@@ -22,8 +22,10 @@ import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
+import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
+import com.onlytechtake.repairapp.domain.workspace.OrderListItem
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
 import com.onlytechtake.repairapp.domain.workspace.RepairOrderInput
 import java.util.UUID
@@ -61,6 +63,28 @@ class OrderWorkflowRepository(
             orders.filter { it.status in filter.statuses }
         }
     }
+
+    fun observeOrderList(actor: AuthenticatedUser, filter: OrderFilter): Flow<List<OrderListItem>> =
+        combine(
+            observeOrders(actor, filter),
+            orderMediaDao.observeAggregates(),
+            signatureDao.observeAggregates(),
+        ) { orders, mediaAggregates, signatureAggregates ->
+            val mediaByOrder = mediaAggregates.associateBy { it.orderId }
+            val signaturesByOrder = signatureAggregates.associateBy { it.orderId }
+            orders.map { order ->
+                val media = mediaByOrder[order.id]
+                val signatures = signaturesByOrder[order.id]
+                OrderListItem(
+                    order = order,
+                    attachments = OrderAttachmentCounts(
+                        images = media?.images ?: 0,
+                        documents = media?.documents ?: 0,
+                        signatures = signatures?.signatures ?: 0,
+                    ),
+                )
+            }
+        }
 
     fun observeOrderDetail(orderId: String): Flow<OrderDetail?> =
         combine(

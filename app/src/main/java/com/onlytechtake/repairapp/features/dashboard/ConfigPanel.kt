@@ -160,6 +160,11 @@ fun ConfigPanel(viewModel: WorkspaceViewModel, isAdmin: Boolean) {
                         }
                     }
                 }
+                if (categories.isEmpty()) {
+                    item {
+                        Text("Nessuna categoria configurata.", style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
             }
 
             ConfigSection.TEMPLATES -> {
@@ -199,6 +204,11 @@ fun ConfigPanel(viewModel: WorkspaceViewModel, isAdmin: Boolean) {
                             Text(template.title)
                             Text(if (template.active) "Attivo" else "Archiviato")
                         }
+                    }
+                }
+                if (templates.isEmpty()) {
+                    item {
+                        Text("Nessun template configurato.", style = MaterialTheme.typography.bodyMedium)
                     }
                 }
             }
@@ -303,6 +313,7 @@ private fun ConfigHubCard(title: String, subtitle: String, onClick: () -> Unit) 
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(title, style = MaterialTheme.typography.titleMedium)
             Text(subtitle)
+            TouchButton(text = "Apri", onClick = onClick)
         }
     }
 }

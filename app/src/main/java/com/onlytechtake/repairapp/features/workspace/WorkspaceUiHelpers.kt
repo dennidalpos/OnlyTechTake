@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.features.workspace
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
+import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -22,6 +23,9 @@ fun attachmentCounts(media: List<OrderMediaEntity>, signatures: List<SignatureEn
     )
 
 fun AttachmentCounts.label(): String =
+    "Foto ${images} - Documenti ${documents} - Firme ${signatures}"
+
+fun OrderAttachmentCounts.label(): String =
     "Foto ${images} - Documenti ${documents} - Firme ${signatures}"
 
 fun OrderMediaEntity.isImageAttachment(): Boolean =

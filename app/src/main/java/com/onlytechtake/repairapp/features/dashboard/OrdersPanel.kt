@@ -28,7 +28,7 @@ import com.onlytechtake.repairapp.features.workspace.nextActionLabel
 @Composable
 fun OrdersPanel(viewModel: WorkspaceViewModel) {
     val uiState by viewModel.uiState.collectAsState()
-    val orders by viewModel.orders.collectAsState()
+    val orderListItems by viewModel.orderListItems.collectAsState()
 
     LazyColumn(
         modifier = Modifier
@@ -48,12 +48,13 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
             )
         }
 
-        if (orders.isEmpty()) {
+        if (orderListItems.isEmpty()) {
             item {
                 Text("Nessuna commessa per questo filtro.", style = MaterialTheme.typography.bodyMedium)
             }
         } else {
-            items(orders) { order ->
+            items(orderListItems) { item ->
+                val order = item.order
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -68,7 +69,7 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
                         Text("Stato: ${order.status.label()}")
                         Text("Prossima azione: ${nextActionLabel(order.status)}")
                         Text("Aggiornata: ${formatUiDateTime(order.updatedAt)}")
-                        Text("Media e firme: apri la scheda per anteprime e allegati")
+                        Text("Media e firme: ${item.attachments.label()}")
                     }
                 }
             }

@@ -15,6 +15,7 @@ import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 
 @Composable
 fun QuickIntakeCategorySection(
+    stepNumber: Int,
     activeCategories: List<OrderCategoryEntity>,
     selectedCategoryId: String?,
     selectedCategory: OrderCategoryEntity?,
@@ -23,7 +24,7 @@ fun QuickIntakeCategorySection(
 ) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text("Categoria e dati tecnici", style = MaterialTheme.typography.titleMedium)
+            StepSectionTitle(stepNumber, "Categoria e dati tecnici")
             if (activeCategories.isEmpty()) {
                 Text(
                     text = "Configura almeno una categoria attiva prima di creare nuove commesse.",

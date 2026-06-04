@@ -33,6 +33,11 @@ fun SectionTitle(text: String) {
 }
 
 @Composable
+fun StepSectionTitle(stepNumber: Int, text: String) {
+    Text(text = "$stepNumber. $text", style = MaterialTheme.typography.titleMedium)
+}
+
+@Composable
 fun Field(
     value: String,
     onValueChange: (String) -> Unit,

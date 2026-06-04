@@ -17,6 +17,7 @@ import java.io.File
 
 @Composable
 fun QuickIntakeMediaSection(
+    stepNumber: Int,
     intakeSessionId: String,
     stagedMedia: List<StagedOrderMedia>,
     showCamera: Boolean,
@@ -29,7 +30,7 @@ fun QuickIntakeMediaSection(
 ) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text("Foto e allegati", style = MaterialTheme.typography.titleMedium)
+            StepSectionTitle(stepNumber, "Foto e allegati")
             if (stagedMedia.isEmpty()) {
                 Text("Aggiungi almeno una foto o un allegato.")
             } else {

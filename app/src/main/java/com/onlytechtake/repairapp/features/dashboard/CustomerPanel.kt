@@ -68,43 +68,56 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
     ) {
         item {
             SectionTitle("Clienti")
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = uiState.customerSearchQuery,
-                onValueChange = viewModel::setCustomerSearchQuery,
-                label = { Text("Cerca per nome, telefono, email, P.IVA, codice fiscale o commessa") },
-                singleLine = true,
-            )
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { showForm = true },
-            ) {
-                Text("Nuovo cliente")
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text("Archivio clienti", style = MaterialTheme.typography.titleMedium)
+                    OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = uiState.customerSearchQuery,
+                        onValueChange = viewModel::setCustomerSearchQuery,
+                        label = { Text("Cerca nome, telefono, email, P.IVA, codice fiscale o commessa") },
+                        singleLine = true,
+                    )
+                    TouchButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Nuovo cliente",
+                        onClick = { showForm = true },
+                    )
+                }
             }
         }
 
         if (showForm) {
             item {
-                SectionTitle("Nuovo cliente")
-                CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = { isBusiness = it })
-                if (isBusiness) {
-                    Field(companyName, { companyName = it }, "Ragione sociale", required = true, showError = companyName.isBlank(), singleLine = true)
-                    Field(vatNumber, { vatNumber = it }, "P.IVA")
-                } else {
-                    Field(firstName, { firstName = it }, "Nome", required = true, showError = firstName.isBlank(), singleLine = true)
-                    Field(lastName, { lastName = it }, "Cognome", required = true, showError = lastName.isBlank(), singleLine = true)
-                }
-                Field(taxCode, { taxCode = it }, "Codice fiscale")
-                Field(phone, { phone = it }, "Telefono", required = true, showError = phone.isBlank() && email.isBlank(), singleLine = true)
-                Field(email, { email = it }, "Email", required = true, showError = phone.isBlank() && email.isBlank(), singleLine = true)
-                Field(address, { address = it }, "Indirizzo")
-                Field(notes, { notes = it }, "Note")
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = canSave,
-                    onClick = { confirmSave = true },
-                ) {
-                    Text("Salva cliente")
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text("Nuovo cliente", style = MaterialTheme.typography.titleMedium)
+                        CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = { isBusiness = it })
+                        if (isBusiness) {
+                            Field(companyName, { companyName = it }, "Ragione sociale", required = true, showError = companyName.isBlank(), singleLine = true)
+                            Field(vatNumber, { vatNumber = it }, "P.IVA")
+                        } else {
+                            Field(firstName, { firstName = it }, "Nome", required = true, showError = firstName.isBlank(), singleLine = true)
+                            Field(lastName, { lastName = it }, "Cognome", required = true, showError = lastName.isBlank(), singleLine = true)
+                        }
+                        Field(taxCode, { taxCode = it }, "Codice fiscale")
+                        Field(phone, { phone = it }, "Telefono", required = true, showError = phone.isBlank() && email.isBlank(), singleLine = true)
+                        Field(email, { email = it }, "Email", required = true, showError = phone.isBlank() && email.isBlank(), singleLine = true)
+                        Field(address, { address = it }, "Indirizzo")
+                        Field(notes, { notes = it }, "Note")
+                        ActionRow {
+                            TouchButton(
+                                text = "Salva cliente",
+                                enabled = canSave,
+                                onClick = { confirmSave = true },
+                            )
+                            TouchButton(
+                                text = "Annulla",
+                                tone = ButtonTone.NEUTRAL,
+                                onClick = { showForm = false },
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -112,13 +125,9 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
         item { SectionTitle(if (uiState.customerSearchQuery.isBlank()) "Clienti recenti" else "Risultati ricerca") }
         if (customers.isEmpty()) {
             item {
-                Text(
-                    text = if (uiState.customerSearchQuery.isBlank()) {
-                        "Nessun cliente registrato."
-                    } else {
-                        "Nessun cliente trovato per questa ricerca."
-                    },
-                    style = MaterialTheme.typography.bodyMedium,
+                CustomerEmptyState(
+                    hasQuery = uiState.customerSearchQuery.isNotBlank(),
+                    onNewCustomer = { showForm = true },
                 )
             }
         } else {
@@ -170,6 +179,23 @@ private fun CustomerCard(customer: CustomerEntity) {
         Column(modifier = Modifier.padding(12.dp)) {
             Text(customer.displayName(), style = MaterialTheme.typography.titleMedium)
             Text("${customer.type.label()} - ${customer.phone.orEmpty()} ${customer.email.orEmpty()}")
+        }
+    }
+}
+
+@Composable
+private fun CustomerEmptyState(hasQuery: Boolean, onNewCustomer: () -> Unit) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(
+                text = if (hasQuery) "Nessun cliente trovato per questa ricerca." else "Nessun cliente registrato.",
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            TouchButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "Nuovo cliente",
+                onClick = onNewCustomer,
+            )
         }
     }
 }

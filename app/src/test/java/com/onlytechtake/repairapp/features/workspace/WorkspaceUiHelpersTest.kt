@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.features.workspace
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
+import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
 import java.time.ZoneOffset
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -27,6 +28,7 @@ class WorkspaceUiHelpersTest {
 
         assertEquals(AttachmentCounts(images = 1, documents = 1, signatures = 1), counts)
         assertEquals("Foto 1 - Documenti 1 - Firme 1", counts.label())
+        assertEquals("Foto 2 - Documenti 3 - Firme 1", OrderAttachmentCounts(2, 3, 1).label())
     }
 
     @Test

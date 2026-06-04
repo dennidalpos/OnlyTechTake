@@ -76,9 +76,9 @@ class WorkspaceViewModel(
     val messageMode = templateRepository.observeMessageMode()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), MessageMode.MANUAL_WHATSAPP)
 
-    val orders = combine(currentUser, uiState) { user, state -> user to state.orderFilter }
+    val orderListItems = combine(currentUser, uiState) { user, state -> user to state.orderFilter }
         .flatMapLatest { (user, filter) ->
-            if (user == null) flowOf(emptyList()) else orderRepository.observeOrders(user, filter)
+            if (user == null) flowOf(emptyList()) else orderRepository.observeOrderList(user, filter)
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 

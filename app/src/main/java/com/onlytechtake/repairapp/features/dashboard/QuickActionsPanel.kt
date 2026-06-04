@@ -147,7 +147,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
 
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                Text("Dati cliente", style = MaterialTheme.typography.titleMedium)
+                StepSectionTitle(1, "Cliente")
                 Field(
                     value = uiState.customerSearchQuery,
                     onValueChange = {
@@ -223,6 +223,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         }
 
         QuickIntakeCategorySection(
+            stepNumber = 2,
             activeCategories = activeCategories,
             selectedCategoryId = selectedCategoryId,
             selectedCategory = selectedCategory,
@@ -233,6 +234,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         )
 
         QuickIntakeProblemSection(
+            stepNumber = 3,
             problemSummary = problemSummary,
             onProblemSummaryChange = { problemSummary = it },
             problemDetails = problemDetails,
@@ -242,6 +244,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         )
 
         QuickIntakeMediaSection(
+            stepNumber = 4,
             intakeSessionId = intakeSessionId,
             stagedMedia = stagedMedia,
             showCamera = showCamera,
@@ -261,7 +264,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 SignatureCaptureForm(
                     modifier = Modifier.padding(12.dp),
-                    title = "Privacy e firma",
+                    title = "5. Privacy e firma",
                     privacyText = privacyText,
                     termsText = termsText,
                     onCaptureChanged = { signatureCapture = it },
@@ -270,6 +273,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         }
 
         QuickIntakeSubmitSection(
+            stepNumber = 6,
             missingRequirements = missingRequirements,
             enabled = activeCategories.isNotEmpty() && intakeInput.isReadyForSubmit(),
             onSubmit = {

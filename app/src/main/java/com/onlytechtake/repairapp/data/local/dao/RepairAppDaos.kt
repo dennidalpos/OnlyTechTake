@@ -18,6 +18,17 @@ import com.onlytechtake.repairapp.data.local.entities.UserEntity
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import kotlinx.coroutines.flow.Flow
 
+data class OrderMediaAggregate(
+    val orderId: String,
+    val images: Int,
+    val documents: Int,
+)
+
+data class SignatureAggregate(
+    val orderId: String,
+    val signatures: Int,
+)
+
 @Dao
 interface DashboardDao {
     @Query("SELECT COUNT(*) FROM users")
@@ -170,6 +181,18 @@ interface OrderMediaDao {
 
     @Query("SELECT * FROM order_media WHERE orderId = :orderId ORDER BY capturedAt DESC")
     fun observeForOrder(orderId: String): Flow<List<OrderMediaEntity>>
+
+    @Query(
+        """
+        SELECT
+            orderId,
+            COUNT(CASE WHEN UPPER(mediaType) IN ('PHOTO', 'IMAGE') OR mimeType LIKE 'image/%' THEN 1 END) AS images,
+            COUNT(CASE WHEN NOT (UPPER(mediaType) IN ('PHOTO', 'IMAGE') OR mimeType LIKE 'image/%') THEN 1 END) AS documents
+        FROM order_media
+        GROUP BY orderId
+        """,
+    )
+    fun observeAggregates(): Flow<List<OrderMediaAggregate>>
 }
 
 @Dao
@@ -179,6 +202,9 @@ interface SignatureDao {
 
     @Query("SELECT * FROM signatures WHERE orderId = :orderId ORDER BY signedAt DESC")
     fun observeForOrder(orderId: String): Flow<List<SignatureEntity>>
+
+    @Query("SELECT orderId, COUNT(*) AS signatures FROM signatures GROUP BY orderId")
+    fun observeAggregates(): Flow<List<SignatureAggregate>>
 }
 
 @Dao

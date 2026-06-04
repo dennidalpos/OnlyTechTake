@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun QuickIntakeProblemSection(
+    stepNumber: Int,
     problemSummary: String,
     onProblemSummaryChange: (String) -> Unit,
     problemDetails: String,
@@ -24,7 +25,7 @@ fun QuickIntakeProblemSection(
 ) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text("Problema", style = MaterialTheme.typography.titleMedium)
+            StepSectionTitle(stepNumber, "Problema")
             Field(
                 value = problemSummary,
                 onValueChange = onProblemSummaryChange,

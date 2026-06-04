@@ -1,7 +1,3 @@
 {
-  "todos": [
-    "Rendere Nuova commessa un flusso a blocchi numerati: cliente, categoria, problema, media, privacy/firma e conferma",
-    "Riorganizzare Clienti, Config e Admin con hub/sezioni piu' semplici, stati vuoti e azioni primarie evidenti",
-    "Aggiungere aggregati media/firme reali alla lista commesse senza aprire la scheda"
-  ]
+  "todos": []
 }
