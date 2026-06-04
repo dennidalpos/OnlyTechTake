@@ -68,6 +68,7 @@ data class RepairOrderEntity(
     val createdAt: Long,
     val updatedAt: Long,
     val closedAt: Long?,
+    val closureReason: ClosureReason?,
     val deletedAt: Long?,
     val deletedByUserId: String?,
     val deleteReason: String?,

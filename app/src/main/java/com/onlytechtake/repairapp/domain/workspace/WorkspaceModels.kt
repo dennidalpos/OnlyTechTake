@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.domain.workspace
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
@@ -120,4 +121,5 @@ data class PreparedMessage(
 data class FeedbackInput(
     val feedback: CustomerFeedbackType,
     val note: String = "",
+    val closureReason: ClosureReason? = null,
 )

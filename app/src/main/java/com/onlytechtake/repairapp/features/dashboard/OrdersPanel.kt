@@ -21,7 +21,9 @@ import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
+import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
 import com.onlytechtake.repairapp.features.workspace.label
+import com.onlytechtake.repairapp.features.workspace.nextActionLabel
 
 @Composable
 fun OrdersPanel(viewModel: WorkspaceViewModel) {
@@ -64,7 +66,9 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
                     Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text("${order.orderNumber} - ${order.title}", style = MaterialTheme.typography.titleMedium)
                         Text("Stato: ${order.status.label()}")
-                        Text("Aggiornata: ${order.updatedAt}")
+                        Text("Prossima azione: ${nextActionLabel(order.status)}")
+                        Text("Aggiornata: ${formatUiDateTime(order.updatedAt)}")
+                        Text("Media e firme: apri la scheda per anteprime e allegati")
                     }
                 }
             }
@@ -89,10 +93,10 @@ private fun OrderFilterBar(
                 enabled = !filter.showMineOnly,
                 onClick = { onFilter(filter.copy(showMineOnly = true)) },
             )
-            QuickStatusFilter("In carico", OrderStatus.PRESA_IN_CARICO, filter, onFilter)
-            QuickStatusFilter("Diagnosi", OrderStatus.IN_DIAGNOSI, filter, onFilter)
-            QuickStatusFilter("Attesa cliente", OrderStatus.IN_ATTESA_CLIENTE, filter, onFilter)
-            QuickStatusFilter("Pronte", OrderStatus.PRONTO_AL_RITIRO, filter, onFilter)
+            QuickStatusFilter("Nuove", OrderStatus.NEW, filter, onFilter)
+            QuickStatusFilter("Diagnosi", OrderStatus.DIAGNOSIS, filter, onFilter)
+            QuickStatusFilter("Attesa cliente", OrderStatus.WAITING_CUSTOMER, filter, onFilter)
+            QuickStatusFilter("Pronte", OrderStatus.READY_FOR_PICKUP, filter, onFilter)
         }
         if (filter.showMineOnly || filter.status != null || filter.statuses.isNotEmpty()) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {

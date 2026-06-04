@@ -12,7 +12,7 @@
 - Kotlin Coroutines
 - Kotlin Flow
 - Navigation Compose
-- Storage Access Framework per export
+- Storage Access Framework per import allegati ed export
 - Gradle Wrapper
 
 ## Architettura
@@ -114,6 +114,7 @@ TemplateRepository
 
 ```text
 AuthGateViewModel
+DashboardViewModel
 WorkspaceViewModel
 ```
 
@@ -165,13 +166,13 @@ Richiedere nuovamente password dopo inattività.
 
 ## Permessi runtime Android
 
-Permessi probabili:
+Permessi manifest:
 
 - Camera;
-- Read media images, se serve acquisire immagini dalla galleria;
-- Write tramite Storage Access Framework, senza permesso storage globale.
+- nessun permesso storage globale.
 
-Evitare permessi larghi non necessari.
+Import allegati ed export usano Storage Access Framework, quindi non richiedono
+permessi larghi di lettura/scrittura storage.
 
 ## Foto e firme
 
@@ -231,8 +232,9 @@ Implementazioni:
 ManualWhatsAppSender
 ```
 
-Il rilascio corrente usa solo invio manuale. Non esistono stub API o modalita
-future finche' non viene introdotto un backend reale.
+Il rilascio corrente usa solo invio manuale. `MessageMode` contiene solo
+`MANUAL_WHATSAPP`: non esistono stub API o modalita future finche' non viene
+introdotto un backend reale.
 
 ## Template engine
 
@@ -250,18 +252,22 @@ rendering del template.
 
 Implementare un semplice motore replace controllato.
 
-Regole:
+Regole implementate:
 
-- se una variabile non esiste, lasciare vuoto oppure mostrare avviso;
-- evitare crash;
-- anteprima template obbligatoria in impostazioni admin.
+- i template con variabili fuori allowlist vengono rifiutati al salvataggio;
+- il rendering fallisce se riceve una variabile non supportata;
+- l'anteprima del messaggio e' disponibile nel dettaglio commessa prima dell'apertura WhatsApp.
 
-## Audit log
+Limite: nella sezione Config non e' presente una preview renderizzata separata durante la modifica del template.
 
-Ogni azione sensibile genera audit:
+## Audit log e limiti
+
+Le azioni sensibili tracciate includono:
 
 - login admin;
 - creazione operatore;
+- aggiornamento utente;
+- reset password;
 - modifica template;
 - modifica privacy;
 - export dati;
@@ -269,6 +275,13 @@ Ogni azione sensibile genera audit:
 - cambio assegnazione;
 - cambio stato;
 - reset dati, scritto prima della cancellazione totale locale.
+
+Limiti attuali:
+
+- nessun ripristino/import backup;
+- nessuna cifratura applicativa degli export;
+- nessuna CI tracciata nel repository;
+- nessun backend o invio WhatsApp API.
 
 ## Build
 

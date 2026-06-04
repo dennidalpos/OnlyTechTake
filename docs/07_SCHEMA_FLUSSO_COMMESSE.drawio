@@ -78,7 +78,7 @@
         <mxCell id="w_sections" value="Sempre accessibili nel dettaglio&lt;br&gt;note rapide, WhatsApp guidato,&lt;br&gt;foto/allegati, firme, PDF, timeline" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="710" y="805" width="260" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="w_status_map" value="Mappa stati ITIL-like&lt;br&gt;PRESA_IN_CARICO -&gt; IN_DIAGNOSI&lt;br&gt;IN_DIAGNOSI -&gt; PREVENTIVO / LAVORAZIONE&lt;br&gt;ATTESA_CLIENTE -&gt; ACCETTA / RIFIUTA&lt;br&gt;LAVORAZIONE -&gt; COMPLETATO&lt;br&gt;COMPLETATO -&gt; PRONTO_AL_RITIRO&lt;br&gt;PRONTO_AL_RITIRO -&gt; CONSEGNATO / CHIUSO" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+        <mxCell id="w_status_map" value="Mappa stati operativa&lt;br&gt;NEW -&gt; DIAGNOSIS&lt;br&gt;DIAGNOSIS -&gt; WAITING_CUSTOMER / WORKING&lt;br&gt;WORKING -&gt; WAITING_PARTS / READY_FOR_PICKUP&lt;br&gt;WAITING_PARTS -&gt; WORKING / READY_FOR_PICKUP&lt;br&gt;READY_FOR_PICKUP -&gt; CLOSED&lt;br&gt;CLOSED richiede motivo chiusura" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
           <mxGeometry x="1015" y="800" width="320" height="170" as="geometry" />
         </mxCell>
         <mxCell id="compat_note" value="Schema pulito: il flusso usa repair_orders.status e timeline_events." style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">

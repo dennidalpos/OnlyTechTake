@@ -23,8 +23,8 @@ fun queueFilter(queue: OperationalQueue): OrderFilter =
     OrderFilter(statuses = queue.statuses)
 
 private val queueDefinitions = listOf(
-    "Da diagnosticare" to setOf(OrderStatus.PRESA_IN_CARICO, OrderStatus.IN_DIAGNOSI),
-    "Attesa cliente" to setOf(OrderStatus.PREVENTIVO_INVIATO, OrderStatus.IN_ATTESA_CLIENTE),
-    "Da lavorare" to setOf(OrderStatus.PREVENTIVO_ACCETTATO, OrderStatus.IN_LAVORAZIONE, OrderStatus.IN_ATTESA_RICAMBIO),
-    "Pronte / chiusura" to setOf(OrderStatus.COMPLETATO, OrderStatus.PRONTO_AL_RITIRO, OrderStatus.CONSEGNATO),
+    "Da diagnosticare" to setOf(OrderStatus.NEW, OrderStatus.DIAGNOSIS),
+    "Attesa cliente" to setOf(OrderStatus.WAITING_CUSTOMER),
+    "Da lavorare" to setOf(OrderStatus.WORKING, OrderStatus.WAITING_PARTS),
+    "Pronte / chiusura" to setOf(OrderStatus.READY_FOR_PICKUP),
 )

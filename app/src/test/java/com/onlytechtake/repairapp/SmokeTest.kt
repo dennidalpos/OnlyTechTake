@@ -14,7 +14,7 @@ class SmokeTest {
 
     @Test
     fun coreDatabaseEnumsKeepStableCodes() {
-        assertEquals("PRESA_IN_CARICO", OrderStatus.PRESA_IN_CARICO.name)
+        assertEquals("NEW", OrderStatus.NEW.name)
         assertEquals("ACCEPT", CustomerFeedbackType.ACCEPT.name)
         assertEquals("ORDER_STATUS_CHANGED", AuditAction.ORDER_STATUS_CHANGED.name)
     }

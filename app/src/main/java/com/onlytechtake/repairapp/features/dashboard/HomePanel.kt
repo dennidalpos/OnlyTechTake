@@ -56,11 +56,18 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel) {
                             Text(queue.title, style = MaterialTheme.typography.titleMedium)
                             Text(queue.orders.size.toString(), style = MaterialTheme.typography.titleMedium)
                         }
-                        Text(
-                            text = queue.orders.take(3).joinToString("\n") { "${it.orderNumber} - ${it.title}" }
-                                .ifBlank { "Nessuna commessa in questa coda." },
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
+                        if (queue.orders.isEmpty()) {
+                            Text("Nessuna commessa in questa coda.", style = MaterialTheme.typography.bodyMedium)
+                        } else {
+                            queue.orders.take(3).forEach { order ->
+                                TouchButton(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = "${order.orderNumber} - ${order.title}",
+                                    tone = ButtonTone.NEUTRAL,
+                                    onClick = { viewModel.selectOrder(order.id) },
+                                )
+                            }
+                        }
                         TouchButton(
                             modifier = Modifier.fillMaxWidth(),
                             text = "Apri coda",

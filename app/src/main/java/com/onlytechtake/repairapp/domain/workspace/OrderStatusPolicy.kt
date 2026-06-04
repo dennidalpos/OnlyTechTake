@@ -1,66 +1,53 @@
 package com.onlytechtake.repairapp.domain.workspace
 
+import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 
 object OrderStatusPolicy {
-    val closedStatuses: Set<OrderStatus> = setOf(
-        OrderStatus.CHIUSO,
-        OrderStatus.CONSEGNATO,
-        OrderStatus.ANNULLATO,
-    )
+    val closedStatuses: Set<OrderStatus> = setOf(OrderStatus.CLOSED)
 
     fun allowedTargets(from: OrderStatus): Set<OrderStatus> =
         when (from) {
-            OrderStatus.PRESA_IN_CARICO -> setOf(
-                OrderStatus.IN_DIAGNOSI,
-                OrderStatus.ANNULLATO,
+            OrderStatus.NEW -> setOf(
+                OrderStatus.DIAGNOSIS,
+                OrderStatus.CLOSED,
             )
-            OrderStatus.IN_DIAGNOSI -> setOf(
-                OrderStatus.PREVENTIVO_INVIATO,
-                OrderStatus.IN_LAVORAZIONE,
-                OrderStatus.NON_COMPLETABILE,
+            OrderStatus.DIAGNOSIS -> setOf(
+                OrderStatus.WAITING_CUSTOMER,
+                OrderStatus.WORKING,
+                OrderStatus.WAITING_PARTS,
+                OrderStatus.CLOSED,
             )
-            OrderStatus.PREVENTIVO_INVIATO,
-            OrderStatus.IN_ATTESA_CLIENTE -> setOf(
-                OrderStatus.PREVENTIVO_ACCETTATO,
-                OrderStatus.PREVENTIVO_RIFIUTATO,
-                OrderStatus.IN_ATTESA_CLIENTE,
+            OrderStatus.WAITING_CUSTOMER -> setOf(
+                OrderStatus.WORKING,
+                OrderStatus.CLOSED,
             )
-            OrderStatus.PREVENTIVO_ACCETTATO -> setOf(
-                OrderStatus.IN_LAVORAZIONE,
-                OrderStatus.IN_ATTESA_RICAMBIO,
+            OrderStatus.WORKING -> setOf(
+                OrderStatus.WAITING_CUSTOMER,
+                OrderStatus.WAITING_PARTS,
+                OrderStatus.READY_FOR_PICKUP,
+                OrderStatus.CLOSED,
             )
-            OrderStatus.PREVENTIVO_RIFIUTATO,
-            OrderStatus.NON_COMPLETABILE -> setOf(
-                OrderStatus.CHIUSO,
-                OrderStatus.ANNULLATO,
+            OrderStatus.WAITING_PARTS -> setOf(
+                OrderStatus.WORKING,
+                OrderStatus.WAITING_CUSTOMER,
+                OrderStatus.READY_FOR_PICKUP,
+                OrderStatus.CLOSED,
             )
-            OrderStatus.IN_LAVORAZIONE -> setOf(
-                OrderStatus.IN_ATTESA_RICAMBIO,
-                OrderStatus.COMPLETATO,
-                OrderStatus.NON_COMPLETABILE,
+            OrderStatus.READY_FOR_PICKUP -> setOf(
+                OrderStatus.CLOSED,
             )
-            OrderStatus.IN_ATTESA_RICAMBIO -> setOf(
-                OrderStatus.IN_LAVORAZIONE,
-                OrderStatus.COMPLETATO,
-                OrderStatus.NON_COMPLETABILE,
-            )
-            OrderStatus.COMPLETATO -> setOf(
-                OrderStatus.PRONTO_AL_RITIRO,
-                OrderStatus.CHIUSO,
-            )
-            OrderStatus.PRONTO_AL_RITIRO -> setOf(
-                OrderStatus.CONSEGNATO,
-                OrderStatus.CHIUSO,
-            )
-            OrderStatus.CONSEGNATO -> setOf(OrderStatus.CHIUSO)
-            OrderStatus.CHIUSO,
-            OrderStatus.ANNULLATO -> emptySet()
+            OrderStatus.CLOSED -> emptySet()
         }
 
-    fun requireAllowed(from: OrderStatus, to: OrderStatus) {
+    fun requiresClosureReason(to: OrderStatus): Boolean = to == OrderStatus.CLOSED
+
+    fun requireAllowed(from: OrderStatus, to: OrderStatus, closureReason: ClosureReason? = null) {
         require(to in allowedTargets(from)) {
             "Transizione stato non valida: ${from.name} -> ${to.name}"
+        }
+        require(!requiresClosureReason(to) || closureReason != null) {
+            "Motivo chiusura obbligatorio"
         }
     }
 }

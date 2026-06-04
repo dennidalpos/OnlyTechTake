@@ -4,6 +4,7 @@ import android.net.Uri
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
@@ -221,8 +222,8 @@ class WorkspaceViewModel(
         sortOrder: Int,
     ) = catalogActions.saveCategory(id, name, description, active, sortOrder)
 
-    fun changeStatus(orderId: String, status: OrderStatus) = withUser { actor ->
-        orderRepository.changeStatus(actor, orderId, status)
+    fun changeStatus(orderId: String, status: OrderStatus, note: String = "", closureReason: ClosureReason? = null) = withUser { actor ->
+        orderRepository.changeStatus(actor, orderId, status, note, closureReason)
     }
 
     fun reassign(orderId: String, userId: String?) = withUser { actor ->
@@ -287,8 +288,13 @@ class WorkspaceViewModel(
         bitmap = bitmap,
     )
 
-    fun recordFeedback(orderId: String, feedback: CustomerFeedbackType, note: String) = withUser { actor ->
-        orderRepository.recordFeedback(actor, orderId, FeedbackInput(feedback, note))
+    fun recordFeedback(
+        orderId: String,
+        feedback: CustomerFeedbackType,
+        note: String,
+        closureReason: ClosureReason? = null,
+    ) = withUser { actor ->
+        orderRepository.recordFeedback(actor, orderId, FeedbackInput(feedback, note, closureReason))
     }
 
     fun prepareStatusMessage(orderId: String, status: OrderStatus) =

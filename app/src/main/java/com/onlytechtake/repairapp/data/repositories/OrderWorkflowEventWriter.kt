@@ -4,6 +4,7 @@ import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
 import com.onlytechtake.repairapp.data.local.entities.AuditAction
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
+import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
@@ -32,21 +33,29 @@ internal class OrderWorkflowEventWriter(
         actorUserId: String,
         oldStatus: OrderStatus,
         newStatus: OrderStatus,
+        note: String?,
+        closureReason: ClosureReason?,
         now: Long,
     ) {
+        val readableTransition = "${oldStatus.label()} -> ${newStatus.label()}"
+        val details = listOfNotNull(
+            readableTransition,
+            note,
+            closureReason?.let { "Motivo chiusura: ${it.label()}" },
+        ).joinToString("\n")
         writeTimeline(
             timelineEvent(
                 orderId = orderId,
                 type = TimelineEventType.STATUS_CHANGED,
                 title = "Stato aggiornato",
-                description = "${oldStatus.name} -> ${newStatus.name}",
+                description = details,
                 oldStatus = oldStatus.name,
                 newStatus = newStatus.name,
                 actorUserId = actorUserId,
                 createdAt = now,
                 visibleToCustomer = true,
-                requiresCustomerFeedback = newStatus == OrderStatus.PREVENTIVO_INVIATO,
-                expectedFeedbackType = if (newStatus == OrderStatus.PREVENTIVO_INVIATO) {
+                requiresCustomerFeedback = newStatus == OrderStatus.WAITING_CUSTOMER,
+                expectedFeedbackType = if (newStatus == OrderStatus.WAITING_CUSTOMER) {
                     CustomerFeedbackType.ACCEPT
                 } else {
                     null
@@ -218,3 +227,23 @@ internal class OrderWorkflowEventWriter(
         )
     }
 }
+
+private fun OrderStatus.label(): String =
+    when (this) {
+        OrderStatus.NEW -> "Nuova"
+        OrderStatus.DIAGNOSIS -> "Diagnosi"
+        OrderStatus.WAITING_CUSTOMER -> "Attesa cliente"
+        OrderStatus.WORKING -> "In lavorazione"
+        OrderStatus.WAITING_PARTS -> "Attesa ricambi"
+        OrderStatus.READY_FOR_PICKUP -> "Pronta al ritiro"
+        OrderStatus.CLOSED -> "Chiusa"
+    }
+
+private fun ClosureReason.label(): String =
+    when (this) {
+        ClosureReason.COMPLETED -> "Completata"
+        ClosureReason.CUSTOMER_DECLINED -> "Rifiutata dal cliente"
+        ClosureReason.NOT_REPAIRABLE -> "Non riparabile"
+        ClosureReason.CANCELLED -> "Annullata"
+        ClosureReason.OTHER -> "Altro"
+    }

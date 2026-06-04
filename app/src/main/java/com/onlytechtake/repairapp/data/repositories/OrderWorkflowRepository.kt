@@ -12,6 +12,7 @@ import com.onlytechtake.repairapp.data.local.dao.SignatureDao
 import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
 import com.onlytechtake.repairapp.data.local.dao.UserDao
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
+import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
@@ -111,7 +112,7 @@ class OrderWorkflowRepository(
                     customerId = input.customerId,
                     title = input.title.trim(),
                     categoryId = input.categoryId,
-                    status = OrderStatus.PRESA_IN_CARICO,
+                    status = OrderStatus.NEW,
                     priority = input.priority,
                     assignedToUserId = input.assignedToUserId ?: actor.id,
                     createdByUserId = actor.id,
@@ -122,6 +123,7 @@ class OrderWorkflowRepository(
                     createdAt = now,
                     updatedAt = now,
                     closedAt = null,
+                    closureReason = null,
                     deletedAt = null,
                     deletedByUserId = null,
                     deleteReason = null,
@@ -133,12 +135,18 @@ class OrderWorkflowRepository(
             }
         }
 
-    suspend fun changeStatus(actor: AuthenticatedUser, orderId: String, status: OrderStatus): Result<Unit> =
+    suspend fun changeStatus(
+        actor: AuthenticatedUser,
+        orderId: String,
+        status: OrderStatus,
+        note: String = "",
+        closureReason: ClosureReason? = null,
+    ): Result<Unit> =
         runCatching {
             inTransaction {
                 val order = requireWritableOrder(actor, orderId)
                 if (order.status == status) return@inTransaction
-                OrderStatusPolicy.requireAllowed(order.status, status)
+                OrderStatusPolicy.requireAllowed(order.status, status, closureReason)
 
                 val now = clockMillis()
                 repairOrderDao.upsert(
@@ -146,9 +154,18 @@ class OrderWorkflowRepository(
                         status = status,
                         updatedAt = now,
                         closedAt = if (status in OrderStatusPolicy.closedStatuses) now else order.closedAt,
+                        closureReason = if (status in OrderStatusPolicy.closedStatuses) closureReason else null,
                     ),
                 )
-                eventWriter.statusChanged(orderId, actor.id, order.status, status, now)
+                eventWriter.statusChanged(
+                    orderId = orderId,
+                    actorUserId = actor.id,
+                    oldStatus = order.status,
+                    newStatus = status,
+                    note = note.trim().ifBlank { null },
+                    closureReason = closureReason,
+                    now = now,
+                )
             }
         }
 
@@ -202,14 +219,26 @@ class OrderWorkflowRepository(
                 val order = requireWritableOrder(actor, orderId)
                 val now = clockMillis()
                 val targetStatus = when (input.feedback) {
-                    CustomerFeedbackType.ACCEPT -> OrderStatus.PREVENTIVO_ACCETTATO
-                    CustomerFeedbackType.REJECT -> OrderStatus.PREVENTIVO_RIFIUTATO
+                    CustomerFeedbackType.ACCEPT -> OrderStatus.WORKING
+                    CustomerFeedbackType.REJECT -> OrderStatus.CLOSED
                     else -> order.status
                 }
-                if (targetStatus != order.status) {
-                    OrderStatusPolicy.requireAllowed(order.status, targetStatus)
+                val closureReason = when {
+                    input.closureReason != null -> input.closureReason
+                    targetStatus == OrderStatus.CLOSED -> ClosureReason.CUSTOMER_DECLINED
+                    else -> null
                 }
-                repairOrderDao.upsert(order.copy(status = targetStatus, updatedAt = now))
+                if (targetStatus != order.status) {
+                    OrderStatusPolicy.requireAllowed(order.status, targetStatus, closureReason)
+                }
+                repairOrderDao.upsert(
+                    order.copy(
+                        status = targetStatus,
+                        updatedAt = now,
+                        closedAt = if (targetStatus == OrderStatus.CLOSED) now else order.closedAt,
+                        closureReason = if (targetStatus == OrderStatus.CLOSED) closureReason else order.closureReason,
+                    ),
+                )
                 eventWriter.feedbackRecorded(
                     orderId = orderId,
                     actorUserId = actor.id,

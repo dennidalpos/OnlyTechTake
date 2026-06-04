@@ -17,6 +17,7 @@ import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.data.local.entities.MessageStatus
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventType
 import com.onlytechtake.repairapp.data.local.entities.UserRole
@@ -131,7 +132,7 @@ class TemplateRepository(
                 mapOf(
                     "numero_commessa" to order.orderNumber,
                     "titolo_commessa" to order.title,
-                    "stato_commessa" to order.status.name,
+                    "stato_commessa" to order.status.label(),
                     "cliente" to listOfNotNull(customer.companyName, customer.firstName, customer.lastName)
                         .joinToString(" ")
                         .ifBlank { "Cliente" },
@@ -326,3 +327,14 @@ class TemplateRepository(
         )
     }
 }
+
+private fun OrderStatus.label(): String =
+    when (this) {
+        OrderStatus.NEW -> "Nuova"
+        OrderStatus.DIAGNOSIS -> "In diagnosi"
+        OrderStatus.WAITING_CUSTOMER -> "In attesa cliente"
+        OrderStatus.WORKING -> "In lavorazione"
+        OrderStatus.WAITING_PARTS -> "In attesa ricambi"
+        OrderStatus.READY_FOR_PICKUP -> "Pronta al ritiro"
+        OrderStatus.CLOSED -> "Chiusa"
+    }

@@ -1,6 +1,8 @@
 # Build, installazione e verifica Android su Windows
 
-Guida operativa supportata per Windows + PowerShell. Eseguire tutti i comandi dalla root del progetto.
+Guida operativa supportata per Windows + PowerShell. Gli script in
+`scripts\windows` calcolano la root del progetto dal proprio percorso; il
+comando diretto `.\gradlew.bat` va invece eseguito dalla root.
 
 ## Prerequisiti
 
@@ -44,6 +46,12 @@ Test unitari:
 
 ```powershell
 .\gradlew.bat --no-configuration-cache :app:testDebugUnitTest
+```
+
+Audit vulnerabilita' dipendenze tramite OSV:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\windows\check_dependency_vulnerabilities.ps1
 ```
 
 I task dello script `check_project.ps1` sono eseguiti in sequenza per ridurre i file lock Gradle/Kotlin su Windows.
@@ -90,7 +98,7 @@ powershell -ExecutionPolicy Bypass -File scripts\windows\build_android_installer
 
 - `app\build\outputs\apk\debug\app-debug.apk`
 - `app\build\outputs\apk\release\app-release.apk` quando il signing locale è configurato.
-- `app\build\outputs\bundle\release\app-release.aab`
+- `app\build\outputs\bundle\release\app-release.aab` quando il signing locale è configurato.
 
 ## Signing release
 

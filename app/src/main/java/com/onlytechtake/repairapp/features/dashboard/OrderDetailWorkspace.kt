@@ -27,12 +27,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
+import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.features.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
+import com.onlytechtake.repairapp.features.workspace.attachmentCounts
 import com.onlytechtake.repairapp.features.workspace.availableOrderStatusActions
+import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
 import com.onlytechtake.repairapp.features.workspace.label
+import com.onlytechtake.repairapp.features.workspace.nextActionLabel
 import com.onlytechtake.repairapp.features.workspace.requiresConfirmation
 
 @Composable
@@ -44,6 +47,9 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
     var confirmTitle by remember { mutableStateOf<String?>(null) }
     var confirmText by remember { mutableStateOf("") }
     var confirmAction by remember { mutableStateOf<(() -> Unit)?>(null) }
+    var statusAction by remember { mutableStateOf<OrderStatusAction?>(null) }
+    var statusNote by rememberSaveable { mutableStateOf("") }
+    var closureReason by rememberSaveable { mutableStateOf<ClosureReason?>(null) }
 
     val exportPdfLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
         uri?.let(viewModel::exportSelectedOrderPdf)
@@ -100,7 +106,11 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     SectionTitle("${selected.order.orderNumber} - ${selected.order.title}")
                     Text("Cliente: ${selected.customer?.displayName().orEmpty()}")
                     Text("Stato: ${selected.order.status.label()}", style = MaterialTheme.typography.titleMedium)
+                    Text("Prossima azione: ${nextActionLabel(selected.order.status)}")
+                    selected.order.closureReason?.let { Text("Motivo chiusura: ${it.label()}") }
                     Text("Operatore: ${selected.assignedUser?.displayName.orEmpty()}")
+                    Text("Aggiornata: ${formatUiDateTime(selected.order.updatedAt)}")
+                    Text(attachmentCounts(selected.media, selected.signatures).label())
                     selected.order.description?.takeIf { it.isNotBlank() }?.let {
                         Text("Problema: $it")
                     }
@@ -122,13 +132,9 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                                     text = action.label,
                                     tone = action.tone(),
                                     onClick = {
-                                        if (action.requiresConfirmation()) {
-                                            requestConfirm(action.label, "Aggiornare lo stato della commessa?") {
-                                                applyStatusAction(action, selected.order.id, viewModel)
-                                            }
-                                        } else {
-                                            applyStatusAction(action, selected.order.id, viewModel)
-                                        }
+                                        statusAction = action
+                                        statusNote = ""
+                                        closureReason = null
                                     },
                                 )
                             }
@@ -252,25 +258,62 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             },
         )
     }
+
+    statusAction?.let { action ->
+        val requiresClosureReason = action.requiresConfirmation()
+        AlertDialog(
+            onDismissRequest = { statusAction = null },
+            title = { Text(action.label) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text("Aggiornare lo stato della commessa?")
+                    Field(statusNote, { statusNote = it }, "Nota opzionale")
+                    if (requiresClosureReason) {
+                        Text("Motivo chiusura", style = MaterialTheme.typography.titleSmall)
+                        ActionRow {
+                            ClosureReason.entries.forEach { reason ->
+                                TouchButton(
+                                    text = reason.label(),
+                                    tone = if (closureReason == reason) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
+                                    onClick = { closureReason = reason },
+                                )
+                            }
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    enabled = !requiresClosureReason || closureReason != null,
+                    onClick = {
+                        applyStatusAction(action, selected.order.id, viewModel, statusNote, closureReason)
+                        statusAction = null
+                    },
+                ) {
+                    Text("Conferma")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { statusAction = null }) {
+                    Text("Annulla")
+                }
+            },
+        )
+    }
 }
 
 private fun applyStatusAction(
     action: OrderStatusAction,
     orderId: String,
     viewModel: WorkspaceViewModel,
+    note: String,
+    closureReason: ClosureReason?,
 ) {
-    when (action) {
-        OrderStatusAction.ACCEPT_ESTIMATE -> viewModel.recordFeedback(orderId, CustomerFeedbackType.ACCEPT, "Preventivo accettato")
-        OrderStatusAction.REJECT_ESTIMATE -> viewModel.recordFeedback(orderId, CustomerFeedbackType.REJECT, "Preventivo rifiutato")
-        else -> action.targetStatus?.let { viewModel.changeStatus(orderId, it) }
-    }
+    action.targetStatus?.let { viewModel.changeStatus(orderId, it, note, closureReason) }
 }
 
 private fun OrderStatusAction.tone(): ButtonTone =
     when (this) {
-        OrderStatusAction.REJECT_ESTIMATE -> ButtonTone.WARNING
-        OrderStatusAction.CANCEL -> ButtonTone.DANGER
-        OrderStatusAction.DELIVER -> ButtonTone.SUCCESS
         OrderStatusAction.CLOSE -> ButtonTone.SUCCESS
         OrderStatusAction.READY_FOR_PICKUP -> ButtonTone.SUCCESS
         else -> ButtonTone.PRIMARY

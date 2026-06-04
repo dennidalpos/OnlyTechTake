@@ -12,15 +12,15 @@ class OperationalQueuesTest {
     fun queuesGroupOrdersByOperationalState() {
         val queues = buildOperationalQueues(
             listOf(
-                order("1", OrderStatus.PRESA_IN_CARICO),
-                order("2", OrderStatus.IN_ATTESA_CLIENTE),
-                order("3", OrderStatus.IN_LAVORAZIONE),
-                order("4", OrderStatus.PRONTO_AL_RITIRO),
+                order("1", OrderStatus.NEW),
+                order("2", OrderStatus.WAITING_CUSTOMER),
+                order("3", OrderStatus.WORKING),
+                order("4", OrderStatus.READY_FOR_PICKUP),
             ),
         )
 
         assertEquals(listOf(1, 1, 1, 1), queues.map { it.orders.size })
-        assertTrue(queueFilter(queues.first()).statuses.contains(OrderStatus.IN_DIAGNOSI))
+        assertTrue(queueFilter(queues.first()).statuses.contains(OrderStatus.DIAGNOSIS))
     }
 
     private fun order(id: String, status: OrderStatus) = RepairOrderEntity(
@@ -40,6 +40,7 @@ class OperationalQueuesTest {
         createdAt = 0L,
         updatedAt = 0L,
         closedAt = null,
+        closureReason = null,
         deletedAt = null,
         deletedByUserId = null,
         deleteReason = null,

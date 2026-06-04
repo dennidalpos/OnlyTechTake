@@ -11,11 +11,14 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +35,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
+import com.onlytechtake.repairapp.features.workspace.formatFileSize
+import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
+import com.onlytechtake.repairapp.features.workspace.isImageAttachment
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 import java.io.File
 
@@ -41,17 +47,43 @@ fun OrderPhotoSection(
     viewModel: WorkspaceViewModel,
 ) {
     var showCamera by rememberSaveable { mutableStateOf(false) }
+    var selectedImage by rememberSaveable { mutableStateOf<Pair<String, String>?>(null) }
     val attachmentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let { viewModel.importAttachment(detail.order.id, it) }
     }
+    val images = detail.media.filter { it.isImageAttachment() }
+    val documents = detail.media.filterNot { it.isImageAttachment() }
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         SectionTitle("Foto e allegati")
-        if (detail.media.isEmpty()) {
+        if (images.isEmpty() && documents.isEmpty()) {
             Text("Nessuna foto o allegato.")
         } else {
-            detail.media.forEach { media ->
-                Text("${media.mediaType}: ${media.fileName} - ${media.sizeBytes / 1024} KB")
+            if (images.isNotEmpty()) {
+                Text("Immagini")
+                images.forEach { media ->
+                    Card(modifier = Modifier.fillMaxWidth()) {
+                        Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            LocalImagePreview(
+                                path = media.localPath,
+                                description = media.fileName,
+                                onClick = { selectedImage = media.localPath to media.fileName },
+                            )
+                            Text("${media.fileName} - ${formatFileSize(media.sizeBytes)} - ${formatUiDateTime(media.capturedAt)}")
+                        }
+                    }
+                }
+            }
+            if (documents.isNotEmpty()) {
+                Text("Documenti")
+                documents.forEach { media ->
+                    Card(modifier = Modifier.fillMaxWidth()) {
+                        Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text(media.fileName)
+                            Text("${media.mimeType} - ${formatFileSize(media.sizeBytes)} - ${formatUiDateTime(media.capturedAt)}")
+                        }
+                    }
+                }
             }
         }
 
@@ -81,6 +113,10 @@ fun OrderPhotoSection(
                 onError = viewModel::reportCameraError,
             )
         }
+    }
+
+    selectedImage?.let { (path, title) ->
+        LocalImageViewer(path = path, title = title, onDismiss = { selectedImage = null })
     }
 }
 

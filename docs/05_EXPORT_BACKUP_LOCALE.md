@@ -29,7 +29,8 @@ Copia il database Room locale quando esiste.
 
 ### Backup completo
 
-Output: `repair-app-backup-YYYY-MM-DD-HH-mm.zip`.
+Output suggerito dal selettore: `onlytechtake-backup.zip`. L'utente puo'
+scegliere un nome diverso tramite Storage Access Framework.
 
 Contiene:
 

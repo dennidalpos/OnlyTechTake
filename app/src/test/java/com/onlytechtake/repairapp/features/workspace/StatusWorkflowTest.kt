@@ -1,37 +1,44 @@
 package com.onlytechtake.repairapp.features.workspace
 
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Assert.assertThrows
 import org.junit.Test
 
 class StatusWorkflowTest {
     @Test
-    fun presaInCaricoStartsWithDiagnosisOrCancel() {
+    fun newOrderStartsWithDiagnosisOrClose() {
         assertEquals(
-            listOf(OrderStatusAction.START_DIAGNOSIS, OrderStatusAction.CANCEL),
-            availableOrderStatusActions(OrderStatus.PRESA_IN_CARICO),
+            listOf(OrderStatusAction.START_DIAGNOSIS, OrderStatusAction.CLOSE),
+            availableOrderStatusActions(OrderStatus.NEW),
         )
     }
 
     @Test
-    fun waitingCustomerCanRecordEstimateAnswer() {
-        val actions = availableOrderStatusActions(OrderStatus.IN_ATTESA_CLIENTE)
+    fun waitingCustomerCanStartWorkOrClose() {
+        val actions = availableOrderStatusActions(OrderStatus.WAITING_CUSTOMER)
 
-        assertTrue(actions.contains(OrderStatusAction.ACCEPT_ESTIMATE))
-        assertTrue(actions.contains(OrderStatusAction.REJECT_ESTIMATE))
+        assertTrue(actions.contains(OrderStatusAction.START_WORK))
+        assertTrue(actions.contains(OrderStatusAction.CLOSE))
     }
 
     @Test
     fun closedStatusesHaveNoOperatorActions() {
-        assertTrue(availableOrderStatusActions(OrderStatus.CHIUSO).isEmpty())
-        assertTrue(availableOrderStatusActions(OrderStatus.ANNULLATO).isEmpty())
+        assertTrue(availableOrderStatusActions(OrderStatus.CLOSED).isEmpty())
     }
 
     @Test
-    fun onlyRiskyStatusActionsRequireConfirmation() {
+    fun onlyClosingStatusActionRequiresConfirmation() {
         assertTrue(OrderStatusAction.CLOSE.requiresConfirmation())
-        assertTrue(OrderStatusAction.CANCEL.requiresConfirmation())
         assertTrue(!OrderStatusAction.START_DIAGNOSIS.requiresConfirmation())
+    }
+
+    @Test
+    fun closingRequiresClosureReason() {
+        assertThrows(IllegalArgumentException::class.java) {
+            OrderStatusPolicy.requireAllowed(OrderStatus.READY_FOR_PICKUP, OrderStatus.CLOSED)
+        }
     }
 }

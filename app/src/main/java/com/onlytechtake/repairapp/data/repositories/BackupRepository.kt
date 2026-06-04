@@ -10,6 +10,8 @@ import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.data.local.entities.ClosureReason
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
@@ -78,7 +80,10 @@ class BackupRepository(
                 writer.title("Riepilogo commessa ${detail.order.orderNumber}")
                 writer.line("Numero: ${detail.order.orderNumber}")
                 writer.line("Titolo: ${detail.order.title}")
-                writer.line("Stato: ${detail.order.status.name}")
+                writer.line("Stato: ${detail.order.status.label()}")
+                detail.order.closureReason?.let { reason ->
+                    writer.line("Motivo chiusura: ${reason.label()}")
+                }
                 writer.line("Cliente: ${detail.customer.displayName()}")
                 writer.line("Categoria: ${detail.category?.name.orEmpty().ifBlank { "Nessuna" }}")
                 writer.line("Operatore: ${detail.assignedUser?.displayName.orEmpty().ifBlank { "Non assegnato" }}")
@@ -198,6 +203,26 @@ private fun CustomerEntity?.displayName(): String =
                 .ifBlank { "Privato senza nome" }
             CustomerType.BUSINESS -> customer.companyName.orEmpty().ifBlank { "Azienda senza nome" }
         }
+    }
+
+private fun OrderStatus.label(): String =
+    when (this) {
+        OrderStatus.NEW -> "Nuova"
+        OrderStatus.DIAGNOSIS -> "In diagnosi"
+        OrderStatus.WAITING_CUSTOMER -> "In attesa cliente"
+        OrderStatus.WORKING -> "In lavorazione"
+        OrderStatus.WAITING_PARTS -> "In attesa ricambi"
+        OrderStatus.READY_FOR_PICKUP -> "Pronta al ritiro"
+        OrderStatus.CLOSED -> "Chiusa"
+    }
+
+private fun ClosureReason.label(): String =
+    when (this) {
+        ClosureReason.COMPLETED -> "Completata"
+        ClosureReason.CUSTOMER_DECLINED -> "Rifiutata dal cliente"
+        ClosureReason.NOT_REPAIRABLE -> "Non riparabile"
+        ClosureReason.CANCELLED -> "Annullata"
+        ClosureReason.OTHER -> "Altro"
     }
 
 private fun formatTime(millis: Long): String =

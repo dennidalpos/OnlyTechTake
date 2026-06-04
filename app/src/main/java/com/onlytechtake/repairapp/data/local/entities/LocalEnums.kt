@@ -11,20 +11,21 @@ enum class UserRole {
 }
 
 enum class OrderStatus {
-    PRESA_IN_CARICO,
-    IN_DIAGNOSI,
-    PREVENTIVO_INVIATO,
-    IN_ATTESA_CLIENTE,
-    PREVENTIVO_ACCETTATO,
-    PREVENTIVO_RIFIUTATO,
-    IN_LAVORAZIONE,
-    IN_ATTESA_RICAMBIO,
-    COMPLETATO,
-    NON_COMPLETABILE,
-    PRONTO_AL_RITIRO,
-    CONSEGNATO,
-    CHIUSO,
-    ANNULLATO,
+    NEW,
+    DIAGNOSIS,
+    WAITING_CUSTOMER,
+    WORKING,
+    WAITING_PARTS,
+    READY_FOR_PICKUP,
+    CLOSED,
+}
+
+enum class ClosureReason {
+    COMPLETED,
+    CUSTOMER_DECLINED,
+    NOT_REPAIRABLE,
+    CANCELLED,
+    OTHER,
 }
 
 enum class OrderPriority {

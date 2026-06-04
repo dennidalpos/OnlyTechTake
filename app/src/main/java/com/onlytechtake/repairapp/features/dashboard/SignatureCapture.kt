@@ -14,8 +14,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -41,6 +43,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.createBitmap
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
+import com.onlytechtake.repairapp.features.workspace.formatFileSize
+import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
 
 data class SignatureCaptureResult(
     val signerName: String,
@@ -63,6 +67,8 @@ fun SignatureCaptureForm(
     var signerName by rememberSaveable { mutableStateOf("") }
     var privacyAccepted by rememberSaveable { mutableStateOf(false) }
     var termsAccepted by rememberSaveable { mutableStateOf(false) }
+    var selectedSignaturePath by rememberSaveable { mutableStateOf<String?>(null) }
+    var selectedSignatureTitle by rememberSaveable { mutableStateOf("") }
     var strokes by remember { mutableStateOf<List<SignatureStroke>>(emptyList()) }
     var currentStroke by remember { mutableStateOf<SignatureStroke?>(null) }
     val hasSignature = strokes.any { it.points.size > 1 }
@@ -84,7 +90,20 @@ fun SignatureCaptureForm(
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         SectionTitle(title)
         existingSignatures.forEach { signature ->
-            Text("${signature.signerName} - ${signature.fileName} - v privacy ${signature.privacyTemplateVersion}")
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    LocalImagePreview(
+                        path = signature.localPath,
+                        description = "Firma ${signature.signerName}",
+                        onClick = {
+                            selectedSignaturePath = signature.localPath
+                            selectedSignatureTitle = "Firma ${signature.signerName}"
+                        },
+                    )
+                    Text("${signature.signerName} - ${formatUiDateTime(signature.signedAt)}")
+                    Text("${signature.fileName} - ${formatFileSize(signature.sizeBytes)} - privacy v${signature.privacyTemplateVersion}")
+                }
+            }
         }
         if (existingSignatures.isEmpty() && submitText != null) {
             Text("Nessuna firma acquisita.")
@@ -153,6 +172,14 @@ fun SignatureCaptureForm(
                 }
             }
         }
+    }
+
+    selectedSignaturePath?.let { path ->
+        LocalImageViewer(
+            path = path,
+            title = selectedSignatureTitle,
+            onDismiss = { selectedSignaturePath = null },
+        )
     }
 }
 

@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.data.local.db
 
 import androidx.room.TypeConverter
 import com.onlytechtake.repairapp.data.local.entities.AuditAction
+import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.MessageChannel
@@ -21,6 +22,9 @@ class RoomConverters {
 
     @TypeConverter fun toOrderStatus(value: String?): OrderStatus? = enumValueOrNull<OrderStatus>(value)
     @TypeConverter fun fromOrderStatus(value: OrderStatus?): String? = value?.name
+
+    @TypeConverter fun toClosureReason(value: String?): ClosureReason? = enumValueOrNull<ClosureReason>(value)
+    @TypeConverter fun fromClosureReason(value: ClosureReason?): String? = value?.name
 
     @TypeConverter fun toOrderPriority(value: String?): OrderPriority? = enumValueOrNull<OrderPriority>(value)
     @TypeConverter fun fromOrderPriority(value: OrderPriority?): String? = value?.name
