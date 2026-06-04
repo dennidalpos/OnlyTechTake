@@ -77,6 +77,20 @@ class SignatureRepository(
             signature
         }
 
+    fun deleteSignatureFile(signature: SignatureEntity) {
+        val file = File(signature.localPath)
+        if (file.exists()) {
+            file.delete()
+        }
+        file.parentFile?.deleteIfEmpty()
+    }
+
+    private fun File.deleteIfEmpty() {
+        if (exists() && isDirectory && listFiles().isNullOrEmpty()) {
+            delete()
+        }
+    }
+
     private companion object {
         const val PRIVACY_TEMPLATE_CODE = "privacy_breve"
         const val TERMS_TEMPLATE_CODE = "condizioni_presa_in_carico"

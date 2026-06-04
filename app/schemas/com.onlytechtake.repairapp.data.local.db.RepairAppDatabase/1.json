@@ -1,0 +1,1573 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "3ba2ac2eca02da2ba98376b3e1c603b1",
+    "entities": [
+      {
+        "tableName": "users",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `displayName` TEXT NOT NULL, `username` TEXT NOT NULL, `passwordHash` TEXT NOT NULL, `passwordSalt` TEXT NOT NULL, `role` TEXT NOT NULL, `active` INTEGER NOT NULL DEFAULT 1, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "displayName",
+            "columnName": "displayName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "passwordHash",
+            "columnName": "passwordHash",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "passwordSalt",
+            "columnName": "passwordSalt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "role",
+            "columnName": "role",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "active",
+            "columnName": "active",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_users_username",
+            "unique": true,
+            "columnNames": [
+              "username"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_users_username` ON `${TABLE_NAME}` (`username`)"
+          },
+          {
+            "name": "index_users_active",
+            "unique": false,
+            "columnNames": [
+              "active"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_users_active` ON `${TABLE_NAME}` (`active`)"
+          }
+        ]
+      },
+      {
+        "tableName": "customers",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `type` TEXT NOT NULL, `firstName` TEXT, `lastName` TEXT, `companyName` TEXT, `vatNumber` TEXT, `taxCode` TEXT, `phone` TEXT, `email` TEXT, `address` TEXT, `notes` TEXT, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstName",
+            "columnName": "firstName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "lastName",
+            "columnName": "lastName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "companyName",
+            "columnName": "companyName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "vatNumber",
+            "columnName": "vatNumber",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "taxCode",
+            "columnName": "taxCode",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "phone",
+            "columnName": "phone",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "address",
+            "columnName": "address",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "notes",
+            "columnName": "notes",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_customers_type",
+            "unique": false,
+            "columnNames": [
+              "type"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_customers_type` ON `${TABLE_NAME}` (`type`)"
+          },
+          {
+            "name": "index_customers_firstName",
+            "unique": false,
+            "columnNames": [
+              "firstName"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_customers_firstName` ON `${TABLE_NAME}` (`firstName`)"
+          },
+          {
+            "name": "index_customers_lastName",
+            "unique": false,
+            "columnNames": [
+              "lastName"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_customers_lastName` ON `${TABLE_NAME}` (`lastName`)"
+          },
+          {
+            "name": "index_customers_companyName",
+            "unique": false,
+            "columnNames": [
+              "companyName"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_customers_companyName` ON `${TABLE_NAME}` (`companyName`)"
+          },
+          {
+            "name": "index_customers_phone",
+            "unique": false,
+            "columnNames": [
+              "phone"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_customers_phone` ON `${TABLE_NAME}` (`phone`)"
+          },
+          {
+            "name": "index_customers_email",
+            "unique": false,
+            "columnNames": [
+              "email"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_customers_email` ON `${TABLE_NAME}` (`email`)"
+          },
+          {
+            "name": "index_customers_vatNumber",
+            "unique": false,
+            "columnNames": [
+              "vatNumber"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_customers_vatNumber` ON `${TABLE_NAME}` (`vatNumber`)"
+          },
+          {
+            "name": "index_customers_taxCode",
+            "unique": false,
+            "columnNames": [
+              "taxCode"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_customers_taxCode` ON `${TABLE_NAME}` (`taxCode`)"
+          }
+        ]
+      },
+      {
+        "tableName": "order_categories",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `description` TEXT, `active` INTEGER NOT NULL DEFAULT 1, `sortOrder` INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "active",
+            "columnName": "active",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "sortOrder",
+            "columnName": "sortOrder",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_order_categories_name",
+            "unique": true,
+            "columnNames": [
+              "name"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_order_categories_name` ON `${TABLE_NAME}` (`name`)"
+          },
+          {
+            "name": "index_order_categories_active",
+            "unique": false,
+            "columnNames": [
+              "active"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_order_categories_active` ON `${TABLE_NAME}` (`active`)"
+          },
+          {
+            "name": "index_order_categories_sortOrder",
+            "unique": false,
+            "columnNames": [
+              "sortOrder"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_order_categories_sortOrder` ON `${TABLE_NAME}` (`sortOrder`)"
+          }
+        ]
+      },
+      {
+        "tableName": "repair_orders",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `orderNumber` TEXT NOT NULL, `customerId` TEXT NOT NULL, `title` TEXT NOT NULL, `categoryId` TEXT NOT NULL, `status` TEXT NOT NULL, `priority` TEXT NOT NULL, `assignedToUserId` TEXT, `createdByUserId` TEXT NOT NULL, `description` TEXT, `internalNotes` TEXT, `estimateAmountCents` INTEGER, `finalAmountCents` INTEGER, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, `closedAt` INTEGER, `deletedAt` INTEGER, `deletedByUserId` TEXT, `deleteReason` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`customerId`) REFERENCES `customers`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`categoryId`) REFERENCES `order_categories`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`assignedToUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL , FOREIGN KEY(`createdByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`deletedByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "orderNumber",
+            "columnName": "orderNumber",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "customerId",
+            "columnName": "customerId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "categoryId",
+            "columnName": "categoryId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "priority",
+            "columnName": "priority",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "assignedToUserId",
+            "columnName": "assignedToUserId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "createdByUserId",
+            "columnName": "createdByUserId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "internalNotes",
+            "columnName": "internalNotes",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "estimateAmountCents",
+            "columnName": "estimateAmountCents",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "finalAmountCents",
+            "columnName": "finalAmountCents",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "closedAt",
+            "columnName": "closedAt",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "deletedAt",
+            "columnName": "deletedAt",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "deletedByUserId",
+            "columnName": "deletedByUserId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "deleteReason",
+            "columnName": "deleteReason",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_repair_orders_orderNumber",
+            "unique": true,
+            "columnNames": [
+              "orderNumber"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_repair_orders_orderNumber` ON `${TABLE_NAME}` (`orderNumber`)"
+          },
+          {
+            "name": "index_repair_orders_customerId",
+            "unique": false,
+            "columnNames": [
+              "customerId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_repair_orders_customerId` ON `${TABLE_NAME}` (`customerId`)"
+          },
+          {
+            "name": "index_repair_orders_categoryId",
+            "unique": false,
+            "columnNames": [
+              "categoryId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_repair_orders_categoryId` ON `${TABLE_NAME}` (`categoryId`)"
+          },
+          {
+            "name": "index_repair_orders_status",
+            "unique": false,
+            "columnNames": [
+              "status"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_repair_orders_status` ON `${TABLE_NAME}` (`status`)"
+          },
+          {
+            "name": "index_repair_orders_assignedToUserId",
+            "unique": false,
+            "columnNames": [
+              "assignedToUserId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_repair_orders_assignedToUserId` ON `${TABLE_NAME}` (`assignedToUserId`)"
+          },
+          {
+            "name": "index_repair_orders_createdByUserId",
+            "unique": false,
+            "columnNames": [
+              "createdByUserId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_repair_orders_createdByUserId` ON `${TABLE_NAME}` (`createdByUserId`)"
+          },
+          {
+            "name": "index_repair_orders_deletedByUserId",
+            "unique": false,
+            "columnNames": [
+              "deletedByUserId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_repair_orders_deletedByUserId` ON `${TABLE_NAME}` (`deletedByUserId`)"
+          },
+          {
+            "name": "index_repair_orders_deletedAt",
+            "unique": false,
+            "columnNames": [
+              "deletedAt"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_repair_orders_deletedAt` ON `${TABLE_NAME}` (`deletedAt`)"
+          },
+          {
+            "name": "index_repair_orders_createdAt",
+            "unique": false,
+            "columnNames": [
+              "createdAt"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_repair_orders_createdAt` ON `${TABLE_NAME}` (`createdAt`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "customers",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "customerId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "order_categories",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "categoryId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "users",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "assignedToUserId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "users",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "createdByUserId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "users",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "deletedByUserId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "timeline_events",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `orderId` TEXT NOT NULL, `type` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT, `oldStatus` TEXT, `newStatus` TEXT, `visibleToCustomer` INTEGER NOT NULL DEFAULT 0, `requiresCustomerFeedback` INTEGER NOT NULL DEFAULT 0, `expectedFeedbackType` TEXT, `customerFeedback` TEXT, `customerFeedbackNote` TEXT, `customerFeedbackAt` INTEGER, `createdByUserId` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`orderId`) REFERENCES `repair_orders`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`createdByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "orderId",
+            "columnName": "orderId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "oldStatus",
+            "columnName": "oldStatus",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "newStatus",
+            "columnName": "newStatus",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "visibleToCustomer",
+            "columnName": "visibleToCustomer",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "requiresCustomerFeedback",
+            "columnName": "requiresCustomerFeedback",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "expectedFeedbackType",
+            "columnName": "expectedFeedbackType",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "customerFeedback",
+            "columnName": "customerFeedback",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "customerFeedbackNote",
+            "columnName": "customerFeedbackNote",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "customerFeedbackAt",
+            "columnName": "customerFeedbackAt",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "createdByUserId",
+            "columnName": "createdByUserId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_timeline_events_orderId",
+            "unique": false,
+            "columnNames": [
+              "orderId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_timeline_events_orderId` ON `${TABLE_NAME}` (`orderId`)"
+          },
+          {
+            "name": "index_timeline_events_type",
+            "unique": false,
+            "columnNames": [
+              "type"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_timeline_events_type` ON `${TABLE_NAME}` (`type`)"
+          },
+          {
+            "name": "index_timeline_events_createdByUserId",
+            "unique": false,
+            "columnNames": [
+              "createdByUserId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_timeline_events_createdByUserId` ON `${TABLE_NAME}` (`createdByUserId`)"
+          },
+          {
+            "name": "index_timeline_events_createdAt",
+            "unique": false,
+            "columnNames": [
+              "createdAt"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_timeline_events_createdAt` ON `${TABLE_NAME}` (`createdAt`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "repair_orders",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "orderId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "users",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "createdByUserId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "message_templates",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `code` TEXT NOT NULL, `title` TEXT NOT NULL, `channel` TEXT NOT NULL, `body` TEXT NOT NULL, `active` INTEGER NOT NULL DEFAULT 1, `version` INTEGER NOT NULL DEFAULT 1, `updatedByUserId` TEXT, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`updatedByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "code",
+            "columnName": "code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "channel",
+            "columnName": "channel",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "body",
+            "columnName": "body",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "active",
+            "columnName": "active",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "version",
+            "columnName": "version",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "updatedByUserId",
+            "columnName": "updatedByUserId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_message_templates_code",
+            "unique": true,
+            "columnNames": [
+              "code"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_message_templates_code` ON `${TABLE_NAME}` (`code`)"
+          },
+          {
+            "name": "index_message_templates_channel",
+            "unique": false,
+            "columnNames": [
+              "channel"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_message_templates_channel` ON `${TABLE_NAME}` (`channel`)"
+          },
+          {
+            "name": "index_message_templates_active",
+            "unique": false,
+            "columnNames": [
+              "active"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_message_templates_active` ON `${TABLE_NAME}` (`active`)"
+          },
+          {
+            "name": "index_message_templates_updatedByUserId",
+            "unique": false,
+            "columnNames": [
+              "updatedByUserId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_message_templates_updatedByUserId` ON `${TABLE_NAME}` (`updatedByUserId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "users",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "updatedByUserId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "message_logs",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `orderId` TEXT NOT NULL, `timelineEventId` TEXT, `customerId` TEXT NOT NULL, `channel` TEXT NOT NULL, `mode` TEXT NOT NULL, `body` TEXT NOT NULL, `status` TEXT NOT NULL, `expectedReply` TEXT, `actualReply` TEXT, `actualReplyNote` TEXT, `createdByUserId` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `sentAt` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`orderId`) REFERENCES `repair_orders`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`timelineEventId`) REFERENCES `timeline_events`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL , FOREIGN KEY(`customerId`) REFERENCES `customers`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`createdByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "orderId",
+            "columnName": "orderId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timelineEventId",
+            "columnName": "timelineEventId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "customerId",
+            "columnName": "customerId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "channel",
+            "columnName": "channel",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mode",
+            "columnName": "mode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "body",
+            "columnName": "body",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "expectedReply",
+            "columnName": "expectedReply",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "actualReply",
+            "columnName": "actualReply",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "actualReplyNote",
+            "columnName": "actualReplyNote",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "createdByUserId",
+            "columnName": "createdByUserId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sentAt",
+            "columnName": "sentAt",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_message_logs_orderId",
+            "unique": false,
+            "columnNames": [
+              "orderId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_message_logs_orderId` ON `${TABLE_NAME}` (`orderId`)"
+          },
+          {
+            "name": "index_message_logs_timelineEventId",
+            "unique": false,
+            "columnNames": [
+              "timelineEventId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_message_logs_timelineEventId` ON `${TABLE_NAME}` (`timelineEventId`)"
+          },
+          {
+            "name": "index_message_logs_customerId",
+            "unique": false,
+            "columnNames": [
+              "customerId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_message_logs_customerId` ON `${TABLE_NAME}` (`customerId`)"
+          },
+          {
+            "name": "index_message_logs_channel",
+            "unique": false,
+            "columnNames": [
+              "channel"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_message_logs_channel` ON `${TABLE_NAME}` (`channel`)"
+          },
+          {
+            "name": "index_message_logs_status",
+            "unique": false,
+            "columnNames": [
+              "status"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_message_logs_status` ON `${TABLE_NAME}` (`status`)"
+          },
+          {
+            "name": "index_message_logs_createdByUserId",
+            "unique": false,
+            "columnNames": [
+              "createdByUserId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_message_logs_createdByUserId` ON `${TABLE_NAME}` (`createdByUserId`)"
+          },
+          {
+            "name": "index_message_logs_createdAt",
+            "unique": false,
+            "columnNames": [
+              "createdAt"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_message_logs_createdAt` ON `${TABLE_NAME}` (`createdAt`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "repair_orders",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "orderId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "timeline_events",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "timelineEventId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "customers",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "customerId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "users",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "createdByUserId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "app_settings",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`key` TEXT NOT NULL, `value` TEXT NOT NULL, `updatedByUserId` TEXT, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`key`), FOREIGN KEY(`updatedByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "fields": [
+          {
+            "fieldPath": "key",
+            "columnName": "key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedByUserId",
+            "columnName": "updatedByUserId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "key"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_app_settings_updatedByUserId",
+            "unique": false,
+            "columnNames": [
+              "updatedByUserId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_app_settings_updatedByUserId` ON `${TABLE_NAME}` (`updatedByUserId`)"
+          },
+          {
+            "name": "index_app_settings_updatedAt",
+            "unique": false,
+            "columnNames": [
+              "updatedAt"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_app_settings_updatedAt` ON `${TABLE_NAME}` (`updatedAt`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "users",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "updatedByUserId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "audit_logs",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `action` TEXT NOT NULL, `actorUserId` TEXT, `orderId` TEXT, `customerId` TEXT, `detailsJson` TEXT, `createdAt` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`actorUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL , FOREIGN KEY(`orderId`) REFERENCES `repair_orders`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL , FOREIGN KEY(`customerId`) REFERENCES `customers`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "action",
+            "columnName": "action",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "actorUserId",
+            "columnName": "actorUserId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "orderId",
+            "columnName": "orderId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "customerId",
+            "columnName": "customerId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "detailsJson",
+            "columnName": "detailsJson",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_audit_logs_action",
+            "unique": false,
+            "columnNames": [
+              "action"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_audit_logs_action` ON `${TABLE_NAME}` (`action`)"
+          },
+          {
+            "name": "index_audit_logs_actorUserId",
+            "unique": false,
+            "columnNames": [
+              "actorUserId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_audit_logs_actorUserId` ON `${TABLE_NAME}` (`actorUserId`)"
+          },
+          {
+            "name": "index_audit_logs_orderId",
+            "unique": false,
+            "columnNames": [
+              "orderId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_audit_logs_orderId` ON `${TABLE_NAME}` (`orderId`)"
+          },
+          {
+            "name": "index_audit_logs_customerId",
+            "unique": false,
+            "columnNames": [
+              "customerId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_audit_logs_customerId` ON `${TABLE_NAME}` (`customerId`)"
+          },
+          {
+            "name": "index_audit_logs_createdAt",
+            "unique": false,
+            "columnNames": [
+              "createdAt"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_audit_logs_createdAt` ON `${TABLE_NAME}` (`createdAt`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "users",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "actorUserId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "repair_orders",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "orderId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "customers",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "customerId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "order_media",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `orderId` TEXT NOT NULL, `mediaType` TEXT NOT NULL, `localPath` TEXT NOT NULL, `fileName` TEXT NOT NULL, `mimeType` TEXT NOT NULL, `sizeBytes` INTEGER NOT NULL, `width` INTEGER, `height` INTEGER, `createdByUserId` TEXT, `capturedAt` INTEGER NOT NULL, `createdAt` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`orderId`) REFERENCES `repair_orders`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`createdByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "orderId",
+            "columnName": "orderId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mediaType",
+            "columnName": "mediaType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "localPath",
+            "columnName": "localPath",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fileName",
+            "columnName": "fileName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mimeType",
+            "columnName": "mimeType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sizeBytes",
+            "columnName": "sizeBytes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "width",
+            "columnName": "width",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "height",
+            "columnName": "height",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "createdByUserId",
+            "columnName": "createdByUserId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "capturedAt",
+            "columnName": "capturedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_order_media_orderId",
+            "unique": false,
+            "columnNames": [
+              "orderId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_order_media_orderId` ON `${TABLE_NAME}` (`orderId`)"
+          },
+          {
+            "name": "index_order_media_createdByUserId",
+            "unique": false,
+            "columnNames": [
+              "createdByUserId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_order_media_createdByUserId` ON `${TABLE_NAME}` (`createdByUserId`)"
+          },
+          {
+            "name": "index_order_media_capturedAt",
+            "unique": false,
+            "columnNames": [
+              "capturedAt"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_order_media_capturedAt` ON `${TABLE_NAME}` (`capturedAt`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "repair_orders",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "orderId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "users",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "createdByUserId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "signatures",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `orderId` TEXT NOT NULL, `signerName` TEXT NOT NULL, `privacyAccepted` INTEGER NOT NULL DEFAULT 0, `termsAccepted` INTEGER NOT NULL DEFAULT 0, `privacyTextSnapshot` TEXT NOT NULL, `privacyTemplateVersion` INTEGER NOT NULL DEFAULT 0, `termsTextSnapshot` TEXT NOT NULL, `termsTemplateVersion` INTEGER NOT NULL DEFAULT 0, `localPath` TEXT NOT NULL, `fileName` TEXT NOT NULL, `mimeType` TEXT NOT NULL, `sizeBytes` INTEGER NOT NULL, `width` INTEGER NOT NULL, `height` INTEGER NOT NULL, `createdByUserId` TEXT, `signedAt` INTEGER NOT NULL, `createdAt` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`orderId`) REFERENCES `repair_orders`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`createdByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "orderId",
+            "columnName": "orderId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "signerName",
+            "columnName": "signerName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "privacyAccepted",
+            "columnName": "privacyAccepted",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "termsAccepted",
+            "columnName": "termsAccepted",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "privacyTextSnapshot",
+            "columnName": "privacyTextSnapshot",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "privacyTemplateVersion",
+            "columnName": "privacyTemplateVersion",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "termsTextSnapshot",
+            "columnName": "termsTextSnapshot",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "termsTemplateVersion",
+            "columnName": "termsTemplateVersion",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "localPath",
+            "columnName": "localPath",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fileName",
+            "columnName": "fileName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mimeType",
+            "columnName": "mimeType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sizeBytes",
+            "columnName": "sizeBytes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "width",
+            "columnName": "width",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "height",
+            "columnName": "height",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdByUserId",
+            "columnName": "createdByUserId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "signedAt",
+            "columnName": "signedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_signatures_orderId",
+            "unique": false,
+            "columnNames": [
+              "orderId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_signatures_orderId` ON `${TABLE_NAME}` (`orderId`)"
+          },
+          {
+            "name": "index_signatures_createdByUserId",
+            "unique": false,
+            "columnNames": [
+              "createdByUserId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_signatures_createdByUserId` ON `${TABLE_NAME}` (`createdByUserId`)"
+          },
+          {
+            "name": "index_signatures_signedAt",
+            "unique": false,
+            "columnNames": [
+              "signedAt"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_signatures_signedAt` ON `${TABLE_NAME}` (`signedAt`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "repair_orders",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "orderId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "users",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "createdByUserId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3ba2ac2eca02da2ba98376b3e1c603b1')"
+    ]
+  }
+}

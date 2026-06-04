@@ -45,7 +45,7 @@ import com.onlytechtake.repairapp.data.local.entities.UserEntity
         SignatureEntity::class,
     ],
     version = RepairAppDatabase.DATABASE_VERSION,
-    exportSchema = false,
+    exportSchema = true,
 )
 @TypeConverters(RoomConverters::class)
 abstract class RepairAppDatabase : RoomDatabase() {
@@ -65,6 +65,7 @@ abstract class RepairAppDatabase : RoomDatabase() {
     companion object {
         const val DATABASE_NAME = "repair_app.db"
         const val DATABASE_VERSION = 1
+        val MIGRATIONS: Array<Migration> = emptyArray()
 
         @Volatile
         private var instance: RepairAppDatabase? = null
@@ -76,6 +77,7 @@ abstract class RepairAppDatabase : RoomDatabase() {
                     RepairAppDatabase::class.java,
                     DATABASE_NAME,
                 ).fallbackToDestructiveMigration(false)
+                    .addMigrations(*MIGRATIONS)
                     .build()
                     .also { instance = it }
             }

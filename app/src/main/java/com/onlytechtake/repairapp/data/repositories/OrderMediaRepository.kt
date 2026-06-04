@@ -187,10 +187,12 @@ class OrderMediaRepository(
             if (stagedMedia.isEmpty()) return@runCatching emptyList()
 
             val now = clockMillis()
+            val movedFiles = mutableListOf<File>()
             val entities = stagedMedia.mapIndexed { index, staged ->
                 val source = File(staged.localPath)
                 require(source.exists() && source.length() > 0L) { "File presa in carico non disponibile: ${staged.fileName}" }
                 val destination = moveStagedFile(orderId, source, staged, now + index)
+                movedFiles += destination
                 OrderMediaEntity(
                     id = UUID.randomUUID().toString(),
                     orderId = orderId,
@@ -207,14 +209,23 @@ class OrderMediaRepository(
                 )
             }
 
-            inTransaction {
-                entities.forEach { media ->
-                    orderMediaDao.upsert(media)
-                    eventWriter.mediaAdded(orderId, actor.id, "Media presa in carico", media.fileName, media.createdAt)
+            try {
+                inTransaction {
+                    entities.forEach { media ->
+                        orderMediaDao.upsert(media)
+                        eventWriter.mediaAdded(orderId, actor.id, "Media presa in carico", media.fileName, media.createdAt)
+                    }
                 }
+            } catch (error: Exception) {
+                movedFiles.forEach { file -> deleteMediaFile(file) }
+                throw error
             }
             entities
         }
+
+    fun deleteMediaFiles(media: List<OrderMediaEntity>) {
+        media.forEach { entity -> deleteMediaFile(File(entity.localPath)) }
+    }
 
     private fun readImageBounds(file: File): ImageBounds {
         val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
@@ -289,6 +300,19 @@ class OrderMediaRepository(
         } catch (error: Exception) {
             destination.delete()
             throw error
+        }
+    }
+
+    private fun deleteMediaFile(file: File) {
+        if (file.exists()) {
+            file.delete()
+        }
+        file.parentFile?.deleteIfEmpty()
+    }
+
+    private fun File.deleteIfEmpty() {
+        if (exists() && isDirectory && listFiles().isNullOrEmpty()) {
+            delete()
         }
     }
 

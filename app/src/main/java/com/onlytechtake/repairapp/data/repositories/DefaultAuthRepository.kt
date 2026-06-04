@@ -8,6 +8,7 @@ import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
+import com.onlytechtake.repairapp.data.preferences.FailedLoginPreference
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.auth.AuthState
@@ -30,7 +31,6 @@ class DefaultAuthRepository(
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) : AuthRepository {
     override val currentUser = sessionStore.currentUser
-    private val failedLoginAttempts = mutableMapOf<String, FailedLoginState>()
 
     override fun observeAuthState(): Flow<AuthState> =
         combine(
@@ -109,7 +109,7 @@ class DefaultAuthRepository(
         }
 
         val authenticatedUser = user.toAuthenticatedUser()
-        failedLoginAttempts.remove(normalizedUsername.lowercase())
+        authPreferences.clearFailedLoginState(normalizedUsername)
         sessionStore.setCurrentUser(authenticatedUser, now)
         authPreferences.recordLogin(user.id, now)
         if (user.role == UserRole.ADMIN) {
@@ -157,33 +157,29 @@ class DefaultAuthRepository(
             }
         }
 
-    private fun isLockedOut(username: String, now: Long): Boolean {
-        val state = failedLoginAttempts[username.lowercase()] ?: return false
-        if (state.lockedUntilMillis == null || now < state.lockedUntilMillis) {
-            return state.lockedUntilMillis != null
-        }
-        failedLoginAttempts.remove(username.lowercase())
+    private suspend fun isLockedOut(username: String, now: Long): Boolean {
+        val state = authPreferences.failedLoginState(username) ?: return false
+        val lockedUntil = state.lockedUntilMillis ?: return false
+        if (now < lockedUntil) return true
+        authPreferences.clearFailedLoginState(username)
         return false
     }
 
-    private fun recordFailedAttempt(username: String, now: Long) {
-        val key = username.lowercase()
-        val previous = failedLoginAttempts[key]
+    private suspend fun recordFailedAttempt(username: String, now: Long) {
+        val previous = authPreferences.failedLoginState(username)
         val attempts = (previous?.attempts ?: 0) + 1
-        failedLoginAttempts[key] = FailedLoginState(
-            attempts = attempts,
-            lockedUntilMillis = if (attempts >= AuthPolicy.MAX_FAILED_LOGIN_ATTEMPTS) {
-                now + AuthPolicy.LOGIN_LOCKOUT_MILLIS
-            } else {
-                previous?.lockedUntilMillis
-            },
+        authPreferences.recordFailedLoginState(
+            username,
+            FailedLoginPreference(
+                attempts = attempts,
+                lockedUntilMillis = if (attempts >= AuthPolicy.MAX_FAILED_LOGIN_ATTEMPTS) {
+                    now + AuthPolicy.LOGIN_LOCKOUT_MILLIS
+                } else {
+                    previous?.lockedUntilMillis
+                },
+            ),
         )
     }
-
-    private data class FailedLoginState(
-        val attempts: Int,
-        val lockedUntilMillis: Long?,
-    )
 
     private companion object {
         const val INACTIVITY_CHECK_INTERVAL_MILLIS = 60 * 1000L

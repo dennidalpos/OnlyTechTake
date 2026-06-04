@@ -35,6 +35,7 @@ fun AdminPanel(
     var displayName by rememberSaveable { mutableStateOf("") }
     var username by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
+    var resetPasswords by rememberSaveable { mutableStateOf(emptyMap<String, String>()) }
     var resetConfirmation by rememberSaveable { mutableStateOf("") }
     var confirmTitle by remember { mutableStateOf<String?>(null) }
     var confirmText by remember { mutableStateOf("") }
@@ -86,6 +87,16 @@ fun AdminPanel(
                 Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text("${user.displayName} - ${user.username} (${user.role.name})")
                     Text(if (user.active) "Attivo" else "Disattivo")
+                    Field(
+                        value = resetPasswords[user.id].orEmpty(),
+                        onValueChange = { value ->
+                            resetPasswords = resetPasswords + (user.id to value)
+                        },
+                        label = "Nuova password temporanea",
+                        singleLine = true,
+                        keyboardType = KeyboardType.Password,
+                        visualTransformation = PasswordVisualTransformation(),
+                    )
                     ActionRow {
                         Button(
                             onClick = {
@@ -98,8 +109,10 @@ fun AdminPanel(
                         }
                         Button(
                             onClick = {
+                                val resetPassword = resetPasswords[user.id].orEmpty()
                                 requestConfirm("Resettare password?", "La password temporanea inserita verra' salvata per ${user.displayName}.") {
-                                    viewModel.resetPassword(user.id, password)
+                                    viewModel.resetPassword(user.id, resetPassword)
+                                    resetPasswords = resetPasswords - user.id
                                 }
                             },
                         ) {
