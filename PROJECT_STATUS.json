@@ -1,0 +1,12 @@
+{
+  "todos": [
+    "Restore Git metadata or move the project into a Git working tree",
+    "Add rollback cleanup coverage for intake signatures and staged media",
+    "Persist login lockout state across app restarts or document the accepted risk",
+    "Enable Room schema export and add migration verification before database version changes",
+    "Add repository and use-case tests for auth, workflow, backup, and reset paths",
+    "Remove generated build and cache directories from the source workspace",
+    "Archive or update obsolete Codex prompt backlog notes",
+    "Separate admin password reset input from operator creation state"
+  ]
+}

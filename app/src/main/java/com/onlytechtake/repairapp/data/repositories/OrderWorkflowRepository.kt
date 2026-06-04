@@ -1,0 +1,236 @@
+package com.onlytechtake.repairapp.data.repositories
+
+import androidx.room.withTransaction
+import com.onlytechtake.repairapp.core.orders.OrderNumberGenerator
+import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
+import com.onlytechtake.repairapp.data.local.dao.CustomerDao
+import com.onlytechtake.repairapp.data.local.dao.MessageLogDao
+import com.onlytechtake.repairapp.data.local.dao.OrderMediaDao
+import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
+import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
+import com.onlytechtake.repairapp.data.local.dao.SignatureDao
+import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
+import com.onlytechtake.repairapp.data.local.dao.UserDao
+import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
+import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
+import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
+import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
+import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
+import com.onlytechtake.repairapp.domain.workspace.OrderDetail
+import com.onlytechtake.repairapp.domain.workspace.OrderFilter
+import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
+import com.onlytechtake.repairapp.domain.workspace.RepairOrderInput
+import java.util.UUID
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+
+class OrderWorkflowRepository(
+    private val repairOrderDao: RepairOrderDao,
+    private val customerDao: CustomerDao,
+    private val categoryDao: OrderCategoryDao,
+    private val userDao: UserDao,
+    private val timelineEventDao: TimelineEventDao,
+    private val orderMediaDao: OrderMediaDao,
+    private val signatureDao: SignatureDao,
+    private val messageLogDao: MessageLogDao,
+    private val auditLogDao: AuditLogDao,
+    private val database: RepairAppDatabase? = null,
+    private val orderNumberGenerator: OrderNumberGenerator = OrderNumberGenerator(),
+    private val clockMillis: () -> Long = System::currentTimeMillis,
+) {
+    private val eventWriter = OrderWorkflowEventWriter(timelineEventDao, auditLogDao)
+
+    fun observeOrders(actor: AuthenticatedUser, filter: OrderFilter): Flow<List<RepairOrderEntity>> {
+        val assignedToUserId = if (filter.showMineOnly) actor.id else null
+        val status = filter.status.takeIf { filter.statuses.isEmpty() }
+        val base = repairOrderDao.observeFiltered(
+            includeDeleted = filter.showArchive,
+            onlyDeleted = filter.showArchive,
+            assignedToUserId = assignedToUserId,
+            status = status,
+            customerId = filter.customerId,
+        )
+        return if (filter.statuses.isEmpty()) base else base.map { orders ->
+            orders.filter { it.status in filter.statuses }
+        }
+    }
+
+    fun observeOrderDetail(orderId: String): Flow<OrderDetail?> =
+        combine(
+            repairOrderDao.observeById(orderId),
+            timelineEventDao.observeForOrder(orderId),
+            messageLogDao.observeForOrder(orderId),
+            orderMediaDao.observeForOrder(orderId),
+        ) { order, timeline, messages, media ->
+            order?.let { ObservedOrderData(it, timeline, messages, media) }
+        }.let { detailData ->
+            combine(detailData, signatureDao.observeForOrder(orderId)) { data, signatures ->
+                data?.let {
+                    val order = it.order
+                    OrderDetail(
+                        order = order,
+                        customer = customerDao.findById(order.customerId),
+                        category = categoryDao.findById(order.categoryId),
+                        assignedUser = order.assignedToUserId?.let { userId -> userDao.findById(userId) },
+                        timeline = it.timeline,
+                        messages = it.messages,
+                        media = it.media,
+                        signatures = signatures,
+                    )
+                }
+            }
+        }
+
+    private data class ObservedOrderData(
+        val order: RepairOrderEntity,
+        val timeline: List<TimelineEventEntity>,
+        val messages: List<MessageLogEntity>,
+        val media: List<OrderMediaEntity>,
+    )
+
+    suspend fun createOrder(actor: AuthenticatedUser, input: RepairOrderInput): Result<RepairOrderEntity> =
+        runCatching {
+            inTransaction {
+                require(input.customerId.isNotBlank()) { "Cliente obbligatorio" }
+                require(input.title.isNotBlank()) { "Titolo obbligatorio" }
+                require(input.categoryId.isNotBlank()) { "Categoria obbligatoria" }
+                requireNotNull(customerDao.findById(input.customerId)) { "Cliente non trovato" }
+                requireNotNull(categoryDao.findById(input.categoryId)) { "Categoria non trovata" }
+
+                val now = clockMillis()
+                val prefix = orderNumberGenerator.yearPrefix(now)
+                val order = RepairOrderEntity(
+                    id = UUID.randomUUID().toString(),
+                    orderNumber = orderNumberGenerator.next(prefix, repairOrderDao.findLatestOrderNumberForYear(prefix)),
+                    customerId = input.customerId,
+                    title = input.title.trim(),
+                    categoryId = input.categoryId,
+                    status = OrderStatus.PRESA_IN_CARICO,
+                    priority = input.priority,
+                    assignedToUserId = input.assignedToUserId ?: actor.id,
+                    createdByUserId = actor.id,
+                    description = input.description.trim().ifBlank { null },
+                    internalNotes = null,
+                    estimateAmountCents = null,
+                    finalAmountCents = null,
+                    createdAt = now,
+                    updatedAt = now,
+                    closedAt = null,
+                    deletedAt = null,
+                    deletedByUserId = null,
+                    deleteReason = null,
+                )
+
+                repairOrderDao.upsert(order)
+                eventWriter.orderCreated(order.id, actor.id, now)
+                order
+            }
+        }
+
+    suspend fun changeStatus(actor: AuthenticatedUser, orderId: String, status: OrderStatus): Result<Unit> =
+        runCatching {
+            inTransaction {
+                val order = requireWritableOrder(actor, orderId)
+                if (order.status == status) return@inTransaction
+                OrderStatusPolicy.requireAllowed(order.status, status)
+
+                val now = clockMillis()
+                repairOrderDao.upsert(
+                    order.copy(
+                        status = status,
+                        updatedAt = now,
+                        closedAt = if (status in OrderStatusPolicy.closedStatuses) now else order.closedAt,
+                    ),
+                )
+                eventWriter.statusChanged(orderId, actor.id, order.status, status, now)
+            }
+        }
+
+    suspend fun reassign(actor: AuthenticatedUser, orderId: String, assignedToUserId: String?): Result<Unit> =
+        runCatching {
+            inTransaction {
+                val order = requireWritableOrder(actor, orderId)
+                if (actor.role != UserRole.ADMIN) {
+                    require(order.assignedToUserId == actor.id) { "Solo la propria commessa puo' essere riassegnata" }
+                }
+
+                val now = clockMillis()
+                repairOrderDao.upsert(order.copy(assignedToUserId = assignedToUserId, updatedAt = now))
+                eventWriter.orderReassigned(orderId, actor.id, assignedToUserId, now)
+            }
+        }
+
+    suspend fun addInternalNote(actor: AuthenticatedUser, orderId: String, note: String): Result<Unit> =
+        runCatching {
+            inTransaction {
+                require(note.isNotBlank()) { "Nota vuota" }
+                val order = requireWritableOrder(actor, orderId)
+                val now = clockMillis()
+                val mergedNotes = listOfNotNull(order.internalNotes, note.trim()).joinToString("\n\n")
+                repairOrderDao.upsert(order.copy(internalNotes = mergedNotes, updatedAt = now))
+                eventWriter.internalNoteAdded(orderId, actor.id, note.trim(), now)
+            }
+        }
+
+    suspend fun softDelete(actor: AuthenticatedUser, orderId: String, reason: String): Result<Unit> =
+        runCatching {
+            inTransaction {
+                require(actor.role == UserRole.ADMIN) { "Solo admin" }
+                val order = requireNotNull(repairOrderDao.findById(orderId)) { "Commessa non trovata" }
+                val now = clockMillis()
+                repairOrderDao.upsert(
+                    order.copy(
+                        deletedAt = now,
+                        deletedByUserId = actor.id,
+                        deleteReason = reason.trim().ifBlank { null },
+                        updatedAt = now,
+                    ),
+                )
+                eventWriter.orderDeleted(orderId, actor.id, reason.trim().ifBlank { null }, now)
+            }
+        }
+
+    suspend fun recordFeedback(actor: AuthenticatedUser, orderId: String, input: FeedbackInput): Result<Unit> =
+        runCatching {
+            inTransaction {
+                val order = requireWritableOrder(actor, orderId)
+                val now = clockMillis()
+                val targetStatus = when (input.feedback) {
+                    CustomerFeedbackType.ACCEPT -> OrderStatus.PREVENTIVO_ACCETTATO
+                    CustomerFeedbackType.REJECT -> OrderStatus.PREVENTIVO_RIFIUTATO
+                    else -> order.status
+                }
+                if (targetStatus != order.status) {
+                    OrderStatusPolicy.requireAllowed(order.status, targetStatus)
+                }
+                repairOrderDao.upsert(order.copy(status = targetStatus, updatedAt = now))
+                eventWriter.feedbackRecorded(
+                    orderId = orderId,
+                    actorUserId = actor.id,
+                    feedback = input.feedback,
+                    note = input.note.trim().ifBlank { input.feedback.name },
+                    targetStatus = targetStatus,
+                    now = now,
+                )
+            }
+        }
+
+    private suspend fun requireWritableOrder(actor: AuthenticatedUser, orderId: String): RepairOrderEntity {
+        val order = requireNotNull(repairOrderDao.findById(orderId)) { "Commessa non trovata" }
+        require(order.deletedAt == null) { "Commessa archiviata" }
+        require(actor.role == UserRole.ADMIN || order.assignedToUserId == actor.id) {
+            "Operatore non assegnato"
+        }
+        return order
+    }
+
+    private suspend fun <T> inTransaction(block: suspend () -> T): T =
+        database?.withTransaction { block() } ?: block()
+
+}
