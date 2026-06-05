@@ -35,7 +35,7 @@ class SignatureRepository(
             val order = requireNotNull(repairOrderDao.findById(orderId)) { "Commessa non trovata" }
             require(order.deletedAt == null) { "Commessa archiviata" }
             require(actor.role == UserRole.ADMIN || order.assignedToUserId == actor.id) { "Operatore non assegnato" }
-            require(signerName.isNotBlank()) { "Nome firmatario obbligatorio" }
+            require(signatureDao.countForOrder(orderId) == 0) { "Firma gia' presente per questa commessa" }
             require(privacyAccepted) { "Consenso privacy obbligatorio" }
             require(termsAccepted) { "Accettazione condizioni obbligatoria" }
             require(bitmap.width > 0 && bitmap.height > 0) { "Firma non valida" }
@@ -54,7 +54,7 @@ class SignatureRepository(
             val signature = SignatureEntity(
                 id = UUID.randomUUID().toString(),
                 orderId = orderId,
-                signerName = signerName.trim(),
+                signerName = signerName.trim().ifBlank { DEFAULT_SIGNER_NAME },
                 privacyAccepted = privacyAccepted,
                 termsAccepted = termsAccepted,
                 privacyTextSnapshot = privacyTemplate?.body ?: DEFAULT_PRIVACY_TEXT,
@@ -96,6 +96,7 @@ class SignatureRepository(
         const val TERMS_TEMPLATE_CODE = "condizioni_presa_in_carico"
         const val MIME_TYPE_PNG = "image/png"
         const val PNG_QUALITY = 100
+        const val DEFAULT_SIGNER_NAME = "Cliente"
         const val DEFAULT_PRIVACY_TEXT = "I dati sono trattati solo per gestione riparazione, comunicazioni e obblighi fiscali."
         const val DEFAULT_TERMS_TEXT = "Il cliente autorizza la presa in carico del bene e accetta le condizioni operative comunicate."
     }

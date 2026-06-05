@@ -26,8 +26,6 @@ fun QuickIntakeSubmitSection(
                     text = "Mancano: ${missingRequirements.joinToString(", ")}",
                     color = MaterialTheme.colorScheme.error,
                 )
-            } else {
-                Text("Tutti i dati obbligatori sono presenti.")
             }
             TouchButton(
                 modifier = Modifier.fillMaxWidth(),

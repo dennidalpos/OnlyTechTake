@@ -35,11 +35,12 @@ Ogni salvataggio incrementa la versione del template esistente.
 ## Firma
 
 La firma viene acquisita con canvas Compose nel modulo Nuova commessa o dal dettaglio commessa.
+Privacy e condizioni si aprono in dialog cliccando sui rispettivi testi prima dell'accettazione.
+Ogni commessa accetta una sola firma cliente.
 
 Alla firma vengono salvati:
 
 - immagine PNG della firma;
-- nome firmatario;
 - accettazione privacy;
 - accettazione condizioni;
 - snapshot testo privacy;
@@ -111,6 +112,8 @@ Stato operativo implementato:
 - l'accettazione/rifiuto preventivo viene registrata dalle azioni operative del dettaglio commessa;
 - `ACCEPT` porta lo stato a `WORKING`;
 - `REJECT` porta lo stato a `CLOSED` con motivo `CUSTOMER_DECLINED`.
+
+Le chiusure operative dirette usano motivi espliciti: `COMPLETED` per completata e `CUSTOMER_DECLINED` per rifiutata. Dopo una chiusura riuscita l'app torna all'elenco commesse.
 
 ## API WhatsApp non implementata
 

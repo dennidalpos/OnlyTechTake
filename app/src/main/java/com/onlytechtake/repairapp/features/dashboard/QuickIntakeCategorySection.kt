@@ -46,9 +46,6 @@ fun QuickIntakeCategorySection(
                     }
                 }
                 selectedCategory?.description?.takeIf { it.isNotBlank() }?.let { Text(it) }
-                if (selectedCategoryId == null) {
-                    Text("Seleziona una categoria per classificare la commessa.")
-                }
             }
         }
     }

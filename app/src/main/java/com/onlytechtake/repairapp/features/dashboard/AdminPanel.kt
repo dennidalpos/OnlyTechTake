@@ -38,6 +38,8 @@ fun AdminPanel(
     var password by rememberSaveable { mutableStateOf("") }
     var resetPasswords by rememberSaveable { mutableStateOf(emptyMap<String, String>()) }
     var resetConfirmation by rememberSaveable { mutableStateOf("") }
+    var archiveConfirmation by rememberSaveable { mutableStateOf("") }
+    var deleteConfirmation by rememberSaveable { mutableStateOf("") }
     var confirmTitle by remember { mutableStateOf<String?>(null) }
     var confirmText by remember { mutableStateOf("") }
     var confirmAction by remember { mutableStateOf<(() -> Unit)?>(null) }
@@ -141,7 +143,6 @@ fun AdminPanel(
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Reset totale dati", style = MaterialTheme.typography.titleMedium)
-                    Text("Cancella dati locali, preferenze e file privati dell'app. Dopo il reset serve configurare un nuovo admin.")
                     Field(resetConfirmation, { resetConfirmation = it }, "Digita RESET")
                     TouchButton(
                         text = "Reset totale",
@@ -151,6 +152,37 @@ fun AdminPanel(
                             requestConfirm("Reset totale?", "Questa azione elimina i dati locali dell'app e riporta al primo setup admin.") {
                                 viewModel.resetAllData(resetConfirmation, onResetComplete)
                                 resetConfirmation = ""
+                            }
+                        },
+                    )
+                }
+            }
+        }
+        item {
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Pulizia commesse", style = MaterialTheme.typography.titleMedium)
+                    Field(archiveConfirmation, { archiveConfirmation = it }, "Digita ARCHIVIA")
+                    TouchButton(
+                        text = "Archivia scartate",
+                        enabled = archiveConfirmation == "ARCHIVIA",
+                        tone = ButtonTone.WARNING,
+                        onClick = {
+                            requestConfirm("Archiviare scartate?", "Le commesse rifiutate, annullate o non riparabili verranno archiviate.") {
+                                viewModel.archiveDiscardedClosedOrders()
+                                archiveConfirmation = ""
+                            }
+                        },
+                    )
+                    Field(deleteConfirmation, { deleteConfirmation = it }, "Digita CANCELLA")
+                    TouchButton(
+                        text = "Cancella archiviate",
+                        enabled = deleteConfirmation == "CANCELLA",
+                        tone = ButtonTone.DANGER,
+                        onClick = {
+                            requestConfirm("Cancellare archiviate?", "Le commesse gia' archiviate e i relativi file verranno eliminati.") {
+                                viewModel.deleteArchivedOrders()
+                                deleteConfirmation = ""
                             }
                         },
                     )

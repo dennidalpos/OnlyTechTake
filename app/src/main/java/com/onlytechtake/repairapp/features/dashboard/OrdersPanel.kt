@@ -38,7 +38,6 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
     ) {
         item {
             SectionTitle("Commesse")
-            Text("Apri una commessa per riprendere dal suo stato corrente.", style = MaterialTheme.typography.bodyMedium)
         }
 
         item {
@@ -66,6 +65,7 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
                 ) {
                     Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text("${order.orderNumber} - ${order.title}", style = MaterialTheme.typography.titleMedium)
+                        Text("Cliente: ${item.customer?.displayName().orEmpty().ifBlank { "Cliente non disponibile" }}")
                         Text("Stato: ${order.status.label()}")
                         Text("Prossima azione: ${nextActionLabel(order.status)}")
                         Text("Aggiornata: ${formatUiDateTime(order.updatedAt)}")
@@ -86,13 +86,13 @@ private fun OrderFilterBar(
         ActionRow {
             TouchButton(
                 text = "Tutte",
-                enabled = filter.showMineOnly || filter.status != null || filter.statuses.isNotEmpty(),
+                tone = if (!filter.hasActiveFilter()) ButtonTone.SUCCESS else ButtonTone.DANGER,
                 onClick = { onFilter(OrderFilter()) },
             )
             TouchButton(
                 text = "Mie",
-                enabled = !filter.showMineOnly,
-                onClick = { onFilter(filter.copy(showMineOnly = true)) },
+                tone = if (filter.showMineOnly) ButtonTone.SUCCESS else ButtonTone.DANGER,
+                onClick = { onFilter(filter.copy(showMineOnly = !filter.showMineOnly)) },
             )
             QuickStatusFilter("Nuove", OrderStatus.NEW, filter, onFilter)
             QuickStatusFilter("Diagnosi", OrderStatus.DIAGNOSIS, filter, onFilter)
@@ -123,7 +123,17 @@ private fun QuickStatusFilter(
 ) {
     TouchButton(
         text = label,
-        enabled = filter.status != status,
-        onClick = { onFilter(filter.copy(status = status, statuses = emptySet())) },
+        tone = if (filter.status == status) ButtonTone.SUCCESS else ButtonTone.DANGER,
+        onClick = {
+            onFilter(
+                filter.copy(
+                    status = status.takeUnless { filter.status == status },
+                    statuses = emptySet(),
+                ),
+            )
+        },
     )
 }
+
+private fun OrderFilter.hasActiveFilter(): Boolean =
+    showMineOnly || status != null || statuses.isNotEmpty()

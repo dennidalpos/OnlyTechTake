@@ -97,6 +97,30 @@ class OrderMediaRepository(
         }
 
     suspend fun registerCapturedPhoto(actor: AuthenticatedUser, orderId: String, file: File): Result<OrderMediaEntity> =
+        registerCapturedImage(
+            actor = actor,
+            orderId = orderId,
+            file = file,
+            mediaType = MEDIA_TYPE_PHOTO,
+            timelineTitle = "Foto allegata",
+        )
+
+    suspend fun registerCapturedFinalPhoto(actor: AuthenticatedUser, orderId: String, file: File): Result<OrderMediaEntity> =
+        registerCapturedImage(
+            actor = actor,
+            orderId = orderId,
+            file = file,
+            mediaType = MEDIA_TYPE_FINAL_PHOTO,
+            timelineTitle = "Foto lavoro finito",
+        )
+
+    private suspend fun registerCapturedImage(
+        actor: AuthenticatedUser,
+        orderId: String,
+        file: File,
+        mediaType: String,
+        timelineTitle: String,
+    ): Result<OrderMediaEntity> =
         runCatching {
             requireWritableOrder(actor, orderId)
             require(file.exists() && file.length() > 0L) { "Foto non salvata" }
@@ -106,7 +130,7 @@ class OrderMediaRepository(
             val media = OrderMediaEntity(
                 id = UUID.randomUUID().toString(),
                 orderId = orderId,
-                mediaType = MEDIA_TYPE_PHOTO,
+                mediaType = mediaType,
                 localPath = file.absolutePath,
                 fileName = file.name,
                 mimeType = MIME_TYPE_JPEG,
@@ -120,7 +144,7 @@ class OrderMediaRepository(
 
             inTransaction {
                 orderMediaDao.upsert(media)
-                eventWriter.mediaAdded(orderId, actor.id, "Foto allegata", file.name, now)
+                eventWriter.mediaAdded(orderId, actor.id, timelineTitle, file.name, now)
             }
             media
         }
@@ -227,6 +251,11 @@ class OrderMediaRepository(
         media.forEach { entity -> deleteMediaFile(File(entity.localPath)) }
     }
 
+    fun deleteStagedMedia(path: String): Result<Unit> =
+        runCatching {
+            deleteMediaFile(File(path))
+        }
+
     private fun readImageBounds(file: File): ImageBounds {
         val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
         BitmapFactory.decodeFile(file.absolutePath, options)
@@ -318,6 +347,7 @@ class OrderMediaRepository(
 
     private companion object {
         const val MEDIA_TYPE_PHOTO = "PHOTO"
+        const val MEDIA_TYPE_FINAL_PHOTO = "FINAL_PHOTO"
         const val MEDIA_TYPE_IMAGE = "IMAGE"
         const val MEDIA_TYPE_DOCUMENT = "DOCUMENT"
         const val MIME_TYPE_JPEG = "image/jpeg"

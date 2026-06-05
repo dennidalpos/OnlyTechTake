@@ -260,7 +260,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
     }
 
     statusAction?.let { action ->
-        val requiresClosureReason = action.requiresConfirmation()
+        val requiresClosureReason = action.requiresConfirmation() && action.closureReason == null
         AlertDialog(
             onDismissRequest = { statusAction = null },
             title = { Text(action.label) },
@@ -271,7 +271,9 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     if (requiresClosureReason) {
                         Text("Motivo chiusura", style = MaterialTheme.typography.titleSmall)
                         ActionRow {
-                            ClosureReason.entries.forEach { reason ->
+                            ClosureReason.entries
+                                .filterNot { it == ClosureReason.COMPLETED || it == ClosureReason.CUSTOMER_DECLINED }
+                                .forEach { reason ->
                                 TouchButton(
                                     text = reason.label(),
                                     tone = if (closureReason == reason) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
@@ -309,12 +311,26 @@ private fun applyStatusAction(
     note: String,
     closureReason: ClosureReason?,
 ) {
-    action.targetStatus?.let { viewModel.changeStatus(orderId, it, note, closureReason) }
+    val targetStatus = action.targetStatus ?: return
+    val targetClosureReason = action.closureReason ?: closureReason
+    viewModel.changeStatus(
+        orderId = orderId,
+        status = targetStatus,
+        note = note,
+        closureReason = targetClosureReason,
+        onSuccess = {
+            if (targetStatus == com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED) {
+                viewModel.selectOrder(null)
+            }
+        },
+    )
 }
 
 private fun OrderStatusAction.tone(): ButtonTone =
     when (this) {
-        OrderStatusAction.CLOSE -> ButtonTone.SUCCESS
+        OrderStatusAction.CLOSE_COMPLETED -> ButtonTone.SUCCESS
+        OrderStatusAction.CLOSE_REJECTED,
+        OrderStatusAction.CLOSE_OTHER -> ButtonTone.DANGER
         OrderStatusAction.READY_FOR_PICKUP -> ButtonTone.SUCCESS
         else -> ButtonTone.PRIMARY
     }

@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -65,6 +66,8 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
     var problemSummary by rememberSaveable { mutableStateOf("") }
     var problemDetails by rememberSaveable { mutableStateOf("") }
     var showCamera by rememberSaveable { mutableStateOf(false) }
+    var currentStep by rememberSaveable { mutableIntStateOf(1) }
+    var completedStep by rememberSaveable { mutableIntStateOf(0) }
     var stagedMedia by remember { mutableStateOf<List<StagedOrderMedia>>(emptyList()) }
     var signatureCapture by remember { mutableStateOf<SignatureCaptureResult?>(null) }
 
@@ -136,6 +139,8 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         stagedMedia = emptyList()
         signatureCapture = null
         showCamera = false
+        currentStep = 1
+        completedStep = 0
         viewModel.setCustomerSearchQuery("")
     }
 
@@ -155,6 +160,16 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
     val canSaveNewCustomer = (phone.isNotBlank() || email.isNotBlank()) &&
         if (isBusiness) companyName.isNotBlank() else firstName.isNotBlank() && lastName.isNotBlank()
 
+    fun editStep(step: Int) {
+        currentStep = step
+        completedStep = completedStepAfterEdit(completedStep, step)
+    }
+
+    fun completeStep(step: Int) {
+        completedStep = completedStepAfterAdvance(completedStep, step)
+        currentStep = currentStepAfterAdvance(step)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -164,7 +179,16 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
     ) {
         SectionTitle("Nuova commessa")
 
-        Card(modifier = Modifier.fillMaxWidth()) {
+        if (completedStep >= 1 && currentStep != 1) {
+            IntakeStepSummary(
+                stepNumber = 1,
+                title = "Cliente",
+                value = selectedCustomerDisplayName.orEmpty(),
+                onEdit = { editStep(1) },
+            )
+        }
+        if (currentStep == 1) {
+            Card(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 StepSectionTitle(1, "Cliente")
                 Field(
@@ -259,76 +283,179 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                         },
                     )
                 }
-            }
-        }
-
-        QuickIntakeCategorySection(
-            stepNumber = 2,
-            activeCategories = activeCategories,
-            selectedCategoryId = selectedCategoryId,
-            selectedCategory = selectedCategory,
-            onCategorySelected = { categoryId ->
-                selectedCategoryId = categoryId
-            },
-            onOpenConfig = { viewModel.navigateTo(WorkspaceDestination.CONFIG) },
-        )
-
-        QuickIntakeProblemSection(
-            stepNumber = 3,
-            problemSummary = problemSummary,
-            onProblemSummaryChange = { problemSummary = it },
-            problemDetails = problemDetails,
-            onProblemDetailsChange = { problemDetails = it },
-            nextAction = nextAction,
-            doneAction = doneAction,
-        )
-
-        QuickIntakeMediaSection(
-            stepNumber = 4,
-            intakeSessionId = intakeSessionId,
-            stagedMedia = stagedMedia,
-            showCamera = showCamera,
-            onShowCameraChange = { showCamera = it },
-            onRemoveMedia = { localPath -> stagedMedia = stagedMedia.filterNot { it.localPath == localPath } },
-            onLaunchAttachmentPicker = { attachmentLauncher.launch("*/*") },
-            createPhotoFile = { sessionId, _ -> viewModel.createIntakePhotoFile(sessionId) },
-            onPhotoCaptured = { file ->
-                viewModel.stageCapturedIntakePhoto(file) { staged ->
-                    stagedMedia = stagedMedia + staged
-                }
-            },
-            onCameraError = viewModel::reportCameraError,
-        )
-
-        key(intakeSessionId) {
-            Card(modifier = Modifier.fillMaxWidth()) {
-                SignatureCaptureForm(
-                    modifier = Modifier.padding(12.dp),
-                    title = "5. Privacy e firma",
-                    privacyText = privacyText,
-                    termsText = termsText,
-                    onCaptureChanged = { signatureCapture = it },
+                TouchButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Avanti",
+                    enabled = selectedCustomerId != null,
+                    onClick = { completeStep(1) },
                 )
             }
         }
+        }
 
-        QuickIntakeSubmitSection(
-            stepNumber = 6,
-            missingRequirements = missingRequirements,
-            enabled = activeCategories.isNotEmpty() && intakeInput.isReadyForSubmit(),
-            onSubmit = {
-                signatureCapture?.let { capture ->
-                    viewModel.createIntakeOrder(
-                        input = intakeInput,
-                        stagedMedia = stagedMedia,
-                        signerName = capture.signerName,
-                        privacyAccepted = capture.privacyAccepted,
-                        termsAccepted = capture.termsAccepted,
-                        signatureBitmap = capture.bitmap,
-                        onCreated = ::resetForm,
+        if (completedStep >= 2 && currentStep != 2) {
+            IntakeStepSummary(
+                stepNumber = 2,
+                title = "Categoria",
+                value = selectedCategory?.name.orEmpty(),
+                onEdit = { editStep(2) },
+            )
+        }
+        if (currentStep == 2) {
+            QuickIntakeCategorySection(
+                stepNumber = 2,
+                activeCategories = activeCategories,
+                selectedCategoryId = selectedCategoryId,
+                selectedCategory = selectedCategory,
+                onCategorySelected = { categoryId ->
+                    selectedCategoryId = categoryId
+                },
+                onOpenConfig = { viewModel.navigateTo(WorkspaceDestination.CONFIG) },
+            )
+            TouchButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "Avanti",
+                enabled = selectedCategoryId != null,
+                onClick = { completeStep(2) },
+            )
+        }
+
+        if (completedStep >= 3 && currentStep != 3) {
+            IntakeStepSummary(
+                stepNumber = 3,
+                title = "Problema",
+                value = problemSummary,
+                onEdit = { editStep(3) },
+            )
+        }
+        if (currentStep == 3) {
+            QuickIntakeProblemSection(
+                stepNumber = 3,
+                problemSummary = problemSummary,
+                onProblemSummaryChange = { problemSummary = it },
+                problemDetails = problemDetails,
+                onProblemDetailsChange = { problemDetails = it },
+                nextAction = nextAction,
+                doneAction = doneAction,
+            )
+            TouchButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "Avanti",
+                enabled = problemSummary.isNotBlank(),
+                onClick = { completeStep(3) },
+            )
+        }
+
+        if (completedStep >= 4 && currentStep != 4) {
+            IntakeStepSummary(
+                stepNumber = 4,
+                title = "Foto e allegati",
+                value = "${stagedMedia.size} media",
+                onEdit = { editStep(4) },
+            )
+        }
+        if (currentStep == 4) {
+            QuickIntakeMediaSection(
+                stepNumber = 4,
+                intakeSessionId = intakeSessionId,
+                stagedMedia = stagedMedia,
+                showCamera = showCamera,
+                onShowCameraChange = { showCamera = it },
+                onRemoveMedia = { localPath ->
+                    viewModel.deleteStagedMedia(localPath)
+                    stagedMedia = stagedMedia.filterNot { it.localPath == localPath }
+                },
+                onLaunchAttachmentPicker = { attachmentLauncher.launch("*/*") },
+                createPhotoFile = { sessionId, _ -> viewModel.createIntakePhotoFile(sessionId) },
+                onPhotoCaptured = { file ->
+                    viewModel.stageCapturedIntakePhoto(file) { staged ->
+                        stagedMedia = stagedMedia + staged
+                    }
+                },
+                onCameraError = viewModel::reportCameraError,
+            )
+            TouchButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "Avanti",
+                enabled = stagedMedia.isNotEmpty(),
+                onClick = { completeStep(4) },
+            )
+        }
+
+        if (completedStep >= 5 && currentStep != 5) {
+            IntakeStepSummary(
+                stepNumber = 5,
+                title = "Privacy e firma",
+                value = "Firma acquisita",
+                onEdit = { editStep(5) },
+            )
+        }
+        if (currentStep == 5) {
+            key(intakeSessionId) {
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    SignatureCaptureForm(
+                        modifier = Modifier.padding(12.dp),
+                        title = "5. Privacy e firma",
+                        privacyText = privacyText,
+                        termsText = termsText,
+                        onCaptureChanged = { signatureCapture = it },
                     )
                 }
-            },
-        )
+            }
+            TouchButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "Avanti",
+                enabled = signatureCapture != null,
+                onClick = { completeStep(5) },
+            )
+        }
+
+        if (currentStep == SUBMIT_INTAKE_STEP || isIntakeSubmitUnlocked(completedStep)) {
+            QuickIntakeSubmitSection(
+                stepNumber = 6,
+                missingRequirements = if (isIntakeSubmitUnlocked(completedStep)) {
+                    missingRequirements
+                } else {
+                    listOf("Confermare tutti gli step")
+                },
+                enabled = isIntakeSubmitUnlocked(completedStep) &&
+                    activeCategories.isNotEmpty() &&
+                    intakeInput.isReadyForSubmit(),
+                onSubmit = {
+                    signatureCapture?.let { capture ->
+                        viewModel.createIntakeOrder(
+                            input = intakeInput,
+                            stagedMedia = stagedMedia,
+                            signerName = capture.signerName,
+                            privacyAccepted = capture.privacyAccepted,
+                            termsAccepted = capture.termsAccepted,
+                            signatureBitmap = capture.bitmap,
+                            onCreated = ::resetForm,
+                        )
+                    }
+                },
+            )
+        }
+    }
+}
+
+@Composable
+private fun IntakeStepSummary(
+    stepNumber: Int,
+    title: String,
+    value: String,
+    onEdit: () -> Unit,
+) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            StepSectionTitle(stepNumber, title)
+            Text(value.ifBlank { "Non impostato" }, style = MaterialTheme.typography.bodyMedium)
+            TouchButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "Modifica",
+                tone = ButtonTone.NEUTRAL,
+                onClick = onEdit,
+            )
+        }
     }
 }

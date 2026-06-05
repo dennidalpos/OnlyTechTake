@@ -104,10 +104,12 @@ data class OrderAttachmentCounts(
     val images: Int = 0,
     val documents: Int = 0,
     val signatures: Int = 0,
+    val finalPhotos: Int = 0,
 )
 
 data class OrderListItem(
     val order: RepairOrderEntity,
+    val customer: CustomerEntity? = null,
     val attachments: OrderAttachmentCounts = OrderAttachmentCounts(),
 )
 

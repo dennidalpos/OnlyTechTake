@@ -128,6 +128,7 @@ class WorkspaceViewModel(
         scope = viewModelScope,
         backupRepository = backupRepository,
         dataResetRepository = dataResetRepository,
+        orderRepository = orderRepository,
         showSuccess = ::showSuccess,
         showError = ::showError,
         showMessage = ::showMessage,
@@ -227,6 +228,16 @@ class WorkspaceViewModel(
         orderRepository.changeStatus(actor, orderId, status, note, closureReason)
     }
 
+    fun changeStatus(
+        orderId: String,
+        status: OrderStatus,
+        note: String = "",
+        closureReason: ClosureReason? = null,
+        onSuccess: () -> Unit,
+    ) = withUser(onSuccess = onSuccess) { actor ->
+        orderRepository.changeStatus(actor, orderId, status, note, closureReason)
+    }
+
     fun reassign(orderId: String, userId: String?) = withUser { actor ->
         orderRepository.reassign(actor, orderId, userId)
     }
@@ -247,6 +258,9 @@ class WorkspaceViewModel(
 
     fun stageCapturedIntakePhoto(file: File, onStaged: (StagedOrderMedia) -> Unit) =
         mediaActions.stageCapturedIntakePhoto(file, onStaged)
+
+    fun deleteStagedMedia(path: String) =
+        mediaActions.deleteStagedMedia(path)
 
     fun importIntakeAttachment(sessionId: String, uri: Uri, onStaged: (StagedOrderMedia) -> Unit) =
         mediaActions.importIntakeAttachment(sessionId, uri, onStaged)
@@ -271,6 +285,9 @@ class WorkspaceViewModel(
 
     fun registerCapturedPhoto(orderId: String, file: File) =
         mediaActions.registerCapturedPhoto(orderId, file)
+
+    fun registerCapturedFinalPhoto(orderId: String, file: File) =
+        mediaActions.registerCapturedFinalPhoto(orderId, file)
 
     fun importAttachment(orderId: String, uri: Uri) =
         mediaActions.importAttachment(orderId, uri)
@@ -334,12 +351,24 @@ class WorkspaceViewModel(
     fun resetAllData(confirmation: String, onReset: () -> Unit) =
         adminActions.resetAllData(confirmation, onReset)
 
-    private fun withUser(block: suspend (com.onlytechtake.repairapp.domain.auth.AuthenticatedUser) -> Result<*>) {
+    fun archiveDiscardedClosedOrders() =
+        adminActions.archiveDiscardedClosedOrders()
+
+    fun deleteArchivedOrders() =
+        adminActions.deleteArchivedOrders()
+
+    private fun withUser(
+        onSuccess: () -> Unit = {},
+        block: suspend (com.onlytechtake.repairapp.domain.auth.AuthenticatedUser) -> Result<*>,
+    ) {
         viewModelScope.launch {
             val actor = currentUser.value ?: return@launch showMessage("Sessione non valida", true)
             authRepository.touchSession()
             block(actor).fold(
-                onSuccess = { showSuccess("Operazione completata") },
+                onSuccess = {
+                    showSuccess("Operazione completata")
+                    onSuccess()
+                },
                 onFailure = { showError(it) },
             )
         }

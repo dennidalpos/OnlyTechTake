@@ -1,10 +1,3 @@
 {
-  "todos": [
-    "Applicare verde/rosso ai pulsanti toggle e ai filtri in base a stato attivo o disattivo",
-    "Mostrare una miniatura immediata dopo acquisizione foto e aprire anteprima zoomabile al click",
-    "Rimuovere il campo nome firmatario e accettare firme con singolo tocco",
-    "Aprire privacy e condizioni in dialog cliccando sul testo e limitarne la configurazione agli admin",
-    "Impedire l'inserimento di piu firme per la stessa commessa",
-    "Mostrare il nome cliente nell'elenco commesse"
-  ]
+  "todos": []
 }

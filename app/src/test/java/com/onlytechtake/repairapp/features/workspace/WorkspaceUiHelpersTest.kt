@@ -22,13 +22,22 @@ class WorkspaceUiHelpersTest {
             media = listOf(
                 media("PHOTO", "image/jpeg"),
                 media("DOCUMENT", "application/pdf"),
+                media("FINAL_PHOTO", "image/jpeg"),
             ),
             signatures = listOf(signature()),
         )
 
-        assertEquals(AttachmentCounts(images = 1, documents = 1, signatures = 1), counts)
-        assertEquals("Foto 1 - Documenti 1 - Firme 1", counts.label())
+        assertEquals(AttachmentCounts(images = 1, documents = 1, signatures = 1, finalPhotos = 1), counts)
+        assertEquals("Foto 1 - Documenti 1 - Firme 1 - Lavoro finito 1", counts.label())
         assertEquals("Foto 2 - Documenti 3 - Firme 1", OrderAttachmentCounts(2, 3, 1).label())
+    }
+
+    @Test
+    fun finalPhotosAreImageHistoryButNotIntakePhotos() {
+        val media = media("FINAL_PHOTO", "image/jpeg")
+
+        assertTrue(media.isImageAttachment())
+        assertTrue(media.isFinalPhoto())
     }
 
     @Test

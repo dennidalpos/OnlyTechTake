@@ -11,7 +11,12 @@ class StatusWorkflowTest {
     @Test
     fun newOrderStartsWithDiagnosisOrClose() {
         assertEquals(
-            listOf(OrderStatusAction.START_DIAGNOSIS, OrderStatusAction.CLOSE),
+            listOf(
+                OrderStatusAction.START_DIAGNOSIS,
+                OrderStatusAction.CLOSE_COMPLETED,
+                OrderStatusAction.CLOSE_REJECTED,
+                OrderStatusAction.CLOSE_OTHER,
+            ),
             availableOrderStatusActions(OrderStatus.NEW),
         )
     }
@@ -21,7 +26,9 @@ class StatusWorkflowTest {
         val actions = availableOrderStatusActions(OrderStatus.WAITING_CUSTOMER)
 
         assertTrue(actions.contains(OrderStatusAction.START_WORK))
-        assertTrue(actions.contains(OrderStatusAction.CLOSE))
+        assertTrue(actions.contains(OrderStatusAction.CLOSE_COMPLETED))
+        assertTrue(actions.contains(OrderStatusAction.CLOSE_REJECTED))
+        assertTrue(actions.contains(OrderStatusAction.CLOSE_OTHER))
     }
 
     @Test
@@ -31,8 +38,22 @@ class StatusWorkflowTest {
 
     @Test
     fun onlyClosingStatusActionRequiresConfirmation() {
-        assertTrue(OrderStatusAction.CLOSE.requiresConfirmation())
+        assertTrue(OrderStatusAction.CLOSE_COMPLETED.requiresConfirmation())
+        assertTrue(OrderStatusAction.CLOSE_REJECTED.requiresConfirmation())
+        assertTrue(OrderStatusAction.CLOSE_OTHER.requiresConfirmation())
         assertTrue(!OrderStatusAction.START_DIAGNOSIS.requiresConfirmation())
+    }
+
+    @Test
+    fun directClosingActionsCarryClosureReason() {
+        assertEquals(
+            com.onlytechtake.repairapp.data.local.entities.ClosureReason.COMPLETED,
+            OrderStatusAction.CLOSE_COMPLETED.closureReason,
+        )
+        assertEquals(
+            com.onlytechtake.repairapp.data.local.entities.ClosureReason.CUSTOMER_DECLINED,
+            OrderStatusAction.CLOSE_REJECTED.closureReason,
+        )
     }
 
     @Test

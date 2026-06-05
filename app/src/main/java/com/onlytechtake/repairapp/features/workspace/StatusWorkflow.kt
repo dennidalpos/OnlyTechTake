@@ -7,13 +7,16 @@ import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
 enum class OrderStatusAction(
     val label: String,
     val targetStatus: OrderStatus?,
+    val closureReason: ClosureReason? = null,
 ) {
     START_DIAGNOSIS("Avvia diagnosi", OrderStatus.DIAGNOSIS),
     WAIT_CUSTOMER("Attesa cliente", OrderStatus.WAITING_CUSTOMER),
     START_WORK("Avvia lavorazione", OrderStatus.WORKING),
     WAIT_PARTS("Attesa ricambi", OrderStatus.WAITING_PARTS),
     READY_FOR_PICKUP("Pronta al ritiro", OrderStatus.READY_FOR_PICKUP),
-    CLOSE("Chiudi", OrderStatus.CLOSED),
+    CLOSE_COMPLETED("Chiudi completata", OrderStatus.CLOSED, ClosureReason.COMPLETED),
+    CLOSE_REJECTED("Chiudi rifiutata", OrderStatus.CLOSED, ClosureReason.CUSTOMER_DECLINED),
+    CLOSE_OTHER("Chiudi altro", OrderStatus.CLOSED),
 }
 
 fun availableOrderStatusActions(status: OrderStatus): List<OrderStatusAction> =

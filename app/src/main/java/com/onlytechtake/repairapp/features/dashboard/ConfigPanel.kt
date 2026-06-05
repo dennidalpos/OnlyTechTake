@@ -91,7 +91,11 @@ fun ConfigPanel(viewModel: WorkspaceViewModel, isAdmin: Boolean) {
                     }
                 }
                 item {
-                    ConfigHubCard("Template", "Privacy, condizioni e messaggi WhatsApp.") {
+                    ConfigHubCard(
+                        title = "Template",
+                        subtitle = if (isAdmin) "Privacy, condizioni e messaggi WhatsApp." else "Area riservata admin.",
+                        enabled = isAdmin,
+                    ) {
                         section = ConfigSection.TEMPLATES
                     }
                 }
@@ -121,6 +125,7 @@ fun ConfigPanel(viewModel: WorkspaceViewModel, isAdmin: Boolean) {
                     ActionRow {
                         TouchButton(
                             text = if (categoryActive) "Attiva" else "Archiviata",
+                            tone = if (categoryActive) ButtonTone.SUCCESS else ButtonTone.DANGER,
                             onClick = { categoryActive = !categoryActive },
                         )
                         TouchButton(text = "Nuova", onClick = ::loadNewCategory)
@@ -176,6 +181,7 @@ fun ConfigPanel(viewModel: WorkspaceViewModel, isAdmin: Boolean) {
                     ActionRow {
                         TouchButton(
                             text = if (templateActive) "Attivo" else "Archiviato",
+                            tone = if (templateActive) ButtonTone.SUCCESS else ButtonTone.DANGER,
                             onClick = { templateActive = !templateActive },
                         )
                         TouchButton(
@@ -304,16 +310,21 @@ fun ConfigPanel(viewModel: WorkspaceViewModel, isAdmin: Boolean) {
 }
 
 @Composable
-private fun ConfigHubCard(title: String, subtitle: String, onClick: () -> Unit) {
+private fun ConfigHubCard(
+    title: String,
+    subtitle: String,
+    enabled: Boolean = true,
+    onClick: () -> Unit,
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick),
+            .clickable(enabled = enabled, onClick = onClick),
     ) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(title, style = MaterialTheme.typography.titleMedium)
             Text(subtitle)
-            TouchButton(text = "Apri", onClick = onClick)
+            TouchButton(text = "Apri", enabled = enabled, onClick = onClick)
         }
     }
 }

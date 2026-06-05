@@ -48,6 +48,13 @@ internal class WorkspaceMediaActions(
         )
     }
 
+    fun deleteStagedMedia(path: String) {
+        orderMediaRepository.deleteStagedMedia(path).fold(
+            onSuccess = { showSuccess("Media rimosso") },
+            onFailure = showError,
+        )
+    }
+
     fun importIntakeAttachment(sessionId: String, uri: Uri, onStaged: (StagedOrderMedia) -> Unit) {
         scope.launch {
             orderMediaRepository.importIntakeAttachment(sessionId, uri).fold(
@@ -74,7 +81,7 @@ internal class WorkspaceMediaActions(
             authRepository.touchSession()
             val errors = input.copy(
                 stagedMediaCount = stagedMedia.size,
-                hasPrivacySignature = signerName.isNotBlank() && privacyAccepted && termsAccepted,
+                hasPrivacySignature = privacyAccepted && termsAccepted,
             ).validationErrors()
             if (errors.isNotEmpty()) return@launch showMessage(errors.joinToString("\n"), true)
 
@@ -111,6 +118,17 @@ internal class WorkspaceMediaActions(
             authRepository.touchSession()
             orderMediaRepository.registerCapturedPhoto(actor, orderId, file).fold(
                 onSuccess = { showSuccess("Foto salvata") },
+                onFailure = showError,
+            )
+        }
+    }
+
+    fun registerCapturedFinalPhoto(orderId: String, file: File) {
+        scope.launch {
+            val actor = currentUser.value ?: return@launch showMessage("Sessione non valida", true)
+            authRepository.touchSession()
+            orderMediaRepository.registerCapturedFinalPhoto(actor, orderId, file).fold(
+                onSuccess = { showSuccess("Foto lavoro finito salvata") },
                 onFailure = showError,
             )
         }

@@ -37,6 +37,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.features.workspace.formatFileSize
 import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
+import com.onlytechtake.repairapp.features.workspace.isFinalPhoto
 import com.onlytechtake.repairapp.features.workspace.isImageAttachment
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 import java.io.File
@@ -47,11 +48,13 @@ fun OrderPhotoSection(
     viewModel: WorkspaceViewModel,
 ) {
     var showCamera by rememberSaveable { mutableStateOf(false) }
+    var showFinalCamera by rememberSaveable { mutableStateOf(false) }
     var selectedImage by rememberSaveable { mutableStateOf<Pair<String, String>?>(null) }
     val attachmentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let { viewModel.importAttachment(detail.order.id, it) }
     }
-    val images = detail.media.filter { it.isImageAttachment() }
+    val finalPhotos = detail.media.filter { it.isFinalPhoto() }
+    val images = detail.media.filter { it.isImageAttachment() && !it.isFinalPhoto() }
     val documents = detail.media.filterNot { it.isImageAttachment() }
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -85,11 +88,35 @@ fun OrderPhotoSection(
                     }
                 }
             }
+            if (finalPhotos.isNotEmpty()) {
+                Text("Lavoro finito")
+                finalPhotos.forEach { media ->
+                    Card(modifier = Modifier.fillMaxWidth()) {
+                        Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            LocalImagePreview(
+                                path = media.localPath,
+                                description = media.fileName,
+                                onClick = { selectedImage = media.localPath to media.fileName },
+                            )
+                            Text("${media.fileName} - ${formatFileSize(media.sizeBytes)} - ${formatUiDateTime(media.capturedAt)}")
+                        }
+                    }
+                }
+            }
         }
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = { showCamera = true }) {
+            Button(onClick = {
+                showFinalCamera = false
+                showCamera = true
+            }) {
                 Text("Scatta foto")
+            }
+            Button(onClick = {
+                showCamera = false
+                showFinalCamera = true
+            }) {
+                Text("Foto lavoro finito")
             }
             Button(onClick = { attachmentLauncher.launch("*/*") }) {
                 Text("Allega file")
@@ -97,6 +124,11 @@ fun OrderPhotoSection(
             if (showCamera) {
                 OutlinedButton(onClick = { showCamera = false }) {
                     Text("Chiudi camera")
+                }
+            }
+            if (showFinalCamera) {
+                OutlinedButton(onClick = { showFinalCamera = false }) {
+                    Text("Chiudi lavoro finito")
                 }
             }
         }
@@ -109,6 +141,18 @@ fun OrderPhotoSection(
                 onPhotoCaptured = { file ->
                     viewModel.registerCapturedPhoto(detail.order.id, file)
                     showCamera = false
+                },
+                onError = viewModel::reportCameraError,
+            )
+        }
+        if (showFinalCamera) {
+            CameraCapturePreview(
+                orderId = detail.order.id,
+                orderNumber = detail.order.orderNumber,
+                createPhotoFile = viewModel::createPhotoFile,
+                onPhotoCaptured = { file ->
+                    viewModel.registerCapturedFinalPhoto(detail.order.id, file)
+                    showFinalCamera = false
                 },
                 onError = viewModel::reportCameraError,
             )

@@ -185,7 +185,9 @@ files/orders/<orderId>/documents/
 ```
 
 Nel database salvare path locale privato e metadati essenziali. Le foto acquisite
-con CameraX sono registrate in `order_media` e generano evento timeline. Le
+con CameraX sono registrate in `order_media` e generano evento timeline. Le foto
+opzionali del lavoro finito usano `mediaType = FINAL_PHOTO` nello stesso modello,
+senza schema dedicato. Le
 firme sono registrate in `signatures`, salvate come PNG in
 `files/orders/<orderId>/signatures/` e includono snapshot/versione dei testi
 privacy e condizioni usati al momento della firma.
@@ -271,7 +273,7 @@ Le azioni sensibili tracciate includono:
 - modifica template;
 - modifica privacy;
 - export dati;
-- cancellazione commessa;
+- archiviazione/cancellazione commessa;
 - cambio assegnazione;
 - cambio stato;
 - reset dati, scritto prima della cancellazione totale locale.

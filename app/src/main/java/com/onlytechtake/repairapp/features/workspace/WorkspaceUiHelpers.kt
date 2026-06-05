@@ -13,25 +13,41 @@ data class AttachmentCounts(
     val images: Int,
     val documents: Int,
     val signatures: Int,
+    val finalPhotos: Int = 0,
 )
 
 fun attachmentCounts(media: List<OrderMediaEntity>, signatures: List<SignatureEntity>): AttachmentCounts =
     AttachmentCounts(
-        images = media.count { it.isImageAttachment() },
+        images = media.count { it.isImageAttachment() && !it.isFinalPhoto() },
         documents = media.count { !it.isImageAttachment() },
         signatures = signatures.size,
+        finalPhotos = media.count { it.isFinalPhoto() },
     )
 
 fun AttachmentCounts.label(): String =
-    "Foto ${images} - Documenti ${documents} - Firme ${signatures}"
+    listOf(
+        "Foto $images",
+        "Documenti $documents",
+        "Firme $signatures",
+        "Lavoro finito $finalPhotos".takeIf { finalPhotos > 0 },
+    ).filterNotNull().joinToString(" - ")
 
 fun OrderAttachmentCounts.label(): String =
-    "Foto ${images} - Documenti ${documents} - Firme ${signatures}"
+    listOf(
+        "Foto $images",
+        "Documenti $documents",
+        "Firme $signatures",
+        "Lavoro finito $finalPhotos".takeIf { finalPhotos > 0 },
+    ).filterNotNull().joinToString(" - ")
 
 fun OrderMediaEntity.isImageAttachment(): Boolean =
     mediaType.equals("PHOTO", ignoreCase = true) ||
+        mediaType.equals("FINAL_PHOTO", ignoreCase = true) ||
         mediaType.equals("IMAGE", ignoreCase = true) ||
         mimeType.startsWith("image/", ignoreCase = true)
+
+fun OrderMediaEntity.isFinalPhoto(): Boolean =
+    mediaType.equals("FINAL_PHOTO", ignoreCase = true)
 
 fun formatFileSize(bytes: Long): String =
     when {

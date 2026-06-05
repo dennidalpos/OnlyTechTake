@@ -10,6 +10,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
@@ -28,6 +32,8 @@ fun QuickIntakeMediaSection(
     onPhotoCaptured: (File) -> Unit,
     onCameraError: (String) -> Unit,
 ) {
+    var selectedImage by rememberSaveable { mutableStateOf<Pair<String, String>?>(null) }
+
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             StepSectionTitle(stepNumber, "Foto e allegati")
@@ -35,13 +41,34 @@ fun QuickIntakeMediaSection(
                 Text("Aggiungi almeno una foto o un allegato.")
             } else {
                 stagedMedia.forEach { media ->
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(
-                            modifier = Modifier.weight(1f),
-                            text = "${media.mediaType}: ${media.fileName} - ${media.sizeBytes / 1024} KB",
-                        )
-                        OutlinedButton(onClick = { onRemoveMedia(media.localPath) }) {
-                            Text("Rimuovi")
+                    if (media.isImage()) {
+                        Card(modifier = Modifier.fillMaxWidth()) {
+                            Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                                LocalImagePreview(
+                                    path = media.localPath,
+                                    description = media.fileName,
+                                    onClick = { selectedImage = media.localPath to media.fileName },
+                                )
+                                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    Text(
+                                        modifier = Modifier.weight(1f),
+                                        text = "${media.mediaType}: ${media.fileName} - ${media.sizeBytes / 1024} KB",
+                                    )
+                                    OutlinedButton(onClick = { onRemoveMedia(media.localPath) }) {
+                                        Text("Rimuovi")
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(
+                                modifier = Modifier.weight(1f),
+                                text = "${media.mediaType}: ${media.fileName} - ${media.sizeBytes / 1024} KB",
+                            )
+                            OutlinedButton(onClick = { onRemoveMedia(media.localPath) }) {
+                                Text("Rimuovi")
+                            }
                         }
                     }
                 }
@@ -69,4 +96,13 @@ fun QuickIntakeMediaSection(
             }
         }
     }
+
+    selectedImage?.let { (path, title) ->
+        LocalImageViewer(path = path, title = title, onDismiss = { selectedImage = null })
+    }
 }
+
+private fun StagedOrderMedia.isImage(): Boolean =
+    mediaType.equals("PHOTO", ignoreCase = true) ||
+        mediaType.equals("IMAGE", ignoreCase = true) ||
+        mimeType.startsWith("image/", ignoreCase = true)

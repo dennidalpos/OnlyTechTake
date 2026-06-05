@@ -12,6 +12,8 @@ import com.onlytechtake.repairapp.data.local.dao.SignatureDao
 import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
 import com.onlytechtake.repairapp.data.local.dao.UserDao
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
+import com.onlytechtake.repairapp.data.local.entities.AuditAction
+import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
@@ -26,8 +28,10 @@ import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.domain.workspace.OrderListItem
+import com.onlytechtake.repairapp.domain.workspace.discardedCleanupReasons
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
 import com.onlytechtake.repairapp.domain.workspace.RepairOrderInput
+import java.io.File
 import java.util.UUID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -67,9 +71,11 @@ class OrderWorkflowRepository(
     fun observeOrderList(actor: AuthenticatedUser, filter: OrderFilter): Flow<List<OrderListItem>> =
         combine(
             observeOrders(actor, filter),
+            customerDao.observeAll(),
             orderMediaDao.observeAggregates(),
             signatureDao.observeAggregates(),
-        ) { orders, mediaAggregates, signatureAggregates ->
+        ) { orders, customers, mediaAggregates, signatureAggregates ->
+            val customersById = customers.associateBy { it.id }
             val mediaByOrder = mediaAggregates.associateBy { it.orderId }
             val signaturesByOrder = signatureAggregates.associateBy { it.orderId }
             orders.map { order ->
@@ -77,10 +83,12 @@ class OrderWorkflowRepository(
                 val signatures = signaturesByOrder[order.id]
                 OrderListItem(
                     order = order,
+                    customer = customersById[order.customerId],
                     attachments = OrderAttachmentCounts(
                         images = media?.images ?: 0,
                         documents = media?.documents ?: 0,
                         signatures = signatures?.signatures ?: 0,
+                        finalPhotos = media?.finalPhotos ?: 0,
                     ),
                 )
             }
@@ -237,6 +245,48 @@ class OrderWorkflowRepository(
             }
         }
 
+    suspend fun archiveDiscardedClosedOrders(actor: AuthenticatedUser): Result<Int> =
+        runCatching {
+            require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            val orders = repairOrderDao.findClosedByClosureReasons(discardedCleanupReasons)
+            if (orders.isEmpty()) return@runCatching 0
+
+            val now = clockMillis()
+            inTransaction {
+                orders.forEach { order ->
+                    repairOrderDao.upsert(
+                        order.copy(
+                            deletedAt = now,
+                            deletedByUserId = actor.id,
+                            deleteReason = "Pulizia commesse scartate",
+                            updatedAt = now,
+                        ),
+                    )
+                    eventWriter.orderDeleted(order.id, actor.id, "Pulizia commesse scartate", now)
+                }
+                auditCleanup(actor.id, "archive_discarded", orders.size, now)
+            }
+            orders.size
+        }
+
+    suspend fun deleteArchivedOrders(actor: AuthenticatedUser): Result<Int> =
+        runCatching {
+            require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            val orders = repairOrderDao.findArchived()
+            if (orders.isEmpty()) return@runCatching 0
+
+            val orderIds = orders.map { it.id }
+            val mediaFiles = orderMediaDao.findForOrders(orderIds).map { it.localPath }
+            val signatureFiles = signatureDao.findForOrders(orderIds).map { it.localPath }
+            val deletedCount = inTransaction {
+                val count = repairOrderDao.deleteByIds(orderIds)
+                auditCleanup(actor.id, "delete_archived", count, clockMillis())
+                count
+            }
+            (mediaFiles + signatureFiles).forEach(::deleteFileQuietly)
+            deletedCount
+        }
+
     suspend fun recordFeedback(actor: AuthenticatedUser, orderId: String, input: FeedbackInput): Result<Unit> =
         runCatching {
             inTransaction {
@@ -285,5 +335,34 @@ class OrderWorkflowRepository(
 
     private suspend fun <T> inTransaction(block: suspend () -> T): T =
         database?.withTransaction { block() } ?: block()
+
+    private suspend fun auditCleanup(actorUserId: String, operation: String, count: Int, now: Long) {
+        auditLogDao.upsert(
+            AuditLogEntity(
+                id = UUID.randomUUID().toString(),
+                action = AuditAction.ORDER_DELETED,
+                actorUserId = actorUserId,
+                orderId = null,
+                customerId = null,
+                detailsJson = """{"operation":"$operation","count":$count}""",
+                createdAt = now,
+            ),
+        )
+    }
+
+    private fun deleteFileQuietly(path: String) {
+        val file = File(path)
+        if (file.exists()) {
+            file.delete()
+        }
+        file.parentFile?.deleteIfEmpty()
+        file.parentFile?.parentFile?.deleteIfEmpty()
+    }
+
+    private fun File.deleteIfEmpty() {
+        if (exists() && isDirectory && listFiles().isNullOrEmpty()) {
+            delete()
+        }
+    }
 
 }

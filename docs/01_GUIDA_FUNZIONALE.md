@@ -20,6 +20,7 @@ Funzioni implementate:
 - modificare template privacy, condizioni e WhatsApp;
 - impostare la modalita WhatsApp manuale;
 - esportare configurazione, database, ZIP completo e PDF commessa;
+- archiviare in batch le commesse scartate e cancellare definitivamente quelle gia' archiviate;
 - eseguire reset totale dati con conferma testuale `RESET`.
 
 ### Operatore
@@ -31,7 +32,7 @@ Funzioni implementate:
 - consultare le commesse;
 - gestire le commesse assegnate;
 - riassegnare una propria commessa;
-- aggiungere note, foto, allegati e firme alle proprie commesse;
+- aggiungere note, foto, allegati, foto lavoro finito e una firma cliente alle proprie commesse;
 - preparare messaggi WhatsApp manuali per le proprie commesse;
 - confermare manualmente l'invio WhatsApp;
 - registrare risposta cliente o chiusura tramite azioni operative nello stato commessa.
@@ -105,13 +106,16 @@ Per la presa in carico serve un cliente esistente oppure un nuovo cliente valido
 
 ## Nuova commessa
 
-La creazione rapida richiede:
+La creazione commessa procede a step confermati:
 
 - cliente esistente o nuovo cliente valido;
 - problema/sintesi obbligatoria;
 - categoria attiva obbligatoria;
 - almeno una foto o allegato;
-- privacy, condizioni e firma cliente.
+- privacy, condizioni e firma cliente. I testi privacy e condizioni si aprono in dialog dalla sezione firma.
+
+Ogni step confermato diventa un riepilogo. Il pulsante `Modifica` riapre lo step e richiede di riconfermare gli step successivi prima della creazione.
+Durante lo step foto/allegati l'operatore puo' eliminare media venuti male, scattare di nuovo o aggiungere altri file.
 
 Alla conferma, `CreateIntakeOrderUseCase` crea cliente eventuale, commessa, firma e media dentro una transazione Room. Se firma o media falliscono, la commessa non viene confermata nel database e i file gia' scritti vengono ripuliti quando possibile.
 
@@ -126,6 +130,11 @@ Gli allegati importabili sono:
 - Excel XLS/XLSX.
 
 Ogni allegato puo' pesare al massimo 25 MiB.
+
+## Foto lavoro finito
+
+Dal dettaglio commessa e' possibile aggiungere foto opzionali del lavoro finito.
+Queste foto restano nello storico media della commessa, sono mostrate in una sezione separata e non sono richieste per la presa in carico.
 
 ## Campi commessa
 
@@ -161,7 +170,7 @@ READY_FOR_PICKUP
 CLOSED
 ```
 
-Il workspace riprende dallo stato corrente e mostra solo le azioni consentite dalla policy di stato. La chiusura richiede conferma e motivo obbligatorio.
+Il workspace riprende dallo stato corrente e mostra solo le azioni consentite dalla policy di stato. Le azioni di chiusura impostano il motivo e dopo il salvataggio riportano all'elenco commesse.
 
 Mappa operativa:
 
@@ -190,6 +199,13 @@ Ogni azione importante crea un evento timeline, tra cui:
 - commessa chiusa;
 - commessa eliminata logicamente;
 - reset dati ed export nei log audit.
+
+## Pulizia admin
+
+L'admin puo':
+
+- archiviare in batch le commesse chiuse come rifiutate, annullate o non riparabili digitando `ARCHIVIA`;
+- cancellare definitivamente le commesse gia' archiviate e i relativi file digitando `CANCELLA`.
 
 ## WhatsApp e feedback
 

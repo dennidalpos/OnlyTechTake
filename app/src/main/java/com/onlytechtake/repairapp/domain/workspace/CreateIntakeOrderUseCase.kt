@@ -31,7 +31,7 @@ class CreateIntakeOrderUseCase(
         runCatching {
             val normalizedInput = input.copy(
                 stagedMediaCount = stagedMedia.size,
-                hasPrivacySignature = signerName.isNotBlank() && privacyAccepted && termsAccepted,
+                hasPrivacySignature = privacyAccepted && termsAccepted,
             )
             val errors = normalizedInput.validationErrors()
             require(errors.isEmpty()) { errors.joinToString("\n") }

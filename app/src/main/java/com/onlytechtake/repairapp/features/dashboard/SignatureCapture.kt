@@ -8,6 +8,8 @@ import android.graphics.Path
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,9 +21,11 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -64,17 +68,17 @@ fun SignatureCaptureForm(
     onSubmit: (SignatureCaptureResult) -> Unit = {},
     onCaptureChanged: (SignatureCaptureResult?) -> Unit = {},
 ) {
-    var signerName by rememberSaveable { mutableStateOf("") }
     var privacyAccepted by rememberSaveable { mutableStateOf(false) }
     var termsAccepted by rememberSaveable { mutableStateOf(false) }
+    var textDialog by rememberSaveable { mutableStateOf<SignatureTextDialog?>(null) }
     var selectedSignaturePath by rememberSaveable { mutableStateOf<String?>(null) }
     var selectedSignatureTitle by rememberSaveable { mutableStateOf("") }
     var strokes by remember { mutableStateOf<List<SignatureStroke>>(emptyList()) }
     var currentStroke by remember { mutableStateOf<SignatureStroke?>(null) }
     val hasSignature = strokes.any { it.points.size > 1 }
-    val capture = if (signerName.isNotBlank() && privacyAccepted && termsAccepted && hasSignature) {
+    val capture = if (privacyAccepted && termsAccepted && hasSignature) {
         SignatureCaptureResult(
-            signerName = signerName,
+            signerName = DEFAULT_SIGNER_NAME,
             privacyAccepted = privacyAccepted,
             termsAccepted = termsAccepted,
             bitmap = renderSignatureBitmap(strokes),
@@ -83,7 +87,7 @@ fun SignatureCaptureForm(
         null
     }
 
-    LaunchedEffect(signerName, privacyAccepted, termsAccepted, strokes) {
+    LaunchedEffect(privacyAccepted, termsAccepted, strokes) {
         onCaptureChanged(capture)
     }
 
@@ -109,9 +113,18 @@ fun SignatureCaptureForm(
             Text("Nessuna firma acquisita.")
         }
 
-        Text(privacyText, style = MaterialTheme.typography.bodySmall)
-        Text(termsText, style = MaterialTheme.typography.bodySmall)
-        Field(signerName, { signerName = it }, "Nome firmatario")
+        Text(
+            modifier = Modifier.clickable { textDialog = SignatureTextDialog.PRIVACY },
+            text = "Leggi informativa privacy",
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.bodySmall,
+        )
+        Text(
+            modifier = Modifier.clickable { textDialog = SignatureTextDialog.TERMS },
+            text = "Leggi condizioni di presa in carico",
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.bodySmall,
+        )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -145,6 +158,14 @@ fun SignatureCaptureForm(
             strokes = strokes,
             currentStroke = currentStroke,
             onStart = { point -> currentStroke = SignatureStroke(listOf(point)) },
+            onTap = { point ->
+                strokes = strokes + SignatureStroke(
+                    listOf(
+                        point,
+                        point.copy(x = (point.x + SIGNATURE_DOT_DELTA).coerceAtMost(1f)),
+                    ),
+                )
+            },
             onDrag = { point ->
                 currentStroke = currentStroke?.let { it.copy(points = it.points + point) }
             },
@@ -181,6 +202,33 @@ fun SignatureCaptureForm(
             onDismiss = { selectedSignaturePath = null },
         )
     }
+
+    textDialog?.let { dialog ->
+        AlertDialog(
+            onDismissRequest = { textDialog = null },
+            title = {
+                Text(
+                    when (dialog) {
+                        SignatureTextDialog.PRIVACY -> "Informativa privacy"
+                        SignatureTextDialog.TERMS -> "Condizioni di presa in carico"
+                    },
+                )
+            },
+            text = {
+                Text(
+                    when (dialog) {
+                        SignatureTextDialog.PRIVACY -> privacyText
+                        SignatureTextDialog.TERMS -> termsText
+                    },
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { textDialog = null }) {
+                    Text("Chiudi")
+                }
+            },
+        )
+    }
 }
 
 @Composable
@@ -188,6 +236,7 @@ private fun SignatureCanvas(
     strokes: List<SignatureStroke>,
     currentStroke: SignatureStroke?,
     onStart: (SignaturePoint) -> Unit,
+    onTap: (SignaturePoint) -> Unit,
     onDrag: (SignaturePoint) -> Unit,
     onEnd: () -> Unit,
 ) {
@@ -199,6 +248,11 @@ private fun SignatureCanvas(
             .border(1.dp, MaterialTheme.colorScheme.outline)
             .semantics {
                 contentDescription = "Area firma cliente. Tracciare la firma con dito o pennino."
+            }
+            .pointerInput(Unit) {
+                detectTapGestures { offset ->
+                    onTap(offset.toSignaturePoint(size.width, size.height))
+                }
             }
             .pointerInput(Unit) {
                 detectDragGestures(
@@ -249,6 +303,11 @@ private data class SignaturePoint(
     val y: Float,
 )
 
+private enum class SignatureTextDialog {
+    PRIVACY,
+    TERMS,
+}
+
 private fun Offset.toSignaturePoint(width: Int, height: Int): SignaturePoint =
     SignaturePoint(
         x = (x / width.coerceAtLeast(1)).coerceIn(0f, 1f),
@@ -274,3 +333,5 @@ private fun SignatureStroke.toAndroidPath(width: Float, height: Float): Path =
 private const val BITMAP_WIDTH = 1200
 private const val BITMAP_HEIGHT = 400
 private const val BITMAP_STROKE_WIDTH = 8f
+private const val SIGNATURE_DOT_DELTA = 0.001f
+private const val DEFAULT_SIGNER_NAME = "Cliente"

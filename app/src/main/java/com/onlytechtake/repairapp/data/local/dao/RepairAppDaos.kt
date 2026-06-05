@@ -5,6 +5,7 @@ import androidx.room.Query
 import androidx.room.Upsert
 import com.onlytechtake.repairapp.data.local.entities.AppSettingEntity
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
+import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
@@ -22,6 +23,7 @@ data class OrderMediaAggregate(
     val orderId: String,
     val images: Int,
     val documents: Int,
+    val finalPhotos: Int,
 )
 
 data class SignatureAggregate(
@@ -73,6 +75,9 @@ interface CustomerDao {
     @Query("SELECT * FROM customers ORDER BY updatedAt DESC LIMIT :limit")
     fun observeRecent(limit: Int = 50): Flow<List<CustomerEntity>>
 
+    @Query("SELECT * FROM customers")
+    fun observeAll(): Flow<List<CustomerEntity>>
+
     @Query("SELECT * FROM customers WHERE id = :id LIMIT 1")
     suspend fun findById(id: String): CustomerEntity?
 
@@ -119,6 +124,20 @@ interface RepairOrderDao {
     @Query("SELECT * FROM repair_orders WHERE id = :id LIMIT 1")
     suspend fun findById(id: String): RepairOrderEntity?
 
+    @Query(
+        """
+        SELECT * FROM repair_orders
+        WHERE status = 'CLOSED'
+            AND deletedAt IS NULL
+            AND closureReason IN (:closureReasons)
+        ORDER BY updatedAt DESC
+        """,
+    )
+    suspend fun findClosedByClosureReasons(closureReasons: List<ClosureReason>): List<RepairOrderEntity>
+
+    @Query("SELECT * FROM repair_orders WHERE deletedAt IS NOT NULL ORDER BY deletedAt DESC")
+    suspend fun findArchived(): List<RepairOrderEntity>
+
     @Query("SELECT * FROM repair_orders WHERE id = :id LIMIT 1")
     fun observeById(id: String): Flow<RepairOrderEntity?>
 
@@ -148,6 +167,9 @@ interface RepairOrderDao {
 
     @Query("SELECT * FROM repair_orders WHERE deletedAt IS NULL ORDER BY createdAt DESC LIMIT :limit")
     fun observeRecentActiveOrders(limit: Int = 50): Flow<List<RepairOrderEntity>>
+
+    @Query("DELETE FROM repair_orders WHERE id IN (:orderIds)")
+    suspend fun deleteByIds(orderIds: List<String>): Int
 }
 
 @Dao
@@ -182,12 +204,16 @@ interface OrderMediaDao {
     @Query("SELECT * FROM order_media WHERE orderId = :orderId ORDER BY capturedAt DESC")
     fun observeForOrder(orderId: String): Flow<List<OrderMediaEntity>>
 
+    @Query("SELECT * FROM order_media WHERE orderId IN (:orderIds)")
+    suspend fun findForOrders(orderIds: List<String>): List<OrderMediaEntity>
+
     @Query(
         """
         SELECT
             orderId,
-            COUNT(CASE WHEN UPPER(mediaType) IN ('PHOTO', 'IMAGE') OR mimeType LIKE 'image/%' THEN 1 END) AS images,
-            COUNT(CASE WHEN NOT (UPPER(mediaType) IN ('PHOTO', 'IMAGE') OR mimeType LIKE 'image/%') THEN 1 END) AS documents
+            COUNT(CASE WHEN UPPER(mediaType) IN ('PHOTO', 'IMAGE') OR (mimeType LIKE 'image/%' AND UPPER(mediaType) != 'FINAL_PHOTO') THEN 1 END) AS images,
+            COUNT(CASE WHEN NOT (UPPER(mediaType) IN ('PHOTO', 'IMAGE', 'FINAL_PHOTO') OR mimeType LIKE 'image/%') THEN 1 END) AS documents,
+            COUNT(CASE WHEN UPPER(mediaType) = 'FINAL_PHOTO' THEN 1 END) AS finalPhotos
         FROM order_media
         GROUP BY orderId
         """,
@@ -202,6 +228,12 @@ interface SignatureDao {
 
     @Query("SELECT * FROM signatures WHERE orderId = :orderId ORDER BY signedAt DESC")
     fun observeForOrder(orderId: String): Flow<List<SignatureEntity>>
+
+    @Query("SELECT * FROM signatures WHERE orderId IN (:orderIds)")
+    suspend fun findForOrders(orderIds: List<String>): List<SignatureEntity>
+
+    @Query("SELECT COUNT(*) FROM signatures WHERE orderId = :orderId")
+    suspend fun countForOrder(orderId: String): Int
 
     @Query("SELECT orderId, COUNT(*) AS signatures FROM signatures GROUP BY orderId")
     fun observeAggregates(): Flow<List<SignatureAggregate>>

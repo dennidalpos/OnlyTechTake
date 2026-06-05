@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.features.workspace
 import android.net.Uri
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.DataResetRepository
+import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import kotlinx.coroutines.CoroutineScope
@@ -17,6 +18,7 @@ internal class WorkspaceAdminActions(
     private val scope: CoroutineScope,
     private val backupRepository: BackupRepository,
     private val dataResetRepository: DataResetRepository,
+    private val orderRepository: OrderWorkflowRepository,
     private val showSuccess: (String) -> Unit,
     private val showError: (Throwable) -> Unit,
     private val showMessage: (String, Boolean) -> Unit,
@@ -47,12 +49,30 @@ internal class WorkspaceAdminActions(
         }
     }
 
+    fun archiveDiscardedClosedOrders() {
+        withUser { actor ->
+            orderRepository.archiveDiscardedClosedOrders(actor).map { count ->
+                "$count commesse archiviate"
+            }
+        }
+    }
+
+    fun deleteArchivedOrders() {
+        withUser { actor ->
+            orderRepository.deleteArchivedOrders(actor).map { count ->
+                "$count commesse cancellate"
+            }
+        }
+    }
+
     private fun withUser(block: suspend (AuthenticatedUser) -> Result<*>) {
         scope.launch {
             val actor = currentUser.value ?: return@launch showMessage("Sessione non valida", true)
             authRepository.touchSession()
             block(actor).fold(
-                onSuccess = { showSuccess("Operazione completata") },
+                onSuccess = { result ->
+                    showSuccess(result as? String ?: "Operazione completata")
+                },
                 onFailure = showError,
             )
         }
