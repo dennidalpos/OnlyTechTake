@@ -1,3 +1,5 @@
 {
-  "todos": []
+  "todos": [
+    "Implementare ripristino/import del backup locale esportato tramite SAF"
+  ]
 }

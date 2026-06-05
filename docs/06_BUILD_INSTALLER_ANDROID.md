@@ -2,7 +2,9 @@
 
 Guida operativa supportata per Windows + PowerShell. Gli script in
 `scripts\windows` calcolano la root del progetto dal proprio percorso; il
-comando diretto `.\gradlew.bat` va invece eseguito dalla root.
+comando diretto `.\gradlew.bat` va invece eseguito dalla root e usa la JVM gia'
+configurata nel processo PowerShell. Se il terminale punta a Java 8, usare gli
+script ufficiali o impostare `JAVA_HOME` su JDK/JBR 17+ nello stesso terminale.
 
 ## Prerequisiti
 
@@ -144,6 +146,7 @@ powershell -ExecutionPolicy Bypass -File scripts\windows\start_android_app.ps1 -
 
 - `gradlew.bat non trovato`: eseguire dalla root del progetto.
 - `Java non trovato` o `javac non trovato`: configurare JDK 17+ o Android Studio JBR.
+- `Dependency requires at least JVM runtime version 11` con `.\gradlew.bat`: il processo sta usando una JVM troppo vecchia; usare gli script PowerShell ufficiali o impostare `JAVA_HOME` su JDK/JBR 17+.
 - `Platform android-36 non trovata`: installare Android SDK Platform 36 da Android Studio SDK Manager.
 - `Android SDK Build Tools non trovati`: installare Android SDK Build Tools da Android Studio SDK Manager.
 - `adb non trovato`: installare Android Platform Tools o aggiungere `platform-tools` al `PATH`.

@@ -63,7 +63,7 @@ Al primo avvio, se non esiste un admin locale, l'app mostra il setup admin. Dopo
 
 ## Comandi Ufficiali
 
-Gli script PowerShell calcolano la root del progetto dal proprio percorso, quindi possono essere eseguiti anche da una sottocartella. Il comando diretto `.\gradlew.bat` va invece lanciato dalla root.
+Gli script PowerShell calcolano la root del progetto dal proprio percorso, quindi possono essere eseguiti anche da una sottocartella. Il comando diretto `.\gradlew.bat` va invece lanciato dalla root e usa la JVM gia' configurata nel processo PowerShell; se il processo punta a Java 8, usare gli script o impostare `JAVA_HOME` su JDK/JBR 17+.
 
 | Obiettivo | Comando |
 |---|---|
@@ -142,6 +142,7 @@ Regole:
 
 - `gradlew.bat non trovato`: eseguire i comandi Gradle dalla root o usare gli script in `scripts\windows`.
 - `Java non trovato` o `javac non trovato`: installare JDK 17+ o usare Android Studio JBR, poi rieseguire `check_android_env.ps1`.
+- `Dependency requires at least JVM runtime version 11` con `.\gradlew.bat`: il processo sta usando una JVM troppo vecchia; usare gli script PowerShell ufficiali o impostare `JAVA_HOME` su JDK/JBR 17+ nello stesso terminale.
 - `Platform android-36 non trovata`: installare Android SDK Platform 36 da Android Studio SDK Manager.
 - `Android SDK Build Tools non trovati`: installare Android SDK Build Tools da Android Studio SDK Manager.
 - `adb non trovato`: installare Android Platform Tools o aggiungere `platform-tools` al `PATH`.
