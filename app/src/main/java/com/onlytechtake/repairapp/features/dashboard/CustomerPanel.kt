@@ -178,7 +178,7 @@ private fun CustomerCard(customer: CustomerEntity) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(12.dp)) {
             Text(customer.displayName(), style = MaterialTheme.typography.titleMedium)
-            Text("${customer.type.label()} - ${customer.phone.orEmpty()} ${customer.email.orEmpty()}")
+            Text(customer.type.label())
         }
     }
 }

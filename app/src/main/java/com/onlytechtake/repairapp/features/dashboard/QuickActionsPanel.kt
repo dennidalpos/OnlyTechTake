@@ -49,8 +49,9 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
 
     var intakeSessionId by rememberSaveable { mutableStateOf(UUID.randomUUID().toString()) }
     var selectedCustomerId by rememberSaveable { mutableStateOf<String?>(null) }
+    var selectedCustomerLabel by rememberSaveable { mutableStateOf<String?>(null) }
     var selectedCategoryId by rememberSaveable { mutableStateOf<String?>(null) }
-    var showNewCustomerForm by rememberSaveable { mutableStateOf(true) }
+    var showNewCustomerForm by rememberSaveable { mutableStateOf(false) }
     var isBusiness by rememberSaveable { mutableStateOf(false) }
     var firstName by rememberSaveable { mutableStateOf("") }
     var lastName by rememberSaveable { mutableStateOf("") }
@@ -77,6 +78,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         },
     )
     val selectedCustomer = selectedCustomerId?.let { id -> customerSuggestions.firstOrNull { it.id == id } }
+    val selectedCustomerDisplayName = selectedCustomer?.displayName() ?: selectedCustomerLabel
     val activeCategories = categories.filter { it.active }
     val selectedCategory = activeCategories.firstOrNull { it.id == selectedCategoryId }
     val newCustomerInput = CustomerInput(
@@ -92,8 +94,8 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         notes = notes,
     )
     val intakeInput = IntakeOrderInput(
-        existingCustomerId = selectedCustomerId?.takeIf { !showNewCustomerForm },
-        newCustomer = newCustomerInput.takeIf { showNewCustomerForm },
+        existingCustomerId = selectedCustomerId,
+        newCustomer = null,
         problemSummary = problemSummary,
         problemDetails = problemDetails,
         categoryId = selectedCategoryId,
@@ -116,8 +118,9 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
     fun resetForm() {
         intakeSessionId = UUID.randomUUID().toString()
         selectedCustomerId = null
+        selectedCustomerLabel = null
         selectedCategoryId = null
-        showNewCustomerForm = true
+        showNewCustomerForm = false
         isBusiness = false
         firstName = ""
         lastName = ""
@@ -136,6 +139,22 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         viewModel.setCustomerSearchQuery("")
     }
 
+    fun clearNewCustomerFields() {
+        isBusiness = false
+        firstName = ""
+        lastName = ""
+        companyName = ""
+        phone = ""
+        email = ""
+        vatNumber = ""
+        taxCode = ""
+        address = ""
+        notes = ""
+    }
+
+    val canSaveNewCustomer = (phone.isNotBlank() || email.isNotBlank()) &&
+        if (isBusiness) companyName.isNotBlank() else firstName.isNotBlank() && lastName.isNotBlank()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -152,7 +171,8 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                     value = uiState.customerSearchQuery,
                     onValueChange = {
                         selectedCustomerId = null
-                        showNewCustomerForm = it.isBlank()
+                        selectedCustomerLabel = null
+                        showNewCustomerForm = false
                         viewModel.setCustomerSearchQuery(it)
                     },
                     label = "Cerca cliente esistente",
@@ -160,13 +180,14 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                     imeAction = ImeAction.Next,
                     keyboardActions = nextAction,
                 )
-                if (selectedCustomer != null) {
-                    Text("Cliente selezionato: ${selectedCustomer.displayName()}")
+                if (selectedCustomerId != null) {
+                    Text("Cliente selezionato: ${selectedCustomerDisplayName.orEmpty()}")
                     OutlinedButton(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
                             selectedCustomerId = null
-                            showNewCustomerForm = true
+                            selectedCustomerLabel = null
+                            showNewCustomerForm = false
                             viewModel.setCustomerSearchQuery("")
                         },
                     ) {
@@ -178,20 +199,25 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                             customer = customer,
                             onClick = {
                                 selectedCustomerId = customer.id
+                                selectedCustomerLabel = customer.displayName()
                                 showNewCustomerForm = false
                                 viewModel.setCustomerSearchQuery(customer.displayName())
                             },
                         )
                     }
                 }
-                OutlinedButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        selectedCustomerId = null
-                        showNewCustomerForm = true
-                    },
-                ) {
-                    Text("Inserisci nuovo cliente")
+                if (selectedCustomerId == null && !showNewCustomerForm) {
+                    OutlinedButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            selectedCustomerId = null
+                            selectedCustomerLabel = null
+                            showNewCustomerForm = true
+                            viewModel.setCustomerSearchQuery("")
+                        },
+                    ) {
+                        Text("Inserisci nuovo cliente")
+                    }
                 }
                 if (showNewCustomerForm) {
                     IntakeCustomerFields(
@@ -217,6 +243,20 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                         onNotesChange = { notes = it },
                         nextAction = nextAction,
                         doneAction = doneAction,
+                    )
+                    TouchButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Salva cliente",
+                        enabled = canSaveNewCustomer,
+                        onClick = {
+                            viewModel.saveCustomer(newCustomerInput) { customer ->
+                                selectedCustomerId = customer.id
+                                selectedCustomerLabel = customer.displayName()
+                                showNewCustomerForm = false
+                                clearNewCustomerFields()
+                                viewModel.setCustomerSearchQuery(customer.displayName())
+                            }
+                        },
                     )
                 }
             }

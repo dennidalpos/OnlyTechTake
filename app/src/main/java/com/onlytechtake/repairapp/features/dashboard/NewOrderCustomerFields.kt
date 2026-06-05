@@ -33,7 +33,7 @@ fun CustomerSuggestionCard(customer: CustomerEntity, onClick: () -> Unit) {
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Text(customer.displayName(), style = MaterialTheme.typography.titleMedium)
-            Text(customerContactLine(customer), style = MaterialTheme.typography.bodyMedium)
+            Text(customer.type.label(), style = MaterialTheme.typography.bodyMedium)
         }
     }
 }
@@ -140,9 +140,4 @@ fun IntakeCustomerFields(
         Field(address, onAddressChange, "Indirizzo", singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
         Field(notes, onNotesChange, "Note cliente", imeAction = ImeAction.Done, keyboardActions = doneAction)
     }
-}
-
-private fun customerContactLine(customer: CustomerEntity): String {
-    val contacts = listOfNotNull(customer.phone, customer.email).joinToString(" ")
-    return "${customer.type.label()} - $contacts".trimEnd()
 }

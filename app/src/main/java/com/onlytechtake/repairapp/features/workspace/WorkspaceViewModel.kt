@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
+import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
@@ -211,8 +212,8 @@ class WorkspaceViewModel(
     fun resetPassword(userId: String, password: String) =
         catalogActions.resetPassword(userId, password)
 
-    fun saveCustomer(input: CustomerInput) =
-        catalogActions.saveCustomer(input)
+    fun saveCustomer(input: CustomerInput, onSaved: (CustomerEntity) -> Unit = {}) =
+        catalogActions.saveCustomer(input, onSaved)
 
     fun saveCategory(
         id: String?,

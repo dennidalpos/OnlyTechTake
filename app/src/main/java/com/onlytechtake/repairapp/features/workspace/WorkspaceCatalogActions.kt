@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.features.workspace
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
 import com.onlytechtake.repairapp.data.repositories.CustomerRepository
+import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
@@ -35,10 +36,13 @@ internal class WorkspaceCatalogActions(
         adminUserRepository.resetPassword(actor, userId, password)
     }
 
-    fun saveCustomer(input: CustomerInput) {
+    fun saveCustomer(input: CustomerInput, onSaved: (CustomerEntity) -> Unit = {}) {
         scope.launch {
             customerRepository.save(input).fold(
-                onSuccess = { showSuccess("Cliente salvato") },
+                onSuccess = { customer ->
+                    showSuccess("Cliente salvato")
+                    onSaved(customer)
+                },
                 onFailure = showError,
             )
         }
