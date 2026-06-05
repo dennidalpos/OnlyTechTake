@@ -13,7 +13,6 @@ import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -105,22 +104,16 @@ fun OrderPhotoSection(
             }
         }
 
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = {
+        ActionRow {
+            TouchButton(text = "Scatta foto", onClick = {
                 showFinalCamera = false
                 showCamera = true
-            }) {
-                Text("Scatta foto")
-            }
-            Button(onClick = {
+            })
+            TouchButton(text = "Foto finita", onClick = {
                 showCamera = false
                 showFinalCamera = true
-            }) {
-                Text("Foto lavoro finito")
-            }
-            Button(onClick = { attachmentLauncher.launch("*/*") }) {
-                Text("Allega file")
-            }
+            })
+            TouchButton(text = "Allega file", onClick = { attachmentLauncher.launch("*/*") })
             if (showCamera) {
                 OutlinedButton(onClick = { showCamera = false }) {
                     Text("Chiudi camera")
@@ -128,7 +121,7 @@ fun OrderPhotoSection(
             }
             if (showFinalCamera) {
                 OutlinedButton(onClick = { showFinalCamera = false }) {
-                    Text("Chiudi lavoro finito")
+                    Text("Chiudi foto finita")
                 }
             }
         }
