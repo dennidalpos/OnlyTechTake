@@ -13,6 +13,8 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.data.preferences.AuthPreferences
+import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import java.io.File
@@ -20,9 +22,13 @@ import java.io.IOException
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.UUID
+import java.util.zip.ZipInputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 
 class BackupRepository(
     private val context: Context,
@@ -30,6 +36,9 @@ class BackupRepository(
     private val templateDao: MessageTemplateDao,
     private val settingDao: AppSettingDao,
     private val auditLogDao: AuditLogDao,
+    private val database: RepairAppDatabase? = null,
+    private val authPreferences: AuthPreferences? = null,
+    private val sessionStore: InMemorySessionStore? = null,
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
     private val eventWriter = OrderWorkflowEventWriter(auditLogDao = auditLogDao)
@@ -65,6 +74,36 @@ class BackupRepository(
                 }
             } ?: throw IOException("Destinazione non disponibile")
             eventWriter.dataExported(actor.id, clockMillis())
+        }
+
+    suspend fun importCompleteBackup(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
+        runCatching {
+            require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            val roomDatabase = requireNotNull(database) { "Ripristino non configurato" }
+
+            withContext(Dispatchers.IO) {
+                val restoreDirectory = File(context.cacheDir, "backup_restore_${UUID.randomUUID()}").apply {
+                    mkdirs()
+                }
+                val rollbackDirectory = File(context.cacheDir, "backup_restore_rollback_${UUID.randomUUID()}")
+                try {
+                    val extracted = extractBackup(uri, restoreDirectory)
+                    restorePrivateFiles(extracted.filesDirectory, rollbackDirectory)
+                    try {
+                        restoreDatabase(roomDatabase, extracted.databaseFile)
+                    } catch (error: Throwable) {
+                        restorePrivateFiles(rollbackDirectory, File(context.cacheDir, "backup_restore_unused_${UUID.randomUUID()}"))
+                        throw error
+                    }
+                } finally {
+                    restoreDirectory.deleteRecursively()
+                    rollbackDirectory.deleteRecursively()
+                }
+            }
+
+            eventWriter.dataImported(clockMillis())
+            authPreferences?.markConfigured()
+            sessionStore?.clear()
         }
 
     suspend fun exportOrderSummaryPdf(
@@ -114,6 +153,107 @@ class BackupRepository(
         }
 
     fun databaseFile(): File = context.getDatabasePath(RepairAppDatabase.DATABASE_NAME)
+
+    private fun extractBackup(uri: Uri, restoreDirectory: File): ExtractedBackup {
+        val databaseDirectory = File(restoreDirectory, "database").apply { mkdirs() }
+        val filesDirectory = File(restoreDirectory, "files").apply { mkdirs() }
+        val databaseFile = File(databaseDirectory, RepairAppDatabase.DATABASE_NAME)
+        var hasMetadata = false
+
+        context.contentResolver.openInputStream(uri)?.use { input ->
+            ZipInputStream(input).use { zip ->
+                generateSequence { zip.nextEntry }.forEach { entry ->
+                    val entryName = entry.name
+                    validateZipEntryName(entryName)
+                    when {
+                        entry.isDirectory -> Unit
+                        entryName == "metadata/backup.json" -> {
+                            hasMetadata = true
+                        }
+                        entryName.startsWith("database/") -> {
+                            val fileName = entryName.removePrefix("database/")
+                            require(fileName == RepairAppDatabase.DATABASE_NAME || fileName.startsWith("${RepairAppDatabase.DATABASE_NAME}-")) {
+                                "Backup database non valido"
+                            }
+                            File(databaseDirectory, fileName).outputStream().use { output -> zip.copyTo(output) }
+                        }
+                        entryName.startsWith("files/orders/") || entryName.startsWith("files/order_media/") -> {
+                            val target = File(filesDirectory, entryName.removePrefix("files/"))
+                            target.parentFile?.mkdirs()
+                            target.outputStream().use { output -> zip.copyTo(output) }
+                        }
+                    }
+                    zip.closeEntry()
+                }
+            }
+        } ?: throw IOException("Backup non disponibile")
+
+        require(hasMetadata) { "File backup non valido" }
+        require(databaseFile.exists()) { "Database backup mancante" }
+        return ExtractedBackup(databaseFile = databaseFile, filesDirectory = filesDirectory)
+    }
+
+    private fun restoreDatabase(roomDatabase: RepairAppDatabase, backupDatabaseFile: File) {
+        val db = roomDatabase.openHelper.writableDatabase
+        db.execSQL("ATTACH DATABASE ? AS backup", arrayOf(backupDatabaseFile.absolutePath))
+        try {
+            val backupVersion = db.query("PRAGMA backup.user_version").use { cursor ->
+                if (cursor.moveToFirst()) cursor.getInt(0) else 0
+            }
+            require(backupVersion == RepairAppDatabase.DATABASE_VERSION) {
+                "Versione backup non supportata"
+            }
+            DATABASE_TABLES.forEach { table ->
+                require(db.query("SELECT name FROM backup.sqlite_master WHERE type = 'table' AND name = ?", arrayOf(table)).use { it.moveToFirst() }) {
+                    "Tabella backup mancante: $table"
+                }
+            }
+            val activeAdminCount = db.query("SELECT COUNT(*) FROM backup.users WHERE role = 'ADMIN' AND active = 1").use { cursor ->
+                if (cursor.moveToFirst()) cursor.getInt(0) else 0
+            }
+            require(activeAdminCount > 0) { "Il backup non contiene admin attivi" }
+
+            db.execSQL("PRAGMA foreign_keys=OFF")
+            db.beginTransaction()
+            try {
+                DELETE_TABLES.forEach { table -> db.execSQL("DELETE FROM $table") }
+                INSERT_TABLES.forEach { table -> db.execSQL("INSERT INTO $table SELECT * FROM backup.$table") }
+                val foreignKeyErrors = db.query("PRAGMA foreign_key_check").use { cursor -> cursor.count }
+                require(foreignKeyErrors == 0) { "Backup con riferimenti non validi" }
+                db.setTransactionSuccessful()
+            } finally {
+                db.endTransaction()
+                db.execSQL("PRAGMA foreign_keys=ON")
+            }
+        } finally {
+            db.execSQL("DETACH DATABASE backup")
+        }
+    }
+
+    private fun restorePrivateFiles(filesDirectory: File, rollbackDirectory: File) {
+        rollbackDirectory.deleteRecursively()
+        rollbackDirectory.mkdirs()
+        RESTORED_FILE_DIRECTORIES.forEach { directoryName ->
+            val current = File(context.filesDir, directoryName)
+            val rollback = File(rollbackDirectory, directoryName)
+            if (current.exists()) {
+                current.copyRecursively(rollback, overwrite = true)
+            }
+            current.deleteRecursively()
+            val restored = File(filesDirectory, directoryName)
+            if (restored.exists()) {
+                restored.copyRecursively(current, overwrite = true)
+            }
+        }
+        File(context.filesDir, "intake_media").deleteRecursively()
+    }
+
+    private fun validateZipEntryName(name: String) {
+        val segments = name.split("/")
+        require(name.isNotBlank() && !name.startsWith("/") && "\\" !in name && ".." !in segments) {
+            "Backup ZIP non valido"
+        }
+    }
 
     private suspend fun buildConfigurationJson(): String {
         val categories = categoryDao.observeAll().first()
@@ -182,6 +322,11 @@ class BackupRepository(
 
 }
 
+private data class ExtractedBackup(
+    val databaseFile: File,
+    val filesDirectory: File,
+)
+
 private fun ZipOutputStream.putTextEntry(name: String, text: String) {
     putNextEntry(ZipEntry(name))
     write(text.toByteArray(Charsets.UTF_8))
@@ -238,3 +383,47 @@ private fun jsonString(value: String?): String =
         ?.replace("\n", "\\n")
         ?.let { "\"$it\"" }
         ?: "null"
+
+private val DATABASE_TABLES = listOf(
+    "users",
+    "customers",
+    "order_categories",
+    "repair_orders",
+    "timeline_events",
+    "message_templates",
+    "message_logs",
+    "app_settings",
+    "audit_logs",
+    "order_media",
+    "signatures",
+)
+
+private val DELETE_TABLES = listOf(
+    "message_logs",
+    "order_media",
+    "signatures",
+    "timeline_events",
+    "audit_logs",
+    "repair_orders",
+    "customers",
+    "order_categories",
+    "message_templates",
+    "app_settings",
+    "users",
+)
+
+private val INSERT_TABLES = listOf(
+    "users",
+    "customers",
+    "order_categories",
+    "message_templates",
+    "app_settings",
+    "repair_orders",
+    "timeline_events",
+    "message_logs",
+    "audit_logs",
+    "order_media",
+    "signatures",
+)
+
+private val RESTORED_FILE_DIRECTORIES = listOf("orders", "order_media")

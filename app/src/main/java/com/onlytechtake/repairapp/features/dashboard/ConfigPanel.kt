@@ -57,6 +57,9 @@ fun ConfigPanel(viewModel: WorkspaceViewModel, isAdmin: Boolean) {
     val exportZipLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
         uri?.let(viewModel::exportCompleteBackup)
     }
+    val importZipLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        uri?.let(viewModel::importCompleteBackup)
+    }
 
     fun requestConfirm(title: String, text: String, action: () -> Unit) {
         confirmTitle = title
@@ -110,7 +113,7 @@ fun ConfigPanel(viewModel: WorkspaceViewModel, isAdmin: Boolean) {
                     }
                 }
                 item {
-                    ConfigHubCard("Export", "Configurazione, database e backup completo.") {
+                    ConfigHubCard("Backup", "Export e ripristino ZIP completo.") {
                         section = ConfigSection.EXPORT
                     }
                 }
@@ -239,11 +242,11 @@ fun ConfigPanel(viewModel: WorkspaceViewModel, isAdmin: Boolean) {
 
             ConfigSection.EXPORT -> {
                 item {
-                    SectionTitle("Export")
+                    SectionTitle("Backup")
                     if (!isAdmin) {
                         Text("Area riservata admin.")
                     } else {
-                        Text("Gli export non sono cifrati dall'app: salvarli solo su supporti o cartelle protette.")
+                        Text("Gli export e i backup ripristinati non sono cifrati dall'app: usare solo supporti o cartelle protette.")
                         ActionRow {
                             TouchButton(
                                 text = "Export config",
@@ -266,6 +269,15 @@ fun ConfigPanel(viewModel: WorkspaceViewModel, isAdmin: Boolean) {
                                 onClick = {
                                     requestConfirm("Esportare backup completo?", "Verra' creato un file ZIP non cifrato tramite selettore di sistema.") {
                                         exportZipLauncher.launch("onlytechtake-backup.zip")
+                                    }
+                                },
+                            )
+                            TouchButton(
+                                text = "Ripristina ZIP",
+                                tone = ButtonTone.DANGER,
+                                onClick = {
+                                    requestConfirm("Ripristinare backup?", "Il backup ZIP sostituira' database e file locali. Dopo il ripristino sara' richiesto un nuovo login.") {
+                                        importZipLauncher.launch(arrayOf("application/zip", "application/octet-stream", "application/x-zip-compressed"))
                                     }
                                 },
                             )

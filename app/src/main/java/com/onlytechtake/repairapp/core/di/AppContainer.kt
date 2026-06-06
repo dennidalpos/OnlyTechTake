@@ -109,6 +109,9 @@ class AppContainer(context: Context) {
         templateDao = database.messageTemplateDao(),
         settingDao = database.appSettingDao(),
         auditLogDao = database.auditLogDao(),
+        database = database,
+        authPreferences = authPreferences,
+        sessionStore = sessionStore,
     )
 
     val dataResetRepository = DataResetRepository(

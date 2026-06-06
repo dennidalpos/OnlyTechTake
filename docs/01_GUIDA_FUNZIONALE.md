@@ -41,7 +41,7 @@ Limiti operatore:
 
 - non accede alla sezione Admin;
 - non modifica categorie, template o impostazioni generali;
-- non esegue export admin;
+- non esegue export o ripristino admin;
 - non esegue reset totale dati.
 
 ## Primo avvio e login
@@ -198,7 +198,7 @@ Ogni azione importante crea un evento timeline, tra cui:
 - nota aggiunta;
 - commessa chiusa;
 - commessa eliminata logicamente;
-- reset dati ed export nei log audit.
+- reset dati, export e ripristino nei log audit.
 
 ## Pulizia admin
 
@@ -226,7 +226,7 @@ Non sono implementati backend, WhatsApp Business Platform, webhook o conferme au
 
 Il feedback cliente automatico non e' implementato. Nel rilascio corrente l'app registra manualmente la risposta cliente: l'accettazione porta la commessa a `WORKING`, il rifiuto chiude la commessa in `CLOSED` con motivo `CUSTOMER_DECLINED`.
 
-## Export e limiti
+## Backup e limiti
 
 Export implementati:
 
@@ -235,9 +235,12 @@ Export implementati:
 - ZIP completo con database, configurazione e file privati rilevanti;
 - PDF riepilogo della singola commessa.
 
+Ripristino implementato:
+
+- ZIP completo tramite selettore di sistema, solo admin, con nuovo login obbligatorio dopo il completamento.
+
 Limiti noti:
 
-- nessun ripristino/import backup;
 - export non cifrati dall'app;
 - nessuna API WhatsApp;
 - nessun backend;

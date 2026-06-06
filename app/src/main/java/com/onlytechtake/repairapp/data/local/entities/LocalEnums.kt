@@ -89,4 +89,5 @@ enum class AuditAction {
     ORDER_REASSIGNED,
     ORDER_STATUS_CHANGED,
     DATA_RESET,
+    DATA_IMPORTED,
 }

@@ -25,6 +25,8 @@ import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
 import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
 import com.onlytechtake.repairapp.domain.workspace.RepairOrderInput
 import java.io.File
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -136,6 +138,92 @@ class RepositoryPathsInstrumentedTest {
         assertTrue(text.contains("\"categories\""))
         assertTrue(text.contains("Smartphone"))
         assertEquals(1, database.auditLogDao().observeRecent().first().size)
+    }
+
+    @Test
+    fun backupRepositoryImportsCompleteBackupAndRestoresPrivateFiles() = runBlocking {
+        val actor = seedAdmin()
+        seedCategory()
+        val sourceDatabaseName = "restore-source.db"
+        val sourceDatabase = Room.databaseBuilder(context, RepairAppDatabase::class.java, sourceDatabaseName)
+            .allowMainThreadQueries()
+            .build()
+        try {
+            val hash = PasswordHasher().hash("correct-password".toCharArray())
+            sourceDatabase.userDao().upsert(
+                UserEntity(
+                    id = "backup-admin",
+                    displayName = "Backup Admin",
+                    username = "backup",
+                    passwordHash = hash.hash,
+                    passwordSalt = hash.salt,
+                    role = UserRole.ADMIN,
+                    active = true,
+                    createdAt = NOW,
+                    updatedAt = NOW,
+                ),
+            )
+            sourceDatabase.customerDao().upsert(
+                CustomerEntity(
+                    id = "backup-customer",
+                    type = CustomerType.PRIVATE,
+                    firstName = "Luigi",
+                    lastName = "Verdi",
+                    companyName = null,
+                    vatNumber = null,
+                    taxCode = null,
+                    phone = "3331111111",
+                    email = null,
+                    address = null,
+                    notes = null,
+                    createdAt = NOW,
+                    updatedAt = NOW,
+                ),
+            )
+            sourceDatabase.orderCategoryDao().upsert(
+                OrderCategoryEntity(
+                    id = "backup-category",
+                    name = "Console",
+                    description = null,
+                    active = true,
+                    sortOrder = 0,
+                ),
+            )
+        } finally {
+            sourceDatabase.close()
+        }
+
+        val zipFile = File(context.cacheDir, "restore-test.zip")
+        ZipOutputStream(zipFile.outputStream()).use { zip ->
+            zip.putTextEntry("metadata/backup.json", """{"databaseVersion":1}""")
+            zip.putFileEntry(context.getDatabasePath(sourceDatabaseName), "database/${RepairAppDatabase.DATABASE_NAME}")
+            zip.putTextEntry("files/orders/order-source/signatures/signature.png", "signature")
+        }
+        File(context.filesDir, "orders/stale/file.txt").also {
+            it.parentFile?.mkdirs()
+            it.writeText("stale")
+        }
+        val repository = BackupRepository(
+            context = context,
+            categoryDao = database.orderCategoryDao(),
+            templateDao = database.messageTemplateDao(),
+            settingDao = database.appSettingDao(),
+            auditLogDao = database.auditLogDao(),
+            database = database,
+            clockMillis = { NOW },
+        )
+
+        repository.importCompleteBackup(actor, Uri.fromFile(zipFile)).getOrThrow()
+
+        assertEquals(null, database.orderCategoryDao().findById(CATEGORY_ID))
+        assertNotNull(database.orderCategoryDao().findById("backup-category"))
+        assertNotNull(database.customerDao().findById("backup-customer"))
+        assertTrue(File(context.filesDir, "orders/order-source/signatures/signature.png").exists())
+        assertFalse(File(context.filesDir, "orders/stale/file.txt").exists())
+
+        context.deleteDatabase(sourceDatabaseName)
+        zipFile.delete()
+        Unit
     }
 
     @Test
@@ -333,4 +421,16 @@ class RepositoryPathsInstrumentedTest {
         const val CUSTOMER_ID = "customer-1"
         const val CATEGORY_ID = "category-1"
     }
+}
+
+private fun ZipOutputStream.putTextEntry(name: String, text: String) {
+    putNextEntry(ZipEntry(name))
+    write(text.toByteArray(Charsets.UTF_8))
+    closeEntry()
+}
+
+private fun ZipOutputStream.putFileEntry(file: File, entryName: String) {
+    putNextEntry(ZipEntry(entryName))
+    file.inputStream().use { input -> input.copyTo(this) }
+    closeEntry()
 }

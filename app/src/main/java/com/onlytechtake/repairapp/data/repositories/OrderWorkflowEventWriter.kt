@@ -171,6 +171,10 @@ internal class OrderWorkflowEventWriter(
         audit(actorUserId, AuditAction.DATA_RESET, null, null, now)
     }
 
+    suspend fun dataImported(now: Long) {
+        audit(null, AuditAction.DATA_IMPORTED, null, null, now)
+    }
+
     private suspend fun writeTimeline(event: TimelineEventEntity) {
         requireNotNull(timelineEventDao) { "Timeline writer non configurato" }.upsert(event)
     }
@@ -208,7 +212,7 @@ internal class OrderWorkflowEventWriter(
     )
 
     private suspend fun audit(
-        actorUserId: String,
+        actorUserId: String?,
         action: AuditAction,
         orderId: String?,
         customerId: String?,

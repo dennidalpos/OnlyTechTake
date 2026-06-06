@@ -345,6 +345,9 @@ class WorkspaceViewModel(
     fun exportCompleteBackup(uri: Uri) =
         adminActions.exportCompleteBackup(uri)
 
+    fun importCompleteBackup(uri: Uri) =
+        adminActions.importCompleteBackup(uri)
+
     fun exportSelectedOrderPdf(uri: Uri) =
         mediaActions.exportSelectedOrderPdf(backupRepository, uri)
 

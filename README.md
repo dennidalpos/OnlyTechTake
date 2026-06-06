@@ -113,14 +113,13 @@ Regole:
 - Creazione commessa a step con cliente esistente o nuovo, categoria attiva obbligatoria, problema, almeno un media/allegato, privacy e firma.
 - Workspace commessa con azioni di stato, note interne, foto/allegati, foto lavoro finito, firma, timeline, WhatsApp manuale ed export PDF.
 - Admin: utenti, reset password, pulizia commesse scartate/archiviate e reset totale dati con conferma `RESET`.
-- Config admin: categorie, template privacy/condizioni/WhatsApp, modalita WhatsApp manuale, export config/database/ZIP.
+- Config admin: categorie, template privacy/condizioni/WhatsApp, modalita WhatsApp manuale, export config/database/ZIP e ripristino ZIP completo.
 - Import allegati tramite SAF per JPEG/PNG/WebP, PDF, TXT, DOC/DOCX e XLS/XLSX fino a 25 MiB.
-- Export admin di configurazione, database e ZIP completo tramite SAF. Export PDF della singola commessa dal dettaglio.
+- Export admin di configurazione, database e ZIP completo tramite SAF. Ripristino admin del backup ZIP completo tramite SAF. Export PDF della singola commessa dal dettaglio.
 
 ## Limiti Noti
 
 - Nessun backend e nessuna API WhatsApp.
-- Nessun ripristino/import backup.
 - Export JSON, database, PDF e ZIP non sono cifrati dall'app.
 - Non esiste un gate CI remoto tracciato nel repository.
 - La build release richiede signing locale non tracciato.

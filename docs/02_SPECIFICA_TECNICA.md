@@ -12,7 +12,7 @@
 - Kotlin Coroutines
 - Kotlin Flow
 - Navigation Compose
-- Storage Access Framework per import allegati ed export
+- Storage Access Framework per import allegati, export e ripristino backup
 - Gradle Wrapper
 
 ## Architettura
@@ -171,7 +171,7 @@ Permessi manifest:
 - Camera;
 - nessun permesso storage globale.
 
-Import allegati ed export usano Storage Access Framework, quindi non richiedono
+Import allegati, export e ripristino backup usano Storage Access Framework, quindi non richiedono
 permessi larghi di lettura/scrittura storage.
 
 ## Foto e firme
@@ -205,7 +205,7 @@ o non in allowlist vengono rifiutati prima della copia, e la copia interrompe lo
 stream se il provider non dichiara la dimensione ma il contenuto supera il
 limite.
 
-## Export
+## Backup
 
 L'export completo crea ZIP con:
 
@@ -217,6 +217,8 @@ database/repair_app.db-*
 files/orders/...
 files/order_media/...
 ```
+
+Il ripristino ZIP usa Storage Access Framework, valida versione database e presenza di almeno un admin attivo, poi sostituisce tabelle Room e file privati esportati.
 
 ## WhatsApp
 
@@ -273,6 +275,7 @@ Le azioni sensibili tracciate includono:
 - modifica template;
 - modifica privacy;
 - export dati;
+- import/ripristino backup;
 - archiviazione/cancellazione commessa;
 - cambio assegnazione;
 - cambio stato;
@@ -280,7 +283,6 @@ Le azioni sensibili tracciate includono:
 
 Limiti attuali:
 
-- nessun ripristino/import backup;
 - nessuna cifratura applicativa degli export;
 - nessuna CI tracciata nel repository;
 - nessun backend o invio WhatsApp API.

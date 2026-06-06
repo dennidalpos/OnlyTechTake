@@ -35,6 +35,12 @@ internal class WorkspaceAdminActions(
         backupRepository.exportCompleteBackup(actor, uri)
     }
 
+    fun importCompleteBackup(uri: Uri) = withUser { actor ->
+        backupRepository.importCompleteBackup(actor, uri).map {
+            "Backup ripristinato. Accedi di nuovo."
+        }
+    }
+
     fun resetAllData(confirmation: String, onReset: () -> Unit) {
         scope.launch {
             val actor = currentUser.value ?: return@launch showMessage("Sessione non valida", true)

@@ -2,13 +2,13 @@
 
 ## Stato operativo
 
-L'export è implementato per admin tramite Storage Access Framework. Il ripristino/import non è implementato in questo rilascio.
+Export e ripristino ZIP completo sono implementati per admin tramite Storage Access Framework.
 
 ## Sezione app
 
 ```text
 Config
-Backup / Export
+Backup
 ```
 
 Visibile solo ad admin.
@@ -45,6 +45,19 @@ files/order_media/<orderId>/...
 
 Foto CameraX, allegati importati e firme restano in spazio privato app e vengono copiati nel backup completo.
 
+### Ripristino backup
+
+Input: ZIP completo esportato dall'app.
+
+Il ripristino:
+
+- richiede ruolo admin;
+- valida formato ZIP, presenza database, versione database e presenza di almeno un admin attivo;
+- sostituisce database locale, firme, foto e allegati privati inclusi nel backup;
+- elimina eventuali file di presa in carico temporanei;
+- registra audit `DATA_IMPORTED`;
+- forza un nuovo login dopo il completamento.
+
 ## Metadata
 
 Il backup completo include metadati con data creazione, nome database, versione database e sezioni incluse.
@@ -55,6 +68,7 @@ Il backup completo include metadati con data creazione, nome database, versione 
 - Il salvataggio usa Storage Access Framework; non usare percorsi assoluti fragili.
 - Gli export richiedono ruolo admin.
 - Ogni export registra audit `DATA_EXPORTED`.
+- Ogni ripristino ZIP registra audit `DATA_IMPORTED`.
 - Configurazione, database, PDF e backup ZIP non sono cifrati dall'app. La
   cifratura non e' attivata in questo rilascio per evitare gestione passphrase e
   recupero chiavi dentro l'app locale; salvare gli export solo su supporti,
