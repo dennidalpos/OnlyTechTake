@@ -10,6 +10,7 @@ data class AuthenticatedUser(
 )
 
 data class AuthState(
+    val initialized: Boolean = false,
     val configured: Boolean = false,
     val currentUser: AuthenticatedUser? = null,
     val lastUsername: String = "",

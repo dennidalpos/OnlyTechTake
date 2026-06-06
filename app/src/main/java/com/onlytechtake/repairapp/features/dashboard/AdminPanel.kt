@@ -23,7 +23,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.core.design.PasswordVisibilityButton
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 
 @Composable
@@ -36,6 +38,7 @@ fun AdminPanel(
     var displayName by rememberSaveable { mutableStateOf("") }
     var username by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
     var resetPasswords by rememberSaveable { mutableStateOf(emptyMap<String, String>()) }
     var resetConfirmation by rememberSaveable { mutableStateOf("") }
     var archiveConfirmation by rememberSaveable { mutableStateOf("") }
@@ -72,7 +75,13 @@ fun AdminPanel(
                         label = "Password temporanea",
                         singleLine = true,
                         keyboardType = KeyboardType.Password,
-                        visualTransformation = PasswordVisualTransformation(),
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        trailingIcon = {
+                            PasswordVisibilityButton(
+                                visible = passwordVisible,
+                                onVisibleChange = { passwordVisible = it },
+                            )
+                        },
                     )
                     TouchButton(
                         text = "Crea operatore",
@@ -82,6 +91,7 @@ fun AdminPanel(
                                 displayName = ""
                                 username = ""
                                 password = ""
+                                passwordVisible = false
                             }
                         },
                     )
@@ -98,7 +108,8 @@ fun AdminPanel(
                 }
             }
         } else {
-            items(users) { user ->
+            items(users, key = { it.id }) { user ->
+                var resetPasswordVisible by rememberSaveable(user.id) { mutableStateOf(false) }
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Text("${user.displayName} - ${user.username} (${user.role.name})", style = MaterialTheme.typography.titleMedium)
@@ -111,7 +122,13 @@ fun AdminPanel(
                             label = "Nuova password temporanea",
                             singleLine = true,
                             keyboardType = KeyboardType.Password,
-                            visualTransformation = PasswordVisualTransformation(),
+                            visualTransformation = if (resetPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                            trailingIcon = {
+                                PasswordVisibilityButton(
+                                    visible = resetPasswordVisible,
+                                    onVisibleChange = { resetPasswordVisible = it },
+                                )
+                            },
                         )
                         ActionRow {
                             Button(

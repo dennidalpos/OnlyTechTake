@@ -82,6 +82,15 @@ class RepositoryPathsInstrumentedTest {
     }
 
     @Test
+    fun authStateIsInitializedAndConfiguredWhenAdminExists() = runBlocking {
+        seedAdmin()
+        val state = authRepository { NOW }.observeAuthState().first()
+
+        assertTrue(state.initialized)
+        assertTrue(state.configured)
+    }
+
+    @Test
     fun workflowRepositoryCreatesOrderAndTimelineEvent() = runBlocking {
         val actor = seedAdmin()
         seedCustomer()

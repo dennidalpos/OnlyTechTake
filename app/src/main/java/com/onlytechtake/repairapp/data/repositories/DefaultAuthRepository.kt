@@ -43,6 +43,7 @@ class DefaultAuthRepository(
                 sessionStore.clear()
             }
             AuthState(
+                initialized = true,
                 configured = adminCount > 0,
                 currentUser = sessionStore.currentUser.value,
                 lastUsername = lastUserId?.let { userDao.findById(it)?.username }.orEmpty(),

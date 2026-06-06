@@ -50,6 +50,7 @@ fun Field(
     keyboardType: KeyboardType = KeyboardType.Text,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    trailingIcon: (@Composable () -> Unit)? = null,
 ) {
     OutlinedTextField(
         modifier = modifier.fillMaxWidth(),
@@ -61,6 +62,7 @@ fun Field(
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
         visualTransformation = visualTransformation,
         keyboardActions = keyboardActions,
+        trailingIcon = trailingIcon,
     )
 }
 

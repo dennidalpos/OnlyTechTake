@@ -1,7 +1,9 @@
 package com.onlytechtake.repairapp.features.auth
 
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -26,10 +28,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.core.design.PasswordVisibilityButton
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.features.dashboard.DashboardRoute
@@ -50,6 +59,7 @@ fun AuthGateRoute() {
     }
 
     when {
+        !authState.initialized -> AuthLoadingScreen()
         authState.currentUser != null -> DashboardRoute(onLogout = viewModel::logout)
         !authState.configured -> FirstSetupScreen(
             formState = formState,
@@ -65,6 +75,20 @@ fun AuthGateRoute() {
             onPasswordChange = viewModel::updatePassword,
             onSubmit = viewModel::login,
         )
+    }
+}
+
+@Composable
+private fun AuthLoadingScreen() {
+    Scaffold { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            contentAlignment = Alignment.Center,
+        ) {
+            CircularProgressIndicator()
+        }
     }
 }
 
@@ -145,6 +169,9 @@ private fun AuthForm(
     showDisplayName: Boolean,
     showConfirmPassword: Boolean,
 ) {
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
+    var confirmPasswordVisible by rememberSaveable { mutableStateOf(false) }
+
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
@@ -183,6 +210,7 @@ private fun AuthForm(
                 onValueChange = onUsernameChange,
                 label = { Text(text = "Username") },
                 singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             )
 
             OutlinedTextField(
@@ -191,8 +219,24 @@ private fun AuthForm(
                 onValueChange = onPasswordChange,
                 label = { Text(text = "Password") },
                 singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = if (showConfirmPassword) ImeAction.Next else ImeAction.Done,
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        if (!showConfirmPassword) {
+                            onSubmit()
+                        }
+                    },
+                ),
+                trailingIcon = {
+                    PasswordVisibilityButton(
+                        visible = passwordVisible,
+                        onVisibleChange = { passwordVisible = it },
+                    )
+                },
             )
 
             if (showConfirmPassword) {
@@ -202,8 +246,18 @@ private fun AuthForm(
                     onValueChange = onConfirmPasswordChange,
                     label = { Text(text = "Conferma password") },
                     singleLine = true,
-                    visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done,
+                    ),
+                    keyboardActions = KeyboardActions(onDone = { onSubmit() }),
+                    trailingIcon = {
+                        PasswordVisibilityButton(
+                            visible = confirmPasswordVisible,
+                            onVisibleChange = { confirmPasswordVisible = it },
+                        )
+                    },
                 )
             }
 
