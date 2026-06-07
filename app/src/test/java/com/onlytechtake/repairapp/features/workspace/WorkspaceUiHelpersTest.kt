@@ -44,13 +44,14 @@ class WorkspaceUiHelpersTest {
     fun fileSizeAndDatesAreReadable() {
         assertEquals("512 B", formatFileSize(512))
         assertEquals("2 KB", formatFileSize(2_048))
-        assertEquals("1.5 MB", formatFileSize(1_572_864))
+        assertEquals("1,5 MB", formatFileSize(1_572_864))
         assertEquals("01/01/1970 00:00", formatUiDateTime(0L, ZoneOffset.UTC))
     }
 
     @Test
     fun nextActionComesFromWorkflowPolicy() {
-        assertEquals("Avvia diagnosi", nextActionLabel(OrderStatus.NEW))
+        assertEquals("Prendi in carico", nextActionLabel(OrderStatus.OPEN))
+        assertEquals("Registra risultato", nextActionLabel(OrderStatus.DIAGNOSIS))
         assertEquals("Nessuna azione", nextActionLabel(OrderStatus.CLOSED))
     }
 

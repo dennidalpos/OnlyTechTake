@@ -238,6 +238,10 @@ class WorkspaceViewModel(
         orderRepository.changeStatus(actor, orderId, status, note, closureReason)
     }
 
+    fun recordResult(orderId: String, summary: String, estimateAmountCents: Long?) = withUser { actor ->
+        orderRepository.recordResult(actor, orderId, summary, estimateAmountCents)
+    }
+
     fun reassign(orderId: String, userId: String?) = withUser { actor ->
         orderRepository.reassign(actor, orderId, userId)
     }

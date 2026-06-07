@@ -10,6 +10,9 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 
@@ -38,10 +41,15 @@ fun QuickIntakeCategorySection(
             } else {
                 ActionRow {
                     activeCategories.forEach { category ->
+                        val selected = category.id == selectedCategoryId
                         OutlinedButton(
+                            modifier = Modifier.semantics {
+                                this.selected = selected
+                                stateDescription = if (selected) "Selezionata" else "Non selezionata"
+                            },
                             onClick = { onCategorySelected(category.id) },
                         ) {
-                            Text(if (category.id == selectedCategoryId) "${category.name} *" else category.name)
+                            Text(if (selected) "${category.name} *" else category.name)
                         }
                     }
                 }

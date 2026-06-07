@@ -72,10 +72,10 @@ interface CustomerDao {
     @Upsert
     suspend fun upsert(customer: CustomerEntity)
 
-    @Query("SELECT * FROM customers ORDER BY updatedAt DESC LIMIT :limit")
-    fun observeRecent(limit: Int = 50): Flow<List<CustomerEntity>>
+    @Query("SELECT * FROM customers ORDER BY updatedAt DESC")
+    fun observeRecent(): Flow<List<CustomerEntity>>
 
-    @Query("SELECT * FROM customers")
+    @Query("SELECT * FROM customers ORDER BY updatedAt DESC")
     fun observeAll(): Flow<List<CustomerEntity>>
 
     @Query("SELECT * FROM customers WHERE id = :id LIMIT 1")
@@ -95,10 +95,9 @@ interface CustomerDao {
             OR customers.taxCode LIKE '%' || :query || '%'
             OR repair_orders.orderNumber LIKE '%' || :query || '%'
         ORDER BY customers.updatedAt DESC
-        LIMIT :limit
         """,
     )
-    fun search(query: String, limit: Int = 50): Flow<List<CustomerEntity>>
+    fun search(query: String): Flow<List<CustomerEntity>>
 }
 
 @Dao

@@ -1,36 +1,63 @@
 package com.onlytechtake.repairapp.features.dashboard
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
-import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
+import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
 
 @Composable
 fun OrderSignatureSection(
     detail: OrderDetail,
-    viewModel: WorkspaceViewModel,
 ) {
-    val templates by viewModel.templates.collectAsState()
-    val privacyText = templates.firstOrNull { it.code == PRIVACY_TEMPLATE_CODE && it.active }?.body ?: DEFAULT_PRIVACY_TEXT
-    val termsText = templates.firstOrNull { it.code == TERMS_TEMPLATE_CODE && it.active }?.body ?: DEFAULT_TERMS_TEXT
+    var selectedSignaturePath by rememberSaveable { mutableStateOf<String?>(null) }
+    var selectedSignatureTitle by remember { mutableStateOf("") }
 
-    SignatureCaptureForm(
-        title = "Firma privacy",
-        privacyText = privacyText,
-        termsText = termsText,
-        existingSignatures = detail.signatures,
-        submitText = "Salva firma",
-        onSubmit = { capture ->
-            viewModel.saveSignature(
-                orderId = detail.order.id,
-                signerName = capture.signerName,
-                privacyAccepted = capture.privacyAccepted,
-                termsAccepted = capture.termsAccepted,
-                bitmap = capture.bitmap,
-            )
-        },
-    )
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        SectionTitle("Firma privacy")
+        if (detail.signatures.isEmpty()) {
+            Text("Nessuna firma acquisita.")
+        } else {
+            detail.signatures.forEach { signature ->
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        LocalImagePreview(
+                            path = signature.localPath,
+                            description = "Firma ${signature.signerName}",
+                            onClick = {
+                                selectedSignaturePath = signature.localPath
+                                selectedSignatureTitle = "Firma ${signature.signerName}"
+                            },
+                        )
+                        CompactExpandableRow(
+                            title = signature.signerName,
+                            subtitle = formatUiDateTime(signature.signedAt),
+                            detail = "Privacy accettata: ${if (signature.privacyAccepted) "si" else "no"}\nCondizioni accettate: ${if (signature.termsAccepted) "si" else "no"}",
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    selectedSignaturePath?.let { path ->
+        LocalImageViewer(
+            path = path,
+            title = selectedSignatureTitle,
+            onDismiss = { selectedSignaturePath = null },
+        )
+    }
 }
 
 const val PRIVACY_TEMPLATE_CODE = "privacy_breve"

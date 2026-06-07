@@ -1,20 +1,21 @@
 package com.onlytechtake.repairapp.features.dashboard
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
@@ -22,18 +23,28 @@ import com.onlytechtake.repairapp.features.workspace.label
 
 @Composable
 fun CustomerSuggestionCard(customer: CustomerEntity, onClick: () -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(
-                onClickLabel = "Seleziona ${customer.displayName()}",
-                role = Role.Button,
-                onClick = onClick,
-            ),
-    ) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Text(customer.displayName(), style = MaterialTheme.typography.titleMedium)
-            Text(customer.type.label(), style = MaterialTheme.typography.bodyMedium)
+    var expanded by rememberSaveable(customer.id) { mutableStateOf(false) }
+    androidx.compose.material3.Card(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(customer.displayName(), style = MaterialTheme.typography.titleSmall)
+            Text(listOfNotNull(customer.type.label(), customer.phone, customer.email).joinToString(" - "))
+            if (expanded) {
+                val details = listOfNotNull(
+                    customer.address?.let { "Indirizzo: $it" },
+                    customer.vatNumber?.let { "P.IVA: $it" },
+                    customer.taxCode?.let { "Codice fiscale: $it" },
+                    customer.notes?.let { "Note: $it" },
+                ).joinToString("\n")
+                if (details.isNotBlank()) OperatorText(details)
+            }
+            TouchButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = if (expanded) "Seleziona cliente" else "Dettagli",
+                tone = if (expanded) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
+                onClick = {
+                    if (expanded) onClick() else expanded = true
+                },
+            )
         }
     }
 }

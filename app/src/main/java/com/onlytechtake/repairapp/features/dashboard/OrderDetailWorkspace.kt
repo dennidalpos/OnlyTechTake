@@ -25,9 +25,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
+import com.onlytechtake.repairapp.data.local.entities.MessageChannel
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.features.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
@@ -42,6 +45,7 @@ import com.onlytechtake.repairapp.features.workspace.requiresConfirmation
 fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
     val detail by viewModel.selectedOrder.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
+    val templates by viewModel.templates.collectAsState()
     val context = LocalContext.current
     var note by rememberSaveable { mutableStateOf("") }
     var confirmTitle by remember { mutableStateOf<String?>(null) }
@@ -50,6 +54,8 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
     var statusAction by remember { mutableStateOf<OrderStatusAction?>(null) }
     var statusNote by rememberSaveable { mutableStateOf("") }
     var closureReason by rememberSaveable { mutableStateOf<ClosureReason?>(null) }
+    var resultSummary by rememberSaveable { mutableStateOf("") }
+    var resultAmount by rememberSaveable { mutableStateOf("") }
 
     val exportPdfLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
         uri?.let(viewModel::exportSelectedOrderPdf)
@@ -121,7 +127,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         item {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text("Azioni operative", style = MaterialTheme.typography.titleMedium)
+                    Text("Azioni", style = MaterialTheme.typography.titleMedium)
                     val actions = availableOrderStatusActions(selected.order.status)
                     if (actions.isEmpty()) {
                         Text("Nessuna azione disponibile per questo stato.")
@@ -135,14 +141,11 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                                         statusAction = action
                                         statusNote = ""
                                         closureReason = null
+                                        resultSummary = ""
+                                        resultAmount = ""
                                     },
                                 )
                             }
-                            TouchButton(
-                                text = "WhatsApp",
-                                tone = ButtonTone.INFO,
-                                onClick = { viewModel.prepareStatusMessage(selected.order.id, selected.order.status) },
-                            )
                         }
                     }
                 }
@@ -153,7 +156,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text("Note interne", style = MaterialTheme.typography.titleMedium)
-                    selected.order.internalNotes?.takeIf { it.isNotBlank() }?.let { Text(it) }
+                    selected.order.internalNotes?.takeIf { it.isNotBlank() }?.let { OperatorText(it) }
                     Field(note, { note = it }, "Nuova nota")
                     TouchButton(
                         text = "Salva nota",
@@ -170,17 +173,33 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         }
 
         item {
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(12.dp)) {
-                    OrderPhotoSection(selected, viewModel)
-                }
-            }
+            OrderPhotoSection(selected, viewModel)
         }
 
         item {
+            OrderSignatureSection(selected)
+        }
+
+        item {
+            val whatsappTemplates = templates.filter {
+                it.active && it.channel == MessageChannel.WHATSAPP && it.code.startsWith("whatsapp_")
+            }
             Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(12.dp)) {
-                    OrderSignatureSection(selected, viewModel)
+                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    SectionTitle("WhatsApp")
+                    if (whatsappTemplates.isEmpty()) {
+                        Text("Nessun template WhatsApp attivo.")
+                    } else {
+                        ActionRow {
+                            whatsappTemplates.forEach { template ->
+                                TouchButton(
+                                    text = template.title,
+                                    tone = if (template.code == statusTemplateCodeForDetail(selected.order.status)) ButtonTone.INFO else ButtonTone.NEUTRAL,
+                                    onClick = { viewModel.prepareMessage(selected.order.id, template.code) },
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -216,12 +235,14 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         }
 
         item {
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    SectionTitle("Timeline")
-                    selected.timeline.forEach { event ->
-                        Text("${event.title}: ${event.description.orEmpty()}")
-                    }
+            Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                SectionTitle("Timeline")
+                selected.timeline.forEach { event ->
+                    CompactExpandableRow(
+                        title = event.title,
+                        subtitle = formatUiDateTime(event.createdAt),
+                        detail = event.description.orEmpty(),
+                    )
                 }
             }
         }
@@ -260,23 +281,37 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
     }
 
     statusAction?.let { action ->
-        val requiresClosureReason = action.requiresConfirmation() && action.closureReason == null
+        val isResultStep = action == OrderStatusAction.RECORD_RESULT
+        val isClosure = action.requiresConfirmation()
         AlertDialog(
             onDismissRequest = { statusAction = null },
             title = { Text(action.label) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text("Aggiornare lo stato della commessa?")
-                    Field(statusNote, { statusNote = it }, "Nota opzionale")
-                    if (requiresClosureReason) {
+                    if (isResultStep) {
+                        Field(resultSummary, { resultSummary = it }, "Sintesi risultato", required = true, showError = resultSummary.isBlank())
+                        Field(resultAmount, { resultAmount = it }, "Importo riparazione opzionale", singleLine = true, keyboardType = KeyboardType.Number)
+                    } else {
+                        Field(
+                            statusNote,
+                            { statusNote = it },
+                            if (isClosure) "Nota chiusura" else "Nota opzionale",
+                            required = isClosure,
+                            showError = isClosure && statusNote.isBlank(),
+                        )
+                    }
+                    if (isClosure) {
                         Text("Motivo chiusura", style = MaterialTheme.typography.titleSmall)
                         ActionRow {
                             ClosureReason.entries
-                                .filterNot { it == ClosureReason.COMPLETED || it == ClosureReason.CUSTOMER_DECLINED }
                                 .forEach { reason ->
+                                val selectedReason = closureReason == reason
                                 TouchButton(
                                     text = reason.label(),
-                                    tone = if (closureReason == reason) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
+                                    tone = if (selectedReason) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
+                                    selected = selectedReason,
+                                    stateDescription = if (selectedReason) "Motivo selezionato" else "Motivo non selezionato",
                                     onClick = { closureReason = reason },
                                 )
                             }
@@ -286,9 +321,21 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             },
             confirmButton = {
                 TextButton(
-                    enabled = !requiresClosureReason || closureReason != null,
+                    enabled = when {
+                        isResultStep -> resultSummary.isNotBlank()
+                        isClosure -> closureReason != null && statusNote.isNotBlank()
+                        else -> true
+                    },
                     onClick = {
-                        applyStatusAction(action, selected.order.id, viewModel, statusNote, closureReason)
+                        applyStatusAction(
+                            action = action,
+                            orderId = selected.order.id,
+                            viewModel = viewModel,
+                            note = statusNote,
+                            closureReason = closureReason,
+                            resultSummary = resultSummary,
+                            resultAmount = resultAmount,
+                        )
                         statusAction = null
                     },
                 ) {
@@ -310,16 +357,25 @@ private fun applyStatusAction(
     viewModel: WorkspaceViewModel,
     note: String,
     closureReason: ClosureReason?,
+    resultSummary: String,
+    resultAmount: String,
 ) {
+    if (action == OrderStatusAction.RECORD_RESULT) {
+        viewModel.recordResult(
+            orderId = orderId,
+            summary = resultSummary,
+            estimateAmountCents = parseEuroCentsOrNull(resultAmount),
+        )
+        return
+    }
     val targetStatus = action.targetStatus ?: return
-    val targetClosureReason = action.closureReason ?: closureReason
     viewModel.changeStatus(
         orderId = orderId,
         status = targetStatus,
         note = note,
-        closureReason = targetClosureReason,
+        closureReason = closureReason,
         onSuccess = {
-            if (targetStatus == com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED) {
+            if (targetStatus == OrderStatus.CLOSED) {
                 viewModel.selectOrder(null)
             }
         },
@@ -328,9 +384,25 @@ private fun applyStatusAction(
 
 private fun OrderStatusAction.tone(): ButtonTone =
     when (this) {
-        OrderStatusAction.CLOSE_COMPLETED -> ButtonTone.SUCCESS
-        OrderStatusAction.CLOSE_REJECTED,
-        OrderStatusAction.CLOSE_OTHER -> ButtonTone.DANGER
+        OrderStatusAction.CLOSE_ORDER -> ButtonTone.DANGER
         OrderStatusAction.READY_FOR_PICKUP -> ButtonTone.SUCCESS
+        OrderStatusAction.RECORD_RESULT -> ButtonTone.INFO
         else -> ButtonTone.PRIMARY
     }
+
+private fun parseEuroCentsOrNull(value: String): Long? {
+    val normalized = value.trim().replace(',', '.')
+    if (normalized.isBlank()) return null
+    val parts = normalized.split('.', limit = 2)
+    val euros = parts.getOrNull(0)?.filter(Char::isDigit)?.toLongOrNull() ?: return null
+    val cents = parts.getOrNull(1)
+        ?.filter(Char::isDigit)
+        ?.take(2)
+        ?.padEnd(2, '0')
+        ?.toLongOrNull()
+        ?: 0L
+    return euros * 100L + cents
+}
+
+private fun statusTemplateCodeForDetail(status: OrderStatus): String =
+    com.onlytechtake.repairapp.features.workspace.statusTemplateCode(status)

@@ -109,7 +109,7 @@ Regole:
 
 - Setup primo admin, login admin/operatore, logout, lockout dopo 5 tentativi falliti e scadenza sessione dopo 30 minuti di inattivita'.
 - Dashboard con tab Home, Nuova, Clienti, Commesse/Commessa, Config e Admin.
-- Home con metriche e quattro code operative: da diagnosticare, attesa cliente, da lavorare, pronte/chiusura.
+- Home con metriche e quattro code operative: Aperte, In lavorazione / diagnosi, Risultato / riparazione, Pronte.
 - Creazione commessa a step con cliente esistente o nuovo, categoria attiva obbligatoria, problema, almeno un media/allegato, privacy e firma.
 - Workspace commessa con azioni di stato, note interne, foto/allegati, foto lavoro finito, firma, timeline, WhatsApp manuale ed export PDF.
 - Admin: utenti, reset password, pulizia commesse scartate/archiviate e reset totale dati con conferma `RESET`.

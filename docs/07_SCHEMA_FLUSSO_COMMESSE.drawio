@@ -57,7 +57,7 @@
         <mxCell id="w_orders" value="Home workbench&lt;br&gt;4 code operative" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="60" y="655" width="165" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="w_filters" value="Deep-link a Commesse&lt;br&gt;Da diagnosticare&lt;br&gt;Attesa cliente&lt;br&gt;Da lavorare&lt;br&gt;Pronte / chiusura" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+        <mxCell id="w_filters" value="Deep-link a Commesse&lt;br&gt;Aperte&lt;br&gt;In lavorazione / diagnosi&lt;br&gt;Risultato / riparazione&lt;br&gt;Pronte" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="270" y="640" width="190" height="110" as="geometry" />
         </mxCell>
         <mxCell id="w_open" value="Operatore apre una commessa" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
@@ -66,10 +66,10 @@
         <mxCell id="w_detail" value="Workspace commessa&lt;br&gt;riapre dallo stato corrente" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
           <mxGeometry x="710" y="655" width="180" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="w_actions" value="Azioni operative&lt;br&gt;routine dirette&lt;br&gt;conferma solo rischiose" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" vertex="1" parent="1">
+        <mxCell id="w_actions" value="Azioni&lt;br&gt;step successivo&lt;br&gt;chiusura motivata" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" vertex="1" parent="1">
           <mxGeometry x="945" y="655" width="205" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="w_update" value="Aggiorna stato&lt;br&gt;changeStatus() / recordFeedback()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+        <mxCell id="w_update" value="Aggiorna stato&lt;br&gt;changeStatus() / recordResult()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
           <mxGeometry x="1205" y="655" width="190" height="80" as="geometry" />
         </mxCell>
         <mxCell id="w_room" value="Room&lt;br&gt;repair_orders.status&lt;br&gt;+ timeline_events" style="shape=cylinder3d;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
@@ -78,7 +78,7 @@
         <mxCell id="w_sections" value="Sempre accessibili nel dettaglio&lt;br&gt;note rapide, WhatsApp guidato,&lt;br&gt;foto/allegati, firme, PDF, timeline" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="710" y="805" width="260" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="w_status_map" value="Mappa stati operativa&lt;br&gt;NEW -&gt; DIAGNOSIS&lt;br&gt;DIAGNOSIS -&gt; WAITING_CUSTOMER / WORKING&lt;br&gt;WORKING -&gt; WAITING_PARTS / READY_FOR_PICKUP&lt;br&gt;WAITING_PARTS -&gt; WORKING / READY_FOR_PICKUP&lt;br&gt;READY_FOR_PICKUP -&gt; CLOSED&lt;br&gt;CLOSED richiede motivo chiusura" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+        <mxCell id="w_status_map" value="Mappa stati operativa&lt;br&gt;OPEN -&gt; IN_PROGRESS&lt;br&gt;IN_PROGRESS -&gt; DIAGNOSIS&lt;br&gt;DIAGNOSIS -&gt; RESULT&lt;br&gt;RESULT -&gt; REPAIRING&lt;br&gt;REPAIRING -&gt; READY_FOR_PICKUP&lt;br&gt;READY_FOR_PICKUP -&gt; CLOSED&lt;br&gt;CLOSED richiede motivo chiusura" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
           <mxGeometry x="1015" y="800" width="320" height="170" as="geometry" />
         </mxCell>
         <mxCell id="compat_note" value="Schema pulito: il flusso usa repair_orders.status e timeline_events." style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">

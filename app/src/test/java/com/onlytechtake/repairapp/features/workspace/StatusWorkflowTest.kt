@@ -9,26 +9,22 @@ import org.junit.Test
 
 class StatusWorkflowTest {
     @Test
-    fun newOrderStartsWithDiagnosisOrClose() {
+    fun openOrderStartsWithProgressOrClose() {
         assertEquals(
             listOf(
-                OrderStatusAction.START_DIAGNOSIS,
-                OrderStatusAction.CLOSE_COMPLETED,
-                OrderStatusAction.CLOSE_REJECTED,
-                OrderStatusAction.CLOSE_OTHER,
+                OrderStatusAction.START_PROGRESS,
+                OrderStatusAction.CLOSE_ORDER,
             ),
-            availableOrderStatusActions(OrderStatus.NEW),
+            availableOrderStatusActions(OrderStatus.OPEN),
         )
     }
 
     @Test
-    fun waitingCustomerCanStartWorkOrClose() {
-        val actions = availableOrderStatusActions(OrderStatus.WAITING_CUSTOMER)
+    fun diagnosisCanRecordResultOrClose() {
+        val actions = availableOrderStatusActions(OrderStatus.DIAGNOSIS)
 
-        assertTrue(actions.contains(OrderStatusAction.START_WORK))
-        assertTrue(actions.contains(OrderStatusAction.CLOSE_COMPLETED))
-        assertTrue(actions.contains(OrderStatusAction.CLOSE_REJECTED))
-        assertTrue(actions.contains(OrderStatusAction.CLOSE_OTHER))
+        assertTrue(actions.contains(OrderStatusAction.RECORD_RESULT))
+        assertTrue(actions.contains(OrderStatusAction.CLOSE_ORDER))
     }
 
     @Test
@@ -38,22 +34,13 @@ class StatusWorkflowTest {
 
     @Test
     fun onlyClosingStatusActionRequiresConfirmation() {
-        assertTrue(OrderStatusAction.CLOSE_COMPLETED.requiresConfirmation())
-        assertTrue(OrderStatusAction.CLOSE_REJECTED.requiresConfirmation())
-        assertTrue(OrderStatusAction.CLOSE_OTHER.requiresConfirmation())
+        assertTrue(OrderStatusAction.CLOSE_ORDER.requiresConfirmation())
         assertTrue(!OrderStatusAction.START_DIAGNOSIS.requiresConfirmation())
     }
 
     @Test
-    fun directClosingActionsCarryClosureReason() {
-        assertEquals(
-            com.onlytechtake.repairapp.data.local.entities.ClosureReason.COMPLETED,
-            OrderStatusAction.CLOSE_COMPLETED.closureReason,
-        )
-        assertEquals(
-            com.onlytechtake.repairapp.data.local.entities.ClosureReason.CUSTOMER_DECLINED,
-            OrderStatusAction.CLOSE_REJECTED.closureReason,
-        )
+    fun closeActionRequiresManualClosureReason() {
+        assertEquals(null, OrderStatusAction.CLOSE_ORDER.closureReason)
     }
 
     @Test

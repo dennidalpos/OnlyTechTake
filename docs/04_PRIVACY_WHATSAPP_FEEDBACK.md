@@ -11,8 +11,8 @@ Template predefiniti implementati:
 - `whatsapp_presa_in_carico`;
 - `whatsapp_aggiornamento`;
 - `whatsapp_diagnosi`;
-- `whatsapp_preventivo`;
-- `whatsapp_accettazione`;
+- `whatsapp_risultato`;
+- `whatsapp_riparazione`;
 - `whatsapp_lavorazione`;
 - `whatsapp_completamento`;
 - `whatsapp_pronto_ritiro`.
@@ -34,7 +34,7 @@ Ogni salvataggio incrementa la versione del template esistente.
 
 ## Firma
 
-La firma viene acquisita con canvas Compose nel modulo Nuova commessa o dal dettaglio commessa.
+La firma viene acquisita con canvas Compose nel modulo Nuova commessa. Nel dettaglio commessa le firme gia' salvate sono mostrate in sola lettura.
 Privacy e condizioni si aprono in dialog cliccando sui rispettivi testi prima dell'accettazione.
 Ogni commessa accetta una sola firma cliente.
 
@@ -109,11 +109,11 @@ Stato operativo implementato:
 
 - non esiste una schermata dedicata "Registra feedback";
 - non esiste lettura automatica delle risposte WhatsApp;
-- l'accettazione/rifiuto preventivo viene registrata dalle azioni operative del dettaglio commessa;
-- `ACCEPT` porta lo stato a `WORKING`;
+- l'accettazione/rifiuto viene registrata dalle azioni operative del dettaglio commessa;
+- `ACCEPT` porta lo stato a `REPAIRING`;
 - `REJECT` porta lo stato a `CLOSED` con motivo `CUSTOMER_DECLINED`.
 
-Le chiusure operative dirette usano motivi espliciti: `COMPLETED` per completata e `CUSTOMER_DECLINED` per rifiutata. Dopo una chiusura riuscita l'app torna all'elenco commesse.
+La chiusura operativa usa un solo pulsante "Chiudi commessa" e richiede motivo esplicito e nota manuale. Dopo una chiusura riuscita l'app torna all'elenco commesse.
 
 ## API WhatsApp non implementata
 

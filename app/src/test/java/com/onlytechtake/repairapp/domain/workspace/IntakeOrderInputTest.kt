@@ -82,7 +82,7 @@ class IntakeOrderInputTest {
             customerId = "customer-1",
             title = "Batteria gonfia",
             categoryId = "phone",
-            status = OrderStatus.NEW,
+            status = OrderStatus.OPEN,
             priority = OrderPriority.NORMAL,
             assignedToUserId = "operator-1",
             createdByUserId = "operator-1",

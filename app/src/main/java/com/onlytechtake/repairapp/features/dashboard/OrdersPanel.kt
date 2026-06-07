@@ -84,20 +84,25 @@ private fun OrderFilterBar(
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         ActionRow {
+            val allSelected = !filter.hasActiveFilter()
             TouchButton(
                 text = "Tutte",
-                tone = if (!filter.hasActiveFilter()) ButtonTone.SUCCESS else ButtonTone.DANGER,
+                tone = if (allSelected) ButtonTone.SUCCESS else ButtonTone.DANGER,
+                selected = allSelected,
+                stateDescription = if (allSelected) "Filtro selezionato" else "Filtro non selezionato",
                 onClick = { onFilter(OrderFilter()) },
             )
             TouchButton(
                 text = "Mie",
                 tone = if (filter.showMineOnly) ButtonTone.SUCCESS else ButtonTone.DANGER,
+                selected = filter.showMineOnly,
+                stateDescription = if (filter.showMineOnly) "Filtro selezionato" else "Filtro non selezionato",
                 onClick = { onFilter(filter.copy(showMineOnly = !filter.showMineOnly)) },
             )
-            QuickStatusFilter("Nuove", OrderStatus.NEW, filter, onFilter)
-            QuickStatusFilter("Diagnosi", OrderStatus.DIAGNOSIS, filter, onFilter)
-            QuickStatusFilter("Attesa cliente", OrderStatus.WAITING_CUSTOMER, filter, onFilter)
-            QuickStatusFilter("Pronte", OrderStatus.READY_FOR_PICKUP, filter, onFilter)
+            QuickStatusGroupFilter("Aperte", setOf(OrderStatus.OPEN), filter, onFilter)
+            QuickStatusGroupFilter("Lav./diagnosi", setOf(OrderStatus.IN_PROGRESS, OrderStatus.DIAGNOSIS), filter, onFilter)
+            QuickStatusGroupFilter("Ris./rip.", setOf(OrderStatus.RESULT, OrderStatus.REPAIRING), filter, onFilter)
+            QuickStatusGroupFilter("Pronte", setOf(OrderStatus.READY_FOR_PICKUP), filter, onFilter)
         }
         if (filter.showMineOnly || filter.status != null || filter.statuses.isNotEmpty()) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -115,20 +120,22 @@ private fun OrderFilterBar(
 }
 
 @Composable
-private fun QuickStatusFilter(
+private fun QuickStatusGroupFilter(
     label: String,
-    status: OrderStatus,
+    statuses: Set<OrderStatus>,
     filter: OrderFilter,
     onFilter: (OrderFilter) -> Unit,
 ) {
     TouchButton(
         text = label,
-        tone = if (filter.status == status) ButtonTone.SUCCESS else ButtonTone.DANGER,
+        tone = if (filter.statuses == statuses) ButtonTone.SUCCESS else ButtonTone.DANGER,
+        selected = filter.statuses == statuses,
+        stateDescription = if (filter.statuses == statuses) "Filtro selezionato" else "Filtro non selezionato",
         onClick = {
             onFilter(
                 filter.copy(
-                    status = status.takeUnless { filter.status == status },
-                    statuses = emptySet(),
+                    status = null,
+                    statuses = statuses.takeUnless { filter.statuses == statuses } ?: emptySet(),
                 ),
             )
         },

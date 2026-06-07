@@ -249,10 +249,10 @@ class TemplateRepository(
             ),
             MessageTemplateEntity(
                 id = "",
-                code = "whatsapp_preventivo",
-                title = "WhatsApp preventivo",
+                code = "whatsapp_risultato",
+                title = "WhatsApp risultato",
                 channel = MessageChannel.WHATSAPP,
-                body = "Ciao {{cliente}}, il preventivo per la commessa {{numero_commessa}} e pronto per conferma.",
+                body = "Ciao {{cliente}}, abbiamo registrato il risultato della commessa {{numero_commessa}}: {{titolo_commessa}}.",
                 active = true,
                 version = 1,
                 updatedByUserId = null,
@@ -260,10 +260,10 @@ class TemplateRepository(
             ),
             MessageTemplateEntity(
                 id = "",
-                code = "whatsapp_accettazione",
-                title = "WhatsApp accettazione preventivo",
+                code = "whatsapp_riparazione",
+                title = "WhatsApp riparazione",
                 channel = MessageChannel.WHATSAPP,
-                body = "Ciao {{cliente}}, abbiamo registrato la risposta al preventivo della commessa {{numero_commessa}}.",
+                body = "Ciao {{cliente}}, la riparazione della commessa {{numero_commessa}} e in corso.",
                 active = true,
                 version = 1,
                 updatedByUserId = null,
@@ -330,11 +330,11 @@ class TemplateRepository(
 
 private fun OrderStatus.label(): String =
     when (this) {
-        OrderStatus.NEW -> "Nuova"
+        OrderStatus.OPEN -> "Aperta"
+        OrderStatus.IN_PROGRESS -> "In lavorazione"
         OrderStatus.DIAGNOSIS -> "In diagnosi"
-        OrderStatus.WAITING_CUSTOMER -> "In attesa cliente"
-        OrderStatus.WORKING -> "In lavorazione"
-        OrderStatus.WAITING_PARTS -> "In attesa ricambi"
+        OrderStatus.RESULT -> "Risultato"
+        OrderStatus.REPAIRING -> "In riparazione"
         OrderStatus.READY_FOR_PICKUP -> "Pronta al ritiro"
         OrderStatus.CLOSED -> "Chiusa"
     }

@@ -114,13 +114,21 @@ fun SignatureCaptureForm(
         }
 
         Text(
-            modifier = Modifier.clickable { textDialog = SignatureTextDialog.PRIVACY },
+            modifier = Modifier.clickable(
+                onClickLabel = "Apri informativa privacy",
+                role = Role.Button,
+                onClick = { textDialog = SignatureTextDialog.PRIVACY },
+            ),
             text = "Leggi informativa privacy",
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.bodySmall,
         )
         Text(
-            modifier = Modifier.clickable { textDialog = SignatureTextDialog.TERMS },
+            modifier = Modifier.clickable(
+                onClickLabel = "Apri condizioni di presa in carico",
+                role = Role.Button,
+                onClick = { textDialog = SignatureTextDialog.TERMS },
+            ),
             text = "Leggi condizioni di presa in carico",
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.bodySmall,

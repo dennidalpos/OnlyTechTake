@@ -1,25 +1,37 @@
 package com.onlytechtake.repairapp.features.dashboard
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
@@ -79,15 +91,69 @@ fun ActionRow(content: @Composable () -> Unit) {
 }
 
 @Composable
+fun OperatorText(text: String, modifier: Modifier = Modifier) {
+    Text(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.secondaryContainer, RoundedCornerShape(8.dp))
+            .padding(10.dp),
+        text = text,
+        color = MaterialTheme.colorScheme.onSecondaryContainer,
+    )
+}
+
+@Composable
+fun CompactExpandableRow(
+    title: String,
+    subtitle: String,
+    detail: String,
+    modifier: Modifier = Modifier,
+) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics {
+                stateDescription = if (expanded) "Espanso" else "Compresso"
+            }
+            .clickable(
+                onClickLabel = if (expanded) "Comprimi dettaglio" else "Espandi dettaglio",
+                role = Role.Button,
+                onClick = { expanded = !expanded },
+            ),
+        shape = RoundedCornerShape(8.dp),
+    ) {
+        Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(title, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(subtitle, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            if (detail.isNotBlank()) {
+                if (expanded) {
+                    OperatorText(detail)
+                } else {
+                    Text(detail, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
+            }
+        }
+    }
+}
+
+@Composable
 fun TouchButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     tone: ButtonTone = ButtonTone.PRIMARY,
+    selected: Boolean? = null,
+    stateDescription: String? = null,
 ) {
     androidx.compose.material3.Button(
-        modifier = modifier.defaultMinSize(minHeight = 56.dp),
+        modifier = modifier
+            .defaultMinSize(minHeight = 56.dp)
+            .semantics {
+                selected?.let { this.selected = it }
+                stateDescription?.let { this.stateDescription = it }
+            },
         enabled = enabled,
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
@@ -163,7 +229,10 @@ private fun TypeToggleButton(
     TextButton(
         modifier = modifier
             .defaultMinSize(minHeight = 56.dp)
-            .semantics { this.selected = selected },
+            .semantics {
+                this.selected = selected
+                stateDescription = if (selected) "Selezionato" else "Non selezionato"
+            },
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.textButtonColors(
             containerColor = if (selected) selectedContainer else MaterialTheme.colorScheme.surfaceVariant,

@@ -8,29 +8,23 @@ object OrderStatusPolicy {
 
     fun allowedTargets(from: OrderStatus): Set<OrderStatus> =
         when (from) {
-            OrderStatus.NEW -> setOf(
+            OrderStatus.OPEN -> setOf(
+                OrderStatus.IN_PROGRESS,
+                OrderStatus.CLOSED,
+            )
+            OrderStatus.IN_PROGRESS -> setOf(
                 OrderStatus.DIAGNOSIS,
                 OrderStatus.CLOSED,
             )
             OrderStatus.DIAGNOSIS -> setOf(
-                OrderStatus.WAITING_CUSTOMER,
-                OrderStatus.WORKING,
-                OrderStatus.WAITING_PARTS,
+                OrderStatus.RESULT,
                 OrderStatus.CLOSED,
             )
-            OrderStatus.WAITING_CUSTOMER -> setOf(
-                OrderStatus.WORKING,
+            OrderStatus.RESULT -> setOf(
+                OrderStatus.REPAIRING,
                 OrderStatus.CLOSED,
             )
-            OrderStatus.WORKING -> setOf(
-                OrderStatus.WAITING_CUSTOMER,
-                OrderStatus.WAITING_PARTS,
-                OrderStatus.READY_FOR_PICKUP,
-                OrderStatus.CLOSED,
-            )
-            OrderStatus.WAITING_PARTS -> setOf(
-                OrderStatus.WORKING,
-                OrderStatus.WAITING_CUSTOMER,
+            OrderStatus.REPAIRING -> setOf(
                 OrderStatus.READY_FOR_PICKUP,
                 OrderStatus.CLOSED,
             )

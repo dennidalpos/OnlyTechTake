@@ -11,11 +11,11 @@ enum class UserRole {
 }
 
 enum class OrderStatus {
-    NEW,
+    OPEN,
+    IN_PROGRESS,
     DIAGNOSIS,
-    WAITING_CUSTOMER,
-    WORKING,
-    WAITING_PARTS,
+    RESULT,
+    REPAIRING,
     READY_FOR_PICKUP,
     CLOSED,
 }

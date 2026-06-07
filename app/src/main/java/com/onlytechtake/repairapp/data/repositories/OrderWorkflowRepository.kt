@@ -144,7 +144,7 @@ class OrderWorkflowRepository(
                     customerId = input.customerId,
                     title = input.title.trim(),
                     categoryId = input.categoryId,
-                    status = OrderStatus.NEW,
+                    status = OrderStatus.OPEN,
                     priority = input.priority,
                     assignedToUserId = input.assignedToUserId ?: actor.id,
                     createdByUserId = actor.id,
@@ -196,6 +196,43 @@ class OrderWorkflowRepository(
                     newStatus = status,
                     note = note.trim().ifBlank { null },
                     closureReason = closureReason,
+                    now = now,
+                )
+            }
+        }
+
+    suspend fun recordResult(
+        actor: AuthenticatedUser,
+        orderId: String,
+        summary: String,
+        estimateAmountCents: Long?,
+    ): Result<Unit> =
+        runCatching {
+            inTransaction {
+                require(summary.isNotBlank()) { "Sintesi risultato obbligatoria" }
+                estimateAmountCents?.let { require(it >= 0L) { "Importo riparazione non valido" } }
+                val order = requireWritableOrder(actor, orderId)
+                OrderStatusPolicy.requireAllowed(order.status, OrderStatus.RESULT)
+
+                val now = clockMillis()
+                val details = listOfNotNull(
+                    "Sintesi risultato: ${summary.trim()}",
+                    estimateAmountCents?.let { "Importo riparazione: ${formatEuroCents(it)}" },
+                ).joinToString("\n")
+                repairOrderDao.upsert(
+                    order.copy(
+                        status = OrderStatus.RESULT,
+                        estimateAmountCents = estimateAmountCents,
+                        updatedAt = now,
+                    ),
+                )
+                eventWriter.statusChanged(
+                    orderId = orderId,
+                    actorUserId = actor.id,
+                    oldStatus = order.status,
+                    newStatus = OrderStatus.RESULT,
+                    note = details,
+                    closureReason = null,
                     now = now,
                 )
             }
@@ -293,7 +330,7 @@ class OrderWorkflowRepository(
                 val order = requireWritableOrder(actor, orderId)
                 val now = clockMillis()
                 val targetStatus = when (input.feedback) {
-                    CustomerFeedbackType.ACCEPT -> OrderStatus.WORKING
+                    CustomerFeedbackType.ACCEPT -> OrderStatus.REPAIRING
                     CustomerFeedbackType.REJECT -> OrderStatus.CLOSED
                     else -> order.status
                 }
@@ -366,3 +403,6 @@ class OrderWorkflowRepository(
     }
 
 }
+
+private fun formatEuroCents(cents: Long): String =
+    "EUR ${cents / 100},${(cents % 100).toString().padStart(2, '0')}"

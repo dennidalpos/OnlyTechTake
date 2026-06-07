@@ -9,14 +9,12 @@ enum class OrderStatusAction(
     val targetStatus: OrderStatus?,
     val closureReason: ClosureReason? = null,
 ) {
+    START_PROGRESS("Prendi in carico", OrderStatus.IN_PROGRESS),
     START_DIAGNOSIS("Avvia diagnosi", OrderStatus.DIAGNOSIS),
-    WAIT_CUSTOMER("Attesa cliente", OrderStatus.WAITING_CUSTOMER),
-    START_WORK("Avvia lavorazione", OrderStatus.WORKING),
-    WAIT_PARTS("Attesa ricambi", OrderStatus.WAITING_PARTS),
+    RECORD_RESULT("Registra risultato", OrderStatus.RESULT),
+    START_REPAIR("Avvia riparazione", OrderStatus.REPAIRING),
     READY_FOR_PICKUP("Pronta al ritiro", OrderStatus.READY_FOR_PICKUP),
-    CLOSE_COMPLETED("Chiudi completata", OrderStatus.CLOSED, ClosureReason.COMPLETED),
-    CLOSE_REJECTED("Chiudi rifiutata", OrderStatus.CLOSED, ClosureReason.CUSTOMER_DECLINED),
-    CLOSE_OTHER("Chiudi altro", OrderStatus.CLOSED),
+    CLOSE_ORDER("Chiudi commessa", OrderStatus.CLOSED),
 }
 
 fun availableOrderStatusActions(status: OrderStatus): List<OrderStatusAction> =
@@ -29,22 +27,22 @@ fun OrderStatusAction.requiresConfirmation(): Boolean =
 
 fun statusTemplateCode(status: OrderStatus): String =
     when (status) {
-        OrderStatus.NEW -> "whatsapp_presa_in_carico"
+        OrderStatus.OPEN -> "whatsapp_presa_in_carico"
+        OrderStatus.IN_PROGRESS -> "whatsapp_lavorazione"
         OrderStatus.DIAGNOSIS -> "whatsapp_diagnosi"
-        OrderStatus.WAITING_CUSTOMER -> "whatsapp_preventivo"
-        OrderStatus.WORKING,
-        OrderStatus.WAITING_PARTS -> "whatsapp_lavorazione"
+        OrderStatus.RESULT -> "whatsapp_risultato"
+        OrderStatus.REPAIRING -> "whatsapp_riparazione"
         OrderStatus.READY_FOR_PICKUP,
         OrderStatus.CLOSED -> "whatsapp_pronto_ritiro"
     }
 
 fun OrderStatus.label(): String =
     when (this) {
-        OrderStatus.NEW -> "Nuova"
+        OrderStatus.OPEN -> "Aperta"
+        OrderStatus.IN_PROGRESS -> "In lavorazione"
         OrderStatus.DIAGNOSIS -> "In diagnosi"
-        OrderStatus.WAITING_CUSTOMER -> "In attesa cliente"
-        OrderStatus.WORKING -> "In lavorazione"
-        OrderStatus.WAITING_PARTS -> "In attesa ricambi"
+        OrderStatus.RESULT -> "Risultato"
+        OrderStatus.REPAIRING -> "In riparazione"
         OrderStatus.READY_FOR_PICKUP -> "Pronta al ritiro"
         OrderStatus.CLOSED -> "Chiusa"
     }

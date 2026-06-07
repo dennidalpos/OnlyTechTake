@@ -74,10 +74,10 @@ Admin
 
 La Home mostra metriche locali e quattro code operative:
 
-- Da diagnosticare;
-- Attesa cliente;
-- Da lavorare;
-- Pronte / chiusura.
+- Aperte: commesse `OPEN`;
+- In lavorazione / diagnosi: commesse `IN_PROGRESS` e `DIAGNOSIS`;
+- Risultato / riparazione: commesse `RESULT` e `REPAIRING`;
+- Pronte: commesse `READY_FOR_PICKUP`.
 
 Ogni coda apre l'elenco commesse con filtro coerente allo stato.
 
@@ -161,24 +161,24 @@ Non sono implementati campi personalizzati configurabili.
 Stati interni:
 
 ```text
-NEW
+OPEN
+IN_PROGRESS
 DIAGNOSIS
-WAITING_CUSTOMER
-WORKING
-WAITING_PARTS
+RESULT
+REPAIRING
 READY_FOR_PICKUP
 CLOSED
 ```
 
-Il workspace riprende dallo stato corrente e mostra solo le azioni consentite dalla policy di stato. Le azioni di chiusura impostano il motivo e dopo il salvataggio riportano all'elenco commesse.
+Il workspace riprende dallo stato corrente e mostra solo lo step successivo consentito dalla policy di stato piu' l'azione unica "Chiudi commessa". La chiusura richiede motivo e nota manuale, poi riporta all'elenco commesse.
 
 Mappa operativa:
 
-- `NEW`: avvio diagnosi o chiusura motivata;
-- `DIAGNOSIS`: attesa cliente, lavorazione, attesa ricambi o chiusura motivata;
-- `WAITING_CUSTOMER`: lavorazione o chiusura motivata;
-- `WORKING`: attesa cliente, attesa ricambi, pronta al ritiro o chiusura motivata;
-- `WAITING_PARTS`: lavorazione, attesa cliente, pronta al ritiro o chiusura motivata;
+- `OPEN`: presa in carico o chiusura motivata;
+- `IN_PROGRESS`: avvio diagnosi o chiusura motivata;
+- `DIAGNOSIS`: registrazione risultato o chiusura motivata;
+- `RESULT`: avvio riparazione o chiusura motivata;
+- `REPAIRING`: pronta al ritiro o chiusura motivata;
 - `READY_FOR_PICKUP`: chiusura motivata;
 - `CLOSED`: nessuna azione operativa.
 
@@ -224,7 +224,7 @@ Timeline e message log vengono aggiornati
 
 Non sono implementati backend, WhatsApp Business Platform, webhook o conferme automatiche.
 
-Il feedback cliente automatico non e' implementato. Nel rilascio corrente l'app registra manualmente la risposta cliente: l'accettazione porta la commessa a `WORKING`, il rifiuto chiude la commessa in `CLOSED` con motivo `CUSTOMER_DECLINED`.
+Il feedback cliente automatico non e' implementato. Nel rilascio corrente l'app registra manualmente la risposta cliente: l'accettazione porta la commessa a `REPAIRING`, il rifiuto chiude la commessa in `CLOSED` con motivo `CUSTOMER_DECLINED`.
 
 ## Backup e limiti
 

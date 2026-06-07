@@ -34,8 +34,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
-import com.onlytechtake.repairapp.features.workspace.formatFileSize
-import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
 import com.onlytechtake.repairapp.features.workspace.isFinalPhoto
 import com.onlytechtake.repairapp.features.workspace.isImageAttachment
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
@@ -68,10 +66,9 @@ fun OrderPhotoSection(
                         Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                             LocalImagePreview(
                                 path = media.localPath,
-                                description = media.fileName,
+                                description = "Foto commessa",
                                 onClick = { selectedImage = media.localPath to media.fileName },
                             )
-                            Text("${media.fileName} - ${formatFileSize(media.sizeBytes)} - ${formatUiDateTime(media.capturedAt)}")
                         }
                     }
                 }
@@ -79,12 +76,11 @@ fun OrderPhotoSection(
             if (documents.isNotEmpty()) {
                 Text("Documenti")
                 documents.forEach { media ->
-                    Card(modifier = Modifier.fillMaxWidth()) {
-                        Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text(media.fileName)
-                            Text("${media.mimeType} - ${formatFileSize(media.sizeBytes)} - ${formatUiDateTime(media.capturedAt)}")
-                        }
-                    }
+                    CompactExpandableRow(
+                        title = "Allegato",
+                        subtitle = "Documento commessa",
+                        detail = media.fileName,
+                    )
                 }
             }
             if (finalPhotos.isNotEmpty()) {
@@ -94,10 +90,9 @@ fun OrderPhotoSection(
                         Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                             LocalImagePreview(
                                 path = media.localPath,
-                                description = media.fileName,
+                                description = "Foto lavoro finito",
                                 onClick = { selectedImage = media.localPath to media.fileName },
                             )
-                            Text("${media.fileName} - ${formatFileSize(media.sizeBytes)} - ${formatUiDateTime(media.capturedAt)}")
                         }
                     }
                 }

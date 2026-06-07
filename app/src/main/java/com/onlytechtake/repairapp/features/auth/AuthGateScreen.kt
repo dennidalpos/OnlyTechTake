@@ -33,6 +33,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -87,7 +94,11 @@ private fun AuthLoadingScreen() {
                 .padding(paddingValues),
             contentAlignment = Alignment.Center,
         ) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(
+                modifier = Modifier.semantics {
+                    contentDescription = "Caricamento autenticazione"
+                },
+            )
         }
     }
 }
@@ -171,6 +182,14 @@ private fun AuthForm(
 ) {
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     var confirmPasswordVisible by rememberSaveable { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val nextAction = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) })
+    val submitAction = {
+        keyboardController?.hide()
+        focusManager.clearFocus()
+        onSubmit()
+    }
 
     BoxWithConstraints(
         modifier = Modifier
@@ -201,6 +220,8 @@ private fun AuthForm(
                     onValueChange = onDisplayNameChange,
                     label = { Text(text = "Nome admin") },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                    keyboardActions = nextAction,
                 )
             }
 
@@ -211,6 +232,7 @@ private fun AuthForm(
                 label = { Text(text = "Username") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                keyboardActions = nextAction,
             )
 
             OutlinedTextField(
@@ -225,9 +247,10 @@ private fun AuthForm(
                     imeAction = if (showConfirmPassword) ImeAction.Next else ImeAction.Done,
                 ),
                 keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) },
                     onDone = {
                         if (!showConfirmPassword) {
-                            onSubmit()
+                            submitAction()
                         }
                     },
                 ),
@@ -251,7 +274,7 @@ private fun AuthForm(
                         keyboardType = KeyboardType.Password,
                         imeAction = ImeAction.Done,
                     ),
-                    keyboardActions = KeyboardActions(onDone = { onSubmit() }),
+                    keyboardActions = KeyboardActions(onDone = { submitAction() }),
                     trailingIcon = {
                         PasswordVisibilityButton(
                             visible = confirmPasswordVisible,
@@ -263,6 +286,7 @@ private fun AuthForm(
 
             formState.errorMessage?.let { errorMessage ->
                 Text(
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
                     text = errorMessage,
                     color = MaterialTheme.colorScheme.error,
                 )

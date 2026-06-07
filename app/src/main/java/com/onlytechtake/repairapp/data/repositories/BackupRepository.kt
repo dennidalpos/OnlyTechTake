@@ -352,11 +352,11 @@ private fun CustomerEntity?.displayName(): String =
 
 private fun OrderStatus.label(): String =
     when (this) {
-        OrderStatus.NEW -> "Nuova"
+        OrderStatus.OPEN -> "Aperta"
+        OrderStatus.IN_PROGRESS -> "In lavorazione"
         OrderStatus.DIAGNOSIS -> "In diagnosi"
-        OrderStatus.WAITING_CUSTOMER -> "In attesa cliente"
-        OrderStatus.WORKING -> "In lavorazione"
-        OrderStatus.WAITING_PARTS -> "In attesa ricambi"
+        OrderStatus.RESULT -> "Risultato"
+        OrderStatus.REPAIRING -> "In riparazione"
         OrderStatus.READY_FOR_PICKUP -> "Pronta al ritiro"
         OrderStatus.CLOSED -> "Chiusa"
     }

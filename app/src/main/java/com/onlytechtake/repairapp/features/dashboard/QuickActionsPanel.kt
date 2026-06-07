@@ -217,8 +217,8 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                     ) {
                         Text("Cambia cliente")
                     }
-                } else if (customerSuggestions.isNotEmpty() && uiState.customerSearchQuery.isNotBlank()) {
-                    customerSuggestions.take(5).forEach { customer ->
+                } else if (customerSuggestions.isNotEmpty()) {
+                    customerSuggestions.forEach { customer ->
                         CustomerSuggestionCard(
                             customer = customer,
                             onClick = {

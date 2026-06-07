@@ -54,12 +54,8 @@ internal class OrderWorkflowEventWriter(
                 actorUserId = actorUserId,
                 createdAt = now,
                 visibleToCustomer = true,
-                requiresCustomerFeedback = newStatus == OrderStatus.WAITING_CUSTOMER,
-                expectedFeedbackType = if (newStatus == OrderStatus.WAITING_CUSTOMER) {
-                    CustomerFeedbackType.ACCEPT
-                } else {
-                    null
-                },
+                requiresCustomerFeedback = false,
+                expectedFeedbackType = null,
             ),
         )
         audit(actorUserId, AuditAction.ORDER_STATUS_CHANGED, orderId, null, now)
@@ -234,11 +230,11 @@ internal class OrderWorkflowEventWriter(
 
 private fun OrderStatus.label(): String =
     when (this) {
-        OrderStatus.NEW -> "Nuova"
+        OrderStatus.OPEN -> "Aperta"
+        OrderStatus.IN_PROGRESS -> "In lavorazione"
         OrderStatus.DIAGNOSIS -> "Diagnosi"
-        OrderStatus.WAITING_CUSTOMER -> "Attesa cliente"
-        OrderStatus.WORKING -> "In lavorazione"
-        OrderStatus.WAITING_PARTS -> "Attesa ricambi"
+        OrderStatus.RESULT -> "Risultato"
+        OrderStatus.REPAIRING -> "Riparazione"
         OrderStatus.READY_FOR_PICKUP -> "Pronta al ritiro"
         OrderStatus.CLOSED -> "Chiusa"
     }
