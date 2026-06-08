@@ -295,7 +295,7 @@ private fun AuthForm(
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !formState.loading,
-                onClick = onSubmit,
+                onClick = submitAction,
             ) {
                 if (formState.loading) {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

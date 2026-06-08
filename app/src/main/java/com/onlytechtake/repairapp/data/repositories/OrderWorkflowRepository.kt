@@ -327,6 +327,9 @@ class OrderWorkflowRepository(
     suspend fun recordFeedback(actor: AuthenticatedUser, orderId: String, input: FeedbackInput): Result<Unit> =
         runCatching {
             inTransaction {
+                if (input.feedback == CustomerFeedbackType.REJECT) {
+                    require(input.note.isNotBlank()) { "Motivo rifiuto obbligatorio" }
+                }
                 val order = requireWritableOrder(actor, orderId)
                 val now = clockMillis()
                 val targetStatus = when (input.feedback) {

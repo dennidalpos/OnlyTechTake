@@ -266,6 +266,9 @@ class WorkspaceViewModel(
     fun deleteStagedMedia(path: String) =
         mediaActions.deleteStagedMedia(path)
 
+    fun replaceStagedImage(staged: StagedOrderMedia, bitmap: Bitmap, onReplaced: (StagedOrderMedia) -> Unit) =
+        mediaActions.replaceStagedImage(staged, bitmap, onReplaced)
+
     fun importIntakeAttachment(sessionId: String, uri: Uri, onStaged: (StagedOrderMedia) -> Unit) =
         mediaActions.importIntakeAttachment(sessionId, uri, onStaged)
 
@@ -296,6 +299,12 @@ class WorkspaceViewModel(
     fun importAttachment(orderId: String, uri: Uri) =
         mediaActions.importAttachment(orderId, uri)
 
+    fun deleteMedia(mediaId: String) =
+        mediaActions.deleteMedia(mediaId)
+
+    fun replaceImage(mediaId: String, bitmap: Bitmap) =
+        mediaActions.replaceImage(mediaId, bitmap)
+
     fun saveSignature(
         orderId: String,
         signerName: String,
@@ -315,7 +324,8 @@ class WorkspaceViewModel(
         feedback: CustomerFeedbackType,
         note: String,
         closureReason: ClosureReason? = null,
-    ) = withUser { actor ->
+        onSuccess: () -> Unit = {},
+    ) = withUser(onSuccess = onSuccess) { actor ->
         orderRepository.recordFeedback(actor, orderId, FeedbackInput(feedback, note, closureReason))
     }
 

@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.features.dashboard
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,12 +28,13 @@ fun QuickIntakeMediaSection(
     showCamera: Boolean,
     onShowCameraChange: (Boolean) -> Unit,
     onRemoveMedia: (String) -> Unit,
+    onReplaceMedia: (StagedOrderMedia, Bitmap) -> Unit,
     onLaunchAttachmentPicker: () -> Unit,
     createPhotoFile: (String, String) -> Result<File>,
     onPhotoCaptured: (File) -> Unit,
     onCameraError: (String) -> Unit,
 ) {
-    var selectedImage by rememberSaveable { mutableStateOf<Pair<String, String>?>(null) }
+    var selectedImagePath by rememberSaveable { mutableStateOf<String?>(null) }
 
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -47,7 +49,7 @@ fun QuickIntakeMediaSection(
                                 LocalImagePreview(
                                     path = media.localPath,
                                     description = media.fileName,
-                                    onClick = { selectedImage = media.localPath to media.fileName },
+                                    onClick = { selectedImagePath = media.localPath },
                                 )
                                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                     Text(
@@ -97,8 +99,18 @@ fun QuickIntakeMediaSection(
         }
     }
 
-    selectedImage?.let { (path, title) ->
-        LocalImageViewer(path = path, title = title, onDismiss = { selectedImage = null })
+    selectedImagePath?.let { path ->
+        val media = stagedMedia.firstOrNull { it.localPath == path }
+        if (media == null) {
+            selectedImagePath = null
+        } else {
+            LocalImageViewer(
+                path = media.localPath,
+                title = media.fileName,
+                onDismiss = { selectedImagePath = null },
+                onSaveEdited = { bitmap -> onReplaceMedia(media, bitmap) },
+            )
+        }
     }
 }
 

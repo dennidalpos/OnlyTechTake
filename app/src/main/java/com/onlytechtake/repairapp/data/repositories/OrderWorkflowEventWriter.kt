@@ -145,6 +145,19 @@ internal class OrderWorkflowEventWriter(
         )
     }
 
+    suspend fun mediaRemoved(orderId: String, actorUserId: String, fileName: String, now: Long) {
+        writeTimeline(
+            timelineEvent(
+                orderId = orderId,
+                type = TimelineEventType.MEDIA_ADDED,
+                title = "Media rimosso",
+                description = fileName,
+                actorUserId = actorUserId,
+                createdAt = now,
+            ),
+        )
+    }
+
     suspend fun signatureCaptured(orderId: String, actorUserId: String, signerName: String, now: Long) {
         writeTimeline(
             timelineEvent(

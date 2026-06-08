@@ -1,9 +1,19 @@
 package com.onlytechtake.repairapp.features.dashboard
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas as AndroidCanvas
+import android.graphics.Color as AndroidColor
+import android.graphics.Matrix
+import android.graphics.Paint as AndroidPaint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -24,11 +35,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import java.io.File
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.floor
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.roundToInt
+import kotlin.math.sin
 
 @Composable
 fun LocalImagePreview(
@@ -37,7 +65,10 @@ fun LocalImagePreview(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
 ) {
-    val bitmap = remember(path) { BitmapFactory.decodeFile(path)?.asImageBitmap() }
+    val imageFile = remember(path) { File(path) }
+    val bitmap = remember(path, imageFile.lastModified(), imageFile.length()) {
+        BitmapFactory.decodeFile(path)?.asImageBitmap()
+    }
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -69,26 +100,227 @@ fun LocalImageViewer(
     path: String,
     title: String,
     onDismiss: () -> Unit,
+    onSaveEdited: ((Bitmap) -> Unit)? = null,
+    onDelete: (() -> Unit)? = null,
 ) {
+    var buildEditedBitmap by remember(path) { mutableStateOf<(() -> Bitmap?)?>(null) }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(title) },
         text = {
-            ZoomableLocalImage(
-                path = path,
-                description = title,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(360.dp)
-                    .padding(top = 8.dp),
-            )
+            if (onSaveEdited == null) {
+                ZoomableLocalImage(
+                    path = path,
+                    description = title,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(360.dp)
+                        .padding(top = 8.dp),
+                )
+            } else {
+                EditableLocalImage(
+                    path = path,
+                    description = title,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(420.dp)
+                        .padding(top = 8.dp),
+                    onBuildEditedBitmapChange = { buildEditedBitmap = it },
+                )
+            }
         },
         confirmButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Chiudi")
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                onDelete?.let { delete ->
+                    TextButton(
+                        onClick = {
+                            delete()
+                            onDismiss()
+                        },
+                    ) {
+                        Text("Elimina")
+                    }
+                }
+                if (onSaveEdited != null) {
+                    TextButton(
+                        onClick = {
+                            buildEditedBitmap?.invoke()?.let(onSaveEdited)
+                            onDismiss()
+                        },
+                    ) {
+                        Text("Salva")
+                    }
+                }
+                TextButton(onClick = onDismiss) {
+                    Text("Chiudi")
+                }
             }
         },
     )
+}
+
+@Composable
+private fun EditableLocalImage(
+    path: String,
+    description: String,
+    modifier: Modifier = Modifier,
+    onBuildEditedBitmapChange: (() -> Bitmap?) -> Unit,
+) {
+    var bitmap by remember(path) {
+        mutableStateOf(BitmapFactory.decodeFile(path)?.copy(Bitmap.Config.ARGB_8888, true))
+    }
+    var editMode by remember(path) { mutableStateOf(ImageEditMode.ARROW) }
+    var arrows by remember(path) { mutableStateOf(emptyList<ImageEditArrow>()) }
+    var cropRect by remember(path) { mutableStateOf<Rect?>(null) }
+    var dragStart by remember(path) { mutableStateOf<Offset?>(null) }
+    var dragCurrent by remember(path) { mutableStateOf<Offset?>(null) }
+    var canvasSize by remember(path) { mutableStateOf(IntSize.Zero) }
+
+    SideEffect {
+        onBuildEditedBitmapChange {
+            bitmap?.let { source -> buildEditedBitmap(source, arrows, cropRect) }
+        }
+    }
+
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        ActionRow {
+            TextButton(
+                onClick = {
+                    bitmap = bitmap?.rotateRight()
+                    arrows = emptyList()
+                    cropRect = null
+                },
+            ) {
+                Text("Ruota")
+            }
+            TextButton(onClick = { editMode = ImageEditMode.CROP }) {
+                Text("Ritaglio")
+            }
+            TextButton(onClick = { editMode = ImageEditMode.ARROW }) {
+                Text("Freccia")
+            }
+            TextButton(enabled = arrows.isNotEmpty(), onClick = { arrows = arrows.dropLast(1) }) {
+                Text("Annulla freccia")
+            }
+            TextButton(enabled = cropRect != null, onClick = { cropRect = null }) {
+                Text("Cancella ritaglio")
+            }
+        }
+        ImageEditCanvas(
+            bitmap = bitmap,
+            description = description,
+            arrows = arrows,
+            cropRect = cropRect,
+            dragStart = dragStart,
+            dragCurrent = dragCurrent,
+            editMode = editMode,
+            canvasSize = canvasSize,
+            onCanvasSizeChange = { canvasSize = it },
+            onDragStart = { offset ->
+                val source = bitmap ?: return@ImageEditCanvas
+                val mapped = offset.toBitmapOffset(canvasSize, source) ?: return@ImageEditCanvas
+                dragStart = mapped
+                dragCurrent = mapped
+            },
+            onDrag = { offset ->
+                val source = bitmap ?: return@ImageEditCanvas
+                dragCurrent = offset.toBitmapOffset(canvasSize, source)
+            },
+            onDragEnd = {
+                val start = dragStart
+                val end = dragCurrent
+                if (start != null && end != null) {
+                    when (editMode) {
+                        ImageEditMode.ARROW -> {
+                            if ((start - end).getDistance() >= MIN_DRAG_DISTANCE) {
+                                arrows = arrows + ImageEditArrow(start, end)
+                            }
+                        }
+                        ImageEditMode.CROP -> {
+                            normalizeBitmapRect(start, end, bitmap)?.let { cropRect = it }
+                        }
+                    }
+                }
+                dragStart = null
+                dragCurrent = null
+            },
+            modifier = modifier,
+        )
+    }
+}
+
+@Composable
+private fun ImageEditCanvas(
+    bitmap: Bitmap?,
+    description: String,
+    arrows: List<ImageEditArrow>,
+    cropRect: Rect?,
+    dragStart: Offset?,
+    dragCurrent: Offset?,
+    editMode: ImageEditMode,
+    canvasSize: IntSize,
+    onCanvasSizeChange: (IntSize) -> Unit,
+    onDragStart: (Offset) -> Unit,
+    onDrag: (Offset) -> Unit,
+    onDragEnd: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier.clipToBounds(), contentAlignment = Alignment.Center) {
+        if (bitmap == null) {
+            Text("Anteprima non disponibile", style = MaterialTheme.typography.bodySmall)
+        } else {
+            val imageBitmap = remember(bitmap) { bitmap.asImageBitmap() }
+            Canvas(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(420.dp)
+                    .onSizeChanged(onCanvasSizeChange)
+                    .pointerInput(editMode, bitmap, canvasSize) {
+                        detectDragGestures(
+                            onDragStart = onDragStart,
+                            onDrag = { change, _ -> onDrag(change.position) },
+                            onDragEnd = onDragEnd,
+                            onDragCancel = onDragEnd,
+                        )
+                    },
+            ) {
+                val placement = imagePlacement(Size(bitmap.width.toFloat(), bitmap.height.toFloat()), size)
+                drawImage(
+                    image = imageBitmap,
+                    dstOffset = IntOffset(placement.left.roundToInt(), placement.top.roundToInt()),
+                    dstSize = IntSize(placement.width.roundToInt(), placement.height.roundToInt()),
+                )
+                arrows.forEach { arrow ->
+                    drawBitmapArrow(arrow.start.toCanvasOffset(placement, bitmap), arrow.end.toCanvasOffset(placement, bitmap))
+                }
+                cropRect?.let { rect ->
+                    drawRect(
+                        color = Color.White,
+                        topLeft = rect.topLeft.toCanvasOffset(placement, bitmap),
+                        size = rect.size.toCanvasSize(placement, bitmap),
+                        style = Stroke(width = 3.dp.toPx()),
+                    )
+                }
+                if (dragStart != null && dragCurrent != null) {
+                    when (editMode) {
+                        ImageEditMode.ARROW -> drawBitmapArrow(
+                            dragStart.toCanvasOffset(placement, bitmap),
+                            dragCurrent.toCanvasOffset(placement, bitmap),
+                            color = Color.Yellow,
+                        )
+                        ImageEditMode.CROP -> normalizeBitmapRect(dragStart, dragCurrent, bitmap)?.let { rect ->
+                            drawRect(
+                                color = Color.Yellow,
+                                topLeft = rect.topLeft.toCanvasOffset(placement, bitmap),
+                                size = rect.size.toCanvasSize(placement, bitmap),
+                                style = Stroke(width = 3.dp.toPx()),
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Composable
@@ -132,3 +364,130 @@ private fun ZoomableLocalImage(
         }
     }
 }
+
+private enum class ImageEditMode {
+    CROP,
+    ARROW,
+}
+
+private data class ImageEditArrow(
+    val start: Offset,
+    val end: Offset,
+)
+
+private data class ImagePlacement(
+    val left: Float,
+    val top: Float,
+    val width: Float,
+    val height: Float,
+)
+
+private fun imagePlacement(imageSize: Size, canvasSize: Size): ImagePlacement {
+    val scale = min(canvasSize.width / imageSize.width, canvasSize.height / imageSize.height)
+    val width = imageSize.width * scale
+    val height = imageSize.height * scale
+    return ImagePlacement(
+        left = (canvasSize.width - width) / 2f,
+        top = (canvasSize.height - height) / 2f,
+        width = width,
+        height = height,
+    )
+}
+
+private fun Offset.toCanvasOffset(placement: ImagePlacement, bitmap: Bitmap): Offset =
+    Offset(
+        x = placement.left + (x / bitmap.width.toFloat()) * placement.width,
+        y = placement.top + (y / bitmap.height.toFloat()) * placement.height,
+    )
+
+private fun Size.toCanvasSize(placement: ImagePlacement, bitmap: Bitmap): Size =
+    Size(
+        width = (width / bitmap.width.toFloat()) * placement.width,
+        height = (height / bitmap.height.toFloat()) * placement.height,
+    )
+
+private fun Offset.toBitmapOffset(canvasSize: IntSize, bitmap: Bitmap): Offset? {
+    if (canvasSize.width <= 0 || canvasSize.height <= 0) return null
+    val placement = imagePlacement(
+        imageSize = Size(bitmap.width.toFloat(), bitmap.height.toFloat()),
+        canvasSize = Size(canvasSize.width.toFloat(), canvasSize.height.toFloat()),
+    )
+    if (x < placement.left || x > placement.left + placement.width) return null
+    if (y < placement.top || y > placement.top + placement.height) return null
+    return Offset(
+        x = ((x - placement.left) / placement.width * bitmap.width).coerceIn(0f, bitmap.width.toFloat()),
+        y = ((y - placement.top) / placement.height * bitmap.height).coerceIn(0f, bitmap.height.toFloat()),
+    )
+}
+
+private fun normalizeBitmapRect(start: Offset, end: Offset, bitmap: Bitmap?): Rect? {
+    bitmap ?: return null
+    val left = min(start.x, end.x).coerceIn(0f, bitmap.width.toFloat())
+    val top = min(start.y, end.y).coerceIn(0f, bitmap.height.toFloat())
+    val right = max(start.x, end.x).coerceIn(0f, bitmap.width.toFloat())
+    val bottom = max(start.y, end.y).coerceIn(0f, bitmap.height.toFloat())
+    if (right - left < MIN_CROP_SIZE || bottom - top < MIN_CROP_SIZE) return null
+    return Rect(left, top, right, bottom)
+}
+
+private fun DrawScope.drawBitmapArrow(
+    start: Offset,
+    end: Offset,
+    color: Color = Color.Red,
+) {
+    val strokeWidth = 5.dp.toPx()
+    drawLine(color = color, start = start, end = end, strokeWidth = strokeWidth)
+    val angle = atan2(end.y - start.y, end.x - start.x)
+    val headLength = 22.dp.toPx()
+    val left = Offset(
+        x = end.x - headLength * cos(angle - ARROW_HEAD_ANGLE),
+        y = end.y - headLength * sin(angle - ARROW_HEAD_ANGLE),
+    )
+    val right = Offset(
+        x = end.x - headLength * cos(angle + ARROW_HEAD_ANGLE),
+        y = end.y - headLength * sin(angle + ARROW_HEAD_ANGLE),
+    )
+    drawLine(color = color, start = end, end = left, strokeWidth = strokeWidth)
+    drawLine(color = color, start = end, end = right, strokeWidth = strokeWidth)
+}
+
+private fun Bitmap.rotateRight(): Bitmap {
+    val matrix = Matrix().apply { postRotate(90f) }
+    return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
+}
+
+private fun buildEditedBitmap(source: Bitmap, arrows: List<ImageEditArrow>, cropRect: Rect?): Bitmap {
+    val output = source.copy(Bitmap.Config.ARGB_8888, true)
+    val canvas = AndroidCanvas(output)
+    val paint = AndroidPaint(AndroidPaint.ANTI_ALIAS_FLAG).apply {
+        color = AndroidColor.RED
+        strokeWidth = max(6f, source.width / 160f)
+        style = AndroidPaint.Style.STROKE
+        strokeCap = AndroidPaint.Cap.ROUND
+    }
+    arrows.forEach { arrow ->
+        canvas.drawLine(arrow.start.x, arrow.start.y, arrow.end.x, arrow.end.y, paint)
+        drawAndroidArrowHead(canvas, paint, arrow.start, arrow.end)
+    }
+    val rect = cropRect ?: return output
+    val left = floor(rect.left).toInt().coerceIn(0, output.width - 1)
+    val top = floor(rect.top).toInt().coerceIn(0, output.height - 1)
+    val right = rect.right.roundToInt().coerceIn(left + 1, output.width)
+    val bottom = rect.bottom.roundToInt().coerceIn(top + 1, output.height)
+    return Bitmap.createBitmap(output, left, top, right - left, bottom - top)
+}
+
+private fun drawAndroidArrowHead(canvas: AndroidCanvas, paint: AndroidPaint, start: Offset, end: Offset) {
+    val angle = atan2(end.y - start.y, end.x - start.x)
+    val headLength = max(24f, paint.strokeWidth * 4f)
+    val leftX = end.x - headLength * cos(angle - ARROW_HEAD_ANGLE)
+    val leftY = end.y - headLength * sin(angle - ARROW_HEAD_ANGLE)
+    val rightX = end.x - headLength * cos(angle + ARROW_HEAD_ANGLE)
+    val rightY = end.y - headLength * sin(angle + ARROW_HEAD_ANGLE)
+    canvas.drawLine(end.x, end.y, leftX, leftY, paint)
+    canvas.drawLine(end.x, end.y, rightX, rightY, paint)
+}
+
+private const val MIN_DRAG_DISTANCE = 12f
+private const val MIN_CROP_SIZE = 24f
+private const val ARROW_HEAD_ANGLE = 0.7f

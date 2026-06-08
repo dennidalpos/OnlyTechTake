@@ -365,6 +365,13 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                     viewModel.deleteStagedMedia(localPath)
                     stagedMedia = stagedMedia.filterNot { it.localPath == localPath }
                 },
+                onReplaceMedia = { media, bitmap ->
+                    viewModel.replaceStagedImage(media, bitmap) { replaced ->
+                        stagedMedia = stagedMedia.map { current ->
+                            if (current.localPath == replaced.localPath) replaced else current
+                        }
+                    }
+                },
                 onLaunchAttachmentPicker = { attachmentLauncher.launch("*/*") },
                 createPhotoFile = { sessionId, _ -> viewModel.createIntakePhotoFile(sessionId) },
                 onPhotoCaptured = { file ->

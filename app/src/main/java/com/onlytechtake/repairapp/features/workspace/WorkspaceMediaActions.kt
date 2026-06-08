@@ -55,6 +55,16 @@ internal class WorkspaceMediaActions(
         )
     }
 
+    fun replaceStagedImage(staged: StagedOrderMedia, bitmap: Bitmap, onReplaced: (StagedOrderMedia) -> Unit) {
+        orderMediaRepository.replaceStagedImage(staged, bitmap).fold(
+            onSuccess = {
+                onReplaced(it)
+                showSuccess("Foto modificata")
+            },
+            onFailure = showError,
+        )
+    }
+
     fun importIntakeAttachment(sessionId: String, uri: Uri, onStaged: (StagedOrderMedia) -> Unit) {
         scope.launch {
             orderMediaRepository.importIntakeAttachment(sessionId, uri).fold(
@@ -140,6 +150,28 @@ internal class WorkspaceMediaActions(
             authRepository.touchSession()
             orderMediaRepository.importAttachment(actor, orderId, uri).fold(
                 onSuccess = { showSuccess("Allegato salvato") },
+                onFailure = showError,
+            )
+        }
+    }
+
+    fun deleteMedia(mediaId: String) {
+        scope.launch {
+            val actor = currentUser.value ?: return@launch showMessage("Sessione non valida", true)
+            authRepository.touchSession()
+            orderMediaRepository.deleteMedia(actor, mediaId).fold(
+                onSuccess = { showSuccess("Media rimosso") },
+                onFailure = showError,
+            )
+        }
+    }
+
+    fun replaceImage(mediaId: String, bitmap: Bitmap) {
+        scope.launch {
+            val actor = currentUser.value ?: return@launch showMessage("Sessione non valida", true)
+            authRepository.touchSession()
+            orderMediaRepository.replaceImage(actor, mediaId, bitmap).fold(
+                onSuccess = { showSuccess("Foto modificata") },
                 onFailure = showError,
             )
         }

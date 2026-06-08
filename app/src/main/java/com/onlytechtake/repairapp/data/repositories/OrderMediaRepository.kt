@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.data.repositories
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.webkit.MimeTypeMap
@@ -201,6 +202,43 @@ class OrderMediaRepository(
             media
         }
 
+    suspend fun deleteMedia(actor: AuthenticatedUser, mediaId: String): Result<Unit> =
+        runCatching {
+            val media = requireNotNull(orderMediaDao.findById(mediaId)) { "Media non trovato" }
+            requireWritableOrder(actor, media.orderId)
+            val now = clockMillis()
+
+            inTransaction {
+                val deleted = orderMediaDao.deleteById(media.id)
+                require(deleted > 0) { "Media non rimosso" }
+                eventWriter.mediaRemoved(media.orderId, actor.id, media.fileName, now)
+            }
+            deleteMediaFile(File(media.localPath))
+        }
+
+    suspend fun replaceImage(actor: AuthenticatedUser, mediaId: String, bitmap: Bitmap): Result<OrderMediaEntity> =
+        runCatching {
+            val media = requireNotNull(orderMediaDao.findById(mediaId)) { "Media non trovato" }
+            requireWritableOrder(actor, media.orderId)
+            require(media.mimeType.startsWith("image/", ignoreCase = true)) { "Il media selezionato non e' un'immagine" }
+
+            val file = File(media.localPath)
+            val savedMimeType = writeBitmapReplacing(file, bitmap, media.mimeType)
+            val bounds = readImageBounds(file)
+            val updated = media.copy(
+                mimeType = savedMimeType,
+                sizeBytes = file.length(),
+                width = bounds.width,
+                height = bounds.height,
+            )
+
+            inTransaction {
+                orderMediaDao.upsert(updated)
+                eventWriter.mediaAdded(media.orderId, actor.id, "Immagine modificata", media.fileName, clockMillis())
+            }
+            updated
+        }
+
     suspend fun attachStagedMedia(
         actor: AuthenticatedUser,
         orderId: String,
@@ -254,6 +292,20 @@ class OrderMediaRepository(
     fun deleteStagedMedia(path: String): Result<Unit> =
         runCatching {
             deleteMediaFile(File(path))
+        }
+
+    fun replaceStagedImage(staged: StagedOrderMedia, bitmap: Bitmap): Result<StagedOrderMedia> =
+        runCatching {
+            require(staged.mimeType.startsWith("image/", ignoreCase = true)) { "Il media selezionato non e' un'immagine" }
+            val file = File(staged.localPath)
+            val savedMimeType = writeBitmapReplacing(file, bitmap, staged.mimeType)
+            val bounds = readImageBounds(file)
+            staged.copy(
+                mimeType = savedMimeType,
+                sizeBytes = file.length(),
+                width = bounds.width,
+                height = bounds.height,
+            )
         }
 
     private fun readImageBounds(file: File): ImageBounds {
@@ -339,6 +391,35 @@ class OrderMediaRepository(
         file.parentFile?.deleteIfEmpty()
     }
 
+    private fun writeBitmapReplacing(file: File, bitmap: Bitmap, sourceMimeType: String): String {
+        require(bitmap.width > 0 && bitmap.height > 0) { "Immagine modificata non valida" }
+        val parent = requireNotNull(file.parentFile) { "Cartella media non disponibile" }
+        check(parent.exists() || parent.mkdirs()) { "Cartella media non disponibile" }
+        val (format, mimeType) = compressFormatFor(sourceMimeType)
+        val temp = File(parent, "${file.name}.tmp")
+        try {
+            FileOutputStream(temp).use { output ->
+                require(bitmap.compress(format, IMAGE_SAVE_QUALITY, output)) { "Salvataggio immagine non riuscito" }
+            }
+            require(temp.exists() && temp.length() > 0L) { "Immagine modificata vuota" }
+            temp.copyTo(file, overwrite = true)
+            require(file.exists() && file.length() > 0L) { "Sostituzione immagine non riuscita" }
+            return mimeType
+        } catch (error: Exception) {
+            throw error
+        } finally {
+            temp.delete()
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun compressFormatFor(mimeType: String): Pair<Bitmap.CompressFormat, String> =
+        when {
+            mimeType.equals("image/png", ignoreCase = true) -> Bitmap.CompressFormat.PNG to "image/png"
+            mimeType.equals("image/webp", ignoreCase = true) -> Bitmap.CompressFormat.WEBP to "image/webp"
+            else -> Bitmap.CompressFormat.JPEG to MIME_TYPE_JPEG
+        }
+
     private fun File.deleteIfEmpty() {
         if (exists() && isDirectory && listFiles().isNullOrEmpty()) {
             delete()
@@ -351,5 +432,6 @@ class OrderMediaRepository(
         const val MEDIA_TYPE_IMAGE = "IMAGE"
         const val MEDIA_TYPE_DOCUMENT = "DOCUMENT"
         const val MIME_TYPE_JPEG = "image/jpeg"
+        const val IMAGE_SAVE_QUALITY = 92
     }
 }

@@ -62,4 +62,8 @@ fun formatUiDateTime(millis: Long, zoneId: ZoneId = ZoneId.systemDefault()): Str
         .format(Instant.ofEpochMilli(millis).atZone(zoneId))
 
 fun nextActionLabel(status: OrderStatus): String =
-    availableOrderStatusActions(status).firstOrNull()?.label ?: "Nessuna azione"
+    if (status == OrderStatus.RESULT) {
+        "Registra esito preventivo"
+    } else {
+        availableOrderStatusActions(status).firstOrNull()?.label ?: "Nessuna azione"
+    }

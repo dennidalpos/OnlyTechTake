@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.features.dashboard
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
@@ -18,8 +19,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -33,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.features.workspace.isFinalPhoto
 import com.onlytechtake.repairapp.features.workspace.isImageAttachment
@@ -46,7 +50,8 @@ fun OrderPhotoSection(
 ) {
     var showCamera by rememberSaveable { mutableStateOf(false) }
     var showFinalCamera by rememberSaveable { mutableStateOf(false) }
-    var selectedImage by rememberSaveable { mutableStateOf<Pair<String, String>?>(null) }
+    var selectedImageId by rememberSaveable { mutableStateOf<String?>(null) }
+    var deleteMedia by remember { mutableStateOf<OrderMediaEntity?>(null) }
     val attachmentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let { viewModel.importAttachment(detail.order.id, it) }
     }
@@ -67,7 +72,7 @@ fun OrderPhotoSection(
                             LocalImagePreview(
                                 path = media.localPath,
                                 description = "Foto commessa",
-                                onClick = { selectedImage = media.localPath to media.fileName },
+                                onClick = { selectedImageId = media.id },
                             )
                         }
                     }
@@ -91,7 +96,7 @@ fun OrderPhotoSection(
                             LocalImagePreview(
                                 path = media.localPath,
                                 description = "Foto lavoro finito",
-                                onClick = { selectedImage = media.localPath to media.fileName },
+                                onClick = { selectedImageId = media.id },
                             )
                         }
                     }
@@ -147,8 +152,46 @@ fun OrderPhotoSection(
         }
     }
 
-    selectedImage?.let { (path, title) ->
-        LocalImageViewer(path = path, title = title, onDismiss = { selectedImage = null })
+    selectedImageId?.let { mediaId ->
+        val media = detail.media.firstOrNull { it.id == mediaId }
+        if (media == null) {
+            selectedImageId = null
+        } else {
+            LocalImageViewer(
+                path = media.localPath,
+                title = media.fileName,
+                onDismiss = { selectedImageId = null },
+                onSaveEdited = { bitmap: Bitmap ->
+                    viewModel.replaceImage(media.id, bitmap)
+                },
+                onDelete = {
+                    deleteMedia = media
+                },
+            )
+        }
+    }
+
+    deleteMedia?.let { media ->
+        AlertDialog(
+            onDismissRequest = { deleteMedia = null },
+            title = { Text("Eliminare foto?") },
+            text = { Text("La foto ${media.fileName} verra' rimossa dalla commessa.") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.deleteMedia(media.id)
+                        deleteMedia = null
+                    },
+                ) {
+                    Text("Elimina")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { deleteMedia = null }) {
+                    Text("Annulla")
+                }
+            },
+        )
     }
 }
 
