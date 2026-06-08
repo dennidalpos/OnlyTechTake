@@ -24,6 +24,7 @@ import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthPolicy
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.auth.LoginResult
+import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
 import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
 import com.onlytechtake.repairapp.domain.workspace.RepairOrderInput
@@ -92,6 +93,32 @@ class RepositoryPathsInstrumentedTest {
 
         assertTrue(state.initialized)
         assertTrue(state.configured)
+    }
+
+    @Test
+    fun loginKeepsCurrentUserAndAllowsSavingCategory() = runBlocking {
+        val authRepository = authRepository { NOW }
+        authRepository.createFirstAdmin("Admin", "admin", "correct-password".toCharArray())
+        authRepository.logout()
+
+        val loginResult = authRepository.login("admin", "correct-password".toCharArray())
+
+        assertTrue(loginResult is LoginResult.Success)
+        val actor = authRepository.currentUser.value
+        assertNotNull(actor)
+
+        CatalogRepository(database.orderCategoryDao(), clockMillis = { NOW }).saveCategory(
+            actor = actor!!,
+            input = CategoryInput(
+                id = "saved-after-login",
+                name = "Notebook",
+                description = "Riparazioni notebook",
+                active = true,
+                sortOrder = 1,
+            ),
+        ).getOrThrow()
+
+        assertNotNull(database.orderCategoryDao().findById("saved-after-login"))
     }
 
     @Test

@@ -51,7 +51,10 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel) {
             )
             queues.forEach { queue ->
                 Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Column(
+                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                    ) {
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                             Text(queue.title, style = MaterialTheme.typography.titleMedium)
                             Text(queue.orders.size.toString(), style = MaterialTheme.typography.titleMedium)

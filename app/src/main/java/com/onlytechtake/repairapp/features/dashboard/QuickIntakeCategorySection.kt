@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,7 +25,10 @@ fun QuickIntakeCategorySection(
     onOpenConfig: () -> Unit,
 ) {
     Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Column(
+            modifier = Modifier.padding(DashboardSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+        ) {
             StepSectionTitle(stepNumber, "Categoria e dati tecnici")
             if (activeCategories.isEmpty()) {
                 Text(
@@ -42,15 +44,16 @@ fun QuickIntakeCategorySection(
                 ActionRow {
                     activeCategories.forEach { category ->
                         val selected = category.id == selectedCategoryId
-                        OutlinedButton(
+                        TouchButton(
                             modifier = Modifier.semantics {
                                 this.selected = selected
                                 stateDescription = if (selected) "Selezionata" else "Non selezionata"
                             },
+                            text = if (selected) "${category.name} *" else category.name,
+                            tone = if (selected) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
+                            selected = selected,
                             onClick = { onCategorySelected(category.id) },
-                        ) {
-                            Text(if (selected) "${category.name} *" else category.name)
-                        }
+                        )
                     }
                 }
                 selectedCategory?.description?.takeIf { it.isNotBlank() }?.let { Text(it) }

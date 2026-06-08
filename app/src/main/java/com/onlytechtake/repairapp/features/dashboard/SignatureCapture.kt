@@ -18,12 +18,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -91,11 +89,14 @@ fun SignatureCaptureForm(
         onCaptureChanged(capture)
     }
 
-    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
         SectionTitle(title)
         existingSignatures.forEach { signature ->
             Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Column(
+                    modifier = Modifier.padding(DashboardSpacing.compactGap),
+                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+                ) {
                     LocalImagePreview(
                         path = signature.localPath,
                         description = "Firma ${signature.signerName}",
@@ -184,21 +185,20 @@ fun SignatureCaptureForm(
         )
 
         ActionRow {
-            OutlinedButton(
+            TouchButton(
+                text = "Pulisci firma",
+                tone = ButtonTone.NEUTRAL,
                 onClick = {
                     strokes = emptyList()
                     currentStroke = null
                 },
-            ) {
-                Text("Pulisci firma")
-            }
+            )
             if (submitText != null) {
-                Button(
+                TouchButton(
+                    text = submitText,
                     enabled = capture != null,
                     onClick = { capture?.let(onSubmit) },
-                ) {
-                    Text(submitText)
-                }
+                )
             }
         }
     }

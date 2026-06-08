@@ -24,14 +24,17 @@ fun OrderSignatureSection(
     var selectedSignaturePath by rememberSaveable { mutableStateOf<String?>(null) }
     var selectedSignatureTitle by remember { mutableStateOf("") }
 
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
         SectionTitle("Firma privacy")
         if (detail.signatures.isEmpty()) {
             Text("Nessuna firma acquisita.")
         } else {
             detail.signatures.forEach { signature ->
                 Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Column(
+                        modifier = Modifier.padding(DashboardSpacing.compactGap),
+                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+                    ) {
                         LocalImagePreview(
                             path = signature.localPath,
                             description = "Firma ${signature.signerName}",

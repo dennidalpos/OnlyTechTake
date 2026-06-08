@@ -96,9 +96,17 @@ class WorkspaceViewModel(
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
-    private val mediaActions = WorkspaceMediaActions(
+    private val authenticatedActionRunner = AuthenticatedActionRunner(
         authRepository = authRepository,
         currentUser = currentUser,
+        scope = viewModelScope,
+        showSuccess = ::showSuccess,
+        showError = ::showError,
+        showMessage = ::showMessage,
+    )
+
+    private val mediaActions = WorkspaceMediaActions(
+        authenticatedActionRunner = authenticatedActionRunner,
         selectedOrder = selectedOrder,
         mutableUiState = mutableUiState,
         scope = viewModelScope,
@@ -111,10 +119,8 @@ class WorkspaceViewModel(
     )
 
     private val messageActions = WorkspaceMessageActions(
-        authRepository = authRepository,
-        currentUser = currentUser,
+        authenticatedActionRunner = authenticatedActionRunner,
         mutableUiState = mutableUiState,
-        scope = viewModelScope,
         templateRepository = templateRepository,
         showSuccess = ::showSuccess,
         showError = ::showError,
@@ -122,28 +128,22 @@ class WorkspaceViewModel(
     )
 
     private val adminActions = WorkspaceAdminActions(
-        authRepository = authRepository,
-        currentUser = currentUser,
+        authenticatedActionRunner = authenticatedActionRunner,
         mutableUiState = mutableUiState,
-        scope = viewModelScope,
         backupRepository = backupRepository,
         dataResetRepository = dataResetRepository,
         orderRepository = orderRepository,
-        showSuccess = ::showSuccess,
         showError = ::showError,
-        showMessage = ::showMessage,
     )
 
     private val catalogActions = WorkspaceCatalogActions(
-        authRepository = authRepository,
-        currentUser = currentUser,
+        authenticatedActionRunner = authenticatedActionRunner,
         scope = viewModelScope,
         adminUserRepository = adminUserRepository,
         customerRepository = customerRepository,
         catalogRepository = catalogRepository,
         showSuccess = ::showSuccess,
         showError = ::showError,
-        showMessage = ::showMessage,
     )
 
     init {
@@ -381,17 +381,7 @@ class WorkspaceViewModel(
         onSuccess: () -> Unit = {},
         block: suspend (com.onlytechtake.repairapp.domain.auth.AuthenticatedUser) -> Result<*>,
     ) {
-        viewModelScope.launch {
-            val actor = currentUser.value ?: return@launch showMessage("Sessione non valida", true)
-            authRepository.touchSession()
-            block(actor).fold(
-                onSuccess = {
-                    showSuccess("Operazione completata")
-                    onSuccess()
-                },
-                onFailure = { showError(it) },
-            )
-        }
+        authenticatedActionRunner.run(onSuccess = onSuccess, block = block)
     }
 
     private fun showSuccess(text: String) = showMessage(text, false)

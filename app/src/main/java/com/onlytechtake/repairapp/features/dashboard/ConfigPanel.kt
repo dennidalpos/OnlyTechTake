@@ -79,8 +79,8 @@ fun ConfigPanel(viewModel: WorkspaceViewModel, isAdmin: Boolean) {
     }
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = Modifier.fillMaxSize().padding(DashboardSpacing.screenPadding),
+        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
             SectionTitle("Config")
@@ -125,38 +125,44 @@ fun ConfigPanel(viewModel: WorkspaceViewModel, isAdmin: Boolean) {
             ConfigSection.CATEGORIES -> {
                 item {
                     SectionTitle("Categorie")
-                    Field(categoryName, { categoryName = it }, "Nome categoria")
-                    Field(categoryDescription, { categoryDescription = it }, "Descrizione")
-                    Field(categorySortOrder, { categorySortOrder = it }, "Ordine")
-                    ActionRow {
-                        TouchButton(
-                            text = if (categoryActive) "Attiva" else "Archiviata",
-                            tone = if (categoryActive) ButtonTone.SUCCESS else ButtonTone.DANGER,
-                            onClick = { categoryActive = !categoryActive },
-                        )
-                        TouchButton(text = "Nuova", onClick = ::loadNewCategory)
-                        TouchButton(
-                            text = "Salva categoria",
-                            onClick = {
-                                requestConfirm("Salvare categoria?", "La categoria verra' aggiornata nel catalogo locale.") {
-                                    viewModel.saveCategory(
-                                        id = categoryId,
-                                        name = categoryName,
-                                        description = categoryDescription,
-                                        active = categoryActive,
-                                        sortOrder = categorySortOrder.toIntOrNull() ?: 0,
-                                    )
-                                    loadNewCategory()
-                                }
-                            },
-                        )
+                    if (!isAdmin) {
+                        Text("Area riservata admin. Le categorie sono disponibili solo in consultazione.")
+                    } else {
+                        Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
+                            Field(categoryName, { categoryName = it }, "Nome categoria")
+                            Field(categoryDescription, { categoryDescription = it }, "Descrizione")
+                            Field(categorySortOrder, { categorySortOrder = it }, "Ordine")
+                            ActionRow {
+                                TouchButton(
+                                    text = if (categoryActive) "Attiva" else "Archiviata",
+                                    tone = if (categoryActive) ButtonTone.SUCCESS else ButtonTone.DANGER,
+                                    onClick = { categoryActive = !categoryActive },
+                                )
+                                TouchButton(text = "Nuova", tone = ButtonTone.NEUTRAL, onClick = ::loadNewCategory)
+                                TouchButton(
+                                    text = "Salva categoria",
+                                    onClick = {
+                                        requestConfirm("Salvare categoria?", "La categoria verra' aggiornata nel catalogo locale.") {
+                                            viewModel.saveCategory(
+                                                id = categoryId,
+                                                name = categoryName,
+                                                description = categoryDescription,
+                                                active = categoryActive,
+                                                sortOrder = categorySortOrder.toIntOrNull() ?: 0,
+                                            )
+                                            loadNewCategory()
+                                        }
+                                    },
+                                )
+                            }
+                        }
                     }
                 }
                 items(categories) { category ->
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {
+                            .clickable(enabled = isAdmin) {
                                 categoryId = category.id
                                 categoryName = category.name
                                 categoryDescription = category.description.orEmpty()
@@ -164,7 +170,10 @@ fun ConfigPanel(viewModel: WorkspaceViewModel, isAdmin: Boolean) {
                                 categorySortOrder = category.sortOrder.toString()
                             },
                     ) {
-                        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Column(
+                            modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+                        ) {
                             Text(category.name, style = MaterialTheme.typography.titleMedium)
                             Text(if (category.active) "Attiva" else "Archiviata")
                             category.description?.takeIf { it.isNotBlank() }?.let { Text(it) }
@@ -211,7 +220,10 @@ fun ConfigPanel(viewModel: WorkspaceViewModel, isAdmin: Boolean) {
                                 templateActive = template.active
                             },
                     ) {
-                        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Column(
+                            modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+                        ) {
                             Text("${template.code} v${template.version}", style = MaterialTheme.typography.titleMedium)
                             Text(template.title)
                             Text(if (template.active) "Attivo" else "Archiviato")
@@ -344,7 +356,10 @@ private fun ConfigHubCard(
             .fillMaxWidth()
             .clickable(enabled = enabled, onClick = onClick),
     ) {
-        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Column(
+            modifier = Modifier.padding(DashboardSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+        ) {
             Text(title, style = MaterialTheme.typography.titleMedium)
             Text(subtitle)
         }

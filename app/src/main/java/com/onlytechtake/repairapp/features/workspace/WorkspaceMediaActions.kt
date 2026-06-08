@@ -6,8 +6,6 @@ import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.SignatureRepository
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
-import com.onlytechtake.repairapp.domain.auth.AuthRepository
-import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
 import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
@@ -20,8 +18,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 internal class WorkspaceMediaActions(
-    private val authRepository: AuthRepository,
-    private val currentUser: StateFlow<AuthenticatedUser?>,
+    private val authenticatedActionRunner: AuthenticatedActionRunner,
     private val selectedOrder: StateFlow<OrderDetail?>,
     private val mutableUiState: MutableStateFlow<WorkspaceUiState>,
     private val scope: CoroutineScope,
@@ -86,14 +83,15 @@ internal class WorkspaceMediaActions(
         signatureBitmap: Bitmap,
         onCreated: () -> Unit,
     ) {
-        scope.launch {
-            val actor = currentUser.value ?: return@launch showMessage("Sessione non valida", true)
-            authRepository.touchSession()
+        authenticatedActionRunner.runCustom { actor ->
             val errors = input.copy(
                 stagedMediaCount = stagedMedia.size,
                 hasPrivacySignature = privacyAccepted && termsAccepted,
             ).validationErrors()
-            if (errors.isNotEmpty()) return@launch showMessage(errors.joinToString("\n"), true)
+            if (errors.isNotEmpty()) {
+                showMessage(errors.joinToString("\n"), true)
+                return@runCustom
+            }
 
             createIntakeOrderUseCase.execute(
                 actor = actor,
@@ -123,9 +121,7 @@ internal class WorkspaceMediaActions(
     }
 
     fun registerCapturedPhoto(orderId: String, file: File) {
-        scope.launch {
-            val actor = currentUser.value ?: return@launch showMessage("Sessione non valida", true)
-            authRepository.touchSession()
+        authenticatedActionRunner.runCustom { actor ->
             orderMediaRepository.registerCapturedPhoto(actor, orderId, file).fold(
                 onSuccess = { showSuccess("Foto salvata") },
                 onFailure = showError,
@@ -134,9 +130,7 @@ internal class WorkspaceMediaActions(
     }
 
     fun registerCapturedFinalPhoto(orderId: String, file: File) {
-        scope.launch {
-            val actor = currentUser.value ?: return@launch showMessage("Sessione non valida", true)
-            authRepository.touchSession()
+        authenticatedActionRunner.runCustom { actor ->
             orderMediaRepository.registerCapturedFinalPhoto(actor, orderId, file).fold(
                 onSuccess = { showSuccess("Foto lavoro finito salvata") },
                 onFailure = showError,
@@ -145,9 +139,7 @@ internal class WorkspaceMediaActions(
     }
 
     fun importAttachment(orderId: String, uri: Uri) {
-        scope.launch {
-            val actor = currentUser.value ?: return@launch showMessage("Sessione non valida", true)
-            authRepository.touchSession()
+        authenticatedActionRunner.runCustom { actor ->
             orderMediaRepository.importAttachment(actor, orderId, uri).fold(
                 onSuccess = { showSuccess("Allegato salvato") },
                 onFailure = showError,
@@ -156,9 +148,7 @@ internal class WorkspaceMediaActions(
     }
 
     fun deleteMedia(mediaId: String) {
-        scope.launch {
-            val actor = currentUser.value ?: return@launch showMessage("Sessione non valida", true)
-            authRepository.touchSession()
+        authenticatedActionRunner.runCustom { actor ->
             orderMediaRepository.deleteMedia(actor, mediaId).fold(
                 onSuccess = { showSuccess("Media rimosso") },
                 onFailure = showError,
@@ -167,9 +157,7 @@ internal class WorkspaceMediaActions(
     }
 
     fun replaceImage(mediaId: String, bitmap: Bitmap) {
-        scope.launch {
-            val actor = currentUser.value ?: return@launch showMessage("Sessione non valida", true)
-            authRepository.touchSession()
+        authenticatedActionRunner.runCustom { actor ->
             orderMediaRepository.replaceImage(actor, mediaId, bitmap).fold(
                 onSuccess = { showSuccess("Foto modificata") },
                 onFailure = showError,
@@ -184,9 +172,7 @@ internal class WorkspaceMediaActions(
         termsAccepted: Boolean,
         bitmap: Bitmap,
     ) {
-        scope.launch {
-            val actor = currentUser.value ?: return@launch showMessage("Sessione non valida", true)
-            authRepository.touchSession()
+        authenticatedActionRunner.runCustom { actor ->
             signatureRepository.saveSignature(
                 actor = actor,
                 orderId = orderId,
@@ -202,10 +188,8 @@ internal class WorkspaceMediaActions(
     }
 
     fun exportSelectedOrderPdf(backupRepository: BackupRepository, uri: Uri) {
-        scope.launch {
-            val actor = currentUser.value ?: return@launch showMessage("Sessione non valida", true)
-            authRepository.touchSession()
-            val detail = selectedOrder.value ?: return@launch showMessage("Seleziona prima una commessa", true)
+        authenticatedActionRunner.runCustom { actor ->
+            val detail = selectedOrder.value ?: return@runCustom showMessage("Seleziona prima una commessa", true)
             backupRepository.exportOrderSummaryPdf(actor, detail, uri).fold(
                 onSuccess = { showSuccess("PDF commessa esportato") },
                 onFailure = showError,

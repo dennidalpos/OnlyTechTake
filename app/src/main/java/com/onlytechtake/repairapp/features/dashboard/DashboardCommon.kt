@@ -41,6 +41,15 @@ import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 
+object DashboardSpacing {
+    val screenPadding = 16.dp
+    val listGap = 12.dp
+    val cardPadding = 12.dp
+    val formGap = 10.dp
+    val compactGap = 8.dp
+    val actionGap = 8.dp
+}
+
 @Composable
 fun SectionTitle(text: String) {
     Text(text = text, style = MaterialTheme.typography.titleLarge)
@@ -93,7 +102,7 @@ fun ActionRow(content: @Composable () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState()),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.actionGap),
     ) {
         content()
     }
@@ -132,7 +141,10 @@ fun CompactExpandableRow(
             ),
         shape = RoundedCornerShape(8.dp),
     ) {
-        Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Column(
+            modifier = Modifier.padding(DashboardSpacing.compactGap),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+        ) {
             Text(title, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(subtitle, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
             if (detail.isNotBlank()) {
@@ -189,9 +201,9 @@ enum class ButtonTone {
 private fun ButtonTone.containerColor(): Color =
     when (this) {
         ButtonTone.PRIMARY -> MaterialTheme.colorScheme.primary
-        ButtonTone.NEUTRAL -> MaterialTheme.colorScheme.secondary
+        ButtonTone.NEUTRAL -> MaterialTheme.colorScheme.surfaceVariant
         ButtonTone.SUCCESS -> Color(0xFF2E7D32)
-        ButtonTone.INFO -> Color(0xFF1565C0)
+        ButtonTone.INFO -> MaterialTheme.colorScheme.tertiary
         ButtonTone.WARNING -> Color(0xFFF9A825)
         ButtonTone.DANGER -> MaterialTheme.colorScheme.error
     }
@@ -199,6 +211,10 @@ private fun ButtonTone.containerColor(): Color =
 @Composable
 private fun ButtonTone.contentColor(): Color =
     when (this) {
+        ButtonTone.PRIMARY -> MaterialTheme.colorScheme.onPrimary
+        ButtonTone.NEUTRAL -> MaterialTheme.colorScheme.onSurfaceVariant
+        ButtonTone.INFO -> MaterialTheme.colorScheme.onTertiary
+        ButtonTone.DANGER -> MaterialTheme.colorScheme.onError
         ButtonTone.WARNING -> Color(0xFF1F1F1F)
         else -> Color.White
     }
@@ -209,18 +225,18 @@ fun CustomerTypeToggle(
     onBusinessChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.actionGap)) {
         TypeToggleButton(
             text = "Privato",
             selected = !isBusiness,
-            selectedContainer = Color(0xFF2E7D32),
+            selectedTone = ButtonTone.SUCCESS,
             onClick = { onBusinessChange(false) },
             modifier = Modifier.weight(1f),
         )
         TypeToggleButton(
             text = "Azienda",
             selected = isBusiness,
-            selectedContainer = Color(0xFFF9A825),
+            selectedTone = ButtonTone.INFO,
             onClick = { onBusinessChange(true) },
             modifier = Modifier.weight(1f),
         )
@@ -231,7 +247,7 @@ fun CustomerTypeToggle(
 private fun TypeToggleButton(
     text: String,
     selected: Boolean,
-    selectedContainer: Color,
+    selectedTone: ButtonTone,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -244,8 +260,8 @@ private fun TypeToggleButton(
             },
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.textButtonColors(
-            containerColor = if (selected) selectedContainer else MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = if (selected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
+            containerColor = if (selected) selectedTone.containerColor() else MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = if (selected) selectedTone.contentColor() else MaterialTheme.colorScheme.onSurfaceVariant,
         ),
         onClick = onClick,
     ) {

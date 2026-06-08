@@ -25,7 +25,10 @@ import com.onlytechtake.repairapp.features.workspace.label
 fun CustomerSuggestionCard(customer: CustomerEntity, onClick: () -> Unit) {
     var expanded by rememberSaveable(customer.id) { mutableStateOf(false) }
     androidx.compose.material3.Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Column(
+            modifier = Modifier.padding(DashboardSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+        ) {
             Text(customer.displayName(), style = MaterialTheme.typography.titleSmall)
             Text(listOfNotNull(customer.type.label(), customer.phone, customer.email).joinToString(" - "))
             if (expanded) {
@@ -85,7 +88,7 @@ fun NewCustomerFields(
     )
     val contactMissing = phone.isBlank() && email.isBlank()
 
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
         Text("Nuovo cliente", style = MaterialTheme.typography.titleMedium)
         CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = onBusinessChange)
         if (isBusiness) {
@@ -136,7 +139,7 @@ fun IntakeCustomerFields(
 ) {
     val contactMissing = phone.isBlank() && email.isBlank()
 
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
         CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = onBusinessChange)
         if (isBusiness) {
             Field(companyName, onCompanyNameChange, "Ragione sociale", required = true, showError = companyName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)

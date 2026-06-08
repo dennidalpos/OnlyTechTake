@@ -13,7 +13,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -189,7 +188,10 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         }
         if (currentStep == 1) {
             Card(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Column(
+                modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+            ) {
                 StepSectionTitle(1, "Cliente")
                 Field(
                     value = uiState.customerSearchQuery,
@@ -206,17 +208,17 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                 )
                 if (selectedCustomerId != null) {
                     Text("Cliente selezionato: ${selectedCustomerDisplayName.orEmpty()}")
-                    OutlinedButton(
+                    TouchButton(
                         modifier = Modifier.fillMaxWidth(),
+                        text = "Cambia cliente",
+                        tone = ButtonTone.NEUTRAL,
                         onClick = {
                             selectedCustomerId = null
                             selectedCustomerLabel = null
                             showNewCustomerForm = false
                             viewModel.setCustomerSearchQuery("")
                         },
-                    ) {
-                        Text("Cambia cliente")
-                    }
+                    )
                 } else if (customerSuggestions.isNotEmpty()) {
                     customerSuggestions.forEach { customer ->
                         CustomerSuggestionCard(
@@ -231,17 +233,17 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                     }
                 }
                 if (selectedCustomerId == null && !showNewCustomerForm) {
-                    OutlinedButton(
+                    TouchButton(
                         modifier = Modifier.fillMaxWidth(),
+                        text = "Inserisci nuovo cliente",
+                        tone = ButtonTone.NEUTRAL,
                         onClick = {
                             selectedCustomerId = null
                             selectedCustomerLabel = null
                             showNewCustomerForm = true
                             viewModel.setCustomerSearchQuery("")
                         },
-                    ) {
-                        Text("Inserisci nuovo cliente")
-                    }
+                    )
                 }
                 if (showNewCustomerForm) {
                     IntakeCustomerFields(
@@ -401,7 +403,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
             key(intakeSessionId) {
                 Card(modifier = Modifier.fillMaxWidth()) {
                     SignatureCaptureForm(
-                        modifier = Modifier.padding(12.dp),
+                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         title = "5. Privacy e firma",
                         privacyText = privacyText,
                         termsText = termsText,
@@ -454,7 +456,10 @@ private fun IntakeStepSummary(
     onEdit: () -> Unit,
 ) {
     Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(
+            modifier = Modifier.padding(DashboardSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+        ) {
             StepSectionTitle(stepNumber, title)
             Text(value.ifBlank { "Non impostato" }, style = MaterialTheme.typography.bodyMedium)
             TouchButton(

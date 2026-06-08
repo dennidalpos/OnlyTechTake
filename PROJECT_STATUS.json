@@ -1,5 +1,6 @@
 {
   "todos": [
+    "Eseguire verifica manuale su dispositivo del flusso admin Config > Categorie: salvare una categoria, verificarne la presenza nella lista e selezionarla in una nuova commessa",
     "Eseguire verifica manuale su dispositivo del flusso completo: login singolo, scatto foto, modifica con rotazione/freccia/ritaglio, cancellazione foto, diagnosi, preventivo accettato e preventivo rifiutato con nota obbligatoria"
   ]
 }

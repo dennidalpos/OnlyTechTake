@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -59,13 +58,16 @@ fun AdminPanel(
     }
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = Modifier.fillMaxSize().padding(DashboardSpacing.screenPadding),
+        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
             SectionTitle("Admin")
             Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Column(
+                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                ) {
                     Text("Crea operatore", style = MaterialTheme.typography.titleMedium)
                     Field(displayName, { displayName = it }, "Nome")
                     Field(username, { username = it }, "Username")
@@ -102,7 +104,7 @@ fun AdminPanel(
         if (users.isEmpty()) {
             item {
                 Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(12.dp)) {
+                    Column(modifier = Modifier.padding(DashboardSpacing.cardPadding)) {
                         Text("Nessun utente configurato.", style = MaterialTheme.typography.bodyMedium)
                     }
                 }
@@ -111,7 +113,10 @@ fun AdminPanel(
             items(users, key = { it.id }) { user ->
                 var resetPasswordVisible by rememberSaveable(user.id) { mutableStateOf(false) }
                 Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Column(
+                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                    ) {
                         Text("${user.displayName} - ${user.username} (${user.role.name})", style = MaterialTheme.typography.titleMedium)
                         Text(if (user.active) "Attivo" else "Disattivo")
                         Field(
@@ -131,16 +136,18 @@ fun AdminPanel(
                             },
                         )
                         ActionRow {
-                            Button(
+                            TouchButton(
+                                text = if (user.active) "Disattiva" else "Attiva",
+                                tone = if (user.active) ButtonTone.DANGER else ButtonTone.SUCCESS,
                                 onClick = {
                                     requestConfirm("Cambiare stato utente?", "Lo stato di ${user.displayName} verra' aggiornato.") {
                                         viewModel.setUserActive(user.id, !user.active)
                                     }
                                 },
-                            ) {
-                                Text(if (user.active) "Disattiva" else "Attiva")
-                            }
-                            Button(
+                            )
+                            TouchButton(
+                                text = "Reset password",
+                                tone = ButtonTone.NEUTRAL,
                                 onClick = {
                                     val resetPassword = resetPasswords[user.id].orEmpty()
                                     requestConfirm("Resettare password?", "La password temporanea inserita verra' salvata per ${user.displayName}.") {
@@ -148,9 +155,7 @@ fun AdminPanel(
                                         resetPasswords = resetPasswords - user.id
                                     }
                                 },
-                            ) {
-                                Text("Reset password")
-                            }
+                            )
                         }
                     }
                 }
@@ -158,7 +163,10 @@ fun AdminPanel(
         }
         item {
             Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Column(
+                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                ) {
                     Text("Reset totale dati", style = MaterialTheme.typography.titleMedium)
                     Field(resetConfirmation, { resetConfirmation = it }, "Digita RESET")
                     TouchButton(
@@ -177,7 +185,10 @@ fun AdminPanel(
         }
         item {
             Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Column(
+                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                ) {
                     Text("Pulizia commesse", style = MaterialTheme.typography.titleMedium)
                     Field(archiveConfirmation, { archiveConfirmation = it }, "Digita ARCHIVIA")
                     TouchButton(

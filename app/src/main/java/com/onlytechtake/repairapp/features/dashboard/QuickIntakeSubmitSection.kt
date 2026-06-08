@@ -19,7 +19,10 @@ fun QuickIntakeSubmitSection(
     onSubmit: () -> Unit,
 ) {
     Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Column(
+            modifier = Modifier.padding(DashboardSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+        ) {
             StepSectionTitle(stepNumber, "Conferma")
             if (missingRequirements.isNotEmpty()) {
                 Text(

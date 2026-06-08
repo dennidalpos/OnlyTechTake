@@ -17,10 +17,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -59,7 +57,7 @@ fun OrderPhotoSection(
     val images = detail.media.filter { it.isImageAttachment() && !it.isFinalPhoto() }
     val documents = detail.media.filterNot { it.isImageAttachment() }
 
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
         SectionTitle("Foto e allegati")
         if (images.isEmpty() && documents.isEmpty()) {
             Text("Nessuna foto o allegato.")
@@ -68,7 +66,10 @@ fun OrderPhotoSection(
                 Text("Immagini")
                 images.forEach { media ->
                     Card(modifier = Modifier.fillMaxWidth()) {
-                        Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Column(
+                            modifier = Modifier.padding(DashboardSpacing.compactGap),
+                            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+                        ) {
                             LocalImagePreview(
                                 path = media.localPath,
                                 description = "Foto commessa",
@@ -92,7 +93,10 @@ fun OrderPhotoSection(
                 Text("Lavoro finito")
                 finalPhotos.forEach { media ->
                     Card(modifier = Modifier.fillMaxWidth()) {
-                        Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Column(
+                            modifier = Modifier.padding(DashboardSpacing.compactGap),
+                            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+                        ) {
                             LocalImagePreview(
                                 path = media.localPath,
                                 description = "Foto lavoro finito",
@@ -115,14 +119,10 @@ fun OrderPhotoSection(
             })
             TouchButton(text = "Allega file", onClick = { attachmentLauncher.launch("*/*") })
             if (showCamera) {
-                OutlinedButton(onClick = { showCamera = false }) {
-                    Text("Chiudi camera")
-                }
+                TouchButton(text = "Chiudi camera", tone = ButtonTone.NEUTRAL, onClick = { showCamera = false })
             }
             if (showFinalCamera) {
-                OutlinedButton(onClick = { showFinalCamera = false }) {
-                    Text("Chiudi foto finita")
-                }
+                TouchButton(text = "Chiudi foto finita", tone = ButtonTone.NEUTRAL, onClick = { showFinalCamera = false })
             }
         }
 
@@ -221,9 +221,7 @@ fun CameraCapturePreview(
     }
 
     if (!hasCameraPermission) {
-        Button(onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) }) {
-            Text("Concedi permesso camera")
-        }
+        TouchButton(text = "Concedi permesso camera", onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) })
         return
     }
 
@@ -259,15 +257,16 @@ fun CameraCapturePreview(
         }
     }
 
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
         AndroidView(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(280.dp),
             factory = { previewView },
         )
-        Button(
+        TouchButton(
             modifier = Modifier.fillMaxWidth(),
+            text = "Acquisisci foto",
             onClick = {
                 createPhotoFile(orderId, orderNumber).fold(
                     onSuccess = { file ->
@@ -290,8 +289,6 @@ fun CameraCapturePreview(
                     onFailure = { onError(it.message ?: "File foto non disponibile") },
                 )
             },
-        ) {
-            Text("Acquisisci foto")
-        }
+        )
     }
 }

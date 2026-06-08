@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,7 +36,10 @@ fun QuickIntakeMediaSection(
     var selectedImagePath by rememberSaveable { mutableStateOf<String?>(null) }
 
     Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Column(
+            modifier = Modifier.padding(DashboardSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+        ) {
             StepSectionTitle(stepNumber, "Foto e allegati")
             if (stagedMedia.isEmpty()) {
                 Text("Aggiungi almeno una foto o un allegato.")
@@ -45,7 +47,10 @@ fun QuickIntakeMediaSection(
                 stagedMedia.forEach { media ->
                     if (media.isImage()) {
                         Card(modifier = Modifier.fillMaxWidth()) {
-                            Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Column(
+                                modifier = Modifier.padding(DashboardSpacing.compactGap),
+                                verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+                            ) {
                                 LocalImagePreview(
                                     path = media.localPath,
                                     description = media.fileName,
@@ -56,9 +61,7 @@ fun QuickIntakeMediaSection(
                                         modifier = Modifier.weight(1f),
                                         text = "${media.mediaType}: ${media.fileName} - ${media.sizeBytes / 1024} KB",
                                     )
-                                    OutlinedButton(onClick = { onRemoveMedia(media.localPath) }) {
-                                        Text("Rimuovi")
-                                    }
+                                    TouchButton(text = "Rimuovi", tone = ButtonTone.DANGER, onClick = { onRemoveMedia(media.localPath) })
                                 }
                             }
                         }
@@ -68,9 +71,7 @@ fun QuickIntakeMediaSection(
                                 modifier = Modifier.weight(1f),
                                 text = "${media.mediaType}: ${media.fileName} - ${media.sizeBytes / 1024} KB",
                             )
-                            OutlinedButton(onClick = { onRemoveMedia(media.localPath) }) {
-                                Text("Rimuovi")
-                            }
+                            TouchButton(text = "Rimuovi", tone = ButtonTone.DANGER, onClick = { onRemoveMedia(media.localPath) })
                         }
                     }
                 }
@@ -79,9 +80,7 @@ fun QuickIntakeMediaSection(
                 TouchButton(text = "Scatta foto", onClick = { onShowCameraChange(true) })
                 TouchButton(text = "Allega file", onClick = onLaunchAttachmentPicker)
                 if (showCamera) {
-                    OutlinedButton(onClick = { onShowCameraChange(false) }) {
-                        Text("Chiudi camera")
-                    }
+                    TouchButton(text = "Chiudi camera", tone = ButtonTone.NEUTRAL, onClick = { onShowCameraChange(false) })
                 }
             }
             if (showCamera) {

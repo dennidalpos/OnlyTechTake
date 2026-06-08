@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
@@ -71,7 +70,10 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
 
     val selected = detail
     if (selected == null) {
-        Column(modifier = Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(DashboardSpacing.screenPadding),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
+        ) {
             Text("Nessuna commessa selezionata")
             TouchButton(text = "Commesse", onClick = { viewModel.navigateTo(WorkspaceDestination.ORDERS) })
         }
@@ -104,12 +106,15 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+            .padding(DashboardSpacing.screenPadding),
+        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
             Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Column(
+                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                ) {
                     ActionRow {
                         TouchButton(text = "Esci", tone = ButtonTone.NEUTRAL, onClick = ::exitOrderDetail)
                         TouchButton(
@@ -139,7 +144,10 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
 
         item {
             Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(
+                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                ) {
                     Text("Azioni", style = MaterialTheme.typography.titleMedium)
                     val actions = availableOrderStatusActions(selected.order.status)
                         .filterNot { selected.order.status == OrderStatus.RESULT && it == OrderStatusAction.START_REPAIR }
@@ -169,7 +177,10 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         if (selected.order.status == OrderStatus.RESULT) {
             item {
                 Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Column(
+                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                    ) {
                         Text("Esito preventivo", style = MaterialTheme.typography.titleMedium)
                         QuoteDecisionRow(
                             text = "Preventivo accettato",
@@ -223,7 +234,10 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
 
         item {
             Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(
+                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                ) {
                     Text("Note interne", style = MaterialTheme.typography.titleMedium)
                     selected.order.internalNotes?.takeIf { it.isNotBlank() }?.let { OperatorText(it) }
                     Field(note, { note = it }, "Nuova nota")
@@ -254,7 +268,10 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                 it.active && it.channel == MessageChannel.WHATSAPP && it.code.startsWith("whatsapp_")
             }
             Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(
+                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                ) {
                     SectionTitle("WhatsApp")
                     if (whatsappTemplates.isEmpty()) {
                         Text("Nessun template WhatsApp attivo.")
@@ -276,11 +293,16 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         uiState.preparedMessage?.let { prepared ->
             item {
                 Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Column(
+                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                    ) {
                         SectionTitle("Anteprima WhatsApp")
                         Field(uiState.preparedMessageBody, viewModel::updatePreparedMessageBody, "Messaggio")
                         ActionRow {
-                            Button(
+                            TouchButton(
+                                text = "Apri WhatsApp",
+                                tone = ButtonTone.INFO,
                                 onClick = {
                                     requestConfirm("Aprire WhatsApp?", "Registrare e aprire il messaggio?") {
                                         viewModel.recordPreparedMessage()
@@ -291,12 +313,12 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                                         context.startActivity(intent)
                                     }
                                 },
-                            ) {
-                                Text("Apri WhatsApp")
-                            }
-                            Button(onClick = { requestConfirm("Invio confermato?", "Registrare l'invio manuale?") { viewModel.confirmSentMessage() } }) {
-                                Text("Inviato")
-                            }
+                            )
+                            TouchButton(
+                                text = "Inviato",
+                                tone = ButtonTone.SUCCESS,
+                                onClick = { requestConfirm("Invio confermato?", "Registrare l'invio manuale?") { viewModel.confirmSentMessage() } },
+                            )
                         }
                     }
                 }
@@ -304,7 +326,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         }
 
         item {
-            Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
                 SectionTitle("Timeline")
                 selected.timeline.forEach { event ->
                     CompactExpandableRow(

@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -74,8 +73,11 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
     ) {
         item {
             SectionTitle("Clienti")
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Card(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                ) {
                     Text("Archivio clienti", style = MaterialTheme.typography.titleMedium)
                     OutlinedTextField(
                         modifier = Modifier.fillMaxWidth(),
@@ -98,7 +100,10 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
         if (showForm) {
             item {
                 Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Column(
+                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                    ) {
                         Text("Nuovo cliente", style = MaterialTheme.typography.titleMedium)
                         CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = { isBusiness = it })
                         if (isBusiness) {
@@ -184,7 +189,7 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
 @Composable
 private fun CustomerCard(customer: CustomerEntity) {
     Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(12.dp)) {
+        Column(modifier = Modifier.padding(DashboardSpacing.cardPadding)) {
             Text(customer.displayName(), style = MaterialTheme.typography.titleMedium)
             Text(customer.type.label())
         }
@@ -194,7 +199,10 @@ private fun CustomerCard(customer: CustomerEntity) {
 @Composable
 private fun CustomerEmptyState(hasQuery: Boolean, onNewCustomer: () -> Unit) {
     Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(
+            modifier = Modifier.padding(DashboardSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+        ) {
             Text(
                 text = if (hasQuery) "Nessun cliente trovato per questa ricerca." else "Nessun cliente registrato.",
                 style = MaterialTheme.typography.bodyMedium,

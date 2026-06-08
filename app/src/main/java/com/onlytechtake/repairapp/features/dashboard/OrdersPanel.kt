@@ -63,7 +63,10 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
                             onClick = { viewModel.selectOrder(order.id) },
                         ),
                 ) {
-                    Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Column(
+                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+                    ) {
                         Text("${order.orderNumber} - ${order.title}", style = MaterialTheme.typography.titleMedium)
                         Text("Cliente: ${item.customer?.displayName().orEmpty().ifBlank { "Cliente non disponibile" }}")
                         Text("Stato: ${order.status.label()}")

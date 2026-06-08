@@ -24,7 +24,10 @@ fun QuickIntakeProblemSection(
     doneAction: KeyboardActions,
 ) {
     Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Column(
+            modifier = Modifier.padding(DashboardSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+        ) {
             StepSectionTitle(stepNumber, "Problema")
             Field(
                 value = problemSummary,
