@@ -1,3 +1,5 @@
 {
-  "todos": []
+  "todos": [
+    "Eseguire verifica manuale su dispositivo del flusso completo: login singolo, scatto foto, modifica con rotazione/freccia/ritaglio, cancellazione foto, diagnosi, preventivo accettato e preventivo rifiutato con nota obbligatoria"
+  ]
 }
