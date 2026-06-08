@@ -12,6 +12,7 @@ import com.onlytechtake.repairapp.data.local.dao.CustomerDao
 import com.onlytechtake.repairapp.data.local.dao.DashboardDao
 import com.onlytechtake.repairapp.data.local.dao.MessageLogDao
 import com.onlytechtake.repairapp.data.local.dao.MessageTemplateDao
+import com.onlytechtake.repairapp.data.local.dao.OrderExportDao
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
 import com.onlytechtake.repairapp.data.local.dao.OrderMediaDao
 import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
@@ -61,6 +62,7 @@ abstract class RepairAppDatabase : RoomDatabase() {
     abstract fun messageLogDao(): MessageLogDao
     abstract fun appSettingDao(): AppSettingDao
     abstract fun auditLogDao(): AuditLogDao
+    abstract fun orderExportDao(): OrderExportDao
 
     companion object {
         const val DATABASE_NAME = "repair_app.db"

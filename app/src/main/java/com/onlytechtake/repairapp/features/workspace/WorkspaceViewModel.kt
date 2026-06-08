@@ -359,6 +359,9 @@ class WorkspaceViewModel(
     fun exportCompleteBackup(uri: Uri) =
         adminActions.exportCompleteBackup(uri)
 
+    fun exportOrdersXlsx(uri: Uri) =
+        adminActions.exportOrdersXlsx(uri)
+
     fun importCompleteBackup(uri: Uri) =
         adminActions.importCompleteBackup(uri)
 

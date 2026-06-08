@@ -57,6 +57,9 @@ fun ConfigPanel(viewModel: WorkspaceViewModel, isAdmin: Boolean) {
     val exportZipLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
         uri?.let(viewModel::exportCompleteBackup)
     }
+    val exportOrdersXlsxLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument(XLSX_MIME_TYPE)) { uri ->
+        uri?.let(viewModel::exportOrdersXlsx)
+    }
     val importZipLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         uri?.let(viewModel::importCompleteBackup)
     }
@@ -265,6 +268,14 @@ fun ConfigPanel(viewModel: WorkspaceViewModel, isAdmin: Boolean) {
                                 },
                             )
                             TouchButton(
+                                text = "Export commesse XLSX",
+                                onClick = {
+                                    requestConfirm("Esportare commesse?", "Verra' creato un file XLSX non cifrato tramite selettore di sistema.") {
+                                        exportOrdersXlsxLauncher.launch("onlytechtake-commesse.xlsx")
+                                    }
+                                },
+                            )
+                            TouchButton(
                                 text = "Export ZIP",
                                 onClick = {
                                     requestConfirm("Esportare backup completo?", "Verra' creato un file ZIP non cifrato tramite selettore di sistema.") {
@@ -336,7 +347,6 @@ private fun ConfigHubCard(
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(title, style = MaterialTheme.typography.titleMedium)
             Text(subtitle)
-            TouchButton(text = "Apri", enabled = enabled, onClick = onClick)
         }
     }
 }
@@ -347,3 +357,5 @@ private enum class ConfigSection {
     WHATSAPP,
     EXPORT,
 }
+
+private const val XLSX_MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

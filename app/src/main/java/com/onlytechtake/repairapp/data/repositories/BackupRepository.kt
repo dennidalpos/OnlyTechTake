@@ -6,6 +6,7 @@ import android.net.Uri
 import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.MessageTemplateDao
+import com.onlytechtake.repairapp.data.local.dao.OrderExportDao
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
@@ -36,6 +37,7 @@ class BackupRepository(
     private val templateDao: MessageTemplateDao,
     private val settingDao: AppSettingDao,
     private val auditLogDao: AuditLogDao,
+    private val orderExportDao: OrderExportDao? = null,
     private val database: RepairAppDatabase? = null,
     private val authPreferences: AuthPreferences? = null,
     private val sessionStore: InMemorySessionStore? = null,
@@ -73,6 +75,19 @@ class BackupRepository(
                     addAppFiles(zip, directoryName = "order_media")
                 }
             } ?: throw IOException("Destinazione non disponibile")
+            eventWriter.dataExported(actor.id, clockMillis())
+        }
+
+    suspend fun exportOrdersXlsx(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
+        runCatching {
+            require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            val exportDao = requireNotNull(orderExportDao) { "Export commesse non configurato" }
+            withContext(Dispatchers.IO) {
+                val rows = exportDao.exportAllOrders()
+                context.contentResolver.openOutputStream(uri)?.use { output ->
+                    OrderExportXlsxWriter().write(rows, output)
+                } ?: throw IOException("Destinazione non disponibile")
+            }
             eventWriter.dataExported(actor.id, clockMillis())
         }
 

@@ -35,6 +35,10 @@ internal class WorkspaceAdminActions(
         backupRepository.exportCompleteBackup(actor, uri)
     }
 
+    fun exportOrdersXlsx(uri: Uri) = withUser { actor ->
+        backupRepository.exportOrdersXlsx(actor, uri)
+    }
+
     fun importCompleteBackup(uri: Uri) = withUser { actor ->
         backupRepository.importCompleteBackup(actor, uri).map {
             "Backup ripristinato. Accedi di nuovo."

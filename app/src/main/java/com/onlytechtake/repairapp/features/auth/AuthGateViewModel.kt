@@ -6,7 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.auth.AuthPolicy
 import com.onlytechtake.repairapp.domain.auth.AuthState
+import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.auth.LoginResult
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -26,15 +28,42 @@ data class AuthFormState(
 class AuthGateViewModel(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
-    val authState: StateFlow<AuthState> = authRepository.observeAuthState()
+    private val immediateUser = MutableStateFlow<AuthenticatedUser?>(null)
+    private val repositoryAuthState: StateFlow<AuthState> = authRepository.observeAuthState()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = AuthState(),
         )
+    val authState: StateFlow<AuthState> = combine(repositoryAuthState, immediateUser) { state, user ->
+        if (user == null) {
+            state
+        } else {
+            state.copy(
+                initialized = true,
+                configured = true,
+                currentUser = state.currentUser ?: user,
+            )
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = AuthState(),
+    )
 
     private val mutableFormState = MutableStateFlow(AuthFormState())
     val formState: StateFlow<AuthFormState> = mutableFormState
+
+    init {
+        viewModelScope.launch {
+            repositoryAuthState.collect { state ->
+                val user = immediateUser.value
+                if (user != null && state.currentUser?.id == user.id) {
+                    immediateUser.value = null
+                }
+            }
+        }
+    }
 
     fun updateDisplayName(value: String) = updateForm { copy(displayName = value, errorMessage = null) }
     fun updateUsername(value: String) = updateForm { copy(username = value, errorMessage = null) }
@@ -57,7 +86,8 @@ class AuthGateViewModel(
                     username = form.username,
                     password = form.password.toCharArray(),
                 )
-            }.onSuccess {
+            }.onSuccess { user ->
+                immediateUser.value = user
                 mutableFormState.value = AuthFormState()
             }.onFailure {
                 mutableFormState.update {
@@ -76,8 +106,11 @@ class AuthGateViewModel(
 
         viewModelScope.launch {
             mutableFormState.update { it.copy(loading = true, errorMessage = null) }
-            when (authRepository.login(form.username, form.password.toCharArray())) {
-                is LoginResult.Success -> mutableFormState.value = AuthFormState()
+            when (val result = authRepository.login(form.username, form.password.toCharArray())) {
+                is LoginResult.Success -> {
+                    immediateUser.value = result.user
+                    mutableFormState.value = AuthFormState()
+                }
                 LoginResult.InactiveUser -> mutableFormState.update {
                     it.copy(loading = false, errorMessage = "Utente disattivato")
                 }
@@ -93,6 +126,7 @@ class AuthGateViewModel(
 
     fun logout() {
         viewModelScope.launch {
+            immediateUser.value = null
             authRepository.logout()
         }
     }

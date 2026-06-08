@@ -14,6 +14,9 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.MessageChannel
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderPriority
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
@@ -26,6 +29,7 @@ import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
 import com.onlytechtake.repairapp.domain.workspace.RepairOrderInput
 import java.io.File
 import java.util.zip.ZipEntry
+import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -150,6 +154,44 @@ class RepositoryPathsInstrumentedTest {
     }
 
     @Test
+    fun backupRepositoryExportsAllOrdersAsXlsxAndRecordsAudit() = runBlocking {
+        val actor = seedAdmin()
+        seedCustomer()
+        seedCategory()
+        orderWorkflowRepository().createOrder(
+            actor = actor,
+            input = RepairOrderInput(
+                customerId = CUSTOMER_ID,
+                title = "Schermo & vetro",
+                categoryId = CATEGORY_ID,
+                description = "Display rotto",
+            ),
+        ).getOrThrow()
+        val output = File(context.cacheDir, "orders-export-test.xlsx")
+        val repository = BackupRepository(
+            context = context,
+            categoryDao = database.orderCategoryDao(),
+            templateDao = database.messageTemplateDao(),
+            settingDao = database.appSettingDao(),
+            auditLogDao = database.auditLogDao(),
+            orderExportDao = database.orderExportDao(),
+            clockMillis = { NOW },
+        )
+
+        repository.exportOrdersXlsx(actor, Uri.fromFile(output)).getOrThrow()
+
+        val entries = output.unzipTextEntries()
+        assertTrue(entries.containsKey("[Content_Types].xml"))
+        assertTrue(entries.containsKey("xl/worksheets/sheet1.xml"))
+        assertTrue(entries.getValue("xl/worksheets/sheet1.xml").contains("202"))
+        assertTrue(entries.getValue("xl/worksheets/sheet1.xml").contains("Schermo &amp; vetro"))
+        assertEquals(1, database.auditLogDao().observeRecent().first().size)
+
+        output.delete()
+        Unit
+    }
+
+    @Test
     fun backupRepositoryImportsCompleteBackupAndRestoresPrivateFiles() = runBlocking {
         val actor = seedAdmin()
         seedCategory()
@@ -257,6 +299,106 @@ class RepositoryPathsInstrumentedTest {
         assertEquals(null, database.userDao().findById(actor.id))
         assertFalse(orderFile.exists())
         assertEquals(null, sessionStore.currentUser.value)
+    }
+
+    @Test
+    fun dataResetClearsFileBackedDatabaseWithoutLocking() = runBlocking {
+        val databaseName = "reset-file-backed.db"
+        context.deleteDatabase(databaseName)
+        val fileBackedDatabase = Room.databaseBuilder(context, RepairAppDatabase::class.java, databaseName)
+            .allowMainThreadQueries()
+            .build()
+        val actor = AuthenticatedUser(ADMIN_ID, "Admin", "admin", UserRole.ADMIN)
+        val sessionStore = InMemorySessionStore().also { it.setCurrentUser(actor, NOW) }
+        val authPreferences = AuthPreferences(context)
+        try {
+            val hash = PasswordHasher().hash("correct-password".toCharArray())
+            fileBackedDatabase.userDao().upsert(
+                UserEntity(
+                    id = ADMIN_ID,
+                    displayName = "Admin",
+                    username = "admin",
+                    passwordHash = hash.hash,
+                    passwordSalt = hash.salt,
+                    role = UserRole.ADMIN,
+                    active = true,
+                    createdAt = NOW,
+                    updatedAt = NOW,
+                ),
+            )
+            fileBackedDatabase.customerDao().upsert(
+                CustomerEntity(
+                    id = CUSTOMER_ID,
+                    type = CustomerType.PRIVATE,
+                    firstName = "Mario",
+                    lastName = "Rossi",
+                    companyName = null,
+                    vatNumber = null,
+                    taxCode = null,
+                    phone = "3330000000",
+                    email = null,
+                    address = null,
+                    notes = null,
+                    createdAt = NOW,
+                    updatedAt = NOW,
+                ),
+            )
+            fileBackedDatabase.orderCategoryDao().upsert(
+                OrderCategoryEntity(
+                    id = CATEGORY_ID,
+                    name = "Smartphone",
+                    description = null,
+                    active = true,
+                    sortOrder = 0,
+                ),
+            )
+            fileBackedDatabase.repairOrderDao().upsert(
+                RepairOrderEntity(
+                    id = "order-1",
+                    orderNumber = "2026-0001",
+                    customerId = CUSTOMER_ID,
+                    title = "Schermo rotto",
+                    categoryId = CATEGORY_ID,
+                    status = OrderStatus.OPEN,
+                    priority = OrderPriority.NORMAL,
+                    assignedToUserId = ADMIN_ID,
+                    createdByUserId = ADMIN_ID,
+                    description = null,
+                    internalNotes = null,
+                    estimateAmountCents = null,
+                    finalAmountCents = null,
+                    createdAt = NOW,
+                    updatedAt = NOW,
+                    closedAt = null,
+                    closureReason = null,
+                    deletedAt = null,
+                    deletedByUserId = null,
+                    deleteReason = null,
+                ),
+            )
+            val orderFile = File(context.filesDir, "orders/order-1/file.txt").also {
+                it.parentFile?.mkdirs()
+                it.writeText("private")
+            }
+            val repository = DataResetRepository(
+                context = context,
+                database = fileBackedDatabase,
+                auditLogDao = fileBackedDatabase.auditLogDao(),
+                authPreferences = authPreferences,
+                sessionStore = sessionStore,
+            )
+
+            repository.resetAll(actor, "RESET").getOrThrow()
+
+            assertEquals(null, fileBackedDatabase.userDao().findById(actor.id))
+            assertEquals(null, fileBackedDatabase.repairOrderDao().findById("order-1"))
+            assertFalse(orderFile.exists())
+            assertEquals(null, sessionStore.currentUser.value)
+        } finally {
+            authPreferences.clear()
+            fileBackedDatabase.close()
+            context.deleteDatabase(databaseName)
+        }
     }
 
     @Test
@@ -423,6 +565,18 @@ class RepositoryPathsInstrumentedTest {
 
     private fun File.walkFiles(): Sequence<File> =
         if (exists()) walkTopDown().filter { it.isFile } else emptySequence()
+
+    private fun File.unzipTextEntries(): Map<String, String> {
+        val entries = mutableMapOf<String, String>()
+        ZipInputStream(inputStream()).use { zip ->
+            while (true) {
+                val entry = zip.nextEntry ?: break
+                entries[entry.name] = zip.readBytes().toString(Charsets.UTF_8)
+                zip.closeEntry()
+            }
+        }
+        return entries
+    }
 
     private companion object {
         const val NOW = 1_717_171_717_000L

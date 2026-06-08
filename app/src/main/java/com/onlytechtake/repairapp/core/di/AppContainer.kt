@@ -109,6 +109,7 @@ class AppContainer(context: Context) {
         templateDao = database.messageTemplateDao(),
         settingDao = database.appSettingDao(),
         auditLogDao = database.auditLogDao(),
+        orderExportDao = database.orderExportDao(),
         database = database,
         authPreferences = authPreferences,
         sessionStore = sessionStore,

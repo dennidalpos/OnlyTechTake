@@ -26,7 +26,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
@@ -61,9 +63,16 @@ fun Field(
     imeAction: ImeAction = ImeAction.Default,
     keyboardType: KeyboardType = KeyboardType.Text,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    keyboardActions: KeyboardActions? = null,
     trailingIcon: (@Composable () -> Unit)? = null,
 ) {
+    val focusManager = LocalFocusManager.current
+    val effectiveImeAction = if (imeAction == ImeAction.Default) ImeAction.Next else imeAction
+    val effectiveKeyboardActions = keyboardActions ?: KeyboardActions(
+        onNext = { focusManager.moveFocus(FocusDirection.Down) },
+        onDone = { focusManager.clearFocus() },
+    )
+
     OutlinedTextField(
         modifier = modifier.fillMaxWidth(),
         value = value,
@@ -71,9 +80,9 @@ fun Field(
         label = { Text(if (required) "$label *" else label) },
         singleLine = singleLine,
         isError = showError,
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = effectiveImeAction),
         visualTransformation = visualTransformation,
-        keyboardActions = keyboardActions,
+        keyboardActions = effectiveKeyboardActions,
         trailingIcon = trailingIcon,
     )
 }

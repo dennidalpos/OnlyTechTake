@@ -7,10 +7,12 @@ import com.onlytechtake.repairapp.data.local.entities.AppSettingEntity
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
+import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
@@ -31,6 +33,29 @@ data class SignatureAggregate(
     val signatures: Int,
 )
 
+data class OrderExportRow(
+    val orderNumber: String,
+    val title: String,
+    val status: OrderStatus,
+    val priority: OrderPriority,
+    val customerName: String?,
+    val customerType: CustomerType?,
+    val phone: String?,
+    val email: String?,
+    val categoryName: String?,
+    val assignedUserName: String?,
+    val description: String?,
+    val internalNotes: String?,
+    val estimateAmountCents: Long?,
+    val finalAmountCents: Long?,
+    val createdAt: Long,
+    val updatedAt: Long,
+    val closedAt: Long?,
+    val closureReason: ClosureReason?,
+    val deletedAt: Long?,
+    val deleteReason: String?,
+)
+
 @Dao
 interface DashboardDao {
     @Query("SELECT COUNT(*) FROM users")
@@ -41,6 +66,44 @@ interface DashboardDao {
 
     @Query("SELECT COUNT(*) FROM customers")
     fun observeCustomerCount(): Flow<Int>
+}
+
+@Dao
+interface OrderExportDao {
+    @Query(
+        """
+        SELECT
+            repair_orders.orderNumber AS orderNumber,
+            repair_orders.title AS title,
+            repair_orders.status AS status,
+            repair_orders.priority AS priority,
+            CASE
+                WHEN customers.type = 'BUSINESS' THEN customers.companyName
+                ELSE TRIM(COALESCE(customers.firstName, '') || ' ' || COALESCE(customers.lastName, ''))
+            END AS customerName,
+            customers.type AS customerType,
+            customers.phone AS phone,
+            customers.email AS email,
+            order_categories.name AS categoryName,
+            users.displayName AS assignedUserName,
+            repair_orders.description AS description,
+            repair_orders.internalNotes AS internalNotes,
+            repair_orders.estimateAmountCents AS estimateAmountCents,
+            repair_orders.finalAmountCents AS finalAmountCents,
+            repair_orders.createdAt AS createdAt,
+            repair_orders.updatedAt AS updatedAt,
+            repair_orders.closedAt AS closedAt,
+            repair_orders.closureReason AS closureReason,
+            repair_orders.deletedAt AS deletedAt,
+            repair_orders.deleteReason AS deleteReason
+        FROM repair_orders
+        LEFT JOIN customers ON customers.id = repair_orders.customerId
+        LEFT JOIN order_categories ON order_categories.id = repair_orders.categoryId
+        LEFT JOIN users ON users.id = repair_orders.assignedToUserId
+        ORDER BY repair_orders.createdAt DESC, repair_orders.orderNumber DESC
+        """,
+    )
+    suspend fun exportAllOrders(): List<OrderExportRow>
 }
 
 @Dao
