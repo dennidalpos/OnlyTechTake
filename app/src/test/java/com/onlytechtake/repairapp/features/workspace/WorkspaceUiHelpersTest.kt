@@ -52,6 +52,7 @@ class WorkspaceUiHelpersTest {
     fun nextActionComesFromWorkflowPolicy() {
         assertEquals("Prendi in carico", nextActionLabel(OrderStatus.OPEN))
         assertEquals("Registra risultato", nextActionLabel(OrderStatus.DIAGNOSIS))
+        assertEquals("Registra esito preventivo", nextActionLabel(OrderStatus.RESULT))
         assertEquals("Nessuna azione", nextActionLabel(OrderStatus.CLOSED))
     }
 

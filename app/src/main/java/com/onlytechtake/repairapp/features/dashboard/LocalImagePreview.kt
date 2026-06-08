@@ -104,6 +104,7 @@ fun LocalImageViewer(
     onDelete: (() -> Unit)? = null,
 ) {
     var buildEditedBitmap by remember(path) { mutableStateOf<(() -> Bitmap?)?>(null) }
+    var editedBitmapToConfirm by remember(path) { mutableStateOf<Bitmap?>(null) }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(title) },
@@ -144,8 +145,7 @@ fun LocalImageViewer(
                 if (onSaveEdited != null) {
                     TextButton(
                         onClick = {
-                            buildEditedBitmap?.invoke()?.let(onSaveEdited)
-                            onDismiss()
+                            editedBitmapToConfirm = buildEditedBitmap?.invoke()
                         },
                     ) {
                         Text("Salva")
@@ -157,6 +157,30 @@ fun LocalImageViewer(
             }
         },
     )
+
+    editedBitmapToConfirm?.let { bitmap ->
+        AlertDialog(
+            onDismissRequest = { editedBitmapToConfirm = null },
+            title = { Text("Sostituire foto?") },
+            text = { Text("La foto modificata sostituira' l'immagine originale.") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onSaveEdited?.invoke(bitmap)
+                        editedBitmapToConfirm = null
+                        onDismiss()
+                    },
+                ) {
+                    Text("Sostituisci")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { editedBitmapToConfirm = null }) {
+                    Text("Annulla")
+                }
+            },
+        )
+    }
 }
 
 @Composable

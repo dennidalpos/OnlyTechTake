@@ -136,3 +136,10 @@ data class FeedbackInput(
     val note: String = "",
     val closureReason: ClosureReason? = null,
 )
+
+fun FeedbackInput.validationErrors(): List<String> =
+    buildList {
+        if (feedback == CustomerFeedbackType.REJECT && note.isBlank()) {
+            add("Motivo rifiuto obbligatorio")
+        }
+    }

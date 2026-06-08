@@ -31,6 +31,7 @@ import com.onlytechtake.repairapp.domain.workspace.OrderListItem
 import com.onlytechtake.repairapp.domain.workspace.discardedCleanupReasons
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
 import com.onlytechtake.repairapp.domain.workspace.RepairOrderInput
+import com.onlytechtake.repairapp.domain.workspace.validationErrors
 import java.io.File
 import java.util.UUID
 import kotlinx.coroutines.flow.Flow
@@ -327,9 +328,8 @@ class OrderWorkflowRepository(
     suspend fun recordFeedback(actor: AuthenticatedUser, orderId: String, input: FeedbackInput): Result<Unit> =
         runCatching {
             inTransaction {
-                if (input.feedback == CustomerFeedbackType.REJECT) {
-                    require(input.note.isNotBlank()) { "Motivo rifiuto obbligatorio" }
-                }
+                val errors = input.validationErrors()
+                require(errors.isEmpty()) { errors.joinToString("\n") }
                 val order = requireWritableOrder(actor, orderId)
                 val now = clockMillis()
                 val targetStatus = when (input.feedback) {
