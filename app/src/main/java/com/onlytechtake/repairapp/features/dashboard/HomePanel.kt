@@ -15,6 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.domain.models.AppSummary
 import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
@@ -28,17 +29,28 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(DashboardSpacing.screenPadding),
         contentAlignment = Alignment.TopCenter,
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
         ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+            ) {
+                SectionTitle("Banco riparazioni")
+                Text(
+                    text = "Segui ogni commessa dal ritiro al banco, alla diagnosi, alla riparazione e alla consegna. Gli aggiornamenti WhatsApp vengono preparati qui e inviati manualmente al cliente.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
             ) {
                 MetricCard("Utenti", summary.userCount.toString(), Modifier.weight(1f))
                 MetricCard("Clienti", summary.customerCount.toString(), Modifier.weight(1f))
@@ -55,9 +67,16 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel) {
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                     ) {
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text(queue.title, style = MaterialTheme.typography.titleMedium)
-                            Text(queue.orders.size.toString(), style = MaterialTheme.typography.titleMedium)
+                        Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                Text(queue.title, style = MaterialTheme.typography.titleMedium)
+                                Text(queue.orders.size.toString(), style = MaterialTheme.typography.titleMedium)
+                            }
+                            Text(
+                                text = queueDescription(queue.title),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
                         }
                         if (queue.orders.isEmpty()) {
                             Text("Nessuna commessa in questa coda.", style = MaterialTheme.typography.bodyMedium)
@@ -92,11 +111,20 @@ private fun MetricCard(label: String, value: String, modifier: Modifier = Modifi
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 14.dp, horizontal = 8.dp),
+                .padding(vertical = 16.dp, horizontal = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(value, style = MaterialTheme.typography.headlineSmall)
-            Text(label, style = MaterialTheme.typography.labelMedium)
+            Text(label, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
     }
 }
+
+private fun queueDescription(title: String): String =
+    when {
+        title.contains("aper", ignoreCase = true) -> "Presa in carico e prime verifiche al banco."
+        title.contains("diagnosi", ignoreCase = true) -> "Controlli tecnici, diagnosi e raccolta esito."
+        title.contains("ripar", ignoreCase = true) -> "Preventivo, approvazione cliente e lavorazione."
+        title.contains("pront", ignoreCase = true) -> "Avviso al cliente e consegna finale."
+        else -> "Coda operativa della giornata."
+    }

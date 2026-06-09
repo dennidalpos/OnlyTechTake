@@ -45,7 +45,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.core.design.LoadingBrandIndicator
 import com.onlytechtake.repairapp.core.design.PasswordVisibilityButton
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -104,10 +106,9 @@ private fun AuthLoadingScreen() {
                 .padding(paddingValues),
             contentAlignment = Alignment.Center,
         ) {
-            CircularProgressIndicator(
-                modifier = Modifier.semantics {
-                    contentDescription = "Caricamento autenticazione"
-                },
+            LoadingBrandIndicator(
+                text = "Caricamento autenticazione",
+                contentDescription = "Caricamento autenticazione",
             )
         }
     }
@@ -314,9 +315,16 @@ private fun AuthForm(
                 onClick = submitAction,
             ) {
                 if (formState.loading) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        CircularProgressIndicator(modifier = Modifier.size(20.dp))
-                        Text(text = "Operazione in corso")
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
+                        Text(
+                            text = "Operazione in corso",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
                     }
                 } else {
                     Text(text = submitLabel)

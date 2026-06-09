@@ -306,8 +306,8 @@ class OperatorIntakeDemoScreenshotTest {
     }
 
     private fun acceptQuote() {
-        composeRule.onNodeWithText("Preventivo accettato").performScrollTo().performClick()
-        composeRule.onNodeWithText("Conferma esito preventivo").performScrollTo().performClick()
+        clickTag(RepairAppTestTags.QuoteAcceptedToggle, scroll = true)
+        clickTag(RepairAppTestTags.QuoteConfirmButton, scroll = true)
         waitForText("Stato: In riparazione")
     }
 
@@ -359,7 +359,7 @@ class OperatorIntakeDemoScreenshotTest {
     private fun typeTag(tag: String, text: String, scroll: Boolean = false) {
         waitForTagExists(tag)
         val node = composeRule.onNodeWithTag(tag)
-        if (scroll) node.performScrollTo()
+        if (scroll) runCatching { node.performScrollTo() }
         node.assertIsDisplayed()
         node.performClick()
         node.performTextReplacement(text)
@@ -370,13 +370,12 @@ class OperatorIntakeDemoScreenshotTest {
     private fun clickTag(tag: String, scroll: Boolean = false) {
         waitForTagExists(tag)
         val node = composeRule.onNodeWithTag(tag)
-        if (scroll) node.performScrollTo()
+        if (scroll) runCatching { node.performScrollTo() }
         if (scroll && runCatching { node.assertIsDisplayed() }.isFailure) {
-            closeSoftKeyboard()
             var displayed = false
             repeat(VISIBILITY_SWIPE_ATTEMPTS) {
                 if (displayed) return@repeat
-                node.performScrollTo()
+                runCatching { node.performScrollTo() }
                 displayed = runCatching { node.assertIsDisplayed() }.isSuccess
                 if (displayed) {
                     return@repeat

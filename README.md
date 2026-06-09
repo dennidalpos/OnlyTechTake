@@ -1,8 +1,8 @@
 # OnlyTechTake Repair App
 
-![OnlyTechTake Repair App](media/brand/github-cover.png)
+![OnlyTechTake Repair App](media/brand/github-cover-repair-flow.png)
 
-App Android locale per gestione commesse di riparazione/lavorazione su un singolo device.
+App Android locale per tracciare commesse clienti dal banco alla diagnosi, alla riparazione e alla consegna su un singolo device. L'app prepara gli aggiornamenti WhatsApp di avanzamento, lasciando all'operatore il controllo dell'invio manuale al cliente.
 
 ## Stato Reale
 
@@ -111,9 +111,9 @@ Regole:
 
 - Setup primo admin, login admin/operatore, logout, lockout dopo 5 tentativi falliti e scadenza sessione dopo 30 minuti di inattivita'.
 - Dashboard con tab Home, Nuova, Clienti, Commesse/Commessa, Config e Admin.
-- Home con metriche e quattro code operative: Aperte, In lavorazione / diagnosi, Risultato / riparazione, Pronte.
+- Home con metriche e quattro code operative che seguono il flusso banco, diagnosi, preventivo/riparazione e consegna.
 - Creazione commessa a step con cliente esistente o nuovo, categoria attiva obbligatoria, problema, almeno un media/allegato, privacy e firma.
-- Workspace commessa con azioni di stato, note interne, foto/allegati, foto lavoro finito, firma, timeline, WhatsApp manuale ed export PDF.
+- Workspace commessa con azioni di stato, prossima azione, note interne, foto/allegati, foto lavoro finito, firma, timeline, anteprima WhatsApp manuale ed export PDF.
 - Admin: utenti, reset password, pulizia commesse scartate/archiviate e reset totale dati con conferma `RESET`.
 - Config admin: categorie, template privacy/condizioni/WhatsApp, modalita WhatsApp manuale, export config/database/ZIP/XLSX.
 - Import allegati tramite SAF per JPEG/PNG/WebP, PDF, TXT, DOC/DOCX e XLS/XLSX fino a 25 MiB.

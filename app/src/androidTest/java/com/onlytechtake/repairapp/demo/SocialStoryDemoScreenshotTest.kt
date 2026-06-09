@@ -136,7 +136,7 @@ class SocialStoryDemoScreenshotTest {
             capture(outputDir, "03-creazione-categoria.png")
             clickTag(RepairAppTestTags.ConfigCategorySaveButton, scroll = true)
             clickText("Conferma")
-            waitForText("Smartphone")
+            waitForText("Operazione completata")
             capture(outputDir, "04-categoria-salvata.png")
 
             clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
@@ -151,7 +151,7 @@ class SocialStoryDemoScreenshotTest {
             capture(outputDir, "05-creazione-template.png")
             clickTag(RepairAppTestTags.ConfigTemplateSaveButton, scroll = true)
             clickText("Conferma")
-            waitForText("whatsapp_demo_social")
+            waitForText("Operazione completata")
             capture(outputDir, "06-template-salvato.png")
         }
     }
@@ -395,8 +395,8 @@ class SocialStoryDemoScreenshotTest {
     }
 
     private fun acceptQuote() {
-        composeRule.onNodeWithText("Preventivo accettato").performScrollTo().performClick()
-        composeRule.onNodeWithText("Conferma esito preventivo").performScrollTo().performClick()
+        clickTag(RepairAppTestTags.QuoteAcceptedToggle, scroll = true)
+        clickTag(RepairAppTestTags.QuoteConfirmButton, scroll = true)
         waitForText("Stato: In riparazione")
     }
 
@@ -448,7 +448,7 @@ class SocialStoryDemoScreenshotTest {
     private fun typeTag(tag: String, text: String, scroll: Boolean = false) {
         waitForTagExists(tag)
         val node = composeRule.onNodeWithTag(tag)
-        if (scroll) node.performScrollTo()
+        if (scroll) runCatching { node.performScrollTo() }
         node.assertIsDisplayed()
         node.performClick()
         node.performTextReplacement(text)
@@ -459,13 +459,12 @@ class SocialStoryDemoScreenshotTest {
     private fun clickTag(tag: String, scroll: Boolean = false, requireDisplayed: Boolean = true) {
         waitForTagExists(tag)
         val node = composeRule.onNodeWithTag(tag)
-        if (scroll) node.performScrollTo()
+        if (scroll) runCatching { node.performScrollTo() }
         if (requireDisplayed && scroll && runCatching { node.assertIsDisplayed() }.isFailure) {
-            closeSoftKeyboard()
             var displayed = false
             repeat(VISIBILITY_SWIPE_ATTEMPTS) {
                 if (displayed) return@repeat
-                node.performScrollTo()
+                runCatching { node.performScrollTo() }
                 displayed = runCatching { node.assertIsDisplayed() }.isSuccess
                 if (displayed) {
                     return@repeat

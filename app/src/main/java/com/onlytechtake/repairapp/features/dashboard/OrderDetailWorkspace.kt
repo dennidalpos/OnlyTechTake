@@ -129,16 +129,79 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                             },
                         )
                     }
-                    SectionTitle("${selected.order.orderNumber} - ${selected.order.title}")
+                    SectionTitle("Scheda commessa")
+                    Text("${selected.order.orderNumber} - ${selected.order.title}", style = MaterialTheme.typography.titleMedium)
                     Text("Cliente: ${selected.customer?.displayName().orEmpty()}")
-                    Text("Stato: ${selected.order.status.label()}", style = MaterialTheme.typography.titleMedium)
-                    Text("Prossima azione: ${nextActionLabel(selected.order.status)}")
+                    OperatorText(
+                        text = "Stato: ${selected.order.status.label()}\nProssima azione: ${nextActionLabel(selected.order.status)}",
+                    )
                     selected.order.closureReason?.let { Text("Motivo chiusura: ${it.label()}") }
                     Text("Operatore: ${selected.assignedUser?.displayName.orEmpty()}")
                     Text("Aggiornata: ${formatUiDateTime(selected.order.updatedAt)}")
                     Text(attachmentCounts(selected.media, selected.signatures).label())
                     selected.order.description?.takeIf { it.isNotBlank() }?.let {
                         Text("Problema: $it")
+                    }
+                }
+            }
+        }
+
+        if (selected.order.status == OrderStatus.RESULT) {
+            item {
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(
+                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                    ) {
+                        Text("Esito preventivo", style = MaterialTheme.typography.titleMedium)
+                        QuoteDecisionRow(
+                            text = "Preventivo accettato",
+                            checked = quoteDecision == QuoteDecision.ACCEPTED,
+                            testTag = RepairAppTestTags.QuoteAcceptedToggle,
+                            onClick = { quoteDecision = toggleQuoteDecision(quoteDecision, QuoteDecision.ACCEPTED) },
+                        )
+                        QuoteDecisionRow(
+                            text = "Preventivo rifiutato",
+                            checked = quoteDecision == QuoteDecision.REJECTED,
+                            testTag = RepairAppTestTags.QuoteRejectedToggle,
+                            onClick = { quoteDecision = toggleQuoteDecision(quoteDecision, QuoteDecision.REJECTED) },
+                        )
+                        if (quoteDecision == QuoteDecision.REJECTED) {
+                            Field(
+                                value = quoteRejectNote,
+                                onValueChange = { quoteRejectNote = it },
+                                label = "Motivo rifiuto",
+                                required = true,
+                                showError = quoteRejectNote.isBlank(),
+                            )
+                        }
+                        TouchButton(
+                            text = "Conferma esito preventivo",
+                            tone = if (quoteDecision == QuoteDecision.REJECTED) ButtonTone.DANGER else ButtonTone.SUCCESS,
+                            enabled = canConfirmQuoteDecision(quoteDecision, quoteRejectNote),
+                            testTag = RepairAppTestTags.QuoteConfirmButton,
+                            onClick = {
+                                when (quoteDecision) {
+                                    QuoteDecision.ACCEPTED -> {
+                                        viewModel.recordFeedback(
+                                            orderId = selected.order.id,
+                                            feedback = CustomerFeedbackType.ACCEPT,
+                                            note = "Preventivo accettato",
+                                        )
+                                    }
+                                    QuoteDecision.REJECTED -> {
+                                        viewModel.recordFeedback(
+                                            orderId = selected.order.id,
+                                            feedback = CustomerFeedbackType.REJECT,
+                                            note = quoteRejectNote,
+                                            closureReason = ClosureReason.CUSTOMER_DECLINED,
+                                            onSuccess = { viewModel.selectOrder(null) },
+                                        )
+                                    }
+                                    null -> Unit
+                                }
+                            },
+                        )
                     }
                 }
             }
@@ -172,64 +235,6 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                                 )
                             }
                         }
-                    }
-                }
-            }
-        }
-
-        if (selected.order.status == OrderStatus.RESULT) {
-            item {
-                Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(
-                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                    ) {
-                        Text("Esito preventivo", style = MaterialTheme.typography.titleMedium)
-                        QuoteDecisionRow(
-                            text = "Preventivo accettato",
-                            checked = quoteDecision == QuoteDecision.ACCEPTED,
-                            onClick = { quoteDecision = toggleQuoteDecision(quoteDecision, QuoteDecision.ACCEPTED) },
-                        )
-                        QuoteDecisionRow(
-                            text = "Preventivo rifiutato",
-                            checked = quoteDecision == QuoteDecision.REJECTED,
-                            onClick = { quoteDecision = toggleQuoteDecision(quoteDecision, QuoteDecision.REJECTED) },
-                        )
-                        if (quoteDecision == QuoteDecision.REJECTED) {
-                            Field(
-                                value = quoteRejectNote,
-                                onValueChange = { quoteRejectNote = it },
-                                label = "Motivo rifiuto",
-                                required = true,
-                                showError = quoteRejectNote.isBlank(),
-                            )
-                        }
-                        TouchButton(
-                            text = "Conferma esito preventivo",
-                            tone = if (quoteDecision == QuoteDecision.REJECTED) ButtonTone.DANGER else ButtonTone.SUCCESS,
-                            enabled = canConfirmQuoteDecision(quoteDecision, quoteRejectNote),
-                            onClick = {
-                                when (quoteDecision) {
-                                    QuoteDecision.ACCEPTED -> {
-                                        viewModel.recordFeedback(
-                                            orderId = selected.order.id,
-                                            feedback = CustomerFeedbackType.ACCEPT,
-                                            note = "Preventivo accettato",
-                                        )
-                                    }
-                                    QuoteDecision.REJECTED -> {
-                                        viewModel.recordFeedback(
-                                            orderId = selected.order.id,
-                                            feedback = CustomerFeedbackType.REJECT,
-                                            note = quoteRejectNote,
-                                            closureReason = ClosureReason.CUSTOMER_DECLINED,
-                                            onSuccess = { viewModel.selectOrder(null) },
-                                        )
-                                    }
-                                    null -> Unit
-                                }
-                            },
-                        )
                     }
                 }
             }
@@ -276,6 +281,11 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                 ) {
                     SectionTitle("WhatsApp")
+                    Text(
+                        text = "Prepara un aggiornamento stato avanzamento da controllare e inviare manualmente al cliente.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                     if (whatsappTemplates.isEmpty()) {
                         Text("Nessun template WhatsApp attivo.")
                     } else {
@@ -297,17 +307,22 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             item {
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(
-                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                    ) {
+                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                ) {
                         SectionTitle("Anteprima WhatsApp")
+                        Text(
+                            text = "Il testo resta modificabile: l'app apre WhatsApp con il messaggio pronto, poi l'invio viene confermato manualmente.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
                         Field(uiState.preparedMessageBody, viewModel::updatePreparedMessageBody, "Messaggio")
                         ActionRow {
                             TouchButton(
                                 text = "Apri WhatsApp",
                                 tone = ButtonTone.INFO,
                                 onClick = {
-                                    requestConfirm("Aprire WhatsApp?", "Registrare e aprire il messaggio?") {
+                                    requestConfirm("Aprire WhatsApp?", "Registrare la preparazione e aprire WhatsApp per l'invio manuale?") {
                                         viewModel.recordPreparedMessage()
                                         val intent = Intent(
                                             Intent.ACTION_VIEW,
@@ -320,7 +335,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                             TouchButton(
                                 text = "Inviato",
                                 tone = ButtonTone.SUCCESS,
-                                onClick = { requestConfirm("Invio confermato?", "Registrare l'invio manuale?") { viewModel.confirmSentMessage() } },
+                                onClick = { requestConfirm("Invio confermato?", "Registrare che l'operatore ha inviato manualmente il messaggio al cliente?") { viewModel.confirmSentMessage() } },
                             )
                         }
                     }
@@ -452,11 +467,13 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
 private fun QuoteDecisionRow(
     text: String,
     checked: Boolean,
+    testTag: String,
     onClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .testTag(testTag)
             .clickable(onClick = onClick)
             .padding(vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically,

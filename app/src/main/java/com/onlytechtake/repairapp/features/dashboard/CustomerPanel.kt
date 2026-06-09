@@ -26,7 +26,6 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
@@ -106,8 +105,8 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+            .padding(DashboardSpacing.screenPadding),
+        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
             SectionTitle("Clienti")

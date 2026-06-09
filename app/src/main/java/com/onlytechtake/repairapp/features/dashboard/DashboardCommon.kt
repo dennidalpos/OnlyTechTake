@@ -2,15 +2,15 @@ package com.onlytechtake.repairapp.features.dashboard
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -34,6 +34,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -44,12 +45,12 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 
 object DashboardSpacing {
-    val screenPadding = 16.dp
-    val listGap = 12.dp
-    val cardPadding = 12.dp
-    val formGap = 10.dp
-    val compactGap = 8.dp
-    val actionGap = 8.dp
+    val screenPadding = 20.dp
+    val listGap = 16.dp
+    val cardPadding = 16.dp
+    val formGap = 14.dp
+    val compactGap = 10.dp
+    val actionGap = 10.dp
 }
 
 @Composable
@@ -101,13 +102,13 @@ fun Field(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ActionRow(content: @Composable () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .horizontalScroll(rememberScrollState()),
+    FlowRow(
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.actionGap),
+        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.actionGap),
     ) {
         content()
     }
@@ -176,7 +177,7 @@ fun TouchButton(
 ) {
     androidx.compose.material3.Button(
         modifier = modifier
-            .defaultMinSize(minHeight = 56.dp)
+            .defaultMinSize(minWidth = 96.dp, minHeight = 56.dp)
             .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
             .semantics {
                 selected?.let { this.selected = it }
@@ -187,11 +188,18 @@ fun TouchButton(
         colors = ButtonDefaults.buttonColors(
             containerColor = tone.containerColor(),
             contentColor = tone.contentColor(),
+            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.58f),
+            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.62f),
         ),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+        contentPadding = PaddingValues(horizontal = 18.dp, vertical = 14.dp),
         onClick = onClick,
     ) {
-        Text(text)
+        Text(
+            text = text,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 
@@ -209,9 +217,9 @@ private fun ButtonTone.containerColor(): Color =
     when (this) {
         ButtonTone.PRIMARY -> MaterialTheme.colorScheme.primary
         ButtonTone.NEUTRAL -> MaterialTheme.colorScheme.surfaceVariant
-        ButtonTone.SUCCESS -> Color(0xFF2E7D32)
+        ButtonTone.SUCCESS -> Color(0xFF237A3B)
         ButtonTone.INFO -> MaterialTheme.colorScheme.tertiary
-        ButtonTone.WARNING -> Color(0xFFF9A825)
+        ButtonTone.WARNING -> Color(0xFFE8A600)
         ButtonTone.DANGER -> MaterialTheme.colorScheme.error
     }
 
@@ -222,7 +230,7 @@ private fun ButtonTone.contentColor(): Color =
         ButtonTone.NEUTRAL -> MaterialTheme.colorScheme.onSurfaceVariant
         ButtonTone.INFO -> MaterialTheme.colorScheme.onTertiary
         ButtonTone.DANGER -> MaterialTheme.colorScheme.onError
-        ButtonTone.WARNING -> Color(0xFF1F1F1F)
+        ButtonTone.WARNING -> Color(0xFF2A2100)
         else -> Color.White
     }
 

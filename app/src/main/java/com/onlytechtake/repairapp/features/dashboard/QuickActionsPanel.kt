@@ -174,8 +174,8 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
+            .padding(DashboardSpacing.screenPadding),
+        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         SectionTitle("Nuova commessa")
 

@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.core.design.PasswordVisibilityButton
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 
@@ -53,7 +52,7 @@ fun AdminPanel(
     }
 
     if (!isAdmin) {
-        Text(modifier = Modifier.padding(16.dp), text = "Sezione disponibile solo per admin.")
+        Text(modifier = Modifier.padding(DashboardSpacing.screenPadding), text = "Sezione disponibile solo per admin.")
         return
     }
 

@@ -35,8 +35,8 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+            .padding(DashboardSpacing.screenPadding),
+        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
             SectionTitle("Commesse")
@@ -88,19 +88,19 @@ private fun OrderFilterBar(
     filter: OrderFilter,
     onFilter: (OrderFilter) -> Unit,
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
         ActionRow {
             val allSelected = !filter.hasActiveFilter()
             TouchButton(
                 text = "Tutte",
-                tone = if (allSelected) ButtonTone.SUCCESS else ButtonTone.DANGER,
+                tone = if (allSelected) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
                 selected = allSelected,
                 stateDescription = if (allSelected) "Filtro selezionato" else "Filtro non selezionato",
                 onClick = { onFilter(OrderFilter()) },
             )
             TouchButton(
                 text = "Mie",
-                tone = if (filter.showMineOnly) ButtonTone.SUCCESS else ButtonTone.DANGER,
+                tone = if (filter.showMineOnly) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
                 selected = filter.showMineOnly,
                 stateDescription = if (filter.showMineOnly) "Filtro selezionato" else "Filtro non selezionato",
                 onClick = { onFilter(filter.copy(showMineOnly = !filter.showMineOnly)) },
@@ -134,7 +134,7 @@ private fun QuickStatusGroupFilter(
 ) {
     TouchButton(
         text = label,
-        tone = if (filter.statuses == statuses) ButtonTone.SUCCESS else ButtonTone.DANGER,
+        tone = if (filter.statuses == statuses) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
         selected = filter.statuses == statuses,
         stateDescription = if (filter.statuses == statuses) "Filtro selezionato" else "Filtro non selezionato",
         onClick = {

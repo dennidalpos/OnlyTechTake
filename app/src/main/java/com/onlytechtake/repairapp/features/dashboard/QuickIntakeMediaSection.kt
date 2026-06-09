@@ -3,11 +3,9 @@ package com.onlytechtake.repairapp.features.dashboard
 import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,7 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextOverflow
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
 import java.io.File
 
@@ -56,22 +54,17 @@ fun QuickIntakeMediaSection(
                                     description = media.fileName,
                                     onClick = { selectedImagePath = media.localPath },
                                 )
-                                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    Text(
-                                        modifier = Modifier.weight(1f),
-                                        text = "${media.mediaType}: ${media.fileName} - ${media.sizeBytes / 1024} KB",
-                                    )
-                                    TouchButton(text = "Rimuovi", tone = ButtonTone.DANGER, onClick = { onRemoveMedia(media.localPath) })
-                                }
+                                StagedMediaSummary(media = media, onRemoveMedia = onRemoveMedia)
                             }
                         }
                     } else {
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(
-                                modifier = Modifier.weight(1f),
-                                text = "${media.mediaType}: ${media.fileName} - ${media.sizeBytes / 1024} KB",
-                            )
-                            TouchButton(text = "Rimuovi", tone = ButtonTone.DANGER, onClick = { onRemoveMedia(media.localPath) })
+                        Card(modifier = Modifier.fillMaxWidth()) {
+                            Column(
+                                modifier = Modifier.padding(DashboardSpacing.compactGap),
+                                verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+                            ) {
+                                StagedMediaSummary(media = media, onRemoveMedia = onRemoveMedia)
+                            }
                         }
                     }
                 }
@@ -117,3 +110,31 @@ private fun StagedOrderMedia.isImage(): Boolean =
     mediaType.equals("PHOTO", ignoreCase = true) ||
         mediaType.equals("IMAGE", ignoreCase = true) ||
         mimeType.startsWith("image/", ignoreCase = true)
+
+@Composable
+private fun StagedMediaSummary(
+    media: StagedOrderMedia,
+    onRemoveMedia: (String) -> Unit,
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+    ) {
+        Text(
+            text = media.fileName,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Text(
+            text = "${media.mediaType} - ${media.sizeBytes / 1024} KB",
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        TouchButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = "Rimuovi",
+            tone = ButtonTone.DANGER,
+            onClick = { onRemoveMedia(media.localPath) },
+        )
+    }
+}

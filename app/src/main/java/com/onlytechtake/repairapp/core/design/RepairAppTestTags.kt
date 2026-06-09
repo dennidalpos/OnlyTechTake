@@ -23,6 +23,9 @@ object RepairAppTestTags {
     const val StatusResultSummaryField = "status_result_summary_field"
     const val StatusNoteField = "status_note_field"
     const val StatusDialogConfirmButton = "status_dialog_confirm_button"
+    const val QuoteAcceptedToggle = "quote_accepted_toggle"
+    const val QuoteRejectedToggle = "quote_rejected_toggle"
+    const val QuoteConfirmButton = "quote_confirm_button"
 
     const val CustomerNewButton = "customer_new_button"
     const val CustomerPrivateToggle = "customer_private_toggle"
