@@ -11,11 +11,13 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.swipeLeft
+import androidx.compose.ui.test.swipeUp
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -369,6 +371,21 @@ class OperatorIntakeDemoScreenshotTest {
         waitForTagExists(tag)
         val node = composeRule.onNodeWithTag(tag)
         if (scroll) node.performScrollTo()
+        if (scroll && runCatching { node.assertIsDisplayed() }.isFailure) {
+            closeSoftKeyboard()
+            var displayed = false
+            repeat(VISIBILITY_SWIPE_ATTEMPTS) {
+                if (displayed) return@repeat
+                node.performScrollTo()
+                displayed = runCatching { node.assertIsDisplayed() }.isSuccess
+                if (displayed) {
+                    return@repeat
+                }
+                composeRule.onRoot().performTouchInput { swipeUp() }
+                composeRule.waitForIdle()
+                pauseForDemo()
+            }
+        }
         node.assertIsDisplayed()
         node.performClick()
         composeRule.waitForIdle()
@@ -423,6 +440,14 @@ class OperatorIntakeDemoScreenshotTest {
         bitmap.recycle()
     }
 
+    private fun closeSoftKeyboard() {
+        InstrumentationRegistry.getInstrumentation().uiAutomation
+            .executeShellCommand("input keyevent 4")
+            .close()
+        composeRule.waitForIdle()
+        pauseForDemo()
+    }
+
     private fun pauseForDemo() {
         Thread.sleep(ACTION_PAUSE_MILLIS)
     }
@@ -473,6 +498,7 @@ class OperatorIntakeDemoScreenshotTest {
         const val LOGIN_ATTEMPTS = 2
         const val LOGIN_ATTEMPT_TIMEOUT_MILLIS = 20_000L
         const val DASHBOARD_TAB_SWIPE_ATTEMPTS = 4
+        const val VISIBILITY_SWIPE_ATTEMPTS = 5
         const val TAG_POLL_MILLIS = 250L
         const val ACTION_PAUSE_MILLIS = 1_400L
         const val SCREENSHOT_PAUSE_MILLIS = 2_000L

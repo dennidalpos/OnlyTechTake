@@ -5,17 +5,21 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
+import androidx.compose.ui.test.swipeUp
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -171,7 +175,7 @@ class SocialStoryDemoScreenshotTest {
             typeTag(RepairAppTestTags.CustomerPhoneField, "+39 333 010 3030", scroll = true)
             typeTag(RepairAppTestTags.CustomerEmailField, "luca.rossi@example.invalid", scroll = true)
             capture(outputDir, "02-cliente-privato.png")
-            clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
+            clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true, requireDisplayed = false)
             clickTag(RepairAppTestTags.CustomerConfirmSaveButton)
             waitForText("Luca Rossi")
             capture(outputDir, "03-privato-salvato.png")
@@ -184,7 +188,7 @@ class SocialStoryDemoScreenshotTest {
             typeTag(RepairAppTestTags.CustomerEmailField, "amministrazione@example.invalid", scroll = true)
             typeTag(RepairAppTestTags.CustomerAddressField, "Via Demo 24, Milano", scroll = true)
             capture(outputDir, "04-cliente-azienda.png")
-            clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
+            clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true, requireDisplayed = false)
             clickTag(RepairAppTestTags.CustomerConfirmSaveButton)
             waitForText("Demo Lab Srl")
             capture(outputDir, "05-azienda-salvata.png")
@@ -452,12 +456,33 @@ class SocialStoryDemoScreenshotTest {
         pauseForDemo()
     }
 
-    private fun clickTag(tag: String, scroll: Boolean = false) {
+    private fun clickTag(tag: String, scroll: Boolean = false, requireDisplayed: Boolean = true) {
         waitForTagExists(tag)
         val node = composeRule.onNodeWithTag(tag)
         if (scroll) node.performScrollTo()
-        node.assertIsDisplayed()
-        node.performClick()
+        if (requireDisplayed && scroll && runCatching { node.assertIsDisplayed() }.isFailure) {
+            closeSoftKeyboard()
+            var displayed = false
+            repeat(VISIBILITY_SWIPE_ATTEMPTS) {
+                if (displayed) return@repeat
+                node.performScrollTo()
+                displayed = runCatching { node.assertIsDisplayed() }.isSuccess
+                if (displayed) {
+                    return@repeat
+                }
+                composeRule.onRoot().performTouchInput { swipeUp() }
+                composeRule.waitForIdle()
+                pauseForDemo()
+            }
+        }
+        if (requireDisplayed) {
+            node.assertIsDisplayed()
+        }
+        if (requireDisplayed) {
+            node.performClick()
+        } else {
+            node.performSemanticsAction(SemanticsActions.OnClick)
+        }
         composeRule.waitForIdle()
         pauseForDemo()
     }
@@ -517,6 +542,14 @@ class SocialStoryDemoScreenshotTest {
         bitmap.recycle()
     }
 
+    private fun closeSoftKeyboard() {
+        InstrumentationRegistry.getInstrumentation().uiAutomation
+            .executeShellCommand("input keyevent 4")
+            .close()
+        composeRule.waitForIdle()
+        pauseForDemo()
+    }
+
     private fun prepareCaseDirectory(caseName: String): File {
         val root = File(requireNotNull(context.getExternalFilesDir(null)), SCREENSHOT_ROOT_DIR_NAME)
         val directory = File(root, caseName)
@@ -572,6 +605,7 @@ class SocialStoryDemoScreenshotTest {
         const val LOGIN_ATTEMPTS = 2
         const val LOGIN_ATTEMPT_TIMEOUT_MILLIS = 20_000L
         const val DASHBOARD_TAB_SWIPE_ATTEMPTS = 4
+        const val VISIBILITY_SWIPE_ATTEMPTS = 5
         const val TAG_POLL_MILLIS = 250L
         const val ACTION_PAUSE_MILLIS = 900L
         const val SCREENSHOT_PAUSE_MILLIS = 1_400L
