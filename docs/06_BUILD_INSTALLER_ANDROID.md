@@ -1,16 +1,17 @@
 # Build, installazione e verifica Android su Windows
 
-Guida operativa supportata per Windows + PowerShell. Gli script in
-`scripts\windows` calcolano la root del progetto dal proprio percorso; il
+Guida operativa supportata per Windows + PowerShell. Gli script ufficiali in
+`scripts\android` calcolano la root del progetto dal proprio percorso; i wrapper
+in `scripts\windows` restano compatibili con i comandi storici. Il
 comando diretto `.\gradlew.bat` va invece eseguito dalla root e usa la JVM gia'
-configurata nel processo PowerShell. Se il terminale punta a Java 8, usare gli
-script ufficiali o impostare `JAVA_HOME` su JDK/JBR 17+ nello stesso terminale.
+configurata nel processo PowerShell. Se il terminale punta a Java 8 o Java 26,
+usare gli script ufficiali o impostare `JAVA_HOME` su JDK/JBR 17/21 nello stesso terminale.
 
 ## Prerequisiti
 
 - PowerShell.
 - Android Studio recente.
-- JDK 17+ o Android Studio JBR.
+- JDK 17/21 o Android Studio JBR.
 - Android SDK Platform `android-36`.
 - Android SDK Build Tools.
 - Android Platform Tools per `adb`.
@@ -19,7 +20,7 @@ script ufficiali o impostare `JAVA_HOME` su JDK/JBR 17+ nello stesso terminale.
 Verifica ambiente:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\windows\check_android_env.ps1
+powershell -ExecutionPolicy Bypass -File scripts\android\check_env.ps1
 ```
 
 Il comando termina con exit code non zero se manca l'ambiente minimo per Gradle.
@@ -47,7 +48,7 @@ powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1
 Test unitari:
 
 ```powershell
-.\gradlew.bat --no-configuration-cache :app:testDebugUnitTest
+powershell -ExecutionPolicy Bypass -File scripts\android\gradle.ps1 -- --no-configuration-cache :app:testDebugUnitTest
 ```
 
 Audit vulnerabilita' dipendenze tramite OSV:
@@ -63,37 +64,37 @@ I task dello script `check_project.ps1` sono eseguiti in sequenza per ridurre i 
 Debug APK:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\windows\build_android_installer.ps1 -BuildType Debug -OutputType Apk
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Debug -OutputType Apk
 ```
 
 Release APK:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\windows\build_android_installer.ps1 -BuildType Release -OutputType Apk
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Release -OutputType Apk
 ```
 
 Release AAB:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\windows\build_android_installer.ps1 -BuildType Release -OutputType Aab
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Release -OutputType Aab
 ```
 
 Rigenerazione senza cancellare `app\build`:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\windows\build_android_installer.ps1 -BuildType Release -OutputType Apk -RerunTasks
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Release -OutputType Apk -RerunTasks
 ```
 
 Clean + build:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\windows\build_android_installer.ps1 -BuildType Release -OutputType Apk -Clean
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Release -OutputType Apk -Clean
 ```
 
 Build debug e installazione su device:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\windows\build_android_installer.ps1 -BuildType Debug -OutputType Apk -Install
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Debug -OutputType Apk -Install
 ```
 
 ## Output
@@ -138,26 +139,33 @@ Un APK installato manualmente da sorgenti sconosciute e firmato con una chiave l
 Installare e avviare l'ultimo APK debug:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\windows\start_android_app.ps1
+powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1
+```
+
+Installazione pulita e avvio dell'ultimo APK debug:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -CleanInstall
 ```
 
 Avviare senza reinstallare:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\windows\start_android_app.ps1 -NoInstall
+powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -NoInstall
 ```
 
 Installare un APK specifico:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\windows\start_android_app.ps1 -ApkPath app\build\outputs\apk\debug\app-debug.apk
+powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -ApkPath app\build\outputs\apk\debug\app-debug.apk
 ```
 
 ## Troubleshooting
 
 - `gradlew.bat non trovato`: eseguire dalla root del progetto.
-- `Java non trovato` o `javac non trovato`: configurare JDK 17+ o Android Studio JBR.
-- `Dependency requires at least JVM runtime version 11` con `.\gradlew.bat`: il processo sta usando una JVM troppo vecchia; usare gli script PowerShell ufficiali o impostare `JAVA_HOME` su JDK/JBR 17+.
+- `Java non trovato` o `javac non trovato`: configurare JDK 17/21 o Android Studio JBR.
+- Java 26 nel `PATH`: gli script lo ignorano e preferiscono Android Studio JBR o un JDK 17/21 supportato.
+- `Dependency requires at least JVM runtime version 11` con `.\gradlew.bat`: il processo sta usando una JVM troppo vecchia; usare gli script PowerShell ufficiali o impostare `JAVA_HOME` su JDK/JBR 17/21.
 - `Platform android-36 non trovata`: installare Android SDK Platform 36 da Android Studio SDK Manager.
 - `Android SDK Build Tools non trovati`: installare Android SDK Build Tools da Android Studio SDK Manager.
 - `adb non trovato`: installare Android Platform Tools o aggiungere `platform-tools` al `PATH`.

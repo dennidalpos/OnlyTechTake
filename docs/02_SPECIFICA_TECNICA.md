@@ -216,7 +216,7 @@ files/orders/...
 files/order_media/...
 ```
 
-Il ripristino/import ZIP non e' supportato: il backup completo e' solo export locale.
+Il ripristino ZIP completo e' supportato per admin tramite Storage Access Framework e sostituisce database e file privati dell'app.
 
 ## WhatsApp
 

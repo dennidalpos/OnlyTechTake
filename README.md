@@ -29,13 +29,13 @@ App Android locale per tracciare commesse clienti dal banco alla diagnosi, alla 
 
 - PowerShell.
 - Android Studio recente.
-- JDK 17+ oppure JBR incluso in Android Studio.
+- JDK 17/21 oppure JBR incluso in Android Studio.
 - Android SDK Platform `android-36`.
 - Android SDK Build Tools.
 - Android Platform Tools per `adb`, se servono installazione, start o instrumentation test su device.
 - Debug USB abilitato e PC autorizzato sul device per i comandi via `adb`.
 
-Gli script in `scripts\windows` rilevano automaticamente Android Studio JBR, Android SDK e platform-tools nei percorsi standard. Se l'autodetect non basta, impostare nel processo PowerShell:
+Gli script ufficiali in `scripts\android` rilevano automaticamente Android Studio JBR, Android SDK e platform-tools nei percorsi standard. I vecchi comandi in `scripts\windows` restano wrapper compatibili. Se l'autodetect non basta, impostare nel processo PowerShell:
 
 ```powershell
 $env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
@@ -49,37 +49,37 @@ $env:Path = "$env:ANDROID_HOME\platform-tools;$env:JAVA_HOME\bin;$env:Path"
 Da una copia pulita del repository:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\windows\check_android_env.ps1
+powershell -ExecutionPolicy Bypass -File scripts\android\check_env.ps1
 powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -SkipReleaseBuild
-powershell -ExecutionPolicy Bypass -File scripts\windows\build_android_installer.ps1 -BuildType Debug -OutputType Apk
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Debug -OutputType Apk
 ```
 
 Per provare l'app su device:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\windows\build_android_installer.ps1 -BuildType Debug -OutputType Apk -Install
-powershell -ExecutionPolicy Bypass -File scripts\windows\start_android_app.ps1
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Debug -OutputType Apk -Install
+powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1
 ```
 
 Al primo avvio, se non esiste un admin locale, l'app mostra il setup admin. Dopo la creazione dell'admin mostra la dashboard; dagli avvii successivi mostra il login.
 
 ## Comandi Ufficiali
 
-Gli script PowerShell calcolano la root del progetto dal proprio percorso, quindi possono essere eseguiti anche da una sottocartella. Il comando diretto `.\gradlew.bat` va invece lanciato dalla root e usa la JVM gia' configurata nel processo PowerShell; se il processo punta a Java 8, usare gli script o impostare `JAVA_HOME` su JDK/JBR 17+.
+Gli script PowerShell calcolano la root del progetto dal proprio percorso, quindi possono essere eseguiti anche da una sottocartella. Il comando diretto `.\gradlew.bat` va invece lanciato dalla root e usa la JVM gia' configurata nel processo PowerShell; se il processo punta a Java 8 o Java 26, usare gli script o impostare `JAVA_HOME` su JDK/JBR 17/21.
 
 | Obiettivo | Comando |
 |---|---|
-| Setup / env check | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_android_env.ps1` |
+| Setup / env check | `powershell -ExecutionPolicy Bypass -File scripts\android\check_env.ps1` |
 | Check locale standard senza signing | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -SkipReleaseBuild` |
 | Check locale standard + instrumentation test | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -SkipReleaseBuild -AndroidTests` |
 | Check completo con release firmata | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1` |
 | Audit vulnerabilita' dipendenze | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_dependency_vulnerabilities.ps1` |
-| Test unitari | `.\gradlew.bat --no-configuration-cache :app:testDebugUnitTest` |
-| Build APK debug | `powershell -ExecutionPolicy Bypass -File scripts\windows\build_android_installer.ps1 -BuildType Debug -OutputType Apk` |
-| Build APK release | `powershell -ExecutionPolicy Bypass -File scripts\windows\build_android_installer.ps1 -BuildType Release -OutputType Apk` |
-| Build AAB release | `powershell -ExecutionPolicy Bypass -File scripts\windows\build_android_installer.ps1 -BuildType Release -OutputType Aab` |
-| Dev smoke su device | `powershell -ExecutionPolicy Bypass -File scripts\windows\build_android_installer.ps1 -BuildType Debug -OutputType Apk -Install` |
-| Start app su device | `powershell -ExecutionPolicy Bypass -File scripts\windows\start_android_app.ps1` |
+| Test unitari | `powershell -ExecutionPolicy Bypass -File scripts\android\gradle.ps1 -- --no-configuration-cache :app:testDebugUnitTest` |
+| Build APK debug | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Debug -OutputType Apk` |
+| Build APK release | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Release -OutputType Apk` |
+| Build AAB release | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Release -OutputType Aab` |
+| Dev smoke su device | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Debug -OutputType Apk -Install` |
+| Installazione pulita e start su device | `powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -CleanInstall` |
 
 ## Output Build
 
@@ -117,7 +117,7 @@ Regole:
 - Admin: utenti, reset password, pulizia commesse scartate/archiviate e reset totale dati con conferma `RESET`.
 - Config admin: categorie, template privacy/condizioni/WhatsApp, modalita WhatsApp manuale, export config/database/ZIP/XLSX.
 - Import allegati tramite SAF per JPEG/PNG/WebP, PDF, TXT, DOC/DOCX e XLS/XLSX fino a 25 MiB.
-- Export admin di configurazione, database, ZIP completo e XLSX commesse tramite SAF. L'app non supporta ripristino/import di backup ZIP. Export PDF della singola commessa dal dettaglio.
+- Export admin di configurazione, database, ZIP completo e XLSX commesse tramite SAF. Ripristino ZIP completo tramite SAF per admin. Export PDF della singola commessa dal dettaglio.
 
 ## Limiti Noti
 
@@ -138,17 +138,20 @@ Regole:
 - `app\schemas\`: schema Room esportato.
 - `docs\`: documentazione operativa e funzionale.
 - `media\brand\`: logo, favicon, anteprime e cover README per GitHub.
-- `scripts\windows\`: script PowerShell ufficiali.
+- `scripts\android\`: script PowerShell ufficiali per ambiente, Gradle, build/install e start app.
+- `scripts\support\`: funzioni condivise per rilevamento Android/JDK.
+- `scripts\windows\`: wrapper compatibili e script Windows specifici.
 
 ## Troubleshooting
 
-- `gradlew.bat non trovato`: eseguire i comandi Gradle dalla root o usare gli script in `scripts\windows`.
-- `Java non trovato` o `javac non trovato`: installare JDK 17+ o usare Android Studio JBR, poi rieseguire `check_android_env.ps1`.
-- `Dependency requires at least JVM runtime version 11` con `.\gradlew.bat`: il processo sta usando una JVM troppo vecchia; usare gli script PowerShell ufficiali o impostare `JAVA_HOME` su JDK/JBR 17+ nello stesso terminale.
+- `gradlew.bat non trovato`: eseguire i comandi Gradle dalla root o usare gli script in `scripts\android`.
+- `Java non trovato` o `javac non trovato`: installare JDK 17/21 o usare Android Studio JBR, poi rieseguire `check_env.ps1`.
+- Java 26 nel `PATH`: gli script lo ignorano e preferiscono Android Studio JBR o un JDK 17/21 supportato.
+- `Dependency requires at least JVM runtime version 11` con `.\gradlew.bat`: il processo sta usando una JVM troppo vecchia; usare gli script PowerShell ufficiali o impostare `JAVA_HOME` su JDK/JBR 17/21 nello stesso terminale.
 - `Platform android-36 non trovata`: installare Android SDK Platform 36 da Android Studio SDK Manager.
 - `Android SDK Build Tools non trovati`: installare Android SDK Build Tools da Android Studio SDK Manager.
 - `adb non trovato`: installare Android Platform Tools o aggiungere `platform-tools` al `PATH`.
 - Nessun device in `adb devices`: abilitare debug USB e autorizzare il computer sul device.
-- `Activity class ... does not exist`: installare prima l'APK con `start_android_app.ps1` senza `-NoInstall`.
+- `Activity class ... does not exist`: installare prima l'APK con `start_app.ps1` senza `-NoInstall`.
 - File lock Gradle/Kotlin su Windows: chiudere Android Studio se sta compilando, eseguire `.\gradlew.bat --stop` e rilanciare uno script alla volta.
 - Build release bloccata per signing: manca `keystore.properties` locale o il file non punta a un keystore valido.
