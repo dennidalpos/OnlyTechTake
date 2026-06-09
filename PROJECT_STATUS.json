@@ -1,5 +1,17 @@
 {
   "todos": [
+    "Aggiornare la matrice build Android stabile recente: AGP 8.13.2, Kotlin 2.3.20, KSP 2.3.9 e Gradle wrapper 8.14.5",
+    "Aggiungere toolchain Kotlin/JVM 17 nel modulo Android mantenendo bytecode JVM 17 e compatibilita' app esistente",
+    "Rigenerare lockfile Gradle e dependency verification metadata dopo l'aggiornamento della toolchain",
+    "Spostare la logica condivisa di rilevamento Android/JDK in scripts/support/android_env.ps1 riusabile da script cross-platform",
+    "Creare scripts/android/check_env.ps1 con verifica JDK supportato, Android SDK, platform android-36, build-tools e adb",
+    "Creare scripts/android/gradle.ps1 come entrypoint Gradle cross-platform che seleziona gradlew corretto e JDK supportato",
+    "Creare scripts/android/build_installer.ps1 per build APK/AAB e installazione debug su device collegato senza dipendere dal PATH globale",
+    "Creare scripts/android/start_app.ps1 per installare o avviare l'app su device collegato con rilevamento adb portabile",
+    "Aggiornare gli script scripts/windows per delegare ai nuovi script cross-platform mantenendo compatibilita' dei comandi esistenti",
+    "Aggiornare README.md, docs/06_BUILD_INSTALLER_ANDROID.md e scripts/README.md con i nuovi comandi supportati e troubleshooting Java 26",
+    "Verificare che gli script ignorino Java 26 nel PATH e preferiscano Android Studio JBR o un JDK 17/21 supportato",
+    "Eseguire check ambiente cross-platform, lintDebug, testDebugUnitTest, assembleDebug e installDebug su device collegato con i nuovi script",
     "Configurare keystore.properties locale non tracciato e generare build release APK/AAB per verifica Play Protect tramite Play Console, Internal Testing o Internal App Sharing",
     "Eseguire verifica manuale operatore su telefono destinatario: login singolo, modifica cliente con commessa esistente, selezione/deselezione categoria nuova commessa, export ZIP e ripristino ZIP su installazione pulita"
   ]
