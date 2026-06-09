@@ -12,6 +12,8 @@ Template predefiniti implementati:
 - `whatsapp_aggiornamento`;
 - `whatsapp_diagnosi`;
 - `whatsapp_risultato`;
+- `whatsapp_preventivo_intervento`;
+- `whatsapp_non_riparabile`;
 - `whatsapp_riparazione`;
 - `whatsapp_lavorazione`;
 - `whatsapp_completamento`;
@@ -68,6 +70,10 @@ Variabili supportate:
 {{titolo_commessa}}
 {{stato_commessa}}
 {{cliente}}
+{{importo_preventivo}}
+{{prossima_azione}}
+{{motivo_chiusura}}
+{{categoria_percorso}}
 ```
 
 Template con variabili diverse vengono rifiutati al salvataggio. L'anteprima WhatsApp nel dettaglio commessa mostra il testo renderizzato e modificabile prima dell'apertura di WhatsApp.
@@ -80,8 +86,8 @@ Flusso:
 
 ```text
 Operatore apre una commessa
-Prepara il messaggio WhatsApp
-L'app renderizza il template con i dati commessa
+Prepara il messaggio WhatsApp con il pulsante unico
+L'app sceglie il template in base allo stato corrente e ai dati della commessa
 Operatore modifica il testo se necessario
 Operatore apre WhatsApp
 Operatore invia manualmente
@@ -112,6 +118,8 @@ Stato operativo implementato:
 - l'accettazione/rifiuto viene registrata dalle azioni operative del dettaglio commessa;
 - `ACCEPT` porta lo stato a `REPAIRING`;
 - `REJECT` porta lo stato a `CLOSED` con motivo `CUSTOMER_DECLINED`.
+- una chiusura come `NOT_REPAIRABLE` usa il template dedicato `whatsapp_non_riparabile`;
+- un risultato con importo usa il template `whatsapp_preventivo_intervento` e resta in attesa di conferma cliente.
 
 La chiusura operativa usa un solo pulsante "Chiudi commessa" e richiede motivo esplicito e nota manuale. Dopo una chiusura riuscita l'app torna all'elenco commesse.
 

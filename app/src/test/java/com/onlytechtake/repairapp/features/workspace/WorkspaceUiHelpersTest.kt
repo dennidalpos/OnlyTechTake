@@ -1,7 +1,9 @@
 package com.onlytechtake.repairapp.features.workspace
 
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
 import java.time.ZoneOffset
@@ -54,6 +56,7 @@ class WorkspaceUiHelpersTest {
         assertEquals("Registra risultato", nextActionLabel(OrderStatus.DIAGNOSIS))
         assertEquals("Registra esito preventivo", nextActionLabel(OrderStatus.RESULT))
         assertEquals("Nessuna azione", nextActionLabel(OrderStatus.CLOSED))
+        assertEquals("Attendere conferma preventivo", nextActionLabel(orderWithEstimate()))
     }
 
     private fun media(mediaType: String, mimeType: String) = OrderMediaEntity(
@@ -90,5 +93,28 @@ class WorkspaceUiHelpersTest {
         createdByUserId = null,
         signedAt = 0L,
         createdAt = 0L,
+    )
+
+    private fun orderWithEstimate() = RepairOrderEntity(
+        id = "order",
+        orderNumber = "2026-0001",
+        customerId = "customer",
+        title = "Oggetto",
+        categoryId = "category",
+        status = OrderStatus.RESULT,
+        priority = OrderPriority.NORMAL,
+        assignedToUserId = "operator",
+        createdByUserId = "operator",
+        description = null,
+        internalNotes = null,
+        estimateAmountCents = 10_000,
+        finalAmountCents = null,
+        createdAt = 0L,
+        updatedAt = 0L,
+        closedAt = null,
+        closureReason = null,
+        deletedAt = null,
+        deletedByUserId = null,
+        deleteReason = null,
     )
 }

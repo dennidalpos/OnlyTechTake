@@ -112,10 +112,10 @@ Regole:
 - Setup primo admin, login admin/operatore, logout, lockout dopo 5 tentativi falliti e scadenza sessione dopo 30 minuti di inattivita'.
 - Dashboard con tab Home, Nuova, Clienti, Commesse/Commessa, Config e Admin.
 - Home con metriche e quattro code operative che seguono il flusso banco, diagnosi, preventivo/riparazione e consegna.
-- Creazione commessa a step con cliente esistente o nuovo, categoria attiva obbligatoria, problema, almeno un media/allegato, privacy e firma.
-- Workspace commessa con azioni di stato, prossima azione, note interne, foto/allegati, foto lavoro finito, firma, timeline, anteprima WhatsApp manuale ed export PDF.
+- Creazione commessa a step con cliente esistente o nuovo, categoria ad albero obbligatoria, problema, almeno un media/allegato, privacy e firma.
+- Workspace commessa con stato corrente, prossima azione, note interne, foto/allegati, foto lavoro finito, firma, timeline, WhatsApp manuale a pulsante unico ed export PDF con timeline completa.
 - Admin: utenti, reset password, pulizia commesse scartate/archiviate e reset totale dati con conferma `RESET`.
-- Config admin: categorie, template privacy/condizioni/WhatsApp, modalita WhatsApp manuale, export config/database/ZIP/XLSX.
+- Config admin: categorie multilivello, template privacy/condizioni/WhatsApp, modalita WhatsApp manuale, export config/database/ZIP/XLSX.
 - Import allegati tramite SAF per JPEG/PNG/WebP, PDF, TXT, DOC/DOCX e XLS/XLSX fino a 25 MiB.
 - Export admin di configurazione, database, ZIP completo e XLSX commesse tramite SAF. Ripristino ZIP completo tramite SAF per admin. Export PDF della singola commessa dal dettaglio.
 

@@ -168,14 +168,24 @@ interface OrderCategoryDao {
     @Upsert
     suspend fun upsert(category: OrderCategoryEntity)
 
-    @Query("SELECT * FROM order_categories ORDER BY active DESC, sortOrder ASC, name ASC")
+    @Query("SELECT * FROM order_categories ORDER BY level ASC, parentId ASC, active DESC, sortOrder ASC, name ASC")
     fun observeAll(): Flow<List<OrderCategoryEntity>>
 
-    @Query("SELECT * FROM order_categories WHERE active = 1 ORDER BY sortOrder ASC, name ASC")
+    @Query("SELECT * FROM order_categories WHERE active = 1 ORDER BY level ASC, parentId ASC, sortOrder ASC, name ASC")
     fun observeActiveCategories(): Flow<List<OrderCategoryEntity>>
 
     @Query("SELECT * FROM order_categories WHERE id = :id LIMIT 1")
     suspend fun findById(id: String): OrderCategoryEntity?
+
+    @Query(
+        """
+        SELECT * FROM order_categories
+        WHERE name = :name
+            AND ((:parentId IS NULL AND parentId IS NULL) OR parentId = :parentId)
+        LIMIT 1
+        """,
+    )
+    suspend fun findByParentAndName(parentId: String?, name: String): OrderCategoryEntity?
 }
 
 @Dao

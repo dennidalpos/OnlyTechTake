@@ -6,18 +6,22 @@ import com.onlytechtake.repairapp.data.local.dao.CustomerDao
 import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
 import com.onlytechtake.repairapp.data.local.dao.MessageLogDao
 import com.onlytechtake.repairapp.data.local.dao.MessageTemplateDao
+import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
 import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
 import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
 import com.onlytechtake.repairapp.data.local.entities.AppSettingEntity
 import com.onlytechtake.repairapp.data.local.entities.AuditAction
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
+import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.MessageChannel
 import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.data.local.entities.MessageStatus
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventType
 import com.onlytechtake.repairapp.data.local.entities.UserRole
@@ -31,6 +35,7 @@ class TemplateRepository(
     private val templateDao: MessageTemplateDao,
     private val orderDao: RepairOrderDao,
     private val customerDao: CustomerDao,
+    private val categoryDao: OrderCategoryDao,
     private val settingDao: AppSettingDao,
     private val messageLogDao: MessageLogDao,
     private val timelineEventDao: TimelineEventDao,
@@ -124,6 +129,7 @@ class TemplateRepository(
             require(actor.role == UserRole.ADMIN || order.assignedToUserId == actor.id) { "Operatore non assegnato" }
             val customer = requireNotNull(customerDao.findById(order.customerId)) { "Cliente non trovato" }
             val template = requireNotNull(templateDao.findActiveByCode(templateCode)) { "Template non trovato" }
+            val categoryPath = categoryPath(order.categoryId)
             val phone = customer.phone?.filter { it.isDigit() || it == '+' }.orEmpty()
             require(phone.isNotBlank()) { "Telefono cliente mancante" }
 
@@ -136,6 +142,10 @@ class TemplateRepository(
                     "cliente" to listOfNotNull(customer.companyName, customer.firstName, customer.lastName)
                         .joinToString(" ")
                         .ifBlank { "Cliente" },
+                    "importo_preventivo" to order.estimateAmountCents?.let(::formatEuroCents).orEmpty(),
+                    "prossima_azione" to order.nextActionLabel(),
+                    "motivo_chiusura" to order.closureReason?.label().orEmpty(),
+                    "categoria_percorso" to categoryPath,
                 ),
             )
             PreparedMessage(order.id, customer.id, phone, body)
@@ -204,6 +214,17 @@ class TemplateRepository(
             else -> MessageMode.MANUAL_WHATSAPP
         }
 
+    private suspend fun categoryPath(categoryId: String): String {
+        val chain = mutableListOf<OrderCategoryEntity>()
+        var current = categoryDao.findById(categoryId)
+        repeat(3) {
+            if (current == null) return@repeat
+            chain += current
+            current = current.parentId?.let { categoryDao.findById(it) }
+        }
+        return chain.asReversed().joinToString(" > ") { it.name }
+    }
+
     private companion object {
         const val MESSAGE_MODE_SETTING_KEY = "message_mode"
         val supportedVariables = setOf(
@@ -211,6 +232,10 @@ class TemplateRepository(
             "titolo_commessa",
             "stato_commessa",
             "cliente",
+            "importo_preventivo",
+            "prossima_azione",
+            "motivo_chiusura",
+            "categoria_percorso",
         )
 
         val defaultTemplates = listOf(
@@ -219,7 +244,7 @@ class TemplateRepository(
                 code = "whatsapp_presa_in_carico",
                 title = "WhatsApp presa in carico",
                 channel = MessageChannel.WHATSAPP,
-                body = "Ciao {{cliente}}, abbiamo preso in carico la commessa {{numero_commessa}}: {{titolo_commessa}}.",
+                body = "Ciao {{cliente}}, abbiamo preso in carico la commessa {{numero_commessa}}: {{titolo_commessa}}.\nCategoria: {{categoria_percorso}}.\nTi aggiorneremo appena avremo novita'.",
                 active = true,
                 version = 1,
                 updatedByUserId = null,
@@ -230,7 +255,7 @@ class TemplateRepository(
                 code = "whatsapp_aggiornamento",
                 title = "WhatsApp aggiornamento",
                 channel = MessageChannel.WHATSAPP,
-                body = "Aggiornamento commessa {{numero_commessa}}: stato {{stato_commessa}}.",
+                body = "Aggiornamento commessa {{numero_commessa}}: stato attuale {{stato_commessa}}.\nProssima azione: {{prossima_azione}}.",
                 active = true,
                 version = 1,
                 updatedByUserId = null,
@@ -241,7 +266,7 @@ class TemplateRepository(
                 code = "whatsapp_diagnosi",
                 title = "WhatsApp diagnosi",
                 channel = MessageChannel.WHATSAPP,
-                body = "Ciao {{cliente}}, stiamo completando la diagnosi della commessa {{numero_commessa}}: {{titolo_commessa}}.",
+                body = "Ciao {{cliente}}, la commessa {{numero_commessa}} e' in diagnosi.\nOggetto: {{titolo_commessa}}.\nTi comunicheremo esito e preventivo prima di procedere.",
                 active = true,
                 version = 1,
                 updatedByUserId = null,
@@ -252,7 +277,29 @@ class TemplateRepository(
                 code = "whatsapp_risultato",
                 title = "WhatsApp risultato",
                 channel = MessageChannel.WHATSAPP,
-                body = "Ciao {{cliente}}, abbiamo registrato il risultato della commessa {{numero_commessa}}: {{titolo_commessa}}.",
+                body = "Ciao {{cliente}}, abbiamo completato la diagnosi della commessa {{numero_commessa}}.\nStato: {{stato_commessa}}.\nProssima azione: {{prossima_azione}}.",
+                active = true,
+                version = 1,
+                updatedByUserId = null,
+                updatedAt = 0L,
+            ),
+            MessageTemplateEntity(
+                id = "",
+                code = "whatsapp_preventivo_intervento",
+                title = "WhatsApp preventivo intervento",
+                channel = MessageChannel.WHATSAPP,
+                body = "Ciao {{cliente}}, per la commessa {{numero_commessa}} abbiamo completato la diagnosi.\nPreventivo intervento: {{importo_preventivo}}.\nRispondi confermando o rifiutando il preventivo: procederemo solo dopo la tua conferma.",
+                active = true,
+                version = 1,
+                updatedByUserId = null,
+                updatedAt = 0L,
+            ),
+            MessageTemplateEntity(
+                id = "",
+                code = "whatsapp_non_riparabile",
+                title = "WhatsApp non riparabile",
+                channel = MessageChannel.WHATSAPP,
+                body = "Ciao {{cliente}}, dopo la diagnosi della commessa {{numero_commessa}} l'oggetto risulta non riparabile.\nMotivo: {{motivo_chiusura}}.\nPuoi passare in negozio per il ritiro o contattarci per chiarimenti.",
                 active = true,
                 version = 1,
                 updatedByUserId = null,
@@ -263,7 +310,7 @@ class TemplateRepository(
                 code = "whatsapp_riparazione",
                 title = "WhatsApp riparazione",
                 channel = MessageChannel.WHATSAPP,
-                body = "Ciao {{cliente}}, la riparazione della commessa {{numero_commessa}} e in corso.",
+                body = "Ciao {{cliente}}, la riparazione della commessa {{numero_commessa}} e' in corso.\nTi aggiorneremo quando sara' pronta.",
                 active = true,
                 version = 1,
                 updatedByUserId = null,
@@ -274,7 +321,7 @@ class TemplateRepository(
                 code = "whatsapp_lavorazione",
                 title = "WhatsApp lavorazione",
                 channel = MessageChannel.WHATSAPP,
-                body = "Ciao {{cliente}}, la commessa {{numero_commessa}} e in lavorazione.",
+                body = "Ciao {{cliente}}, la commessa {{numero_commessa}} e' in lavorazione.\nProssima azione: {{prossima_azione}}.",
                 active = true,
                 version = 1,
                 updatedByUserId = null,
@@ -285,7 +332,7 @@ class TemplateRepository(
                 code = "whatsapp_completamento",
                 title = "WhatsApp completamento",
                 channel = MessageChannel.WHATSAPP,
-                body = "Ciao {{cliente}}, la lavorazione della commessa {{numero_commessa}} e completata.",
+                body = "Ciao {{cliente}}, la lavorazione della commessa {{numero_commessa}} e' completata.",
                 active = true,
                 version = 1,
                 updatedByUserId = null,
@@ -296,7 +343,7 @@ class TemplateRepository(
                 code = "whatsapp_pronto_ritiro",
                 title = "WhatsApp pronto ritiro",
                 channel = MessageChannel.WHATSAPP,
-                body = "Ciao {{cliente}}, la commessa {{numero_commessa}} e pronta per il ritiro.",
+                body = "Ciao {{cliente}}, la commessa {{numero_commessa}} e' pronta per il ritiro.",
                 active = true,
                 version = 1,
                 updatedByUserId = null,
@@ -307,7 +354,7 @@ class TemplateRepository(
                 code = "privacy_breve",
                 title = "Privacy breve",
                 channel = MessageChannel.WHATSAPP,
-                body = "I dati sono trattati solo per gestione riparazione, comunicazioni e obblighi fiscali.",
+                body = "Informativa privacy sintetica ai sensi del Regolamento UE 2016/679 (GDPR).\nTitolare: OnlyTechTake, contattabile presso il punto vendita o i recapiti indicati nella ricevuta.\nFinalita': presa in carico e gestione della commessa, diagnosi, preventivo, riparazione, consegna, assistenza post-intervento, comunicazioni operative e adempimenti contabili/fiscali.\nBasi giuridiche: esecuzione di misure precontrattuali o contrattuali, obblighi di legge e legittimo interesse alla gestione organizzativa e alla tutela dei diritti. Per comunicazioni WhatsApp non indispensabili o ulteriori rispetto alla gestione della commessa puo' essere richiesto consenso specifico.\nDati trattati: dati identificativi e di contatto, dati fiscali se necessari, informazioni sull'oggetto consegnato, descrizione del problema, foto/allegati, firma, note operative e storico comunicazioni.\nConservazione: per il tempo necessario alla gestione della commessa e successivamente per obblighi di legge o tutela dei diritti.\nDestinatari: personale autorizzato, fornitori tecnici strettamente necessari, consulenti e soggetti previsti dalla legge. L'uso di WhatsApp comporta trattamento secondo le condizioni della piattaforma usata dal cliente.\nDiritti: accesso, rettifica, cancellazione nei casi previsti, limitazione, opposizione, portabilita' ove applicabile e reclamo al Garante per la protezione dei dati personali.",
                 active = true,
                 version = 1,
                 updatedByUserId = null,
@@ -318,7 +365,7 @@ class TemplateRepository(
                 code = "condizioni_presa_in_carico",
                 title = "Condizioni presa in carico",
                 channel = MessageChannel.WHATSAPP,
-                body = "Il cliente autorizza la presa in carico del bene e accetta le condizioni operative comunicate.",
+                body = "Condizioni di presa in carico.\nIl cliente dichiara di consegnare l'oggetto indicato in commessa e autorizza OnlyTechTake a custodirlo, verificarlo e svolgere diagnosi tecnica preliminare.\nLa diagnosi puo' richiedere apertura, test, pulizia tecnica o collegamento ad alimentatori/strumenti compatibili. L'intervento di riparazione viene eseguito solo dopo accettazione del preventivo quando previsto.\nIl cliente si impegna a fornire informazioni corrette su proprieta', difetti noti, blocchi, accessori e condizioni dell'oggetto. OnlyTechTake non risponde di dati non salvati, password non comunicate, difetti preesistenti o peggioramenti inevitabili emersi durante diagnosi su oggetti gia' danneggiati.\nGli importi comunicati come preventivo devono essere accettati dal cliente prima dell'avvio intervento. In caso di rifiuto, impossibilita' di riparazione o mancato ritiro, la commessa puo' essere chiusa secondo le condizioni comunicate dall'operatore.\nCon la firma il cliente conferma presa visione di privacy e condizioni operative.",
                 active = true,
                 version = 1,
                 updatedByUserId = null,
@@ -338,3 +385,28 @@ private fun OrderStatus.label(): String =
         OrderStatus.READY_FOR_PICKUP -> "Pronta al ritiro"
         OrderStatus.CLOSED -> "Chiusa"
     }
+
+private fun ClosureReason.label(): String =
+    when (this) {
+        ClosureReason.COMPLETED -> "Completata"
+        ClosureReason.CUSTOMER_DECLINED -> "Rifiutata dal cliente"
+        ClosureReason.NOT_REPAIRABLE -> "Non riparabile"
+        ClosureReason.CANCELLED -> "Annullata"
+        ClosureReason.OTHER -> "Altro"
+    }
+
+private fun RepairOrderEntity.nextActionLabel(): String =
+    when {
+        status == OrderStatus.RESULT && estimateAmountCents != null -> "Attendere conferma preventivo"
+        status == OrderStatus.RESULT -> "Registrare esito preventivo"
+        status == OrderStatus.OPEN -> "Prendere in carico"
+        status == OrderStatus.IN_PROGRESS -> "Avviare diagnosi"
+        status == OrderStatus.DIAGNOSIS -> "Registrare risultato diagnosi"
+        status == OrderStatus.REPAIRING -> "Completare riparazione"
+        status == OrderStatus.READY_FOR_PICKUP -> "Consegnare e chiudere"
+        status == OrderStatus.CLOSED -> "Nessuna azione"
+        else -> "Aggiornare commessa"
+    }
+
+private fun formatEuroCents(cents: Long): String =
+    "EUR ${cents / 100},${(cents % 100).toString().padStart(2, '0')}"

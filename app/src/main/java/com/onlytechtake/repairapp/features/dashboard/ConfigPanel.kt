@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
+import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 
@@ -42,11 +43,14 @@ fun ConfigPanel(
 
     var section by rememberSaveable { mutableStateOf<ConfigSection?>(null) }
     var categoryId by rememberSaveable { mutableStateOf<String?>(null) }
+    var categoryParentId by rememberSaveable { mutableStateOf<String?>(null) }
+    var currentCategoryParentId by rememberSaveable { mutableStateOf<String?>(null) }
     var categoryName by rememberSaveable { mutableStateOf("") }
     var categoryDescription by rememberSaveable { mutableStateOf("") }
     var categoryActive by rememberSaveable { mutableStateOf(true) }
     var categorySortOrder by rememberSaveable { mutableStateOf("0") }
     var templateCode by rememberSaveable { mutableStateOf("whatsapp_aggiornamento") }
+    var loadedTemplateCode by rememberSaveable { mutableStateOf<String?>(null) }
     var templateTitle by rememberSaveable { mutableStateOf("WhatsApp aggiornamento") }
     var templateBody by rememberSaveable { mutableStateOf("Aggiornamento {{numero_commessa}}: {{stato_commessa}}") }
     var templateActive by rememberSaveable { mutableStateOf(true) }
@@ -78,10 +82,25 @@ fun ConfigPanel(
 
     fun loadNewCategory() {
         categoryId = null
+        categoryParentId = currentCategoryParentId
         categoryName = ""
         categoryDescription = ""
         categoryActive = true
         categorySortOrder = "0"
+    }
+
+    fun selectCategoryForEdit(category: OrderCategoryEntity) {
+        categoryId = category.id
+        categoryParentId = category.parentId
+        categoryName = category.name
+        categoryDescription = category.description.orEmpty()
+        categoryActive = category.active
+        categorySortOrder = category.sortOrder.toString()
+    }
+
+    fun openCategoryBranch(categoryId: String?) {
+        currentCategoryParentId = categoryId
+        loadNewCategory()
     }
 
     LazyColumn(
@@ -138,12 +157,35 @@ fun ConfigPanel(
             }
 
             ConfigSection.CATEGORIES -> {
+                val currentParent = currentCategoryParentId?.let { id -> categories.firstOrNull { it.id == id } }
+                val visibleCategories = categories.filter { it.parentId == currentCategoryParentId }
                 item {
                     SectionTitle("Categorie")
                     if (!isAdmin) {
                         Text("Area riservata admin. Le categorie sono disponibili solo in consultazione.")
                     } else {
                         Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
+                            Text("Ramo: ${categoryBreadcrumb(categories, currentCategoryParentId)}")
+                            ActionRow {
+                                TouchButton(
+                                    text = "Radice",
+                                    tone = if (currentCategoryParentId == null) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
+                                    onClick = { openCategoryBranch(null) },
+                                )
+                                if (currentParent?.parentId != null) {
+                                    TouchButton(
+                                        text = "Su",
+                                        tone = ButtonTone.NEUTRAL,
+                                        onClick = { openCategoryBranch(currentParent.parentId) },
+                                    )
+                                } else if (currentCategoryParentId != null) {
+                                    TouchButton(
+                                        text = "Su",
+                                        tone = ButtonTone.NEUTRAL,
+                                        onClick = { openCategoryBranch(null) },
+                                    )
+                                }
+                            }
                             Field(categoryName, { categoryName = it }, "Nome categoria", testTag = RepairAppTestTags.ConfigCategoryNameField)
                             Field(categoryDescription, { categoryDescription = it }, "Descrizione", testTag = RepairAppTestTags.ConfigCategoryDescriptionField)
                             Field(categorySortOrder, { categorySortOrder = it }, "Ordine", testTag = RepairAppTestTags.ConfigCategorySortOrderField)
@@ -166,6 +208,7 @@ fun ConfigPanel(
                                         requestConfirm("Salvare categoria?", "La categoria verra' aggiornata nel catalogo locale.") {
                                             viewModel.saveCategory(
                                                 id = categoryId,
+                                                parentId = categoryParentId,
                                                 name = categoryName,
                                                 description = categoryDescription,
                                                 active = categoryActive,
@@ -179,16 +222,12 @@ fun ConfigPanel(
                         }
                     }
                 }
-                items(categories) { category ->
+                items(visibleCategories) { category ->
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable(enabled = isAdmin) {
-                                categoryId = category.id
-                                categoryName = category.name
-                                categoryDescription = category.description.orEmpty()
-                                categoryActive = category.active
-                                categorySortOrder = category.sortOrder.toString()
+                                selectCategoryForEdit(category)
                             },
                     ) {
                         Column(
@@ -196,14 +235,30 @@ fun ConfigPanel(
                             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
                         ) {
                             Text(category.name, style = MaterialTheme.typography.titleMedium)
-                            Text(if (category.active) "Attiva" else "Archiviata")
+                            Text("Livello ${category.level + 1} - ${if (category.active) "Attiva" else "Archiviata"}")
                             category.description?.takeIf { it.isNotBlank() }?.let { Text(it) }
+                            if (isAdmin) {
+                                ActionRow {
+                                    TouchButton(
+                                        text = "Modifica",
+                                        tone = ButtonTone.NEUTRAL,
+                                        onClick = { selectCategoryForEdit(category) },
+                                    )
+                                    if (category.level < 2) {
+                                        TouchButton(
+                                            text = "Entra",
+                                            tone = ButtonTone.INFO,
+                                            onClick = { openCategoryBranch(category.id) },
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
                 }
-                if (categories.isEmpty()) {
+                if (visibleCategories.isEmpty()) {
                     item {
-                        Text("Nessuna categoria configurata.", style = MaterialTheme.typography.bodyMedium)
+                        Text("Nessuna categoria in questo ramo.", style = MaterialTheme.typography.bodyMedium)
                     }
                 }
             }
@@ -224,8 +279,17 @@ fun ConfigPanel(
                             text = "Salva template",
                             testTag = RepairAppTestTags.ConfigTemplateSaveButton,
                             onClick = {
-                                requestConfirm("Salvare template?", "Il template verra' salvato con una nuova versione.") {
+                                val riskyTemplateChange = isRiskyTemplateChange(loadedTemplateCode, templateCode, templateActive)
+                                requestConfirm(
+                                    "Salvare template?",
+                                    if (riskyTemplateChange) {
+                                        "Modificare codice o disattivare un template di sistema puo' impedire ai flussi esistenti di trovare il messaggio corretto. Le firme gia' acquisite restano salvate come snapshot."
+                                    } else {
+                                        "Il template verra' salvato con una nuova versione."
+                                    },
+                                ) {
                                     viewModel.saveTemplate(templateCode, templateTitle, templateBody, active = templateActive)
+                                    loadedTemplateCode = templateCode
                                 }
                             },
                         )
@@ -237,6 +301,7 @@ fun ConfigPanel(
                             .fillMaxWidth()
                             .clickable {
                                 templateCode = template.code
+                                loadedTemplateCode = template.code
                                 templateTitle = template.title
                                 templateBody = template.body
                                 templateActive = template.active
@@ -401,3 +466,34 @@ private enum class ConfigSection {
 }
 
 private const val XLSX_MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+private val systemTemplateCodes = setOf(
+    "privacy_breve",
+    "condizioni_presa_in_carico",
+    "whatsapp_presa_in_carico",
+    "whatsapp_aggiornamento",
+    "whatsapp_diagnosi",
+    "whatsapp_risultato",
+    "whatsapp_preventivo_intervento",
+    "whatsapp_non_riparabile",
+    "whatsapp_riparazione",
+    "whatsapp_lavorazione",
+    "whatsapp_completamento",
+    "whatsapp_pronto_ritiro",
+)
+
+private fun isRiskyTemplateChange(loadedCode: String?, currentCode: String, active: Boolean): Boolean =
+    (loadedCode != null && loadedCode != currentCode) || (currentCode in systemTemplateCodes && !active)
+
+private fun categoryBreadcrumb(categories: List<OrderCategoryEntity>, parentId: String?): String {
+    if (parentId == null) return "Macrocategorie"
+    val byId = categories.associateBy { it.id }
+    val names = mutableListOf<String>()
+    var current = byId[parentId]
+    repeat(3) {
+        if (current == null) return@repeat
+        names += current.name
+        current = current.parentId?.let(byId::get)
+    }
+    return names.asReversed().joinToString(" > ").ifBlank { "Macrocategorie" }
+}

@@ -16,7 +16,7 @@ Funzioni implementate:
 - attivare o disattivare utenti;
 - resettare password utenti;
 - vedere e gestire le commesse;
-- modificare categorie;
+- modificare categorie ad albero su tre livelli;
 - modificare template privacy, condizioni e WhatsApp;
 - impostare la modalita WhatsApp manuale;
 - esportare configurazione, database, ZIP completo e PDF commessa;
@@ -110,7 +110,7 @@ La creazione commessa procede a step confermati:
 
 - cliente esistente o nuovo cliente valido;
 - problema/sintesi obbligatoria;
-- categoria attiva obbligatoria;
+- categoria attiva obbligatoria, selezionata navigando l'albero fino al ramo operativo;
 - almeno una foto o allegato;
 - privacy, condizioni e firma cliente. I testi privacy e condizioni si aprono in dialog dalla sezione firma.
 
@@ -143,7 +143,7 @@ Campi principali:
 - numero commessa;
 - cliente;
 - titolo;
-- categoria;
+- categoria o percorso categoria;
 - stato;
 - priorita';
 - operatore assegnato;
@@ -170,14 +170,14 @@ READY_FOR_PICKUP
 CLOSED
 ```
 
-Il workspace riprende dallo stato corrente e mostra solo lo step successivo consentito dalla policy di stato piu' l'azione unica "Chiudi commessa". La chiusura richiede motivo e nota manuale, poi riporta all'elenco commesse.
+Il workspace riprende dallo stato corrente e mostra separatamente stato corrente e prossima azione consentita dalla policy di stato piu' l'azione unica "Chiudi commessa". La chiusura richiede motivo e nota manuale. Se il motivo e' non riparabile, la scheda resta aperta per preparare la comunicazione WhatsApp dedicata.
 
 Mappa operativa:
 
 - `OPEN`: presa in carico o chiusura motivata;
 - `IN_PROGRESS`: avvio diagnosi o chiusura motivata;
 - `DIAGNOSIS`: registrazione risultato o chiusura motivata;
-- `RESULT`: avvio riparazione o chiusura motivata;
+- `RESULT`: attesa conferma preventivo quando e' presente un importo, altrimenti avvio riparazione o chiusura motivata;
 - `REPAIRING`: pronta al ritiro o chiusura motivata;
 - `READY_FOR_PICKUP`: chiusura motivata;
 - `CLOSED`: nessuna azione operativa.
@@ -224,7 +224,7 @@ Timeline e message log vengono aggiornati
 
 Non sono implementati backend, WhatsApp Business Platform, webhook o conferme automatiche.
 
-Il feedback cliente automatico non e' implementato. Nel rilascio corrente l'app registra manualmente la risposta cliente: l'accettazione porta la commessa a `REPAIRING`, il rifiuto chiude la commessa in `CLOSED` con motivo `CUSTOMER_DECLINED`.
+Il feedback cliente automatico non e' implementato. Nel rilascio corrente l'app registra manualmente la risposta cliente: l'accettazione del preventivo porta la commessa a `REPAIRING`, il rifiuto chiude la commessa in `CLOSED` con motivo `CUSTOMER_DECLINED`.
 
 ## Backup e limiti
 
@@ -233,7 +233,7 @@ Export implementati:
 - configurazione JSON;
 - database Room;
 - ZIP completo con database, configurazione e file privati rilevanti;
-- PDF riepilogo della singola commessa.
+- PDF riepilogo della singola commessa con timeline completa.
 
 Ripristino backup:
 

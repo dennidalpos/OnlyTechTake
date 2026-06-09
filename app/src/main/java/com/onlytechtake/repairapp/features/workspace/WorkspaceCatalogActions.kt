@@ -43,12 +43,13 @@ internal class WorkspaceCatalogActions(
         }
     }
 
-    fun saveCategory(id: String?, name: String, description: String, active: Boolean, sortOrder: Int) =
+    fun saveCategory(id: String?, parentId: String?, name: String, description: String, active: Boolean, sortOrder: Int) =
         authenticatedActionRunner.run { actor ->
             catalogRepository.saveCategory(
                 actor,
                 CategoryInput(
                     id = id,
+                    parentId = parentId,
                     name = name,
                     description = description,
                     active = active,

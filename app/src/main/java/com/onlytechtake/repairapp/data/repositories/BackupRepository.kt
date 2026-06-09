@@ -14,6 +14,7 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
@@ -139,6 +140,16 @@ class BackupRepository(
                 writer.line("Operatore: ${detail.assignedUser?.displayName.orEmpty().ifBlank { "Non assegnato" }}")
                 writer.line("Data creazione: ${formatTime(detail.order.createdAt)}")
                 writer.line("Descrizione: ${detail.order.description.orEmpty().ifBlank { "Nessuna" }}")
+                writer.section("Timeline")
+                if (detail.timeline.isEmpty()) {
+                    writer.line("Nessun evento registrato.")
+                } else {
+                    detail.timeline
+                        .sortedBy { it.createdAt }
+                        .forEach { event ->
+                            writer.line(formatTimelineEvent(event))
+                        }
+                }
                 writer.section("Firme")
                 if (detail.signatures.isEmpty()) {
                     writer.line("Nessuna firma acquisita.")
@@ -268,7 +279,7 @@ class BackupRepository(
             appendLine("  \"exportedAt\": ${jsonString(formatTime(clockMillis()))},")
             appendLine("  \"categories\": [")
             appendLine(categories.joinToString(",\n") { category ->
-                "    {\"id\": ${jsonString(category.id)}, \"name\": ${jsonString(category.name)}, \"active\": ${category.active}, \"sortOrder\": ${category.sortOrder}}"
+                "    {\"id\": ${jsonString(category.id)}, \"parentId\": ${jsonString(category.parentId)}, \"level\": ${category.level}, \"name\": ${jsonString(category.name)}, \"active\": ${category.active}, \"sortOrder\": ${category.sortOrder}}"
             })
             appendLine("  ],")
             appendLine("  \"templates\": [")
@@ -380,6 +391,21 @@ private fun ClosureReason.label(): String =
         ClosureReason.CANCELLED -> "Annullata"
         ClosureReason.OTHER -> "Altro"
     }
+
+private fun formatTimelineEvent(event: TimelineEventEntity): String {
+    val parts = buildList {
+        add("${formatTime(event.createdAt)} - ${event.title}")
+        event.description?.takeIf { it.isNotBlank() }?.let { add(it) }
+        if (!event.oldStatus.isNullOrBlank() || !event.newStatus.isNullOrBlank()) {
+            add("Cambio stato: ${event.oldStatus.orEmpty().ifBlank { "-" }} -> ${event.newStatus.orEmpty().ifBlank { "-" }}")
+        }
+        event.expectedFeedbackType?.let { add("Feedback atteso: ${it.name}") }
+        event.customerFeedback?.let { add("Feedback cliente: ${it.name}") }
+        event.customerFeedbackNote?.takeIf { it.isNotBlank() }?.let { add("Nota feedback: $it") }
+        event.customerFeedbackAt?.let { add("Feedback registrato: ${formatTime(it)}") }
+    }
+    return parts.joinToString(" | ")
+}
 
 private fun formatTime(millis: Long): String =
     DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(

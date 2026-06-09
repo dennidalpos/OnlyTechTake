@@ -81,6 +81,7 @@ class AppContainer(context: Context) {
         templateDao = database.messageTemplateDao(),
         orderDao = database.repairOrderDao(),
         customerDao = database.customerDao(),
+        categoryDao = database.orderCategoryDao(),
         settingDao = database.appSettingDao(),
         messageLogDao = database.messageLogDao(),
         timelineEventDao = database.timelineEventDao(),

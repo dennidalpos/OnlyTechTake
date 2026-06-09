@@ -81,6 +81,7 @@ Versionamento database obbligatorio. L'app e' trattata come fresh app: non manti
 
 - UserEntity
 - CustomerEntity
+- OrderCategoryEntity, con parentId e level per albero categorie a tre livelli
 - RepairOrderEntity
 - OrderMediaEntity
 - SignatureEntity
@@ -247,6 +248,10 @@ I testi admin devono supportare variabili:
 {{titolo_commessa}}
 {{stato_commessa}}
 {{cliente}}
+{{importo_preventivo}}
+{{prossima_azione}}
+{{motivo_chiusura}}
+{{categoria_percorso}}
 ```
 
 Variabili diverse da questo elenco devono essere rifiutate al salvataggio o al

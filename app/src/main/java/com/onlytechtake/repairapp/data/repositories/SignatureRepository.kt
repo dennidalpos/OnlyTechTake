@@ -97,7 +97,7 @@ class SignatureRepository(
         const val MIME_TYPE_PNG = "image/png"
         const val PNG_QUALITY = 100
         const val DEFAULT_SIGNER_NAME = "Cliente"
-        const val DEFAULT_PRIVACY_TEXT = "I dati sono trattati solo per gestione riparazione, comunicazioni e obblighi fiscali."
-        const val DEFAULT_TERMS_TEXT = "Il cliente autorizza la presa in carico del bene e accetta le condizioni operative comunicate."
+        const val DEFAULT_PRIVACY_TEXT = "Informativa privacy sintetica GDPR: i dati sono trattati per presa in carico, diagnosi, preventivo, riparazione, consegna, comunicazioni operative e obblighi di legge. Il cliente puo' esercitare i diritti previsti dal GDPR e proporre reclamo al Garante."
+        const val DEFAULT_TERMS_TEXT = "Il cliente autorizza presa in carico, custodia e diagnosi tecnica dell'oggetto. Ogni riparazione con preventivo viene eseguita solo dopo conferma del cliente."
     }
 }

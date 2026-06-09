@@ -30,13 +30,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
-import com.onlytechtake.repairapp.data.local.entities.MessageChannel
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.features.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
@@ -47,6 +47,7 @@ import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
 import com.onlytechtake.repairapp.features.workspace.label
 import com.onlytechtake.repairapp.features.workspace.nextActionLabel
 import com.onlytechtake.repairapp.features.workspace.requiresConfirmation
+import com.onlytechtake.repairapp.features.workspace.statusTemplateCode
 
 @Composable
 fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
@@ -132,9 +133,8 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     SectionTitle("Scheda commessa")
                     Text("${selected.order.orderNumber} - ${selected.order.title}", style = MaterialTheme.typography.titleMedium)
                     Text("Cliente: ${selected.customer?.displayName().orEmpty()}")
-                    OperatorText(
-                        text = "Stato: ${selected.order.status.label()}\nProssima azione: ${nextActionLabel(selected.order.status)}",
-                    )
+                    OperatorText(text = "Stato corrente: ${selected.order.status.label()}")
+                    OperatorText(text = "Prossima azione: ${nextActionLabel(selected.order)}")
                     selected.order.closureReason?.let { Text("Motivo chiusura: ${it.label()}") }
                     Text("Operatore: ${selected.assignedUser?.displayName.orEmpty()}")
                     Text("Aggiornata: ${formatUiDateTime(selected.order.updatedAt)}")
@@ -272,33 +272,23 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         }
 
         item {
-            val whatsappTemplates = templates.filter {
-                it.active && it.channel == MessageChannel.WHATSAPP && it.code.startsWith("whatsapp_")
-            }
+            val templateCode = statusTemplateCode(selected.order)
+            val templateTitle = templates.firstOrNull { it.active && it.code == templateCode }?.title ?: templateCode
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                 ) {
                     SectionTitle("WhatsApp")
-                    Text(
-                        text = "Prepara un aggiornamento stato avanzamento da controllare e inviare manualmente al cliente.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    OperatorText(
+                        text = "Stato attuale: ${selected.order.status.label()}\nTemplate: $templateTitle",
                     )
-                    if (whatsappTemplates.isEmpty()) {
-                        Text("Nessun template WhatsApp attivo.")
-                    } else {
-                        ActionRow {
-                            whatsappTemplates.forEach { template ->
-                                TouchButton(
-                                    text = template.title,
-                                    tone = if (template.code == statusTemplateCodeForDetail(selected.order.status)) ButtonTone.INFO else ButtonTone.NEUTRAL,
-                                    onClick = { viewModel.prepareMessage(selected.order.id, template.code) },
-                                )
-                            }
-                        }
-                    }
+                    TouchButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Invia stato WhatsApp",
+                        tone = ButtonTone.INFO,
+                        onClick = { viewModel.prepareMessage(selected.order.id, templateCode) },
+                    )
                 }
             }
         }
@@ -311,11 +301,6 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                 ) {
                         SectionTitle("Anteprima WhatsApp")
-                        Text(
-                            text = "Il testo resta modificabile: l'app apre WhatsApp con il messaggio pronto, poi l'invio viene confermato manualmente.",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
                         Field(uiState.preparedMessageBody, viewModel::updatePreparedMessageBody, "Messaggio")
                         ActionRow {
                             TouchButton(
@@ -399,8 +384,8 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text("Aggiornare lo stato della commessa?")
                     if (isResultStep) {
-                        Field(resultSummary, { resultSummary = it }, "Sintesi risultato", required = true, showError = resultSummary.isBlank(), testTag = RepairAppTestTags.StatusResultSummaryField)
-                        Field(resultAmount, { resultAmount = it }, "Importo riparazione opzionale", singleLine = true, keyboardType = KeyboardType.Number)
+                        Field(resultSummary, { resultSummary = it }, "Sintesi risultato", required = true, showError = resultSummary.isBlank(), imeAction = ImeAction.Next, testTag = RepairAppTestTags.StatusResultSummaryField)
+                        Field(resultAmount, { resultAmount = it }, "Importo riparazione opzionale", singleLine = true, imeAction = ImeAction.Done, keyboardType = KeyboardType.Number)
                     } else {
                         Field(
                             statusNote,
@@ -408,6 +393,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                             if (isClosure) "Nota chiusura" else "Nota opzionale",
                             required = isClosure,
                             showError = isClosure && statusNote.isBlank(),
+                            imeAction = ImeAction.Done,
                             testTag = RepairAppTestTags.StatusNoteField,
                         )
                     }
@@ -494,10 +480,16 @@ private fun applyStatusAction(
     resultAmount: String,
 ) {
     if (action == OrderStatusAction.RECORD_RESULT) {
+        val estimateAmountCents = parseEuroCentsOrNull(resultAmount)
         viewModel.recordResult(
             orderId = orderId,
             summary = resultSummary,
-            estimateAmountCents = parseEuroCentsOrNull(resultAmount),
+            estimateAmountCents = estimateAmountCents,
+            onSuccess = {
+                if (estimateAmountCents != null) {
+                    viewModel.prepareMessage(orderId, "whatsapp_preventivo_intervento")
+                }
+            },
         )
         return
     }
@@ -508,7 +500,9 @@ private fun applyStatusAction(
         note = note,
         closureReason = closureReason,
         onSuccess = {
-            if (targetStatus == OrderStatus.CLOSED) {
+            if (targetStatus == OrderStatus.CLOSED && closureReason == ClosureReason.NOT_REPAIRABLE) {
+                viewModel.prepareMessage(orderId, "whatsapp_non_riparabile")
+            } else if (targetStatus == OrderStatus.CLOSED) {
                 viewModel.selectOrder(null)
             }
         },
@@ -536,6 +530,3 @@ private fun parseEuroCentsOrNull(value: String): Long? {
         ?: 0L
     return euros * 100L + cents
 }
-
-private fun statusTemplateCodeForDetail(status: OrderStatus): String =
-    com.onlytechtake.repairapp.features.workspace.statusTemplateCode(status)

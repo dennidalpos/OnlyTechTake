@@ -73,7 +73,7 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
                         Text("${order.orderNumber} - ${order.title}", style = MaterialTheme.typography.titleMedium)
                         Text("Cliente: ${item.customer?.displayName().orEmpty().ifBlank { "Cliente non disponibile" }}")
                         Text("Stato: ${order.status.label()}")
-                        Text("Prossima azione: ${nextActionLabel(order.status)}")
+                        Text("Prossima azione: ${nextActionLabel(order)}")
                         Text("Aggiornata: ${formatUiDateTime(order.updatedAt)}")
                         Text("Media e firme: ${item.attachments.label()}")
                     }

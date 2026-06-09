@@ -191,6 +191,8 @@ class RepairAppDatabaseInstrumentedTest {
 
     private fun testCategory(id: String) = OrderCategoryEntity(
         id = id,
+        parentId = null,
+        level = 0,
         name = "Smartphone",
         description = null,
         active = true,

@@ -218,11 +218,12 @@ class WorkspaceViewModel(
 
     fun saveCategory(
         id: String?,
+        parentId: String?,
         name: String,
         description: String,
         active: Boolean,
         sortOrder: Int,
-    ) = catalogActions.saveCategory(id, name, description, active, sortOrder)
+    ) = catalogActions.saveCategory(id, parentId, name, description, active, sortOrder)
 
     fun changeStatus(orderId: String, status: OrderStatus, note: String = "", closureReason: ClosureReason? = null) = withUser { actor ->
         orderRepository.changeStatus(actor, orderId, status, note, closureReason)
@@ -238,7 +239,7 @@ class WorkspaceViewModel(
         orderRepository.changeStatus(actor, orderId, status, note, closureReason)
     }
 
-    fun recordResult(orderId: String, summary: String, estimateAmountCents: Long?) = withUser { actor ->
+    fun recordResult(orderId: String, summary: String, estimateAmountCents: Long?, onSuccess: () -> Unit = {}) = withUser(onSuccess = onSuccess) { actor ->
         orderRepository.recordResult(actor, orderId, summary, estimateAmountCents)
     }
 

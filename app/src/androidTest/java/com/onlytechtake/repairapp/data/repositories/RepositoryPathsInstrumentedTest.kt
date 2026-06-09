@@ -286,6 +286,8 @@ class RepositoryPathsInstrumentedTest {
             fileBackedDatabase.orderCategoryDao().upsert(
                 OrderCategoryEntity(
                     id = CATEGORY_ID,
+                    parentId = null,
+                    level = 0,
                     name = "Smartphone",
                     description = null,
                     active = true,
@@ -364,6 +366,8 @@ class RepositoryPathsInstrumentedTest {
             fileBackedDatabase.orderCategoryDao().upsert(
                 OrderCategoryEntity(
                     id = CATEGORY_ID,
+                    parentId = null,
+                    level = 0,
                     name = "Smartphone",
                     description = null,
                     active = true,
@@ -390,6 +394,8 @@ class RepositoryPathsInstrumentedTest {
             fileBackedDatabase.orderCategoryDao().upsert(
                 OrderCategoryEntity(
                     id = CATEGORY_ID,
+                    parentId = null,
+                    level = 0,
                     name = "Categoria sovrascritta",
                     description = null,
                     active = true,
@@ -489,6 +495,8 @@ class RepositoryPathsInstrumentedTest {
             fileBackedDatabase.orderCategoryDao().upsert(
                 OrderCategoryEntity(
                     id = CATEGORY_ID,
+                    parentId = null,
+                    level = 0,
                     name = "Smartphone",
                     description = null,
                     active = true,
@@ -692,6 +700,8 @@ class RepositoryPathsInstrumentedTest {
         database.orderCategoryDao().upsert(
             OrderCategoryEntity(
                 id = CATEGORY_ID,
+                parentId = null,
+                level = 0,
                 name = "Smartphone",
                 description = null,
                 active = true,

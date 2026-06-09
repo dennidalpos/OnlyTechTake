@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.features.workspace
 
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
 
 enum class OrderStatusAction(
@@ -34,6 +35,13 @@ fun statusTemplateCode(status: OrderStatus): String =
         OrderStatus.REPAIRING -> "whatsapp_riparazione"
         OrderStatus.READY_FOR_PICKUP,
         OrderStatus.CLOSED -> "whatsapp_pronto_ritiro"
+    }
+
+fun statusTemplateCode(order: RepairOrderEntity): String =
+    when {
+        order.status == OrderStatus.CLOSED && order.closureReason == ClosureReason.NOT_REPAIRABLE -> "whatsapp_non_riparabile"
+        order.status == OrderStatus.RESULT && order.estimateAmountCents != null -> "whatsapp_preventivo_intervento"
+        else -> statusTemplateCode(order.status)
     }
 
 fun OrderStatus.label(): String =

@@ -36,6 +36,7 @@ data class CustomerInput(
 
 data class CategoryInput(
     val id: String? = null,
+    val parentId: String? = null,
     val name: String,
     val description: String,
     val active: Boolean = true,

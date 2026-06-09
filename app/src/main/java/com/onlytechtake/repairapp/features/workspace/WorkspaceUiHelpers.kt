@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.features.workspace
 
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
 import java.time.Instant
@@ -66,4 +67,11 @@ fun nextActionLabel(status: OrderStatus): String =
         "Registra esito preventivo"
     } else {
         availableOrderStatusActions(status).firstOrNull()?.label ?: "Nessuna azione"
+    }
+
+fun nextActionLabel(order: RepairOrderEntity): String =
+    if (order.status == OrderStatus.RESULT && order.estimateAmountCents != null) {
+        "Attendere conferma preventivo"
+    } else {
+        nextActionLabel(order.status)
     }

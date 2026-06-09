@@ -22,10 +22,20 @@ class CatalogRepository(
         runCatching {
             require(actor.role == UserRole.ADMIN) { "Solo admin" }
             require(input.name.isNotBlank()) { "Nome categoria obbligatorio" }
+            val parent = input.parentId?.let {
+                requireNotNull(categoryDao.findById(it)) { "Categoria padre non trovata" }
+            }
+            val level = (parent?.level ?: -1) + 1
+            require(level in 0..2) { "Sono supportati al massimo tre livelli categoria" }
+            val normalizedName = input.name.trim()
+            val duplicate = categoryDao.findByParentAndName(input.parentId, normalizedName)
+            require(duplicate == null || duplicate.id == input.id) { "Categoria gia' presente in questo ramo" }
             categoryDao.upsert(
                 OrderCategoryEntity(
                     id = input.id ?: UUID.randomUUID().toString(),
-                    name = input.name.trim(),
+                    parentId = input.parentId,
+                    level = level,
+                    name = normalizedName,
                     description = input.description.trim().ifBlank { null },
                     active = input.active,
                     sortOrder = input.sortOrder,

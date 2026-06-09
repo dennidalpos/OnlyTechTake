@@ -236,6 +236,8 @@ class SocialStoryDemoScreenshotTest {
         database.orderCategoryDao().upsert(
             OrderCategoryEntity(
                 id = DEMO_CATEGORY_ID,
+                parentId = null,
+                level = 0,
                 name = "Notebook",
                 description = "Diagnosi e riparazioni notebook e ultrabook.",
                 active = true,
