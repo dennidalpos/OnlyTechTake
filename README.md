@@ -1,5 +1,7 @@
 # OnlyTechTake Repair App
 
+![OnlyTechTake Repair App](media/brand/github-cover.png)
+
 App Android locale per gestione commesse di riparazione/lavorazione su un singolo device.
 
 ## Stato Reale
@@ -135,6 +137,7 @@ Regole:
 - `app\src\androidTest\`: test strumentali su device/emulatore.
 - `app\schemas\`: schema Room esportato.
 - `docs\`: documentazione operativa e funzionale.
+- `media\brand\`: logo, favicon, anteprime e cover README per GitHub.
 - `scripts\windows\`: script PowerShell ufficiali.
 
 ## Troubleshooting
