@@ -315,7 +315,8 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                 selectedCategoryId = selectedCategoryId,
                 selectedCategory = selectedCategory,
                 onCategorySelected = { categoryId ->
-                    selectedCategoryId = categoryId
+                    selectedCategoryId = selectedCategoryAfterClick(selectedCategoryId, categoryId)
+                    completedStep = completedStepAfterCategorySelection(completedStep)
                 },
                 onOpenConfig = { viewModel.navigateTo(WorkspaceDestination.CONFIG) },
             )

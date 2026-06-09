@@ -53,9 +53,13 @@ import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.features.dashboard.DashboardRoute
 
 @Composable
-fun AuthGateRoute() {
+fun AuthGateRoute(
+    appInstanceKey: Int,
+    onAppDataRestored: () -> Unit,
+) {
     val container = LocalAppContainer.current
     val viewModel: AuthGateViewModel = viewModel(
+        key = "auth_gate_$appInstanceKey",
         factory = AuthGateViewModel.Factory(container.authRepository),
     )
     val authState by viewModel.authState.collectAsState()
@@ -69,7 +73,11 @@ fun AuthGateRoute() {
 
     when {
         !authState.initialized -> AuthLoadingScreen()
-        authState.currentUser != null -> DashboardRoute(onLogout = viewModel::logout)
+        authState.currentUser != null -> DashboardRoute(
+            appInstanceKey = appInstanceKey,
+            onLogout = viewModel::logout,
+            onAppDataRestored = onAppDataRestored,
+        )
         !authState.configured -> FirstSetupScreen(
             formState = formState,
             onDisplayNameChange = viewModel::updateDisplayName,

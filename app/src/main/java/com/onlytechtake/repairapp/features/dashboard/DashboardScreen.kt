@@ -30,12 +30,18 @@ import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModelFactory
 
 @Composable
-fun DashboardRoute(onLogout: () -> Unit) {
+fun DashboardRoute(
+    appInstanceKey: Int,
+    onLogout: () -> Unit,
+    onAppDataRestored: () -> Unit,
+) {
     val container = LocalAppContainer.current
     val dashboardViewModel: DashboardViewModel = viewModel(
+        key = "dashboard_$appInstanceKey",
         factory = DashboardViewModel.Factory(container.repairAppRepository),
     )
     val workspaceViewModel: WorkspaceViewModel = viewModel(
+        key = "workspace_$appInstanceKey",
         factory = WorkspaceViewModelFactory(
             authRepository = container.authRepository,
             adminUserRepository = container.adminUserRepository,
@@ -52,7 +58,12 @@ fun DashboardRoute(onLogout: () -> Unit) {
     )
     val summary by dashboardViewModel.summary.collectAsState()
 
-    DashboardScreen(summary = summary, workspaceViewModel = workspaceViewModel, onLogout = onLogout)
+    DashboardScreen(
+        summary = summary,
+        workspaceViewModel = workspaceViewModel,
+        onLogout = onLogout,
+        onAppDataRestored = onAppDataRestored,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,6 +72,7 @@ fun DashboardScreen(
     summary: AppSummary,
     workspaceViewModel: WorkspaceViewModel,
     onLogout: () -> Unit,
+    onAppDataRestored: () -> Unit,
 ) {
     val uiState by workspaceViewModel.uiState.collectAsState()
     val currentUser by workspaceViewModel.currentUser.collectAsState()
@@ -134,7 +146,11 @@ fun DashboardScreen(
                 WorkspaceDestination.CUSTOMERS -> CustomerPanel(workspaceViewModel)
                 WorkspaceDestination.ORDERS -> OrdersPanel(workspaceViewModel)
                 WorkspaceDestination.ORDER_DETAIL -> OrderDetailWorkspace(workspaceViewModel)
-                WorkspaceDestination.CONFIG -> ConfigPanel(workspaceViewModel, isAdmin = currentUser?.role == UserRole.ADMIN)
+                WorkspaceDestination.CONFIG -> ConfigPanel(
+                    viewModel = workspaceViewModel,
+                    isAdmin = currentUser?.role == UserRole.ADMIN,
+                    onBackupRestored = onAppDataRestored,
+                )
                 WorkspaceDestination.ADMIN -> AdminPanel(
                     viewModel = workspaceViewModel,
                     isAdmin = currentUser?.role == UserRole.ADMIN,

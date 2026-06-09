@@ -48,11 +48,12 @@ fun QuickIntakeCategorySection(
                         TouchButton(
                             modifier = Modifier.semantics {
                                 this.selected = selected
-                                stateDescription = if (selected) "Selezionata" else "Non selezionata"
+                                stateDescription = if (selected) "Selezionata, tocca per rimuovere" else "Non selezionata"
                             },
                             text = if (selected) "${category.name} *" else category.name,
                             tone = if (selected) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
                             selected = selected,
+                            stateDescription = if (selected) "Selezionata, tocca per rimuovere" else "Non selezionata",
                             testTag = RepairAppTestTags.categoryButton(category.id),
                             onClick = { onCategorySelected(category.id) },
                         )

@@ -38,6 +38,7 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
     val customers by viewModel.customerSuggestions.collectAsState()
     var showForm by rememberSaveable { mutableStateOf(false) }
     var confirmSave by rememberSaveable { mutableStateOf(false) }
+    var editingCustomerId by rememberSaveable { mutableStateOf<String?>(null) }
     var isBusiness by rememberSaveable { mutableStateOf(false) }
     var firstName by rememberSaveable { mutableStateOf("") }
     var lastName by rememberSaveable { mutableStateOf("") }
@@ -51,6 +52,7 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
     val focusManager = LocalFocusManager.current
 
     val input = CustomerInput(
+        id = editingCustomerId,
         type = if (isBusiness) CustomerType.BUSINESS else CustomerType.PRIVATE,
         firstName = firstName,
         lastName = lastName,
@@ -64,6 +66,40 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
     )
     val canSave = (phone.isNotBlank() || email.isNotBlank()) &&
         if (isBusiness) companyName.isNotBlank() else firstName.isNotBlank() && lastName.isNotBlank()
+
+    fun clearForm() {
+        editingCustomerId = null
+        isBusiness = false
+        firstName = ""
+        lastName = ""
+        companyName = ""
+        phone = ""
+        email = ""
+        taxCode = ""
+        vatNumber = ""
+        address = ""
+        notes = ""
+    }
+
+    fun openNewCustomerForm() {
+        clearForm()
+        showForm = true
+    }
+
+    fun editCustomer(customer: CustomerEntity) {
+        editingCustomerId = customer.id
+        isBusiness = customer.type == CustomerType.BUSINESS
+        firstName = customer.firstName.orEmpty()
+        lastName = customer.lastName.orEmpty()
+        companyName = customer.companyName.orEmpty()
+        phone = customer.phone.orEmpty()
+        email = customer.email.orEmpty()
+        taxCode = customer.taxCode.orEmpty()
+        vatNumber = customer.vatNumber.orEmpty()
+        address = customer.address.orEmpty()
+        notes = customer.notes.orEmpty()
+        showForm = true
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -91,7 +127,7 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                     TouchButton(
                         modifier = Modifier.fillMaxWidth(),
                         text = "Nuovo cliente",
-                        onClick = { showForm = true },
+                        onClick = ::openNewCustomerForm,
                     )
                 }
             }
@@ -104,7 +140,10 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                     ) {
-                        Text("Nuovo cliente", style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            text = if (editingCustomerId == null) "Nuovo cliente" else "Modifica cliente",
+                            style = MaterialTheme.typography.titleMedium,
+                        )
                         CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = { isBusiness = it })
                         if (isBusiness) {
                             Field(companyName, { companyName = it }, "Ragione sociale", required = true, showError = companyName.isBlank(), singleLine = true)
@@ -120,14 +159,18 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                         Field(notes, { notes = it }, "Note")
                         ActionRow {
                             TouchButton(
-                                text = "Salva cliente",
+                                text = if (editingCustomerId == null) "Salva cliente" else "Aggiorna cliente",
                                 enabled = canSave,
                                 onClick = { confirmSave = true },
                             )
                             TouchButton(
                                 text = "Annulla",
                                 tone = ButtonTone.NEUTRAL,
-                                onClick = { showForm = false },
+                                onClick = {
+                                    showForm = false
+                                    confirmSave = false
+                                    clearForm()
+                                },
                             )
                         }
                     }
@@ -140,12 +183,15 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
             item {
                 CustomerEmptyState(
                     hasQuery = uiState.customerSearchQuery.isNotBlank(),
-                    onNewCustomer = { showForm = true },
+                    onNewCustomer = ::openNewCustomerForm,
                 )
             }
         } else {
             items(customers) { customer ->
-                CustomerCard(customer)
+                CustomerCard(
+                    customer = customer,
+                    onEdit = { editCustomer(customer) },
+                )
             }
         }
     }
@@ -153,23 +199,14 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
     if (confirmSave) {
         AlertDialog(
             onDismissRequest = { confirmSave = false },
-            title = { Text("Salvare cliente?") },
-            text = { Text("Salvare il cliente?") },
+            title = { Text(if (editingCustomerId == null) "Salvare cliente?" else "Aggiornare cliente?") },
+            text = { Text(if (editingCustomerId == null) "Salvare il cliente?" else "Aggiornare i dati del cliente selezionato?") },
             confirmButton = {
                 TextButton(
                     onClick = {
                         confirmSave = false
                         viewModel.saveCustomer(input)
-                        isBusiness = false
-                        firstName = ""
-                        lastName = ""
-                        companyName = ""
-                        phone = ""
-                        email = ""
-                        taxCode = ""
-                        vatNumber = ""
-                        address = ""
-                        notes = ""
+                        clearForm()
                         showForm = false
                         viewModel.setCustomerSearchQuery("")
                     },
@@ -187,11 +224,23 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
 }
 
 @Composable
-private fun CustomerCard(customer: CustomerEntity) {
+private fun CustomerCard(customer: CustomerEntity, onEdit: () -> Unit) {
     Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(DashboardSpacing.cardPadding)) {
+        Column(
+            modifier = Modifier.padding(DashboardSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+        ) {
             Text(customer.displayName(), style = MaterialTheme.typography.titleMedium)
             Text(customer.type.label())
+            listOfNotNull(customer.phone, customer.email).takeIf { it.isNotEmpty() }?.let {
+                Text(it.joinToString(" - "))
+            }
+            TouchButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "Modifica cliente",
+                tone = ButtonTone.NEUTRAL,
+                onClick = onEdit,
+            )
         }
     }
 }

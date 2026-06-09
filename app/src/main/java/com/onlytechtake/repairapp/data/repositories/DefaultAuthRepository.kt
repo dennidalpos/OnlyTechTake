@@ -39,13 +39,16 @@ class DefaultAuthRepository(
             authPreferences.lastUserId,
             inactivityTicker(),
         ) { adminCount, currentUser, lastUserId, now ->
-            if (currentUser != null && sessionStore.isExpired(now, AuthPolicy.INACTIVITY_TIMEOUT_MILLIS)) {
+            val activeUser = if (currentUser != null && sessionStore.isExpired(now, AuthPolicy.INACTIVITY_TIMEOUT_MILLIS)) {
                 sessionStore.clear()
+                null
+            } else {
+                currentUser
             }
             AuthState(
                 initialized = true,
                 configured = adminCount > 0,
-                currentUser = sessionStore.currentUser.value,
+                currentUser = activeUser,
                 lastUsername = lastUserId?.let { userDao.findById(it)?.username }.orEmpty(),
             )
         }

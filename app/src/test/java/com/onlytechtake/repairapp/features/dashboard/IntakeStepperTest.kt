@@ -23,4 +23,16 @@ class IntakeStepperTest {
         assertFalse(isIntakeSubmitUnlocked(completedStep = 4))
         assertTrue(isIntakeSubmitUnlocked(completedStep = 5))
     }
+
+    @Test
+    fun categoryClickTogglesCurrentSelection() {
+        assertEquals("phone", selectedCategoryAfterClick(currentCategoryId = null, clickedCategoryId = "phone"))
+        assertEquals("tablet", selectedCategoryAfterClick(currentCategoryId = "phone", clickedCategoryId = "tablet"))
+        assertEquals(null, selectedCategoryAfterClick(currentCategoryId = "phone", clickedCategoryId = "phone"))
+    }
+
+    @Test
+    fun categoryChangeInvalidatesFollowingSteps() {
+        assertEquals(1, completedStepAfterCategorySelection(completedStep = 5))
+    }
 }

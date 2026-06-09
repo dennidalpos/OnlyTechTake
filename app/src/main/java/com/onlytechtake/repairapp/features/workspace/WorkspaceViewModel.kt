@@ -362,6 +362,9 @@ class WorkspaceViewModel(
     fun exportOrdersXlsx(uri: Uri) =
         adminActions.exportOrdersXlsx(uri)
 
+    fun restoreCompleteBackup(uri: Uri, onRestored: () -> Unit) =
+        adminActions.restoreCompleteBackup(uri, onRestored)
+
     fun exportSelectedOrderPdf(uri: Uri) =
         mediaActions.exportSelectedOrderPdf(backupRepository, uri)
 

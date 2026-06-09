@@ -120,6 +120,18 @@ class RepositoryPathsInstrumentedTest {
     }
 
     @Test
+    fun authStateEmitsCurrentUserAfterSingleSuccessfulLogin() = runBlocking {
+        val authRepository = authRepository { NOW }
+        authRepository.createFirstAdmin("Admin", "admin", "correct-password".toCharArray())
+        authRepository.logout()
+
+        assertTrue(authRepository.login("admin", "correct-password".toCharArray()) is LoginResult.Success)
+
+        val state = authRepository.observeAuthState().first { it.currentUser != null }
+        assertEquals("admin", state.currentUser?.username)
+    }
+
+    @Test
     fun workflowRepositoryCreatesOrderAndTimelineEvent() = runBlocking {
         val actor = seedAdmin()
         seedCustomer()
@@ -140,6 +152,37 @@ class RepositoryPathsInstrumentedTest {
         val events = database.timelineEventDao().observeForOrder(order.id).first()
         assertEquals(1, events.size)
         assertEquals(order.id, events.single().orderId)
+    }
+
+    @Test
+    fun customerUpdatePreservesExistingOrderRelationship() = runBlocking {
+        val actor = seedAdmin()
+        seedCustomer()
+        seedCategory()
+        val order = orderWorkflowRepository().createOrder(
+            actor = actor,
+            input = RepairOrderInput(
+                customerId = CUSTOMER_ID,
+                title = "Schermo rotto",
+                categoryId = CATEGORY_ID,
+            ),
+        ).getOrThrow()
+        val repository = CustomerRepository(database.customerDao(), clockMillis = { NOW + 1L })
+
+        val updated = repository.save(
+            com.onlytechtake.repairapp.domain.workspace.CustomerInput(
+                id = CUSTOMER_ID,
+                type = CustomerType.PRIVATE,
+                firstName = "Luigi",
+                lastName = "Verdi",
+                phone = "3331111111",
+                email = "luigi@example.test",
+            ),
+        ).getOrThrow()
+
+        assertEquals(CUSTOMER_ID, updated.id)
+        assertEquals(CUSTOMER_ID, database.repairOrderDao().findById(order.id)?.customerId)
+        assertEquals("Luigi", database.customerDao().findById(CUSTOMER_ID)?.firstName)
     }
 
     @Test
@@ -287,6 +330,91 @@ class RepositoryPathsInstrumentedTest {
             fileBackedDatabase.close()
             output.delete()
             context.deleteDatabase(databaseName)
+        }
+
+        Unit
+    }
+
+    @Test
+    fun backupRepositoryRestoresCompleteZipReplacingDatabaseAndPrivateFiles() = runBlocking {
+        val databaseName = RepairAppDatabase.DATABASE_NAME
+        context.deleteDatabase(databaseName)
+        val fileBackedDatabase = Room.databaseBuilder(context, RepairAppDatabase::class.java, databaseName)
+            .allowMainThreadQueries()
+            .build()
+        val output = File(context.cacheDir, "complete-restore-test.zip")
+        val sessionStore = InMemorySessionStore()
+        try {
+            val hash = PasswordHasher().hash("correct-password".toCharArray())
+            val actor = AuthenticatedUser(ADMIN_ID, "Admin", "admin", UserRole.ADMIN)
+            sessionStore.setCurrentUser(actor, NOW)
+            fileBackedDatabase.userDao().upsert(
+                UserEntity(
+                    id = actor.id,
+                    displayName = actor.displayName,
+                    username = actor.username,
+                    passwordHash = hash.hash,
+                    passwordSalt = hash.salt,
+                    role = UserRole.ADMIN,
+                    active = true,
+                    createdAt = NOW,
+                    updatedAt = NOW,
+                ),
+            )
+            fileBackedDatabase.orderCategoryDao().upsert(
+                OrderCategoryEntity(
+                    id = CATEGORY_ID,
+                    name = "Smartphone",
+                    description = null,
+                    active = true,
+                    sortOrder = 0,
+                ),
+            )
+            File(context.filesDir, "order_media/order-1/photo.jpg").also {
+                it.parentFile?.mkdirs()
+                it.writeBytes(byteArrayOf(1, 2, 3, 4))
+            }
+            val repository = BackupRepository(
+                context = context,
+                categoryDao = fileBackedDatabase.orderCategoryDao(),
+                templateDao = fileBackedDatabase.messageTemplateDao(),
+                settingDao = fileBackedDatabase.appSettingDao(),
+                auditLogDao = fileBackedDatabase.auditLogDao(),
+                database = fileBackedDatabase,
+                authPreferences = authPreferences,
+                sessionStore = sessionStore,
+                clockMillis = { NOW },
+            )
+
+            repository.exportCompleteBackup(actor, Uri.fromFile(output)).getOrThrow()
+            fileBackedDatabase.orderCategoryDao().upsert(
+                OrderCategoryEntity(
+                    id = CATEGORY_ID,
+                    name = "Categoria sovrascritta",
+                    description = null,
+                    active = true,
+                    sortOrder = 0,
+                ),
+            )
+            File(context.filesDir, "order_media/order-1/photo.jpg").writeText("changed")
+
+            repository.restoreCompleteBackup(actor, Uri.fromFile(output)).getOrThrow()
+
+            val restoredDatabase = Room.databaseBuilder(context, RepairAppDatabase::class.java, databaseName)
+                .allowMainThreadQueries()
+                .build()
+            try {
+                assertEquals("Smartphone", restoredDatabase.orderCategoryDao().findById(CATEGORY_ID)?.name)
+                assertTrue(File(context.filesDir, "order_media/order-1/photo.jpg").readBytes().contentEquals(byteArrayOf(1, 2, 3, 4)))
+                assertEquals(null, sessionStore.currentUser.value)
+            } finally {
+                restoredDatabase.close()
+            }
+        } finally {
+            runCatching { fileBackedDatabase.close() }
+            output.delete()
+            context.deleteDatabase(databaseName)
+            clearAppFiles()
         }
 
         Unit

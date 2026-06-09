@@ -2,7 +2,7 @@
 
 ## Stato operativo
 
-Export configurazione, database, ZIP completo e XLSX commesse sono implementati per admin tramite Storage Access Framework. L'app non supporta ripristino/import di backup ZIP.
+Export configurazione, database, ZIP completo, XLSX commesse e ripristino ZIP completo sono implementati per admin tramite Storage Access Framework.
 
 ## Sezione app
 
@@ -53,7 +53,17 @@ Contiene l'export tabellare delle commesse per uso admin.
 
 ### Ripristino backup
 
-Non supportato. Il backup ZIP completo e' solo export locale: l'app non importa ZIP e non sostituisce database o file privati da backup storici.
+Output accettato: ZIP completo generato da `Export ZIP`.
+
+Il ripristino:
+
+- richiede ruolo admin;
+- valida metadata, versione database e presenza di `database/repair_app.db`;
+- rifiuta percorsi ZIP non sicuri o file app fuori dalle cartelle supportate;
+- sostituisce database locale e file privati `orders` / `order_media`;
+- cancella sessione locale e richiede un nuovo login.
+
+Il ripristino e' pensato per trasferire l'app su un altro telefono con lo stesso pacchetto applicativo. Prima di ripristinare, salvare un export ZIP recente dal telefono sorgente.
 
 ## Metadata
 
@@ -61,9 +71,9 @@ Il backup completo include metadati con data creazione, nome database, versione 
 
 ## Sicurezza
 
-- L'app non usa backup cloud Android: `android:allowBackup="false"` e le regole XML escludono file, database e shared preferences.
+- L'app usa backup manuale tramite ZIP selezionato dall'admin. Il backup cloud Android resta disattivato: `android:allowBackup="false"` e le regole XML escludono file, database e shared preferences.
 - Il salvataggio usa Storage Access Framework; non usare percorsi assoluti fragili.
-- Gli export richiedono ruolo admin.
+- Export e ripristino richiedono ruolo admin.
 - Ogni export registra audit `DATA_EXPORTED`.
 - Configurazione, database, PDF e backup ZIP non sono cifrati dall'app. La
   cifratura non e' attivata in questo rilascio per evitare gestione passphrase e

@@ -1,7 +1,6 @@
 {
   "todos": [
-    "Eseguire verifica manuale su dispositivo del flusso admin Config > Categorie: salvare una categoria, verificarne la presenza nella lista e selezionarla in una nuova commessa",
-    "Eseguire verifica manuale su dispositivo del flusso completo: login singolo, scatto foto, modifica con rotazione/freccia/ritaglio, cancellazione foto, diagnosi, preventivo accettato e preventivo rifiutato con nota obbligatoria",
-    "Creare o configurare l'AVD dedicato OnlyTechTakeDemo per usare lo script demo nel flusso predefinito non distruttivo su emulatore"
+    "Configurare keystore.properties locale non tracciato e generare build release APK/AAB per verifica Play Protect tramite Play Console, Internal Testing o Internal App Sharing",
+    "Eseguire verifica manuale operatore su telefono destinatario: login singolo, modifica cliente con commessa esistente, selezione/deselezione categoria nuova commessa, export ZIP e ripristino ZIP su installazione pulita"
   ]
 }

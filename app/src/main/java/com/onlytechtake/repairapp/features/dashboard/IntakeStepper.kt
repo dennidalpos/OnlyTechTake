@@ -14,3 +14,9 @@ internal fun currentStepAfterAdvance(step: Int): Int =
 
 internal fun isIntakeSubmitUnlocked(completedStep: Int): Boolean =
     completedStep >= LAST_INTAKE_STEP
+
+internal fun selectedCategoryAfterClick(currentCategoryId: String?, clickedCategoryId: String): String? =
+    if (currentCategoryId == clickedCategoryId) null else clickedCategoryId
+
+internal fun completedStepAfterCategorySelection(completedStep: Int): Int =
+    completedStepAfterEdit(completedStep, 2)

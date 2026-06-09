@@ -122,6 +122,17 @@ Regole:
 - non scrivere password o percorsi personali in README, docs o script;
 - se `keystore.properties` manca o non punta a un keystore valido, la build release fallisce prima della compilazione release.
 
+## Play Protect e distribuzione
+
+Per ridurre gli avvisi Play Protect:
+
+- distribuire build release firmate, non APK debug;
+- mantenere stabile `applicationId` e certificato di firma tra le versioni;
+- preferire Android App Bundle caricato su Play Console, Internal Testing o Internal App Sharing;
+- se serve distribuire anche fuori Play, scaricare da Play Console l'APK universale firmato da Google oppure usare una chiave release gestita in modo coerente con Play App Signing.
+
+Un APK installato manualmente da sorgenti sconosciute e firmato con una chiave locale non riconosciuta puo' comunque mostrare avvisi Play Protect anche se il codice dell'app e' legittimo.
+
 ## Installazione e start
 
 Installare e avviare l'ultimo APK debug:

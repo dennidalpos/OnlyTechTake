@@ -80,5 +80,12 @@ abstract class RepairAppDatabase : RoomDatabase() {
                     .build()
                     .also { instance = it }
             }
+
+        fun closeInstance() {
+            synchronized(this) {
+                instance?.close()
+                instance = null
+            }
+        }
     }
 }

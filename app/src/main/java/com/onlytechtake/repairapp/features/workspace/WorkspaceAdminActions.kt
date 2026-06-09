@@ -30,6 +30,18 @@ internal class WorkspaceAdminActions(
         backupRepository.exportOrdersXlsx(actor, uri)
     }
 
+    fun restoreCompleteBackup(uri: Uri, onRestored: () -> Unit) {
+        authenticatedActionRunner.runCustom { actor ->
+            backupRepository.restoreCompleteBackup(actor, uri).fold(
+                onSuccess = {
+                    mutableUiState.value = WorkspaceUiState()
+                    onRestored()
+                },
+                onFailure = showError,
+            )
+        }
+    }
+
     fun resetAllData(confirmation: String, onReset: () -> Unit) {
         authenticatedActionRunner.runCustom { actor ->
             dataResetRepository.resetAll(actor, confirmation).fold(

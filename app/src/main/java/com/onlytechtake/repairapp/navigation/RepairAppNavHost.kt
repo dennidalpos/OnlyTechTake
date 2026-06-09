@@ -2,7 +2,10 @@ package com.onlytechtake.repairapp.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,8 +22,13 @@ private object Routes {
 fun RepairAppNavHost() {
     val navController = rememberNavController()
     val context = LocalContext.current
-    val appContainer = remember(context) {
+    var appInstanceKey by remember { mutableIntStateOf(0) }
+    val appContainer = remember(context, appInstanceKey) {
         AppContainer(context.applicationContext)
+    }
+    val recreateAppContainer = {
+        appContainer.close()
+        appInstanceKey += 1
     }
 
     CompositionLocalProvider(LocalAppContainer provides appContainer) {
@@ -29,7 +37,10 @@ fun RepairAppNavHost() {
             startDestination = Routes.AuthGate,
         ) {
             composable(Routes.AuthGate) {
-                AuthGateRoute()
+                AuthGateRoute(
+                    appInstanceKey = appInstanceKey,
+                    onAppDataRestored = recreateAppContainer,
+                )
             }
         }
     }

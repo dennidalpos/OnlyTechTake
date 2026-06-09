@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.data.repositories
 
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase
 import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
@@ -14,6 +15,8 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.data.preferences.AuthPreferences
+import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import java.io.File
@@ -21,6 +24,7 @@ import java.io.IOException
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.zip.ZipInputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +38,9 @@ class BackupRepository(
     private val settingDao: AppSettingDao,
     private val auditLogDao: AuditLogDao,
     private val orderExportDao: OrderExportDao? = null,
+    private val database: RepairAppDatabase? = null,
+    private val authPreferences: AuthPreferences? = null,
+    private val sessionStore: InMemorySessionStore? = null,
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
     private val eventWriter = OrderWorkflowEventWriter(auditLogDao = auditLogDao)
@@ -69,6 +76,32 @@ class BackupRepository(
                 }
             } ?: throw IOException("Destinazione non disponibile")
             eventWriter.dataExported(actor.id, clockMillis())
+        }
+
+    suspend fun restoreCompleteBackup(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
+        runCatching {
+            require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            withContext(Dispatchers.IO) {
+                val restoreRoot = File(context.cacheDir, RESTORE_WORK_DIR).also {
+                    it.deleteRecursively()
+                    check(it.mkdirs()) { "Area ripristino non disponibile" }
+                }
+                try {
+                    val extracted = extractBackup(uri, restoreRoot)
+                    require(extracted.metadataText.contains("\"databaseVersion\": ${RepairAppDatabase.DATABASE_VERSION}")) {
+                        "Versione backup non compatibile"
+                    }
+                    validateDatabase(extracted.databaseFiles.getValue(RepairAppDatabase.DATABASE_NAME))
+                    database?.close()
+                    RepairAppDatabase.closeInstance()
+                    replaceDatabaseFiles(extracted.databaseFiles)
+                    replacePrivateFiles(restoreRoot)
+                    authPreferences?.clear()
+                    sessionStore?.clear()
+                } finally {
+                    restoreRoot.deleteRecursively()
+                }
+            }
         }
 
     suspend fun exportOrdersXlsx(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
@@ -131,6 +164,100 @@ class BackupRepository(
         }
 
     fun databaseFile(): File = context.getDatabasePath(RepairAppDatabase.DATABASE_NAME)
+
+    private fun extractBackup(uri: Uri, restoreRoot: File): ExtractedBackup {
+        val metadata = StringBuilder()
+        val databaseFiles = mutableMapOf<String, File>()
+        var hasMetadata = false
+
+        context.contentResolver.openInputStream(uri)?.use { input ->
+            ZipInputStream(input).use { zip ->
+                while (true) {
+                    val entry = zip.nextEntry ?: break
+                    try {
+                        if (entry.isDirectory) continue
+                        requireSafeZipEntry(entry.name)
+                        when {
+                            entry.name == BACKUP_METADATA_ENTRY -> {
+                                hasMetadata = true
+                                metadata.append(zip.readBytes().toString(Charsets.UTF_8))
+                            }
+                            entry.name.startsWith(DATABASE_ENTRY_PREFIX) -> {
+                                val fileName = entry.name.removePrefix(DATABASE_ENTRY_PREFIX)
+                                require(fileName.isNotBlank() && !fileName.contains('/')) { "Backup database non valido" }
+                                val destination = File(restoreRoot, "database/$fileName")
+                                destination.parentFile?.mkdirs()
+                                destination.outputStream().use { output -> zip.copyTo(output) }
+                                databaseFiles[fileName] = destination
+                            }
+                            entry.name.startsWith(FILES_ENTRY_PREFIX) -> {
+                                val relativePath = entry.name.removePrefix(FILES_ENTRY_PREFIX)
+                                require(relativePath.startsWith("orders/") || relativePath.startsWith("order_media/")) {
+                                    "Backup contiene file app non supportati"
+                                }
+                                val destination = safeChild(File(restoreRoot, "files"), relativePath)
+                                destination.parentFile?.mkdirs()
+                                destination.outputStream().use { output -> zip.copyTo(output) }
+                            }
+                        }
+                    } finally {
+                        zip.closeEntry()
+                    }
+                }
+            }
+        } ?: throw IOException("Backup non disponibile")
+
+        require(hasMetadata) { "Metadata backup mancanti" }
+        require(databaseFiles.containsKey(RepairAppDatabase.DATABASE_NAME)) { "Database backup mancante" }
+        return ExtractedBackup(metadata.toString(), databaseFiles)
+    }
+
+    private fun requireSafeZipEntry(name: String) {
+        require(name.isNotBlank()) { "Backup ZIP non valido" }
+        require(!name.startsWith("/") && !name.startsWith("\\")) { "Percorso backup non valido" }
+        val parts = name.replace('\\', '/').split('/')
+        require(parts.none { it == ".." || it.isBlank() }) { "Percorso backup non valido" }
+    }
+
+    private fun safeChild(root: File, relativePath: String): File {
+        val destination = File(root, relativePath)
+        val rootPath = root.canonicalPath + File.separator
+        val destinationPath = destination.canonicalPath
+        require(destinationPath.startsWith(rootPath)) { "Percorso backup non valido" }
+        return destination
+    }
+
+    private fun validateDatabase(file: File) {
+        SQLiteDatabase.openDatabase(file.absolutePath, null, SQLiteDatabase.OPEN_READONLY).use { db ->
+            db.rawQuery("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'users'", null).use { cursor ->
+                require(cursor.moveToFirst()) { "Database backup non valido" }
+            }
+        }
+    }
+
+    private fun replaceDatabaseFiles(databaseFiles: Map<String, File>) {
+        val dbFile = databaseFile()
+        dbFile.parentFile?.mkdirs()
+        dbFile.parentFile
+            ?.listFiles { file -> file.name == dbFile.name || file.name.startsWith("${dbFile.name}-") }
+            ?.forEach { it.delete() }
+        databaseFiles.forEach { (fileName, source) ->
+            source.copyTo(File(dbFile.parentFile, fileName), overwrite = true)
+        }
+    }
+
+    private fun replacePrivateFiles(restoreRoot: File) {
+        listOf("orders", "order_media", "intake_media", "signatures").forEach { name ->
+            File(context.filesDir, name).deleteRecursively()
+        }
+        val restoredFiles = File(restoreRoot, "files")
+        listOf("orders", "order_media").forEach { name ->
+            val source = File(restoredFiles, name)
+            if (source.exists()) {
+                source.copyRecursively(File(context.filesDir, name), overwrite = true)
+            }
+        }
+    }
 
     private suspend fun buildConfigurationJson(): String {
         val categories = categoryDao.observeAll().first()
@@ -197,7 +324,19 @@ class BackupRepository(
         } ?: throw IOException("Destinazione non disponibile")
     }
 
+    private companion object {
+        const val RESTORE_WORK_DIR = "onlytechtake_restore"
+        const val BACKUP_METADATA_ENTRY = "metadata/backup.json"
+        const val DATABASE_ENTRY_PREFIX = "database/"
+        const val FILES_ENTRY_PREFIX = "files/"
+    }
+
 }
+
+private data class ExtractedBackup(
+    val metadataText: String,
+    val databaseFiles: Map<String, File>,
+)
 
 private fun ZipOutputStream.putTextEntry(name: String, text: String) {
     putNextEntry(ZipEntry(name))
