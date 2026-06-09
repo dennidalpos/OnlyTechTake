@@ -19,10 +19,10 @@ keystore.properties
 Thumbs.db
 .DS_Store
 
-# Generated local outputs
-reports/
-logs/
-tmp/
+# Generated local outputs, including demo screenshots and videos
+/reports/
+/logs/
+/tmp/
 *.apk
 *.aab
 *.ap_
