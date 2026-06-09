@@ -325,6 +325,20 @@ if (Test-Path $pulledDir) {
 }
 
 $story = Get-Content -Path $StoryPath -Raw | ConvertFrom-Json
+$expectedScreenshots = @($story.scenes | ForEach-Object { $_.file })
+$actualScreenshots = @(Get-ChildItem -Path $screenshotsDir -Filter "*.png" -File | Select-Object -ExpandProperty Name)
+$missingScreenshots = @($expectedScreenshots | Where-Object { $actualScreenshots -notcontains $_ })
+$unexpectedScreenshots = @($actualScreenshots | Where-Object { $expectedScreenshots -notcontains $_ })
+if ($missingScreenshots.Count -gt 0) {
+    throw "Screenshot demo mancanti: $($missingScreenshots -join ', ')"
+}
+if ($unexpectedScreenshots.Count -gt 0) {
+    throw "Screenshot demo inattesi: $($unexpectedScreenshots -join ', ')"
+}
+if ($actualScreenshots.Count -ne $expectedScreenshots.Count) {
+    throw "Numero screenshot demo non valido: attesi $($expectedScreenshots.Count), trovati $($actualScreenshots.Count)."
+}
+
 Add-Type -AssemblyName System.Drawing
 
 $index = 1

@@ -13,7 +13,9 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.performTextReplacement
+import androidx.compose.ui.test.swipeLeft
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -62,16 +64,10 @@ class OperatorIntakeDemoScreenshotTest {
             waitForTag(RepairAppTestTags.AuthUsernameField)
             capture(outputDir, "01-login.png")
 
-            typeTag(RepairAppTestTags.AuthUsernameField, DEMO_OPERATOR_USERNAME)
-            typePassword(DEMO_PASSWORD)
-            clickTag(RepairAppTestTags.AuthSubmitButton)
-            Thread.sleep(5_000L)
-            capture(outputDir, "debug-login-after-submit.png")
-
-            waitForTag(RepairAppTestTags.dashboardTab("HOME"))
+            loginOperatorDemo()
             capture(outputDir, "02-home.png")
 
-            clickTag(RepairAppTestTags.dashboardTab("NEW_ORDER"))
+            clickDashboardTab("NEW_ORDER")
             clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
             typeTag(RepairAppTestTags.NewOrderFirstNameField, "Giulia", scroll = true)
             typeTag(RepairAppTestTags.NewOrderLastNameField, "Bianchi", scroll = true)
@@ -92,7 +88,7 @@ class OperatorIntakeDemoScreenshotTest {
             )
             capture(outputDir, "04-category-problem.png")
 
-            clickTag(RepairAppTestTags.dashboardTab("ORDERS"))
+            clickDashboardTab("ORDERS")
             clickTag(RepairAppTestTags.orderCard(DEMO_ORDER_ID), scroll = true)
             waitForText("Stato: Aperta")
             capture(outputDir, "05-order-created.png")
@@ -321,42 +317,94 @@ class OperatorIntakeDemoScreenshotTest {
         waitForText("Commesse")
     }
 
+    private fun clickDashboardTab(destination: String) {
+        val tabTag = RepairAppTestTags.dashboardTab(destination)
+        repeat(DASHBOARD_TAB_SWIPE_ATTEMPTS) {
+            if (isTagDisplayed(tabTag)) {
+                clickTag(tabTag)
+                return
+            }
+            composeRule.onNodeWithTag(RepairAppTestTags.DashboardTabs)
+                .performTouchInput { swipeLeft() }
+            composeRule.waitForIdle()
+            pauseForDemo()
+        }
+        composeRule.onNodeWithTag(tabTag).performClick()
+        composeRule.waitForIdle()
+        pauseForDemo()
+    }
+
+    private fun loginOperatorDemo() {
+        repeat(LOGIN_ATTEMPTS) { attempt ->
+            waitForTag(RepairAppTestTags.AuthUsernameField)
+            typeTag(RepairAppTestTags.AuthUsernameField, DEMO_OPERATOR_USERNAME)
+            pauseForDemo()
+            typeTag(RepairAppTestTags.AuthPasswordField, DEMO_PASSWORD)
+            pauseForDemo()
+            clickTag(RepairAppTestTags.AuthSubmitButton)
+
+            if (waitForTagIfPresent(RepairAppTestTags.dashboardTab("HOME"), LOGIN_ATTEMPT_TIMEOUT_MILLIS)) {
+                return
+            }
+
+            if (attempt == LOGIN_ATTEMPTS - 1 || !isTagPresent(RepairAppTestTags.AuthUsernameField)) {
+                waitForTag(RepairAppTestTags.dashboardTab("HOME"))
+            }
+            pauseForDemo()
+        }
+    }
+
     private fun typeTag(tag: String, text: String, scroll: Boolean = false) {
-        waitForTag(tag)
+        waitForTagExists(tag)
         val node = composeRule.onNodeWithTag(tag)
         if (scroll) node.performScrollTo()
+        node.assertIsDisplayed()
         node.performClick()
         node.performTextReplacement(text)
         composeRule.waitForIdle()
         pauseForDemo()
     }
 
-    private fun typePassword(text: String) {
-        waitForTag(RepairAppTestTags.AuthPasswordField)
-        composeRule.onNodeWithText("Password").performClick()
-        pauseForDemo()
-        InstrumentationRegistry.getInstrumentation().uiAutomation
-            .executeShellCommand("input text $text")
-            .close()
-        composeRule.waitForIdle()
-        pauseForDemo()
-    }
-
     private fun clickTag(tag: String, scroll: Boolean = false) {
-        waitForTag(tag)
+        waitForTagExists(tag)
         val node = composeRule.onNodeWithTag(tag)
         if (scroll) node.performScrollTo()
+        node.assertIsDisplayed()
         node.performClick()
         composeRule.waitForIdle()
         pauseForDemo()
     }
 
     private fun waitForTag(tag: String) {
+        waitForTagExists(tag)
+        composeRule.onNodeWithTag(tag).assertIsDisplayed()
+    }
+
+    private fun waitForTagExists(tag: String) {
         composeRule.waitUntil(timeoutMillis = WAIT_TIMEOUT_MILLIS) {
             composeRule.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()
         }
-        composeRule.onNodeWithTag(tag).assertIsDisplayed()
     }
+
+    private fun waitForTagIfPresent(tag: String, timeoutMillis: Long): Boolean {
+        val deadline = System.currentTimeMillis() + timeoutMillis
+        do {
+            if (isTagPresent(tag)) {
+                composeRule.onNodeWithTag(tag).assertIsDisplayed()
+                return true
+            }
+            Thread.sleep(TAG_POLL_MILLIS)
+        } while (System.currentTimeMillis() < deadline)
+        return false
+    }
+
+    private fun isTagPresent(tag: String): Boolean =
+        composeRule.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()
+
+    private fun isTagDisplayed(tag: String): Boolean =
+        runCatching {
+            composeRule.onNodeWithTag(tag).assertIsDisplayed()
+        }.isSuccess
 
     private fun waitForText(text: String) {
         composeRule.waitUntil(timeoutMillis = WAIT_TIMEOUT_MILLIS) {
@@ -422,7 +470,11 @@ class OperatorIntakeDemoScreenshotTest {
         const val DEMO_ORDER_ID = "demo-order-operator-intake"
         const val SCREENSHOT_DIR_NAME = "demo-screenshots"
         const val WAIT_TIMEOUT_MILLIS = 30_000L
-        const val ACTION_PAUSE_MILLIS = 900L
-        const val SCREENSHOT_PAUSE_MILLIS = 1_500L
+        const val LOGIN_ATTEMPTS = 2
+        const val LOGIN_ATTEMPT_TIMEOUT_MILLIS = 20_000L
+        const val DASHBOARD_TAB_SWIPE_ATTEMPTS = 4
+        const val TAG_POLL_MILLIS = 250L
+        const val ACTION_PAUSE_MILLIS = 1_400L
+        const val SCREENSHOT_PAUSE_MILLIS = 2_000L
     }
 }

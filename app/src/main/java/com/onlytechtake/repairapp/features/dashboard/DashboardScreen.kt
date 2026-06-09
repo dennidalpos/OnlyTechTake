@@ -108,7 +108,10 @@ fun DashboardScreen(
             val selectedIndex = destinations
                 .indexOfFirst { it.first == uiState.destination }
                 .coerceIn(0, destinations.lastIndex)
-            ScrollableTabRow(selectedTabIndex = selectedIndex) {
+            ScrollableTabRow(
+                modifier = Modifier.testTag(RepairAppTestTags.DashboardTabs),
+                selectedTabIndex = selectedIndex,
+            ) {
                 destinations.forEach { (destination, title) ->
                     Tab(
                         modifier = Modifier.testTag(RepairAppTestTags.dashboardTab(destination.name)),
