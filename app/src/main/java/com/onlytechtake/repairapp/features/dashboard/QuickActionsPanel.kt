@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
@@ -205,6 +206,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                     singleLine = true,
                     imeAction = ImeAction.Next,
                     keyboardActions = nextAction,
+                    testTag = RepairAppTestTags.NewOrderCustomerSearchField,
                 )
                 if (selectedCustomerId != null) {
                     Text("Cliente selezionato: ${selectedCustomerDisplayName.orEmpty()}")
@@ -237,6 +239,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                         modifier = Modifier.fillMaxWidth(),
                         text = "Inserisci nuovo cliente",
                         tone = ButtonTone.NEUTRAL,
+                        testTag = RepairAppTestTags.NewOrderInsertCustomerButton,
                         onClick = {
                             selectedCustomerId = null
                             selectedCustomerLabel = null
@@ -274,6 +277,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                         modifier = Modifier.fillMaxWidth(),
                         text = "Salva cliente",
                         enabled = canSaveNewCustomer,
+                        testTag = RepairAppTestTags.NewOrderSaveCustomerButton,
                         onClick = {
                             viewModel.saveCustomer(newCustomerInput) { customer ->
                                 selectedCustomerId = customer.id
@@ -289,6 +293,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                     modifier = Modifier.fillMaxWidth(),
                     text = "Avanti",
                     enabled = selectedCustomerId != null,
+                    testTag = RepairAppTestTags.NewOrderStep1NextButton,
                     onClick = { completeStep(1) },
                 )
             }
@@ -318,6 +323,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                 modifier = Modifier.fillMaxWidth(),
                 text = "Avanti",
                 enabled = selectedCategoryId != null,
+                testTag = RepairAppTestTags.NewOrderStep2NextButton,
                 onClick = { completeStep(2) },
             )
         }

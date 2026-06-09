@@ -16,8 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
@@ -57,6 +59,7 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .testTag(RepairAppTestTags.orderCard(order.id))
                         .clickable(
                             onClickLabel = "Apri ${order.orderNumber}",
                             role = Role.Button,

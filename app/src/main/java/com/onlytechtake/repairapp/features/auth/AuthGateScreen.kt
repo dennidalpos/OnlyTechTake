@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
@@ -46,6 +47,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.core.design.PasswordVisibilityButton
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.features.dashboard.DashboardRoute
@@ -226,7 +228,9 @@ private fun AuthForm(
             }
 
             OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(RepairAppTestTags.AuthUsernameField),
                 value = formState.username,
                 onValueChange = onUsernameChange,
                 label = { Text(text = "Username") },
@@ -236,7 +240,9 @@ private fun AuthForm(
             )
 
             OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(RepairAppTestTags.AuthPasswordField),
                 value = formState.password,
                 onValueChange = onPasswordChange,
                 label = { Text(text = "Password") },
@@ -293,7 +299,9 @@ private fun AuthForm(
             }
 
             Button(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(RepairAppTestTags.AuthSubmitButton),
                 enabled = !formState.loading,
                 onClick = submitAction,
             ) {

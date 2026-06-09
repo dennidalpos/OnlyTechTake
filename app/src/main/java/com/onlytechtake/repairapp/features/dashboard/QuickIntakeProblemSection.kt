@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 
 @Composable
 fun QuickIntakeProblemSection(
@@ -38,6 +39,7 @@ fun QuickIntakeProblemSection(
                 singleLine = true,
                 imeAction = ImeAction.Next,
                 keyboardActions = nextAction,
+                testTag = RepairAppTestTags.NewOrderProblemSummaryField,
             )
             Field(
                 value = problemDetails,
@@ -45,6 +47,7 @@ fun QuickIntakeProblemSection(
                 label = "Dettagli problema",
                 imeAction = ImeAction.Done,
                 keyboardActions = doneAction,
+                testTag = RepairAppTestTags.NewOrderProblemDetailsField,
             )
         }
     }

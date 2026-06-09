@@ -1,6 +1,12 @@
 {
   "todos": [
     "Eseguire verifica manuale su dispositivo del flusso admin Config > Categorie: salvare una categoria, verificarne la presenza nella lista e selezionarla in una nuova commessa",
-    "Eseguire verifica manuale su dispositivo del flusso completo: login singolo, scatto foto, modifica con rotazione/freccia/ritaglio, cancellazione foto, diagnosi, preventivo accettato e preventivo rifiutato con nota obbligatoria"
+    "Eseguire verifica manuale su dispositivo del flusso completo: login singolo, scatto foto, modifica con rotazione/freccia/ritaglio, cancellazione foto, diagnosi, preventivo accettato e preventivo rifiutato con nota obbligatoria",
+    "Completare l'automatismo video demo su dispositivo fisico: rilanciare scripts\\windows\\create_demo_video.ps1 -UseConnectedDevice dopo le pause aggiunte, verificare che il login operatore demo superi il focus password su tastiera Samsung e che vengano prodotti tutti gli screenshot 01-10",
+    "Verificare il prompt Play Protect durante la generazione video demo su device USB: confermare che la disattivazione temporanea di package_verifier_enable, verifier_verify_adb_installs e upload_apk_enable evita il blocco e che i valori globali vengono ripristinati a fine script anche in caso di errore",
+    "Se il login demo resta bloccato sul device fisico, sostituire l'inserimento password del test OperatorIntakeDemoScreenshotTest con un meccanismo piu' stabile: click tramite coordinate del campo password, setText semantico dedicato o bypass login demo controllato solo da androidTest",
+    "Rimuovere lo screenshot debug debug-login-after-submit.png dal test OperatorIntakeDemoScreenshotTest quando il login demo su device fisico e' stabile",
+    "Validare il montaggio finale del video demo: controllare che reports\\demo-video\\operator-intake contenga screenshot, slide con caption e onlytechtake-demo-operatore-banco.mp4, senza dati reali e con durata circa 50 secondi",
+    "Creare o configurare l'AVD dedicato OnlyTechTakeDemo per usare lo script demo nel flusso predefinito non distruttivo su emulatore"
   ]
 }

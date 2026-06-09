@@ -13,6 +13,7 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 
 @Composable
@@ -52,6 +53,7 @@ fun QuickIntakeCategorySection(
                             text = if (selected) "${category.name} *" else category.name,
                             tone = if (selected) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
                             selected = selected,
+                            testTag = RepairAppTestTags.categoryButton(category.id),
                             onClick = { onCategorySelected(category.id) },
                         )
                     }

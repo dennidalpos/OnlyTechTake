@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.features.workspace.label
 
@@ -95,12 +96,12 @@ fun NewCustomerFields(
             Field(companyName, onCompanyNameChange, "Ragione sociale", required = true, showError = companyName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
             Field(vatNumber, onVatNumberChange, "P.IVA", singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
         } else {
-            Field(firstName, onFirstNameChange, "Nome", required = true, showError = firstName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
-            Field(lastName, onLastNameChange, "Cognome", required = true, showError = lastName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
+            Field(firstName, onFirstNameChange, "Nome", required = true, showError = firstName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, testTag = RepairAppTestTags.NewOrderFirstNameField)
+            Field(lastName, onLastNameChange, "Cognome", required = true, showError = lastName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, testTag = RepairAppTestTags.NewOrderLastNameField)
         }
         Field(taxCode, onTaxCodeChange, "Codice fiscale", singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
-        Field(phone, onPhoneChange, "Telefono", required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
-        Field(email, onEmailChange, "Email", required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
+        Field(phone, onPhoneChange, "Telefono", required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, testTag = RepairAppTestTags.NewOrderPhoneField)
+        Field(email, onEmailChange, "Email", required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, testTag = RepairAppTestTags.NewOrderEmailField)
         Field(address, onAddressChange, "Indirizzo", singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
         Field(notes, onNotesChange, "Note cliente", imeAction = ImeAction.Done, keyboardActions = doneAction)
         TouchButton(
@@ -145,12 +146,12 @@ fun IntakeCustomerFields(
             Field(companyName, onCompanyNameChange, "Ragione sociale", required = true, showError = companyName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
             Field(vatNumber, onVatNumberChange, "P.IVA", singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
         } else {
-            Field(firstName, onFirstNameChange, "Nome", required = true, showError = firstName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
-            Field(lastName, onLastNameChange, "Cognome", required = true, showError = lastName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
+            Field(firstName, onFirstNameChange, "Nome", required = true, showError = firstName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, testTag = RepairAppTestTags.NewOrderFirstNameField)
+            Field(lastName, onLastNameChange, "Cognome", required = true, showError = lastName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, testTag = RepairAppTestTags.NewOrderLastNameField)
         }
         Field(taxCode, onTaxCodeChange, "Codice fiscale", singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
-        Field(phone, onPhoneChange, "Telefono", required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
-        Field(email, onEmailChange, "Email", required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
+        Field(phone, onPhoneChange, "Telefono", required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, testTag = RepairAppTestTags.NewOrderPhoneField)
+        Field(email, onEmailChange, "Email", required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, testTag = RepairAppTestTags.NewOrderEmailField)
         Field(address, onAddressChange, "Indirizzo", singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
         Field(notes, onNotesChange, "Note cliente", imeAction = ImeAction.Done, keyboardActions = doneAction)
     }

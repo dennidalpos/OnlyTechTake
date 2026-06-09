@@ -42,8 +42,10 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.createBitmap
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.features.workspace.formatFileSize
 import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
@@ -252,6 +254,7 @@ private fun SignatureCanvas(
         modifier = Modifier
             .fillMaxWidth()
             .height(180.dp)
+            .testTag(RepairAppTestTags.SignatureCanvas)
             .background(androidx.compose.ui.graphics.Color.White)
             .border(1.dp, MaterialTheme.colorScheme.outline)
             .semantics {

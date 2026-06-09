@@ -29,9 +29,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.MessageChannel
@@ -159,6 +161,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                                 TouchButton(
                                     text = action.label,
                                     tone = action.tone(),
+                                    testTag = RepairAppTestTags.statusAction(action.name),
                                     onClick = {
                                         statusAction = action
                                         statusNote = ""
@@ -381,7 +384,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text("Aggiornare lo stato della commessa?")
                     if (isResultStep) {
-                        Field(resultSummary, { resultSummary = it }, "Sintesi risultato", required = true, showError = resultSummary.isBlank())
+                        Field(resultSummary, { resultSummary = it }, "Sintesi risultato", required = true, showError = resultSummary.isBlank(), testTag = RepairAppTestTags.StatusResultSummaryField)
                         Field(resultAmount, { resultAmount = it }, "Importo riparazione opzionale", singleLine = true, keyboardType = KeyboardType.Number)
                     } else {
                         Field(
@@ -390,6 +393,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                             if (isClosure) "Nota chiusura" else "Nota opzionale",
                             required = isClosure,
                             showError = isClosure && statusNote.isBlank(),
+                            testTag = RepairAppTestTags.StatusNoteField,
                         )
                     }
                     if (isClosure) {
@@ -403,6 +407,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                                     tone = if (selectedReason) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
                                     selected = selectedReason,
                                     stateDescription = if (selectedReason) "Motivo selezionato" else "Motivo non selezionato",
+                                    testTag = RepairAppTestTags.closureReason(reason.name),
                                     onClick = { closureReason = reason },
                                 )
                             }
@@ -429,6 +434,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                         )
                         statusAction = null
                     },
+                    modifier = Modifier.testTag(RepairAppTestTags.StatusDialogConfirmButton),
                 ) {
                     Text("Conferma")
                 }

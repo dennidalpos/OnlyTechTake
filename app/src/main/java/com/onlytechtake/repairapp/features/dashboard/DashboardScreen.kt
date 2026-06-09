@@ -15,12 +15,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.domain.models.AppSummary
 import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
@@ -109,6 +111,7 @@ fun DashboardScreen(
             ScrollableTabRow(selectedTabIndex = selectedIndex) {
                 destinations.forEach { (destination, title) ->
                     Tab(
+                        modifier = Modifier.testTag(RepairAppTestTags.dashboardTab(destination.name)),
                         selected = uiState.destination == destination,
                         onClick = {
                             if (destination == WorkspaceDestination.NEW_ORDER) {
@@ -138,4 +141,3 @@ fun DashboardScreen(
         }
     }
 }
-

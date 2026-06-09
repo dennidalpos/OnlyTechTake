@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
@@ -74,6 +75,7 @@ fun Field(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardActions: KeyboardActions? = null,
     trailingIcon: (@Composable () -> Unit)? = null,
+    testTag: String? = null,
 ) {
     val focusManager = LocalFocusManager.current
     val effectiveImeAction = if (imeAction == ImeAction.Default) ImeAction.Next else imeAction
@@ -83,7 +85,9 @@ fun Field(
     )
 
     OutlinedTextField(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .then(testTag?.let { Modifier.testTag(it) } ?: Modifier),
         value = value,
         onValueChange = onValueChange,
         label = { Text(if (required) "$label *" else label) },
@@ -167,10 +171,12 @@ fun TouchButton(
     tone: ButtonTone = ButtonTone.PRIMARY,
     selected: Boolean? = null,
     stateDescription: String? = null,
+    testTag: String? = null,
 ) {
     androidx.compose.material3.Button(
         modifier = modifier
             .defaultMinSize(minHeight = 56.dp)
+            .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
             .semantics {
                 selected?.let { this.selected = it }
                 stateDescription?.let { this.stateDescription = it }
