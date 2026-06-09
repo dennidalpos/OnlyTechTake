@@ -24,8 +24,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
@@ -127,6 +129,7 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                     TouchButton(
                         modifier = Modifier.fillMaxWidth(),
                         text = "Nuovo cliente",
+                        testTag = RepairAppTestTags.CustomerNewButton,
                         onClick = ::openNewCustomerForm,
                     )
                 }
@@ -146,21 +149,62 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                         )
                         CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = { isBusiness = it })
                         if (isBusiness) {
-                            Field(companyName, { companyName = it }, "Ragione sociale", required = true, showError = companyName.isBlank(), singleLine = true)
-                            Field(vatNumber, { vatNumber = it }, "P.IVA")
+                            Field(
+                                companyName,
+                                { companyName = it },
+                                "Ragione sociale",
+                                required = true,
+                                showError = companyName.isBlank(),
+                                singleLine = true,
+                                testTag = RepairAppTestTags.CustomerCompanyNameField,
+                            )
+                            Field(vatNumber, { vatNumber = it }, "P.IVA", testTag = RepairAppTestTags.CustomerVatNumberField)
                         } else {
-                            Field(firstName, { firstName = it }, "Nome", required = true, showError = firstName.isBlank(), singleLine = true)
-                            Field(lastName, { lastName = it }, "Cognome", required = true, showError = lastName.isBlank(), singleLine = true)
+                            Field(
+                                firstName,
+                                { firstName = it },
+                                "Nome",
+                                required = true,
+                                showError = firstName.isBlank(),
+                                singleLine = true,
+                                testTag = RepairAppTestTags.CustomerFirstNameField,
+                            )
+                            Field(
+                                lastName,
+                                { lastName = it },
+                                "Cognome",
+                                required = true,
+                                showError = lastName.isBlank(),
+                                singleLine = true,
+                                testTag = RepairAppTestTags.CustomerLastNameField,
+                            )
                         }
-                        Field(taxCode, { taxCode = it }, "Codice fiscale")
-                        Field(phone, { phone = it }, "Telefono", required = true, showError = phone.isBlank() && email.isBlank(), singleLine = true)
-                        Field(email, { email = it }, "Email", required = true, showError = phone.isBlank() && email.isBlank(), singleLine = true)
-                        Field(address, { address = it }, "Indirizzo")
-                        Field(notes, { notes = it }, "Note")
+                        Field(taxCode, { taxCode = it }, "Codice fiscale", testTag = RepairAppTestTags.CustomerTaxCodeField)
+                        Field(
+                            phone,
+                            { phone = it },
+                            "Telefono",
+                            required = true,
+                            showError = phone.isBlank() && email.isBlank(),
+                            singleLine = true,
+                            testTag = RepairAppTestTags.CustomerPhoneField,
+                        )
+                        Field(
+                            email,
+                            { email = it },
+                            "Email",
+                            required = true,
+                            showError = phone.isBlank() && email.isBlank(),
+                            singleLine = true,
+                            testTag = RepairAppTestTags.CustomerEmailField,
+                        )
+                        Field(address, { address = it }, "Indirizzo", testTag = RepairAppTestTags.CustomerAddressField)
+                        Field(notes, { notes = it }, "Note", testTag = RepairAppTestTags.CustomerNotesField)
                         ActionRow {
                             TouchButton(
                                 text = if (editingCustomerId == null) "Salva cliente" else "Aggiorna cliente",
                                 enabled = canSave,
+                                testTag = RepairAppTestTags.CustomerSaveButton,
                                 onClick = { confirmSave = true },
                             )
                             TouchButton(
@@ -210,6 +254,7 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                         showForm = false
                         viewModel.setCustomerSearchQuery("")
                     },
+                    modifier = Modifier.testTag(RepairAppTestTags.CustomerConfirmSaveButton),
                 ) {
                     Text("Conferma")
                 }

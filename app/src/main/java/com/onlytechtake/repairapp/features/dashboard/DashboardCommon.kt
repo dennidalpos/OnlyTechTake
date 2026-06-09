@@ -39,6 +39,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 
@@ -238,6 +239,7 @@ fun CustomerTypeToggle(
             selectedTone = ButtonTone.SUCCESS,
             onClick = { onBusinessChange(false) },
             modifier = Modifier.weight(1f),
+            testTag = RepairAppTestTags.CustomerPrivateToggle,
         )
         TypeToggleButton(
             text = "Azienda",
@@ -245,6 +247,7 @@ fun CustomerTypeToggle(
             selectedTone = ButtonTone.INFO,
             onClick = { onBusinessChange(true) },
             modifier = Modifier.weight(1f),
+            testTag = RepairAppTestTags.CustomerBusinessToggle,
         )
     }
 }
@@ -256,10 +259,12 @@ private fun TypeToggleButton(
     selectedTone: ButtonTone,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    testTag: String? = null,
 ) {
     TextButton(
         modifier = modifier
             .defaultMinSize(minHeight = 56.dp)
+            .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
             .semantics {
                 this.selected = selected
                 stateDescription = if (selected) "Selezionato" else "Non selezionato"

@@ -23,7 +23,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
@@ -89,14 +91,22 @@ fun ConfigPanel(
         item {
             SectionTitle("Config")
             section?.let {
-                TouchButton(text = "Torna a Config", onClick = { section = null })
+                TouchButton(
+                    text = "Torna a Config",
+                    testTag = RepairAppTestTags.ConfigBackButton,
+                    onClick = { section = null },
+                )
             }
         }
 
         when (section) {
             null -> {
                 item {
-                    ConfigHubCard("Categorie", "Tipi di commessa attivi o archiviati.") {
+                    ConfigHubCard(
+                        title = "Categorie",
+                        subtitle = "Tipi di commessa attivi o archiviati.",
+                        testTag = RepairAppTestTags.ConfigHubCategoriesButton,
+                    ) {
                         section = ConfigSection.CATEGORIES
                     }
                 }
@@ -105,6 +115,7 @@ fun ConfigPanel(
                         title = "Template",
                         subtitle = if (isAdmin) "Privacy, condizioni e messaggi WhatsApp." else "Area riservata admin.",
                         enabled = isAdmin,
+                        testTag = RepairAppTestTags.ConfigHubTemplatesButton,
                     ) {
                         section = ConfigSection.TEMPLATES
                     }
@@ -133,18 +144,24 @@ fun ConfigPanel(
                         Text("Area riservata admin. Le categorie sono disponibili solo in consultazione.")
                     } else {
                         Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
-                            Field(categoryName, { categoryName = it }, "Nome categoria")
-                            Field(categoryDescription, { categoryDescription = it }, "Descrizione")
-                            Field(categorySortOrder, { categorySortOrder = it }, "Ordine")
+                            Field(categoryName, { categoryName = it }, "Nome categoria", testTag = RepairAppTestTags.ConfigCategoryNameField)
+                            Field(categoryDescription, { categoryDescription = it }, "Descrizione", testTag = RepairAppTestTags.ConfigCategoryDescriptionField)
+                            Field(categorySortOrder, { categorySortOrder = it }, "Ordine", testTag = RepairAppTestTags.ConfigCategorySortOrderField)
                             ActionRow {
                                 TouchButton(
                                     text = if (categoryActive) "Attiva" else "Archiviata",
                                     tone = if (categoryActive) ButtonTone.SUCCESS else ButtonTone.DANGER,
                                     onClick = { categoryActive = !categoryActive },
                                 )
-                                TouchButton(text = "Nuova", tone = ButtonTone.NEUTRAL, onClick = ::loadNewCategory)
+                                TouchButton(
+                                    text = "Nuova",
+                                    tone = ButtonTone.NEUTRAL,
+                                    testTag = RepairAppTestTags.ConfigCategoryNewButton,
+                                    onClick = ::loadNewCategory,
+                                )
                                 TouchButton(
                                     text = "Salva categoria",
+                                    testTag = RepairAppTestTags.ConfigCategorySaveButton,
                                     onClick = {
                                         requestConfirm("Salvare categoria?", "La categoria verra' aggiornata nel catalogo locale.") {
                                             viewModel.saveCategory(
@@ -194,9 +211,9 @@ fun ConfigPanel(
             ConfigSection.TEMPLATES -> {
                 item {
                     SectionTitle("Template")
-                    Field(templateCode, { templateCode = it }, "Codice")
-                    Field(templateTitle, { templateTitle = it }, "Titolo")
-                    Field(templateBody, { templateBody = it }, "Testo con {{variabili}}")
+                    Field(templateCode, { templateCode = it }, "Codice", testTag = RepairAppTestTags.ConfigTemplateCodeField)
+                    Field(templateTitle, { templateTitle = it }, "Titolo", testTag = RepairAppTestTags.ConfigTemplateTitleField)
+                    Field(templateBody, { templateBody = it }, "Testo con {{variabili}}", testTag = RepairAppTestTags.ConfigTemplateBodyField)
                     ActionRow {
                         TouchButton(
                             text = if (templateActive) "Attivo" else "Archiviato",
@@ -205,6 +222,7 @@ fun ConfigPanel(
                         )
                         TouchButton(
                             text = "Salva template",
+                            testTag = RepairAppTestTags.ConfigTemplateSaveButton,
                             onClick = {
                                 requestConfirm("Salvare template?", "Il template verra' salvato con una nuova versione.") {
                                     viewModel.saveTemplate(templateCode, templateTitle, templateBody, active = templateActive)
@@ -356,11 +374,13 @@ private fun ConfigHubCard(
     title: String,
     subtitle: String,
     enabled: Boolean = true,
+    testTag: String? = null,
     onClick: () -> Unit,
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
             .clickable(enabled = enabled, onClick = onClick),
     ) {
         Column(
