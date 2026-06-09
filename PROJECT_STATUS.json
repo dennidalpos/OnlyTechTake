@@ -1,6 +1,10 @@
 {
   "todos": [
     "Configurare keystore.properties locale non tracciato e generare build release APK/AAB per verifica Play Protect tramite Play Console, Internal Testing o Internal App Sharing",
-    "Eseguire verifica manuale operatore su telefono destinatario: login singolo, modifica cliente con commessa esistente, selezione/deselezione categoria nuova commessa, export ZIP e ripristino ZIP su installazione pulita"
+    "Eseguire verifica manuale completa su dispositivo SM-A145R dopo clean install: primo avvio, setup admin, login, creazione categorie multilivello, creazione nuova commessa con categoria foglia, privacy/firma, avanzamento stati, preventivo con importo, accettazione/rifiuto cliente, chiusura non riparabile, pulsante WhatsApp unico e export PDF con timeline completa",
+    "Investigate fallimento test strumentale mirato MainActivityLaunchInstrumentedTest su SM-A145R: Gradle connectedDebugAndroidTest fallisce con 'Instrumentation run failed due to Process crashed' nonostante installazione debug e avvio manuale MainActivity riusciti con start_app.ps1 -CleanInstall",
+    "Rieseguire suite connectedDebugAndroidTest completa su dispositivo dopo aver risolto il crash strumentale; il primo tentativo e' andato in timeout dopo circa 5 minuti",
+    "Verificare manualmente export ZIP e ripristino ZIP su installazione pulita dopo le modifiche a schema fresh categorie multilivello e template",
+    "Verificare manualmente su telefono destinatario il flusso WhatsApp reale: apertura wa.me, testo renderizzato per stato corrente, template preventivo intervento, template non riparabile e conferma manuale invio"
   ]
 }
