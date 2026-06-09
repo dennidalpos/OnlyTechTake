@@ -30,12 +30,6 @@ internal class WorkspaceAdminActions(
         backupRepository.exportOrdersXlsx(actor, uri)
     }
 
-    fun importCompleteBackup(uri: Uri) = authenticatedActionRunner.run { actor ->
-        backupRepository.importCompleteBackup(actor, uri).map {
-            "Backup ripristinato. Accedi di nuovo."
-        }
-    }
-
     fun resetAllData(confirmation: String, onReset: () -> Unit) {
         authenticatedActionRunner.runCustom { actor ->
             dataResetRepository.resetAll(actor, confirmation).fold(

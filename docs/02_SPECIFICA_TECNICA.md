@@ -12,7 +12,7 @@
 - Kotlin Coroutines
 - Kotlin Flow
 - Navigation Compose
-- Storage Access Framework per import allegati, export e ripristino backup
+- Storage Access Framework per import allegati ed export
 - Gradle Wrapper
 
 ## Architettura
@@ -75,9 +75,7 @@ Nome database:
 repair_app.db
 ```
 
-Versionamento database obbligatorio.
-
-Abilitare migrazioni Room quando cambia lo schema.
+Versionamento database obbligatorio. L'app e' trattata come fresh app: non mantiene scaffolding di migrazioni storiche e usa migrazione distruttiva esplicita su mismatch schema.
 
 ## Entità principali
 
@@ -171,7 +169,7 @@ Permessi manifest:
 - Camera;
 - nessun permesso storage globale.
 
-Import allegati, export e ripristino backup usano Storage Access Framework, quindi non richiedono
+Import allegati ed export usano Storage Access Framework, quindi non richiedono
 permessi larghi di lettura/scrittura storage.
 
 ## Foto e firme
@@ -218,7 +216,7 @@ files/orders/...
 files/order_media/...
 ```
 
-Il ripristino ZIP usa Storage Access Framework, valida versione database e presenza di almeno un admin attivo, poi sostituisce tabelle Room e file privati esportati.
+Il ripristino/import ZIP non e' supportato: il backup completo e' solo export locale.
 
 ## WhatsApp
 
@@ -275,7 +273,6 @@ Le azioni sensibili tracciate includono:
 - modifica template;
 - modifica privacy;
 - export dati;
-- import/ripristino backup;
 - archiviazione/cancellazione commessa;
 - cambio assegnazione;
 - cambio stato;

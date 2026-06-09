@@ -5,7 +5,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.room.migration.Migration
 import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.CustomerDao
@@ -67,7 +66,6 @@ abstract class RepairAppDatabase : RoomDatabase() {
     companion object {
         const val DATABASE_NAME = "repair_app.db"
         const val DATABASE_VERSION = 1
-        val MIGRATIONS: Array<Migration> = emptyArray()
 
         @Volatile
         private var instance: RepairAppDatabase? = null
@@ -78,8 +76,7 @@ abstract class RepairAppDatabase : RoomDatabase() {
                     context.applicationContext,
                     RepairAppDatabase::class.java,
                     DATABASE_NAME,
-                ).fallbackToDestructiveMigration(false)
-                    .addMigrations(*MIGRATIONS)
+                ).fallbackToDestructiveMigration(true)
                     .build()
                     .also { instance = it }
             }

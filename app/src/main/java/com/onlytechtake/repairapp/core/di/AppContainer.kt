@@ -110,9 +110,6 @@ class AppContainer(context: Context) {
         settingDao = database.appSettingDao(),
         auditLogDao = database.auditLogDao(),
         orderExportDao = database.orderExportDao(),
-        database = database,
-        authPreferences = authPreferences,
-        sessionStore = sessionStore,
     )
 
     val dataResetRepository = DataResetRepository(

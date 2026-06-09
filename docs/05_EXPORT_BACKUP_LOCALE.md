@@ -2,7 +2,7 @@
 
 ## Stato operativo
 
-Export e ripristino ZIP completo sono implementati per admin tramite Storage Access Framework.
+Export configurazione, database, ZIP completo e XLSX commesse sono implementati per admin tramite Storage Access Framework. L'app non supporta ripristino/import di backup ZIP.
 
 ## Sezione app
 
@@ -45,18 +45,15 @@ files/order_media/<orderId>/...
 
 Foto CameraX, allegati importati e firme restano in spazio privato app e vengono copiati nel backup completo.
 
+### XLSX commesse
+
+Output: `onlytechtake-commesse.xlsx`.
+
+Contiene l'export tabellare delle commesse per uso admin.
+
 ### Ripristino backup
 
-Input: ZIP completo esportato dall'app.
-
-Il ripristino:
-
-- richiede ruolo admin;
-- valida formato ZIP, presenza database, versione database e presenza di almeno un admin attivo;
-- sostituisce database locale, firme, foto e allegati privati inclusi nel backup;
-- elimina eventuali file di presa in carico temporanei;
-- registra audit `DATA_IMPORTED`;
-- forza un nuovo login dopo il completamento.
+Non supportato. Il backup ZIP completo e' solo export locale: l'app non importa ZIP e non sostituisce database o file privati da backup storici.
 
 ## Metadata
 
@@ -68,7 +65,6 @@ Il backup completo include metadati con data creazione, nome database, versione 
 - Il salvataggio usa Storage Access Framework; non usare percorsi assoluti fragili.
 - Gli export richiedono ruolo admin.
 - Ogni export registra audit `DATA_EXPORTED`.
-- Ogni ripristino ZIP registra audit `DATA_IMPORTED`.
 - Configurazione, database, PDF e backup ZIP non sono cifrati dall'app. La
   cifratura non e' attivata in questo rilascio per evitare gestione passphrase e
   recupero chiavi dentro l'app locale; salvare gli export solo su supporti,

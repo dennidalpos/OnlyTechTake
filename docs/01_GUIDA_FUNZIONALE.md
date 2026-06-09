@@ -41,7 +41,7 @@ Limiti operatore:
 
 - non accede alla sezione Admin;
 - non modifica categorie, template o impostazioni generali;
-- non esegue export o ripristino admin;
+- non esegue export admin;
 - non esegue reset totale dati.
 
 ## Primo avvio e login
@@ -198,7 +198,7 @@ Ogni azione importante crea un evento timeline, tra cui:
 - nota aggiunta;
 - commessa chiusa;
 - commessa eliminata logicamente;
-- reset dati, export e ripristino nei log audit.
+- reset dati ed export nei log audit.
 
 ## Pulizia admin
 
@@ -235,9 +235,9 @@ Export implementati:
 - ZIP completo con database, configurazione e file privati rilevanti;
 - PDF riepilogo della singola commessa.
 
-Ripristino implementato:
+Ripristino backup:
 
-- ZIP completo tramite selettore di sistema, solo admin, con nuovo login obbligatorio dopo il completamento.
+- non supportato; lo ZIP completo e' solo export locale.
 
 Limiti noti:
 
