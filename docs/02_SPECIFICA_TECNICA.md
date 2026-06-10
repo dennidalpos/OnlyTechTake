@@ -75,14 +75,14 @@ Nome database:
 repair_app.db
 ```
 
-Versionamento database obbligatorio. L'app e' trattata come fresh app: non mantiene scaffolding di migrazioni storiche e usa migrazione distruttiva esplicita su mismatch schema.
+Lo schema corrente resta Room v1 ed e' aggiornato in place per installazioni pulite. Non sono presenti migrazioni, fallback o converter legacy: dopo modifiche incompatibili allo schema e' richiesta una reinstallazione pulita.
 
 ## Entità principali
 
 - UserEntity
 - CustomerEntity
 - OrderCategoryEntity, con parentId e level per albero categorie a tre livelli
-- RepairOrderEntity
+- RepairOrderEntity, con `diagnosisOutcome` nullable finche' la diagnosi non viene registrata
 - OrderMediaEntity
 - SignatureEntity
 - TimelineEventEntity
@@ -186,7 +186,9 @@ files/orders/<orderId>/documents/
 Nel database salvare path locale privato e metadati essenziali. Le foto acquisite
 con CameraX sono registrate in `order_media` e generano evento timeline. Le foto
 opzionali del lavoro finito usano `mediaType = FINAL_PHOTO` nello stesso modello,
-senza schema dedicato. Le
+senza schema dedicato. `ImageCapture.targetRotation` viene impostato dalla rotazione
+del `PreviewView` prima del bind e prima dello scatto. Le anteprime locali applicano
+l'orientamento EXIF senza riscrivere il file originale. Le
 firme sono registrate in `signatures`, salvate come PNG in
 `files/orders/<orderId>/signatures/` e includono snapshot/versione dei testi
 privacy e condizioni usati al momento della firma.
@@ -263,7 +265,8 @@ Regole implementate:
 
 - i template con variabili fuori allowlist vengono rifiutati al salvataggio;
 - il rendering fallisce se riceve una variabile non supportata;
-- l'anteprima del messaggio e' disponibile nel dettaglio commessa prima dell'apertura WhatsApp.
+- l'anteprima del messaggio e' disponibile solo nel dettaglio della commessa corrente;
+- cambio commessa, navigazione, cambio stato, feedback, conferma invio WhatsApp e chiusura preview eliminano lo stato locale della preview; l'apertura di WhatsApp la mantiene per la conferma al ritorno.
 
 Limite: nella sezione Config non e' presente una preview renderizzata separata durante la modifica del template.
 

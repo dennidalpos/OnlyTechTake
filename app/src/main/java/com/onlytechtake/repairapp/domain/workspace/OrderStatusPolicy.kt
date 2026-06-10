@@ -22,6 +22,7 @@ object OrderStatusPolicy {
             )
             OrderStatus.RESULT -> setOf(
                 OrderStatus.REPAIRING,
+                OrderStatus.READY_FOR_PICKUP,
                 OrderStatus.CLOSED,
             )
             OrderStatus.REPAIRING -> setOf(

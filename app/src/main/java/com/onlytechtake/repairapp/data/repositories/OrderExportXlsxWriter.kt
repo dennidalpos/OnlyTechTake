@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.data.repositories
 import com.onlytechtake.repairapp.data.local.dao.OrderExportRow
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import java.io.OutputStream
@@ -70,6 +71,7 @@ internal class OrderExportXlsxWriter(
             row.assignedUserName.orEmpty(),
             row.description.orEmpty(),
             row.internalNotes.orEmpty(),
+            row.diagnosisOutcome.label(),
             row.estimateAmountCents.formatEuroCents(),
             row.finalAmountCents.formatEuroCents(),
             row.createdAt.formatTime(),
@@ -114,6 +116,13 @@ internal class OrderExportXlsxWriter(
             OrderPriority.NORMAL -> "Normale"
             OrderPriority.HIGH -> "Alta"
             OrderPriority.URGENT -> "Urgente"
+        }
+
+    private fun DiagnosisOutcome?.label(): String =
+        when (this) {
+            DiagnosisOutcome.REPAIRABLE -> "Riparabile"
+            DiagnosisOutcome.NOT_REPAIRABLE -> "Non riparabile"
+            null -> ""
         }
 
     private fun ClosureReason?.label(): String =
@@ -164,6 +173,7 @@ private val headers = listOf(
     "Operatore",
     "Descrizione",
     "Note interne",
+    "Esito diagnosi",
     "Importo preventivo",
     "Importo finale",
     "Creata",

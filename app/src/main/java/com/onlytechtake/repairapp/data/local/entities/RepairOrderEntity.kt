@@ -63,6 +63,7 @@ data class RepairOrderEntity(
     val createdByUserId: String,
     val description: String?,
     val internalNotes: String?,
+    val diagnosisOutcome: DiagnosisOutcome? = null,
     val estimateAmountCents: Long?,
     val finalAmountCents: Long?,
     val createdAt: Long,

@@ -93,25 +93,25 @@ class SocialStoryDemoScreenshotTest {
 
             clickDashboardTab("ORDERS")
             clickTag(RepairAppTestTags.orderCard(DEMO_ORDER_ID), scroll = true)
-            waitForText("Stato: Aperta")
+            waitForText("Stato corrente: Aperta")
             capture(outputDir, "05-commessa-aperta.png")
 
-            applySimpleStatus(OrderStatusAction.START_PROGRESS, "Stato: In lavorazione")
+            applySimpleStatus(OrderStatusAction.START_PROGRESS, "Stato corrente: In lavorazione")
             capture(outputDir, "06-presa-in-carico.png")
 
-            applySimpleStatus(OrderStatusAction.START_DIAGNOSIS, "Stato: In diagnosi")
+            applySimpleStatus(OrderStatusAction.START_DIAGNOSIS, "Stato corrente: In diagnosi")
             applyResultStatus()
             capture(outputDir, "07-diagnosi-risultato.png")
 
             acceptQuote()
             capture(outputDir, "08-riparazione.png")
 
-            applySimpleStatus(OrderStatusAction.READY_FOR_PICKUP, "Stato: Pronta al ritiro")
+            applySimpleStatus(OrderStatusAction.READY_FOR_PICKUP, "Stato corrente: Pronta al ritiro")
             capture(outputDir, "09-pronta-ritiro.png")
 
             closeOrder()
             clickTag(RepairAppTestTags.orderCard(DEMO_ORDER_ID), scroll = true)
-            waitForText("Stato: Chiusa")
+            waitForText("Stato corrente: Chiusa")
             capture(outputDir, "10-chiusura-timeline.png")
         }
     }
@@ -392,14 +392,16 @@ class SocialStoryDemoScreenshotTest {
     private fun applyResultStatus() {
         clickTag(RepairAppTestTags.statusAction(OrderStatusAction.RECORD_RESULT.name), scroll = true)
         typeTag(RepairAppTestTags.StatusResultSummaryField, "Connettore di alimentazione danneggiato.", scroll = false)
+        clickTag(RepairAppTestTags.DiagnosisRepairableToggle)
+        typeTag(RepairAppTestTags.DiagnosisEstimateField, "149,00", scroll = false)
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
-        waitForText("Stato: Risultato")
+        waitForText("Stato corrente: Risultato")
     }
 
     private fun acceptQuote() {
         clickTag(RepairAppTestTags.QuoteAcceptedToggle, scroll = true)
         clickTag(RepairAppTestTags.QuoteConfirmButton, scroll = true)
-        waitForText("Stato: In riparazione")
+        waitForText("Stato corrente: In riparazione")
     }
 
     private fun closeOrder() {

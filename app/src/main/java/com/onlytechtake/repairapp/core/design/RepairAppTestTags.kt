@@ -26,6 +26,9 @@ object RepairAppTestTags {
     const val QuoteAcceptedToggle = "quote_accepted_toggle"
     const val QuoteRejectedToggle = "quote_rejected_toggle"
     const val QuoteConfirmButton = "quote_confirm_button"
+    const val DiagnosisRepairableToggle = "diagnosis_repairable_toggle"
+    const val DiagnosisNotRepairableToggle = "diagnosis_not_repairable_toggle"
+    const val DiagnosisEstimateField = "diagnosis_estimate_field"
 
     const val CustomerNewButton = "customer_new_button"
     const val CustomerPrivateToggle = "customer_private_toggle"

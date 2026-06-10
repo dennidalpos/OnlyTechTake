@@ -1,10 +1,9 @@
 {
   "todos": [
-    "Configurare keystore.properties locale non tracciato e generare build release APK/AAB per verifica Play Protect tramite Play Console, Internal Testing o Internal App Sharing",
-    "Eseguire verifica manuale completa su dispositivo SM-A145R dopo clean install: primo avvio, setup admin, login, creazione categorie multilivello, creazione nuova commessa con categoria foglia, privacy/firma, avanzamento stati, preventivo con importo, accettazione/rifiuto cliente, chiusura non riparabile, pulsante WhatsApp unico e export PDF con timeline completa",
-    "Investigate fallimento test strumentale mirato MainActivityLaunchInstrumentedTest su SM-A145R: Gradle connectedDebugAndroidTest fallisce con 'Instrumentation run failed due to Process crashed' nonostante installazione debug e avvio manuale MainActivity riusciti con start_app.ps1 -CleanInstall",
-    "Rieseguire suite connectedDebugAndroidTest completa su dispositivo dopo aver risolto il crash strumentale; il primo tentativo e' andato in timeout dopo circa 5 minuti",
-    "Verificare manualmente export ZIP e ripristino ZIP su installazione pulita dopo le modifiche a schema fresh categorie multilivello e template",
-    "Verificare manualmente su telefono destinatario il flusso WhatsApp reale: apertura wa.me, testo renderizzato per stato corrente, template preventivo intervento, template non riparabile e conferma manuale invio"
+    "Eseguire verifica manuale completa su dispositivo: setup admin, login, categorie, nuova commessa, privacy, firma, foto, diagnosi riparabile, accettazione, rifiuto, non riparabile, pronto ritiro, chiusura e PDF",
+    "Verificare manualmente WhatsApp reale su telefono destinatario: apertura wa.me, testo modificabile, importo preventivo renderizzato, template non riparabile e conferma manuale invio",
+    "Verificare manualmente orientamento foto su device: scatto portrait, scatto landscape, anteprima in app, file salvato e assenza di rotazioni errate",
+    "Verificare manualmente export ZIP e ripristino ZIP su una successiva installazione pulita",
+    "Configurare keystore.properties locale non tracciato e generare APK o AAB release solo quando serve la verifica tramite Play Console"
   ]
 }

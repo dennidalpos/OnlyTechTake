@@ -27,11 +27,15 @@ internal class WorkspaceMessageActions(
             templateRepository.prepareMessage(actor, orderId, templateCode).fold(
                 onSuccess = { prepared ->
                     mutableUiState.update {
-                        it.copy(
-                            preparedMessage = prepared,
-                            preparedMessageBody = prepared.body,
-                            message = WorkspaceMessage("Anteprima WhatsApp pronta", false),
-                        )
+                        if (it.destination == WorkspaceDestination.ORDER_DETAIL && it.selectedOrderId == orderId) {
+                            it.copy(
+                                preparedMessage = prepared,
+                                preparedMessageBody = prepared.body,
+                                message = null,
+                            )
+                        } else {
+                            it
+                        }
                     }
                 },
                 onFailure = showError,
@@ -43,15 +47,27 @@ internal class WorkspaceMessageActions(
         mutableUiState.update { it.copy(preparedMessageBody = body) }
     }
 
-    fun recordPreparedMessage() = withPrepared { actor, prepared, body ->
+    fun clearPreparedMessage() {
+        mutableUiState.update(WorkspaceUiState::withoutPreparedMessage)
+    }
+
+    fun recordPreparedMessage() = withPrepared(
+        clearOnSuccess = false,
+        successMessage = "WhatsApp preparato",
+    ) { actor, prepared, body ->
         templateRepository.recordPrepared(actor, prepared, body)
     }
 
-    fun confirmSentMessage() = withPrepared { actor, prepared, body ->
+    fun confirmSentMessage() = withPrepared(
+        clearOnSuccess = true,
+        successMessage = "WhatsApp registrato",
+    ) { actor, prepared, body ->
         templateRepository.confirmSent(actor, prepared, body)
     }
 
     private fun withPrepared(
+        clearOnSuccess: Boolean,
+        successMessage: String,
         block: suspend (AuthenticatedUser, PreparedMessage, String) -> Result<Unit>,
     ) {
         authenticatedActionRunner.runCustom { actor ->
@@ -59,8 +75,8 @@ internal class WorkspaceMessageActions(
                 ?: return@runCustom showMessage("Prepara prima il messaggio", true)
             block(actor, prepared, mutableUiState.value.preparedMessageBody).fold(
                 onSuccess = {
-                    mutableUiState.update { it.copy(preparedMessage = null, preparedMessageBody = "") }
-                    showSuccess("WhatsApp registrato")
+                    if (clearOnSuccess) clearPreparedMessage()
+                    showSuccess(successMessage)
                 },
                 onFailure = showError,
             )

@@ -8,6 +8,7 @@ import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
@@ -46,6 +47,7 @@ data class OrderExportRow(
     val assignedUserName: String?,
     val description: String?,
     val internalNotes: String?,
+    val diagnosisOutcome: DiagnosisOutcome? = null,
     val estimateAmountCents: Long?,
     val finalAmountCents: Long?,
     val createdAt: Long,
@@ -88,6 +90,7 @@ interface OrderExportDao {
             users.displayName AS assignedUserName,
             repair_orders.description AS description,
             repair_orders.internalNotes AS internalNotes,
+            repair_orders.diagnosisOutcome AS diagnosisOutcome,
             repair_orders.estimateAmountCents AS estimateAmountCents,
             repair_orders.finalAmountCents AS finalAmountCents,
             repair_orders.createdAt AS createdAt,
@@ -324,6 +327,9 @@ interface MessageLogDao {
 
     @Query("SELECT * FROM message_logs WHERE orderId = :orderId ORDER BY createdAt DESC")
     fun observeForOrder(orderId: String): Flow<List<MessageLogEntity>>
+
+    @Query("SELECT * FROM message_logs WHERE orderId = :orderId ORDER BY createdAt DESC LIMIT 1")
+    suspend fun findLatestForOrder(orderId: String): MessageLogEntity?
 }
 
 @Dao

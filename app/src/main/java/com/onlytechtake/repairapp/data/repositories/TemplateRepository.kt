@@ -14,6 +14,7 @@ import com.onlytechtake.repairapp.data.local.entities.AuditAction
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.MessageChannel
 import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
@@ -49,7 +50,7 @@ class TemplateRepository(
         settingDao.observeAll().map { settings ->
             settings.firstOrNull { it.key == MESSAGE_MODE_SETTING_KEY }
                 ?.value
-                ?.let(::parseMessageMode)
+                ?.let(MessageMode::valueOf)
                 ?: MessageMode.MANUAL_WHATSAPP
         }
 
@@ -144,7 +145,11 @@ class TemplateRepository(
                         .ifBlank { "Cliente" },
                     "importo_preventivo" to order.estimateAmountCents?.let(::formatEuroCents).orEmpty(),
                     "prossima_azione" to order.nextActionLabel(),
-                    "motivo_chiusura" to order.closureReason?.label().orEmpty(),
+                    "motivo_chiusura" to when {
+                        order.closureReason != null -> order.closureReason.label()
+                        order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE -> "Diagnosi tecnica: non riparabile"
+                        else -> ""
+                    },
                     "categoria_percorso" to categoryPath,
                 ),
             )
@@ -206,12 +211,6 @@ class TemplateRepository(
                     sentAt = sentAt,
                 ),
             )
-        }
-
-    private fun parseMessageMode(value: String?): MessageMode =
-        when (value) {
-            "MANUAL" -> MessageMode.MANUAL_WHATSAPP
-            else -> MessageMode.MANUAL_WHATSAPP
         }
 
     private suspend fun categoryPath(categoryId: String): String {
@@ -299,7 +298,7 @@ class TemplateRepository(
                 code = "whatsapp_non_riparabile",
                 title = "WhatsApp non riparabile",
                 channel = MessageChannel.WHATSAPP,
-                body = "Ciao {{cliente}}, dopo la diagnosi della commessa {{numero_commessa}} l'oggetto risulta non riparabile.\nMotivo: {{motivo_chiusura}}.\nPuoi passare in negozio per il ritiro o contattarci per chiarimenti.",
+                body = "Ciao {{cliente}}, dopo la diagnosi della commessa {{numero_commessa}} l'oggetto risulta non riparabile.\nPuoi passare in negozio per il ritiro o contattarci per chiarimenti.",
                 active = true,
                 version = 1,
                 updatedByUserId = null,
@@ -397,8 +396,11 @@ private fun ClosureReason.label(): String =
 
 private fun RepairOrderEntity.nextActionLabel(): String =
     when {
-        status == OrderStatus.RESULT && estimateAmountCents != null -> "Attendere conferma preventivo"
-        status == OrderStatus.RESULT -> "Registrare esito preventivo"
+        status == OrderStatus.RESULT && diagnosisOutcome == DiagnosisOutcome.REPAIRABLE ->
+            "Attendere accettazione o rifiuto preventivo"
+        status == OrderStatus.RESULT && diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE ->
+            "Avvisare il cliente e preparare il ritiro"
+        status == OrderStatus.RESULT -> "Registrare esito diagnosi"
         status == OrderStatus.OPEN -> "Prendere in carico"
         status == OrderStatus.IN_PROGRESS -> "Avviare diagnosi"
         status == OrderStatus.DIAGNOSIS -> "Registrare risultato diagnosi"

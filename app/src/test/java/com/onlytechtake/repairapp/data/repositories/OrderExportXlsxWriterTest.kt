@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.data.repositories
 
 import com.onlytechtake.repairapp.data.local.dao.OrderExportRow
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import java.io.ByteArrayOutputStream
@@ -29,6 +30,7 @@ class OrderExportXlsxWriterTest {
             assignedUserName = "Operatore",
             description = "Display \"nero\"",
             internalNotes = "Nota con apostrofo '",
+            diagnosisOutcome = DiagnosisOutcome.REPAIRABLE,
             estimateAmountCents = 12345,
             finalAmountCents = null,
             createdAt = 1_717_171_717_000L,
@@ -53,6 +55,7 @@ class OrderExportXlsxWriterTest {
         assertTrue(sheet.contains("Schermo &amp; vetro &lt;rotto&gt;"))
         assertTrue(sheet.contains("Display &quot;nero&quot;"))
         assertTrue(sheet.contains("Nota con apostrofo &apos;"))
+        assertTrue(sheet.contains("Riparabile"))
         assertTrue(sheet.contains("EUR 123,45"))
     }
 

@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -37,16 +38,20 @@ import androidx.core.net.toUri
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.features.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 import com.onlytechtake.repairapp.features.workspace.attachmentCounts
 import com.onlytechtake.repairapp.features.workspace.availableOrderStatusActions
+import com.onlytechtake.repairapp.features.workspace.canConfirmDiagnosisResult
+import com.onlytechtake.repairapp.features.workspace.diagnosisOutcomeLabel
 import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
 import com.onlytechtake.repairapp.features.workspace.label
 import com.onlytechtake.repairapp.features.workspace.nextActionLabel
 import com.onlytechtake.repairapp.features.workspace.requiresConfirmation
+import com.onlytechtake.repairapp.features.workspace.shouldShowDiagnosisEstimate
 import com.onlytechtake.repairapp.features.workspace.statusTemplateCode
 
 @Composable
@@ -64,6 +69,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
     var closureReason by rememberSaveable { mutableStateOf<ClosureReason?>(null) }
     var resultSummary by rememberSaveable { mutableStateOf("") }
     var resultAmount by rememberSaveable { mutableStateOf("") }
+    var diagnosisOutcome by rememberSaveable { mutableStateOf<DiagnosisOutcome?>(null) }
     var quoteDecision by rememberSaveable { mutableStateOf<QuoteDecision?>(null) }
     var quoteRejectNote by rememberSaveable { mutableStateOf("") }
 
@@ -86,6 +92,9 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
     LaunchedEffect(selected.order.id, selected.order.status) {
         quoteDecision = null
         quoteRejectNote = ""
+    }
+    DisposableEffect(selected.order.id) {
+        onDispose { viewModel.clearPreparedMessage() }
     }
 
     fun requestConfirm(title: String, text: String, action: () -> Unit) {
@@ -135,6 +144,9 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     Text("Cliente: ${selected.customer?.displayName().orEmpty()}")
                     OperatorText(text = "Stato corrente: ${selected.order.status.label()}")
                     OperatorText(text = "Prossima azione: ${nextActionLabel(selected.order)}")
+                    selected.order.diagnosisOutcome?.let {
+                        Text("Esito diagnosi: ${it.diagnosisOutcomeLabel()}")
+                    }
                     selected.order.closureReason?.let { Text("Motivo chiusura: ${it.label()}") }
                     Text("Operatore: ${selected.assignedUser?.displayName.orEmpty()}")
                     Text("Aggiornata: ${formatUiDateTime(selected.order.updatedAt)}")
@@ -146,7 +158,9 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             }
         }
 
-        if (selected.order.status == OrderStatus.RESULT) {
+        if (selected.order.status == OrderStatus.RESULT &&
+            selected.order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE
+        ) {
             item {
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(
@@ -207,6 +221,38 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             }
         }
 
+        if (selected.order.status == OrderStatus.RESULT &&
+            selected.order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE
+        ) {
+            item {
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(
+                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                    ) {
+                        Text("Esito diagnosi", style = MaterialTheme.typography.titleMedium)
+                        OperatorText("Il dispositivo non e' riparabile. Avvisa il cliente prima di preparare il ritiro.")
+                        TouchButton(
+                            text = "Cliente avvisato / pronto per il ritiro",
+                            tone = ButtonTone.SUCCESS,
+                            onClick = {
+                                requestConfirm(
+                                    "Cliente avvisato?",
+                                    "La commessa passera' a pronta per il ritiro.",
+                                ) {
+                                    viewModel.changeStatus(
+                                        orderId = selected.order.id,
+                                        status = OrderStatus.READY_FOR_PICKUP,
+                                        note = "Cliente avvisato: dispositivo non riparabile",
+                                    )
+                                }
+                            },
+                        )
+                    }
+                }
+            }
+        }
+
         item {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(
@@ -215,7 +261,10 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                 ) {
                     Text("Azioni", style = MaterialTheme.typography.titleMedium)
                     val actions = availableOrderStatusActions(selected.order.status)
-                        .filterNot { selected.order.status == OrderStatus.RESULT && it == OrderStatusAction.START_REPAIR }
+                        .filterNot {
+                            selected.order.status == OrderStatus.RESULT &&
+                                it in setOf(OrderStatusAction.START_REPAIR, OrderStatusAction.READY_FOR_PICKUP)
+                        }
                     if (actions.isEmpty()) {
                         Text("Nessuna azione disponibile per questo stato.")
                     } else {
@@ -231,6 +280,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                                         closureReason = null
                                         resultSummary = ""
                                         resultAmount = ""
+                                        diagnosisOutcome = selected.order.diagnosisOutcome
                                     },
                                 )
                             }
@@ -293,7 +343,9 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             }
         }
 
-        uiState.preparedMessage?.let { prepared ->
+        uiState.preparedMessage
+            ?.takeIf { it.orderId == selected.order.id }
+            ?.let { prepared ->
             item {
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(
@@ -321,6 +373,11 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                                 text = "Inviato",
                                 tone = ButtonTone.SUCCESS,
                                 onClick = { requestConfirm("Invio confermato?", "Registrare che l'operatore ha inviato manualmente il messaggio al cliente?") { viewModel.confirmSentMessage() } },
+                            )
+                            TouchButton(
+                                text = "Chiudi anteprima",
+                                tone = ButtonTone.NEUTRAL,
+                                onClick = viewModel::clearPreparedMessage,
                             )
                         }
                     }
@@ -385,7 +442,37 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     Text("Aggiornare lo stato della commessa?")
                     if (isResultStep) {
                         Field(resultSummary, { resultSummary = it }, "Sintesi risultato", required = true, showError = resultSummary.isBlank(), imeAction = ImeAction.Next, testTag = RepairAppTestTags.StatusResultSummaryField)
-                        Field(resultAmount, { resultAmount = it }, "Importo riparazione opzionale", singleLine = true, imeAction = ImeAction.Done, keyboardType = KeyboardType.Number)
+                        Text("Esito diagnosi", style = MaterialTheme.typography.titleSmall)
+                        QuoteDecisionRow(
+                            text = "Riparabile",
+                            checked = diagnosisOutcome == DiagnosisOutcome.REPAIRABLE,
+                            testTag = RepairAppTestTags.DiagnosisRepairableToggle,
+                            onClick = {
+                                diagnosisOutcome = DiagnosisOutcome.REPAIRABLE
+                            },
+                        )
+                        QuoteDecisionRow(
+                            text = "Non riparabile",
+                            checked = diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE,
+                            testTag = RepairAppTestTags.DiagnosisNotRepairableToggle,
+                            onClick = {
+                                diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE
+                                resultAmount = ""
+                            },
+                        )
+                        if (shouldShowDiagnosisEstimate(diagnosisOutcome)) {
+                            Field(
+                                resultAmount,
+                                { resultAmount = it },
+                                "Importo preventivo",
+                                required = true,
+                                showError = parseEuroCentsOrNull(resultAmount)?.let { it <= 0L } != false,
+                                singleLine = true,
+                                imeAction = ImeAction.Done,
+                                keyboardType = KeyboardType.Decimal,
+                                testTag = RepairAppTestTags.DiagnosisEstimateField,
+                            )
+                        }
                     } else {
                         Field(
                             statusNote,
@@ -419,7 +506,11 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             confirmButton = {
                 TextButton(
                     enabled = when {
-                        isResultStep -> resultSummary.isNotBlank()
+                        isResultStep -> canConfirmDiagnosisResult(
+                            summary = resultSummary,
+                            outcome = diagnosisOutcome,
+                            estimateAmountCents = parseEuroCentsOrNull(resultAmount),
+                        )
                         isClosure -> closureReason != null && statusNote.isNotBlank()
                         else -> true
                     },
@@ -432,6 +523,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                             closureReason = closureReason,
                             resultSummary = resultSummary,
                             resultAmount = resultAmount,
+                            diagnosisOutcome = diagnosisOutcome,
                         )
                         statusAction = null
                     },
@@ -478,17 +570,25 @@ private fun applyStatusAction(
     closureReason: ClosureReason?,
     resultSummary: String,
     resultAmount: String,
+    diagnosisOutcome: DiagnosisOutcome?,
 ) {
     if (action == OrderStatusAction.RECORD_RESULT) {
+        val outcome = diagnosisOutcome ?: return
         val estimateAmountCents = parseEuroCentsOrNull(resultAmount)
         viewModel.recordResult(
             orderId = orderId,
             summary = resultSummary,
+            diagnosisOutcome = outcome,
             estimateAmountCents = estimateAmountCents,
             onSuccess = {
-                if (estimateAmountCents != null) {
-                    viewModel.prepareMessage(orderId, "whatsapp_preventivo_intervento")
-                }
+                viewModel.prepareMessage(
+                    orderId,
+                    if (outcome == DiagnosisOutcome.REPAIRABLE) {
+                        "whatsapp_preventivo_intervento"
+                    } else {
+                        "whatsapp_non_riparabile"
+                    },
+                )
             },
         )
         return

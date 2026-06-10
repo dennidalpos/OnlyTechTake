@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
@@ -22,6 +23,7 @@ import com.onlytechtake.repairapp.data.repositories.TemplateRepository
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
+import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
 import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
 import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
@@ -225,7 +227,9 @@ class WorkspaceViewModel(
         sortOrder: Int,
     ) = catalogActions.saveCategory(id, parentId, name, description, active, sortOrder)
 
-    fun changeStatus(orderId: String, status: OrderStatus, note: String = "", closureReason: ClosureReason? = null) = withUser { actor ->
+    fun changeStatus(orderId: String, status: OrderStatus, note: String = "", closureReason: ClosureReason? = null) = withUser(
+        onSuccess = messageActions::clearPreparedMessage,
+    ) { actor ->
         orderRepository.changeStatus(actor, orderId, status, note, closureReason)
     }
 
@@ -235,12 +239,28 @@ class WorkspaceViewModel(
         note: String = "",
         closureReason: ClosureReason? = null,
         onSuccess: () -> Unit,
-    ) = withUser(onSuccess = onSuccess) { actor ->
+    ) = withUser(onSuccess = {
+        messageActions.clearPreparedMessage()
+        onSuccess()
+    }) { actor ->
         orderRepository.changeStatus(actor, orderId, status, note, closureReason)
     }
 
-    fun recordResult(orderId: String, summary: String, estimateAmountCents: Long?, onSuccess: () -> Unit = {}) = withUser(onSuccess = onSuccess) { actor ->
-        orderRepository.recordResult(actor, orderId, summary, estimateAmountCents)
+    fun recordResult(
+        orderId: String,
+        summary: String,
+        diagnosisOutcome: DiagnosisOutcome,
+        estimateAmountCents: Long?,
+        onSuccess: () -> Unit = {},
+    ) = withUser(onSuccess = {
+        messageActions.clearPreparedMessage()
+        onSuccess()
+    }) { actor ->
+        orderRepository.recordResult(
+            actor,
+            orderId,
+            DiagnosisResultInput(summary, diagnosisOutcome, estimateAmountCents),
+        )
     }
 
     fun reassign(orderId: String, userId: String?) = withUser { actor ->
@@ -326,7 +346,10 @@ class WorkspaceViewModel(
         note: String,
         closureReason: ClosureReason? = null,
         onSuccess: () -> Unit = {},
-    ) = withUser(onSuccess = onSuccess) { actor ->
+    ) = withUser(onSuccess = {
+        messageActions.clearPreparedMessage()
+        onSuccess()
+    }) { actor ->
         orderRepository.recordFeedback(actor, orderId, FeedbackInput(feedback, note, closureReason))
     }
 
@@ -346,6 +369,8 @@ class WorkspaceViewModel(
 
     fun updatePreparedMessageBody(body: String) =
         messageActions.updatePreparedMessageBody(body)
+
+    fun clearPreparedMessage() = messageActions.clearPreparedMessage()
 
     fun recordPreparedMessage() = messageActions.recordPreparedMessage()
 

@@ -89,7 +89,7 @@ Gli script PowerShell calcolano la root del progetto dal proprio percorso, quind
 
 ## Release Signing
 
-`app\build.gradle.kts` legge `keystore.properties` dalla root solo se il file esiste. Gli script `check_project.ps1` e `build_android_installer.ps1` bloccano APK/AAB release quando il signing locale non e' configurato. Il file e il keystore sono locali e ignorati da `.gitignore`.
+`app\build.gradle.kts` legge `keystore.properties` dalla root solo se il file esiste. Gli script `check_project.ps1` e `scripts\android\build_installer.ps1` bloccano APK/AAB release quando il signing locale non e' configurato. Il file e il keystore sono locali e ignorati da `.gitignore`.
 
 Schema richiesto:
 
@@ -113,7 +113,8 @@ Regole:
 - Dashboard con tab Home, Nuova, Clienti, Commesse/Commessa, Config e Admin.
 - Home con metriche e quattro code operative che seguono il flusso banco, diagnosi, preventivo/riparazione e consegna.
 - Creazione commessa a step con cliente esistente o nuovo, categoria ad albero obbligatoria, problema, almeno un media/allegato, privacy e firma.
-- Workspace commessa con stato corrente, prossima azione, note interne, foto/allegati, foto lavoro finito, firma, timeline, WhatsApp manuale a pulsante unico ed export PDF con timeline completa.
+- Workspace commessa con esito diagnosi esplicito `REPAIRABLE`/`NOT_REPAIRABLE`, preventivo obbligatorio solo nel ramo riparabile, azioni post-diagnosi guidate, note, media, firma, timeline, WhatsApp manuale locale ed export PDF.
+- Le anteprime immagini locali rispettano l'orientamento EXIF; CameraX usa la rotazione reale del display prima del bind e dello scatto.
 - Admin: utenti, reset password, pulizia commesse scartate/archiviate e reset totale dati con conferma `RESET`.
 - Config admin: categorie multilivello, template privacy/condizioni/WhatsApp, modalita WhatsApp manuale, export config/database/ZIP/XLSX.
 - Import allegati tramite SAF per JPEG/PNG/WebP, PDF, TXT, DOC/DOCX e XLS/XLSX fino a 25 MiB.

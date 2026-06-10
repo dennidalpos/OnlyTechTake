@@ -43,13 +43,16 @@ files/orders/<orderId>/signatures/...
 files/order_media/<orderId>/...
 ```
 
-Foto CameraX, allegati importati e firme restano in spazio privato app e vengono copiati nel backup completo.
+Foto CameraX, allegati importati e firme restano in spazio privato app e vengono copiati byte per byte nel backup completo, conservando metadati EXIF e orientamento. L'anteprima applica EXIF in lettura; le modifiche esplicite dell'operatore riscrivono invece l'immagine normalizzata.
 
 ### XLSX commesse
 
 Output: `onlytechtake-commesse.xlsx`.
 
-Contiene l'export tabellare delle commesse per uso admin.
+Contiene l'export tabellare delle commesse per uso admin, incluso l'esito diagnosi.
+
+Il PDF della commessa elenca timeline e nomi dei media; non incorpora bitmap,
+quindi non altera ne' ricodifica l'orientamento delle foto.
 
 ### Ripristino backup
 

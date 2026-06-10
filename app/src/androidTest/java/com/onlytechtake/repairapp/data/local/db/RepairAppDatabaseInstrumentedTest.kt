@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
@@ -80,6 +81,7 @@ class RepairAppDatabaseInstrumentedTest {
             createdByUserId = user.id,
             description = "Smoke database",
             internalNotes = null,
+            diagnosisOutcome = DiagnosisOutcome.REPAIRABLE,
             estimateAmountCents = null,
             finalAmountCents = null,
             createdAt = now,
@@ -99,6 +101,7 @@ class RepairAppDatabaseInstrumentedTest {
         assertNotNull(database.userDao().findById(user.id))
         assertNotNull(database.customerDao().findById(customer.id))
         assertEquals(order.orderNumber, database.repairOrderDao().findById(order.id)?.orderNumber)
+        assertEquals(DiagnosisOutcome.REPAIRABLE, database.repairOrderDao().findById(order.id)?.diagnosisOutcome)
     }
 
     @Test

@@ -16,6 +16,7 @@ import com.onlytechtake.repairapp.data.local.entities.AuditAction
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
@@ -24,6 +25,7 @@ import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
+import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
 import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
@@ -32,6 +34,7 @@ import com.onlytechtake.repairapp.domain.workspace.discardedCleanupReasons
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
 import com.onlytechtake.repairapp.domain.workspace.RepairOrderInput
 import com.onlytechtake.repairapp.domain.workspace.validationErrors
+import com.onlytechtake.repairapp.domain.workspace.normalizedEstimateAmountCents
 import java.io.File
 import java.util.UUID
 import kotlinx.coroutines.flow.Flow
@@ -151,6 +154,7 @@ class OrderWorkflowRepository(
                     createdByUserId = actor.id,
                     description = input.description.trim().ifBlank { null },
                     internalNotes = null,
+                    diagnosisOutcome = null,
                     estimateAmountCents = null,
                     finalAmountCents = null,
                     createdAt = now,
@@ -180,6 +184,16 @@ class OrderWorkflowRepository(
                 val order = requireWritableOrder(actor, orderId)
                 if (order.status == status) return@inTransaction
                 OrderStatusPolicy.requireAllowed(order.status, status, closureReason)
+                if (order.status == OrderStatus.RESULT && status == OrderStatus.REPAIRING) {
+                    require(order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
+                        "Solo una diagnosi riparabile puo' passare in riparazione"
+                    }
+                }
+                if (order.status == OrderStatus.RESULT && status == OrderStatus.READY_FOR_PICKUP) {
+                    require(order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE) {
+                        "Il passaggio diretto al ritiro richiede una diagnosi non riparabile"
+                    }
+                }
 
                 val now = clockMillis()
                 repairOrderDao.upsert(
@@ -205,24 +219,31 @@ class OrderWorkflowRepository(
     suspend fun recordResult(
         actor: AuthenticatedUser,
         orderId: String,
-        summary: String,
-        estimateAmountCents: Long?,
+        input: DiagnosisResultInput,
     ): Result<Unit> =
         runCatching {
             inTransaction {
-                require(summary.isNotBlank()) { "Sintesi risultato obbligatoria" }
-                estimateAmountCents?.let { require(it >= 0L) { "Importo riparazione non valido" } }
+                val errors = input.validationErrors()
+                require(errors.isEmpty()) { errors.joinToString("\n") }
                 val order = requireWritableOrder(actor, orderId)
-                OrderStatusPolicy.requireAllowed(order.status, OrderStatus.RESULT)
+                require(order.status == OrderStatus.DIAGNOSIS || order.status == OrderStatus.RESULT) {
+                    "La diagnosi puo' essere registrata solo durante o dopo la diagnosi"
+                }
+                if (order.status != OrderStatus.RESULT) {
+                    OrderStatusPolicy.requireAllowed(order.status, OrderStatus.RESULT)
+                }
 
                 val now = clockMillis()
+                val estimateAmountCents = input.normalizedEstimateAmountCents()
                 val details = listOfNotNull(
-                    "Sintesi risultato: ${summary.trim()}",
+                    "Sintesi risultato: ${input.summary.trim()}",
+                    "Esito diagnosi: ${input.diagnosisOutcome.label()}",
                     estimateAmountCents?.let { "Importo riparazione: ${formatEuroCents(it)}" },
                 ).joinToString("\n")
                 repairOrderDao.upsert(
                     order.copy(
                         status = OrderStatus.RESULT,
+                        diagnosisOutcome = input.diagnosisOutcome,
                         estimateAmountCents = estimateAmountCents,
                         updatedAt = now,
                     ),
@@ -331,6 +352,17 @@ class OrderWorkflowRepository(
                 val errors = input.validationErrors()
                 require(errors.isEmpty()) { errors.joinToString("\n") }
                 val order = requireWritableOrder(actor, orderId)
+                require(order.status == OrderStatus.RESULT) {
+                    "Il feedback preventivo richiede una commessa in attesa cliente"
+                }
+                when (input.feedback) {
+                    CustomerFeedbackType.ACCEPT,
+                    CustomerFeedbackType.REJECT,
+                    -> require(order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
+                        "Accettazione o rifiuto sono disponibili solo per una diagnosi riparabile"
+                    }
+                    else -> Unit
+                }
                 val now = clockMillis()
                 val targetStatus = when (input.feedback) {
                     CustomerFeedbackType.ACCEPT -> OrderStatus.REPAIRING
@@ -361,6 +393,14 @@ class OrderWorkflowRepository(
                     targetStatus = targetStatus,
                     now = now,
                 )
+                messageLogDao.findLatestForOrder(orderId)?.let { latest ->
+                    messageLogDao.upsert(
+                        latest.copy(
+                            actualReply = input.feedback,
+                            actualReplyNote = input.note.trim().ifBlank { input.feedback.name },
+                        ),
+                    )
+                }
             }
         }
 
@@ -409,3 +449,9 @@ class OrderWorkflowRepository(
 
 private fun formatEuroCents(cents: Long): String =
     "EUR ${cents / 100},${(cents % 100).toString().padStart(2, '0')}"
+
+private fun DiagnosisOutcome.label(): String =
+    when (this) {
+        DiagnosisOutcome.REPAIRABLE -> "Riparabile"
+        DiagnosisOutcome.NOT_REPAIRABLE -> "Non riparabile"
+    }

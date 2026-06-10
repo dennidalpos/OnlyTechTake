@@ -76,8 +76,7 @@ abstract class RepairAppDatabase : RoomDatabase() {
                     context.applicationContext,
                     RepairAppDatabase::class.java,
                     DATABASE_NAME,
-                ).fallbackToDestructiveMigration(true)
-                    .build()
+                ).build()
                     .also { instance = it }
             }
 

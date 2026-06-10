@@ -76,7 +76,7 @@ Variabili supportate:
 {{categoria_percorso}}
 ```
 
-Template con variabili diverse vengono rifiutati al salvataggio. L'anteprima WhatsApp nel dettaglio commessa mostra il testo renderizzato e modificabile prima dell'apertura di WhatsApp.
+Template con variabili diverse vengono rifiutati al salvataggio. L'anteprima WhatsApp e' confinata al dettaglio della commessa corrente, e' modificabile e puo' essere chiusa senza invio.
 
 ## WhatsApp manuale
 
@@ -116,8 +116,15 @@ Stato operativo implementato:
 - non esiste una schermata dedicata "Registra feedback";
 - non esiste lettura automatica delle risposte WhatsApp;
 - l'accettazione/rifiuto viene registrata dalle azioni operative del dettaglio commessa;
+- `whatsapp_preventivo_intervento` e' usato solo per `REPAIRABLE` e include `importo_preventivo`;
+- `whatsapp_non_riparabile` e' usato per `NOT_REPAIRABLE` gia' in `RESULT`, senza testo vuoto legato al motivo chiusura;
 - `ACCEPT` porta lo stato a `REPAIRING`;
 - `REJECT` porta lo stato a `CLOSED` con motivo `CUSTOMER_DECLINED`.
+
+La preview viene eliminata su chiusura, cambio commessa, ritorno all'elenco,
+cambio stato, feedback cliente e conferma invio. L'apertura di `wa.me` mantiene
+la preview per consentire all'operatore di confermare manualmente l'invio al
+ritorno. L'app non invia automaticamente.
 - una chiusura come `NOT_REPAIRABLE` usa il template dedicato `whatsapp_non_riparabile`;
 - un risultato con importo usa il template `whatsapp_preventivo_intervento` e resta in attesa di conferma cliente.
 

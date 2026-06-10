@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.domain.workspace
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
@@ -144,3 +145,20 @@ fun FeedbackInput.validationErrors(): List<String> =
             add("Motivo rifiuto obbligatorio")
         }
     }
+
+data class DiagnosisResultInput(
+    val summary: String,
+    val diagnosisOutcome: DiagnosisOutcome,
+    val estimateAmountCents: Long? = null,
+)
+
+fun DiagnosisResultInput.validationErrors(): List<String> =
+    buildList {
+        if (summary.isBlank()) add("Sintesi risultato obbligatoria")
+        if (diagnosisOutcome == DiagnosisOutcome.REPAIRABLE && (estimateAmountCents == null || estimateAmountCents <= 0L)) {
+            add("Importo preventivo positivo obbligatorio")
+        }
+    }
+
+fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? =
+    estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }

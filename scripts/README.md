@@ -10,13 +10,10 @@ Gli script calcolano automaticamente la root del progetto dal proprio percorso, 
 | Gradle wrapper Android | `scripts\android\gradle.ps1` | Esegue `gradlew.bat` con JDK/SDK risolti dallo script. | Usare `--` prima degli argomenti Gradle. |
 | Build installer Android | `scripts\android\build_installer.ps1` | Produce APK o AAB tramite Gradle Wrapper e opzionalmente installa APK via adb. | Supporta `-BuildType`, `-OutputType`, `-Clean`, `-RerunTasks`, `-Install`; blocca release senza signing locale. |
 | Start app Android | `scripts\android\start_app.ps1` | Installa l'APK selezionato e avvia `MainActivity` via adb. | Supporta `-NoInstall`, `-ApkPath` e `-CleanInstall` per reinstallazione pulita. |
-| Check progetto | `scripts\windows\check_project.ps1` | Esegue lint, compile Kotlin debug, test unitari, build APK debug e, senza `-SkipReleaseBuild`, build APK release firmata. | Usa l'helper condiviso tramite wrapper compatibility; `-AndroidTests` esegue `connectedDebugAndroidTest`. |
+| Check progetto | `scripts\windows\check_project.ps1` | Esegue lint, compile Kotlin debug, test unitari, build APK debug e, senza `-SkipReleaseBuild`, build APK release firmata. | Usa direttamente il supporto Android condiviso; `-AndroidTests` esegue `connectedDebugAndroidTest`. |
 | Audit vulnerabilita' dipendenze | `scripts\windows\check_dependency_vulnerabilities.ps1` | Interroga OSV sulle coordinate Maven presenti nei lockfile Gradle. | Separato dai check offline; non invia codice sorgente, solo group/artifact/version. |
 | Screenshot demo | `scripts\windows\create_demo_screenshots.ps1` | Genera PNG demo verticali 1080x1920 divisi per caso d'uso. | Usa AVD `OnlyTechTakeDemo` o un device USB con `-UseConnectedDevice`. |
 | Video demo operatore | `scripts\windows\create_demo_video.ps1` | Genera MP4 demo del flusso operatore al banco. | Richiede ffmpeg; usa AVD demo o device USB con `-UseConnectedDevice`. |
-| Wrapper compatibility | `scripts\windows\check_android_env.ps1` | Delega a `scripts\android\check_env.ps1`. | Mantenuto per comandi esistenti. |
-| Wrapper compatibility | `scripts\windows\build_android_installer.ps1` | Delega a `scripts\android\build_installer.ps1`. | Mantenuto per comandi esistenti. |
-| Wrapper compatibility | `scripts\windows\start_android_app.ps1` | Delega a `scripts\android\start_app.ps1`. | Mantenuto per comandi esistenti. |
 
 ## Comandi per obiettivo
 

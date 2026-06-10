@@ -19,6 +19,9 @@ data class WorkspaceUiState(
     val preparedMessageBody: String = "",
 )
 
+fun WorkspaceUiState.withoutPreparedMessage(): WorkspaceUiState =
+    copy(preparedMessage = null, preparedMessageBody = "")
+
 enum class WorkspaceDestination {
     HOME,
     CUSTOMERS,

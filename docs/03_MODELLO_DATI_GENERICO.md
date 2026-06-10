@@ -62,6 +62,7 @@ data class RepairOrderEntity(
     val createdByUserId: String,
     val description: String?,
     val internalNotes: String?,
+    val diagnosisOutcome: DiagnosisOutcome?,
     val estimateAmountCents: Long?,
     val finalAmountCents: Long?,
     val createdAt: Long,
@@ -72,6 +73,11 @@ data class RepairOrderEntity(
     val deleteReason: String?
 )
 ```
+
+`DiagnosisOutcome` ammette solo `REPAIRABLE` e `NOT_REPAIRABLE`. Non viene dedotto
+dall'importo: il preventivo deve essere positivo nel primo ramo ed e' sempre
+azzerato nel secondo. `RESULT` rappresenta l'attesa del riscontro cliente o
+dell'avviso per il ritiro, senza introdurre uno stato `WAITING_CUSTOMER`.
 
 ## OrderCategory
 
@@ -244,5 +250,6 @@ Non usare una tabella diversa per ogni tipo di negozio.
 Non aggiungere colonne tipo `imei`, `marca`, `modello`, `taglia`, `colore`, ecc. nella tabella commesse.
 
 Usare categorie, descrizione, note interne, media, firme, timeline e messaggi.
-Lo schema Room corrente e' v1 pulito e non include tabelle custom field o
-workflow parallele a `repair_orders.status`.
+Lo schema Room corrente e' v1 pulito, aggiornato in place e senza migrazioni
+legacy. Non include tabelle custom field o workflow parallele a
+`repair_orders.status`.

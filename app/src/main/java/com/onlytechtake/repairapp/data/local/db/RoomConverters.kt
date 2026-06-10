@@ -5,6 +5,7 @@ import com.onlytechtake.repairapp.data.local.entities.AuditAction
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.MessageChannel
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.data.local.entities.MessageStatus
@@ -23,6 +24,9 @@ class RoomConverters {
     @TypeConverter fun toOrderStatus(value: String?): OrderStatus? = enumValueOrNull<OrderStatus>(value)
     @TypeConverter fun fromOrderStatus(value: OrderStatus?): String? = value?.name
 
+    @TypeConverter fun toDiagnosisOutcome(value: String?): DiagnosisOutcome? = enumValueOrNull<DiagnosisOutcome>(value)
+    @TypeConverter fun fromDiagnosisOutcome(value: DiagnosisOutcome?): String? = value?.name
+
     @TypeConverter fun toClosureReason(value: String?): ClosureReason? = enumValueOrNull<ClosureReason>(value)
     @TypeConverter fun fromClosureReason(value: ClosureReason?): String? = value?.name
 
@@ -40,12 +44,7 @@ class RoomConverters {
     @TypeConverter fun toMessageChannel(value: String?): MessageChannel? = enumValueOrNull<MessageChannel>(value)
     @TypeConverter fun fromMessageChannel(value: MessageChannel?): String? = value?.name
 
-    @TypeConverter
-    fun toMessageMode(value: String?): MessageMode? =
-        when (value) {
-            "MANUAL" -> MessageMode.MANUAL_WHATSAPP
-            else -> enumValueOrNull<MessageMode>(value)
-        }
+    @TypeConverter fun toMessageMode(value: String?): MessageMode? = enumValueOrNull<MessageMode>(value)
     @TypeConverter fun fromMessageMode(value: MessageMode?): String? = value?.name
 
     @TypeConverter fun toMessageStatus(value: String?): MessageStatus? = enumValueOrNull<MessageStatus>(value)

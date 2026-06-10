@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.features.dashboard
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.view.WindowManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
@@ -35,6 +36,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
+import com.onlytechtake.repairapp.core.media.normalizeCameraTargetRotation
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.features.workspace.isFinalPhoto
 import com.onlytechtake.repairapp.features.workspace.isImageAttachment
@@ -239,6 +241,7 @@ fun CameraCapturePreview(
                     val preview = Preview.Builder().build().also {
                         it.setSurfaceProvider(previewView.surfaceProvider)
                     }
+                    imageCapture.targetRotation = cameraTargetRotation(context, previewView)
                     cameraProvider.unbindAll()
                     cameraProvider.bindToLifecycle(lifecycleOwner, selector, preview, imageCapture)
                 }.onFailure {
@@ -268,6 +271,7 @@ fun CameraCapturePreview(
             modifier = Modifier.fillMaxWidth(),
             text = "Acquisisci foto",
             onClick = {
+                imageCapture.targetRotation = cameraTargetRotation(context, previewView)
                 createPhotoFile(orderId, orderNumber).fold(
                     onSuccess = { file ->
                         val outputOptions = ImageCapture.OutputFileOptions.Builder(file).build()
@@ -291,4 +295,12 @@ fun CameraCapturePreview(
             },
         )
     }
+}
+
+@Suppress("DEPRECATION")
+private fun cameraTargetRotation(context: android.content.Context, previewView: PreviewView): Int {
+    val windowRotation = (context.getSystemService(android.content.Context.WINDOW_SERVICE) as? WindowManager)
+        ?.defaultDisplay
+        ?.rotation
+    return normalizeCameraTargetRotation(previewView.display?.rotation ?: windowRotation)
 }

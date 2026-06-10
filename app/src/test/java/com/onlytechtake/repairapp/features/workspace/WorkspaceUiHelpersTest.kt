@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.features.workspace
 
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
@@ -56,7 +57,19 @@ class WorkspaceUiHelpersTest {
         assertEquals("Registra risultato", nextActionLabel(OrderStatus.DIAGNOSIS))
         assertEquals("Registra esito preventivo", nextActionLabel(OrderStatus.RESULT))
         assertEquals("Nessuna azione", nextActionLabel(OrderStatus.CLOSED))
-        assertEquals("Attendere conferma preventivo", nextActionLabel(orderWithEstimate()))
+        assertEquals("Attendere accettazione o rifiuto preventivo", nextActionLabel(order(DiagnosisOutcome.REPAIRABLE)))
+        assertEquals("Avvisare il cliente e preparare il ritiro", nextActionLabel(order(DiagnosisOutcome.NOT_REPAIRABLE)))
+    }
+
+    @Test
+    fun diagnosisUiRequiresOutcomeAndPositiveEstimateOnlyWhenRepairable() {
+        assertTrue(!shouldShowDiagnosisEstimate(null))
+        assertTrue(shouldShowDiagnosisEstimate(DiagnosisOutcome.REPAIRABLE))
+        assertTrue(!canConfirmDiagnosisResult("Esito", null, null))
+        assertTrue(!canConfirmDiagnosisResult("Esito", DiagnosisOutcome.REPAIRABLE, null))
+        assertTrue(!canConfirmDiagnosisResult("Esito", DiagnosisOutcome.REPAIRABLE, 0L))
+        assertTrue(canConfirmDiagnosisResult("Esito", DiagnosisOutcome.REPAIRABLE, 10_000L))
+        assertTrue(canConfirmDiagnosisResult("Esito", DiagnosisOutcome.NOT_REPAIRABLE, null))
     }
 
     private fun media(mediaType: String, mimeType: String) = OrderMediaEntity(
@@ -95,7 +108,7 @@ class WorkspaceUiHelpersTest {
         createdAt = 0L,
     )
 
-    private fun orderWithEstimate() = RepairOrderEntity(
+    private fun order(outcome: DiagnosisOutcome) = RepairOrderEntity(
         id = "order",
         orderNumber = "2026-0001",
         customerId = "customer",
@@ -107,7 +120,8 @@ class WorkspaceUiHelpersTest {
         createdByUserId = "operator",
         description = null,
         internalNotes = null,
-        estimateAmountCents = 10_000,
+        diagnosisOutcome = outcome,
+        estimateAmountCents = 10_000L.takeIf { outcome == DiagnosisOutcome.REPAIRABLE },
         finalAmountCents = null,
         createdAt = 0L,
         updatedAt = 0L,

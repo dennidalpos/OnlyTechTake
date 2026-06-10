@@ -150,7 +150,8 @@ Campi principali:
 - creato da;
 - descrizione;
 - note interne;
-- importo preventivo/finale;
+- esito diagnosi `REPAIRABLE` o `NOT_REPAIRABLE`;
+- importo preventivo, obbligatorio e positivo solo per esito riparabile, e importo finale;
 - date creazione, aggiornamento e chiusura;
 - campi di cancellazione logica.
 
@@ -170,14 +171,17 @@ READY_FOR_PICKUP
 CLOSED
 ```
 
-Il workspace riprende dallo stato corrente e mostra separatamente stato corrente e prossima azione consentita dalla policy di stato piu' l'azione unica "Chiudi commessa". La chiusura richiede motivo e nota manuale. Se il motivo e' non riparabile, la scheda resta aperta per preparare la comunicazione WhatsApp dedicata.
+Il workspace riprende dallo stato corrente e mostra separatamente stato corrente e prossima azione. La chiusura richiede sempre motivo e nota manuale.
 
 Mappa operativa:
 
 - `OPEN`: presa in carico o chiusura motivata;
 - `IN_PROGRESS`: avvio diagnosi o chiusura motivata;
-- `DIAGNOSIS`: registrazione risultato o chiusura motivata;
-- `RESULT`: attesa conferma preventivo quando e' presente un importo, altrimenti avvio riparazione o chiusura motivata;
+- `DIAGNOSIS`: registrazione obbligatoria di sintesi ed esito diagnosi;
+- `RESULT` con `REPAIRABLE`: preventivo positivo obbligatorio, attesa accettazione o rifiuto cliente;
+- accettazione preventivo: feedback `ACCEPT` e passaggio a `REPAIRING`;
+- rifiuto preventivo: feedback `REJECT`, nota obbligatoria e chiusura `CUSTOMER_DECLINED`;
+- `RESULT` con `NOT_REPAIRABLE`: nessun importo, avviso cliente e passaggio a `READY_FOR_PICKUP`;
 - `REPAIRING`: pronta al ritiro o chiusura motivata;
 - `READY_FOR_PICKUP`: chiusura motivata;
 - `CLOSED`: nessuna azione operativa.
@@ -224,7 +228,7 @@ Timeline e message log vengono aggiornati
 
 Non sono implementati backend, WhatsApp Business Platform, webhook o conferme automatiche.
 
-Il feedback cliente automatico non e' implementato. Nel rilascio corrente l'app registra manualmente la risposta cliente: l'accettazione del preventivo porta la commessa a `REPAIRING`, il rifiuto chiude la commessa in `CLOSED` con motivo `CUSTOMER_DECLINED`.
+Il feedback cliente automatico non e' implementato. La risposta viene registrata manualmente e aggiorna timeline e ultimo message log disponibile. Il ramo non riparabile usa il normale flusso pronto ritiro e chiusura motivata.
 
 ## Backup e limiti
 

@@ -49,6 +49,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.core.media.decodeOrientedBitmap
 import java.io.File
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -67,7 +68,7 @@ fun LocalImagePreview(
 ) {
     val imageFile = remember(path) { File(path) }
     val bitmap = remember(path, imageFile.lastModified(), imageFile.length()) {
-        BitmapFactory.decodeFile(path)?.asImageBitmap()
+        decodeOrientedBitmap(path)?.asImageBitmap()
     }
     Box(
         modifier = modifier
@@ -191,7 +192,7 @@ private fun EditableLocalImage(
     onBuildEditedBitmapChange: (() -> Bitmap?) -> Unit,
 ) {
     var bitmap by remember(path) {
-        mutableStateOf(BitmapFactory.decodeFile(path)?.copy(Bitmap.Config.ARGB_8888, true))
+        mutableStateOf(decodeOrientedBitmap(path)?.copy(Bitmap.Config.ARGB_8888, true))
     }
     var editMode by remember(path) { mutableStateOf(ImageEditMode.ARROW) }
     var arrows by remember(path) { mutableStateOf(emptyList<ImageEditArrow>()) }
@@ -353,7 +354,7 @@ private fun ZoomableLocalImage(
     description: String,
     modifier: Modifier = Modifier,
 ) {
-    val bitmap = remember(path) { BitmapFactory.decodeFile(path)?.asImageBitmap() }
+    val bitmap = remember(path) { decodeOrientedBitmap(path)?.asImageBitmap() }
     var scale by remember(path) { mutableFloatStateOf(1f) }
     var offset by remember(path) { mutableStateOf(Offset.Zero) }
     val transformState = rememberTransformableState { zoomChange, panChange, _ ->

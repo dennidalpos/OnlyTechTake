@@ -20,6 +20,11 @@ enum class OrderStatus {
     CLOSED,
 }
 
+enum class DiagnosisOutcome {
+    REPAIRABLE,
+    NOT_REPAIRABLE,
+}
+
 enum class ClosureReason {
     COMPLETED,
     CUSTOMER_DECLINED,

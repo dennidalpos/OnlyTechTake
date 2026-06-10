@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "826069628471b9d8b3d0dbf49546890d",
+    "identityHash": "fb7afeec0f13e57e8468bc28cacf4ad7",
     "entities": [
       {
         "tableName": "users",
@@ -364,7 +364,7 @@
       },
       {
         "tableName": "repair_orders",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `orderNumber` TEXT NOT NULL, `customerId` TEXT NOT NULL, `title` TEXT NOT NULL, `categoryId` TEXT NOT NULL, `status` TEXT NOT NULL, `priority` TEXT NOT NULL, `assignedToUserId` TEXT, `createdByUserId` TEXT NOT NULL, `description` TEXT, `internalNotes` TEXT, `estimateAmountCents` INTEGER, `finalAmountCents` INTEGER, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, `closedAt` INTEGER, `closureReason` TEXT, `deletedAt` INTEGER, `deletedByUserId` TEXT, `deleteReason` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`customerId`) REFERENCES `customers`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`categoryId`) REFERENCES `order_categories`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`assignedToUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL , FOREIGN KEY(`createdByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`deletedByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `orderNumber` TEXT NOT NULL, `customerId` TEXT NOT NULL, `title` TEXT NOT NULL, `categoryId` TEXT NOT NULL, `status` TEXT NOT NULL, `priority` TEXT NOT NULL, `assignedToUserId` TEXT, `createdByUserId` TEXT NOT NULL, `description` TEXT, `internalNotes` TEXT, `diagnosisOutcome` TEXT, `estimateAmountCents` INTEGER, `finalAmountCents` INTEGER, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, `closedAt` INTEGER, `closureReason` TEXT, `deletedAt` INTEGER, `deletedByUserId` TEXT, `deleteReason` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`customerId`) REFERENCES `customers`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`categoryId`) REFERENCES `order_categories`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`assignedToUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL , FOREIGN KEY(`createdByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`deletedByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
         "fields": [
           {
             "fieldPath": "id",
@@ -427,6 +427,11 @@
           {
             "fieldPath": "internalNotes",
             "columnName": "internalNotes",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "diagnosisOutcome",
+            "columnName": "diagnosisOutcome",
             "affinity": "TEXT"
           },
           {
@@ -1616,7 +1621,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '826069628471b9d8b3d0dbf49546890d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fb7afeec0f13e57e8468bc28cacf4ad7')"
     ]
   }
 }

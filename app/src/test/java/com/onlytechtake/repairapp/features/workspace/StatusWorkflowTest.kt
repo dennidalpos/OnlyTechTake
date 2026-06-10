@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.features.workspace
 
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
@@ -55,14 +56,21 @@ class StatusWorkflowTest {
 
     @Test
     fun statusMessageTemplateUsesSpecialCases() {
-        assertEquals("whatsapp_preventivo_intervento", statusTemplateCode(order(OrderStatus.RESULT, estimateAmountCents = 12_300)))
+        assertEquals(
+            "whatsapp_preventivo_intervento",
+            statusTemplateCode(order(OrderStatus.RESULT, diagnosisOutcome = DiagnosisOutcome.REPAIRABLE)),
+        )
+        assertEquals(
+            "whatsapp_non_riparabile",
+            statusTemplateCode(order(OrderStatus.RESULT, diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE)),
+        )
         assertEquals("whatsapp_non_riparabile", statusTemplateCode(order(OrderStatus.CLOSED, closureReason = ClosureReason.NOT_REPAIRABLE)))
         assertEquals("whatsapp_diagnosi", statusTemplateCode(order(OrderStatus.DIAGNOSIS)))
     }
 
     private fun order(
         status: OrderStatus,
-        estimateAmountCents: Long? = null,
+        diagnosisOutcome: DiagnosisOutcome? = null,
         closureReason: ClosureReason? = null,
     ) = RepairOrderEntity(
         id = "order",
@@ -76,7 +84,8 @@ class StatusWorkflowTest {
         createdByUserId = "operator",
         description = null,
         internalNotes = null,
-        estimateAmountCents = estimateAmountCents,
+        diagnosisOutcome = diagnosisOutcome,
+        estimateAmountCents = if (diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) 12_300 else null,
         finalAmountCents = null,
         createdAt = 0L,
         updatedAt = 0L,

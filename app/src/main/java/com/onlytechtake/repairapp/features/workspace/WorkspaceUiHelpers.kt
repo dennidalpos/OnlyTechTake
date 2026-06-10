@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.features.workspace
 
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
@@ -70,8 +71,28 @@ fun nextActionLabel(status: OrderStatus): String =
     }
 
 fun nextActionLabel(order: RepairOrderEntity): String =
-    if (order.status == OrderStatus.RESULT && order.estimateAmountCents != null) {
-        "Attendere conferma preventivo"
-    } else {
-        nextActionLabel(order.status)
+    when {
+        order.status == OrderStatus.RESULT && order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE ->
+            "Attendere accettazione o rifiuto preventivo"
+        order.status == OrderStatus.RESULT && order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE ->
+            "Avvisare il cliente e preparare il ritiro"
+        else -> nextActionLabel(order.status)
+    }
+
+fun shouldShowDiagnosisEstimate(outcome: DiagnosisOutcome?): Boolean =
+    outcome == DiagnosisOutcome.REPAIRABLE
+
+fun canConfirmDiagnosisResult(
+    summary: String,
+    outcome: DiagnosisOutcome?,
+    estimateAmountCents: Long?,
+): Boolean =
+    summary.isNotBlank() &&
+        outcome != null &&
+        (outcome != DiagnosisOutcome.REPAIRABLE || (estimateAmountCents != null && estimateAmountCents > 0L))
+
+fun DiagnosisOutcome.diagnosisOutcomeLabel(): String =
+    when (this) {
+        DiagnosisOutcome.REPAIRABLE -> "Riparabile"
+        DiagnosisOutcome.NOT_REPAIRABLE -> "Non riparabile"
     }

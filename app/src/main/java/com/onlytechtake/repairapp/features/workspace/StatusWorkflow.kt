@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.features.workspace
 
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
@@ -39,8 +40,12 @@ fun statusTemplateCode(status: OrderStatus): String =
 
 fun statusTemplateCode(order: RepairOrderEntity): String =
     when {
-        order.status == OrderStatus.CLOSED && order.closureReason == ClosureReason.NOT_REPAIRABLE -> "whatsapp_non_riparabile"
-        order.status == OrderStatus.RESULT && order.estimateAmountCents != null -> "whatsapp_preventivo_intervento"
+        order.status == OrderStatus.RESULT && order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE ->
+            "whatsapp_preventivo_intervento"
+        order.status == OrderStatus.RESULT && order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE ->
+            "whatsapp_non_riparabile"
+        order.status == OrderStatus.CLOSED && order.closureReason == ClosureReason.NOT_REPAIRABLE ->
+            "whatsapp_non_riparabile"
         else -> statusTemplateCode(order.status)
     }
 
@@ -62,4 +67,10 @@ fun ClosureReason.label(): String =
         ClosureReason.NOT_REPAIRABLE -> "Non riparabile"
         ClosureReason.CANCELLED -> "Annullata"
         ClosureReason.OTHER -> "Altro"
+    }
+
+fun DiagnosisOutcome.label(): String =
+    when (this) {
+        DiagnosisOutcome.REPAIRABLE -> "Riparabile"
+        DiagnosisOutcome.NOT_REPAIRABLE -> "Non riparabile"
     }

@@ -9,8 +9,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.AppSettingEntity
+import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
+import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.MessageChannel
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
@@ -26,6 +29,8 @@ import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.auth.LoginResult
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
+import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
+import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
 import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
 import com.onlytechtake.repairapp.domain.workspace.RepairOrderInput
 import java.io.File
@@ -152,6 +157,78 @@ class RepositoryPathsInstrumentedTest {
         val events = database.timelineEventDao().observeForOrder(order.id).first()
         assertEquals(1, events.size)
         assertEquals(order.id, events.single().orderId)
+    }
+
+    @Test
+    fun diagnosisWorkflowCoversRepairableRejectedAndNotRepairableBranches() = runBlocking {
+        val actor = seedAdmin()
+        seedCustomer()
+        seedCategory()
+        val workflow = orderWorkflowRepository()
+        val templates = templateRepository()
+        templates.ensureDefaults(actor.id)
+
+        val acceptedOrder = createDiagnosisOrder(workflow, actor, "Riparabile")
+        workflow.recordResult(
+            actor,
+            acceptedOrder.id,
+            DiagnosisResultInput("Display sostituibile", DiagnosisOutcome.REPAIRABLE, 12_300L),
+        ).getOrThrow()
+        val acceptedResult = database.repairOrderDao().findById(acceptedOrder.id)
+        assertEquals(DiagnosisOutcome.REPAIRABLE, acceptedResult?.diagnosisOutcome)
+        assertEquals(12_300L, acceptedResult?.estimateAmountCents)
+        val quote = templates.prepareMessage(actor, acceptedOrder.id, "whatsapp_preventivo_intervento").getOrThrow()
+        assertTrue(quote.body.contains("EUR 123,00"))
+        templates.recordPrepared(actor, quote, quote.body).getOrThrow()
+        workflow.recordFeedback(
+            actor,
+            acceptedOrder.id,
+            FeedbackInput(CustomerFeedbackType.ACCEPT, "Preventivo accettato"),
+        ).getOrThrow()
+        assertEquals(OrderStatus.REPAIRING, database.repairOrderDao().findById(acceptedOrder.id)?.status)
+        assertEquals(CustomerFeedbackType.ACCEPT, database.messageLogDao().findLatestForOrder(acceptedOrder.id)?.actualReply)
+
+        val rejectedOrder = createDiagnosisOrder(workflow, actor, "Rifiutata")
+        workflow.recordResult(
+            actor,
+            rejectedOrder.id,
+            DiagnosisResultInput("Riparazione possibile", DiagnosisOutcome.REPAIRABLE, 9_900L),
+        ).getOrThrow()
+        workflow.recordFeedback(
+            actor,
+            rejectedOrder.id,
+            FeedbackInput(CustomerFeedbackType.REJECT, "Preventivo non accettato"),
+        ).getOrThrow()
+        val rejected = database.repairOrderDao().findById(rejectedOrder.id)
+        assertEquals(OrderStatus.CLOSED, rejected?.status)
+        assertEquals(ClosureReason.CUSTOMER_DECLINED, rejected?.closureReason)
+
+        val notRepairableOrder = createDiagnosisOrder(workflow, actor, "Non riparabile")
+        workflow.recordResult(
+            actor,
+            notRepairableOrder.id,
+            DiagnosisResultInput("Scheda irreparabile", DiagnosisOutcome.NOT_REPAIRABLE, 50_000L),
+        ).getOrThrow()
+        val notRepairable = database.repairOrderDao().findById(notRepairableOrder.id)
+        assertEquals(DiagnosisOutcome.NOT_REPAIRABLE, notRepairable?.diagnosisOutcome)
+        assertEquals(null, notRepairable?.estimateAmountCents)
+        val message = templates.prepareMessage(actor, notRepairableOrder.id, "whatsapp_non_riparabile").getOrThrow()
+        assertTrue(message.body.contains("non riparabile"))
+        assertFalse(message.body.contains("Motivo: ."))
+        workflow.changeStatus(
+            actor,
+            notRepairableOrder.id,
+            OrderStatus.READY_FOR_PICKUP,
+            "Cliente avvisato",
+        ).getOrThrow()
+        workflow.changeStatus(
+            actor,
+            notRepairableOrder.id,
+            OrderStatus.CLOSED,
+            "Dispositivo ritirato",
+            ClosureReason.NOT_REPAIRABLE,
+        ).getOrThrow()
+        assertEquals(OrderStatus.CLOSED, database.repairOrderDao().findById(notRepairableOrder.id)?.status)
     }
 
     @Test
@@ -638,6 +715,19 @@ class RepositoryPathsInstrumentedTest {
             clockMillis = { NOW },
         )
 
+    private fun templateRepository(): TemplateRepository =
+        TemplateRepository(
+            templateDao = database.messageTemplateDao(),
+            orderDao = database.repairOrderDao(),
+            customerDao = database.customerDao(),
+            categoryDao = database.orderCategoryDao(),
+            settingDao = database.appSettingDao(),
+            messageLogDao = database.messageLogDao(),
+            timelineEventDao = database.timelineEventDao(),
+            auditLogDao = database.auditLogDao(),
+            clockMillis = { NOW },
+        )
+
     private fun signatureRepository(): SignatureRepository =
         SignatureRepository(
             context = context,
@@ -708,6 +798,24 @@ class RepositoryPathsInstrumentedTest {
                 sortOrder = 0,
             ),
         )
+    }
+
+    private suspend fun createDiagnosisOrder(
+        repository: OrderWorkflowRepository,
+        actor: AuthenticatedUser,
+        title: String,
+    ): RepairOrderEntity {
+        val order = repository.createOrder(
+            actor,
+            RepairOrderInput(
+                customerId = CUSTOMER_ID,
+                title = title,
+                categoryId = CATEGORY_ID,
+            ),
+        ).getOrThrow()
+        repository.changeStatus(actor, order.id, OrderStatus.IN_PROGRESS).getOrThrow()
+        repository.changeStatus(actor, order.id, OrderStatus.DIAGNOSIS).getOrThrow()
+        return order
     }
 
     private fun clearAppFiles() {

@@ -3,12 +3,14 @@ package com.onlytechtake.repairapp.data.repositories
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.ExifInterface
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import androidx.room.withTransaction
 import com.onlytechtake.repairapp.core.media.AttachmentImportPolicy
 import com.onlytechtake.repairapp.core.media.OrderMediaFileNamer
 import com.onlytechtake.repairapp.core.media.toMiBLabel
+import com.onlytechtake.repairapp.core.media.exifOrientationTransform
 import com.onlytechtake.repairapp.data.local.dao.OrderMediaDao
 import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
 import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
@@ -311,9 +313,17 @@ class OrderMediaRepository(
     private fun readImageBounds(file: File): ImageBounds {
         val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
         BitmapFactory.decodeFile(file.absolutePath, options)
+        val rotation = runCatching {
+            val orientation = ExifInterface(file.absolutePath).getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL,
+            )
+            exifOrientationTransform(orientation).rotationDegrees
+        }.getOrDefault(0f)
+        val swapDimensions = rotation == 90f || rotation == -90f
         return ImageBounds(
-            width = options.outWidth.takeIf { it > 0 },
-            height = options.outHeight.takeIf { it > 0 },
+            width = (if (swapDimensions) options.outHeight else options.outWidth).takeIf { it > 0 },
+            height = (if (swapDimensions) options.outWidth else options.outHeight).takeIf { it > 0 },
         )
     }
 
