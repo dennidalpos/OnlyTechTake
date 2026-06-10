@@ -115,12 +115,11 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                 ) {
-                    Text("Archivio clienti", style = MaterialTheme.typography.titleMedium)
                     OutlinedTextField(
                         modifier = Modifier.fillMaxWidth(),
                         value = uiState.customerSearchQuery,
                         onValueChange = viewModel::setCustomerSearchQuery,
-                        label = { Text("Cerca nome, telefono, email, P.IVA, codice fiscale o commessa") },
+                        label = { Text("Cerca cliente o commessa") },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),

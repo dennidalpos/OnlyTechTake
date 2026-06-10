@@ -279,7 +279,7 @@ class BackupRepository(
             appendLine("  \"exportedAt\": ${jsonString(formatTime(clockMillis()))},")
             appendLine("  \"categories\": [")
             appendLine(categories.joinToString(",\n") { category ->
-                "    {\"id\": ${jsonString(category.id)}, \"parentId\": ${jsonString(category.parentId)}, \"level\": ${category.level}, \"name\": ${jsonString(category.name)}, \"active\": ${category.active}, \"sortOrder\": ${category.sortOrder}}"
+                "    {\"id\": ${jsonString(category.id)}, \"parentId\": ${jsonString(category.parentId)}, \"level\": ${category.level}, \"name\": ${jsonString(category.name)}, \"active\": ${category.active}}"
             })
             appendLine("  ],")
             appendLine("  \"templates\": [")

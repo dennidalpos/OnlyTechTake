@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.Flow
 
 class CatalogRepository(
     private val categoryDao: OrderCategoryDao,
-    private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
     fun observeCategories(): Flow<List<OrderCategoryEntity>> = categoryDao.observeAll()
 
@@ -22,24 +21,90 @@ class CatalogRepository(
         runCatching {
             require(actor.role == UserRole.ADMIN) { "Solo admin" }
             require(input.name.isNotBlank()) { "Nome categoria obbligatorio" }
-            val parent = input.parentId?.let {
-                requireNotNull(categoryDao.findById(it)) { "Categoria padre non trovata" }
-            }
-            val level = (parent?.level ?: -1) + 1
-            require(level in 0..2) { "Sono supportati al massimo tre livelli categoria" }
             val normalizedName = input.name.trim()
             val duplicate = categoryDao.findByParentAndName(input.parentId, normalizedName)
             require(duplicate == null || duplicate.id == input.id) { "Categoria gia' presente in questo ramo" }
-            categoryDao.upsert(
-                OrderCategoryEntity(
-                    id = input.id ?: UUID.randomUUID().toString(),
-                    parentId = input.parentId,
-                    level = level,
-                    name = normalizedName,
-                    description = input.description.trim().ifBlank { null },
-                    active = input.active,
-                    sortOrder = input.sortOrder,
+            categoryDao.upsertAll(
+                normalizeCategoryTree(
+                    existing = categoryDao.findAll(),
+                    input = input.copy(name = normalizedName),
+                    generatedId = UUID.randomUUID().toString(),
                 ),
             )
         }
+
+    suspend fun deleteCategory(actor: AuthenticatedUser, categoryId: String): Result<Unit> =
+        runCatching {
+            require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            val categories = categoryDao.findAll()
+            require(categories.any { it.id == categoryId }) { "Categoria non trovata" }
+            val branch = categoryBranch(categories, categoryId)
+            require(categoryDao.countOrdersForCategories(branch.map { it.id }) == 0) {
+                "Categoria usata da una commessa"
+            }
+            branch
+                .sortedByDescending { it.level }
+                .forEach { category ->
+                    categoryDao.deleteById(category.id)
+                }
+        }
+}
+
+internal fun categoryBranch(categories: List<OrderCategoryEntity>, rootId: String): List<OrderCategoryEntity> {
+    val byParent = categories.groupBy { it.parentId }
+    val branch = mutableListOf<OrderCategoryEntity>()
+    val visited = mutableSetOf<String>()
+
+    fun visit(id: String) {
+        require(visited.add(id)) { "Il ramo categorie contiene un ciclo" }
+        val category = categories.firstOrNull { it.id == id } ?: return
+        branch += category
+        byParent[id].orEmpty().forEach { child -> visit(child.id) }
+    }
+
+    visit(rootId)
+    return branch
+}
+
+internal fun normalizeCategoryTree(
+    existing: List<OrderCategoryEntity>,
+    input: CategoryInput,
+    generatedId: String,
+): List<OrderCategoryEntity> {
+    val categoryId = input.id ?: generatedId
+    require(input.parentId != categoryId) { "Una categoria non puo' essere padre di se stessa" }
+
+    val categories = existing.associateBy { it.id }.toMutableMap()
+    categories[categoryId] = OrderCategoryEntity(
+        id = categoryId,
+        parentId = input.parentId,
+        level = 0,
+        name = input.name.trim(),
+        description = input.description.trim().ifBlank { null },
+        active = input.active,
+    )
+
+    val resolvedLevels = mutableMapOf<String, Int>()
+    val resolving = mutableSetOf<String>()
+
+    fun resolveLevel(id: String): Int {
+        resolvedLevels[id]?.let { return it }
+        require(resolving.add(id)) { "Il ramo categorie contiene un ciclo" }
+        val category = requireNotNull(categories[id]) { "Categoria non trovata" }
+        val level = category.parentId?.let { parentId ->
+            require(categories.containsKey(parentId)) { "Categoria padre non trovata" }
+            resolveLevel(parentId) + 1
+        } ?: 0
+        resolving.remove(id)
+        resolvedLevels[id] = level
+        return level
+    }
+
+    return categories.values
+        .map { category -> category.copy(level = resolveLevel(category.id)) }
+        .sortedWith(
+            compareBy<OrderCategoryEntity> { it.level }
+                .thenBy(String.CASE_INSENSITIVE_ORDER) { it.name }
+                .thenBy { it.id },
+        )
 }

@@ -289,15 +289,13 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                         },
                     )
                 }
-                TouchButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "Avanti",
-                    enabled = selectedCustomerId != null,
-                    testTag = RepairAppTestTags.NewOrderStep1NextButton,
-                    onClick = { completeStep(1) },
-                )
             }
         }
+            WizardNavigationBar(
+                nextEnabled = selectedCustomerId != null,
+                nextTestTag = RepairAppTestTags.NewOrderStep1NextButton,
+                onNext = { completeStep(1) },
+            )
         }
 
         if (completedStep >= 2 && currentStep != 2) {
@@ -313,26 +311,24 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                 stepNumber = 2,
                 activeCategories = activeCategories,
                 selectedCategoryId = selectedCategoryId,
-                selectedCategory = selectedCategory,
                 onCategorySelected = { categoryId ->
                     selectedCategoryId = selectedCategoryAfterClick(selectedCategoryId, categoryId)
                     completedStep = completedStepAfterCategorySelection(completedStep)
                 },
                 onOpenConfig = { viewModel.navigateTo(WorkspaceDestination.CONFIG) },
             )
-            TouchButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = "Avanti",
-                enabled = selectedCategoryId != null,
-                testTag = RepairAppTestTags.NewOrderStep2NextButton,
-                onClick = { completeStep(2) },
+            WizardNavigationBar(
+                onBack = { editStep(1) },
+                nextEnabled = selectedCategoryId != null,
+                nextTestTag = RepairAppTestTags.NewOrderStep2NextButton,
+                onNext = { completeStep(2) },
             )
         }
 
         if (completedStep >= 3 && currentStep != 3) {
             IntakeStepSummary(
                 stepNumber = 3,
-                title = "Problema",
+                title = "Dettagli commessa",
                 value = problemSummary,
                 onEdit = { editStep(3) },
             )
@@ -347,11 +343,10 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                 nextAction = nextAction,
                 doneAction = doneAction,
             )
-            TouchButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = "Avanti",
-                enabled = problemSummary.isNotBlank(),
-                onClick = { completeStep(3) },
+            WizardNavigationBar(
+                onBack = { editStep(2) },
+                nextEnabled = problemSummary.isNotBlank(),
+                onNext = { completeStep(3) },
             )
         }
 
@@ -390,11 +385,10 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                 },
                 onCameraError = viewModel::reportCameraError,
             )
-            TouchButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = "Avanti",
-                enabled = stagedMedia.isNotEmpty(),
-                onClick = { completeStep(4) },
+            WizardNavigationBar(
+                onBack = { editStep(3) },
+                nextEnabled = stagedMedia.isNotEmpty(),
+                onNext = { completeStep(4) },
             )
         }
 
@@ -418,11 +412,10 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                     )
                 }
             }
-            TouchButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = "Avanti",
-                enabled = signatureCapture != null,
-                onClick = { completeStep(5) },
+            WizardNavigationBar(
+                onBack = { editStep(4) },
+                nextEnabled = signatureCapture != null,
+                onNext = { completeStep(5) },
             )
         }
 

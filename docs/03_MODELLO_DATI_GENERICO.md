@@ -87,8 +87,7 @@ data class OrderCategoryEntity(
     @PrimaryKey val id: String,
     val name: String,
     val description: String?,
-    val active: Boolean,
-    val sortOrder: Int
+    val active: Boolean
 )
 ```
 

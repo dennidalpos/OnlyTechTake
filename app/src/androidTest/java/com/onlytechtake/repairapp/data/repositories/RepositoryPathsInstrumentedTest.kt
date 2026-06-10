@@ -110,14 +110,13 @@ class RepositoryPathsInstrumentedTest {
         val actor = authRepository.currentUser.value
         assertNotNull(actor)
 
-        CatalogRepository(database.orderCategoryDao(), clockMillis = { NOW }).saveCategory(
+        CatalogRepository(database.orderCategoryDao()).saveCategory(
             actor = actor!!,
             input = CategoryInput(
                 id = "saved-after-login",
                 name = "Notebook",
                 description = "Riparazioni notebook",
                 active = true,
-                sortOrder = 1,
             ),
         ).getOrThrow()
 
@@ -368,7 +367,6 @@ class RepositoryPathsInstrumentedTest {
                     name = "Smartphone",
                     description = null,
                     active = true,
-                    sortOrder = 0,
                 ),
             )
             fileBackedDatabase.appSettingDao().upsert(
@@ -448,7 +446,6 @@ class RepositoryPathsInstrumentedTest {
                     name = "Smartphone",
                     description = null,
                     active = true,
-                    sortOrder = 0,
                 ),
             )
             File(context.filesDir, "order_media/order-1/photo.jpg").also {
@@ -476,7 +473,6 @@ class RepositoryPathsInstrumentedTest {
                     name = "Categoria sovrascritta",
                     description = null,
                     active = true,
-                    sortOrder = 0,
                 ),
             )
             File(context.filesDir, "order_media/order-1/photo.jpg").writeText("changed")
@@ -577,7 +573,6 @@ class RepositoryPathsInstrumentedTest {
                     name = "Smartphone",
                     description = null,
                     active = true,
-                    sortOrder = 0,
                 ),
             )
             fileBackedDatabase.repairOrderDao().upsert(
@@ -795,7 +790,6 @@ class RepositoryPathsInstrumentedTest {
                 name = "Smartphone",
                 description = null,
                 active = true,
-                sortOrder = 0,
             ),
         )
     }

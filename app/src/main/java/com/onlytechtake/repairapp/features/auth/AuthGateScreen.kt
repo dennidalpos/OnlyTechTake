@@ -131,7 +131,7 @@ private fun FirstSetupScreen(
     ) { paddingValues ->
         AuthForm(
             title = "Primo avvio",
-            subtitle = "Crea l'account admin locale per proteggere l'app.",
+            subtitle = "Account admin locale",
             formState = formState,
             paddingValues = paddingValues,
             submitLabel = "Crea admin",
@@ -161,7 +161,7 @@ private fun LoginScreen(
     ) { paddingValues ->
         AuthForm(
             title = "Login",
-            subtitle = "Accedi con un utente admin o operatore.",
+            subtitle = null,
             formState = formState,
             paddingValues = paddingValues,
             submitLabel = "Accedi",
@@ -179,7 +179,7 @@ private fun LoginScreen(
 @Composable
 private fun AuthForm(
     title: String,
-    subtitle: String,
+    subtitle: String?,
     formState: AuthFormState,
     paddingValues: PaddingValues,
     submitLabel: String,
@@ -222,7 +222,7 @@ private fun AuthForm(
                 text = title,
                 style = if (compactHeight) MaterialTheme.typography.titleLarge else MaterialTheme.typography.headlineSmall,
             )
-            Text(text = subtitle, style = MaterialTheme.typography.bodyMedium)
+            subtitle?.let { Text(text = it, style = MaterialTheme.typography.bodyMedium) }
 
             if (showDisplayName) {
                 OutlinedTextField(

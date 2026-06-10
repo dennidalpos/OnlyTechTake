@@ -41,7 +41,6 @@ data class CategoryInput(
     val name: String,
     val description: String,
     val active: Boolean = true,
-    val sortOrder: Int = 0,
 )
 
 data class RepairOrderInput(

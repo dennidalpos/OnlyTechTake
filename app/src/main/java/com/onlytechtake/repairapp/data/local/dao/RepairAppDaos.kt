@@ -171,14 +171,26 @@ interface OrderCategoryDao {
     @Upsert
     suspend fun upsert(category: OrderCategoryEntity)
 
-    @Query("SELECT * FROM order_categories ORDER BY level ASC, parentId ASC, active DESC, sortOrder ASC, name ASC")
+    @Upsert
+    suspend fun upsertAll(categories: List<OrderCategoryEntity>)
+
+    @Query("SELECT * FROM order_categories ORDER BY level ASC, parentId ASC, active DESC, name COLLATE NOCASE ASC, id ASC")
     fun observeAll(): Flow<List<OrderCategoryEntity>>
 
-    @Query("SELECT * FROM order_categories WHERE active = 1 ORDER BY level ASC, parentId ASC, sortOrder ASC, name ASC")
+    @Query("SELECT * FROM order_categories WHERE active = 1 ORDER BY level ASC, parentId ASC, name COLLATE NOCASE ASC, id ASC")
     fun observeActiveCategories(): Flow<List<OrderCategoryEntity>>
+
+    @Query("SELECT * FROM order_categories")
+    suspend fun findAll(): List<OrderCategoryEntity>
 
     @Query("SELECT * FROM order_categories WHERE id = :id LIMIT 1")
     suspend fun findById(id: String): OrderCategoryEntity?
+
+    @Query("SELECT COUNT(*) FROM repair_orders WHERE categoryId IN (:categoryIds)")
+    suspend fun countOrdersForCategories(categoryIds: List<String>): Int
+
+    @Query("DELETE FROM order_categories WHERE id = :id")
+    suspend fun deleteById(id: String): Int
 
     @Query(
         """

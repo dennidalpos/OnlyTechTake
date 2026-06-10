@@ -43,7 +43,7 @@ internal class WorkspaceCatalogActions(
         }
     }
 
-    fun saveCategory(id: String?, parentId: String?, name: String, description: String, active: Boolean, sortOrder: Int) =
+    fun saveCategory(id: String?, parentId: String?, name: String, description: String, active: Boolean) =
         authenticatedActionRunner.run { actor ->
             catalogRepository.saveCategory(
                 actor,
@@ -53,8 +53,12 @@ internal class WorkspaceCatalogActions(
                     name = name,
                     description = description,
                     active = active,
-                    sortOrder = sortOrder,
                 ),
             )
+        }
+
+    fun deleteCategory(categoryId: String) =
+        authenticatedActionRunner.run { actor ->
+            catalogRepository.deleteCategory(actor, categoryId)
         }
 }

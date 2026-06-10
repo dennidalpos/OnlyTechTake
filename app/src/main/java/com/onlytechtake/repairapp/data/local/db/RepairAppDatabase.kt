@@ -65,7 +65,7 @@ abstract class RepairAppDatabase : RoomDatabase() {
 
     companion object {
         const val DATABASE_NAME = "repair_app.db"
-        const val DATABASE_VERSION = 1
+        const val DATABASE_VERSION = 2
 
         @Volatile
         private var instance: RepairAppDatabase? = null

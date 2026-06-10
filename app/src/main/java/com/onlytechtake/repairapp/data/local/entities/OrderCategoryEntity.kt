@@ -21,7 +21,6 @@ import androidx.room.PrimaryKey
         Index(value = ["parentId"]),
         Index(value = ["level"]),
         Index(value = ["active"]),
-        Index(value = ["sortOrder"]),
     ],
 )
 data class OrderCategoryEntity(
@@ -31,5 +30,4 @@ data class OrderCategoryEntity(
     val name: String,
     val description: String?,
     @ColumnInfo(defaultValue = "1") val active: Boolean,
-    @ColumnInfo(defaultValue = "0") val sortOrder: Int,
 )

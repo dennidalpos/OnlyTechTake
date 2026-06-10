@@ -132,7 +132,6 @@ class SocialStoryDemoScreenshotTest {
             clickTag(RepairAppTestTags.ConfigHubCategoriesButton, scroll = true)
             typeTag(RepairAppTestTags.ConfigCategoryNameField, "Smartphone", scroll = true)
             typeTag(RepairAppTestTags.ConfigCategoryDescriptionField, "Riparazioni smartphone, display e batterie.", scroll = true)
-            typeTag(RepairAppTestTags.ConfigCategorySortOrderField, "2", scroll = true)
             capture(outputDir, "03-creazione-categoria.png")
             clickTag(RepairAppTestTags.ConfigCategorySaveButton, scroll = true)
             clickText("Conferma")
@@ -241,7 +240,6 @@ class SocialStoryDemoScreenshotTest {
                 name = "Notebook",
                 description = "Diagnosi e riparazioni notebook e ultrabook.",
                 active = true,
-                sortOrder = 1,
             ),
         )
         database.customerDao().upsert(

@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.features.dashboard
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,16 +8,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
-import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 
@@ -25,7 +28,6 @@ fun QuickIntakeCategorySection(
     stepNumber: Int,
     activeCategories: List<OrderCategoryEntity>,
     selectedCategoryId: String?,
-    selectedCategory: OrderCategoryEntity?,
     onCategorySelected: (String) -> Unit,
     onOpenConfig: () -> Unit,
 ) {
@@ -33,16 +35,17 @@ fun QuickIntakeCategorySection(
     val visibleCategories = activeCategories.filter { it.parentId == currentParentId }
     val currentParent = currentParentId?.let { id -> activeCategories.firstOrNull { it.id == id } }
     val selectedPath = selectedCategoryId?.let { categoryPath(activeCategories, it) }.orEmpty()
+    val visibleLevel = currentParent?.level?.plus(1) ?: 0
 
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier.padding(DashboardSpacing.cardPadding),
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
         ) {
-            StepSectionTitle(stepNumber, "Categoria e dati tecnici")
+            StepSectionTitle(stepNumber, "Categoria")
             if (activeCategories.isEmpty()) {
                 Text(
-                    text = "Configura almeno una categoria attiva prima di creare nuove commesse.",
+                    text = "Nessuna categoria attiva.",
                     color = MaterialTheme.colorScheme.error,
                 )
                 TouchButton(
@@ -51,78 +54,103 @@ fun QuickIntakeCategorySection(
                     onClick = onOpenConfig,
                 )
             } else {
-                Text("Ramo: ${categoryPath(activeCategories, currentParentId) ?: "Macrocategorie"}")
+                Text(
+                    text = "Livello $visibleLevel",
+                    style = MaterialTheme.typography.titleSmall,
+                )
+                Text(
+                    text = categoryBreadcrumb(activeCategories, currentParentId),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
                 if (selectedPath.isNotBlank()) {
-                    Text("Selezionata: $selectedPath")
+                    Text("Selezionata: $selectedPath", color = MaterialTheme.colorScheme.primary)
                 }
                 ActionRow {
-                    TouchButton(
-                        text = "Radice",
-                        tone = if (currentParentId == null) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
+                    TextButton(
+                        enabled = currentParentId != null,
                         onClick = { currentParentId = null },
-                    )
+                    ) {
+                        Text("Radice")
+                    }
                     currentParent?.let { parent ->
-                        TouchButton(
-                            text = "Su",
-                            tone = ButtonTone.NEUTRAL,
+                        TextButton(
                             onClick = { currentParentId = parent.parentId },
-                        )
+                        ) {
+                            Text("Livello precedente")
+                        }
                     }
                 }
-                ActionRow {
+                Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
                     visibleCategories.forEach { category ->
-                        val hasChildren = activeCategories.any { it.parentId == category.id }
-                        val selected = category.id == selectedCategoryId
-                        TouchButton(
-                            modifier = Modifier.semantics {
-                                this.selected = selected
-                                stateDescription = if (hasChildren) {
-                                    "Ramo categoria"
-                                } else if (selected) {
-                                    "Selezionata, tocca per rimuovere"
-                                } else {
-                                    "Non selezionata"
+                        val hasChildren = activeCategories.any { child -> child.parentId == category.id }
+                        val isSelected = category.id == selectedCategoryId
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag(RepairAppTestTags.categoryButton(category.id))
+                                .semantics {
+                                    selected = isSelected
+                                    stateDescription = when {
+                                        hasChildren -> "Ramo categoria"
+                                        isSelected -> "Categoria selezionata"
+                                        else -> "Categoria non selezionata"
+                                    }
                                 }
-                            },
-                            text = if (hasChildren) "${category.name} >" else if (selected) "${category.name} *" else category.name,
-                            tone = if (selected) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
-                            selected = selected,
-                            stateDescription = if (hasChildren) {
-                                "Ramo categoria"
-                            } else if (selected) {
-                                "Selezionata, tocca per rimuovere"
-                            } else {
-                                "Non selezionata"
-                            },
-                            testTag = RepairAppTestTags.categoryButton(category.id),
-                            onClick = {
-                                if (hasChildren) {
-                                    currentParentId = category.id
-                                } else {
-                                    onCategorySelected(category.id)
-                                }
-                            },
-                        )
+                                .clickable(
+                                    role = Role.Button,
+                                    onClick = {
+                                        if (hasChildren) {
+                                            currentParentId = category.id
+                                        } else {
+                                            onCategorySelected(category.id)
+                                        }
+                                    },
+                                ),
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                                verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+                            ) {
+                                Text(category.name, style = MaterialTheme.typography.titleMedium)
+                                Text(
+                                    text = when {
+                                        hasChildren -> "Apri livello ${category.level + 1}"
+                                        isSelected -> "Selezionata"
+                                        else -> "Seleziona"
+                                    },
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = if (isSelected) {
+                                        MaterialTheme.colorScheme.primary
+                                    } else {
+                                        MaterialTheme.colorScheme.onSurfaceVariant
+                                    },
+                                )
+                            }
+                        }
                     }
                 }
                 if (visibleCategories.isEmpty()) {
-                    Text("Nessuna sottocategoria attiva in questo ramo.")
+                    Text("Nessuna categoria in questo ramo.")
                 }
-                selectedCategory?.description?.takeIf { it.isNotBlank() }?.let { Text(it) }
             }
         }
     }
 }
 
-private fun categoryPath(categories: List<OrderCategoryEntity>, categoryId: String?): String? {
+internal fun categoryPath(categories: List<OrderCategoryEntity>, categoryId: String?): String? {
     if (categoryId == null) return null
     val byId = categories.associateBy { it.id }
     val names = mutableListOf<String>()
+    val visited = mutableSetOf<String>()
     var current = byId[categoryId]
-    repeat(3) {
-        if (current == null) return@repeat
+    while (current != null && visited.add(current.id)) {
         names += current.name
         current = current.parentId?.let(byId::get)
     }
-    return names.asReversed().joinToString(" > ")
+    return names.asReversed().joinToString(" > ").ifBlank { null }
 }
+
+private fun categoryBreadcrumb(categories: List<OrderCategoryEntity>, parentId: String?): String =
+    listOfNotNull("Radice", categoryPath(categories, parentId))
+        .joinToString(" > ")

@@ -215,9 +215,9 @@ class TemplateRepository(
 
     private suspend fun categoryPath(categoryId: String): String {
         val chain = mutableListOf<OrderCategoryEntity>()
+        val visited = mutableSetOf<String>()
         var current = categoryDao.findById(categoryId)
-        repeat(3) {
-            if (current == null) return@repeat
+        while (current != null && visited.add(current.id)) {
             chain += current
             current = current.parentId?.let { categoryDao.findById(it) }
         }

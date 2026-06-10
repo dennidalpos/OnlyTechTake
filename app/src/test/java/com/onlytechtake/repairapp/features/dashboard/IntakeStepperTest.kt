@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.features.dashboard
 
+import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -34,5 +35,21 @@ class IntakeStepperTest {
     @Test
     fun categoryChangeInvalidatesFollowingSteps() {
         assertEquals(1, completedStepAfterCategorySelection(completedStep = 5))
+    }
+
+    @Test
+    fun categoryPathSupportsArbitraryDepth() {
+        val categories = (0..5).map { level ->
+            OrderCategoryEntity(
+                id = "level-$level",
+                parentId = "level-${level - 1}".takeIf { level > 0 },
+                level = level,
+                name = "L$level",
+                description = null,
+                active = true,
+            )
+        }
+
+        assertEquals("L0 > L1 > L2 > L3 > L4 > L5", categoryPath(categories, "level-5"))
     }
 }

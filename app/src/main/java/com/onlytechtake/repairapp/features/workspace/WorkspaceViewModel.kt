@@ -224,8 +224,10 @@ class WorkspaceViewModel(
         name: String,
         description: String,
         active: Boolean,
-        sortOrder: Int,
-    ) = catalogActions.saveCategory(id, parentId, name, description, active, sortOrder)
+    ) = catalogActions.saveCategory(id, parentId, name, description, active)
+
+    fun deleteCategory(categoryId: String) =
+        catalogActions.deleteCategory(categoryId)
 
     fun changeStatus(orderId: String, status: OrderStatus, note: String = "", closureReason: ClosureReason? = null) = withUser(
         onSuccess = messageActions::clearPreparedMessage,

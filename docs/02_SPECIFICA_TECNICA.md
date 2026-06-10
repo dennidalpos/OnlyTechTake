@@ -81,7 +81,7 @@ Lo schema corrente resta Room v1 ed e' aggiornato in place per installazioni pul
 
 - UserEntity
 - CustomerEntity
-- OrderCategoryEntity, con parentId e level per albero categorie a tre livelli
+- OrderCategoryEntity, con parentId e level coerente per albero categorie a livelli 0..N
 - RepairOrderEntity, con `diagnosisOutcome` nullable finche' la diagnosi non viene registrata
 - OrderMediaEntity
 - SignatureEntity

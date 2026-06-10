@@ -16,7 +16,7 @@ Funzioni implementate:
 - attivare o disattivare utenti;
 - resettare password utenti;
 - vedere e gestire le commesse;
-- modificare categorie ad albero su tre livelli;
+- modificare categorie ad albero con livelli numerici da 0 a N;
 - modificare template privacy, condizioni e WhatsApp;
 - impostare la modalita WhatsApp manuale;
 - esportare configurazione, database, ZIP completo e PDF commessa;

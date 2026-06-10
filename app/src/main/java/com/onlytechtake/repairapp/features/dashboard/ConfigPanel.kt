@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -23,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
@@ -48,7 +51,6 @@ fun ConfigPanel(
     var categoryName by rememberSaveable { mutableStateOf("") }
     var categoryDescription by rememberSaveable { mutableStateOf("") }
     var categoryActive by rememberSaveable { mutableStateOf(true) }
-    var categorySortOrder by rememberSaveable { mutableStateOf("0") }
     var templateCode by rememberSaveable { mutableStateOf("whatsapp_aggiornamento") }
     var loadedTemplateCode by rememberSaveable { mutableStateOf<String?>(null) }
     var templateTitle by rememberSaveable { mutableStateOf("WhatsApp aggiornamento") }
@@ -86,7 +88,6 @@ fun ConfigPanel(
         categoryName = ""
         categoryDescription = ""
         categoryActive = true
-        categorySortOrder = "0"
     }
 
     fun selectCategoryForEdit(category: OrderCategoryEntity) {
@@ -95,7 +96,6 @@ fun ConfigPanel(
         categoryName = category.name
         categoryDescription = category.description.orEmpty()
         categoryActive = category.active
-        categorySortOrder = category.sortOrder.toString()
     }
 
     fun openCategoryBranch(categoryId: String?) {
@@ -123,7 +123,7 @@ fun ConfigPanel(
                 item {
                     ConfigHubCard(
                         title = "Categorie",
-                        subtitle = "Tipi di commessa attivi o archiviati.",
+                        subtitle = "Catalogo commesse",
                         testTag = RepairAppTestTags.ConfigHubCategoriesButton,
                     ) {
                         section = ConfigSection.CATEGORIES
@@ -132,7 +132,7 @@ fun ConfigPanel(
                 item {
                     ConfigHubCard(
                         title = "Template",
-                        subtitle = if (isAdmin) "Privacy, condizioni e messaggi WhatsApp." else "Area riservata admin.",
+                        subtitle = if (isAdmin) "Messaggi e documenti" else "Area admin",
                         enabled = isAdmin,
                         testTag = RepairAppTestTags.ConfigHubTemplatesButton,
                     ) {
@@ -140,17 +140,17 @@ fun ConfigPanel(
                     }
                 }
                 item {
-                    ConfigHubCard("WhatsApp", "Preparazione manuale messaggi cliente.") {
+                    ConfigHubCard("WhatsApp", "Invio manuale") {
                         section = ConfigSection.WHATSAPP
                     }
                 }
                 item {
-                    ConfigHubCard("Utenti e reset", "Gestione utenti e azzeramento dati admin.") {
+                    ConfigHubCard("Utenti e reset", "Area admin") {
                         viewModel.navigateTo(WorkspaceDestination.ADMIN)
                     }
                 }
                 item {
-                    ConfigHubCard("Backup", "Export config, database, ZIP e XLSX.") {
+                    ConfigHubCard("Backup", "Export e ripristino") {
                         section = ConfigSection.EXPORT
                     }
                 }
@@ -165,7 +165,15 @@ fun ConfigPanel(
                         Text("Area riservata admin. Le categorie sono disponibili solo in consultazione.")
                     } else {
                         Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
-                            Text("Ramo: ${categoryBreadcrumb(categories, currentCategoryParentId)}")
+                            Text(
+                                text = "Livello ${currentParent?.level?.plus(1) ?: 0}",
+                                style = MaterialTheme.typography.titleSmall,
+                            )
+                            Text(
+                                text = categoryBreadcrumb(categories, currentCategoryParentId),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
                             ActionRow {
                                 TouchButton(
                                     text = "Radice",
@@ -188,13 +196,18 @@ fun ConfigPanel(
                             }
                             Field(categoryName, { categoryName = it }, "Nome categoria", testTag = RepairAppTestTags.ConfigCategoryNameField)
                             Field(categoryDescription, { categoryDescription = it }, "Descrizione", testTag = RepairAppTestTags.ConfigCategoryDescriptionField)
-                            Field(categorySortOrder, { categorySortOrder = it }, "Ordine", testTag = RepairAppTestTags.ConfigCategorySortOrderField)
-                            ActionRow {
-                                TouchButton(
-                                    text = if (categoryActive) "Attiva" else "Archiviata",
-                                    tone = if (categoryActive) ButtonTone.SUCCESS else ButtonTone.DANGER,
-                                    onClick = { categoryActive = !categoryActive },
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(if (categoryActive) "Categoria attiva" else "Categoria archiviata")
+                                Switch(
+                                    checked = categoryActive,
+                                    onCheckedChange = { categoryActive = it },
                                 )
+                            }
+                            ActionRow {
                                 TouchButton(
                                     text = "Nuova",
                                     tone = ButtonTone.NEUTRAL,
@@ -212,7 +225,6 @@ fun ConfigPanel(
                                                 name = categoryName,
                                                 description = categoryDescription,
                                                 active = categoryActive,
-                                                sortOrder = categorySortOrder.toIntOrNull() ?: 0,
                                             )
                                             loadNewCategory()
                                         }
@@ -235,7 +247,7 @@ fun ConfigPanel(
                             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
                         ) {
                             Text(category.name, style = MaterialTheme.typography.titleMedium)
-                            Text("Livello ${category.level + 1} - ${if (category.active) "Attiva" else "Archiviata"}")
+                            Text("Livello ${category.level} - ${if (category.active) "Attiva" else "Archiviata"}")
                             category.description?.takeIf { it.isNotBlank() }?.let { Text(it) }
                             if (isAdmin) {
                                 ActionRow {
@@ -244,13 +256,11 @@ fun ConfigPanel(
                                         tone = ButtonTone.NEUTRAL,
                                         onClick = { selectCategoryForEdit(category) },
                                     )
-                                    if (category.level < 2) {
-                                        TouchButton(
-                                            text = "Entra",
-                                            tone = ButtonTone.INFO,
-                                            onClick = { openCategoryBranch(category.id) },
-                                        )
-                                    }
+                                    TouchButton(
+                                        text = "Apri ramo",
+                                        tone = ButtonTone.INFO,
+                                        onClick = { openCategoryBranch(category.id) },
+                                    )
                                 }
                             }
                         }
@@ -265,34 +275,46 @@ fun ConfigPanel(
 
             ConfigSection.TEMPLATES -> {
                 item {
-                    SectionTitle("Template")
-                    Field(templateCode, { templateCode = it }, "Codice", testTag = RepairAppTestTags.ConfigTemplateCodeField)
-                    Field(templateTitle, { templateTitle = it }, "Titolo", testTag = RepairAppTestTags.ConfigTemplateTitleField)
-                    Field(templateBody, { templateBody = it }, "Testo con {{variabili}}", testTag = RepairAppTestTags.ConfigTemplateBodyField)
-                    ActionRow {
-                        TouchButton(
-                            text = if (templateActive) "Attivo" else "Archiviato",
-                            tone = if (templateActive) ButtonTone.SUCCESS else ButtonTone.DANGER,
-                            onClick = { templateActive = !templateActive },
-                        )
-                        TouchButton(
-                            text = "Salva template",
-                            testTag = RepairAppTestTags.ConfigTemplateSaveButton,
-                            onClick = {
-                                val riskyTemplateChange = isRiskyTemplateChange(loadedTemplateCode, templateCode, templateActive)
-                                requestConfirm(
-                                    "Salvare template?",
-                                    if (riskyTemplateChange) {
-                                        "Modificare codice o disattivare un template di sistema puo' impedire ai flussi esistenti di trovare il messaggio corretto. Le firme gia' acquisite restano salvate come snapshot."
-                                    } else {
-                                        "Il template verra' salvato con una nuova versione."
-                                    },
-                                ) {
-                                    viewModel.saveTemplate(templateCode, templateTitle, templateBody, active = templateActive)
-                                    loadedTemplateCode = templateCode
-                                }
-                            },
-                        )
+                    Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
+                        SectionTitle("Template")
+                        Field(templateCode, { templateCode = it }, "Codice", testTag = RepairAppTestTags.ConfigTemplateCodeField)
+                        Field(templateTitle, { templateTitle = it }, "Titolo", testTag = RepairAppTestTags.ConfigTemplateTitleField)
+                        Field(templateBody, { templateBody = it }, "Testo", testTag = RepairAppTestTags.ConfigTemplateBodyField)
+                        Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
+                            Text("Variabili", style = MaterialTheme.typography.titleSmall)
+                            OperatorText("{{numero_commessa}}  {{stato_commessa}}  {{categoria_percorso}}  {{cliente}}")
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(if (templateActive) "Template attivo" else "Template archiviato")
+                            Switch(
+                                checked = templateActive,
+                                onCheckedChange = { templateActive = it },
+                            )
+                        }
+                        ActionRow {
+                            TouchButton(
+                                text = "Salva template",
+                                testTag = RepairAppTestTags.ConfigTemplateSaveButton,
+                                onClick = {
+                                    val riskyTemplateChange = isRiskyTemplateChange(loadedTemplateCode, templateCode, templateActive)
+                                    requestConfirm(
+                                        "Salvare template?",
+                                        if (riskyTemplateChange) {
+                                            "La modifica puo' interrompere i flussi che usano questo codice. Le firme salvate non cambiano."
+                                        } else {
+                                            "Verra' salvata una nuova versione."
+                                        },
+                                    ) {
+                                        viewModel.saveTemplate(templateCode, templateTitle, templateBody, active = templateActive)
+                                        loadedTemplateCode = templateCode
+                                    }
+                                },
+                            )
+                        }
                     }
                 }
                 items(templates) { template ->
@@ -326,74 +348,77 @@ fun ConfigPanel(
 
             ConfigSection.WHATSAPP -> {
                 item {
-                    SectionTitle("WhatsApp")
-                    Text("Attuale: ${messageMode.name}")
-                    ActionRow {
-                        TouchButton(
-                            text = "Manuale",
-                            onClick = {
-                                requestConfirm("Impostare modalita manuale?", "La modalita WhatsApp verra' salvata.") {
-                                    viewModel.setMessageMode(MessageMode.MANUAL_WHATSAPP)
-                                }
-                            },
-                        )
+                    Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
+                        SectionTitle("WhatsApp")
+                        Text("Modalita': ${messageMode.name}")
+                        ActionRow {
+                            TouchButton(
+                                text = "Manuale",
+                                onClick = {
+                                    requestConfirm("Impostare modalita' manuale?", "La modalita' WhatsApp verra' salvata.") {
+                                        viewModel.setMessageMode(MessageMode.MANUAL_WHATSAPP)
+                                    }
+                                },
+                            )
+                        }
                     }
-                    Text("I messaggi vengono preparati nell'app e inviati manualmente dall'operatore.")
                 }
             }
 
             ConfigSection.EXPORT -> {
                 item {
-                    SectionTitle("Backup")
-                    if (!isAdmin) {
-                        Text("Area riservata admin.")
-                    } else {
-                        Text("Gli export e i backup ripristinati non sono cifrati dall'app: usare solo supporti o cartelle protette.")
-                        ActionRow {
-                            TouchButton(
-                                text = "Export config",
-                                onClick = {
-                                    requestConfirm("Esportare configurazione?", "Verra' creato un file JSON non cifrato tramite selettore di sistema.") {
-                                        exportConfigLauncher.launch("onlytechtake-config.json")
-                                    }
-                                },
-                            )
-                            TouchButton(
-                                text = "Export DB",
-                                onClick = {
-                                    requestConfirm("Esportare database?", "Verra' creato un file database non cifrato tramite selettore di sistema.") {
-                                        exportDbLauncher.launch("repair_app.db")
-                                    }
-                                },
-                            )
-                            TouchButton(
-                                text = "Export commesse XLSX",
-                                onClick = {
-                                    requestConfirm("Esportare commesse?", "Verra' creato un file XLSX non cifrato tramite selettore di sistema.") {
-                                        exportOrdersXlsxLauncher.launch("onlytechtake-commesse.xlsx")
-                                    }
-                                },
-                            )
-                            TouchButton(
-                                text = "Export ZIP",
-                                onClick = {
-                                    requestConfirm("Esportare backup completo?", "Verra' creato un file ZIP non cifrato tramite selettore di sistema.") {
-                                        exportZipLauncher.launch("onlytechtake-backup.zip")
-                                    }
-                                },
-                            )
-                            TouchButton(
-                                text = "Ripristina ZIP",
-                                tone = ButtonTone.WARNING,
-                                onClick = {
-                                    requestConfirm(
-                                        title = "Ripristinare backup?",
-                                        text = "Il backup ZIP sostituira' database e file locali dell'app. Dopo il ripristino sara' richiesto un nuovo login.",
-                                    ) {
-                                        restoreZipLauncher.launch(arrayOf("application/zip", "application/octet-stream", "*/*"))
-                                    }
-                                },
-                            )
+                    Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
+                        SectionTitle("Backup")
+                        if (!isAdmin) {
+                            Text("Area riservata admin.")
+                        } else {
+                            Text("File non cifrati: usare solo destinazioni protette.")
+                            ActionRow {
+                                TouchButton(
+                                    text = "Export config",
+                                    onClick = {
+                                        requestConfirm("Esportare configurazione?", "Verra' creato un file JSON non cifrato tramite selettore di sistema.") {
+                                            exportConfigLauncher.launch("onlytechtake-config.json")
+                                        }
+                                    },
+                                )
+                                TouchButton(
+                                    text = "Export DB",
+                                    onClick = {
+                                        requestConfirm("Esportare database?", "Verra' creato un file database non cifrato tramite selettore di sistema.") {
+                                            exportDbLauncher.launch("repair_app.db")
+                                        }
+                                    },
+                                )
+                                TouchButton(
+                                    text = "Export commesse XLSX",
+                                    onClick = {
+                                        requestConfirm("Esportare commesse?", "Verra' creato un file XLSX non cifrato tramite selettore di sistema.") {
+                                            exportOrdersXlsxLauncher.launch("onlytechtake-commesse.xlsx")
+                                        }
+                                    },
+                                )
+                                TouchButton(
+                                    text = "Export ZIP",
+                                    onClick = {
+                                        requestConfirm("Esportare backup completo?", "Verra' creato un file ZIP non cifrato tramite selettore di sistema.") {
+                                            exportZipLauncher.launch("onlytechtake-backup.zip")
+                                        }
+                                    },
+                                )
+                                TouchButton(
+                                    text = "Ripristina ZIP",
+                                    tone = ButtonTone.WARNING,
+                                    onClick = {
+                                        requestConfirm(
+                                            title = "Ripristinare backup?",
+                                            text = "Il backup ZIP sostituira' database e file locali dell'app. Dopo il ripristino sara' richiesto un nuovo login.",
+                                        ) {
+                                            restoreZipLauncher.launch(arrayOf("application/zip", "application/octet-stream", "*/*"))
+                                        }
+                                    },
+                                )
+                            }
                         }
                     }
                 }
@@ -486,14 +511,14 @@ private fun isRiskyTemplateChange(loadedCode: String?, currentCode: String, acti
     (loadedCode != null && loadedCode != currentCode) || (currentCode in systemTemplateCodes && !active)
 
 private fun categoryBreadcrumb(categories: List<OrderCategoryEntity>, parentId: String?): String {
-    if (parentId == null) return "Macrocategorie"
+    if (parentId == null) return "Radice"
     val byId = categories.associateBy { it.id }
     val names = mutableListOf<String>()
+    val visited = mutableSetOf<String>()
     var current = byId[parentId]
-    repeat(3) {
-        if (current == null) return@repeat
+    while (current != null && visited.add(current.id)) {
         names += current.name
         current = current.parentId?.let(byId::get)
     }
-    return names.asReversed().joinToString(" > ").ifBlank { "Macrocategorie" }
+    return (listOf("Radice") + names.asReversed()).joinToString(" > ")
 }

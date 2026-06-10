@@ -37,17 +37,7 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
         ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
-            ) {
-                SectionTitle("Banco riparazioni")
-                Text(
-                    text = "Segui ogni commessa dal ritiro al banco, alla diagnosi, alla riparazione e alla consegna. Gli aggiornamenti WhatsApp vengono preparati qui e inviati manualmente al cliente.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+            SectionTitle("Banco riparazioni")
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
@@ -67,16 +57,9 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel) {
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                     ) {
-                        Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
-                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                Text(queue.title, style = MaterialTheme.typography.titleMedium)
-                                Text(queue.orders.size.toString(), style = MaterialTheme.typography.titleMedium)
-                            }
-                            Text(
-                                text = queueDescription(queue.title),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            Text(queue.title, style = MaterialTheme.typography.titleMedium)
+                            Text(queue.orders.size.toString(), style = MaterialTheme.typography.titleMedium)
                         }
                         if (queue.orders.isEmpty()) {
                             Text("Nessuna commessa in questa coda.", style = MaterialTheme.typography.bodyMedium)
@@ -119,12 +102,3 @@ private fun MetricCard(label: String, value: String, modifier: Modifier = Modifi
         }
     }
 }
-
-private fun queueDescription(title: String): String =
-    when {
-        title.contains("aper", ignoreCase = true) -> "Presa in carico e prime verifiche al banco."
-        title.contains("diagnosi", ignoreCase = true) -> "Controlli tecnici, diagnosi e raccolta esito."
-        title.contains("ripar", ignoreCase = true) -> "Preventivo, approvazione cliente e lavorazione."
-        title.contains("pront", ignoreCase = true) -> "Avviso al cliente e consegna finale."
-        else -> "Coda operativa della giornata."
-    }

@@ -115,6 +115,40 @@ fun ActionRow(content: @Composable () -> Unit) {
 }
 
 @Composable
+fun WizardNavigationBar(
+    onBack: (() -> Unit)? = null,
+    nextLabel: String = "Avanti",
+    nextEnabled: Boolean = true,
+    nextTestTag: String? = null,
+    onNext: () -> Unit,
+) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(DashboardSpacing.compactGap),
+            horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.actionGap),
+        ) {
+            onBack?.let {
+                TouchButton(
+                    modifier = Modifier.weight(1f),
+                    text = "Indietro",
+                    tone = ButtonTone.NEUTRAL,
+                    onClick = it,
+                )
+            }
+            TouchButton(
+                modifier = Modifier.weight(1f),
+                text = nextLabel,
+                enabled = nextEnabled,
+                testTag = nextTestTag,
+                onClick = onNext,
+            )
+        }
+    }
+}
+
+@Composable
 fun OperatorText(text: String, modifier: Modifier = Modifier) {
     Text(
         modifier = modifier

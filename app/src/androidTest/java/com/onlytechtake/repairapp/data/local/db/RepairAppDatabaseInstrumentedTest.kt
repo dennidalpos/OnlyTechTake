@@ -199,6 +199,5 @@ class RepairAppDatabaseInstrumentedTest {
         name = "Smartphone",
         description = null,
         active = true,
-        sortOrder = 0,
     )
 }

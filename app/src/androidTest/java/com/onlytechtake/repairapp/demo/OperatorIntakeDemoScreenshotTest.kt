@@ -162,7 +162,6 @@ class OperatorIntakeDemoScreenshotTest {
                 name = "Notebook",
                 description = "Diagnosi e riparazioni notebook e ultrabook.",
                 active = true,
-                sortOrder = 1,
             ),
         )
         database.customerDao().upsert(
