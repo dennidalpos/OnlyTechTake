@@ -11,11 +11,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -28,8 +31,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
@@ -40,17 +45,20 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.features.workspace.ButtonTone
 
 object DashboardSpacing {
-    val screenPadding = 20.dp
+    val screenPadding = 16.dp
     val listGap = 16.dp
     val cardPadding = 16.dp
-    val formGap = 14.dp
-    val compactGap = 10.dp
-    val actionGap = 10.dp
+    val formGap = 12.dp
+    val compactGap = 8.dp
+    val actionGap = 8.dp
 }
 
 @Composable
@@ -117,7 +125,7 @@ fun ActionRow(content: @Composable () -> Unit) {
 @Composable
 fun WizardNavigationBar(
     onBack: (() -> Unit)? = null,
-    nextLabel: String = "Avanti",
+    nextLabel: String = stringResource(R.string.nav_next),
     nextEnabled: Boolean = true,
     nextTestTag: String? = null,
     onNext: () -> Unit,
@@ -132,7 +140,7 @@ fun WizardNavigationBar(
             onBack?.let {
                 TouchButton(
                     modifier = Modifier.weight(1f),
-                    text = "Indietro",
+                    text = stringResource(R.string.nav_back),
                     tone = ButtonTone.NEUTRAL,
                     onClick = it,
                 )
@@ -167,18 +175,20 @@ fun CompactExpandableRow(
     detail: String,
     modifier: Modifier = Modifier,
 ) {
-    var expanded by rememberSaveable { mutableStateOf(false) }
+    var expanded by rememberSaveable { mutableStateOf(value = false) }
+    val expandedState = if (expanded) stringResource(R.string.state_expanded) else stringResource(R.string.state_collapsed)
+    val clickLabel = if (expanded) stringResource(R.string.action_collapse) else stringResource(R.string.action_expand)
+    
     Card(
         modifier = modifier
             .fillMaxWidth()
             .semantics {
-                stateDescription = if (expanded) "Espanso" else "Compresso"
+                stateDescription = expandedState
             }
             .clickable(
-                onClickLabel = if (expanded) "Comprimi dettaglio" else "Espandi dettaglio",
+                onClickLabel = clickLabel,
                 role = Role.Button,
-                onClick = { expanded = !expanded },
-            ),
+            ) { expanded = !expanded },
         shape = RoundedCornerShape(8.dp),
     ) {
         Column(
@@ -209,23 +219,23 @@ fun TouchButton(
     stateDescription: String? = null,
     testTag: String? = null,
 ) {
-    androidx.compose.material3.Button(
+    Button(
         modifier = modifier
-            .defaultMinSize(minWidth = 96.dp, minHeight = 56.dp)
+            .defaultMinSize(minWidth = 80.dp, minHeight = 48.dp)
             .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
             .semantics {
                 selected?.let { this.selected = it }
                 stateDescription?.let { this.stateDescription = it }
             },
         enabled = enabled,
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = tone.containerColor(),
             contentColor = tone.contentColor(),
-            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.58f),
-            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.62f),
+            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.38f),
+            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f),
         ),
-        contentPadding = PaddingValues(horizontal = 18.dp, vertical = 14.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
         onClick = onClick,
     ) {
         Text(
@@ -233,24 +243,53 @@ fun TouchButton(
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.labelLarge,
         )
     }
 }
 
-enum class ButtonTone {
-    PRIMARY,
-    NEUTRAL,
-    SUCCESS,
-    INFO,
-    WARNING,
-    DANGER,
+@Composable
+fun TouchButtonWithIcon(
+    text: String,
+    icon: ImageVector,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    tone: ButtonTone = ButtonTone.PRIMARY,
+    testTag: String? = null,
+) {
+    Button(
+        modifier = modifier
+            .defaultMinSize(minWidth = 80.dp, minHeight = 48.dp)
+            .then(testTag?.let { Modifier.testTag(it) } ?: Modifier),
+        enabled = enabled,
+        shape = RoundedCornerShape(12.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = tone.containerColor(),
+            contentColor = tone.contentColor(),
+        ),
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 12.dp),
+        onClick = onClick,
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            modifier = Modifier.padding(end = 8.dp).size(18.dp)
+        )
+        Text(
+            text = text,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.labelLarge,
+        )
+    }
 }
 
 @Composable
 private fun ButtonTone.containerColor(): Color =
     when (this) {
         ButtonTone.PRIMARY -> MaterialTheme.colorScheme.primary
-        ButtonTone.NEUTRAL -> MaterialTheme.colorScheme.surfaceVariant
+        ButtonTone.NEUTRAL -> MaterialTheme.colorScheme.secondaryContainer
         ButtonTone.SUCCESS -> Color(0xFF237A3B)
         ButtonTone.INFO -> MaterialTheme.colorScheme.tertiary
         ButtonTone.WARNING -> Color(0xFFE8A600)
@@ -261,11 +300,11 @@ private fun ButtonTone.containerColor(): Color =
 private fun ButtonTone.contentColor(): Color =
     when (this) {
         ButtonTone.PRIMARY -> MaterialTheme.colorScheme.onPrimary
-        ButtonTone.NEUTRAL -> MaterialTheme.colorScheme.onSurfaceVariant
+        ButtonTone.NEUTRAL -> MaterialTheme.colorScheme.onSecondaryContainer
         ButtonTone.INFO -> MaterialTheme.colorScheme.onTertiary
         ButtonTone.DANGER -> MaterialTheme.colorScheme.onError
         ButtonTone.WARNING -> Color(0xFF2A2100)
-        else -> Color.White
+        ButtonTone.SUCCESS -> Color.White
     }
 
 @Composable
@@ -276,7 +315,7 @@ fun CustomerTypeToggle(
 ) {
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.actionGap)) {
         TypeToggleButton(
-            text = "Privato",
+            text = stringResource(R.string.customer_type_private),
             selected = !isBusiness,
             selectedTone = ButtonTone.SUCCESS,
             onClick = { onBusinessChange(false) },
@@ -284,7 +323,7 @@ fun CustomerTypeToggle(
             testTag = RepairAppTestTags.CustomerPrivateToggle,
         )
         TypeToggleButton(
-            text = "Azienda",
+            text = stringResource(R.string.customer_type_business),
             selected = isBusiness,
             selectedTone = ButtonTone.INFO,
             onClick = { onBusinessChange(true) },
@@ -303,13 +342,15 @@ private fun TypeToggleButton(
     modifier: Modifier = Modifier,
     testTag: String? = null,
 ) {
+    val selectedState = if (selected) stringResource(R.string.state_selected) else stringResource(R.string.state_not_selected)
+    
     TextButton(
         modifier = modifier
             .defaultMinSize(minHeight = 56.dp)
             .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
             .semantics {
                 this.selected = selected
-                stateDescription = if (selected) "Selezionato" else "Non selezionato"
+                stateDescription = selectedState
             },
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.textButtonColors(
@@ -321,9 +362,3 @@ private fun TypeToggleButton(
         Text(text)
     }
 }
-
-fun CustomerEntity.displayName(): String =
-    when (type) {
-        CustomerType.PRIVATE -> listOfNotNull(firstName, lastName).joinToString(" ").ifBlank { "Privato senza nome" }
-        CustomerType.BUSINESS -> companyName.orEmpty().ifBlank { "Azienda senza nome" }
-    }

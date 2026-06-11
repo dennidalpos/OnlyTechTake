@@ -357,7 +357,7 @@ private fun ZoomableLocalImage(
     val bitmap = remember(path) { decodeOrientedBitmap(path)?.asImageBitmap() }
     var scale by remember(path) { mutableFloatStateOf(1f) }
     var offset by remember(path) { mutableStateOf(Offset.Zero) }
-    val transformState = rememberTransformableState { zoomChange, panChange, _ ->
+    val transformState = rememberTransformableState { _, zoomChange, panChange, _ ->
         val nextScale = (scale * zoomChange).coerceIn(1f, 5f)
         scale = nextScale
         offset = if (nextScale == 1f) Offset.Zero else offset + panChange

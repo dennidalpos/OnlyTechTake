@@ -17,20 +17,26 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
+import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
-import com.onlytechtake.repairapp.features.workspace.label
+import androidx.compose.ui.platform.LocalContext
+import com.onlytechtake.repairapp.core.utils.displayName
+import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.features.workspace.nextActionLabel
+import com.onlytechtake.repairapp.features.workspace.label as attachmentLabel
 
 @Composable
 fun OrdersPanel(viewModel: WorkspaceViewModel) {
     val uiState by viewModel.uiState.collectAsState()
     val orderListItems by viewModel.orderListItems.collectAsState()
+    val context = LocalContext.current
 
     LazyColumn(
         modifier = Modifier
@@ -39,7 +45,7 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
-            SectionTitle("Commesse")
+            SectionTitle(stringResource(R.string.orders_title))
         }
 
         item {
@@ -51,7 +57,7 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
 
         if (orderListItems.isEmpty()) {
             item {
-                Text("Nessuna commessa per questo filtro.", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.orders_empty_filter), style = MaterialTheme.typography.bodyMedium)
             }
         } else {
             items(orderListItems) { item ->
@@ -71,11 +77,16 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
                     ) {
                         Text("${order.orderNumber} - ${order.title}", style = MaterialTheme.typography.titleMedium)
-                        Text("Cliente: ${item.customer?.displayName().orEmpty().ifBlank { "Cliente non disponibile" }}")
-                        Text("Stato: ${order.status.label()}")
-                        Text("Prossima azione: ${nextActionLabel(order)}")
-                        Text("Aggiornata: ${formatUiDateTime(order.updatedAt)}")
-                        Text("Media e firme: ${item.attachments.label()}")
+                        Text(
+                            stringResource(
+                                R.string.orders_customer_label,
+                                item.customer?.displayName(context).orEmpty()
+                            )
+                        )
+                        Text(stringResource(R.string.orders_status_label, order.status.label(context)))
+                        Text(stringResource(R.string.orders_next_action_label, nextActionLabel(order)))
+                        Text(stringResource(R.string.orders_updated_label, formatUiDateTime(order.updatedAt)))
+                        Text(stringResource(R.string.orders_media_label, item.attachments.attachmentLabel()))
                     }
                 }
             }
@@ -88,36 +99,43 @@ private fun OrderFilterBar(
     filter: OrderFilter,
     onFilter: (OrderFilter) -> Unit,
 ) {
+    val context = LocalContext.current
     Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
         ActionRow {
             val allSelected = !filter.hasActiveFilter()
             TouchButton(
-                text = "Tutte",
+                text = stringResource(R.string.orders_filter_all),
                 tone = if (allSelected) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
                 selected = allSelected,
-                stateDescription = if (allSelected) "Filtro selezionato" else "Filtro non selezionato",
+                stateDescription = if (allSelected) stringResource(R.string.state_selected) else stringResource(R.string.state_not_selected),
                 onClick = { onFilter(OrderFilter()) },
             )
             TouchButton(
-                text = "Mie",
+                text = stringResource(R.string.orders_filter_mine),
                 tone = if (filter.showMineOnly) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
                 selected = filter.showMineOnly,
-                stateDescription = if (filter.showMineOnly) "Filtro selezionato" else "Filtro non selezionato",
+                stateDescription = if (filter.showMineOnly) stringResource(R.string.state_selected) else stringResource(R.string.state_not_selected),
                 onClick = { onFilter(filter.copy(showMineOnly = !filter.showMineOnly)) },
             )
-            QuickStatusGroupFilter("Aperte", setOf(OrderStatus.OPEN), filter, onFilter)
-            QuickStatusGroupFilter("Lav./diagnosi", setOf(OrderStatus.IN_PROGRESS, OrderStatus.DIAGNOSIS), filter, onFilter)
-            QuickStatusGroupFilter("Ris./rip.", setOf(OrderStatus.RESULT, OrderStatus.REPAIRING), filter, onFilter)
-            QuickStatusGroupFilter("Pronte", setOf(OrderStatus.READY_FOR_PICKUP), filter, onFilter)
+            QuickStatusGroupFilter(stringResource(R.string.orders_filter_open), setOf(OrderStatus.OPEN), filter, onFilter)
+            QuickStatusGroupFilter(stringResource(R.string.orders_filter_progress), setOf(OrderStatus.IN_PROGRESS, OrderStatus.DIAGNOSIS), filter, onFilter)
+            QuickStatusGroupFilter(stringResource(R.string.orders_filter_result), setOf(OrderStatus.RESULT, OrderStatus.REPAIRING), filter, onFilter)
+            QuickStatusGroupFilter(stringResource(R.string.orders_filter_ready), setOf(OrderStatus.READY_FOR_PICKUP), filter, onFilter)
         }
         if (filter.showMineOnly || filter.status != null || filter.statuses.isNotEmpty()) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+            ) {
                 Text(
-                    text = "Filtro attivo: " + listOfNotNull(
-                        "mie".takeIf { filter.showMineOnly },
-                        filter.status?.label(),
-                        filter.statuses.takeIf { it.isNotEmpty() }?.joinToString(" / ") { it.label() },
-                    ).joinToString(", "),
+                    text = stringResource(
+                        R.string.orders_filter_active,
+                        listOfNotNull(
+                            stringResource(R.string.orders_filter_mine).lowercase().takeIf { filter.showMineOnly },
+                            filter.status?.label(context),
+                            filter.statuses.takeIf { it.isNotEmpty() }?.joinToString(" / ") { it.label(context) },
+                        ).joinToString(", ")
+                    ),
                     style = MaterialTheme.typography.bodySmall,
                 )
             }
@@ -136,7 +154,7 @@ private fun QuickStatusGroupFilter(
         text = label,
         tone = if (filter.statuses == statuses) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
         selected = filter.statuses == statuses,
-        stateDescription = if (filter.statuses == statuses) "Filtro selezionato" else "Filtro non selezionato",
+        stateDescription = if (filter.statuses == statuses) stringResource(R.string.state_selected) else stringResource(R.string.state_not_selected),
         onClick = {
             onFilter(
                 filter.copy(

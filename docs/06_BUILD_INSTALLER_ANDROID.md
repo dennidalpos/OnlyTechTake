@@ -12,7 +12,7 @@ usare gli script ufficiali o impostare `JAVA_HOME` su JDK/JBR 17/21 nello stesso
 - PowerShell.
 - Android Studio recente.
 - JDK 17/21 o Android Studio JBR.
-- Android SDK Platform `android-36`.
+- Android SDK Platform `android-37`.
 - Android SDK Build Tools.
 - Android Platform Tools per `adb`.
 - Debug USB e autorizzazione PC sul device per installazione, start e instrumentation test.
@@ -170,7 +170,7 @@ powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -ApkPath 
 - `Java non trovato` o `javac non trovato`: configurare JDK 17/21 o Android Studio JBR.
 - Java 26 nel `PATH`: gli script lo ignorano e preferiscono Android Studio JBR o un JDK 17/21 supportato.
 - `Dependency requires at least JVM runtime version 11` con `.\gradlew.bat`: il processo sta usando una JVM troppo vecchia; usare gli script PowerShell ufficiali o impostare `JAVA_HOME` su JDK/JBR 17/21.
-- `Platform android-36 non trovata`: installare Android SDK Platform 36 da Android Studio SDK Manager.
+- `Platform android-37 non trovata`: installare Android SDK Platform 37 da Android Studio SDK Manager.
 - `Android SDK Build Tools non trovati`: installare Android SDK Build Tools da Android Studio SDK Manager.
 - `adb non trovato`: installare Android Platform Tools o aggiungere `platform-tools` al `PATH`.
 - Nessun device in `adb devices`: abilitare debug USB e autorizzare il computer sul device.

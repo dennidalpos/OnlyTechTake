@@ -675,6 +675,37 @@ class RepositoryPathsInstrumentedTest {
         assertFalse(File(context.filesDir, "orders").walkFiles().any())
     }
 
+    @Test
+    fun deleteCategoryRemovesBranchAndFailsIfUsed() = runBlocking {
+        val actor = seedAdmin()
+        val dao = database.orderCategoryDao()
+        val repository = CatalogRepository(dao)
+
+        dao.upsert(OrderCategoryEntity("root", null, 0, "Root", null, true))
+        dao.upsert(OrderCategoryEntity("child", "root", 1, "Child", null, true))
+
+        // Delete fails if used
+        seedCustomer()
+        orderWorkflowRepository().createOrder(
+            actor = actor,
+            input = RepairOrderInput(
+                customerId = CUSTOMER_ID,
+                title = "Order",
+                categoryId = "child",
+            ),
+        ).getOrThrow()
+
+        val deleteResult = repository.deleteCategory(actor, "root")
+        assertTrue(deleteResult.isFailure)
+        assertTrue(deleteResult.exceptionOrNull()?.message?.contains("usata") == true)
+
+        // Delete succeeds if NOT used
+        database.repairOrderDao().deleteByIds(database.repairOrderDao().observeRecentActiveOrders().first().map { it.id })
+
+        repository.deleteCategory(actor, "root").getOrThrow()
+        assertEquals(0, dao.findAll().size)
+    }
+
     private fun authRepository(clockMillis: () -> Long): DefaultAuthRepository =
         DefaultAuthRepository(
             userDao = database.userDao(),

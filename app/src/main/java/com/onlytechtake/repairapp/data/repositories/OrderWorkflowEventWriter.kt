@@ -1,10 +1,14 @@
 package com.onlytechtake.repairapp.data.repositories
 
+import android.content.Context
+import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
 import com.onlytechtake.repairapp.data.local.entities.AuditAction
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
+import com.onlytechtake.repairapp.data.local.entities.CustomerActionStatus
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
@@ -12,6 +16,7 @@ import com.onlytechtake.repairapp.data.local.entities.TimelineEventType
 import java.util.UUID
 
 internal class OrderWorkflowEventWriter(
+    private val context: Context,
     private val timelineEventDao: TimelineEventDao? = null,
     private val auditLogDao: AuditLogDao? = null,
 ) {
@@ -20,7 +25,7 @@ internal class OrderWorkflowEventWriter(
             timelineEvent(
                 orderId = orderId,
                 type = TimelineEventType.ORDER_CREATED,
-                title = "Commessa creata",
+                title = context.getString(R.string.order_created_title),
                 actorUserId = actorUserId,
                 createdAt = now,
                 visibleToCustomer = true,
@@ -37,17 +42,17 @@ internal class OrderWorkflowEventWriter(
         closureReason: ClosureReason?,
         now: Long,
     ) {
-        val readableTransition = "${oldStatus.label()} -> ${newStatus.label()}"
+        val readableTransition = "${oldStatus.label(context)} -> ${newStatus.label(context)}"
         val details = listOfNotNull(
             readableTransition,
             note,
-            closureReason?.let { "Motivo chiusura: ${it.label()}" },
+            closureReason?.let { context.getString(R.string.closure_reason_prefix, it.label(context)) },
         ).joinToString("\n")
         writeTimeline(
             timelineEvent(
                 orderId = orderId,
                 type = TimelineEventType.STATUS_CHANGED,
-                title = "Stato aggiornato",
+                title = context.getString(R.string.status_updated_title),
                 description = details,
                 oldStatus = oldStatus.name,
                 newStatus = newStatus.name,
@@ -66,8 +71,8 @@ internal class OrderWorkflowEventWriter(
             timelineEvent(
                 orderId = orderId,
                 type = TimelineEventType.ORDER_REASSIGNED,
-                title = "Commessa riassegnata",
-                description = assignedToUserId ?: "Non assegnata",
+                title = context.getString(R.string.order_reassigned_title),
+                description = assignedToUserId ?: context.getString(R.string.unassigned),
                 actorUserId = actorUserId,
                 createdAt = now,
             ),
@@ -80,7 +85,7 @@ internal class OrderWorkflowEventWriter(
             timelineEvent(
                 orderId = orderId,
                 type = TimelineEventType.INTERNAL_NOTE_ADDED,
-                title = "Nota interna aggiunta",
+                title = context.getString(R.string.internal_note_added_title),
                 description = note,
                 actorUserId = actorUserId,
                 createdAt = now,
@@ -93,7 +98,7 @@ internal class OrderWorkflowEventWriter(
             timelineEvent(
                 orderId = orderId,
                 type = TimelineEventType.ORDER_DELETED,
-                title = "Commessa archiviata",
+                title = context.getString(R.string.order_archived_title),
                 description = reason,
                 actorUserId = actorUserId,
                 createdAt = now,
@@ -114,7 +119,7 @@ internal class OrderWorkflowEventWriter(
             timelineEvent(
                 orderId = orderId,
                 type = TimelineEventType.CUSTOMER_FEEDBACK_RECORDED,
-                title = "Feedback cliente registrato",
+                title = context.getString(R.string.customer_feedback_recorded_title),
                 description = note,
                 newStatus = targetStatus.name,
                 actorUserId = actorUserId,
@@ -149,8 +154,8 @@ internal class OrderWorkflowEventWriter(
         writeTimeline(
             timelineEvent(
                 orderId = orderId,
-                type = TimelineEventType.MEDIA_ADDED,
-                title = "Media rimosso",
+                type = TimelineEventType.MEDIA_REMOVED,
+                title = context.getString(R.string.media_removed_title),
                 description = fileName,
                 actorUserId = actorUserId,
                 createdAt = now,
@@ -163,11 +168,44 @@ internal class OrderWorkflowEventWriter(
             timelineEvent(
                 orderId = orderId,
                 type = TimelineEventType.SIGNATURE_CAPTURED,
-                title = "Firma acquisita",
+                title = context.getString(R.string.signature_captured_title),
                 description = signerName,
                 actorUserId = actorUserId,
                 createdAt = now,
                 visibleToCustomer = true,
+            ),
+        )
+    }
+
+    suspend fun pdfShared(orderId: String, actorUserId: String, fileName: String, now: Long) {
+        writeTimeline(
+            timelineEvent(
+                orderId = orderId,
+                type = TimelineEventType.PDF_STATUS_SHARED,
+                title = context.getString(R.string.pdf_shared_title),
+                description = fileName,
+                actorUserId = actorUserId,
+                createdAt = now,
+                visibleToCustomer = true,
+            ),
+        )
+    }
+
+    suspend fun customerActionStatusChanged(
+        orderId: String,
+        actorUserId: String,
+        status: CustomerActionStatus,
+        now: Long,
+    ) {
+        writeTimeline(
+            timelineEvent(
+                orderId = orderId,
+                type = TimelineEventType.CUSTOMER_ACTION_STATUS_CHANGED,
+                title = context.getString(R.string.customer_action_status_updated_title),
+                description = status.label(context),
+                actorUserId = actorUserId,
+                createdAt = now,
+                visibleToCustomer = false,
             ),
         )
     }
@@ -181,7 +219,7 @@ internal class OrderWorkflowEventWriter(
     }
 
     private suspend fun writeTimeline(event: TimelineEventEntity) {
-        requireNotNull(timelineEventDao) { "Timeline writer non configurato" }.upsert(event)
+        requireNotNull(timelineEventDao) { context.getString(R.string.timeline_writer_not_configured) }.upsert(event)
     }
 
     private fun timelineEvent(
@@ -223,7 +261,7 @@ internal class OrderWorkflowEventWriter(
         customerId: String?,
         now: Long,
     ) {
-        requireNotNull(auditLogDao) { "Audit writer non configurato" }.upsert(
+        requireNotNull(auditLogDao) { context.getString(R.string.audit_writer_not_configured) }.upsert(
             AuditLogEntity(
                 id = UUID.randomUUID().toString(),
                 action = action,
@@ -236,23 +274,3 @@ internal class OrderWorkflowEventWriter(
         )
     }
 }
-
-private fun OrderStatus.label(): String =
-    when (this) {
-        OrderStatus.OPEN -> "Aperta"
-        OrderStatus.IN_PROGRESS -> "In lavorazione"
-        OrderStatus.DIAGNOSIS -> "Diagnosi"
-        OrderStatus.RESULT -> "Risultato"
-        OrderStatus.REPAIRING -> "Riparazione"
-        OrderStatus.READY_FOR_PICKUP -> "Pronta al ritiro"
-        OrderStatus.CLOSED -> "Chiusa"
-    }
-
-private fun ClosureReason.label(): String =
-    when (this) {
-        ClosureReason.COMPLETED -> "Completata"
-        ClosureReason.CUSTOMER_DECLINED -> "Rifiutata dal cliente"
-        ClosureReason.NOT_REPAIRABLE -> "Non riparabile"
-        ClosureReason.CANCELLED -> "Annullata"
-        ClosureReason.OTHER -> "Altro"
-    }

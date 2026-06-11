@@ -61,16 +61,23 @@ data class RepairOrderEntity(
     val assignedToUserId: String?,
     val createdByUserId: String,
     val description: String?,
-    val internalNotes: String?,
-    val diagnosisOutcome: DiagnosisOutcome?,
-    val estimateAmountCents: Long?,
-    val finalAmountCents: Long?,
+    val internalNotes: String? = null,
+    val diagnosisOutcome: DiagnosisOutcome? = null,
+    val estimateAmountCents: Long? = null,
+    val finalAmountCents: Long? = null,
     val createdAt: Long,
     val updatedAt: Long,
-    val closedAt: Long?,
-    val deletedAt: Long?,
-    val deletedByUserId: String?,
-    val deleteReason: String?
+    val closedAt: Long? = null,
+    val closureReason: ClosureReason? = null,
+    val customerActionStatus: CustomerActionStatus? = null,
+    val closureReason: ClosureReason? = null,
+    val closeNote: String? = null,
+    val closedByUserId: String? = null,
+    val categoryPathSnapshot: String? = null,
+    val lastCustomerContactAt: Long? = null,
+    val deletedAt: Long? = null,
+    val deletedByUserId: String? = null,
+    val deleteReason: String? = null
 )
 ```
 
@@ -85,6 +92,8 @@ dell'avviso per il ritiro, senza introdurre uno stato `WAITING_CUSTOMER`.
 @Entity(tableName = "order_categories")
 data class OrderCategoryEntity(
     @PrimaryKey val id: String,
+    val parentId: String?,
+    val level: Int,
     val name: String,
     val description: String?,
     val active: Boolean

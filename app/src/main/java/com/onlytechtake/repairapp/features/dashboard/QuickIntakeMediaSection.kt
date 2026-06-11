@@ -15,6 +15,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
+import com.onlytechtake.repairapp.features.workspace.ButtonTone
+import com.onlytechtake.repairapp.features.workspace.isImageAttachment
 import java.io.File
 
 @Composable
@@ -43,7 +45,7 @@ fun QuickIntakeMediaSection(
                 Text("Aggiungi almeno una foto o un allegato.")
             } else {
                 stagedMedia.forEach { media ->
-                    if (media.isImage()) {
+                    if (media.isImageAttachment()) {
                         Card(modifier = Modifier.fillMaxWidth()) {
                             Column(
                                 modifier = Modifier.padding(DashboardSpacing.compactGap),
@@ -105,11 +107,6 @@ fun QuickIntakeMediaSection(
         }
     }
 }
-
-private fun StagedOrderMedia.isImage(): Boolean =
-    mediaType.equals("PHOTO", ignoreCase = true) ||
-        mediaType.equals("IMAGE", ignoreCase = true) ||
-        mimeType.startsWith("image/", ignoreCase = true)
 
 @Composable
 private fun StagedMediaSummary(

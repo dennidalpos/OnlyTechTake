@@ -170,10 +170,12 @@ Permessi manifest:
 - Camera;
 - nessun permesso storage globale.
 
+L'app usa `FileProvider` per la condivisione sicura dei PDF generati in `files/orders/<orderId>/documents/`. Le autorizzazioni sono concesse tramite `FLAG_GRANT_READ_URI_PERMISSION`.
+
 Import allegati ed export usano Storage Access Framework, quindi non richiedono
 permessi larghi di lettura/scrittura storage.
 
-## Foto e firme
+## Foto, firme e documenti
 
 Salvare file in directory private app:
 
@@ -184,7 +186,8 @@ files/orders/<orderId>/documents/
 ```
 
 Nel database salvare path locale privato e metadati essenziali. Le foto acquisite
-con CameraX sono registrate in `order_media` e generano evento timeline. Le foto
+con CameraX sono registrate in `order_media` e generano evento timeline. I PDF
+di stato vengono generati in `documents` e condivisi tramite `ShareDocumentIntentFactory`. Le foto
 opzionali del lavoro finito usano `mediaType = FINAL_PHOTO` nello stesso modello,
 senza schema dedicato. `ImageCapture.targetRotation` viene impostato dalla rotazione
 del `PreviewView` prima del bind e prima dello scatto. Le anteprime locali applicano

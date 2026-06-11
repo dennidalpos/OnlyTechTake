@@ -12,6 +12,7 @@ import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
@@ -363,4 +364,25 @@ interface AuditLogDao {
 
     @Query("SELECT * FROM audit_logs ORDER BY createdAt DESC LIMIT :limit")
     fun observeRecent(limit: Int = 100): Flow<List<AuditLogEntity>>
+}
+
+@Dao
+interface OrderDocumentDao {
+    @Upsert
+    suspend fun upsert(document: OrderDocumentEntity)
+
+    @Query(
+        """
+        SELECT * FROM order_documents
+        WHERE orderId = :orderId
+        ORDER BY createdAt DESC
+        """,
+    )
+    fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>>
+
+    @Query("SELECT * FROM order_documents WHERE id = :id LIMIT 1")
+    suspend fun getById(id: String): OrderDocumentEntity?
+
+    @Query("UPDATE order_documents SET sharedAt = :sharedAt WHERE id = :id")
+    suspend fun markShared(id: String, sharedAt: Long)
 }

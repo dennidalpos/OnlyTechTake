@@ -16,6 +16,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,6 +40,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalContext
+import android.app.Activity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.contentDescription
@@ -66,6 +72,7 @@ fun AuthGateRoute(
     )
     val authState by viewModel.authState.collectAsState()
     val formState by viewModel.formState.collectAsState()
+    val context = LocalContext.current
 
     LaunchedEffect(authState.lastUsername) {
         if (formState.username.isBlank() && authState.lastUsername.isNotBlank()) {
@@ -87,12 +94,14 @@ fun AuthGateRoute(
             onPasswordChange = viewModel::updatePassword,
             onConfirmPasswordChange = viewModel::updateConfirmPassword,
             onSubmit = viewModel::createFirstAdmin,
+            onBack = { (context as? Activity)?.finish() }
         )
         else -> LoginScreen(
             formState = formState,
             onUsernameChange = viewModel::updateUsername,
             onPasswordChange = viewModel::updatePassword,
             onSubmit = viewModel::login,
+            onBack = { (context as? Activity)?.finish() }
         )
     }
 }
@@ -123,10 +132,18 @@ private fun FirstSetupScreen(
     onPasswordChange: (String) -> Unit,
     onConfirmPasswordChange: (String) -> Unit,
     onSubmit: () -> Unit,
+    onBack: () -> Unit,
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(text = "Configurazione admin") })
+            TopAppBar(
+                title = { Text(text = "Configurazione admin") },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Indietro")
+                    }
+                }
+            )
         },
     ) { paddingValues ->
         AuthForm(
@@ -153,10 +170,18 @@ private fun LoginScreen(
     onUsernameChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onSubmit: () -> Unit,
+    onBack: () -> Unit,
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(text = "OnlyTechTake") })
+            TopAppBar(
+                title = { Text(text = "OnlyTechTake") },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Chiudi app")
+                    }
+                }
+            )
         },
     ) { paddingValues ->
         AuthForm(
@@ -175,6 +200,7 @@ private fun LoginScreen(
         )
     }
 }
+
 
 @Composable
 private fun AuthForm(

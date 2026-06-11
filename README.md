@@ -9,7 +9,7 @@ App Android locale per tracciare commesse clienti dal banco alla diagnosi, alla 
 - Sistema di sviluppo supportato: Windows + PowerShell.
 - Runtime app: Android, package `com.onlytechtake.repairapp`.
 - Versione app: `0.1.0`, `versionCode` 1.
-- SDK Android: compile/target SDK 36, min SDK 26.
+- SDK Android: compile/target SDK 37, min SDK 26.
 - Stack: Kotlin, Jetpack Compose, Material 3, Navigation Compose, Room, DataStore, CameraX, Coroutines/Flow.
 - Dati: Room locale, DataStore per preferenze auth, file privati app, export tramite Storage Access Framework.
 - Backend: assente. WhatsApp e' solo manuale.
@@ -30,7 +30,7 @@ App Android locale per tracciare commesse clienti dal banco alla diagnosi, alla 
 - PowerShell.
 - Android Studio recente.
 - JDK 17/21 oppure JBR incluso in Android Studio.
-- Android SDK Platform `android-36`.
+- Android SDK Platform `android-37`.
 - Android SDK Build Tools.
 - Android Platform Tools per `adb`, se servono installazione, start o instrumentation test su device.
 - Debug USB abilitato e PC autorizzato sul device per i comandi via `adb`.
@@ -91,7 +91,7 @@ Gli script PowerShell calcolano la root del progetto dal proprio percorso, quind
 
 `app\build.gradle.kts` legge `keystore.properties` dalla root solo se il file esiste. Gli script `check_project.ps1` e `scripts\android\build_installer.ps1` bloccano APK/AAB release quando il signing locale non e' configurato. Il file e il keystore sono locali e ignorati da `.gitignore`.
 
-Schema richiesto:
+Schema richiesto (copiare da `keystore.properties.example` e rinominare in `keystore.properties`):
 
 ```properties
 storeFile=C:\Percorso\locale\repair-app-release.jks
@@ -113,12 +113,12 @@ Regole:
 - Dashboard con tab Home, Nuova, Clienti, Commesse/Commessa, Config e Admin.
 - Home con metriche e quattro code operative che seguono il flusso banco, diagnosi, preventivo/riparazione e consegna.
 - Creazione commessa a step con cliente esistente o nuovo, categoria ad albero obbligatoria, problema, almeno un media/allegato, privacy e firma.
-- Workspace commessa con esito diagnosi esplicito `REPAIRABLE`/`NOT_REPAIRABLE`, preventivo obbligatorio solo nel ramo riparabile, azioni post-diagnosi guidate, note, media, firma, timeline, WhatsApp manuale locale ed export PDF.
+- Workspace commessa con esito diagnosi esplicito `REPAIRABLE`/`NOT_REPAIRABLE`, preventivo obbligatorio solo nel ramo riparabile, azioni post-diagnosi guidate, note, media, firma, timeline, WhatsApp manuale locale e condivisione PDF.
 - Le anteprime immagini locali rispettano l'orientamento EXIF; CameraX usa la rotazione reale del display prima del bind e dello scatto.
 - Admin: utenti, reset password, pulizia commesse scartate/archiviate e reset totale dati con conferma `RESET`.
 - Config admin: categorie multilivello, template privacy/condizioni/WhatsApp, modalita WhatsApp manuale, export config/database/ZIP/XLSX.
 - Import allegati tramite SAF per JPEG/PNG/WebP, PDF, TXT, DOC/DOCX e XLS/XLSX fino a 25 MiB.
-- Export admin di configurazione, database, ZIP completo e XLSX commesse tramite SAF. Ripristino ZIP completo tramite SAF per admin. Export PDF della singola commessa dal dettaglio.
+- Export admin di configurazione, database, ZIP completo e XLSX commesse tramite SAF. Ripristino ZIP completo tramite SAF per admin. Condivisione PDF della singola commessa dal dettaglio.
 
 ## Limiti Noti
 

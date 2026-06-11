@@ -18,7 +18,7 @@ class DataResetRepository(
     private val authPreferences: AuthPreferences,
     private val sessionStore: InMemorySessionStore,
 ) {
-    private val eventWriter = OrderWorkflowEventWriter(auditLogDao = auditLogDao)
+    private val eventWriter = OrderWorkflowEventWriter(context, auditLogDao = auditLogDao)
 
     suspend fun resetAll(actor: AuthenticatedUser, confirmation: String): Result<Unit> =
         runCatching {

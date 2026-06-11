@@ -17,6 +17,7 @@ Funzioni implementate:
 - resettare password utenti;
 - vedere e gestire le commesse;
 - modificare categorie ad albero con livelli numerici da 0 a N;
+- eliminare categorie vuote o eseguire cancellazione ricorsiva;
 - modificare template privacy, condizioni e WhatsApp;
 - impostare la modalita WhatsApp manuale;
 - esportare configurazione, database, ZIP completo e PDF commessa;
@@ -184,7 +185,7 @@ Mappa operativa:
 - `RESULT` con `NOT_REPAIRABLE`: nessun importo, avviso cliente e passaggio a `READY_FOR_PICKUP`;
 - `REPAIRING`: pronta al ritiro o chiusura motivata;
 - `READY_FOR_PICKUP`: chiusura motivata;
-- `CLOSED`: nessuna azione operativa.
+- `CLOSED`: nessuna azione operativa, consultazione PDF riepilogo.
 
 ## Timeline
 
@@ -202,6 +203,8 @@ Ogni azione importante crea un evento timeline, tra cui:
 - nota aggiunta;
 - commessa chiusa;
 - commessa eliminata logicamente;
+- PDF riepilogo condiviso;
+- stato azione cliente aggiornato;
 - reset dati ed export nei log audit.
 
 ## Pulizia admin
@@ -211,11 +214,11 @@ L'admin puo':
 - archiviare in batch le commesse chiuse come rifiutate, annullate o non riparabili digitando `ARCHIVIA`;
 - cancellare definitivamente le commesse gia' archiviate e i relativi file digitando `CANCELLA`.
 
-## WhatsApp e feedback
+## WhatsApp, feedback e PDF
 
 La sola modalita implementata e' `MANUAL_WHATSAPP`.
 
-Flusso:
+Flusso WhatsApp:
 
 ```text
 Operatore prepara messaggio
@@ -227,6 +230,8 @@ Timeline e message log vengono aggiornati
 ```
 
 Non sono implementati backend, WhatsApp Business Platform, webhook o conferme automatiche.
+
+L'operatore può inoltre esportare e condividere un PDF di riepilogo della commessa (stato, timeline, dettagli) tramite il tasto di condivisione. Il PDF viene generato localmente e condiviso tramite le app installate sul device (es. WhatsApp, Email).
 
 Il feedback cliente automatico non e' implementato. La risposta viene registrata manualmente e aggiorna timeline e ultimo message log disponibile. Il ramo non riparabile usa il normale flusso pronto ritiro e chiusura motivata.
 
@@ -241,7 +246,9 @@ Export implementati:
 
 Ripristino backup:
 
-- non supportato; lo ZIP completo e' solo export locale.
+- supportato per admin tramite ZIP completo selezionato con SAF;
+- sostituisce database e file privati;
+- richiede nuovo login dopo il completamento.
 
 Limiti noti:
 

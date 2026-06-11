@@ -35,15 +35,15 @@ class DefaultAuthRepository(
     override fun observeAuthState(): Flow<AuthState> =
         combine(
             userDao.observeCountByRole(UserRole.ADMIN),
-            currentUser,
+            sessionStore.state,
             authPreferences.lastUserId,
             inactivityTicker(),
-        ) { adminCount, currentUser, lastUserId, now ->
-            val activeUser = if (currentUser != null && sessionStore.isExpired(now, AuthPolicy.INACTIVITY_TIMEOUT_MILLIS)) {
+        ) { adminCount, session, lastUserId, now ->
+            val activeUser = if (session.user != null && sessionStore.isExpired(now, AuthPolicy.INACTIVITY_TIMEOUT_MILLIS)) {
                 sessionStore.clear()
                 null
             } else {
-                currentUser
+                session.user
             }
             AuthState(
                 initialized = true,

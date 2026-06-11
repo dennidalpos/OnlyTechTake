@@ -59,7 +59,7 @@ I file sono salvati in directory privata app:
 files/orders/<orderId>/signatures/
 ```
 
-Il salvataggio crea anche evento timeline "Firma acquisita".
+Il salvataggio crea anche evento timeline "Firma acquisita" (`SIGNATURE_CAPTURED`).
 
 ## Variabili template
 
@@ -127,6 +127,11 @@ la preview per consentire all'operatore di confermare manualmente l'invio al
 ritorno. L'app non invia automaticamente.
 - una chiusura come `NOT_REPAIRABLE` usa il template dedicato `whatsapp_non_riparabile`;
 - un risultato con importo usa il template `whatsapp_preventivo_intervento` e resta in attesa di conferma cliente.
+
+## Condivisione PDF di stato
+
+Oltre a WhatsApp manuale, l'app permette di generare e condividere un PDF di riepilogo dello stato della commessa.
+Il file viene salvato temporaneamente in `documents/` e condiviso tramite `FileProvider` con le app di sistema. La condivisione registra l'evento `PDF_STATUS_SHARED` nella timeline.
 
 La chiusura operativa usa un solo pulsante "Chiudi commessa" e richiede motivo esplicito e nota manuale. Dopo una chiusura riuscita l'app torna all'elenco commesse.
 

@@ -1,9 +1,16 @@
 {
   "todos": [
-    "Eseguire verifica manuale completa su dispositivo: setup admin, login, categorie, nuova commessa, privacy, firma, foto, diagnosi riparabile, accettazione, rifiuto, non riparabile, pronto ritiro, chiusura e PDF",
+    "Completare verifica manuale su dispositivo: nuova commessa (firma, foto), diagnosi riparabile, accettazione, rifiuto, non riparabile, pronto ritiro, chiusura e PDF (setup admin e categorie verificati)",
     "Verificare manualmente WhatsApp reale su telefono destinatario: apertura wa.me, testo modificabile, importo preventivo renderizzato, template non riparabile e conferma manuale invio",
+    "Verificare manualmente rimozione categorie: cancellazione categoria vuota, errore cancellazione se usata in commessa, cancellazione ricorsiva sottocategorie",
     "Verificare manualmente orientamento foto su device: scatto portrait, scatto landscape, anteprima in app, file salvato e assenza di rotazioni errate",
     "Verificare manualmente export ZIP e ripristino ZIP su una successiva installazione pulita",
-    "Configurare keystore.properties locale non tracciato e generare APK o AAB release solo quando serve la verifica tramite Play Console"
+    "Creare video demo 01: Setup Admin e gestione Operatori",
+    "Creare video demo 02: Configurazione Categorie (3 livelli) e Template WhatsApp",
+    "Creare video demo 03: Flusso Nuova Commessa (Cliente, Foto, Firma e Privacy)",
+    "Creare video demo 04: Gestione Operativa (Diagnosi, Preventivo e Notifiche WhatsApp)",
+    "Creare video demo 05: Chiusura Commessa, Consegna e PDF Riepilogo",
+    "Creare video demo 06: Funzioni Admin Avanzate (Export ZIP, Ripristino e Pulizia Dati)",
+    "Organizzare le registrazioni demo nella cartella dedicata 'demo/recordings' del repository"
   ]
 }

@@ -3,7 +3,7 @@ package com.onlytechtake.repairapp.core.media
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import android.media.ExifInterface
+import androidx.exifinterface.media.ExifInterface
 
 fun decodeOrientedBitmap(path: String): Bitmap? {
     val source = BitmapFactory.decodeFile(path) ?: return null

@@ -3,7 +3,7 @@ package com.onlytechtake.repairapp.data.repositories
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.ExifInterface
+import androidx.exifinterface.media.ExifInterface
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import androidx.room.withTransaction
@@ -35,7 +35,7 @@ class OrderMediaRepository(
     private val attachmentPolicy: AttachmentImportPolicy = AttachmentImportPolicy(),
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
-    private val eventWriter = OrderWorkflowEventWriter(timelineEventDao = timelineEventDao)
+    private val eventWriter = OrderWorkflowEventWriter(context, timelineEventDao = timelineEventDao)
 
     fun createPhotoFile(orderId: String, orderNumber: String): File {
         val orderDirectory = File(context.filesDir, "order_media/$orderId")

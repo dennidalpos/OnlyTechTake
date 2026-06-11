@@ -5,6 +5,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.room.withTransaction
 import com.onlytechtake.repairapp.core.permissions.PermissionManager
 import com.onlytechtake.repairapp.core.security.PasswordHasher
+import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
@@ -14,6 +15,9 @@ import com.onlytechtake.repairapp.data.repositories.CustomerRepository
 import com.onlytechtake.repairapp.data.repositories.DefaultAuthRepository
 import com.onlytechtake.repairapp.data.repositories.DefaultRepairAppRepository
 import com.onlytechtake.repairapp.data.repositories.DataResetRepository
+import com.onlytechtake.repairapp.data.repositories.DefaultOrderDocumentRepository
+import com.onlytechtake.repairapp.data.repositories.OrderDocumentFileStorage
+import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
 import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
 import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
 import com.onlytechtake.repairapp.data.repositories.SignatureRepository
@@ -22,6 +26,7 @@ import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.repositories.RepairAppRepository
 import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
+import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
 
 class AppContainer(context: Context) {
     private val database = RepairAppDatabase.getInstance(context)
@@ -29,6 +34,7 @@ class AppContainer(context: Context) {
     private val authPreferences = AuthPreferences(context)
     private val passwordHasher = PasswordHasher()
     val permissionManager = PermissionManager()
+    val shareDocumentIntentFactory = ShareDocumentIntentFactory(context)
 
     val repairAppRepository: RepairAppRepository = DefaultRepairAppRepository(
         dashboardDao = database.dashboardDao(),
@@ -56,7 +62,14 @@ class AppContainer(context: Context) {
         categoryDao = database.orderCategoryDao(),
     )
 
+    val orderDocumentFileStorage = OrderDocumentFileStorage(context.applicationContext)
+
+    val orderDocumentRepository: OrderDocumentRepository = DefaultOrderDocumentRepository(
+        dao = database.orderDocumentDao(),
+    )
+
     val orderWorkflowRepository = OrderWorkflowRepository(
+        context = context.applicationContext,
         repairOrderDao = database.repairOrderDao(),
         customerDao = database.customerDao(),
         categoryDao = database.orderCategoryDao(),
@@ -102,6 +115,16 @@ class AppContainer(context: Context) {
         orderMediaRepository = orderMediaRepository,
         signatureRepository = signatureRepository,
         runAtomically = { block -> database.withTransaction { block() } },
+    )
+
+    val generateOrderStatusPdfUseCase = GenerateOrderStatusPdfUseCase(
+        workflowRepository = orderWorkflowRepository,
+        customerRepository = customerRepository,
+        catalogRepository = catalogRepository,
+        signatureRepository = signatureRepository,
+        documentRepository = orderDocumentRepository,
+        userDao = database.userDao(),
+        fileStorage = orderDocumentFileStorage,
     )
 
     val backupRepository = BackupRepository(

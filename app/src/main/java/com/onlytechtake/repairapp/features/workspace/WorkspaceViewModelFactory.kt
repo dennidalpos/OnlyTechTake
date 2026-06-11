@@ -11,8 +11,11 @@ import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
 import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
 import com.onlytechtake.repairapp.data.repositories.SignatureRepository
 import com.onlytechtake.repairapp.data.repositories.TemplateRepository
+import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
+import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
+import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
 
 class WorkspaceViewModelFactory(
     private val authRepository: AuthRepository,
@@ -26,6 +29,9 @@ class WorkspaceViewModelFactory(
     private val backupRepository: BackupRepository,
     private val dataResetRepository: DataResetRepository,
     private val createIntakeOrderUseCase: CreateIntakeOrderUseCase,
+    private val orderDocumentRepository: OrderDocumentRepository,
+    private val generateOrderStatusPdfUseCase: GenerateOrderStatusPdfUseCase,
+    private val shareDocumentIntentFactory: ShareDocumentIntentFactory,
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -44,6 +50,9 @@ class WorkspaceViewModelFactory(
             backupRepository = backupRepository,
             dataResetRepository = dataResetRepository,
             createIntakeOrderUseCase = createIntakeOrderUseCase,
+            orderDocumentRepository = orderDocumentRepository,
+            generateOrderStatusPdfUseCase = generateOrderStatusPdfUseCase,
+            shareDocumentIntentFactory = shareDocumentIntentFactory,
         ) as T
     }
 }

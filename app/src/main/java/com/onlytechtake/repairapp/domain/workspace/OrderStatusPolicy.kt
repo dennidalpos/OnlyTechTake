@@ -41,7 +41,7 @@ object OrderStatusPolicy {
         require(to in allowedTargets(from)) {
             "Transizione stato non valida: ${from.name} -> ${to.name}"
         }
-        require(!requiresClosureReason(to) || closureReason != null) {
+        require(!requiresClosureReason(to) || (closureReason != null)) {
             "Motivo chiusura obbligatorio"
         }
     }

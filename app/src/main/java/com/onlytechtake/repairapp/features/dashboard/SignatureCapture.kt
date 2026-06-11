@@ -48,6 +48,7 @@ import androidx.core.graphics.createBitmap
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.features.workspace.formatFileSize
+import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
 
 data class SignatureCaptureResult(

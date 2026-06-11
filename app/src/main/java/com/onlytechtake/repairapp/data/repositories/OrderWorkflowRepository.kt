@@ -1,7 +1,10 @@
 package com.onlytechtake.repairapp.data.repositories
 
+import android.content.Context
 import androidx.room.withTransaction
 import com.onlytechtake.repairapp.core.orders.OrderNumberGenerator
+import com.onlytechtake.repairapp.core.utils.formatEuroCents
+import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.CustomerDao
 import com.onlytechtake.repairapp.data.local.dao.MessageLogDao
@@ -15,6 +18,7 @@ import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.AuditAction
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
+import com.onlytechtake.repairapp.data.local.entities.CustomerActionStatus
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
@@ -42,6 +46,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 
 class OrderWorkflowRepository(
+    private val context: Context,
     private val repairOrderDao: RepairOrderDao,
     private val customerDao: CustomerDao,
     private val categoryDao: OrderCategoryDao,
@@ -55,7 +60,7 @@ class OrderWorkflowRepository(
     private val orderNumberGenerator: OrderNumberGenerator = OrderNumberGenerator(),
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
-    private val eventWriter = OrderWorkflowEventWriter(timelineEventDao, auditLogDao)
+    private val eventWriter = OrderWorkflowEventWriter(context, timelineEventDao, auditLogDao)
 
     fun observeOrders(actor: AuthenticatedUser, filter: OrderFilter): Flow<List<RepairOrderEntity>> {
         val assignedToUserId = if (filter.showMineOnly) actor.id else null
@@ -106,21 +111,19 @@ class OrderWorkflowRepository(
             orderMediaDao.observeForOrder(orderId),
         ) { order, timeline, messages, media ->
             order?.let { ObservedOrderData(it, timeline, messages, media) }
-        }.let { detailData ->
-            combine(detailData, signatureDao.observeForOrder(orderId)) { data, signatures ->
-                data?.let {
-                    val order = it.order
-                    OrderDetail(
-                        order = order,
-                        customer = customerDao.findById(order.customerId),
-                        category = categoryDao.findById(order.categoryId),
-                        assignedUser = order.assignedToUserId?.let { userId -> userDao.findById(userId) },
-                        timeline = it.timeline,
-                        messages = it.messages,
-                        media = it.media,
-                        signatures = signatures,
-                    )
-                }
+        }.combine(signatureDao.observeForOrder(orderId)) { data, signatures ->
+            data?.let {
+                val order = it.order
+                OrderDetail(
+                    order = order,
+                    customer = customerDao.findById(order.customerId),
+                    category = categoryDao.findById(order.categoryId),
+                    assignedUser = order.assignedToUserId?.let { userId -> userDao.findById(userId) },
+                    timeline = it.timeline,
+                    messages = it.messages,
+                    media = it.media,
+                    signatures = signatures,
+                )
             }
         }
 
@@ -184,12 +187,12 @@ class OrderWorkflowRepository(
                 val order = requireWritableOrder(actor, orderId)
                 if (order.status == status) return@inTransaction
                 OrderStatusPolicy.requireAllowed(order.status, status, closureReason)
-                if (order.status == OrderStatus.RESULT && status == OrderStatus.REPAIRING) {
+                if ((order.status == OrderStatus.RESULT) && (status == OrderStatus.REPAIRING)) {
                     require(order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
                         "Solo una diagnosi riparabile puo' passare in riparazione"
                     }
                 }
-                if (order.status == OrderStatus.RESULT && status == OrderStatus.READY_FOR_PICKUP) {
+                if ((order.status == OrderStatus.RESULT) && (status == OrderStatus.READY_FOR_PICKUP)) {
                     require(order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE) {
                         "Il passaggio diretto al ritiro richiede una diagnosi non riparabile"
                     }
@@ -226,7 +229,7 @@ class OrderWorkflowRepository(
                 val errors = input.validationErrors()
                 require(errors.isEmpty()) { errors.joinToString("\n") }
                 val order = requireWritableOrder(actor, orderId)
-                require(order.status == OrderStatus.DIAGNOSIS || order.status == OrderStatus.RESULT) {
+                require((order.status == OrderStatus.DIAGNOSIS) || (order.status == OrderStatus.RESULT)) {
                     "La diagnosi puo' essere registrata solo durante o dopo la diagnosi"
                 }
                 if (order.status != OrderStatus.RESULT) {
@@ -237,14 +240,21 @@ class OrderWorkflowRepository(
                 val estimateAmountCents = input.normalizedEstimateAmountCents()
                 val details = listOfNotNull(
                     "Sintesi risultato: ${input.summary.trim()}",
-                    "Esito diagnosi: ${input.diagnosisOutcome.label()}",
-                    estimateAmountCents?.let { "Importo riparazione: ${formatEuroCents(it)}" },
+                    "Esito diagnosi: ${input.diagnosisOutcome.label(context)}",
+                    estimateAmountCents?.let { "Importo riparazione: ${it.formatEuroCents()}" },
                 ).joinToString("\n")
+
+                val customerActionStatus = when (input.diagnosisOutcome) {
+                    DiagnosisOutcome.REPAIRABLE -> CustomerActionStatus.WAITING_ACCEPTANCE
+                    DiagnosisOutcome.NOT_REPAIRABLE -> CustomerActionStatus.TO_NOTIFY
+                }
+
                 repairOrderDao.upsert(
                     order.copy(
                         status = OrderStatus.RESULT,
                         diagnosisOutcome = input.diagnosisOutcome,
                         estimateAmountCents = estimateAmountCents,
+                        customerActionStatus = customerActionStatus,
                         updatedAt = now,
                     ),
                 )
@@ -257,6 +267,7 @@ class OrderWorkflowRepository(
                     closureReason = null,
                     now = now,
                 )
+                eventWriter.customerActionStatusChanged(orderId, actor.id, customerActionStatus, now)
             }
         }
 
@@ -369,9 +380,15 @@ class OrderWorkflowRepository(
                     CustomerFeedbackType.REJECT -> OrderStatus.CLOSED
                     else -> order.status
                 }
-                val closureReason = when {
-                    input.closureReason != null -> input.closureReason
-                    targetStatus == OrderStatus.CLOSED -> ClosureReason.CUSTOMER_DECLINED
+                val customerActionStatus = when (input.feedback) {
+                    CustomerFeedbackType.ACCEPT -> CustomerActionStatus.ACCEPTED
+                    CustomerFeedbackType.REJECT -> CustomerActionStatus.REJECTED
+                    CustomerFeedbackType.READ -> CustomerActionStatus.NOTIFIED
+                    CustomerFeedbackType.ASK_INFO -> CustomerActionStatus.ASKED_INFO
+                    CustomerFeedbackType.CALL_ME -> CustomerActionStatus.CALL_REQUESTED
+                }
+                val closureReason = input.closureReason ?: when (targetStatus) {
+                    OrderStatus.CLOSED -> ClosureReason.CUSTOMER_DECLINED
                     else -> null
                 }
                 if (targetStatus != order.status) {
@@ -380,6 +397,9 @@ class OrderWorkflowRepository(
                 repairOrderDao.upsert(
                     order.copy(
                         status = targetStatus,
+                        customerActionStatus = customerActionStatus,
+                        closeNote = if (targetStatus == OrderStatus.CLOSED) input.note.trim() else order.closeNote,
+                        closedByUserId = if (targetStatus == OrderStatus.CLOSED) actor.id else order.closedByUserId,
                         updatedAt = now,
                         closedAt = if (targetStatus == OrderStatus.CLOSED) now else order.closedAt,
                         closureReason = if (targetStatus == OrderStatus.CLOSED) closureReason else order.closureReason,
@@ -393,6 +413,9 @@ class OrderWorkflowRepository(
                     targetStatus = targetStatus,
                     now = now,
                 )
+                if (customerActionStatus != order.customerActionStatus) {
+                    eventWriter.customerActionStatusChanged(orderId, actor.id, customerActionStatus, now)
+                }
                 messageLogDao.findLatestForOrder(orderId)?.let { latest ->
                     messageLogDao.upsert(
                         latest.copy(
@@ -404,10 +427,59 @@ class OrderWorkflowRepository(
             }
         }
 
+    suspend fun closeOrder(
+        actor: AuthenticatedUser,
+        orderId: String,
+        reason: ClosureReason,
+        note: String,
+    ): Result<Unit> =
+        runCatching {
+            inTransaction {
+                require(note.isNotBlank()) { "Nota di chiusura obbligatoria" }
+                val order = requireWritableOrder(actor, orderId)
+                
+                val now = clockMillis()
+                val oldStatus = order.status
+                val targetStatus = OrderStatus.CLOSED
+
+                OrderStatusPolicy.requireAllowed(oldStatus, targetStatus, reason)
+
+                repairOrderDao.upsert(
+                    order.copy(
+                        status = targetStatus,
+                        closedAt = now,
+                        closureReason = reason,
+                        closeNote = note.trim(),
+                        closedByUserId = actor.id,
+                        updatedAt = now,
+                    ),
+                )
+
+                eventWriter.statusChanged(
+                    orderId = orderId,
+                    actorUserId = actor.id,
+                    oldStatus = oldStatus,
+                    newStatus = targetStatus,
+                    note = note.trim(),
+                    closureReason = reason,
+                    now = now,
+                )
+            }
+        }
+
+    suspend fun recordPdfShared(actor: AuthenticatedUser, orderId: String, fileName: String): Result<Unit> =
+        runCatching {
+            inTransaction {
+                requireWritableOrder(actor, orderId)
+                val now = clockMillis()
+                eventWriter.pdfShared(orderId, actor.id, fileName, now)
+            }
+        }
+
     private suspend fun requireWritableOrder(actor: AuthenticatedUser, orderId: String): RepairOrderEntity {
         val order = requireNotNull(repairOrderDao.findById(orderId)) { "Commessa non trovata" }
         require(order.deletedAt == null) { "Commessa archiviata" }
-        require(actor.role == UserRole.ADMIN || order.assignedToUserId == actor.id) {
+        require((actor.role == UserRole.ADMIN) || (order.assignedToUserId == actor.id)) {
             "Operatore non assegnato"
         }
         return order
@@ -446,12 +518,3 @@ class OrderWorkflowRepository(
     }
 
 }
-
-private fun formatEuroCents(cents: Long): String =
-    "EUR ${cents / 100},${(cents % 100).toString().padStart(2, '0')}"
-
-private fun DiagnosisOutcome.label(): String =
-    when (this) {
-        DiagnosisOutcome.REPAIRABLE -> "Riparabile"
-        DiagnosisOutcome.NOT_REPAIRABLE -> "Non riparabile"
-    }

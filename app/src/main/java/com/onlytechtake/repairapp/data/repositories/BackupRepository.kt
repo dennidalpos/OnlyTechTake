@@ -4,6 +4,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.pdf.PdfDocument
 import android.net.Uri
+import com.onlytechtake.repairapp.core.utils.displayName
+import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.MessageTemplateDao
@@ -44,7 +46,7 @@ class BackupRepository(
     private val sessionStore: InMemorySessionStore? = null,
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
-    private val eventWriter = OrderWorkflowEventWriter(auditLogDao = auditLogDao)
+    private val eventWriter = OrderWorkflowEventWriter(context, auditLogDao = auditLogDao)
 
     suspend fun exportConfiguration(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
         runCatching {
@@ -124,18 +126,18 @@ class BackupRepository(
         uri: Uri,
     ): Result<Unit> =
         runCatching {
-            require(detail.order.deletedAt == null || actor.role == UserRole.ADMIN) { "Commessa archiviata non esportabile" }
+            require((detail.order.deletedAt == null) || (actor.role == UserRole.ADMIN)) { "Commessa archiviata non esportabile" }
             val document = PdfDocument()
             try {
                 val writer = PdfTextWriter(document)
                 writer.title("Riepilogo commessa ${detail.order.orderNumber}")
                 writer.line("Numero: ${detail.order.orderNumber}")
                 writer.line("Titolo: ${detail.order.title}")
-                writer.line("Stato: ${detail.order.status.label()}")
+                writer.line("Stato: ${detail.order.status.label(context)}")
                 detail.order.closureReason?.let { reason ->
-                    writer.line("Motivo chiusura: ${reason.label()}")
+                    writer.line("Motivo chiusura: ${reason.label(context)}")
                 }
-                writer.line("Cliente: ${detail.customer.displayName()}")
+                writer.line("Cliente: ${detail.customer.displayName(context)}")
                 writer.line("Categoria: ${detail.category?.name.orEmpty().ifBlank { "Nessuna" }}")
                 writer.line("Operatore: ${detail.assignedUser?.displayName.orEmpty().ifBlank { "Non assegnato" }}")
                 writer.line("Data creazione: ${formatTime(detail.order.createdAt)}")
@@ -278,19 +280,25 @@ class BackupRepository(
             appendLine("{")
             appendLine("  \"exportedAt\": ${jsonString(formatTime(clockMillis()))},")
             appendLine("  \"categories\": [")
-            appendLine(categories.joinToString(",\n") { category ->
-                "    {\"id\": ${jsonString(category.id)}, \"parentId\": ${jsonString(category.parentId)}, \"level\": ${category.level}, \"name\": ${jsonString(category.name)}, \"active\": ${category.active}}"
-            })
+            appendLine(
+                categories.joinToString(",\n") { category ->
+                    "    {\"id\": ${jsonString(category.id)}, \"parentId\": ${jsonString(category.parentId)}, \"level\": ${category.level}, \"name\": ${jsonString(category.name)}, \"active\": ${category.active}}"
+                },
+            )
             appendLine("  ],")
             appendLine("  \"templates\": [")
-            appendLine(templates.joinToString(",\n") { template ->
-                "    {\"code\": ${jsonString(template.code)}, \"title\": ${jsonString(template.title)}, \"channel\": ${jsonString(template.channel.name)}, \"active\": ${template.active}, \"version\": ${template.version}, \"body\": ${jsonString(template.body)}}"
-            })
+            appendLine(
+                templates.joinToString(",\n") { template ->
+                    "    {\"code\": ${jsonString(template.code)}, \"title\": ${jsonString(template.title)}, \"channel\": ${jsonString(template.channel.name)}, \"active\": ${template.active}, \"version\": ${template.version}, \"body\": ${jsonString(template.body)}}"
+                },
+            )
             appendLine("  ],")
             appendLine("  \"settings\": [")
-            appendLine(settings.joinToString(",\n") { setting ->
-                "    {\"key\": ${jsonString(setting.key)}, \"value\": ${jsonString(setting.value)}, \"updatedAt\": ${setting.updatedAt}}"
-            })
+            appendLine(
+                settings.joinToString(",\n") { setting ->
+                    "    {\"key\": ${jsonString(setting.key)}, \"value\": ${jsonString(setting.value)}, \"updatedAt\": ${setting.updatedAt}}"
+                },
+            )
             appendLine("  ]")
             appendLine("}")
         }
@@ -360,37 +368,6 @@ private fun ZipOutputStream.putFileEntry(file: File, entryName: String) {
     file.inputStream().use { input -> input.copyTo(this) }
     closeEntry()
 }
-
-private fun CustomerEntity?.displayName(): String =
-    when (val customer = this) {
-        null -> "Cliente non disponibile"
-        else -> when (customer.type) {
-            CustomerType.PRIVATE -> listOfNotNull(customer.firstName, customer.lastName)
-                .joinToString(" ")
-                .ifBlank { "Privato senza nome" }
-            CustomerType.BUSINESS -> customer.companyName.orEmpty().ifBlank { "Azienda senza nome" }
-        }
-    }
-
-private fun OrderStatus.label(): String =
-    when (this) {
-        OrderStatus.OPEN -> "Aperta"
-        OrderStatus.IN_PROGRESS -> "In lavorazione"
-        OrderStatus.DIAGNOSIS -> "In diagnosi"
-        OrderStatus.RESULT -> "Risultato"
-        OrderStatus.REPAIRING -> "In riparazione"
-        OrderStatus.READY_FOR_PICKUP -> "Pronta al ritiro"
-        OrderStatus.CLOSED -> "Chiusa"
-    }
-
-private fun ClosureReason.label(): String =
-    when (this) {
-        ClosureReason.COMPLETED -> "Completata"
-        ClosureReason.CUSTOMER_DECLINED -> "Rifiutata dal cliente"
-        ClosureReason.NOT_REPAIRABLE -> "Non riparabile"
-        ClosureReason.CANCELLED -> "Annullata"
-        ClosureReason.OTHER -> "Altro"
-    }
 
 private fun formatTimelineEvent(event: TimelineEventEntity): String {
     val parts = buildList {

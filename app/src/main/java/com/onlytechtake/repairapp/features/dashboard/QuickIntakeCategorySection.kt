@@ -22,6 +22,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
+import com.onlytechtake.repairapp.features.workspace.ButtonTone
+import com.onlytechtake.repairapp.features.workspace.categoryPath
 
 @Composable
 fun QuickIntakeCategorySection(
@@ -67,18 +69,18 @@ fun QuickIntakeCategorySection(
                     Text("Selezionata: $selectedPath", color = MaterialTheme.colorScheme.primary)
                 }
                 ActionRow {
-                    TextButton(
+                    TouchButton(
+                        text = "Radice",
+                        tone = if (currentParentId == null) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
                         enabled = currentParentId != null,
                         onClick = { currentParentId = null },
-                    ) {
-                        Text("Radice")
-                    }
+                    )
                     currentParent?.let { parent ->
-                        TextButton(
+                        TouchButton(
+                            text = "Indietro",
+                            tone = ButtonTone.NEUTRAL,
                             onClick = { currentParentId = parent.parentId },
-                        ) {
-                            Text("Livello precedente")
-                        }
+                        )
                     }
                 }
                 Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
@@ -136,19 +138,6 @@ fun QuickIntakeCategorySection(
             }
         }
     }
-}
-
-internal fun categoryPath(categories: List<OrderCategoryEntity>, categoryId: String?): String? {
-    if (categoryId == null) return null
-    val byId = categories.associateBy { it.id }
-    val names = mutableListOf<String>()
-    val visited = mutableSetOf<String>()
-    var current = byId[categoryId]
-    while (current != null && visited.add(current.id)) {
-        names += current.name
-        current = current.parentId?.let(byId::get)
-    }
-    return names.asReversed().joinToString(" > ").ifBlank { null }
 }
 
 private fun categoryBreadcrumb(categories: List<OrderCategoryEntity>, parentId: String?): String =

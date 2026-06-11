@@ -31,35 +31,59 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.utils.displayName
+import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.data.local.entities.ExportDestination
 import com.onlytechtake.repairapp.features.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
+import com.onlytechtake.repairapp.features.workspace.ButtonTone
+import com.onlytechtake.repairapp.features.workspace.applyStatusAction
 import com.onlytechtake.repairapp.features.workspace.attachmentCounts
 import com.onlytechtake.repairapp.features.workspace.availableOrderStatusActions
 import com.onlytechtake.repairapp.features.workspace.canConfirmDiagnosisResult
 import com.onlytechtake.repairapp.features.workspace.diagnosisOutcomeLabel
 import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
-import com.onlytechtake.repairapp.features.workspace.label
 import com.onlytechtake.repairapp.features.workspace.nextActionLabel
+import com.onlytechtake.repairapp.features.workspace.label as attachmentLabel
+import com.onlytechtake.repairapp.features.workspace.parseEuroCentsOrNull
 import com.onlytechtake.repairapp.features.workspace.requiresConfirmation
 import com.onlytechtake.repairapp.features.workspace.shouldShowDiagnosisEstimate
 import com.onlytechtake.repairapp.features.workspace.statusTemplateCode
+import com.onlytechtake.repairapp.features.workspace.tone
 
 @Composable
 fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
     val detail by viewModel.selectedOrder.collectAsState()
+    val documents by viewModel.selectedOrderDocuments.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
     val templates by viewModel.templates.collectAsState()
+    val exportDestination by viewModel.exportDestination.collectAsState()
     val context = LocalContext.current
+
+    val exitConfirmTitle = stringResource(R.string.order_exit_confirm_title)
+    val exitConfirmText = stringResource(R.string.order_exit_confirm_text)
+    val exportLocal = stringResource(R.string.order_export_local)
+    val exportCloud = stringResource(R.string.order_export_cloud)
+    val exportPdfTitle = stringResource(R.string.order_export_pdf_title)
+    val exportPdfTextTemplate = stringResource(R.string.order_export_pdf_text)
+    val missingSignatureTitle = stringResource(R.string.order_pdf_missing_signature_title)
+    val missingSignatureText = stringResource(R.string.order_pdf_missing_signature_text)
+    val waOpenConfirmTitle = stringResource(R.string.order_wa_open_confirm_title)
+    val waOpenConfirmText = stringResource(R.string.order_wa_open_confirm_text)
+    val waSentConfirmTitle = stringResource(R.string.order_wa_sent_confirm_title)
+    val waSentConfirmText = stringResource(R.string.order_wa_sent_confirm_text)
+
     var note by rememberSaveable { mutableStateOf("") }
     var confirmTitle by remember { mutableStateOf<String?>(null) }
     var confirmText by remember { mutableStateOf("") }
@@ -83,8 +107,8 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             modifier = Modifier.fillMaxSize().padding(DashboardSpacing.screenPadding),
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
         ) {
-            Text("Nessuna commessa selezionata")
-            TouchButton(text = "Commesse", onClick = { viewModel.navigateTo(WorkspaceDestination.ORDERS) })
+            Text(stringResource(R.string.order_none_selected))
+            TouchButton(text = stringResource(R.string.dashboard_orders), onClick = { viewModel.navigateTo(WorkspaceDestination.ORDERS) })
         }
         return
     }
@@ -97,6 +121,13 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         onDispose { viewModel.clearPreparedMessage() }
     }
 
+    LaunchedEffect(uiState.pendingShareIntent) {
+        uiState.pendingShareIntent?.let { intent ->
+            context.startActivity(Intent.createChooser(intent, "Invia stato avanzamento"))
+            viewModel.clearPendingShareIntent()
+        }
+    }
+
     fun requestConfirm(title: String, text: String, action: () -> Unit) {
         confirmTitle = title
         confirmText = text
@@ -106,7 +137,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
     fun exitOrderDetail() {
         val hasUnsavedLocalWork = note.isNotBlank() || uiState.preparedMessage != null
         if (hasUnsavedLocalWork) {
-            requestConfirm("Uscire dalla scheda?", "Nota non salvata o anteprima WhatsApp verranno scartate.") {
+            requestConfirm(exitConfirmTitle, exitConfirmText) {
                 note = ""
                 viewModel.selectOrder(null)
             }
@@ -121,6 +152,81 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             .padding(DashboardSpacing.screenPadding),
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
+        // --- WHATSAPP SECTION MOVED TO TOP ---
+        item {
+            val templateCode = statusTemplateCode(selected.order)
+            val templateTitle = templates.firstOrNull { it.active && it.code == templateCode }?.title ?: templateCode
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = androidx.compose.material3.CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f)
+                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                ) {
+                    SectionTitle("WhatsApp")
+                    OperatorText(
+                        text = "Invio rapido per stato: ${selected.order.status.label(context)}\nTemplate: $templateTitle",
+                    )
+                    TouchButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.order_whatsapp_send),
+                        tone = ButtonTone.INFO,
+                        onClick = { viewModel.prepareMessage(selected.order.id, templateCode) },
+                    )
+                }
+            }
+        }
+
+        uiState.preparedMessage
+            ?.takeIf { it.orderId == selected.order.id }
+            ?.let { prepared ->
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = androidx.compose.material3.CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                    )
+                ) {
+                    Column(
+                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                ) {
+                        SectionTitle(stringResource(R.string.order_wa_preview_title))
+                        Field(uiState.preparedMessageBody, viewModel::updatePreparedMessageBody, stringResource(R.string.order_wa_message_label))
+                        ActionRow {
+                            TouchButton(
+                                text = stringResource(R.string.order_wa_open),
+                                tone = ButtonTone.INFO,
+                                onClick = {
+                                    requestConfirm(waOpenConfirmTitle, waOpenConfirmText) {
+                                        viewModel.recordPreparedMessage()
+                                        val intent = Intent(
+                                            Intent.ACTION_VIEW,
+                                            "https://wa.me/${prepared.phone}?text=${Uri.encode(uiState.preparedMessageBody)}".toUri(),
+                                        )
+                                        context.startActivity(intent)
+                                    }
+                                },
+                            )
+                            TouchButton(
+                                text = stringResource(R.string.order_wa_sent),
+                                tone = ButtonTone.SUCCESS,
+                                onClick = { requestConfirm(waSentConfirmTitle, waSentConfirmText) { viewModel.confirmSentMessage() } },
+                            )
+                            TouchButton(
+                                text = stringResource(R.string.order_wa_close_preview),
+                                tone = ButtonTone.NEUTRAL,
+                                onClick = viewModel::clearPreparedMessage,
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
         item {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(
@@ -128,31 +234,37 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                 ) {
                     ActionRow {
-                        TouchButton(text = "Esci", tone = ButtonTone.NEUTRAL, onClick = ::exitOrderDetail)
+                        TouchButton(text = stringResource(R.string.order_exit), tone = ButtonTone.NEUTRAL, onClick = ::exitOrderDetail)
                         TouchButton(
-                            text = "PDF",
+                            text = stringResource(R.string.order_pdf),
                             tone = ButtonTone.INFO,
                             onClick = {
-                                requestConfirm("Esportare PDF?", "Creare il riepilogo commessa tramite selettore di sistema?") {
+                                val destMsg = if (exportDestination == ExportDestination.LOCAL) exportLocal else exportCloud
+                                requestConfirm(exportPdfTitle, exportPdfTextTemplate.format(destMsg)) {
                                     exportPdfLauncher.launch("${selected.order.orderNumber}.pdf")
                                 }
                             },
                         )
                     }
-                    SectionTitle("Scheda commessa")
+                    SectionTitle(stringResource(R.string.order_detail_title))
                     Text("${selected.order.orderNumber} - ${selected.order.title}", style = MaterialTheme.typography.titleMedium)
-                    Text("Cliente: ${selected.customer?.displayName().orEmpty()}")
-                    OperatorText(text = "Stato corrente: ${selected.order.status.label()}")
-                    OperatorText(text = "Prossima azione: ${nextActionLabel(selected.order)}")
+                    Text(
+                        stringResource(
+                            R.string.orders_customer_label,
+                            selected.customer?.displayName(context).orEmpty()
+                        )
+                    )
+                    OperatorText(text = stringResource(R.string.order_status_current, selected.order.status.label(context)))
+                    OperatorText(text = stringResource(R.string.orders_next_action_label, nextActionLabel(selected.order)))
                     selected.order.diagnosisOutcome?.let {
-                        Text("Esito diagnosi: ${it.diagnosisOutcomeLabel()}")
+                        Text(stringResource(R.string.order_diagnosis_outcome_label, it.label(context)))
                     }
-                    selected.order.closureReason?.let { Text("Motivo chiusura: ${it.label()}") }
+                    selected.order.closureReason?.let { Text(stringResource(R.string.closure_reason_prefix, it.label(context))) }
                     Text("Operatore: ${selected.assignedUser?.displayName.orEmpty()}")
-                    Text("Aggiornata: ${formatUiDateTime(selected.order.updatedAt)}")
-                    Text(attachmentCounts(selected.media, selected.signatures).label())
+                    Text(stringResource(R.string.orders_updated_label, formatUiDateTime(selected.order.updatedAt)))
+                    Text(attachmentCounts(selected.media, selected.signatures).attachmentLabel())
                     selected.order.description?.takeIf { it.isNotBlank() }?.let {
-                        Text("Problema: $it")
+                        Text(stringResource(R.string.order_problem_label, it))
                     }
                 }
             }
@@ -259,14 +371,14 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                 ) {
-                    Text("Azioni", style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.order_actions), style = MaterialTheme.typography.titleMedium)
                     val actions = availableOrderStatusActions(selected.order.status)
                         .filterNot {
                             selected.order.status == OrderStatus.RESULT &&
                                 it in setOf(OrderStatusAction.START_REPAIR, OrderStatusAction.READY_FOR_PICKUP)
                         }
                     if (actions.isEmpty()) {
-                        Text("Nessuna azione disponibile per questo stato.")
+                        Text(stringResource(R.string.order_no_actions))
                     } else {
                         ActionRow {
                             actions.forEach { action ->
@@ -296,11 +408,11 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                 ) {
-                    Text("Note interne", style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.order_internal_notes), style = MaterialTheme.typography.titleMedium)
                     selected.order.internalNotes?.takeIf { it.isNotBlank() }?.let { OperatorText(it) }
-                    Field(note, { note = it }, "Nuova nota")
+                    Field(note, { note = it }, stringResource(R.string.order_new_note))
                     TouchButton(
-                        text = "Salva nota",
+                        text = stringResource(R.string.order_save_note),
                         tone = ButtonTone.SUCCESS,
                         enabled = note.isNotBlank(),
                         onClick = {
@@ -322,63 +434,57 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         }
 
         item {
-            val templateCode = statusTemplateCode(selected.order)
-            val templateTitle = templates.firstOrNull { it.active && it.code == templateCode }?.title ?: templateCode
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                 ) {
-                    SectionTitle("WhatsApp")
-                    OperatorText(
-                        text = "Stato attuale: ${selected.order.status.label()}\nTemplate: $templateTitle",
-                    )
-                    TouchButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "Invia stato WhatsApp",
-                        tone = ButtonTone.INFO,
-                        onClick = { viewModel.prepareMessage(selected.order.id, templateCode) },
-                    )
-                }
-            }
-        }
-
-        uiState.preparedMessage
-            ?.takeIf { it.orderId == selected.order.id }
-            ?.let { prepared ->
-            item {
-                Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                ) {
-                        SectionTitle("Anteprima WhatsApp")
-                        Field(uiState.preparedMessageBody, viewModel::updatePreparedMessageBody, "Messaggio")
-                        ActionRow {
-                            TouchButton(
-                                text = "Apri WhatsApp",
-                                tone = ButtonTone.INFO,
-                                onClick = {
-                                    requestConfirm("Aprire WhatsApp?", "Registrare la preparazione e aprire WhatsApp per l'invio manuale?") {
-                                        viewModel.recordPreparedMessage()
-                                        val intent = Intent(
-                                            Intent.ACTION_VIEW,
-                                            "https://wa.me/${prepared.phone}?text=${Uri.encode(uiState.preparedMessageBody)}".toUri(),
-                                        )
-                                        context.startActivity(intent)
+                    Text(stringResource(R.string.order_customer_documents), style = MaterialTheme.typography.titleMedium)
+                    ActionRow {
+                        TouchButton(
+                            text = stringResource(R.string.order_generate_status_pdf),
+                            tone = ButtonTone.INFO,
+                            enabled = !uiState.isGeneratingStatusPdf,
+                            onClick = {
+                                if (selected.signatures.isEmpty()) {
+                                    requestConfirm(missingSignatureTitle, missingSignatureText) {
+                                        viewModel.onGenerateStatusPdfClicked(selected.order.id, includeSignature = false)
                                     }
-                                },
-                            )
-                            TouchButton(
-                                text = "Inviato",
-                                tone = ButtonTone.SUCCESS,
-                                onClick = { requestConfirm("Invio confermato?", "Registrare che l'operatore ha inviato manualmente il messaggio al cliente?") { viewModel.confirmSentMessage() } },
-                            )
-                            TouchButton(
-                                text = "Chiudi anteprima",
-                                tone = ButtonTone.NEUTRAL,
-                                onClick = viewModel::clearPreparedMessage,
-                            )
+                                } else {
+                                    viewModel.onGenerateStatusPdfClicked(selected.order.id, includeSignature = true)
+                                }
+                            },
+                        )
+                    }
+                    if (uiState.isGeneratingStatusPdf) {
+                        Text(stringResource(R.string.order_generating_pdf), style = MaterialTheme.typography.bodySmall)
+                    }
+                    uiState.statusPdfError?.let { error ->
+                        Text("Errore: $error", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                    }
+
+                    if (documents.isNotEmpty()) {
+                        Text(stringResource(R.string.order_document_history), style = MaterialTheme.typography.bodySmall)
+                        documents.forEach { doc ->
+                            Row(
+                                modifier = Modifier.fillMaxWidth().clickable { viewModel.onShareDocumentClicked(doc.id) },
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(doc.fileName, style = MaterialTheme.typography.bodySmall)
+                                    Text(
+                                        text = stringResource(R.string.order_document_generated, formatUiDateTime(doc.createdAt)) + (if (doc.sharedAt != null) stringResource(R.string.order_document_sent) else ""),
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.secondary
+                                    )
+                                }
+                                TouchButton(
+                                    text = stringResource(R.string.order_share),
+                                    tone = ButtonTone.NEUTRAL,
+                                    onClick = { viewModel.onShareDocumentClicked(doc.id) }
+                                )
+                            }
                         }
                     }
                 }
@@ -387,7 +493,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
 
         item {
             Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
-                SectionTitle("Timeline")
+                SectionTitle(stringResource(R.string.order_timeline))
                 selected.timeline.forEach { event ->
                     CompactExpandableRow(
                         title = event.title,
@@ -415,18 +521,18 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                         confirmAction = null
                     },
                 ) {
-                    Text("Conferma")
+                    Text(stringResource(R.string.confirm))
                 }
             },
             dismissButton = {
-                TextButton(
+                TouchButton(
+                    text = stringResource(R.string.customer_cancel),
+                    tone = ButtonTone.NEUTRAL,
                     onClick = {
                         confirmTitle = null
                         confirmAction = null
                     },
-                ) {
-                    Text("Annulla")
-                }
+                )
             },
         )
     }
@@ -438,13 +544,21 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             onDismissRequest = { statusAction = null },
             title = { Text(action.label) },
             text = {
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text("Aggiornare lo stato della commessa?")
+                Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
+                    Text(stringResource(R.string.order_confirm_status_update))
                     if (isResultStep) {
-                        Field(resultSummary, { resultSummary = it }, "Sintesi risultato", required = true, showError = resultSummary.isBlank(), imeAction = ImeAction.Next, testTag = RepairAppTestTags.StatusResultSummaryField)
+                        Field(
+                            value = resultSummary,
+                            onValueChange = { resultSummary = it },
+                            label = stringResource(R.string.order_result_summary),
+                            required = true,
+                            showError = resultSummary.isBlank(),
+                            imeAction = ImeAction.Next,
+                            testTag = RepairAppTestTags.StatusResultSummaryField,
+                        )
                         Text("Esito diagnosi", style = MaterialTheme.typography.titleSmall)
                         QuoteDecisionRow(
-                            text = "Riparabile",
+                            text = stringResource(R.string.order_diagnosis_repairable),
                             checked = diagnosisOutcome == DiagnosisOutcome.REPAIRABLE,
                             testTag = RepairAppTestTags.DiagnosisRepairableToggle,
                             onClick = {
@@ -452,7 +566,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                             },
                         )
                         QuoteDecisionRow(
-                            text = "Non riparabile",
+                            text = stringResource(R.string.order_diagnosis_not_repairable),
                             checked = diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE,
                             testTag = RepairAppTestTags.DiagnosisNotRepairableToggle,
                             onClick = {
@@ -462,9 +576,9 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                         )
                         if (shouldShowDiagnosisEstimate(diagnosisOutcome)) {
                             Field(
-                                resultAmount,
-                                { resultAmount = it },
-                                "Importo preventivo",
+                                value = resultAmount,
+                                onValueChange = { resultAmount = it },
+                                label = stringResource(R.string.order_estimate_amount),
                                 required = true,
                                 showError = parseEuroCentsOrNull(resultAmount)?.let { it <= 0L } != false,
                                 singleLine = true,
@@ -475,9 +589,9 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                         }
                     } else {
                         Field(
-                            statusNote,
-                            { statusNote = it },
-                            if (isClosure) "Nota chiusura" else "Nota opzionale",
+                            value = statusNote,
+                            onValueChange = { statusNote = it },
+                            label = if (isClosure) stringResource(R.string.order_closure_note_label) else stringResource(R.string.order_status_note_label),
                             required = isClosure,
                             showError = isClosure && statusNote.isBlank(),
                             imeAction = ImeAction.Done,
@@ -485,16 +599,15 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                         )
                     }
                     if (isClosure) {
-                        Text("Motivo chiusura", style = MaterialTheme.typography.titleSmall)
+                        Text(stringResource(R.string.order_closure_reason_title), style = MaterialTheme.typography.titleSmall)
                         ActionRow {
-                            ClosureReason.entries
-                                .forEach { reason ->
+                            ClosureReason.entries.forEach { reason ->
                                 val selectedReason = closureReason == reason
                                 TouchButton(
-                                    text = reason.label(),
+                                    text = reason.label(context),
                                     tone = if (selectedReason) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
                                     selected = selectedReason,
-                                    stateDescription = if (selectedReason) "Motivo selezionato" else "Motivo non selezionato",
+                                    stateDescription = if (selectedReason) stringResource(R.string.state_selected) else stringResource(R.string.state_not_selected),
                                     testTag = RepairAppTestTags.closureReason(reason.name),
                                     onClick = { closureReason = reason },
                                 )
@@ -529,14 +642,36 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     },
                     modifier = Modifier.testTag(RepairAppTestTags.StatusDialogConfirmButton),
                 ) {
-                    Text("Conferma")
+                    Text(stringResource(R.string.confirm))
                 }
             },
             dismissButton = {
-                TextButton(onClick = { statusAction = null }) {
-                    Text("Annulla")
+                TouchButton(
+                    text = stringResource(R.string.customer_cancel),
+                    tone = ButtonTone.NEUTRAL,
+                    onClick = { statusAction = null }
+                )
+            },
+        )
+    }
+
+    if (uiState.showPdfSentConfirmation) {
+        AlertDialog(
+            onDismissRequest = { viewModel.onPdfSentDismissed() },
+            title = { Text(stringResource(R.string.order_pdf_sent_confirm_title)) },
+            text = { Text(stringResource(R.string.order_pdf_sent_confirm_text)) },
+            confirmButton = {
+                TextButton(onClick = { 
+                    viewModel.onPdfSentConfirmed()
+                }) {
+                    Text(stringResource(R.string.yes_confirmed))
                 }
             },
+            dismissButton = {
+                TextButton(onClick = { viewModel.onPdfSentDismissed() }) {
+                    Text(stringResource(R.string.no_cancel))
+                }
+            }
         )
     }
 }
@@ -553,80 +688,11 @@ private fun QuoteDecisionRow(
             .fillMaxWidth()
             .testTag(testTag)
             .clickable(onClick = onClick)
-            .padding(vertical = 4.dp),
+            .padding(vertical = DashboardSpacing.compactGap / 2),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
     ) {
         Checkbox(checked = checked, onCheckedChange = { onClick() })
-        Text(text)
+        Text(text, style = MaterialTheme.typography.bodyLarge)
     }
-}
-
-private fun applyStatusAction(
-    action: OrderStatusAction,
-    orderId: String,
-    viewModel: WorkspaceViewModel,
-    note: String,
-    closureReason: ClosureReason?,
-    resultSummary: String,
-    resultAmount: String,
-    diagnosisOutcome: DiagnosisOutcome?,
-) {
-    if (action == OrderStatusAction.RECORD_RESULT) {
-        val outcome = diagnosisOutcome ?: return
-        val estimateAmountCents = parseEuroCentsOrNull(resultAmount)
-        viewModel.recordResult(
-            orderId = orderId,
-            summary = resultSummary,
-            diagnosisOutcome = outcome,
-            estimateAmountCents = estimateAmountCents,
-            onSuccess = {
-                viewModel.prepareMessage(
-                    orderId,
-                    if (outcome == DiagnosisOutcome.REPAIRABLE) {
-                        "whatsapp_preventivo_intervento"
-                    } else {
-                        "whatsapp_non_riparabile"
-                    },
-                )
-            },
-        )
-        return
-    }
-    val targetStatus = action.targetStatus ?: return
-    viewModel.changeStatus(
-        orderId = orderId,
-        status = targetStatus,
-        note = note,
-        closureReason = closureReason,
-        onSuccess = {
-            if (targetStatus == OrderStatus.CLOSED && closureReason == ClosureReason.NOT_REPAIRABLE) {
-                viewModel.prepareMessage(orderId, "whatsapp_non_riparabile")
-            } else if (targetStatus == OrderStatus.CLOSED) {
-                viewModel.selectOrder(null)
-            }
-        },
-    )
-}
-
-private fun OrderStatusAction.tone(): ButtonTone =
-    when (this) {
-        OrderStatusAction.CLOSE_ORDER -> ButtonTone.DANGER
-        OrderStatusAction.READY_FOR_PICKUP -> ButtonTone.SUCCESS
-        OrderStatusAction.RECORD_RESULT -> ButtonTone.INFO
-        else -> ButtonTone.PRIMARY
-    }
-
-private fun parseEuroCentsOrNull(value: String): Long? {
-    val normalized = value.trim().replace(',', '.')
-    if (normalized.isBlank()) return null
-    val parts = normalized.split('.', limit = 2)
-    val euros = parts.getOrNull(0)?.filter(Char::isDigit)?.toLongOrNull() ?: return null
-    val cents = parts.getOrNull(1)
-        ?.filter(Char::isDigit)
-        ?.take(2)
-        ?.padEnd(2, '0')
-        ?.toLongOrNull()
-        ?: 0L
-    return euros * 100L + cents
 }

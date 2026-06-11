@@ -3,12 +3,14 @@ package com.onlytechtake.repairapp.data.local.db
 import androidx.room.TypeConverter
 import com.onlytechtake.repairapp.data.local.entities.AuditAction
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
+import com.onlytechtake.repairapp.data.local.entities.CustomerActionStatus
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.MessageChannel
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.data.local.entities.MessageStatus
+import com.onlytechtake.repairapp.data.local.entities.OrderDocumentType
 import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventType
@@ -29,6 +31,12 @@ class RoomConverters {
 
     @TypeConverter fun toClosureReason(value: String?): ClosureReason? = enumValueOrNull<ClosureReason>(value)
     @TypeConverter fun fromClosureReason(value: ClosureReason?): String? = value?.name
+
+    @TypeConverter fun toCustomerActionStatus(value: String?): CustomerActionStatus? = enumValueOrNull<CustomerActionStatus>(value)
+    @TypeConverter fun fromCustomerActionStatus(value: CustomerActionStatus?): String? = value?.name
+
+    @TypeConverter fun toOrderDocumentType(value: String?): OrderDocumentType? = enumValueOrNull<OrderDocumentType>(value)
+    @TypeConverter fun fromOrderDocumentType(value: OrderDocumentType?): String? = value?.name
 
     @TypeConverter fun toOrderPriority(value: String?): OrderPriority? = enumValueOrNull<OrderPriority>(value)
     @TypeConverter fun fromOrderPriority(value: OrderPriority?): String? = value?.name

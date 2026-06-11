@@ -2,11 +2,16 @@ package com.onlytechtake.repairapp.features.dashboard
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScrollableTabRow
+import androidx.compose.material3.SecondaryScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -16,11 +21,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.UserRole
@@ -54,6 +61,9 @@ fun DashboardRoute(
             backupRepository = container.backupRepository,
             dataResetRepository = container.dataResetRepository,
             createIntakeOrderUseCase = container.createIntakeOrderUseCase,
+            orderDocumentRepository = container.orderDocumentRepository,
+            generateOrderStatusPdfUseCase = container.generateOrderStatusPdfUseCase,
+            shareDocumentIntentFactory = container.shareDocumentIntentFactory,
         ),
     )
     val summary by dashboardViewModel.summary.collectAsState()
@@ -77,26 +87,40 @@ fun DashboardScreen(
     val uiState by workspaceViewModel.uiState.collectAsState()
     val currentUser by workspaceViewModel.currentUser.collectAsState()
     val orderTabDestination = if (uiState.selectedOrderId != null) {
-        WorkspaceDestination.ORDER_DETAIL to "Commessa"
+        WorkspaceDestination.ORDER_DETAIL to stringResource(R.string.dashboard_order)
     } else {
-        WorkspaceDestination.ORDERS to "Commesse"
+        WorkspaceDestination.ORDERS to stringResource(R.string.dashboard_orders)
     }
     val destinations = listOf(
-        WorkspaceDestination.HOME to "Home",
-        WorkspaceDestination.NEW_ORDER to "Nuova",
-        WorkspaceDestination.CUSTOMERS to "Clienti",
+        WorkspaceDestination.HOME to stringResource(R.string.dashboard_home),
+        WorkspaceDestination.NEW_ORDER to stringResource(R.string.dashboard_new),
+        WorkspaceDestination.CUSTOMERS to stringResource(R.string.dashboard_customers),
         orderTabDestination,
-        WorkspaceDestination.CONFIG to "Config",
-        WorkspaceDestination.ADMIN to "Admin",
+        WorkspaceDestination.CONFIG to stringResource(R.string.dashboard_config),
+        WorkspaceDestination.ADMIN to stringResource(R.string.dashboard_admin),
     )
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(text = summary.title, maxLines = 1) },
+                navigationIcon = {
+                    IconButton(onClick = { 
+                        when (uiState.destination) {
+                            WorkspaceDestination.ORDER_DETAIL -> workspaceViewModel.selectOrder(null)
+                            WorkspaceDestination.HOME -> onLogout() // Or some exit logic
+                            else -> workspaceViewModel.navigateTo(WorkspaceDestination.HOME)
+                        }
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = stringResource(R.string.nav_back)
+                        )
+                    }
+                },
                 actions = {
                     TextButton(onClick = onLogout) {
-                        Text(text = "Logout")
+                        Text(text = stringResource(R.string.logout))
                     }
                 },
             )
@@ -105,7 +129,8 @@ fun DashboardScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues),
+                .padding(paddingValues)
+                .imePadding(),
         ) {
             uiState.message?.let { message ->
                 Text(
@@ -120,7 +145,7 @@ fun DashboardScreen(
             val selectedIndex = destinations
                 .indexOfFirst { it.first == uiState.destination }
                 .coerceIn(0, destinations.lastIndex)
-            ScrollableTabRow(
+            SecondaryScrollableTabRow(
                 modifier = Modifier.testTag(RepairAppTestTags.DashboardTabs),
                 selectedTabIndex = selectedIndex,
             ) {

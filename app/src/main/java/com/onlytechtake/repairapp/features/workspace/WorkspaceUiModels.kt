@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.features.workspace
 
+import android.content.Intent
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
@@ -17,6 +18,11 @@ data class WorkspaceUiState(
     val customerSearchQuery: String = "",
     val preparedMessage: PreparedMessage? = null,
     val preparedMessageBody: String = "",
+    val isGeneratingStatusPdf: Boolean = false,
+    val statusPdfError: String? = null,
+    val showPdfSentConfirmation: Boolean = false,
+    val pendingShareIntent: Intent? = null,
+    val lastGeneratedDocumentId: String? = null,
 )
 
 fun WorkspaceUiState.withoutPreparedMessage(): WorkspaceUiState =
@@ -32,8 +38,11 @@ enum class WorkspaceDestination {
     ADMIN,
 }
 
-fun CustomerType.label(): String =
-    when (this) {
-        CustomerType.PRIVATE -> "Privato"
-        CustomerType.BUSINESS -> "Azienda"
-    }
+enum class ButtonTone {
+    PRIMARY,
+    NEUTRAL,
+    SUCCESS,
+    INFO,
+    WARNING,
+    DANGER,
+}

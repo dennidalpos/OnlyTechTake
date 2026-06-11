@@ -27,8 +27,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
@@ -38,6 +40,7 @@ import com.onlytechtake.repairapp.domain.workspace.isReadyForSubmit
 import com.onlytechtake.repairapp.domain.workspace.validationErrors
 import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
+import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import java.util.UUID
 
 @Composable
@@ -47,6 +50,9 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
     val categories by viewModel.categories.collectAsState()
     val templates by viewModel.templates.collectAsState()
     val currentUser by viewModel.currentUser.collectAsState()
+
+    val unnamedPrivate = stringResource(R.string.customer_unnamed_private)
+    val unnamedBusiness = stringResource(R.string.customer_unnamed_business)
 
     var intakeSessionId by rememberSaveable { mutableStateOf(UUID.randomUUID().toString()) }
     var selectedCustomerId by rememberSaveable { mutableStateOf<String?>(null) }
@@ -81,7 +87,10 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         },
     )
     val selectedCustomer = selectedCustomerId?.let { id -> customerSuggestions.firstOrNull { it.id == id } }
-    val selectedCustomerDisplayName = selectedCustomer?.displayName() ?: selectedCustomerLabel
+    val selectedCustomerDisplayName = selectedCustomer?.displayName(
+        unnamedPrivate = unnamedPrivate,
+        unnamedBusiness = unnamedBusiness
+    ) ?: selectedCustomerLabel
     val activeCategories = categories.filter { it.active }
     val selectedCategory = activeCategories.firstOrNull { it.id == selectedCategoryId }
     val newCustomerInput = CustomerInput(
@@ -177,12 +186,12 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
             .padding(DashboardSpacing.screenPadding),
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
-        SectionTitle("Nuova commessa")
+        SectionTitle(stringResource(R.string.new_order_title))
 
         if (completedStep >= 1 && currentStep != 1) {
             IntakeStepSummary(
                 stepNumber = 1,
-                title = "Cliente",
+                title = stringResource(R.string.intake_step_customer),
                 value = selectedCustomerDisplayName.orEmpty(),
                 onEdit = { editStep(1) },
             )
@@ -193,7 +202,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                 modifier = Modifier.padding(DashboardSpacing.cardPadding),
                 verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
             ) {
-                StepSectionTitle(1, "Cliente")
+                StepSectionTitle(1, stringResource(R.string.intake_step_customer))
                 Field(
                     value = uiState.customerSearchQuery,
                     onValueChange = {
@@ -202,17 +211,17 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                         showNewCustomerForm = false
                         viewModel.setCustomerSearchQuery(it)
                     },
-                    label = "Cerca cliente esistente",
+                    label = stringResource(R.string.intake_search_customer),
                     singleLine = true,
                     imeAction = ImeAction.Next,
                     keyboardActions = nextAction,
                     testTag = RepairAppTestTags.NewOrderCustomerSearchField,
                 )
                 if (selectedCustomerId != null) {
-                    Text("Cliente selezionato: ${selectedCustomerDisplayName.orEmpty()}")
+                    Text(stringResource(R.string.intake_selected_customer, selectedCustomerDisplayName.orEmpty()))
                     TouchButton(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Cambia cliente",
+                        text = stringResource(R.string.intake_change_customer),
                         tone = ButtonTone.NEUTRAL,
                         onClick = {
                             selectedCustomerId = null
@@ -227,9 +236,12 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                             customer = customer,
                             onClick = {
                                 selectedCustomerId = customer.id
-                                selectedCustomerLabel = customer.displayName()
+                                selectedCustomerLabel = customer.displayName(
+                                    unnamedPrivate = unnamedPrivate,
+                                    unnamedBusiness = unnamedBusiness
+                                )
                                 showNewCustomerForm = false
-                                viewModel.setCustomerSearchQuery(customer.displayName())
+                                viewModel.setCustomerSearchQuery(selectedCustomerLabel.orEmpty())
                             },
                         )
                     }
@@ -237,7 +249,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                 if (selectedCustomerId == null && !showNewCustomerForm) {
                     TouchButton(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Inserisci nuovo cliente",
+                        text = stringResource(R.string.intake_insert_new_customer),
                         tone = ButtonTone.NEUTRAL,
                         testTag = RepairAppTestTags.NewOrderInsertCustomerButton,
                         onClick = {
@@ -275,16 +287,19 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                     )
                     TouchButton(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Salva cliente",
+                        text = stringResource(R.string.customer_save),
                         enabled = canSaveNewCustomer,
                         testTag = RepairAppTestTags.NewOrderSaveCustomerButton,
                         onClick = {
                             viewModel.saveCustomer(newCustomerInput) { customer ->
                                 selectedCustomerId = customer.id
-                                selectedCustomerLabel = customer.displayName()
+                                selectedCustomerLabel = customer.displayName(
+                                    unnamedPrivate = unnamedPrivate,
+                                    unnamedBusiness = unnamedBusiness
+                                )
                                 showNewCustomerForm = false
                                 clearNewCustomerFields()
-                                viewModel.setCustomerSearchQuery(customer.displayName())
+                                viewModel.setCustomerSearchQuery(selectedCustomerLabel.orEmpty())
                             }
                         },
                     )
@@ -301,7 +316,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         if (completedStep >= 2 && currentStep != 2) {
             IntakeStepSummary(
                 stepNumber = 2,
-                title = "Categoria",
+                title = stringResource(R.string.intake_step_category),
                 value = selectedCategory?.name.orEmpty(),
                 onEdit = { editStep(2) },
             )
@@ -328,7 +343,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         if (completedStep >= 3 && currentStep != 3) {
             IntakeStepSummary(
                 stepNumber = 3,
-                title = "Dettagli commessa",
+                title = stringResource(R.string.intake_step_problem),
                 value = problemSummary,
                 onEdit = { editStep(3) },
             )
@@ -353,8 +368,8 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         if (completedStep >= 4 && currentStep != 4) {
             IntakeStepSummary(
                 stepNumber = 4,
-                title = "Foto e allegati",
-                value = "${stagedMedia.size} media",
+                title = stringResource(R.string.intake_step_media),
+                value = stringResource(R.string.intake_media_count, stagedMedia.size),
                 onEdit = { editStep(4) },
             )
         }
@@ -395,8 +410,8 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         if (completedStep >= 5 && currentStep != 5) {
             IntakeStepSummary(
                 stepNumber = 5,
-                title = "Privacy e firma",
-                value = "Firma acquisita",
+                title = stringResource(R.string.intake_step_privacy),
+                value = stringResource(R.string.intake_signature_captured),
                 onEdit = { editStep(5) },
             )
         }
@@ -405,7 +420,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                 Card(modifier = Modifier.fillMaxWidth()) {
                     SignatureCaptureForm(
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                        title = "5. Privacy e firma",
+                        title = "5. ${stringResource(R.string.intake_step_privacy)}",
                         privacyText = privacyText,
                         termsText = termsText,
                         onCaptureChanged = { signatureCapture = it },
@@ -425,7 +440,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                 missingRequirements = if (isIntakeSubmitUnlocked(completedStep)) {
                     missingRequirements
                 } else {
-                    listOf("Confermare tutti gli step")
+                    listOf(stringResource(R.string.intake_confirm_all_steps))
                 },
                 enabled = isIntakeSubmitUnlocked(completedStep) &&
                     activeCategories.isNotEmpty() &&
@@ -461,10 +476,10 @@ private fun IntakeStepSummary(
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
         ) {
             StepSectionTitle(stepNumber, title)
-            Text(value.ifBlank { "Non impostato" }, style = MaterialTheme.typography.bodyMedium)
+            Text(value.ifBlank { stringResource(R.string.intake_not_set) }, style = MaterialTheme.typography.bodyMedium)
             TouchButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Modifica",
+                text = stringResource(R.string.intake_edit_step),
                 tone = ButtonTone.NEUTRAL,
                 onClick = onEdit,
             )

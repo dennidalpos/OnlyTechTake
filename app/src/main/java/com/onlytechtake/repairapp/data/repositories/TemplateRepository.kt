@@ -127,7 +127,7 @@ class TemplateRepository(
     suspend fun prepareMessage(actor: AuthenticatedUser, orderId: String, templateCode: String): Result<PreparedMessage> =
         runCatching {
             val order = requireNotNull(orderDao.findById(orderId)) { "Commessa non trovata" }
-            require(actor.role == UserRole.ADMIN || order.assignedToUserId == actor.id) { "Operatore non assegnato" }
+            require((actor.role == UserRole.ADMIN) || (order.assignedToUserId == actor.id)) { "Operatore non assegnato" }
             val customer = requireNotNull(customerDao.findById(order.customerId)) { "Cliente non trovato" }
             val template = requireNotNull(templateDao.findActiveByCode(templateCode)) { "Template non trovato" }
             val categoryPath = categoryPath(order.categoryId)
@@ -350,6 +350,17 @@ class TemplateRepository(
             ),
             MessageTemplateEntity(
                 id = "",
+                code = "whatsapp_stato_avanzamento_pdf",
+                title = "WhatsApp stato avanzamento PDF",
+                channel = MessageChannel.WHATSAPP,
+                body = "Ciao {{cliente}}, ti inviamo in allegato lo stato avanzamento della commessa {{numero_commessa}}: {{titolo_commessa}}.\n\nStato attuale: {{stato_commessa}}\nProssima azione: {{prossima_azione}}\n\nOnlyTechTake",
+                active = true,
+                version = 1,
+                updatedByUserId = null,
+                updatedAt = 0L,
+            ),
+            MessageTemplateEntity(
+                id = "",
                 code = "privacy_breve",
                 title = "Privacy breve",
                 channel = MessageChannel.WHATSAPP,
@@ -395,19 +406,18 @@ private fun ClosureReason.label(): String =
     }
 
 private fun RepairOrderEntity.nextActionLabel(): String =
-    when {
-        status == OrderStatus.RESULT && diagnosisOutcome == DiagnosisOutcome.REPAIRABLE ->
-            "Attendere accettazione o rifiuto preventivo"
-        status == OrderStatus.RESULT && diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE ->
-            "Avvisare il cliente e preparare il ritiro"
-        status == OrderStatus.RESULT -> "Registrare esito diagnosi"
-        status == OrderStatus.OPEN -> "Prendere in carico"
-        status == OrderStatus.IN_PROGRESS -> "Avviare diagnosi"
-        status == OrderStatus.DIAGNOSIS -> "Registrare risultato diagnosi"
-        status == OrderStatus.REPAIRING -> "Completare riparazione"
-        status == OrderStatus.READY_FOR_PICKUP -> "Consegnare e chiudere"
-        status == OrderStatus.CLOSED -> "Nessuna azione"
-        else -> "Aggiornare commessa"
+    when (status) {
+        OrderStatus.RESULT -> when (diagnosisOutcome) {
+            DiagnosisOutcome.REPAIRABLE -> "Attendere accettazione o rifiuto preventivo"
+            DiagnosisOutcome.NOT_REPAIRABLE -> "Avvisare il cliente e preparare il ritiro"
+            null -> "Registrare esito diagnosi"
+        }
+        OrderStatus.OPEN -> "Prendere in carico"
+        OrderStatus.IN_PROGRESS -> "Avviare diagnosi"
+        OrderStatus.DIAGNOSIS -> "Registrare risultato diagnosi"
+        OrderStatus.REPAIRING -> "Completare riparazione"
+        OrderStatus.READY_FOR_PICKUP -> "Consegnare e chiudere"
+        OrderStatus.CLOSED -> "Nessuna azione"
     }
 
 private fun formatEuroCents(cents: Long): String =

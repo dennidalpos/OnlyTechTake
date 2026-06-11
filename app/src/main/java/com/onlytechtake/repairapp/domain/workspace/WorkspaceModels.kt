@@ -140,7 +140,7 @@ data class FeedbackInput(
 
 fun FeedbackInput.validationErrors(): List<String> =
     buildList {
-        if (feedback == CustomerFeedbackType.REJECT && note.isBlank()) {
+        if ((feedback == CustomerFeedbackType.REJECT) && note.isBlank()) {
             add("Motivo rifiuto obbligatorio")
         }
     }
@@ -154,7 +154,7 @@ data class DiagnosisResultInput(
 fun DiagnosisResultInput.validationErrors(): List<String> =
     buildList {
         if (summary.isBlank()) add("Sintesi risultato obbligatoria")
-        if (diagnosisOutcome == DiagnosisOutcome.REPAIRABLE && (estimateAmountCents == null || estimateAmountCents <= 0L)) {
+        if ((diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) && ((estimateAmountCents == null) || (estimateAmountCents <= 0L))) {
             add("Importo preventivo positivo obbligatorio")
         }
     }

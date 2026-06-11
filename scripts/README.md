@@ -6,7 +6,7 @@ Gli script calcolano automaticamente la root del progetto dal proprio percorso, 
 
 | script | path | purpose | notes |
 |---|---|---|---|
-| Check ambiente Android | `scripts\android\check_env.ps1` | Verifica JDK supportato, Gradle Wrapper, Android SDK Platform 36, Build Tools e adb. | Exit code non zero se l'ambiente minimo per Gradle non e' valido. |
+| Check ambiente Android | `scripts\android\check_env.ps1` | Verifica JDK supportato, Gradle Wrapper, Android SDK Platform 37, Build Tools e adb. | Exit code non zero se l'ambiente minimo per Gradle non e' valido. |
 | Gradle wrapper Android | `scripts\android\gradle.ps1` | Esegue `gradlew.bat` con JDK/SDK risolti dallo script. | Usare `--` prima degli argomenti Gradle. |
 | Build installer Android | `scripts\android\build_installer.ps1` | Produce APK o AAB tramite Gradle Wrapper e opzionalmente installa APK via adb. | Supporta `-BuildType`, `-OutputType`, `-Clean`, `-RerunTasks`, `-Install`; blocca release senza signing locale. |
 | Start app Android | `scripts\android\start_app.ps1` | Installa l'APK selezionato e avvia `MainActivity` via adb. | Supporta `-NoInstall`, `-ApkPath` e `-CleanInstall` per reinstallazione pulita. |

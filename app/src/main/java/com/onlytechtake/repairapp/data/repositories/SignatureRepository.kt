@@ -21,7 +21,7 @@ class SignatureRepository(
     private val timelineEventDao: TimelineEventDao,
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
-    private val eventWriter = OrderWorkflowEventWriter(timelineEventDao = timelineEventDao)
+    private val eventWriter = OrderWorkflowEventWriter(context, timelineEventDao = timelineEventDao)
 
     suspend fun saveSignature(
         actor: AuthenticatedUser,

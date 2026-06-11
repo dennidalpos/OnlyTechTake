@@ -13,9 +13,21 @@ class CatalogRepository(
 ) {
     fun observeCategories(): Flow<List<OrderCategoryEntity>> = categoryDao.observeAll()
 
-    fun observeActiveCategories(): Flow<List<OrderCategoryEntity>> = categoryDao.observeActiveCategories()
-
-    suspend fun findCategory(id: String): OrderCategoryEntity? = categoryDao.findById(id)
+    suspend fun getCategoryPath(id: String): String {
+        val all = categoryDao.findAll()
+        val path = mutableListOf<String>()
+        var currentId: String? = id
+        while (currentId != null) {
+            val category = all.find { it.id == currentId }
+            currentId = if (category != null) {
+                path.add(0, category.name)
+                category.parentId
+            } else {
+                null
+            }
+        }
+        return path.joinToString(" > ")
+    }
 
     suspend fun saveCategory(actor: AuthenticatedUser, input: CategoryInput): Result<Unit> =
         runCatching {
@@ -23,7 +35,7 @@ class CatalogRepository(
             require(input.name.isNotBlank()) { "Nome categoria obbligatorio" }
             val normalizedName = input.name.trim()
             val duplicate = categoryDao.findByParentAndName(input.parentId, normalizedName)
-            require(duplicate == null || duplicate.id == input.id) { "Categoria gia' presente in questo ramo" }
+            require(duplicate == null || (duplicate.id == input.id)) { "Categoria gia' presente in questo ramo" }
             categoryDao.upsertAll(
                 normalizeCategoryTree(
                     existing = categoryDao.findAll(),
@@ -100,11 +112,12 @@ internal fun normalizeCategoryTree(
         return level
     }
 
-    return categories.values
+    return categories.values.asSequence()
         .map { category -> category.copy(level = resolveLevel(category.id)) }
         .sortedWith(
             compareBy<OrderCategoryEntity> { it.level }
                 .thenBy(String.CASE_INSENSITIVE_ORDER) { it.name }
                 .thenBy { it.id },
         )
+        .toList()
 }

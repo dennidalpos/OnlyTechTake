@@ -25,12 +25,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.platform.LocalContext
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.utils.displayName
+import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
+import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.label
 
 @Composable
@@ -109,7 +115,7 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
-            SectionTitle("Clienti")
+            SectionTitle(stringResource(R.string.customer_title))
                 Card(modifier = Modifier.fillMaxWidth()) {
                 Column(
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
@@ -119,14 +125,14 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                         modifier = Modifier.fillMaxWidth(),
                         value = uiState.customerSearchQuery,
                         onValueChange = viewModel::setCustomerSearchQuery,
-                        label = { Text("Cerca cliente o commessa") },
+                        label = { Text(stringResource(R.string.customer_search_label)) },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
                     )
                     TouchButton(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Nuovo cliente",
+                        text = stringResource(R.string.customer_new),
                         testTag = RepairAppTestTags.CustomerNewButton,
                         onClick = ::openNewCustomerForm,
                     )
@@ -142,7 +148,7 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                     ) {
                         Text(
-                            text = if (editingCustomerId == null) "Nuovo cliente" else "Modifica cliente",
+                            text = if (editingCustomerId == null) stringResource(R.string.customer_new) else stringResource(R.string.customer_edit),
                             style = MaterialTheme.typography.titleMedium,
                         )
                         CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = { isBusiness = it })
@@ -150,18 +156,18 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                             Field(
                                 companyName,
                                 { companyName = it },
-                                "Ragione sociale",
+                                stringResource(R.string.customer_field_company_name),
                                 required = true,
                                 showError = companyName.isBlank(),
                                 singleLine = true,
                                 testTag = RepairAppTestTags.CustomerCompanyNameField,
                             )
-                            Field(vatNumber, { vatNumber = it }, "P.IVA", testTag = RepairAppTestTags.CustomerVatNumberField)
+                            Field(vatNumber, { vatNumber = it }, stringResource(R.string.customer_field_vat_number), testTag = RepairAppTestTags.CustomerVatNumberField)
                         } else {
                             Field(
                                 firstName,
                                 { firstName = it },
-                                "Nome",
+                                stringResource(R.string.customer_field_first_name),
                                 required = true,
                                 showError = firstName.isBlank(),
                                 singleLine = true,
@@ -170,18 +176,18 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                             Field(
                                 lastName,
                                 { lastName = it },
-                                "Cognome",
+                                stringResource(R.string.customer_field_last_name),
                                 required = true,
                                 showError = lastName.isBlank(),
                                 singleLine = true,
                                 testTag = RepairAppTestTags.CustomerLastNameField,
                             )
                         }
-                        Field(taxCode, { taxCode = it }, "Codice fiscale", testTag = RepairAppTestTags.CustomerTaxCodeField)
+                        Field(taxCode, { taxCode = it }, stringResource(R.string.customer_field_tax_code), testTag = RepairAppTestTags.CustomerTaxCodeField)
                         Field(
                             phone,
                             { phone = it },
-                            "Telefono",
+                            stringResource(R.string.customer_field_phone),
                             required = true,
                             showError = phone.isBlank() && email.isBlank(),
                             singleLine = true,
@@ -190,23 +196,23 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                         Field(
                             email,
                             { email = it },
-                            "Email",
+                            stringResource(R.string.customer_field_email),
                             required = true,
                             showError = phone.isBlank() && email.isBlank(),
                             singleLine = true,
                             testTag = RepairAppTestTags.CustomerEmailField,
                         )
-                        Field(address, { address = it }, "Indirizzo", testTag = RepairAppTestTags.CustomerAddressField)
-                        Field(notes, { notes = it }, "Note", testTag = RepairAppTestTags.CustomerNotesField)
+                        Field(address, { address = it }, stringResource(R.string.customer_field_address), testTag = RepairAppTestTags.CustomerAddressField)
+                        Field(notes, { notes = it }, stringResource(R.string.customer_field_notes), testTag = RepairAppTestTags.CustomerNotesField)
                         ActionRow {
                             TouchButton(
-                                text = if (editingCustomerId == null) "Salva cliente" else "Aggiorna cliente",
+                                text = if (editingCustomerId == null) stringResource(R.string.customer_save) else stringResource(R.string.customer_update),
                                 enabled = canSave,
                                 testTag = RepairAppTestTags.CustomerSaveButton,
                                 onClick = { confirmSave = true },
                             )
                             TouchButton(
-                                text = "Annulla",
+                                text = stringResource(R.string.customer_cancel),
                                 tone = ButtonTone.NEUTRAL,
                                 onClick = {
                                     showForm = false
@@ -220,7 +226,7 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
             }
         }
 
-        item { SectionTitle(if (uiState.customerSearchQuery.isBlank()) "Clienti recenti" else "Risultati ricerca") }
+        item { SectionTitle(if (uiState.customerSearchQuery.isBlank()) stringResource(R.string.customer_recent) else stringResource(R.string.customer_search_results)) }
         if (customers.isEmpty()) {
             item {
                 CustomerEmptyState(
@@ -241,8 +247,8 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
     if (confirmSave) {
         AlertDialog(
             onDismissRequest = { confirmSave = false },
-            title = { Text(if (editingCustomerId == null) "Salvare cliente?" else "Aggiornare cliente?") },
-            text = { Text(if (editingCustomerId == null) "Salvare il cliente?" else "Aggiornare i dati del cliente selezionato?") },
+            title = { Text(if (editingCustomerId == null) stringResource(R.string.customer_confirm_save_title) else stringResource(R.string.customer_confirm_update_title)) },
+            text = { Text(if (editingCustomerId == null) stringResource(R.string.customer_confirm_save_text) else stringResource(R.string.customer_confirm_update_text)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -254,12 +260,12 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                     },
                     modifier = Modifier.testTag(RepairAppTestTags.CustomerConfirmSaveButton),
                 ) {
-                    Text("Conferma")
+                    Text(stringResource(R.string.confirm))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { confirmSave = false }) {
-                    Text("Annulla")
+                    Text(stringResource(R.string.customer_cancel))
                 }
             },
         )
@@ -273,14 +279,18 @@ private fun CustomerCard(customer: CustomerEntity, onEdit: () -> Unit) {
             modifier = Modifier.padding(DashboardSpacing.cardPadding),
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
         ) {
-            Text(customer.displayName(), style = MaterialTheme.typography.titleMedium)
-            Text(customer.type.label())
+            val context = LocalContext.current
+            Text(
+                customer.displayName(context),
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(customer.type.label(context))
             listOfNotNull(customer.phone, customer.email).takeIf { it.isNotEmpty() }?.let {
                 Text(it.joinToString(" - "))
             }
             TouchButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Modifica cliente",
+                text = stringResource(R.string.customer_edit),
                 tone = ButtonTone.NEUTRAL,
                 onClick = onEdit,
             )
@@ -296,12 +306,12 @@ private fun CustomerEmptyState(hasQuery: Boolean, onNewCustomer: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
         ) {
             Text(
-                text = if (hasQuery) "Nessun cliente trovato per questa ricerca." else "Nessun cliente registrato.",
+                text = if (hasQuery) stringResource(R.string.customer_no_results) else stringResource(R.string.customer_empty),
                 style = MaterialTheme.typography.bodyMedium,
             )
             TouchButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Nuovo cliente",
+                text = stringResource(R.string.customer_new),
                 onClick = onNewCustomer,
             )
         }

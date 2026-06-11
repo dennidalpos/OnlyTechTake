@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.features.dashboard
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,11 +21,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.PasswordVisibilityButton
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
+import com.onlytechtake.repairapp.features.workspace.ButtonTone
 
 @Composable
 fun AdminPanel(
@@ -33,17 +38,36 @@ fun AdminPanel(
     onResetComplete: () -> Unit,
 ) {
     val users by viewModel.users.collectAsState()
-    var displayName by rememberSaveable { mutableStateOf("") }
-    var username by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
-    var passwordVisible by rememberSaveable { mutableStateOf(false) }
-    var resetPasswords by rememberSaveable { mutableStateOf(emptyMap<String, String>()) }
-    var resetConfirmation by rememberSaveable { mutableStateOf("") }
-    var archiveConfirmation by rememberSaveable { mutableStateOf("") }
-    var deleteConfirmation by rememberSaveable { mutableStateOf("") }
-    var confirmTitle by remember { mutableStateOf<String?>(null) }
-    var confirmText by remember { mutableStateOf("") }
-    var confirmAction by remember { mutableStateOf<(() -> Unit)?>(null) }
+    val uriHandler = LocalUriHandler.current
+
+    val confirmCreateTitle = stringResource(R.string.admin_confirm_create_title)
+    val confirmCreateText = stringResource(R.string.admin_confirm_create_text)
+    val confirmStatusTitle = stringResource(R.string.admin_confirm_status_title)
+    val confirmStatusTextTemplate = stringResource(R.string.admin_confirm_status_text)
+    val confirmResetTitle = stringResource(R.string.admin_confirm_reset_title)
+    val confirmResetTextTemplate = stringResource(R.string.admin_confirm_reset_text)
+    val confirmTotalResetTitle = stringResource(R.string.admin_confirm_total_reset_title)
+    val confirmTotalResetText = stringResource(R.string.admin_confirm_total_reset_text)
+    val confirmArchiveTitle = stringResource(R.string.admin_confirm_archive_title)
+    val confirmArchiveText = stringResource(R.string.admin_confirm_archive_text)
+    val confirmDeleteTitle = stringResource(R.string.admin_confirm_delete_title)
+    val confirmDeleteText = stringResource(R.string.admin_confirm_delete_text)
+
+    var displayName by rememberSaveable { mutableStateOf(value = "") }
+    var username by rememberSaveable { mutableStateOf(value = "") }
+    var password by rememberSaveable { mutableStateOf(value = "") }
+    var passwordVisible by rememberSaveable { mutableStateOf(value = false) }
+    
+    // Use remember for maps to avoid parcelable issues with rememberSaveable
+    var resetPasswords by remember { mutableStateOf(value = emptyMap<String, String>()) }
+    
+    var resetConfirmation by rememberSaveable { mutableStateOf(value = "") }
+    var archiveConfirmation by rememberSaveable { mutableStateOf(value = "") }
+    var deleteConfirmation by rememberSaveable { mutableStateOf(value = "") }
+    
+    var confirmTitle by remember { mutableStateOf<String?>(value = null) }
+    var confirmText by remember { mutableStateOf(value = "") }
+    var confirmAction by remember { mutableStateOf<(() -> Unit)?>(value = null) }
 
     fun requestConfirm(title: String, text: String, action: () -> Unit) {
         confirmTitle = title
@@ -52,42 +76,43 @@ fun AdminPanel(
     }
 
     if (!isAdmin) {
-        Text(modifier = Modifier.padding(DashboardSpacing.screenPadding), text = "Sezione disponibile solo per admin.")
+        Text(modifier = Modifier.padding(DashboardSpacing.screenPadding), text = stringResource(R.string.admin_only_section))
         return
     }
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(DashboardSpacing.screenPadding),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(DashboardSpacing.screenPadding),
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
-            SectionTitle("Admin")
+            SectionTitle(stringResource(R.string.dashboard_admin))
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                 ) {
-                    Text("Crea operatore", style = MaterialTheme.typography.titleMedium)
-                    Field(displayName, { displayName = it }, "Nome")
+                    Text(stringResource(R.string.admin_create_operator), style = MaterialTheme.typography.titleMedium)
+                    Field(displayName, { displayName = it }, stringResource(R.string.customer_field_first_name))
                     Field(username, { username = it }, "Username")
                     Field(
                         value = password,
                         onValueChange = { password = it },
-                        label = "Password temporanea",
+                        label = stringResource(R.string.admin_field_temp_password),
                         singleLine = true,
                         keyboardType = KeyboardType.Password,
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
-                            PasswordVisibilityButton(
-                                visible = passwordVisible,
-                                onVisibleChange = { passwordVisible = it },
-                            )
+                            PasswordVisibilityButton(visible = passwordVisible) {
+                                passwordVisible = it
+                            }
                         },
                     )
                     TouchButton(
-                        text = "Crea operatore",
+                        text = stringResource(R.string.admin_create_operator),
+                        enabled = displayName.isNotBlank() && username.isNotBlank() && password.isNotBlank(),
                         onClick = {
-                            requestConfirm("Creare operatore?", "Il nuovo operatore verra' salvato nel database locale.") {
+                            requestConfirm(confirmCreateTitle, confirmCreateText) {
                                 viewModel.createOperator(displayName, username, password)
                                 displayName = ""
                                 username = ""
@@ -99,59 +124,59 @@ fun AdminPanel(
                 }
             }
         }
-        item { SectionTitle("Utenti") }
+        item { SectionTitle(stringResource(R.string.admin_users_title)) }
         if (users.isEmpty()) {
             item {
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(DashboardSpacing.cardPadding)) {
-                        Text("Nessun utente configurato.", style = MaterialTheme.typography.bodyMedium)
+                        Text(stringResource(R.string.admin_no_users), style = MaterialTheme.typography.bodyMedium)
                     }
                 }
             }
         } else {
             items(users, key = { it.id }) { user ->
-                var resetPasswordVisible by rememberSaveable(user.id) { mutableStateOf(false) }
+                var resetPasswordVisible by rememberSaveable(user.id) { mutableStateOf(value = false) }
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                     ) {
                         Text("${user.displayName} - ${user.username} (${user.role.name})", style = MaterialTheme.typography.titleMedium)
-                        Text(if (user.active) "Attivo" else "Disattivo")
+                        Text(if (user.active) stringResource(R.string.admin_user_active) else stringResource(R.string.admin_user_inactive))
                         Field(
                             value = resetPasswords[user.id].orEmpty(),
                             onValueChange = { value ->
-                                resetPasswords = resetPasswords + (user.id to value)
+                                resetPasswords += (user.id to value)
                             },
-                            label = "Nuova password temporanea",
+                            label = stringResource(R.string.admin_field_temp_password),
                             singleLine = true,
                             keyboardType = KeyboardType.Password,
                             visualTransformation = if (resetPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                             trailingIcon = {
-                                PasswordVisibilityButton(
-                                    visible = resetPasswordVisible,
-                                    onVisibleChange = { resetPasswordVisible = it },
-                                )
+                                PasswordVisibilityButton(visible = resetPasswordVisible) {
+                                    resetPasswordVisible = it
+                                }
                             },
                         )
                         ActionRow {
                             TouchButton(
-                                text = if (user.active) "Disattiva" else "Attiva",
+                                text = if (user.active) stringResource(R.string.admin_user_deactivate) else stringResource(R.string.admin_user_activate),
                                 tone = if (user.active) ButtonTone.DANGER else ButtonTone.SUCCESS,
                                 onClick = {
-                                    requestConfirm("Cambiare stato utente?", "Lo stato di ${user.displayName} verra' aggiornato.") {
+                                    requestConfirm(confirmStatusTitle, confirmStatusTextTemplate.format(user.displayName)) {
                                         viewModel.setUserActive(user.id, !user.active)
                                     }
                                 },
                             )
                             TouchButton(
-                                text = "Reset password",
+                                text = stringResource(R.string.admin_reset_password),
+                                enabled = resetPasswords[user.id]?.isNotBlank() == true,
                                 tone = ButtonTone.NEUTRAL,
                                 onClick = {
                                     val resetPassword = resetPasswords[user.id].orEmpty()
-                                    requestConfirm("Resettare password?", "La password temporanea inserita verra' salvata per ${user.displayName}.") {
+                                    requestConfirm(confirmResetTitle, confirmResetTextTemplate.format(user.displayName)) {
                                         viewModel.resetPassword(user.id, resetPassword)
-                                        resetPasswords = resetPasswords - user.id
+                                        resetPasswords -= user.id
                                     }
                                 },
                             )
@@ -166,14 +191,14 @@ fun AdminPanel(
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                 ) {
-                    Text("Reset totale dati", style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.admin_total_reset), style = MaterialTheme.typography.titleMedium)
                     Field(resetConfirmation, { resetConfirmation = it }, "Digita RESET")
                     TouchButton(
-                        text = "Reset totale",
+                        text = stringResource(R.string.admin_total_reset),
                         enabled = resetConfirmation == "RESET",
                         tone = ButtonTone.DANGER,
                         onClick = {
-                            requestConfirm("Reset totale?", "Questa azione elimina i dati locali dell'app e riporta al primo setup admin.") {
+                            requestConfirm(confirmTotalResetTitle, confirmTotalResetText) {
                                 viewModel.resetAllData(resetConfirmation, onResetComplete)
                                 resetConfirmation = ""
                             }
@@ -188,14 +213,14 @@ fun AdminPanel(
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                 ) {
-                    Text("Pulizia commesse", style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.admin_cleanup_orders), style = MaterialTheme.typography.titleMedium)
                     Field(archiveConfirmation, { archiveConfirmation = it }, "Digita ARCHIVIA")
                     TouchButton(
-                        text = "Archivia scartate",
+                        text = stringResource(R.string.admin_archive_discarded),
                         enabled = archiveConfirmation == "ARCHIVIA",
                         tone = ButtonTone.WARNING,
                         onClick = {
-                            requestConfirm("Archiviare scartate?", "Le commesse rifiutate, annullate o non riparabili verranno archiviate.") {
+                            requestConfirm(confirmArchiveTitle, confirmArchiveText) {
                                 viewModel.archiveDiscardedClosedOrders()
                                 archiveConfirmation = ""
                             }
@@ -203,15 +228,31 @@ fun AdminPanel(
                     )
                     Field(deleteConfirmation, { deleteConfirmation = it }, "Digita CANCELLA")
                     TouchButton(
-                        text = "Cancella archiviate",
+                        text = stringResource(R.string.admin_delete_archived),
                         enabled = deleteConfirmation == "CANCELLA",
                         tone = ButtonTone.DANGER,
                         onClick = {
-                            requestConfirm("Cancellare archiviate?", "Le commesse gia' archiviate e i relativi file verranno eliminati.") {
+                            requestConfirm(confirmDeleteTitle, confirmDeleteText) {
                                 viewModel.deleteArchivedOrders()
                                 deleteConfirmation = ""
                             }
                         },
+                    )
+                }
+            }
+        }
+        item {
+            SectionTitle(stringResource(R.string.admin_author))
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                ) {
+                    Text("Danny Perondi", style = MaterialTheme.typography.titleMedium)
+                    TouchButton(
+                        text = "GitHub Repository",
+                        onClick = { uriHandler.openUri("https://github.com/dennidalpos/OnlyTechTake") },
+                        tone = ButtonTone.NEUTRAL,
                     )
                 }
             }
@@ -234,7 +275,7 @@ fun AdminPanel(
                         confirmAction = null
                     },
                 ) {
-                    Text("Conferma")
+                    Text(stringResource(R.string.confirm))
                 }
             },
             dismissButton = {
@@ -244,7 +285,7 @@ fun AdminPanel(
                         confirmAction = null
                     },
                 ) {
-                    Text("Annulla")
+                    Text(stringResource(R.string.customer_cancel))
                 }
             },
         )

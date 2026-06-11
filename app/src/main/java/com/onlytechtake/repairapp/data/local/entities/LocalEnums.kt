@@ -25,6 +25,17 @@ enum class DiagnosisOutcome {
     NOT_REPAIRABLE,
 }
 
+enum class CustomerActionStatus {
+    NONE,
+    TO_NOTIFY,
+    WAITING_ACCEPTANCE,
+    ACCEPTED,
+    REJECTED,
+    ASKED_INFO,
+    CALL_REQUESTED,
+    NOTIFIED
+}
+
 enum class ClosureReason {
     COMPLETED,
     CUSTOMER_DECLINED,
@@ -42,28 +53,26 @@ enum class OrderPriority {
 
 enum class TimelineEventType {
     ORDER_CREATED,
-    CUSTOMER_CREATED,
     STATUS_CHANGED,
-    ESTIMATE_UPDATED,
     WHATSAPP_PREPARED,
     WHATSAPP_SENT_CONFIRMED,
     CUSTOMER_FEEDBACK_RECORDED,
     ORDER_REASSIGNED,
     INTERNAL_NOTE_ADDED,
     MEDIA_ADDED,
+    MEDIA_REMOVED,
     SIGNATURE_CAPTURED,
-    ORDER_CLOSED,
     ORDER_DELETED,
+    PDF_STATUS_SHARED,
+    CUSTOMER_ACTION_STATUS_CHANGED,
 }
 
 enum class CustomerFeedbackType {
-    NONE,
     READ,
     ACCEPT,
     REJECT,
     ASK_INFO,
     CALL_ME,
-    CUSTOM,
 }
 
 enum class MessageChannel {
@@ -75,10 +84,17 @@ enum class MessageMode {
 }
 
 enum class MessageStatus {
-    DRAFT,
     PREPARED,
     SENT_CONFIRMED,
-    FAILED,
+}
+
+enum class OrderDocumentType {
+    STATUS_PROGRESS_PDF,
+}
+
+enum class ExportDestination {
+    LOCAL,
+    CLOUD,
 }
 
 enum class AuditAction {

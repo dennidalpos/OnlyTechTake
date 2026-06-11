@@ -58,7 +58,8 @@ class AuthGateViewModel(
                     password = form.password.toCharArray(),
                 )
             }.onSuccess {
-                mutableFormState.value = AuthFormState()
+                // We don't clear the form here to avoid a flicker before navigation
+                // The AuthState update will trigger the transition to Dashboard
             }.onFailure {
                 mutableFormState.update {
                     it.copy(loading = false, errorMessage = "Creazione admin non riuscita")
@@ -78,7 +79,7 @@ class AuthGateViewModel(
             mutableFormState.update { it.copy(loading = true, errorMessage = null) }
             when (val result = authRepository.login(form.username, form.password.toCharArray())) {
                 is LoginResult.Success -> {
-                    mutableFormState.value = AuthFormState()
+                    // Success will trigger AuthState change, no need to clear form here
                 }
                 LoginResult.InactiveUser -> mutableFormState.update {
                     it.copy(loading = false, errorMessage = "Utente disattivato")

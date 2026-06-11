@@ -8,6 +8,7 @@ import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
+import com.onlytechtake.repairapp.data.local.entities.ExportDestination
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
@@ -17,11 +18,14 @@ import com.onlytechtake.repairapp.data.repositories.CustomerRepository
 import com.onlytechtake.repairapp.data.repositories.DataResetRepository
 import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
 import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
+import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
+import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.data.repositories.SignatureRepository
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
 import com.onlytechtake.repairapp.data.repositories.TemplateRepository
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
+import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
 import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
@@ -32,6 +36,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
@@ -53,19 +58,16 @@ class WorkspaceViewModel(
     private val templateRepository: TemplateRepository,
     private val backupRepository: BackupRepository,
     private val dataResetRepository: DataResetRepository,
-    private val createIntakeOrderUseCase: CreateIntakeOrderUseCase = CreateIntakeOrderUseCase(
-        customerRepository = customerRepository,
-        orderRepository = orderRepository,
-        orderMediaRepository = orderMediaRepository,
-        signatureRepository = signatureRepository,
-    ),
+    private val createIntakeOrderUseCase: CreateIntakeOrderUseCase,
+    private val orderDocumentRepository: OrderDocumentRepository,
+    private val generateOrderStatusPdfUseCase: GenerateOrderStatusPdfUseCase,
+    private val shareDocumentIntentFactory: ShareDocumentIntentFactory,
 ) : ViewModel() {
     private val mutableUiState = MutableStateFlow(WorkspaceUiState())
     val uiState: StateFlow<WorkspaceUiState> = mutableUiState
 
     val currentUser = authRepository.currentUser
     val users = adminUserRepository.observeUsers().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
-    val activeUsers = adminUserRepository.observeActiveUsers().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     val customers = customerRepository.observeRecent().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     val customerSuggestions = uiState
         .map { it.customerSearchQuery.trim() }
@@ -78,6 +80,9 @@ class WorkspaceViewModel(
     val templates = templateRepository.observeTemplates().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     val messageMode = templateRepository.observeMessageMode()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), MessageMode.MANUAL_WHATSAPP)
+
+    private val _exportDestination = MutableStateFlow(ExportDestination.LOCAL)
+    val exportDestination = _exportDestination.asStateFlow()
 
     val orderListItems = combine(currentUser, uiState) { user, state -> user to state.orderFilter }
         .flatMapLatest { (user, filter) ->
@@ -97,6 +102,12 @@ class WorkspaceViewModel(
             state.selectedOrderId?.let { orderRepository.observeOrderDetail(it) } ?: flowOf(null)
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    val selectedOrderDocuments = uiState
+        .flatMapLatest { state ->
+            state.selectedOrderId?.let { orderDocumentRepository.observeByOrder(it) } ?: flowOf(emptyList())
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     private val authenticatedActionRunner = AuthenticatedActionRunner(
         authRepository = authRepository,
@@ -159,7 +170,7 @@ class WorkspaceViewModel(
     }
 
     fun reportCameraError(message: String) {
-        showMessage(message, true)
+        showMessage(message, isError = true)
     }
 
     fun setFilter(filter: OrderFilter) {
@@ -178,10 +189,6 @@ class WorkspaceViewModel(
                 preparedMessageBody = "",
             )
         }
-    }
-
-    fun goHome() {
-        navigateTo(WorkspaceDestination.HOME)
     }
 
     fun openNewOrder() {
@@ -244,6 +251,7 @@ class WorkspaceViewModel(
     ) = withUser(onSuccess = {
         messageActions.clearPreparedMessage()
         onSuccess()
+        showSuccess("Stato aggiornato correttamente")
     }) { actor ->
         orderRepository.changeStatus(actor, orderId, status, note, closureReason)
     }
@@ -366,6 +374,10 @@ class WorkspaceViewModel(
         templateRepository.setMessageMode(actor, mode)
     }
 
+    fun setExportDestination(destination: ExportDestination) {
+        _exportDestination.value = destination
+    }
+
     fun prepareMessage(orderId: String, templateCode: String) =
         messageActions.prepareMessage(orderId, templateCode)
 
@@ -405,6 +417,79 @@ class WorkspaceViewModel(
     fun deleteArchivedOrders() =
         adminActions.deleteArchivedOrders()
 
+    fun onGenerateStatusPdfClicked(orderId: String, includeSignature: Boolean = true) {
+        val actor = currentUser.value ?: return
+        viewModelScope.launch {
+            mutableUiState.update { it.copy(isGeneratingStatusPdf = true, statusPdfError = null) }
+            generateOrderStatusPdfUseCase(orderId, actor.id, includeSignature)
+                .onSuccess { document ->
+                    mutableUiState.update { it.copy(
+                        isGeneratingStatusPdf = false,
+                        lastGeneratedDocumentId = document.id
+                    ) }
+                    showSuccess("PDF stato avanzamento generato")
+                    // Automatically trigger share after generation
+                    triggerShare(document.localPath, "Stato avanzamento ${document.fileName}")
+                    mutableUiState.update { it.copy(showPdfSentConfirmation = true) }
+                }
+                .onFailure { error ->
+                    mutableUiState.update { it.copy(isGeneratingStatusPdf = false, statusPdfError = error.message) }
+                    showError(error)
+                }
+        }
+    }
+
+    fun onShareDocumentClicked(documentId: String) {
+        viewModelScope.launch {
+            val document = orderDocumentRepository.findById(documentId)
+            if (document != null) {
+                mutableUiState.update { it.copy(lastGeneratedDocumentId = documentId) }
+                triggerShare(document.localPath, "Documento ${document.fileName}")
+                mutableUiState.update { it.copy(showPdfSentConfirmation = true) }
+            } else {
+                showMessage("Documento non trovato", isError = true)
+            }
+        }
+    }
+
+    private fun triggerShare(localPath: String, title: String) {
+        val file = File(localPath)
+        if (file.exists()) {
+            val intent = shareDocumentIntentFactory.createPdfShareIntent(file, title)
+            // This is tricky because ViewModel doesn't have Context to start activity easily.
+            // Usually we'd use a Flow/Event for UI to handle this.
+            // I'll add a sharedIntent to UiState.
+            mutableUiState.update { it.copy(pendingShareIntent = intent) }
+        } else {
+            showMessage("File non trovato", isError = true)
+        }
+    }
+
+    fun onPdfSentConfirmed() {
+        val actor = currentUser.value ?: return
+        val documentId = uiState.value.lastGeneratedDocumentId ?: return
+        viewModelScope.launch {
+            val now = System.currentTimeMillis()
+            orderDocumentRepository.markShared(documentId, now)
+            val doc = orderDocumentRepository.findById(documentId)
+            selectedOrder.value?.order?.id?.let { orderId ->
+                if (doc != null) {
+                    orderRepository.recordPdfShared(actor, orderId, doc.fileName)
+                }
+            }
+            mutableUiState.update { it.copy(showPdfSentConfirmation = false, lastGeneratedDocumentId = null) }
+            showSuccess("Invio confermato")
+        }
+    }
+
+    fun onPdfSentDismissed() {
+        mutableUiState.update { it.copy(showPdfSentConfirmation = false) }
+    }
+
+    fun clearPendingShareIntent() {
+        mutableUiState.update { it.copy(pendingShareIntent = null) }
+    }
+
     private fun withUser(
         onSuccess: () -> Unit = {},
         block: suspend (com.onlytechtake.repairapp.domain.auth.AuthenticatedUser) -> Result<*>,
@@ -412,9 +497,9 @@ class WorkspaceViewModel(
         authenticatedActionRunner.run(onSuccess = onSuccess, block = block)
     }
 
-    private fun showSuccess(text: String) = showMessage(text, false)
+    private fun showSuccess(text: String) = showMessage(text, isError = false)
 
-    private fun showError(error: Throwable) = showMessage(error.message ?: "Operazione non riuscita", true)
+    private fun showError(error: Throwable) = showMessage(error.message ?: "Operazione non riuscita", isError = true)
 
     private fun showMessage(text: String, isError: Boolean) {
         mutableUiState.update { it.copy(message = WorkspaceMessage(text, isError)) }

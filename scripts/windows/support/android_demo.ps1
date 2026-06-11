@@ -193,19 +193,26 @@ function Assert-PathInsideRoot {
 function Invoke-DemoApkBuildAndInstall {
     param(
         [Parameter(Mandatory = $true)][string]$RootPath,
-        [Parameter(Mandatory = $true)][string]$Serial
+        [Parameter(Mandatory = $true)][string]$Serial,
+        [switch]$SkipBuild
     )
 
-    $gradle = Join-Path $RootPath "gradlew.bat"
-    Invoke-Checked -FilePath $gradle -Arguments @("--no-configuration-cache", ":app:assembleDebug", ":app:assembleDebugAndroidTest")
+    if (-not $SkipBuild) {
+        $gradle = Join-Path $RootPath "gradlew.bat"
+        # Removed --no-configuration-cache to speed up repeated builds
+        Invoke-Checked -FilePath $gradle -Arguments @(":app:assembleDebug", ":app:assembleDebugAndroidTest")
+    } else {
+        Write-Host "Salto build APK (richiesto -SkipBuild)."
+    }
 
     $debugApk = Join-Path $RootPath "app\build\outputs\apk\debug\app-debug.apk"
     $testApk = Join-Path $RootPath "app\build\outputs\apk\androidTest\debug\app-debug-androidTest.apk"
     if (-not (Test-Path $debugApk)) { throw "APK debug non trovato: $debugApk" }
     if (-not (Test-Path $testApk)) { throw "Test APK non trovato: $testApk" }
 
-    Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "install", "-r", $debugApk)
-    Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "install", "-r", $testApk)
+    Write-Host "Installazione APK su $Serial..."
+    Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "install", "-r", "-d", $debugApk)
+    Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "install", "-r", "-d", $testApk)
     Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "shell", "pm", "clear", "com.onlytechtake.repairapp")
 }
 

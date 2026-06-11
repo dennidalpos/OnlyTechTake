@@ -11,8 +11,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -27,12 +36,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
+import com.onlytechtake.repairapp.data.local.entities.ExportDestination
 import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
+import com.onlytechtake.repairapp.features.workspace.ButtonTone
 
 @Composable
 fun ConfigPanel(
@@ -43,6 +56,30 @@ fun ConfigPanel(
     val categories by viewModel.categories.collectAsState()
     val templates by viewModel.templates.collectAsState()
     val messageMode by viewModel.messageMode.collectAsState()
+    val exportDestination by viewModel.exportDestination.collectAsState()
+
+    val confirmCategorySaveTitle = stringResource(R.string.config_category_confirm_save_title)
+    val confirmCategorySaveText = stringResource(R.string.config_category_confirm_save_text)
+    val confirmCategoryDeleteTitle = stringResource(R.string.config_category_confirm_delete_title)
+    val confirmCategoryDeleteText = stringResource(R.string.config_category_confirm_delete_text)
+    val confirmCategoryDeleteSpecificText = stringResource(R.string.config_category_confirm_delete_specific_text)
+    val confirmTemplateSaveTitle = stringResource(R.string.config_template_confirm_save_title)
+    val confirmTemplateSaveRisky = stringResource(R.string.config_template_confirm_save_risky)
+    val confirmTemplateSaveNewVersion = stringResource(R.string.config_template_confirm_save_new_version)
+    val confirmWaManualTitle = stringResource(R.string.config_whatsapp_confirm_manual_title)
+    val confirmWaManualText = stringResource(R.string.config_whatsapp_confirm_manual_text)
+    val confirmExportConfigTitle = stringResource(R.string.config_backup_confirm_export_config_title)
+    val confirmExportConfigTextTemplate = stringResource(R.string.config_backup_confirm_export_config_text)
+    val confirmExportDbTitle = stringResource(R.string.config_backup_confirm_export_db_title)
+    val confirmExportDbTextTemplate = stringResource(R.string.config_backup_confirm_export_db_text)
+    val confirmExportXlsxTitle = stringResource(R.string.config_backup_confirm_export_xlsx_title)
+    val confirmExportXlsxTextTemplate = stringResource(R.string.config_backup_confirm_export_xlsx_text)
+    val confirmExportZipTitle = stringResource(R.string.config_backup_confirm_export_zip_title)
+    val confirmExportZipTextTemplate = stringResource(R.string.config_backup_confirm_export_zip_text)
+    val confirmRestoreZipTitle = stringResource(R.string.config_backup_confirm_restore_zip_title)
+    val confirmRestoreZipText = stringResource(R.string.config_backup_confirm_restore_zip_text)
+    val destMsgLocal = stringResource(R.string.order_export_local)
+    val destMsgCloud = stringResource(R.string.order_export_cloud)
 
     var section by rememberSaveable { mutableStateOf<ConfigSection?>(null) }
     var categoryId by rememberSaveable { mutableStateOf<String?>(null) }
@@ -108,10 +145,10 @@ fun ConfigPanel(
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
-            SectionTitle("Config")
+            SectionTitle(stringResource(R.string.dashboard_config))
             section?.let {
                 TouchButton(
-                    text = "Torna a Config",
+                    text = stringResource(R.string.config_back),
                     testTag = RepairAppTestTags.ConfigBackButton,
                     onClick = { section = null },
                 )
@@ -122,8 +159,8 @@ fun ConfigPanel(
             null -> {
                 item {
                     ConfigHubCard(
-                        title = "Categorie",
-                        subtitle = "Catalogo commesse",
+                        title = stringResource(R.string.config_hub_categories_title),
+                        subtitle = stringResource(R.string.config_hub_categories_subtitle),
                         testTag = RepairAppTestTags.ConfigHubCategoriesButton,
                     ) {
                         section = ConfigSection.CATEGORIES
@@ -131,8 +168,8 @@ fun ConfigPanel(
                 }
                 item {
                     ConfigHubCard(
-                        title = "Template",
-                        subtitle = if (isAdmin) "Messaggi e documenti" else "Area admin",
+                        title = stringResource(R.string.config_hub_templates_title),
+                        subtitle = if (isAdmin) stringResource(R.string.config_hub_templates_subtitle_admin) else stringResource(R.string.config_hub_templates_subtitle_user),
                         enabled = isAdmin,
                         testTag = RepairAppTestTags.ConfigHubTemplatesButton,
                     ) {
@@ -140,17 +177,17 @@ fun ConfigPanel(
                     }
                 }
                 item {
-                    ConfigHubCard("WhatsApp", "Invio manuale") {
+                    ConfigHubCard(stringResource(R.string.config_hub_whatsapp_title), stringResource(R.string.config_hub_whatsapp_subtitle)) {
                         section = ConfigSection.WHATSAPP
                     }
                 }
                 item {
-                    ConfigHubCard("Utenti e reset", "Area admin") {
+                    ConfigHubCard(stringResource(R.string.config_hub_admin_title), stringResource(R.string.config_hub_admin_subtitle)) {
                         viewModel.navigateTo(WorkspaceDestination.ADMIN)
                     }
                 }
                 item {
-                    ConfigHubCard("Backup", "Export e ripristino") {
+                    ConfigHubCard(stringResource(R.string.config_hub_backup_title), stringResource(R.string.config_hub_backup_subtitle)) {
                         section = ConfigSection.EXPORT
                     }
                 }
@@ -160,76 +197,111 @@ fun ConfigPanel(
                 val currentParent = currentCategoryParentId?.let { id -> categories.firstOrNull { it.id == id } }
                 val visibleCategories = categories.filter { it.parentId == currentCategoryParentId }
                 item {
-                    SectionTitle("Categorie")
+                    SectionTitle(stringResource(R.string.config_hub_categories_title))
                     if (!isAdmin) {
-                        Text("Area riservata admin. Le categorie sono disponibili solo in consultazione.")
+                        Text(stringResource(R.string.config_categories_admin_only))
                     } else {
-                        Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
-                            Text(
-                                text = "Livello ${currentParent?.level?.plus(1) ?: 0}",
-                                style = MaterialTheme.typography.titleSmall,
-                            )
-                            Text(
-                                text = categoryBreadcrumb(categories, currentCategoryParentId),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                            ActionRow {
-                                TouchButton(
-                                    text = "Radice",
-                                    tone = if (currentCategoryParentId == null) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
-                                    onClick = { openCategoryBranch(null) },
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                                verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)
+                            ) {
+                                Text(
+                                    text = if (categoryId == null) "Nuova Categoria" else "Modifica Categoria",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.primary
                                 )
-                                if (currentParent?.parentId != null) {
+                                Text(
+                                    text = categoryBreadcrumb(categories, currentCategoryParentId),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                                ActionRow {
                                     TouchButton(
-                                        text = "Su",
-                                        tone = ButtonTone.NEUTRAL,
-                                        onClick = { openCategoryBranch(currentParent.parentId) },
-                                    )
-                                } else if (currentCategoryParentId != null) {
-                                    TouchButton(
-                                        text = "Su",
-                                        tone = ButtonTone.NEUTRAL,
+                                        text = stringResource(R.string.config_category_root),
+                                        tone = if (currentCategoryParentId == null) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
                                         onClick = { openCategoryBranch(null) },
                                     )
+                                    if (currentParent?.parentId != null) {
+                                        TouchButton(
+                                            text = stringResource(R.string.config_category_up),
+                                            tone = ButtonTone.NEUTRAL,
+                                            onClick = { openCategoryBranch(currentParent.parentId) },
+                                        )
+                                    } else if (currentCategoryParentId != null) {
+                                        TouchButton(
+                                            text = stringResource(R.string.config_category_up),
+                                            tone = ButtonTone.NEUTRAL,
+                                            onClick = { openCategoryBranch(null) },
+                                        )
+                                    }
                                 }
-                            }
-                            Field(categoryName, { categoryName = it }, "Nome categoria", testTag = RepairAppTestTags.ConfigCategoryNameField)
-                            Field(categoryDescription, { categoryDescription = it }, "Descrizione", testTag = RepairAppTestTags.ConfigCategoryDescriptionField)
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(if (categoryActive) "Categoria attiva" else "Categoria archiviata")
-                                Switch(
-                                    checked = categoryActive,
-                                    onCheckedChange = { categoryActive = it },
+                                Field(
+                                    categoryName,
+                                    { categoryName = it },
+                                    stringResource(R.string.config_category_name_label),
+                                    testTag = RepairAppTestTags.ConfigCategoryNameField
                                 )
-                            }
-                            ActionRow {
-                                TouchButton(
-                                    text = "Nuova",
-                                    tone = ButtonTone.NEUTRAL,
-                                    testTag = RepairAppTestTags.ConfigCategoryNewButton,
-                                    onClick = ::loadNewCategory,
+                                Field(
+                                    categoryDescription,
+                                    { categoryDescription = it },
+                                    stringResource(R.string.config_category_description_label),
+                                    testTag = RepairAppTestTags.ConfigCategoryDescriptionField
                                 )
-                                TouchButton(
-                                    text = "Salva categoria",
-                                    testTag = RepairAppTestTags.ConfigCategorySaveButton,
-                                    onClick = {
-                                        requestConfirm("Salvare categoria?", "La categoria verra' aggiornata nel catalogo locale.") {
-                                            viewModel.saveCategory(
-                                                id = categoryId,
-                                                parentId = categoryParentId,
-                                                name = categoryName,
-                                                description = categoryDescription,
-                                                active = categoryActive,
-                                            )
-                                            loadNewCategory()
-                                        }
-                                    },
-                                )
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Text(if (categoryActive) stringResource(R.string.config_category_active) else stringResource(R.string.config_category_archived))
+                                    Switch(
+                                        checked = categoryActive,
+                                        onCheckedChange = { categoryActive = it },
+                                    )
+                                }
+                                ActionRow {
+                                    TouchButtonWithIcon(
+                                        text = stringResource(R.string.config_category_new),
+                                        icon = Icons.Default.Add,
+                                        tone = ButtonTone.NEUTRAL,
+                                        testTag = RepairAppTestTags.ConfigCategoryNewButton,
+                                        onClick = ::loadNewCategory,
+                                    )
+                                    TouchButtonWithIcon(
+                                        text = stringResource(R.string.config_category_save),
+                                        icon = Icons.Default.Check,
+                                        testTag = RepairAppTestTags.ConfigCategorySaveButton,
+                                        onClick = {
+                                            requestConfirm(confirmCategorySaveTitle, confirmCategorySaveText) {
+                                                viewModel.saveCategory(
+                                                    id = categoryId,
+                                                    parentId = categoryParentId,
+                                                    name = categoryName,
+                                                    description = categoryDescription,
+                                                    active = categoryActive,
+                                                )
+                                                loadNewCategory()
+                                            }
+                                        },
+                                    )
+                                    if (categoryId != null) {
+                                        TouchButtonWithIcon(
+                                            text = stringResource(R.string.config_category_delete),
+                                            icon = Icons.Default.Delete,
+                                            tone = ButtonTone.DANGER,
+                                            testTag = RepairAppTestTags.ConfigCategoryDeleteButton,
+                                            onClick = {
+                                                requestConfirm(confirmCategoryDeleteTitle, confirmCategoryDeleteText) {
+                                                    viewModel.deleteCategory(categoryId!!)
+                                                    loadNewCategory()
+                                                }
+                                            },
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
@@ -246,29 +318,47 @@ fun ConfigPanel(
                             modifier = Modifier.padding(DashboardSpacing.cardPadding),
                             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
                         ) {
-                            Text(category.name, style = MaterialTheme.typography.titleMedium)
-                            Text("Livello ${category.level} - ${if (category.active) "Attiva" else "Archiviata"}")
-                            category.description?.takeIf { it.isNotBlank() }?.let { Text(it) }
-                            if (isAdmin) {
-                                ActionRow {
-                                    TouchButton(
-                                        text = "Modifica",
-                                        tone = ButtonTone.NEUTRAL,
-                                        onClick = { selectCategoryForEdit(category) },
-                                    )
-                                    TouchButton(
-                                        text = "Apri ramo",
-                                        tone = ButtonTone.INFO,
-                                        onClick = { openCategoryBranch(category.id) },
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(category.name, style = MaterialTheme.typography.titleMedium)
+                                    Text(
+                                        text = stringResource(R.string.config_category_level, category.level) + " - " + (if (category.active) stringResource(R.string.config_category_active) else stringResource(R.string.config_category_archived)),
+                                        style = MaterialTheme.typography.bodySmall
                                     )
                                 }
+                                if (isAdmin) {
+                                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                        IconButton(onClick = { selectCategoryForEdit(category) }) {
+                                            Icon(Icons.Default.Edit, contentDescription = "Modifica")
+                                        }
+                                        IconButton(onClick = { openCategoryBranch(category.id) }) {
+                                            Icon(Icons.Default.ArrowForward, contentDescription = "Apri")
+                                        }
+                                        IconButton(onClick = {
+                                            requestConfirm(
+                                                confirmCategoryDeleteTitle,
+                                                confirmCategoryDeleteSpecificText.format(category.name)
+                                            ) {
+                                                viewModel.deleteCategory(category.id)
+                                                loadNewCategory()
+                                            }
+                                        }) {
+                                            Icon(Icons.Default.Delete, contentDescription = "Elimina", tint = MaterialTheme.colorScheme.error)
+                                        }
+                                    }
+                                }
                             }
+                            category.description?.takeIf { it.isNotBlank() }?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
                         }
                     }
                 }
                 if (visibleCategories.isEmpty()) {
                     item {
-                        Text("Nessuna categoria in questo ramo.", style = MaterialTheme.typography.bodyMedium)
+                        Text(stringResource(R.string.config_category_empty_branch), style = MaterialTheme.typography.bodyMedium)
                     }
                 }
             }
@@ -276,12 +366,12 @@ fun ConfigPanel(
             ConfigSection.TEMPLATES -> {
                 item {
                     Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
-                        SectionTitle("Template")
-                        Field(templateCode, { templateCode = it }, "Codice", testTag = RepairAppTestTags.ConfigTemplateCodeField)
-                        Field(templateTitle, { templateTitle = it }, "Titolo", testTag = RepairAppTestTags.ConfigTemplateTitleField)
-                        Field(templateBody, { templateBody = it }, "Testo", testTag = RepairAppTestTags.ConfigTemplateBodyField)
+                        SectionTitle(stringResource(R.string.config_hub_templates_title))
+                        Field(templateCode, { templateCode = it }, stringResource(R.string.config_template_code_label), testTag = RepairAppTestTags.ConfigTemplateCodeField)
+                        Field(templateTitle, { templateTitle = it }, stringResource(R.string.config_template_title_label), testTag = RepairAppTestTags.ConfigTemplateTitleField)
+                        Field(templateBody, { templateBody = it }, stringResource(R.string.config_template_body_label), testTag = RepairAppTestTags.ConfigTemplateBodyField)
                         Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
-                            Text("Variabili", style = MaterialTheme.typography.titleSmall)
+                            Text(stringResource(R.string.config_template_variables), style = MaterialTheme.typography.titleSmall)
                             OperatorText("{{numero_commessa}}  {{stato_commessa}}  {{categoria_percorso}}  {{cliente}}")
                         }
                         Row(
@@ -289,7 +379,7 @@ fun ConfigPanel(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Text(if (templateActive) "Template attivo" else "Template archiviato")
+                            Text(if (templateActive) stringResource(R.string.config_template_active) else stringResource(R.string.config_template_archived))
                             Switch(
                                 checked = templateActive,
                                 onCheckedChange = { templateActive = it },
@@ -297,17 +387,13 @@ fun ConfigPanel(
                         }
                         ActionRow {
                             TouchButton(
-                                text = "Salva template",
+                                text = stringResource(R.string.config_template_save),
                                 testTag = RepairAppTestTags.ConfigTemplateSaveButton,
                                 onClick = {
                                     val riskyTemplateChange = isRiskyTemplateChange(loadedTemplateCode, templateCode, templateActive)
                                     requestConfirm(
-                                        "Salvare template?",
-                                        if (riskyTemplateChange) {
-                                            "La modifica puo' interrompere i flussi che usano questo codice. Le firme salvate non cambiano."
-                                        } else {
-                                            "Verra' salvata una nuova versione."
-                                        },
+                                        confirmTemplateSaveTitle,
+                                        if (riskyTemplateChange) confirmTemplateSaveRisky else confirmTemplateSaveNewVersion,
                                     ) {
                                         viewModel.saveTemplate(templateCode, templateTitle, templateBody, active = templateActive)
                                         loadedTemplateCode = templateCode
@@ -333,15 +419,15 @@ fun ConfigPanel(
                             modifier = Modifier.padding(DashboardSpacing.cardPadding),
                             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
                         ) {
-                            Text("${template.code} v${template.version}", style = MaterialTheme.typography.titleMedium)
+                            Text(stringResource(R.string.config_template_version_label, template.code, template.version), style = MaterialTheme.typography.titleMedium)
                             Text(template.title)
-                            Text(if (template.active) "Attivo" else "Archiviato")
+                            Text(if (template.active) stringResource(R.string.config_template_active) else stringResource(R.string.config_template_archived))
                         }
                     }
                 }
                 if (templates.isEmpty()) {
                     item {
-                        Text("Nessun template configurato.", style = MaterialTheme.typography.bodyMedium)
+                        Text(stringResource(R.string.config_template_empty), style = MaterialTheme.typography.bodyMedium)
                     }
                 }
             }
@@ -349,13 +435,13 @@ fun ConfigPanel(
             ConfigSection.WHATSAPP -> {
                 item {
                     Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
-                        SectionTitle("WhatsApp")
-                        Text("Modalita': ${messageMode.name}")
+                        SectionTitle(stringResource(R.string.config_hub_whatsapp_title))
+                        Text(stringResource(R.string.config_whatsapp_mode, messageMode.name))
                         ActionRow {
                             TouchButton(
-                                text = "Manuale",
+                                text = stringResource(R.string.config_whatsapp_manual),
                                 onClick = {
-                                    requestConfirm("Impostare modalita' manuale?", "La modalita' WhatsApp verra' salvata.") {
+                                    requestConfirm(confirmWaManualTitle, confirmWaManualText) {
                                         viewModel.setMessageMode(MessageMode.MANUAL_WHATSAPP)
                                     }
                                 },
@@ -368,51 +454,77 @@ fun ConfigPanel(
             ConfigSection.EXPORT -> {
                 item {
                     Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
-                        SectionTitle("Backup")
+                        SectionTitle(stringResource(R.string.config_hub_backup_title))
                         if (!isAdmin) {
-                            Text("Area riservata admin.")
+                            Text(stringResource(R.string.config_backup_admin_only))
                         } else {
-                            Text("File non cifrati: usare solo destinazioni protette.")
+                            Text(stringResource(R.string.config_backup_unencrypted_warning))
+                            Text(stringResource(R.string.config_backup_destination_label), style = MaterialTheme.typography.titleSmall)
                             ActionRow {
                                 TouchButton(
-                                    text = "Export config",
+                                    text = stringResource(R.string.config_backup_destination_local),
+                                    tone = if (exportDestination == ExportDestination.LOCAL) ButtonTone.PRIMARY else ButtonTone.NEUTRAL,
+                                    onClick = { viewModel.setExportDestination(ExportDestination.LOCAL) }
+                                )
+                                TouchButton(
+                                    text = stringResource(R.string.config_backup_destination_cloud),
+                                    tone = if (exportDestination == ExportDestination.CLOUD) ButtonTone.PRIMARY else ButtonTone.NEUTRAL,
+                                    onClick = { viewModel.setExportDestination(ExportDestination.CLOUD) }
+                                )
+                            }
+                            Text(
+                                text = if (exportDestination == ExportDestination.LOCAL)
+                                    stringResource(R.string.config_backup_destination_local_desc)
+                                else
+                                    stringResource(R.string.config_backup_destination_cloud_desc),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+
+                            ActionRow {
+                                TouchButton(
+                                    text = stringResource(R.string.config_backup_export_config),
                                     onClick = {
-                                        requestConfirm("Esportare configurazione?", "Verra' creato un file JSON non cifrato tramite selettore di sistema.") {
+                                        val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
+                                        requestConfirm(confirmExportConfigTitle, confirmExportConfigTextTemplate.format(destMsg)) {
                                             exportConfigLauncher.launch("onlytechtake-config.json")
                                         }
                                     },
                                 )
                                 TouchButton(
-                                    text = "Export DB",
+                                    text = stringResource(R.string.config_backup_export_db),
                                     onClick = {
-                                        requestConfirm("Esportare database?", "Verra' creato un file database non cifrato tramite selettore di sistema.") {
+                                        val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
+                                        requestConfirm(confirmExportDbTitle, confirmExportDbTextTemplate.format(destMsg)) {
                                             exportDbLauncher.launch("repair_app.db")
                                         }
                                     },
                                 )
                                 TouchButton(
-                                    text = "Export commesse XLSX",
+                                    text = stringResource(R.string.config_backup_export_xlsx),
                                     onClick = {
-                                        requestConfirm("Esportare commesse?", "Verra' creato un file XLSX non cifrato tramite selettore di sistema.") {
+                                        val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
+                                        requestConfirm(confirmExportXlsxTitle, confirmExportXlsxTextTemplate.format(destMsg)) {
                                             exportOrdersXlsxLauncher.launch("onlytechtake-commesse.xlsx")
                                         }
                                     },
                                 )
                                 TouchButton(
-                                    text = "Export ZIP",
+                                    text = stringResource(R.string.config_backup_export_zip),
                                     onClick = {
-                                        requestConfirm("Esportare backup completo?", "Verra' creato un file ZIP non cifrato tramite selettore di sistema.") {
+                                        val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
+                                        requestConfirm(confirmExportZipTitle, confirmExportZipTextTemplate.format(destMsg)) {
                                             exportZipLauncher.launch("onlytechtake-backup.zip")
                                         }
                                     },
                                 )
                                 TouchButton(
-                                    text = "Ripristina ZIP",
+                                    text = stringResource(R.string.config_backup_restore_zip),
                                     tone = ButtonTone.WARNING,
                                     onClick = {
                                         requestConfirm(
-                                            title = "Ripristinare backup?",
-                                            text = "Il backup ZIP sostituira' database e file locali dell'app. Dopo il ripristino sara' richiesto un nuovo login.",
+                                            title = confirmRestoreZipTitle,
+                                            text = confirmRestoreZipText,
                                         ) {
                                             restoreZipLauncher.launch(arrayOf("application/zip", "application/octet-stream", "*/*"))
                                         }
@@ -442,7 +554,7 @@ fun ConfigPanel(
                         confirmAction = null
                     },
                 ) {
-                    Text("Conferma")
+                    Text(stringResource(R.string.confirm))
                 }
             },
             dismissButton = {
@@ -452,7 +564,7 @@ fun ConfigPanel(
                         confirmAction = null
                     },
                 ) {
-                    Text("Annulla")
+                    Text(stringResource(R.string.customer_cancel))
                 }
             },
         )

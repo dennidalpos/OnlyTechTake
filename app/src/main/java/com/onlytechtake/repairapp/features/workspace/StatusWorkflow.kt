@@ -49,28 +49,10 @@ fun statusTemplateCode(order: RepairOrderEntity): String =
         else -> statusTemplateCode(order.status)
     }
 
-fun OrderStatus.label(): String =
+fun OrderStatusAction.tone(): ButtonTone =
     when (this) {
-        OrderStatus.OPEN -> "Aperta"
-        OrderStatus.IN_PROGRESS -> "In lavorazione"
-        OrderStatus.DIAGNOSIS -> "In diagnosi"
-        OrderStatus.RESULT -> "Risultato"
-        OrderStatus.REPAIRING -> "In riparazione"
-        OrderStatus.READY_FOR_PICKUP -> "Pronta al ritiro"
-        OrderStatus.CLOSED -> "Chiusa"
-    }
-
-fun ClosureReason.label(): String =
-    when (this) {
-        ClosureReason.COMPLETED -> "Completata"
-        ClosureReason.CUSTOMER_DECLINED -> "Rifiutata dal cliente"
-        ClosureReason.NOT_REPAIRABLE -> "Non riparabile"
-        ClosureReason.CANCELLED -> "Annullata"
-        ClosureReason.OTHER -> "Altro"
-    }
-
-fun DiagnosisOutcome.label(): String =
-    when (this) {
-        DiagnosisOutcome.REPAIRABLE -> "Riparabile"
-        DiagnosisOutcome.NOT_REPAIRABLE -> "Non riparabile"
+        OrderStatusAction.CLOSE_ORDER -> ButtonTone.DANGER
+        OrderStatusAction.READY_FOR_PICKUP -> ButtonTone.SUCCESS
+        OrderStatusAction.RECORD_RESULT -> ButtonTone.INFO
+        else -> ButtonTone.PRIMARY
     }
