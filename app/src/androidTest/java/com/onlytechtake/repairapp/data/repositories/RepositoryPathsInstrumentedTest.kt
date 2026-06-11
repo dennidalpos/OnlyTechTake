@@ -718,6 +718,7 @@ class RepositoryPathsInstrumentedTest {
 
     private fun orderWorkflowRepository(): OrderWorkflowRepository =
         OrderWorkflowRepository(
+            context = context,
             repairOrderDao = database.repairOrderDao(),
             customerDao = database.customerDao(),
             categoryDao = database.orderCategoryDao(),
@@ -743,6 +744,7 @@ class RepositoryPathsInstrumentedTest {
 
     private fun templateRepository(): TemplateRepository =
         TemplateRepository(
+            context = context,
             templateDao = database.messageTemplateDao(),
             orderDao = database.repairOrderDao(),
             customerDao = database.customerDao(),
