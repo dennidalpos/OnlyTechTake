@@ -164,15 +164,15 @@ fun IntakeCustomerFields(
         CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = onBusinessChange)
         if (isBusiness) {
             Field(companyName, onCompanyNameChange, stringResource(R.string.customer_field_company_name), required = true, showError = companyName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
-            Field(vatNumber, onVatNumberChange, stringResource(R.string.customer_field_vat_number), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
+            Field(vatNumber, onVatNumberChange, stringResource(R.string.customer_field_vat_number), showOptional = true, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
         } else {
             Field(firstName, onFirstNameChange, stringResource(R.string.customer_field_first_name), required = true, showError = firstName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, testTag = RepairAppTestTags.NewOrderFirstNameField)
             Field(lastName, onLastNameChange, stringResource(R.string.customer_field_last_name), required = true, showError = lastName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, testTag = RepairAppTestTags.NewOrderLastNameField)
         }
-        Field(taxCode, onTaxCodeChange, stringResource(R.string.customer_field_tax_code), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
+        Field(taxCode, onTaxCodeChange, stringResource(R.string.customer_field_tax_code), showOptional = true, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
         Field(phone, onPhoneChange, stringResource(R.string.customer_field_phone), required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, testTag = RepairAppTestTags.NewOrderPhoneField)
         Field(email, onEmailChange, stringResource(R.string.customer_field_email), required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, testTag = RepairAppTestTags.NewOrderEmailField)
-        Field(address, onAddressChange, stringResource(R.string.customer_field_address), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
-        Field(notes, onNotesChange, stringResource(R.string.customer_field_notes), imeAction = ImeAction.Done, keyboardActions = doneAction)
+        Field(address, onAddressChange, stringResource(R.string.customer_field_address), showOptional = true, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction)
+        NoteFieldWithDialog(notes, onNotesChange, testTag = RepairAppTestTags.NewOrderNotesField)
     }
 }

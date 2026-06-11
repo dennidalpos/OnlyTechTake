@@ -18,6 +18,7 @@ object RepairAppTestTags {
     const val NewOrderStep2NextButton = "new_order_step_2_next_button"
     const val NewOrderProblemSummaryField = "new_order_problem_summary_field"
     const val NewOrderProblemDetailsField = "new_order_problem_details_field"
+    const val NewOrderNotesField = "new_order_notes_field"
     const val SignatureCanvas = "signature_canvas"
 
     const val StatusResultSummaryField = "status_result_summary_field"

@@ -12,10 +12,6 @@ import com.onlytechtake.repairapp.data.local.dao.MessageTemplateDao
 import com.onlytechtake.repairapp.data.local.dao.OrderExportDao
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
-import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
-import com.onlytechtake.repairapp.data.local.entities.CustomerType
-import com.onlytechtake.repairapp.data.local.entities.ClosureReason
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
@@ -229,7 +225,7 @@ class BackupRepository(
         require(name.isNotBlank()) { "Backup ZIP non valido" }
         require(!name.startsWith("/") && !name.startsWith("\\")) { "Percorso backup non valido" }
         val parts = name.replace('\\', '/').split('/')
-        require(parts.none { it == ".." || it.isBlank() }) { "Percorso backup non valido" }
+        require(parts.none { (it == "..") || it.isBlank() }) { "Percorso backup non valido" }
     }
 
     private fun safeChild(root: File, relativePath: String): File {
@@ -252,7 +248,7 @@ class BackupRepository(
         val dbFile = databaseFile()
         dbFile.parentFile?.mkdirs()
         dbFile.parentFile
-            ?.listFiles { file -> file.name == dbFile.name || file.name.startsWith("${dbFile.name}-") }
+            ?.listFiles { file -> (file.name == dbFile.name) || file.name.startsWith("${dbFile.name}-") }
             ?.forEach { it.delete() }
         databaseFiles.forEach { (fileName, source) ->
             source.copyTo(File(dbFile.parentFile, fileName), overwrite = true)
@@ -318,7 +314,7 @@ class BackupRepository(
         val dbFile = databaseFile()
         require(dbFile.exists()) { "Database non ancora creato" }
         val databaseFiles = dbFile.parentFile
-            ?.listFiles { file -> file.name == dbFile.name || file.name.startsWith("${dbFile.name}-") }
+            ?.listFiles { file -> (file.name == dbFile.name) || file.name.startsWith("${dbFile.name}-") }
             ?.sortedBy { it.name }
             .orEmpty()
         databaseFiles.forEach { file ->

@@ -3,12 +3,19 @@ package com.onlytechtake.repairapp.features.dashboard
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
@@ -23,12 +30,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
@@ -92,7 +102,6 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         unnamedBusiness = unnamedBusiness
     ) ?: selectedCustomerLabel
     val activeCategories = categories.filter { it.active }
-    val selectedCategory = activeCategories.firstOrNull { it.id == selectedCategoryId }
     val newCustomerInput = CustomerInput(
         type = if (isBusiness) CustomerType.BUSINESS else CustomerType.PRIVATE,
         firstName = firstName,
@@ -188,14 +197,16 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
     ) {
         SectionTitle(stringResource(R.string.new_order_title))
 
-        if (completedStep >= 1 && currentStep != 1) {
-            IntakeStepSummary(
-                stepNumber = 1,
-                title = stringResource(R.string.intake_step_customer),
-                value = selectedCustomerDisplayName.orEmpty(),
-                onEdit = { editStep(1) },
-            )
-        }
+        StepperIndicator(
+            currentStep = currentStep,
+            completedStep = completedStep,
+            onStepClick = { step ->
+                if (step <= completedStep + 1) {
+                    editStep(step)
+                }
+            }
+        )
+
         if (currentStep == 1) {
             Card(modifier = Modifier.fillMaxWidth()) {
             Column(
@@ -313,14 +324,6 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
             )
         }
 
-        if (completedStep >= 2 && currentStep != 2) {
-            IntakeStepSummary(
-                stepNumber = 2,
-                title = stringResource(R.string.intake_step_category),
-                value = selectedCategory?.name.orEmpty(),
-                onEdit = { editStep(2) },
-            )
-        }
         if (currentStep == 2) {
             QuickIntakeCategorySection(
                 stepNumber = 2,
@@ -340,14 +343,6 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
             )
         }
 
-        if (completedStep >= 3 && currentStep != 3) {
-            IntakeStepSummary(
-                stepNumber = 3,
-                title = stringResource(R.string.intake_step_problem),
-                value = problemSummary,
-                onEdit = { editStep(3) },
-            )
-        }
         if (currentStep == 3) {
             QuickIntakeProblemSection(
                 stepNumber = 3,
@@ -365,14 +360,6 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
             )
         }
 
-        if (completedStep >= 4 && currentStep != 4) {
-            IntakeStepSummary(
-                stepNumber = 4,
-                title = stringResource(R.string.intake_step_media),
-                value = stringResource(R.string.intake_media_count, stagedMedia.size),
-                onEdit = { editStep(4) },
-            )
-        }
         if (currentStep == 4) {
             QuickIntakeMediaSection(
                 stepNumber = 4,
@@ -407,14 +394,6 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
             )
         }
 
-        if (completedStep >= 5 && currentStep != 5) {
-            IntakeStepSummary(
-                stepNumber = 5,
-                title = stringResource(R.string.intake_step_privacy),
-                value = stringResource(R.string.intake_signature_captured),
-                onEdit = { editStep(5) },
-            )
-        }
         if (currentStep == 5) {
             key(intakeSessionId) {
                 Card(modifier = Modifier.fillMaxWidth()) {
@@ -464,25 +443,50 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
 }
 
 @Composable
-private fun IntakeStepSummary(
-    stepNumber: Int,
-    title: String,
-    value: String,
-    onEdit: () -> Unit,
+private fun StepperIndicator(
+    currentStep: Int,
+    completedStep: Int,
+    onStepClick: (Int) -> Unit
 ) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(
-            modifier = Modifier.padding(DashboardSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-        ) {
-            StepSectionTitle(stepNumber, title)
-            Text(value.ifBlank { stringResource(R.string.intake_not_set) }, style = MaterialTheme.typography.bodyMedium)
-            TouchButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.intake_edit_step),
-                tone = ButtonTone.NEUTRAL,
-                onClick = onEdit,
-            )
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        for (i in 1..LAST_INTAKE_STEP) {
+            val isCompleted = i <= completedStep
+            val isCurrent = i == currentStep
+
+            Box(
+                modifier = Modifier
+                    .size(32.dp)
+                    .background(
+                        color = when {
+                            isCurrent -> MaterialTheme.colorScheme.primary
+                            isCompleted -> Color(0xFF237A3B)
+                            else -> MaterialTheme.colorScheme.surfaceVariant
+                        },
+                        shape = CircleShape
+                    )
+                    .clickable(enabled = isCompleted || i == 1) { onStepClick(i) },
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = i.toString(),
+                    color = when {
+                        isCurrent -> MaterialTheme.colorScheme.onPrimary
+                        isCompleted -> Color.White
+                        else -> MaterialTheme.colorScheme.onSurfaceVariant
+                    },
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
+            if (i < LAST_INTAKE_STEP) {
+                androidx.compose.foundation.Canvas(modifier = Modifier.weight(1f).height(2.dp)) {
+                    drawRect(color = if (i <= completedStep) Color(0xFF237A3B) else Color.LightGray)
+                }
+            }
         }
     }
 }
+

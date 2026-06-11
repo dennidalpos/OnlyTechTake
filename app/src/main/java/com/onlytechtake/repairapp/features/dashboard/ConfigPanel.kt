@@ -2,18 +2,22 @@ package com.onlytechtake.repairapp.features.dashboard
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -35,6 +39,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -198,78 +203,87 @@ fun ConfigPanel(
                 val visibleCategories = categories.filter { it.parentId == currentCategoryParentId }
                 item {
                     SectionTitle(stringResource(R.string.config_hub_categories_title))
-                    if (!isAdmin) {
-                        Text(stringResource(R.string.config_categories_admin_only))
-                    } else {
-                        Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)
                         ) {
-                            Column(
-                                modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                                verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)
-                            ) {
-                                Text(
-                                    text = if (categoryId == null) "Nuova Categoria" else "Modifica Categoria",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = MaterialTheme.colorScheme.primary
+                            Text(
+                                text = if (categoryId == null) {
+                                    if (currentCategoryParentId == null) "Nuova Categoria principale"
+                                    else "Nuova Sottocategoria"
+                                } else {
+                                    "Modifica Categoria"
+                                },
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            CategoryBreadcrumb(categories, currentCategoryParentId)
+                            ActionRow {
+                                TouchButton(
+                                    text = stringResource(R.string.config_category_root),
+                                    tone = if (currentCategoryParentId == null) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
+                                    onClick = { openCategoryBranch(null) },
                                 )
-                                Text(
-                                    text = categoryBreadcrumb(categories, currentCategoryParentId),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                )
-                                ActionRow {
+                                if (currentParent?.parentId != null) {
                                     TouchButton(
-                                        text = stringResource(R.string.config_category_root),
-                                        tone = if (currentCategoryParentId == null) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
+                                        text = stringResource(R.string.config_category_up),
+                                        tone = ButtonTone.NEUTRAL,
+                                        onClick = { openCategoryBranch(currentParent.parentId) },
+                                    )
+                                } else if (currentCategoryParentId != null) {
+                                    TouchButton(
+                                        text = stringResource(R.string.config_category_up),
+                                        tone = ButtonTone.NEUTRAL,
                                         onClick = { openCategoryBranch(null) },
                                     )
-                                    if (currentParent?.parentId != null) {
-                                        TouchButton(
-                                            text = stringResource(R.string.config_category_up),
-                                            tone = ButtonTone.NEUTRAL,
-                                            onClick = { openCategoryBranch(currentParent.parentId) },
-                                        )
-                                    } else if (currentCategoryParentId != null) {
-                                        TouchButton(
-                                            text = stringResource(R.string.config_category_up),
-                                            tone = ButtonTone.NEUTRAL,
-                                            onClick = { openCategoryBranch(null) },
-                                        )
-                                    }
                                 }
-                                Field(
-                                    categoryName,
-                                    { categoryName = it },
-                                    stringResource(R.string.config_category_name_label),
-                                    testTag = RepairAppTestTags.ConfigCategoryNameField
+                            }
+                            Field(
+                                categoryName,
+                                { categoryName = it },
+                                stringResource(R.string.config_category_name_label),
+                                testTag = RepairAppTestTags.ConfigCategoryNameField
+                            )
+                            Field(
+                                categoryDescription,
+                                { categoryDescription = it },
+                                stringResource(R.string.config_category_description_label),
+                                showOptional = true,
+                                testTag = RepairAppTestTags.ConfigCategoryDescriptionField
+                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(if (categoryActive) stringResource(R.string.config_category_active) else stringResource(R.string.config_category_archived))
+                                Switch(
+                                    checked = categoryActive,
+                                    enabled = isAdmin,
+                                    onCheckedChange = { categoryActive = it },
                                 )
-                                Field(
-                                    categoryDescription,
-                                    { categoryDescription = it },
-                                    stringResource(R.string.config_category_description_label),
-                                    testTag = RepairAppTestTags.ConfigCategoryDescriptionField
+                            }
+                            ActionRow {
+                                TouchButtonWithIcon(
+                                    text = stringResource(R.string.config_category_new),
+                                    icon = Icons.Default.Add,
+                                    tone = ButtonTone.NEUTRAL,
+                                    testTag = RepairAppTestTags.ConfigCategoryNewButton,
+                                    onClick = ::loadNewCategory,
                                 )
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    Text(if (categoryActive) stringResource(R.string.config_category_active) else stringResource(R.string.config_category_archived))
-                                    Switch(
-                                        checked = categoryActive,
-                                        onCheckedChange = { categoryActive = it },
-                                    )
-                                }
-                                ActionRow {
+                                if (categoryId != null && isAdmin) {
                                     TouchButtonWithIcon(
-                                        text = stringResource(R.string.config_category_new),
-                                        icon = Icons.Default.Add,
+                                        text = stringResource(R.string.config_category_open_branch),
+                                        icon = Icons.AutoMirrored.Filled.ArrowForward,
                                         tone = ButtonTone.NEUTRAL,
-                                        testTag = RepairAppTestTags.ConfigCategoryNewButton,
-                                        onClick = ::loadNewCategory,
+                                        onClick = { openCategoryBranch(categoryId) },
                                     )
+                                }
+                                if (categoryId == null || isAdmin) {
                                     TouchButtonWithIcon(
                                         text = stringResource(R.string.config_category_save),
                                         icon = Icons.Default.Check,
@@ -287,20 +301,20 @@ fun ConfigPanel(
                                             }
                                         },
                                     )
-                                    if (categoryId != null) {
-                                        TouchButtonWithIcon(
-                                            text = stringResource(R.string.config_category_delete),
-                                            icon = Icons.Default.Delete,
-                                            tone = ButtonTone.DANGER,
-                                            testTag = RepairAppTestTags.ConfigCategoryDeleteButton,
-                                            onClick = {
-                                                requestConfirm(confirmCategoryDeleteTitle, confirmCategoryDeleteText) {
-                                                    viewModel.deleteCategory(categoryId!!)
-                                                    loadNewCategory()
-                                                }
-                                            },
-                                        )
-                                    }
+                                }
+                                if (categoryId != null && isAdmin) {
+                                    TouchButtonWithIcon(
+                                        text = stringResource(R.string.config_category_delete),
+                                        icon = Icons.Default.Delete,
+                                        tone = ButtonTone.DANGER,
+                                        testTag = RepairAppTestTags.ConfigCategoryDeleteButton,
+                                        onClick = {
+                                            requestConfirm(confirmCategoryDeleteTitle, confirmCategoryDeleteText) {
+                                                viewModel.deleteCategory(categoryId!!)
+                                                loadNewCategory()
+                                            }
+                                        },
+                                    )
                                 }
                             }
                         }
@@ -310,9 +324,7 @@ fun ConfigPanel(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable(enabled = isAdmin) {
-                                selectCategoryForEdit(category)
-                            },
+                            .clickable { openCategoryBranch(category.id) },
                     ) {
                         Column(
                             modifier = Modifier.padding(DashboardSpacing.cardPadding),
@@ -323,21 +335,26 @@ fun ConfigPanel(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(category.name, style = MaterialTheme.typography.titleMedium)
-                                    Text(
-                                        text = stringResource(R.string.config_category_level, category.level) + " - " + (if (category.active) stringResource(R.string.config_category_active) else stringResource(R.string.config_category_archived)),
-                                        style = MaterialTheme.typography.bodySmall
-                                    )
+                                Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                                    LevelDot(category.level)
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        Text(category.name, style = MaterialTheme.typography.titleMedium)
+                                        Text(
+                                            text = (if (category.level == 0) stringResource(R.string.config_category_level_main) else stringResource(R.string.config_category_level_sub, category.level)) + " - " + (if (category.active) stringResource(R.string.config_category_active) else stringResource(R.string.config_category_archived)),
+                                            style = MaterialTheme.typography.bodySmall
+                                        )
+                                    }
                                 }
-                                if (isAdmin) {
-                                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    if (isAdmin) {
                                         IconButton(onClick = { selectCategoryForEdit(category) }) {
                                             Icon(Icons.Default.Edit, contentDescription = "Modifica")
                                         }
-                                        IconButton(onClick = { openCategoryBranch(category.id) }) {
-                                            Icon(Icons.Default.ArrowForward, contentDescription = "Apri")
-                                        }
+                                    }
+                                    IconButton(onClick = { openCategoryBranch(category.id) }) {
+                                        Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Apri")
+                                    }
+                                    if (isAdmin) {
                                         IconButton(onClick = {
                                             requestConfirm(
                                                 confirmCategoryDeleteTitle,
@@ -595,6 +612,46 @@ private fun ConfigHubCard(
     }
 }
 
+fun colorForLevel(level: Int): Color = when (level) {
+    0 -> Color(0xFF1976D2)
+    1 -> Color(0xFF388E3C)
+    2 -> Color(0xFFF57C00)
+    else -> Color(0xFF7B1FA2)
+}
+
+@Composable
+private fun LevelDot(level: Int) {
+    Box(
+        modifier = Modifier
+            .size(12.dp)
+            .background(colorForLevel(level), CircleShape)
+    )
+}
+
+@Composable
+private fun CategoryBreadcrumb(categories: List<OrderCategoryEntity>, parentId: String?) {
+    val byId = categories.associateBy { it.id }
+    val nodes = mutableListOf<OrderCategoryEntity>()
+    var current = parentId?.let(byId::get)
+    while (current != null) {
+        nodes.add(0, current)
+        current = current.parentId?.let(byId::get)
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = Modifier.padding(vertical = 4.dp)
+    ) {
+        Text("Radice", style = MaterialTheme.typography.bodySmall)
+        nodes.forEach { node ->
+            Text(">", style = MaterialTheme.typography.bodySmall)
+            LevelDot(node.level)
+            Text(node.name, style = MaterialTheme.typography.bodySmall)
+        }
+    }
+}
+
 private enum class ConfigSection {
     CATEGORIES,
     TEMPLATES,
@@ -621,16 +678,3 @@ private val systemTemplateCodes = setOf(
 
 private fun isRiskyTemplateChange(loadedCode: String?, currentCode: String, active: Boolean): Boolean =
     (loadedCode != null && loadedCode != currentCode) || (currentCode in systemTemplateCodes && !active)
-
-private fun categoryBreadcrumb(categories: List<OrderCategoryEntity>, parentId: String?): String {
-    if (parentId == null) return "Radice"
-    val byId = categories.associateBy { it.id }
-    val names = mutableListOf<String>()
-    val visited = mutableSetOf<String>()
-    var current = byId[parentId]
-    while (current != null && visited.add(current.id)) {
-        names += current.name
-        current = current.parentId?.let(byId::get)
-    }
-    return (listOf("Radice") + names.asReversed()).joinToString(" > ")
-}

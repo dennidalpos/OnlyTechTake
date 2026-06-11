@@ -6,29 +6,25 @@ import com.onlytechtake.repairapp.data.local.dao.UserDao
 import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderDocumentType
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
-import com.onlytechtake.repairapp.data.repositories.CustomerRepository
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentFileStorage
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
 import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
-import com.onlytechtake.repairapp.data.repositories.SignatureRepository
 import kotlinx.coroutines.flow.firstOrNull
 import java.util.UUID
 
 class GenerateOrderStatusPdfUseCase(
     private val workflowRepository: OrderWorkflowRepository,
-    private val customerRepository: CustomerRepository,
     private val catalogRepository: CatalogRepository,
-    private val signatureRepository: SignatureRepository,
     private val documentRepository: OrderDocumentRepository,
     private val userDao: UserDao,
     private val fileStorage: OrderDocumentFileStorage,
     private val pdfGenerator: OrderStatusPdfGenerator = OrderStatusPdfGenerator(),
-    private val clockMillis: () -> Long = System::currentTimeMillis
+    private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
     suspend operator fun invoke(
         orderId: String,
         userId: String,
-        includeCustomerSignature: Boolean = true
+        includeCustomerSignature: Boolean = true,
     ): Result<OrderDocumentEntity> = runCatching {
         val detail = workflowRepository.observeOrderDetail(orderId).firstOrNull()
             ?: throw IllegalStateException("Commessa non trovata")
@@ -39,7 +35,7 @@ class GenerateOrderStatusPdfUseCase(
             detail.signatures.maxByOrNull { it.signedAt }
         } else null
         
-        if (includeCustomerSignature && signature == null) {
+        if (includeCustomerSignature && (signature == null)) {
             throw IllegalStateException("Firma cliente non trovata")
         }
 
@@ -57,7 +53,7 @@ class GenerateOrderStatusPdfUseCase(
             generatedBy = user.displayName
         )
         
-        val fileName = "stato-avanzamento-${detail.order.orderNumber}-${now}.pdf"
+        val fileName = "stato-avanzamento-${detail.order.orderNumber}-$now.pdf"
         val file = fileStorage.getDocumentFile(orderId, fileName)
         
         pdfGenerator.generate(file, payload)

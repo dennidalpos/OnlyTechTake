@@ -191,6 +191,32 @@ internal class OrderWorkflowEventWriter(
         )
     }
 
+    suspend fun whatsappPrepared(orderId: String, actorUserId: String, body: String, now: Long): TimelineEventEntity {
+        val event = timelineEvent(
+            orderId = orderId,
+            type = TimelineEventType.WHATSAPP_PREPARED,
+            title = "WhatsApp preparato",
+            description = body,
+            actorUserId = actorUserId,
+            createdAt = now,
+        )
+        writeTimeline(event)
+        return event
+    }
+
+    suspend fun whatsappSent(orderId: String, actorUserId: String, body: String, now: Long): TimelineEventEntity {
+        val event = timelineEvent(
+            orderId = orderId,
+            type = TimelineEventType.WHATSAPP_SENT_CONFIRMED,
+            title = "WhatsApp confermato",
+            description = body,
+            actorUserId = actorUserId,
+            createdAt = now,
+        )
+        writeTimeline(event)
+        return event
+    }
+
     suspend fun customerActionStatusChanged(
         orderId: String,
         actorUserId: String,

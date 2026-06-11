@@ -14,6 +14,7 @@ Gli script calcolano automaticamente la root del progetto dal proprio percorso, 
 | Audit vulnerabilita' dipendenze | `scripts\windows\check_dependency_vulnerabilities.ps1` | Interroga OSV sulle coordinate Maven presenti nei lockfile Gradle. | Separato dai check offline; non invia codice sorgente, solo group/artifact/version. |
 | Screenshot demo | `scripts\windows\create_demo_screenshots.ps1` | Genera PNG demo verticali 1080x1920 divisi per caso d'uso. | Usa AVD `OnlyTechTakeDemo` o un device USB con `-UseConnectedDevice`. |
 | Video demo operatore | `scripts\windows\create_demo_video.ps1` | Genera MP4 demo del flusso operatore al banco. | Richiede ffmpeg; usa AVD demo o device USB con `-UseConnectedDevice`. |
+| Registrazione demo USB | `scripts\windows\record_demo_device.ps1` | Registra video MP4 direttamente da device fisico USB. | Pulisce dati app, avvia app e usa `adb screenrecord`. |
 
 ## Comandi per obiettivo
 
@@ -35,3 +36,4 @@ Gli script calcolano automaticamente la root del progetto dal proprio percorso, 
 | screenshot demo su device USB | `powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_screenshots.ps1 -UseConnectedDevice` |
 | video demo operatore | `powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_video.ps1` |
 | video demo su device USB | `powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_video.ps1 -UseConnectedDevice` |
+| registrazione demo USB guidata | `powershell -ExecutionPolicy Bypass -File scripts\windows\record_demo_device.ps1` |

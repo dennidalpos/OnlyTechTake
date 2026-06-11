@@ -24,7 +24,7 @@ function Test-Command($Name) {
 }
 
 $canRunGradle = $true
-$requiredCompileSdk = 36
+$requiredCompileSdk = 37
 
 Write-Section "Autodetect ambiente"
 if ($null -ne $resolvedEnvironment -and $resolvedEnvironment.JavaHome) {

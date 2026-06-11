@@ -7,13 +7,13 @@ import com.onlytechtake.repairapp.R
 import java.io.File
 
 class ShareDocumentIntentFactory(
-    private val context: Context
+    private val context: Context,
 ) {
     fun createPdfShareIntent(file: File, title: String): Intent {
         val uri = FileProvider.getUriForFile(
             context,
             "${context.packageName}.fileprovider",
-            file
+            file,
         )
 
         return Intent(Intent.ACTION_SEND).apply {

@@ -23,6 +23,7 @@ Thumbs.db
 /reports/
 /logs/
 /tmp/
+/demo/recordings/
 *.apk
 *.aab
 *.ap_

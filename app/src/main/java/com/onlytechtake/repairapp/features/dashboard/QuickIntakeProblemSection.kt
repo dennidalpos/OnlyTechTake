@@ -42,6 +42,7 @@ fun QuickIntakeProblemSection(
                 value = problemDetails,
                 onValueChange = onProblemDetailsChange,
                 label = "Descrizione",
+                showOptional = true,
                 imeAction = ImeAction.Done,
                 keyboardActions = doneAction,
                 testTag = RepairAppTestTags.NewOrderProblemDetailsField,

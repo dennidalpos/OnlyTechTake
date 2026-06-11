@@ -60,6 +60,8 @@
     <string name="nav_back">Indietro</string>
     <string name="nav_next">Avanti</string>
 
+    <string name="label_optional">opzionale</string>
+
     <string name="state_expanded">Espanso</string>
     <string name="state_collapsed">Compresso</string>
     <string name="state_selected">Selezionato</string>
@@ -229,7 +231,8 @@
     <string name="config_hub_backup_title">Backup</string>
     <string name="config_hub_backup_subtitle">Export e ripristino</string>
     <string name="config_categories_admin_only">Area riservata admin. Le categorie sono disponibili solo in consultazione.</string>
-    <string name="config_category_level">Livello %1$d</string>
+    <string name="config_category_level_main">Categoria principale</string>
+    <string name="config_category_level_sub">Sottocategoria livello %1$d</string>
     <string name="config_category_root">Radice</string>
     <string name="config_category_up">Su</string>
     <string name="config_category_name_label">Nome categoria</string>

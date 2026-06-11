@@ -97,6 +97,14 @@ class AuthGateViewModel(
     fun logout() {
         viewModelScope.launch {
             authRepository.logout()
+            mutableFormState.update {
+                it.copy(
+                    password = "",
+                    confirmPassword = "",
+                    loading = false,
+                    errorMessage = null
+                )
+            }
         }
     }
 

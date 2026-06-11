@@ -51,7 +51,7 @@ class OrderMediaRepository(
 
     fun stageCapturedIntakePhoto(file: File): Result<StagedOrderMedia> =
         runCatching {
-            require(file.exists() && file.length() > 0L) { "Foto non salvata" }
+            require(file.exists() && (file.length() > 0L)) { "Foto non salvata" }
             val bounds = readImageBounds(file)
             StagedOrderMedia(
                 localPath = file.absolutePath,
@@ -64,7 +64,7 @@ class OrderMediaRepository(
             )
         }
 
-    suspend fun importIntakeAttachment(sessionId: String, uri: Uri): Result<StagedOrderMedia> =
+    fun importIntakeAttachment(sessionId: String, uri: Uri): Result<StagedOrderMedia> =
         runCatching {
             val resolver = context.contentResolver
             val sourceName = resolver.displayName(uri) ?: "allegato"
@@ -381,13 +381,13 @@ class OrderMediaRepository(
         }
         check(directory.exists() || directory.mkdirs()) { "Cartella media commessa non disponibile" }
         val destination = File(directory, uniqueAttachmentName(staged.fileName, staged.mimeType, now))
-        try {
+        return try {
             source.inputStream().use { input ->
                 FileOutputStream(destination).use { output -> input.copyTo(output) }
             }
             check(destination.exists() && destination.length() > 0L) { "Spostamento media non riuscito" }
             source.delete()
-            return destination
+            destination
         } catch (error: Exception) {
             destination.delete()
             throw error

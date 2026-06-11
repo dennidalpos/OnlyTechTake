@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.data.repositories
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.core.utils.capitalizeFirst
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import java.util.UUID
@@ -31,15 +32,20 @@ class CatalogRepository(
 
     suspend fun saveCategory(actor: AuthenticatedUser, input: CategoryInput): Result<Unit> =
         runCatching {
-            require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            if (input.id != null) {
+                require(actor.role == UserRole.ADMIN) { "Solo admin puo' modificare categorie esistenti" }
+            }
             require(input.name.isNotBlank()) { "Nome categoria obbligatorio" }
-            val normalizedName = input.name.trim()
+            val normalizedName = input.name.trim().capitalizeFirst()
             val duplicate = categoryDao.findByParentAndName(input.parentId, normalizedName)
             require(duplicate == null || (duplicate.id == input.id)) { "Categoria gia' presente in questo ramo" }
             categoryDao.upsertAll(
                 normalizeCategoryTree(
                     existing = categoryDao.findAll(),
-                    input = input.copy(name = normalizedName),
+                    input = input.copy(
+                        name = normalizedName,
+                        description = input.description.trim().capitalizeFirst()
+                    ),
                     generatedId = UUID.randomUUID().toString(),
                 ),
             )

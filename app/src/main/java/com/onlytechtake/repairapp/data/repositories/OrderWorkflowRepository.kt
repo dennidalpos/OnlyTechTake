@@ -5,6 +5,7 @@ import androidx.room.withTransaction
 import com.onlytechtake.repairapp.core.orders.OrderNumberGenerator
 import com.onlytechtake.repairapp.core.utils.formatEuroCents
 import com.onlytechtake.repairapp.core.utils.label
+import com.onlytechtake.repairapp.core.utils.capitalizeFirst
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.CustomerDao
 import com.onlytechtake.repairapp.data.local.dao.MessageLogDao
@@ -149,13 +150,13 @@ class OrderWorkflowRepository(
                     id = UUID.randomUUID().toString(),
                     orderNumber = orderNumberGenerator.next(prefix, repairOrderDao.findLatestOrderNumberForYear(prefix)),
                     customerId = input.customerId,
-                    title = input.title.trim(),
+                    title = input.title.trim().capitalizeFirst(),
                     categoryId = input.categoryId,
                     status = OrderStatus.OPEN,
                     priority = input.priority,
                     assignedToUserId = input.assignedToUserId ?: actor.id,
                     createdByUserId = actor.id,
-                    description = input.description.trim().ifBlank { null },
+                    description = input.description.trim().capitalizeFirst().ifBlank { null },
                     internalNotes = null,
                     diagnosisOutcome = null,
                     estimateAmountCents = null,
@@ -212,7 +213,7 @@ class OrderWorkflowRepository(
                     actorUserId = actor.id,
                     oldStatus = order.status,
                     newStatus = status,
-                    note = note.trim().ifBlank { null },
+                    note = note.trim().capitalizeFirst().ifBlank { null },
                     closureReason = closureReason,
                     now = now,
                 )
@@ -239,7 +240,7 @@ class OrderWorkflowRepository(
                 val now = clockMillis()
                 val estimateAmountCents = input.normalizedEstimateAmountCents()
                 val details = listOfNotNull(
-                    "Sintesi risultato: ${input.summary.trim()}",
+                    "Sintesi risultato: ${input.summary.trim().capitalizeFirst()}",
                     "Esito diagnosi: ${input.diagnosisOutcome.label(context)}",
                     estimateAmountCents?.let { "Importo riparazione: ${it.formatEuroCents()}" },
                 ).joinToString("\n")
@@ -291,9 +292,10 @@ class OrderWorkflowRepository(
                 require(note.isNotBlank()) { "Nota vuota" }
                 val order = requireWritableOrder(actor, orderId)
                 val now = clockMillis()
-                val mergedNotes = listOfNotNull(order.internalNotes, note.trim()).joinToString("\n\n")
+                val normalizedNote = note.trim().capitalizeFirst()
+                val mergedNotes = listOfNotNull(order.internalNotes, normalizedNote).joinToString("\n\n")
                 repairOrderDao.upsert(order.copy(internalNotes = mergedNotes, updatedAt = now))
-                eventWriter.internalNoteAdded(orderId, actor.id, note.trim(), now)
+                eventWriter.internalNoteAdded(orderId, actor.id, normalizedNote, now)
             }
         }
 
@@ -398,7 +400,7 @@ class OrderWorkflowRepository(
                     order.copy(
                         status = targetStatus,
                         customerActionStatus = customerActionStatus,
-                        closeNote = if (targetStatus == OrderStatus.CLOSED) input.note.trim() else order.closeNote,
+                        closeNote = if (targetStatus == OrderStatus.CLOSED) input.note.trim().capitalizeFirst() else order.closeNote,
                         closedByUserId = if (targetStatus == OrderStatus.CLOSED) actor.id else order.closedByUserId,
                         updatedAt = now,
                         closedAt = if (targetStatus == OrderStatus.CLOSED) now else order.closedAt,
@@ -409,7 +411,7 @@ class OrderWorkflowRepository(
                     orderId = orderId,
                     actorUserId = actor.id,
                     feedback = input.feedback,
-                    note = input.note.trim().ifBlank { input.feedback.name },
+                    note = input.note.trim().capitalizeFirst().ifBlank { input.feedback.name },
                     targetStatus = targetStatus,
                     now = now,
                 )
@@ -435,7 +437,9 @@ class OrderWorkflowRepository(
     ): Result<Unit> =
         runCatching {
             inTransaction {
-                require(note.isNotBlank()) { "Nota di chiusura obbligatoria" }
+                if (reason == ClosureReason.OTHER) {
+                    require(note.isNotBlank()) { "Nota di chiusura obbligatoria per motivo Altro" }
+                }
                 val order = requireWritableOrder(actor, orderId)
                 
                 val now = clockMillis()
@@ -449,7 +453,7 @@ class OrderWorkflowRepository(
                         status = targetStatus,
                         closedAt = now,
                         closureReason = reason,
-                        closeNote = note.trim(),
+                        closeNote = note.trim().capitalizeFirst(),
                         closedByUserId = actor.id,
                         updatedAt = now,
                     ),
@@ -460,7 +464,7 @@ class OrderWorkflowRepository(
                     actorUserId = actor.id,
                     oldStatus = oldStatus,
                     newStatus = targetStatus,
-                    note = note.trim(),
+                    note = note.trim().capitalizeFirst(),
                     closureReason = reason,
                     now = now,
                 )

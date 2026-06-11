@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -113,12 +113,24 @@ fun DashboardScreen(
                         }
                     }) {
                         Icon(
-                            imageVector = Icons.Default.ArrowBack,
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.nav_back)
                         )
                     }
                 },
                 actions = {
+                    currentUser?.let { user ->
+                        val roleLabel = when (user.role) {
+                            UserRole.ADMIN -> "Admin"
+                            UserRole.OPERATOR -> "Operatore"
+                        }
+                        Text(
+                            text = roleLabel,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                    }
                     TextButton(onClick = onLogout) {
                         Text(text = stringResource(R.string.logout))
                     }

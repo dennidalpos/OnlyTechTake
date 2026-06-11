@@ -28,11 +28,13 @@ import com.onlytechtake.repairapp.data.local.entities.TimelineEventType
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
+import android.content.Context
 import java.util.UUID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class TemplateRepository(
+    private val context: Context,
     private val templateDao: MessageTemplateDao,
     private val orderDao: RepairOrderDao,
     private val customerDao: CustomerDao,
@@ -44,6 +46,8 @@ class TemplateRepository(
     private val renderer: TemplateRenderer = TemplateRenderer(),
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
+    private val eventWriter = OrderWorkflowEventWriter(context, timelineEventDao = timelineEventDao)
+
     fun observeTemplates(): Flow<List<MessageTemplateEntity>> = templateDao.observeAll()
 
     fun observeMessageMode(): Flow<MessageMode> =
@@ -171,28 +175,11 @@ class TemplateRepository(
     ): Result<Unit> =
         runCatching {
             val now = clockMillis()
-            val event = TimelineEventEntity(
-                id = UUID.randomUUID().toString(),
-                orderId = prepared.orderId,
-                type = if (status == MessageStatus.SENT_CONFIRMED) {
-                    TimelineEventType.WHATSAPP_SENT_CONFIRMED
-                } else {
-                    TimelineEventType.WHATSAPP_PREPARED
-                },
-                title = if (status == MessageStatus.SENT_CONFIRMED) "WhatsApp confermato" else "WhatsApp preparato",
-                description = body,
-                oldStatus = null,
-                newStatus = null,
-                visibleToCustomer = false,
-                requiresCustomerFeedback = false,
-                expectedFeedbackType = null,
-                customerFeedback = null,
-                customerFeedbackNote = null,
-                customerFeedbackAt = null,
-                createdByUserId = actor.id,
-                createdAt = now,
-            )
-            timelineEventDao.upsert(event)
+            val event = if (status == MessageStatus.SENT_CONFIRMED) {
+                eventWriter.whatsappSent(prepared.orderId, actor.id, body, now)
+            } else {
+                eventWriter.whatsappPrepared(prepared.orderId, actor.id, body, now)
+            }
             messageLogDao.upsert(
                 MessageLogEntity(
                     id = UUID.randomUUID().toString(),

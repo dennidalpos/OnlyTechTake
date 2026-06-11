@@ -248,11 +248,13 @@ class WorkspaceViewModel(
         note: String = "",
         closureReason: ClosureReason? = null,
         onSuccess: () -> Unit,
-    ) = withUser(onSuccess = {
-        messageActions.clearPreparedMessage()
-        onSuccess()
-        showSuccess("Stato aggiornato correttamente")
-    }) { actor ->
+    ) = withUser(
+        onSuccess = {
+            messageActions.clearPreparedMessage()
+            onSuccess()
+            showSuccess("Stato aggiornato correttamente")
+        },
+    ) { actor ->
         orderRepository.changeStatus(actor, orderId, status, note, closureReason)
     }
 
@@ -262,10 +264,12 @@ class WorkspaceViewModel(
         diagnosisOutcome: DiagnosisOutcome,
         estimateAmountCents: Long?,
         onSuccess: () -> Unit = {},
-    ) = withUser(onSuccess = {
-        messageActions.clearPreparedMessage()
-        onSuccess()
-    }) { actor ->
+    ) = withUser(
+        onSuccess = {
+            messageActions.clearPreparedMessage()
+            onSuccess()
+        },
+    ) { actor ->
         orderRepository.recordResult(
             actor,
             orderId,
@@ -356,10 +360,12 @@ class WorkspaceViewModel(
         note: String,
         closureReason: ClosureReason? = null,
         onSuccess: () -> Unit = {},
-    ) = withUser(onSuccess = {
-        messageActions.clearPreparedMessage()
-        onSuccess()
-    }) { actor ->
+    ) = withUser(
+        onSuccess = {
+            messageActions.clearPreparedMessage()
+            onSuccess()
+        },
+    ) { actor ->
         orderRepository.recordFeedback(actor, orderId, FeedbackInput(feedback, note, closureReason))
     }
 
@@ -473,8 +479,8 @@ class WorkspaceViewModel(
             orderDocumentRepository.markShared(documentId, now)
             val doc = orderDocumentRepository.findById(documentId)
             selectedOrder.value?.order?.id?.let { orderId ->
-                if (doc != null) {
-                    orderRepository.recordPdfShared(actor, orderId, doc.fileName)
+                doc?.let {
+                    orderRepository.recordPdfShared(actor, orderId, it.fileName)
                 }
             }
             mutableUiState.update { it.copy(showPdfSentConfirmation = false, lastGeneratedDocumentId = null) }

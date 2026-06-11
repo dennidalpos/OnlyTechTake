@@ -162,7 +162,7 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                                 singleLine = true,
                                 testTag = RepairAppTestTags.CustomerCompanyNameField,
                             )
-                            Field(vatNumber, { vatNumber = it }, stringResource(R.string.customer_field_vat_number), testTag = RepairAppTestTags.CustomerVatNumberField)
+                            Field(vatNumber, { vatNumber = it }, stringResource(R.string.customer_field_vat_number), showOptional = true, testTag = RepairAppTestTags.CustomerVatNumberField)
                         } else {
                             Field(
                                 firstName,
@@ -183,7 +183,7 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                                 testTag = RepairAppTestTags.CustomerLastNameField,
                             )
                         }
-                        Field(taxCode, { taxCode = it }, stringResource(R.string.customer_field_tax_code), testTag = RepairAppTestTags.CustomerTaxCodeField)
+                        Field(taxCode, { taxCode = it }, stringResource(R.string.customer_field_tax_code), showOptional = true, testTag = RepairAppTestTags.CustomerTaxCodeField)
                         Field(
                             phone,
                             { phone = it },
@@ -202,8 +202,8 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                             singleLine = true,
                             testTag = RepairAppTestTags.CustomerEmailField,
                         )
-                        Field(address, { address = it }, stringResource(R.string.customer_field_address), testTag = RepairAppTestTags.CustomerAddressField)
-                        Field(notes, { notes = it }, stringResource(R.string.customer_field_notes), testTag = RepairAppTestTags.CustomerNotesField)
+                        Field(address, { address = it }, stringResource(R.string.customer_field_address), showOptional = true, testTag = RepairAppTestTags.CustomerAddressField)
+                        NoteFieldWithDialog(notes, { notes = it }, testTag = RepairAppTestTags.CustomerNotesField)
                         ActionRow {
                             TouchButton(
                                 text = if (editingCustomerId == null) stringResource(R.string.customer_save) else stringResource(R.string.customer_update),

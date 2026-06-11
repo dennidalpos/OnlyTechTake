@@ -29,11 +29,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
@@ -85,6 +88,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
     val waSentConfirmText = stringResource(R.string.order_wa_sent_confirm_text)
 
     var note by rememberSaveable { mutableStateOf("") }
+    var showInternalNoteDialog by rememberSaveable { mutableStateOf(false) }
     var confirmTitle by remember { mutableStateOf<String?>(null) }
     var confirmText by remember { mutableStateOf("") }
     var confirmAction by remember { mutableStateOf<(() -> Unit)?>(null) }
@@ -156,27 +160,22 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         item {
             val templateCode = statusTemplateCode(selected.order)
             val templateTitle = templates.firstOrNull { it.active && it.code == templateCode }?.title ?: templateCode
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = androidx.compose.material3.CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f)
-                )
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                ) {
-                    SectionTitle("WhatsApp")
-                    OperatorText(
-                        text = "Invio rapido per stato: ${selected.order.status.label(context)}\nTemplate: $templateTitle",
-                    )
-                    TouchButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.order_whatsapp_send),
-                        tone = ButtonTone.INFO,
-                        onClick = { viewModel.prepareMessage(selected.order.id, templateCode) },
-                    )
-                }
+                TouchButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.order_whatsapp_send),
+                    tone = ButtonTone.INFO,
+                    onClick = { viewModel.prepareMessage(selected.order.id, templateCode) },
+                )
+                Text(
+                    text = "Template: $templateTitle",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.secondary
+                )
             }
         }
 
@@ -230,8 +229,8 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         item {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                    modifier = Modifier.padding(DashboardSpacing.compactGap),
+                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
                 ) {
                     ActionRow {
                         TouchButton(text = stringResource(R.string.order_exit), tone = ButtonTone.NEUTRAL, onClick = ::exitOrderDetail)
@@ -246,25 +245,40 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                             },
                         )
                     }
-                    SectionTitle(stringResource(R.string.order_detail_title))
                     Text("${selected.order.orderNumber} - ${selected.order.title}", style = MaterialTheme.typography.titleMedium)
                     Text(
                         stringResource(
                             R.string.orders_customer_label,
                             selected.customer?.displayName(context).orEmpty()
-                        )
+                        ),
+                        style = MaterialTheme.typography.bodySmall
                     )
-                    OperatorText(text = stringResource(R.string.order_status_current, selected.order.status.label(context)))
-                    OperatorText(text = stringResource(R.string.orders_next_action_label, nextActionLabel(selected.order)))
-                    selected.order.diagnosisOutcome?.let {
-                        Text(stringResource(R.string.order_diagnosis_outcome_label, it.label(context)))
+                    StatusHighlightText(
+                        text = stringResource(R.string.order_status_current, selected.order.status.label(context)),
+                        backgroundColor = Color(0xFF237A3B),
+                        contentColor = Color.White
+                    )
+                    StatusHighlightText(
+                        text = stringResource(R.string.orders_next_action_label, nextActionLabel(selected.order)),
+                        backgroundColor = Color(0xFFE8A600),
+                        contentColor = Color(0xFF2A2100)
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text("Operatore: ${selected.assignedUser?.displayName.orEmpty()}", style = MaterialTheme.typography.bodySmall)
+                        Text(formatUiDateTime(selected.order.updatedAt), style = MaterialTheme.typography.bodySmall)
                     }
-                    selected.order.closureReason?.let { Text(stringResource(R.string.closure_reason_prefix, it.label(context))) }
-                    Text("Operatore: ${selected.assignedUser?.displayName.orEmpty()}")
-                    Text(stringResource(R.string.orders_updated_label, formatUiDateTime(selected.order.updatedAt)))
-                    Text(attachmentCounts(selected.media, selected.signatures).attachmentLabel())
+                    Text(attachmentCounts(selected.media, selected.signatures).attachmentLabel(), style = MaterialTheme.typography.bodySmall)
+                    
+                    selected.order.diagnosisOutcome?.let {
+                        Text(stringResource(R.string.order_diagnosis_outcome_label, it.label(context)), style = MaterialTheme.typography.bodySmall)
+                    }
+                    selected.order.closureReason?.let { Text(stringResource(R.string.closure_reason_prefix, it.label(context)), style = MaterialTheme.typography.bodySmall) }
+
                     selected.order.description?.takeIf { it.isNotBlank() }?.let {
-                        Text(stringResource(R.string.order_problem_label, it))
+                        Text(stringResource(R.string.order_problem_label, it), style = MaterialTheme.typography.bodySmall)
                     }
                 }
             }
@@ -409,17 +423,22 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                 ) {
                     Text(stringResource(R.string.order_internal_notes), style = MaterialTheme.typography.titleMedium)
-                    selected.order.internalNotes?.takeIf { it.isNotBlank() }?.let { OperatorText(it) }
-                    Field(note, { note = it }, stringResource(R.string.order_new_note))
+                    selected.order.internalNotes?.takeIf { it.isNotBlank() }?.let {
+                        Text(
+                            text = it,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
                     TouchButton(
-                        text = stringResource(R.string.order_save_note),
-                        tone = ButtonTone.SUCCESS,
-                        enabled = note.isNotBlank(),
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.order_internal_notes),
+                        tone = ButtonTone.NEUTRAL,
                         onClick = {
-                            val noteToSave = note
-                            viewModel.addNote(selected.order.id, noteToSave)
                             note = ""
-                        },
+                            showInternalNoteDialog = true
+                        }
                     )
                 }
             }
@@ -494,9 +513,10 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         item {
             Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
                 SectionTitle(stringResource(R.string.order_timeline))
-                selected.timeline.forEach { event ->
+                selected.timeline.forEachIndexed { index, event ->
+                    val eventNumber = selected.timeline.size - index
                     CompactExpandableRow(
-                        title = event.title,
+                        title = "$eventNumber. ${event.title}",
                         subtitle = formatUiDateTime(event.createdAt),
                         detail = event.description.orEmpty(),
                     )
@@ -587,13 +607,24 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                                 testTag = RepairAppTestTags.DiagnosisEstimateField,
                             )
                         }
+                    } else if (isClosure) {
+                        if (closureReason == ClosureReason.OTHER) {
+                            Field(
+                                value = statusNote,
+                                onValueChange = { statusNote = it },
+                                label = stringResource(R.string.order_closure_note_label),
+                                required = true,
+                                showError = statusNote.isBlank(),
+                                imeAction = ImeAction.Done,
+                                testTag = RepairAppTestTags.StatusNoteField,
+                            )
+                        }
                     } else {
                         Field(
                             value = statusNote,
                             onValueChange = { statusNote = it },
-                            label = if (isClosure) stringResource(R.string.order_closure_note_label) else stringResource(R.string.order_status_note_label),
-                            required = isClosure,
-                            showError = isClosure && statusNote.isBlank(),
+                            label = stringResource(R.string.order_status_note_label),
+                            showOptional = true,
                             imeAction = ImeAction.Done,
                             testTag = RepairAppTestTags.StatusNoteField,
                         )
@@ -624,7 +655,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                             outcome = diagnosisOutcome,
                             estimateAmountCents = parseEuroCentsOrNull(resultAmount),
                         )
-                        isClosure -> closureReason != null && statusNote.isNotBlank()
+                        isClosure -> closureReason != null && (closureReason != ClosureReason.OTHER || statusNote.isNotBlank())
                         else -> true
                     },
                     onClick = {
@@ -651,6 +682,43 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     tone = ButtonTone.NEUTRAL,
                     onClick = { statusAction = null }
                 )
+            },
+        )
+    }
+
+    if (showInternalNoteDialog) {
+        AlertDialog(
+            onDismissRequest = { showInternalNoteDialog = false },
+            title = { Text(stringResource(R.string.order_internal_notes)) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
+                    selected.order.internalNotes?.takeIf { it.isNotBlank() }?.let {
+                        OperatorText(it, modifier = Modifier.weight(1f, fill = false))
+                    }
+                    Field(
+                        value = note,
+                        onValueChange = { note = it },
+                        label = stringResource(R.string.order_new_note),
+                        imeAction = ImeAction.Done,
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    enabled = note.isNotBlank(),
+                    onClick = {
+                        viewModel.addNote(selected.order.id, note)
+                        note = ""
+                        showInternalNoteDialog = false
+                    },
+                ) {
+                    Text(stringResource(R.string.order_save_note))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showInternalNoteDialog = false }) {
+                    Text(stringResource(R.string.customer_cancel))
+                }
             },
         )
     }

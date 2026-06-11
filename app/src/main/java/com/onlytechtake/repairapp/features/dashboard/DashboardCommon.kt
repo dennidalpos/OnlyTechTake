@@ -78,6 +78,7 @@ fun Field(
     label: String,
     modifier: Modifier = Modifier,
     required: Boolean = false,
+    showOptional: Boolean = false,
     showError: Boolean = false,
     singleLine: Boolean = false,
     imeAction: ImeAction = ImeAction.Default,
@@ -94,13 +95,19 @@ fun Field(
         onDone = { focusManager.clearFocus() },
     )
 
+    val labelText = when {
+        required -> "$label *"
+        showOptional -> "$label (${stringResource(R.string.label_optional)})"
+        else -> label
+    }
+
     OutlinedTextField(
         modifier = modifier
             .fillMaxWidth()
             .then(testTag?.let { Modifier.testTag(it) } ?: Modifier),
         value = value,
         onValueChange = onValueChange,
-        label = { Text(if (required) "$label *" else label) },
+        label = { Text(labelText) },
         singleLine = singleLine,
         isError = showError,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = effectiveImeAction),
@@ -169,6 +176,24 @@ fun OperatorText(text: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
+fun StatusHighlightText(
+    text: String,
+    backgroundColor: Color,
+    contentColor: Color,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(backgroundColor, RoundedCornerShape(8.dp))
+            .padding(DashboardSpacing.compactGap),
+        text = text,
+        color = contentColor,
+        style = MaterialTheme.typography.labelLarge
+    )
+}
+
+@Composable
 fun CompactExpandableRow(
     title: String,
     subtitle: String,
@@ -197,12 +222,8 @@ fun CompactExpandableRow(
         ) {
             Text(title, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(subtitle, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            if (detail.isNotBlank()) {
-                if (expanded) {
-                    OperatorText(detail)
-                } else {
-                    Text(detail, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                }
+            if (detail.isNotBlank() && expanded) {
+                OperatorText(detail)
             }
         }
     }
@@ -362,3 +383,61 @@ private fun TypeToggleButton(
         Text(text)
     }
 }
+
+@Composable
+fun NoteFieldWithDialog(
+    note: String,
+    onNoteChange: (String) -> Unit,
+    label: String = stringResource(R.string.customer_field_notes),
+    modifier: Modifier = Modifier,
+    testTag: String? = null,
+) {
+    var showDialog by rememberSaveable { mutableStateOf(false) }
+    var tempNote by rememberSaveable { mutableStateOf(note) }
+
+    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
+        if (note.isNotBlank()) {
+            OperatorText(note)
+        }
+        TouchButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = if (note.isBlank()) label else "$label (${stringResource(R.string.customer_edit).lowercase()})",
+            tone = ButtonTone.NEUTRAL,
+            testTag = testTag,
+            onClick = {
+                tempNote = note
+                showDialog = true
+            },
+        )
+    }
+
+    if (showDialog) {
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(label) },
+            text = {
+                OutlinedTextField(
+                    value = tempNote,
+                    onValueChange = { tempNote = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text(label) },
+                    minLines = 3,
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    onNoteChange(tempNote)
+                    showDialog = false
+                }) {
+                    Text(stringResource(R.string.confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDialog = false }) {
+                    Text(stringResource(R.string.customer_cancel))
+                }
+            },
+        )
+    }
+}
+
