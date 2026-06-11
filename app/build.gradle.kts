@@ -12,7 +12,9 @@ gradle.taskGraph.whenReady {
     val requiresReleaseSigning = allTasks.any { task ->
         task.path.startsWith(":app:") && task.name.contains("Release", ignoreCase = true)
     }
-    if (requiresReleaseSigning && !keystorePropertiesFile.exists()) {
+    val isExplicitReleaseRequest = gradle.startParameter.taskNames.any { it.contains("Release", ignoreCase = true) }
+
+    if (requiresReleaseSigning && isExplicitReleaseRequest && !keystorePropertiesFile.exists()) {
         throw GradleException("Release build requires keystore.properties in the project root")
     }
 }

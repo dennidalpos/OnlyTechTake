@@ -168,6 +168,8 @@
     <string name="order_share">Condividi</string>
     <string name="order_whatsapp_send">Invia stato WhatsApp</string>
     <string name="order_wa_preview_title">Anteprima WhatsApp</string>
+    <string name="order_wa_prepared_timeline_title">WhatsApp preparato</string>
+    <string name="order_wa_sent_timeline_title">WhatsApp confermato</string>
     <string name="order_wa_message_label">Messaggio</string>
     <string name="order_wa_open">Apri WhatsApp</string>
     <string name="order_wa_open_confirm_title">Aprire WhatsApp?</string>

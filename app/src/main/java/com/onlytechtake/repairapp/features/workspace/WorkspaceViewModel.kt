@@ -431,7 +431,7 @@ class WorkspaceViewModel(
                 .onSuccess { document ->
                     mutableUiState.update { it.copy(
                         isGeneratingStatusPdf = false,
-                        lastGeneratedDocumentId = document.id
+                        lastGeneratedDocumentId = document.id,
                     ) }
                     showSuccess("PDF stato avanzamento generato")
                     // Automatically trigger share after generation

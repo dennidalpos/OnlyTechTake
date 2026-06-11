@@ -195,7 +195,7 @@ internal class OrderWorkflowEventWriter(
         val event = timelineEvent(
             orderId = orderId,
             type = TimelineEventType.WHATSAPP_PREPARED,
-            title = "WhatsApp preparato",
+            title = context.getString(R.string.order_wa_prepared_timeline_title),
             description = body,
             actorUserId = actorUserId,
             createdAt = now,
@@ -208,7 +208,7 @@ internal class OrderWorkflowEventWriter(
         val event = timelineEvent(
             orderId = orderId,
             type = TimelineEventType.WHATSAPP_SENT_CONFIRMED,
-            title = "WhatsApp confermato",
+            title = context.getString(R.string.order_wa_sent_timeline_title),
             description = body,
             actorUserId = actorUserId,
             createdAt = now,

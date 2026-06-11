@@ -56,7 +56,7 @@ class GenerateOrderStatusPdfUseCase(
             timeline = detail.timeline,
             signature = signature,
             generatedAt = now,
-            generatedBy = user.displayName
+            generatedBy = user.displayName,
         )
         
         val fileName = "stato-avanzamento-${detail.order.orderNumber}-$now.pdf"
@@ -75,7 +75,7 @@ class GenerateOrderStatusPdfUseCase(
             includesCustomerSignature = signature != null,
             createdByUserId = userId,
             createdAt = now,
-            sharedAt = null
+            sharedAt = null,
         )
         
         documentRepository.save(entity)

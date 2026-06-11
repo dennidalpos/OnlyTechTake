@@ -47,7 +47,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
@@ -180,7 +179,7 @@ fun StatusHighlightText(
     text: String,
     backgroundColor: Color,
     contentColor: Color,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Text(
         modifier = modifier
@@ -242,7 +241,7 @@ fun TouchButton(
 ) {
     Button(
         modifier = modifier
-            .defaultMinSize(minWidth = 80.dp, minHeight = 48.dp)
+            .defaultMinSize(minWidth = 80.dp, minHeight = 40.dp)
             .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
             .semantics {
                 selected?.let { this.selected = it }
@@ -256,7 +255,7 @@ fun TouchButton(
             disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.38f),
             disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f),
         ),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         onClick = onClick,
     ) {
         Text(
@@ -281,7 +280,7 @@ fun TouchButtonWithIcon(
 ) {
     Button(
         modifier = modifier
-            .defaultMinSize(minWidth = 80.dp, minHeight = 48.dp)
+            .defaultMinSize(minWidth = 80.dp, minHeight = 40.dp)
             .then(testTag?.let { Modifier.testTag(it) } ?: Modifier),
         enabled = enabled,
         shape = RoundedCornerShape(12.dp),
@@ -289,7 +288,7 @@ fun TouchButtonWithIcon(
             containerColor = tone.containerColor(),
             contentColor = tone.contentColor(),
         ),
-        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 12.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
         onClick = onClick,
     ) {
         Icon(
@@ -367,7 +366,7 @@ private fun TypeToggleButton(
     
     TextButton(
         modifier = modifier
-            .defaultMinSize(minHeight = 56.dp)
+            .defaultMinSize(minHeight = 40.dp)
             .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
             .semantics {
                 this.selected = selected
@@ -392,7 +391,7 @@ fun NoteFieldWithDialog(
     modifier: Modifier = Modifier,
     testTag: String? = null,
 ) {
-    var showDialog by rememberSaveable { mutableStateOf(false) }
+    var showDialog by rememberSaveable { mutableStateOf(value = false) }
     var tempNote by rememberSaveable { mutableStateOf(note) }
 
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
@@ -425,10 +424,12 @@ fun NoteFieldWithDialog(
                 )
             },
             confirmButton = {
-                TextButton(onClick = {
-                    onNoteChange(tempNote)
-                    showDialog = false
-                }) {
+                TextButton(
+                    onClick = {
+                        onNoteChange(tempNote)
+                        showDialog = false
+                    }
+                ) {
                     Text(stringResource(R.string.confirm))
                 }
             },

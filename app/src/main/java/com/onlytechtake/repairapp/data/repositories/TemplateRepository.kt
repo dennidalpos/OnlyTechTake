@@ -23,7 +23,6 @@ import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
-import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventType
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
@@ -135,7 +134,7 @@ class TemplateRepository(
             val customer = requireNotNull(customerDao.findById(order.customerId)) { "Cliente non trovato" }
             val template = requireNotNull(templateDao.findActiveByCode(templateCode)) { "Template non trovato" }
             val categoryPath = categoryPath(order.categoryId)
-            val phone = customer.phone?.filter { it.isDigit() || it == '+' }.orEmpty()
+            val phone = customer.phone?.filter { it.isDigit() || (it == '+') }.orEmpty()
             require(phone.isNotBlank()) { "Telefono cliente mancante" }
 
             val body = renderer.render(

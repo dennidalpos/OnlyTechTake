@@ -92,12 +92,12 @@ fun ConfigPanel(
     var currentCategoryParentId by rememberSaveable { mutableStateOf<String?>(null) }
     var categoryName by rememberSaveable { mutableStateOf("") }
     var categoryDescription by rememberSaveable { mutableStateOf("") }
-    var categoryActive by rememberSaveable { mutableStateOf(true) }
+    var categoryActive by rememberSaveable { mutableStateOf(value = true) }
     var templateCode by rememberSaveable { mutableStateOf("whatsapp_aggiornamento") }
     var loadedTemplateCode by rememberSaveable { mutableStateOf<String?>(null) }
     var templateTitle by rememberSaveable { mutableStateOf("WhatsApp aggiornamento") }
     var templateBody by rememberSaveable { mutableStateOf("Aggiornamento {{numero_commessa}}: {{stato_commessa}}") }
-    var templateActive by rememberSaveable { mutableStateOf(true) }
+    var templateActive by rememberSaveable { mutableStateOf(value = true) }
     var confirmTitle by remember { mutableStateOf<String?>(null) }
     var confirmText by remember { mutableStateOf("") }
     var confirmAction by remember { mutableStateOf<(() -> Unit)?>(null) }
@@ -205,7 +205,9 @@ fun ConfigPanel(
                     SectionTitle(stringResource(R.string.config_hub_categories_title))
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                        ),
                     ) {
                         Column(
                             modifier = Modifier.padding(DashboardSpacing.cardPadding),
@@ -275,7 +277,7 @@ fun ConfigPanel(
                                     testTag = RepairAppTestTags.ConfigCategoryNewButton,
                                     onClick = ::loadNewCategory,
                                 )
-                                if (categoryId != null && isAdmin) {
+                                if ((categoryId != null) && isAdmin) {
                                     TouchButtonWithIcon(
                                         text = stringResource(R.string.config_category_open_branch),
                                         icon = Icons.AutoMirrored.Filled.ArrowForward,
@@ -302,7 +304,7 @@ fun ConfigPanel(
                                         },
                                     )
                                 }
-                                if (categoryId != null && isAdmin) {
+                                if ((categoryId != null) && isAdmin) {
                                     TouchButtonWithIcon(
                                         text = stringResource(R.string.config_category_delete),
                                         icon = Icons.Default.Delete,
@@ -335,7 +337,7 @@ fun ConfigPanel(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
                                     LevelDot(category.level)
                                     Column(modifier = Modifier.weight(1f)) {
                                         Text(category.name, style = MaterialTheme.typography.titleMedium)
@@ -347,11 +349,15 @@ fun ConfigPanel(
                                 }
                                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                                     if (isAdmin) {
-                                        IconButton(onClick = { selectCategoryForEdit(category) }) {
+                                        IconButton(
+                                            onClick = { selectCategoryForEdit(category) },
+                                        ) {
                                             Icon(Icons.Default.Edit, contentDescription = "Modifica")
                                         }
                                     }
-                                    IconButton(onClick = { openCategoryBranch(category.id) }) {
+                                    IconButton(
+                                        onClick = { openCategoryBranch(category.id) },
+                                    ) {
                                         Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Apri")
                                     }
                                     if (isAdmin) {

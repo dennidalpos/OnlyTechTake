@@ -37,14 +37,13 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
-import com.onlytechtake.repairapp.features.workspace.label
 
 @Composable
 fun CustomerPanel(viewModel: WorkspaceViewModel) {
     val uiState by viewModel.uiState.collectAsState()
     val customers by viewModel.customerSuggestions.collectAsState()
-    var showForm by rememberSaveable { mutableStateOf(false) }
-    var confirmSave by rememberSaveable { mutableStateOf(false) }
+    var showForm by rememberSaveable { mutableStateOf(value = false) }
+    var confirmSave by rememberSaveable { mutableStateOf(value = false) }
     var editingCustomerId by rememberSaveable { mutableStateOf<String?>(null) }
     var isBusiness by rememberSaveable { mutableStateOf(false) }
     var firstName by rememberSaveable { mutableStateOf("") }
@@ -238,8 +237,9 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
             items(customers) { customer ->
                 CustomerCard(
                     customer = customer,
-                    onEdit = { editCustomer(customer) },
-                )
+                ) {
+                    editCustomer(customer)
+                }
             }
         }
     }
@@ -282,7 +282,7 @@ private fun CustomerCard(customer: CustomerEntity, onEdit: () -> Unit) {
             val context = LocalContext.current
             Text(
                 customer.displayName(context),
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
             )
             Text(customer.type.label(context))
             listOfNotNull(customer.phone, customer.email).takeIf { it.isNotEmpty() }?.let {

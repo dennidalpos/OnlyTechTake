@@ -70,8 +70,9 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
                         .clickable(
                             onClickLabel = "Apri ${order.orderNumber}",
                             role = Role.Button,
-                            onClick = { viewModel.selectOrder(order.id) },
-                        ),
+                        ) {
+                            viewModel.selectOrder(order.id)
+                        },
                 ) {
                     Column(
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
@@ -80,10 +81,10 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
                         Text("${order.orderNumber} - ${order.title}", style = MaterialTheme.typography.titleMedium)
                         OrderStatusStepper(status = order.status, compact = true)
                         Text(
-                            stringResource(
+                            text = stringResource(
                                 R.string.orders_customer_label,
-                                item.customer?.displayName(context).orEmpty()
-                            )
+                                item.customer?.displayName(context).orEmpty(),
+                            ),
                         )
                         Text(stringResource(R.string.orders_status_label, order.status.label(context)))
                         Text(stringResource(R.string.orders_next_action_label, nextActionLabel(order)))
@@ -124,7 +125,7 @@ private fun OrderFilterBar(
             QuickStatusGroupFilter(stringResource(R.string.orders_filter_result), setOf(OrderStatus.RESULT, OrderStatus.REPAIRING), filter, onFilter)
             QuickStatusGroupFilter(stringResource(R.string.orders_filter_ready), setOf(OrderStatus.READY_FOR_PICKUP), filter, onFilter)
         }
-        if (filter.showMineOnly || filter.status != null || filter.statuses.isNotEmpty()) {
+        if (filter.showMineOnly || (filter.status != null) || filter.statuses.isNotEmpty()) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
