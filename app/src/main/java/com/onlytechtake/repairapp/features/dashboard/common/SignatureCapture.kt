@@ -1,4 +1,4 @@
-package com.onlytechtake.repairapp.features.dashboard
+package com.onlytechtake.repairapp.features.dashboard.common
 
 import android.graphics.Bitmap
 import android.graphics.Canvas as AndroidCanvas
@@ -9,8 +9,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,9 +18,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -39,16 +39,18 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.createBitmap
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
-import com.onlytechtake.repairapp.features.workspace.formatFileSize
+import com.onlytechtake.repairapp.features.dashboard.LocalImagePreview
+import com.onlytechtake.repairapp.features.dashboard.LocalImageViewer
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
+import com.onlytechtake.repairapp.features.workspace.formatFileSize
 import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
 
 data class SignatureCaptureResult(

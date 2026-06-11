@@ -1,4 +1,4 @@
-package com.onlytechtake.repairapp.features.dashboard
+package com.onlytechtake.repairapp.features.dashboard.neworder
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,6 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
+import com.onlytechtake.repairapp.features.dashboard.common.Field
+import com.onlytechtake.repairapp.features.dashboard.common.StepSectionTitle
 
 @Composable
 fun QuickIntakeProblemSection(

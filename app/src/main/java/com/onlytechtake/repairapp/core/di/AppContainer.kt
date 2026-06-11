@@ -3,24 +3,13 @@ package com.onlytechtake.repairapp.core.di
 import android.content.Context
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.room.withTransaction
+import com.onlytechtake.repairapp.core.error.DefaultErrorHandler
+import com.onlytechtake.repairapp.core.error.ErrorHandler
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
-import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
-import com.onlytechtake.repairapp.data.repositories.BackupRepository
-import com.onlytechtake.repairapp.data.repositories.CatalogRepository
-import com.onlytechtake.repairapp.data.repositories.CustomerRepository
-import com.onlytechtake.repairapp.data.repositories.DefaultAuthRepository
-import com.onlytechtake.repairapp.data.repositories.DefaultRepairAppRepository
-import com.onlytechtake.repairapp.data.repositories.DataResetRepository
-import com.onlytechtake.repairapp.data.repositories.DefaultOrderDocumentRepository
-import com.onlytechtake.repairapp.data.repositories.OrderDocumentFileStorage
-import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
-import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
-import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
-import com.onlytechtake.repairapp.data.repositories.SignatureRepository
-import com.onlytechtake.repairapp.data.repositories.TemplateRepository
+import com.onlytechtake.repairapp.data.repositories.*
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.repositories.RepairAppRepository
@@ -33,6 +22,7 @@ class AppContainer(context: Context) {
     private val authPreferences = AuthPreferences(context)
     private val passwordHasher = PasswordHasher()
     val shareDocumentIntentFactory = ShareDocumentIntentFactory(context)
+    val errorHandler: ErrorHandler = DefaultErrorHandler()
 
     val repairAppRepository: RepairAppRepository = DefaultRepairAppRepository(
         dashboardDao = database.dashboardDao(),
@@ -57,6 +47,7 @@ class AppContainer(context: Context) {
     )
 
     val catalogRepository = CatalogRepository(
+        context = context.applicationContext,
         categoryDao = database.orderCategoryDao(),
     )
 

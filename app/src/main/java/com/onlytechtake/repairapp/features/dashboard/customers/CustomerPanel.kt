@@ -1,7 +1,8 @@
-package com.onlytechtake.repairapp.features.dashboard
+package com.onlytechtake.repairapp.features.dashboard.customers
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,13 +22,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.utils.displayName
@@ -35,8 +38,15 @@ import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
-import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
+import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
+import com.onlytechtake.repairapp.features.dashboard.common.CustomerTypeToggle
+import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
+import com.onlytechtake.repairapp.features.dashboard.common.Field
+import com.onlytechtake.repairapp.features.dashboard.common.NoteFieldWithDialog
+import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
+import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
+import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 
 @Composable
 fun CustomerPanel(viewModel: WorkspaceViewModel) {
@@ -114,8 +124,22 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
-            SectionTitle(stringResource(R.string.customer_title))
-                Card(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                SectionTitle(stringResource(R.string.customer_title))
+                TouchButton(
+                    text = stringResource(R.string.customer_new),
+                    testTag = RepairAppTestTags.CustomerNewButton,
+                    onClick = ::openNewCustomerForm,
+                )
+            }
+        }
+
+        item {
+            Card(modifier = Modifier.fillMaxWidth()) {
                 Column(
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
@@ -126,14 +150,11 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                         onValueChange = viewModel::setCustomerSearchQuery,
                         label = { Text(stringResource(R.string.customer_search_label)) },
                         singleLine = true,
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
-                    )
-                    TouchButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.customer_new),
-                        testTag = RepairAppTestTags.CustomerNewButton,
-                        onClick = ::openNewCustomerForm,
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Search,
+                            capitalization = KeyboardCapitalization.Words
+                        ),
+                        keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
                     )
                 }
             }
@@ -159,9 +180,10 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                                 required = true,
                                 showError = companyName.isBlank(),
                                 singleLine = true,
+                                capitalization = KeyboardCapitalization.Words,
                                 testTag = RepairAppTestTags.CustomerCompanyNameField,
                             )
-                            Field(vatNumber, { vatNumber = it }, stringResource(R.string.customer_field_vat_number), showOptional = true, testTag = RepairAppTestTags.CustomerVatNumberField)
+                            Field(vatNumber, { vatNumber = it }, stringResource(R.string.customer_field_vat_number), showOptional = true, capitalization = KeyboardCapitalization.Characters, testTag = RepairAppTestTags.CustomerVatNumberField)
                         } else {
                             Field(
                                 firstName,
@@ -170,6 +192,7 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                                 required = true,
                                 showError = firstName.isBlank(),
                                 singleLine = true,
+                                capitalization = KeyboardCapitalization.Words,
                                 testTag = RepairAppTestTags.CustomerFirstNameField,
                             )
                             Field(
@@ -179,10 +202,11 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                                 required = true,
                                 showError = lastName.isBlank(),
                                 singleLine = true,
+                                capitalization = KeyboardCapitalization.Words,
                                 testTag = RepairAppTestTags.CustomerLastNameField,
                             )
                         }
-                        Field(taxCode, { taxCode = it }, stringResource(R.string.customer_field_tax_code), showOptional = true, testTag = RepairAppTestTags.CustomerTaxCodeField)
+                        Field(taxCode, { taxCode = it }, stringResource(R.string.customer_field_tax_code), showOptional = true, capitalization = KeyboardCapitalization.Characters, testTag = RepairAppTestTags.CustomerTaxCodeField)
                         Field(
                             phone,
                             { phone = it },
@@ -275,21 +299,23 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
 @Composable
 private fun CustomerCard(customer: CustomerEntity, onEdit: () -> Unit) {
     Card(modifier = Modifier.fillMaxWidth()) {
-        Column(
-            modifier = Modifier.padding(DashboardSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+        Row(
+            modifier = Modifier.padding(DashboardSpacing.cardPadding).fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            val context = LocalContext.current
-            Text(
-                customer.displayName(context),
-                style = MaterialTheme.typography.titleMedium,
-            )
-            Text(customer.type.label(context))
-            listOfNotNull(customer.phone, customer.email).takeIf { it.isNotEmpty() }?.let {
-                Text(it.joinToString(" - "))
+            Column(modifier = Modifier.weight(1f)) {
+                val context = LocalContext.current
+                Text(
+                    customer.displayName(context),
+                    style = MaterialTheme.typography.titleSmall,
+                )
+                Text(
+                    text = listOfNotNull(customer.type.label(context), customer.phone).joinToString(" - "),
+                    style = MaterialTheme.typography.bodySmall,
+                )
             }
             TouchButton(
-                modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.customer_edit),
                 tone = ButtonTone.NEUTRAL,
                 onClick = onEdit,
@@ -307,12 +333,7 @@ private fun CustomerEmptyState(hasQuery: Boolean, onNewCustomer: () -> Unit) {
         ) {
             Text(
                 text = if (hasQuery) stringResource(R.string.customer_no_results) else stringResource(R.string.customer_empty),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            TouchButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.customer_new),
-                onClick = onNewCustomer,
+                style = MaterialTheme.typography.bodySmall,
             )
         }
     }

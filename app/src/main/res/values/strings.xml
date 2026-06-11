@@ -124,6 +124,7 @@
     <string name="customer_create_and_order">Crea cliente e commessa</string>
 
     <string name="orders_title">Commesse</string>
+    <string name="orders_filter_title">Filtri</string>
     <string name="orders_empty_filter">Nessuna commessa per questo filtro.</string>
     <string name="orders_customer_label">Cliente: %s</string>
     <string name="orders_customer_unavailable">Cliente non disponibile</string>
@@ -289,4 +290,15 @@
     <string name="config_backup_restore_zip">Ripristina ZIP</string>
     <string name="config_backup_confirm_restore_zip_title">Ripristinare backup?</string>
     <string name="config_backup_confirm_restore_zip_text">Il backup ZIP sostituira\' database e file locali dell\'app. Dopo il ripristino sara\' richiesto un nuovo login.</string>
+
+    <string name="catalog_path_separator">\u0020&gt;\u0020</string>
+    <string name="catalog_error_only_admin_modify">Solo admin puo\' modificare categorie esistenti</string>
+    <string name="catalog_error_name_required">Nome categoria obbligatorio</string>
+    <string name="catalog_error_duplicate_name">Categoria gia\' presente in questo ramo</string>
+    <string name="catalog_error_only_admin">Solo admin</string>
+    <string name="catalog_error_not_found">Categoria non trovata</string>
+    <string name="catalog_error_used_by_order">Categoria usata da una commessa</string>
+    <string name="catalog_error_cycle_detected">Il ramo categorie contiene un ciclo</string>
+    <string name="catalog_error_self_parent">Una categoria non puo\' essere padre di se stessa</string>
+    <string name="catalog_error_parent_not_found">Categoria padre non trovata</string>
 </resources>

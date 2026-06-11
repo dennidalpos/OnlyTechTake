@@ -1,4 +1,4 @@
-package com.onlytechtake.repairapp.features.dashboard
+package com.onlytechtake.repairapp.features.dashboard.neworder
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -40,17 +40,44 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
-import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
 import com.onlytechtake.repairapp.domain.workspace.isReadyForSubmit
 import com.onlytechtake.repairapp.domain.workspace.validationErrors
+import com.onlytechtake.repairapp.features.dashboard.CustomerSuggestionCard
+import com.onlytechtake.repairapp.features.dashboard.common.DEFAULT_PRIVACY_TEXT
+import com.onlytechtake.repairapp.features.dashboard.common.DEFAULT_TERMS_TEXT
+import com.onlytechtake.repairapp.features.dashboard.common.PRIVACY_TEMPLATE_CODE
+import com.onlytechtake.repairapp.features.dashboard.common.TERMS_TEMPLATE_CODE
+import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
+import com.onlytechtake.repairapp.features.dashboard.common.Field
+import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
+import com.onlytechtake.repairapp.features.dashboard.common.StepSectionTitle
+import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
+import com.onlytechtake.repairapp.features.dashboard.common.WizardNavigationBar
+import com.onlytechtake.repairapp.features.dashboard.common.SignatureCaptureForm
+import com.onlytechtake.repairapp.features.dashboard.common.SignatureCaptureResult
+import com.onlytechtake.repairapp.features.dashboard.neworder.LAST_INTAKE_STEP
+import com.onlytechtake.repairapp.features.dashboard.neworder.SUBMIT_INTAKE_STEP
+import com.onlytechtake.repairapp.features.dashboard.neworder.completedStepAfterAdvance
+import com.onlytechtake.repairapp.features.dashboard.neworder.completedStepAfterCategorySelection
+import com.onlytechtake.repairapp.features.dashboard.neworder.completedStepAfterEdit
+import com.onlytechtake.repairapp.features.dashboard.neworder.currentStepAfterAdvance
+import com.onlytechtake.repairapp.features.dashboard.neworder.isIntakeSubmitUnlocked
+import com.onlytechtake.repairapp.features.dashboard.neworder.selectedCategoryAfterClick
+import com.onlytechtake.repairapp.features.dashboard.neworder.QuickIntakeCategorySection
+import com.onlytechtake.repairapp.features.dashboard.neworder.QuickIntakeMediaSection
+import com.onlytechtake.repairapp.features.dashboard.neworder.QuickIntakeProblemSection
+import com.onlytechtake.repairapp.features.dashboard.neworder.QuickIntakeSubmitSection
+import com.onlytechtake.repairapp.features.dashboard.neworder.IntakeCustomerFields
+import com.onlytechtake.repairapp.features.dashboard.neworder.CustomerSuggestionCard
+import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
-import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import java.util.UUID
 
 @Composable
@@ -489,4 +516,3 @@ private fun StepperIndicator(
         }
     }
 }
-

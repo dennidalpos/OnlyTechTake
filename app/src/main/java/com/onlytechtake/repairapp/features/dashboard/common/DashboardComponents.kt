@@ -1,4 +1,4 @@
-package com.onlytechtake.repairapp.features.dashboard
+package com.onlytechtake.repairapp.features.dashboard.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,8 +25,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -39,25 +39,24 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
-import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 
 object DashboardSpacing {
-    val screenPadding = 16.dp
-    val listGap = 16.dp
-    val cardPadding = 16.dp
-    val formGap = 12.dp
-    val compactGap = 8.dp
-    val actionGap = 8.dp
+    val screenPadding = 8.dp
+    val listGap = 8.dp
+    val cardPadding = 8.dp
+    val formGap = 8.dp
+    val compactGap = 4.dp
+    val actionGap = 4.dp
 }
 
 @Composable
@@ -82,6 +81,7 @@ fun Field(
     singleLine: Boolean = false,
     imeAction: ImeAction = ImeAction.Default,
     keyboardType: KeyboardType = KeyboardType.Text,
+    capitalization: KeyboardCapitalization = KeyboardCapitalization.Sentences,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardActions: KeyboardActions? = null,
     trailingIcon: (@Composable () -> Unit)? = null,
@@ -109,7 +109,11 @@ fun Field(
         label = { Text(labelText) },
         singleLine = singleLine,
         isError = showError,
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = effectiveImeAction),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = keyboardType,
+            imeAction = effectiveImeAction,
+            capitalization = capitalization
+        ),
         visualTransformation = visualTransformation,
         keyboardActions = effectiveKeyboardActions,
         trailingIcon = trailingIcon,
@@ -241,21 +245,21 @@ fun TouchButton(
 ) {
     Button(
         modifier = modifier
-            .defaultMinSize(minWidth = 80.dp, minHeight = 40.dp)
+            .defaultMinSize(minWidth = 60.dp, minHeight = 36.dp)
             .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
             .semantics {
                 selected?.let { this.selected = it }
                 stateDescription?.let { this.stateDescription = it }
             },
         enabled = enabled,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = tone.containerColor(),
             contentColor = tone.contentColor(),
             disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.38f),
             disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f),
         ),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
         onClick = onClick,
     ) {
         Text(
@@ -263,7 +267,7 @@ fun TouchButton(
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.labelLarge,
+            style = MaterialTheme.typography.labelMedium,
         )
     }
 }
@@ -280,27 +284,27 @@ fun TouchButtonWithIcon(
 ) {
     Button(
         modifier = modifier
-            .defaultMinSize(minWidth = 80.dp, minHeight = 40.dp)
+            .defaultMinSize(minWidth = 60.dp, minHeight = 36.dp)
             .then(testTag?.let { Modifier.testTag(it) } ?: Modifier),
         enabled = enabled,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = tone.containerColor(),
             contentColor = tone.contentColor(),
         ),
-        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
+        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp),
         onClick = onClick,
     ) {
         Icon(
             imageVector = icon,
             contentDescription = null,
-            modifier = Modifier.padding(end = 8.dp).size(18.dp)
+            modifier = Modifier.padding(end = 4.dp).size(16.dp)
         )
         Text(
             text = text,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.labelLarge,
+            style = MaterialTheme.typography.labelMedium,
         )
     }
 }
@@ -441,4 +445,3 @@ fun NoteFieldWithDialog(
         )
     }
 }
-

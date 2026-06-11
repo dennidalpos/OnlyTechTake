@@ -1,4 +1,4 @@
-package com.onlytechtake.repairapp.features.dashboard
+package com.onlytechtake.repairapp.features.dashboard.detail
 
 import android.content.Intent
 import android.net.Uri
@@ -7,10 +7,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
@@ -44,26 +44,34 @@ import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.ExportDestination
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.features.dashboard.OrderPhotoSection
+import com.onlytechtake.repairapp.features.dashboard.OrderSignatureSection
+import com.onlytechtake.repairapp.features.dashboard.QuoteDecision
+import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
+import com.onlytechtake.repairapp.features.dashboard.common.CompactExpandableRow
+import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
+import com.onlytechtake.repairapp.features.dashboard.common.Field
+import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
+import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
+import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
+import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.OrderStatusAction
+import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
 import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
-import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.applyStatusAction
 import com.onlytechtake.repairapp.features.workspace.attachmentCounts
 import com.onlytechtake.repairapp.features.workspace.availableOrderStatusActions
 import com.onlytechtake.repairapp.features.workspace.canConfirmDiagnosisResult
-import com.onlytechtake.repairapp.features.workspace.diagnosisOutcomeLabel
 import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
-import com.onlytechtake.repairapp.features.workspace.nextActionLabel
 import com.onlytechtake.repairapp.features.workspace.label as attachmentLabel
 import com.onlytechtake.repairapp.features.workspace.parseEuroCentsOrNull
 import com.onlytechtake.repairapp.features.workspace.requiresConfirmation
 import com.onlytechtake.repairapp.features.workspace.shouldShowDiagnosisEstimate
 import com.onlytechtake.repairapp.features.workspace.statusTemplateCode
 import com.onlytechtake.repairapp.features.workspace.tone
-import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
 
 @Composable
 fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
@@ -194,7 +202,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
 
                     Text(
                         text = "${selected.order.orderNumber} - ${selected.order.title}",
-                        style = MaterialTheme.typography.headlineSmall
+                        style = MaterialTheme.typography.titleLarge
                     )
 
                     Text(
@@ -202,7 +210,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                             R.string.orders_customer_label,
                             selected.customer?.displayName(context).orEmpty()
                         ),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodySmall
                     )
 
                     Row(
@@ -275,7 +283,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     if (forwardAction != null && canShowStandardActions) {
                         Text(
                             text = stringResource(R.string.orders_next_action_label, forwardAction.label),
-                            style = MaterialTheme.typography.titleMedium
+                            style = MaterialTheme.typography.titleSmall
                         )
                     }
 
@@ -298,7 +306,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                     ) {
-                        Text("Esito preventivo", style = MaterialTheme.typography.titleMedium)
+                        Text("Esito preventivo", style = MaterialTheme.typography.titleSmall)
                         QuoteDecisionRow(
                             text = "Preventivo accettato",
                             checked = quoteDecision == QuoteDecision.ACCEPTED,
@@ -363,7 +371,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                     ) {
-                        Text("Esito diagnosi", style = MaterialTheme.typography.titleMedium)
+                        Text("Esito diagnosi", style = MaterialTheme.typography.titleSmall)
                         OperatorText("Il dispositivo non e' riparabile. Avvisa il cliente prima di preparare il ritiro.")
                         TouchButton(
                             text = "Cliente avvisato / pronto per il ritiro",
@@ -439,7 +447,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                 ) {
-                    Text(stringResource(R.string.order_internal_notes), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.order_internal_notes), style = MaterialTheme.typography.titleSmall)
                     selected.order.internalNotes?.takeIf { it.isNotBlank() }?.let {
                         Text(
                             text = it,
@@ -475,7 +483,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                 ) {
-                    Text(stringResource(R.string.order_customer_documents), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.order_customer_documents), style = MaterialTheme.typography.titleSmall)
                     ActionRow {
                         TouchButton(
                             text = stringResource(R.string.order_generate_status_pdf),
@@ -636,15 +644,6 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                                 testTag = RepairAppTestTags.StatusNoteField,
                             )
                         }
-                    } else {
-                        Field(
-                            value = statusNote,
-                            onValueChange = { statusNote = it },
-                            label = stringResource(R.string.order_status_note_label),
-                            showOptional = true,
-                            imeAction = ImeAction.Done,
-                            testTag = RepairAppTestTags.StatusNoteField,
-                        )
                     }
                     if (isClosure) {
                         Text(stringResource(R.string.order_closure_reason_title), style = MaterialTheme.typography.titleSmall)
@@ -845,3 +844,13 @@ private fun QuoteDecisionRow(
         Text(text, style = MaterialTheme.typography.bodyLarge)
     }
 }
+
+private fun toggleQuoteDecision(current: QuoteDecision?, new: QuoteDecision): QuoteDecision? =
+    if (current == new) null else new
+
+private fun canConfirmQuoteDecision(decision: QuoteDecision?, rejectNote: String): Boolean =
+    when (decision) {
+        QuoteDecision.ACCEPTED -> true
+        QuoteDecision.REJECTED -> rejectNote.isNotBlank()
+        null -> false
+    }

@@ -1,4 +1,4 @@
-package com.onlytechtake.repairapp.features.dashboard
+package com.onlytechtake.repairapp.features.dashboard.detail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,8 +13,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
+import com.onlytechtake.repairapp.features.dashboard.LocalImagePreview
+import com.onlytechtake.repairapp.features.dashboard.LocalImageViewer
+import com.onlytechtake.repairapp.features.dashboard.common.CompactExpandableRow
+import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
+import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
 
 @Composable
@@ -62,8 +66,3 @@ fun OrderSignatureSection(
         )
     }
 }
-
-const val PRIVACY_TEMPLATE_CODE = "privacy_breve"
-const val TERMS_TEMPLATE_CODE = "condizioni_presa_in_carico"
-const val DEFAULT_PRIVACY_TEXT = "Informativa privacy sintetica GDPR: dati trattati per presa in carico, diagnosi, preventivo, riparazione, consegna, comunicazioni operative e obblighi di legge."
-const val DEFAULT_TERMS_TEXT = "Il cliente autorizza presa in carico, custodia e diagnosi tecnica dell'oggetto. Ogni intervento con preventivo richiede conferma."

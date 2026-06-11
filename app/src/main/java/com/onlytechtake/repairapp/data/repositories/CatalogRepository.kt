@@ -1,5 +1,7 @@
 package com.onlytechtake.repairapp.data.repositories
 
+import android.content.Context
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.UserRole
@@ -10,6 +12,7 @@ import java.util.UUID
 import kotlinx.coroutines.flow.Flow
 
 class CatalogRepository(
+    private val context: Context,
     private val categoryDao: OrderCategoryDao,
 ) {
     fun observeCategories(): Flow<List<OrderCategoryEntity>> = categoryDao.observeAll()
@@ -27,18 +30,24 @@ class CatalogRepository(
                 null
             }
         }
-        return path.joinToString(" > ")
+        return path.joinToString(context.getString(R.string.catalog_path_separator))
     }
 
     suspend fun saveCategory(actor: AuthenticatedUser, input: CategoryInput): Result<Unit> =
         runCatching {
             if (input.id != null) {
-                require(actor.role == UserRole.ADMIN) { "Solo admin puo' modificare categorie esistenti" }
+                require(actor.role == UserRole.ADMIN) {
+                    context.getString(R.string.catalog_error_only_admin_modify)
+                }
             }
-            require(input.name.isNotBlank()) { "Nome categoria obbligatorio" }
+            require(input.name.isNotBlank()) {
+                context.getString(R.string.catalog_error_name_required)
+            }
             val normalizedName = input.name.trim().capitalizeFirst()
             val duplicate = categoryDao.findByParentAndName(input.parentId, normalizedName)
-            require(duplicate == null || (duplicate.id == input.id)) { "Categoria gia' presente in questo ramo" }
+            require(duplicate == null || (duplicate.id == input.id)) {
+                context.getString(R.string.catalog_error_duplicate_name)
+            }
             categoryDao.upsertAll(
                 normalizeCategoryTree(
                     existing = categoryDao.findAll(),
@@ -47,18 +56,30 @@ class CatalogRepository(
                         description = input.description.trim().capitalizeFirst()
                     ),
                     generatedId = UUID.randomUUID().toString(),
+                    errorCycle = context.getString(R.string.catalog_error_cycle_detected),
+                    errorNotFound = context.getString(R.string.catalog_error_not_found),
+                    errorParentNotFound = context.getString(R.string.catalog_error_parent_not_found),
+                    errorSelfParent = context.getString(R.string.catalog_error_self_parent),
                 ),
             )
         }
 
     suspend fun deleteCategory(actor: AuthenticatedUser, categoryId: String): Result<Unit> =
         runCatching {
-            require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            require(actor.role == UserRole.ADMIN) {
+                context.getString(R.string.catalog_error_only_admin)
+            }
             val categories = categoryDao.findAll()
-            require(categories.any { it.id == categoryId }) { "Categoria non trovata" }
-            val branch = categoryBranch(categories, categoryId)
+            require(categories.any { it.id == categoryId }) {
+                context.getString(R.string.catalog_error_not_found)
+            }
+            val branch = categoryBranch(
+                categories = categories,
+                rootId = categoryId,
+                errorCycle = context.getString(R.string.catalog_error_cycle_detected),
+            )
             require(categoryDao.countOrdersForCategories(branch.map { it.id }) == 0) {
-                "Categoria usata da una commessa"
+                context.getString(R.string.catalog_error_used_by_order)
             }
             branch
                 .sortedByDescending { it.level }
@@ -68,13 +89,17 @@ class CatalogRepository(
         }
 }
 
-internal fun categoryBranch(categories: List<OrderCategoryEntity>, rootId: String): List<OrderCategoryEntity> {
+internal fun categoryBranch(
+    categories: List<OrderCategoryEntity>,
+    rootId: String,
+    errorCycle: String,
+): List<OrderCategoryEntity> {
     val byParent = categories.groupBy { it.parentId }
     val branch = mutableListOf<OrderCategoryEntity>()
     val visited = mutableSetOf<String>()
 
     fun visit(id: String) {
-        require(visited.add(id)) { "Il ramo categorie contiene un ciclo" }
+        require(visited.add(id)) { errorCycle }
         val category = categories.firstOrNull { it.id == id } ?: return
         branch += category
         byParent[id].orEmpty().forEach { child -> visit(child.id) }
@@ -88,9 +113,13 @@ internal fun normalizeCategoryTree(
     existing: List<OrderCategoryEntity>,
     input: CategoryInput,
     generatedId: String,
+    errorCycle: String,
+    errorNotFound: String,
+    errorParentNotFound: String,
+    errorSelfParent: String,
 ): List<OrderCategoryEntity> {
     val categoryId = input.id ?: generatedId
-    require(input.parentId != categoryId) { "Una categoria non puo' essere padre di se stessa" }
+    require(input.parentId != categoryId) { errorSelfParent }
 
     val categories = existing.associateBy { it.id }.toMutableMap()
     categories[categoryId] = OrderCategoryEntity(
@@ -107,10 +136,10 @@ internal fun normalizeCategoryTree(
 
     fun resolveLevel(id: String): Int {
         resolvedLevels[id]?.let { return it }
-        require(resolving.add(id)) { "Il ramo categorie contiene un ciclo" }
-        val category = requireNotNull(categories[id]) { "Categoria non trovata" }
+        require(resolving.add(id)) { errorCycle }
+        val category = requireNotNull(categories[id]) { errorNotFound }
         val level = category.parentId?.let { parentId ->
-            require(categories.containsKey(parentId)) { "Categoria padre non trovata" }
+            require(categories.containsKey(parentId)) { errorParentNotFound }
             resolveLevel(parentId) + 1
         } ?: 0
         resolving.remove(id)

@@ -1,4 +1,4 @@
-package com.onlytechtake.repairapp.features.dashboard
+package com.onlytechtake.repairapp.features.dashboard.neworder
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +15,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
+import com.onlytechtake.repairapp.features.dashboard.CameraCapturePreview
+import com.onlytechtake.repairapp.features.dashboard.LocalImagePreview
+import com.onlytechtake.repairapp.features.dashboard.LocalImageViewer
+import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
+import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
+import com.onlytechtake.repairapp.features.dashboard.common.StepSectionTitle
+import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.isImageAttachment
 import java.io.File

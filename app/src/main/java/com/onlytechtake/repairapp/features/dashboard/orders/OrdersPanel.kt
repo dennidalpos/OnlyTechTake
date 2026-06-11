@@ -1,4 +1,4 @@
-package com.onlytechtake.repairapp.features.dashboard
+package com.onlytechtake.repairapp.features.dashboard.orders
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,35 +9,46 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
-import com.onlytechtake.repairapp.domain.workspace.OrderFilter
-import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
-import com.onlytechtake.repairapp.features.workspace.ButtonTone
-import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
-import androidx.compose.ui.platform.LocalContext
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label
-import com.onlytechtake.repairapp.features.workspace.nextActionLabel
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.domain.workspace.OrderFilter
+import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
+import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
+import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
+import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
+import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
+import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
+import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
 import com.onlytechtake.repairapp.features.workspace.label as attachmentLabel
+import com.onlytechtake.repairapp.features.workspace.nextActionLabel
 
 @Composable
 fun OrdersPanel(viewModel: WorkspaceViewModel) {
     val uiState by viewModel.uiState.collectAsState()
     val orderListItems by viewModel.orderListItems.collectAsState()
     val context = LocalContext.current
+    var showFilterDialog by rememberSaveable { mutableStateOf(false) }
 
     LazyColumn(
         modifier = Modifier
@@ -46,14 +57,24 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
-            SectionTitle(stringResource(R.string.orders_title))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SectionTitle(stringResource(R.string.orders_title))
+                TouchButton(
+                    text = stringResource(R.string.orders_filter_title),
+                    tone = if (uiState.orderFilter.hasActiveFilter()) ButtonTone.INFO else ButtonTone.NEUTRAL,
+                    onClick = { showFilterDialog = true }
+                )
+            }
         }
 
-        item {
-            OrderFilterBar(
-                filter = uiState.orderFilter,
-                onFilter = viewModel::setFilter,
-            )
+        if (uiState.orderFilter.hasActiveFilter()) {
+            item {
+                ActiveFilterInfo(uiState.orderFilter)
+            }
         }
 
         if (orderListItems.isEmpty()) {
@@ -78,23 +99,59 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
                     ) {
-                        Text("${order.orderNumber} - ${order.title}", style = MaterialTheme.typography.titleMedium)
+                        Text("${order.orderNumber} - ${order.title}", style = MaterialTheme.typography.titleSmall)
                         OrderStatusStepper(status = order.status, compact = true)
                         Text(
                             text = stringResource(
                                 R.string.orders_customer_label,
                                 item.customer?.displayName(context).orEmpty(),
                             ),
+                            style = MaterialTheme.typography.bodySmall,
                         )
-                        Text(stringResource(R.string.orders_status_label, order.status.label(context)))
-                        Text(stringResource(R.string.orders_next_action_label, nextActionLabel(order)))
-                        Text(stringResource(R.string.orders_updated_label, formatUiDateTime(order.updatedAt)))
-                        Text(stringResource(R.string.orders_media_label, item.attachments.attachmentLabel()))
+                        Text(
+                            text = stringResource(R.string.orders_next_action_label, nextActionLabel(order)),
+                            style = MaterialTheme.typography.labelSmall,
+                        )
                     }
                 }
             }
         }
     }
+
+    if (showFilterDialog) {
+        AlertDialog(
+            onDismissRequest = { showFilterDialog = false },
+            title = { Text(stringResource(R.string.orders_filter_title)) },
+            text = {
+                OrderFilterBar(
+                    filter = uiState.orderFilter,
+                    onFilter = viewModel::setFilter,
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { showFilterDialog = false }) {
+                    Text(stringResource(R.string.confirm))
+                }
+            }
+        )
+    }
+}
+
+@Composable
+private fun ActiveFilterInfo(filter: OrderFilter) {
+    val context = LocalContext.current
+    Text(
+        text = stringResource(
+            R.string.orders_filter_active,
+            listOfNotNull(
+                stringResource(R.string.orders_filter_mine).lowercase().takeIf { filter.showMineOnly },
+                filter.status?.label(context),
+                filter.statuses.takeIf { it.isNotEmpty() }?.joinToString(" / ") { it.label(context) },
+            ).joinToString(", ")
+        ),
+        style = MaterialTheme.typography.labelSmall,
+        color = MaterialTheme.colorScheme.secondary,
+    )
 }
 
 @Composable
@@ -102,7 +159,6 @@ private fun OrderFilterBar(
     filter: OrderFilter,
     onFilter: (OrderFilter) -> Unit,
 ) {
-    val context = LocalContext.current
     Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
         ActionRow {
             val allSelected = !filter.hasActiveFilter()
@@ -124,24 +180,6 @@ private fun OrderFilterBar(
             QuickStatusGroupFilter(stringResource(R.string.orders_filter_progress), setOf(OrderStatus.IN_PROGRESS, OrderStatus.DIAGNOSIS), filter, onFilter)
             QuickStatusGroupFilter(stringResource(R.string.orders_filter_result), setOf(OrderStatus.RESULT, OrderStatus.REPAIRING), filter, onFilter)
             QuickStatusGroupFilter(stringResource(R.string.orders_filter_ready), setOf(OrderStatus.READY_FOR_PICKUP), filter, onFilter)
-        }
-        if (filter.showMineOnly || (filter.status != null) || filter.statuses.isNotEmpty()) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
-            ) {
-                Text(
-                    text = stringResource(
-                        R.string.orders_filter_active,
-                        listOfNotNull(
-                            stringResource(R.string.orders_filter_mine).lowercase().takeIf { filter.showMineOnly },
-                            filter.status?.label(context),
-                            filter.statuses.takeIf { it.isNotEmpty() }?.joinToString(" / ") { it.label(context) },
-                        ).joinToString(", ")
-                    ),
-                    style = MaterialTheme.typography.bodySmall,
-                )
-            }
         }
     }
 }

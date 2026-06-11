@@ -25,6 +25,10 @@ class CatalogCategoryTreeTest {
                 description = "",
             ),
             generatedId = "unused",
+            errorCycle = "cycle",
+            errorNotFound = "not_found",
+            errorParentNotFound = "parent_not_found",
+            errorSelfParent = "self_parent",
         )
 
         assertEquals(4, normalized.single { it.id == "four" }.level)
@@ -48,6 +52,10 @@ class CatalogCategoryTreeTest {
                 description = "",
             ),
             generatedId = "unused",
+            errorCycle = "cycle",
+            errorNotFound = "not_found",
+            errorParentNotFound = "parent_not_found",
+            errorSelfParent = "self_parent",
         )
 
         assertEquals(0, normalized.single { it.id == "branch" }.level)
@@ -72,6 +80,10 @@ class CatalogCategoryTreeTest {
                     description = "",
                 ),
                 generatedId = "unused",
+                errorCycle = "cycle",
+                errorNotFound = "not_found",
+                errorParentNotFound = "parent_not_found",
+                errorSelfParent = "self_parent",
             )
         }
     }

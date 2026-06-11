@@ -1,4 +1,4 @@
-package com.onlytechtake.repairapp.features.dashboard
+package com.onlytechtake.repairapp.features.dashboard.common
 
 enum class QuoteDecision {
     ACCEPTED,

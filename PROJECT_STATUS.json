@@ -1,5 +1,6 @@
 {
   "todos": [
+    "Verifica stabilità dopo refactoring strutturale: testare navigazione tra i nuovi package e funzionamento dei ViewModel separati",
     "Verifica manuale UI: provare nuova commessa, navigazione categorie, note dialog, scheda commessa compatta, timeline espandibile (verificare numerazione 1..N), WhatsApp e logout",
     "Completare verifica manuale su dispositivo: nuova commessa (firma, foto), diagnosi riparabile, accettazione, rifiuto, non riparabile, pronto ritiro, chiusura e PDF (setup admin e categorie verificati)",
     "Verificare manualmente WhatsApp reale su telefono destinatario: apertura wa.me, testo modificabile, importo preventivo renderizzato, template non riparabile e conferma manuale invio",
