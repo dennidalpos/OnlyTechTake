@@ -22,6 +22,8 @@ data class OrderStatusPdfPayload(
     val order: RepairOrderEntity,
     val customer: CustomerEntity,
     val categoryPath: String,
+    val statusLabel: String,
+    val estimateAmountLabel: String?,
     val assignedOperatorName: String?,
     val timeline: List<TimelineEventEntity>,
     val signature: SignatureEntity?,
@@ -117,11 +119,11 @@ class OrderStatusPdfGenerator {
         canvas.drawText("STATO ATTUALE", margin, y, sectionPaint)
         y += 15f
         canvas.drawText("Stato:", margin, y, labelPaint)
-        canvas.drawText(payload.order.status.name, margin + 80f, y, textPaint) // TODO: use labels
+        canvas.drawText(payload.statusLabel, margin + 80f, y, textPaint)
         y += 15f
-        if (payload.order.estimateAmountCents != null) {
+        if (payload.estimateAmountLabel != null) {
             canvas.drawText("Preventivo:", margin, y, labelPaint)
-            canvas.drawText("EUR ${payload.order.estimateAmountCents / 100.0}", margin + 80f, y, textPaint)
+            canvas.drawText(payload.estimateAmountLabel, margin + 80f, y, textPaint)
             y += 15f
         }
         y += 10f

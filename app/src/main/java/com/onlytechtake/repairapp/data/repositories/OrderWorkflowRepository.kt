@@ -206,6 +206,8 @@ class OrderWorkflowRepository(
                         updatedAt = now,
                         closedAt = if (status in OrderStatusPolicy.closedStatuses) now else order.closedAt,
                         closureReason = if (status in OrderStatusPolicy.closedStatuses) closureReason else null,
+                        closedByUserId = if (status in OrderStatusPolicy.closedStatuses) actor.id else order.closedByUserId,
+                        closeNote = if (status in OrderStatusPolicy.closedStatuses) note.trim().capitalizeFirst().ifBlank { null } else order.closeNote,
                     ),
                 )
                 eventWriter.statusChanged(
@@ -426,48 +428,6 @@ class OrderWorkflowRepository(
                         ),
                     )
                 }
-            }
-        }
-
-    suspend fun closeOrder(
-        actor: AuthenticatedUser,
-        orderId: String,
-        reason: ClosureReason,
-        note: String,
-    ): Result<Unit> =
-        runCatching {
-            inTransaction {
-                if (reason == ClosureReason.OTHER) {
-                    require(note.isNotBlank()) { "Nota di chiusura obbligatoria per motivo Altro" }
-                }
-                val order = requireWritableOrder(actor, orderId)
-                
-                val now = clockMillis()
-                val oldStatus = order.status
-                val targetStatus = OrderStatus.CLOSED
-
-                OrderStatusPolicy.requireAllowed(oldStatus, targetStatus, reason)
-
-                repairOrderDao.upsert(
-                    order.copy(
-                        status = targetStatus,
-                        closedAt = now,
-                        closureReason = reason,
-                        closeNote = note.trim().capitalizeFirst(),
-                        closedByUserId = actor.id,
-                        updatedAt = now,
-                    ),
-                )
-
-                eventWriter.statusChanged(
-                    orderId = orderId,
-                    actorUserId = actor.id,
-                    oldStatus = oldStatus,
-                    newStatus = targetStatus,
-                    note = note.trim().capitalizeFirst(),
-                    closureReason = reason,
-                    now = now,
-                )
             }
         }
 

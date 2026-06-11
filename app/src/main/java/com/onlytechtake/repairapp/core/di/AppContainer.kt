@@ -116,6 +116,7 @@ class AppContainer(context: Context) {
     ) { block -> database.withTransaction { block() } }
 
     val generateOrderStatusPdfUseCase = GenerateOrderStatusPdfUseCase(
+        context = context.applicationContext,
         workflowRepository = orderWorkflowRepository,
         catalogRepository = catalogRepository,
         documentRepository = orderDocumentRepository,

@@ -1,7 +1,10 @@
 package com.onlytechtake.repairapp.domain.workspace
 
+import android.content.Context
 import com.onlytechtake.repairapp.core.pdf.OrderStatusPdfGenerator
 import com.onlytechtake.repairapp.core.pdf.OrderStatusPdfPayload
+import com.onlytechtake.repairapp.core.utils.formatEuroCents
+import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.dao.UserDao
 import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderDocumentType
@@ -13,6 +16,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import java.util.UUID
 
 class GenerateOrderStatusPdfUseCase(
+    private val context: Context,
     private val workflowRepository: OrderWorkflowRepository,
     private val catalogRepository: CatalogRepository,
     private val documentRepository: OrderDocumentRepository,
@@ -46,6 +50,8 @@ class GenerateOrderStatusPdfUseCase(
             order = detail.order,
             customer = detail.customer ?: throw IllegalStateException("Cliente non trovato"),
             categoryPath = categoryPath,
+            statusLabel = detail.order.status.label(context),
+            estimateAmountLabel = detail.order.estimateAmountCents?.formatEuroCents(),
             assignedOperatorName = detail.assignedUser?.displayName,
             timeline = detail.timeline,
             signature = signature,
