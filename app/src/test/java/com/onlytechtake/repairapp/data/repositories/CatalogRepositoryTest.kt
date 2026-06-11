@@ -1,10 +1,12 @@
 package com.onlytechtake.repairapp.data.repositories
 
+import android.content.Context
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -22,7 +24,8 @@ class CatalogRepositoryTest {
         override suspend fun findByParentAndName(parentId: String?, name: String): OrderCategoryEntity? = null
     }
 
-    private val repository = CatalogRepository(stubDao)
+    private val context = mockk<Context>(relaxed = true)
+    private val repository = CatalogRepository(context, stubDao)
     private val admin = AuthenticatedUser("1", "admin", "Admin", UserRole.ADMIN)
     private val operator = AuthenticatedUser("2", "operator", "Operator", UserRole.OPERATOR)
 

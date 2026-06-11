@@ -1,5 +1,8 @@
 package com.onlytechtake.repairapp.features.dashboard
 
+import com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision
+import com.onlytechtake.repairapp.features.dashboard.common.canConfirmQuoteDecision
+import com.onlytechtake.repairapp.features.dashboard.common.toggleQuoteDecision
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

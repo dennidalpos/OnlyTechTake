@@ -117,6 +117,7 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.testing)
+    testImplementation(libs.mockk)
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.espresso.core)

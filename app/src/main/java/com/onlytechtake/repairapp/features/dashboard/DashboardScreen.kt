@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -88,7 +89,7 @@ fun DashboardScreen(
         NavigationItem(WorkspaceDestination.HOME, Icons.Default.Home, R.string.dashboard_home),
         NavigationItem(WorkspaceDestination.NEW_ORDER, Icons.Default.Add, R.string.dashboard_new),
         NavigationItem(WorkspaceDestination.CUSTOMERS, Icons.Default.Person, R.string.dashboard_customers),
-        NavigationItem(WorkspaceDestination.ORDERS, Icons.Default.List, R.string.dashboard_orders),
+        NavigationItem(WorkspaceDestination.ORDERS, Icons.AutoMirrored.Filled.List, R.string.dashboard_orders),
         NavigationItem(WorkspaceDestination.CONFIG, Icons.Default.Settings, R.string.dashboard_config),
     )
 
@@ -108,7 +109,7 @@ fun DashboardScreen(
                         Text(
                             text = if (user.role == UserRole.ADMIN) "Admin" else "Operatore",
                             style = MaterialTheme.typography.labelSmall,
-                            modifier = Modifier.padding(end = 8.dp)
+                            modifier = Modifier.padding(end = 8.dp),
                         )
                     }
                     TextButton(onClick = onLogout) {
