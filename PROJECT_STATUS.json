@@ -5,12 +5,18 @@
     "Verificare manualmente rimozione categorie: cancellazione categoria vuota, errore cancellazione se usata in commessa, cancellazione ricorsiva sottocategorie",
     "Verificare manualmente orientamento foto su device: scatto portrait, scatto landscape, anteprima in app, file salvato e assenza di rotazioni errate",
     "Verificare manualmente export ZIP e ripristino ZIP su una successiva installazione pulita",
-    "Creare video demo 01: Setup Admin e gestione Operatori",
-    "Creare video demo 02: Configurazione Categorie (3 livelli) e Template WhatsApp",
-    "Creare video demo 03: Flusso Nuova Commessa (Cliente, Foto, Firma e Privacy)",
-    "Creare video demo 04: Gestione Operativa (Diagnosi, Preventivo e Notifiche WhatsApp)",
-    "Creare video demo 05: Chiusura Commessa, Consegna e PDF Riepilogo",
-    "Creare video demo 06: Funzioni Admin Avanzate (Export ZIP, Ripristino e Pulizia Dati)",
-    "Organizzare le registrazioni demo nella cartella dedicata 'demo/recordings' del repository"
+    "Creare script PowerShell scripts/windows/record_demo_device.ps1 per registrazione demo guidata su device USB: rilevare un solo device fisico, installare APK debug/test, pulire solo i dati del package com.onlytechtake.repairapp, caricare dati demo, avviare app, avviare adb screenrecord e salvare MP4 locale",
+    "Aggiungere parametri allo script record_demo_device.ps1: -OutputRoot con default demo/recordings, -OutputFile con nome timestamp, -SkipBuild, -MaxDurationSeconds, -BitRate e -Size opzionale",
+    "Estrarre o riusare il seed demo AndroidTest in modo condiviso e aggiungere uno scenario strumentale minimale che carica dati demo senza generare screenshot",
+    "Configurare demo/recordings come cartella locale ignorata da Git per evitare commit di MP4 pesanti",
+    "Aggiornare scripts/README.md con comando di registrazione demo USB, prerequisiti adb/ffmpeg e nota distruttiva sui soli dati app del device collegato",
+    "Correggere scripts/android/check_env.ps1 per verificare Android SDK Platform 37, coerente con compileSdk 37",
+    "Verificare record_demo_device.ps1 su device USB reale: seed dati demo, avvio app, registrazione manuale guidata, pull MP4 in demo/recordings e file video riproducibile",
+    "Creare registrazione demo 01 in demo/recordings: Setup Admin e gestione Operatori",
+    "Creare registrazione demo 02 in demo/recordings: Configurazione Categorie (3 livelli) e Template WhatsApp",
+    "Creare registrazione demo 03 in demo/recordings: Flusso Nuova Commessa (Cliente, Foto, Firma e Privacy)",
+    "Creare registrazione demo 04 in demo/recordings: Gestione Operativa (Diagnosi, Preventivo e Notifiche WhatsApp)",
+    "Creare registrazione demo 05 in demo/recordings: Chiusura Commessa, Consegna e PDF Riepilogo",
+    "Creare registrazione demo 06 in demo/recordings: Funzioni Admin Avanzate (Export ZIP, Ripristino e Pulizia Dati)"
   ]
 }
