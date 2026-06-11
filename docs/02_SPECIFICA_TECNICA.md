@@ -75,7 +75,10 @@ Nome database:
 repair_app.db
 ```
 
-Lo schema corrente resta Room v1 ed e' aggiornato in place per installazioni pulite. Non sono presenti migrazioni, fallback o converter legacy: dopo modifiche incompatibili allo schema e' richiesta una reinstallazione pulita.
+Lo schema corrente e' Room v3. Il repository contiene gli export schema in
+`app/schemas/` e una migrazione implementata `2 -> 3`; non sono presenti
+migrazioni per versioni precedenti alla v2. Dopo modifiche incompatibili non
+coperte da migrazione e' richiesta una reinstallazione pulita.
 
 ## Entità principali
 
@@ -91,6 +94,7 @@ Lo schema corrente resta Room v1 ed e' aggiornato in place per installazioni pul
 - AppSettingEntity
 - AuditLogEntity
 - OrderMediaEntity, per foto CameraX locali collegate alla commessa
+- OrderDocumentEntity, per PDF/documenti generati e condivisi dalla commessa
 
 ## Repository
 

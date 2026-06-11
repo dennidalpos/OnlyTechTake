@@ -148,9 +148,9 @@ Installazione pulita e avvio dell'ultimo APK debug:
 powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -CleanInstall
 ```
 
-Questo e' il comando richiesto dopo modifiche incompatibili allo schema Room v1:
-disinstalla il package, elimina i dati locali precedenti, installa l'APK debug
-aggiornato e avvia `MainActivity`.
+Questo e' il comando richiesto dopo modifiche incompatibili allo schema Room non
+coperte da migrazione: disinstalla il package, elimina i dati locali precedenti,
+installa l'APK debug aggiornato e avvia `MainActivity`.
 
 Avviare senza reinstallare:
 

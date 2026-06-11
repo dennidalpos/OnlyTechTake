@@ -109,7 +109,16 @@ function Test-AndroidSdkPlatform {
         [int]$ApiLevel
     )
 
-    return Test-Path (Join-Path $Path "platforms\android-$ApiLevel")
+    $platformsPath = Join-Path $Path "platforms"
+    if (Test-Path (Join-Path $platformsPath "android-$ApiLevel")) {
+        return $true
+    }
+
+    return $null -ne (
+        Get-ChildItem -Path $platformsPath -Directory -ErrorAction SilentlyContinue |
+            Where-Object { $_.Name -like "android-$ApiLevel.*" } |
+            Select-Object -First 1
+    )
 }
 
 function Test-AndroidBuildToolsInstalled {

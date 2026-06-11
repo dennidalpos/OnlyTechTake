@@ -18,6 +18,7 @@ Template predefiniti implementati:
 - `whatsapp_lavorazione`;
 - `whatsapp_completamento`;
 - `whatsapp_pronto_ritiro`.
+- `whatsapp_stato_avanzamento_pdf`.
 
 Ogni template salva:
 

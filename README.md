@@ -149,7 +149,7 @@ Regole:
 - `Java non trovato` o `javac non trovato`: installare JDK 17/21 o usare Android Studio JBR, poi rieseguire `check_env.ps1`.
 - Java 26 nel `PATH`: gli script lo ignorano e preferiscono Android Studio JBR o un JDK 17/21 supportato.
 - `Dependency requires at least JVM runtime version 11` con `.\gradlew.bat`: il processo sta usando una JVM troppo vecchia; usare gli script PowerShell ufficiali o impostare `JAVA_HOME` su JDK/JBR 17/21 nello stesso terminale.
-- `Platform android-36 non trovata`: installare Android SDK Platform 36 da Android Studio SDK Manager.
+- `Platform android-37 non trovata`: installare Android SDK Platform 37 da Android Studio SDK Manager.
 - `Android SDK Build Tools non trovati`: installare Android SDK Build Tools da Android Studio SDK Manager.
 - `adb non trovato`: installare Android Platform Tools o aggiungere `platform-tools` al `PATH`.
 - Nessun device in `adb devices`: abilitare debug USB e autorizzare il computer sul device.

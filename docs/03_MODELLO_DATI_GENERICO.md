@@ -70,7 +70,6 @@ data class RepairOrderEntity(
     val closedAt: Long? = null,
     val closureReason: ClosureReason? = null,
     val customerActionStatus: CustomerActionStatus? = null,
-    val closureReason: ClosureReason? = null,
     val closeNote: String? = null,
     val closedByUserId: String? = null,
     val categoryPathSnapshot: String? = null,
@@ -258,6 +257,6 @@ Non usare una tabella diversa per ogni tipo di negozio.
 Non aggiungere colonne tipo `imei`, `marca`, `modello`, `taglia`, `colore`, ecc. nella tabella commesse.
 
 Usare categorie, descrizione, note interne, media, firme, timeline e messaggi.
-Lo schema Room corrente e' v1 pulito, aggiornato in place e senza migrazioni
-legacy. Non include tabelle custom field o workflow parallele a
-`repair_orders.status`.
+Lo schema Room corrente e' v3, con migrazione `2 -> 3` implementata e schema
+esportato in `app/schemas/`. Non include tabelle custom field o workflow
+parallele a `repair_orders.status`.
