@@ -13,6 +13,23 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
 data class AttachmentCounts(
     val images: Int,
@@ -130,6 +147,71 @@ fun parseEuroCentsOrNull(value: String): Long? {
         ?.toLongOrNull()
         ?: 0L
     return euros * 100L + cents
+}
+
+@Composable
+fun OrderStatusStepper(
+    status: OrderStatus,
+    modifier: Modifier = Modifier,
+    compact: Boolean = false
+) {
+    val steps = listOf(
+        OrderStatus.OPEN,
+        OrderStatus.DIAGNOSIS,
+        OrderStatus.RESULT,
+        OrderStatus.REPAIRING,
+        OrderStatus.READY_FOR_PICKUP,
+        OrderStatus.CLOSED
+    )
+
+    val currentStepIndex = when (status) {
+        OrderStatus.OPEN -> 0
+        OrderStatus.IN_PROGRESS, OrderStatus.DIAGNOSIS -> 1
+        OrderStatus.RESULT -> 2
+        OrderStatus.REPAIRING -> 3
+        OrderStatus.READY_FOR_PICKUP -> 4
+        OrderStatus.CLOSED -> 5
+    }
+
+    val dotSize = if (compact) 12.dp else 24.dp
+    val spacing = if (compact) 4.dp else 12.dp
+
+    Row(
+        modifier = modifier.fillMaxWidth().padding(vertical = spacing),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        steps.forEachIndexed { index, _ ->
+            val isCompleted = index < currentStepIndex
+            val isCurrent = index == currentStepIndex
+            val color = when {
+                isCurrent -> MaterialTheme.colorScheme.primary
+                isCompleted -> Color(0xFF237A3B)
+                else -> MaterialTheme.colorScheme.surfaceVariant
+            }
+
+            Box(
+                modifier = Modifier
+                    .size(dotSize)
+                    .background(color = color, shape = CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                if (!compact) {
+                    if (isCompleted) {
+                        Text("✓", color = Color.White, style = MaterialTheme.typography.labelSmall)
+                    } else {
+                        Text((index + 1).toString(), color = if (isCurrent) Color.White else MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelSmall)
+                    }
+                }
+            }
+
+            if (index < steps.size - 1) {
+                Canvas(modifier = Modifier.weight(1f).height(if (compact) 1.dp else 2.dp).padding(horizontal = 2.dp)) {
+                    drawRect(color = if (index < currentStepIndex) Color(0xFF237A3B) else Color.LightGray)
+                }
+            }
+        }
+    }
 }
 
 fun applyStatusAction(

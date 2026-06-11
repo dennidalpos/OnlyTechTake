@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,7 +30,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -64,13 +64,13 @@ import com.onlytechtake.repairapp.features.workspace.requiresConfirmation
 import com.onlytechtake.repairapp.features.workspace.shouldShowDiagnosisEstimate
 import com.onlytechtake.repairapp.features.workspace.statusTemplateCode
 import com.onlytechtake.repairapp.features.workspace.tone
+import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
 
 @Composable
 fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
     val detail by viewModel.selectedOrder.collectAsState()
     val documents by viewModel.selectedOrderDocuments.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
-    val templates by viewModel.templates.collectAsState()
     val exportDestination by viewModel.exportDestination.collectAsState()
     val context = LocalContext.current
 
@@ -156,84 +156,22 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             .padding(DashboardSpacing.screenPadding),
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
-        // --- WHATSAPP SECTION MOVED TO TOP ---
-        item {
-            val templateCode = statusTemplateCode(selected.order)
-            val templateTitle = templates.firstOrNull { it.active && it.code == templateCode }?.title ?: templateCode
-            Column(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                TouchButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.order_whatsapp_send),
-                    tone = ButtonTone.INFO,
-                    onClick = { viewModel.prepareMessage(selected.order.id, templateCode) },
-                )
-                Text(
-                    text = "Template: $templateTitle",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.secondary
-                )
-            }
-        }
-
-        uiState.preparedMessage
-            ?.takeIf { it.orderId == selected.order.id }
-            ?.let { prepared ->
-            item {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = androidx.compose.material3.CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.tertiaryContainer
-                    )
-                ) {
-                    Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                ) {
-                        SectionTitle(stringResource(R.string.order_wa_preview_title))
-                        Field(uiState.preparedMessageBody, viewModel::updatePreparedMessageBody, stringResource(R.string.order_wa_message_label))
-                        ActionRow {
-                            TouchButton(
-                                text = stringResource(R.string.order_wa_open),
-                                tone = ButtonTone.INFO,
-                                onClick = {
-                                    requestConfirm(waOpenConfirmTitle, waOpenConfirmText) {
-                                        viewModel.recordPreparedMessage()
-                                        val intent = Intent(
-                                            Intent.ACTION_VIEW,
-                                            "https://wa.me/${prepared.phone}?text=${Uri.encode(uiState.preparedMessageBody)}".toUri(),
-                                        )
-                                        context.startActivity(intent)
-                                    }
-                                },
-                            )
-                            TouchButton(
-                                text = stringResource(R.string.order_wa_sent),
-                                tone = ButtonTone.SUCCESS,
-                                onClick = { requestConfirm(waSentConfirmTitle, waSentConfirmText) { viewModel.confirmSentMessage() } },
-                            )
-                            TouchButton(
-                                text = stringResource(R.string.order_wa_close_preview),
-                                tone = ButtonTone.NEUTRAL,
-                                onClick = viewModel::clearPreparedMessage,
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
         item {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(
-                    modifier = Modifier.padding(DashboardSpacing.compactGap),
+                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
                 ) {
-                    ActionRow {
-                        TouchButton(text = stringResource(R.string.order_exit), tone = ButtonTone.NEUTRAL, onClick = ::exitOrderDetail)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        TouchButton(
+                            text = stringResource(R.string.order_exit),
+                            tone = ButtonTone.NEUTRAL,
+                            onClick = ::exitOrderDetail
+                        )
                         TouchButton(
                             text = stringResource(R.string.order_pdf),
                             tone = ButtonTone.INFO,
@@ -245,40 +183,140 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                             },
                         )
                     }
-                    Text("${selected.order.orderNumber} - ${selected.order.title}", style = MaterialTheme.typography.titleMedium)
+
+                    OrderStatusStepper(selected.order.status)
                     Text(
-                        stringResource(
+                        text = selected.order.status.label(context),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+
+                    Text(
+                        text = "${selected.order.orderNumber} - ${selected.order.title}",
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+
+                    Text(
+                        text = stringResource(
                             R.string.orders_customer_label,
                             selected.customer?.displayName(context).orEmpty()
                         ),
-                        style = MaterialTheme.typography.bodySmall
+                        style = MaterialTheme.typography.bodyMedium
                     )
-                    StatusHighlightText(
-                        text = stringResource(R.string.order_status_current, selected.order.status.label(context)),
-                        backgroundColor = Color(0xFF237A3B),
-                        contentColor = Color.White
-                    )
-                    StatusHighlightText(
-                        text = stringResource(R.string.orders_next_action_label, nextActionLabel(selected.order)),
-                        backgroundColor = Color(0xFFE8A600),
-                        contentColor = Color(0xFF2A2100)
-                    )
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text("Operatore: ${selected.assignedUser?.displayName.orEmpty()}", style = MaterialTheme.typography.bodySmall)
-                        Text(formatUiDateTime(selected.order.updatedAt), style = MaterialTheme.typography.bodySmall)
+                        Text(
+                            text = "Operatore: ${selected.assignedUser?.displayName.orEmpty()}",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                        Text(
+                            text = formatUiDateTime(selected.order.updatedAt),
+                            style = MaterialTheme.typography.bodySmall
+                        )
                     }
-                    Text(attachmentCounts(selected.media, selected.signatures).attachmentLabel(), style = MaterialTheme.typography.bodySmall)
-                    
-                    selected.order.diagnosisOutcome?.let {
-                        Text(stringResource(R.string.order_diagnosis_outcome_label, it.label(context)), style = MaterialTheme.typography.bodySmall)
-                    }
-                    selected.order.closureReason?.let { Text(stringResource(R.string.closure_reason_prefix, it.label(context)), style = MaterialTheme.typography.bodySmall) }
 
-                    selected.order.description?.takeIf { it.isNotBlank() }?.let {
-                        Text(stringResource(R.string.order_problem_label, it), style = MaterialTheme.typography.bodySmall)
+                    if (selected.order.description?.isNotBlank() == true) {
+                        Text(
+                            text = stringResource(R.string.order_problem_label, selected.order.description),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.secondary
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = attachmentCounts(selected.media, selected.signatures).attachmentLabel(),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        selected.order.diagnosisOutcome?.let {
+                            Text(
+                                text = "• ${it.label(context)}",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.secondary
+                            )
+                        }
+                    }
+
+                    selected.order.closureReason?.let {
+                        Text(
+                            text = stringResource(R.string.closure_reason_prefix, it.label(context)),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+            }
+        }
+
+        item {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = androidx.compose.material3.CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                ) {
+                    val actions = availableOrderStatusActions(selected.order.status)
+                    val forwardAction = actions.firstOrNull { it != OrderStatusAction.CLOSE_ORDER }
+                    val canShowStandardActions = selected.order.status != OrderStatus.RESULT
+
+                    if (forwardAction != null && canShowStandardActions) {
+                        Text(
+                            text = stringResource(R.string.orders_next_action_label, forwardAction.label),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        TouchButton(
+                            modifier = Modifier.fillMaxWidth().height(56.dp),
+                            text = forwardAction.label,
+                            tone = forwardAction.tone(),
+                            onClick = {
+                                statusAction = forwardAction
+                                statusNote = ""
+                                closureReason = null
+                                resultSummary = ""
+                                resultAmount = ""
+                                diagnosisOutcome = selected.order.diagnosisOutcome
+                            }
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)
+                    ) {
+                        val templateCode = statusTemplateCode(selected.order)
+                        TouchButton(
+                            modifier = Modifier.weight(1f),
+                            text = stringResource(R.string.order_whatsapp_send),
+                            tone = ButtonTone.INFO,
+                            onClick = { viewModel.prepareMessage(selected.order.id, templateCode) },
+                        )
+
+                        val closeAction = actions.find { it == OrderStatusAction.CLOSE_ORDER }
+                        if (closeAction != null) {
+                            TouchButton(
+                                modifier = Modifier.weight(1f),
+                                text = closeAction.label,
+                                tone = ButtonTone.DANGER,
+                                onClick = {
+                                    statusAction = closeAction
+                                    statusNote = ""
+                                    closureReason = null
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -379,37 +417,47 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             }
         }
 
-        item {
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+        uiState.preparedMessage
+            ?.takeIf { it.orderId == selected.order.id }
+            ?.let { prepared ->
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = androidx.compose.material3.CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                    )
                 ) {
-                    Text(stringResource(R.string.order_actions), style = MaterialTheme.typography.titleMedium)
-                    val actions = availableOrderStatusActions(selected.order.status)
-                        .filterNot {
-                            selected.order.status == OrderStatus.RESULT &&
-                                it in setOf(OrderStatusAction.START_REPAIR, OrderStatusAction.READY_FOR_PICKUP)
-                        }
-                    if (actions.isEmpty()) {
-                        Text(stringResource(R.string.order_no_actions))
-                    } else {
+                    Column(
+                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                    ) {
+                        SectionTitle(stringResource(R.string.order_wa_preview_title))
+                        Field(uiState.preparedMessageBody, viewModel::updatePreparedMessageBody, stringResource(R.string.order_wa_message_label))
                         ActionRow {
-                            actions.forEach { action ->
-                                TouchButton(
-                                    text = action.label,
-                                    tone = action.tone(),
-                                    testTag = RepairAppTestTags.statusAction(action.name),
-                                    onClick = {
-                                        statusAction = action
-                                        statusNote = ""
-                                        closureReason = null
-                                        resultSummary = ""
-                                        resultAmount = ""
-                                        diagnosisOutcome = selected.order.diagnosisOutcome
-                                    },
-                                )
-                            }
+                            TouchButton(
+                                text = stringResource(R.string.order_wa_open),
+                                tone = ButtonTone.INFO,
+                                onClick = {
+                                    requestConfirm(waOpenConfirmTitle, waOpenConfirmText) {
+                                        viewModel.recordPreparedMessage()
+                                        val intent = Intent(
+                                            Intent.ACTION_VIEW,
+                                            "https://wa.me/${prepared.phone}?text=${Uri.encode(uiState.preparedMessageBody)}".toUri(),
+                                        )
+                                        context.startActivity(intent)
+                                    }
+                                },
+                            )
+                            TouchButton(
+                                text = stringResource(R.string.order_wa_sent),
+                                tone = ButtonTone.SUCCESS,
+                                onClick = { requestConfirm(waSentConfirmTitle, waSentConfirmText) { viewModel.confirmSentMessage() } },
+                            )
+                            TouchButton(
+                                text = stringResource(R.string.order_wa_close_preview),
+                                tone = ButtonTone.NEUTRAL,
+                                onClick = viewModel::clearPreparedMessage,
+                            )
                         }
                     }
                 }

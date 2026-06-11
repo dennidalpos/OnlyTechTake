@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.features.workspace.nextActionLabel
+import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
 import com.onlytechtake.repairapp.features.workspace.label as attachmentLabel
 
 @Composable
@@ -77,6 +78,7 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
                     ) {
                         Text("${order.orderNumber} - ${order.title}", style = MaterialTheme.typography.titleMedium)
+                        OrderStatusStepper(status = order.status, compact = true)
                         Text(
                             stringResource(
                                 R.string.orders_customer_label,
