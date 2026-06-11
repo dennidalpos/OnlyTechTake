@@ -85,6 +85,31 @@ fun DashboardScreen(
     val currentUser by workspaceViewModel.currentUser.collectAsState()
     val isAdmin = currentUser?.role == UserRole.ADMIN
 
+    androidx.compose.runtime.LaunchedEffect(uiState.destination) {
+        if (currentDestination != uiState.destination.name) {
+            navController.navigate(uiState.destination.name) {
+                if (uiState.destination == WorkspaceDestination.HOME) {
+                    popUpTo(WorkspaceDestination.HOME.name) { inclusive = true }
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+        }
+    }
+
+    androidx.compose.runtime.DisposableEffect(navController) {
+        val listener = androidx.navigation.NavController.OnDestinationChangedListener { _, destination, _ ->
+            val dest = WorkspaceDestination.entries.find { it.name == destination.route }
+            if (dest != null && dest != uiState.destination) {
+                workspaceViewModel.navigateTo(dest)
+            }
+        }
+        navController.addOnDestinationChangedListener(listener)
+        onDispose {
+            navController.removeOnDestinationChangedListener(listener)
+        }
+    }
+
     val items = listOf(
         NavigationItem(WorkspaceDestination.HOME, Icons.Default.Home, R.string.dashboard_home),
         NavigationItem(WorkspaceDestination.NEW_ORDER, Icons.Default.Add, R.string.dashboard_new),

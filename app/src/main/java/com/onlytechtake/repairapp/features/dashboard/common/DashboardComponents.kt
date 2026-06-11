@@ -1,9 +1,11 @@
 package com.onlytechtake.repairapp.features.dashboard.common
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,9 +20,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -51,22 +55,59 @@ import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 
 object DashboardSpacing {
-    val screenPadding = 8.dp
-    val listGap = 8.dp
-    val cardPadding = 8.dp
-    val formGap = 8.dp
-    val compactGap = 4.dp
-    val actionGap = 4.dp
+    val screenPadding = 16.dp
+    val listGap = 12.dp
+    val cardPadding = 12.dp
+    val formGap = 12.dp
+    val compactGap = 8.dp
+    val actionGap = 8.dp
 }
 
 @Composable
 fun SectionTitle(text: String) {
-    Text(text = text, style = MaterialTheme.typography.titleLarge)
+    Text(
+        text = text,
+        style = MaterialTheme.typography.titleLarge,
+        modifier = Modifier.padding(bottom = 4.dp),
+        color = MaterialTheme.colorScheme.primary
+    )
+}
+
+@Composable
+fun StandardCard(
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+    containerColor: Color = MaterialTheme.colorScheme.surface,
+    border: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f)),
+    content: @Composable ColumnScope.() -> Unit
+) {
+    val cardModifier = modifier.fillMaxWidth()
+    if (onClick != null) {
+        Card(
+            modifier = cardModifier.clickable(onClick = onClick),
+            border = border,
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(containerColor = containerColor),
+            content = content
+        )
+    } else {
+        Card(
+            modifier = cardModifier,
+            border = border,
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(containerColor = containerColor),
+            content = content
+        )
+    }
 }
 
 @Composable
 fun StepSectionTitle(stepNumber: Int, text: String) {
-    Text(text = "$stepNumber. $text", style = MaterialTheme.typography.titleMedium)
+    Text(
+        text = "$stepNumber. $text",
+        style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.secondary
+    )
 }
 
 @Composable
@@ -109,6 +150,11 @@ fun Field(
         label = { Text(labelText) },
         singleLine = singleLine,
         isError = showError,
+        shape = RoundedCornerShape(12.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+        ),
         keyboardOptions = KeyboardOptions(
             keyboardType = keyboardType,
             imeAction = effectiveImeAction,
@@ -117,6 +163,7 @@ fun Field(
         visualTransformation = visualTransformation,
         keyboardActions = effectiveKeyboardActions,
         trailingIcon = trailingIcon,
+        textStyle = MaterialTheme.typography.bodyLarge
     )
 }
 
@@ -140,7 +187,7 @@ fun WizardNavigationBar(
     nextTestTag: String? = null,
     onNext: () -> Unit,
 ) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+    StandardCard {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -207,17 +254,12 @@ fun CompactExpandableRow(
     val expandedState = if (expanded) stringResource(R.string.state_expanded) else stringResource(R.string.state_collapsed)
     val clickLabel = if (expanded) stringResource(R.string.action_collapse) else stringResource(R.string.action_expand)
     
-    Card(
+    StandardCard(
         modifier = modifier
-            .fillMaxWidth()
             .semantics {
                 stateDescription = expandedState
-            }
-            .clickable(
-                onClickLabel = clickLabel,
-                role = Role.Button,
-            ) { expanded = !expanded },
-        shape = RoundedCornerShape(8.dp),
+            },
+        onClick = { expanded = !expanded },
     ) {
         Column(
             modifier = Modifier.padding(DashboardSpacing.compactGap),

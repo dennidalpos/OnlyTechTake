@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,6 +20,7 @@ import com.onlytechtake.repairapp.features.dashboard.common.LocalImagePreview
 import com.onlytechtake.repairapp.features.dashboard.common.LocalImageViewer
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
+import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.StepSectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
@@ -42,18 +43,20 @@ fun QuickIntakeMediaSection(
 ) {
     var selectedImagePath by rememberSaveable { mutableStateOf<String?>(null) }
 
-    Card(modifier = Modifier.fillMaxWidth()) {
+    StandardCard {
         Column(
             modifier = Modifier.padding(DashboardSpacing.cardPadding),
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
         ) {
             StepSectionTitle(stepNumber, "Foto e allegati")
             if (stagedMedia.isEmpty()) {
-                Text("Aggiungi almeno una foto o un allegato.")
+                Text("Aggiungi almeno una foto o un allegato.", style = MaterialTheme.typography.bodyMedium)
             } else {
                 stagedMedia.forEach { media ->
                     if (media.isImageAttachment()) {
-                        Card(modifier = Modifier.fillMaxWidth()) {
+                        StandardCard(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
+                        ) {
                             Column(
                                 modifier = Modifier.padding(DashboardSpacing.compactGap),
                                 verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
@@ -67,7 +70,9 @@ fun QuickIntakeMediaSection(
                             }
                         }
                     } else {
-                        Card(modifier = Modifier.fillMaxWidth()) {
+                        StandardCard(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
+                        ) {
                             Column(
                                 modifier = Modifier.padding(DashboardSpacing.compactGap),
                                 verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),

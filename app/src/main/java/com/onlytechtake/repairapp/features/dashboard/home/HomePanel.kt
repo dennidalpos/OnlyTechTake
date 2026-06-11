@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +21,7 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.domain.models.AppSummary
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
+import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
@@ -59,17 +58,22 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel) {
                 onClick = viewModel::openNewOrder,
             )
             queues.forEach { queue ->
-                Card(modifier = Modifier.fillMaxWidth()) {
+                StandardCard {
                     Column(
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                     ) {
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text(queue.title, style = MaterialTheme.typography.titleMedium)
-                            Text(queue.orders.size.toString(), style = MaterialTheme.typography.titleMedium)
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                            Text(queue.title, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.secondary)
+                            androidx.compose.material3.Badge(
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                            ) {
+                                Text(queue.orders.size.toString(), modifier = Modifier.padding(4.dp))
+                            }
                         }
                         if (queue.orders.isEmpty()) {
-                            Text(stringResource(R.string.home_empty_queue), style = MaterialTheme.typography.bodyMedium)
+                            Text(stringResource(R.string.home_empty_queue), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         } else {
                             queue.orders.take(3).forEach { order ->
                                 TouchButton(
@@ -97,9 +101,8 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel) {
 
 @Composable
 private fun MetricCard(label: String, value: String, modifier: Modifier = Modifier) {
-    Card(
+    StandardCard(
         modifier = modifier,
-        shape = RoundedCornerShape(12.dp),
     ) {
         Column(
             modifier = Modifier
@@ -114,7 +117,7 @@ private fun MetricCard(label: String, value: String, modifier: Modifier = Modifi
             )
             Text(
                 label,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )

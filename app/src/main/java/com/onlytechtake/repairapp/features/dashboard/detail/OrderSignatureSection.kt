@@ -19,6 +19,7 @@ import com.onlytechtake.repairapp.features.dashboard.common.LocalImageViewer
 import com.onlytechtake.repairapp.features.dashboard.common.CompactExpandableRow
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
+import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
 
 @Composable
@@ -34,7 +35,7 @@ fun OrderSignatureSection(
             Text("Nessuna firma acquisita.")
         } else {
             detail.signatures.forEach { signature ->
-                Card(modifier = Modifier.fillMaxWidth()) {
+                StandardCard {
                     Column(
                         modifier = Modifier.padding(DashboardSpacing.compactGap),
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),

@@ -35,6 +35,10 @@ enum class WorkspaceDestination {
     NEW_ORDER,
     ORDER_DETAIL,
     CONFIG,
+    CONFIG_CATEGORIES,
+    CONFIG_TEMPLATES,
+    CONFIG_WHATSAPP,
+    CONFIG_EXPORT,
     ADMIN,
 }
 

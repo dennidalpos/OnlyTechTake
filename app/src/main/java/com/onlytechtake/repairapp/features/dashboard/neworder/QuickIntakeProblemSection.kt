@@ -12,6 +12,7 @@ import androidx.compose.ui.text.input.ImeAction
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.Field
+import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.StepSectionTitle
 
 @Composable
@@ -24,7 +25,7 @@ fun QuickIntakeProblemSection(
     nextAction: KeyboardActions,
     doneAction: KeyboardActions,
 ) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+    StandardCard {
         Column(
             modifier = Modifier.padding(DashboardSpacing.cardPadding),
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),

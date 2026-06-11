@@ -181,13 +181,16 @@ fun OrderStatusStepper(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
+        val completedColor = Color(0xFF2E7D32) // Use a standard green
+        val inactiveColor = MaterialTheme.colorScheme.outlineVariant
+
         steps.forEachIndexed { index, _ ->
             val isCompleted = index < currentStepIndex
             val isCurrent = index == currentStepIndex
             val color = when {
                 isCurrent -> MaterialTheme.colorScheme.primary
-                isCompleted -> Color(0xFF237A3B)
-                else -> MaterialTheme.colorScheme.surfaceVariant
+                isCompleted -> completedColor
+                else -> inactiveColor
             }
 
             Box(
@@ -206,8 +209,8 @@ fun OrderStatusStepper(
             }
 
             if (index < steps.size - 1) {
-                Canvas(modifier = Modifier.weight(1f).height(if (compact) 1.dp else 2.dp).padding(horizontal = 2.dp)) {
-                    drawRect(color = if (index < currentStepIndex) Color(0xFF237A3B) else Color.LightGray)
+                Canvas(modifier = Modifier.weight(1f).height(if (compact) 2.dp else 4.dp).padding(horizontal = 2.dp)) {
+                    drawRect(color = if (index < currentStepIndex) completedColor else inactiveColor)
                 }
             }
         }

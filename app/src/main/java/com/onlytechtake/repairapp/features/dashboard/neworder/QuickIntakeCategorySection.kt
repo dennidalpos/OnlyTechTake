@@ -1,6 +1,5 @@
 package com.onlytechtake.repairapp.features.dashboard.neworder
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,6 +30,7 @@ import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
+import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.StepSectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
@@ -49,7 +49,7 @@ fun QuickIntakeCategorySection(
     val currentParent = currentParentId?.let { id -> activeCategories.firstOrNull { it.id == id } }
     val selectedPath = selectedCategoryId?.let { categoryPath(activeCategories, it) }.orEmpty()
 
-    Card(modifier = Modifier.fillMaxWidth()) {
+    StandardCard {
         Column(
             modifier = Modifier.padding(DashboardSpacing.cardPadding),
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
@@ -76,7 +76,7 @@ fun QuickIntakeCategorySection(
                             tone = ButtonTone.NEUTRAL,
                             onClick = { currentParentId = currentParent?.parentId },
                         )
-                        Text(currentParent?.name.orEmpty(), style = MaterialTheme.typography.titleMedium)
+                        Text(currentParent?.name.orEmpty(), style = MaterialTheme.typography.titleLarge)
                     }
                 }
 
@@ -88,9 +88,8 @@ fun QuickIntakeCategorySection(
                     visibleCategories.forEach { category ->
                         val hasChildren = activeCategories.any { child -> child.parentId == category.id }
                         val isSelected = category.id == selectedCategoryId
-                        Card(
+                        StandardCard(
                             modifier = Modifier
-                                .fillMaxWidth()
                                 .testTag(RepairAppTestTags.categoryButton(category.id))
                                 .semantics {
                                     selected = isSelected
@@ -99,20 +98,15 @@ fun QuickIntakeCategorySection(
                                         isSelected -> "Categoria selezionata"
                                         else -> "Categoria non selezionata"
                                     }
+                                },
+                            onClick = {
+                                if (hasChildren) {
+                                    currentParentId = category.id
+                                } else {
+                                    onCategorySelected(category.id)
                                 }
-                                .clickable(
-                                    role = Role.Button,
-                                    onClick = {
-                                        if (hasChildren) {
-                                            currentParentId = category.id
-                                        } else {
-                                            onCategorySelected(category.id)
-                                        }
-                                    },
-                                ),
-                            colors = androidx.compose.material3.CardDefaults.cardColors(
-                                containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant
-                            )
+                            },
+                            containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
                         ) {
                             Row(
                                 modifier = Modifier
@@ -132,7 +126,7 @@ fun QuickIntakeCategorySection(
                     }
                 }
                 if (visibleCategories.isEmpty()) {
-                    Text("Nessuna categoria in questo ramo.")
+                    Text("Nessuna categoria in questo ramo.", style = MaterialTheme.typography.bodyMedium)
                 }
             }
         }

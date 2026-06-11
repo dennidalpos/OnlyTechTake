@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,6 +28,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.activity.compose.BackHandler
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -53,6 +53,7 @@ import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.Field
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
+import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.OrderStatusAction
@@ -144,14 +145,10 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         confirmAction = action
     }
 
-    fun exitOrderDetail() {
-        val hasUnsavedLocalWork = (note.isNotBlank() || uiState.preparedMessage != null)
-        if (hasUnsavedLocalWork) {
-            requestConfirm(exitConfirmTitle, exitConfirmText) {
-                note = ""
-                viewModel.selectOrder(null)
-            }
-        } else {
+    val hasUnsavedLocalWork = (note.isNotBlank() || uiState.preparedMessage != null)
+    BackHandler(enabled = hasUnsavedLocalWork) {
+        requestConfirm(exitConfirmTitle, exitConfirmText) {
+            note = ""
             viewModel.selectOrder(null)
         }
     }
@@ -163,21 +160,16 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
-            Card(modifier = Modifier.fillMaxWidth()) {
+            StandardCard {
                 Column(
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                        horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        TouchButton(
-                            text = stringResource(R.string.order_exit),
-                            tone = ButtonTone.NEUTRAL,
-                            onClick = ::exitOrderDetail
-                        )
                         TouchButton(
                             text = stringResource(R.string.order_pdf),
                             tone = ButtonTone.INFO,
@@ -193,14 +185,14 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     OrderStatusStepper(selected.order.status)
                     Text(
                         text = selected.order.status.label(context),
-                        style = MaterialTheme.typography.labelLarge,
+                        style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
 
                     Text(
                         text = "${selected.order.orderNumber} - ${selected.order.title}",
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.headlineSmall
                     )
 
                     Text(
@@ -208,7 +200,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                             R.string.orders_customer_label,
                             selected.customer?.displayName(context).orEmpty()
                         ),
-                        style = MaterialTheme.typography.bodySmall
+                        style = MaterialTheme.typography.bodyLarge
                     )
 
                     Row(
@@ -217,19 +209,18 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     ) {
                         Text(
                             text = "Operatore: ${selected.assignedUser?.displayName.orEmpty()}",
-                            style = MaterialTheme.typography.bodySmall
+                            style = MaterialTheme.typography.bodyMedium
                         )
                         Text(
                             text = formatUiDateTime(selected.order.updatedAt),
-                            style = MaterialTheme.typography.bodySmall
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.secondary
                         )
                     }
 
                     if (selected.order.description?.isNotBlank() == true) {
-                        Text(
+                        OperatorText(
                             text = stringResource(R.string.order_problem_label, selected.order.description),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.secondary
                         )
                     }
 
@@ -264,11 +255,8 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         }
 
         item {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = androidx.compose.material3.CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
-                )
+            StandardCard(
+                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
             ) {
                 Column(
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
@@ -281,7 +269,8 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     if (forwardAction != null && canShowStandardActions) {
                         Text(
                             text = stringResource(R.string.orders_next_action_label, forwardAction.label),
-                            style = MaterialTheme.typography.titleSmall
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }
 
@@ -299,12 +288,12 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             selected.order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE
         ) {
             item {
-                Card(modifier = Modifier.fillMaxWidth()) {
+                StandardCard {
                     Column(
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                     ) {
-                        Text("Esito preventivo", style = MaterialTheme.typography.titleSmall)
+                        Text("Esito preventivo", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
                         QuoteDecisionRow(
                             text = "Preventivo accettato",
                             checked = quoteDecision == QuoteDecision.ACCEPTED,
@@ -329,6 +318,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                             )
                         }
                         TouchButton(
+                            modifier = Modifier.fillMaxWidth(),
                             text = "Conferma esito preventivo",
                             tone = if (quoteDecision == QuoteDecision.REJECTED) ButtonTone.DANGER else ButtonTone.SUCCESS,
                             enabled = canConfirmQuoteDecision(quoteDecision, quoteRejectNote),
@@ -364,16 +354,17 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             selected.order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE
         ) {
             item {
-                Card(modifier = Modifier.fillMaxWidth()) {
+                StandardCard {
                     Column(
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                     ) {
-                        Text("Esito diagnosi", style = MaterialTheme.typography.titleSmall)
+                        Text("Esito diagnosi", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.error)
                         OperatorText("Il dispositivo non e' riparabile. Avvisa il cliente prima di preparare il ritiro.")
                         TouchButton(
                             text = "Cliente avvisato / pronto per il ritiro",
                             tone = ButtonTone.SUCCESS,
+                            modifier = Modifier.fillMaxWidth(),
                             onClick = {
                                 requestConfirm(
                                     "Cliente avvisato?",
@@ -396,11 +387,8 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             ?.takeIf { it.orderId == selected.order.id }
             ?.let { prepared ->
             item {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = androidx.compose.material3.CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.tertiaryContainer
-                    )
+                StandardCard(
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f)
                 ) {
                     Column(
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
@@ -440,19 +428,14 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         }
 
         item {
-            Card(modifier = Modifier.fillMaxWidth()) {
+            StandardCard {
                 Column(
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                 ) {
-                    Text(stringResource(R.string.order_internal_notes), style = MaterialTheme.typography.titleSmall)
+                    Text(stringResource(R.string.order_internal_notes), style = MaterialTheme.typography.titleMedium)
                     selected.order.internalNotes?.takeIf { it.isNotBlank() }?.let {
-                        Text(
-                            text = it,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.bodySmall
-                        )
+                        OperatorText(it)
                     }
                     TouchButton(
                         modifier = Modifier.fillMaxWidth(),
@@ -476,12 +459,12 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         }
 
         item {
-            Card(modifier = Modifier.fillMaxWidth()) {
+            StandardCard {
                 Column(
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                 ) {
-                    Text(stringResource(R.string.order_customer_documents), style = MaterialTheme.typography.titleSmall)
+                    Text(stringResource(R.string.order_customer_documents), style = MaterialTheme.typography.titleMedium)
                     ActionRow {
                         TouchButton(
                             text = stringResource(R.string.order_generate_status_pdf),
@@ -499,14 +482,14 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                         )
                     }
                     if (uiState.isGeneratingStatusPdf) {
-                        Text(stringResource(R.string.order_generating_pdf), style = MaterialTheme.typography.bodySmall)
+                        Text(stringResource(R.string.order_generating_pdf), style = MaterialTheme.typography.bodyMedium)
                     }
                     uiState.statusPdfError?.let { error ->
-                        Text("Errore: $error", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                        Text("Errore: $error", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
                     }
 
                     if (documents.isNotEmpty()) {
-                        Text(stringResource(R.string.order_document_history), style = MaterialTheme.typography.bodySmall)
+                        Text(stringResource(R.string.order_document_history), style = MaterialTheme.typography.titleSmall)
                         documents.forEach { doc ->
                             Row(
                                 modifier = Modifier.fillMaxWidth().clickable { viewModel.onShareDocumentClicked(doc.id) },
@@ -514,7 +497,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
-                                    Text(doc.fileName, style = MaterialTheme.typography.bodySmall)
+                                    Text(doc.fileName, style = MaterialTheme.typography.bodyMedium)
                                     Text(
                                         text = stringResource(R.string.order_document_generated, formatUiDateTime(doc.createdAt)) + (if (doc.sharedAt != null) stringResource(R.string.order_document_sent) else ""),
                                         style = MaterialTheme.typography.labelSmall,

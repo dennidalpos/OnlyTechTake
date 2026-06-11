@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.activity.compose.BackHandler
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -31,6 +32,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.utils.displayName
@@ -44,6 +46,7 @@ import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.Field
 import com.onlytechtake.repairapp.features.dashboard.common.NoteFieldWithDialog
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
+import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
@@ -97,6 +100,11 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
         notes = ""
     }
 
+    BackHandler(enabled = showForm) {
+        showForm = false
+        clearForm()
+    }
+
     fun openNewCustomerForm() {
         clearForm()
         showForm = true
@@ -139,7 +147,7 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
         }
 
         item {
-            Card(modifier = Modifier.fillMaxWidth()) {
+            StandardCard {
                 Column(
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
@@ -150,6 +158,11 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                         onValueChange = viewModel::setCustomerSearchQuery,
                         label = { Text(stringResource(R.string.customer_search_label)) },
                         singleLine = true,
+                        shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
+                        colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                        ),
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Search,
                             capitalization = KeyboardCapitalization.Words
@@ -162,14 +175,15 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
 
         if (showForm) {
             item {
-                Card(modifier = Modifier.fillMaxWidth()) {
+                StandardCard {
                     Column(
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                     ) {
                         Text(
                             text = if (editingCustomerId == null) stringResource(R.string.customer_new) else stringResource(R.string.customer_edit),
-                            style = MaterialTheme.typography.titleMedium,
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.primary
                         )
                         CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = { isBusiness = it })
                         if (isBusiness) {
@@ -232,16 +246,7 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                                 text = if (editingCustomerId == null) stringResource(R.string.customer_save) else stringResource(R.string.customer_update),
                                 enabled = canSave,
                                 testTag = RepairAppTestTags.CustomerSaveButton,
-                                onClick = { confirmSave = true },
-                            )
-                            TouchButton(
-                                text = stringResource(R.string.customer_cancel),
-                                tone = ButtonTone.NEUTRAL,
-                                onClick = {
-                                    showForm = false
-                                    confirmSave = false
-                                    clearForm()
-                                },
+                                onClick = { confirmSave = true }
                             )
                         }
                     }
@@ -298,7 +303,7 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
 
 @Composable
 private fun CustomerCard(customer: CustomerEntity, onEdit: () -> Unit) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+    StandardCard(onClick = onEdit) {
         Row(
             modifier = Modifier.padding(DashboardSpacing.cardPadding).fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -308,17 +313,18 @@ private fun CustomerCard(customer: CustomerEntity, onEdit: () -> Unit) {
                 val context = LocalContext.current
                 Text(
                     customer.displayName(context),
-                    style = MaterialTheme.typography.titleSmall,
+                    style = MaterialTheme.typography.titleMedium,
                 )
                 Text(
                     text = listOfNotNull(customer.type.label(context), customer.phone).joinToString(" - "),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            TouchButton(
-                text = stringResource(R.string.customer_edit),
-                tone = ButtonTone.NEUTRAL,
-                onClick = onEdit,
+            androidx.compose.material3.Icon(
+                imageVector = androidx.compose.material.icons.filled.Edit,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
             )
         }
     }
@@ -326,15 +332,21 @@ private fun CustomerCard(customer: CustomerEntity, onEdit: () -> Unit) {
 
 @Composable
 private fun CustomerEmptyState(hasQuery: Boolean, onNewCustomer: () -> Unit) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+    StandardCard {
         Column(
             modifier = Modifier.padding(DashboardSpacing.cardPadding),
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
         ) {
             Text(
                 text = if (hasQuery) stringResource(R.string.customer_no_results) else stringResource(R.string.customer_empty),
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
             )
+            if (hasQuery) {
+                TouchButton(
+                    text = stringResource(R.string.customer_new),
+                    onClick = onNewCustomer
+                )
+            }
         }
     }
 }

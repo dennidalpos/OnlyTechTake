@@ -35,6 +35,7 @@ import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
+import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
@@ -84,33 +85,45 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
         } else {
             items(orderListItems) { item ->
                 val order = item.order
-                Card(
+                StandardCard(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag(RepairAppTestTags.orderCard(order.id))
-                        .clickable(
-                            onClickLabel = "Apri ${order.orderNumber}",
-                            role = Role.Button,
-                        ) {
-                            viewModel.selectOrder(order.id)
-                        },
+                        .testTag(RepairAppTestTags.orderCard(order.id)),
+                    onClick = {
+                        viewModel.selectOrder(order.id)
+                    },
                 ) {
                     Column(
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
                     ) {
-                        Text("${order.orderNumber} - ${order.title}", style = MaterialTheme.typography.titleSmall)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.Top
+                        ) {
+                            Text(
+                                "${order.orderNumber} - ${order.title}",
+                                style = MaterialTheme.typography.titleMedium,
+                                modifier = Modifier.weight(1f)
+                            )
+                            Text(
+                                formatUiDateTime(order.updatedAt),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                         OrderStatusStepper(status = order.status, compact = true)
                         Text(
                             text = stringResource(
                                 R.string.orders_customer_label,
                                 item.customer?.displayName(context).orEmpty(),
                             ),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                         )
                         Text(
                             text = stringResource(R.string.orders_next_action_label, nextActionLabel(order)),
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.secondary
                         )
                     }
                 }

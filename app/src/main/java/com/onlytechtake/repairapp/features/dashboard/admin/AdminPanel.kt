@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -32,6 +31,7 @@ import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.Field
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
+import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
@@ -92,7 +92,7 @@ fun AdminPanel(
     ) {
         item {
             SectionTitle(stringResource(R.string.dashboard_admin))
-            Card(modifier = Modifier.fillMaxWidth()) {
+            StandardCard {
                 Column(
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
@@ -132,7 +132,7 @@ fun AdminPanel(
         item { SectionTitle(stringResource(R.string.admin_users_title)) }
         if (users.isEmpty()) {
             item {
-                Card(modifier = Modifier.fillMaxWidth()) {
+                StandardCard {
                     Column(modifier = Modifier.padding(DashboardSpacing.cardPadding)) {
                         Text(stringResource(R.string.admin_no_users), style = MaterialTheme.typography.bodyMedium)
                     }
@@ -141,7 +141,7 @@ fun AdminPanel(
         } else {
             items(users, key = { it.id }) { user ->
                 var resetPasswordVisible by rememberSaveable(user.id) { mutableStateOf(value = false) }
-                Card(modifier = Modifier.fillMaxWidth()) {
+                StandardCard {
                     Column(
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
@@ -191,7 +191,7 @@ fun AdminPanel(
             }
         }
         item {
-            Card(modifier = Modifier.fillMaxWidth()) {
+            StandardCard {
                 Column(
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
@@ -213,7 +213,7 @@ fun AdminPanel(
             }
         }
         item {
-            Card(modifier = Modifier.fillMaxWidth()) {
+            StandardCard {
                 Column(
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
@@ -248,7 +248,7 @@ fun AdminPanel(
         }
         item {
             SectionTitle(stringResource(R.string.admin_author))
-            Card(modifier = Modifier.fillMaxWidth()) {
+            StandardCard {
                 Column(
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),

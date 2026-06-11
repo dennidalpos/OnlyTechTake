@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
+import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.StepSectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 
@@ -20,7 +21,7 @@ fun QuickIntakeSubmitSection(
     enabled: Boolean,
     onSubmit: () -> Unit,
 ) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+    StandardCard {
         Column(
             modifier = Modifier.padding(DashboardSpacing.cardPadding),
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
@@ -30,6 +31,7 @@ fun QuickIntakeSubmitSection(
                 Text(
                     text = "Mancano: ${missingRequirements.joinToString(", ")}",
                     color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
             TouchButton(

@@ -55,6 +55,7 @@ import com.onlytechtake.repairapp.features.dashboard.common.TERMS_TEMPLATE_CODE
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.Field
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
+import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.StepSectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.dashboard.common.WizardNavigationBar
@@ -234,7 +235,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         )
 
         if (currentStep == 1) {
-            Card(modifier = Modifier.fillMaxWidth()) {
+            StandardCard {
             Column(
                 modifier = Modifier.padding(DashboardSpacing.cardPadding),
                 verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
@@ -255,7 +256,11 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                     testTag = RepairAppTestTags.NewOrderCustomerSearchField,
                 )
                 if (selectedCustomerId != null) {
-                    Text(stringResource(R.string.intake_selected_customer, selectedCustomerDisplayName.orEmpty()))
+                    Text(
+                        stringResource(R.string.intake_selected_customer, selectedCustomerDisplayName.orEmpty()),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.primary
+                    )
                     TouchButton(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.intake_change_customer),
@@ -422,7 +427,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
 
         if (currentStep == 5) {
             key(intakeSessionId) {
-                Card(modifier = Modifier.fillMaxWidth()) {
+                StandardCard {
                     SignatureCaptureForm(
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         title = "5. ${stringResource(R.string.intake_step_privacy)}",
@@ -482,6 +487,7 @@ private fun StepperIndicator(
         for (i in 1..LAST_INTAKE_STEP) {
             val isCompleted = i <= completedStep
             val isCurrent = i == currentStep
+            val completedColor = Color(0xFF2E7D32)
 
             Box(
                 modifier = Modifier
@@ -489,7 +495,7 @@ private fun StepperIndicator(
                     .background(
                         color = when {
                             isCurrent -> MaterialTheme.colorScheme.primary
-                            isCompleted -> Color(0xFF237A3B)
+                            isCompleted -> completedColor
                             else -> MaterialTheme.colorScheme.surfaceVariant
                         },
                         shape = CircleShape
@@ -508,8 +514,8 @@ private fun StepperIndicator(
                 )
             }
             if (i < LAST_INTAKE_STEP) {
-                androidx.compose.foundation.Canvas(modifier = Modifier.weight(1f).height(2.dp)) {
-                    drawRect(color = if (i <= completedStep) Color(0xFF237A3B) else Color.LightGray)
+                androidx.compose.foundation.Canvas(modifier = Modifier.weight(1f).height(4.dp)) {
+                    drawRect(color = if (i <= completedStep) completedColor else Color.LightGray)
                 }
             }
         }

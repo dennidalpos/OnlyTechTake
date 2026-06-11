@@ -54,6 +54,38 @@ fun DashboardNavHost(
                 onBackupRestored = onAppDataRestored
             )
         }
+        composable(WorkspaceDestination.CONFIG_CATEGORIES.name) {
+            ConfigPanel(
+                viewModel = workspaceViewModel,
+                isAdmin = isAdmin,
+                initialSection = "CATEGORIES",
+                onBackupRestored = onAppDataRestored
+            )
+        }
+        composable(WorkspaceDestination.CONFIG_TEMPLATES.name) {
+            ConfigPanel(
+                viewModel = workspaceViewModel,
+                isAdmin = isAdmin,
+                initialSection = "TEMPLATES",
+                onBackupRestored = onAppDataRestored
+            )
+        }
+        composable(WorkspaceDestination.CONFIG_WHATSAPP.name) {
+            ConfigPanel(
+                viewModel = workspaceViewModel,
+                isAdmin = isAdmin,
+                initialSection = "WHATSAPP",
+                onBackupRestored = onAppDataRestored
+            )
+        }
+        composable(WorkspaceDestination.CONFIG_EXPORT.name) {
+            ConfigPanel(
+                viewModel = workspaceViewModel,
+                isAdmin = isAdmin,
+                initialSection = "EXPORT",
+                onBackupRestored = onAppDataRestored
+            )
+        }
         composable(WorkspaceDestination.ADMIN.name) {
             AdminPanel(
                 viewModel = workspaceViewModel,

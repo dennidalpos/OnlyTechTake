@@ -28,6 +28,7 @@ import com.onlytechtake.repairapp.features.dashboard.common.CameraCapturePreview
 import com.onlytechtake.repairapp.features.dashboard.common.CompactExpandableRow
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
+import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
@@ -56,9 +57,9 @@ fun OrderPhotoSection(
             Text("Nessuna foto o allegato.")
         } else {
             if (images.isNotEmpty()) {
-                Text("Immagini")
+                Text("Immagini", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.secondary)
                 images.forEach { media ->
-                    Card(modifier = Modifier.fillMaxWidth()) {
+                    StandardCard {
                         Column(
                             modifier = Modifier.padding(DashboardSpacing.compactGap),
                             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
@@ -73,7 +74,7 @@ fun OrderPhotoSection(
                 }
             }
             if (documents.isNotEmpty()) {
-                Text("Documenti")
+                Text("Documenti", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.secondary)
                 documents.forEach { media ->
                     CompactExpandableRow(
                         title = "Allegato",
@@ -83,9 +84,9 @@ fun OrderPhotoSection(
                 }
             }
             if (finalPhotos.isNotEmpty()) {
-                Text("Lavoro finito")
+                Text("Lavoro finito", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.tertiary)
                 finalPhotos.forEach { media ->
-                    Card(modifier = Modifier.fillMaxWidth()) {
+                    StandardCard {
                         Column(
                             modifier = Modifier.padding(DashboardSpacing.compactGap),
                             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
