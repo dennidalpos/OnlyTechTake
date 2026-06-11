@@ -132,7 +132,7 @@ internal class WorkspaceMediaActions(
     fun registerCapturedFinalPhoto(orderId: String, file: File) {
         authenticatedActionRunner.runCustom { actor ->
             orderMediaRepository.registerCapturedFinalPhoto(actor, orderId, file).fold(
-                onSuccess = { showSuccess("Foto lavoro finito salvata") },
+                onSuccess = { showSuccess("Foto finale salvata") },
                 onFailure = showError,
             )
         }

@@ -155,6 +155,18 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
     val termsText = templates.firstOrNull { it.code == TERMS_TEMPLATE_CODE && it.active }?.body ?: DEFAULT_TERMS_TEXT
     val missingRequirements = intakeInput.validationErrors()
 
+    androidx.compose.runtime.LaunchedEffect(
+        selectedCustomerId, selectedCategoryId, problemSummary, problemDetails, stagedMedia, signatureCapture
+    ) {
+        val isDirty = selectedCustomerId != null ||
+                selectedCategoryId != null ||
+                problemSummary.isNotBlank() ||
+                problemDetails.isNotBlank() ||
+                stagedMedia.isNotEmpty() ||
+                signatureCapture != null
+        viewModel.setFormDirty(isDirty)
+    }
+
     val attachmentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
             viewModel.importIntakeAttachment(intakeSessionId, it) { staged ->

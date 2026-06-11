@@ -37,6 +37,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.utils.displayName
@@ -116,10 +118,16 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
     if (selected == null) {
         Column(
             modifier = Modifier.fillMaxSize().padding(DashboardSpacing.screenPadding),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(stringResource(R.string.order_none_selected))
-            TouchButton(text = stringResource(R.string.dashboard_orders), onClick = { viewModel.navigateTo(WorkspaceDestination.ORDERS) })
+            if (uiState.selectedOrderId != null) {
+                androidx.compose.material3.CircularProgressIndicator()
+                Text("Caricamento commessa...", modifier = Modifier.padding(top = 8.dp))
+            } else {
+                Text(stringResource(R.string.order_none_selected))
+                TouchButton(text = stringResource(R.string.dashboard_orders), onClick = { viewModel.navigateTo(WorkspaceDestination.ORDERS) })
+            }
         }
         return
     }
@@ -165,23 +173,6 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        TouchButton(
-                            text = stringResource(R.string.order_pdf),
-                            tone = ButtonTone.INFO,
-                            onClick = {
-                                val destMsg = if (exportDestination == ExportDestination.LOCAL) exportLocal else exportCloud
-                                requestConfirm(exportPdfTitle, exportPdfTextTemplate.format(destMsg)) {
-                                    exportPdfLauncher.launch("${selected.order.orderNumber}.pdf")
-                                }
-                            },
-                        )
-                    }
-
                     OrderStatusStepper(selected.order.status)
                     Text(
                         text = selected.order.status.label(context),
@@ -264,9 +255,8 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                 ) {
                     val actions = availableOrderStatusActions(selected.order.status)
                     val forwardAction = actions.firstOrNull { it != OrderStatusAction.CLOSE_ORDER }
-                    val canShowStandardActions = selected.order.status != OrderStatus.RESULT
 
-                    if (forwardAction != null && canShowStandardActions) {
+                    if (forwardAction != null) {
                         Text(
                             text = stringResource(R.string.orders_next_action_label, forwardAction.label),
                             style = MaterialTheme.typography.titleMedium,
@@ -492,23 +482,44 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                         Text(stringResource(R.string.order_document_history), style = MaterialTheme.typography.titleSmall)
                         documents.forEach { doc ->
                             Row(
-                                modifier = Modifier.fillMaxWidth().clickable { viewModel.onShareDocumentClicked(doc.id) },
+                                modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(doc.fileName, style = MaterialTheme.typography.bodyMedium)
-                                    Text(
-                                        text = stringResource(R.string.order_document_generated, formatUiDateTime(doc.createdAt)) + (if (doc.sharedAt != null) stringResource(R.string.order_document_sent) else ""),
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.secondary
+                                Row(
+                                    modifier = Modifier.weight(1f).clickable { viewModel.onShareDocumentClicked(doc.id) },
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        Text(doc.fileName, style = MaterialTheme.typography.bodyMedium)
+                                        Text(
+                                            text = stringResource(R.string.order_document_generated, formatUiDateTime(doc.createdAt)) + (if (doc.sharedAt != null) stringResource(R.string.order_document_sent) else ""),
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = MaterialTheme.colorScheme.secondary
+                                        )
+                                    }
+                                    TouchButton(
+                                        text = stringResource(R.string.order_share),
+                                        tone = ButtonTone.NEUTRAL,
+                                        onClick = { viewModel.onShareDocumentClicked(doc.id) }
                                     )
                                 }
-                                TouchButton(
-                                    text = stringResource(R.string.order_share),
-                                    tone = ButtonTone.NEUTRAL,
-                                    onClick = { viewModel.onShareDocumentClicked(doc.id) }
-                                )
+                                androidx.compose.material3.IconButton(
+                                    onClick = {
+                                        requestConfirm(
+                                            "Eliminare documento?",
+                                            "Il file ${doc.fileName} verra' rimosso permanentemente."
+                                        ) {
+                                            viewModel.onDeleteDocumentClicked(doc.id)
+                                        }
+                                    }
+                                ) {
+                                    androidx.compose.material3.Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = "Elimina",
+                                        tint = MaterialTheme.colorScheme.error
+                                    )
+                                }
                             }
                         }
                     }

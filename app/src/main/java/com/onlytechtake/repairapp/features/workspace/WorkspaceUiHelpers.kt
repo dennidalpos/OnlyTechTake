@@ -51,7 +51,7 @@ fun AttachmentCounts.label(): String =
         "Foto $images",
         "Documenti $documents",
         "Firme $signatures",
-        "Lavoro finito $finalPhotos".takeIf { finalPhotos > 0 },
+        "Lavoro finale $finalPhotos".takeIf { finalPhotos > 0 },
     ).filterNotNull().joinToString(" - ")
 
 fun OrderAttachmentCounts.label(): String =
@@ -59,7 +59,7 @@ fun OrderAttachmentCounts.label(): String =
         "Foto $images",
         "Documenti $documents",
         "Firme $signatures",
-        "Lavoro finito $finalPhotos".takeIf { finalPhotos > 0 },
+        "Lavoro finale $finalPhotos".takeIf { finalPhotos > 0 },
     ).filterNotNull().joinToString(" - ")
 
 fun OrderMediaEntity.isImageAttachment(): Boolean =

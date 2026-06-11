@@ -66,6 +66,13 @@ class WorkspaceViewModel(
     private val mutableUiState = MutableStateFlow(WorkspaceUiState())
     val uiState: StateFlow<WorkspaceUiState> = mutableUiState
 
+    private val _isFormDirty = MutableStateFlow(false)
+    val isFormDirty = _isFormDirty.asStateFlow()
+
+    fun setFormDirty(dirty: Boolean) {
+        _isFormDirty.value = dirty
+    }
+
     val currentUser = authRepository.currentUser
     val users = adminUserRepository.observeUsers().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     val customers = customerRepository.observeRecent().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
@@ -83,6 +90,9 @@ class WorkspaceViewModel(
 
     private val _exportDestination = MutableStateFlow(ExportDestination.LOCAL)
     val exportDestination = _exportDestination.asStateFlow()
+
+    private val _isCloudAvailable = MutableStateFlow(false)
+    val isCloudAvailable = _isCloudAvailable.asStateFlow()
 
     val orderListItems = combine(currentUser, uiState) { user, state -> user to state.orderFilter }
         .flatMapLatest { (user, filter) ->
@@ -162,6 +172,10 @@ class WorkspaceViewModel(
     init {
         viewModelScope.launch {
             templateRepository.ensureDefaults(currentUser.value?.id)
+            _isCloudAvailable.value = backupRepository.isCloudProviderAvailable()
+            if (_isCloudAvailable.value) {
+                _exportDestination.value = ExportDestination.CLOUD
+            }
         }
     }
 
@@ -454,6 +468,24 @@ class WorkspaceViewModel(
                 mutableUiState.update { it.copy(showPdfSentConfirmation = true) }
             } else {
                 showMessage("Documento non trovato", isError = true)
+            }
+        }
+    }
+
+    fun onDeleteDocumentClicked(documentId: String) {
+        val actor = currentUser.value ?: return
+        viewModelScope.launch {
+            val document = orderDocumentRepository.findById(documentId)
+            if (document != null) {
+                orderDocumentRepository.delete(documentId).fold(
+                    onSuccess = {
+                        showSuccess("Documento eliminato")
+                        selectedOrder.value?.order?.id?.let { orderId ->
+                            orderRepository.recordMediaRemoved(actor, orderId, document.fileName)
+                        }
+                    },
+                    onFailure = ::showError
+                )
             }
         }
     }

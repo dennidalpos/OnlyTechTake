@@ -114,7 +114,7 @@ class OrderMediaRepository(
             orderId = orderId,
             file = file,
             mediaType = MEDIA_TYPE_FINAL_PHOTO,
-            timelineTitle = "Foto lavoro finito",
+            timelineTitle = "Foto finale",
         )
 
     private suspend fun registerCapturedImage(

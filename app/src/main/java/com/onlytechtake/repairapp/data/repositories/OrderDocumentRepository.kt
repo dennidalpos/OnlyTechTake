@@ -9,6 +9,7 @@ interface OrderDocumentRepository {
     suspend fun markShared(documentId: String, sharedAt: Long)
     suspend fun findById(id: String): OrderDocumentEntity?
     fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>>
+    suspend fun delete(documentId: String): Result<Unit>
 }
 
 class DefaultOrderDocumentRepository(
@@ -26,5 +27,14 @@ class DefaultOrderDocumentRepository(
 
     override fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>> {
         return dao.observeByOrder(orderId)
+    }
+
+    override suspend fun delete(documentId: String): Result<Unit> = runCatching {
+        val doc = dao.getById(documentId) ?: throw Exception("Documento non trovato")
+        dao.deleteById(documentId)
+        val file = java.io.File(doc.localPath)
+        if (file.exists()) {
+            file.delete()
+        }
     }
 }

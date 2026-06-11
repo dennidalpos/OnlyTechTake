@@ -440,6 +440,15 @@ class OrderWorkflowRepository(
             }
         }
 
+    suspend fun recordMediaRemoved(actor: AuthenticatedUser, orderId: String, fileName: String): Result<Unit> =
+        runCatching {
+            inTransaction {
+                requireWritableOrder(actor, orderId)
+                val now = clockMillis()
+                eventWriter.mediaRemoved(orderId, actor.id, fileName, now)
+            }
+        }
+
     private suspend fun requireWritableOrder(actor: AuthenticatedUser, orderId: String): RepairOrderEntity {
         val order = requireNotNull(repairOrderDao.findById(orderId)) { "Commessa non trovata" }
         require(order.deletedAt == null) { "Commessa archiviata" }

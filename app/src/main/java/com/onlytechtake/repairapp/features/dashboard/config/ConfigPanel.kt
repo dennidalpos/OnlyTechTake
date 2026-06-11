@@ -71,6 +71,7 @@ fun ConfigPanel(
     val templates by viewModel.templates.collectAsState()
     val messageMode by viewModel.messageMode.collectAsState()
     val exportDestination by viewModel.exportDestination.collectAsState()
+    val isCloudAvailable by viewModel.isCloudAvailable.collectAsState()
 
     val confirmCategorySaveTitle = stringResource(R.string.config_category_confirm_save_title)
     val confirmCategorySaveText = stringResource(R.string.config_category_confirm_save_text)
@@ -479,7 +480,7 @@ fun ConfigPanel(
                 item {
                     StandardCard {
                         Column(modifier = Modifier.padding(DashboardSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
-                            SectionTitle(stringResource(R.string.config_hub_backup_title))
+                            SectionTitle("Backup e Ripristino")
                             if (!isAdmin) {
                                 Text(stringResource(R.string.config_backup_admin_only))
                             } else {
@@ -494,8 +495,12 @@ fun ConfigPanel(
                                     TouchButton(
                                         text = stringResource(R.string.config_backup_destination_cloud),
                                         tone = if (exportDestination == ExportDestination.CLOUD) ButtonTone.PRIMARY else ButtonTone.NEUTRAL,
+                                        enabled = isCloudAvailable,
                                         onClick = { viewModel.setExportDestination(ExportDestination.CLOUD) }
                                     )
+                                }
+                                if (!isCloudAvailable) {
+                                    OperatorText("Nessun provider cloud (Drive, OneDrive, Dropbox) rilevato. L'esportazione avverra' solo in locale.")
                                 }
                                 Text(
                                     text = if (exportDestination == ExportDestination.LOCAL)
@@ -506,36 +511,11 @@ fun ConfigPanel(
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
 
+                                OperatorText("Il backup completo include database locale, configurazioni e tutti i media (foto e firme).")
+
                                 ActionRow {
                                     TouchButton(
-                                        text = stringResource(R.string.config_backup_export_config),
-                                        onClick = {
-                                            val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
-                                            requestConfirm(confirmExportConfigTitle, confirmExportConfigTextTemplate.format(destMsg)) {
-                                                exportConfigLauncher.launch("onlytechtake-config.json")
-                                            }
-                                        },
-                                    )
-                                    TouchButton(
-                                        text = stringResource(R.string.config_backup_export_db),
-                                        onClick = {
-                                            val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
-                                            requestConfirm(confirmExportDbTitle, confirmExportDbTextTemplate.format(destMsg)) {
-                                                exportDbLauncher.launch("repair_app.db")
-                                            }
-                                        },
-                                    )
-                                    TouchButton(
-                                        text = stringResource(R.string.config_backup_export_xlsx),
-                                        onClick = {
-                                            val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
-                                            requestConfirm(confirmExportXlsxTitle, confirmExportXlsxTextTemplate.format(destMsg)) {
-                                                exportOrdersXlsxLauncher.launch("onlytechtake-commesse.xlsx")
-                                            }
-                                        },
-                                    )
-                                    TouchButton(
-                                        text = stringResource(R.string.config_backup_export_zip),
+                                        text = "Esporta Backup Completo (ZIP)",
                                         onClick = {
                                             val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
                                             requestConfirm(confirmExportZipTitle, confirmExportZipTextTemplate.format(destMsg)) {
@@ -544,7 +524,7 @@ fun ConfigPanel(
                                         },
                                     )
                                     TouchButton(
-                                        text = stringResource(R.string.config_backup_restore_zip),
+                                        text = "Ripristina Backup (ZIP)",
                                         tone = ButtonTone.WARNING,
                                         onClick = {
                                             requestConfirm(
@@ -552,6 +532,20 @@ fun ConfigPanel(
                                                 text = confirmRestoreZipText,
                                             ) {
                                                 restoreZipLauncher.launch(arrayOf("application/zip", "application/octet-stream", "*/*"))
+                                            }
+                                        },
+                                    )
+                                }
+
+                                SectionTitle("Esportazione Commesse")
+                                Text("Esporta l'elenco di tutte le commesse in un file Excel leggibile.", style = MaterialTheme.typography.bodyMedium)
+                                ActionRow {
+                                    TouchButton(
+                                        text = "Esporta Commesse (XLSX)",
+                                        onClick = {
+                                            val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
+                                            requestConfirm(confirmExportXlsxTitle, confirmExportXlsxTextTemplate.format(destMsg)) {
+                                                exportOrdersXlsxLauncher.launch("onlytechtake-commesse.xlsx")
                                             }
                                         },
                                     )

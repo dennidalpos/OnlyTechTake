@@ -174,6 +174,24 @@ class BackupRepository(
 
     fun databaseFile(): File = context.getDatabasePath(RepairAppDatabase.DATABASE_NAME)
 
+    fun isCloudProviderAvailable(): Boolean {
+        val cloudPackages = listOf(
+            "com.google.android.apps.docs", // Drive
+            "com.microsoft.skydrive",      // OneDrive
+            "com.dropbox.android",         // Dropbox
+            "com.box.android",             // Box
+        )
+        val pm = context.packageManager
+        return cloudPackages.any { pkg ->
+            try {
+                pm.getPackageInfo(pkg, 0)
+                true
+            } catch (e: Exception) {
+                false
+            }
+        }
+    }
+
     private fun extractBackup(uri: Uri, restoreRoot: File): ExtractedBackup {
         val metadata = StringBuilder()
         val databaseFiles = mutableMapOf<String, File>()

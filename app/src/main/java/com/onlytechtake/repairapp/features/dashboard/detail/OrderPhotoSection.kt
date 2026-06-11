@@ -20,6 +20,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.features.dashboard.common.LocalImagePreview
 import com.onlytechtake.repairapp.features.dashboard.common.LocalImageViewer
@@ -84,7 +85,7 @@ fun OrderPhotoSection(
                 }
             }
             if (finalPhotos.isNotEmpty()) {
-                Text("Lavoro finito", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.tertiary)
+                Text("Lavoro finale", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.tertiary)
                 finalPhotos.forEach { media ->
                     StandardCard {
                         Column(
@@ -93,7 +94,7 @@ fun OrderPhotoSection(
                         ) {
                             LocalImagePreview(
                                 path = media.localPath,
-                                description = "Foto lavoro finito",
+                                description = "Foto finale",
                                 onClick = { selectedImageId = media.id },
                             )
                         }
@@ -102,21 +103,26 @@ fun OrderPhotoSection(
             }
         }
 
+        val canCaptureFinal = detail.order.status == OrderStatus.READY_FOR_PICKUP || 
+                           detail.order.status == OrderStatus.CLOSED
+
         ActionRow {
             TouchButton(text = "Scatta foto", onClick = {
                 showFinalCamera = false
                 showCamera = true
             })
-            TouchButton(text = "Foto finita", onClick = {
-                showCamera = false
-                showFinalCamera = true
-            })
+            if (canCaptureFinal) {
+                TouchButton(text = "Foto finale", onClick = {
+                    showCamera = false
+                    showFinalCamera = true
+                })
+            }
             TouchButton(text = "Allega file", onClick = { attachmentLauncher.launch("*/*") })
             if (showCamera) {
                 TouchButton(text = "Chiudi camera", tone = ButtonTone.NEUTRAL, onClick = { showCamera = false })
             }
             if (showFinalCamera) {
-                TouchButton(text = "Chiudi foto finita", tone = ButtonTone.NEUTRAL, onClick = { showFinalCamera = false })
+                TouchButton(text = "Chiudi foto finale", tone = ButtonTone.NEUTRAL, onClick = { showFinalCamera = false })
             }
         }
 

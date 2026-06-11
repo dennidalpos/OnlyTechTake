@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
@@ -117,8 +118,8 @@ fun IntakeCustomerFields(
             Field(lastName, onLastNameChange, stringResource(R.string.customer_field_last_name), required = true, showError = lastName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, capitalization = KeyboardCapitalization.Words, testTag = RepairAppTestTags.NewOrderLastNameField)
         }
         Field(taxCode, onTaxCodeChange, stringResource(R.string.customer_field_tax_code), showOptional = true, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, capitalization = KeyboardCapitalization.Characters)
-        Field(phone, onPhoneChange, stringResource(R.string.customer_field_phone), required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, testTag = RepairAppTestTags.NewOrderPhoneField)
-        Field(email, onEmailChange, stringResource(R.string.customer_field_email), required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, testTag = RepairAppTestTags.NewOrderEmailField)
+        Field(phone, onPhoneChange, stringResource(R.string.customer_field_phone), required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, keyboardType = KeyboardType.Phone, testTag = RepairAppTestTags.NewOrderPhoneField)
+        Field(email, onEmailChange, stringResource(R.string.customer_field_email), required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, keyboardType = KeyboardType.Email, capitalization = KeyboardCapitalization.None, testTag = RepairAppTestTags.NewOrderEmailField)
         Field(address, onAddressChange, stringResource(R.string.customer_field_address), showOptional = true, singleLine = true, imeAction = ImeAction.Done, keyboardActions = doneAction, capitalization = KeyboardCapitalization.Words)
         NoteFieldWithDialog(notes, onNotesChange, testTag = RepairAppTestTags.NewOrderNotesField)
     }

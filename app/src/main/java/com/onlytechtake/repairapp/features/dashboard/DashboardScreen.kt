@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.List
@@ -12,6 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -118,13 +121,33 @@ fun DashboardScreen(
         NavigationItem(WorkspaceDestination.CONFIG, Icons.Default.Settings, R.string.dashboard_config),
     )
 
+    val isFormDirty by workspaceViewModel.isFormDirty.collectAsState()
+    var pendingDestination by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf<WorkspaceDestination?>(null) }
+    var showUnsavedChangesDialog by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
+
+    fun performNavigation(destination: WorkspaceDestination) {
+        navController.navigate(destination.name) {
+            popUpTo(WorkspaceDestination.HOME.name) { saveState = true }
+            launchSingleTop = true
+            restoreState = true
+        }
+        workspaceViewModel.setFormDirty(false)
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(text = summary.title) },
                 navigationIcon = {
                     if (currentDestination != WorkspaceDestination.HOME.name) {
-                        IconButton(onClick = { navController.popBackStack() }) {
+                        IconButton(onClick = {
+                            if (isFormDirty) {
+                                pendingDestination = null // Pop back
+                                showUnsavedChangesDialog = true
+                            } else {
+                                navController.popBackStack()
+                            }
+                        }) {
                             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                         }
                     }
@@ -152,10 +175,11 @@ fun DashboardScreen(
                         selected = currentDestination == item.destination.name,
                         onClick = {
                             if (currentDestination != item.destination.name) {
-                                navController.navigate(item.destination.name) {
-                                    popUpTo(WorkspaceDestination.HOME.name) { saveState = true }
-                                    launchSingleTop = true
-                                    restoreState = true
+                                if (isFormDirty) {
+                                    pendingDestination = item.destination
+                                    showUnsavedChangesDialog = true
+                                } else {
+                                    performNavigation(item.destination)
                                 }
                             }
                         }
@@ -169,6 +193,7 @@ fun DashboardScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .imePadding()
+                .verticalScroll(rememberScrollState())
         ) {
             uiState.message?.let { message ->
                 Text(
@@ -190,6 +215,35 @@ fun DashboardScreen(
                 modifier = Modifier.fillMaxSize()
             )
         }
+    }
+
+    if (showUnsavedChangesDialog) {
+        AlertDialog(
+            onDismissRequest = { showUnsavedChangesDialog = false },
+            title = { Text("Dati non salvati") },
+            text = { Text("Ci sono modifiche non salvate. Vuoi uscire comunque perdendo i dati o continuare a compilare?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showUnsavedChangesDialog = false
+                        workspaceViewModel.setFormDirty(false)
+                        val dest = pendingDestination
+                        if (dest != null) {
+                            performNavigation(dest)
+                        } else {
+                            navController.popBackStack()
+                        }
+                    }
+                ) {
+                    Text("Esci e perdi dati")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showUnsavedChangesDialog = false }) {
+                    Text("Continua compilazione")
+                }
+            }
+        )
     }
 }
 

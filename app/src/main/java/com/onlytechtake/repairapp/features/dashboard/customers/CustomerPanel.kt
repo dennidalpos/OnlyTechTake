@@ -16,6 +16,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,6 +34,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
@@ -101,8 +104,22 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
     }
 
     BackHandler(enabled = showForm) {
+        if (canSave || firstName.isNotBlank() || lastName.isNotBlank() || companyName.isNotBlank()) {
+            // If there's something, we could show a dialog, but BackHandler is usually for the back button.
+            // Let's just sync with the dirty flag.
+        }
         showForm = false
         clearForm()
+        viewModel.setFormDirty(false)
+    }
+
+    androidx.compose.runtime.LaunchedEffect(
+        firstName, lastName, companyName, phone, email, taxCode, vatNumber, address, notes, showForm
+    ) {
+        val isDirty = showForm && (firstName.isNotBlank() || lastName.isNotBlank() || companyName.isNotBlank() ||
+            phone.isNotBlank() || email.isNotBlank() || taxCode.isNotBlank() ||
+            vatNumber.isNotBlank() || address.isNotBlank() || notes.isNotBlank())
+        viewModel.setFormDirty(isDirty)
     }
 
     fun openNewCustomerForm() {
@@ -228,6 +245,7 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                             required = true,
                             showError = phone.isBlank() && email.isBlank(),
                             singleLine = true,
+                            keyboardType = KeyboardType.Phone,
                             testTag = RepairAppTestTags.CustomerPhoneField,
                         )
                         Field(
@@ -237,6 +255,8 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                             required = true,
                             showError = phone.isBlank() && email.isBlank(),
                             singleLine = true,
+                            keyboardType = KeyboardType.Email,
+                            capitalization = KeyboardCapitalization.None,
                             testTag = RepairAppTestTags.CustomerEmailField,
                         )
                         Field(address, { address = it }, stringResource(R.string.customer_field_address), showOptional = true, testTag = RepairAppTestTags.CustomerAddressField)
@@ -285,6 +305,7 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                         viewModel.saveCustomer(input)
                         clearForm()
                         showForm = false
+                        viewModel.setFormDirty(false)
                         viewModel.setCustomerSearchQuery("")
                     },
                     modifier = Modifier.testTag(RepairAppTestTags.CustomerConfirmSaveButton),
@@ -322,7 +343,7 @@ private fun CustomerCard(customer: CustomerEntity, onEdit: () -> Unit) {
                 )
             }
             androidx.compose.material3.Icon(
-                imageVector = androidx.compose.material.icons.filled.Edit,
+                imageVector = Icons.Default.Edit,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary
             )

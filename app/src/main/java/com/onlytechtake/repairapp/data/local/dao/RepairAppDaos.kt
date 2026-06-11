@@ -385,4 +385,7 @@ interface OrderDocumentDao {
 
     @Query("UPDATE order_documents SET sharedAt = :sharedAt WHERE id = :id")
     suspend fun markShared(id: String, sharedAt: Long)
+
+    @Query("DELETE FROM order_documents WHERE id = :id")
+    suspend fun deleteById(id: String)
 }
