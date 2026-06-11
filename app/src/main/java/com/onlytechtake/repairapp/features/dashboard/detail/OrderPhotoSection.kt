@@ -21,8 +21,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
-import com.onlytechtake.repairapp.features.dashboard.LocalImagePreview
-import com.onlytechtake.repairapp.features.dashboard.LocalImageViewer
+import com.onlytechtake.repairapp.features.dashboard.common.LocalImagePreview
+import com.onlytechtake.repairapp.features.dashboard.common.LocalImageViewer
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.CameraCapturePreview
 import com.onlytechtake.repairapp.features.dashboard.common.CompactExpandableRow

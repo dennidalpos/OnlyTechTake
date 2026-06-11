@@ -14,8 +14,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
-import com.onlytechtake.repairapp.features.dashboard.LocalImagePreview
-import com.onlytechtake.repairapp.features.dashboard.LocalImageViewer
+import com.onlytechtake.repairapp.features.dashboard.common.LocalImagePreview
+import com.onlytechtake.repairapp.features.dashboard.common.LocalImageViewer
 import com.onlytechtake.repairapp.features.dashboard.common.CompactExpandableRow
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle

@@ -37,7 +37,7 @@ fun DashboardRoute(
     val container = LocalAppContainer.current
     val dashboardViewModel: DashboardViewModel = viewModel(
         key = "dashboard_$appInstanceKey",
-        factory = DashboardViewModel.Factory(container.repairAppRepository, container.errorHandler),
+        factory = DashboardViewModel.Factory(container.repairAppRepository),
     )
     val workspaceViewModel: WorkspaceViewModel = viewModel(
         key = "workspace_$appInstanceKey",

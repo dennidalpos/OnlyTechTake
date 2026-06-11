@@ -46,9 +46,7 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.ExportDestination
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
-import com.onlytechtake.repairapp.features.dashboard.OrderPhotoSection
-import com.onlytechtake.repairapp.features.dashboard.OrderSignatureSection
-import com.onlytechtake.repairapp.features.dashboard.QuoteDecision
+import com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.CompactExpandableRow
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing

@@ -48,7 +48,6 @@ import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
 import com.onlytechtake.repairapp.domain.workspace.isReadyForSubmit
 import com.onlytechtake.repairapp.domain.workspace.validationErrors
-import com.onlytechtake.repairapp.features.dashboard.CustomerSuggestionCard
 import com.onlytechtake.repairapp.features.dashboard.common.DEFAULT_PRIVACY_TEXT
 import com.onlytechtake.repairapp.features.dashboard.common.DEFAULT_TERMS_TEXT
 import com.onlytechtake.repairapp.features.dashboard.common.PRIVACY_TEMPLATE_CODE

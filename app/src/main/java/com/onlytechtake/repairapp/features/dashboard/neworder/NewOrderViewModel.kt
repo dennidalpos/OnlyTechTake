@@ -34,7 +34,7 @@ class NewOrderViewModel(
         showMessage = { _, _ -> /* Handle message */ }
     )
 
-    fun createPhotoFile(sessionId: String): Result<File> =
+    fun createIntakePhotoFile(sessionId: String): Result<File> =
         runCatching { orderMediaRepository.createIntakePhotoFile(sessionId) }
 
     fun stageCapturedPhoto(file: File, onStaged: (StagedOrderMedia) -> Unit) {
@@ -75,7 +75,7 @@ class NewOrderViewModel(
         onCreated: () -> Unit,
     ) {
         actionRunner.run(onSuccess = onCreated) { actor ->
-            createIntakeOrderUseCase(
+            createIntakeOrderUseCase.execute(
                 actor = actor,
                 input = input,
                 stagedMedia = stagedMedia,

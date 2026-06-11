@@ -47,8 +47,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.createBitmap
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
-import com.onlytechtake.repairapp.features.dashboard.LocalImagePreview
-import com.onlytechtake.repairapp.features.dashboard.LocalImageViewer
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.formatFileSize
 import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
