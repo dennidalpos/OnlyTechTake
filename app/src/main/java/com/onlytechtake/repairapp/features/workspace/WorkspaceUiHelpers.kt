@@ -5,14 +5,11 @@ import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
-import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
+import com.onlytechtake.repairapp.core.utils.parseEuroCentsOrNull
 import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.Locale
+import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -51,7 +48,7 @@ fun AttachmentCounts.label(): String =
         "Foto $images",
         "Documenti $documents",
         "Firme $signatures",
-        "Lavoro finale $finalPhotos".takeIf { finalPhotos > 0 },
+        "Lavoro finito $finalPhotos".takeIf { finalPhotos > 0 },
     ).filterNotNull().joinToString(" - ")
 
 fun OrderAttachmentCounts.label(): String =
@@ -59,7 +56,7 @@ fun OrderAttachmentCounts.label(): String =
         "Foto $images",
         "Documenti $documents",
         "Firme $signatures",
-        "Lavoro finale $finalPhotos".takeIf { finalPhotos > 0 },
+        "Lavoro finito $finalPhotos".takeIf { finalPhotos > 0 },
     ).filterNotNull().joinToString(" - ")
 
 fun OrderMediaEntity.isImageAttachment(): Boolean =
@@ -75,46 +72,6 @@ fun StagedOrderMedia.isImageAttachment(): Boolean =
     mediaType.equals("PHOTO", ignoreCase = true) ||
         mediaType.equals("IMAGE", ignoreCase = true) ||
         mimeType.startsWith("image/", ignoreCase = true)
-
-fun formatFileSize(bytes: Long): String =
-    when {
-        bytes < 0L -> "0 B"
-        bytes < 1024L -> "$bytes B"
-        bytes < 1024L * 1024L -> "${bytes / 1024L} KB"
-        else -> String.format(Locale.ITALIAN, "%.1f MB", bytes / (1024.0 * 1024.0))
-    }
-
-fun formatUiDateTime(millis: Long, zoneId: ZoneId = ZoneId.systemDefault()): String =
-    DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
-        .format(Instant.ofEpochMilli(millis).atZone(zoneId))
-
-fun nextActionLabel(status: OrderStatus): String =
-    if (status == OrderStatus.RESULT) {
-        "Registra esito preventivo"
-    } else {
-        availableOrderStatusActions(status).firstOrNull()?.label ?: "Nessuna azione"
-    }
-
-fun nextActionLabel(order: RepairOrderEntity): String =
-    when {
-        order.status == OrderStatus.RESULT && order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE ->
-            "Attendere accettazione o rifiuto preventivo"
-        order.status == OrderStatus.RESULT && order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE ->
-            "Avvisare il cliente e preparare il ritiro"
-        else -> nextActionLabel(order.status)
-    }
-
-fun shouldShowDiagnosisEstimate(outcome: DiagnosisOutcome?): Boolean =
-    outcome == DiagnosisOutcome.REPAIRABLE
-
-fun canConfirmDiagnosisResult(
-    summary: String,
-    outcome: DiagnosisOutcome?,
-    estimateAmountCents: Long?,
-): Boolean =
-    summary.isNotBlank() &&
-        outcome != null &&
-        (outcome != DiagnosisOutcome.REPAIRABLE || (estimateAmountCents != null && estimateAmountCents > 0L))
 
 fun DiagnosisOutcome.diagnosisOutcomeLabel(): String =
     when (this) {
@@ -133,20 +90,6 @@ fun categoryPath(categories: List<OrderCategoryEntity>, categoryId: String?): St
         current = current.parentId?.let(byId::get)
     }
     return names.asReversed().joinToString(" > ").ifBlank { null }
-}
-
-fun parseEuroCentsOrNull(value: String): Long? {
-    val normalized = value.trim().replace(',', '.')
-    if (normalized.isBlank()) return null
-    val parts = normalized.split('.', limit = 2)
-    val euros = parts.getOrNull(0)?.filter(Char::isDigit)?.toLongOrNull() ?: return null
-    val cents = parts.getOrNull(1)
-        ?.filter(Char::isDigit)
-        ?.take(2)
-        ?.padEnd(2, '0')
-        ?.toLongOrNull()
-        ?: 0L
-    return euros * 100L + cents
 }
 
 @Composable

@@ -4,6 +4,7 @@ import com.onlytechtake.repairapp.data.local.dao.CustomerDao
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -11,9 +12,9 @@ import org.junit.Test
 class CustomerRepositoryTest {
     private val stubDao = object : CustomerDao {
         var lastUpserted: CustomerEntity? = null
-        override fun observeRecent(): Flow<List<CustomerEntity>> = TODO()
-        override fun observeAll(): Flow<List<CustomerEntity>> = TODO()
-        override fun search(query: String): Flow<List<CustomerEntity>> = TODO()
+        override fun observeRecent(): Flow<List<CustomerEntity>> = emptyFlow()
+        override fun observeAll(): Flow<List<CustomerEntity>> = emptyFlow()
+        override fun search(query: String): Flow<List<CustomerEntity>> = emptyFlow()
         override suspend fun findById(id: String): CustomerEntity? = null
         override suspend fun upsert(customer: CustomerEntity) { lastUpserted = customer }
     }

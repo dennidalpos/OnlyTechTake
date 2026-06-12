@@ -79,10 +79,6 @@ class GenerateOrderStatusPdfUseCase(
         )
         
         documentRepository.save(entity)
-        // TODO: log event in timeline? The plan says Step 3 Timeline...
-        // Actually the UseCase should probably just generate. 
-        // Or it should also log the event.
-        
         entity
     }
 }

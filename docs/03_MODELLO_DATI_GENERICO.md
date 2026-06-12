@@ -21,6 +21,8 @@ Signature
 TimelineEvent
   ↓
 MessageLog
+  ↓
+OrderDocument
 ```
 
 ## Customer
@@ -222,6 +224,34 @@ data class MessageLogEntity(
 )
 ```
 
+## OrderDocument
+
+```kotlin
+@Entity(tableName = "order_documents")
+data class OrderDocumentEntity(
+    @PrimaryKey val id: String,
+    val orderId: String,
+    val type: OrderDocumentType,
+    val localPath: String,
+    val fileName: String,
+    val mimeType: String,
+    val sizeBytes: Long,
+    val includesCustomerSignature: Boolean,
+    val createdByUserId: String,
+    val createdAt: Long,
+    val sharedAt: Long?
+)
+```
+
+Tipo documento implementato:
+
+```text
+STATUS_PROGRESS_PDF
+```
+
+I PDF di stato vengono salvati nello spazio privato app sotto
+`files/orders/<orderId>/documents/` e condivisi tramite `FileProvider`.
+
 ## User
 
 ```kotlin
@@ -257,6 +287,6 @@ Non usare una tabella diversa per ogni tipo di negozio.
 Non aggiungere colonne tipo `imei`, `marca`, `modello`, `taglia`, `colore`, ecc. nella tabella commesse.
 
 Usare categorie, descrizione, note interne, media, firme, timeline e messaggi.
-Lo schema Room corrente e' v3, con migrazione `2 -> 3` implementata e schema
-esportato in `app/schemas/`. Non include tabelle custom field o workflow
-parallele a `repair_orders.status`.
+Lo schema Room corrente e' v1 ed e' mantenuto come schema fresh-app senza
+migrazioni finche' non viene autorizzato esplicitamente un cambio versione. Non
+include tabelle custom field o workflow parallele a `repair_orders.status`.

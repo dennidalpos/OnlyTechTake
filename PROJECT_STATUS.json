@@ -1,9 +1,10 @@
 {
   "todos": [
-    "Verificare fix tastiera (windowSoftInputMode e imePadding): controllare che i campi di input non vengano coperti in CustomerPanel, QuickActions e ConfigPanel",
-    "Verifica stabilità dopo refactoring strutturale: testare navigazione tra i nuovi package e funzionamento dei ViewModel separati",
-    "Verifica manuale UI: provare nuova commessa, navigazione categorie, note dialog, scheda commessa compatta, timeline espandibile (verificare numerazione 1..N), WhatsApp e logout",
-    "Completare verifica manuale su dispositivo: nuova commessa (firma, foto), diagnosi riparabile, accettazione, rifiuto, non riparabile, pronto ritiro, chiusura e PDF (setup admin e categorie verificati)",
+    "Valutare il file non tracciato docs/07_BACKEND_AGENT_TRACKER.md: decidere se integrarlo nella documentazione, rinominarlo o rimuoverlo",
+    "Eseguire smoke test manuale post-refactor fresh-app su installazione pulita: setup admin, navigazione principale, schema Room v1, formattazioni centralizzate e logout",
+    "Verificare workflow commessa end-to-end su device: nuova commessa con firma e foto, presa in carico, diagnosi riparabile, accettazione, rifiuto, non riparabile, pronto ritiro, chiusura, timeline, media e PDF",
+    "Verificare UI dettaglio commessa: scheda compatta, note dialog, timeline espandibile con numerazione 1..N, pulsanti primari coerenti e scrolling non eccessivo",
+    "Verificare fix tastiera: controllare che i campi di input non vengano coperti in CustomerPanel, QuickActions e ConfigPanel",
     "Verificare manualmente WhatsApp reale su telefono destinatario: apertura wa.me, testo modificabile, importo preventivo renderizzato, template non riparabile e conferma manuale invio",
     "Verificare manualmente rimozione categorie: cancellazione categoria vuota, errore cancellazione se usata in commessa, cancellazione ricorsiva sottocategorie",
     "Verificare manualmente orientamento foto su device: scatto portrait, scatto landscape, anteprima in app, file salvato e assenza di rotazioni errate",

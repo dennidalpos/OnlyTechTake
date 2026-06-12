@@ -1,0 +1,11 @@
+package com.onlytechtake.repairapp.core.utils
+
+import java.util.Locale
+
+fun formatFileSize(bytes: Long): String =
+    when {
+        bytes < 0L -> "0 B"
+        bytes < 1024L -> "$bytes B"
+        bytes < 1024L * 1024L -> "${bytes / 1024L} KB"
+        else -> String.format(Locale.ITALIAN, "%.1f MB", bytes / (1024.0 * 1024.0))
+    }

@@ -75,10 +75,16 @@ Nome database:
 repair_app.db
 ```
 
-Lo schema corrente e' Room v3. Il repository contiene gli export schema in
-`app/schemas/` e una migrazione implementata `2 -> 3`; non sono presenti
-migrazioni per versioni precedenti alla v2. Dopo modifiche incompatibili non
-coperte da migrazione e' richiesta una reinstallazione pulita.
+Lo schema corrente e' Room v1. Il progetto e' trattato come fresh app in
+sviluppo iniziale: non sono presenti migrazioni Room e `DATABASE_VERSION` resta
+1 finche' non viene autorizzato esplicitamente un cambio schema. Dopo modifiche
+incompatibili e' richiesta una reinstallazione pulita.
+
+Schema esportato corrente:
+
+```text
+app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json
+```
 
 ## Entità principali
 
@@ -93,7 +99,6 @@ coperte da migrazione e' richiesta una reinstallazione pulita.
 - MessageLogEntity
 - AppSettingEntity
 - AuditLogEntity
-- OrderMediaEntity, per foto CameraX locali collegate alla commessa
 - OrderDocumentEntity, per PDF/documenti generati e condivisi dalla commessa
 
 ## Repository
@@ -298,6 +303,7 @@ Limiti attuali:
 - nessuna cifratura applicativa degli export;
 - nessuna CI tracciata nel repository;
 - nessun backend o invio WhatsApp API.
+- eventuali provider Drive/OneDrive/Dropbox sono solo destinazioni SAF esposte dal device, non integrazioni cloud proprietarie.
 
 ## Build
 

@@ -3,6 +3,7 @@
 ## Stato operativo
 
 Export configurazione, database, ZIP completo, XLSX commesse e ripristino ZIP completo sono implementati per admin tramite Storage Access Framework.
+Eventuali provider come Drive, OneDrive o Dropbox compaiono solo come destinazioni del selettore documenti Android: non esiste un backend o una sincronizzazione cloud proprietaria.
 
 ## Sezione app
 
@@ -71,6 +72,7 @@ Il ripristino e' pensato per trasferire l'app su un altro telefono con lo stesso
 ## Metadata
 
 Il backup completo include metadati con data creazione, nome database, versione database e sezioni incluse.
+La versione database attesa e' quella di `RepairAppDatabase.DATABASE_VERSION`; nella fase fresh-app corrente e' `1`.
 
 ## Sicurezza
 

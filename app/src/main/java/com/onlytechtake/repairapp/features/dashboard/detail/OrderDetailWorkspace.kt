@@ -42,7 +42,9 @@ import androidx.compose.material.icons.filled.Delete
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.utils.displayName
+import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.core.utils.label
+import com.onlytechtake.repairapp.core.utils.parseEuroCentsOrNull
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
@@ -58,21 +60,19 @@ import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
-import com.onlytechtake.repairapp.features.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
 import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 import com.onlytechtake.repairapp.features.workspace.applyStatusAction
 import com.onlytechtake.repairapp.features.workspace.attachmentCounts
-import com.onlytechtake.repairapp.features.workspace.availableOrderStatusActions
-import com.onlytechtake.repairapp.features.workspace.canConfirmDiagnosisResult
-import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
 import com.onlytechtake.repairapp.features.workspace.label as attachmentLabel
-import com.onlytechtake.repairapp.features.workspace.parseEuroCentsOrNull
-import com.onlytechtake.repairapp.features.workspace.requiresConfirmation
-import com.onlytechtake.repairapp.features.workspace.shouldShowDiagnosisEstimate
-import com.onlytechtake.repairapp.features.workspace.statusTemplateCode
 import com.onlytechtake.repairapp.features.workspace.tone
+import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
+import com.onlytechtake.repairapp.domain.workspace.availableOrderStatusActions
+import com.onlytechtake.repairapp.domain.workspace.canConfirmDiagnosisResult
+import com.onlytechtake.repairapp.domain.workspace.requiresConfirmation
+import com.onlytechtake.repairapp.domain.workspace.shouldShowDiagnosisEstimate
+import com.onlytechtake.repairapp.domain.workspace.statusTemplateCode
 
 @Composable
 fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {

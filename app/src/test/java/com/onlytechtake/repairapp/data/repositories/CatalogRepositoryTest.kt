@@ -7,6 +7,7 @@ import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import io.mockk.mockk
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -15,8 +16,8 @@ class CatalogRepositoryTest {
     private val stubDao = object : OrderCategoryDao {
         override suspend fun upsert(category: OrderCategoryEntity) = Unit
         override suspend fun upsertAll(categories: List<OrderCategoryEntity>) = Unit
-        override fun observeAll() = TODO()
-        override fun observeActiveCategories() = TODO()
+        override fun observeAll() = emptyFlow<List<OrderCategoryEntity>>()
+        override fun observeActiveCategories() = emptyFlow<List<OrderCategoryEntity>>()
         override suspend fun findAll(): List<OrderCategoryEntity> = emptyList()
         override suspend fun findById(id: String): OrderCategoryEntity? = null
         override suspend fun countOrdersForCategories(categoryIds: List<String>): Int = 0

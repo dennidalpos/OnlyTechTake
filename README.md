@@ -12,6 +12,7 @@ App Android locale per tracciare commesse clienti dal banco alla diagnosi, alla 
 - SDK Android: compile/target SDK 37, min SDK 26.
 - Stack: Kotlin, Jetpack Compose, Material 3, Navigation Compose, Room, DataStore, CameraX, Coroutines/Flow.
 - Dati: Room locale, DataStore per preferenze auth, file privati app, export tramite Storage Access Framework.
+- Schema Room corrente: `app\schemas\...\1.json`; il progetto e' fresh app e non contiene migrazioni Room.
 - Backend: assente. WhatsApp e' solo manuale.
 - CI: non configurata nel repository; i gate sono locali.
 
@@ -46,15 +47,16 @@ $env:Path = "$env:ANDROID_HOME\platform-tools;$env:JAVA_HOME\bin;$env:Path"
 
 ## Setup Fresh-Install
 
-Da una copia pulita del repository:
+Da una copia pulita del repository o dopo modifiche incompatibili allo schema locale:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\android\check_env.ps1
 powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -SkipReleaseBuild
 powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Debug -OutputType Apk
+powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -CleanInstall
 ```
 
-Per provare l'app su device:
+Per provare l'app senza cancellare dati locali esistenti:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Debug -OutputType Apk -Install
@@ -80,6 +82,17 @@ Gli script PowerShell calcolano la root del progetto dal proprio percorso, quind
 | Build AAB release | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Release -OutputType Aab` |
 | Dev smoke su device | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Debug -OutputType Apk -Install` |
 | Installazione pulita e start su device | `powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -CleanInstall` |
+
+## Handoff Operativo
+
+Prima di consegnare il repository:
+
+1. Controllare lo stato con `git status --short` e distinguere modifiche tracciate da file non tracciati.
+2. Leggere `PROJECT_STATUS.json`: contiene solo todo incompleti correnti.
+3. Eseguire almeno `check_env.ps1`, `check_project.ps1 -SkipReleaseBuild` e una build/install debug se serve validare su device.
+4. Usare `start_app.ps1 -CleanInstall` quando lo schema Room locale e' incompatibile con dati gia' installati.
+
+Nota: file non tracciati sotto `docs\` non fanno parte della documentazione ufficiale del repository finche' non vengono revisionati e aggiunti intenzionalmente.
 
 ## Output Build
 
@@ -119,6 +132,7 @@ Regole:
 - Config admin: categorie multilivello, template privacy/condizioni/WhatsApp, modalita WhatsApp manuale, export config/database/ZIP/XLSX.
 - Import allegati tramite SAF per JPEG/PNG/WebP, PDF, TXT, DOC/DOCX e XLS/XLSX fino a 25 MiB.
 - Export admin di configurazione, database, ZIP completo e XLSX commesse tramite SAF. Ripristino ZIP completo tramite SAF per admin. Condivisione PDF della singola commessa dal dettaglio.
+- Se il device espone provider come Drive, OneDrive o Dropbox nel selettore documenti Android, vengono usati tramite SAF come destinazione scelta dall'utente; non esiste integrazione cloud proprietaria.
 
 ## Limiti Noti
 
@@ -126,6 +140,7 @@ Regole:
 - Export JSON, database, PDF e ZIP non sono cifrati dall'app.
 - Non esiste un gate CI remoto tracciato nel repository.
 - La build release richiede signing locale non tracciato.
+- Le verifiche manuali residue sono elencate in `PROJECT_STATUS.json`.
 
 ## Struttura
 
@@ -136,7 +151,7 @@ Regole:
 - `app\src\main\java\com\onlytechtake\repairapp\features\`: UI Compose e ViewModel.
 - `app\src\test\`: test unitari JVM.
 - `app\src\androidTest\`: test strumentali su device/emulatore.
-- `app\schemas\`: schema Room esportato.
+- `app\schemas\`: schema Room esportato; nella fase fresh-app corrente deve restare `1.json`.
 - `docs\`: documentazione operativa e funzionale.
 - `media\brand\`: logo, favicon, anteprime e cover README per GitHub.
 - `scripts\android\`: script PowerShell ufficiali per ambiente, Gradle, build/install e start app.

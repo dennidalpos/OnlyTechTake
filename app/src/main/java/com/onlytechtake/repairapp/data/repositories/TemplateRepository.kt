@@ -28,6 +28,8 @@ import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
 import android.content.Context
+import com.onlytechtake.repairapp.core.utils.formatEuroCentsForExport
+import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
 import java.util.UUID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -146,8 +148,8 @@ class TemplateRepository(
                     "cliente" to listOfNotNull(customer.companyName, customer.firstName, customer.lastName)
                         .joinToString(" ")
                         .ifBlank { "Cliente" },
-                    "importo_preventivo" to order.estimateAmountCents?.let(::formatEuroCents).orEmpty(),
-                    "prossima_azione" to order.nextActionLabel(),
+                    "importo_preventivo" to order.estimateAmountCents.formatEuroCentsForExport(),
+                    "prossima_azione" to nextActionLabel(order),
                     "motivo_chiusura" to when {
                         order.closureReason != null -> order.closureReason.label()
                         order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE -> "Diagnosi tecnica: non riparabile"
@@ -390,21 +392,3 @@ private fun ClosureReason.label(): String =
         ClosureReason.CANCELLED -> "Annullata"
         ClosureReason.OTHER -> "Altro"
     }
-
-private fun RepairOrderEntity.nextActionLabel(): String =
-    when (status) {
-        OrderStatus.RESULT -> when (diagnosisOutcome) {
-            DiagnosisOutcome.REPAIRABLE -> "Attendere accettazione o rifiuto preventivo"
-            DiagnosisOutcome.NOT_REPAIRABLE -> "Avvisare il cliente e preparare il ritiro"
-            null -> "Registrare esito diagnosi"
-        }
-        OrderStatus.OPEN -> "Prendere in carico"
-        OrderStatus.IN_PROGRESS -> "Avviare diagnosi"
-        OrderStatus.DIAGNOSIS -> "Registrare risultato diagnosi"
-        OrderStatus.REPAIRING -> "Completare riparazione"
-        OrderStatus.READY_FOR_PICKUP -> "Consegnare e chiudere"
-        OrderStatus.CLOSED -> "Nessuna azione"
-    }
-
-private fun formatEuroCents(cents: Long): String =
-    "EUR ${cents / 100},${(cents % 100).toString().padStart(2, '0')}"

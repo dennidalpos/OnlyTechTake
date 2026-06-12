@@ -30,10 +30,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
+import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
@@ -42,9 +44,7 @@ import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
-import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
 import com.onlytechtake.repairapp.features.workspace.label as attachmentLabel
-import com.onlytechtake.repairapp.features.workspace.nextActionLabel
 
 @Composable
 fun OrdersPanel(viewModel: WorkspaceViewModel) {

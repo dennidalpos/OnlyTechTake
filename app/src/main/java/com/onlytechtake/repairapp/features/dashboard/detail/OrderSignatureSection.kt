@@ -20,7 +20,7 @@ import com.onlytechtake.repairapp.features.dashboard.common.CompactExpandableRow
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
-import com.onlytechtake.repairapp.features.workspace.formatUiDateTime
+import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 
 @Composable
 fun OrderSignatureSection(

@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.data.repositories
 
+import com.onlytechtake.repairapp.core.utils.formatEuroCentsForExport
 import com.onlytechtake.repairapp.data.local.dao.OrderExportRow
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
@@ -72,8 +73,8 @@ internal class OrderExportXlsxWriter(
             row.description.orEmpty(),
             row.internalNotes.orEmpty(),
             row.diagnosisOutcome.label(),
-            row.estimateAmountCents.formatEuroCents(),
-            row.finalAmountCents.formatEuroCents(),
+            row.estimateAmountCents.formatEuroCentsForExport(),
+            row.finalAmountCents.formatEuroCentsForExport(),
             row.createdAt.formatTime(),
             row.updatedAt.formatTime(),
             row.closedAt.formatTime(),
@@ -85,11 +86,6 @@ internal class OrderExportXlsxWriter(
     private fun Long?.formatTime(): String =
         this?.let {
             DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(Instant.ofEpochMilli(it).atZone(zoneId))
-        }.orEmpty()
-
-    private fun Long?.formatEuroCents(): String =
-        this?.let { cents ->
-            "EUR ${cents / 100},${(cents % 100).toString().padStart(2, '0')}"
         }.orEmpty()
 
     private fun CustomerType?.label(): String =

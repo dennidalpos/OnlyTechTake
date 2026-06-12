@@ -17,7 +17,7 @@ Template predefiniti implementati:
 - `whatsapp_riparazione`;
 - `whatsapp_lavorazione`;
 - `whatsapp_completamento`;
-- `whatsapp_pronto_ritiro`.
+- `whatsapp_pronto_ritiro`;
 - `whatsapp_stato_avanzamento_pdf`.
 
 Ogni template salva:
@@ -37,7 +37,7 @@ Ogni salvataggio incrementa la versione del template esistente.
 
 ## Firma
 
-La firma viene acquisita con canvas Compose nel modulo Nuova commessa. Nel dettaglio commessa le firme gia' salvate sono mostrate in sola lettura.
+La firma viene acquisita con canvas Compose nel modulo Nuova commessa. Nel dettaglio commessa la firma salvata e' mostrata in sola lettura.
 Privacy e condizioni si aprono in dialog cliccando sui rispettivi testi prima dell'accettazione.
 Ogni commessa accetta una sola firma cliente.
 
@@ -109,7 +109,6 @@ ACCEPT
 REJECT
 ASK_INFO
 CALL_ME
-CUSTOM
 ```
 
 Stato operativo implementato:
@@ -126,6 +125,7 @@ La preview viene eliminata su chiusura, cambio commessa, ritorno all'elenco,
 cambio stato, feedback cliente e conferma invio. L'apertura di `wa.me` mantiene
 la preview per consentire all'operatore di confermare manualmente l'invio al
 ritorno. L'app non invia automaticamente.
+
 - una chiusura come `NOT_REPAIRABLE` usa il template dedicato `whatsapp_non_riparabile`;
 - un risultato con importo usa il template `whatsapp_preventivo_intervento` e resta in attesa di conferma cliente.
 

@@ -5,8 +5,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.CustomerDao
@@ -71,44 +69,10 @@ abstract class RepairAppDatabase : RoomDatabase() {
 
     companion object {
         const val DATABASE_NAME = "repair_app.db"
-        const val DATABASE_VERSION = 3
+        const val DATABASE_VERSION = 1
 
         @Volatile
         private var instance: RepairAppDatabase? = null
-
-        val MIGRATION_2_3 = object : Migration(2, 3) {
-            override fun migrate(db: SupportSQLiteDatabase) {
-                db.execSQL("ALTER TABLE repair_orders ADD COLUMN customerActionStatus TEXT")
-                db.execSQL("ALTER TABLE repair_orders ADD COLUMN closureReason TEXT")
-                db.execSQL("ALTER TABLE repair_orders ADD COLUMN closeNote TEXT")
-                db.execSQL("ALTER TABLE repair_orders ADD COLUMN closedByUserId TEXT")
-                db.execSQL("ALTER TABLE repair_orders ADD COLUMN categoryPathSnapshot TEXT")
-                db.execSQL("ALTER TABLE repair_orders ADD COLUMN lastCustomerContactAt INTEGER")
-
-                db.execSQL("""
-                    CREATE TABLE IF NOT EXISTS order_documents (
-                        id TEXT NOT NULL PRIMARY KEY,
-                        orderId TEXT NOT NULL,
-                        type TEXT NOT NULL,
-                        localPath TEXT NOT NULL,
-                        fileName TEXT NOT NULL,
-                        mimeType TEXT NOT NULL,
-                        sizeBytes INTEGER NOT NULL,
-                        includesCustomerSignature INTEGER NOT NULL,
-                        createdByUserId TEXT NOT NULL,
-                        createdAt INTEGER NOT NULL,
-                        sharedAt INTEGER,
-                        FOREIGN KEY(orderId) REFERENCES repair_orders(id) ON UPDATE NO ACTION ON DELETE CASCADE,
-                        FOREIGN KEY(createdByUserId) REFERENCES users(id) ON UPDATE NO ACTION ON DELETE RESTRICT
-                    )
-                """.trimIndent())
-
-                db.execSQL("CREATE INDEX IF NOT EXISTS index_order_documents_orderId ON order_documents (orderId)")
-                db.execSQL("CREATE INDEX IF NOT EXISTS index_order_documents_createdByUserId ON order_documents (createdByUserId)")
-                db.execSQL("CREATE INDEX IF NOT EXISTS index_order_documents_createdAt ON order_documents (createdAt)")
-                db.execSQL("CREATE INDEX IF NOT EXISTS index_repair_orders_closedByUserId ON repair_orders (closedByUserId)")
-            }
-        }
 
         fun getInstance(context: Context): RepairAppDatabase =
             instance ?: synchronized(this) {
@@ -117,7 +81,6 @@ abstract class RepairAppDatabase : RoomDatabase() {
                     RepairAppDatabase::class.java,
                     DATABASE_NAME,
                 )
-                    .addMigrations(MIGRATION_2_3)
                     .build()
                     .also { instance = it }
             }

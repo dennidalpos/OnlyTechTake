@@ -51,10 +51,10 @@ class AuthGateViewModelTest {
         override val currentUser: StateFlow<AuthenticatedUser?> = MutableStateFlow(null)
         override fun observeAuthState(): Flow<AuthState> = emptyFlow()
         override suspend fun createFirstAdmin(displayName: String, username: String, password: CharArray): AuthenticatedUser {
-            TODO("Not needed for this test")
+            error("createFirstAdmin is not expected in logoutResetsLoadingState")
         }
         override suspend fun login(username: String, password: CharArray): LoginResult {
-            TODO("Not needed for this test")
+            error("login is not expected in logoutResetsLoadingState")
         }
         override fun touchSession() {}
         override suspend fun logout() {}

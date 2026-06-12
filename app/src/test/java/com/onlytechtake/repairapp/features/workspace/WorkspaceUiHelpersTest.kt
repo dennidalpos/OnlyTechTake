@@ -6,7 +6,12 @@ import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
+import com.onlytechtake.repairapp.core.utils.formatFileSize
+import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
+import com.onlytechtake.repairapp.domain.workspace.canConfirmDiagnosisResult
+import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
+import com.onlytechtake.repairapp.domain.workspace.shouldShowDiagnosisEstimate
 import java.time.ZoneOffset
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

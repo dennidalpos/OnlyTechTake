@@ -6,6 +6,10 @@ import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
+import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
+import com.onlytechtake.repairapp.domain.workspace.availableOrderStatusActions
+import com.onlytechtake.repairapp.domain.workspace.requiresConfirmation
+import com.onlytechtake.repairapp.domain.workspace.statusTemplateCode
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Assert.assertThrows

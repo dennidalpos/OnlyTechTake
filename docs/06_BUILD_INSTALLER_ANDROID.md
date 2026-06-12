@@ -59,6 +59,19 @@ powershell -ExecutionPolicy Bypass -File scripts\windows\check_dependency_vulner
 
 I task dello script `check_project.ps1` sono eseguiti in sequenza per ridurre i file lock Gradle/Kotlin su Windows.
 
+## Setup fresh-install consigliato
+
+Per consegna o verifica su device dopo modifiche incompatibili con dati locali:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\android\check_env.ps1
+powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -SkipReleaseBuild
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Debug -OutputType Apk
+powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -CleanInstall
+```
+
+Al primo avvio pulito l'app mostra il setup admin locale. Il repository non contiene CI remota: questi sono i gate operativi locali.
+
 ## Build
 
 Debug APK:
@@ -148,8 +161,8 @@ Installazione pulita e avvio dell'ultimo APK debug:
 powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -CleanInstall
 ```
 
-Questo e' il comando richiesto dopo modifiche incompatibili allo schema Room non
-coperte da migrazione: disinstalla il package, elimina i dati locali precedenti,
+Questo e' il comando richiesto dopo modifiche incompatibili allo schema Room in
+questa fase fresh-app: disinstalla il package, elimina i dati locali precedenti,
 installa l'APK debug aggiornato e avvia `MainActivity`.
 
 Avviare senza reinstallare:
