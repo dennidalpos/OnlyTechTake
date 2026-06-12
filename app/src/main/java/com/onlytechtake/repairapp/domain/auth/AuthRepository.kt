@@ -16,6 +16,8 @@ interface AuthRepository {
 
     suspend fun login(username: String, password: CharArray): LoginResult
 
+    suspend fun loginDemo(): LoginResult
+
     fun touchSession()
 
     suspend fun logout()

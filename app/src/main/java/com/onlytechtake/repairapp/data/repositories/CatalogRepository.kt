@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.data.repositories
 
 import android.content.Context
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.UserRole
@@ -10,14 +11,23 @@ import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import java.util.UUID
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 class CatalogRepository(
     private val context: Context,
     private val categoryDao: OrderCategoryDao,
 ) {
-    fun observeCategories(): Flow<List<OrderCategoryEntity>> = categoryDao.observeAll()
+    fun observeCategories(): Flow<List<OrderCategoryEntity>> {
+        if (DemoMode.isEnabled) {
+            return flowOf(listOf(DemoMode.demoCategory))
+        }
+        return categoryDao.observeAll()
+    }
 
     suspend fun getCategoryPath(id: String): String {
+        if (DemoMode.isEnabled && id == DemoMode.demoCategory.id) {
+            return DemoMode.demoCategory.name
+        }
         val all = categoryDao.findAll()
         val path = mutableListOf<String>()
         var currentId: String? = id

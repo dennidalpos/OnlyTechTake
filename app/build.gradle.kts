@@ -56,7 +56,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "true")
+        }
         release {
+            buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "false")
             isMinifyEnabled = false
             if (keystorePropertiesFile.exists()) {
                 signingConfig = signingConfigs.getByName("release")

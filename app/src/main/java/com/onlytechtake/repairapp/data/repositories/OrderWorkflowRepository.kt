@@ -6,6 +6,7 @@ import com.onlytechtake.repairapp.core.orders.OrderNumberGenerator
 import com.onlytechtake.repairapp.core.utils.formatEuroCents
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.core.utils.capitalizeFirst
+import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.CustomerDao
 import com.onlytechtake.repairapp.data.local.dao.MessageLogDao
@@ -44,6 +45,7 @@ import java.io.File
 import java.util.UUID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 class OrderWorkflowRepository(
@@ -64,6 +66,9 @@ class OrderWorkflowRepository(
     private val eventWriter = OrderWorkflowEventWriter(context, timelineEventDao, auditLogDao)
 
     fun observeOrders(actor: AuthenticatedUser, filter: OrderFilter): Flow<List<RepairOrderEntity>> {
+        if (DemoMode.isEnabled) {
+            return flowOf(listOf(DemoMode.demoOrder))
+        }
         val assignedToUserId = if (filter.showMineOnly) actor.id else null
         val status = filter.status.takeIf { filter.statuses.isEmpty() }
         val base = repairOrderDao.observeFiltered(
@@ -104,8 +109,22 @@ class OrderWorkflowRepository(
             }
         }
 
-    fun observeOrderDetail(orderId: String): Flow<OrderDetail?> =
-        combine(
+    fun observeOrderDetail(orderId: String): Flow<OrderDetail?> {
+        if (DemoMode.isEnabled && orderId == DemoMode.demoOrder.id) {
+            return flowOf(
+                OrderDetail(
+                    order = DemoMode.demoOrder,
+                    customer = DemoMode.demoCustomer,
+                    category = DemoMode.demoCategory,
+                    assignedUser = null,
+                    timeline = emptyList(),
+                    messages = emptyList(),
+                    media = emptyList(),
+                    signatures = emptyList(),
+                )
+            )
+        }
+        return combine(
             repairOrderDao.observeById(orderId),
             timelineEventDao.observeForOrder(orderId),
             messageLogDao.observeForOrder(orderId),
@@ -127,6 +146,7 @@ class OrderWorkflowRepository(
                 )
             }
         }
+    }
 
     private data class ObservedOrderData(
         val order: RepairOrderEntity,

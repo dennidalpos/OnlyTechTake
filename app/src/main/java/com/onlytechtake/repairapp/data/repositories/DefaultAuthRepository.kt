@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.data.repositories
 
+import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.UserDao
@@ -91,6 +92,9 @@ class DefaultAuthRepository(
     }
 
     override suspend fun login(username: String, password: CharArray): LoginResult {
+        if (DemoMode.isEnabled) {
+            return loginDemo()
+        }
         val normalizedUsername = username.trim()
         val now = clockMillis()
         if (isLockedOut(normalizedUsername, now)) return LoginResult.LockedOut
@@ -123,7 +127,20 @@ class DefaultAuthRepository(
         return LoginResult.Success(authenticatedUser)
     }
 
+    override suspend fun loginDemo(): LoginResult {
+        DemoMode.setEnabled(true)
+        val demoUser = AuthenticatedUser(
+            id = "admin",
+            displayName = "Demo Admin",
+            username = "admin",
+            role = UserRole.ADMIN,
+        )
+        sessionStore.setCurrentUser(demoUser, clockMillis())
+        return LoginResult.Success(demoUser)
+    }
+
     override suspend fun logout() {
+        DemoMode.setEnabled(false)
         sessionStore.clear()
     }
 

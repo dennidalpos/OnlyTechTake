@@ -54,6 +54,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.design.LoadingBrandIndicator
 import com.onlytechtake.repairapp.core.design.PasswordVisibilityButton
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
@@ -102,6 +103,7 @@ fun AuthGateRoute(
             onUsernameChange = viewModel::updateUsername,
             onPasswordChange = viewModel::updatePassword,
             onSubmit = viewModel::login,
+            onDemoLogin = viewModel::loginDemo,
             onBack = { (context as? Activity)?.finish() }
         )
     }
@@ -171,6 +173,7 @@ private fun LoginScreen(
     onUsernameChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onSubmit: () -> Unit,
+    onDemoLogin: () -> Unit,
     onBack: () -> Unit,
 ) {
     Scaffold(
@@ -196,6 +199,7 @@ private fun LoginScreen(
             onPasswordChange = onPasswordChange,
             onConfirmPasswordChange = {},
             onSubmit = onSubmit,
+            onDemoLogin = onDemoLogin,
             showDisplayName = false,
             showConfirmPassword = false,
         )
@@ -215,6 +219,7 @@ private fun AuthForm(
     onPasswordChange: (String) -> Unit,
     onConfirmPasswordChange: (String) -> Unit,
     onSubmit: () -> Unit,
+    onDemoLogin: () -> Unit = {},
     showDisplayName: Boolean,
     showConfirmPassword: Boolean,
 ) {
@@ -359,6 +364,16 @@ private fun AuthForm(
                     }
                 } else {
                     Text(text = submitLabel)
+                }
+            }
+
+            if (DemoMode.canEnable() && !showDisplayName) {
+                androidx.compose.material3.TextButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = onDemoLogin,
+                    enabled = !formState.loading,
+                ) {
+                    Text(text = "Avvia Modalità Demo")
                 }
             }
         }
