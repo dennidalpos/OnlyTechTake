@@ -9,6 +9,7 @@ import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
+import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.repositories.*
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
@@ -20,6 +21,7 @@ class AppContainer(context: Context) {
     private val database = RepairAppDatabase.getInstance(context)
     private val sessionStore = InMemorySessionStore()
     private val authPreferences = AuthPreferences(context)
+    val backupReminderPreferences = BackupReminderPreferences(context.applicationContext)
     private val passwordHasher = PasswordHasher()
     val shareDocumentIntentFactory = ShareDocumentIntentFactory(context)
     val errorHandler: ErrorHandler = DefaultErrorHandler()

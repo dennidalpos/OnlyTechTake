@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.features.workspace
 
 import android.net.Uri
+import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.DataResetRepository
 import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
@@ -10,8 +11,10 @@ internal class WorkspaceAdminActions(
     private val authenticatedActionRunner: AuthenticatedActionRunner,
     private val mutableUiState: MutableStateFlow<WorkspaceUiState>,
     private val backupRepository: BackupRepository,
+    private val backupReminderPreferences: BackupReminderPreferences,
     private val dataResetRepository: DataResetRepository,
     private val orderRepository: OrderWorkflowRepository,
+    private val showSuccess: (String) -> Unit,
     private val showError: (Throwable) -> Unit,
 ) {
     fun exportConfiguration(uri: Uri) = authenticatedActionRunner.run { actor ->
@@ -22,8 +25,19 @@ internal class WorkspaceAdminActions(
         backupRepository.exportDatabase(actor, uri)
     }
 
-    fun exportCompleteBackup(uri: Uri) = authenticatedActionRunner.run { actor ->
-        backupRepository.exportCompleteBackup(actor, uri)
+    fun exportCompleteBackup(uri: Uri) {
+        authenticatedActionRunner.runCustom { actor ->
+            backupRepository.exportCompleteBackup(actor, uri).fold(
+                onSuccess = {
+                    backupReminderPreferences.recordSuccessfulFullBackup(backupRepository.displayName(uri))
+                    showSuccess("Operazione completata")
+                },
+                onFailure = { error ->
+                    backupReminderPreferences.recordFailedFullBackup()
+                    showError(error)
+                },
+            )
+        }
     }
 
     fun exportOrdersXlsx(uri: Uri) = authenticatedActionRunner.run { actor ->

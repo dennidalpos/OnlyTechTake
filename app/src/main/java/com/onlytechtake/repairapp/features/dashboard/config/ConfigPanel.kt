@@ -33,6 +33,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,12 +45,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.ExportDestination
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
+import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
+import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
+import com.onlytechtake.repairapp.domain.backup.BackupReminderStatus
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.Field
@@ -74,6 +80,7 @@ fun ConfigPanel(
     val messageMode by viewModel.messageMode.collectAsState()
     val exportDestination by viewModel.exportDestination.collectAsState()
     val isCloudAvailable by viewModel.isCloudAvailable.collectAsState()
+    val backupReminderSettings by viewModel.backupReminderSettings.collectAsState()
 
     val confirmCategorySaveTitle = stringResource(R.string.config_category_confirm_save_title)
     val confirmCategorySaveText = stringResource(R.string.config_category_confirm_save_text)
@@ -110,6 +117,7 @@ fun ConfigPanel(
     var templateTitle by rememberSaveable { mutableStateOf("WhatsApp aggiornamento") }
     var templateBody by rememberSaveable { mutableStateOf("Aggiornamento {{numero_commessa}}: {{stato_commessa}}") }
     var templateActive by rememberSaveable { mutableStateOf(value = true) }
+    var backupIntervalDays by rememberSaveable { mutableStateOf(backupReminderSettings.intervalDays.toString()) }
     var confirmTitle by remember { mutableStateOf<String?>(null) }
     var confirmText by remember { mutableStateOf("") }
     var confirmAction by remember { mutableStateOf<(() -> Unit)?>(null) }
@@ -134,6 +142,10 @@ fun ConfigPanel(
         confirmTitle = title
         confirmText = text
         confirmAction = action
+    }
+
+    LaunchedEffect(backupReminderSettings.intervalDays) {
+        backupIntervalDays = backupReminderSettings.intervalDays.toString()
     }
 
     fun loadNewCategory() {
@@ -199,9 +211,15 @@ fun ConfigPanel(
                         viewModel.navigateTo(WorkspaceDestination.ADMIN)
                     }
                 }
-                item {
-                    ConfigHubCard(stringResource(R.string.config_hub_backup_title), stringResource(R.string.config_hub_backup_subtitle)) {
-                        viewModel.navigateTo(WorkspaceDestination.CONFIG_EXPORT)
+                if (isAdmin) {
+                    item {
+                        ConfigHubCard(
+                            stringResource(R.string.config_hub_backup_title),
+                            stringResource(R.string.config_hub_backup_subtitle),
+                            testTag = RepairAppTestTags.ConfigHubBackupButton,
+                        ) {
+                            viewModel.navigateTo(WorkspaceDestination.CONFIG_EXPORT)
+                        }
                     }
                 }
             }
@@ -487,10 +505,35 @@ fun ConfigPanel(
                 item {
                     StandardCard(highlight = true) {
                         Column(modifier = Modifier.padding(DashboardSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
-                            SectionTitle("Backup e Ripristino")
+                            SectionTitle(stringResource(R.string.config_backup_title))
                             if (!isAdmin) {
-                                Text(stringResource(R.string.config_backup_admin_only))
+                                Text(stringResource(R.string.admin_only_section))
                             } else {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Text(stringResource(R.string.config_backup_reminder_enabled))
+                                    Switch(
+                                        checked = backupReminderSettings.enabled,
+                                        onCheckedChange = viewModel::setBackupReminderEnabled,
+                                        modifier = Modifier.testTag(RepairAppTestTags.ConfigBackupReminderSwitch),
+                                    )
+                                }
+                                Field(
+                                    value = backupIntervalDays,
+                                    onValueChange = { raw ->
+                                        val digits = raw.filter { it.isDigit() }.take(3)
+                                        backupIntervalDays = digits
+                                        digits.toIntOrNull()?.let(viewModel::setBackupReminderIntervalDays)
+                                    },
+                                    label = stringResource(R.string.config_backup_interval_days),
+                                    singleLine = true,
+                                    keyboardType = KeyboardType.Number,
+                                    testTag = RepairAppTestTags.ConfigBackupIntervalField,
+                                )
+                                OperatorText(backupReminderInfo(backupReminderSettings))
                                 Text(stringResource(R.string.config_backup_unencrypted_warning))
                                 Text(stringResource(R.string.config_backup_destination_label), style = MaterialTheme.typography.titleSmall)
                                 ActionRow {
@@ -518,11 +561,13 @@ fun ConfigPanel(
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
 
-                                OperatorText("Il backup completo include database locale, configurazioni e tutti i media (foto e firme).")
+                                OperatorText(stringResource(R.string.config_backup_full_zip_includes))
+                                OperatorText(stringResource(R.string.config_backup_android_archive_note))
 
                                 ActionRow {
                                     TouchButton(
-                                        text = "Esporta Backup Completo (ZIP)",
+                                        text = stringResource(R.string.backup_run_full_zip),
+                                        testTag = RepairAppTestTags.ConfigBackupRunZipButton,
                                         onClick = {
                                             val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
                                             requestConfirm(confirmExportZipTitle, confirmExportZipTextTemplate.format(destMsg)) {
@@ -531,7 +576,7 @@ fun ConfigPanel(
                                         },
                                     )
                                     TouchButton(
-                                        text = "Ripristina Backup (ZIP)",
+                                        text = stringResource(R.string.config_backup_restore_zip),
                                         tone = ButtonTone.WARNING,
                                         onClick = {
                                             requestConfirm(
@@ -544,11 +589,11 @@ fun ConfigPanel(
                                     )
                                 }
 
-                                SectionTitle("Esportazione Commesse")
-                                Text("Esporta l'elenco di tutte le commesse in un file Excel leggibile.", style = MaterialTheme.typography.bodyMedium)
+                                SectionTitle(stringResource(R.string.config_backup_orders_export_title))
+                                Text(stringResource(R.string.config_backup_orders_export_desc), style = MaterialTheme.typography.bodyMedium)
                                 ActionRow {
                                     TouchButton(
-                                        text = "Esporta Commesse (XLSX)",
+                                        text = stringResource(R.string.config_backup_export_xlsx),
                                         onClick = {
                                             val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
                                             requestConfirm(confirmExportXlsxTitle, confirmExportXlsxTextTemplate.format(destMsg)) {
@@ -618,6 +663,32 @@ private fun ConfigHubCard(
             Text(subtitle, style = MaterialTheme.typography.bodyMedium)
         }
     }
+}
+
+@Composable
+private fun backupReminderInfo(settings: BackupReminderSettings): String {
+    val status = when {
+        settings.lastBackupStatus == BackupReminderStatus.FAILED ->
+            stringResource(R.string.backup_status_failed)
+        settings.lastSuccessfulBackupAtMillis == null ->
+            stringResource(R.string.backup_status_never)
+        else -> {
+            val days = BackupReminderPolicy.daysSinceLastSuccessfulBackup(settings, System.currentTimeMillis()) ?: 0L
+            stringResource(R.string.backup_status_days_ago, days)
+        }
+    }
+    val lastSuccessful = settings.lastSuccessfulBackupAtMillis
+        ?.let { formatUiDateTime(it) }
+        ?: stringResource(R.string.config_backup_last_success_none)
+    val fileName = settings.lastBackupFileName
+        ?: stringResource(R.string.config_backup_last_file_none)
+    return stringResource(
+        R.string.config_backup_reminder_info,
+        status,
+        lastSuccessful,
+        settings.intervalDays,
+        fileName,
+    )
 }
 
 fun colorForLevel(level: Int): Color = when (level) {

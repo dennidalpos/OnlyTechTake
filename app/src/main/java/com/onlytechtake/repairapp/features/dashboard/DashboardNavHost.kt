@@ -33,7 +33,7 @@ fun DashboardNavHost(
         modifier = modifier
     ) {
         composable(WorkspaceDestination.HOME.name) {
-            HomePanel(summary, workspaceViewModel)
+            HomePanel(summary, workspaceViewModel, isAdmin)
         }
         composable(WorkspaceDestination.NEW_ORDER.name) {
             QuickActions(workspaceViewModel)
@@ -82,7 +82,7 @@ fun DashboardNavHost(
             ConfigPanel(
                 viewModel = workspaceViewModel,
                 isAdmin = isAdmin,
-                initialSection = "EXPORT",
+                initialSection = if (isAdmin) "EXPORT" else null,
                 onBackupRestored = onAppDataRestored
             )
         }

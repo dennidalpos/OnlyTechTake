@@ -1,5 +1,7 @@
 package com.onlytechtake.repairapp.features.dashboard.home
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +22,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
+import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
+import com.onlytechtake.repairapp.domain.backup.BackupReminderStatus
 import com.onlytechtake.repairapp.domain.models.AppSummary
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
@@ -31,8 +36,13 @@ import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.queueFilter
 
 @Composable
-fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel) {
+fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel, isAdmin: Boolean) {
     val queues by viewModel.operationalQueues.collectAsState()
+    val backupReminderSettings by viewModel.backupReminderSettings.collectAsState()
+    val exportZipLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
+        uri?.let(viewModel::exportCompleteBackup)
+    }
+    val showBackupReminder = isAdmin && viewModel.isBackupReminderDue(backupReminderSettings)
 
     Box(
         modifier = Modifier
@@ -60,6 +70,13 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel) {
                 text = stringResource(R.string.home_new_order),
                 onClick = viewModel::openNewOrder,
             )
+            if (showBackupReminder) {
+                BackupReminderCard(
+                    settings = backupReminderSettings,
+                    onRunBackup = { exportZipLauncher.launch("onlytechtake-backup.zip") },
+                    onOpenSettings = { viewModel.navigateTo(WorkspaceDestination.CONFIG_EXPORT) },
+                )
+            }
             queues.forEach { queue ->
                 StandardCard {
                     Column(
@@ -101,6 +118,60 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel) {
         }
     }
 }
+
+@Composable
+private fun BackupReminderCard(
+    settings: BackupReminderSettings,
+    onRunBackup: () -> Unit,
+    onOpenSettings: () -> Unit,
+) {
+    StandardCard(highlight = true) {
+        Column(
+            modifier = Modifier.padding(DashboardSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+        ) {
+            Text(
+                text = stringResource(R.string.home_backup_reminder_title),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            Text(
+                text = backupStatusLabel(settings),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.actionGap),
+            ) {
+                TouchButton(
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(R.string.backup_run_full_zip),
+                    onClick = onRunBackup,
+                )
+                TouchButton(
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(R.string.home_backup_reminder_settings),
+                    tone = ButtonTone.NEUTRAL,
+                    onClick = onOpenSettings,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun backupStatusLabel(settings: BackupReminderSettings): String =
+    when {
+        settings.lastBackupStatus == BackupReminderStatus.FAILED ->
+            stringResource(R.string.backup_status_failed)
+        settings.lastSuccessfulBackupAtMillis == null ->
+            stringResource(R.string.backup_status_never)
+        else -> {
+            val days = BackupReminderPolicy.daysSinceLastSuccessfulBackup(settings, System.currentTimeMillis()) ?: 0L
+            stringResource(R.string.backup_status_days_ago, days)
+        }
+    }
 
 @Composable
 private fun MetricCard(label: String, value: String, modifier: Modifier = Modifier) {

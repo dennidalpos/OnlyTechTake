@@ -48,6 +48,7 @@ object RepairAppTestTags {
 
     const val ConfigHubCategoriesButton = "config_hub_categories_button"
     const val ConfigHubTemplatesButton = "config_hub_templates_button"
+    const val ConfigHubBackupButton = "config_hub_backup_button"
     const val ConfigBackButton = "config_back_button"
     const val ConfigCategoryNameField = "config_category_name_field"
     const val ConfigCategoryDescriptionField = "config_category_description_field"
@@ -58,6 +59,9 @@ object RepairAppTestTags {
     const val ConfigTemplateTitleField = "config_template_title_field"
     const val ConfigTemplateBodyField = "config_template_body_field"
     const val ConfigTemplateSaveButton = "config_template_save_button"
+    const val ConfigBackupReminderSwitch = "config_backup_reminder_switch"
+    const val ConfigBackupIntervalField = "config_backup_interval_field"
+    const val ConfigBackupRunZipButton = "config_backup_run_zip_button"
 
     fun dashboardTab(destination: String) = "dashboard_tab_${destination.lowercase()}"
 

@@ -11,6 +11,7 @@ import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.ExportDestination
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
@@ -31,6 +32,8 @@ import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
 import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
 import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
+import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
+import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import java.io.File
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -57,6 +60,7 @@ class WorkspaceViewModel(
     private val signatureRepository: SignatureRepository,
     private val templateRepository: TemplateRepository,
     private val backupRepository: BackupRepository,
+    private val backupReminderPreferences: BackupReminderPreferences,
     private val dataResetRepository: DataResetRepository,
     private val createIntakeOrderUseCase: CreateIntakeOrderUseCase,
     private val orderDocumentRepository: OrderDocumentRepository,
@@ -66,11 +70,34 @@ class WorkspaceViewModel(
     private val mutableUiState = MutableStateFlow(WorkspaceUiState())
     val uiState: StateFlow<WorkspaceUiState> = mutableUiState
 
+    private val mutableQuickIntakeDraft = MutableStateFlow(QuickIntakeDraft())
+    val quickIntakeDraft: StateFlow<QuickIntakeDraft> = mutableQuickIntakeDraft.asStateFlow()
+
     private val _isFormDirty = MutableStateFlow(false)
     val isFormDirty = _isFormDirty.asStateFlow()
 
     fun setFormDirty(dirty: Boolean) {
         _isFormDirty.value = dirty
+    }
+
+    fun updateQuickIntakeDraft(transform: (QuickIntakeDraft) -> QuickIntakeDraft) {
+        mutableQuickIntakeDraft.update(transform)
+    }
+
+    fun resetQuickIntakeDraft() {
+        mutableQuickIntakeDraft.value = QuickIntakeDraft()
+        setFormDirty(false)
+        setCustomerSearchQuery("")
+    }
+
+    fun openCategoryCreationFromIntake() {
+        mutableQuickIntakeDraft.update {
+            it.copy(
+                currentStep = 2,
+                returnToIntakeAfterCategorySave = true,
+            )
+        }
+        navigateTo(WorkspaceDestination.CONFIG_CATEGORIES)
     }
 
     val currentUser = authRepository.currentUser
@@ -87,6 +114,8 @@ class WorkspaceViewModel(
     val templates = templateRepository.observeTemplates().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     val messageMode = templateRepository.observeMessageMode()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), MessageMode.MANUAL_WHATSAPP)
+    val backupReminderSettings = backupReminderPreferences.settings
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), BackupReminderSettings())
 
     private val _exportDestination = MutableStateFlow(ExportDestination.LOCAL)
     val exportDestination = _exportDestination.asStateFlow()
@@ -154,8 +183,10 @@ class WorkspaceViewModel(
         authenticatedActionRunner = authenticatedActionRunner,
         mutableUiState = mutableUiState,
         backupRepository = backupRepository,
+        backupReminderPreferences = backupReminderPreferences,
         dataResetRepository = dataResetRepository,
         orderRepository = orderRepository,
+        showSuccess = ::showSuccess,
         showError = ::showError,
     )
 
@@ -245,7 +276,15 @@ class WorkspaceViewModel(
         name: String,
         description: String,
         active: Boolean,
-    ) = catalogActions.saveCategory(id, parentId, name, description, active)
+    ) = catalogActions.saveCategory(id, parentId, name, description, active) { savedCategoryId ->
+        val shouldReturnToIntake = mutableQuickIntakeDraft.value.returnToIntakeAfterCategorySave
+        if (shouldReturnToIntake) {
+            mutableQuickIntakeDraft.update {
+                it.withCategoryCreatedFromIntake(savedCategoryId)
+            }
+            navigateTo(WorkspaceDestination.NEW_ORDER)
+        }
+    }
 
     fun deleteCategory(categoryId: String) =
         catalogActions.deleteCategory(categoryId)
@@ -397,6 +436,21 @@ class WorkspaceViewModel(
     fun setExportDestination(destination: ExportDestination) {
         _exportDestination.value = destination
     }
+
+    fun setBackupReminderEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            backupReminderPreferences.setEnabled(enabled)
+        }
+    }
+
+    fun setBackupReminderIntervalDays(days: Int) {
+        viewModelScope.launch {
+            backupReminderPreferences.setIntervalDays(days)
+        }
+    }
+
+    fun isBackupReminderDue(settings: BackupReminderSettings, nowMillis: Long = System.currentTimeMillis()): Boolean =
+        BackupReminderPolicy.shouldShowReminder(settings, nowMillis)
 
     fun prepareMessage(orderId: String, templateCode: String) =
         messageActions.prepareMessage(orderId, templateCode)

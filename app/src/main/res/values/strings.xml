@@ -56,6 +56,12 @@
     <string name="home_new_order">Nuova commessa</string>
     <string name="home_empty_queue">Nessuna commessa in questa coda.</string>
     <string name="home_open_queue">Apri coda</string>
+    <string name="home_backup_reminder_title">Backup consigliato</string>
+    <string name="home_backup_reminder_settings">Impostazioni promemoria</string>
+    <string name="backup_run_full_zip">Esegui backup ZIP completo</string>
+    <string name="backup_status_never">Mai eseguito</string>
+    <string name="backup_status_days_ago">%1$d giorni fa</string>
+    <string name="backup_status_failed">Ultimo tentativo fallito</string>
 
     <string name="nav_back">Indietro</string>
     <string name="nav_next">Avanti</string>
@@ -113,6 +119,9 @@
     <string name="intake_selected_customer">Cliente selezionato: %s</string>
     <string name="intake_change_customer">Cambia cliente</string>
     <string name="intake_insert_new_customer">Inserisci nuovo cliente</string>
+    <string name="intake_no_active_categories">Nessuna categoria attiva.</string>
+    <string name="intake_create_category">Crea categoria</string>
+    <string name="intake_add_missing_category">Aggiungi categoria mancante</string>
     <string name="intake_media_count">%d media</string>
     <string name="intake_signature_captured">Firma acquisita</string>
     <string name="intake_not_set">Non impostato</string>
@@ -268,8 +277,16 @@
     <string name="config_whatsapp_manual">Manuale</string>
     <string name="config_whatsapp_confirm_manual_title">Impostare modalita\' manuale?</string>
     <string name="config_whatsapp_confirm_manual_text">La modalita\' WhatsApp verra\' salvata.</string>
+    <string name="config_backup_title">Backup e Ripristino</string>
     <string name="config_backup_admin_only">Area riservata admin.</string>
+    <string name="config_backup_reminder_enabled">Promemoria backup attivo</string>
+    <string name="config_backup_interval_days">Intervallo promemoria (giorni)</string>
+    <string name="config_backup_reminder_info">Stato: %1$s\nUltimo backup riuscito: %2$s\nIntervallo: ogni %3$d giorni\nFile: %4$s</string>
+    <string name="config_backup_last_success_none">Nessuno</string>
+    <string name="config_backup_last_file_none">Non disponibile</string>
     <string name="config_backup_unencrypted_warning">File non cifrati: usare solo destinazioni protette.</string>
+    <string name="config_backup_full_zip_includes">Il backup completo include database locale, configurazioni e tutti i media (foto e firme).</string>
+    <string name="config_backup_android_archive_note">Android può archiviare app inutilizzate per liberare spazio. L’archiviazione dovrebbe mantenere i dati, ma la disinstallazione completa può eliminarli. Esegui periodicamente un backup ZIP completo e salvalo fuori dal dispositivo.</string>
     <string name="config_backup_destination_label">Destinazione export:</string>
     <string name="config_backup_destination_local">Locale</string>
     <string name="config_backup_destination_cloud">Cloud (G-Drive)</string>
@@ -290,6 +307,8 @@
     <string name="config_backup_restore_zip">Ripristina ZIP</string>
     <string name="config_backup_confirm_restore_zip_title">Ripristinare backup?</string>
     <string name="config_backup_confirm_restore_zip_text">Il backup ZIP sostituira\' database e file locali dell\'app. Dopo il ripristino sara\' richiesto un nuovo login.</string>
+    <string name="config_backup_orders_export_title">Esportazione Commesse</string>
+    <string name="config_backup_orders_export_desc">Esporta l\'elenco di tutte le commesse in un file Excel leggibile.</string>
 
     <string name="catalog_path_separator">\u0020&gt;\u0020</string>
     <string name="catalog_error_only_admin_modify">Solo admin puo\' modificare categorie esistenti</string>

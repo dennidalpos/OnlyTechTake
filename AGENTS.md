@@ -36,6 +36,24 @@ OnlyTechTake Repair App is currently a fresh app in early development. Keep Room
 
 ---
 
+## Backup reminder and Android data preservation
+
+* Fresh install must work in LOCAL_ONLY mode.
+* Manual ZIP backup is the primary local recovery mechanism.
+* Admin can configure backup reminder every N days.
+* Default reminder interval is 7 days.
+* Reminder is based on last successful full ZIP backup.
+* Do not block normal app use when backup is overdue.
+* Before destructive operations, warn strongly if no recent backup exists.
+* Do not enable Android cloud backup without explicit owner approval.
+* Use `android:hasFragileUserData="true"` if compatible with current manifest.
+* Do not promise data survival after uninstall.
+* Room schemaVersion must remain 1.
+* Any DB schema change must be marked:
+  RICHIEDE CAMBIO SCHEMA - BLOCCATA
+
+---
+
 ## 3. Windows-first rules
 
 Use PowerShell-compatible commands unless repository evidence requires another shell, container, CI image, or deployment target.

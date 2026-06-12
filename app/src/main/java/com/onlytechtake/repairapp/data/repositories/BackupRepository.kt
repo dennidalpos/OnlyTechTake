@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.pdf.PdfDocument
 import android.net.Uri
+import android.provider.OpenableColumns
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
@@ -173,6 +174,19 @@ class BackupRepository(
         }
 
     fun databaseFile(): File = context.getDatabasePath(RepairAppDatabase.DATABASE_NAME)
+
+    fun displayName(uri: Uri): String? =
+        runCatching {
+            context.contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)
+                ?.use { cursor ->
+                    if (cursor.moveToFirst()) {
+                        cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME))
+                    } else {
+                        null
+                    }
+                }
+                ?.takeIf { it.isNotBlank() }
+        }.getOrNull()
 
     fun isCloudProviderAvailable(): Boolean {
         val cloudPackages = listOf(

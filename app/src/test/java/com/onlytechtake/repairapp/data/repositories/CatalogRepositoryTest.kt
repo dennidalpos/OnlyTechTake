@@ -9,6 +9,7 @@ import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import io.mockk.mockk
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -35,6 +36,7 @@ class CatalogRepositoryTest {
         val input = CategoryInput(name = "New", description = "")
         val result = repository.saveCategory(operator, input)
         assertTrue(result.isSuccess)
+        assertTrue(result.getOrThrow().isNotBlank())
     }
 
     @Test
@@ -49,5 +51,6 @@ class CatalogRepositoryTest {
         val input = CategoryInput(id = "1", name = "Modified", description = "")
         val result = repository.saveCategory(admin, input)
         assertTrue(result.isSuccess)
+        assertEquals("1", result.getOrThrow())
     }
 }

@@ -56,6 +56,7 @@ fun DashboardRoute(
             signatureRepository = container.signatureRepository,
             templateRepository = container.templateRepository,
             backupRepository = container.backupRepository,
+            backupReminderPreferences = container.backupReminderPreferences,
             dataResetRepository = container.dataResetRepository,
             createIntakeOrderUseCase = container.createIntakeOrderUseCase,
             orderDocumentRepository = container.orderDocumentRepository,

@@ -19,18 +19,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -44,7 +38,6 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
-import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
 import com.onlytechtake.repairapp.domain.workspace.isReadyForSubmit
@@ -61,7 +54,6 @@ import com.onlytechtake.repairapp.features.dashboard.common.StepSectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.dashboard.common.WizardNavigationBar
 import com.onlytechtake.repairapp.features.dashboard.common.SignatureCaptureForm
-import com.onlytechtake.repairapp.features.dashboard.common.SignatureCaptureResult
 import com.onlytechtake.repairapp.features.dashboard.neworder.LAST_INTAKE_STEP
 import com.onlytechtake.repairapp.features.dashboard.neworder.SUBMIT_INTAKE_STEP
 import com.onlytechtake.repairapp.features.dashboard.neworder.completedStepAfterAdvance
@@ -77,13 +69,14 @@ import com.onlytechtake.repairapp.features.dashboard.neworder.QuickIntakeSubmitS
 import com.onlytechtake.repairapp.features.dashboard.neworder.IntakeCustomerFields
 import com.onlytechtake.repairapp.features.dashboard.neworder.CustomerSuggestionCard
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
-import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
+import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
+import com.onlytechtake.repairapp.features.workspace.QuickIntakeSignatureDraft
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
-import java.util.UUID
 
 @Composable
 fun QuickActions(viewModel: WorkspaceViewModel) {
     val uiState by viewModel.uiState.collectAsState()
+    val draft by viewModel.quickIntakeDraft.collectAsState()
     val customerSuggestions by viewModel.customerSuggestions.collectAsState()
     val categories by viewModel.categories.collectAsState()
     val templates by viewModel.templates.collectAsState()
@@ -92,28 +85,15 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
     val unnamedPrivate = stringResource(R.string.customer_unnamed_private)
     val unnamedBusiness = stringResource(R.string.customer_unnamed_business)
 
-    var intakeSessionId by rememberSaveable { mutableStateOf(UUID.randomUUID().toString()) }
-    var selectedCustomerId by rememberSaveable { mutableStateOf<String?>(null) }
-    var selectedCustomerLabel by rememberSaveable { mutableStateOf<String?>(null) }
-    var selectedCategoryId by rememberSaveable { mutableStateOf<String?>(null) }
-    var showNewCustomerForm by rememberSaveable { mutableStateOf(false) }
-    var isBusiness by rememberSaveable { mutableStateOf(false) }
-    var firstName by rememberSaveable { mutableStateOf("") }
-    var lastName by rememberSaveable { mutableStateOf("") }
-    var companyName by rememberSaveable { mutableStateOf("") }
-    var phone by rememberSaveable { mutableStateOf("") }
-    var email by rememberSaveable { mutableStateOf("") }
-    var vatNumber by rememberSaveable { mutableStateOf("") }
-    var taxCode by rememberSaveable { mutableStateOf("") }
-    var address by rememberSaveable { mutableStateOf("") }
-    var notes by rememberSaveable { mutableStateOf("") }
-    var problemSummary by rememberSaveable { mutableStateOf("") }
-    var problemDetails by rememberSaveable { mutableStateOf("") }
-    var showCamera by rememberSaveable { mutableStateOf(false) }
-    var currentStep by rememberSaveable { mutableIntStateOf(1) }
-    var completedStep by rememberSaveable { mutableIntStateOf(0) }
-    var stagedMedia by remember { mutableStateOf<List<StagedOrderMedia>>(emptyList()) }
-    var signatureCapture by remember { mutableStateOf<SignatureCaptureResult?>(null) }
+    fun updateDraft(transform: (QuickIntakeDraft) -> QuickIntakeDraft) {
+        viewModel.updateQuickIntakeDraft(transform)
+    }
+
+    androidx.compose.runtime.LaunchedEffect(Unit) {
+        if (draft.returnToIntakeAfterCategorySave) {
+            updateDraft { it.copy(returnToIntakeAfterCategorySave = false) }
+        }
+    }
 
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -124,108 +104,99 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
             focusManager.clearFocus()
         },
     )
-    val selectedCustomer = selectedCustomerId?.let { id -> customerSuggestions.firstOrNull { it.id == id } }
+    val selectedCustomer = draft.selectedCustomerId?.let { id -> customerSuggestions.firstOrNull { it.id == id } }
     val selectedCustomerDisplayName = selectedCustomer?.displayName(
         unnamedPrivate = unnamedPrivate,
         unnamedBusiness = unnamedBusiness
-    ) ?: selectedCustomerLabel
+    ) ?: draft.selectedCustomerLabel
     val activeCategories = categories.filter { it.active }
     val newCustomerInput = CustomerInput(
-        type = if (isBusiness) CustomerType.BUSINESS else CustomerType.PRIVATE,
-        firstName = firstName,
-        lastName = lastName,
-        companyName = companyName,
-        phone = phone,
-        email = email,
-        vatNumber = vatNumber,
-        taxCode = taxCode,
-        address = address,
-        notes = notes,
+        type = draft.customerType,
+        firstName = draft.firstName,
+        lastName = draft.lastName,
+        companyName = draft.companyName,
+        phone = draft.phone,
+        email = draft.email,
+        vatNumber = draft.vatNumber,
+        taxCode = draft.taxCode,
+        address = draft.address,
+        notes = draft.notes,
     )
     val intakeInput = IntakeOrderInput(
-        existingCustomerId = selectedCustomerId,
+        existingCustomerId = draft.selectedCustomerId,
         newCustomer = null,
-        problemSummary = problemSummary,
-        problemDetails = problemDetails,
-        categoryId = selectedCategoryId,
+        problemSummary = draft.problemSummary,
+        problemDetails = draft.problemDetails,
+        categoryId = draft.selectedCategoryId,
         assignedToUserId = currentUser?.id,
-        stagedMediaCount = stagedMedia.size,
-        hasPrivacySignature = signatureCapture != null,
+        stagedMediaCount = draft.stagedMedia.size,
+        hasPrivacySignature = draft.signatureCapture != null,
     )
     val privacyText = templates.firstOrNull { it.code == PRIVACY_TEMPLATE_CODE && it.active }?.body ?: DEFAULT_PRIVACY_TEXT
     val termsText = templates.firstOrNull { it.code == TERMS_TEMPLATE_CODE && it.active }?.body ?: DEFAULT_TERMS_TEXT
     val missingRequirements = intakeInput.validationErrors()
 
     androidx.compose.runtime.LaunchedEffect(
-        selectedCustomerId, selectedCategoryId, problemSummary, problemDetails, stagedMedia, signatureCapture
+        draft.selectedCustomerId,
+        draft.selectedCategoryId,
+        draft.problemSummary,
+        draft.problemDetails,
+        draft.stagedMedia,
+        draft.signatureCapture,
     ) {
-        val isDirty = selectedCustomerId != null ||
-                selectedCategoryId != null ||
-                problemSummary.isNotBlank() ||
-                problemDetails.isNotBlank() ||
-                stagedMedia.isNotEmpty() ||
-                signatureCapture != null
+        val isDirty = draft.selectedCustomerId != null ||
+                draft.selectedCategoryId != null ||
+                draft.problemSummary.isNotBlank() ||
+                draft.problemDetails.isNotBlank() ||
+                draft.stagedMedia.isNotEmpty() ||
+                draft.signatureCapture != null
         viewModel.setFormDirty(isDirty)
     }
 
     val attachmentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
-            viewModel.importIntakeAttachment(intakeSessionId, it) { staged ->
-                stagedMedia = stagedMedia + staged
+            viewModel.importIntakeAttachment(draft.intakeSessionId, it) { staged ->
+                updateDraft { current -> current.copy(stagedMedia = current.stagedMedia + staged) }
             }
         }
     }
 
     fun resetForm() {
-        intakeSessionId = UUID.randomUUID().toString()
-        selectedCustomerId = null
-        selectedCustomerLabel = null
-        selectedCategoryId = null
-        showNewCustomerForm = false
-        isBusiness = false
-        firstName = ""
-        lastName = ""
-        companyName = ""
-        phone = ""
-        email = ""
-        vatNumber = ""
-        taxCode = ""
-        address = ""
-        notes = ""
-        problemSummary = ""
-        problemDetails = ""
-        stagedMedia = emptyList()
-        signatureCapture = null
-        showCamera = false
-        currentStep = 1
-        completedStep = 0
-        viewModel.setCustomerSearchQuery("")
+        viewModel.resetQuickIntakeDraft()
     }
 
     fun clearNewCustomerFields() {
-        isBusiness = false
-        firstName = ""
-        lastName = ""
-        companyName = ""
-        phone = ""
-        email = ""
-        vatNumber = ""
-        taxCode = ""
-        address = ""
-        notes = ""
+        updateDraft {
+            it.copy(
+                customerType = CustomerType.PRIVATE,
+                firstName = "",
+                lastName = "",
+                companyName = "",
+                phone = "",
+                email = "",
+                vatNumber = "",
+                taxCode = "",
+                address = "",
+                notes = "",
+            )
+        }
     }
 
-    val canSaveNewCustomer = (phone.isNotBlank() || email.isNotBlank()) &&
-        if (isBusiness) companyName.isNotBlank() else firstName.isNotBlank() && lastName.isNotBlank()
+    val isBusiness = draft.customerType == CustomerType.BUSINESS
+    val canSaveNewCustomer = (draft.phone.isNotBlank() || draft.email.isNotBlank()) &&
+        if (isBusiness) draft.companyName.isNotBlank() else draft.firstName.isNotBlank() && draft.lastName.isNotBlank()
 
     fun editStep(step: Int) {
-        currentStep = step
-        completedStep = completedStepAfterEdit(completedStep, step)
+        updateDraft { it.copy(currentStep = step, completedStep = completedStepAfterEdit(it.completedStep, step)) }
     }
 
     fun completeStep(step: Int) {
-        completedStep = completedStepAfterAdvance(completedStep, step)
-        currentStep = currentStepAfterAdvance(step)
+        updateDraft {
+            it.copy(
+                completedStep = completedStepAfterAdvance(it.completedStep, step),
+                currentStep = currentStepAfterAdvance(step),
+            )
+        }
     }
 
     Column(
@@ -239,16 +210,16 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         SectionTitle(stringResource(R.string.new_order_title))
 
         StepperIndicator(
-            currentStep = currentStep,
-            completedStep = completedStep,
+            currentStep = draft.currentStep,
+            completedStep = draft.completedStep,
             onStepClick = { step ->
-                if (step <= completedStep + 1) {
+                if (step <= draft.completedStep + 1) {
                     editStep(step)
                 }
             }
         )
 
-        if (currentStep == 1) {
+        if (draft.currentStep == 1) {
             StandardCard(highlight = true) {
             Column(
                 modifier = Modifier.padding(DashboardSpacing.cardPadding),
@@ -258,9 +229,13 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                 Field(
                     value = uiState.customerSearchQuery,
                     onValueChange = {
-                        selectedCustomerId = null
-                        selectedCustomerLabel = null
-                        showNewCustomerForm = false
+                        updateDraft {
+                            it.copy(
+                                selectedCustomerId = null,
+                                selectedCustomerLabel = null,
+                                showNewCustomerForm = false,
+                            )
+                        }
                         viewModel.setCustomerSearchQuery(it)
                     },
                     label = stringResource(R.string.intake_search_customer),
@@ -269,7 +244,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                     keyboardActions = nextAction,
                     testTag = RepairAppTestTags.NewOrderCustomerSearchField,
                 )
-                if (selectedCustomerId != null) {
+                if (draft.selectedCustomerId != null) {
                     Text(
                         stringResource(R.string.intake_selected_customer, selectedCustomerDisplayName.orEmpty()),
                         style = MaterialTheme.typography.bodyLarge,
@@ -280,9 +255,13 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                         text = stringResource(R.string.intake_change_customer),
                         tone = ButtonTone.NEUTRAL,
                         onClick = {
-                            selectedCustomerId = null
-                            selectedCustomerLabel = null
-                            showNewCustomerForm = false
+                            updateDraft {
+                                it.copy(
+                                    selectedCustomerId = null,
+                                    selectedCustomerLabel = null,
+                                    showNewCustomerForm = false,
+                                )
+                            }
                             viewModel.setCustomerSearchQuery("")
                         },
                     )
@@ -291,53 +270,66 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                         CustomerSuggestionCard(
                             customer = customer,
                             onClick = {
-                                selectedCustomerId = customer.id
-                                selectedCustomerLabel = customer.displayName(
+                                val label = customer.displayName(
                                     unnamedPrivate = unnamedPrivate,
                                     unnamedBusiness = unnamedBusiness
                                 )
-                                showNewCustomerForm = false
-                                viewModel.setCustomerSearchQuery(selectedCustomerLabel.orEmpty())
+                                updateDraft {
+                                    it.copy(
+                                        selectedCustomerId = customer.id,
+                                        selectedCustomerLabel = label,
+                                        showNewCustomerForm = false,
+                                    )
+                                }
+                                viewModel.setCustomerSearchQuery(label)
                             },
                         )
                     }
                 }
-                if (selectedCustomerId == null && !showNewCustomerForm) {
+                if (draft.selectedCustomerId == null && !draft.showNewCustomerForm) {
                     TouchButton(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.intake_insert_new_customer),
                         tone = ButtonTone.NEUTRAL,
                         testTag = RepairAppTestTags.NewOrderInsertCustomerButton,
                         onClick = {
-                            selectedCustomerId = null
-                            selectedCustomerLabel = null
-                            showNewCustomerForm = true
+                            updateDraft {
+                                it.copy(
+                                    selectedCustomerId = null,
+                                    selectedCustomerLabel = null,
+                                    showNewCustomerForm = true,
+                                )
+                            }
                             viewModel.setCustomerSearchQuery("")
                         },
                     )
                 }
-                if (showNewCustomerForm) {
+                if (draft.showNewCustomerForm) {
                     IntakeCustomerFields(
                         isBusiness = isBusiness,
-                        onBusinessChange = { isBusiness = it },
-                        firstName = firstName,
-                        onFirstNameChange = { firstName = it },
-                        lastName = lastName,
-                        onLastNameChange = { lastName = it },
-                        companyName = companyName,
-                        onCompanyNameChange = { companyName = it },
-                        vatNumber = vatNumber,
-                        onVatNumberChange = { vatNumber = it },
-                        taxCode = taxCode,
-                        onTaxCodeChange = { taxCode = it },
-                        phone = phone,
-                        onPhoneChange = { phone = it },
-                        email = email,
-                        onEmailChange = { email = it },
-                        address = address,
-                        onAddressChange = { address = it },
-                        notes = notes,
-                        onNotesChange = { notes = it },
+                        onBusinessChange = { business ->
+                            updateDraft {
+                                it.copy(customerType = if (business) CustomerType.BUSINESS else CustomerType.PRIVATE)
+                            }
+                        },
+                        firstName = draft.firstName,
+                        onFirstNameChange = { value -> updateDraft { it.copy(firstName = value) } },
+                        lastName = draft.lastName,
+                        onLastNameChange = { value -> updateDraft { it.copy(lastName = value) } },
+                        companyName = draft.companyName,
+                        onCompanyNameChange = { value -> updateDraft { it.copy(companyName = value) } },
+                        vatNumber = draft.vatNumber,
+                        onVatNumberChange = { value -> updateDraft { it.copy(vatNumber = value) } },
+                        taxCode = draft.taxCode,
+                        onTaxCodeChange = { value -> updateDraft { it.copy(taxCode = value) } },
+                        phone = draft.phone,
+                        onPhoneChange = { value -> updateDraft { it.copy(phone = value) } },
+                        email = draft.email,
+                        onEmailChange = { value -> updateDraft { it.copy(email = value) } },
+                        address = draft.address,
+                        onAddressChange = { value -> updateDraft { it.copy(address = value) } },
+                        notes = draft.notes,
+                        onNotesChange = { value -> updateDraft { it.copy(notes = value) } },
                         nextAction = nextAction,
                         doneAction = doneAction,
                     )
@@ -348,14 +340,19 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                         testTag = RepairAppTestTags.NewOrderSaveCustomerButton,
                         onClick = {
                             viewModel.saveCustomer(newCustomerInput) { customer ->
-                                selectedCustomerId = customer.id
-                                selectedCustomerLabel = customer.displayName(
+                                val label = customer.displayName(
                                     unnamedPrivate = unnamedPrivate,
                                     unnamedBusiness = unnamedBusiness
                                 )
-                                showNewCustomerForm = false
+                                updateDraft {
+                                    it.copy(
+                                        selectedCustomerId = customer.id,
+                                        selectedCustomerLabel = label,
+                                        showNewCustomerForm = false,
+                                    )
+                                }
                                 clearNewCustomerFields()
-                                viewModel.setCustomerSearchQuery(selectedCustomerLabel.orEmpty())
+                                viewModel.setCustomerSearchQuery(label)
                             }
                         },
                     )
@@ -363,65 +360,73 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
             }
         }
             WizardNavigationBar(
-                nextEnabled = selectedCustomerId != null,
+                nextEnabled = draft.selectedCustomerId != null,
                 nextTestTag = RepairAppTestTags.NewOrderStep1NextButton,
                 onNext = { completeStep(1) },
             )
         }
 
-        if (currentStep == 2) {
+        if (draft.currentStep == 2) {
             QuickIntakeCategorySection(
                 stepNumber = 2,
                 activeCategories = activeCategories,
-                selectedCategoryId = selectedCategoryId,
+                selectedCategoryId = draft.selectedCategoryId,
                 onCategorySelected = { categoryId ->
-                    selectedCategoryId = selectedCategoryAfterClick(selectedCategoryId, categoryId)
-                    completedStep = completedStepAfterCategorySelection(completedStep)
+                    updateDraft {
+                        it.copy(
+                            selectedCategoryId = selectedCategoryAfterClick(it.selectedCategoryId, categoryId),
+                            completedStep = completedStepAfterCategorySelection(it.completedStep),
+                        )
+                    }
                 },
-                onOpenConfig = { viewModel.navigateTo(WorkspaceDestination.CONFIG) },
+                onOpenConfig = viewModel::openCategoryCreationFromIntake,
                 highlight = true,
             )
             WizardNavigationBar(
                 onBack = { editStep(1) },
-                nextEnabled = selectedCategoryId != null,
+                nextEnabled = draft.selectedCategoryId != null,
                 nextTestTag = RepairAppTestTags.NewOrderStep2NextButton,
                 onNext = { completeStep(2) },
             )
         }
 
-        if (currentStep == 3) {
+        if (draft.currentStep == 3) {
             QuickIntakeProblemSection(
                 stepNumber = 3,
-                problemSummary = problemSummary,
-                onProblemSummaryChange = { problemSummary = it },
-                problemDetails = problemDetails,
-                onProblemDetailsChange = { problemDetails = it },
+                problemSummary = draft.problemSummary,
+                onProblemSummaryChange = { value -> updateDraft { it.copy(problemSummary = value) } },
+                problemDetails = draft.problemDetails,
+                onProblemDetailsChange = { value -> updateDraft { it.copy(problemDetails = value) } },
                 nextAction = nextAction,
                 doneAction = doneAction,
                 highlight = true,
             )
             WizardNavigationBar(
                 onBack = { editStep(2) },
-                nextEnabled = problemSummary.isNotBlank(),
+                nextEnabled = draft.problemSummary.isNotBlank(),
                 onNext = { completeStep(3) },
             )
         }
 
-        if (currentStep == 4) {
+        if (draft.currentStep == 4) {
             QuickIntakeMediaSection(
                 stepNumber = 4,
-                intakeSessionId = intakeSessionId,
-                stagedMedia = stagedMedia,
-                showCamera = showCamera,
-                onShowCameraChange = { showCamera = it },
+                intakeSessionId = draft.intakeSessionId,
+                stagedMedia = draft.stagedMedia,
+                showCamera = draft.showCamera,
+                onShowCameraChange = { value -> updateDraft { it.copy(showCamera = value) } },
                 onRemoveMedia = { localPath ->
                     viewModel.deleteStagedMedia(localPath)
-                    stagedMedia = stagedMedia.filterNot { it.localPath == localPath }
+                    updateDraft { it.copy(stagedMedia = it.stagedMedia.filterNot { media -> media.localPath == localPath }) }
                 },
                 onReplaceMedia = { media, bitmap ->
                     viewModel.replaceStagedImage(media, bitmap) { replaced ->
-                        stagedMedia = stagedMedia.map { current ->
-                            if (current.localPath == replaced.localPath) replaced else current
+                        updateDraft {
+                            it.copy(
+                                stagedMedia = it.stagedMedia.map { current ->
+                                    if (current.localPath == replaced.localPath) replaced else current
+                                },
+                            )
                         }
                     }
                 },
@@ -429,53 +434,68 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                 createPhotoFile = { sessionId, _ -> viewModel.createIntakePhotoFile(sessionId) },
                 onPhotoCaptured = { file ->
                     viewModel.stageCapturedIntakePhoto(file) { staged ->
-                        stagedMedia = stagedMedia + staged
+                        updateDraft { it.copy(stagedMedia = it.stagedMedia + staged) }
                     }
                 },
                 onCameraError = viewModel::reportCameraError,
             )
             WizardNavigationBar(
                 onBack = { editStep(3) },
-                nextEnabled = stagedMedia.isNotEmpty(),
+                nextEnabled = draft.stagedMedia.isNotEmpty(),
                 onNext = { completeStep(4) },
             )
         }
 
-        if (currentStep == 5) {
-            key(intakeSessionId) {
+        if (draft.currentStep == 5) {
+            key(draft.intakeSessionId) {
                 StandardCard {
                     SignatureCaptureForm(
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         title = "5. ${stringResource(R.string.intake_step_privacy)}",
                         privacyText = privacyText,
                         termsText = termsText,
-                        onCaptureChanged = { signatureCapture = it },
+                        onCaptureChanged = { capture ->
+                            if (capture != null || draft.signatureCapture == null) {
+                                updateDraft {
+                                    it.copy(
+                                        signatureCapture = capture?.let { result ->
+                                            QuickIntakeSignatureDraft(
+                                                signerName = result.signerName,
+                                                privacyAccepted = result.privacyAccepted,
+                                                termsAccepted = result.termsAccepted,
+                                                bitmap = result.bitmap,
+                                            )
+                                        },
+                                    )
+                                }
+                            }
+                        },
                     )
                 }
             }
             WizardNavigationBar(
                 onBack = { editStep(4) },
-                nextEnabled = signatureCapture != null,
+                nextEnabled = draft.signatureCapture != null,
                 onNext = { completeStep(5) },
             )
         }
 
-        if (currentStep == SUBMIT_INTAKE_STEP || isIntakeSubmitUnlocked(completedStep)) {
+        if (draft.currentStep == SUBMIT_INTAKE_STEP || isIntakeSubmitUnlocked(draft.completedStep)) {
             QuickIntakeSubmitSection(
                 stepNumber = 6,
-                missingRequirements = if (isIntakeSubmitUnlocked(completedStep)) {
+                missingRequirements = if (isIntakeSubmitUnlocked(draft.completedStep)) {
                     missingRequirements
                 } else {
                     listOf(stringResource(R.string.intake_confirm_all_steps))
                 },
-                enabled = isIntakeSubmitUnlocked(completedStep) &&
+                enabled = isIntakeSubmitUnlocked(draft.completedStep) &&
                     activeCategories.isNotEmpty() &&
                     intakeInput.isReadyForSubmit(),
                 onSubmit = {
-                    signatureCapture?.let { capture ->
+                    draft.signatureCapture?.let { capture ->
                         viewModel.createIntakeOrder(
                             input = intakeInput,
-                            stagedMedia = stagedMedia,
+                            stagedMedia = draft.stagedMedia,
                             signerName = capture.signerName,
                             privacyAccepted = capture.privacyAccepted,
                             termsAccepted = capture.termsAccepted,

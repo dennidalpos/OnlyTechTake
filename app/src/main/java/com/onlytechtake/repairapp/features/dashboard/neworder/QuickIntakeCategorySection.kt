@@ -58,15 +58,21 @@ fun QuickIntakeCategorySection(
             StepSectionTitle(stepNumber, stringResource(R.string.intake_step_category))
             if (activeCategories.isEmpty()) {
                 Text(
-                    text = "Nessuna categoria attiva.",
+                    text = stringResource(R.string.intake_no_active_categories),
                     color = MaterialTheme.colorScheme.error,
                 )
                 TouchButton(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Apri configurazione",
+                    text = stringResource(R.string.intake_create_category),
                     onClick = onOpenConfig,
                 )
             } else {
+                TouchButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.intake_add_missing_category),
+                    tone = ButtonTone.NEUTRAL,
+                    onClick = onOpenConfig,
+                )
                 if (currentParentId != null) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -127,7 +133,7 @@ fun QuickIntakeCategorySection(
                     }
                 }
                 if (visibleCategories.isEmpty()) {
-                    Text("Nessuna categoria in questo ramo.", style = MaterialTheme.typography.bodyMedium)
+                    Text(stringResource(R.string.config_category_empty_branch), style = MaterialTheme.typography.bodyMedium)
                 }
             }
         }

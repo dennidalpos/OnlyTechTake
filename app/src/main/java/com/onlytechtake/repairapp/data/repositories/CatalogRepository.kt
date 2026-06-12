@@ -33,7 +33,7 @@ class CatalogRepository(
         return path.joinToString(context.getString(R.string.catalog_path_separator))
     }
 
-    suspend fun saveCategory(actor: AuthenticatedUser, input: CategoryInput): Result<Unit> =
+    suspend fun saveCategory(actor: AuthenticatedUser, input: CategoryInput): Result<String> =
         runCatching {
             if (input.id != null) {
                 require(actor.role == UserRole.ADMIN) {
@@ -48,6 +48,7 @@ class CatalogRepository(
             require(duplicate == null || (duplicate.id == input.id)) {
                 context.getString(R.string.catalog_error_duplicate_name)
             }
+            val categoryId = input.id ?: UUID.randomUUID().toString()
             categoryDao.upsertAll(
                 normalizeCategoryTree(
                     existing = categoryDao.findAll(),
@@ -55,13 +56,14 @@ class CatalogRepository(
                         name = normalizedName,
                         description = input.description.trim().capitalizeFirst()
                     ),
-                    generatedId = UUID.randomUUID().toString(),
+                    generatedId = categoryId,
                     errorCycle = context.getString(R.string.catalog_error_cycle_detected),
                     errorNotFound = context.getString(R.string.catalog_error_not_found),
                     errorParentNotFound = context.getString(R.string.catalog_error_parent_not_found),
                     errorSelfParent = context.getString(R.string.catalog_error_self_parent),
                 ),
             )
+            categoryId
         }
 
     suspend fun deleteCategory(actor: AuthenticatedUser, categoryId: String): Result<Unit> =

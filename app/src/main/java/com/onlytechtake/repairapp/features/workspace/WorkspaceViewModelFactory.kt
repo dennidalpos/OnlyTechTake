@@ -13,6 +13,7 @@ import com.onlytechtake.repairapp.data.repositories.SignatureRepository
 import com.onlytechtake.repairapp.data.repositories.TemplateRepository
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
+import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
 import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
@@ -27,6 +28,7 @@ class WorkspaceViewModelFactory(
     private val signatureRepository: SignatureRepository,
     private val templateRepository: TemplateRepository,
     private val backupRepository: BackupRepository,
+    private val backupReminderPreferences: BackupReminderPreferences,
     private val dataResetRepository: DataResetRepository,
     private val createIntakeOrderUseCase: CreateIntakeOrderUseCase,
     private val orderDocumentRepository: OrderDocumentRepository,
@@ -48,6 +50,7 @@ class WorkspaceViewModelFactory(
             signatureRepository = signatureRepository,
             templateRepository = templateRepository,
             backupRepository = backupRepository,
+            backupReminderPreferences = backupReminderPreferences,
             dataResetRepository = dataResetRepository,
             createIntakeOrderUseCase = createIntakeOrderUseCase,
             orderDocumentRepository = orderDocumentRepository,

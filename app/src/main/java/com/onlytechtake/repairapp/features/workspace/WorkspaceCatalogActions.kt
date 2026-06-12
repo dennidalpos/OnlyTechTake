@@ -43,19 +43,33 @@ internal class WorkspaceCatalogActions(
         }
     }
 
-    fun saveCategory(id: String?, parentId: String?, name: String, description: String, active: Boolean) =
-        authenticatedActionRunner.run { actor ->
+    fun saveCategory(
+        id: String?,
+        parentId: String?,
+        name: String,
+        description: String,
+        active: Boolean,
+        onSaved: (String) -> Unit = {},
+    ) {
+        authenticatedActionRunner.runCustom { actor ->
             catalogRepository.saveCategory(
-                actor,
-                CategoryInput(
+                actor = actor,
+                input = CategoryInput(
                     id = id,
                     parentId = parentId,
                     name = name,
                     description = description,
                     active = active,
                 ),
+            ).fold(
+                onSuccess = { categoryId ->
+                    showSuccess("Operazione completata")
+                    onSaved(categoryId)
+                },
+                onFailure = showError,
             )
         }
+    }
 
     fun deleteCategory(categoryId: String) =
         authenticatedActionRunner.run { actor ->
