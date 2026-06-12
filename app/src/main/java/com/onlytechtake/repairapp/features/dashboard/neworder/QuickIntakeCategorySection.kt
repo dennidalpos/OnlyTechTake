@@ -43,13 +43,14 @@ fun QuickIntakeCategorySection(
     selectedCategoryId: String?,
     onCategorySelected: (String) -> Unit,
     onOpenConfig: () -> Unit,
+    highlight: Boolean = false,
 ) {
     var currentParentId by rememberSaveable { mutableStateOf<String?>(null) }
     val visibleCategories = activeCategories.filter { it.parentId == currentParentId }
     val currentParent = currentParentId?.let { id -> activeCategories.firstOrNull { it.id == id } }
     val selectedPath = selectedCategoryId?.let { categoryPath(activeCategories, it) }.orEmpty()
 
-    StandardCard {
+    StandardCard(highlight = highlight) {
         Column(
             modifier = Modifier.padding(DashboardSpacing.cardPadding),
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),

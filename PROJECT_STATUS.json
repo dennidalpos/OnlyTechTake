@@ -1,5 +1,6 @@
 {
   "todos": [
+    "Verificare fix tastiera (windowSoftInputMode e imePadding): controllare che i campi di input non vengano coperti in CustomerPanel, QuickActions e ConfigPanel",
     "Verifica stabilità dopo refactoring strutturale: testare navigazione tra i nuovi package e funzionamento dei ViewModel separati",
     "Verifica manuale UI: provare nuova commessa, navigazione categorie, note dialog, scheda commessa compatta, timeline espandibile (verificare numerazione 1..N), WhatsApp e logout",
     "Completare verifica manuale su dispositivo: nuova commessa (firma, foto), diagnosi riparabile, accettazione, rifiuto, non riparabile, pronto ritiro, chiusura e PDF (setup admin e categorie verificati)",

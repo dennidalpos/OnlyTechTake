@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -230,6 +231,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .imePadding()
             .verticalScroll(rememberScrollState())
             .padding(DashboardSpacing.screenPadding),
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
@@ -247,7 +249,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         )
 
         if (currentStep == 1) {
-            StandardCard {
+            StandardCard(highlight = true) {
             Column(
                 modifier = Modifier.padding(DashboardSpacing.cardPadding),
                 verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
@@ -377,6 +379,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                     completedStep = completedStepAfterCategorySelection(completedStep)
                 },
                 onOpenConfig = { viewModel.navigateTo(WorkspaceDestination.CONFIG) },
+                highlight = true,
             )
             WizardNavigationBar(
                 onBack = { editStep(1) },
@@ -395,6 +398,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                 onProblemDetailsChange = { problemDetails = it },
                 nextAction = nextAction,
                 doneAction = doneAction,
+                highlight = true,
             )
             WizardNavigationBar(
                 onBack = { editStep(2) },

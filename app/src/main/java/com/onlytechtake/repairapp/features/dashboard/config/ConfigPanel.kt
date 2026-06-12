@@ -7,9 +7,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -156,7 +158,10 @@ fun ConfigPanel(
     }
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(DashboardSpacing.screenPadding),
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding(),
+        contentPadding = PaddingValues(DashboardSpacing.screenPadding),
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
@@ -208,6 +213,7 @@ fun ConfigPanel(
                     SectionTitle(stringResource(R.string.config_hub_categories_title))
                     StandardCard(
                         containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                        highlight = true,
                     ) {
                         Column(
                             modifier = Modifier.padding(DashboardSpacing.cardPadding),
@@ -388,6 +394,7 @@ fun ConfigPanel(
                 item {
                     StandardCard(
                         containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                        highlight = true,
                     ) {
                         Column(modifier = Modifier.padding(DashboardSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
                             SectionTitle(stringResource(R.string.config_hub_templates_title))
@@ -457,7 +464,7 @@ fun ConfigPanel(
 
             ConfigSection.WHATSAPP -> {
                 item {
-                    StandardCard {
+                    StandardCard(highlight = true) {
                         Column(modifier = Modifier.padding(DashboardSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
                             SectionTitle(stringResource(R.string.config_hub_whatsapp_title))
                             Text(stringResource(R.string.config_whatsapp_mode, messageMode.name))
@@ -478,7 +485,7 @@ fun ConfigPanel(
 
             ConfigSection.EXPORT -> {
                 item {
-                    StandardCard {
+                    StandardCard(highlight = true) {
                         Column(modifier = Modifier.padding(DashboardSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
                             SectionTitle("Backup e Ripristino")
                             if (!isAdmin) {

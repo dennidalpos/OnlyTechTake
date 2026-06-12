@@ -1,11 +1,12 @@
 package com.onlytechtake.repairapp.features.dashboard
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.List
@@ -192,8 +193,8 @@ fun DashboardScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .consumeWindowInsets(paddingValues)
                 .imePadding()
-                .verticalScroll(rememberScrollState())
         ) {
             uiState.message?.let { message ->
                 Text(
@@ -212,7 +213,7 @@ fun DashboardScreen(
                 isAdmin = isAdmin,
                 onAppDataRestored = onAppDataRestored,
                 onLogout = onLogout,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.weight(1f)
             )
         }
     }

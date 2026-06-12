@@ -168,7 +168,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
-            StandardCard {
+            StandardCard(highlight = true) {
                 Column(
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),

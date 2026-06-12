@@ -92,7 +92,7 @@ fun AdminPanel(
     ) {
         item {
             SectionTitle(stringResource(R.string.dashboard_admin))
-            StandardCard {
+            StandardCard(highlight = true) {
                 Column(
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),

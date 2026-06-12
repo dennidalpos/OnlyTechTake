@@ -24,8 +24,9 @@ fun QuickIntakeProblemSection(
     onProblemDetailsChange: (String) -> Unit,
     nextAction: KeyboardActions,
     doneAction: KeyboardActions,
+    highlight: Boolean = false,
 ) {
-    StandardCard {
+    StandardCard(highlight = highlight) {
         Column(
             modifier = Modifier.padding(DashboardSpacing.cardPadding),
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),

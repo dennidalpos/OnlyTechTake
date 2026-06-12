@@ -78,14 +78,21 @@ fun StandardCard(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
     containerColor: Color = MaterialTheme.colorScheme.surface,
-    border: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f)),
+    highlight: Boolean = false,
+    border: BorderStroke? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
+    val effectiveBorder = border ?: if (highlight) {
+        BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
+    } else {
+        BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f))
+    }
+
     val cardModifier = modifier.fillMaxWidth()
     if (onClick != null) {
         Card(
             modifier = cardModifier.clickable(onClick = onClick),
-            border = border,
+            border = effectiveBorder,
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(containerColor = containerColor),
             content = content
@@ -93,7 +100,7 @@ fun StandardCard(
     } else {
         Card(
             modifier = cardModifier,
-            border = border,
+            border = effectiveBorder,
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(containerColor = containerColor),
             content = content
