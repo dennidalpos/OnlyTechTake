@@ -110,7 +110,7 @@ class RepositoryPathsInstrumentedTest {
         val actor = authRepository.currentUser.value
         assertNotNull(actor)
 
-        CatalogRepository(database.orderCategoryDao()).saveCategory(
+        CatalogRepository(context, database.orderCategoryDao()).saveCategory(
             actor = actor!!,
             input = CategoryInput(
                 id = "saved-after-login",
@@ -679,7 +679,7 @@ class RepositoryPathsInstrumentedTest {
     fun deleteCategoryRemovesBranchAndFailsIfUsed() = runBlocking {
         val actor = seedAdmin()
         val dao = database.orderCategoryDao()
-        val repository = CatalogRepository(dao)
+        val repository = CatalogRepository(context, dao)
 
         dao.upsert(OrderCategoryEntity("root", null, 0, "Root", null, true))
         dao.upsert(OrderCategoryEntity("child", "root", 1, "Child", null, true))
