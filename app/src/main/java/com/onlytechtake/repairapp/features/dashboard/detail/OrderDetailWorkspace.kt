@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.activity.compose.BackHandler
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -180,6 +183,18 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
+
+                    if (selected.isPaid) {
+                        Text(
+                            text = "PAGATO",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = Color(0xFF237A3B),
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .background(Color(0xFFE8F5E9), RoundedCornerShape(4.dp))
+                                .padding(horizontal = 8.dp, vertical = 2.dp)
+                        )
+                    }
 
                     Text(
                         text = "${selected.order.orderNumber} - ${selected.order.title}",
@@ -754,6 +769,19 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                                 resultSummary = ""
                                 resultAmount = ""
                                 diagnosisOutcome = selected.order.diagnosisOutcome
+                                showActionsModal = false
+                            }
+                        )
+                    }
+
+                    if (selected.order.status == OrderStatus.READY_FOR_PICKUP || selected.order.status == OrderStatus.CLOSED) {
+                        val isPaid = selected.isPaid
+                        TouchButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = if (isPaid) stringResource(R.string.order_not_paid_button) else stringResource(R.string.order_paid_button),
+                            tone = if (isPaid) ButtonTone.WARNING else ButtonTone.SUCCESS,
+                            onClick = {
+                                viewModel.togglePaymentStatus(selected.order.id, !isPaid)
                                 showActionsModal = false
                             }
                         )

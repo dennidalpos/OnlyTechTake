@@ -65,6 +65,8 @@ enum class TimelineEventType {
     ORDER_DELETED,
     PDF_STATUS_SHARED,
     CUSTOMER_ACTION_STATUS_CHANGED,
+    PAYMENT_RECEIVED,
+    PAYMENT_REMOVED,
 }
 
 enum class CustomerFeedbackType {

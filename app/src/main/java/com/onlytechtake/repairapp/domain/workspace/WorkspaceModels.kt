@@ -13,6 +13,7 @@ import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
+import com.onlytechtake.repairapp.data.local.entities.TimelineEventType
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
 
 data class OperatorInput(
@@ -123,7 +124,10 @@ data class OrderDetail(
     val messages: List<MessageLogEntity>,
     val media: List<OrderMediaEntity>,
     val signatures: List<SignatureEntity>,
-)
+) {
+    val isPaid: Boolean
+        get() = timeline.any { it.type == TimelineEventType.PAYMENT_RECEIVED }
+}
 
 data class PreparedMessage(
     val orderId: String,

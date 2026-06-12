@@ -334,6 +334,10 @@ class WorkspaceViewModel(
         orderRepository.reassign(actor, orderId, userId)
     }
 
+    fun togglePaymentStatus(orderId: String, isPaid: Boolean) = withUser { actor ->
+        orderRepository.togglePaymentStatus(actor, orderId, isPaid)
+    }
+
     fun addNote(orderId: String, note: String) = withUser { actor ->
         orderRepository.addInternalNote(actor, orderId, note)
     }

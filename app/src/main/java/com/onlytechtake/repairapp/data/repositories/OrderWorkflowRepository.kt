@@ -449,6 +449,19 @@ class OrderWorkflowRepository(
             }
         }
 
+    suspend fun togglePaymentStatus(actor: AuthenticatedUser, orderId: String, isPaid: Boolean): Result<Unit> =
+        runCatching {
+            inTransaction {
+                requireWritableOrder(actor, orderId)
+                val now = clockMillis()
+                if (isPaid) {
+                    eventWriter.paymentReceived(orderId, actor.id, now)
+                } else {
+                    eventWriter.paymentRemoved(orderId, actor.id, now)
+                }
+            }
+        }
+
     private suspend fun requireWritableOrder(actor: AuthenticatedUser, orderId: String): RepairOrderEntity {
         val order = requireNotNull(repairOrderDao.findById(orderId)) { "Commessa non trovata" }
         require(order.deletedAt == null) { "Commessa archiviata" }

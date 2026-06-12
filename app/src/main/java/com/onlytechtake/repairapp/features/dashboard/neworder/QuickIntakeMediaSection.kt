@@ -91,15 +91,27 @@ fun QuickIntakeMediaSection(
                 }
             }
             if (showCamera) {
-                CameraCapturePreview(
-                    orderId = intakeSessionId,
-                    orderNumber = "presa_in_carico",
-                    createPhotoFile = createPhotoFile,
-                    onPhotoCaptured = {
-                        onPhotoCaptured(it)
-                        onShowCameraChange(false)
+                androidx.compose.material3.AlertDialog(
+                    onDismissRequest = { onShowCameraChange(false) },
+                    title = { Text("Scatta foto") },
+                    text = {
+                        CameraCapturePreview(
+                            orderId = intakeSessionId,
+                            orderNumber = "presa_in_carico",
+                            createPhotoFile = createPhotoFile,
+                            onPhotoCaptured = {
+                                onPhotoCaptured(it)
+                                onShowCameraChange(false)
+                            },
+                            onError = onCameraError,
+                        )
                     },
-                    onError = onCameraError,
+                    confirmButton = {},
+                    dismissButton = {
+                        androidx.compose.material3.TextButton(onClick = { onShowCameraChange(false) }) {
+                            Text("Chiudi")
+                        }
+                    },
                 )
             }
         }

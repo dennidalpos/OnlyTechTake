@@ -236,6 +236,32 @@ internal class OrderWorkflowEventWriter(
         )
     }
 
+    suspend fun paymentReceived(orderId: String, actorUserId: String, now: Long) {
+        writeTimeline(
+            timelineEvent(
+                orderId = orderId,
+                type = TimelineEventType.PAYMENT_RECEIVED,
+                title = context.getString(R.string.payment_received_title),
+                actorUserId = actorUserId,
+                createdAt = now,
+                visibleToCustomer = true,
+            ),
+        )
+    }
+
+    suspend fun paymentRemoved(orderId: String, actorUserId: String, now: Long) {
+        writeTimeline(
+            timelineEvent(
+                orderId = orderId,
+                type = TimelineEventType.PAYMENT_REMOVED,
+                title = context.getString(R.string.payment_removed_title),
+                actorUserId = actorUserId,
+                createdAt = now,
+                visibleToCustomer = true,
+            ),
+        )
+    }
+
     suspend fun dataExported(actorUserId: String, now: Long) {
         audit(actorUserId, AuditAction.DATA_EXPORTED, null, null, now)
     }

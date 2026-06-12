@@ -128,6 +128,9 @@ fun DashboardScreen(
     var showUnsavedChangesDialog by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
 
     fun performNavigation(destination: WorkspaceDestination) {
+        if (destination == WorkspaceDestination.ORDERS) {
+            workspaceViewModel.setFilter(com.onlytechtake.repairapp.domain.workspace.OrderFilter())
+        }
         navController.navigate(destination.name) {
             popUpTo(WorkspaceDestination.HOME.name) { saveState = true }
             launchSingleTop = true

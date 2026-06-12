@@ -127,27 +127,51 @@ fun OrderPhotoSection(
         }
 
         if (showCamera) {
-            CameraCapturePreview(
-                orderId = detail.order.id,
-                orderNumber = detail.order.orderNumber,
-                createPhotoFile = viewModel::createPhotoFile,
-                onPhotoCaptured = { file ->
-                    viewModel.registerCapturedPhoto(detail.order.id, file)
-                    showCamera = false
+            AlertDialog(
+                onDismissRequest = { showCamera = false },
+                title = { Text("Acquisisci foto") },
+                text = {
+                    CameraCapturePreview(
+                        orderId = detail.order.id,
+                        orderNumber = detail.order.orderNumber,
+                        createPhotoFile = viewModel::createPhotoFile,
+                        onPhotoCaptured = { file ->
+                            viewModel.registerCapturedPhoto(detail.order.id, file)
+                            showCamera = false
+                        },
+                        onError = viewModel::reportCameraError,
+                    )
                 },
-                onError = viewModel::reportCameraError,
+                confirmButton = {},
+                dismissButton = {
+                    TextButton(onClick = { showCamera = false }) {
+                        Text("Annulla")
+                    }
+                },
             )
         }
         if (showFinalCamera) {
-            CameraCapturePreview(
-                orderId = detail.order.id,
-                orderNumber = detail.order.orderNumber,
-                createPhotoFile = viewModel::createPhotoFile,
-                onPhotoCaptured = { file ->
-                    viewModel.registerCapturedFinalPhoto(detail.order.id, file)
-                    showFinalCamera = false
+            AlertDialog(
+                onDismissRequest = { showFinalCamera = false },
+                title = { Text("Acquisisci foto finale") },
+                text = {
+                    CameraCapturePreview(
+                        orderId = detail.order.id,
+                        orderNumber = detail.order.orderNumber,
+                        createPhotoFile = viewModel::createPhotoFile,
+                        onPhotoCaptured = { file ->
+                            viewModel.registerCapturedFinalPhoto(detail.order.id, file)
+                            showFinalCamera = false
+                        },
+                        onError = viewModel::reportCameraError,
+                    )
                 },
-                onError = viewModel::reportCameraError,
+                confirmButton = {},
+                dismissButton = {
+                    TextButton(onClick = { showFinalCamera = false }) {
+                        Text("Annulla")
+                    }
+                },
             )
         }
     }
