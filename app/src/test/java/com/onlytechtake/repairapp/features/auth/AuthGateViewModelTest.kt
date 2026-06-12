@@ -56,6 +56,9 @@ class AuthGateViewModelTest {
         override suspend fun login(username: String, password: CharArray): LoginResult {
             error("login is not expected in logoutResetsLoadingState")
         }
+        override suspend fun loginDemo(): LoginResult {
+            error("loginDemo is not expected in logoutResetsLoadingState")
+        }
         override fun touchSession() {}
         override suspend fun logout() {}
     }

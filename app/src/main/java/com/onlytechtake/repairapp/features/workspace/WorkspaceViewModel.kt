@@ -73,7 +73,7 @@ class WorkspaceViewModel(
     private val mutableQuickIntakeDraft = MutableStateFlow(QuickIntakeDraft())
     val quickIntakeDraft: StateFlow<QuickIntakeDraft> = mutableQuickIntakeDraft.asStateFlow()
 
-    private val _isFormDirty = MutableStateFlow(false)
+    private val _isFormDirty = MutableStateFlow(value = false)
     val isFormDirty = _isFormDirty.asStateFlow()
 
     fun setFormDirty(dirty: Boolean) {
@@ -86,7 +86,7 @@ class WorkspaceViewModel(
 
     fun resetQuickIntakeDraft() {
         mutableQuickIntakeDraft.value = QuickIntakeDraft()
-        setFormDirty(false)
+        setFormDirty(dirty = false)
         setCustomerSearchQuery("")
     }
 
@@ -120,7 +120,7 @@ class WorkspaceViewModel(
     private val _exportDestination = MutableStateFlow(ExportDestination.LOCAL)
     val exportDestination = _exportDestination.asStateFlow()
 
-    private val _isCloudAvailable = MutableStateFlow(false)
+    private val _isCloudAvailable = MutableStateFlow(value = false)
     val isCloudAvailable = _isCloudAvailable.asStateFlow()
 
     val orderListItems = combine(currentUser, uiState) { user, state -> user to state.orderFilter }
@@ -208,10 +208,6 @@ class WorkspaceViewModel(
                 _exportDestination.value = ExportDestination.CLOUD
             }
         }
-    }
-
-    fun clearMessage() {
-        mutableUiState.update { it.copy(message = null) }
     }
 
     fun reportCameraError(message: String) {
@@ -330,20 +326,12 @@ class WorkspaceViewModel(
         )
     }
 
-    fun reassign(orderId: String, userId: String?) = withUser { actor ->
-        orderRepository.reassign(actor, orderId, userId)
-    }
-
     fun togglePaymentStatus(orderId: String, isPaid: Boolean) = withUser { actor ->
         orderRepository.togglePaymentStatus(actor, orderId, isPaid)
     }
 
     fun addNote(orderId: String, note: String) = withUser { actor ->
         orderRepository.addInternalNote(actor, orderId, note)
-    }
-
-    fun deleteOrder(orderId: String, reason: String) = withUser { actor ->
-        orderRepository.softDelete(actor, orderId, reason)
     }
 
     fun createPhotoFile(orderId: String, orderNumber: String): Result<File> =
@@ -397,20 +385,6 @@ class WorkspaceViewModel(
     fun replaceImage(mediaId: String, bitmap: Bitmap) =
         mediaActions.replaceImage(mediaId, bitmap)
 
-    fun saveSignature(
-        orderId: String,
-        signerName: String,
-        privacyAccepted: Boolean,
-        termsAccepted: Boolean,
-        bitmap: Bitmap,
-    ) = mediaActions.saveSignature(
-        orderId = orderId,
-        signerName = signerName,
-        privacyAccepted = privacyAccepted,
-        termsAccepted = termsAccepted,
-        bitmap = bitmap,
-    )
-
     fun recordFeedback(
         orderId: String,
         feedback: CustomerFeedbackType,
@@ -425,9 +399,6 @@ class WorkspaceViewModel(
     ) { actor ->
         orderRepository.recordFeedback(actor, orderId, FeedbackInput(feedback, note, closureReason))
     }
-
-    fun prepareStatusMessage(orderId: String, status: OrderStatus) =
-        messageActions.prepareStatusMessage(orderId, status)
 
     fun saveTemplate(code: String, title: String, body: String, active: Boolean) = withUser { actor ->
         templateRepository.saveTemplate(actor, code, title, body, active)
@@ -542,7 +513,7 @@ class WorkspaceViewModel(
                             orderRepository.recordMediaRemoved(actor, orderId, document.fileName)
                         }
                     },
-                    onFailure = ::showError
+                    onFailure = ::showError,
                 )
             }
         }

@@ -3,8 +3,6 @@ package com.onlytechtake.repairapp.core.di
 import android.content.Context
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.room.withTransaction
-import com.onlytechtake.repairapp.core.error.DefaultErrorHandler
-import com.onlytechtake.repairapp.core.error.ErrorHandler
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
@@ -24,7 +22,6 @@ class AppContainer(context: Context) {
     val backupReminderPreferences = BackupReminderPreferences(context.applicationContext)
     private val passwordHasher = PasswordHasher()
     val shareDocumentIntentFactory = ShareDocumentIntentFactory(context)
-    val errorHandler: ErrorHandler = DefaultErrorHandler()
 
     val repairAppRepository: RepairAppRepository = DefaultRepairAppRepository(
         dashboardDao = database.dashboardDao(),

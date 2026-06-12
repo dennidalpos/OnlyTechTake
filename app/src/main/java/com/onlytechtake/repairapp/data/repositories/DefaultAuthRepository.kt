@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.first
+import kotlin.time.Duration.Companion.milliseconds
 
 class DefaultAuthRepository(
     private val userDao: UserDao,
@@ -40,7 +41,7 @@ class DefaultAuthRepository(
             authPreferences.lastUserId,
             inactivityTicker(),
         ) { adminCount, session, lastUserId, now ->
-            val activeUser = if (session.user != null && sessionStore.isExpired(now, AuthPolicy.INACTIVITY_TIMEOUT_MILLIS)) {
+            val activeUser = if ((session.user != null) && (sessionStore.isExpired(now, AuthPolicy.INACTIVITY_TIMEOUT_MILLIS))) {
                 sessionStore.clear()
                 null
             } else {
@@ -128,7 +129,7 @@ class DefaultAuthRepository(
     }
 
     override suspend fun loginDemo(): LoginResult {
-        DemoMode.setEnabled(true)
+        DemoMode.setEnabled(enabled = true)
         val demoUser = AuthenticatedUser(
             id = "admin",
             displayName = "Demo Admin",
@@ -140,7 +141,7 @@ class DefaultAuthRepository(
     }
 
     override suspend fun logout() {
-        DemoMode.setEnabled(false)
+        DemoMode.setEnabled(enabled = false)
         sessionStore.clear()
     }
 
@@ -174,7 +175,7 @@ class DefaultAuthRepository(
         flow {
             while (true) {
                 emit(clockMillis())
-                delay(INACTIVITY_CHECK_INTERVAL_MILLIS)
+                delay(INACTIVITY_CHECK_INTERVAL_MILLIS.milliseconds)
             }
         }
 

@@ -44,6 +44,20 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    flavorDimensions += "version"
+    productFlavors {
+        create("demo") {
+            dimension = "version"
+            applicationIdSuffix = ".demo"
+            versionNameSuffix = "-demo"
+            buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "true")
+        }
+        create("production") {
+            dimension = "version"
+            buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "false")
+        }
+    }
+
     signingConfigs {
         if (keystorePropertiesFile.exists()) {
             create("release") {
@@ -57,10 +71,8 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "true")
         }
         release {
-            buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "false")
             isMinifyEnabled = false
             if (keystorePropertiesFile.exists()) {
                 signingConfig = signingConfigs.getByName("release")

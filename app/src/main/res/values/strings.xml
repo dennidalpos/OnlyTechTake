@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">OnlyTechTake</string>
+    <string name="demo_mode_banner">MODALITÀ DEMO ATTIVA</string>
     <string name="order_created_title">Commessa creata</string>
     <string name="status_updated_title">Stato aggiornato</string>
     <string name="closure_reason_prefix">Motivo chiusura: %s</string>

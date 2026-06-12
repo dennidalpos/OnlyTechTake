@@ -25,7 +25,7 @@ class CatalogRepository(
     }
 
     suspend fun getCategoryPath(id: String): String {
-        if (DemoMode.isEnabled && id == DemoMode.demoCategory.id) {
+        if (DemoMode.isEnabled && (id == DemoMode.demoCategory.id)) {
             return DemoMode.demoCategory.name
         }
         val all = categoryDao.findAll()
@@ -55,7 +55,7 @@ class CatalogRepository(
             }
             val normalizedName = input.name.trim().capitalizeFirst()
             val duplicate = categoryDao.findByParentAndName(input.parentId, normalizedName)
-            require(duplicate == null || (duplicate.id == input.id)) {
+            require((duplicate == null) || (duplicate.id == input.id)) {
                 context.getString(R.string.catalog_error_duplicate_name)
             }
             val categoryId = input.id ?: UUID.randomUUID().toString()
@@ -64,7 +64,7 @@ class CatalogRepository(
                     existing = categoryDao.findAll(),
                     input = input.copy(
                         name = normalizedName,
-                        description = input.description.trim().capitalizeFirst()
+                        description = input.description.trim().capitalizeFirst(),
                     ),
                     generatedId = categoryId,
                     errorCycle = context.getString(R.string.catalog_error_cycle_detected),

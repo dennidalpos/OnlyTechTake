@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import com.onlytechtake.repairapp.domain.backup.BackupReminderStatus
@@ -56,6 +57,9 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel, isAdmin: Boole
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
         ) {
+            if (DemoMode.canEnable()) {
+                DemoBanner()
+            }
             SectionTitle(stringResource(R.string.home_title))
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -74,8 +78,9 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel, isAdmin: Boole
                 BackupReminderCard(
                     settings = backupReminderSettings,
                     onRunBackup = { exportZipLauncher.launch("onlytechtake-backup.zip") },
-                    onOpenSettings = { viewModel.navigateTo(WorkspaceDestination.CONFIG_EXPORT) },
-                )
+                ) {
+                    viewModel.navigateTo(WorkspaceDestination.CONFIG_EXPORT)
+                }
             }
             queues.forEach { queue ->
                 StandardCard {
@@ -87,7 +92,7 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel, isAdmin: Boole
                             Text(queue.title, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.secondary)
                             androidx.compose.material3.Badge(
                                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                             ) {
                                 Text(queue.orders.size.toString(), modifier = Modifier.padding(4.dp))
                             }
@@ -115,6 +120,24 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel, isAdmin: Boole
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun DemoBanner() {
+    StandardCard(highlight = true) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = stringResource(R.string.demo_mode_banner),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.error
+            )
         }
     }
 }

@@ -2,7 +2,6 @@ package com.onlytechtake.repairapp.core.demo
 
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.data.local.entities.*
-import java.util.UUID
 
 object DemoMode {
     var isEnabled: Boolean = false
@@ -29,7 +28,7 @@ object DemoMode {
         address = "Via Roma 1, Milano",
         notes = "Cliente abituale",
         createdAt = 1735689600000L, // 2025-01-01
-        updatedAt = 1735689600000L
+        updatedAt = 1735689600000L,
     )
 
     val demoCategory = OrderCategoryEntity(

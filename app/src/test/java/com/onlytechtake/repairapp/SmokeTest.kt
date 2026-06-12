@@ -9,7 +9,12 @@ import org.junit.Test
 class SmokeTest {
     @Test
     fun appPackageIsStable() {
-        assertEquals("com.onlytechtake.repairapp", BuildConfig.APPLICATION_ID)
+        val expectedId = if (BuildConfig.APPLICATION_ID.endsWith(".demo")) {
+            "com.onlytechtake.repairapp.demo"
+        } else {
+            "com.onlytechtake.repairapp"
+        }
+        assertEquals(expectedId, BuildConfig.APPLICATION_ID)
     }
 
     @Test
