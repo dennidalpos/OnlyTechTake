@@ -1,7 +1,6 @@
 package com.onlytechtake.repairapp.features.dashboard
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
@@ -17,6 +16,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
@@ -172,9 +173,12 @@ fun DashboardScreen(
             )
         },
         bottomBar = {
-            NavigationBar {
+            NavigationBar(
+                modifier = Modifier.testTag(RepairAppTestTags.DashboardTabs)
+            ) {
                 items.forEach { item ->
                     NavigationBarItem(
+                        modifier = Modifier.testTag(RepairAppTestTags.dashboardTab(item.destination.name)),
                         icon = { Icon(item.icon, contentDescription = null) },
                         label = { Text(stringResource(item.labelRes)) },
                         selected = currentDestination == item.destination.name,

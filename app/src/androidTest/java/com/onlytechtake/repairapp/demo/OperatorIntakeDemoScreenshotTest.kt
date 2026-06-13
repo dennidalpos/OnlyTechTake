@@ -49,6 +49,7 @@ class OperatorIntakeDemoScreenshotTest {
             capture(outputDir, "02-home.png")
 
             clickDashboardTab("NEW_ORDER")
+            waitForTag("quick_actions_screen")
             clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
             typeTag(RepairAppTestTags.NewOrderFirstNameField, "Giulia", scroll = true)
             typeTag(RepairAppTestTags.NewOrderLastNameField, "Bianchi", scroll = true)
@@ -129,7 +130,9 @@ class OperatorIntakeDemoScreenshotTest {
         val tabTag = RepairAppTestTags.dashboardTab(destination)
         repeat(DASHBOARD_TAB_SWIPE_ATTEMPTS) {
             if (isTagDisplayed(tabTag)) {
-                clickTag(tabTag)
+                composeRule.onNodeWithTag(tabTag).performClick()
+                composeRule.waitForIdle()
+                Thread.sleep(2000)
                 return
             }
             composeRule.onNodeWithTag(RepairAppTestTags.DashboardTabs)
@@ -139,7 +142,7 @@ class OperatorIntakeDemoScreenshotTest {
         }
         composeRule.onNodeWithTag(tabTag).performClick()
         composeRule.waitForIdle()
-        pauseForDemo()
+        Thread.sleep(2000)
     }
 
     private fun loginOperatorDemo() {
