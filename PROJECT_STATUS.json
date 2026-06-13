@@ -1,16 +1,6 @@
 {
   "todos": [
-    "Valutare il file non tracciato docs/07_BACKEND_AGENT_TRACKER.md: decidere se integrarlo nella documentazione, rinominarlo o rimuoverlo",
-    "Eseguire smoke test manuale post-refactor fresh-app su installazione pulita: setup admin, navigazione principale, schema Room v1, formattazioni centralizzate e logout",
-    "Verificare workflow commessa end-to-end su device: nuova commessa con firma e foto, presa in carico, diagnosi riparabile, accettazione, rifiuto, non riparabile, pronto ritiro, chiusura, timeline, media e PDF",
-    "Verificare UI dettaglio commessa: scheda compatta, note dialog, timeline espandibile con numerazione 1..N, pulsanti primari coerenti e scrolling non eccessivo",
-    "Verificare fix tastiera: controllare che i campi di input non vengano coperti in CustomerPanel, QuickActions e ConfigPanel",
-    "Verificare manualmente WhatsApp reale su telefono destinatario: apertura wa.me, testo modificabile, importo preventivo renderizzato, template non riparabile e conferma manuale invio",
-    "Verificare manualmente rimozione categorie: cancellazione categoria vuota, errore cancellazione se usata in commessa, cancellazione ricorsiva sottocategorie",
-    "Verificare manualmente orientamento foto su device: scatto portrait, scatto landscape, anteprima in app, file salvato e assenza di rotazioni errate",
-    "Verificare manualmente export ZIP e ripristino ZIP su una successiva installazione pulita",
-    "Estrarre o riusare il seed demo AndroidTest in modo condiviso e aggiungere uno scenario strumentale minimale che carica dati demo senza generare screenshot",
-    "Verificare record_demo_device.ps1 su device USB reale: seed dati demo, avvio app, registrazione manuale guidata, pull MP4 in demo/recordings e file video riproducibile",
+    "Verificare record_demo_device.ps1 su device USB reale: avvio app, registrazione manuale guidata, pull MP4 in demo/recordings e file video riproducibile (Script aggiornato con supporto -SeedData)",
     "Eseguire registrazione demo 01 (Setup Admin e gestione Operatori) seguendo DEMO_GUIDE.md",
     "Eseguire registrazione demo 02 (Configurazione Categorie e Template WhatsApp) seguendo DEMO_GUIDE.md",
     "Eseguire registrazione demo 03 (Flusso Nuova Commessa) seguendo DEMO_GUIDE.md",

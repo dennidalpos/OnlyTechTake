@@ -38,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalContext
@@ -96,6 +97,7 @@ fun AuthGateRoute(
             onPasswordChange = viewModel::updatePassword,
             onConfirmPasswordChange = viewModel::updateConfirmPassword,
             onSubmit = viewModel::createFirstAdmin,
+            onDemoLogin = viewModel::loginDemo,
             onBack = { (context as? Activity)?.finish() }
         )
         else -> LoginScreen(
@@ -135,6 +137,7 @@ private fun FirstSetupScreen(
     onPasswordChange: (String) -> Unit,
     onConfirmPasswordChange: (String) -> Unit,
     onSubmit: () -> Unit,
+    onDemoLogin: () -> Unit,
     onBack: () -> Unit,
 ) {
     Scaffold(
@@ -160,6 +163,7 @@ private fun FirstSetupScreen(
             onPasswordChange = onPasswordChange,
             onConfirmPasswordChange = onConfirmPasswordChange,
             onSubmit = onSubmit,
+            onDemoLogin = onDemoLogin,
             showDisplayName = true,
             showConfirmPassword = true,
         )
@@ -309,6 +313,7 @@ private fun AuthForm(
                     PasswordVisibilityButton(
                         visible = passwordVisible,
                         onVisibleChange = { passwordVisible = it },
+                        modifier = Modifier.focusProperties { canFocus = false }
                     )
                 },
             )
@@ -330,6 +335,7 @@ private fun AuthForm(
                         PasswordVisibilityButton(
                             visible = confirmPasswordVisible,
                             onVisibleChange = { confirmPasswordVisible = it },
+                            modifier = Modifier.focusProperties { canFocus = false }
                         )
                     },
                 )
@@ -367,7 +373,7 @@ private fun AuthForm(
                 }
             }
 
-            if (DemoMode.canEnable() && !showDisplayName) {
+            if (DemoMode.canEnable()) {
                 androidx.compose.material3.TextButton(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = onDemoLogin,

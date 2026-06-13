@@ -20,6 +20,7 @@ import com.onlytechtake.repairapp.data.repositories.DataResetRepository
 import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
 import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
+import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.data.repositories.SignatureRepository
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
@@ -202,7 +203,7 @@ class WorkspaceViewModel(
 
     init {
         viewModelScope.launch {
-            templateRepository.ensureDefaults(currentUser.value?.id)
+            templateRepository.ensureDefaults(if (DemoMode.isEnabled) null else currentUser.value?.id)
             _isCloudAvailable.value = backupRepository.isCloudProviderAvailable()
             if (_isCloudAvailable.value) {
                 _exportDestination.value = ExportDestination.CLOUD

@@ -9,12 +9,18 @@ import org.junit.Test
 class SmokeTest {
     @Test
     fun appPackageIsStable() {
-        val expectedId = if (BuildConfig.APPLICATION_ID.endsWith(".demo")) {
-            "com.onlytechtake.repairapp.demo"
-        } else {
-            "com.onlytechtake.repairapp"
+        val appId = BuildConfig.APPLICATION_ID
+        val isDemo = appId.contains(".demo")
+        val isDebug = appId.endsWith(".debug")
+
+        val base = "com.onlytechtake.repairapp"
+        val expected = when {
+            isDemo && isDebug -> "$base.demo.debug"
+            isDemo -> "$base.demo"
+            isDebug -> "$base.debug"
+            else -> base
         }
-        assertEquals(expectedId, BuildConfig.APPLICATION_ID)
+        assertEquals("APPLICATION_ID non corrisponde alla configurazione attesa", expected, appId)
     }
 
     @Test

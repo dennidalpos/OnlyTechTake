@@ -632,6 +632,7 @@ class RepositoryPathsInstrumentedTest {
         val mediaRepository = orderMediaRepository()
         val signatureRepository = signatureRepository()
         val useCase = CreateIntakeOrderUseCase(
+            context = context,
             customerRepository = CustomerRepository(database.customerDao()) { NOW },
             orderRepository = orderWorkflowRepository(),
             orderMediaRepository = mediaRepository,

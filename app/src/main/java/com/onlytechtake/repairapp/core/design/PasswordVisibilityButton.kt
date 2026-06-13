@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.core.design
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
@@ -15,8 +16,12 @@ import androidx.compose.ui.unit.dp
 fun PasswordVisibilityButton(
     visible: Boolean,
     onVisibleChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    IconButton(onClick = { onVisibleChange(!visible) }) {
+    IconButton(
+        onClick = { onVisibleChange(!visible) },
+        modifier = modifier
+    ) {
         Icon(
             imageVector = if (visible) PasswordVisibleIcon else PasswordHiddenIcon,
             contentDescription = if (visible) "Nascondi password" else "Mostra password",

@@ -113,8 +113,8 @@ powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Bu
 ## Output
 
 - `app\build\outputs\apk\debug\app-debug.apk`
-- `app\build\outputs\apk\release\app-release.apk` quando il signing locale è configurato.
-- `app\build\outputs\bundle\release\app-release.aab` quando il signing locale è configurato.
+- `app\build\outputs\apk\release\app-release.apk`
+- `app\build\outputs\bundle\release\app-release.aab`
 
 ## Signing release
 

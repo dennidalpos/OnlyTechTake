@@ -1,5 +1,8 @@
 package com.onlytechtake.repairapp.data.repositories
 
+import android.content.Context
+import com.onlytechtake.repairapp.BuildConfig
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.UserDao
@@ -13,6 +16,7 @@ import java.util.UUID
 import kotlinx.coroutines.flow.Flow
 
 class AdminUserRepository(
+    private val context: Context,
     private val userDao: UserDao,
     private val auditLogDao: AuditLogDao,
     private val passwordHasher: PasswordHasher,
@@ -29,6 +33,13 @@ class AdminUserRepository(
             require(input.username.isNotBlank()) { "Username obbligatorio" }
             require(input.password.length >= MIN_PASSWORD_LENGTH) { "Password troppo corta" }
             require(userDao.findByUsername(input.username.trim()) == null) { "Username gia' esistente" }
+
+            if (BuildConfig.IS_DEMO_VERSION) {
+                val operatorCount = userDao.countActiveByRole(UserRole.OPERATOR)
+                if (operatorCount >= MAX_DEMO_OPERATORS) {
+                    throw IllegalStateException(context.getString(R.string.demo_error_operator_limit, MAX_DEMO_OPERATORS))
+                }
+            }
 
             val now = clockMillis()
             val passwordHash = passwordHasher.hash(input.password.toCharArray())
@@ -115,5 +126,6 @@ class AdminUserRepository(
 
     private companion object {
         const val MIN_PASSWORD_LENGTH = 8
+        const val MAX_DEMO_OPERATORS = 2
     }
 }

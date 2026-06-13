@@ -36,6 +36,7 @@ class AppContainer(context: Context) {
     )
 
     val adminUserRepository = AdminUserRepository(
+        context = context.applicationContext,
         userDao = database.userDao(),
         auditLogDao = database.auditLogDao(),
         passwordHasher = passwordHasher,
@@ -99,6 +100,7 @@ class AppContainer(context: Context) {
     )
 
     val createIntakeOrderUseCase = CreateIntakeOrderUseCase(
+        context = context.applicationContext,
         customerRepository = customerRepository,
         orderRepository = orderWorkflowRepository,
         orderMediaRepository = orderMediaRepository,

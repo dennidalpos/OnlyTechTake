@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import android.provider.OpenableColumns
+import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
@@ -55,6 +56,9 @@ class BackupRepository(
     suspend fun exportDatabase(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
         runCatching {
             require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            if (BuildConfig.IS_DEMO_VERSION) {
+                throw IllegalStateException("Funzione disponibile nella versione Full")
+            }
             val dbFile = databaseFile()
             require(dbFile.exists()) { "Database non ancora creato" }
             context.contentResolver.openOutputStream(uri)?.use { output ->
@@ -66,6 +70,9 @@ class BackupRepository(
     suspend fun exportCompleteBackup(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
         runCatching {
             require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            if (BuildConfig.IS_DEMO_VERSION) {
+                throw IllegalStateException("Funzione disponibile nella versione Full")
+            }
             context.contentResolver.openOutputStream(uri)?.use { output ->
                 ZipOutputStream(output).use { zip ->
                     zip.putTextEntry("metadata/backup.json", buildBackupMetadataJson())
@@ -81,6 +88,9 @@ class BackupRepository(
     suspend fun restoreCompleteBackup(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
         runCatching {
             require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            if (BuildConfig.IS_DEMO_VERSION) {
+                throw IllegalStateException("Funzione disponibile nella versione Full")
+            }
             withContext(Dispatchers.IO) {
                 val restoreRoot = File(context.cacheDir, RESTORE_WORK_DIR).also {
                     it.deleteRecursively()
@@ -107,6 +117,9 @@ class BackupRepository(
     suspend fun exportOrdersXlsx(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
         runCatching {
             require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            if (BuildConfig.IS_DEMO_VERSION) {
+                throw IllegalStateException("Funzione disponibile nella versione Full")
+            }
             val exportDao = requireNotNull(orderExportDao) { "Export commesse non configurato" }
             withContext(Dispatchers.IO) {
                 val rows = exportDao.exportAllOrders()
@@ -127,6 +140,9 @@ class BackupRepository(
             val document = PdfDocument()
             try {
                 val writer = PdfTextWriter(document)
+                if (BuildConfig.IS_DEMO_VERSION) {
+                    writer.setWatermark("VERSIONE DEMO")
+                }
                 writer.title("Riepilogo commessa ${detail.order.orderNumber}")
                 writer.line("Numero: ${detail.order.orderNumber}")
                 writer.line("Titolo: ${detail.order.title}")

@@ -83,6 +83,8 @@ class OrderWorkflowRepository(
         }
     }
 
+    suspend fun countAllOrders(): Int = repairOrderDao.countAll()
+
     fun observeOrderList(actor: AuthenticatedUser, filter: OrderFilter): Flow<List<OrderListItem>> =
         combine(
             observeOrders(actor, filter),

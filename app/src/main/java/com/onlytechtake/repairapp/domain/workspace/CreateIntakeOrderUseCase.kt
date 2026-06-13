@@ -1,6 +1,9 @@
 package com.onlytechtake.repairapp.domain.workspace
 
+import android.content.Context
 import android.graphics.Bitmap
+import com.onlytechtake.repairapp.BuildConfig
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
@@ -13,6 +16,7 @@ import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.IntakeOrderCreationResult.Complete
 
 class CreateIntakeOrderUseCase(
+    private val context: Context,
     private val customerRepository: CustomerRepository,
     private val orderRepository: OrderWorkflowRepository,
     private val orderMediaRepository: OrderMediaRepository,
@@ -35,6 +39,13 @@ class CreateIntakeOrderUseCase(
             )
             val errors = normalizedInput.validationErrors()
             require(errors.isEmpty()) { errors.joinToString("\n") }
+
+            if (BuildConfig.IS_DEMO_VERSION && BuildConfig.MAX_ORDERS > 0) {
+                val totalOrders = orderRepository.countAllOrders()
+                if (totalOrders >= BuildConfig.MAX_ORDERS) {
+                    throw IllegalStateException(context.getString(R.string.demo_error_order_limit, BuildConfig.MAX_ORDERS))
+                }
+            }
 
             var savedSignature: SignatureEntity? = null
             var attachedMedia: List<OrderMediaEntity> = emptyList()

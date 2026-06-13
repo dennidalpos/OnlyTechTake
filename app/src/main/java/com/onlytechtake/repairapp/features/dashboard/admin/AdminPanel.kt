@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -108,9 +109,11 @@ fun AdminPanel(
                         keyboardType = KeyboardType.Password,
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
-                            PasswordVisibilityButton(visible = passwordVisible) {
-                                passwordVisible = it
-                            }
+                            PasswordVisibilityButton(
+                                visible = passwordVisible,
+                                onVisibleChange = { passwordVisible = it },
+                                modifier = Modifier.focusProperties { canFocus = false }
+                            )
                         },
                     )
                     TouchButton(
@@ -158,9 +161,11 @@ fun AdminPanel(
                             keyboardType = KeyboardType.Password,
                             visualTransformation = if (resetPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                             trailingIcon = {
-                                PasswordVisibilityButton(visible = resetPasswordVisible) {
-                                    resetPasswordVisible = it
-                                }
+                                PasswordVisibilityButton(
+                                    visible = resetPasswordVisible,
+                                    onVisibleChange = { resetPasswordVisible = it },
+                                    modifier = Modifier.focusProperties { canFocus = false }
+                                )
                             },
                         )
                         ActionRow {

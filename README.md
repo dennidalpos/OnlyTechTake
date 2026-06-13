@@ -21,9 +21,12 @@ App Android locale per tracciare commesse clienti dal banco alla diagnosi, alla 
 - [Guida funzionale](docs/01_GUIDA_FUNZIONALE.md)
 - [Specifica tecnica](docs/02_SPECIFICA_TECNICA.md)
 - [Modello dati](docs/03_MODELLO_DATI_GENERICO.md)
+- [Schema flusso commesse (Draw.io)](docs/07_SCHEMA_FLUSSO_COMMESSE.drawio)
 - [Privacy, WhatsApp e feedback](docs/04_PRIVACY_WHATSAPP_FEEDBACK.md)
 - [Export e backup locale](docs/05_EXPORT_BACKUP_LOCALE.md)
 - [Build, installazione e verifica](docs/06_BUILD_INSTALLER_ANDROID.md)
+- [Licenza Demo/Full e manuale d'uso](docs/07_LICENZA_DEMO_FULL_E_MANUALE_USO.md)
+- [Handoff Agent Backend](docs/07_BACKEND_AGENT_TRACKER.md)
 - [Script PowerShell](scripts/README.md)
 
 ## Prerequisiti
@@ -96,9 +99,9 @@ Nota: file non tracciati sotto `docs\` non fanno parte della documentazione uffi
 
 ## Output Build
 
-- APK debug: `app\build\outputs\apk\debug\app-debug.apk`
-- APK release firmato: `app\build\outputs\apk\release\app-release.apk`
-- AAB release: `app\build\outputs\bundle\release\app-release.aab`
+- APK Debug: `app\build\outputs\apk\debug\app-debug.apk`
+- APK Release: `app\build\outputs\apk\release\app-release.apk`
+- AAB Release: `app\build\outputs\bundle\release\app-release.aab`
 
 ## Release Signing
 
@@ -126,7 +129,7 @@ Regole:
 - Dashboard con tab Home, Nuova, Clienti, Commesse/Commessa, Config e Admin.
 - Home con metriche e quattro code operative che seguono il flusso banco, diagnosi, preventivo/riparazione e consegna.
 - Creazione commessa a step con cliente esistente o nuovo, categoria ad albero obbligatoria, problema, almeno un media/allegato, privacy e firma.
-- Workspace commessa con esito diagnosi esplicito `REPAIRABLE`/`NOT_REPAIRABLE`, preventivo obbligatorio solo nel ramo riparabile, azioni post-diagnosi guidate, note, media, firma, timeline, WhatsApp manuale locale e condivisione PDF.
+- Workspace commessa con esito diagnosi esplicito `REPAIRABLE`/`NOT_REPAIRABLE`, preventivo obbligatorio solo nel ramo riparabile, azioni post-diagnosi guidate, note, media, firma, timeline, WhatsApp manuale locale, stato pagamento e condivisione PDF.
 - Le anteprime immagini locali rispettano l'orientamento EXIF; CameraX usa la rotazione reale del display prima del bind e dello scatto.
 - Admin: utenti, reset password, pulizia commesse scartate/archiviate e reset totale dati con conferma `RESET`.
 - Config admin: categorie multilivello, template privacy/condizioni/WhatsApp, modalita WhatsApp manuale, export config/database/ZIP/XLSX.

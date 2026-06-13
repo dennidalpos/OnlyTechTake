@@ -212,6 +212,9 @@ interface RepairOrderDao {
     @Query("SELECT * FROM repair_orders WHERE id = :id LIMIT 1")
     suspend fun findById(id: String): RepairOrderEntity?
 
+    @Query("SELECT COUNT(*) FROM repair_orders")
+    suspend fun countAll(): Int
+
     @Query(
         """
         SELECT * FROM repair_orders

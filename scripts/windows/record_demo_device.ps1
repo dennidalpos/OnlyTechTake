@@ -1,7 +1,9 @@
 param(
     [string]$OutputRoot = "demo/recordings",
     [string]$OutputFile = "",
+    [string]$PackageName = "com.onlytechtake.repairapp.debug",
     [switch]$SkipBuild,
+    [switch]$SeedData,
     [int]$MaxDurationSeconds = 180,
     [int]$BitRate = 4000000,
     [string]$Size
@@ -37,14 +39,42 @@ if (-not $SkipBuild) {
     Write-Host "Building and installing APK..." -ForegroundColor Gray
     .\gradlew.bat assembleDebug
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    adb -s $deviceId install -r app/build/outputs/apk/debug/app-debug.apk
+    # Try to find the APK - might be in different places depending on flavors
+    $apkPath = "app/build/outputs/apk/debug/app-debug.apk"
+    if (-not (Test-Path $apkPath)) {
+        $apkPath = Get-ChildItem -Path "app/build/outputs/apk" -Filter "*.apk" -Recurse | Select-Object -First 1 -ExpandProperty FullName
+    }
+
+    if ($apkPath) {
+        Write-Host "Installing $apkPath..." -ForegroundColor Gray
+        adb -s $deviceId install -r $apkPath
+    } else {
+        Write-Host "ERRORE: APK non trovato." -ForegroundColor Red
+        exit 1
+    }
 }
 
-Write-Host "Pulizia dati app com.onlytechtake.repairapp..." -ForegroundColor Gray
-adb -s $deviceId shell pm clear com.onlytechtake.repairapp
+Write-Host "Pulizia dati app $PackageName..." -ForegroundColor Gray
+adb -s $deviceId shell pm clear $PackageName
+
+if ($SeedData) {
+    Write-Host "Seeding dati demo..." -ForegroundColor Yellow
+    # Install AndroidTest APK if needed
+    if (-not $SkipBuild) {
+        .\gradlew.bat assembleDebugAndroidTest
+        $testApkPath = Get-ChildItem -Path "app/build/outputs/apk/androidTest" -Filter "*.apk" -Recurse | Select-Object -First 1 -ExpandProperty FullName
+        if ($testApkPath) {
+            adb -s $deviceId install -r $testApkPath
+        }
+    }
+
+    $testClass = "com.onlytechtake.repairapp.demo.SeedDemoDataTest"
+    $runner = "androidx.test.runner.AndroidJUnitRunner"
+    adb -s $deviceId shell am instrument -w -e class $testClass $PackageName`.test/$runner
+}
 
 Write-Host "Avvio applicazione..." -ForegroundColor Gray
-adb -s $deviceId shell am start -n com.onlytechtake.repairapp/com.onlytechtake.repairapp.MainActivity
+adb -s $deviceId shell am start -n $PackageName/com.onlytechtake.repairapp.MainActivity
 
 Write-Host "Avvio registrazione (Massimo $MaxDurationSeconds secondi)..." -ForegroundColor Yellow
 Write-Host "Premi CTRL+C per fermare anticipatamente la registrazione." -ForegroundColor Gray

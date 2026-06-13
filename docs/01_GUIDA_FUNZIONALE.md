@@ -33,6 +33,7 @@ Funzioni implementate:
 - consultare le commesse;
 - gestire le commesse assegnate;
 - riassegnare una propria commessa;
+- gestire lo stato del pagamento;
 - aggiungere note, foto, allegati, foto lavoro finito e una firma cliente alle proprie commesse;
 - preparare messaggi WhatsApp manuali per le proprie commesse;
 - confermare manualmente l'invio WhatsApp;
@@ -187,6 +188,8 @@ Mappa operativa:
 - `READY_FOR_PICKUP`: chiusura motivata;
 - `CLOSED`: nessuna azione operativa, consultazione PDF riepilogo.
 
+Lo stato pagamento e' indipendente dallo stato commessa e puo' essere commutato (Pagato/Non Pagato) dal workspace. Ogni variazione viene registrata nella timeline.
+
 ## Timeline
 
 Ogni azione importante crea un evento timeline, tra cui:
@@ -205,6 +208,7 @@ Ogni azione importante crea un evento timeline, tra cui:
 - commessa eliminata logicamente;
 - PDF riepilogo condiviso;
 - stato azione cliente aggiornato;
+- pagamento ricevuto o rimosso;
 - reset dati ed export nei log audit.
 
 ## Pulizia admin
