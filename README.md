@@ -155,7 +155,6 @@ Regole:
 - Export JSON, database, PDF e ZIP non sono cifrati dall'app.
 - Non esiste un gate CI remoto tracciato nel repository.
 - La build release richiede signing locale non tracciato.
-- L'audit OSV sulle dipendenze Gradle bloccate non e' attualmente pulito.
 - Le verifiche manuali residue sono elencate in `PROJECT_STATUS.json`.
 
 ## Struttura

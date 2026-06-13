@@ -2,7 +2,10 @@
   "todos": [
     "Verificare record_demo_device.ps1 su device USB reale: build/install FullDebug, avvio app, opzionale -SeedData, registrazione manuale guidata, pull MP4 in demo/recordings e file video riproducibile",
     "Verificare create_demo_screenshots.ps1 e create_demo_video.ps1 su AVD OnlyTechTakeDemo o device USB dopo allineamento a FullDebug e package com.onlytechtake.repairapp.debug",
-    "Risolvere vulnerabilita' OSV nei lockfile Gradle: aggiornare dipendenze, lockfile o resolution strategy per org.apache.commons:commons-lang3:3.16.0 GHSA-j288-q9x7-2f5v, org.apache.httpcomponents:httpclient:4.5.6 GHSA-7r82-7xv7-xcpj, org.bouncycastle:bcpkix-jdk18on:1.79 GHSA-wg6q-6289-32hp, org.bouncycastle:bcprov-jdk18on:1.79 GHSA-c3fc-8qff-9hwx e GHSA-p93r-85wp-75v3; poi rieseguire scripts\\windows\\check_dependency_vulnerabilities.ps1",
+    "Riprodurre su device reale i 4 timeout login dei test screenshot demo: OperatorIntakeDemoScreenshotTest.capturesOperatorIntakeDemo, SocialStoryDemoScreenshotTest.capturesOrderIntakeToClosureStories, capturesCategoryAndTemplateStories e capturesPrivateAndBusinessCustomerStories",
+    "Diagnosticare perche' i test screenshot demo non raggiungono RepairAppTestTags.dashboardTab(\"HOME\") dopo login con admin.demo/operatore.demo e DemoPass123 su FullDebug",
+    "Correggere helper o dati demo dei test screenshot in OperatorIntakeDemoScreenshotTest e SocialStoryDemoScreenshotTest senza cambiare workflow app o schema Room",
+    "Rieseguire :app:connectedFullDebugAndroidTest su device reale e confermare 23/23 test passed prima di usare create_demo_screenshots.ps1 o create_demo_video.ps1 per asset pubblici",
     "Completare landing pubblica: sostituire placeholder screenshot/video/download/contatti con asset e link reali; generare screenshot con scripts\\windows\\create_demo_screenshots.ps1 e aggiornare landing\\index.html",
     "Completare readiness Play Store: pubblicare URL privacy policy, definire email supporto, produrre icon/feature graphic/screenshot e completare release-checklist su device reale prima del caricamento AAB",
     "Verificare Demo/Full commerciale su device: limite 10 commesse Demo, blocco export/ripristino Demo, watermark PDF Demo, nessun watermark Full, export/backup Full funzionanti",

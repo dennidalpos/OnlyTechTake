@@ -74,7 +74,8 @@ if (-not $NoInstall) {
     }
 }
 
-adb shell am start -W -n "$packageName/.MainActivity"
+$activityClass = "com.onlytechtake.repairapp.MainActivity"
+adb shell am start -W -n "$packageName/$activityClass"
 if ($LASTEXITCODE -ne 0) {
     throw "Avvio app fallito."
 }
