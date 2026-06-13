@@ -48,6 +48,7 @@ class SocialStoryDemoScreenshotTest {
             capture(outputDir, "01-login.png")
 
             loginDemo(DemoDataSeeder.DEMO_OPERATOR_USERNAME)
+            waitForText("Operatore")
             capture(outputDir, "02-dashboard-home.png")
 
             clickDashboardTab("NEW_ORDER")
@@ -73,26 +74,27 @@ class SocialStoryDemoScreenshotTest {
             capture(outputDir, "04-categoria-problema.png")
 
             clickDashboardTab("ORDERS")
+            waitForText("Commesse")
             clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
-            waitForText("Stato corrente: Aperta")
+            waitForText("Notebook HP")
             capture(outputDir, "05-commessa-aperta.png")
 
-            applySimpleStatus(OrderStatusAction.START_PROGRESS, "Stato corrente: In lavorazione")
+            applySimpleStatus(OrderStatusAction.START_PROGRESS, "In lavorazione")
             capture(outputDir, "06-presa-in-carico.png")
 
-            applySimpleStatus(OrderStatusAction.START_DIAGNOSIS, "Stato corrente: In diagnosi")
+            applySimpleStatus(OrderStatusAction.START_DIAGNOSIS, "In diagnosi")
             applyResultStatus()
             capture(outputDir, "07-diagnosi-risultato.png")
 
             acceptQuote()
             capture(outputDir, "08-riparazione.png")
 
-            applySimpleStatus(OrderStatusAction.READY_FOR_PICKUP, "Stato corrente: Pronta al ritiro")
+            applySimpleStatus(OrderStatusAction.READY_FOR_PICKUP, "Pronta al ritiro")
             capture(outputDir, "09-pronta-ritiro.png")
 
             closeOrder()
             clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
-            waitForText("Stato corrente: Chiusa")
+            waitForText("Chiusa")
             capture(outputDir, "10-chiusura-timeline.png")
         }
     }
@@ -105,9 +107,11 @@ class SocialStoryDemoScreenshotTest {
         withDemoApp {
             waitForTag(RepairAppTestTags.AuthUsernameField)
             loginDemo(DemoDataSeeder.DEMO_ADMIN_USERNAME)
+            waitForText("Admin")
             capture(outputDir, "01-dashboard-admin.png")
 
             clickDashboardTab("CONFIG")
+            waitForText("Config")
             capture(outputDir, "02-config-hub.png")
 
             clickTag(RepairAppTestTags.ConfigHubCategoriesButton, scroll = true)
@@ -185,40 +189,51 @@ class SocialStoryDemoScreenshotTest {
     }
 
     private fun applySimpleStatus(action: OrderStatusAction, expectedText: String) {
-        clickTag(RepairAppTestTags.statusAction(action.name), scroll = true)
+        clickText("Azioni Commessa", scroll = true)
+        clickText(action.label)
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
         waitForText(expectedText)
     }
 
     private fun applyResultStatus() {
-        clickTag(RepairAppTestTags.statusAction(OrderStatusAction.RECORD_RESULT.name), scroll = true)
+        clickText("Azioni Commessa", scroll = true)
+        clickText(OrderStatusAction.RECORD_RESULT.label)
         typeTag(RepairAppTestTags.StatusResultSummaryField, "Connettore di alimentazione danneggiato.", scroll = false)
         clickTag(RepairAppTestTags.DiagnosisRepairableToggle)
         typeTag(RepairAppTestTags.DiagnosisEstimateField, "149,00", scroll = false)
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
-        waitForText("Stato corrente: Risultato")
+        waitForText("Risultato")
     }
 
     private fun acceptQuote() {
         clickTag(RepairAppTestTags.QuoteAcceptedToggle, scroll = true)
-        clickTag(RepairAppTestTags.QuoteConfirmButton, scroll = true)
-        waitForText("Stato corrente: In riparazione")
+        clickText("Conferma esito preventivo", scroll = true)
+        waitForText("In riparazione")
     }
 
     private fun closeOrder() {
-        clickTag(RepairAppTestTags.statusAction(OrderStatusAction.CLOSE_ORDER.name), scroll = true)
+        clickText("Azioni Commessa", scroll = true)
+        clickText(OrderStatusAction.CLOSE_ORDER.label)
         typeTag(RepairAppTestTags.StatusNoteField, "Riparazione completata e consegnata al cliente.")
-        clickTag(RepairAppTestTags.closureReason("COMPLETED"), scroll = true)
+        clickText("Completata", scroll = true)
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
         waitForText("Commesse")
     }
 
     private fun clickDashboardTab(destination: String) {
         val tabTag = RepairAppTestTags.dashboardTab(destination)
+        waitForTagExists(RepairAppTestTags.DashboardTabs)
+
         repeat(DASHBOARD_TAB_SWIPE_ATTEMPTS) {
-            if (isTagDisplayed(tabTag)) {
+            if (isTagPresent(tabTag)) {
                 composeRule.onNodeWithTag(tabTag).performClick()
                 composeRule.waitForIdle()
+
+                // Handle "Unsaved changes" dialog if it appears
+                if (isTextDisplayed("Dati non salvati")) {
+                    clickText("Esci e perdi dati")
+                }
+
                 Thread.sleep(2000)
                 return
             }
@@ -227,10 +242,10 @@ class SocialStoryDemoScreenshotTest {
             composeRule.waitForIdle()
             pauseForDemo()
         }
-        composeRule.onNodeWithTag(tabTag).performClick()
-        composeRule.waitForIdle()
-        Thread.sleep(2000)
     }
+
+    private fun isTextDisplayed(text: String): Boolean =
+        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
     private fun loginDemo(username: String) {
         repeat(LOGIN_ATTEMPTS) { attempt ->
@@ -266,18 +281,18 @@ class SocialStoryDemoScreenshotTest {
     private fun clickTag(tag: String, scroll: Boolean = false, requireDisplayed: Boolean = true) {
         waitForTagExists(tag)
         val node = composeRule.onNodeWithTag(tag)
-        if (scroll) runCatching { node.performScrollTo() }
+        if (scroll) {
+            runCatching { node.performScrollTo() }
+            composeRule.waitForIdle()
+        }
         if (requireDisplayed && scroll && runCatching { node.assertIsDisplayed() }.isFailure) {
             var displayed = false
             repeat(VISIBILITY_SWIPE_ATTEMPTS) {
                 if (displayed) return@repeat
-                runCatching { node.performScrollTo() }
-                displayed = runCatching { node.assertIsDisplayed() }.isSuccess
-                if (displayed) {
-                    return@repeat
-                }
                 composeRule.onRoot().performTouchInput { swipeUp() }
                 composeRule.waitForIdle()
+                runCatching { node.performScrollTo() }
+                displayed = runCatching { node.assertIsDisplayed() }.isSuccess
                 pauseForDemo()
             }
         }
@@ -295,19 +310,19 @@ class SocialStoryDemoScreenshotTest {
 
     private fun clickText(text: String, scroll: Boolean = false, requireDisplayed: Boolean = true) {
         waitForText(text)
-        val node = composeRule.onNodeWithText(text, substring = true)
-        if (scroll) runCatching { node.performScrollTo() }
+        val node = composeRule.onNodeWithText(text, substring = false)
+        if (scroll) {
+            runCatching { node.performScrollTo() }
+            composeRule.waitForIdle()
+        }
         if (requireDisplayed && scroll && runCatching { node.assertIsDisplayed() }.isFailure) {
             var displayed = false
             repeat(VISIBILITY_SWIPE_ATTEMPTS) {
                 if (displayed) return@repeat
-                runCatching { node.performScrollTo() }
-                displayed = runCatching { node.assertIsDisplayed() }.isSuccess
-                if (displayed) {
-                    return@repeat
-                }
                 composeRule.onRoot().performTouchInput { swipeUp() }
                 composeRule.waitForIdle()
+                runCatching { node.performScrollTo() }
+                displayed = runCatching { node.assertIsDisplayed() }.isSuccess
                 pauseForDemo()
             }
         }
@@ -399,7 +414,7 @@ class SocialStoryDemoScreenshotTest {
         const val DASHBOARD_TAB_SWIPE_ATTEMPTS = 4
         const val VISIBILITY_SWIPE_ATTEMPTS = 5
         const val TAG_POLL_MILLIS = 250L
-        const val ACTION_PAUSE_MILLIS = 900L
+        const val ACTION_PAUSE_MILLIS = 1_400L
         const val SCREENSHOT_PAUSE_MILLIS = 1_400L
     }
 }

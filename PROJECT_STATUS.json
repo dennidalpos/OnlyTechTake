@@ -1,8 +1,6 @@
 {
   "todos": [
     "Verificare record_demo_device.ps1 su device USB reale: build/install FullDebug, avvio app, opzionale -SeedData, registrazione manuale guidata, pull MP4 in demo/recordings e file video riproducibile",
-    "Rieseguire :app:connectedFullDebugAndroidTest su device reale e confermare 23/23 test passed (Diagnosi: login timeout risolto aggiungendo testTag in DashboardScreen.kt; NewOrderInsertCustomerButton ancora non trovato nonostante sia visibile a occhio nudo)",
-    "Correggere helper o dati demo dei test screenshot in OperatorIntakeDemoScreenshotTest e SocialStoryDemoScreenshotTest: provare onNodeWithText invece di testTag per bottoni wizard",
     "Completare landing pubblica: sostituire placeholder screenshot/video/download/contatti con asset e link reali; generare screenshot con scripts\\windows\\create_demo_screenshots.ps1 e aggiornare landing\\index.html",
     "Completare readiness Play Store: pubblicare URL privacy policy, definire email supporto, produrre icon/feature graphic/screenshot e completare release-checklist su device reale prima del caricamento AAB",
     "Produrre registrazioni demo 01-06 e video promozionali: seguire demo\\DEMO_GUIDE.md e docs\\marketing\\demo-video-production.md usando solo dati fittizi, poi usare gli asset per landing e Play Store"

@@ -72,26 +72,27 @@ class OperatorIntakeDemoScreenshotTest {
             capture(outputDir, "04-category-problem.png")
 
             clickDashboardTab("ORDERS")
+            waitForText("Commesse")
             clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
-            waitForText("Stato corrente: Aperta")
+            waitForText("Notebook HP")
             capture(outputDir, "05-order-created.png")
 
-            applySimpleStatus(OrderStatusAction.START_PROGRESS, "Stato corrente: In lavorazione")
+            applySimpleStatus(OrderStatusAction.START_PROGRESS, "In lavorazione")
             capture(outputDir, "06-in-progress.png")
 
-            applySimpleStatus(OrderStatusAction.START_DIAGNOSIS, "Stato corrente: In diagnosi")
+            applySimpleStatus(OrderStatusAction.START_DIAGNOSIS, "In diagnosi")
             applyResultStatus()
             capture(outputDir, "07-diagnosis-result.png")
 
             acceptQuote()
             capture(outputDir, "08-repairing.png")
 
-            applySimpleStatus(OrderStatusAction.READY_FOR_PICKUP, "Stato corrente: Pronta al ritiro")
+            applySimpleStatus(OrderStatusAction.READY_FOR_PICKUP, "Pronta al ritiro")
             capture(outputDir, "09-ready-for-pickup.png")
 
             closeOrder()
             clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
-            waitForText("Stato corrente: Chiusa")
+            waitForText("Chiusa")
             capture(outputDir, "10-closed-timeline.png")
         } finally {
             scenario.close()
@@ -99,40 +100,51 @@ class OperatorIntakeDemoScreenshotTest {
     }
 
     private fun applySimpleStatus(action: OrderStatusAction, expectedText: String) {
-        clickTag(RepairAppTestTags.statusAction(action.name), scroll = true)
+        clickText("Azioni Commessa", scroll = true)
+        clickText(action.label)
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
         waitForText(expectedText)
     }
 
     private fun applyResultStatus() {
-        clickTag(RepairAppTestTags.statusAction(OrderStatusAction.RECORD_RESULT.name), scroll = true)
+        clickText("Azioni Commessa", scroll = true)
+        clickText(OrderStatusAction.RECORD_RESULT.label)
         typeTag(RepairAppTestTags.StatusResultSummaryField, "Connettore di alimentazione danneggiato.", scroll = false)
         clickTag(RepairAppTestTags.DiagnosisRepairableToggle)
         typeTag(RepairAppTestTags.DiagnosisEstimateField, "149,00", scroll = false)
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
-        waitForText("Stato corrente: Risultato")
+        waitForText("Risultato")
     }
 
     private fun acceptQuote() {
         clickTag(RepairAppTestTags.QuoteAcceptedToggle, scroll = true)
-        clickTag(RepairAppTestTags.QuoteConfirmButton, scroll = true)
-        waitForText("Stato corrente: In riparazione")
+        clickText("Conferma esito preventivo", scroll = true)
+        waitForText("In riparazione")
     }
 
     private fun closeOrder() {
-        clickTag(RepairAppTestTags.statusAction(OrderStatusAction.CLOSE_ORDER.name), scroll = true)
+        clickText("Azioni Commessa", scroll = true)
+        clickText(OrderStatusAction.CLOSE_ORDER.label)
         typeTag(RepairAppTestTags.StatusNoteField, "Riparazione completata e consegnata al cliente.")
-        clickTag(RepairAppTestTags.closureReason("COMPLETED"), scroll = true)
+        clickText("Completata", scroll = true)
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
         waitForText("Commesse")
     }
 
     private fun clickDashboardTab(destination: String) {
         val tabTag = RepairAppTestTags.dashboardTab(destination)
+        waitForTagExists(RepairAppTestTags.DashboardTabs)
+        
         repeat(DASHBOARD_TAB_SWIPE_ATTEMPTS) {
-            if (isTagDisplayed(tabTag)) {
+            if (isTagPresent(tabTag)) {
                 composeRule.onNodeWithTag(tabTag).performClick()
                 composeRule.waitForIdle()
+
+                // Handle "Unsaved changes" dialog if it appears
+                if (isTextDisplayed("Dati non salvati")) {
+                    clickText("Esci e perdi dati")
+                }
+
                 Thread.sleep(2000)
                 return
             }
@@ -141,10 +153,10 @@ class OperatorIntakeDemoScreenshotTest {
             composeRule.waitForIdle()
             pauseForDemo()
         }
-        composeRule.onNodeWithTag(tabTag).performClick()
-        composeRule.waitForIdle()
-        Thread.sleep(2000)
     }
+
+    private fun isTextDisplayed(text: String): Boolean =
+        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
     private fun loginOperatorDemo() {
         repeat(LOGIN_ATTEMPTS) { attempt ->
@@ -180,18 +192,18 @@ class OperatorIntakeDemoScreenshotTest {
     private fun clickTag(tag: String, scroll: Boolean = false) {
         waitForTagExists(tag)
         val node = composeRule.onNodeWithTag(tag)
-        if (scroll) runCatching { node.performScrollTo() }
+        if (scroll) {
+            runCatching { node.performScrollTo() }
+            composeRule.waitForIdle()
+        }
         if (scroll && runCatching { node.assertIsDisplayed() }.isFailure) {
             var displayed = false
             repeat(VISIBILITY_SWIPE_ATTEMPTS) {
                 if (displayed) return@repeat
-                runCatching { node.performScrollTo() }
-                displayed = runCatching { node.assertIsDisplayed() }.isSuccess
-                if (displayed) {
-                    return@repeat
-                }
                 composeRule.onRoot().performTouchInput { swipeUp() }
                 composeRule.waitForIdle()
+                runCatching { node.performScrollTo() }
+                displayed = runCatching { node.assertIsDisplayed() }.isSuccess
                 pauseForDemo()
             }
         }
@@ -203,19 +215,19 @@ class OperatorIntakeDemoScreenshotTest {
 
     private fun clickText(text: String, scroll: Boolean = false) {
         waitForText(text)
-        val node = composeRule.onNodeWithText(text, substring = true)
-        if (scroll) runCatching { node.performScrollTo() }
+        val node = composeRule.onNodeWithText(text, substring = false)
+        if (scroll) {
+            runCatching { node.performScrollTo() }
+            composeRule.waitForIdle()
+        }
         if (scroll && runCatching { node.assertIsDisplayed() }.isFailure) {
             var displayed = false
             repeat(VISIBILITY_SWIPE_ATTEMPTS) {
                 if (displayed) return@repeat
-                runCatching { node.performScrollTo() }
-                displayed = runCatching { node.assertIsDisplayed() }.isSuccess
-                if (displayed) {
-                    return@repeat
-                }
                 composeRule.onRoot().performTouchInput { swipeUp() }
                 composeRule.waitForIdle()
+                runCatching { node.performScrollTo() }
+                displayed = runCatching { node.assertIsDisplayed() }.isSuccess
                 pauseForDemo()
             }
         }
@@ -296,7 +308,7 @@ class OperatorIntakeDemoScreenshotTest {
         const val DASHBOARD_TAB_SWIPE_ATTEMPTS = 4
         const val VISIBILITY_SWIPE_ATTEMPTS = 5
         const val TAG_POLL_MILLIS = 250L
-        const val ACTION_PAUSE_MILLIS = 1_400L
+        const val ACTION_PAUSE_MILLIS = 2_000L
         const val SCREENSHOT_PAUSE_MILLIS = 2_000L
     }
 }

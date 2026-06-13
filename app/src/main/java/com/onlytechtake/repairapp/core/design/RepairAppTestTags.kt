@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.core.design
 
 object RepairAppTestTags {
     const val DashboardTabs = "dashboard_tabs"
+    const val LogoutButton = "logout_button"
 
     const val AuthUsernameField = "auth_username_field"
     const val AuthPasswordField = "auth_password_field"

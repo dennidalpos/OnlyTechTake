@@ -167,7 +167,10 @@ fun DashboardScreen(
                             modifier = Modifier.padding(end = 8.dp),
                         )
                     }
-                    TextButton(onClick = onLogout) {
+                    TextButton(
+                        onClick = onLogout,
+                        modifier = Modifier.testTag(RepairAppTestTags.LogoutButton)
+                    ) {
                         Text(text = stringResource(R.string.logout))
                     }
                 },

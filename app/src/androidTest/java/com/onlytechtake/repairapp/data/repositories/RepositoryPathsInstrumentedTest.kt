@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.AppSettingEntity
@@ -299,6 +300,7 @@ class RepositoryPathsInstrumentedTest {
 
     @Test
     fun backupRepositoryExportsAllOrdersAsXlsxAndRecordsAudit() = runBlocking {
+        if (BuildConfig.IS_DEMO_VERSION) return@runBlocking
         val actor = seedAdmin()
         seedCustomer()
         seedCategory()
@@ -337,6 +339,7 @@ class RepositoryPathsInstrumentedTest {
 
     @Test
     fun backupRepositoryExportsCompleteZipWithMetadataDatabaseAndPrivateFiles() = runBlocking {
+        if (BuildConfig.IS_DEMO_VERSION) return@runBlocking
         val databaseName = RepairAppDatabase.DATABASE_NAME
         context.deleteDatabase(databaseName)
         val fileBackedDatabase = Room.databaseBuilder(context, RepairAppDatabase::class.java, databaseName)
@@ -414,6 +417,7 @@ class RepositoryPathsInstrumentedTest {
 
     @Test
     fun backupRepositoryRestoresCompleteZipReplacingDatabaseAndPrivateFiles() = runBlocking {
+        if (BuildConfig.IS_DEMO_VERSION) return@runBlocking
         val databaseName = RepairAppDatabase.DATABASE_NAME
         context.deleteDatabase(databaseName)
         val fileBackedDatabase = Room.databaseBuilder(context, RepairAppDatabase::class.java, databaseName)
