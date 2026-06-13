@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -29,7 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.activity.compose.BackHandler
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
@@ -106,10 +104,6 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
     }
 
     BackHandler(enabled = showForm) {
-        if (canSave || firstName.isNotBlank() || lastName.isNotBlank() || companyName.isNotBlank()) {
-            // If there's something, we could show a dialog, but BackHandler is usually for the back button.
-            // Let's just sync with the dirty flag.
-        }
         showForm = false
         clearForm()
         viewModel.setFormDirty(false)

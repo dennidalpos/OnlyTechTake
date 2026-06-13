@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -164,7 +163,7 @@ fun AdminPanel(
                                 PasswordVisibilityButton(
                                     visible = resetPasswordVisible,
                                     onVisibleChange = { resetPasswordVisible = it },
-                                    modifier = Modifier.focusProperties { canFocus = false }
+                                    modifier = Modifier.focusProperties { canFocus = false },
                                 )
                             },
                         )

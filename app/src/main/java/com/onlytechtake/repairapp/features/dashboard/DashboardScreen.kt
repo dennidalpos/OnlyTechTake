@@ -3,6 +3,8 @@ package com.onlytechtake.repairapp.features.dashboard
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -14,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import androidx.compose.ui.platform.testTag
@@ -29,6 +32,7 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.domain.models.AppSummary
+import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModelFactory
@@ -105,7 +109,7 @@ fun DashboardScreen(
     androidx.compose.runtime.DisposableEffect(navController) {
         val listener = androidx.navigation.NavController.OnDestinationChangedListener { _, destination, _ ->
             val dest = WorkspaceDestination.entries.find { it.name == destination.route }
-            if (dest != null && (dest != uiState.destination)) {
+            if ((dest != null) && (dest != uiState.destination)) {
                 workspaceViewModel.navigateTo(dest)
             }
         }
@@ -136,7 +140,7 @@ fun DashboardScreen(
             launchSingleTop = true
             restoreState = true
         }
-        workspaceViewModel.setFormDirty(false)
+        workspaceViewModel.setFormDirty(dirty = false)
     }
 
     Scaffold(
@@ -206,11 +210,14 @@ fun DashboardScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .consumeWindowInsets(paddingValues)
-                .imePadding()
+                .imePadding(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             uiState.message?.let { message ->
                 Text(
                     modifier = Modifier
+                        .fillMaxWidth()
+                        .widthIn(max = DashboardSpacing.maxContentWidth)
                         .padding(horizontal = 16.dp, vertical = 4.dp)
                         .semantics { liveRegion = LiveRegionMode.Polite },
                     text = message.text,
@@ -225,7 +232,10 @@ fun DashboardScreen(
                 isAdmin = isAdmin,
                 onAppDataRestored = onAppDataRestored,
                 onLogout = onLogout,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .widthIn(max = DashboardSpacing.maxContentWidth),
             )
         }
     }
@@ -239,7 +249,7 @@ fun DashboardScreen(
                 TextButton(
                     onClick = {
                         showUnsavedChangesDialog = false
-                        workspaceViewModel.setFormDirty(false)
+                        workspaceViewModel.setFormDirty(dirty = false)
                         pendingDestination?.let {
                             performNavigation(it)
                         } ?: navController.popBackStack()

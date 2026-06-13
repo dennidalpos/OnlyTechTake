@@ -60,6 +60,7 @@ object DashboardSpacing {
     val formGap = 12.dp
     val compactGap = 8.dp
     val actionGap = 8.dp
+    val maxContentWidth = 840.dp
 }
 
 @Composable
@@ -79,7 +80,7 @@ fun StandardCard(
     containerColor: Color = MaterialTheme.colorScheme.surface,
     highlight: Boolean = false,
     border: BorderStroke? = null,
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     val effectiveBorder = border ?: if (highlight) {
         BorderStroke(2.dp, MaterialTheme.colorScheme.primary)

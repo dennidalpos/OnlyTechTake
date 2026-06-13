@@ -1,5 +1,6 @@
 {
   "todos": [
+    "Ottimizzare supporto tablet: integrare window-size-class, implementare NavigationRail per schermi wide (sw600dp+) e migliorare i layout Dashboard/Home per sfruttare lo spazio orizzontale (es. multi-pane list-detail)",
     "Verificare record_demo_device.ps1 su device USB reale: build/install FullDebug, avvio app, opzionale -SeedData, registrazione manuale guidata, pull MP4 in demo/recordings e file video riproducibile",
     "Completare landing pubblica: sostituire placeholder screenshot/video/download/contatti con asset e link reali; generare screenshot con scripts\\windows\\create_demo_screenshots.ps1 e aggiornare landing\\index.html",
     "Completare readiness Play Store: pubblicare URL privacy policy, definire email supporto, produrre icon/feature graphic/screenshot e completare release-checklist su device reale prima del caricamento AAB",

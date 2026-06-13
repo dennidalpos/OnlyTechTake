@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -45,7 +46,6 @@ import androidx.compose.ui.platform.LocalContext
 import android.app.Activity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.LiveRegionMode
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
@@ -97,7 +97,7 @@ fun AuthGateRoute(
             onPasswordChange = viewModel::updatePassword,
             onConfirmPasswordChange = viewModel::updateConfirmPassword,
             onSubmit = viewModel::createFirstAdmin,
-            onBack = { (context as? Activity)?.finish() }
+            onBack = { (context as? Activity)?.finish() },
         )
         else -> LoginScreen(
             formState = formState,
@@ -105,7 +105,7 @@ fun AuthGateRoute(
             onPasswordChange = viewModel::updatePassword,
             onSubmit = viewModel::login,
             onDemoLogin = viewModel::loginDemo,
-            onBack = { (context as? Activity)?.finish() }
+            onBack = { (context as? Activity)?.finish() },
         )
     }
 }
@@ -224,7 +224,7 @@ private fun AuthForm(
     showDisplayName: Boolean,
     showConfirmPassword: Boolean,
 ) {
-    var passwordVisible by rememberSaveable { mutableStateOf(false) }
+    var passwordVisible by rememberSaveable { mutableStateOf(value = false) }
     var confirmPasswordVisible by rememberSaveable { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -239,16 +239,18 @@ private fun AuthForm(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues),
+        contentAlignment = Alignment.TopCenter,
     ) {
         val compactHeight = maxHeight < 420.dp
 
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxHeight()
+                .fillMaxWidth()
+                .widthIn(max = 760.dp)
                 .verticalScroll(rememberScrollState())
                 .imePadding()
-                .padding(horizontal = 16.dp, vertical = if (compactHeight) 8.dp else 16.dp)
-                .widthIn(max = 760.dp),
+                .padding(horizontal = 16.dp, vertical = if (compactHeight) 8.dp else 16.dp),
             verticalArrangement = Arrangement.spacedBy(if (compactHeight) 8.dp else 12.dp),
         ) {
             Text(
@@ -370,7 +372,7 @@ private fun AuthForm(
                 }
             }
 
-            if (onDemoLogin != null && DemoMode.canEnable()) {
+            if (onDemoLogin != null && (DemoMode.canEnable())) {
                 androidx.compose.material3.TextButton(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = onDemoLogin,

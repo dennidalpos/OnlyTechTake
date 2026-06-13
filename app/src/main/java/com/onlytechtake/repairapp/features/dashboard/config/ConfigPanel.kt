@@ -3,7 +3,6 @@ package com.onlytechtake.repairapp.features.dashboard.config
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -92,10 +91,6 @@ fun ConfigPanel(
     val confirmTemplateSaveNewVersion = stringResource(R.string.config_template_confirm_save_new_version)
     val confirmWaManualTitle = stringResource(R.string.config_whatsapp_confirm_manual_title)
     val confirmWaManualText = stringResource(R.string.config_whatsapp_confirm_manual_text)
-    val confirmExportConfigTitle = stringResource(R.string.config_backup_confirm_export_config_title)
-    val confirmExportConfigTextTemplate = stringResource(R.string.config_backup_confirm_export_config_text)
-    val confirmExportDbTitle = stringResource(R.string.config_backup_confirm_export_db_title)
-    val confirmExportDbTextTemplate = stringResource(R.string.config_backup_confirm_export_db_text)
     val confirmExportXlsxTitle = stringResource(R.string.config_backup_confirm_export_xlsx_title)
     val confirmExportXlsxTextTemplate = stringResource(R.string.config_backup_confirm_export_xlsx_text)
     val confirmExportZipTitle = stringResource(R.string.config_backup_confirm_export_zip_title)
@@ -122,12 +117,6 @@ fun ConfigPanel(
     var confirmText by remember { mutableStateOf("") }
     var confirmAction by remember { mutableStateOf<(() -> Unit)?>(null) }
 
-    val exportConfigLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
-        uri?.let(viewModel::exportConfiguration)
-    }
-    val exportDbLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri ->
-        uri?.let(viewModel::exportDatabase)
-    }
     val exportZipLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
         uri?.let(viewModel::exportCompleteBackup)
     }
@@ -235,7 +224,7 @@ fun ConfigPanel(
                     ) {
                         Column(
                             modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)
+                            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                         ) {
                             Text(
                                 text = if (categoryId == null) {
@@ -309,7 +298,7 @@ fun ConfigPanel(
                                         onClick = { openCategoryBranch(categoryId) },
                                     )
                                 }
-                                if (categoryId == null || isAdmin) {
+                                if ((categoryId == null) || isAdmin) {
                                     TouchButtonWithIcon(
                                         text = stringResource(R.string.config_category_save),
                                         icon = Icons.Default.Check,

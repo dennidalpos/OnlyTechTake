@@ -2,7 +2,6 @@ package com.onlytechtake.repairapp.features.dashboard.detail
 
 import android.content.Intent
 import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -171,7 +170,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                         text = selected.order.status.label(context),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
                     )
 
                     if (selected.isPaid) {
@@ -279,8 +278,8 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             }
         }
 
-        if (selected.order.status == OrderStatus.RESULT &&
-            selected.order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE
+        if ((selected.order.status == OrderStatus.RESULT) &&
+            (selected.order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE)
         ) {
             item {
                 StandardCard {
@@ -344,8 +343,8 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             }
         }
 
-        if (selected.order.status == OrderStatus.RESULT &&
-            selected.order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE
+        if ((selected.order.status == OrderStatus.RESULT) &&
+            (selected.order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE)
         ) {
             item {
                 StandardCard {
