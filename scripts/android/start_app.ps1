@@ -4,6 +4,9 @@
 #>
 
 param(
+    [ValidateSet("Full", "Demo")]
+    [string]$Flavor = "Full",
+
     [ValidateSet("Debug", "Release")]
     [string]$BuildType = "Debug",
 
@@ -31,7 +34,7 @@ if (-not (Test-Command "adb")) {
 }
 
 if (-not $ApkPath) {
-    $folder = Join-Path $root ("app\build\outputs\apk\" + $BuildType.ToLower())
+    $folder = Join-Path $root ("app\build\outputs\apk\" + $Flavor.ToLower() + "\" + $BuildType.ToLower())
     $apk = Get-ChildItem -Path $folder -Filter "*.apk" -ErrorAction SilentlyContinue |
         Sort-Object LastWriteTime -Descending |
         Select-Object -First 1
@@ -49,8 +52,16 @@ if (-not (Test-Path $ApkPath)) {
 
 adb devices
 
+$packageName = "com.onlytechtake.repairapp"
+if ($Flavor -eq "Demo") {
+    $packageName = "$packageName.demo"
+}
+if ($BuildType -eq "Debug") {
+    $packageName = "$packageName.debug"
+}
+
 if ($CleanInstall) {
-    adb uninstall "com.onlytechtake.repairapp"
+    adb uninstall $packageName
     if ($LASTEXITCODE -ne 0) {
         Write-Host "Package non installato o uninstall non necessario." -ForegroundColor Yellow
     }
@@ -63,7 +74,7 @@ if (-not $NoInstall) {
     }
 }
 
-adb shell am start -W -n "com.onlytechtake.repairapp/.MainActivity"
+adb shell am start -W -n "$packageName/.MainActivity"
 if ($LASTEXITCODE -ne 0) {
     throw "Avvio app fallito."
 }

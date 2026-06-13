@@ -4,7 +4,7 @@ This document describes how to use the Demo Mode to capture clean screenshots fo
 
 ## How to Start Demo Mode
 
-1. **Build requirements**: Ensure you are running a **debug** build. Demo mode is disabled by default in release builds for security and privacy.
+1. **Build requirements**: Use the current `fullDebug` build for screenshots unless the release flow specifically requires another variant.
 2. **Activation**:
    - Open the app.
    - On the **Login** screen, you will see a button "Avvia Modalità Demo" (Start Demo Mode).
@@ -51,4 +51,4 @@ Before taking screenshots, ensure:
 | Price/Estimate | Preventivi chiari e professionali | Clear and professional estimates |
 
 ## Privacy Note
-Demo mode uses hardcoded data stored in `DemoMode.kt`. It does not access or modify your local database. No data is sent to external servers.
+Demo mode uses hardcoded data stored in `DemoMode.kt` and returns in-memory demo data from repositories while enabled. No data is sent to external servers.

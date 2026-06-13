@@ -307,11 +307,17 @@ Limiti attuali:
 
 ## Build
 
-Output richiesti:
+Flavor Gradle correnti:
 
-- APK debug per test;
-- APK release firmato per installazione diretta;
-- AAB release generabile con lo script PowerShell ufficiale.
+- `full`
+- `demo`
+
+Output principali:
+
+- APK debug Full: `app/build/outputs/apk/full/debug/app-full-debug.apk`;
+- APK debug Demo: `app/build/outputs/apk/demo/debug/app-demo-debug.apk`;
+- APK release Full: `app/build/outputs/apk/full/release/app-full-release.apk`;
+- AAB release Full: `app/build/outputs/bundle/fullRelease/app-full-release.aab`.
 
 ## Configurazione Gradle
 

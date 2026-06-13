@@ -9,6 +9,7 @@ App Android locale per tracciare commesse clienti dal banco alla diagnosi, alla 
 - Sistema di sviluppo supportato: Windows + PowerShell.
 - Runtime app: Android, package `com.onlytechtake.repairapp`.
 - Versione app: `0.1.0`, `versionCode` 1.
+- Flavor Gradle: `full` e `demo`; gli script usano `Full` come default.
 - SDK Android: compile/target SDK 37, min SDK 26.
 - Stack: Kotlin, Jetpack Compose, Material 3, Navigation Compose, Room, DataStore, CameraX, Coroutines/Flow.
 - Dati: Room locale, DataStore per preferenze auth, file privati app, export tramite Storage Access Framework.
@@ -26,7 +27,7 @@ App Android locale per tracciare commesse clienti dal banco alla diagnosi, alla 
 - [Export e backup locale](docs/05_EXPORT_BACKUP_LOCALE.md)
 - [Build, installazione e verifica](docs/06_BUILD_INSTALLER_ANDROID.md)
 - [Licenza Demo/Full e manuale d'uso](docs/07_LICENZA_DEMO_FULL_E_MANUALE_USO.md)
-- [Handoff Agent Backend](docs/07_BACKEND_AGENT_TRACKER.md)
+- [Handoff futuro backend, non implementato nell'app attuale](docs/07_BACKEND_AGENT_TRACKER.md)
 - [Script PowerShell](scripts/README.md)
 
 ## Prerequisiti
@@ -54,15 +55,15 @@ Da una copia pulita del repository o dopo modifiche incompatibili allo schema lo
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\android\check_env.ps1
-powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -SkipReleaseBuild
-powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Debug -OutputType Apk
+powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -Flavor Full -SkipReleaseBuild
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk
 powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -CleanInstall
 ```
 
 Per provare l'app senza cancellare dati locali esistenti:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Debug -OutputType Apk -Install
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk -Install
 powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1
 ```
 
@@ -72,18 +73,26 @@ Al primo avvio, se non esiste un admin locale, l'app mostra il setup admin. Dopo
 
 Gli script PowerShell calcolano la root del progetto dal proprio percorso, quindi possono essere eseguiti anche da una sottocartella. Il comando diretto `.\gradlew.bat` va invece lanciato dalla root e usa la JVM gia' configurata nel processo PowerShell; se il processo punta a Java 8 o Java 26, usare gli script o impostare `JAVA_HOME` su JDK/JBR 17/21.
 
+`scripts\android\build_installer.ps1` e `scripts\android\start_app.ps1` accettano `-Flavor Full|Demo`; se omesso usano `Full`. I package reali sono:
+
+- `Full Debug`: `com.onlytechtake.repairapp.debug`
+- `Full Release`: `com.onlytechtake.repairapp`
+- `Demo Debug`: `com.onlytechtake.repairapp.demo.debug`
+- `Demo Release`: `com.onlytechtake.repairapp.demo`
+
 | Obiettivo | Comando |
 |---|---|
 | Setup / env check | `powershell -ExecutionPolicy Bypass -File scripts\android\check_env.ps1` |
-| Check locale standard senza signing | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -SkipReleaseBuild` |
-| Check locale standard + instrumentation test | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -SkipReleaseBuild -AndroidTests` |
-| Check completo con release firmata | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1` |
+| Check locale standard senza signing | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -Flavor Full -SkipReleaseBuild` |
+| Check locale standard + instrumentation test | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -Flavor Full -SkipReleaseBuild -AndroidTests` |
+| Check completo con release firmata | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -Flavor Full` |
 | Audit vulnerabilita' dipendenze | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_dependency_vulnerabilities.ps1` |
-| Test unitari | `powershell -ExecutionPolicy Bypass -File scripts\android\gradle.ps1 -- --no-configuration-cache :app:testDebugUnitTest` |
-| Build APK debug | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Debug -OutputType Apk` |
-| Build APK release | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Release -OutputType Apk` |
-| Build AAB release | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Release -OutputType Aab` |
-| Dev smoke su device | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Debug -OutputType Apk -Install` |
+| Test unitari Full debug | `powershell -ExecutionPolicy Bypass -File scripts\android\gradle.ps1 -- --no-configuration-cache :app:testFullDebugUnitTest` |
+| Build APK debug Full | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk` |
+| Build APK debug Demo | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Demo -BuildType Debug -OutputType Apk` |
+| Build APK release Full | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Apk` |
+| Build AAB release Full | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Aab` |
+| Dev smoke su device | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk -Install` |
 | Installazione pulita e start su device | `powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -CleanInstall` |
 
 ## Handoff Operativo
@@ -92,16 +101,19 @@ Prima di consegnare il repository:
 
 1. Controllare lo stato con `git status --short` e distinguere modifiche tracciate da file non tracciati.
 2. Leggere `PROJECT_STATUS.json`: contiene solo todo incompleti correnti.
-3. Eseguire almeno `check_env.ps1`, `check_project.ps1 -SkipReleaseBuild` e una build/install debug se serve validare su device.
+3. Eseguire almeno `check_env.ps1`, `check_project.ps1 -Flavor Full -SkipReleaseBuild` e una build/install debug se serve validare su device.
 4. Usare `start_app.ps1 -CleanInstall` quando lo schema Room locale e' incompatibile con dati gia' installati.
 
 Nota: file non tracciati sotto `docs\` non fanno parte della documentazione ufficiale del repository finche' non vengono revisionati e aggiunti intenzionalmente.
 
 ## Output Build
 
-- APK Debug: `app\build\outputs\apk\debug\app-debug.apk`
-- APK Release: `app\build\outputs\apk\release\app-release.apk`
-- AAB Release: `app\build\outputs\bundle\release\app-release.aab`
+- APK Full Debug: `app\build\outputs\apk\full\debug\app-full-debug.apk`
+- APK Demo Debug: `app\build\outputs\apk\demo\debug\app-demo-debug.apk`
+- APK Full Release: `app\build\outputs\apk\full\release\app-full-release.apk`
+- APK Demo Release: `app\build\outputs\apk\demo\release\app-demo-release.apk`
+- AAB Full Release: `app\build\outputs\bundle\fullRelease\app-full-release.aab`
+- AAB Demo Release: `app\build\outputs\bundle\demoRelease\app-demo-release.aab`
 
 ## Release Signing
 
@@ -143,6 +155,7 @@ Regole:
 - Export JSON, database, PDF e ZIP non sono cifrati dall'app.
 - Non esiste un gate CI remoto tracciato nel repository.
 - La build release richiede signing locale non tracciato.
+- L'audit OSV sulle dipendenze Gradle bloccate non e' attualmente pulito.
 - Le verifiche manuali residue sono elencate in `PROJECT_STATUS.json`.
 
 ## Struttura

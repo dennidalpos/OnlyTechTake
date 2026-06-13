@@ -1,57 +1,83 @@
 # Build Demo e Distribuzione Beta
 
-Questa guida descrive come generare e distribuire la build **Demo** dell\'applicazione OnlyTechTake Repair App per i test presso i negozi beta.
+Questa guida descrive come generare build Demo e Full dell'app OnlyTechTake Repair App per test autorizzati e distribuzione beta.
 
 ## Architettura Build
 
-L\'app utilizza i **Product Flavors** di Gradle per separare la configurazione di test da quella di produzione.
+Il modulo Android usa due product flavor Gradle reali:
 
-| Caratteristica | Flavor `demo` | Flavor `production` |
+| Caratteristica | Flavor `demo` | Flavor `full` |
 | :--- | :--- | :--- |
-| **Application ID** | `com.onlytechtake.repairapp.demo` | `com.onlytechtake.repairapp` |
-| **Nome App** | OnlyTechTake Demo | OnlyTechTake |
-| **Version Name** | `X.Y.Z-demo` | `X.Y.Z` |
-| **Banner Demo** | Presente in Home | Assente |
-| **Reset Dati** | Disponibile in Admin | Disponibile in Admin |
-| **Uso** | Test, Beta shop, Training | Pubblicazione Play Store |
+| Application ID release | `com.onlytechtake.repairapp.demo` | `com.onlytechtake.repairapp` |
+| Application ID debug | `com.onlytechtake.repairapp.demo.debug` | `com.onlytechtake.repairapp.debug` |
+| Nome app | OnlyTechTake Demo | OnlyTechTake |
+| Limite commesse | 10 | Nessun limite hardcoded |
+| Export/backup | Bloccati dal codice demo dove previsto | Disponibili secondo permessi admin |
+| Uso | Test, beta shop, training | Pubblicazione e uso completo |
+
+La release richiede `keystore.properties` locale configurato nella root. Il keystore e le password non devono essere committati.
 
 ## Comandi di Generazione
 
-Eseguire i comandi dalla radice del progetto utilizzando il terminale (PowerShell consigliato su Windows).
+Usare PowerShell su Windows. Gli script rilevano JDK/SDK e lanciano i task Gradle variant-specific.
 
-### Generare APK Demo (per installazione diretta)
-Per distribuire l\'APK ai tester via WhatsApp, email o download diretto:
-```powershell
-./gradlew :app:assembleDemoRelease
-```
-L\'APK generato si troverà in:
-`app/build/outputs/apk/demo/release/app-demo-release.apk`
+### APK Demo release
 
-### Generare AAB Production (per Play Store)
-Per la pubblicazione ufficiale:
 ```powershell
-./gradlew :app:bundleProductionRelease
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Demo -BuildType Release -OutputType Apk
 ```
-Il bundle generato si troverà in:
-`app/build/outputs/bundle/productionRelease/app-production-release.aab`
+
+Output:
+
+```text
+app\build\outputs\apk\demo\release\app-demo-release.apk
+```
+
+### APK Full release
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Apk
+```
+
+Output:
+
+```text
+app\build\outputs\apk\full\release\app-full-release.apk
+```
+
+### AAB Full release per Play Console
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Aab
+```
+
+Output:
+
+```text
+app\build\outputs\bundle\fullRelease\app-full-release.aab
+```
 
 ## Checklist Pre-Invio Demo
 
-Prima di inviare l\'APK a un negozio per il test:
+Prima di inviare un APK a un tester:
 
-1. [ ] **Pulizia Dati**: Se l\'APK è stato usato localmente per test, assicurarsi che non contenga dati reali di altri clienti. (Nota: l\'installazione pulita su un nuovo dispositivo non ha questo problema).
-2. [ ] **Versione**: Verificare che il `versionCode` in `app/build.gradle.kts` sia aggiornato se si sta sovrascrivendo una build precedente.
-3. [ ] **Keystore**: La build `release` richiede che il file `keystore.properties` sia presente nella root e configurato correttamente.
-
-## Avvertenze di Sicurezza
-
-- **APK Demo**: Solo per test autorizzati. Non pubblicare l\'APK demo su store pubblici o forum.
-- **Dati Locali**: L\'app opera in modalità `LOCAL_ONLY`. I dati salvati nella demo risiedono esclusivamente sul dispositivo.
-- **Firma**: Entrambe le varianti `release` sono firmate con la stessa chiave di produzione (se configurata). Non condividere mai il file di keystore o le password.
+- Verificare `versionCode` e `versionName` in `app\build.gradle.kts`.
+- Generare una build release firmata con keystore locale non tracciato.
+- Installare su device pulito o cancellare i dati del package target.
+- Non usare dati reali nei materiali demo o negli screenshot.
+- Confermare che il tester sappia che l'app e' `LOCAL_ONLY` e che i dati restano sul device.
 
 ## Reset dei Dati
-In caso di necessità di riportare l\'app allo stato iniziale durante una demo:
-1. Accedere alla sezione **Admin**.
-2. Scorrere fino a **Reset totale dati**.
-3. Digitare `RESET` nel campo di conferma.
-4. Premere il pulsante di reset.
+
+Per riportare l'app allo stato iniziale durante una demo:
+
+1. Accedere come admin.
+2. Aprire la sezione Admin.
+3. Usare Reset totale dati.
+4. Digitare `RESET` nel campo di conferma.
+
+In alternativa, per test su device collegato via adb, usare:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -Flavor Demo -BuildType Release -CleanInstall
+```

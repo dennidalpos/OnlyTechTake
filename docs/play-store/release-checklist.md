@@ -5,10 +5,11 @@ Checklist tecnica da completare prima di caricare l\'AAB (Android App Bundle) su
 ## 1. Configurazione Build
 - [ ] **VersionCode:** Incrementato rispetto all\'ultima release (es. `1`).
 - [ ] **VersionName:** Aggiornato secondo semver (es. `0.1.0`).
-- [ ] **Package Name:** Confermato `com.onlytechtake.repairapp`.
+- [ ] **Package Name:** Confermato `com.onlytechtake.repairapp` per flavor `full` release.
 - [ ] **MinSDK / TargetSDK:** Verificati (26 / 37).
 - [ ] **Signing:** `keystore.properties` presente e configurato correttamente.
-- [ ] **Build Type:** Generata build di tipo `release` con `isMinifyEnabled = true` (ProGuard/R8).
+- [ ] **Build Type:** Generata build di tipo `release`; nello stato attuale `isMinifyEnabled = false`.
+- [ ] **Comando AAB:** `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Aab`.
 
 ## 2. Test Funzionali (Clean Install)
 - [ ] **Primo Setup:** Il flusso di creazione admin al primo avvio funziona correttamente.

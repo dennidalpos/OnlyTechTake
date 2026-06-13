@@ -44,8 +44,8 @@ L'app **raccoglie** dati sul dispositivo, ma **non li trasmette** a server ester
 ### Sicurezza (Security Practices)
 1. **Dati in transito:** Non applicabile (l'app non ha un backend proprio).
 2. **Dati a riposo:** Le password sono memorizzate tramite hash e salt (`passwordHash`, `passwordSalt`).
-3. **Backup:** Il backup di Android Cloud è disattivato (`android:allowBackup="false"`). L'app promuove backup manuali in formato ZIP criptato o locale.
-4. **Cancellazione:** L'utente può eliminare i singoli record (Clienti, Ordini) o resettare l'intera app dalle impostazioni di sistema per rimuovere tutti i dati.
+3. **Backup:** Il backup di Android Cloud è disattivato (`android:allowBackup="false"`). L'app promuove backup manuali in formato ZIP locale scelto dall'admin; nello stato attuale lo ZIP non è cifrato dall'app.
+4. **Cancellazione:** L'admin può usare il reset totale dati dell'app oppure la cancellazione dati/disinstallazione dalle impostazioni Android per rimuovere i dati locali.
 
 ---
 
@@ -81,8 +81,7 @@ L'app **raccoglie** dati sul dispositivo, ma **non li trasmette** a server ester
 
 1. **Privacy Policy:** È necessario un URL pubblico che spieghi che i dati sono trattati esclusivamente in locale sul dispositivo.
 2. **Email di Supporto:** Definire un indirizzo email valido per la Play Console.
-3. **Funzione "Elimina tutto":** Sarebbe utile aggiungere un pulsante "Wipe Data" all'interno delle impostazioni dell'app per conformità semplificata.
-4. **Test Policy Camera:** Assicurarsi che l'app gestisca correttamente il rifiuto del permesso Camera senza crash.
+3. **Test Policy Camera:** Assicurarsi che l'app gestisca correttamente il rifiuto del permesso Camera senza crash.
 
 ---
 *Documento generato automaticamente basato sull'analisi del codice - Revisione manuale consigliata prima dell'invio.*

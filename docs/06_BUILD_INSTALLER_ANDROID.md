@@ -30,25 +30,25 @@ Il comando termina con exit code non zero se manca l'ambiente minimo per Gradle.
 Check locale standard senza signing release:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -SkipReleaseBuild
+powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -Flavor Full -SkipReleaseBuild
 ```
 
 Check locale standard con instrumentation test su device collegato:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -SkipReleaseBuild -AndroidTests
+powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -Flavor Full -SkipReleaseBuild -AndroidTests
 ```
 
 Check completo con release firmata:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1
+powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -Flavor Full
 ```
 
 Test unitari:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\android\gradle.ps1 -- --no-configuration-cache :app:testDebugUnitTest
+powershell -ExecutionPolicy Bypass -File scripts\android\gradle.ps1 -- --no-configuration-cache :app:testFullDebugUnitTest
 ```
 
 Audit vulnerabilita' dipendenze tramite OSV:
@@ -65,8 +65,8 @@ Per consegna o verifica su device dopo modifiche incompatibili con dati locali:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\android\check_env.ps1
-powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -SkipReleaseBuild
-powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Debug -OutputType Apk
+powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -Flavor Full -SkipReleaseBuild
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk
 powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -CleanInstall
 ```
 
@@ -74,47 +74,58 @@ Al primo avvio pulito l'app mostra il setup admin locale. Il repository non cont
 
 ## Build
 
-Debug APK:
+I flavor Gradle disponibili sono `full` e `demo`; negli script il parametro e' `-Flavor Full|Demo` e il default e' `Full`.
+
+Debug APK Full:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Debug -OutputType Apk
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk
 ```
 
-Release APK:
+Debug APK Demo:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Release -OutputType Apk
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Demo -BuildType Debug -OutputType Apk
 ```
 
-Release AAB:
+Release APK Full:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Release -OutputType Aab
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Apk
+```
+
+Release AAB Full:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Aab
 ```
 
 Rigenerazione senza cancellare `app\build`:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Release -OutputType Apk -RerunTasks
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Apk -RerunTasks
 ```
 
 Clean + build:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Release -OutputType Apk -Clean
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Apk -Clean
 ```
 
 Build debug e installazione su device:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -BuildType Debug -OutputType Apk -Install
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk -Install
 ```
 
 ## Output
 
-- `app\build\outputs\apk\debug\app-debug.apk`
-- `app\build\outputs\apk\release\app-release.apk`
-- `app\build\outputs\bundle\release\app-release.aab`
+- `app\build\outputs\apk\full\debug\app-full-debug.apk`
+- `app\build\outputs\apk\demo\debug\app-demo-debug.apk`
+- `app\build\outputs\apk\full\release\app-full-release.apk`
+- `app\build\outputs\apk\demo\release\app-demo-release.apk`
+- `app\build\outputs\bundle\fullRelease\app-full-release.aab`
+- `app\build\outputs\bundle\demoRelease\app-demo-release.aab`
 
 ## Signing release
 
@@ -174,8 +185,10 @@ powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -NoInstal
 Installare un APK specifico:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -ApkPath app\build\outputs\apk\debug\app-debug.apk
+powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -Flavor Full -ApkPath app\build\outputs\apk\full\debug\app-full-debug.apk
 ```
+
+Per il flavor Demo usare `-Flavor Demo`; il package avviato sara' `com.onlytechtake.repairapp.demo.debug` in debug e `com.onlytechtake.repairapp.demo` in release.
 
 ## Troubleshooting
 

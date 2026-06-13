@@ -4,6 +4,9 @@
 #>
 
 param(
+    [ValidateSet("Full", "Demo")]
+    [string]$Flavor = "Full",
+
     [ValidateSet("Debug", "Release")]
     [string]$BuildType = "Debug",
 
@@ -90,6 +93,7 @@ if ($BuildType -eq "Release") {
 }
 
 Write-Host "Root progetto: $root"
+Write-Host "Flavor: $Flavor"
 Write-Host "BuildType: $BuildType"
 Write-Host "OutputType: $OutputType"
 
@@ -110,17 +114,8 @@ try {
     }
 
     Write-Section "Build"
-    $task = $null
-
-    if ($OutputType -eq "Apk" -and $BuildType -eq "Debug") {
-        $task = "assembleDebug"
-    } elseif ($OutputType -eq "Apk" -and $BuildType -eq "Release") {
-        $task = "assembleRelease"
-    } elseif ($OutputType -eq "Aab" -and $BuildType -eq "Release") {
-        $task = "bundleRelease"
-    } elseif ($OutputType -eq "Aab" -and $BuildType -eq "Debug") {
-        $task = "bundleDebug"
-    }
+    $variant = "$Flavor$BuildType"
+    $task = if ($OutputType -eq "Apk") { "assemble$variant" } else { "bundle$variant" }
 
     $gradleArguments = @("--no-configuration-cache")
     if ($RerunTasks) {
@@ -141,12 +136,12 @@ Write-Section "Ricerca output"
 $outputFile = $null
 
 if ($OutputType -eq "Apk") {
-    $folder = Join-Path $root ("app\build\outputs\apk\" + $BuildType.ToLower())
+    $folder = Join-Path $root ("app\build\outputs\apk\" + $Flavor.ToLower() + "\" + $BuildType.ToLower())
     $outputFile = Get-ChildItem -Path $folder -Filter "*.apk" -ErrorAction SilentlyContinue |
         Sort-Object LastWriteTime -Descending |
         Select-Object -First 1
 } else {
-    $folder = Join-Path $root ("app\build\outputs\bundle\" + $BuildType.ToLower())
+    $folder = Join-Path $root ("app\build\outputs\bundle\" + $Flavor.ToLower() + $BuildType)
     $outputFile = Get-ChildItem -Path $folder -Filter "*.aab" -ErrorAction SilentlyContinue |
         Sort-Object LastWriteTime -Descending |
         Select-Object -First 1

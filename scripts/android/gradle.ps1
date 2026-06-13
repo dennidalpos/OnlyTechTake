@@ -3,7 +3,7 @@
   Esegue Gradle Wrapper con ambiente Android/JDK supportato.
 
 .USAGE
-  powershell -ExecutionPolicy Bypass -File scripts\android\gradle.ps1 -- :app:testDebugUnitTest
+  powershell -ExecutionPolicy Bypass -File scripts\android\gradle.ps1 -- :app:testFullDebugUnitTest
 #>
 
 $ErrorActionPreference = "Stop"

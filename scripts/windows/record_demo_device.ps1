@@ -37,15 +37,11 @@ Write-Host "Dispositivo rilevato: $deviceId" -ForegroundColor Green
 
 if (-not $SkipBuild) {
     Write-Host "Building and installing APK..." -ForegroundColor Gray
-    .\gradlew.bat assembleDebug
+    .\gradlew.bat :app:assembleFullDebug
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    # Try to find the APK - might be in different places depending on flavors
-    $apkPath = "app/build/outputs/apk/debug/app-debug.apk"
-    if (-not (Test-Path $apkPath)) {
-        $apkPath = Get-ChildItem -Path "app/build/outputs/apk" -Filter "*.apk" -Recurse | Select-Object -First 1 -ExpandProperty FullName
-    }
+    $apkPath = "app/build/outputs/apk/full/debug/app-full-debug.apk"
 
-    if ($apkPath) {
+    if (Test-Path $apkPath) {
         Write-Host "Installing $apkPath..." -ForegroundColor Gray
         adb -s $deviceId install -r $apkPath
     } else {
@@ -61,10 +57,13 @@ if ($SeedData) {
     Write-Host "Seeding dati demo..." -ForegroundColor Yellow
     # Install AndroidTest APK if needed
     if (-not $SkipBuild) {
-        .\gradlew.bat assembleDebugAndroidTest
-        $testApkPath = Get-ChildItem -Path "app/build/outputs/apk/androidTest" -Filter "*.apk" -Recurse | Select-Object -First 1 -ExpandProperty FullName
-        if ($testApkPath) {
+        .\gradlew.bat :app:assembleFullDebugAndroidTest
+        $testApkPath = "app/build/outputs/apk/androidTest/full/debug/app-full-debug-androidTest.apk"
+        if (Test-Path $testApkPath) {
             adb -s $deviceId install -r $testApkPath
+        } else {
+            Write-Host "ERRORE: Test APK non trovato." -ForegroundColor Red
+            exit 1
         }
     }
 

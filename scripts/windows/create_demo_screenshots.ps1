@@ -44,7 +44,7 @@ if (-not $OutputRoot) {
 $screenshotSources = @(
     [PSCustomObject]@{
         TestClass = "com.onlytechtake.repairapp.demo.OperatorIntakeDemoScreenshotTest"
-        DeviceDirectory = "/sdcard/Android/data/com.onlytechtake.repairapp/files/demo-screenshots"
+        DeviceDirectory = "/sdcard/Android/data/com.onlytechtake.repairapp.debug/files/demo-screenshots"
         PulledDirectoryName = "demo-screenshots"
         Cases = @(
             [PSCustomObject]@{
@@ -67,7 +67,7 @@ $screenshotSources = @(
     },
     [PSCustomObject]@{
         TestClass = "com.onlytechtake.repairapp.demo.SocialStoryDemoScreenshotTest"
-        DeviceDirectory = "/sdcard/Android/data/com.onlytechtake.repairapp/files/demo-social-screenshots"
+        DeviceDirectory = "/sdcard/Android/data/com.onlytechtake.repairapp.debug/files/demo-social-screenshots"
         PulledDirectoryName = "demo-social-screenshots"
         Cases = @(
             [PSCustomObject]@{

@@ -72,7 +72,7 @@ New-Item -ItemType Directory -Path $screenshotsDir, $slidesDir | Out-Null
 $serial = Resolve-DemoDeviceSerial -AndroidHome $env:ANDROID_HOME -AvdName $AvdName -UseConnectedDevice:$UseConnectedDevice
 Invoke-DemoApkBuildAndInstall -RootPath $root -Serial $serial -SkipBuild:$SkipBuild
 
-$deviceScreenshots = "/sdcard/Android/data/com.onlytechtake.repairapp/files/demo-screenshots"
+$deviceScreenshots = "/sdcard/Android/data/com.onlytechtake.repairapp.debug/files/demo-screenshots"
 Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "shell", "rm", "-rf", $deviceScreenshots)
 Invoke-DemoScreenshotTest -Serial $serial -TestClass "com.onlytechtake.repairapp.demo.OperatorIntakeDemoScreenshotTest"
 

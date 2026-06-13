@@ -200,20 +200,21 @@ function Invoke-DemoApkBuildAndInstall {
     if (-not $SkipBuild) {
         $gradle = Join-Path $RootPath "gradlew.bat"
         # Removed --no-configuration-cache to speed up repeated builds
-        Invoke-Checked -FilePath $gradle -Arguments @(":app:assembleDebug", ":app:assembleDebugAndroidTest")
+        Invoke-Checked -FilePath $gradle -Arguments @(":app:assembleFullDebug", ":app:assembleFullDebugAndroidTest")
     } else {
         Write-Host "Salto build APK (richiesto -SkipBuild)."
     }
 
-    $debugApk = Join-Path $RootPath "app\build\outputs\apk\debug\app-debug.apk"
-    $testApk = Join-Path $RootPath "app\build\outputs\apk\androidTest\debug\app-debug-androidTest.apk"
+    $packageName = "com.onlytechtake.repairapp.debug"
+    $debugApk = Join-Path $RootPath "app\build\outputs\apk\full\debug\app-full-debug.apk"
+    $testApk = Join-Path $RootPath "app\build\outputs\apk\androidTest\full\debug\app-full-debug-androidTest.apk"
     if (-not (Test-Path $debugApk)) { throw "APK debug non trovato: $debugApk" }
     if (-not (Test-Path $testApk)) { throw "Test APK non trovato: $testApk" }
 
     Write-Host "Installazione APK su $Serial..."
     Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "install", "-r", "-d", $debugApk)
     Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "install", "-r", "-d", $testApk)
-    Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "shell", "pm", "clear", "com.onlytechtake.repairapp")
+    Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "shell", "pm", "clear", $packageName)
 }
 
 function Invoke-DemoScreenshotTest {
@@ -223,7 +224,7 @@ function Invoke-DemoScreenshotTest {
         [string]$FailureMessage = "Scenario strumentato demo fallito."
     )
 
-    $runner = "com.onlytechtake.repairapp.test/androidx.test.runner.AndroidJUnitRunner"
+    $runner = "com.onlytechtake.repairapp.debug.test/androidx.test.runner.AndroidJUnitRunner"
     Invoke-InstrumentationChecked -FailureMessage $FailureMessage -Arguments @(
         "-s",
         $Serial,

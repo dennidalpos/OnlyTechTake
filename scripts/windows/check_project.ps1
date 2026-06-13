@@ -4,22 +4,26 @@
 
 .USAGE
   Check locale standard senza signing release:
-    .\scripts\windows\check_project.ps1 -SkipReleaseBuild
+    .\scripts\windows\check_project.ps1 -Flavor Full -SkipReleaseBuild
 
   Check locale standard + instrumentation test su device collegato:
-    .\scripts\windows\check_project.ps1 -SkipReleaseBuild -AndroidTests
+    .\scripts\windows\check_project.ps1 -Flavor Full -SkipReleaseBuild -AndroidTests
 
   Check completo con release firmata:
-    .\scripts\windows\check_project.ps1
+    .\scripts\windows\check_project.ps1 -Flavor Full
 
 .DESCRIPTION
   Lo script rileva la root del progetto dal proprio percorso e usa solo
   PowerShell, Android SDK, JDK 17+ e Gradle Wrapper. I task Gradle sono
   lanciati in sequenza per evitare file lock su Windows.
   Senza -SkipReleaseBuild verifica anche il signing locale e genera la release.
+  Il flavor predefinito e' Full; usare -Flavor Demo per il flavor demo.
 #>
 
 param(
+    [ValidateSet("Full", "Demo")]
+    [string]$Flavor = "Full",
+
     [switch]$AndroidTests,
     [switch]$SkipReleaseBuild
 )
@@ -66,22 +70,31 @@ Require-File (Join-Path $root "app\build.gradle.kts") "Modulo app Android non tr
 Push-Location $root
 try {
 Write-Section "Controlli locali"
-Invoke-GradleTask @(":app:lintDebug")
-Invoke-GradleTask @(":app:compileDebugKotlin")
-Invoke-GradleTask @(":app:testDebugUnitTest")
-Invoke-GradleTask @(":app:assembleDebug")
+$debugVariant = "$Flavor" + "Debug"
+$releaseVariant = "$Flavor" + "Release"
+$lintTask = ":app:lint$debugVariant"
+$compileTask = ":app:compile$debugVariant" + "Kotlin"
+$testTask = ":app:test$debugVariant" + "UnitTest"
+$assembleDebugTask = ":app:assemble$debugVariant"
+$assembleReleaseTask = ":app:assemble$releaseVariant"
+$connectedAndroidTestTask = ":app:connected$debugVariant" + "AndroidTest"
+
+Invoke-GradleTask @($lintTask)
+Invoke-GradleTask @($compileTask)
+Invoke-GradleTask @($testTask)
+Invoke-GradleTask @($assembleDebugTask)
 
 if (-not $SkipReleaseBuild) {
     Write-Section "Verifica signing release"
     Assert-AndroidReleaseSigningConfigured -RootPath $root
     Write-Host "Signing release configurato." -ForegroundColor Green
 
-    Invoke-GradleTask @(":app:assembleRelease")
+    Invoke-GradleTask @($assembleReleaseTask)
 }
 
 if ($AndroidTests) {
     Write-Section "Instrumentation test"
-    Invoke-GradleTask @(":app:connectedDebugAndroidTest")
+    Invoke-GradleTask @($connectedAndroidTestTask)
 }
 
 Write-Section "Completato"

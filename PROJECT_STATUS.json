@@ -1,6 +1,8 @@
 {
   "todos": [
-    "Verificare record_demo_device.ps1 su device USB reale: avvio app, registrazione manuale guidata, pull MP4 in demo/recordings e file video riproducibile (Script aggiornato con supporto -SeedData)",
+    "Verificare record_demo_device.ps1 su device USB reale: build/install FullDebug, avvio app, opzionale -SeedData, registrazione manuale guidata, pull MP4 in demo/recordings e file video riproducibile",
+    "Verificare create_demo_screenshots.ps1 e create_demo_video.ps1 su AVD OnlyTechTakeDemo o device USB dopo allineamento a FullDebug e package com.onlytechtake.repairapp.debug",
+    "Valutare e risolvere vulnerabilita' OSV nei lockfile Gradle: org.apache.commons:commons-lang3:3.16.0 GHSA-j288-q9x7-2f5v, org.apache.httpcomponents:httpclient:4.5.6 GHSA-7r82-7xv7-xcpj, org.bouncycastle:bcpkix-jdk18on:1.79 GHSA-wg6q-6289-32hp, org.bouncycastle:bcprov-jdk18on:1.79 GHSA-c3fc-8qff-9hwx e GHSA-p93r-85wp-75v3",
     "Eseguire registrazione demo 01 (Setup Admin e gestione Operatori) seguendo DEMO_GUIDE.md",
     "Eseguire registrazione demo 02 (Configurazione Categorie e Template WhatsApp) seguendo DEMO_GUIDE.md",
     "Eseguire registrazione demo 03 (Flusso Nuova Commessa) seguendo DEMO_GUIDE.md",
