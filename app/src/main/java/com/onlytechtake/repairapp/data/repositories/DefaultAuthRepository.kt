@@ -24,6 +24,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.first
 import kotlin.time.Duration.Companion.milliseconds
 
+import kotlinx.coroutines.flow.onStart
+
 class DefaultAuthRepository(
     private val userDao: UserDao,
     private val auditLogDao: AuditLogDao,
@@ -53,6 +55,9 @@ class DefaultAuthRepository(
                 currentUser = activeUser,
                 lastUsername = lastUserId?.let { userDao.findById(it)?.username }.orEmpty(),
             )
+        }.onStart {
+            // Artificial delay to allow the brand animation to complete at least one cycle (1500ms)
+            delay(1500)
         }
 
     override suspend fun createFirstAdmin(

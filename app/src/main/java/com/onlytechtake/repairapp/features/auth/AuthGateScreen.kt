@@ -97,7 +97,6 @@ fun AuthGateRoute(
             onPasswordChange = viewModel::updatePassword,
             onConfirmPasswordChange = viewModel::updateConfirmPassword,
             onSubmit = viewModel::createFirstAdmin,
-            onDemoLogin = viewModel::loginDemo,
             onBack = { (context as? Activity)?.finish() }
         )
         else -> LoginScreen(
@@ -137,7 +136,6 @@ private fun FirstSetupScreen(
     onPasswordChange: (String) -> Unit,
     onConfirmPasswordChange: (String) -> Unit,
     onSubmit: () -> Unit,
-    onDemoLogin: () -> Unit,
     onBack: () -> Unit,
 ) {
     Scaffold(
@@ -163,7 +161,6 @@ private fun FirstSetupScreen(
             onPasswordChange = onPasswordChange,
             onConfirmPasswordChange = onConfirmPasswordChange,
             onSubmit = onSubmit,
-            onDemoLogin = onDemoLogin,
             showDisplayName = true,
             showConfirmPassword = true,
         )
@@ -223,7 +220,7 @@ private fun AuthForm(
     onPasswordChange: (String) -> Unit,
     onConfirmPasswordChange: (String) -> Unit,
     onSubmit: () -> Unit,
-    onDemoLogin: () -> Unit = {},
+    onDemoLogin: (() -> Unit)? = null,
     showDisplayName: Boolean,
     showConfirmPassword: Boolean,
 ) {
@@ -373,7 +370,7 @@ private fun AuthForm(
                 }
             }
 
-            if (DemoMode.canEnable()) {
+            if (onDemoLogin != null && DemoMode.canEnable()) {
                 androidx.compose.material3.TextButton(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = onDemoLogin,

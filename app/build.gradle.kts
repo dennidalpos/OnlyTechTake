@@ -42,7 +42,6 @@ android {
         versionName = "0.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "true")
     }
 
     flavorDimensions += "version"
@@ -52,6 +51,7 @@ android {
             applicationIdSuffix = ".demo"
             resValue("string", "app_name", "OnlyTechTake Demo")
             buildConfigField("boolean", "IS_DEMO_VERSION", "true")
+            buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "true")
             buildConfigField("int", "MAX_ORDERS", "10")
         }
         create("full") {
@@ -59,6 +59,7 @@ android {
             dimension = "version"
             resValue("string", "app_name", "OnlyTechTake")
             buildConfigField("boolean", "IS_DEMO_VERSION", "false")
+            buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "false")
             buildConfigField("int", "MAX_ORDERS", "-1")
         }
     }

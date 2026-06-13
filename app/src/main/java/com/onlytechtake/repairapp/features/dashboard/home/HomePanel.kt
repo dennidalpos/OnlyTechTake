@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
@@ -57,8 +58,14 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel, isAdmin: Boole
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
         ) {
-            if (DemoMode.canEnable()) {
-                DemoBanner()
+            val showBanner = BuildConfig.IS_DEMO_VERSION || DemoMode.isEnabled
+            if (showBanner) {
+                val bannerText = if (DemoMode.isEnabled) {
+                    stringResource(R.string.demo_mode_banner)
+                } else {
+                    stringResource(R.string.demo_version_banner)
+                }
+                DemoBanner(bannerText)
             }
             SectionTitle(stringResource(R.string.home_title))
             Row(
@@ -125,7 +132,7 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel, isAdmin: Boole
 }
 
 @Composable
-private fun DemoBanner() {
+private fun DemoBanner(text: String) {
     StandardCard(highlight = true) {
         Box(
             modifier = Modifier
@@ -134,7 +141,7 @@ private fun DemoBanner() {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = stringResource(R.string.demo_mode_banner),
+                text = text,
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.error
             )

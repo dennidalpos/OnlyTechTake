@@ -4,16 +4,23 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <path
-        android:fillColor="#F8FAFC"
-        android:pathData="M34,22h40c5,0 9,4 9,9v47c0,5 -4,9 -9,9H34c-5,0 -9,-4 -9,-9V31c0,-5 4,-9 9,-9z" />
-    <path
-        android:fillColor="#12B7A7"
-        android:pathData="M36,39h36v7H36z" />
-    <path
-        android:fillColor="#102026"
-        android:pathData="M37,54h24v6H37zM37,66h17v6H37z" />
-    <path
-        android:fillColor="#F59E0B"
-        android:pathData="M72,83l-17,-17l8,-8l9,9l25,-25l8,8z" />
+    <!-- Center of 108x108 is 54,54. Safe area is 72x72 centered (from 18 to 90) -->
+    <group
+        android:translateX="13.5"
+        android:translateY="13.5"
+        android:scaleX="0.75"
+        android:scaleY="0.75">
+        <path
+            android:fillColor="#F8FAFC"
+            android:pathData="M34,22h40c5,0 9,4 9,9v47c0,5 -4,9 -9,9H34c-5,0 -9,-4 -9,-9V31c0,-5 4,-9 9,-9z" />
+        <path
+            android:fillColor="#12B7A7"
+            android:pathData="M36,39h36v7H36z" />
+        <path
+            android:fillColor="#102026"
+            android:pathData="M37,54h24v6H37zM37,66h17v6H37z" />
+        <path
+            android:fillColor="#F59E0B"
+            android:pathData="M72,83l-17,-17l8,-8l9,9l25,-25l8,8z" />
+    </group>
 </vector>
