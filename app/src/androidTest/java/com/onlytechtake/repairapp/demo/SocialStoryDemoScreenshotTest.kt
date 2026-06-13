@@ -52,18 +52,18 @@ class SocialStoryDemoScreenshotTest {
 
             clickDashboardTab("NEW_ORDER")
             waitForTag("quick_actions_screen")
-            clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
+            clickText("Inserisci nuovo cliente")
             typeTag(RepairAppTestTags.NewOrderFirstNameField, "Giulia", scroll = true)
             typeTag(RepairAppTestTags.NewOrderLastNameField, "Bianchi", scroll = true)
             typeTag(RepairAppTestTags.NewOrderPhoneField, "+39 333 010 2020", scroll = true)
             typeTag(RepairAppTestTags.NewOrderEmailField, "giulia.bianchi@example.invalid", scroll = true)
             capture(outputDir, "03-nuovo-cliente.png")
 
-            clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
+            clickText("Salva cliente", scroll = true)
             waitForText("Cliente selezionato")
-            clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
+            clickText("Avanti", scroll = true)
             clickTag(RepairAppTestTags.categoryButton(DemoDataSeeder.DEMO_CATEGORY_ID), scroll = true)
-            clickTag(RepairAppTestTags.NewOrderStep2NextButton, scroll = true)
+            clickText("Avanti", scroll = true)
             typeTag(RepairAppTestTags.NewOrderProblemSummaryField, "Notebook non si accende", scroll = true)
             typeTag(
                 RepairAppTestTags.NewOrderProblemDetailsField,
@@ -293,12 +293,36 @@ class SocialStoryDemoScreenshotTest {
         pauseForDemo()
     }
 
-    private fun clickText(text: String) {
+    private fun clickText(text: String, scroll: Boolean = false, requireDisplayed: Boolean = true) {
         waitForText(text)
-        composeRule.onNodeWithText(text).performClick()
+        val node = composeRule.onNodeWithText(text, substring = true)
+        if (scroll) runCatching { node.performScrollTo() }
+        if (requireDisplayed && scroll && runCatching { node.assertIsDisplayed() }.isFailure) {
+            var displayed = false
+            repeat(VISIBILITY_SWIPE_ATTEMPTS) {
+                if (displayed) return@repeat
+                runCatching { node.performScrollTo() }
+                displayed = runCatching { node.assertIsDisplayed() }.isSuccess
+                if (displayed) {
+                    return@repeat
+                }
+                composeRule.onRoot().performTouchInput { swipeUp() }
+                composeRule.waitForIdle()
+                pauseForDemo()
+            }
+        }
+        if (requireDisplayed) {
+            node.assertIsDisplayed()
+        }
+        if (requireDisplayed) {
+            node.performClick()
+        } else {
+            node.performSemanticsAction(SemanticsActions.OnClick)
+        }
         composeRule.waitForIdle()
         pauseForDemo()
     }
+
 
     private fun waitForTag(tag: String) {
         waitForTagExists(tag)

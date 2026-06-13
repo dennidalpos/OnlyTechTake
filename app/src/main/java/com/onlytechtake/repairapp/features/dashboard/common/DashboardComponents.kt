@@ -39,7 +39,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -69,7 +68,7 @@ fun SectionTitle(text: String) {
         text = text,
         style = MaterialTheme.typography.titleLarge,
         modifier = Modifier.padding(bottom = 4.dp),
-        color = MaterialTheme.colorScheme.primary
+        color = MaterialTheme.colorScheme.primary,
     )
 }
 
@@ -233,24 +232,6 @@ fun OperatorText(text: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun StatusHighlightText(
-    text: String,
-    backgroundColor: Color,
-    contentColor: Color,
-    modifier: Modifier = Modifier,
-) {
-    Text(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(backgroundColor, RoundedCornerShape(8.dp))
-            .padding(DashboardSpacing.compactGap),
-        text = text,
-        color = contentColor,
-        style = MaterialTheme.typography.labelLarge
-    )
-}
-
-@Composable
 fun CompactExpandableRow(
     title: String,
     subtitle: String,
@@ -259,8 +240,7 @@ fun CompactExpandableRow(
 ) {
     var expanded by rememberSaveable { mutableStateOf(value = false) }
     val expandedState = if (expanded) stringResource(R.string.state_expanded) else stringResource(R.string.state_collapsed)
-    val clickLabel = if (expanded) stringResource(R.string.action_collapse) else stringResource(R.string.action_expand)
-    
+
     StandardCard(
         modifier = modifier
             .semantics {
@@ -440,8 +420,8 @@ private fun TypeToggleButton(
 fun NoteFieldWithDialog(
     note: String,
     onNoteChange: (String) -> Unit,
-    label: String = stringResource(R.string.customer_field_notes),
     modifier: Modifier = Modifier,
+    label: String = stringResource(R.string.customer_field_notes),
     testTag: String? = null,
 ) {
     var showDialog by rememberSaveable { mutableStateOf(value = false) }

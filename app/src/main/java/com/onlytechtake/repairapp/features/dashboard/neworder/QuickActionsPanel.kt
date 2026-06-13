@@ -55,7 +55,6 @@ import com.onlytechtake.repairapp.features.dashboard.common.StepSectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.dashboard.common.WizardNavigationBar
 import com.onlytechtake.repairapp.features.dashboard.common.SignatureCaptureForm
-import com.onlytechtake.repairapp.features.dashboard.neworder.LAST_INTAKE_STEP
 import com.onlytechtake.repairapp.features.dashboard.neworder.SUBMIT_INTAKE_STEP
 import com.onlytechtake.repairapp.features.dashboard.neworder.completedStepAfterAdvance
 import com.onlytechtake.repairapp.features.dashboard.neworder.completedStepAfterCategorySelection
@@ -108,7 +107,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
     val selectedCustomer = draft.selectedCustomerId?.let { id -> customerSuggestions.firstOrNull { it.id == id } }
     val selectedCustomerDisplayName = selectedCustomer?.displayName(
         unnamedPrivate = unnamedPrivate,
-        unnamedBusiness = unnamedBusiness
+        unnamedBusiness = unnamedBusiness,
     ) ?: draft.selectedCustomerLabel
     val activeCategories = categories.filter { it.active }
     val newCustomerInput = CustomerInput(
@@ -133,8 +132,8 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         stagedMediaCount = draft.stagedMedia.size,
         hasPrivacySignature = draft.signatureCapture != null,
     )
-    val privacyText = templates.firstOrNull { it.code == PRIVACY_TEMPLATE_CODE && it.active }?.body ?: DEFAULT_PRIVACY_TEXT
-    val termsText = templates.firstOrNull { it.code == TERMS_TEMPLATE_CODE && it.active }?.body ?: DEFAULT_TERMS_TEXT
+    val privacyText = templates.firstOrNull { (it.code == PRIVACY_TEMPLATE_CODE) && it.active }?.body ?: DEFAULT_PRIVACY_TEXT
+    val termsText = templates.firstOrNull { (it.code == TERMS_TEMPLATE_CODE) && it.active }?.body ?: DEFAULT_TERMS_TEXT
     val missingRequirements = intakeInput.validationErrors()
 
     androidx.compose.runtime.LaunchedEffect(
@@ -214,12 +213,11 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
         StepperIndicator(
             currentStep = draft.currentStep,
             completedStep = draft.completedStep,
-            onStepClick = { step ->
-                if (step <= draft.completedStep + 1) {
-                    editStep(step)
-                }
+        ) { step ->
+            if (step <= draft.completedStep + 1) {
+                editStep(step)
             }
-        )
+        }
 
         if (draft.currentStep == 1) {
             StandardCard(highlight = true) {
@@ -230,15 +228,15 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                 StepSectionTitle(1, stringResource(R.string.intake_step_customer))
                 Field(
                     value = uiState.customerSearchQuery,
-                    onValueChange = {
-                        updateDraft {
-                            it.copy(
+                    onValueChange = { query ->
+                        updateDraft { draftState ->
+                            draftState.copy(
                                 selectedCustomerId = null,
                                 selectedCustomerLabel = null,
                                 showNewCustomerForm = false,
                             )
                         }
-                        viewModel.setCustomerSearchQuery(it)
+                        viewModel.setCustomerSearchQuery(query)
                     },
                     label = stringResource(R.string.intake_search_customer),
                     singleLine = true,

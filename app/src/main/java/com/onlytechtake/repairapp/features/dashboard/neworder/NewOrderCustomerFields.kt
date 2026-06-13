@@ -16,7 +16,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -41,11 +40,13 @@ import com.onlytechtake.repairapp.features.workspace.ButtonTone
 @Composable
 fun CustomerSuggestionCard(customer: CustomerEntity, onClick: () -> Unit) {
     val context = LocalContext.current
-    var expanded by rememberSaveable(customer.id) { mutableStateOf(false) }
+    var expanded by rememberSaveable(customer.id) { mutableStateOf(value = false) }
     Card(
         modifier = Modifier.fillMaxWidth(),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+        )
     ) {
         Column(
             modifier = Modifier.padding(DashboardSpacing.compactGap),

@@ -37,7 +37,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.compose.material.icons.Icons
@@ -82,15 +81,10 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
     val detail by viewModel.selectedOrder.collectAsState()
     val documents by viewModel.selectedOrderDocuments.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
-    val exportDestination by viewModel.exportDestination.collectAsState()
     val context = LocalContext.current
 
     val exitConfirmTitle = stringResource(R.string.order_exit_confirm_title)
     val exitConfirmText = stringResource(R.string.order_exit_confirm_text)
-    val exportLocal = stringResource(R.string.order_export_local)
-    val exportCloud = stringResource(R.string.order_export_cloud)
-    val exportPdfTitle = stringResource(R.string.order_export_pdf_title)
-    val exportPdfTextTemplate = stringResource(R.string.order_export_pdf_text)
     val missingSignatureTitle = stringResource(R.string.order_pdf_missing_signature_title)
     val missingSignatureText = stringResource(R.string.order_pdf_missing_signature_text)
     val waOpenConfirmTitle = stringResource(R.string.order_wa_open_confirm_title)
@@ -113,16 +107,12 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
     var quoteDecision by rememberSaveable { mutableStateOf<QuoteDecision?>(null) }
     var quoteRejectNote by rememberSaveable { mutableStateOf("") }
 
-    val exportPdfLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
-        uri?.let(viewModel::exportSelectedOrderPdf)
-    }
-
     val selected = detail
     if (selected == null) {
         Column(
             modifier = Modifier.fillMaxSize().padding(DashboardSpacing.screenPadding),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             if (uiState.selectedOrderId != null) {
                 androidx.compose.material3.CircularProgressIndicator()
@@ -156,7 +146,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         confirmAction = action
     }
 
-    val hasUnsavedLocalWork = (note.isNotBlank() || uiState.preparedMessage != null)
+    val hasUnsavedLocalWork = (note.isNotBlank() || (uiState.preparedMessage != null))
     BackHandler(enabled = hasUnsavedLocalWork) {
         requestConfirm(exitConfirmTitle, exitConfirmText) {
             note = ""
@@ -271,9 +261,9 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     val actions = availableOrderStatusActions(selected.order.status)
                     val forwardAction = actions.firstOrNull { it != OrderStatusAction.CLOSE_ORDER }
 
-                    if (forwardAction != null) {
+                    forwardAction?.let {
                         Text(
-                            text = stringResource(R.string.orders_next_action_label, forwardAction.label),
+                            text = stringResource(R.string.orders_next_action_label, it.label),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
@@ -343,8 +333,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                                             feedback = CustomerFeedbackType.REJECT,
                                             note = quoteRejectNote,
                                             closureReason = ClosureReason.CUSTOMER_DECLINED,
-                                            onSuccess = { viewModel.selectOrder(null) },
-                                        )
+                                        ) { viewModel.selectOrder(null) }
                                     }
                                     null -> Unit
                                 }

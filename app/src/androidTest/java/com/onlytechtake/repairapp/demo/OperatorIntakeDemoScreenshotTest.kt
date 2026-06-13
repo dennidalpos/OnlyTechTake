@@ -7,6 +7,7 @@ import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -50,18 +51,18 @@ class OperatorIntakeDemoScreenshotTest {
 
             clickDashboardTab("NEW_ORDER")
             waitForTag("quick_actions_screen")
-            clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
+            clickText("Inserisci nuovo cliente", scroll = true)
             typeTag(RepairAppTestTags.NewOrderFirstNameField, "Giulia", scroll = true)
             typeTag(RepairAppTestTags.NewOrderLastNameField, "Bianchi", scroll = true)
             typeTag(RepairAppTestTags.NewOrderPhoneField, "+39 333 010 2020", scroll = true)
             typeTag(RepairAppTestTags.NewOrderEmailField, "giulia.bianchi@example.invalid", scroll = true)
             capture(outputDir, "03-new-customer.png")
 
-            clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
+            clickText("Salva cliente", scroll = true)
             waitForText("Cliente selezionato")
-            clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
+            clickText("Avanti", scroll = true)
             clickTag(RepairAppTestTags.categoryButton(DemoDataSeeder.DEMO_CATEGORY_ID), scroll = true)
-            clickTag(RepairAppTestTags.NewOrderStep2NextButton, scroll = true)
+            clickText("Avanti", scroll = true)
             typeTag(RepairAppTestTags.NewOrderProblemSummaryField, "Notebook non si accende", scroll = true)
             typeTag(
                 RepairAppTestTags.NewOrderProblemDetailsField,
@@ -179,6 +180,30 @@ class OperatorIntakeDemoScreenshotTest {
     private fun clickTag(tag: String, scroll: Boolean = false) {
         waitForTagExists(tag)
         val node = composeRule.onNodeWithTag(tag)
+        if (scroll) runCatching { node.performScrollTo() }
+        if (scroll && runCatching { node.assertIsDisplayed() }.isFailure) {
+            var displayed = false
+            repeat(VISIBILITY_SWIPE_ATTEMPTS) {
+                if (displayed) return@repeat
+                runCatching { node.performScrollTo() }
+                displayed = runCatching { node.assertIsDisplayed() }.isSuccess
+                if (displayed) {
+                    return@repeat
+                }
+                composeRule.onRoot().performTouchInput { swipeUp() }
+                composeRule.waitForIdle()
+                pauseForDemo()
+            }
+        }
+        node.assertIsDisplayed()
+        node.performClick()
+        composeRule.waitForIdle()
+        pauseForDemo()
+    }
+
+    private fun clickText(text: String, scroll: Boolean = false) {
+        waitForText(text)
+        val node = composeRule.onNodeWithText(text, substring = true)
         if (scroll) runCatching { node.performScrollTo() }
         if (scroll && runCatching { node.assertIsDisplayed() }.isFailure) {
             var displayed = false

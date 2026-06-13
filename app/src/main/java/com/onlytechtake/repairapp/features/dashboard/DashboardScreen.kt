@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.List
@@ -106,7 +105,7 @@ fun DashboardScreen(
     androidx.compose.runtime.DisposableEffect(navController) {
         val listener = androidx.navigation.NavController.OnDestinationChangedListener { _, destination, _ ->
             val dest = WorkspaceDestination.entries.find { it.name == destination.route }
-            if (dest != null && dest != uiState.destination) {
+            if (dest != null && (dest != uiState.destination)) {
                 workspaceViewModel.navigateTo(dest)
             }
         }
@@ -126,7 +125,7 @@ fun DashboardScreen(
 
     val isFormDirty by workspaceViewModel.isFormDirty.collectAsState()
     var pendingDestination by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf<WorkspaceDestination?>(null) }
-    var showUnsavedChangesDialog by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
+    var showUnsavedChangesDialog by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(value = false) }
 
     fun performNavigation(destination: WorkspaceDestination) {
         if (destination == WorkspaceDestination.ORDERS) {
@@ -146,14 +145,16 @@ fun DashboardScreen(
                 title = { Text(text = summary.title) },
                 navigationIcon = {
                     if (currentDestination != WorkspaceDestination.HOME.name) {
-                        IconButton(onClick = {
-                            if (isFormDirty) {
-                                pendingDestination = null // Pop back
-                                showUnsavedChangesDialog = true
-                            } else {
-                                navController.popBackStack()
+                        IconButton(
+                            onClick = {
+                                if (isFormDirty) {
+                                    pendingDestination = null // Pop back
+                                    showUnsavedChangesDialog = true
+                                } else {
+                                    navController.popBackStack()
+                                }
                             }
-                        }) {
+                        ) {
                             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                         }
                     }
@@ -169,7 +170,7 @@ fun DashboardScreen(
                     TextButton(onClick = onLogout) {
                         Text(text = stringResource(R.string.logout))
                     }
-                }
+                },
             )
         },
         bottomBar = {
@@ -236,12 +237,9 @@ fun DashboardScreen(
                     onClick = {
                         showUnsavedChangesDialog = false
                         workspaceViewModel.setFormDirty(false)
-                        val dest = pendingDestination
-                        if (dest != null) {
-                            performNavigation(dest)
-                        } else {
-                            navController.popBackStack()
-                        }
+                        pendingDestination?.let {
+                            performNavigation(it)
+                        } ?: navController.popBackStack()
                     }
                 ) {
                     Text("Esci e perdi dati")
