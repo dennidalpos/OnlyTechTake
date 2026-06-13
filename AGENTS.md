@@ -88,6 +88,10 @@ For read-only tasks, do not modify files. Report findings, affected areas, recom
 
 ## 5. Cleanliness check
 
+Keep the repository clean by default. Do not leave local cache folders, build outputs, generated reports, temporary files, debug artifacts, APK/AAB outputs, screenshots, recordings, or other disposable generated files in the working tree after a task. Remove safe disposable outputs you created, and prefer updating `.gitignore` when a generated path is expected to recur.
+
+Do not delete local configuration, credentials, signing keys, IDE settings, or user-created files as part of cleanup unless explicitly requested and the target is verified.
+
 Before the final response for implementation tasks, verify that:
 
 - unrelated files were not changed;
