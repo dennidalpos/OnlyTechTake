@@ -132,6 +132,20 @@ class BackupRepository(
                         
                         authPreferences?.clear()
                         sessionStore?.clear()
+
+                        // Log the restore event in the NEW database
+                        val now = clockMillis()
+                        auditLogDao.upsert(
+                            com.onlytechtake.repairapp.data.local.entities.AuditLogEntity(
+                                id = java.util.UUID.randomUUID().toString(),
+                                action = com.onlytechtake.repairapp.data.local.entities.AuditAction.DATA_RESET,
+                                actorUserId = actor.id,
+                                orderId = null,
+                                customerId = null,
+                                detailsJson = """{"operation":"backup_restored","at":"${formatTime(now)}"}""",
+                                createdAt = now,
+                            )
+                        )
                     } catch (e: Exception) {
                         // Rollback DB if possible (partial restore of files is harder)
                         oldDbBackupDir.listFiles()?.forEach { 

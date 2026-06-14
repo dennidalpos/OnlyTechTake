@@ -39,11 +39,10 @@ import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
-import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 
 @Composable
 fun BackupSettings(
-    viewModel: WorkspaceViewModel,
+    viewModel: SettingsViewModel,
     isAdmin: Boolean,
     onBackupRestored: () -> Unit,
     onRequestConfirm: (String, String, () -> Unit) -> Unit,

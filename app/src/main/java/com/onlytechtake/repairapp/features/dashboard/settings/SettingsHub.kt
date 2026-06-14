@@ -18,13 +18,12 @@ import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
-import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
-import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
+import com.onlytechtake.repairapp.features.dashboard.DashboardRoutes
 
 @Composable
 fun SettingsHub(
-    viewModel: WorkspaceViewModel,
     isAdmin: Boolean,
+    onNavigate: (String) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -43,7 +42,7 @@ fun SettingsHub(
                 subtitle = stringResource(R.string.config_hub_categories_subtitle),
                 testTag = RepairAppTestTags.ConfigHubCategoriesButton,
             ) {
-                viewModel.navigateTo(WorkspaceDestination.SETTINGS_CATEGORIES)
+                onNavigate(DashboardRoutes.settings("CATEGORIES"))
             }
         }
         item {
@@ -53,7 +52,7 @@ fun SettingsHub(
                 enabled = isAdmin,
                 testTag = RepairAppTestTags.ConfigHubTemplatesButton,
             ) {
-                viewModel.navigateTo(WorkspaceDestination.SETTINGS_TEMPLATES)
+                onNavigate(DashboardRoutes.settings("TEMPLATES"))
             }
         }
         item {
@@ -61,15 +60,15 @@ fun SettingsHub(
                 stringResource(R.string.config_hub_whatsapp_title),
                 stringResource(R.string.config_hub_whatsapp_subtitle)
             ) {
-                viewModel.navigateTo(WorkspaceDestination.SETTINGS_WHATSAPP)
+                onNavigate(DashboardRoutes.settings("WHATSAPP"))
             }
         }
         item {
             SettingsHubCard(
-                "Archiviazione",
+                stringResource(R.string.storage_title),
                 "Spazio disco e monitoraggio"
             ) {
-                viewModel.navigateTo(WorkspaceDestination.SETTINGS_STORAGE)
+                onNavigate(DashboardRoutes.settings("STORAGE"))
             }
         }
         item {
@@ -77,7 +76,7 @@ fun SettingsHub(
                 stringResource(R.string.config_hub_admin_title),
                 stringResource(R.string.config_hub_admin_subtitle)
             ) {
-                viewModel.navigateTo(WorkspaceDestination.ADMIN)
+                onNavigate(DashboardRoutes.ADMIN)
             }
         }
         if (isAdmin) {
@@ -87,7 +86,7 @@ fun SettingsHub(
                     stringResource(R.string.config_hub_backup_subtitle),
                     testTag = RepairAppTestTags.ConfigHubBackupButton,
                 ) {
-                    viewModel.navigateTo(WorkspaceDestination.SETTINGS_BACKUP)
+                    onNavigate(DashboardRoutes.settings("EXPORT"))
                 }
             }
         }

@@ -20,11 +20,10 @@ import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
-import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 
 @Composable
 fun WhatsAppSettings(
-    viewModel: WorkspaceViewModel,
+    viewModel: SettingsViewModel,
     onRequestConfirm: (String, String, () -> Unit) -> Unit,
 ) {
     val messageMode by viewModel.messageMode.collectAsState()

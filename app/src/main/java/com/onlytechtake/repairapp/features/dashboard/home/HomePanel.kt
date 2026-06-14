@@ -29,17 +29,24 @@ import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import com.onlytechtake.repairapp.domain.backup.BackupReminderStatus
 import com.onlytechtake.repairapp.domain.models.AppSummary
+import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
-import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
-import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.queueFilter
 
 @Composable
-fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel, isAdmin: Boolean) {
+fun HomePanel(
+    summary: AppSummary,
+    viewModel: HomeViewModel,
+    isAdmin: Boolean,
+    onNewOrder: () -> Unit,
+    onSelectOrder: (String) -> Unit,
+    onOpenQueue: (OrderFilter) -> Unit,
+    onOpenBackupSettings: () -> Unit,
+) {
     val queues by viewModel.operationalQueues.collectAsState()
     val backupReminderSettings by viewModel.backupReminderSettings.collectAsState()
     val exportZipLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
@@ -81,13 +88,13 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel, isAdmin: Boole
             TouchButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.home_new_order),
-                onClick = viewModel::openNewOrder,
+                onClick = onNewOrder,
             )
             if (showBackupReminder) {
                 BackupReminderCard(
                     settings = backupReminderSettings,
                     onRunBackup = { exportZipLauncher.launch("onlytechtake-backup.zip") },
-                    onOpenSettings = { viewModel.navigateTo(WorkspaceDestination.SETTINGS_BACKUP) }
+                    onOpenSettings = onOpenBackupSettings
                 )
             }
             queues.forEach { queue ->
@@ -113,7 +120,7 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel, isAdmin: Boole
                                     modifier = Modifier.fillMaxWidth(),
                                     text = "${order.orderNumber} - ${order.title}",
                                     tone = ButtonTone.NEUTRAL,
-                                    onClick = { viewModel.selectOrder(order.id) },
+                                    onClick = { onSelectOrder(order.id) },
                                 )
                             }
                         }
@@ -121,8 +128,7 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel, isAdmin: Boole
                             modifier = Modifier.fillMaxWidth(),
                             text = stringResource(R.string.home_open_queue),
                             onClick = {
-                                viewModel.setFilter(queueFilter(queue))
-                                viewModel.navigateTo(WorkspaceDestination.ORDERS)
+                                onOpenQueue(queueFilter(queue))
                             },
                         )
                     }

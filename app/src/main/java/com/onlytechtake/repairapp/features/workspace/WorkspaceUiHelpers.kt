@@ -163,7 +163,7 @@ fun OrderStatusStepper(
 fun applyStatusAction(
     action: OrderStatusAction,
     orderId: String,
-    viewModel: WorkspaceViewModel,
+    viewModel: com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel,
     note: String,
     closureReason: ClosureReason?,
     resultSummary: String,
@@ -174,13 +174,11 @@ fun applyStatusAction(
         val outcome = diagnosisOutcome ?: return
         val estimateAmountCents = parseEuroCentsOrNull(resultAmount)
         viewModel.recordResult(
-            orderId = orderId,
             summary = resultSummary,
             diagnosisOutcome = outcome,
             estimateAmountCents = estimateAmountCents,
             onSuccess = {
                 viewModel.prepareMessage(
-                    orderId,
                     if (outcome == DiagnosisOutcome.REPAIRABLE) {
                         "whatsapp_preventivo_intervento"
                     } else {
@@ -193,15 +191,12 @@ fun applyStatusAction(
     }
     val targetStatus = action.targetStatus ?: return
     viewModel.changeStatus(
-        orderId = orderId,
         status = targetStatus,
         note = note,
         closureReason = closureReason,
         onSuccess = {
             if (targetStatus == OrderStatus.CLOSED && closureReason == ClosureReason.NOT_REPAIRABLE) {
-                viewModel.prepareMessage(orderId, "whatsapp_non_riparabile")
-            } else if (targetStatus == OrderStatus.CLOSED) {
-                viewModel.selectOrder(null)
+                viewModel.prepareMessage("whatsapp_non_riparabile")
             }
         },
     )

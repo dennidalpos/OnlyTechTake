@@ -8,7 +8,7 @@
     <string name="order_reassigned_title">Commessa riassegnata</string>
     <string name="unassigned">Non assegnata</string>
     <string name="internal_note_added_title">Nota interna aggiunta</string>
-    <string name="order_archived_title">Commessa archiviata</string>
+    <string name="order_deleted_title">Commessa eliminata</string>
     <string name="customer_feedback_recorded_title">Feedback cliente registrato</string>
     <string name="media_removed_title">Media rimosso</string>
     <string name="signature_captured_title">Firma acquisita</string>
@@ -318,6 +318,7 @@
 
     <string name="storage_title">Archiviazione</string>
     <string name="storage_free_device">Spazio libero dispositivo</string>
+    <string name="storage_total_device">Capacità totale dispositivo</string>
     <string name="storage_app_used">Spazio usato dall\'app</string>
     <string name="storage_db_size">Database</string>
     <string name="storage_media_size">Media e Foto</string>

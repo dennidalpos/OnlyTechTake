@@ -2,151 +2,43 @@ package com.onlytechtake.repairapp.core.di
 
 import android.content.Context
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.room.withTransaction
-import com.onlytechtake.repairapp.core.security.PasswordHasher
-import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
-import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
-import com.onlytechtake.repairapp.data.preferences.AuthPreferences
-import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
-import com.onlytechtake.repairapp.data.repositories.*
-import com.onlytechtake.repairapp.data.services.StorageStatsService
-import com.onlytechtake.repairapp.data.session.InMemorySessionStore
-import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.repositories.RepairAppRepository
-import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
-import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
+import com.onlytechtake.repairapp.data.repositories.DefaultRepairAppRepository
 
 class AppContainer(context: Context) {
-    private val database = RepairAppDatabase.getInstance(context)
-    private val sessionStore = InMemorySessionStore()
-    private val authPreferences = AuthPreferences(context)
-    val backupReminderPreferences = BackupReminderPreferences(context.applicationContext)
-    private val passwordHasher = PasswordHasher()
-    val shareDocumentIntentFactory = ShareDocumentIntentFactory(context)
-    val orderFileCleanupService = OrderFileCleanupService(context.applicationContext)
-    val storageStatsService = StorageStatsService(context.applicationContext)
+    private val dataContainer = DataContainer(context)
+    private val authContainer = AuthContainer(context, dataContainer)
+    private val mediaContainer = MediaContainer(context, dataContainer)
+    private val orderContainer = OrderContainer(context, dataContainer, mediaContainer)
+    private val settingsContainer = SettingsContainer(context, dataContainer, authContainer, mediaContainer)
 
     val repairAppRepository: RepairAppRepository = DefaultRepairAppRepository(
-        dashboardDao = database.dashboardDao(),
+        dashboardDao = dataContainer.database.dashboardDao(),
     )
 
-    val authRepository: AuthRepository = DefaultAuthRepository(
-        userDao = database.userDao(),
-        auditLogDao = database.auditLogDao(),
-        loginAttemptDao = database.loginAttemptDao(),
-        authPreferences = authPreferences,
-        sessionStore = sessionStore,
-        passwordHasher = passwordHasher,
-    )
+    val authRepository = authContainer.authRepository
+    val adminUserRepository = authContainer.adminUserRepository
+    
+    val customerRepository = orderContainer.customerRepository
+    val catalogRepository = orderContainer.catalogRepository
+    val orderWorkflowRepository = orderContainer.orderWorkflowRepository
+    val signatureRepository = orderContainer.signatureRepository
+    val createIntakeOrderUseCase = orderContainer.createIntakeOrderUseCase
 
-    val adminUserRepository = AdminUserRepository(
-        context = context.applicationContext,
-        userDao = database.userDao(),
-        auditLogDao = database.auditLogDao(),
-        passwordHasher = passwordHasher,
-    )
+    val orderMediaRepository = mediaContainer.orderMediaRepository
+    val orderDocumentRepository = mediaContainer.orderDocumentRepository
+    val shareDocumentIntentFactory = mediaContainer.shareDocumentIntentFactory
+    val generateOrderStatusPdfUseCase = mediaContainer.generateOrderStatusPdfUseCase
+    val orderFileCleanupService = mediaContainer.orderFileCleanupService
 
-    val customerRepository = CustomerRepository(
-        customerDao = database.customerDao(),
-    )
-
-    val catalogRepository = CatalogRepository(
-        context = context.applicationContext,
-        categoryDao = database.orderCategoryDao(),
-    )
-
-    val orderDocumentFileStorage = OrderDocumentFileStorage(context.applicationContext)
-
-    val orderDocumentRepository: OrderDocumentRepository = DefaultOrderDocumentRepository(
-        dao = database.orderDocumentDao(),
-        fileCleanupService = orderFileCleanupService,
-    )
-
-    val orderWorkflowRepository = OrderWorkflowRepository(
-        context = context.applicationContext,
-        repairOrderDao = database.repairOrderDao(),
-        customerDao = database.customerDao(),
-        categoryDao = database.orderCategoryDao(),
-        userDao = database.userDao(),
-        timelineEventDao = database.timelineEventDao(),
-        orderMediaDao = database.orderMediaDao(),
-        signatureDao = database.signatureDao(),
-        messageLogDao = database.messageLogDao(),
-        auditLogDao = database.auditLogDao(),
-        database = database,
-    )
-
-    val orderMediaRepository = OrderMediaRepository(
-        context = context.applicationContext,
-        repairOrderDao = database.repairOrderDao(),
-        orderMediaDao = database.orderMediaDao(),
-        timelineEventDao = database.timelineEventDao(),
-        fileCleanupService = orderFileCleanupService,
-        database = database,
-    )
-
-    val templateRepository = TemplateRepository(
-        context = context.applicationContext,
-        templateDao = database.messageTemplateDao(),
-        orderDao = database.repairOrderDao(),
-        customerDao = database.customerDao(),
-        categoryDao = database.orderCategoryDao(),
-        settingDao = database.appSettingDao(),
-        messageLogDao = database.messageLogDao(),
-        timelineEventDao = database.timelineEventDao(),
-        auditLogDao = database.auditLogDao(),
-    )
-
-    val signatureRepository = SignatureRepository(
-        context = context.applicationContext,
-        repairOrderDao = database.repairOrderDao(),
-        signatureDao = database.signatureDao(),
-        templateDao = database.messageTemplateDao(),
-        timelineEventDao = database.timelineEventDao(),
-        fileCleanupService = orderFileCleanupService,
-    )
-
-    val createIntakeOrderUseCase = CreateIntakeOrderUseCase(
-        context = context.applicationContext,
-        customerRepository = customerRepository,
-        orderRepository = orderWorkflowRepository,
-        orderMediaRepository = orderMediaRepository,
-        signatureRepository = signatureRepository,
-    ) { block -> database.withTransaction { block() } }
-
-    val generateOrderStatusPdfUseCase = GenerateOrderStatusPdfUseCase(
-        context = context.applicationContext,
-        workflowRepository = orderWorkflowRepository,
-        catalogRepository = catalogRepository,
-        documentRepository = orderDocumentRepository,
-        userDao = database.userDao(),
-        fileStorage = orderDocumentFileStorage,
-    )
-
-    val backupRepository = BackupRepository(
-        context = context.applicationContext,
-        categoryDao = database.orderCategoryDao(),
-        templateDao = database.messageTemplateDao(),
-        settingDao = database.appSettingDao(),
-        auditLogDao = database.auditLogDao(),
-        orderExportDao = database.orderExportDao(),
-        database = database,
-        authPreferences = authPreferences,
-        sessionStore = sessionStore,
-        storageStatsService = storageStatsService,
-    )
-
-    val dataResetRepository = DataResetRepository(
-        context = context.applicationContext,
-        database = database,
-        auditLogDao = database.auditLogDao(),
-        authPreferences = authPreferences,
-        sessionStore = sessionStore,
-        fileCleanupService = orderFileCleanupService,
-    )
+    val templateRepository = settingsContainer.templateRepository
+    val backupRepository = settingsContainer.backupRepository
+    val backupReminderPreferences = settingsContainer.backupReminderPreferences
+    val dataResetRepository = settingsContainer.dataResetRepository
+    val storageStatsService = settingsContainer.storageStatsService
 
     fun close() {
-        RepairAppDatabase.closeInstance()
+        dataContainer.database.close()
     }
 }
 

@@ -61,6 +61,7 @@ object DashboardSpacing {
     val compactGap = 8.dp
     val actionGap = 8.dp
     val maxContentWidth = 840.dp
+    val dialogElevation = 6.dp
 }
 
 @Composable

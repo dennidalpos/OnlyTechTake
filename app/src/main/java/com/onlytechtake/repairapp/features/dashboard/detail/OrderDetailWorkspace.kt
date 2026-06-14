@@ -65,8 +65,6 @@ import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
-import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
-import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 import com.onlytechtake.repairapp.features.workspace.applyStatusAction
 import com.onlytechtake.repairapp.features.workspace.attachmentCounts
 import com.onlytechtake.repairapp.features.workspace.label as attachmentLabel
@@ -79,10 +77,19 @@ import com.onlytechtake.repairapp.domain.workspace.shouldShowDiagnosisEstimate
 import com.onlytechtake.repairapp.domain.workspace.statusTemplateCode
 
 @Composable
-fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
-    val detail by viewModel.selectedOrder.collectAsState()
-    val documents by viewModel.selectedOrderDocuments.collectAsState()
-    val uiState by viewModel.uiState.collectAsState()
+fun OrderDetailWorkspace(
+    viewModel: OrderDetailViewModel,
+    onBack: () -> Unit,
+) {
+    val detail by viewModel.orderDetail.collectAsState()
+    val documents by viewModel.documents.collectAsState()
+    val message by viewModel.message.collectAsState()
+    val preparedMessage by viewModel.preparedMessage.collectAsState()
+    val preparedMessageBody by viewModel.preparedMessageBody.collectAsState()
+    val isGeneratingStatusPdf by viewModel.isGeneratingStatusPdf.collectAsState()
+    val statusPdfError by viewModel.statusPdfError.collectAsState()
+    val showPdfSentConfirmation by viewModel.showPdfSentConfirmation.collectAsState()
+    val pendingShareIntent by viewModel.pendingShareIntent.collectAsState()
     val context = LocalContext.current
 
     val exitConfirmTitle = stringResource(R.string.order_exit_confirm_title)
@@ -115,13 +122,8 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            if (uiState.selectedOrderId != null) {
-                androidx.compose.material3.CircularProgressIndicator()
-                Text("Caricamento commessa...", modifier = Modifier.padding(top = 8.dp))
-            } else {
-                Text(stringResource(R.string.order_none_selected))
-                TouchButton(text = stringResource(R.string.dashboard_orders), onClick = { viewModel.navigateTo(WorkspaceDestination.ORDERS) })
-            }
+            androidx.compose.material3.CircularProgressIndicator()
+            Text("Caricamento commessa...", modifier = Modifier.padding(top = 8.dp))
         }
         return
     }
@@ -134,8 +136,8 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         onDispose { viewModel.clearPreparedMessage() }
     }
 
-    LaunchedEffect(uiState.pendingShareIntent) {
-        uiState.pendingShareIntent?.let { intent ->
+    LaunchedEffect(pendingShareIntent) {
+        pendingShareIntent?.let { intent ->
             context.startActivity(Intent.createChooser(intent, "Invia stato avanzamento"))
             viewModel.clearPendingShareIntent()
         }
@@ -147,11 +149,15 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         confirmAction = action
     }
 
-    val hasUnsavedLocalWork = (note.isNotBlank() || (uiState.preparedMessage != null))
-    BackHandler(enabled = hasUnsavedLocalWork) {
-        requestConfirm(exitConfirmTitle, exitConfirmText) {
-            note = ""
-            viewModel.selectOrder(null)
+    val hasUnsavedLocalWork = (note.isNotBlank() || (preparedMessage != null))
+    BackHandler(enabled = true) {
+        if (hasUnsavedLocalWork) {
+            requestConfirm(exitConfirmTitle, exitConfirmText) {
+                note = ""
+                onBack()
+            }
+        } else {
+            onBack()
         }
     }
 
@@ -285,14 +291,14 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                             TouchButton(
                                 text = if (isPaid) stringResource(R.string.order_not_paid_button) else stringResource(R.string.order_paid_button),
                                 tone = if (isPaid) ButtonTone.WARNING else ButtonTone.SUCCESS,
-                                onClick = { viewModel.togglePaymentStatus(selected.order.id, !isPaid) }
+                                onClick = { viewModel.togglePaymentStatus(!isPaid) }
                             )
                         }
 
                         TouchButton(
                             text = stringResource(R.string.order_whatsapp_send),
                             tone = ButtonTone.INFO,
-                            onClick = { viewModel.prepareMessage(selected.order.id, templateCode) }
+                            onClick = { viewModel.prepareMessage(templateCode) }
                         )
                     }
                 }
@@ -342,18 +348,16 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                                 when (quoteDecision) {
                                     QuoteDecision.ACCEPTED -> {
                                         viewModel.recordFeedback(
-                                            orderId = selected.order.id,
                                             feedback = CustomerFeedbackType.ACCEPT,
                                             note = "Preventivo accettato",
                                         )
                                     }
                                     QuoteDecision.REJECTED -> {
                                         viewModel.recordFeedback(
-                                            orderId = selected.order.id,
                                             feedback = CustomerFeedbackType.REJECT,
                                             note = quoteRejectNote,
                                             closureReason = ClosureReason.CUSTOMER_DECLINED,
-                                        ) { viewModel.selectOrder(null) }
+                                        ) { onBack() }
                                     }
                                     null -> Unit
                                 }
@@ -385,7 +389,6 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                                     "La commessa passera' a pronta per il ritiro.",
                                 ) {
                                     viewModel.changeStatus(
-                                        orderId = selected.order.id,
                                         status = OrderStatus.READY_FOR_PICKUP,
                                         note = "Cliente avvisato: dispositivo non riparabile",
                                     )
@@ -397,7 +400,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             }
         }
 
-        uiState.preparedMessage
+        preparedMessage
             ?.takeIf { it.orderId == selected.order.id }
             ?.let { prepared ->
             item {
@@ -409,7 +412,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                     ) {
                         SectionTitle(stringResource(R.string.order_wa_preview_title))
-                        Field(uiState.preparedMessageBody, viewModel::updatePreparedMessageBody, stringResource(R.string.order_wa_message_label))
+                        Field(preparedMessageBody, viewModel::updatePreparedMessageBody, stringResource(R.string.order_wa_message_label))
                         ActionRow {
                             TouchButton(
                                 text = stringResource(R.string.order_wa_open),
@@ -419,7 +422,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                                         viewModel.recordPreparedMessage()
                                         val intent = Intent(
                                             Intent.ACTION_VIEW,
-                                            "https://wa.me/${prepared.phone}?text=${Uri.encode(uiState.preparedMessageBody)}".toUri(),
+                                            "https://wa.me/${prepared.phone}?text=${Uri.encode(preparedMessageBody)}".toUri(),
                                         )
                                         context.startActivity(intent)
                                     }
@@ -483,22 +486,22 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                         TouchButton(
                             text = stringResource(R.string.order_generate_status_pdf),
                             tone = ButtonTone.INFO,
-                            enabled = !uiState.isGeneratingStatusPdf,
+                            enabled = !isGeneratingStatusPdf,
                             onClick = {
                                 if (selected.signatures.isEmpty()) {
                                     requestConfirm(missingSignatureTitle, missingSignatureText) {
-                                        viewModel.onGenerateStatusPdfClicked(selected.order.id, includeSignature = false)
+                                        viewModel.generateStatusPdf(includeSignature = false)
                                     }
                                 } else {
-                                    viewModel.onGenerateStatusPdfClicked(selected.order.id, includeSignature = true)
+                                    viewModel.generateStatusPdf(includeSignature = true)
                                 }
                             },
                         )
                     }
-                    if (uiState.isGeneratingStatusPdf) {
+                    if (isGeneratingStatusPdf) {
                         Text(stringResource(R.string.order_generating_pdf), style = MaterialTheme.typography.bodyMedium)
                     }
-                    uiState.statusPdfError?.let { error ->
+                    statusPdfError?.let { error ->
                         Text("Errore: $error", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
                     }
 
@@ -694,16 +697,38 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                         else -> true
                     },
                     onClick = {
-                        applyStatusAction(
-                            action = action,
-                            orderId = selected.order.id,
-                            viewModel = viewModel,
-                            note = statusNote,
-                            closureReason = closureReason,
-                            resultSummary = resultSummary,
-                            resultAmount = resultAmount,
-                            diagnosisOutcome = diagnosisOutcome,
-                        )
+                        if (action == OrderStatusAction.RECORD_RESULT) {
+                            val outcome = diagnosisOutcome ?: return@TextButton
+                            val estimateAmountCents = parseEuroCentsOrNull(resultAmount)
+                            viewModel.recordResult(
+                                summary = resultSummary,
+                                diagnosisOutcome = outcome,
+                                estimateAmountCents = estimateAmountCents,
+                                onSuccess = {
+                                    viewModel.prepareMessage(
+                                        if (outcome == DiagnosisOutcome.REPAIRABLE) {
+                                            "whatsapp_preventivo_intervento"
+                                        } else {
+                                            "whatsapp_non_riparabile"
+                                        },
+                                    )
+                                },
+                            )
+                        } else {
+                            val targetStatus = action.targetStatus ?: return@TextButton
+                            viewModel.changeStatus(
+                                status = targetStatus,
+                                note = statusNote,
+                                closureReason = closureReason,
+                                onSuccess = {
+                                    if (targetStatus == OrderStatus.CLOSED && closureReason == ClosureReason.NOT_REPAIRABLE) {
+                                        viewModel.prepareMessage("whatsapp_non_riparabile")
+                                    } else if (targetStatus == OrderStatus.CLOSED) {
+                                        onBack()
+                                    }
+                                },
+                            )
+                        }
                         statusAction = null
                     },
                     modifier = Modifier.testTag(RepairAppTestTags.StatusDialogConfirmButton),
@@ -745,7 +770,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                 TextButton(
                     enabled = note.isNotBlank(),
                     onClick = {
-                        viewModel.addNote(selected.order.id, note)
+                        viewModel.addNote(note)
                         note = ""
                         showInternalNoteDialog = false
                     },
@@ -761,7 +786,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
         )
     }
 
-    if (uiState.showPdfSentConfirmation) {
+    if (showPdfSentConfirmation) {
         AlertDialog(
             onDismissRequest = { viewModel.onPdfSentDismissed() },
             title = { Text(stringResource(R.string.order_pdf_sent_confirm_title)) },

@@ -83,31 +83,39 @@ class OrderWorkflowRepository(
 
     suspend fun countAllOrders(): Int = repairOrderDao.countAll()
 
-    fun observeOrderList(actor: AuthenticatedUser, filter: OrderFilter): Flow<List<OrderListItem>> =
-        combine(
-            observeOrders(actor, filter),
-            customerDao.observeAll(),
-            orderMediaDao.observeAggregates(),
-            signatureDao.observeAggregates(),
-        ) { orders, customers, mediaAggregates, signatureAggregates ->
-            val customersById = customers.associateBy { it.id }
-            val mediaByOrder = mediaAggregates.associateBy { it.orderId }
-            val signaturesByOrder = signatureAggregates.associateBy { it.orderId }
-            orders.map { order ->
-                val media = mediaByOrder[order.id]
-                val signatures = signaturesByOrder[order.id]
+    fun observeOrderList(actor: AuthenticatedUser, filter: OrderFilter): Flow<List<OrderListItem>> {
+        if (DemoMode.isEnabled) {
+            return flowOf(listOf(
                 OrderListItem(
-                    order = order,
-                    customer = customersById[order.customerId],
+                    order = DemoMode.demoOrder,
+                    customer = DemoMode.demoCustomer,
+                    attachments = OrderAttachmentCounts(images = 1, documents = 0, signatures = 1)
+                )
+            ))
+        }
+        val assignedToUserId = if (filter.showMineOnly) actor.id else null
+        val status = filter.status.takeIf { filter.statuses.isEmpty() }
+        
+        return repairOrderDao.observeOrderListProjection(
+            assignedToUserId = assignedToUserId,
+            status = status,
+            customerId = filter.customerId,
+        ).map { projections ->
+            val filtered = if (filter.statuses.isEmpty()) projections else projections.filter { it.order.status in filter.statuses }
+            filtered.map { p ->
+                OrderListItem(
+                    order = p.order,
+                    customer = p.customer,
                     attachments = OrderAttachmentCounts(
-                        images = media?.images ?: 0,
-                        documents = media?.documents ?: 0,
-                        signatures = signatures?.signatures ?: 0,
-                        finalPhotos = media?.finalPhotos ?: 0,
-                    ),
+                        images = p.imagesCount,
+                        documents = p.documentsCount,
+                        signatures = p.signaturesCount,
+                        finalPhotos = p.finalPhotosCount,
+                    )
                 )
             }
         }
+    }
 
     fun observeOrderDetail(orderId: String): Flow<OrderDetail?> {
         if (DemoMode.isEnabled && orderId == DemoMode.demoOrder.id) {

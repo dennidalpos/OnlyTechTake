@@ -58,13 +58,15 @@ import com.onlytechtake.repairapp.features.dashboard.common.SignatureCaptureForm
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeSignatureDraft
-import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 
 @Composable
-fun QuickActions(viewModel: WorkspaceViewModel) {
-    val uiState by viewModel.uiState.collectAsState()
+fun QuickActions(
+    viewModel: NewOrderViewModel,
+    onOpenConfig: () -> Unit,
+) {
     val draft by viewModel.quickIntakeDraft.collectAsState()
     val customerSuggestions by viewModel.customerSuggestions.collectAsState()
+    val customerSearchQuery by viewModel.customerSearchQuery.collectAsState()
     val categories by viewModel.categories.collectAsState()
     val templates by viewModel.templates.collectAsState()
     val currentUser by viewModel.currentUser.collectAsState()
@@ -214,7 +216,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
             ) {
                 StepSectionTitle(1, stringResource(R.string.intake_step_customer))
                 Field(
-                    value = uiState.customerSearchQuery,
+                    value = customerSearchQuery,
                     onValueChange = { query ->
                         updateDraft { draftState ->
                             draftState.copy(
@@ -366,7 +368,7 @@ fun QuickActions(viewModel: WorkspaceViewModel) {
                         )
                     }
                 },
-                onOpenConfig = viewModel::openCategoryCreationFromIntake,
+                onOpenConfig = onOpenConfig,
                 highlight = true,
             )
             WizardNavigationBar(

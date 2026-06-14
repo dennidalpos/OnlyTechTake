@@ -138,6 +138,8 @@ class DefaultAuthRepository(
     }
 
     override suspend fun loginDemo(): LoginResult {
+        if (!DemoMode.canEnable()) return LoginResult.InvalidCredentials
+
         DemoMode.setEnabled(enabled = true)
         val demoUser = AuthenticatedUser(
             id = "admin",

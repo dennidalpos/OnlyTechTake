@@ -94,6 +94,7 @@ class TemplateRepository(
         title: String,
         body: String,
         active: Boolean,
+        step: String? = null,
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_TEMPLATES)
@@ -115,6 +116,7 @@ class TemplateRepository(
                     version = (existing?.version ?: 0) + 1,
                     updatedByUserId = actor.id,
                     updatedAt = now,
+                    step = step?.trim(),
                 ),
             )
             auditLogDao.upsert(
@@ -241,6 +243,7 @@ class TemplateRepository(
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
+                step = "Ingresso",
             ),
             MessageTemplateEntity(
                 id = "",
@@ -252,6 +255,7 @@ class TemplateRepository(
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
+                step = "Aggiornamento",
             ),
             MessageTemplateEntity(
                 id = "",
@@ -263,6 +267,7 @@ class TemplateRepository(
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
+                step = "Diagnosi",
             ),
             MessageTemplateEntity(
                 id = "",
@@ -274,6 +279,7 @@ class TemplateRepository(
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
+                step = "Risultato",
             ),
             MessageTemplateEntity(
                 id = "",
@@ -285,6 +291,7 @@ class TemplateRepository(
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
+                step = "Preventivo",
             ),
             MessageTemplateEntity(
                 id = "",
@@ -296,6 +303,7 @@ class TemplateRepository(
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
+                step = "Non riparabile",
             ),
             MessageTemplateEntity(
                 id = "",
@@ -307,6 +315,7 @@ class TemplateRepository(
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
+                step = "Riparazione",
             ),
             MessageTemplateEntity(
                 id = "",
@@ -318,6 +327,7 @@ class TemplateRepository(
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
+                step = "Lavorazione",
             ),
             MessageTemplateEntity(
                 id = "",
@@ -329,6 +339,7 @@ class TemplateRepository(
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
+                step = "Chiusura",
             ),
             MessageTemplateEntity(
                 id = "",
@@ -340,6 +351,7 @@ class TemplateRepository(
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
+                step = "Pronto ritiro",
             ),
             MessageTemplateEntity(
                 id = "",
@@ -351,6 +363,7 @@ class TemplateRepository(
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
+                step = "PDF Stato",
             ),
             MessageTemplateEntity(
                 id = "",
@@ -362,6 +375,7 @@ class TemplateRepository(
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
+                step = "Legale",
             ),
             MessageTemplateEntity(
                 id = "",
@@ -373,6 +387,7 @@ class TemplateRepository(
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
+                step = "Legale",
             ),
         )
     }

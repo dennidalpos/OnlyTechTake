@@ -8,14 +8,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.utils.formatFileSize
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
@@ -24,14 +24,13 @@ import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
-import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 
 @Composable
 fun StorageSettings(
-    viewModel: WorkspaceViewModel,
+    viewModel: SettingsViewModel,
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    val stats = uiState.storageStats
+    val statsState = viewModel.storageStats.collectAsState()
+    val stats = statsState.value
 
     LazyColumn(
         modifier = Modifier
@@ -56,18 +55,55 @@ fun StorageSettings(
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
                     ) {
                         StorageInfoRow(stringResource(R.string.storage_free_device), formatFileSize(stats.freeDeviceBytes))
+                        StorageInfoRow(stringResource(R.string.storage_total_device), formatFileSize(stats.totalDeviceBytes))
                         StorageInfoRow(stringResource(R.string.storage_app_used), formatFileSize(stats.appUsedBytes))
                         
                         val freePercentage = (stats.freeDeviceBytes.toDouble() / stats.totalDeviceBytes.toDouble() * 100).toInt()
-                        Text(
-                            text = "Spazio libero: $freePercentage%",
-                            style = MaterialTheme.typography.labelSmall,
+                        val usedProgress = (stats.totalDeviceBytes - stats.freeDeviceBytes).toDouble() / stats.totalDeviceBytes.toDouble()
+                        
+                        LinearProgressIndicator(
+                            progress = { usedProgress.toFloat() },
+                            modifier = Modifier.fillMaxWidth(),
                             color = when {
                                 freePercentage < 5 -> MaterialTheme.colorScheme.error
-                                freePercentage < 15 -> MaterialTheme.colorScheme.error // Warning color would be better
+                                freePercentage < 15 -> MaterialTheme.colorScheme.tertiary
                                 else -> MaterialTheme.colorScheme.primary
-                            }
+                            },
+                            trackColor = MaterialTheme.colorScheme.surfaceVariant,
                         )
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Spazio libero: $freePercentage%",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = when {
+                                    freePercentage < 5 -> MaterialTheme.colorScheme.error
+                                    freePercentage < 15 -> MaterialTheme.colorScheme.tertiary
+                                    else -> MaterialTheme.colorScheme.primary
+                                }
+                            )
+
+                            Text(
+                                text = stringResource(
+                                    when {
+                                        freePercentage < 5 -> R.string.storage_status_critical
+                                        freePercentage < 15 -> R.string.storage_status_warning
+                                        else -> R.string.storage_status_ok
+                                    }
+                                ),
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                                color = when {
+                                    freePercentage < 5 -> MaterialTheme.colorScheme.error
+                                    freePercentage < 15 -> MaterialTheme.colorScheme.tertiary
+                                    else -> MaterialTheme.colorScheme.primary
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -89,6 +125,11 @@ fun StorageSettings(
 
             item {
                 ActionRow {
+                    TouchButton(
+                        text = stringResource(R.string.storage_cleanup_cache),
+                        tone = ButtonTone.NEUTRAL,
+                        onClick = viewModel::cleanupCache
+                    )
                     TouchButton(
                         text = stringResource(R.string.storage_refresh),
                         tone = ButtonTone.NEUTRAL,

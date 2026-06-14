@@ -33,4 +33,5 @@ data class MessageTemplateEntity(
     @ColumnInfo(defaultValue = "1") val version: Int,
     val updatedByUserId: String?,
     val updatedAt: Long,
+    val step: String? = null,
 )

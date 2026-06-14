@@ -19,8 +19,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.Surface
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,6 +31,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -35,10 +39,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.utils.displayName
@@ -55,15 +62,19 @@ import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
-import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 
 @Composable
-fun CustomerPanel(viewModel: WorkspaceViewModel) {
-    val uiState by viewModel.uiState.collectAsState()
+fun CustomerPanel(
+    viewModel: CustomersViewModel,
+    onOrderClick: (String) -> Unit,
+) {
     val customers by viewModel.customerSuggestions.collectAsState()
+    val searchQuery by viewModel.searchQuery.collectAsState()
     var showForm by rememberSaveable { mutableStateOf(value = false) }
     var confirmSave by rememberSaveable { mutableStateOf(value = false) }
     var editingCustomerId by rememberSaveable { mutableStateOf<String?>(null) }
+    var selectedCustomer by androidx.compose.runtime.remember { mutableStateOf<CustomerEntity?>(null) }
+    
     var isBusiness by rememberSaveable { mutableStateOf(false) }
     var firstName by rememberSaveable { mutableStateOf("") }
     var lastName by rememberSaveable { mutableStateOf("") }
@@ -169,30 +180,23 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
             }
 
             item {
-                StandardCard {
-                    Column(
-                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                    ) {
-                        OutlinedTextField(
-                            modifier = Modifier.fillMaxWidth(),
-                            value = uiState.customerSearchQuery,
-                            onValueChange = viewModel::setCustomerSearchQuery,
-                            label = { Text(stringResource(R.string.customer_search_label)) },
-                            singleLine = true,
-                            shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
-                            colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-                            ),
-                            keyboardOptions = KeyboardOptions(
-                                imeAction = ImeAction.Search,
-                                capitalization = KeyboardCapitalization.Words
-                            ),
-                            keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
-                        )
-                    }
-                }
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = searchQuery,
+                    onValueChange = viewModel::setSearchQuery,
+                    label = { Text(stringResource(R.string.customer_search_label)) },
+                    singleLine = true,
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
+                    colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Search,
+                        capitalization = KeyboardCapitalization.Words
+                    ),
+                    keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
+                )
             }
 
             if (showForm) {
@@ -273,17 +277,26 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                                     testTag = RepairAppTestTags.CustomerSaveButton,
                                     onClick = { confirmSave = true }
                                 )
+                                TouchButton(
+                                    text = stringResource(R.string.customer_cancel),
+                                    tone = ButtonTone.NEUTRAL,
+                                    onClick = {
+                                        showForm = false
+                                        clearForm()
+                                        viewModel.setFormDirty(false)
+                                    }
+                                )
                             }
                         }
                     }
                 }
             }
 
-            item { SectionTitle(if (uiState.customerSearchQuery.isBlank()) stringResource(R.string.customer_recent) else stringResource(R.string.customer_search_results)) }
+            item { SectionTitle(if (searchQuery.isBlank()) stringResource(R.string.customer_recent) else stringResource(R.string.customer_search_results)) }
             if (customers.isEmpty()) {
                 item {
                     CustomerEmptyState(
-                        hasQuery = uiState.customerSearchQuery.isNotBlank(),
+                        hasQuery = searchQuery.isNotBlank(),
                         onNewCustomer = ::openNewCustomerForm,
                     )
                 }
@@ -291,12 +304,24 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                 items(customers) { customer ->
                     CustomerCard(
                         customer = customer,
-                    ) {
-                        editCustomer(customer)
-                    }
+                        onClick = { selectedCustomer = customer }
+                    )
                 }
             }
         }
+    }
+
+    selectedCustomer?.let { customer ->
+        CustomerDetailDialog(
+            customer = customer,
+            viewModel = viewModel,
+            onDismiss = { selectedCustomer = null },
+            onEdit = {
+                editCustomer(customer)
+                selectedCustomer = null
+            },
+            onOrderClick = onOrderClick
+        )
     }
 
     if (confirmSave) {
@@ -308,11 +333,11 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
                 TextButton(
                     onClick = {
                         confirmSave = false
-                        viewModel.saveCustomer(input)
-                        clearForm()
-                        showForm = false
-                        viewModel.setFormDirty(false)
-                        viewModel.setCustomerSearchQuery("")
+                        viewModel.saveCustomer(input) {
+                            clearForm()
+                            showForm = false
+                            viewModel.setFormDirty(false)
+                        }
                     },
                     modifier = Modifier.testTag(RepairAppTestTags.CustomerConfirmSaveButton),
                 ) {
@@ -329,8 +354,146 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
 }
 
 @Composable
-private fun CustomerCard(customer: CustomerEntity, onEdit: () -> Unit) {
-    StandardCard(onClick = onEdit) {
+fun CustomerDetailDialog(
+    customer: CustomerEntity,
+    viewModel: CustomersViewModel,
+    onDismiss: () -> Unit,
+    onEdit: () -> Unit,
+    onOrderClick: (String) -> Unit,
+) {
+    val openOrders by viewModel.observeOrdersForCustomer(customer.id, openOnly = true).collectAsState(emptyList())
+    val allOrders by viewModel.observeOrdersForCustomer(customer.id, openOnly = false).collectAsState(emptyList())
+    val closedOrders = allOrders.filter { it.order.status == com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED }
+
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth(0.95f)
+                .widthIn(max = DashboardSpacing.maxContentWidth),
+            shape = MaterialTheme.shapes.extraLarge,
+            color = MaterialTheme.colorScheme.surface,
+            tonalElevation = DashboardSpacing.dialogElevation
+        ) {
+            LazyColumn(
+                modifier = Modifier.padding(DashboardSpacing.screenPadding),
+                verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap)
+            ) {
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = customer.displayName(LocalContext.current),
+                                style = MaterialTheme.typography.headlineSmall,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = customer.type.label(LocalContext.current),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        TouchButton(
+                            text = stringResource(R.string.customer_edit),
+                            onClick = onEdit
+                        )
+                    }
+                }
+
+                item {
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        customer.phone?.let { Text("Tel: $it", style = MaterialTheme.typography.bodyLarge) }
+                        customer.email?.let { Text("Email: $it", style = MaterialTheme.typography.bodyLarge) }
+                        customer.address?.let { Text("Indirizzo: $it", style = MaterialTheme.typography.bodyMedium) }
+                        customer.vatNumber?.let { Text("P.IVA: $it", style = MaterialTheme.typography.labelMedium) }
+                        customer.taxCode?.let { Text("CF: $it", style = MaterialTheme.typography.labelMedium) }
+                    }
+                }
+
+                if (!customer.notes.isNullOrBlank()) {
+                    item {
+                        com.onlytechtake.repairapp.features.dashboard.common.OperatorText(customer.notes)
+                    }
+                }
+
+                item { HorizontalDivider() }
+
+                item { SectionTitle("Commesse Aperte (${openOrders.size})") }
+                if (openOrders.isEmpty()) {
+                    item { Text("Nessuna commessa aperta", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline) }
+                } else {
+                    items(openOrders) { item ->
+                        OrderSummaryRow(item, onOrderClick)
+                    }
+                }
+
+                item { SectionTitle("Storico Chiuse (${closedOrders.size})") }
+                if (closedOrders.isEmpty()) {
+                    item { Text("Nessuna commessa chiusa", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline) }
+                } else {
+                    items(closedOrders) { item ->
+                        OrderSummaryRow(item, onOrderClick)
+                    }
+                }
+
+                item {
+                    TouchButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Chiudi",
+                        tone = ButtonTone.NEUTRAL,
+                        onClick = onDismiss
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun OrderSummaryRow(
+    item: com.onlytechtake.repairapp.domain.workspace.OrderListItem,
+    onOrderClick: (String) -> Unit
+) {
+    StandardCard(
+        onClick = { onOrderClick(item.order.id) },
+        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+    ) {
+        Row(
+            modifier = Modifier.padding(DashboardSpacing.compactGap).fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "${item.order.orderNumber}: ${item.order.title}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Text(
+                    text = item.order.status.label(LocalContext.current),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+            androidx.compose.material3.Icon(
+                imageVector = Icons.Default.Info,
+                contentDescription = null,
+                modifier = Modifier.size(20.dp),
+                tint = MaterialTheme.colorScheme.primary
+            )
+        }
+    }
+}
+
+@Composable
+private fun CustomerCard(customer: CustomerEntity, onClick: () -> Unit) {
+    StandardCard(onClick = onClick) {
         Row(
             modifier = Modifier.padding(DashboardSpacing.cardPadding).fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -349,7 +512,7 @@ private fun CustomerCard(customer: CustomerEntity, onEdit: () -> Unit) {
                 )
             }
             androidx.compose.material3.Icon(
-                imageVector = Icons.Default.Edit,
+                imageVector = Icons.Default.Info,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary
             )

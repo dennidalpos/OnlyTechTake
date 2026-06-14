@@ -45,12 +45,14 @@ import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
-import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 import com.onlytechtake.repairapp.features.workspace.label as attachmentLabel
 
 @Composable
-fun OrdersPanel(viewModel: WorkspaceViewModel) {
-    val uiState by viewModel.uiState.collectAsState()
+fun OrdersPanel(
+    viewModel: OrdersViewModel,
+    onOrderClick: (String) -> Unit,
+) {
+    val orderFilter by viewModel.orderFilter.collectAsState()
     val orderListItems by viewModel.orderListItems.collectAsState()
     val context = LocalContext.current
     var showFilterDialog by rememberSaveable { mutableStateOf(false) }
@@ -76,15 +78,15 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
                     SectionTitle(stringResource(R.string.orders_title))
                     TouchButton(
                         text = stringResource(R.string.orders_filter_title),
-                        tone = if (uiState.orderFilter.hasActiveFilter()) ButtonTone.INFO else ButtonTone.NEUTRAL,
+                        tone = if (orderFilter.hasActiveFilter()) ButtonTone.INFO else ButtonTone.NEUTRAL,
                         onClick = { showFilterDialog = true }
                     )
                 }
             }
 
-            if (uiState.orderFilter.hasActiveFilter()) {
+            if (orderFilter.hasActiveFilter()) {
                 item {
-                    ActiveFilterInfo(uiState.orderFilter)
+                    ActiveFilterInfo(orderFilter)
                 }
             }
 
@@ -99,7 +101,7 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
                         modifier = Modifier
                             .testTag(RepairAppTestTags.orderCard(order.id)),
                         onClick = {
-                            viewModel.selectOrder(order.id)
+                            onOrderClick(order.id)
                         },
                     ) {
                         Column(
@@ -148,7 +150,7 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
             title = { Text(stringResource(R.string.orders_filter_title)) },
             text = {
                 OrderFilterBar(
-                    filter = uiState.orderFilter,
+                    filter = orderFilter,
                     onFilter = viewModel::setFilter,
                 )
             },

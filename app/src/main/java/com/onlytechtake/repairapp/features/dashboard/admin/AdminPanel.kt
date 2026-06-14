@@ -50,12 +50,11 @@ import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
-import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 
 @Composable
 fun AdminPanel(
-    viewModel: WorkspaceViewModel,
+    viewModel: AdminViewModel,
     isAdmin: Boolean,
     onResetComplete: () -> Unit,
 ) {
@@ -77,7 +76,6 @@ fun AdminPanel(
     var password by rememberSaveable { mutableStateOf(value = "") }
     var passwordVisible by rememberSaveable { mutableStateOf(value = false) }
     
-    // Use remember for maps to avoid parcelable issues with rememberSaveable
     var resetPasswords by remember { mutableStateOf(value = emptyMap<String, String>()) }
     
     var resetConfirmation by rememberSaveable { mutableStateOf(value = "") }
@@ -181,22 +179,36 @@ fun AdminPanel(
                             
                             if (user.role != UserRole.ADMIN) {
                                 HorizontalDivider()
-                                Text("Permessi", style = MaterialTheme.typography.labelLarge)
-                                UserPermission.entries.forEach { permission ->
-                                    val hasPermission = user.permissions.contains(permission)
+                                Text("Aree e Permessi", style = MaterialTheme.typography.labelLarge)
+                                
+                                val permissionGroups = listOf(
+                                    PermissionUIItem(UserPermission.CREATE_ORDERS, "Creazione commesse"),
+                                    PermissionUIItem(UserPermission.EDIT_OWN_ORDERS, "Modifica proprie commesse"),
+                                    PermissionUIItem(UserPermission.EDIT_ALL_ORDERS, "Modifica tutte le commesse"),
+                                    PermissionUIItem(UserPermission.CLOSE_ORDERS, "Chiusura commesse"),
+                                    PermissionUIItem(UserPermission.MANAGE_CUSTOMERS, "Gestione anagrafica clienti"),
+                                    PermissionUIItem(UserPermission.MANAGE_CATEGORIES, "Gestione catalogo categorie"),
+                                    PermissionUIItem(UserPermission.MANAGE_TEMPLATES, "Gestione template messaggi"),
+                                    PermissionUIItem(UserPermission.MANAGE_PAYMENTS, "Gestione pagamenti"),
+                                    PermissionUIItem(UserPermission.EXPORT_DATA, "Esportazione dati (Excel/PDF)"),
+                                    PermissionUIItem(UserPermission.MANAGE_STORAGE, "Pulizia cache e statistiche"),
+                                )
+
+                                permissionGroups.forEach { item ->
+                                    val hasPermission = user.permissions.contains(item.permission)
                                     Row(
                                         modifier = Modifier.fillMaxWidth().clickable {
-                                            val newPermissions = if (hasPermission) user.permissions - permission else user.permissions + permission
+                                            val newPermissions = if (hasPermission) user.permissions - item.permission else user.permissions + item.permission
                                             viewModel.setUserPermissions(user.id, newPermissions)
                                         },
                                         verticalAlignment = Alignment.CenterVertically,
                                         horizontalArrangement = Arrangement.SpaceBetween
                                     ) {
-                                        Text(permission.name.replace("_", " ").lowercase().replaceFirstChar { it.uppercase() }, style = MaterialTheme.typography.bodySmall)
+                                        Text(item.label, style = MaterialTheme.typography.bodySmall)
                                         Switch(
                                             checked = hasPermission,
                                             onCheckedChange = { checked ->
-                                                val newPermissions = if (checked) user.permissions + permission else user.permissions - permission
+                                                val newPermissions = if (checked) user.permissions + item.permission else user.permissions - item.permission
                                                 viewModel.setUserPermissions(user.id, newPermissions)
                                             },
                                             modifier = Modifier.scale(0.7f)
@@ -284,22 +296,6 @@ fun AdminPanel(
                                     resetConfirmation = ""
                                 }
                             },
-                        )
-                    }
-                }
-            }
-            item {
-                SectionTitle(stringResource(R.string.admin_author))
-                StandardCard {
-                    Column(
-                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                    ) {
-                        Text("Danny Perondi", style = MaterialTheme.typography.titleMedium)
-                        TouchButton(
-                            text = "GitHub Repository",
-                            onClick = { uriHandler.openUri("https://github.com/dennidalpos/OnlyTechTake") },
-                            tone = ButtonTone.NEUTRAL,
                         )
                     }
                 }
@@ -403,3 +399,8 @@ fun AdminPanel(
         )
     }
 }
+
+private data class PermissionUIItem(
+    val permission: UserPermission,
+    val label: String
+)

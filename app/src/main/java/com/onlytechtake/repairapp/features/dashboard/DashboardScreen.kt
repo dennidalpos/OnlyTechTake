@@ -31,10 +31,7 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.domain.models.AppSummary
-import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
-import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
-import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
-import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModelFactory
+import com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel
 
 @Composable
 fun DashboardRoute(
@@ -47,33 +44,15 @@ fun DashboardRoute(
         key = "dashboard_$appInstanceKey",
         factory = DashboardViewModel.Factory(container.repairAppRepository),
     )
-    val workspaceViewModel: WorkspaceViewModel = viewModel(
-        key = "workspace_$appInstanceKey",
-        factory = WorkspaceViewModelFactory(
-            authRepository = container.authRepository,
-            adminUserRepository = container.adminUserRepository,
-            customerRepository = container.customerRepository,
-            catalogRepository = container.catalogRepository,
-            orderRepository = container.orderWorkflowRepository,
-            orderMediaRepository = container.orderMediaRepository,
-            signatureRepository = container.signatureRepository,
-            templateRepository = container.templateRepository,
-            backupRepository = container.backupRepository,
-            backupReminderPreferences = container.backupReminderPreferences,
-            dataResetRepository = container.dataResetRepository,
-            createIntakeOrderUseCase = container.createIntakeOrderUseCase,
-            orderDocumentRepository = container.orderDocumentRepository,
-            generateOrderStatusPdfUseCase = container.generateOrderStatusPdfUseCase,
-            shareDocumentIntentFactory = container.shareDocumentIntentFactory,
-            storageStatsService = container.storageStatsService,
-            orderFileCleanupService = container.orderFileCleanupService,
-        ),
+    val sharedViewModel: SharedWorkspaceViewModel = viewModel(
+        key = "shared_workspace_$appInstanceKey",
+        factory = SharedWorkspaceViewModel.Factory()
     )
     val summary by dashboardViewModel.summary.collectAsState()
 
     DashboardScreen(
         summary = summary,
-        workspaceViewModel = workspaceViewModel,
+        sharedViewModel = sharedViewModel,
         onLogout = onLogout,
         onAppDataRestored = onAppDataRestored,
     )
@@ -83,65 +62,39 @@ fun DashboardRoute(
 @Composable
 fun DashboardScreen(
     summary: AppSummary,
-    workspaceViewModel: WorkspaceViewModel,
+    sharedViewModel: SharedWorkspaceViewModel,
     onLogout: () -> Unit,
     onAppDataRestored: () -> Unit,
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination?.route ?: WorkspaceDestination.HOME.name
+    val currentDestination = navBackStackEntry?.destination?.route ?: DashboardRoutes.HOME
 
-    val uiState by workspaceViewModel.uiState.collectAsState()
-    val currentUser by workspaceViewModel.currentUser.collectAsState()
+    val globalMessage by sharedViewModel.message.collectAsState()
+    val isFormDirty by sharedViewModel.isFormDirty.collectAsState()
+
+    val container = LocalAppContainer.current
+    val currentUser by container.authRepository.currentUser.collectAsState(null)
     val isAdmin = PermissionService.isAdmin(currentUser)
 
-    androidx.compose.runtime.LaunchedEffect(uiState.destination) {
-        if (currentDestination != uiState.destination.name) {
-            navController.navigate(uiState.destination.name) {
-                if (uiState.destination == WorkspaceDestination.HOME) {
-                    popUpTo(WorkspaceDestination.HOME.name) { inclusive = true }
-                }
-                launchSingleTop = true
-                restoreState = true
-            }
-        }
-    }
-
-    androidx.compose.runtime.DisposableEffect(navController) {
-        val listener = androidx.navigation.NavController.OnDestinationChangedListener { _, destination, _ ->
-            val dest = WorkspaceDestination.entries.find { it.name == destination.route }
-            if ((dest != null) && (dest != uiState.destination)) {
-                workspaceViewModel.navigateTo(dest)
-            }
-        }
-        navController.addOnDestinationChangedListener(listener)
-        onDispose {
-            navController.removeOnDestinationChangedListener(listener)
-        }
-    }
-
     val items = listOf(
-        NavigationItem(WorkspaceDestination.HOME, Icons.Default.Home, R.string.dashboard_home),
-        NavigationItem(WorkspaceDestination.NEW_ORDER, Icons.Default.Add, R.string.dashboard_new),
-        NavigationItem(WorkspaceDestination.CUSTOMERS, Icons.Default.Person, R.string.dashboard_customers),
-        NavigationItem(WorkspaceDestination.ORDERS, Icons.AutoMirrored.Filled.List, R.string.dashboard_orders),
-        NavigationItem(WorkspaceDestination.SETTINGS, Icons.Default.Settings, R.string.dashboard_config),
+        NavigationItem(DashboardRoutes.HOME, Icons.Default.Home, R.string.dashboard_home, RepairAppTestTags.dashboardTab("HOME")),
+        NavigationItem(DashboardRoutes.NEW_ORDER, Icons.Default.Add, R.string.dashboard_new, RepairAppTestTags.dashboardTab("NEW_ORDER")),
+        NavigationItem(DashboardRoutes.CUSTOMERS, Icons.Default.Person, R.string.dashboard_customers, RepairAppTestTags.dashboardTab("CUSTOMERS")),
+        NavigationItem(DashboardRoutes.ORDERS, Icons.AutoMirrored.Filled.List, R.string.dashboard_orders, RepairAppTestTags.dashboardTab("ORDERS")),
+        NavigationItem(DashboardRoutes.SETTINGS, Icons.Default.Settings, R.string.dashboard_config, RepairAppTestTags.dashboardTab("SETTINGS")),
     )
 
-    val isFormDirty by workspaceViewModel.isFormDirty.collectAsState()
-    var pendingDestination by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf<WorkspaceDestination?>(null) }
+    var pendingRoute by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf<String?>(null) }
     var showUnsavedChangesDialog by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(value = false) }
 
-    fun performNavigation(destination: WorkspaceDestination) {
-        if (destination == WorkspaceDestination.ORDERS) {
-            workspaceViewModel.setFilter(com.onlytechtake.repairapp.domain.workspace.OrderFilter())
-        }
-        navController.navigate(destination.name) {
-            popUpTo(WorkspaceDestination.HOME.name) { saveState = true }
+    fun performNavigation(route: String) {
+        navController.navigate(route) {
+            popUpTo(DashboardRoutes.HOME) { saveState = true }
             launchSingleTop = true
             restoreState = true
         }
-        workspaceViewModel.setFormDirty(dirty = false)
+        sharedViewModel.setFormDirty(dirty = false)
     }
 
     Scaffold(
@@ -149,19 +102,24 @@ fun DashboardScreen(
             TopAppBar(
                 title = { Text(text = summary.title) },
                 navigationIcon = {
-                    if (currentDestination != WorkspaceDestination.HOME.name) {
+                    if (currentDestination != DashboardRoutes.HOME) {
+                        val isCloseIcon = currentDestination == DashboardRoutes.NEW_ORDER || 
+                                         currentDestination.startsWith("order_detail/")
                         IconButton(
                             modifier = Modifier.testTag(RepairAppTestTags.ConfigBackButton),
                             onClick = {
                                 if (isFormDirty) {
-                                    pendingDestination = null // Pop back
+                                    pendingRoute = null // Pop back
                                     showUnsavedChangesDialog = true
                                 } else {
                                     navController.popBackStack()
                                 }
                             }
                         ) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
+                            Icon(
+                                if (isCloseIcon) Icons.Default.Close else Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = null
+                            )
                         }
                     }
                 },
@@ -187,18 +145,19 @@ fun DashboardScreen(
                 modifier = Modifier.testTag(RepairAppTestTags.DashboardTabs)
             ) {
                 items.forEach { item ->
+                    val selected = currentDestination == item.route
                     NavigationBarItem(
-                        modifier = Modifier.testTag(RepairAppTestTags.dashboardTab(item.destination.name)),
+                        modifier = Modifier.testTag(item.testTag),
                         icon = { Icon(item.icon, contentDescription = null) },
                         label = { Text(stringResource(item.labelRes)) },
-                        selected = currentDestination == item.destination.name,
+                        selected = selected,
                         onClick = {
-                            if (currentDestination != item.destination.name) {
+                            if (!selected) {
                                 if (isFormDirty) {
-                                    pendingDestination = item.destination
+                                    pendingRoute = item.route
                                     showUnsavedChangesDialog = true
                                 } else {
-                                    performNavigation(item.destination)
+                                    performNavigation(item.route)
                                 }
                             }
                         }
@@ -214,7 +173,7 @@ fun DashboardScreen(
                 .consumeWindowInsets(paddingValues)
                 .imePadding()
         ) {
-            uiState.message?.let { message ->
+            globalMessage?.let { message ->
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -228,7 +187,7 @@ fun DashboardScreen(
             DashboardNavHost(
                 navController = navController,
                 summary = summary,
-                workspaceViewModel = workspaceViewModel,
+                sharedViewModel = sharedViewModel,
                 isAdmin = isAdmin,
                 onAppDataRestored = onAppDataRestored,
                 onLogout = onLogout,
@@ -246,8 +205,8 @@ fun DashboardScreen(
                 TextButton(
                     onClick = {
                         showUnsavedChangesDialog = false
-                        workspaceViewModel.setFormDirty(dirty = false)
-                        pendingDestination?.let {
+                        sharedViewModel.setFormDirty(dirty = false)
+                        pendingRoute?.let {
                             performNavigation(it)
                         } ?: navController.popBackStack()
                     }
@@ -265,7 +224,8 @@ fun DashboardScreen(
 }
 
 private data class NavigationItem(
-    val destination: WorkspaceDestination,
+    val route: String,
     val icon: androidx.compose.ui.graphics.vector.ImageVector,
     val labelRes: Int,
+    val testTag: String,
 )

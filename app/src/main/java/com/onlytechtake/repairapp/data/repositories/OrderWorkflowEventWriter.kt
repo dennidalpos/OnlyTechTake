@@ -98,7 +98,7 @@ internal class OrderWorkflowEventWriter(
             timelineEvent(
                 orderId = orderId,
                 type = TimelineEventType.ORDER_DELETED,
-                title = context.getString(R.string.order_archived_title),
+                title = context.getString(R.string.order_deleted_title),
                 description = reason,
                 actorUserId = actorUserId,
                 createdAt = now,

@@ -41,11 +41,10 @@ import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButtonWithIcon
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
-import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 
 @Composable
 fun CategoriesSettings(
-    viewModel: WorkspaceViewModel,
+    viewModel: SettingsViewModel,
     isAdmin: Boolean,
     onRequestConfirm: (String, String, () -> Unit) -> Unit,
 ) {

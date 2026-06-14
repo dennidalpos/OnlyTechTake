@@ -13,14 +13,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
+import com.onlytechtake.repairapp.core.di.LocalAppContainer
 
 @Composable
 fun SettingsPanel(
-    viewModel: WorkspaceViewModel,
+    viewModel: SettingsViewModel,
     isAdmin: Boolean,
     onBackupRestored: () -> Unit,
+    onNavigate: (String) -> Unit,
     initialSection: String? = null,
 ) {
     var confirmTitle by remember { mutableStateOf<String?>(null) }
@@ -43,7 +46,7 @@ fun SettingsPanel(
             "WHATSAPP" -> WhatsAppSettings(viewModel, ::requestConfirm)
             "EXPORT" -> BackupSettings(viewModel, isAdmin, onBackupRestored, ::requestConfirm)
             "STORAGE" -> StorageSettings(viewModel)
-            else -> SettingsHub(viewModel, isAdmin)
+            else -> SettingsHub(isAdmin, onNavigate)
         }
     }
 

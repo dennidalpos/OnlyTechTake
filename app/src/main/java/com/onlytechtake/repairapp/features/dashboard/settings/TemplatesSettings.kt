@@ -9,20 +9,27 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.Field
@@ -30,21 +37,20 @@ import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
-import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
+import com.onlytechtake.repairapp.features.workspace.ButtonTone
 
 @Composable
 fun TemplatesSettings(
-    viewModel: WorkspaceViewModel,
+    viewModel: SettingsViewModel,
     isAdmin: Boolean,
     onRequestConfirm: (String, String, () -> Unit) -> Unit,
 ) {
     val templates by viewModel.templates.collectAsState()
+    var editingTemplate by remember { mutableStateOf<MessageTemplateEntity?>(null) }
 
-    var templateCode by rememberSaveable { mutableStateOf("whatsapp_aggiornamento") }
-    var loadedTemplateCode by rememberSaveable { mutableStateOf<String?>(null) }
-    var templateTitle by rememberSaveable { mutableStateOf("WhatsApp aggiornamento") }
-    var templateBody by rememberSaveable { mutableStateOf("Aggiornamento {{numero_commessa}}: {{stato_commessa}}") }
-    var templateActive by rememberSaveable { mutableStateOf(value = true) }
+    val confirmTitle = stringResource(R.string.config_template_confirm_save_title)
+    val confirmRisky = stringResource(R.string.config_template_confirm_save_risky)
+    val confirmNewVersion = stringResource(R.string.config_template_confirm_save_new_version)
 
     LazyColumn(
         modifier = Modifier
@@ -54,76 +60,157 @@ fun TemplatesSettings(
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
-            StandardCard(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                highlight = true,
-            ) {
-                Column(modifier = Modifier.padding(DashboardSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
-                    SectionTitle(stringResource(R.string.config_hub_templates_title))
-                    Field(templateCode, { templateCode = it }, stringResource(R.string.config_template_code_label), testTag = RepairAppTestTags.ConfigTemplateCodeField)
-                    Field(templateTitle, { templateTitle = it }, stringResource(R.string.config_template_title_label), testTag = RepairAppTestTags.ConfigTemplateTitleField)
-                    Field(templateBody, { templateBody = it }, stringResource(R.string.config_template_body_label), testTag = RepairAppTestTags.ConfigTemplateBodyField)
-                    Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
-                        Text(stringResource(R.string.config_template_variables), style = MaterialTheme.typography.titleSmall)
-                        OperatorText("{{numero_commessa}}  {{stato_commessa}}  {{categoria_percorso}}  {{cliente}}")
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(if (templateActive) stringResource(R.string.config_template_active) else stringResource(R.string.config_template_archived))
-                        Switch(
-                            checked = templateActive,
-                            onCheckedChange = { templateActive = it },
-                        )
-                    }
-                    ActionRow {
-                        val confirmTitle = stringResource(R.string.config_template_confirm_save_title)
-                        val confirmRisky = stringResource(R.string.config_template_confirm_save_risky)
-                        val confirmNewVersion = stringResource(R.string.config_template_confirm_save_new_version)
-                        
-                        TouchButton(
-                            text = stringResource(R.string.config_template_save),
-                            testTag = RepairAppTestTags.ConfigTemplateSaveButton,
-                            onClick = {
-                                val riskyTemplateChange = isRiskyTemplateChange(loadedTemplateCode, templateCode, templateActive)
-                                onRequestConfirm(
-                                    confirmTitle,
-                                    if (riskyTemplateChange) confirmRisky else confirmNewVersion,
-                                ) {
-                                    viewModel.saveTemplate(templateCode, templateTitle, templateBody, active = templateActive)
-                                    loadedTemplateCode = templateCode
-                                }
-                            },
-                        )
-                    }
-                }
-            }
+            SectionTitle(stringResource(R.string.config_hub_templates_title))
         }
+
         items(templates) { template ->
             StandardCard(
-                onClick = {
-                    templateCode = template.code
-                    loadedTemplateCode = template.code
-                    templateTitle = template.title
-                    templateBody = template.body
-                    templateActive = template.active
-                },
+                onClick = { editingTemplate = template },
             ) {
-                Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(DashboardSpacing.cardPadding),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(stringResource(R.string.config_template_version_label, template.code, template.version), style = MaterialTheme.typography.titleMedium)
-                    Text(template.title)
-                    Text(if (template.active) stringResource(R.string.config_template_active) else stringResource(R.string.config_template_archived))
+                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
+                        Text(template.title, style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            text = (template.step ?: "Generale") + " • " + if (template.active) stringResource(R.string.config_template_active) else stringResource(R.string.config_template_archived),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = if (template.active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+                        )
+                    }
+                    Text(
+                        text = "v${template.version}",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.outline
+                    )
                 }
             }
         }
+
         if (templates.isEmpty()) {
             item {
                 Text(stringResource(R.string.config_template_empty), style = MaterialTheme.typography.bodyMedium)
+            }
+        }
+    }
+
+    editingTemplate?.let { template ->
+        TemplateEditDialog(
+            template = template,
+            onDismiss = { editingTemplate = null },
+            onSave = { code, title, body, active, step ->
+                val riskyTemplateChange = isRiskyTemplateChange(template.code, code, active)
+                
+                onRequestConfirm(
+                    confirmTitle,
+                    if (riskyTemplateChange) confirmRisky else confirmNewVersion,
+                ) {
+                    viewModel.saveTemplate(code, title, body, active, step)
+                    editingTemplate = null
+                }
+            }
+        )
+    }
+}
+
+@Composable
+fun TemplateEditDialog(
+    template: MessageTemplateEntity,
+    onDismiss: () -> Unit,
+    onSave: (String, String, String, Boolean, String?) -> Unit,
+) {
+    var title by rememberSaveable { mutableStateOf(template.title) }
+    var body by rememberSaveable { mutableStateOf(template.body) }
+    var active by rememberSaveable { mutableStateOf(template.active) }
+    var step by rememberSaveable { mutableStateOf(template.step ?: "") }
+
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth(0.95f)
+                .widthIn(max = DashboardSpacing.maxContentWidth),
+            shape = MaterialTheme.shapes.extraLarge,
+            color = MaterialTheme.colorScheme.surface,
+            tonalElevation = DashboardSpacing.dialogElevation
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(DashboardSpacing.screenPadding),
+                verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)
+            ) {
+                Text(
+                    text = "Modifica Template",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold
+                )
+                
+                Text(
+                    text = "Codice: ${template.code}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.outline
+                )
+
+                HorizontalDivider(modifier = Modifier.padding(vertical = DashboardSpacing.compactGap))
+
+                Field(
+                    value = title,
+                    onValueChange = { title = it },
+                    label = stringResource(R.string.config_template_title_label),
+                    testTag = RepairAppTestTags.ConfigTemplateTitleField
+                )
+
+                Field(
+                    value = step,
+                    onValueChange = { step = it },
+                    label = "Step associato",
+                )
+
+                Field(
+                    value = body,
+                    onValueChange = { body = it },
+                    label = stringResource(R.string.config_template_body_label),
+                    testTag = RepairAppTestTags.ConfigTemplateBodyField,
+                    singleLine = false
+                )
+
+                Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
+                    Text(stringResource(R.string.config_template_variables), style = MaterialTheme.typography.titleSmall)
+                    OperatorText("{{numero_commessa}}  {{stato_commessa}}  {{categoria_percorso}}  {{cliente}}")
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(if (active) stringResource(R.string.config_template_active) else stringResource(R.string.config_template_archived))
+                    Switch(
+                        checked = active,
+                        onCheckedChange = { active = it },
+                    )
+                }
+
+                ActionRow {
+                    TouchButton(
+                        text = "Annulla",
+                        tone = ButtonTone.NEUTRAL,
+                        onClick = onDismiss
+                    )
+                    TouchButton(
+                        text = stringResource(R.string.config_template_save),
+                        testTag = RepairAppTestTags.ConfigTemplateSaveButton,
+                        onClick = {
+                            onSave(template.code, title, body, active, step.ifBlank { null })
+                        },
+                    )
+                }
             }
         }
     }

@@ -32,14 +32,13 @@ import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
-import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
 import com.onlytechtake.repairapp.features.workspace.isFinalPhoto
 import com.onlytechtake.repairapp.features.workspace.isImageAttachment
 
 @Composable
 fun OrderPhotoSection(
     detail: OrderDetail,
-    viewModel: WorkspaceViewModel,
+    viewModel: OrderDetailViewModel,
 ) {
     var showCamera by rememberSaveable { mutableStateOf(false) }
     var showFinalCamera by rememberSaveable { mutableStateOf(false) }

@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.data.local.dao
 
 import androidx.room.Dao
+import androidx.room.Embedded
 import androidx.room.Query
 import androidx.room.Upsert
 import com.onlytechtake.repairapp.data.local.entities.AppSettingEntity
@@ -56,6 +57,15 @@ data class OrderExportRow(
     val updatedAt: Long,
     val closedAt: Long?,
     val closureReason: ClosureReason?,
+)
+
+data class OrderListItemProjection(
+    @Embedded val order: RepairOrderEntity,
+    @Embedded(prefix = "cust_") val customer: CustomerEntity?,
+    val imagesCount: Int,
+    val documentsCount: Int,
+    val signaturesCount: Int,
+    val finalPhotosCount: Int,
 )
 
 @Dao
@@ -237,6 +247,34 @@ interface RepairOrderDao {
 
     @Query("SELECT * FROM repair_orders ORDER BY createdAt DESC LIMIT :limit")
     fun observeRecentActiveOrders(limit: Int = 50): Flow<List<RepairOrderEntity>>
+
+    @Query(
+        """
+        SELECT 
+            o.*,
+            c.id AS cust_id, c.type AS cust_type, c.firstName AS cust_firstName, c.lastName AS cust_lastName, 
+            c.companyName AS cust_companyName, c.vatNumber AS cust_vatNumber, c.taxCode AS cust_taxCode, 
+            c.phone AS cust_phone, c.email AS cust_email, c.address AS cust_address, c.notes AS cust_notes,
+            c.createdAt AS cust_createdAt, c.updatedAt AS cust_updatedAt,
+            (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND (UPPER(m.mediaType) IN ('PHOTO', 'IMAGE') OR (m.mimeType LIKE 'image/%' AND UPPER(m.mediaType) != 'FINAL_PHOTO'))) AS imagesCount,
+            (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND NOT (UPPER(m.mediaType) IN ('PHOTO', 'IMAGE', 'FINAL_PHOTO') OR m.mimeType LIKE 'image/%')) AS documentsCount,
+            (SELECT COUNT(*) FROM signatures s WHERE s.orderId = o.id) AS signaturesCount,
+            (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND UPPER(m.mediaType) = 'FINAL_PHOTO') AS finalPhotosCount
+        FROM repair_orders o
+        LEFT JOIN customers c ON o.customerId = c.id
+        WHERE (:assignedToUserId IS NULL OR o.assignedToUserId = :assignedToUserId)
+            AND (:status IS NULL OR o.status = :status)
+            AND (:customerId IS NULL OR o.customerId = :customerId)
+        ORDER BY o.updatedAt DESC
+        LIMIT :limit
+        """
+    )
+    fun observeOrderListProjection(
+        assignedToUserId: String?,
+        status: OrderStatus?,
+        customerId: String?,
+        limit: Int = 100
+    ): Flow<List<OrderListItemProjection>>
 
     @Query("DELETE FROM repair_orders WHERE id IN (:orderIds)")
     suspend fun deleteByIds(orderIds: List<String>): Int
