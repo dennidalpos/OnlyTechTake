@@ -2,7 +2,9 @@
 
 ## Stato operativo
 
-Export configurazione, database, ZIP completo, XLSX commesse e ripristino ZIP completo sono implementati per admin tramite Storage Access Framework.
+Export ZIP completo, XLSX commesse e ripristino ZIP completo sono esposti agli admin tramite Config > Backup e Storage Access Framework.
+L'export database e l'export XLSX pre-cleanup sono esposti nella sezione Admin prima della cancellazione totale commesse.
+Il repository contiene anche la logica di export configurazione JSON, ma la schermata Backup corrente non espone un pulsante dedicato per quel file.
 Eventuali provider come Drive, OneDrive o Dropbox compaiono solo come destinazioni del selettore documenti Android: non esiste un backend o una sincronizzazione cloud proprietaria.
 
 ## Sezione app
@@ -10,6 +12,7 @@ Eventuali provider come Drive, OneDrive o Dropbox compaiono solo come destinazio
 ```text
 Config
 Backup
+Admin
 ```
 
 Visibile solo ad admin.
@@ -21,12 +24,13 @@ Visibile solo ad admin.
 Output: `configuration.json`.
 
 Contiene categorie, template WhatsApp e impostazioni applicative esportate in JSON.
+La funzione esiste nel repository, ma non ha un pulsante dedicato nella schermata Backup corrente.
 
 ### Database
 
 Output: `repair_app.db`.
 
-Copia il database Room locale quando esiste.
+Copia il database Room locale quando esiste. Nell'interfaccia corrente e' disponibile dalla sezione Admin come backup consigliato prima della cancellazione totale commesse, non dalla schermata Config > Backup.
 
 ### Backup completo
 
@@ -69,10 +73,21 @@ Il ripristino:
 
 Il ripristino e' pensato per trasferire l'app su un altro telefono con lo stesso pacchetto applicativo. Prima di ripristinare, salvare un export ZIP recente dal telefono sorgente.
 
+## Promemoria backup
+
+Il promemoria backup admin e' implementato.
+
+- E' attivo di default.
+- L'intervallo predefinito e' 7 giorni.
+- L'admin puo' abilitarlo/disabilitarlo e modificare l'intervallo in Config > Backup.
+- La Home mostra il promemoria quando non esiste un ZIP completo riuscito o quando l'ultimo ZIP completo riuscito e' piu' vecchio dell'intervallo configurato.
+- Un backup fallito non aggiorna la data dell'ultimo backup riuscito.
+- Il promemoria non blocca il normale uso dell'app.
+
 ## Metadata
 
 Il backup completo include metadati con data creazione, nome database, versione database e sezioni incluse.
-La versione database attesa e' quella di `RepairAppDatabase.DATABASE_VERSION`; nella fase fresh-app corrente e' `1`.
+La versione database attesa e' quella di `RepairAppDatabase.DATABASE_VERSION`; nello stato corrente del codice e' `2`.
 
 ## Sicurezza
 
@@ -80,6 +95,7 @@ La versione database attesa e' quella di `RepairAppDatabase.DATABASE_VERSION`; n
 - Il salvataggio usa Storage Access Framework; non usare percorsi assoluti fragili.
 - Export e ripristino richiedono ruolo admin.
 - Ogni export registra audit `DATA_EXPORTED`.
+- Prima di azioni distruttive, usare il backup ZIP completo quando serve preservare dati locali; la cancellazione/disinstallazione completa puo' eliminare i dati.
 - Configurazione, database, PDF e backup ZIP non sono cifrati dall'app. La
   cifratura non e' attivata in questo rilascio per evitare gestione passphrase e
   recupero chiavi dentro l'app locale; salvare gli export solo su supporti,

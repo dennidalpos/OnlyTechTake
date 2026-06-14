@@ -1,51 +1,36 @@
-# Landing Page — OnlyTechTake
+# Landing statica
 
-Pagina statica semplice per la presentazione e il download dell'app OnlyTechTake.
+La cartella `landing/` contiene una bozza HTML/CSS/JS statica. Non richiede build tool o server side logic.
 
-## Struttura
-- `index.html`: Struttura principale della pagina.
-- `styles.css`: Stili (Mobile-first, Material-inspired).
-- `script.js`: Piccole interazioni (smooth scroll).
-- `assets/screenshots/`: Cartella per gli screenshot dell'app.
+## Stato reale
 
-## Personalizzazione
+- `index.html`: pagina statica.
+- `styles.css`: stili della landing.
+- `script.js`: smooth scroll e validazione base del form.
+- `assets/`: presente solo con `.gitkeep`.
+- `assets/screenshots/`: non presente nel repository corrente.
 
-### Modificare il Prezzo
-Cerca la sezione `<section id="prezzo">` in `index.html` e modifica i testi all'interno della classe `.price` e `.pricing-card`.
+La landing non pubblica APK, non contiene link Play Store reali, non contiene video e non contiene contatti pubblici verificati. Prima della pubblicazione vanno aggiunti asset reali e link approvati.
 
-### Aggiungere Screenshot
-1. Cattura gli screenshot dall'emulatore o dal dispositivo reale (formato 9:16).
-2. Salvali nella cartella `assets/screenshots/` con i seguenti nomi:
-   - `01-dashboard.png`
-   - `02-nuova-commessa.png`
-   - `03-firma.png`
-   - `04-foto.png`
-   - `05-diagnosi.png`
-   - `06-pdf.png`
-3. Sostituisci i placeholder `div.screenshot-placeholder` in `index.html` con tag `<img>`:
-   ```html
-   <img src="assets/screenshots/01-dashboard.png" alt="Dashboard OnlyTechTake">
-   ```
+## Uso locale
 
-### Aggiornare Link APK
-Trova i pulsanti con testo "Scarica APK" e aggiorna l'attributo `href` con il link diretto al file `.apk` (es. caricato su GitHub Releases o Firebase App Distribution).
+Aprire `landing/index.html` nel browser. Non serve avviare un dev server.
 
-### Video Demo
-Sostituisci il contenuto di `.video-container` in `index.html` con un iframe di YouTube o un tag `<video>` locale.
+## Screenshot e video
 
-## Pubblicazione
+Per sostituire i placeholder:
 
-### GitHub Pages (Consigliato)
-1. Vai nelle impostazioni del repository su GitHub.
-2. Sezione **Pages**.
-3. Seleziona la cartella `/landing` nel branch principale (se supportato) oppure sposta questi file in un branch separato `gh-pages`.
-4. In alternativa, se il repository è solo l'app, puoi usare un'azione GitHub per distribuire la sottocartella `landing/`.
+1. Generare screenshot reali con `scripts\windows\create_demo_screenshots.ps1` oppure da device reale.
+2. Salvare immagini tracciabili sotto `landing\assets\screenshots\`.
+3. Aggiornare `index.html` sostituendo i blocchi `screenshot-placeholder` con tag `img`.
+4. Aggiungere un video locale o un embed solo quando il file/link e' reale e approvato.
 
-### Netlify / Vercel
-1. Collega il repository.
-2. Imposta la "Base directory" su `landing/`.
-3. Lascia vuoto il comando di build (è un sito statico).
-4. La directory di output è la stessa (`.`).
+## Build app collegate
 
-## Requisiti
-Nessuno. La landing è pura HTML/CSS/JS e non richiede server side logic o build tools.
+La landing non genera installer. Usare gli script Android documentati nella root:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk
+```
+
+Le build release richiedono `keystore.properties` locale non tracciato.

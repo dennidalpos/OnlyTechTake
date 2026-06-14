@@ -287,6 +287,10 @@ Non usare una tabella diversa per ogni tipo di negozio.
 Non aggiungere colonne tipo `imei`, `marca`, `modello`, `taglia`, `colore`, ecc. nella tabella commesse.
 
 Usare categorie, descrizione, note interne, media, firme, timeline e messaggi.
-Lo schema Room corrente e' v1 ed e' mantenuto come schema fresh-app senza
-migrazioni finche' non viene autorizzato esplicitamente un cambio versione. Non
-include tabelle custom field o workflow parallele a `repair_orders.status`.
+Lo schema Room corrente nel codice e' v2, con export tracciati in
+`app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json`
+e `app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/2.json`.
+Non sono presenti classi di migrazione Room: in questa fase fresh-app, dati
+locali incompatibili richiedono reinstallazione pulita o vengono gestiti dal
+fallback distruttivo configurato nel database builder. Non include tabelle custom
+field o workflow parallele a `repair_orders.status`.

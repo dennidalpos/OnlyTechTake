@@ -789,12 +789,13 @@ Decisione owner: approvata/bloccata
 
 Direttiva obbligatoria per l'agente.
 
-L'app Android è in fase di sviluppo iniziale e il proprietario ha imposto il blocco dello schema locale.
+L'app Android è in fase di sviluppo iniziale e lo schema locale non va modificato senza approvazione esplicita del proprietario.
 
 ```text
-Room schema version deve restare al valore autorizzato dal proprietario.
-In questa fase: schemaVersion = 1.
-Vietato incrementare schemaVersion.
+Room schema version deve restare al valore reale/autorizzato del sorgente corrente.
+Stato sorgente corrente: RepairAppDatabase.DATABASE_VERSION = 2.
+Export schema tracciati: 1.json e 2.json.
+Vietato incrementare ulteriormente schemaVersion senza approvazione esplicita.
 Vietato aggiungere migrazioni Room.
 Vietato modificare entità Room in modo incompatibile senza autorizzazione esplicita.
 Ogni modifica che richiede cambio schema Android deve essere marcata:

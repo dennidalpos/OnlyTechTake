@@ -20,7 +20,7 @@ Funzioni implementate:
 - eliminare categorie vuote o eseguire cancellazione ricorsiva;
 - modificare template privacy, condizioni e WhatsApp;
 - impostare la modalita WhatsApp manuale;
-- esportare configurazione, database, ZIP completo e PDF commessa;
+- esportare ZIP completo, XLSX commesse, database pre-cleanup e PDF commessa;
 - archiviare in batch le commesse scartate e cancellare definitivamente quelle gia' archiviate;
 - eseguire reset totale dati con conferma testuale `RESET`.
 
@@ -243,10 +243,12 @@ Il feedback cliente automatico non e' implementato. La risposta viene registrata
 
 Export implementati:
 
-- configurazione JSON;
-- database Room;
 - ZIP completo con database, configurazione e file privati rilevanti;
+- XLSX commesse;
+- database Room dalla sezione Admin prima della cancellazione totale commesse;
 - PDF riepilogo della singola commessa con timeline completa.
+
+Nota: la logica di export configurazione JSON esiste nel repository, ma la UI corrente non espone un pulsante dedicato nella schermata Backup.
 
 Ripristino backup:
 

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "df21b3d33e5c9b4358f7a6cf7181898b",
+    "identityHash": "a66e7645db1645b824c44f778f17dcc0",
     "entities": [
       {
         "tableName": "users",
@@ -781,7 +781,7 @@
       },
       {
         "tableName": "message_templates",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `code` TEXT NOT NULL, `title` TEXT NOT NULL, `channel` TEXT NOT NULL, `body` TEXT NOT NULL, `active` INTEGER NOT NULL DEFAULT 1, `version` INTEGER NOT NULL DEFAULT 1, `updatedByUserId` TEXT, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`updatedByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `code` TEXT NOT NULL, `title` TEXT NOT NULL, `channel` TEXT NOT NULL, `body` TEXT NOT NULL, `active` INTEGER NOT NULL DEFAULT 1, `version` INTEGER NOT NULL DEFAULT 1, `updatedByUserId` TEXT, `updatedAt` INTEGER NOT NULL, `step` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`updatedByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
         "fields": [
           {
             "fieldPath": "id",
@@ -837,6 +837,11 @@
             "columnName": "updatedAt",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "step",
+            "columnName": "step",
+            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -1808,7 +1813,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'df21b3d33e5c9b4358f7a6cf7181898b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a66e7645db1645b824c44f778f17dcc0')"
     ]
   }
 }

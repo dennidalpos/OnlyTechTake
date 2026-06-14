@@ -75,15 +75,27 @@ Nome database:
 repair_app.db
 ```
 
-Lo schema corrente e' Room v1. Il progetto e' trattato come fresh app in
-sviluppo iniziale: non sono presenti migrazioni Room e `DATABASE_VERSION` resta
-1 finche' non viene autorizzato esplicitamente un cambio schema. Dopo modifiche
-incompatibili e' richiesta una reinstallazione pulita.
+Lo schema corrente nel codice e' Room v2:
+
+```kotlin
+const val DATABASE_VERSION = 2
+```
+
+Sono presenti export schema `1.json` e `2.json`. Il progetto e' trattato come
+fresh app in sviluppo iniziale: non sono presenti classi di migrazione Room e
+la builder usa `fallbackToDestructiveMigration(dropAllTables = true)`. Dopo
+modifiche incompatibili o quando si passa tra build con schema diverso, usare
+una reinstallazione pulita del package installato.
+
+Nota governance: alcune istruzioni repository richiedono approvazione owner per
+ulteriori cambi schema. Lo stato reale del codice al momento di questo handoff
+e' v2; non incrementare ancora `DATABASE_VERSION` senza richiesta esplicita.
 
 Schema esportato corrente:
 
 ```text
 app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json
+app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/2.json
 ```
 
 ## Entità principali
@@ -123,7 +135,9 @@ TemplateRepository
 ```text
 AuthGateViewModel
 DashboardViewModel
-WorkspaceViewModel
+SharedWorkspaceViewModel
+SettingsViewModel
+AdminViewModel
 ```
 
 ## Navigazione

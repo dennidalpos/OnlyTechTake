@@ -1,7 +1,5 @@
 {
   "todos": [
-    "[P0] Direzione prodotto: trattare l'app come nuova app; consentire modifiche distruttive, rifacimenti di schema e cambi di logica quando migliorano pulizia, sicurezza, performance o manutenibilità",
-    "[P0] Database: progettare Room schema v2 pulito, senza migrazioni conservative non necessarie; rimuovere campi e query legacy non coerenti con la nuova logica dell'app",
     "[P0] Backup sicurezza: pianificare backup ZIP cifrato opzionale/raccomandato con password dedicata, cifratura moderna e warning forte quando si esporta non cifrato",
     "[P0] Utenti: pianificare progetto di recupero password admin offline senza implementarlo ora; definire recovery file/codice, reset distruttivo, backup obbligatorio, casi limite e policy anti-abuso",
     "[P0] Sicurezza password: ridurre uso di password come String dove possibile, azzerare CharArray, prevedere cambio password obbligatorio al primo accesso operatore e separare reset operatori da recovery admin",
@@ -13,7 +11,6 @@
     "[P4] CI: aggiungere GitHub Actions minima con ./gradlew :app:testFullDebugUnitTest e ./gradlew :app:assembleFullDebug",
     "[P4] CI: aggiungere successivamente lint, controlli dipendenze, test restore/backup e test repository su flussi critici",
     "[P4] Test: aggiungere test specifici per cancellazione totale commesse, cleanup file, spazio insufficiente, restore fallito, permessi operatori e admin unico",
-    "[P4] Backup Android: mantenere allowBackup=false e verificare che file, database e shared preferences restino esclusi da cloud backup e device transfer",
     "[P5] Tablet: integrare window-size-class, NavigationRail su schermi wide sw600dp+ e layout master-detail per Clienti, Commesse, Template e Impostazioni",
     "[P5] Landing pubblica: sostituire placeholder screenshot, video, download e contatti con asset/link reali; generare screenshot con scripts\\windows\\create_demo_screenshots.ps1 e aggiornare landing\\index.html",
     "[P5] Play Store: completare readiness con URL privacy policy, email supporto, icona, feature graphic, screenshot e release-checklist su device reale prima del caricamento AAB",
