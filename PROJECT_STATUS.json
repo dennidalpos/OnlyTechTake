@@ -4,6 +4,17 @@
     "Verificare record_demo_device.ps1 su device USB reale: build/install FullDebug, avvio app, opzionale -SeedData, registrazione manuale guidata, pull MP4 in demo/recordings e file video riproducibile",
     "Completare landing pubblica: sostituire placeholder screenshot/video/download/contatti con asset e link reali; generare screenshot con scripts\\windows\\create_demo_screenshots.ps1 e aggiornare landing\\index.html",
     "Completare readiness Play Store: pubblicare URL privacy policy, definire email supporto, produrre icon/feature graphic/screenshot e completare release-checklist su device reale prima del caricamento AAB",
-    "Produrre registrazioni demo 01-06 e video promozionali: seguire demo\\DEMO_GUIDE.md e docs\\marketing\\demo-video-production.md usando solo dati fittizi, poi usare gli asset per landing e Play Store"
+    "Produrre registrazioni demo 01-06 e video promozionali: seguire demo\\DEMO_GUIDE.md e docs\\marketing\\demo-video-production.md usando solo dati fittizi, poi usare gli asset per landing e Play Store",
+    "Utenti: imporre il vincolo applicativo che l'admin sia uno solo; prevedere controlli UI/dati per impedire la creazione di più admin",
+    "Utenti: pianificare un progetto di recupero password admin, senza implementarlo ora; definire flusso, requisiti di sicurezza, casi limite e impatto su DB/app",
+    "Utenti: consentire la creazione di operatori e l'assegnazione di autorizzazioni tramite interruttori per aree dell'app e modifiche consentite",
+    "Template: mostrare una lista compatta con solo titolo del template e step associato; ridurre le card e aprire al click una finestra di modifica con campi editabili, pulsanti Salva e Chiudi e conferma prima di applicare modifiche",
+    "Navigazione: oltre alla freccia indietro mostrare anche un pulsante Chiudi quando il caso d'uso richiede la chiusura della sezione aperta",
+    "Pulizia commesse: mantenere solo l'azione Cancella tutte le commesse; mostrare una finestra con pulsanti Backup DB ed Export XLSX e una checkbox obbligatoria di conferma prima della cancellazione",
+    "Impostazioni/Archiviazione: creare una sezione Archiviazione dentro le impostazioni con metriche di sistema, soprattutto spazio rimanente su disco, monitoraggio continuo dello spazio, soglia alert configurabile, gestione dei casi di spazio esaurito per evitare corruzione DB, e rimozione delle funzioni Archivia commesse e codice",
+    "Configurazione: rinominare Config in Impostazioni e aggiornare tutti i riferimenti UI, navigazione, testi e documentazione interna",
+    "Clienti: migliorare la UI della ricerca rimuovendo il doppio riquadro causato da card contenitore e box di ricerca annidato",
+    "Clienti: aggiungere la possibilità di vedere le commesse assegnate a un cliente, incluse quelle chiuse, selezionando il cliente",
+    "Direzione prodotto: trattare l'app come nuova app; sono consentite modifiche distruttive, cambi di logica e refactoring strutturali se migliorano pulizia, coerenza e manutenibilità"
   ]
 }
