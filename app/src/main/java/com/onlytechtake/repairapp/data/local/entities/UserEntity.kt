@@ -21,6 +21,7 @@ data class UserEntity(
     val role: UserRole,
     val permissions: Set<UserPermission> = emptySet(),
     @ColumnInfo(defaultValue = "1") val active: Boolean,
+    @ColumnInfo(defaultValue = "0") val forcePasswordChange: Boolean = false,
     val createdAt: Long,
     val updatedAt: Long,
 )

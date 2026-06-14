@@ -19,6 +19,10 @@ data class AuthFormState(
     val username: String = "",
     val password: String = "",
     val confirmPassword: String = "",
+    val currentPassword: String = "",
+    val recoveryCode: String = "",
+    val recoveryMode: Boolean = false,
+    val passwordChangeRequired: Boolean = false,
     val errorMessage: String? = null,
     val loading: Boolean = false,
 )
@@ -40,6 +44,7 @@ class AuthGateViewModel(
     fun updateUsername(value: String) = updateForm { copy(username = value, errorMessage = null) }
     fun updatePassword(value: String) = updateForm { copy(password = value, errorMessage = null) }
     fun updateConfirmPassword(value: String) = updateForm { copy(confirmPassword = value, errorMessage = null) }
+    fun updateRecoveryCode(value: String) = updateForm { copy(recoveryCode = value, errorMessage = null) }
 
     fun createFirstAdmin() {
         val form = formState.value
@@ -81,6 +86,16 @@ class AuthGateViewModel(
                 is LoginResult.Success -> {
                     // Success will trigger AuthState change, no need to clear form here
                 }
+                is LoginResult.PasswordChangeRequired -> mutableFormState.update {
+                    it.copy(
+                        loading = false,
+                        passwordChangeRequired = true,
+                        errorMessage = null,
+                        currentPassword = it.password,
+                        password = "",
+                        confirmPassword = ""
+                    )
+                }
                 LoginResult.InactiveUser -> mutableFormState.update {
                     it.copy(loading = false, errorMessage = "Utente disattivato")
                 }
@@ -101,6 +116,50 @@ class AuthGateViewModel(
         }
     }
 
+    fun startRecovery() {
+        updateForm { copy(recoveryMode = true, errorMessage = null, password = "", confirmPassword = "", recoveryCode = "") }
+    }
+
+    fun cancelRecovery() {
+        updateForm { copy(recoveryMode = false, errorMessage = null, password = "", confirmPassword = "") }
+    }
+
+    fun recoverAdmin() {
+        val form = formState.value
+        if (form.recoveryCode.isBlank()) {
+            setError("Inserisci il codice di recupero")
+            return
+        }
+        if (form.password.length < AuthPolicy.MIN_PASSWORD_LENGTH) {
+            setError("La password deve avere almeno 8 caratteri")
+            return
+        }
+        if (form.password != form.confirmPassword) {
+            setError("Le password non coincidono")
+            return
+        }
+
+        viewModelScope.launch {
+            mutableFormState.update { it.copy(loading = true, errorMessage = null) }
+            authRepository.resetAdminWithRecoveryCode(form.recoveryCode, form.password.toCharArray())
+                .onSuccess {
+                    mutableFormState.update { 
+                        it.copy(
+                            loading = false, 
+                            recoveryMode = false, 
+                            errorMessage = "Password resettata con successo. Effettua il login.",
+                            password = "",
+                            confirmPassword = "",
+                            recoveryCode = ""
+                        ) 
+                    }
+                }
+                .onFailure { e ->
+                    mutableFormState.update { it.copy(loading = false, errorMessage = e.message ?: "Errore durante il recupero") }
+                }
+        }
+    }
+
     fun logout() {
         viewModelScope.launch {
             authRepository.logout()
@@ -108,9 +167,75 @@ class AuthGateViewModel(
                 it.copy(
                     password = "",
                     confirmPassword = "",
+                    currentPassword = "",
+                    passwordChangeRequired = false,
                     loading = false,
                     errorMessage = null
                 )
+            }
+        }
+    }
+
+    fun cancelPasswordChange() {
+        mutableFormState.update {
+            it.copy(
+                passwordChangeRequired = false,
+                password = "",
+                confirmPassword = "",
+                currentPassword = "",
+                errorMessage = null
+            )
+        }
+    }
+
+    fun changePassword() {
+        val form = formState.value
+        if (form.password.length < AuthPolicy.MIN_PASSWORD_LENGTH) {
+            setError("La password deve avere almeno 8 caratteri")
+            return
+        }
+        if (form.password != form.confirmPassword) {
+            setError("Le password non coincidono")
+            return
+        }
+
+        viewModelScope.launch {
+            mutableFormState.update { it.copy(loading = true, errorMessage = null) }
+            authRepository.changePassword(
+                username = form.username,
+                currentPassword = form.currentPassword.toCharArray(),
+                newPassword = form.password.toCharArray()
+            ).onSuccess {
+                // After password change, we can try to login again automatically
+                // or just go back to login screen. 
+                // Let's try to login automatically.
+                val loginResult = authRepository.login(form.username, form.password.toCharArray())
+                if (loginResult is LoginResult.Success) {
+                    mutableFormState.update { 
+                        it.copy(
+                            loading = false, 
+                            passwordChangeRequired = false,
+                            password = "",
+                            confirmPassword = "",
+                            currentPassword = ""
+                        ) 
+                    }
+                } else {
+                    mutableFormState.update { 
+                        it.copy(
+                            loading = false, 
+                            passwordChangeRequired = false,
+                            errorMessage = "Password cambiata, effettua il login",
+                            password = "",
+                            confirmPassword = "",
+                            currentPassword = ""
+                        ) 
+                    }
+                }
+            }.onFailure { e ->
+                mutableFormState.update {
+                    it.copy(loading = false, errorMessage = e.message ?: "Errore durante il cambio password")
+                }
             }
         }
     }

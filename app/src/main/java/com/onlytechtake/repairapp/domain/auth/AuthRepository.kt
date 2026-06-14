@@ -18,6 +18,15 @@ interface AuthRepository {
 
     suspend fun loginDemo(): LoginResult
 
+    suspend fun changePassword(
+        username: String,
+        currentPassword: CharArray,
+        newPassword: CharArray,
+    ): Result<Unit>
+
+    suspend fun getRecoveryKit(): Result<String>
+    suspend fun resetAdminWithRecoveryCode(code: String, newPassword: CharArray): Result<Unit>
+
     fun touchSession()
 
     suspend fun logout()

@@ -32,7 +32,9 @@ class CustomerRepository(
                 flowOf(emptyList())
             }
         }
-        return customerDao.search(query.trim())
+        val trimmed = query.trim()
+        val sanitized = trimmed.split(" ").filter { it.isNotBlank() }.joinToString(" ") { "$it*" }
+        return customerDao.search(sanitized)
     }
 
     suspend fun findById(id: String): CustomerEntity? {

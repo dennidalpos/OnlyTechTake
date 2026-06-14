@@ -90,6 +90,14 @@ fun SettingsHub(
                 }
             }
         }
+        item {
+            SettingsHubCard(
+                "Informazioni",
+                "Versione e contatti dell'app"
+            ) {
+                onNavigate(DashboardRoutes.settings("ABOUT"))
+            }
+        }
     }
 }
 

@@ -83,6 +83,27 @@ class OrderWorkflowRepository(
 
     suspend fun countAllOrders(): Int = repairOrderDao.countAll()
 
+    fun searchOrders(actor: AuthenticatedUser, query: String): Flow<List<OrderListItem>> {
+        if (DemoMode.isEnabled) return flowOf(emptyList())
+        val sanitized = query.trim().split(" ").filter { it.isNotBlank() }.joinToString(" ") { "$it*" }
+        if (sanitized.isBlank()) return observeOrderList(actor, OrderFilter())
+        
+        return repairOrderDao.search(sanitized).map { projections ->
+            projections.map { p ->
+                OrderListItem(
+                    order = p.order,
+                    customer = p.customer,
+                    attachments = OrderAttachmentCounts(
+                        images = p.imagesCount,
+                        documents = p.documentsCount,
+                        signatures = p.signaturesCount,
+                        finalPhotos = p.finalPhotosCount,
+                    )
+                )
+            }
+        }
+    }
+
     fun observeOrderList(actor: AuthenticatedUser, filter: OrderFilter): Flow<List<OrderListItem>> {
         if (DemoMode.isEnabled) {
             return flowOf(listOf(

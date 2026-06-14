@@ -122,7 +122,7 @@ class SettingsViewModel(
         }
     }
 
-    fun createOperator(displayName: String, username: String, password: String) {
+    fun createOperator(displayName: String, username: String, password: CharArray) {
         launchWithUser { actor ->
             adminUserRepository.createOperator(actor, OperatorInput(displayName, username, password))
         }
@@ -140,7 +140,7 @@ class SettingsViewModel(
         }
     }
 
-    fun resetPassword(userId: String, password: String) {
+    fun resetPassword(userId: String, password: CharArray) {
         launchWithUser { actor ->
             adminUserRepository.resetPassword(actor, userId, password)
         }

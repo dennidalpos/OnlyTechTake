@@ -19,8 +19,26 @@ import com.onlytechtake.repairapp.data.local.entities.UserEntity
 data class OperatorInput(
     val displayName: String,
     val username: String,
-    val password: String,
-)
+    val password: CharArray,
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as OperatorInput
+        if (displayName != other.displayName) return false
+        if (username != other.username) return false
+        if (!password.contentEquals(other.password)) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = displayName.hashCode()
+        result = 31 * result + username.hashCode()
+        result = 31 * result + password.contentHashCode()
+        return result
+    }
+}
+
 
 data class CustomerInput(
     val id: String? = null,
@@ -99,6 +117,7 @@ data class OrderFilter(
     val status: OrderStatus? = null,
     val statuses: Set<OrderStatus> = emptySet(),
     val customerId: String? = null,
+    val query: String = "",
 )
 
 data class OrderAttachmentCounts(
@@ -125,7 +144,9 @@ data class OrderDetail(
     val signatures: List<SignatureEntity>,
 ) {
     val isPaid: Boolean
-        get() = timeline.any { it.type == TimelineEventType.PAYMENT_RECEIVED }
+        get() = timeline
+            .filter { it.type == TimelineEventType.PAYMENT_RECEIVED || it.type == TimelineEventType.PAYMENT_REMOVED }
+            .maxByOrNull { it.createdAt }?.type == TimelineEventType.PAYMENT_RECEIVED
 }
 
 data class PreparedMessage(

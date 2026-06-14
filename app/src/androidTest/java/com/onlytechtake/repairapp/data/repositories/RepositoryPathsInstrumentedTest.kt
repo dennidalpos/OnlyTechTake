@@ -34,6 +34,7 @@ import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
 import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
 import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
 import com.onlytechtake.repairapp.domain.workspace.RepairOrderInput
+import com.onlytechtake.repairapp.data.repositories.OrderFileCleanupService
 import java.io.File
 import java.util.zip.ZipInputStream
 import kotlinx.coroutines.flow.first
@@ -518,6 +519,7 @@ class RepositoryPathsInstrumentedTest {
             auditLogDao = database.auditLogDao(),
             authPreferences = authPreferences,
             sessionStore = sessionStore,
+            fileCleanupService = OrderFileCleanupService(context),
         )
 
         repository.resetAll(actor, "RESET").getOrThrow()
@@ -598,9 +600,6 @@ class RepositoryPathsInstrumentedTest {
                     updatedAt = NOW,
                     closedAt = null,
                     closureReason = null,
-                    deletedAt = null,
-                    deletedByUserId = null,
-                    deleteReason = null,
                 ),
             )
             val orderFile = File(context.filesDir, "orders/order-1/file.txt").also {
@@ -613,6 +612,7 @@ class RepositoryPathsInstrumentedTest {
                 auditLogDao = fileBackedDatabase.auditLogDao(),
                 authPreferences = authPreferences,
                 sessionStore = sessionStore,
+                fileCleanupService = OrderFileCleanupService(context),
             )
 
             repository.resetAll(actor, "RESET").getOrThrow()
@@ -715,6 +715,8 @@ class RepositoryPathsInstrumentedTest {
         DefaultAuthRepository(
             userDao = database.userDao(),
             auditLogDao = database.auditLogDao(),
+            loginAttemptDao = database.loginAttemptDao(),
+            appSettingDao = database.appSettingDao(),
             authPreferences = authPreferences,
             sessionStore = InMemorySessionStore(),
             passwordHasher = PasswordHasher(),
@@ -743,6 +745,7 @@ class RepositoryPathsInstrumentedTest {
             repairOrderDao = database.repairOrderDao(),
             orderMediaDao = database.orderMediaDao(),
             timelineEventDao = database.timelineEventDao(),
+            fileCleanupService = OrderFileCleanupService(context),
             database = database,
             clockMillis = { NOW },
         )
@@ -768,6 +771,7 @@ class RepositoryPathsInstrumentedTest {
             signatureDao = database.signatureDao(),
             templateDao = database.messageTemplateDao(),
             timelineEventDao = database.timelineEventDao(),
+            fileCleanupService = OrderFileCleanupService(context),
             clockMillis = { NOW },
         )
 

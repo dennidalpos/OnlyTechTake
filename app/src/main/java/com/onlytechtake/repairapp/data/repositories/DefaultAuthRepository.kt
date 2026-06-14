@@ -2,9 +2,11 @@ package com.onlytechtake.repairapp.data.repositories
 
 import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.security.PasswordHasher
+import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.LoginAttemptDao
 import com.onlytechtake.repairapp.data.local.dao.UserDao
+import com.onlytechtake.repairapp.data.local.entities.AppSettingEntity
 import com.onlytechtake.repairapp.data.local.entities.AuditAction
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
 import com.onlytechtake.repairapp.data.local.entities.LoginAttemptEntity
@@ -31,6 +33,7 @@ class DefaultAuthRepository(
     private val userDao: UserDao,
     private val auditLogDao: AuditLogDao,
     private val loginAttemptDao: LoginAttemptDao,
+    private val appSettingDao: AppSettingDao,
     private val authPreferences: AuthPreferences,
     private val sessionStore: InMemorySessionStore,
     private val passwordHasher: PasswordHasher,
@@ -74,30 +77,35 @@ class DefaultAuthRepository(
         require(username.isNotBlank()) { "Username is required" }
         require(password.size >= AuthPolicy.MIN_PASSWORD_LENGTH) { "Password too short" }
 
-        val passwordHash = passwordHasher.hash(password)
-        val now = clockMillis()
-        val user = UserEntity(
-            id = UUID.randomUUID().toString(),
-            displayName = displayName.trim(),
-            username = username.trim(),
-            passwordHash = passwordHash.hash,
-            passwordSalt = passwordHash.salt,
-            role = UserRole.ADMIN,
-            permissions = com.onlytechtake.repairapp.data.local.entities.UserPermission.entries.toSet(),
-            active = true,
-            createdAt = now,
-            updatedAt = now,
-        )
+        try {
+            val passwordHash = passwordHasher.hash(password)
+            val now = clockMillis()
+            val user = UserEntity(
+                id = UUID.randomUUID().toString(),
+                displayName = displayName.trim(),
+                username = username.trim(),
+                passwordHash = passwordHash.hash,
+                passwordSalt = passwordHash.salt,
+                role = UserRole.ADMIN,
+                permissions = com.onlytechtake.repairapp.data.local.entities.UserPermission.entries.toSet(),
+                active = true,
+                forcePasswordChange = false,
+                createdAt = now,
+                updatedAt = now,
+            )
 
-        userDao.upsert(user)
-        authPreferences.markConfigured()
+            userDao.upsert(user)
+            authPreferences.markConfigured()
 
-        val authenticatedUser = user.toAuthenticatedUser()
-        sessionStore.setCurrentUser(authenticatedUser, now)
-        authPreferences.recordLogin(user.id, now)
-        writeAudit(AuditAction.ADMIN_LOGIN, user.id, now)
+            val authenticatedUser = user.toAuthenticatedUser()
+            sessionStore.setCurrentUser(authenticatedUser, now)
+            authPreferences.recordLogin(user.id, now)
+            writeAudit(AuditAction.ADMIN_LOGIN, user.id, null, now)
 
-        return authenticatedUser
+            return authenticatedUser
+        } finally {
+            password.fill('\u0000')
+        }
     }
 
     override suspend fun login(username: String, password: CharArray): LoginResult {
@@ -108,33 +116,42 @@ class DefaultAuthRepository(
         val now = clockMillis()
         if (isLockedOut(normalizedUsername, now)) return LoginResult.LockedOut
 
-        val user = userDao.findByUsername(normalizedUsername) ?: run {
-            recordFailedAttempt(normalizedUsername, now)
-            return LoginResult.InvalidCredentials
-        }
-        if (!user.active) return LoginResult.InactiveUser
+        try {
+            val user = userDao.findByUsername(normalizedUsername) ?: run {
+                recordFailedAttempt(normalizedUsername, now)
+                return LoginResult.InvalidCredentials
+            }
+            if (!user.active) return LoginResult.InactiveUser
 
-        val passwordMatches = passwordHasher.verify(
-            password = password,
-            expectedHash = user.passwordHash,
-            salt = user.passwordSalt,
-        )
-        if (!passwordMatches) {
-            recordFailedAttempt(normalizedUsername, now)
-            writeAudit(AuditAction.LOGIN_FAILED, user.id, now)
-            return LoginResult.InvalidCredentials
-        }
+            val passwordMatches = passwordHasher.verify(
+                password = password,
+                expectedHash = user.passwordHash,
+                salt = user.passwordSalt,
+            )
+            if (!passwordMatches) {
+                recordFailedAttempt(normalizedUsername, now)
+                writeAudit(AuditAction.LOGIN_FAILED, user.id, null, now)
+                return LoginResult.InvalidCredentials
+            }
 
-        val authenticatedUser = user.toAuthenticatedUser()
-        sessionStore.setCurrentUser(authenticatedUser, now)
-        authPreferences.recordLogin(user.id, now)
-        loginAttemptDao.upsert(LoginAttemptEntity(username = normalizedUsername, successful = true, attemptAt = now))
-        
-        if (user.role == UserRole.ADMIN) {
-            writeAudit(AuditAction.ADMIN_LOGIN, user.id, now)
-        }
+            val authenticatedUser = user.toAuthenticatedUser()
 
-        return LoginResult.Success(authenticatedUser)
+            if (user.forcePasswordChange) {
+                return LoginResult.PasswordChangeRequired(authenticatedUser)
+            }
+
+            sessionStore.setCurrentUser(authenticatedUser, now)
+            authPreferences.recordLogin(user.id, now)
+            loginAttemptDao.upsert(LoginAttemptEntity(username = normalizedUsername, successful = true, attemptAt = now))
+
+            if (user.role == UserRole.ADMIN) {
+                writeAudit(AuditAction.ADMIN_LOGIN, user.id, null, now)
+            }
+
+            return LoginResult.Success(authenticatedUser)
+        } finally {
+            password.fill('\u0000')
+        }
     }
 
     override suspend fun loginDemo(): LoginResult {
@@ -147,9 +164,98 @@ class DefaultAuthRepository(
             username = "admin",
             role = UserRole.ADMIN,
             permissions = com.onlytechtake.repairapp.data.local.entities.UserPermission.entries.toSet(),
+            forcePasswordChange = false,
         )
         sessionStore.setCurrentUser(demoUser, clockMillis())
         return LoginResult.Success(demoUser)
+    }
+
+    override suspend fun changePassword(
+        username: String,
+        currentPassword: CharArray,
+        newPassword: CharArray,
+    ): Result<Unit> = runCatching {
+        val user = requireNotNull(userDao.findByUsername(username)) { "Utente non trovato" }
+        val matches = passwordHasher.verify(currentPassword, user.passwordHash, user.passwordSalt)
+        require(matches) { "Password attuale non corretta" }
+        require(newPassword.size >= AuthPolicy.MIN_PASSWORD_LENGTH) { "Nuova password troppo corta" }
+
+        val newHash = passwordHasher.hash(newPassword)
+        val now = clockMillis()
+        userDao.upsert(
+            user.copy(
+                passwordHash = newHash.hash,
+                passwordSalt = newHash.salt,
+                forcePasswordChange = false,
+                updatedAt = now,
+            )
+        )
+        writeAudit(AuditAction.PASSWORD_RESET, user.id, null, now)
+    }.also {
+        currentPassword.fill('\u0000')
+        newPassword.fill('\u0000')
+    }
+
+    override suspend fun getRecoveryKit(): Result<String> = runCatching {
+        // Only existing admins or the flow of first admin creation should call this
+        // Generate a random 12-character code
+        val code = java.util.UUID.randomUUID().toString().replace("-", "").take(12).uppercase()
+        val hash = passwordHasher.hash(code.toCharArray())
+        val now = clockMillis()
+        val actorId = sessionStore.currentUser.value?.id
+
+        appSettingDao.upsert(
+            AppSettingEntity(
+                key = "master_recovery_code_hash",
+                value = hash.hash,
+                updatedByUserId = actorId,
+                updatedAt = now
+            )
+        )
+        appSettingDao.upsert(
+            AppSettingEntity(
+                key = "master_recovery_code_salt",
+                value = hash.salt,
+                updatedByUserId = actorId,
+                updatedAt = now
+            )
+        )
+        code
+    }
+
+    override suspend fun resetAdminWithRecoveryCode(code: String, newPassword: CharArray): Result<Unit> = runCatching {
+        val hashSetting = appSettingDao.findByKey("master_recovery_code_hash") ?: throw IllegalStateException("Recovery Kit non configurato")
+        val saltSetting = appSettingDao.findByKey("master_recovery_code_salt") ?: throw IllegalStateException("Recovery Kit non configurato")
+        
+        val matches = passwordHasher.verify(code.toCharArray(), hashSetting.value, saltSetting.value)
+        require(matches) { "Codice di recupero non valido" }
+        require(newPassword.size >= AuthPolicy.MIN_PASSWORD_LENGTH) { "Nuova password troppo corta" }
+
+        // Find all admins and reset their password, or just the first one?
+        // Let's reset all admins to the new password to be sure.
+        val admins = userDao.findAllAdmins()
+        require(admins.isNotEmpty()) { "Nessun account admin trovato" }
+        
+        val newHash = passwordHasher.hash(newPassword)
+        val now = clockMillis()
+        admins.forEach { admin ->
+            userDao.upsert(
+                admin.copy(
+                    passwordHash = newHash.hash,
+                    passwordSalt = newHash.salt,
+                    forcePasswordChange = false,
+                    updatedAt = now
+                )
+            )
+        }
+        
+        // Invalidate recovery code after use (monouso)
+        // appSettingDao.deleteByKey("master_recovery_code_hash") // We don't have deleteByKey yet, let's just empty it
+        appSettingDao.upsert(hashSetting.copy(value = "", updatedAt = now))
+
+        writeAudit(AuditAction.PASSWORD_RESET, "SYSTEM_RECOVERY", """{"resetAdmins":${admins.size}}""", now)
+    }.also {
+        newPassword.fill('\u0000')
     }
 
     override suspend fun logout() {
@@ -161,7 +267,7 @@ class DefaultAuthRepository(
         sessionStore.touch(clockMillis())
     }
 
-    private suspend fun writeAudit(action: AuditAction, actorUserId: String, createdAt: Long) {
+    private suspend fun writeAudit(action: AuditAction, actorUserId: String, detailsJson: String?, createdAt: Long) {
         auditLogDao.upsert(
             AuditLogEntity(
                 id = UUID.randomUUID().toString(),
@@ -169,7 +275,7 @@ class DefaultAuthRepository(
                 actorUserId = actorUserId,
                 orderId = null,
                 customerId = null,
-                detailsJson = null,
+                detailsJson = detailsJson,
                 createdAt = createdAt,
             ),
         )
@@ -182,6 +288,7 @@ class DefaultAuthRepository(
             username = username,
             role = role,
             permissions = permissions,
+            forcePasswordChange = forcePasswordChange,
         )
 
     private fun inactivityTicker(): Flow<Long> =

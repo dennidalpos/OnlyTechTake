@@ -28,6 +28,7 @@ class AuthContainer(context: Context, dataContainer: DataContainer) {
         userDao = dataContainer.database.userDao(),
         auditLogDao = dataContainer.database.auditLogDao(),
         loginAttemptDao = dataContainer.database.loginAttemptDao(),
+        appSettingDao = dataContainer.database.appSettingDao(),
         authPreferences = authPreferences,
         sessionStore = sessionStore,
         passwordHasher = passwordHasher,
@@ -43,7 +44,8 @@ class AuthContainer(context: Context, dataContainer: DataContainer) {
 
 class MediaContainer(context: Context, dataContainer: DataContainer) {
     val orderFileCleanupService = OrderFileCleanupService(context.applicationContext)
-    
+    private val mediaOptimizer = com.onlytechtake.repairapp.core.media.MediaOptimizer()
+
     val orderMediaRepository = OrderMediaRepository(
         context = context.applicationContext,
         repairOrderDao = dataContainer.database.repairOrderDao(),
@@ -51,6 +53,7 @@ class MediaContainer(context: Context, dataContainer: DataContainer) {
         timelineEventDao = dataContainer.database.timelineEventDao(),
         fileCleanupService = orderFileCleanupService,
         database = dataContainer.database,
+        mediaOptimizer = mediaOptimizer,
     )
 
     val orderDocumentFileStorage = OrderDocumentFileStorage(context.applicationContext)

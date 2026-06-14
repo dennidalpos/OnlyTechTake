@@ -33,7 +33,11 @@ class OrdersViewModel(
 
     val orderListItems = combine(currentUser, _orderFilter) { user, filter -> user to filter }
         .flatMapLatest { (user, filter) ->
-            if (user == null) flowOf(emptyList()) else orderRepository.observeOrderList(user, filter)
+            when {
+                user == null -> flowOf(emptyList())
+                filter.query.isNotBlank() -> orderRepository.searchOrders(user, filter.query)
+                else -> orderRepository.observeOrderList(user, filter)
+            }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 

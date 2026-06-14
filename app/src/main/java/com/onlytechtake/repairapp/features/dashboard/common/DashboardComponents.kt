@@ -51,6 +51,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.SuccessGreen
+import com.onlytechtake.repairapp.core.design.WarningAmber
+import com.onlytechtake.repairapp.core.design.WarningOnAmber
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 
 object DashboardSpacing {
@@ -345,9 +348,9 @@ private fun ButtonTone.containerColor(): Color =
     when (this) {
         ButtonTone.PRIMARY -> MaterialTheme.colorScheme.primary
         ButtonTone.NEUTRAL -> MaterialTheme.colorScheme.secondaryContainer
-        ButtonTone.SUCCESS -> Color(0xFF237A3B)
+        ButtonTone.SUCCESS -> SuccessGreen
         ButtonTone.INFO -> MaterialTheme.colorScheme.tertiary
-        ButtonTone.WARNING -> Color(0xFFE8A600)
+        ButtonTone.WARNING -> WarningAmber
         ButtonTone.DANGER -> MaterialTheme.colorScheme.error
     }
 
@@ -358,7 +361,7 @@ private fun ButtonTone.contentColor(): Color =
         ButtonTone.NEUTRAL -> MaterialTheme.colorScheme.onSecondaryContainer
         ButtonTone.INFO -> MaterialTheme.colorScheme.onTertiary
         ButtonTone.DANGER -> MaterialTheme.colorScheme.onError
-        ButtonTone.WARNING -> Color(0xFF2A2100)
+        ButtonTone.WARNING -> WarningOnAmber
         ButtonTone.SUCCESS -> Color.White
     }
 

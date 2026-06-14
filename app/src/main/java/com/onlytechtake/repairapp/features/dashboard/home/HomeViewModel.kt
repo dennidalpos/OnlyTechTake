@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
@@ -15,6 +16,7 @@ import com.onlytechtake.repairapp.features.workspace.buildOperationalQueues
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -41,8 +43,12 @@ class HomeViewModel(
     val backupReminderSettings: StateFlow<BackupReminderSettings> = backupReminderPreferences.settings
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), BackupReminderSettings())
 
-    fun isBackupReminderDue(settings: BackupReminderSettings, nowMillis: Long = System.currentTimeMillis()): Boolean =
-        BackupReminderPolicy.shouldShowReminder(settings, nowMillis)
+    val isBackupReminderDue: StateFlow<Boolean> = combine(
+        currentUser,
+        backupReminderSettings
+    ) { user, settings ->
+        PermissionService.isAdmin(user) && BackupReminderPolicy.shouldShowReminder(settings, System.currentTimeMillis())
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     fun exportCompleteBackup(uri: Uri) {
         val user = currentUser.value ?: return

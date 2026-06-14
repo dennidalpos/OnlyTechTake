@@ -9,6 +9,7 @@ data class AuthenticatedUser(
     val username: String,
     val role: UserRole,
     val permissions: Set<UserPermission> = emptySet(),
+    val forcePasswordChange: Boolean = false,
 )
 
 data class AuthState(
@@ -20,6 +21,7 @@ data class AuthState(
 
 sealed interface LoginResult {
     data class Success(val user: AuthenticatedUser) : LoginResult
+    data class PasswordChangeRequired(val user: AuthenticatedUser) : LoginResult
     data object InvalidCredentials : LoginResult
     data object InactiveUser : LoginResult
     data object LockedOut : LoginResult

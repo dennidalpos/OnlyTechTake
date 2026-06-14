@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -19,7 +20,7 @@ private object Routes {
 }
 
 @Composable
-fun RepairAppNavHost() {
+fun RepairAppNavHost(windowSizeClass: WindowSizeClass) {
     val navController = rememberNavController()
     val context = LocalContext.current
     var appInstanceKey by remember { mutableIntStateOf(0) }
@@ -31,7 +32,10 @@ fun RepairAppNavHost() {
         appInstanceKey += 1
     }
 
-    CompositionLocalProvider(LocalAppContainer provides appContainer) {
+    CompositionLocalProvider(
+        LocalAppContainer provides appContainer,
+        LocalWindowSizeClass provides windowSizeClass
+    ) {
         NavHost(
             navController = navController,
             startDestination = Routes.AuthGate,
@@ -44,4 +48,8 @@ fun RepairAppNavHost() {
             }
         }
     }
+}
+
+val LocalWindowSizeClass = androidx.compose.runtime.staticCompositionLocalOf<WindowSizeClass> {
+    error("No WindowSizeClass provided")
 }

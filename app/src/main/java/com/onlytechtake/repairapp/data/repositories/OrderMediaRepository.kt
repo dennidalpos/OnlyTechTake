@@ -8,6 +8,7 @@ import android.net.Uri
 import android.webkit.MimeTypeMap
 import androidx.room.withTransaction
 import com.onlytechtake.repairapp.core.media.AttachmentImportPolicy
+import com.onlytechtake.repairapp.core.media.MediaOptimizer
 import com.onlytechtake.repairapp.core.media.OrderMediaFileNamer
 import com.onlytechtake.repairapp.core.media.toMiBLabel
 import com.onlytechtake.repairapp.core.media.exifOrientationTransform
@@ -38,6 +39,7 @@ class OrderMediaRepository(
     private val database: RepairAppDatabase? = null,
     private val fileNamer: OrderMediaFileNamer = OrderMediaFileNamer(),
     private val attachmentPolicy: AttachmentImportPolicy = AttachmentImportPolicy(),
+    private val mediaOptimizer: MediaOptimizer = MediaOptimizer(),
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
     private val eventWriter = OrderWorkflowEventWriter(context, timelineEventDao = timelineEventDao)
@@ -59,6 +61,7 @@ class OrderMediaRepository(
     fun stageCapturedIntakePhoto(file: File): Result<StagedOrderMedia> =
         runCatching {
             require(file.exists() && (file.length() > 0L)) { "Foto non salvata" }
+            mediaOptimizer.optimize(file)
             val bounds = readImageBounds(file)
             StagedOrderMedia(
                 localPath = file.absolutePath,
@@ -94,6 +97,7 @@ class OrderMediaRepository(
             }
             require(file.exists() && file.length() > 0L) { "Allegato vuoto o non salvato" }
 
+            mediaOptimizer.optimize(file)
             val bounds = if (attachmentPolicy.isImage(mimeType)) readImageBounds(file) else ImageBounds(null, null)
             StagedOrderMedia(
                 localPath = file.absolutePath,
@@ -134,6 +138,8 @@ class OrderMediaRepository(
         runCatching {
             requireWritableOrder(actor, orderId)
             require(file.exists() && file.length() > 0L) { "Foto non salvata" }
+            
+            mediaOptimizer.optimize(file)
 
             val now = clockMillis()
             val bounds = readImageBounds(file)
@@ -184,6 +190,7 @@ class OrderMediaRepository(
             }
             require(file.exists() && file.length() > 0L) { "Allegato vuoto o non salvato" }
 
+            mediaOptimizer.optimize(file)
             val bounds = if (attachmentPolicy.isImage(mimeType)) readImageBounds(file) else ImageBounds(null, null)
             val media = OrderMediaEntity(
                 id = UUID.randomUUID().toString(),

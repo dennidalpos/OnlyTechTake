@@ -33,7 +33,7 @@ class AdminUserRepository(
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
             require(input.displayName.isNotBlank()) { "Nome obbligatorio" }
             require(input.username.isNotBlank()) { "Username obbligatorio" }
-            require(input.password.length >= MIN_PASSWORD_LENGTH) { "Password troppo corta" }
+            require(input.password.size >= MIN_PASSWORD_LENGTH) { "Password troppo corta" }
             require(userDao.findByUsername(input.username.trim()) == null) { "Username gia' esistente" }
 
             if (BuildConfig.IS_DEMO_VERSION) {
@@ -44,7 +44,11 @@ class AdminUserRepository(
             }
 
             val now = clockMillis()
-            val passwordHash = passwordHasher.hash(input.password.toCharArray())
+            val passwordHash = try {
+                passwordHasher.hash(input.password)
+            } finally {
+                input.password.fill('\u0000')
+            }
             val user = UserEntity(
                 id = UUID.randomUUID().toString(),
                 displayName = input.displayName.trim(),
@@ -58,6 +62,7 @@ class AdminUserRepository(
                     UserPermission.MANAGE_CUSTOMERS,
                 ),
                 active = true,
+                forcePasswordChange = true,
                 createdAt = now,
                 updatedAt = now,
             )
@@ -87,17 +92,22 @@ class AdminUserRepository(
             audit(actor.id, AuditAction.USER_UPDATED, """{"userId":"$userId"}""", now)
         }
 
-    suspend fun resetPassword(actor: AuthenticatedUser, userId: String, password: String): Result<Unit> =
+    suspend fun resetPassword(actor: AuthenticatedUser, userId: String, password: CharArray): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
-            require(password.length >= MIN_PASSWORD_LENGTH) { "Password troppo corta" }
+            require(password.size >= MIN_PASSWORD_LENGTH) { "Password troppo corta" }
             val existing = requireNotNull(userDao.findById(userId)) { "Utente non trovato" }
-            val hash = passwordHasher.hash(password.toCharArray())
+            val hash = try {
+                passwordHasher.hash(password)
+            } finally {
+                password.fill('\u0000')
+            }
             val now = clockMillis()
             userDao.upsert(
                 existing.copy(
                     passwordHash = hash.hash,
                     passwordSalt = hash.salt,
+                    forcePasswordChange = true,
                     updatedAt = now,
                 ),
             )
@@ -109,7 +119,10 @@ class AdminUserRepository(
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
             val existing = requireNotNull(userDao.findById(userId)) { "Utente non trovato" }
             if (!active && existing.role == UserRole.ADMIN) {
-                throw IllegalStateException("L'unico account Admin non puo' essere disattivato")
+                val activeAdmins = userDao.countActiveByRole(UserRole.ADMIN)
+                if (activeAdmins <= 1) {
+                    throw IllegalStateException("L'ultimo account Admin attivo non può essere disattivato")
+                }
             }
 
             val now = clockMillis()

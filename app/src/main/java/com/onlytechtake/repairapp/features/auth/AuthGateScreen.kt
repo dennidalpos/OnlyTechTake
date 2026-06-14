@@ -90,6 +90,21 @@ fun AuthGateRoute(
             onLogout = viewModel::logout,
             onAppDataRestored = onAppDataRestored,
         )
+        formState.passwordChangeRequired -> MandatoryPasswordChangeScreen(
+            formState = formState,
+            onPasswordChange = viewModel::updatePassword,
+            onConfirmPasswordChange = viewModel::updateConfirmPassword,
+            onSubmit = viewModel::changePassword,
+            onCancel = viewModel::cancelPasswordChange,
+        )
+        formState.recoveryMode -> AdminRecoveryScreen(
+            formState = formState,
+            onRecoveryCodeChange = viewModel::updateRecoveryCode,
+            onPasswordChange = viewModel::updatePassword,
+            onConfirmPasswordChange = viewModel::updateConfirmPassword,
+            onSubmit = viewModel::recoverAdmin,
+            onCancel = viewModel::cancelRecovery,
+        )
         !authState.configured -> FirstSetupScreen(
             formState = formState,
             onDisplayNameChange = viewModel::updateDisplayName,
@@ -105,7 +120,89 @@ fun AuthGateRoute(
             onPasswordChange = viewModel::updatePassword,
             onSubmit = viewModel::login,
             onDemoLogin = viewModel::loginDemo,
+            onRecovery = viewModel::startRecovery,
             onBack = { (context as? Activity)?.finish() },
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MandatoryPasswordChangeScreen(
+    formState: AuthFormState,
+    onPasswordChange: (String) -> Unit,
+    onConfirmPasswordChange: (String) -> Unit,
+    onSubmit: () -> Unit,
+    onCancel: () -> Unit,
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Cambio password obbligatorio") },
+                navigationIcon = {
+                    IconButton(onClick = onCancel) {
+                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Annulla")
+                    }
+                }
+            )
+        },
+    ) { paddingValues ->
+        AuthForm(
+            title = "Sicurezza account",
+            subtitle = "È richiesto il cambio password al primo accesso",
+            formState = formState,
+            paddingValues = paddingValues,
+            submitLabel = "Aggiorna password",
+            onDisplayNameChange = {},
+            onUsernameChange = {},
+            onPasswordChange = onPasswordChange,
+            onConfirmPasswordChange = onConfirmPasswordChange,
+            onSubmit = onSubmit,
+            showDisplayName = false,
+            showConfirmPassword = true,
+            showUsername = false,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AdminRecoveryScreen(
+    formState: AuthFormState,
+    onRecoveryCodeChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onConfirmPasswordChange: (String) -> Unit,
+    onSubmit: () -> Unit,
+    onCancel: () -> Unit,
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Recupero account admin") },
+                navigationIcon = {
+                    IconButton(onClick = onCancel) {
+                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Indietro")
+                    }
+                }
+            )
+        },
+    ) { paddingValues ->
+        AuthForm(
+            title = "Ripristino credenziali",
+            subtitle = "Inserisci il codice master per impostare una nuova password admin",
+            formState = formState,
+            paddingValues = paddingValues,
+            submitLabel = "Resetta Password Admin",
+            onDisplayNameChange = {},
+            onUsernameChange = {},
+            onPasswordChange = onPasswordChange,
+            onConfirmPasswordChange = onConfirmPasswordChange,
+            onRecoveryCodeChange = onRecoveryCodeChange,
+            onSubmit = onSubmit,
+            showDisplayName = false,
+            showConfirmPassword = true,
+            showUsername = false,
+            showRecoveryCode = true,
         )
     }
 }
@@ -175,6 +272,7 @@ private fun LoginScreen(
     onPasswordChange: (String) -> Unit,
     onSubmit: () -> Unit,
     onDemoLogin: () -> Unit,
+    onRecovery: () -> Unit,
     onBack: () -> Unit,
 ) {
     Scaffold(
@@ -201,6 +299,7 @@ private fun LoginScreen(
             onConfirmPasswordChange = {},
             onSubmit = onSubmit,
             onDemoLogin = onDemoLogin,
+            onRecovery = onRecovery,
             showDisplayName = false,
             showConfirmPassword = false,
         )
@@ -219,10 +318,14 @@ private fun AuthForm(
     onUsernameChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onConfirmPasswordChange: (String) -> Unit,
+    onRecoveryCodeChange: (String) -> Unit = {},
     onSubmit: () -> Unit,
     onDemoLogin: (() -> Unit)? = null,
+    onRecovery: (() -> Unit)? = null,
     showDisplayName: Boolean,
     showConfirmPassword: Boolean,
+    showUsername: Boolean = true,
+    showRecoveryCode: Boolean = false,
 ) {
     var passwordVisible by rememberSaveable { mutableStateOf(value = false) }
     var confirmPasswordVisible by rememberSaveable { mutableStateOf(false) }
@@ -271,21 +374,38 @@ private fun AuthForm(
                 )
             }
 
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag(RepairAppTestTags.AuthUsernameField),
-                value = formState.username,
-                onValueChange = onUsernameChange,
-                label = { Text(text = "Username") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next,
-                    keyboardType = KeyboardType.Email,
-                    capitalization = KeyboardCapitalization.None
-                ),
-                keyboardActions = nextAction,
-            )
+            if (showUsername) {
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(RepairAppTestTags.AuthUsernameField),
+                    value = formState.username,
+                    onValueChange = onUsernameChange,
+                    label = { Text(text = "Username") },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next,
+                        keyboardType = KeyboardType.Email,
+                        capitalization = KeyboardCapitalization.None
+                    ),
+                    keyboardActions = nextAction,
+                )
+            }
+
+            if (showRecoveryCode) {
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = formState.recoveryCode,
+                    onValueChange = onRecoveryCodeChange,
+                    label = { Text(text = "Codice di recupero (Master Code)") },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next,
+                        capitalization = KeyboardCapitalization.Characters
+                    ),
+                    keyboardActions = nextAction,
+                )
+            }
 
             OutlinedTextField(
                 modifier = Modifier
@@ -369,6 +489,16 @@ private fun AuthForm(
                     }
                 } else {
                     Text(text = submitLabel)
+                }
+            }
+
+            if (onRecovery != null) {
+                androidx.compose.material3.TextButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = onRecovery,
+                    enabled = !formState.loading,
+                ) {
+                    Text(text = "Problemi di accesso? Recupero Admin")
                 }
             }
 

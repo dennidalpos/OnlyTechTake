@@ -1,20 +1,8 @@
 {
   "todos": [
-    "[P0] Backup sicurezza: pianificare backup ZIP cifrato opzionale/raccomandato con password dedicata, cifratura moderna e warning forte quando si esporta non cifrato",
-    "[P0] Utenti: pianificare progetto di recupero password admin offline senza implementarlo ora; definire recovery file/codice, reset distruttivo, backup obbligatorio, casi limite e policy anti-abuso",
-    "[P0] Sicurezza password: ridurre uso di password come String dove possibile, azzerare CharArray, prevedere cambio password obbligatorio al primo accesso operatore e separare reset operatori da recovery admin",
-    "[P3] Performance ricerca: introdurre FTS o indice di ricerca clienti/commesse per nome, azienda, telefono, email, CF/PIVA e numero commessa, evitando LIKE wildcard su dataset grandi",
-    "[P3] Performance export: rendere export XLSX più robusto con controllo spazio, progress UI, limite/warning dataset grande e scrittura streaming o paginata",
-    "[P3] Performance media: introdurre MediaOptimizer per ridimensionare/comprimere foto, impostare lato massimo configurabile, qualità JPEG ragionevole, thumbnail cache e rimozione EXIF non necessari",
-    "[P3] Performance UI: verificare LazyColumn, key stabili e stato locale nelle liste principali per ridurre recomposition e lag su dataset ampi",
-    "[P4] Release sicurezza: abilitare minify e shrinkResources nella build release e aggiungere regole R8/ProGuard necessarie per Room, Compose, CameraX e librerie usate",
-    "[P4] CI: aggiungere GitHub Actions minima con ./gradlew :app:testFullDebugUnitTest e ./gradlew :app:assembleFullDebug",
-    "[P4] CI: aggiungere successivamente lint, controlli dipendenze, test restore/backup e test repository su flussi critici",
-    "[P4] Test: aggiungere test specifici per cancellazione totale commesse, cleanup file, spazio insufficiente, restore fallito, permessi operatori e admin unico",
-    "[P5] Tablet: integrare window-size-class, NavigationRail su schermi wide sw600dp+ e layout master-detail per Clienti, Commesse, Template e Impostazioni",
-    "[P5] Landing pubblica: sostituire placeholder screenshot, video, download e contatti con asset/link reali; generare screenshot con scripts\\windows\\create_demo_screenshots.ps1 e aggiornare landing\\index.html",
-    "[P5] Play Store: completare readiness con URL privacy policy, email supporto, icona, feature graphic, screenshot e release-checklist su device reale prima del caricamento AAB",
-    "[P5] Demo device: verificare record_demo_device.ps1 su device USB reale con build/install FullDebug, avvio app, opzionale SeedData, registrazione guidata e pull MP4 in demo/recordings",
-    "[P5] Demo video: produrre registrazioni demo 01-06 e video promozionali seguendo demo\\DEMO_GUIDE.md e docs\\marketing\\demo-video-production.md usando solo dati fittizi"
+    "[P5] Asset Marketing: importare screenshot reali (01-10) generati da script o device reale in landing\\assets\\screenshots\\",
+    "[P5] Asset Marketing: importare video demo (01-06) e video promozionale in landing\\assets\\videos\\",
+    "[P5] Play Store: caricare AAB su console e completare Store Listing con asset grafici definitivi",
+    "[P5] Demo device: verificare record_demo_device.ps1 su device USB reale con build/install FullDebug"
   ]
 }

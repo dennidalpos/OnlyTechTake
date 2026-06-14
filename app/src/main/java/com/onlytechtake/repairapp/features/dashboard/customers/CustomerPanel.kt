@@ -1,40 +1,21 @@
 package com.onlytechtake.repairapp.features.dashboard.customers
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.Surface
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.size
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
@@ -53,28 +34,24 @@ import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
-import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
-import com.onlytechtake.repairapp.features.dashboard.common.CustomerTypeToggle
-import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
-import com.onlytechtake.repairapp.features.dashboard.common.Field
-import com.onlytechtake.repairapp.features.dashboard.common.NoteFieldWithDialog
-import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
-import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
+import com.onlytechtake.repairapp.features.dashboard.common.*
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
+import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 
 @Composable
 fun CustomerPanel(
     viewModel: CustomersViewModel,
     onOrderClick: (String) -> Unit,
 ) {
-    val customers by viewModel.customerSuggestions.collectAsState()
-    val searchQuery by viewModel.searchQuery.collectAsState()
+    val windowSizeClass = LocalWindowSizeClass.current
+    val isWide = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Medium
+
+    var selectedCustomer by remember { mutableStateOf<CustomerEntity?>(null) }
     var showForm by rememberSaveable { mutableStateOf(value = false) }
-    var confirmSave by rememberSaveable { mutableStateOf(value = false) }
     var editingCustomerId by rememberSaveable { mutableStateOf<String?>(null) }
-    var selectedCustomer by androidx.compose.runtime.remember { mutableStateOf<CustomerEntity?>(null) }
+    var confirmSave by rememberSaveable { mutableStateOf(value = false) }
     
+    // Form state
     var isBusiness by rememberSaveable { mutableStateOf(false) }
     var firstName by rememberSaveable { mutableStateOf("") }
     var lastName by rememberSaveable { mutableStateOf("") }
@@ -85,7 +62,6 @@ fun CustomerPanel(
     var vatNumber by rememberSaveable { mutableStateOf("") }
     var address by rememberSaveable { mutableStateOf("") }
     var notes by rememberSaveable { mutableStateOf("") }
-    val focusManager = LocalFocusManager.current
 
     val input = CustomerInput(
         id = editingCustomerId,
@@ -100,8 +76,6 @@ fun CustomerPanel(
         address = address,
         notes = notes,
     )
-    val canSave = (phone.isNotBlank() || email.isNotBlank()) &&
-        if (isBusiness) companyName.isNotBlank() else firstName.isNotBlank() && lastName.isNotBlank()
 
     fun clearForm() {
         editingCustomerId = null
@@ -115,26 +89,6 @@ fun CustomerPanel(
         vatNumber = ""
         address = ""
         notes = ""
-    }
-
-    BackHandler(enabled = showForm) {
-        showForm = false
-        clearForm()
-        viewModel.setFormDirty(false)
-    }
-
-    androidx.compose.runtime.LaunchedEffect(
-        firstName, lastName, companyName, phone, email, taxCode, vatNumber, address, notes, showForm
-    ) {
-        val isDirty = showForm && (firstName.isNotBlank() || lastName.isNotBlank() || companyName.isNotBlank() ||
-            phone.isNotBlank() || email.isNotBlank() || taxCode.isNotBlank() ||
-            vatNumber.isNotBlank() || address.isNotBlank() || notes.isNotBlank())
-        viewModel.setFormDirty(isDirty)
-    }
-
-    fun openNewCustomerForm() {
-        clearForm()
-        showForm = true
     }
 
     fun editCustomer(customer: CustomerEntity) {
@@ -152,176 +106,121 @@ fun CustomerPanel(
         showForm = true
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.TopCenter,
-    ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .widthIn(max = DashboardSpacing.maxContentWidth)
-                .imePadding(),
-            contentPadding = PaddingValues(DashboardSpacing.screenPadding),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
-        ) {
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    SectionTitle(stringResource(R.string.customer_title))
-                    TouchButton(
-                        text = stringResource(R.string.customer_new),
-                        testTag = RepairAppTestTags.CustomerNewButton,
-                        onClick = ::openNewCustomerForm,
-                    )
-                }
-            }
-
-            item {
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = searchQuery,
-                    onValueChange = viewModel::setSearchQuery,
-                    label = { Text(stringResource(R.string.customer_search_label)) },
-                    singleLine = true,
-                    shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
-                    colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.primary,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-                    ),
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Search,
-                        capitalization = KeyboardCapitalization.Words
-                    ),
-                    keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
+    if (isWide) {
+        Row(Modifier.fillMaxSize()) {
+            Box(Modifier.weight(1f)) {
+                CustomerListContent(
+                    viewModel = viewModel,
+                    onCustomerClick = { selectedCustomer = it },
+                    onNewCustomer = {
+                        clearForm()
+                        showForm = true
+                    }
                 )
             }
-
-            if (showForm) {
-                item {
-                    StandardCard(highlight = true) {
-                        Column(
-                            modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                        ) {
-                            Text(
-                                text = if (editingCustomerId == null) stringResource(R.string.customer_new) else stringResource(R.string.customer_edit),
-                                style = MaterialTheme.typography.titleLarge,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                            CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = { isBusiness = it })
-                            if (isBusiness) {
-                                Field(
-                                    companyName,
-                                    { companyName = it },
-                                    stringResource(R.string.customer_field_company_name),
-                                    required = true,
-                                    showError = companyName.isBlank(),
-                                    singleLine = true,
-                                    capitalization = KeyboardCapitalization.Words,
-                                    testTag = RepairAppTestTags.CustomerCompanyNameField,
-                                )
-                                Field(vatNumber, { vatNumber = it }, stringResource(R.string.customer_field_vat_number), showOptional = true, capitalization = KeyboardCapitalization.Characters, testTag = RepairAppTestTags.CustomerVatNumberField)
-                            } else {
-                                Field(
-                                    firstName,
-                                    { firstName = it },
-                                    stringResource(R.string.customer_field_first_name),
-                                    required = true,
-                                    showError = firstName.isBlank(),
-                                    singleLine = true,
-                                    capitalization = KeyboardCapitalization.Words,
-                                    testTag = RepairAppTestTags.CustomerFirstNameField,
-                                )
-                                Field(
-                                    lastName,
-                                    { lastName = it },
-                                    stringResource(R.string.customer_field_last_name),
-                                    required = true,
-                                    showError = lastName.isBlank(),
-                                    singleLine = true,
-                                    capitalization = KeyboardCapitalization.Words,
-                                    testTag = RepairAppTestTags.CustomerLastNameField,
-                                )
-                            }
-                            Field(taxCode, { taxCode = it }, stringResource(R.string.customer_field_tax_code), showOptional = true, capitalization = KeyboardCapitalization.Characters, testTag = RepairAppTestTags.CustomerTaxCodeField)
-                            Field(
-                                phone,
-                                { phone = it },
-                                stringResource(R.string.customer_field_phone),
-                                required = true,
-                                showError = phone.isBlank() && email.isBlank(),
-                                singleLine = true,
-                                keyboardType = KeyboardType.Phone,
-                                testTag = RepairAppTestTags.CustomerPhoneField,
-                            )
-                            Field(
-                                email,
-                                { email = it },
-                                stringResource(R.string.customer_field_email),
-                                required = true,
-                                showError = phone.isBlank() && email.isBlank(),
-                                singleLine = true,
-                                keyboardType = KeyboardType.Email,
-                                capitalization = KeyboardCapitalization.None,
-                                testTag = RepairAppTestTags.CustomerEmailField,
-                            )
-                            Field(address, { address = it }, stringResource(R.string.customer_field_address), showOptional = true, testTag = RepairAppTestTags.CustomerAddressField)
-                            NoteFieldWithDialog(notes, { notes = it }, testTag = RepairAppTestTags.CustomerNotesField)
-                            ActionRow {
-                                TouchButton(
-                                    text = if (editingCustomerId == null) stringResource(R.string.customer_save) else stringResource(R.string.customer_update),
-                                    enabled = canSave,
-                                    testTag = RepairAppTestTags.CustomerSaveButton,
-                                    onClick = { confirmSave = true }
-                                )
-                                TouchButton(
-                                    text = stringResource(R.string.customer_cancel),
-                                    tone = ButtonTone.NEUTRAL,
-                                    onClick = {
-                                        showForm = false
-                                        clearForm()
-                                        viewModel.setFormDirty(false)
-                                    }
-                                )
-                            }
+            VerticalDivider()
+            Box(Modifier.weight(1.5f)) {
+                if (showForm) {
+                    CustomerForm(
+                        isEditing = editingCustomerId != null,
+                        isBusiness = isBusiness,
+                        onBusinessChange = { isBusiness = it },
+                        firstName = firstName,
+                        onFirstNameChange = { firstName = it },
+                        lastName = lastName,
+                        onLastNameChange = { lastName = it },
+                        companyName = companyName,
+                        onCompanyNameChange = { companyName = it },
+                        vatNumber = vatNumber,
+                        onVatNumberChange = { vatNumber = it },
+                        taxCode = taxCode,
+                        onTaxCodeChange = { taxCode = it },
+                        phone = phone,
+                        onPhoneChange = { phone = it },
+                        email = email,
+                        onEmailChange = { email = it },
+                        address = address,
+                        onAddressChange = { address = it },
+                        notes = notes,
+                        onNotesChange = { notes = it },
+                        onSave = { confirmSave = true },
+                        onCancel = {
+                            showForm = false
+                            clearForm()
                         }
+                    )
+                } else if (selectedCustomer != null) {
+                    CustomerDetailContent(
+                        customer = selectedCustomer!!,
+                        viewModel = viewModel,
+                        onEdit = {
+                            editCustomer(selectedCustomer!!)
+                        },
+                        onOrderClick = onOrderClick,
+                        onClose = { selectedCustomer = null }
+                    )
+                } else {
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text("Seleziona un cliente per vedere i dettagli", color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
-
-            item { SectionTitle(if (searchQuery.isBlank()) stringResource(R.string.customer_recent) else stringResource(R.string.customer_search_results)) }
-            if (customers.isEmpty()) {
-                item {
-                    CustomerEmptyState(
-                        hasQuery = searchQuery.isNotBlank(),
-                        onNewCustomer = ::openNewCustomerForm,
-                    )
-                }
+        }
+    } else {
+        Box(Modifier.fillMaxSize()) {
+            if (showForm) {
+                CustomerForm(
+                    isEditing = editingCustomerId != null,
+                    isBusiness = isBusiness,
+                    onBusinessChange = { isBusiness = it },
+                    firstName = firstName,
+                    onFirstNameChange = { firstName = it },
+                    lastName = lastName,
+                    onLastNameChange = { lastName = it },
+                    companyName = companyName,
+                    onCompanyNameChange = { companyName = it },
+                    vatNumber = vatNumber,
+                    onVatNumberChange = { vatNumber = it },
+                    taxCode = taxCode,
+                    onTaxCodeChange = { taxCode = it },
+                    phone = phone,
+                    onPhoneChange = { phone = it },
+                    email = email,
+                    onEmailChange = { email = it },
+                    address = address,
+                    onAddressChange = { address = it },
+                    notes = notes,
+                    onNotesChange = { notes = it },
+                    onSave = { confirmSave = true },
+                    onCancel = {
+                        showForm = false
+                        clearForm()
+                    }
+                )
             } else {
-                items(customers) { customer ->
-                    CustomerCard(
-                        customer = customer,
-                        onClick = { selectedCustomer = customer }
-                    )
-                }
+                CustomerListContent(
+                    viewModel = viewModel,
+                    onCustomerClick = { selectedCustomer = it },
+                    onNewCustomer = {
+                        clearForm()
+                        showForm = true
+                    }
+                )
             }
         }
-    }
 
-    selectedCustomer?.let { customer ->
-        CustomerDetailDialog(
-            customer = customer,
-            viewModel = viewModel,
-            onDismiss = { selectedCustomer = null },
-            onEdit = {
-                editCustomer(customer)
-                selectedCustomer = null
-            },
-            onOrderClick = onOrderClick
-        )
+        selectedCustomer?.let { customer ->
+            CustomerDetailDialog(
+                customer = customer,
+                viewModel = viewModel,
+                onDismiss = { selectedCustomer = null },
+                onEdit = {
+                    editCustomer(customer)
+                    selectedCustomer = null
+                },
+                onOrderClick = onOrderClick
+            )
+        }
     }
 
     if (confirmSave) {
@@ -336,7 +235,6 @@ fun CustomerPanel(
                         viewModel.saveCustomer(input) {
                             clearForm()
                             showForm = false
-                            viewModel.setFormDirty(false)
                         }
                     },
                     modifier = Modifier.testTag(RepairAppTestTags.CustomerConfirmSaveButton),
@@ -354,6 +252,180 @@ fun CustomerPanel(
 }
 
 @Composable
+private fun CustomerListContent(
+    viewModel: CustomersViewModel,
+    onCustomerClick: (CustomerEntity) -> Unit,
+    onNewCustomer: () -> Unit
+) {
+    val customers by viewModel.customerSuggestions.collectAsState()
+    val searchQuery by viewModel.searchQuery.collectAsState()
+    val focusManager = LocalFocusManager.current
+
+    LazyColumn(
+        modifier = Modifier.fillMaxSize().imePadding(),
+        contentPadding = PaddingValues(DashboardSpacing.screenPadding),
+        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap)
+    ) {
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                SectionTitle(stringResource(R.string.customer_title))
+                TouchButton(
+                    text = stringResource(R.string.customer_new),
+                    testTag = RepairAppTestTags.CustomerNewButton,
+                    onClick = onNewCustomer,
+                )
+            }
+        }
+
+        item {
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = searchQuery,
+                onValueChange = viewModel::setSearchQuery,
+                label = { Text(stringResource(R.string.customer_search_label)) },
+                singleLine = true,
+                shape = MaterialTheme.shapes.medium,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Search,
+                    capitalization = KeyboardCapitalization.Words
+                ),
+                keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
+            )
+        }
+
+        item { SectionTitle(if (searchQuery.isBlank()) stringResource(R.string.customer_recent) else stringResource(R.string.customer_search_results)) }
+        
+        if (customers.isEmpty()) {
+            item {
+                CustomerEmptyState(hasQuery = searchQuery.isNotBlank(), onNewCustomer = onNewCustomer)
+            }
+        } else {
+            items(customers) { customer ->
+                CustomerCard(customer = customer, onClick = { onCustomerClick(customer) })
+            }
+        }
+    }
+}
+
+@Composable
+private fun CustomerForm(
+    isEditing: Boolean,
+    isBusiness: Boolean,
+    onBusinessChange: (Boolean) -> Unit,
+    firstName: String,
+    onFirstNameChange: (String) -> Unit,
+    lastName: String,
+    onLastNameChange: (String) -> Unit,
+    companyName: String,
+    onCompanyNameChange: (String) -> Unit,
+    vatNumber: String,
+    onVatNumberChange: (String) -> Unit,
+    taxCode: String,
+    onTaxCodeChange: (String) -> Unit,
+    phone: String,
+    onPhoneChange: (String) -> Unit,
+    email: String,
+    onEmailChange: (String) -> Unit,
+    address: String,
+    onAddressChange: (String) -> Unit,
+    notes: String,
+    onNotesChange: (String) -> Unit,
+    onSave: () -> Unit,
+    onCancel: () -> Unit,
+) {
+    val canSave = (phone.isNotBlank() || email.isNotBlank()) &&
+        if (isBusiness) companyName.isNotBlank() else firstName.isNotBlank() && lastName.isNotBlank()
+
+    Column(
+        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(DashboardSpacing.screenPadding),
+        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)
+    ) {
+        Text(
+            text = if (!isEditing) stringResource(R.string.customer_new) else stringResource(R.string.customer_edit),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.primary
+        )
+        CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = onBusinessChange)
+        if (isBusiness) {
+            Field(companyName, onCompanyNameChange, stringResource(R.string.customer_field_company_name), required = true)
+            Field(vatNumber, onVatNumberChange, stringResource(R.string.customer_field_vat_number), showOptional = true)
+        } else {
+            Field(firstName, onFirstNameChange, stringResource(R.string.customer_field_first_name), required = true)
+            Field(lastName, onLastNameChange, stringResource(R.string.customer_field_last_name), required = true)
+        }
+        Field(taxCode, onTaxCodeChange, stringResource(R.string.customer_field_tax_code), showOptional = true)
+        Field(phone, onPhoneChange, stringResource(R.string.customer_field_phone), required = true, keyboardType = KeyboardType.Phone)
+        Field(email, onEmailChange, stringResource(R.string.customer_field_email), required = true, keyboardType = KeyboardType.Email)
+        Field(address, onAddressChange, stringResource(R.string.customer_field_address), showOptional = true)
+        NoteFieldWithDialog(notes, onNotesChange)
+        
+        ActionRow {
+            TouchButton(text = stringResource(R.string.customer_save), enabled = canSave, onClick = onSave)
+            TouchButton(text = stringResource(R.string.customer_cancel), tone = ButtonTone.NEUTRAL, onClick = onCancel)
+        }
+    }
+}
+
+@Composable
+private fun CustomerDetailContent(
+    customer: CustomerEntity,
+    viewModel: CustomersViewModel,
+    onEdit: () -> Unit,
+    onOrderClick: (String) -> Unit,
+    onClose: () -> Unit
+) {
+    val openOrders by viewModel.observeOrdersForCustomer(customer.id, openOnly = true).collectAsState(emptyList())
+    val allOrders by viewModel.observeOrdersForCustomer(customer.id, openOnly = false).collectAsState(emptyList())
+    val closedOrders = allOrders.filter { it.order.status == com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED }
+    val context = LocalContext.current
+
+    LazyColumn(
+        modifier = Modifier.fillMaxSize().padding(DashboardSpacing.screenPadding),
+        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap)
+    ) {
+        item {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Column {
+                    Text(text = customer.displayName(context), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    Text(text = customer.type.label(context), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
+                }
+                Row {
+                    TouchButton(text = "Chiudi", tone = ButtonTone.NEUTRAL, onClick = onClose)
+                    Spacer(Modifier.width(8.dp))
+                    TouchButton(text = "Modifica", onClick = onEdit)
+                }
+            }
+        }
+        item {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                customer.phone?.let { Text("Tel: $it", style = MaterialTheme.typography.bodyLarge) }
+                customer.email?.let { Text("Email: $it", style = MaterialTheme.typography.bodyLarge) }
+                customer.address?.let { Text("Indirizzo: $it", style = MaterialTheme.typography.bodyMedium) }
+            }
+        }
+        if (!customer.notes.isNullOrBlank()) {
+            item { OperatorText(customer.notes) }
+        }
+        item { SectionTitle("Commesse Aperte (${openOrders.size})") }
+        if (openOrders.isEmpty()) {
+            item { Text("Nessuna commessa aperta", color = MaterialTheme.colorScheme.outline) }
+        } else {
+            items(openOrders) { item -> OrderSummaryRow(item, onOrderClick) }
+        }
+        item { SectionTitle("Storico Chiuse (${closedOrders.size})") }
+        if (closedOrders.isEmpty()) {
+            item { Text("Nessuna commessa chiusa", color = MaterialTheme.colorScheme.outline) }
+        } else {
+            items(closedOrders) { item -> OrderSummaryRow(item, onOrderClick) }
+        }
+    }
+}
+
+@Composable
 fun CustomerDetailDialog(
     customer: CustomerEntity,
     viewModel: CustomersViewModel,
@@ -361,132 +433,27 @@ fun CustomerDetailDialog(
     onEdit: () -> Unit,
     onOrderClick: (String) -> Unit,
 ) {
-    val openOrders by viewModel.observeOrdersForCustomer(customer.id, openOnly = true).collectAsState(emptyList())
-    val allOrders by viewModel.observeOrdersForCustomer(customer.id, openOnly = false).collectAsState(emptyList())
-    val closedOrders = allOrders.filter { it.order.status == com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED }
-
-    Dialog(
-        onDismissRequest = onDismiss,
-        properties = DialogProperties(usePlatformDefaultWidth = false)
-    ) {
+    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(
-            modifier = Modifier
-                .fillMaxWidth(0.95f)
-                .widthIn(max = DashboardSpacing.maxContentWidth),
+            modifier = Modifier.fillMaxWidth(0.95f).widthIn(max = 600.dp),
             shape = MaterialTheme.shapes.extraLarge,
             color = MaterialTheme.colorScheme.surface,
-            tonalElevation = DashboardSpacing.dialogElevation
+            tonalElevation = 6.dp
         ) {
-            LazyColumn(
-                modifier = Modifier.padding(DashboardSpacing.screenPadding),
-                verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap)
-            ) {
-                item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = customer.displayName(LocalContext.current),
-                                style = MaterialTheme.typography.headlineSmall,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                text = customer.type.label(LocalContext.current),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                        TouchButton(
-                            text = stringResource(R.string.customer_edit),
-                            onClick = onEdit
-                        )
-                    }
-                }
-
-                item {
-                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        customer.phone?.let { Text("Tel: $it", style = MaterialTheme.typography.bodyLarge) }
-                        customer.email?.let { Text("Email: $it", style = MaterialTheme.typography.bodyLarge) }
-                        customer.address?.let { Text("Indirizzo: $it", style = MaterialTheme.typography.bodyMedium) }
-                        customer.vatNumber?.let { Text("P.IVA: $it", style = MaterialTheme.typography.labelMedium) }
-                        customer.taxCode?.let { Text("CF: $it", style = MaterialTheme.typography.labelMedium) }
-                    }
-                }
-
-                if (!customer.notes.isNullOrBlank()) {
-                    item {
-                        com.onlytechtake.repairapp.features.dashboard.common.OperatorText(customer.notes)
-                    }
-                }
-
-                item { HorizontalDivider() }
-
-                item { SectionTitle("Commesse Aperte (${openOrders.size})") }
-                if (openOrders.isEmpty()) {
-                    item { Text("Nessuna commessa aperta", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline) }
-                } else {
-                    items(openOrders) { item ->
-                        OrderSummaryRow(item, onOrderClick)
-                    }
-                }
-
-                item { SectionTitle("Storico Chiuse (${closedOrders.size})") }
-                if (closedOrders.isEmpty()) {
-                    item { Text("Nessuna commessa chiusa", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline) }
-                } else {
-                    items(closedOrders) { item ->
-                        OrderSummaryRow(item, onOrderClick)
-                    }
-                }
-
-                item {
-                    TouchButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "Chiudi",
-                        tone = ButtonTone.NEUTRAL,
-                        onClick = onDismiss
-                    )
-                }
-            }
+            CustomerDetailContent(customer, viewModel, onEdit, onOrderClick, onDismiss)
         }
     }
 }
 
 @Composable
-fun OrderSummaryRow(
-    item: com.onlytechtake.repairapp.domain.workspace.OrderListItem,
-    onOrderClick: (String) -> Unit
-) {
-    StandardCard(
-        onClick = { onOrderClick(item.order.id) },
-        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
-    ) {
-        Row(
-            modifier = Modifier.padding(DashboardSpacing.compactGap).fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = "${item.order.orderNumber}: ${item.order.title}",
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Text(
-                    text = item.order.status.label(LocalContext.current),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
+fun OrderSummaryRow(item: com.onlytechtake.repairapp.domain.workspace.OrderListItem, onOrderClick: (String) -> Unit) {
+    StandardCard(onClick = { onOrderClick(item.order.id) }) {
+        Row(modifier = Modifier.padding(12.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+            Column {
+                Text(text = "${item.order.orderNumber}: ${item.order.title}", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+                Text(text = item.order.status.label(LocalContext.current), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
             }
-            androidx.compose.material3.Icon(
-                imageVector = Icons.Default.Info,
-                contentDescription = null,
-                modifier = Modifier.size(20.dp),
-                tint = MaterialTheme.colorScheme.primary
-            )
+            Icon(Icons.Default.Info, contentDescription = null, modifier = Modifier.size(20.dp), tint = MaterialTheme.colorScheme.primary)
         }
     }
 }
@@ -494,28 +461,13 @@ fun OrderSummaryRow(
 @Composable
 private fun CustomerCard(customer: CustomerEntity, onClick: () -> Unit) {
     StandardCard(onClick = onClick) {
-        Row(
-            modifier = Modifier.padding(DashboardSpacing.cardPadding).fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
+        Row(modifier = Modifier.padding(16.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+            Column {
                 val context = LocalContext.current
-                Text(
-                    customer.displayName(context),
-                    style = MaterialTheme.typography.titleMedium,
-                )
-                Text(
-                    text = listOfNotNull(customer.type.label(context), customer.phone).joinToString(" - "),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Text(customer.displayName(context), style = MaterialTheme.typography.titleMedium)
+                Text(text = listOfNotNull(customer.type.label(context), customer.phone).joinToString(" - "), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            androidx.compose.material3.Icon(
-                imageVector = Icons.Default.Info,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
-            )
+            Icon(Icons.Default.Info, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
         }
     }
 }
@@ -523,20 +475,9 @@ private fun CustomerCard(customer: CustomerEntity, onClick: () -> Unit) {
 @Composable
 private fun CustomerEmptyState(hasQuery: Boolean, onNewCustomer: () -> Unit) {
     StandardCard {
-        Column(
-            modifier = Modifier.padding(DashboardSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-        ) {
-            Text(
-                text = if (hasQuery) stringResource(R.string.customer_no_results) else stringResource(R.string.customer_empty),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            if (hasQuery) {
-                TouchButton(
-                    text = stringResource(R.string.customer_new),
-                    onClick = onNewCustomer
-                )
-            }
+        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Text(text = if (hasQuery) "Nessun risultato" else "Nessun cliente recente")
+            if (hasQuery) TouchButton(text = "Nuovo Cliente", onClick = onNewCustomer)
         }
     }
 }

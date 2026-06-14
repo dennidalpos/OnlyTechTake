@@ -49,10 +49,10 @@ fun HomePanel(
 ) {
     val queues by viewModel.operationalQueues.collectAsState()
     val backupReminderSettings by viewModel.backupReminderSettings.collectAsState()
+    val showBackupReminder by viewModel.isBackupReminderDue.collectAsState()
     val exportZipLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
         uri?.let(viewModel::exportCompleteBackup)
     }
-    val showBackupReminder = isAdmin && viewModel.isBackupReminderDue(backupReminderSettings)
 
     Box(
         modifier = Modifier.fillMaxSize(),

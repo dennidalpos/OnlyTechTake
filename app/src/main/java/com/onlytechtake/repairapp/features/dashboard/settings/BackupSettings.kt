@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
@@ -101,7 +102,21 @@ fun BackupSettings(
                             testTag = RepairAppTestTags.ConfigBackupIntervalField,
                         )
                         OperatorText(backupReminderInfo(backupReminderSettings))
-                        Text(stringResource(R.string.config_backup_unencrypted_warning))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.padding(vertical = 4.dp)
+                        ) {
+                            Text(
+                                text = "⚠️",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Text(
+                                text = stringResource(R.string.config_backup_unencrypted_warning),
+                                color = MaterialTheme.colorScheme.error,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
                         Text(stringResource(R.string.config_backup_destination_label), style = MaterialTheme.typography.titleSmall)
                         ActionRow {
                             TouchButton(

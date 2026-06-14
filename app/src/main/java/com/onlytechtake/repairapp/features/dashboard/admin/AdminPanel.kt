@@ -59,6 +59,7 @@ fun AdminPanel(
     onResetComplete: () -> Unit,
 ) {
     val users by viewModel.users.collectAsState()
+    val recoveryCode by viewModel.recoveryCode.collectAsState()
     val uriHandler = LocalUriHandler.current
 
     val confirmCreateTitle = stringResource(R.string.admin_confirm_create_title)
@@ -146,7 +147,7 @@ fun AdminPanel(
                             enabled = displayName.isNotBlank() && username.isNotBlank() && password.isNotBlank(),
                             onClick = {
                                 requestConfirm(confirmCreateTitle, confirmCreateText) {
-                                    viewModel.createOperator(displayName, username, password)
+                                    viewModel.createOperator(displayName, username, password.toCharArray())
                                     displayName = ""
                                     username = ""
                                     password = ""
@@ -154,6 +155,49 @@ fun AdminPanel(
                                 }
                             },
                         )
+                    }
+                }
+            }
+            item {
+                StandardCard(highlight = true) {
+                    Column(
+                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                    ) {
+                        Text("Kit di Recupero Admin", style = MaterialTheme.typography.titleMedium)
+                        OperatorText("Il kit di recupero permette di resettare la password admin se dimenticata. Conservalo in un luogo sicuro fuori dal dispositivo.")
+                        
+                        if (recoveryCode == null) {
+                            TouchButton(
+                                text = "Genera Nuovo Kit di Recupero",
+                                tone = ButtonTone.NEUTRAL,
+                                onClick = { viewModel.generateRecoveryKit() }
+                            )
+                        } else {
+                            StandardCard {
+                                Column(
+                                    modifier = Modifier.padding(8.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    Text("CODICE MASTER:", style = MaterialTheme.typography.labelSmall)
+                                    Text(
+                                        text = recoveryCode!!,
+                                        style = MaterialTheme.typography.headlineMedium,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                    Text(
+                                        "Scrivi questo codice e conservalo offline. Scomparirà al riavvio della schermata.",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.error
+                                    )
+                                    TouchButton(
+                                        text = "Fatto, nascondi codice",
+                                        onClick = { viewModel.clearRecoveryCode() }
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -252,7 +296,7 @@ fun AdminPanel(
                                     onClick = {
                                         val resetPassword = resetPasswords[user.id].orEmpty()
                                         requestConfirm(confirmResetTitle, confirmResetTextTemplate.format(user.displayName)) {
-                                            viewModel.resetPassword(user.id, resetPassword)
+                                            viewModel.resetPassword(user.id, resetPassword.toCharArray())
                                             resetPasswords -= user.id
                                         }
                                     },

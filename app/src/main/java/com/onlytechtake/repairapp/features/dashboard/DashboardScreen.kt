@@ -1,7 +1,11 @@
 package com.onlytechtake.repairapp.features.dashboard
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -11,6 +15,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,6 +37,7 @@ import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.domain.models.AppSummary
 import com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel
+import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 
 @Composable
 fun DashboardRoute(
@@ -76,6 +82,9 @@ fun DashboardScreen(
     val container = LocalAppContainer.current
     val currentUser by container.authRepository.currentUser.collectAsState(null)
     val isAdmin = PermissionService.isAdmin(currentUser)
+
+    val windowSizeClass = LocalWindowSizeClass.current
+    val useNavRail = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Medium
 
     val items = listOf(
         NavigationItem(DashboardRoutes.HOME, Icons.Default.Home, R.string.dashboard_home, RepairAppTestTags.dashboardTab("HOME")),
@@ -141,58 +150,96 @@ fun DashboardScreen(
             )
         },
         bottomBar = {
-            NavigationBar(
-                modifier = Modifier.testTag(RepairAppTestTags.DashboardTabs)
-            ) {
-                items.forEach { item ->
-                    val selected = currentDestination == item.route
-                    NavigationBarItem(
-                        modifier = Modifier.testTag(item.testTag),
-                        icon = { Icon(item.icon, contentDescription = null) },
-                        label = { Text(stringResource(item.labelRes)) },
-                        selected = selected,
-                        onClick = {
-                            if (!selected) {
-                                if (isFormDirty) {
-                                    pendingRoute = item.route
-                                    showUnsavedChangesDialog = true
-                                } else {
-                                    performNavigation(item.route)
+            if (!useNavRail) {
+                NavigationBar(
+                    modifier = Modifier.testTag(RepairAppTestTags.DashboardTabs)
+                ) {
+                    items.forEach { item ->
+                        val selected = currentDestination == item.route
+                        NavigationBarItem(
+                            modifier = Modifier.testTag(item.testTag),
+                            icon = { Icon(item.icon, contentDescription = null) },
+                            label = { Text(stringResource(item.labelRes)) },
+                            selected = selected,
+                            onClick = {
+                                if (!selected) {
+                                    if (isFormDirty) {
+                                        pendingRoute = item.route
+                                        showUnsavedChangesDialog = true
+                                    } else {
+                                        performNavigation(item.route)
+                                    }
                                 }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
         }
     ) { paddingValues ->
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .consumeWindowInsets(paddingValues)
-                .imePadding()
         ) {
-            globalMessage?.let { message ->
-                Text(
+            if (useNavRail) {
+                NavigationRail(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 4.dp)
-                        .semantics { liveRegion = LiveRegionMode.Polite },
-                    text = message.text,
-                    color = if (message.isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
-                )
+                        .fillMaxHeight()
+                        .testTag(RepairAppTestTags.DashboardTabs),
+                ) {
+                    Spacer(Modifier.weight(1f))
+                    items.forEach { item ->
+                        val selected = currentDestination == item.route
+                        NavigationRailItem(
+                            modifier = Modifier.testTag(item.testTag),
+                            icon = { Icon(item.icon, contentDescription = null) },
+                            label = { Text(stringResource(item.labelRes)) },
+                            selected = selected,
+                            onClick = {
+                                if (!selected) {
+                                    if (isFormDirty) {
+                                        pendingRoute = item.route
+                                        showUnsavedChangesDialog = true
+                                    } else {
+                                        performNavigation(item.route)
+                                    }
+                                }
+                            }
+                        )
+                    }
+                    Spacer(Modifier.weight(1f))
+                }
             }
 
-            DashboardNavHost(
-                navController = navController,
-                summary = summary,
-                sharedViewModel = sharedViewModel,
-                isAdmin = isAdmin,
-                onAppDataRestored = onAppDataRestored,
-                onLogout = onLogout,
-                modifier = Modifier.weight(1f)
-            )
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .imePadding()
+            ) {
+                globalMessage?.let { message ->
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 4.dp)
+                            .semantics { liveRegion = LiveRegionMode.Polite },
+                        text = message.text,
+                        color = if (message.isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                    )
+                }
+
+                DashboardNavHost(
+                    navController = navController,
+                    summary = summary,
+                    sharedViewModel = sharedViewModel,
+                    isAdmin = isAdmin,
+                    onAppDataRestored = onAppDataRestored,
+                    onLogout = onLogout,
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
     }
 

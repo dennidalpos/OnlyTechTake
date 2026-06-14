@@ -18,14 +18,23 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
+import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspace
+import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -40,6 +49,7 @@ import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
+import com.onlytechtake.repairapp.features.dashboard.common.Field
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
@@ -49,6 +59,57 @@ import com.onlytechtake.repairapp.features.workspace.label as attachmentLabel
 
 @Composable
 fun OrdersPanel(
+    viewModel: OrdersViewModel,
+    onOrderClick: (String) -> Unit,
+) {
+    val windowSizeClass = LocalWindowSizeClass.current
+    val isWide = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Medium
+
+    if (isWide) {
+        var selectedOrderId by rememberSaveable { mutableStateOf<String?>(null) }
+        Row(Modifier.fillMaxSize()) {
+            Box(Modifier.weight(1f)) {
+                OrdersListContent(
+                    viewModel = viewModel,
+                    onOrderClick = { selectedOrderId = it }
+                )
+            }
+            VerticalDivider()
+            Box(Modifier.weight(1.5f)) {
+                if (selectedOrderId != null) {
+                    val container = LocalAppContainer.current
+                    val detailViewModel: OrderDetailViewModel = viewModel(
+                        key = "order_detail_$selectedOrderId",
+                        factory = OrderDetailViewModel.Factory(
+                            orderId = selectedOrderId!!,
+                            authRepository = container.authRepository,
+                            orderRepository = container.orderWorkflowRepository,
+                            orderMediaRepository = container.orderMediaRepository,
+                            orderDocumentRepository = container.orderDocumentRepository,
+                            templateRepository = container.templateRepository,
+                            generateOrderStatusPdfUseCase = container.generateOrderStatusPdfUseCase,
+                            shareDocumentIntentFactory = container.shareDocumentIntentFactory,
+                            onSetFormDirty = { /* Handle dirty state if needed */ }
+                        )
+                    )
+                    OrderDetailWorkspace(
+                        viewModel = detailViewModel,
+                        onBack = { selectedOrderId = null }
+                    )
+                } else {
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text("Seleziona una commessa per vedere i dettagli", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+            }
+        }
+    } else {
+        OrdersListContent(viewModel, onOrderClick)
+    }
+}
+
+@Composable
+private fun OrdersListContent(
     viewModel: OrdersViewModel,
     onOrderClick: (String) -> Unit,
 ) {
@@ -84,6 +145,15 @@ fun OrdersPanel(
                 }
             }
 
+            item {
+                Field(
+                    value = orderFilter.query,
+                    onValueChange = { viewModel.setFilter(orderFilter.copy(query = it)) },
+                    label = "Cerca per cliente, telefono, email o commessa...",
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
             if (orderFilter.hasActiveFilter()) {
                 item {
                     ActiveFilterInfo(orderFilter)
@@ -95,7 +165,7 @@ fun OrdersPanel(
                     Text(stringResource(R.string.orders_empty_filter), style = MaterialTheme.typography.bodyMedium)
                 }
             } else {
-                items(orderListItems) { item ->
+                items(orderListItems, key = { it.order.id }) { item ->
                     val order = item.order
                     StandardCard(
                         modifier = Modifier
@@ -234,4 +304,4 @@ private fun QuickStatusGroupFilter(
 }
 
 private fun OrderFilter.hasActiveFilter(): Boolean =
-    showMineOnly || status != null || statuses.isNotEmpty()
+    showMineOnly || status != null || statuses.isNotEmpty() || query.isNotBlank()

@@ -8,6 +8,7 @@ import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import java.io.OutputStream
+import java.io.Writer
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -17,6 +18,9 @@ import java.util.zip.ZipOutputStream
 internal class OrderExportXlsxWriter(
     private val zoneId: ZoneId = ZoneId.systemDefault(),
 ) {
+    /**
+     * Scrive l'export in formato XLSX in modo streaming per gestire dataset di grandi dimensioni.
+     */
     fun write(rows: List<OrderExportRow>, output: OutputStream) {
         ZipOutputStream(output).use { zip ->
             zip.putTextEntry("[Content_Types].xml", contentTypesXml)
@@ -24,38 +28,44 @@ internal class OrderExportXlsxWriter(
             zip.putTextEntry("xl/workbook.xml", workbookXml)
             zip.putTextEntry("xl/_rels/workbook.xml.rels", workbookRelationshipsXml)
             zip.putTextEntry("xl/styles.xml", stylesXml)
-            zip.putTextEntry("xl/worksheets/sheet1.xml", worksheetXml(rows))
+            
+            zip.putNextEntry(ZipEntry("xl/worksheets/sheet1.xml"))
+            writeWorksheet(rows, zip)
+            zip.closeEntry()
         }
     }
 
-    private fun worksheetXml(rows: List<OrderExportRow>): String {
-        val allRows = listOf(headers) + rows.map(::rowValues)
-        val lastColumn = columnName(headers.size)
-        val lastRow = allRows.size.coerceAtLeast(1)
-        return buildString {
-            append("""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>""")
-            append("""<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">""")
-            append("""<dimension ref="A1:$lastColumn$lastRow"/>""")
-            append("<sheetViews><sheetView workbookViewId=\"0\"/></sheetViews>")
-            append("<sheetFormatPr defaultRowHeight=\"15\"/>")
-            append("<sheetData>")
-            allRows.forEachIndexed { rowIndex, values ->
-                val rowNumber = rowIndex + 1
-                append("""<row r="$rowNumber">""")
-                values.forEachIndexed { columnIndex, value ->
-                    appendCell(columnName(columnIndex + 1), rowNumber, value)
-                }
-                append("</row>")
-            }
-            append("</sheetData>")
-            append("</worksheet>")
+    private fun writeWorksheet(rows: List<OrderExportRow>, zip: ZipOutputStream) {
+        val writer = zip.writer()
+        writer.write("""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>""")
+        writer.write("""<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">""")
+        // Dimension omitted as it's optional for most readers and hard to know in advance when streaming
+        writer.write("<sheetViews><sheetView workbookViewId=\"0\"/></sheetViews>")
+        writer.write("<sheetFormatPr defaultRowHeight=\"15\"/>")
+        writer.write("<sheetData>")
+        
+        // Intestazioni (Riga 1)
+        writeRow(writer, 1, headers)
+        
+        // Dati (Righe 2+)
+        rows.forEachIndexed { index, row ->
+            writeRow(writer, index + 2, rowValues(row))
         }
+        
+        writer.write("</sheetData>")
+        writer.write("</worksheet>")
+        writer.flush()
     }
 
-    private fun StringBuilder.appendCell(column: String, rowNumber: Int, value: String) {
-        append("""<c r="$column$rowNumber" t="inlineStr"><is><t>""")
-        append(value.xmlEscaped())
-        append("</t></is></c>")
+    private fun writeRow(writer: Writer, rowNumber: Int, values: List<String>) {
+        writer.write("""<row r="$rowNumber">""")
+        values.forEachIndexed { columnIndex, value ->
+            val colName = columnName(columnIndex + 1)
+            writer.write("""<c r="$colName$rowNumber" t="inlineStr"><is><t>""")
+            writer.write(value.xmlEscaped())
+            writer.write("</t></is></c>")
+        }
+        writer.write("</row>")
     }
 
     private fun rowValues(row: OrderExportRow): List<String> =

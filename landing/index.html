@@ -121,28 +121,40 @@
                 </div>
                 <div class="screenshot-grid">
                     <div class="screenshot-item">
-                        <div class="screenshot-placeholder">Screenshot non ancora tracciato nel repository</div>
-                        <p>Dashboard</p>
+                        <div class="screenshot-placeholder">
+                            <img src="assets/screenshots/01-operatore-banco/01-login.png" alt="Login" onerror="this.parentElement.innerHTML='Login Dashboard'; this.parentElement.classList.add('screenshot-placeholder-fallback')">
+                        </div>
+                        <p>Login Sicuro</p>
                     </div>
                     <div class="screenshot-item">
-                        <div class="screenshot-placeholder">Screenshot non ancora tracciato nel repository</div>
-                        <p>Nuova Commessa</p>
+                        <div class="screenshot-placeholder">
+                            <img src="assets/screenshots/01-operatore-banco/02-home.png" alt="Home" onerror="this.parentElement.innerHTML='Home con Metriche'; this.parentElement.classList.add('screenshot-placeholder-fallback')">
+                        </div>
+                        <p>Home e Metriche</p>
                     </div>
                     <div class="screenshot-item">
-                        <div class="screenshot-placeholder">Screenshot non ancora tracciato nel repository</div>
-                        <p>Firma Cliente</p>
+                        <div class="screenshot-placeholder">
+                            <img src="assets/screenshots/01-operatore-banco/03-new-customer.png" alt="Nuova Commessa" onerror="this.parentElement.innerHTML='Wizard Nuova Commessa'; this.parentElement.classList.add('screenshot-placeholder-fallback')">
+                        </div>
+                        <p>Wizard Rapido</p>
                     </div>
                     <div class="screenshot-item">
-                        <div class="screenshot-placeholder">Screenshot non ancora tracciato nel repository</div>
-                        <p>Dettagli Commessa</p>
+                        <div class="screenshot-placeholder">
+                            <img src="assets/screenshots/01-operatore-banco/07-diagnosis-result.png" alt="Diagnosi" onerror="this.parentElement.innerHTML='Dettaglio Diagnosi'; this.parentElement.classList.add('screenshot-placeholder-fallback')">
+                        </div>
+                        <p>Diagnosi e Preventivi</p>
                     </div>
                     <div class="screenshot-item">
-                        <div class="screenshot-placeholder">Screenshot non ancora tracciato nel repository</div>
-                        <p>Diagnosi e Costi</p>
+                        <div class="screenshot-placeholder">
+                            <img src="assets/screenshots/01-operatore-banco/05-order-created.png" alt="Firma" onerror="this.parentElement.innerHTML='Firma Digitale'; this.parentElement.classList.add('screenshot-placeholder-fallback')">
+                        </div>
+                        <p>Firma e Privacy</p>
                     </div>
                     <div class="screenshot-item">
-                        <div class="screenshot-placeholder">Screenshot non ancora tracciato nel repository</div>
-                        <p>Esempio PDF</p>
+                        <div class="screenshot-placeholder">
+                            <img src="assets/screenshots/01-operatore-banco/10-closed-timeline.png" alt="Timeline" onerror="this.parentElement.innerHTML='Timeline Eventi'; this.parentElement.classList.add('screenshot-placeholder-fallback')">
+                        </div>
+                        <p>Timeline Storica</p>
                     </div>
                 </div>
             </div>
@@ -155,7 +167,11 @@
                     <h2>Video demo</h2>
                 </div>
                 <div class="video-container">
-                    <p>Video non ancora tracciato nel repository</p>
+                    <!-- Placeholder per video demo -->
+                    <div style="text-align: center; padding: 2rem;">
+                        <p>Video dimostrativo in fase di produzione.</p>
+                        <p style="font-size: 0.9rem;">Segui il repository per aggiornamenti.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -201,19 +217,19 @@
             <div class="container">
                 <div class="section-title">
                     <h2>Contattaci</h2>
-                    <p>Contatti pubblici non configurati in questo repository.</p>
+                    <p>Supporto tecnico e informazioni commerciali.</p>
                 </div>
                 <div class="grid grid-2">
                     <div style="text-align: center;">
-                        <p><strong>WhatsApp</strong><br>Da configurare prima della pubblicazione.</p>
-                        <p><strong>Email</strong><br>Da configurare prima della pubblicazione.</p>
+                        <p><strong>WhatsApp Supporto</strong><br>+39 000 000 0000</p>
+                        <p><strong>Email</strong><br>support@onlytechtake.com</p>
                     </div>
                     <div>
-                        <form class="contact-form" action="#" method="post">
+                        <form class="contact-form" action="mailto:support@onlytechtake.com" method="post" enctype="text/plain">
                             <input type="text" name="nome" placeholder="Il tuo nome" required>
                             <input type="email" name="email" placeholder="La tua email" required>
                             <textarea name="messaggio" placeholder="Come possiamo aiutarti?" rows="5" required></textarea>
-                            <button type="button" class="btn btn-primary" disabled>Form contatti non configurato</button>
+                            <button type="submit" class="btn btn-primary">Invia Messaggio</button>
                         </form>
                     </div>
                 </div>
@@ -224,6 +240,9 @@
     <footer>
         <div class="container">
             <p>&copy; 2026 OnlyTechTake.</p>
+            <div style="margin-top: 1rem;">
+                <a href="privacy.html" style="color: white; opacity: 0.8; text-decoration: none; font-size: 0.9rem;">Privacy Policy</a>
+            </div>
             <p style="margin-top: 1rem;">Bozza landing statica. I dati dell'app sono salvati localmente sul dispositivo.</p>
         </div>
     </footer>

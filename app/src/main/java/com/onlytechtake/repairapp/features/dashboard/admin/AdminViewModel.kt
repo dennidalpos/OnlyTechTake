@@ -29,10 +29,13 @@ class AdminViewModel(
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
 
+    private val _recoveryCode = MutableStateFlow<String?>(null)
+    val recoveryCode = _recoveryCode.asStateFlow()
+
     val currentUser = authRepository.currentUser
     val users = adminUserRepository.observeUsers().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    fun createOperator(displayName: String, username: String, password: String) {
+    fun createOperator(displayName: String, username: String, password: CharArray) {
         launchWithUser { actor ->
             adminUserRepository.createOperator(actor, OperatorInput(displayName, username, password))
         }
@@ -50,7 +53,7 @@ class AdminViewModel(
         }
     }
 
-    fun resetPassword(userId: String, password: String) {
+    fun resetPassword(userId: String, password: CharArray) {
         launchWithUser { actor ->
             adminUserRepository.resetPassword(actor, userId, password)
         }
@@ -78,6 +81,20 @@ class AdminViewModel(
         launchWithUser(onSuccess = onReset) { actor ->
             dataResetRepository.resetOrders(actor, confirmation)
         }
+    }
+
+    fun generateRecoveryKit() {
+        viewModelScope.launch {
+            authRepository.getRecoveryKit().onSuccess { code ->
+                _recoveryCode.value = code
+            }.onFailure { error ->
+                _message.value = WorkspaceMessage(error.message ?: "Errore", true)
+            }
+        }
+    }
+
+    fun clearRecoveryCode() {
+        _recoveryCode.value = null
     }
 
     private fun launchWithUser(

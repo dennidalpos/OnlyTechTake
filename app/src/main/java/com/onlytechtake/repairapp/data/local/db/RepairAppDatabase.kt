@@ -22,6 +22,7 @@ import com.onlytechtake.repairapp.data.local.dao.UserDao
 import com.onlytechtake.repairapp.data.local.entities.AppSettingEntity
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
+import com.onlytechtake.repairapp.data.local.entities.CustomerFtsEntity
 import com.onlytechtake.repairapp.data.local.entities.LoginAttemptEntity
 import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
@@ -29,6 +30,7 @@ import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
+import com.onlytechtake.repairapp.data.local.entities.RepairOrderFtsEntity
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
@@ -37,8 +39,10 @@ import com.onlytechtake.repairapp.data.local.entities.UserEntity
     entities = [
         UserEntity::class,
         CustomerEntity::class,
+        CustomerFtsEntity::class,
         OrderCategoryEntity::class,
         RepairOrderEntity::class,
+        RepairOrderFtsEntity::class,
         TimelineEventEntity::class,
         MessageTemplateEntity::class,
         MessageLogEntity::class,
@@ -72,7 +76,7 @@ abstract class RepairAppDatabase : RoomDatabase() {
 
     companion object {
         const val DATABASE_NAME = "repair_app.db"
-        const val DATABASE_VERSION = 2
+        const val DATABASE_VERSION = 4
 
         @Volatile
         private var instance: RepairAppDatabase? = null

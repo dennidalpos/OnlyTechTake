@@ -2,7 +2,6 @@ package com.onlytechtake.repairapp.features.dashboard.detail
 
 import android.content.Intent
 import android.net.Uri
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.rememberScrollState
@@ -83,7 +82,6 @@ fun OrderDetailWorkspace(
 ) {
     val detail by viewModel.orderDetail.collectAsState()
     val documents by viewModel.documents.collectAsState()
-    val message by viewModel.message.collectAsState()
     val preparedMessage by viewModel.preparedMessage.collectAsState()
     val preparedMessageBody by viewModel.preparedMessageBody.collectAsState()
     val isGeneratingStatusPdf by viewModel.isGeneratingStatusPdf.collectAsState()
@@ -168,203 +166,43 @@ fun OrderDetailWorkspace(
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
-            StandardCard(highlight = true) {
-                Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
-                ) {
-                    OrderStatusStepper(selected.order.status)
-                    Text(
-                        text = selected.order.status.label(context),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                    )
-
-                    if (selected.isPaid) {
-                        Text(
-                            text = "PAGATO",
-                            style = MaterialTheme.typography.labelLarge,
-                            color = Color(0xFF237A3B),
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .background(Color(0xFFE8F5E9), RoundedCornerShape(4.dp))
-                                .padding(horizontal = 8.dp, vertical = 2.dp)
-                        )
-                    }
-
-                    Text(
-                        text = "${selected.order.orderNumber} - ${selected.order.title}",
-                        style = MaterialTheme.typography.headlineSmall
-                    )
-
-                    Text(
-                        text = stringResource(
-                            R.string.orders_customer_label,
-                            selected.customer?.displayName(context).orEmpty()
-                        ),
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = "Operatore: ${selected.assignedUser?.displayName.orEmpty()}",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Text(
-                            text = formatUiDateTime(selected.order.updatedAt),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.secondary
-                        )
-                    }
-
-                    if (selected.order.description?.isNotBlank() == true) {
-                        OperatorText(
-                            text = stringResource(R.string.order_problem_label, selected.order.description),
-                        )
-                    }
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = attachmentCounts(selected.media, selected.signatures).attachmentLabel(),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                        selected.order.diagnosisOutcome?.let {
-                            Text(
-                                text = "• ${it.label(context)}",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.secondary
-                            )
-                        }
-                    }
-
-                    selected.order.closureReason?.let {
-                        Text(
-                            text = stringResource(R.string.closure_reason_prefix, it.label(context)),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.error
-                        )
-                    }
-                }
-            }
+            OrderHeader(selected, context)
         }
 
         item {
-            StandardCard(
-                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
-            ) {
-                Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                ) {
-                    SectionTitle("Azioni Commessa")
-                    
-                    ActionRow {
-                        val actions = availableOrderStatusActions(selected.order.status)
-                        val templateCode = statusTemplateCode(selected.order)
-
-                        actions.forEach { action ->
-                            TouchButton(
-                                text = action.label,
-                                tone = action.tone(),
-                                onClick = {
-                                    statusAction = action
-                                    statusNote = ""
-                                    closureReason = null
-                                    resultSummary = ""
-                                    resultAmount = ""
-                                    diagnosisOutcome = selected.order.diagnosisOutcome
-                                }
-                            )
-                        }
-
-                        if (selected.order.status == OrderStatus.READY_FOR_PICKUP || selected.order.status == OrderStatus.CLOSED) {
-                            val isPaid = selected.isPaid
-                            TouchButton(
-                                text = if (isPaid) stringResource(R.string.order_not_paid_button) else stringResource(R.string.order_paid_button),
-                                tone = if (isPaid) ButtonTone.WARNING else ButtonTone.SUCCESS,
-                                onClick = { viewModel.togglePaymentStatus(!isPaid) }
-                            )
-                        }
-
-                        TouchButton(
-                            text = stringResource(R.string.order_whatsapp_send),
-                            tone = ButtonTone.INFO,
-                            onClick = { viewModel.prepareMessage(templateCode) }
-                        )
-                    }
-                }
-            }
+            OrderActionCard(
+                status = selected.order.status,
+                isPaid = selected.isPaid,
+                onActionClick = { action ->
+                    statusAction = action
+                    statusNote = ""
+                    closureReason = null
+                    resultSummary = ""
+                    resultAmount = ""
+                    diagnosisOutcome = selected.order.diagnosisOutcome
+                },
+                onTogglePayment = viewModel::togglePaymentStatus,
+                onSendWhatsApp = viewModel::prepareMessage
+            )
         }
 
         if ((selected.order.status == OrderStatus.RESULT) &&
             (selected.order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE)
         ) {
             item {
-                StandardCard {
-                    Column(
-                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                    ) {
-                        Text("Esito preventivo", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-                        QuoteDecisionRow(
-                            text = "Preventivo accettato",
-                            checked = quoteDecision == QuoteDecision.ACCEPTED,
-                            testTag = RepairAppTestTags.QuoteAcceptedToggle,
-                        ) {
-                            quoteDecision = toggleQuoteDecision(quoteDecision, QuoteDecision.ACCEPTED)
+                QuoteDecisionPanel(
+                    quoteDecision = quoteDecision,
+                    quoteRejectNote = quoteRejectNote,
+                    onQuoteDecisionChange = { quoteDecision = it },
+                    onQuoteRejectNoteChange = { quoteRejectNote = it },
+                    onConfirm = { feedback, note, closureReason ->
+                        if (feedback == CustomerFeedbackType.ACCEPT) {
+                            viewModel.recordFeedback(feedback, note)
+                        } else {
+                            viewModel.recordFeedback(feedback, note, closureReason) { onBack() }
                         }
-                        QuoteDecisionRow(
-                            text = "Preventivo rifiutato",
-                            checked = quoteDecision == QuoteDecision.REJECTED,
-                            testTag = RepairAppTestTags.QuoteRejectedToggle,
-                        ) {
-                            quoteDecision = toggleQuoteDecision(quoteDecision, QuoteDecision.REJECTED)
-                        }
-                        if (quoteDecision == QuoteDecision.REJECTED) {
-                            Field(
-                                value = quoteRejectNote,
-                                onValueChange = { quoteRejectNote = it },
-                                label = "Motivo rifiuto",
-                                required = true,
-                                showError = quoteRejectNote.isBlank(),
-                            )
-                        }
-                        TouchButton(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = "Conferma esito preventivo",
-                            tone = if (quoteDecision == QuoteDecision.REJECTED) ButtonTone.DANGER else ButtonTone.SUCCESS,
-                            enabled = canConfirmQuoteDecision(quoteDecision, quoteRejectNote),
-                            testTag = RepairAppTestTags.QuoteConfirmButton,
-                            onClick = {
-                                when (quoteDecision) {
-                                    QuoteDecision.ACCEPTED -> {
-                                        viewModel.recordFeedback(
-                                            feedback = CustomerFeedbackType.ACCEPT,
-                                            note = "Preventivo accettato",
-                                        )
-                                    }
-                                    QuoteDecision.REJECTED -> {
-                                        viewModel.recordFeedback(
-                                            feedback = CustomerFeedbackType.REJECT,
-                                            note = quoteRejectNote,
-                                            closureReason = ClosureReason.CUSTOMER_DECLINED,
-                                        ) { onBack() }
-                                    }
-                                    null -> Unit
-                                }
-                            },
-                        )
                     }
-                }
+                )
             }
         }
 
@@ -404,67 +242,36 @@ fun OrderDetailWorkspace(
             ?.takeIf { it.orderId == selected.order.id }
             ?.let { prepared ->
             item {
-                StandardCard(
-                    containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                    ) {
-                        SectionTitle(stringResource(R.string.order_wa_preview_title))
-                        Field(preparedMessageBody, viewModel::updatePreparedMessageBody, stringResource(R.string.order_wa_message_label))
-                        ActionRow {
-                            TouchButton(
-                                text = stringResource(R.string.order_wa_open),
-                                tone = ButtonTone.INFO,
-                                onClick = {
-                                    requestConfirm(waOpenConfirmTitle, waOpenConfirmText) {
-                                        viewModel.recordPreparedMessage()
-                                        val intent = Intent(
-                                            Intent.ACTION_VIEW,
-                                            "https://wa.me/${prepared.phone}?text=${Uri.encode(preparedMessageBody)}".toUri(),
-                                        )
-                                        context.startActivity(intent)
-                                    }
-                                },
+                WhatsAppPreviewPanel(
+                    prepared = prepared,
+                    body = preparedMessageBody,
+                    onBodyChange = viewModel::updatePreparedMessageBody,
+                    onOpenWhatsApp = {
+                        requestConfirm(waOpenConfirmTitle, waOpenConfirmText) {
+                            viewModel.recordPreparedMessage()
+                            val intent = Intent(
+                                Intent.ACTION_VIEW,
+                                "https://wa.me/${prepared.phone}?text=${Uri.encode(preparedMessageBody)}".toUri(),
                             )
-                            TouchButton(
-                                text = stringResource(R.string.order_wa_sent),
-                                tone = ButtonTone.SUCCESS,
-                                onClick = { requestConfirm(waSentConfirmTitle, waSentConfirmText) { viewModel.confirmSentMessage() } },
-                            )
-                            TouchButton(
-                                text = stringResource(R.string.order_wa_close_preview),
-                                tone = ButtonTone.NEUTRAL,
-                                onClick = viewModel::clearPreparedMessage,
-                            )
+                            context.startActivity(intent)
                         }
-                    }
-                }
+                    },
+                    onConfirmSent = {
+                        requestConfirm(waSentConfirmTitle, waSentConfirmText) { viewModel.confirmSentMessage() }
+                    },
+                    onClose = viewModel::clearPreparedMessage
+                )
             }
         }
 
         item {
-            StandardCard {
-                Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                ) {
-                    Text(stringResource(R.string.order_internal_notes), style = MaterialTheme.typography.titleMedium)
-                    selected.order.internalNotes?.takeIf { it.isNotBlank() }?.let {
-                        OperatorText(it)
-                    }
-                    TouchButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.order_internal_notes),
-                        tone = ButtonTone.NEUTRAL,
-                        onClick = {
-                            note = ""
-                            showInternalNoteDialog = true
-                        }
-                    )
+            InternalNotesPanel(
+                notes = selected.order.internalNotes,
+                onAddNoteClick = {
+                    note = ""
+                    showInternalNoteDialog = true
                 }
-            }
+            )
         }
 
         item {
@@ -808,34 +615,3 @@ fun OrderDetailWorkspace(
         )
     }
 }
-
-@Composable
-private fun QuoteDecisionRow(
-    text: String,
-    checked: Boolean,
-    testTag: String,
-    onClick: () -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag(testTag)
-            .clickable(onClick = onClick)
-            .padding(vertical = DashboardSpacing.compactGap / 2),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
-    ) {
-        Checkbox(checked = checked, onCheckedChange = { onClick() })
-        Text(text, style = MaterialTheme.typography.bodyLarge)
-    }
-}
-
-private fun toggleQuoteDecision(current: QuoteDecision?, new: QuoteDecision): QuoteDecision? =
-    if (current == new) null else new
-
-private fun canConfirmQuoteDecision(decision: QuoteDecision?, rejectNote: String): Boolean =
-    when (decision) {
-        QuoteDecision.ACCEPTED -> true
-        QuoteDecision.REJECTED -> rejectNote.isNotBlank()
-        null -> false
-    }

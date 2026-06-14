@@ -134,6 +134,9 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE id = :id LIMIT 1")
     suspend fun findById(id: String): UserEntity?
 
+    @Query("SELECT * FROM users WHERE role = 'ADMIN'")
+    suspend fun findAllAdmins(): List<UserEntity>
+
     @Query("SELECT COUNT(*) FROM users WHERE role = :role")
     fun observeCountByRole(role: UserRole): Flow<Int>
 
@@ -157,18 +160,11 @@ interface CustomerDao {
 
     @Query(
         """
-        SELECT DISTINCT customers.* FROM customers
-        LEFT JOIN repair_orders ON repair_orders.customerId = customers.id
-        WHERE :query = ''
-            OR customers.firstName LIKE '%' || :query || '%'
-            OR customers.lastName LIKE '%' || :query || '%'
-            OR customers.companyName LIKE '%' || :query || '%'
-            OR customers.phone LIKE '%' || :query || '%'
-            OR customers.email LIKE '%' || :query || '%'
-            OR customers.vatNumber LIKE '%' || :query || '%'
-            OR customers.taxCode LIKE '%' || :query || '%'
-            OR repair_orders.orderNumber LIKE '%' || :query || '%'
-        ORDER BY customers.updatedAt DESC
+        SELECT * FROM customers
+        WHERE :query = '' 
+           OR rowid IN (SELECT rowid FROM customers_fts WHERE customers_fts MATCH :query || '*')
+           OR id IN (SELECT customerId FROM repair_orders WHERE rowid IN (SELECT rowid FROM repair_orders_fts WHERE repair_orders_fts MATCH :query || '*'))
+        ORDER BY updatedAt DESC
         """,
     )
     fun search(query: String): Flow<List<CustomerEntity>>
@@ -278,6 +274,29 @@ interface RepairOrderDao {
 
     @Query("DELETE FROM repair_orders WHERE id IN (:orderIds)")
     suspend fun deleteByIds(orderIds: List<String>): Int
+
+    @Query(
+        """
+        SELECT 
+            o.*,
+            c.id AS cust_id, c.type AS cust_type, c.firstName AS cust_firstName, c.lastName AS cust_lastName, 
+            c.companyName AS cust_companyName, c.vatNumber AS cust_vatNumber, c.taxCode AS cust_taxCode, 
+            c.phone AS cust_phone, c.email AS cust_email, c.address AS cust_address, c.notes AS cust_notes,
+            c.createdAt AS cust_createdAt, c.updatedAt AS cust_updatedAt,
+            (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND (UPPER(m.mediaType) IN ('PHOTO', 'IMAGE') OR (m.mimeType LIKE 'image/%' AND UPPER(m.mediaType) != 'FINAL_PHOTO'))) AS imagesCount,
+            (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND NOT (UPPER(m.mediaType) IN ('PHOTO', 'IMAGE', 'FINAL_PHOTO') OR m.mimeType LIKE 'image/%')) AS documentsCount,
+            (SELECT COUNT(*) FROM signatures s WHERE s.orderId = o.id) AS signaturesCount,
+            (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND UPPER(m.mediaType) = 'FINAL_PHOTO') AS finalPhotosCount
+        FROM repair_orders o
+        LEFT JOIN customers c ON o.customerId = c.id
+        WHERE :query = ''
+           OR o.rowid IN (SELECT rowid FROM repair_orders_fts WHERE repair_orders_fts MATCH :query || '*')
+           OR c.rowid IN (SELECT rowid FROM customers_fts WHERE customers_fts MATCH :query || '*')
+        ORDER BY o.updatedAt DESC
+        LIMIT :limit
+        """
+    )
+    fun search(query: String, limit: Int = 100): Flow<List<OrderListItemProjection>>
 }
 
 @Dao
