@@ -40,6 +40,13 @@ class SettingsViewModel(
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
 
+    fun initializeTemplatesIfNeeded() {
+        viewModelScope.launch {
+            val user = authRepository.currentUser.value
+            templateRepository.ensureDefaults(user?.id)
+        }
+    }
+
     private val _storageStats = MutableStateFlow<com.onlytechtake.repairapp.data.services.StorageStats?>(null)
     val storageStats = _storageStats.asStateFlow()
 

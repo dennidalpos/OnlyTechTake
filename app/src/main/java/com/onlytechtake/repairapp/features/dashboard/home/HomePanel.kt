@@ -177,17 +177,17 @@ private fun BackupReminderCard(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            Row(
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.actionGap),
+                verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
             ) {
                 TouchButton(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.backup_run_full_zip),
                     onClick = onRunBackup,
                 )
                 TouchButton(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.home_backup_reminder_settings),
                     tone = ButtonTone.NEUTRAL,
                     onClick = onOpenSettings,

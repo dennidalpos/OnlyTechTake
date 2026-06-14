@@ -49,7 +49,7 @@
     <string name="dashboard_customers">Clienti</string>
     <string name="dashboard_order">Commessa</string>
     <string name="dashboard_orders">Commesse</string>
-    <string name="dashboard_config">Impostazioni</string>
+    <string name="dashboard_config">Setup</string>
     <string name="dashboard_admin">Admin</string>
     <string name="logout">Logout</string>
 
@@ -61,7 +61,7 @@
     <string name="home_empty_queue">Nessuna commessa in questa coda.</string>
     <string name="home_open_queue">Apri coda</string>
     <string name="home_backup_reminder_title">Backup consigliato</string>
-    <string name="home_backup_reminder_settings">Impostazioni promemoria</string>
+    <string name="home_backup_reminder_settings">Setup backup</string>
     <string name="backup_run_full_zip">Esegui backup ZIP completo</string>
     <string name="backup_status_never">Mai eseguito</string>
     <string name="backup_status_days_ago">%1$d giorni fa</string>
@@ -236,7 +236,7 @@
     <string name="admin_confirm_delete_all_orders_field">Digita CANCELLA TUTTO per confermare</string>
     <string name="admin_author">Autore</string>
 
-    <string name="config_back">Torna a Impostazioni</string>
+    <string name="config_back">Torna a Setup</string>
     <string name="config_hub_categories_title">Categorie</string>
     <string name="config_hub_categories_subtitle">Catalogo commesse</string>
     <string name="config_hub_templates_title">Template</string>

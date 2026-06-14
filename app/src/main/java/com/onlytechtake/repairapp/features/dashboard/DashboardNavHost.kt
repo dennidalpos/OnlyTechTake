@@ -78,7 +78,8 @@ fun DashboardNavHost(
             )
             QuickActions(
                 viewModel = newOrderViewModel,
-                onOpenConfig = { navController.navigate(DashboardRoutes.settings("CATEGORIES")) }
+                onOpenConfig = { navController.navigate(DashboardRoutes.settings("CATEGORIES")) },
+                onClose = { navController.popBackStack() }
             )
         }
         composable(DashboardRoutes.CUSTOMERS) {

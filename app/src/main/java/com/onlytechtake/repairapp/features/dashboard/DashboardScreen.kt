@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -90,8 +91,8 @@ fun DashboardScreen(
         NavigationItem(DashboardRoutes.HOME, Icons.Default.Home, R.string.dashboard_home, RepairAppTestTags.dashboardTab("HOME")),
         NavigationItem(DashboardRoutes.NEW_ORDER, Icons.Default.Add, R.string.dashboard_new, RepairAppTestTags.dashboardTab("NEW_ORDER")),
         NavigationItem(DashboardRoutes.CUSTOMERS, Icons.Default.Person, R.string.dashboard_customers, RepairAppTestTags.dashboardTab("CUSTOMERS")),
-        NavigationItem(DashboardRoutes.ORDERS, Icons.AutoMirrored.Filled.List, R.string.dashboard_orders, RepairAppTestTags.dashboardTab("ORDERS")),
-        NavigationItem(DashboardRoutes.SETTINGS, Icons.Default.Settings, R.string.dashboard_config, RepairAppTestTags.dashboardTab("SETTINGS")),
+        NavigationItem(DashboardRoutes.orders(), Icons.AutoMirrored.Filled.List, R.string.dashboard_orders, RepairAppTestTags.dashboardTab("ORDERS")),
+        NavigationItem(DashboardRoutes.settings(), Icons.Default.Settings, R.string.dashboard_config, RepairAppTestTags.dashboardTab("SETTINGS")),
     )
 
     var pendingRoute by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf<String?>(null) }
@@ -159,7 +160,14 @@ fun DashboardScreen(
                         NavigationBarItem(
                             modifier = Modifier.testTag(item.testTag),
                             icon = { Icon(item.icon, contentDescription = null) },
-                            label = { Text(stringResource(item.labelRes)) },
+                            label = { 
+                                Text(
+                                    text = stringResource(item.labelRes),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    softWrap = false
+                                ) 
+                            },
                             selected = selected,
                             onClick = {
                                 if (!selected) {

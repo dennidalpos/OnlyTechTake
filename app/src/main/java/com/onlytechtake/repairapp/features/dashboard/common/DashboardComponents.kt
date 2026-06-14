@@ -17,21 +17,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
@@ -67,14 +61,39 @@ object DashboardSpacing {
     val dialogElevation = 6.dp
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SectionTitle(text: String) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.titleLarge,
+fun SectionTitle(text: String, tooltip: String? = null) {
+    Row(
         modifier = Modifier.padding(bottom = 4.dp),
-        color = MaterialTheme.colorScheme.primary,
-    )
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.primary,
+        )
+        if (tooltip != null) {
+            val tooltipState = rememberTooltipState()
+            TooltipBox(
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(),
+                tooltip = {
+                    PlainTooltip {
+                        Text(tooltip)
+                    }
+                },
+                state = tooltipState
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Info,
+                    contentDescription = "Info",
+                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -197,29 +216,41 @@ fun WizardNavigationBar(
     nextEnabled: Boolean = true,
     nextTestTag: String? = null,
     onNext: () -> Unit,
+    onCancel: (() -> Unit)? = null,
 ) {
     StandardCard {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(DashboardSpacing.compactGap),
-            horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.actionGap),
+        Column(
+            modifier = Modifier.padding(DashboardSpacing.compactGap),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)
         ) {
-            onBack?.let {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.actionGap),
+            ) {
+                onBack?.let {
+                    TouchButton(
+                        modifier = Modifier.weight(1f),
+                        text = stringResource(R.string.nav_back),
+                        tone = ButtonTone.NEUTRAL,
+                        onClick = it,
+                    )
+                }
                 TouchButton(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.nav_back),
-                    tone = ButtonTone.NEUTRAL,
-                    onClick = it,
+                    text = nextLabel,
+                    enabled = nextEnabled,
+                    testTag = nextTestTag,
+                    onClick = onNext,
                 )
             }
-            TouchButton(
-                modifier = Modifier.weight(1f),
-                text = nextLabel,
-                enabled = nextEnabled,
-                testTag = nextTestTag,
-                onClick = onNext,
-            )
+            onCancel?.let {
+                TouchButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Annulla e chiudi",
+                    tone = ButtonTone.NEUTRAL,
+                    onClick = it
+                )
+            }
         }
     }
 }
@@ -298,10 +329,11 @@ fun TouchButton(
     ) {
         Text(
             text = text,
-            maxLines = 2,
+            maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.labelMedium,
+            softWrap = false,
         )
     }
 }

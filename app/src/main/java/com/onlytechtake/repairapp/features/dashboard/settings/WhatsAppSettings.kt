@@ -13,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
@@ -25,6 +26,7 @@ import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 fun WhatsAppSettings(
     viewModel: SettingsViewModel,
     onRequestConfirm: (String, String, () -> Unit) -> Unit,
+    onBack: () -> Unit,
 ) {
     val messageMode by viewModel.messageMode.collectAsState()
 
@@ -38,8 +40,11 @@ fun WhatsAppSettings(
         item {
             StandardCard(highlight = true) {
                 Column(modifier = Modifier.padding(DashboardSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
-                    SectionTitle(stringResource(R.string.config_hub_whatsapp_title))
-                    Text(stringResource(R.string.config_whatsapp_mode, messageMode.name))
+                    SectionTitle(
+                        text = stringResource(R.string.config_hub_whatsapp_title),
+                        tooltip = "Configura la modalità di invio dei messaggi ai clienti. Attualmente è supportato l'invio manuale tramite WhatsApp."
+                    )
+                    Text(stringResource(R.string.config_whatsapp_mode, "Manuale"))
                     ActionRow {
                         val confirmTitle = stringResource(R.string.config_whatsapp_confirm_manual_title)
                         val confirmText = stringResource(R.string.config_whatsapp_confirm_manual_text)
@@ -54,6 +59,15 @@ fun WhatsAppSettings(
                     }
                 }
             }
+        }
+
+        item {
+            TouchButton(
+                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                text = "Chiudi Setup WhatsApp",
+                tone = com.onlytechtake.repairapp.features.workspace.ButtonTone.NEUTRAL,
+                onClick = onBack
+            )
         }
     }
 }

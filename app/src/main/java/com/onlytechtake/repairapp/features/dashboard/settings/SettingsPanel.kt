@@ -18,6 +18,9 @@ fun SettingsPanel(
     onNavigate: (String) -> Unit,
     initialSection: String? = null,
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.initializeTemplatesIfNeeded()
+    }
     val windowSizeClass = LocalWindowSizeClass.current
     val isWide = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Medium
 
@@ -32,14 +35,26 @@ fun SettingsPanel(
         confirmAction = action
     }
 
+    val onBackToHub = { 
+        if (isWide) {
+            currentSection = null
+        } else {
+            onNavigate(com.onlytechtake.repairapp.features.dashboard.DashboardRoutes.settings())
+        }
+    }
+
     if (isWide) {
         Row(Modifier.fillMaxSize()) {
             Box(Modifier.weight(1f)) {
                 SettingsHub(
                     isAdmin = isAdmin,
                     onNavigate = { route ->
-                        val section = route.substringAfter("section=", "")
-                        if (section.isNotEmpty()) {
+                        val section = if (route.contains("section=")) {
+                            route.substringAfter("section=")
+                        } else {
+                            null
+                        }
+                        if (section != null) {
                             currentSection = section
                         } else {
                             onNavigate(route)
@@ -54,7 +69,9 @@ fun SettingsPanel(
                     viewModel = viewModel,
                     isAdmin = isAdmin,
                     onBackupRestored = onBackupRestored,
-                    requestConfirm = ::requestConfirm
+                    requestConfirm = ::requestConfirm,
+                    onNavigate = onNavigate,
+                    onBack = onBackToHub
                 )
             }
         }
@@ -69,7 +86,8 @@ fun SettingsPanel(
                 isAdmin = isAdmin,
                 onBackupRestored = onBackupRestored,
                 requestConfirm = ::requestConfirm,
-                onNavigate = onNavigate
+                onNavigate = onNavigate,
+                onBack = onBackToHub
             )
         }
     }
@@ -114,15 +132,16 @@ private fun SettingsSectionContent(
     isAdmin: Boolean,
     onBackupRestored: () -> Unit,
     requestConfirm: (String, String, () -> Unit) -> Unit,
-    onNavigate: (String) -> Unit = {}
+    onNavigate: (String) -> Unit = {},
+    onBack: () -> Unit = {}
 ) {
     when (section) {
-        "CATEGORIES" -> CategoriesSettings(viewModel, isAdmin, requestConfirm)
-        "TEMPLATES" -> TemplatesSettings(viewModel, isAdmin, requestConfirm)
-        "WHATSAPP" -> WhatsAppSettings(viewModel, requestConfirm)
-        "EXPORT" -> BackupSettings(viewModel, isAdmin, onBackupRestored, requestConfirm)
-        "STORAGE" -> StorageSettings(viewModel)
-        "ABOUT" -> AboutSettings()
+        "CATEGORIES" -> CategoriesSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)
+        "TEMPLATES" -> TemplatesSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)
+        "WHATSAPP" -> WhatsAppSettings(viewModel, requestConfirm, onBack = onBack)
+        "EXPORT" -> BackupSettings(viewModel, isAdmin, onBackupRestored, requestConfirm, onBack = onBack)
+        "STORAGE" -> StorageSettings(viewModel, onBack = onBack)
+        "ABOUT" -> AboutSettings(onBack = onBack)
         else -> if (section == null) SettingsHub(isAdmin, onNavigate) else {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text("Seleziona una sezione")

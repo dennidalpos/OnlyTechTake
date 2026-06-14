@@ -4,12 +4,21 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -25,6 +34,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.onlytechtake.repairapp.R
@@ -33,7 +44,6 @@ import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.Field
-import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
@@ -44,6 +54,7 @@ fun TemplatesSettings(
     viewModel: SettingsViewModel,
     isAdmin: Boolean,
     onRequestConfirm: (String, String, () -> Unit) -> Unit,
+    onBack: () -> Unit,
 ) {
     val templates by viewModel.templates.collectAsState()
     var editingTemplate by remember { mutableStateOf<MessageTemplateEntity?>(null) }
@@ -60,7 +71,10 @@ fun TemplatesSettings(
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
-            SectionTitle(stringResource(R.string.config_hub_templates_title))
+            SectionTitle(
+                text = stringResource(R.string.config_hub_templates_title),
+                tooltip = "Personalizza i messaggi predefiniti per ogni fase della lavorazione e le informative legali."
+            )
         }
 
         items(templates) { template ->
@@ -81,11 +95,19 @@ fun TemplatesSettings(
                             style = MaterialTheme.typography.bodySmall,
                             color = if (template.active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
                         )
+                        Text(
+                            text = template.body,
+                            style = MaterialTheme.typography.bodySmall,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                        )
                     }
-                    Text(
-                        text = "v${template.version}",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.outline
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "Modifica",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(start = 8.dp)
                     )
                 }
             }
@@ -95,6 +117,15 @@ fun TemplatesSettings(
             item {
                 Text(stringResource(R.string.config_template_empty), style = MaterialTheme.typography.bodyMedium)
             }
+        }
+
+        item {
+            TouchButton(
+                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                text = "Chiudi Setup Template",
+                tone = ButtonTone.NEUTRAL,
+                onClick = onBack
+            )
         }
     }
 
@@ -135,6 +166,7 @@ fun TemplateEditDialog(
         Surface(
             modifier = Modifier
                 .fillMaxWidth(0.95f)
+                .fillMaxHeight(0.95f)
                 .widthIn(max = DashboardSpacing.maxContentWidth),
             shape = MaterialTheme.shapes.extraLarge,
             color = MaterialTheme.colorScheme.surface,
@@ -142,8 +174,8 @@ fun TemplateEditDialog(
         ) {
             Column(
                 modifier = Modifier
+                    .fillMaxSize()
                     .padding(DashboardSpacing.screenPadding),
-                verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)
             ) {
                 Text(
                     text = "Modifica Template",
@@ -159,43 +191,54 @@ fun TemplateEditDialog(
 
                 HorizontalDivider(modifier = Modifier.padding(vertical = DashboardSpacing.compactGap))
 
-                Field(
-                    value = title,
-                    onValueChange = { title = it },
-                    label = stringResource(R.string.config_template_title_label),
-                    testTag = RepairAppTestTags.ConfigTemplateTitleField
-                )
-
-                Field(
-                    value = step,
-                    onValueChange = { step = it },
-                    label = "Step associato",
-                )
-
-                Field(
-                    value = body,
-                    onValueChange = { body = it },
-                    label = stringResource(R.string.config_template_body_label),
-                    testTag = RepairAppTestTags.ConfigTemplateBodyField,
-                    singleLine = false
-                )
-
-                Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
-                    Text(stringResource(R.string.config_template_variables), style = MaterialTheme.typography.titleSmall)
-                    OperatorText("{{numero_commessa}}  {{stato_commessa}}  {{categoria_percorso}}  {{cliente}}")
-                }
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)
                 ) {
-                    Text(if (active) stringResource(R.string.config_template_active) else stringResource(R.string.config_template_archived))
-                    Switch(
-                        checked = active,
-                        onCheckedChange = { active = it },
+                    Field(
+                        value = title,
+                        onValueChange = { title = it },
+                        label = stringResource(R.string.config_template_title_label),
+                        testTag = RepairAppTestTags.ConfigTemplateTitleField
                     )
+
+                    Field(
+                        value = step,
+                        onValueChange = { step = it },
+                        label = "Step associato",
+                    )
+
+                    Field(
+                        value = body,
+                        onValueChange = { body = it },
+                        label = stringResource(R.string.config_template_body_label),
+                        testTag = RepairAppTestTags.ConfigTemplateBodyField,
+                        singleLine = false
+                    )
+
+                    SectionTitle(
+                        text = stringResource(R.string.config_template_variables),
+                        tooltip = "{{numero_commessa}}, {{stato_commessa}}, {{categoria_percorso}}, {{cliente}}, {{esito_diagnosi}}, {{importo_preventivo}}"
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(if (active) stringResource(R.string.config_template_active) else stringResource(R.string.config_template_archived))
+                        Switch(
+                            checked = active,
+                            onCheckedChange = { active = it },
+                        )
+                    }
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
+
+                HorizontalDivider(modifier = Modifier.padding(vertical = DashboardSpacing.compactGap))
 
                 ActionRow {
                     TouchButton(

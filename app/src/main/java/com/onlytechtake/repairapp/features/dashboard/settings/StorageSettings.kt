@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.utils.formatFileSize
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
@@ -28,6 +29,7 @@ import com.onlytechtake.repairapp.features.workspace.ButtonTone
 @Composable
 fun StorageSettings(
     viewModel: SettingsViewModel,
+    onBack: () -> Unit,
 ) {
     val statsState = viewModel.storageStats.collectAsState()
     val stats = statsState.value
@@ -40,7 +42,10 @@ fun StorageSettings(
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
-            SectionTitle(stringResource(R.string.storage_title))
+            SectionTitle(
+                text = stringResource(R.string.storage_title),
+                tooltip = "Monitora l'uso della memoria e pulisci i file temporanei per liberare spazio."
+            )
         }
 
         if (stats == null) {
@@ -137,6 +142,15 @@ fun StorageSettings(
                     )
                 }
             }
+        }
+
+        item {
+            TouchButton(
+                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                text = "Chiudi Setup memoria",
+                tone = ButtonTone.NEUTRAL,
+                onClick = onBack
+            )
         }
     }
 }

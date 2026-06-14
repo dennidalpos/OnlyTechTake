@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.features.dashboard.settings
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.BuildConfig
@@ -18,9 +20,13 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
+import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
+import com.onlytechtake.repairapp.features.workspace.ButtonTone
 
 @Composable
-fun AboutSettings() {
+fun AboutSettings(onBack: () -> Unit) {
+    val uriHandler = LocalUriHandler.current
+
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -29,7 +35,10 @@ fun AboutSettings() {
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
-            SectionTitle("Informazioni")
+            SectionTitle(
+                text = "Informazioni",
+                tooltip = "Dettagli sulla versione dell'applicazione e contatti per lo sviluppo."
+            )
         }
 
         item {
@@ -69,9 +78,30 @@ fun AboutSettings() {
                 ) {
                     Text("Sviluppo", style = MaterialTheme.typography.titleSmall)
                     Text("© 2026 OnlyTechTake", style = MaterialTheme.typography.bodyMedium)
-                    Text("Sito web: https://onlytechtake.com", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+                    
+                    TouchButton(
+                        text = "GitHub: dennidalpos",
+                        tone = ButtonTone.NEUTRAL,
+                        onClick = { uriHandler.openUri("https://github.com/dennidalpos") }
+                    )
+
+                    Text(
+                        "Sito web: https://onlytechtake.com",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.clickable { uriHandler.openUri("https://onlytechtake.com") }
+                    )
                 }
             }
+        }
+
+        item {
+            TouchButton(
+                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                text = "Chiudi Informazioni",
+                tone = ButtonTone.NEUTRAL,
+                onClick = onBack
+            )
         }
     }
 }

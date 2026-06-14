@@ -47,6 +47,7 @@ fun BackupSettings(
     isAdmin: Boolean,
     onBackupRestored: () -> Unit,
     onRequestConfirm: (String, String, () -> Unit) -> Unit,
+    onBack: () -> Unit,
 ) {
     val exportDestination by viewModel.exportDestination.collectAsState()
     val isCloudAvailable by viewModel.isCloudAvailable.collectAsState()
@@ -73,7 +74,10 @@ fun BackupSettings(
         item {
             StandardCard(highlight = true) {
                 Column(modifier = Modifier.padding(DashboardSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
-                    SectionTitle(stringResource(R.string.config_backup_title))
+                    SectionTitle(
+                        text = stringResource(R.string.config_backup_title),
+                        tooltip = "Gestisci la frequenza dei promemoria e la destinazione dei file esportati."
+                    )
                     if (!isAdmin) {
                         Text(stringResource(R.string.admin_only_section))
                     } else {
@@ -134,17 +138,6 @@ fun BackupSettings(
                         if (!isCloudAvailable) {
                             OperatorText("Nessun provider cloud (Drive, OneDrive, Dropbox) rilevato. L'esportazione avverra' solo in locale.")
                         }
-                        Text(
-                            text = if (exportDestination == ExportDestination.LOCAL)
-                                stringResource(R.string.config_backup_destination_local_desc)
-                            else
-                                stringResource(R.string.config_backup_destination_cloud_desc),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-
-                        OperatorText(stringResource(R.string.config_backup_full_zip_includes))
-                        OperatorText(stringResource(R.string.config_backup_android_archive_note))
 
                         ActionRow {
                             val destMsgLocal = stringResource(R.string.order_export_local)
@@ -177,8 +170,10 @@ fun BackupSettings(
                             )
                         }
 
-                        SectionTitle(stringResource(R.string.config_backup_orders_export_title))
-                        Text(stringResource(R.string.config_backup_orders_export_desc), style = MaterialTheme.typography.bodyMedium)
+                        SectionTitle(
+                            text = stringResource(R.string.config_backup_orders_export_title),
+                            tooltip = "Esporta l'elenco di tutte le commesse in un file Excel leggibile da PC."
+                        )
                         ActionRow {
                             val destMsgLocal = stringResource(R.string.order_export_local)
                             val destMsgCloud = stringResource(R.string.order_export_cloud)
@@ -197,6 +192,15 @@ fun BackupSettings(
                     }
                 }
             }
+        }
+
+        item {
+            TouchButton(
+                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                text = "Chiudi Setup backup",
+                tone = ButtonTone.NEUTRAL,
+                onClick = onBack
+            )
         }
     }
 }

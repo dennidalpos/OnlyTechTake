@@ -363,7 +363,10 @@ fun OrderDetailWorkspace(
 
         item {
             Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
-                SectionTitle(stringResource(R.string.order_timeline))
+                SectionTitle(
+                    text = stringResource(R.string.order_timeline),
+                    tooltip = "Cronologia di tutti gli eventi e cambiamenti di stato relativi a questa commessa."
+                )
                 selected.timeline.forEachIndexed { index, event ->
                     val eventNumber = selected.timeline.size - index
                     CompactExpandableRow(
@@ -373,6 +376,15 @@ fun OrderDetailWorkspace(
                     )
                 }
             }
+        }
+
+        item {
+            TouchButton(
+                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                text = "Chiudi ed esci",
+                tone = ButtonTone.NEUTRAL,
+                onClick = onBack
+            )
         }
     }
 

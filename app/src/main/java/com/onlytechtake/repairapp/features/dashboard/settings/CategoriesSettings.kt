@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
@@ -24,8 +25,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.activity.compose.BackHandler
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -47,9 +50,12 @@ fun CategoriesSettings(
     viewModel: SettingsViewModel,
     isAdmin: Boolean,
     onRequestConfirm: (String, String, () -> Unit) -> Unit,
+    onBack: () -> Unit,
 ) {
     val categories by viewModel.categories.collectAsState()
 
+    var searchQuery by rememberSaveable { mutableStateOf("") }
+    var showEditCard by rememberSaveable { mutableStateOf(false) }
     var categoryId by rememberSaveable { mutableStateOf<String?>(null) }
     var categoryParentId by rememberSaveable { mutableStateOf<String?>(null) }
     var currentCategoryParentId by rememberSaveable { mutableStateOf<String?>(null) }
@@ -63,6 +69,7 @@ fun CategoriesSettings(
         categoryName = ""
         categoryDescription = ""
         categoryActive = true
+        showEditCard = true
     }
 
     fun selectCategoryForEdit(category: OrderCategoryEntity) {
@@ -71,15 +78,32 @@ fun CategoriesSettings(
         categoryName = category.name
         categoryDescription = category.description.orEmpty()
         categoryActive = category.active
+        showEditCard = true
     }
 
     fun openCategoryBranch(categoryId: String?) {
         currentCategoryParentId = categoryId
-        loadNewCategory()
+        showEditCard = false
+        searchQuery = ""
     }
 
     val currentParent = currentCategoryParentId?.let { id -> categories.firstOrNull { it.id == id } }
-    val visibleCategories = categories.filter { it.parentId == currentCategoryParentId }
+    
+    BackHandler(enabled = currentCategoryParentId != null || showEditCard || searchQuery.isNotEmpty()) {
+        when {
+            showEditCard -> showEditCard = false
+            searchQuery.isNotEmpty() -> searchQuery = ""
+            currentCategoryParentId != null -> currentCategoryParentId = currentParent?.parentId
+        }
+    }
+
+    val visibleCategories = remember(categories, currentCategoryParentId, searchQuery) {
+        if (searchQuery.isNotBlank()) {
+            categories.filter { it.name.contains(searchQuery, ignoreCase = true) }
+        } else {
+            categories.filter { it.parentId == currentCategoryParentId }
+        }
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -89,128 +113,147 @@ fun CategoriesSettings(
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
         item {
-            SectionTitle(stringResource(R.string.config_hub_categories_title))
-            StandardCard(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                highlight = true,
-            ) {
-                Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                ) {
-                    Text(
-                        text = if (categoryId == null) {
-                            if (currentCategoryParentId == null) "Nuova Categoria principale"
-                            else "Nuova Sottocategoria"
-                        } else {
-                            "Modifica Categoria"
-                        },
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+            SectionTitle(
+                text = stringResource(R.string.config_hub_categories_title),
+                tooltip = "Organizza il catalogo delle riparazioni. Puoi creare una gerarchia di categorie e sottocategorie."
+            )
+            
+            Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
+                Field(
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    label = "Cerca categorie...",
+                    singleLine = true,
+                    trailingIcon = {
+                        if (searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { searchQuery = "" }) {
+                                Icon(Icons.Default.Delete, contentDescription = "Pulisci")
+                            }
+                        }
+                    }
+                )
+
+                if (searchQuery.isBlank()) {
                     CategoryBreadcrumb(categories, currentCategoryParentId)
-                    ActionRow {
-                        TouchButton(
-                            text = stringResource(R.string.config_category_root),
-                            tone = if (currentCategoryParentId == null) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
-                            onClick = { openCategoryBranch(null) },
-                        )
-                        if (currentParent?.parentId != null) {
+                    if (currentCategoryParentId != null) {
+                        ActionRow {
                             TouchButton(
-                                text = stringResource(R.string.config_category_up),
-                                tone = ButtonTone.NEUTRAL,
-                                onClick = { openCategoryBranch(currentParent.parentId) },
-                            )
-                        } else if (currentCategoryParentId != null) {
-                            TouchButton(
-                                text = stringResource(R.string.config_category_up),
+                                text = stringResource(R.string.config_category_root),
                                 tone = ButtonTone.NEUTRAL,
                                 onClick = { openCategoryBranch(null) },
                             )
+                            currentParent?.parentId?.let { parentId ->
+                                TouchButton(
+                                    text = stringResource(R.string.config_category_up),
+                                    tone = ButtonTone.NEUTRAL,
+                                    onClick = { openCategoryBranch(parentId) },
+                                )
+                            } ?: run {
+                                TouchButton(
+                                    text = stringResource(R.string.config_category_up),
+                                    tone = ButtonTone.NEUTRAL,
+                                    onClick = { openCategoryBranch(null) },
+                                )
+                            }
                         }
                     }
-                    Field(
-                        categoryName,
-                        { categoryName = it },
-                        stringResource(R.string.config_category_name_label),
-                        testTag = RepairAppTestTags.ConfigCategoryNameField
-                    )
-                    Field(
-                        categoryDescription,
-                        { categoryDescription = it },
-                        stringResource(R.string.config_category_description_label),
-                        showOptional = true,
-                        testTag = RepairAppTestTags.ConfigCategoryDescriptionField
-                    )
-                    Row(
+                }
+                
+                if (!showEditCard && searchQuery.isBlank()) {
+                    TouchButtonWithIcon(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
+                        text = if (currentCategoryParentId == null) "Nuova Categoria principale" else "Nuova Sottocategoria",
+                        icon = Icons.Default.Add,
+                        tone = ButtonTone.PRIMARY,
+                        onClick = ::loadNewCategory
+                    )
+                }
+            }
+        }
+
+        if (showEditCard) {
+            item {
+                StandardCard(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                    highlight = true,
+                ) {
+                    Column(
+                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                     ) {
-                        Text(if (categoryActive) stringResource(R.string.config_category_active) else stringResource(R.string.config_category_archived))
-                        Switch(
-                            checked = categoryActive,
-                            enabled = isAdmin,
-                            onCheckedChange = { categoryActive = it },
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = if (categoryId == null) "Nuova Categoria" else "Modifica Categoria",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            IconButton(onClick = { showEditCard = false }) {
+                                Icon(Icons.Default.Close, contentDescription = "Chiudi")
+                            }
+                        }
+                        
+                        Field(
+                            categoryName,
+                            { categoryName = it },
+                            stringResource(R.string.config_category_name_label),
+                            testTag = RepairAppTestTags.ConfigCategoryNameField
                         )
-                    }
-                    ActionRow {
-                        TouchButtonWithIcon(
-                            text = stringResource(R.string.config_category_new),
-                            icon = Icons.Default.Add,
-                            tone = ButtonTone.NEUTRAL,
-                            testTag = RepairAppTestTags.ConfigCategoryNewButton,
-                            onClick = ::loadNewCategory,
+                        Field(
+                            categoryDescription,
+                            { categoryDescription = it },
+                            stringResource(R.string.config_category_description_label),
+                            showOptional = true,
+                            testTag = RepairAppTestTags.ConfigCategoryDescriptionField
                         )
-                        if ((categoryId != null) && isAdmin) {
-                            TouchButtonWithIcon(
-                                text = stringResource(R.string.config_category_open_branch),
-                                icon = Icons.AutoMirrored.Filled.ArrowForward,
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(if (categoryActive) stringResource(R.string.config_category_active) else stringResource(R.string.config_category_archived))
+                            Switch(
+                                checked = categoryActive,
+                                enabled = isAdmin,
+                                onCheckedChange = { categoryActive = it },
+                            )
+                        }
+                        ActionRow {
+                            TouchButton(
+                                text = "Annulla",
                                 tone = ButtonTone.NEUTRAL,
-                                onClick = { openCategoryBranch(categoryId) },
+                                onClick = { showEditCard = false }
                             )
-                        }
-                        if ((categoryId == null) || isAdmin) {
-                            val confirmTitle = stringResource(R.string.config_category_confirm_save_title)
-                            val confirmText = stringResource(R.string.config_category_confirm_save_text)
-                            TouchButtonWithIcon(
-                                text = stringResource(R.string.config_category_save),
-                                icon = Icons.Default.Check,
-                                testTag = RepairAppTestTags.ConfigCategorySaveButton,
-                                onClick = {
-                                    onRequestConfirm(confirmTitle, confirmText) {
-                                        viewModel.saveCategory(
-                                            id = categoryId,
-                                            parentId = categoryParentId,
-                                            name = categoryName,
-                                            description = categoryDescription,
-                                            active = categoryActive,
-                                        )
-                                        loadNewCategory()
-                                    }
-                                },
-                            )
-                        }
-                        if ((categoryId != null) && isAdmin) {
-                            val confirmTitle = stringResource(R.string.config_category_confirm_delete_title)
-                            val confirmText = stringResource(R.string.config_category_confirm_delete_text)
-                            TouchButtonWithIcon(
-                                text = stringResource(R.string.config_category_delete),
-                                icon = Icons.Default.Delete,
-                                tone = ButtonTone.DANGER,
-                                testTag = RepairAppTestTags.ConfigCategoryDeleteButton,
-                                onClick = {
-                                    onRequestConfirm(confirmTitle, confirmText) {
-                                        viewModel.deleteCategory(categoryId!!)
-                                        loadNewCategory()
-                                    }
-                                },
-                            )
+                            if ((categoryId == null) || isAdmin) {
+                                val confirmTitle = stringResource(R.string.config_category_confirm_save_title)
+                                val confirmText = stringResource(R.string.config_category_confirm_save_text)
+                                TouchButtonWithIcon(
+                                    text = stringResource(R.string.config_category_save),
+                                    icon = Icons.Default.Check,
+                                    testTag = RepairAppTestTags.ConfigCategorySaveButton,
+                                    onClick = {
+                                        onRequestConfirm(confirmTitle, confirmText) {
+                                            viewModel.saveCategory(
+                                                id = categoryId,
+                                                parentId = categoryParentId,
+                                                name = categoryName,
+                                                description = categoryDescription,
+                                                active = categoryActive,
+                                            )
+                                            showEditCard = false
+                                        }
+                                    },
+                                )
+                            }
                         }
                     }
                 }
             }
         }
+
         items(visibleCategories) { category ->
             val confirmTitle = stringResource(R.string.config_category_confirm_delete_title)
             val confirmText = stringResource(R.string.config_category_confirm_delete_specific_text).format(category.name)
@@ -272,6 +315,15 @@ fun CategoriesSettings(
             item {
                 Text(stringResource(R.string.config_category_empty_branch), style = MaterialTheme.typography.bodyMedium)
             }
+        }
+
+        item {
+            TouchButton(
+                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                text = "Chiudi Categorie",
+                tone = ButtonTone.NEUTRAL,
+                onClick = onBack
+            )
         }
     }
 }

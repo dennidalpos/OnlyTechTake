@@ -63,6 +63,7 @@ import com.onlytechtake.repairapp.features.workspace.QuickIntakeSignatureDraft
 fun QuickActions(
     viewModel: NewOrderViewModel,
     onOpenConfig: () -> Unit,
+    onClose: () -> Unit,
 ) {
     val draft by viewModel.quickIntakeDraft.collectAsState()
     val customerSuggestions by viewModel.customerSuggestions.collectAsState()
@@ -197,7 +198,10 @@ fun QuickActions(
             .padding(DashboardSpacing.screenPadding),
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
-        SectionTitle(stringResource(R.string.new_order_title))
+        SectionTitle(
+            text = stringResource(R.string.new_order_title),
+            tooltip = "Compila i passaggi per creare una nuova commessa di riparazione. Puoi salvare una bozza e riprendere in seguito."
+        )
 
         StepperIndicator(
             currentStep = draft.currentStep,
@@ -352,6 +356,7 @@ fun QuickActions(
                 nextEnabled = draft.selectedCustomerId != null,
                 nextTestTag = RepairAppTestTags.NewOrderStep1NextButton,
                 onNext = { completeStep(1) },
+                onCancel = onClose,
             )
         }
 
@@ -376,6 +381,7 @@ fun QuickActions(
                 nextEnabled = draft.selectedCategoryId != null,
                 nextTestTag = RepairAppTestTags.NewOrderStep2NextButton,
                 onNext = { completeStep(2) },
+                onCancel = onClose,
             )
         }
 
@@ -394,6 +400,7 @@ fun QuickActions(
                 onBack = { editStep(2) },
                 nextEnabled = draft.problemSummary.isNotBlank(),
                 onNext = { completeStep(3) },
+                onCancel = onClose,
             )
         }
 
@@ -432,6 +439,7 @@ fun QuickActions(
                 onBack = { editStep(3) },
                 nextEnabled = draft.stagedMedia.isNotEmpty(),
                 onNext = { completeStep(4) },
+                onCancel = onClose,
             )
         }
 
@@ -466,6 +474,7 @@ fun QuickActions(
                 onBack = { editStep(4) },
                 nextEnabled = draft.signatureCapture != null,
                 onNext = { completeStep(5) },
+                onCancel = onClose,
             )
         }
 
