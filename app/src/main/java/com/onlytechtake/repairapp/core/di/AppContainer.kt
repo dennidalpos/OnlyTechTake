@@ -9,6 +9,7 @@ import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.repositories.*
+import com.onlytechtake.repairapp.data.services.StorageStatsService
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.repositories.RepairAppRepository
@@ -22,6 +23,8 @@ class AppContainer(context: Context) {
     val backupReminderPreferences = BackupReminderPreferences(context.applicationContext)
     private val passwordHasher = PasswordHasher()
     val shareDocumentIntentFactory = ShareDocumentIntentFactory(context)
+    val orderFileCleanupService = OrderFileCleanupService(context.applicationContext)
+    val storageStatsService = StorageStatsService(context.applicationContext)
 
     val repairAppRepository: RepairAppRepository = DefaultRepairAppRepository(
         dashboardDao = database.dashboardDao(),
@@ -30,6 +33,7 @@ class AppContainer(context: Context) {
     val authRepository: AuthRepository = DefaultAuthRepository(
         userDao = database.userDao(),
         auditLogDao = database.auditLogDao(),
+        loginAttemptDao = database.loginAttemptDao(),
         authPreferences = authPreferences,
         sessionStore = sessionStore,
         passwordHasher = passwordHasher,
@@ -55,6 +59,7 @@ class AppContainer(context: Context) {
 
     val orderDocumentRepository: OrderDocumentRepository = DefaultOrderDocumentRepository(
         dao = database.orderDocumentDao(),
+        fileCleanupService = orderFileCleanupService,
     )
 
     val orderWorkflowRepository = OrderWorkflowRepository(
@@ -76,6 +81,7 @@ class AppContainer(context: Context) {
         repairOrderDao = database.repairOrderDao(),
         orderMediaDao = database.orderMediaDao(),
         timelineEventDao = database.timelineEventDao(),
+        fileCleanupService = orderFileCleanupService,
         database = database,
     )
 
@@ -97,6 +103,7 @@ class AppContainer(context: Context) {
         signatureDao = database.signatureDao(),
         templateDao = database.messageTemplateDao(),
         timelineEventDao = database.timelineEventDao(),
+        fileCleanupService = orderFileCleanupService,
     )
 
     val createIntakeOrderUseCase = CreateIntakeOrderUseCase(
@@ -126,6 +133,7 @@ class AppContainer(context: Context) {
         database = database,
         authPreferences = authPreferences,
         sessionStore = sessionStore,
+        storageStatsService = storageStatsService,
     )
 
     val dataResetRepository = DataResetRepository(
@@ -134,6 +142,7 @@ class AppContainer(context: Context) {
         auditLogDao = database.auditLogDao(),
         authPreferences = authPreferences,
         sessionStore = sessionStore,
+        fileCleanupService = orderFileCleanupService,
     )
 
     fun close() {

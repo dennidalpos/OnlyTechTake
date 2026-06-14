@@ -9,6 +9,7 @@ import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
+import com.onlytechtake.repairapp.data.local.entities.LoginAttemptEntity
 import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
@@ -55,8 +56,6 @@ data class OrderExportRow(
     val updatedAt: Long,
     val closedAt: Long?,
     val closureReason: ClosureReason?,
-    val deletedAt: Long?,
-    val deleteReason: String?,
 )
 
 @Dao
@@ -64,7 +63,7 @@ interface DashboardDao {
     @Query("SELECT COUNT(*) FROM users")
     fun observeUserCount(): Flow<Int>
 
-    @Query("SELECT COUNT(*) FROM repair_orders WHERE deletedAt IS NULL")
+    @Query("SELECT COUNT(*) FROM repair_orders")
     fun observeActiveOrderCount(): Flow<Int>
 
     @Query("SELECT COUNT(*) FROM customers")
@@ -97,9 +96,7 @@ interface OrderExportDao {
             repair_orders.createdAt AS createdAt,
             repair_orders.updatedAt AS updatedAt,
             repair_orders.closedAt AS closedAt,
-            repair_orders.closureReason AS closureReason,
-            repair_orders.deletedAt AS deletedAt,
-            repair_orders.deleteReason AS deleteReason
+            repair_orders.closureReason AS closureReason
         FROM repair_orders
         LEFT JOIN customers ON customers.id = repair_orders.customerId
         LEFT JOIN order_categories ON order_categories.id = repair_orders.categoryId
@@ -215,29 +212,13 @@ interface RepairOrderDao {
     @Query("SELECT COUNT(*) FROM repair_orders")
     suspend fun countAll(): Int
 
-    @Query(
-        """
-        SELECT * FROM repair_orders
-        WHERE status = 'CLOSED'
-            AND deletedAt IS NULL
-            AND closureReason IN (:closureReasons)
-        ORDER BY updatedAt DESC
-        """,
-    )
-    suspend fun findClosedByClosureReasons(closureReasons: List<ClosureReason>): List<RepairOrderEntity>
-
-    @Query("SELECT * FROM repair_orders WHERE deletedAt IS NOT NULL ORDER BY deletedAt DESC")
-    suspend fun findArchived(): List<RepairOrderEntity>
-
     @Query("SELECT * FROM repair_orders WHERE id = :id LIMIT 1")
     fun observeById(id: String): Flow<RepairOrderEntity?>
 
     @Query(
         """
         SELECT * FROM repair_orders
-        WHERE (:includeDeleted = 1 OR deletedAt IS NULL)
-            AND (:onlyDeleted = 0 OR deletedAt IS NOT NULL)
-            AND (:assignedToUserId IS NULL OR assignedToUserId = :assignedToUserId)
+        WHERE (:assignedToUserId IS NULL OR assignedToUserId = :assignedToUserId)
             AND (:status IS NULL OR status = :status)
             AND (:customerId IS NULL OR customerId = :customerId)
         ORDER BY updatedAt DESC
@@ -245,8 +226,6 @@ interface RepairOrderDao {
         """,
     )
     fun observeFiltered(
-        includeDeleted: Boolean,
-        onlyDeleted: Boolean,
         assignedToUserId: String?,
         status: OrderStatus?,
         customerId: String?,
@@ -256,7 +235,7 @@ interface RepairOrderDao {
     @Query("SELECT orderNumber FROM repair_orders WHERE orderNumber LIKE :yearPrefix || '%' ORDER BY orderNumber DESC LIMIT 1")
     suspend fun findLatestOrderNumberForYear(yearPrefix: String): String?
 
-    @Query("SELECT * FROM repair_orders WHERE deletedAt IS NULL ORDER BY createdAt DESC LIMIT :limit")
+    @Query("SELECT * FROM repair_orders ORDER BY createdAt DESC LIMIT :limit")
     fun observeRecentActiveOrders(limit: Int = 50): Flow<List<RepairOrderEntity>>
 
     @Query("DELETE FROM repair_orders WHERE id IN (:orderIds)")
@@ -367,6 +346,21 @@ interface AuditLogDao {
 
     @Query("SELECT * FROM audit_logs ORDER BY createdAt DESC LIMIT :limit")
     fun observeRecent(limit: Int = 100): Flow<List<AuditLogEntity>>
+}
+
+@Dao
+interface LoginAttemptDao {
+    @Upsert
+    suspend fun upsert(attempt: LoginAttemptEntity)
+
+    @Query("SELECT COUNT(*) FROM login_attempts WHERE username = :username AND successful = 0 AND attemptAt > :since")
+    suspend fun countFailedAttempts(username: String, since: Long): Int
+
+    @Query("DELETE FROM login_attempts WHERE username = :username")
+    suspend fun clearAttempts(username: String)
+
+    @Query("DELETE FROM login_attempts WHERE attemptAt < :before")
+    suspend fun cleanupOldAttempts(before: Long)
 }
 
 @Dao

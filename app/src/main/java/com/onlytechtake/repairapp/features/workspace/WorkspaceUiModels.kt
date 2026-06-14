@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.content.Intent
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
+import com.onlytechtake.repairapp.data.services.StorageStats
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
 import java.util.UUID
@@ -26,6 +27,7 @@ data class WorkspaceUiState(
     val showPdfSentConfirmation: Boolean = false,
     val pendingShareIntent: Intent? = null,
     val lastGeneratedDocumentId: String? = null,
+    val storageStats: StorageStats? = null,
 )
 
 data class QuickIntakeSignatureDraft(
@@ -78,11 +80,12 @@ enum class WorkspaceDestination {
     ORDERS,
     NEW_ORDER,
     ORDER_DETAIL,
-    CONFIG,
-    CONFIG_CATEGORIES,
-    CONFIG_TEMPLATES,
-    CONFIG_WHATSAPP,
-    CONFIG_EXPORT,
+    SETTINGS,
+    SETTINGS_CATEGORIES,
+    SETTINGS_TEMPLATES,
+    SETTINGS_WHATSAPP,
+    SETTINGS_BACKUP,
+    SETTINGS_STORAGE,
     ADMIN,
 }
 

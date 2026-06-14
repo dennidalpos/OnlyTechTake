@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.data.repositories
 import android.content.Context
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
@@ -28,11 +29,12 @@ class CatalogRepositoryTest {
 
     private val context = mockk<Context>(relaxed = true)
     private val repository = CatalogRepository(context, stubDao)
-    private val admin = AuthenticatedUser("1", "admin", "Admin", UserRole.ADMIN)
-    private val operator = AuthenticatedUser("2", "operator", "Operator", UserRole.OPERATOR)
+    private val admin = AuthenticatedUser("1", "admin", "Admin", UserRole.ADMIN, UserPermission.entries.toSet())
+    private val operator = AuthenticatedUser("2", "operator", "Operator", UserRole.OPERATOR, setOf(UserPermission.MANAGE_CATEGORIES))
+    private val restrictedOperator = AuthenticatedUser("3", "restricted", "Restricted", UserRole.OPERATOR, emptySet())
 
     @Test
-    fun operatorCanCreateNewCategory() = runBlocking {
+    fun operatorCanCreateNewCategoryIfHasPermission() = runBlocking {
         val input = CategoryInput(name = "New", description = "")
         val result = repository.saveCategory(operator, input)
         assertTrue(result.isSuccess)
@@ -40,9 +42,16 @@ class CatalogRepositoryTest {
     }
 
     @Test
-    fun operatorCannotModifyExistingCategory() = runBlocking {
+    fun operatorCannotCreateNewCategoryIfNoPermission() = runBlocking {
+        val input = CategoryInput(name = "New", description = "")
+        val result = repository.saveCategory(restrictedOperator, input)
+        assertTrue(result.isFailure)
+    }
+
+    @Test
+    fun restrictedOperatorCannotModifyExistingCategory() = runBlocking {
         val input = CategoryInput(id = "1", name = "Modified", description = "")
-        val result = repository.saveCategory(operator, input)
+        val result = repository.saveCategory(restrictedOperator, input)
         assertTrue(result.isFailure)
     }
 

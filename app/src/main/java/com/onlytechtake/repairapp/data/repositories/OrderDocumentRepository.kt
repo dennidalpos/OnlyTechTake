@@ -13,7 +13,8 @@ interface OrderDocumentRepository {
 }
 
 class DefaultOrderDocumentRepository(
-    private val dao: OrderDocumentDao
+    private val dao: OrderDocumentDao,
+    private val fileCleanupService: OrderFileCleanupService,
 ) : OrderDocumentRepository {
     override suspend fun save(document: OrderDocumentEntity) = dao.upsert(document)
 
@@ -32,9 +33,6 @@ class DefaultOrderDocumentRepository(
     override suspend fun delete(documentId: String): Result<Unit> = runCatching {
         val doc = dao.getById(documentId) ?: throw Exception("Documento non trovato")
         dao.deleteById(documentId)
-        val file = java.io.File(doc.localPath)
-        if (file.exists()) {
-            file.delete()
-        }
+        fileCleanupService.deleteSpecificFile(doc.localPath)
     }
 }

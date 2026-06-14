@@ -5,8 +5,9 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
-import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.core.utils.capitalizeFirst
+import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import java.util.UUID
@@ -45,11 +46,7 @@ class CatalogRepository(
 
     suspend fun saveCategory(actor: AuthenticatedUser, input: CategoryInput): Result<String> =
         runCatching {
-            if (input.id != null) {
-                require(actor.role == UserRole.ADMIN) {
-                    context.getString(R.string.catalog_error_only_admin_modify)
-                }
-            }
+            PermissionService.requirePermission(actor, UserPermission.MANAGE_CATEGORIES)
             require(input.name.isNotBlank()) {
                 context.getString(R.string.catalog_error_name_required)
             }
@@ -78,9 +75,7 @@ class CatalogRepository(
 
     suspend fun deleteCategory(actor: AuthenticatedUser, categoryId: String): Result<Unit> =
         runCatching {
-            require(actor.role == UserRole.ADMIN) {
-                context.getString(R.string.catalog_error_only_admin)
-            }
+            PermissionService.requirePermission(actor, UserPermission.MANAGE_CATEGORIES)
             val categories = categoryDao.findAll()
             require(categories.any { it.id == categoryId }) {
                 context.getString(R.string.catalog_error_not_found)

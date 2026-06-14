@@ -96,7 +96,6 @@ private fun CustomerInput.isValidForIntake(): Boolean {
 
 data class OrderFilter(
     val showMineOnly: Boolean = false,
-    val showArchive: Boolean = false,
     val status: OrderStatus? = null,
     val statuses: Set<OrderStatus> = emptySet(),
     val customerId: String? = null,

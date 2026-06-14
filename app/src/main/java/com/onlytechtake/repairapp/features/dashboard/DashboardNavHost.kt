@@ -10,7 +10,7 @@ import com.onlytechtake.repairapp.features.dashboard.neworder.QuickActions
 import com.onlytechtake.repairapp.features.dashboard.customers.CustomerPanel
 import com.onlytechtake.repairapp.features.dashboard.orders.OrdersPanel
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspace
-import com.onlytechtake.repairapp.features.dashboard.config.ConfigPanel
+import com.onlytechtake.repairapp.features.dashboard.settings.SettingsPanel
 import com.onlytechtake.repairapp.features.dashboard.admin.AdminPanel
 import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
 import com.onlytechtake.repairapp.features.workspace.WorkspaceViewModel
@@ -47,42 +47,50 @@ fun DashboardNavHost(
         composable(WorkspaceDestination.ORDER_DETAIL.name) {
             OrderDetailWorkspace(workspaceViewModel)
         }
-        composable(WorkspaceDestination.CONFIG.name) {
-            ConfigPanel(
+        composable(WorkspaceDestination.SETTINGS.name) {
+            SettingsPanel(
                 viewModel = workspaceViewModel,
                 isAdmin = isAdmin,
                 onBackupRestored = onAppDataRestored
             )
         }
-        composable(WorkspaceDestination.CONFIG_CATEGORIES.name) {
-            ConfigPanel(
+        composable(WorkspaceDestination.SETTINGS_CATEGORIES.name) {
+            SettingsPanel(
                 viewModel = workspaceViewModel,
                 isAdmin = isAdmin,
                 initialSection = "CATEGORIES",
                 onBackupRestored = onAppDataRestored
             )
         }
-        composable(WorkspaceDestination.CONFIG_TEMPLATES.name) {
-            ConfigPanel(
+        composable(WorkspaceDestination.SETTINGS_TEMPLATES.name) {
+            SettingsPanel(
                 viewModel = workspaceViewModel,
                 isAdmin = isAdmin,
                 initialSection = "TEMPLATES",
                 onBackupRestored = onAppDataRestored
             )
         }
-        composable(WorkspaceDestination.CONFIG_WHATSAPP.name) {
-            ConfigPanel(
+        composable(WorkspaceDestination.SETTINGS_WHATSAPP.name) {
+            SettingsPanel(
                 viewModel = workspaceViewModel,
                 isAdmin = isAdmin,
                 initialSection = "WHATSAPP",
                 onBackupRestored = onAppDataRestored
             )
         }
-        composable(WorkspaceDestination.CONFIG_EXPORT.name) {
-            ConfigPanel(
+        composable(WorkspaceDestination.SETTINGS_BACKUP.name) {
+            SettingsPanel(
                 viewModel = workspaceViewModel,
                 isAdmin = isAdmin,
                 initialSection = if (isAdmin) "EXPORT" else null,
+                onBackupRestored = onAppDataRestored
+            )
+        }
+        composable(WorkspaceDestination.SETTINGS_STORAGE.name) {
+            SettingsPanel(
+                viewModel = workspaceViewModel,
+                isAdmin = isAdmin,
+                initialSection = "STORAGE",
                 onBackupRestored = onAppDataRestored
             )
         }

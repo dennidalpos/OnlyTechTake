@@ -4,7 +4,6 @@ import android.net.Uri
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.DataResetRepository
-import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 
 internal class WorkspaceAdminActions(
@@ -13,7 +12,6 @@ internal class WorkspaceAdminActions(
     private val backupRepository: BackupRepository,
     private val backupReminderPreferences: BackupReminderPreferences,
     private val dataResetRepository: DataResetRepository,
-    private val orderRepository: OrderWorkflowRepository,
     private val showSuccess: (String) -> Unit,
     private val showError: (Throwable) -> Unit,
 ) {
@@ -68,19 +66,15 @@ internal class WorkspaceAdminActions(
         }
     }
 
-    fun archiveDiscardedClosedOrders() {
-        authenticatedActionRunner.run { actor ->
-            orderRepository.archiveDiscardedClosedOrders(actor).map { count ->
-                "$count commesse archiviate"
-            }
-        }
-    }
-
-    fun deleteArchivedOrders() {
-        authenticatedActionRunner.run { actor ->
-            orderRepository.deleteArchivedOrders(actor).map { count ->
-                "$count commesse cancellate"
-            }
+    fun resetOrders(confirmation: String, onReset: () -> Unit) {
+        authenticatedActionRunner.runCustom { actor ->
+            dataResetRepository.resetOrders(actor, confirmation).fold(
+                onSuccess = {
+                    mutableUiState.value = WorkspaceUiState()
+                    onReset()
+                },
+                onFailure = showError,
+            )
         }
     }
 }

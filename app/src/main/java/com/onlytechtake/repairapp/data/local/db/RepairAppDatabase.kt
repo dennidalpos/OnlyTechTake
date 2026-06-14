@@ -22,6 +22,7 @@ import com.onlytechtake.repairapp.data.local.dao.UserDao
 import com.onlytechtake.repairapp.data.local.entities.AppSettingEntity
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
+import com.onlytechtake.repairapp.data.local.entities.LoginAttemptEntity
 import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
@@ -46,6 +47,7 @@ import com.onlytechtake.repairapp.data.local.entities.UserEntity
         OrderMediaEntity::class,
         SignatureEntity::class,
         OrderDocumentEntity::class,
+        LoginAttemptEntity::class,
     ],
     version = RepairAppDatabase.DATABASE_VERSION,
     exportSchema = true,
@@ -66,10 +68,11 @@ abstract class RepairAppDatabase : RoomDatabase() {
     abstract fun auditLogDao(): AuditLogDao
     abstract fun orderExportDao(): OrderExportDao
     abstract fun orderDocumentDao(): OrderDocumentDao
+    abstract fun loginAttemptDao(): com.onlytechtake.repairapp.data.local.dao.LoginAttemptDao
 
     companion object {
         const val DATABASE_NAME = "repair_app.db"
-        const val DATABASE_VERSION = 1
+        const val DATABASE_VERSION = 2
 
         @Volatile
         private var instance: RepairAppDatabase? = null
@@ -81,6 +84,7 @@ abstract class RepairAppDatabase : RoomDatabase() {
                     RepairAppDatabase::class.java,
                     DATABASE_NAME,
                 )
+                    .fallbackToDestructiveMigration(dropAllTables = true)
                     .build()
                     .also { instance = it }
             }

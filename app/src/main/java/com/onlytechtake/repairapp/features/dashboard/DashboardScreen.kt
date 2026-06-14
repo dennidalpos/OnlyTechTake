@@ -29,7 +29,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
-import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.domain.models.AppSummary
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.workspace.WorkspaceDestination
@@ -65,6 +65,8 @@ fun DashboardRoute(
             orderDocumentRepository = container.orderDocumentRepository,
             generateOrderStatusPdfUseCase = container.generateOrderStatusPdfUseCase,
             shareDocumentIntentFactory = container.shareDocumentIntentFactory,
+            storageStatsService = container.storageStatsService,
+            orderFileCleanupService = container.orderFileCleanupService,
         ),
     )
     val summary by dashboardViewModel.summary.collectAsState()
@@ -91,7 +93,7 @@ fun DashboardScreen(
 
     val uiState by workspaceViewModel.uiState.collectAsState()
     val currentUser by workspaceViewModel.currentUser.collectAsState()
-    val isAdmin = currentUser?.role == UserRole.ADMIN
+    val isAdmin = PermissionService.isAdmin(currentUser)
 
     androidx.compose.runtime.LaunchedEffect(uiState.destination) {
         if (currentDestination != uiState.destination.name) {
@@ -123,7 +125,7 @@ fun DashboardScreen(
         NavigationItem(WorkspaceDestination.NEW_ORDER, Icons.Default.Add, R.string.dashboard_new),
         NavigationItem(WorkspaceDestination.CUSTOMERS, Icons.Default.Person, R.string.dashboard_customers),
         NavigationItem(WorkspaceDestination.ORDERS, Icons.AutoMirrored.Filled.List, R.string.dashboard_orders),
-        NavigationItem(WorkspaceDestination.CONFIG, Icons.Default.Settings, R.string.dashboard_config),
+        NavigationItem(WorkspaceDestination.SETTINGS, Icons.Default.Settings, R.string.dashboard_config),
     )
 
     val isFormDirty by workspaceViewModel.isFormDirty.collectAsState()
@@ -166,7 +168,7 @@ fun DashboardScreen(
                 actions = {
                     currentUser?.let { user ->
                         Text(
-                            text = if (user.role == UserRole.ADMIN) "Admin" else "Operatore",
+                            text = if (PermissionService.isAdmin(user)) "Admin" else "Operatore",
                             style = MaterialTheme.typography.labelSmall,
                             modifier = Modifier.padding(end = 8.dp),
                         )

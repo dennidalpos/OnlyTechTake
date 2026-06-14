@@ -14,6 +14,7 @@ import com.onlytechtake.repairapp.data.local.entities.OrderDocumentType
 import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventType
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 
 class RoomConverters {
@@ -60,6 +61,14 @@ class RoomConverters {
 
     @TypeConverter fun toAuditAction(value: String?): AuditAction? = enumValueOrNull<AuditAction>(value)
     @TypeConverter fun fromAuditAction(value: AuditAction?): String? = value?.name
+
+    @TypeConverter
+    fun toPermissionSet(value: String?): Set<UserPermission> =
+        value?.split(",")?.filter { it.isNotBlank() }?.mapNotNull { enumValueOrNull<UserPermission>(it) }?.toSet() ?: emptySet()
+
+    @TypeConverter
+    fun fromPermissionSet(value: Set<UserPermission>?): String? =
+        value?.joinToString(",") { it.name }
 
     private inline fun <reified T : Enum<T>> enumValueOrNull(value: String?): T? =
         value?.let { enumValueOf<T>(it) }

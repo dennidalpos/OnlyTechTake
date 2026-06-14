@@ -28,7 +28,8 @@ import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
-import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
+import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
 import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
@@ -36,7 +37,6 @@ import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.domain.workspace.OrderListItem
-import com.onlytechtake.repairapp.domain.workspace.discardedCleanupReasons
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
 import com.onlytechtake.repairapp.domain.workspace.RepairOrderInput
 import com.onlytechtake.repairapp.domain.workspace.validationErrors
@@ -72,8 +72,6 @@ class OrderWorkflowRepository(
         val assignedToUserId = if (filter.showMineOnly) actor.id else null
         val status = filter.status.takeIf { filter.statuses.isEmpty() }
         val base = repairOrderDao.observeFiltered(
-            includeDeleted = filter.showArchive,
-            onlyDeleted = filter.showArchive,
             assignedToUserId = assignedToUserId,
             status = status,
             customerId = filter.customerId,
@@ -159,6 +157,7 @@ class OrderWorkflowRepository(
 
     suspend fun createOrder(actor: AuthenticatedUser, input: RepairOrderInput): Result<RepairOrderEntity> =
         runCatching {
+            PermissionService.requirePermission(actor, UserPermission.CREATE_ORDERS)
             inTransaction {
                 require(input.customerId.isNotBlank()) { "Cliente obbligatorio" }
                 require(input.title.isNotBlank()) { "Titolo obbligatorio" }
@@ -187,9 +186,6 @@ class OrderWorkflowRepository(
                     updatedAt = now,
                     closedAt = null,
                     closureReason = null,
-                    deletedAt = null,
-                    deletedByUserId = null,
-                    deleteReason = null,
                 )
 
                 repairOrderDao.upsert(order)
@@ -300,8 +296,8 @@ class OrderWorkflowRepository(
         runCatching {
             inTransaction {
                 val order = requireWritableOrder(actor, orderId)
-                if (actor.role != UserRole.ADMIN) {
-                    require(order.assignedToUserId == actor.id) { "Solo la propria commessa puo' essere riassegnata" }
+                if (order.assignedToUserId != actor.id) {
+                    PermissionService.requirePermission(actor, UserPermission.EDIT_ALL_ORDERS)
                 }
 
                 val now = clockMillis()
@@ -321,66 +317,6 @@ class OrderWorkflowRepository(
                 repairOrderDao.upsert(order.copy(internalNotes = mergedNotes, updatedAt = now))
                 eventWriter.internalNoteAdded(orderId, actor.id, normalizedNote, now)
             }
-        }
-
-    suspend fun softDelete(actor: AuthenticatedUser, orderId: String, reason: String): Result<Unit> =
-        runCatching {
-            inTransaction {
-                require(actor.role == UserRole.ADMIN) { "Solo admin" }
-                val order = requireNotNull(repairOrderDao.findById(orderId)) { "Commessa non trovata" }
-                val now = clockMillis()
-                repairOrderDao.upsert(
-                    order.copy(
-                        deletedAt = now,
-                        deletedByUserId = actor.id,
-                        deleteReason = reason.trim().ifBlank { null },
-                        updatedAt = now,
-                    ),
-                )
-                eventWriter.orderDeleted(orderId, actor.id, reason.trim().ifBlank { null }, now)
-            }
-        }
-
-    suspend fun archiveDiscardedClosedOrders(actor: AuthenticatedUser): Result<Int> =
-        runCatching {
-            require(actor.role == UserRole.ADMIN) { "Solo admin" }
-            val orders = repairOrderDao.findClosedByClosureReasons(discardedCleanupReasons)
-            if (orders.isEmpty()) return@runCatching 0
-
-            val now = clockMillis()
-            inTransaction {
-                orders.forEach { order ->
-                    repairOrderDao.upsert(
-                        order.copy(
-                            deletedAt = now,
-                            deletedByUserId = actor.id,
-                            deleteReason = "Pulizia commesse scartate",
-                            updatedAt = now,
-                        ),
-                    )
-                    eventWriter.orderDeleted(order.id, actor.id, "Pulizia commesse scartate", now)
-                }
-                auditCleanup(actor.id, "archive_discarded", orders.size, now)
-            }
-            orders.size
-        }
-
-    suspend fun deleteArchivedOrders(actor: AuthenticatedUser): Result<Int> =
-        runCatching {
-            require(actor.role == UserRole.ADMIN) { "Solo admin" }
-            val orders = repairOrderDao.findArchived()
-            if (orders.isEmpty()) return@runCatching 0
-
-            val orderIds = orders.map { it.id }
-            val mediaFiles = orderMediaDao.findForOrders(orderIds).map { it.localPath }
-            val signatureFiles = signatureDao.findForOrders(orderIds).map { it.localPath }
-            val deletedCount = inTransaction {
-                val count = repairOrderDao.deleteByIds(orderIds)
-                auditCleanup(actor.id, "delete_archived", count, clockMillis())
-                count
-            }
-            (mediaFiles + signatureFiles).forEach(::deleteFileQuietly)
-            deletedCount
         }
 
     suspend fun recordFeedback(actor: AuthenticatedUser, orderId: String, input: FeedbackInput): Result<Unit> =
@@ -486,38 +422,16 @@ class OrderWorkflowRepository(
 
     private suspend fun requireWritableOrder(actor: AuthenticatedUser, orderId: String): RepairOrderEntity {
         val order = requireNotNull(repairOrderDao.findById(orderId)) { "Commessa non trovata" }
-        require(order.deletedAt == null) { "Commessa archiviata" }
-        require((actor.role == UserRole.ADMIN) || (order.assignedToUserId == actor.id)) {
-            "Operatore non assegnato"
+        if (order.assignedToUserId != actor.id) {
+            PermissionService.requirePermission(actor, UserPermission.EDIT_ALL_ORDERS)
+        } else {
+            PermissionService.requirePermission(actor, UserPermission.EDIT_OWN_ORDERS)
         }
         return order
     }
 
     private suspend fun <T> inTransaction(block: suspend () -> T): T =
         database?.withTransaction { block() } ?: block()
-
-    private suspend fun auditCleanup(actorUserId: String, operation: String, count: Int, now: Long) {
-        auditLogDao.upsert(
-            AuditLogEntity(
-                id = UUID.randomUUID().toString(),
-                action = AuditAction.ORDER_DELETED,
-                actorUserId = actorUserId,
-                orderId = null,
-                customerId = null,
-                detailsJson = """{"operation":"$operation","count":$count}""",
-                createdAt = now,
-            ),
-        )
-    }
-
-    private fun deleteFileQuietly(path: String) {
-        val file = File(path)
-        if (file.exists()) {
-            file.delete()
-        }
-        file.parentFile?.deleteIfEmpty()
-        file.parentFile?.parentFile?.deleteIfEmpty()
-    }
 
     private fun File.deleteIfEmpty() {
         if (exists() && isDirectory && listFiles().isNullOrEmpty()) {

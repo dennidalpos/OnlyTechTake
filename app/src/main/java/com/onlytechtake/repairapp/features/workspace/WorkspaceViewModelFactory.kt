@@ -34,6 +34,8 @@ class WorkspaceViewModelFactory(
     private val orderDocumentRepository: OrderDocumentRepository,
     private val generateOrderStatusPdfUseCase: GenerateOrderStatusPdfUseCase,
     private val shareDocumentIntentFactory: ShareDocumentIntentFactory,
+    private val storageStatsService: com.onlytechtake.repairapp.data.services.StorageStatsService,
+    private val orderFileCleanupService: com.onlytechtake.repairapp.data.repositories.OrderFileCleanupService,
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -56,6 +58,8 @@ class WorkspaceViewModelFactory(
             orderDocumentRepository = orderDocumentRepository,
             generateOrderStatusPdfUseCase = generateOrderStatusPdfUseCase,
             shareDocumentIntentFactory = shareDocumentIntentFactory,
+            storageStatsService = storageStatsService,
+            orderFileCleanupService = orderFileCleanupService,
         ) as T
     }
 }

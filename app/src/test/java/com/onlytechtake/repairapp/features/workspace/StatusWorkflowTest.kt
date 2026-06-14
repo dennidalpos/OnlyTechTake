@@ -95,8 +95,5 @@ class StatusWorkflowTest {
         updatedAt = 0L,
         closedAt = null,
         closureReason = closureReason,
-        deletedAt = null,
-        deletedByUserId = null,
-        deleteReason = null,
     )
 }

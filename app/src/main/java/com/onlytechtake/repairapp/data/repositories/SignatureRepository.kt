@@ -7,7 +7,8 @@ import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
 import com.onlytechtake.repairapp.data.local.dao.SignatureDao
 import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
-import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
+import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import java.io.File
 import java.io.FileOutputStream
@@ -19,6 +20,7 @@ class SignatureRepository(
     private val signatureDao: SignatureDao,
     private val templateDao: MessageTemplateDao,
     private val timelineEventDao: TimelineEventDao,
+    private val fileCleanupService: OrderFileCleanupService,
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
     private val eventWriter = OrderWorkflowEventWriter(context, timelineEventDao = timelineEventDao)
@@ -33,8 +35,11 @@ class SignatureRepository(
     ): Result<SignatureEntity> =
         runCatching {
             val order = requireNotNull(repairOrderDao.findById(orderId)) { "Commessa non trovata" }
-            require(order.deletedAt == null) { "Commessa archiviata" }
-            require(actor.role == UserRole.ADMIN || order.assignedToUserId == actor.id) { "Operatore non assegnato" }
+            if (order.assignedToUserId != actor.id) {
+                PermissionService.requirePermission(actor, UserPermission.EDIT_ALL_ORDERS)
+            } else {
+                PermissionService.requirePermission(actor, UserPermission.EDIT_OWN_ORDERS)
+            }
             require(signatureDao.countForOrder(orderId) == 0) { "Firma gia' presente per questa commessa" }
             require(privacyAccepted) { "Consenso privacy obbligatorio" }
             require(termsAccepted) { "Accettazione condizioni obbligatoria" }
@@ -78,17 +83,7 @@ class SignatureRepository(
         }
 
     fun deleteSignatureFile(signature: SignatureEntity) {
-        val file = File(signature.localPath)
-        if (file.exists()) {
-            file.delete()
-        }
-        file.parentFile?.deleteIfEmpty()
-    }
-
-    private fun File.deleteIfEmpty() {
-        if (exists() && isDirectory && listFiles().isNullOrEmpty()) {
-            delete()
-        }
+        fileCleanupService.deleteSpecificFile(signature.localPath)
     }
 
     private companion object {

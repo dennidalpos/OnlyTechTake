@@ -37,8 +37,6 @@ class OrderExportXlsxWriterTest {
             updatedAt = 1_717_171_717_000L,
             closedAt = null,
             closureReason = null,
-            deletedAt = null,
-            deleteReason = null,
         )
 
         OrderExportXlsxWriter(ZoneId.of("UTC")).write(listOf(row), output)

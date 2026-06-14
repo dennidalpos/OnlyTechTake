@@ -15,11 +15,14 @@ import com.onlytechtake.repairapp.data.local.dao.OrderExportDao
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.storage.StoragePolicy
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
+import com.onlytechtake.repairapp.core.permissions.PermissionService
 import java.io.File
 import java.io.IOException
 import java.time.Instant
@@ -42,20 +45,21 @@ class BackupRepository(
     private val database: RepairAppDatabase? = null,
     private val authPreferences: AuthPreferences? = null,
     private val sessionStore: InMemorySessionStore? = null,
+    private val storageStatsService: com.onlytechtake.repairapp.data.services.StorageStatsService? = null,
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
     private val eventWriter = OrderWorkflowEventWriter(context, auditLogDao = auditLogDao)
 
     suspend fun exportConfiguration(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
         runCatching {
-            require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            PermissionService.requirePermission(actor, UserPermission.EXPORT_DATA)
             writeText(uri, buildConfigurationJson())
             eventWriter.dataExported(actor.id, clockMillis())
         }
 
     suspend fun exportDatabase(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
         runCatching {
-            require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            PermissionService.requirePermission(actor, UserPermission.EXPORT_DATA)
             if (BuildConfig.IS_DEMO_VERSION) {
                 throw IllegalStateException("Funzione disponibile nella versione Full")
             }
@@ -69,7 +73,8 @@ class BackupRepository(
 
     suspend fun exportCompleteBackup(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
         runCatching {
-            require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
+            PermissionService.requirePermission(actor, UserPermission.BACKUP_RESTORE)
             if (BuildConfig.IS_DEMO_VERSION) {
                 throw IllegalStateException("Funzione disponibile nella versione Full")
             }
@@ -87,36 +92,64 @@ class BackupRepository(
 
     suspend fun restoreCompleteBackup(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
         runCatching {
-            require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
+            PermissionService.requirePermission(actor, UserPermission.BACKUP_RESTORE)
             if (BuildConfig.IS_DEMO_VERSION) {
                 throw IllegalStateException("Funzione disponibile nella versione Full")
             }
             withContext(Dispatchers.IO) {
-                val restoreRoot = File(context.cacheDir, RESTORE_WORK_DIR).also {
+                val stagingDir = File(context.cacheDir, RESTORE_WORK_DIR).also {
                     it.deleteRecursively()
                     check(it.mkdirs()) { "Area ripristino non disponibile" }
                 }
                 try {
-                    val extracted = extractBackup(uri, restoreRoot)
+                    val extracted = extractBackup(uri, stagingDir)
                     require(extracted.metadataText.contains("\"databaseVersion\": ${RepairAppDatabase.DATABASE_VERSION}")) {
                         "Versione backup non compatibile"
                     }
-                    validateDatabase(extracted.databaseFiles.getValue(RepairAppDatabase.DATABASE_NAME))
+                    val backupDbFile = extracted.databaseFiles[RepairAppDatabase.DATABASE_NAME]
+                        ?: throw IOException("Database mancante nel backup")
+                    validateDatabase(backupDbFile)
+                    
+                    // Atomic replacement: close, move current to backup, move new to current, delete backup
                     database?.close()
                     RepairAppDatabase.closeInstance()
-                    replaceDatabaseFiles(extracted.databaseFiles)
-                    replacePrivateFiles(restoreRoot)
-                    authPreferences?.clear()
-                    sessionStore?.clear()
+                    
+                    val currentDbFile = databaseFile()
+                    val oldDbBackupDir = File(context.cacheDir, "db_backup_pre_restore").also {
+                        it.deleteRecursively()
+                        it.mkdirs()
+                    }
+                    
+                    // Snapshot current DB files
+                    currentDbFile.parentFile?.listFiles { file -> 
+                        (file.name == currentDbFile.name) || file.name.startsWith("${currentDbFile.name}-") 
+                    }?.forEach { it.copyTo(File(oldDbBackupDir, it.name)) }
+
+                    try {
+                        replaceDatabaseFiles(extracted.databaseFiles)
+                        replacePrivateFiles(stagingDir)
+                        
+                        authPreferences?.clear()
+                        sessionStore?.clear()
+                    } catch (e: Exception) {
+                        // Rollback DB if possible (partial restore of files is harder)
+                        oldDbBackupDir.listFiles()?.forEach { 
+                            it.copyTo(File(currentDbFile.parentFile, it.name), overwrite = true)
+                        }
+                        throw e
+                    } finally {
+                        oldDbBackupDir.deleteRecursively()
+                    }
                 } finally {
-                    restoreRoot.deleteRecursively()
+                    stagingDir.deleteRecursively()
                 }
             }
         }
 
     suspend fun exportOrdersXlsx(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
         runCatching {
-            require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            PermissionService.requirePermission(actor, UserPermission.EXPORT_DATA)
             if (BuildConfig.IS_DEMO_VERSION) {
                 throw IllegalStateException("Funzione disponibile nella versione Full")
             }
@@ -136,7 +169,7 @@ class BackupRepository(
         uri: Uri,
     ): Result<Unit> =
         runCatching {
-            require((detail.order.deletedAt == null) || (actor.role == UserRole.ADMIN)) { "Commessa archiviata non esportabile" }
+            PermissionService.requirePermission(actor, UserPermission.EXPORT_DATA)
             val document = PdfDocument()
             try {
                 val writer = PdfTextWriter(document)

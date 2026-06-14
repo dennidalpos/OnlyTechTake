@@ -9,7 +9,9 @@ import com.onlytechtake.repairapp.data.local.dao.UserDao
 import com.onlytechtake.repairapp.data.local.entities.AuditAction
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.OperatorInput
 import java.util.UUID
@@ -28,7 +30,7 @@ class AdminUserRepository(
 
     suspend fun createOperator(actor: AuthenticatedUser, input: OperatorInput): Result<Unit> =
         runCatching {
-            require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
             require(input.displayName.isNotBlank()) { "Nome obbligatorio" }
             require(input.username.isNotBlank()) { "Username obbligatorio" }
             require(input.password.length >= MIN_PASSWORD_LENGTH) { "Password troppo corta" }
@@ -50,6 +52,11 @@ class AdminUserRepository(
                 passwordHash = passwordHash.hash,
                 passwordSalt = passwordHash.salt,
                 role = UserRole.OPERATOR,
+                permissions = setOf(
+                    UserPermission.CREATE_ORDERS,
+                    UserPermission.EDIT_OWN_ORDERS,
+                    UserPermission.MANAGE_CUSTOMERS,
+                ),
                 active = true,
                 createdAt = now,
                 updatedAt = now,
@@ -61,7 +68,7 @@ class AdminUserRepository(
 
     suspend fun updateUser(actor: AuthenticatedUser, userId: String, displayName: String, username: String): Result<Unit> =
         runCatching {
-            require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
             val existing = requireNotNull(userDao.findById(userId)) { "Utente non trovato" }
             val trimmedUsername = username.trim()
             require(displayName.isNotBlank()) { "Nome obbligatorio" }
@@ -82,7 +89,7 @@ class AdminUserRepository(
 
     suspend fun resetPassword(actor: AuthenticatedUser, userId: String, password: String): Result<Unit> =
         runCatching {
-            require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
             require(password.length >= MIN_PASSWORD_LENGTH) { "Password troppo corta" }
             val existing = requireNotNull(userDao.findById(userId)) { "Utente non trovato" }
             val hash = passwordHasher.hash(password.toCharArray())
@@ -99,15 +106,26 @@ class AdminUserRepository(
 
     suspend fun setActive(actor: AuthenticatedUser, userId: String, active: Boolean): Result<Unit> =
         runCatching {
-            require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
             val existing = requireNotNull(userDao.findById(userId)) { "Utente non trovato" }
             if (!active && existing.role == UserRole.ADMIN) {
-                require(userDao.countActiveByRole(UserRole.ADMIN) > 1) { "Ultimo admin non disattivabile" }
+                throw IllegalStateException("L'unico account Admin non puo' essere disattivato")
             }
 
             val now = clockMillis()
             userDao.upsert(existing.copy(active = active, updatedAt = now))
             audit(actor.id, AuditAction.USER_UPDATED, """{"userId":"$userId","active":$active}""", now)
+        }
+
+    suspend fun setPermissions(actor: AuthenticatedUser, userId: String, permissions: Set<UserPermission>): Result<Unit> =
+        runCatching {
+            PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
+            val existing = requireNotNull(userDao.findById(userId)) { "Utente non trovato" }
+            require(existing.role != UserRole.ADMIN) { "I permessi dell'admin non possono essere modificati" }
+
+            val now = clockMillis()
+            userDao.upsert(existing.copy(permissions = permissions, updatedAt = now))
+            audit(actor.id, AuditAction.USER_UPDATED, """{"userId":"$userId","permissions":${permissions.map { it.name }}}""", now)
         }
 
     private suspend fun audit(actorUserId: String, action: AuditAction, detailsJson: String, now: Long) {

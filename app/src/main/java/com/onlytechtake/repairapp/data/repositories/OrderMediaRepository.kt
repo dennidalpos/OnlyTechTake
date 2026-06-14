@@ -16,8 +16,12 @@ import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
 import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.storage.StoragePolicy
+import com.onlytechtake.repairapp.core.permissions.PermissionService
+import com.onlytechtake.repairapp.core.utils.AtomicFileHelper
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -30,6 +34,7 @@ class OrderMediaRepository(
     private val repairOrderDao: RepairOrderDao,
     private val orderMediaDao: OrderMediaDao,
     private val timelineEventDao: TimelineEventDao,
+    private val fileCleanupService: OrderFileCleanupService,
     private val database: RepairAppDatabase? = null,
     private val fileNamer: OrderMediaFileNamer = OrderMediaFileNamer(),
     private val attachmentPolicy: AttachmentImportPolicy = AttachmentImportPolicy(),
@@ -38,12 +43,14 @@ class OrderMediaRepository(
     private val eventWriter = OrderWorkflowEventWriter(context, timelineEventDao = timelineEventDao)
 
     fun createPhotoFile(orderId: String, orderNumber: String): File {
+        StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
         val orderDirectory = File(context.filesDir, "order_media/$orderId")
         check(orderDirectory.exists() || orderDirectory.mkdirs()) { "Cartella media non disponibile" }
         return File(orderDirectory, fileNamer.photoFileName(orderNumber, clockMillis()))
     }
 
     fun createIntakePhotoFile(sessionId: String): File {
+        StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
         val intakeDirectory = File(context.filesDir, "intake_media/$sessionId")
         check(intakeDirectory.exists() || intakeDirectory.mkdirs()) { "Cartella media presa in carico non disponibile" }
         return File(intakeDirectory, fileNamer.photoFileName("presa_in_carico", clockMillis()))
@@ -154,6 +161,7 @@ class OrderMediaRepository(
 
     suspend fun importAttachment(actor: AuthenticatedUser, orderId: String, uri: Uri): Result<OrderMediaEntity> =
         runCatching {
+            StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
             requireWritableOrder(actor, orderId)
             val resolver = context.contentResolver
             val sourceName = resolver.displayName(uri) ?: "allegato"
@@ -215,7 +223,7 @@ class OrderMediaRepository(
                 require(deleted > 0) { "Media non rimosso" }
                 eventWriter.mediaRemoved(media.orderId, actor.id, media.fileName, now)
             }
-            deleteMediaFile(File(media.localPath))
+            fileCleanupService.deleteSpecificFile(media.localPath)
         }
 
     suspend fun replaceImage(actor: AuthenticatedUser, mediaId: String, bitmap: Bitmap): Result<OrderMediaEntity> =
@@ -281,19 +289,19 @@ class OrderMediaRepository(
                     }
                 }
             } catch (error: Exception) {
-                movedFiles.forEach { file -> deleteMediaFile(file) }
+                movedFiles.forEach { file -> fileCleanupService.deleteSpecificFile(file.absolutePath) }
                 throw error
             }
             entities
         }
 
     fun deleteMediaFiles(media: List<OrderMediaEntity>) {
-        media.forEach { entity -> deleteMediaFile(File(entity.localPath)) }
+        media.forEach { entity -> fileCleanupService.deleteSpecificFile(entity.localPath) }
     }
 
     fun deleteStagedMedia(path: String): Result<Unit> =
         runCatching {
-            deleteMediaFile(File(path))
+            fileCleanupService.deleteSpecificFile(path)
         }
 
     fun replaceStagedImage(staged: StagedOrderMedia, bitmap: Bitmap): Result<StagedOrderMedia> =
@@ -334,8 +342,11 @@ class OrderMediaRepository(
 
     private suspend fun requireWritableOrder(actor: AuthenticatedUser, orderId: String) {
         val order = requireNotNull(repairOrderDao.findById(orderId)) { "Commessa non trovata" }
-        require(order.deletedAt == null) { "Commessa archiviata" }
-        require(actor.role == UserRole.ADMIN || order.assignedToUserId == actor.id) { "Operatore non assegnato" }
+        if (order.assignedToUserId != actor.id) {
+            PermissionService.requirePermission(actor, UserPermission.EDIT_ALL_ORDERS)
+        } else {
+            PermissionService.requirePermission(actor, UserPermission.EDIT_OWN_ORDERS)
+        }
     }
 
     private suspend fun <T> inTransaction(block: suspend () -> T): T =
@@ -394,32 +405,15 @@ class OrderMediaRepository(
         }
     }
 
-    private fun deleteMediaFile(file: File) {
-        if (file.exists()) {
-            file.delete()
-        }
-        file.parentFile?.deleteIfEmpty()
-    }
-
     private fun writeBitmapReplacing(file: File, bitmap: Bitmap, sourceMimeType: String): String {
         require(bitmap.width > 0 && bitmap.height > 0) { "Immagine modificata non valida" }
-        val parent = requireNotNull(file.parentFile) { "Cartella media non disponibile" }
-        check(parent.exists() || parent.mkdirs()) { "Cartella media non disponibile" }
         val (format, mimeType) = compressFormatFor(sourceMimeType)
-        val temp = File(parent, "${file.name}.tmp")
-        try {
-            FileOutputStream(temp).use { output ->
+        AtomicFileHelper.writeAtomically(file) { tempFile ->
+            FileOutputStream(tempFile).use { output ->
                 require(bitmap.compress(format, IMAGE_SAVE_QUALITY, output)) { "Salvataggio immagine non riuscito" }
             }
-            require(temp.exists() && temp.length() > 0L) { "Immagine modificata vuota" }
-            temp.copyTo(file, overwrite = true)
-            require(file.exists() && file.length() > 0L) { "Sostituzione immagine non riuscita" }
-            return mimeType
-        } catch (error: Exception) {
-            throw error
-        } finally {
-            temp.delete()
         }
+        return mimeType
     }
 
     @Suppress("DEPRECATION")
@@ -429,12 +423,6 @@ class OrderMediaRepository(
             mimeType.equals("image/webp", ignoreCase = true) -> Bitmap.CompressFormat.WEBP to "image/webp"
             else -> Bitmap.CompressFormat.JPEG to MIME_TYPE_JPEG
         }
-
-    private fun File.deleteIfEmpty() {
-        if (exists() && isDirectory && listFiles().isNullOrEmpty()) {
-            delete()
-        }
-    }
 
     private companion object {
         const val MEDIA_TYPE_PHOTO = "PHOTO"

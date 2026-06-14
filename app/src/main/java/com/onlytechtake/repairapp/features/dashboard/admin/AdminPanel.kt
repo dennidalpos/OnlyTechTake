@@ -1,9 +1,13 @@
 package com.onlytechtake.repairapp.features.dashboard.admin
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,7 +15,10 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -23,17 +30,23 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.PasswordVisibilityButton
+import com.onlytechtake.repairapp.core.permissions.PermissionService
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
+import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.Field
+import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
@@ -57,10 +70,7 @@ fun AdminPanel(
     val confirmResetTextTemplate = stringResource(R.string.admin_confirm_reset_text)
     val confirmTotalResetTitle = stringResource(R.string.admin_confirm_total_reset_title)
     val confirmTotalResetText = stringResource(R.string.admin_confirm_total_reset_text)
-    val confirmArchiveTitle = stringResource(R.string.admin_confirm_archive_title)
-    val confirmArchiveText = stringResource(R.string.admin_confirm_archive_text)
-    val confirmDeleteTitle = stringResource(R.string.admin_confirm_delete_title)
-    val confirmDeleteText = stringResource(R.string.admin_confirm_delete_text)
+    val confirmDeleteAllOrdersTitle = stringResource(R.string.admin_confirm_delete_all_orders_title)
 
     var displayName by rememberSaveable { mutableStateOf(value = "") }
     var username by rememberSaveable { mutableStateOf(value = "") }
@@ -71,8 +81,9 @@ fun AdminPanel(
     var resetPasswords by remember { mutableStateOf(value = emptyMap<String, String>()) }
     
     var resetConfirmation by rememberSaveable { mutableStateOf(value = "") }
-    var archiveConfirmation by rememberSaveable { mutableStateOf(value = "") }
-    var deleteConfirmation by rememberSaveable { mutableStateOf(value = "") }
+    var ordersResetConfirmation by rememberSaveable { mutableStateOf(value = "") }
+    var ordersResetChecked by rememberSaveable { mutableStateOf(value = false) }
+    var showOrdersResetDialog by rememberSaveable { mutableStateOf(value = false) }
     
     var confirmTitle by remember { mutableStateOf<String?>(value = null) }
     var confirmText by remember { mutableStateOf(value = "") }
@@ -82,6 +93,13 @@ fun AdminPanel(
         confirmTitle = title
         confirmText = text
         confirmAction = action
+    }
+
+    val exportDatabaseLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri ->
+        uri?.let(viewModel::exportDatabase)
+    }
+    val exportOrdersXlsxLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) { uri ->
+        uri?.let(viewModel::exportOrdersXlsx)
     }
 
     if (!isAdmin) {
@@ -160,6 +178,34 @@ fun AdminPanel(
                         ) {
                             Text("${user.displayName} - ${user.username} (${user.role.name})", style = MaterialTheme.typography.titleMedium)
                             Text(if (user.active) stringResource(R.string.admin_user_active) else stringResource(R.string.admin_user_inactive))
+                            
+                            if (user.role != UserRole.ADMIN) {
+                                HorizontalDivider()
+                                Text("Permessi", style = MaterialTheme.typography.labelLarge)
+                                UserPermission.entries.forEach { permission ->
+                                    val hasPermission = user.permissions.contains(permission)
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth().clickable {
+                                            val newPermissions = if (hasPermission) user.permissions - permission else user.permissions + permission
+                                            viewModel.setUserPermissions(user.id, newPermissions)
+                                        },
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        Text(permission.name.replace("_", " ").lowercase().replaceFirstChar { it.uppercase() }, style = MaterialTheme.typography.bodySmall)
+                                        Switch(
+                                            checked = hasPermission,
+                                            onCheckedChange = { checked ->
+                                                val newPermissions = if (checked) user.permissions + permission else user.permissions - permission
+                                                viewModel.setUserPermissions(user.id, newPermissions)
+                                            },
+                                            modifier = Modifier.scale(0.7f)
+                                        )
+                                    }
+                                }
+                                HorizontalDivider()
+                            }
+
                             Field(
                                 value = resetPasswords[user.id].orEmpty(),
                                 onValueChange = { value ->
@@ -210,18 +256,12 @@ fun AdminPanel(
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                     ) {
-                        Text(stringResource(R.string.admin_total_reset), style = MaterialTheme.typography.titleMedium)
-                        Field(resetConfirmation, { resetConfirmation = it }, "Digita RESET")
+                        Text(stringResource(R.string.admin_delete_all_orders), style = MaterialTheme.typography.titleMedium)
+                        OperatorText(stringResource(R.string.admin_confirm_delete_all_orders_text))
                         TouchButton(
-                            text = stringResource(R.string.admin_total_reset),
-                            enabled = resetConfirmation == "RESET",
-                            tone = ButtonTone.DANGER,
-                            onClick = {
-                                requestConfirm(confirmTotalResetTitle, confirmTotalResetText) {
-                                    viewModel.resetAllData(resetConfirmation, onResetComplete)
-                                    resetConfirmation = ""
-                                }
-                            },
+                            text = stringResource(R.string.admin_delete_all_orders),
+                            tone = ButtonTone.WARNING,
+                            onClick = { showOrdersResetDialog = true }
                         )
                     }
                 }
@@ -232,28 +272,16 @@ fun AdminPanel(
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                     ) {
-                        Text(stringResource(R.string.admin_cleanup_orders), style = MaterialTheme.typography.titleMedium)
-                        Field(archiveConfirmation, { archiveConfirmation = it }, "Digita ARCHIVIA")
+                        Text(stringResource(R.string.admin_total_reset), style = MaterialTheme.typography.titleMedium)
+                        Field(resetConfirmation, { resetConfirmation = it }, "Digita RESET")
                         TouchButton(
-                            text = stringResource(R.string.admin_archive_discarded),
-                            enabled = archiveConfirmation == "ARCHIVIA",
-                            tone = ButtonTone.WARNING,
-                            onClick = {
-                                requestConfirm(confirmArchiveTitle, confirmArchiveText) {
-                                    viewModel.archiveDiscardedClosedOrders()
-                                    archiveConfirmation = ""
-                                }
-                            },
-                        )
-                        Field(deleteConfirmation, { deleteConfirmation = it }, "Digita CANCELLA")
-                        TouchButton(
-                            text = stringResource(R.string.admin_delete_archived),
-                            enabled = deleteConfirmation == "CANCELLA",
+                            text = stringResource(R.string.admin_total_reset),
+                            enabled = resetConfirmation == "RESET",
                             tone = ButtonTone.DANGER,
                             onClick = {
-                                requestConfirm(confirmDeleteTitle, confirmDeleteText) {
-                                    viewModel.deleteArchivedOrders()
-                                    deleteConfirmation = ""
+                                requestConfirm(confirmTotalResetTitle, confirmTotalResetText) {
+                                    viewModel.resetAllData(resetConfirmation, onResetComplete)
+                                    resetConfirmation = ""
                                 }
                             },
                         )
@@ -277,6 +305,70 @@ fun AdminPanel(
                 }
             }
         }
+    }
+
+    if (showOrdersResetDialog) {
+        AlertDialog(
+            onDismissRequest = { showOrdersResetDialog = false },
+            title = { Text(confirmDeleteAllOrdersTitle) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
+                    Text(stringResource(R.string.admin_confirm_delete_all_orders_warning), color = MaterialTheme.colorScheme.error)
+                    
+                    HorizontalDivider()
+                    
+                    Text("Azioni consigliate prima di procedere:", style = MaterialTheme.typography.labelLarge)
+                    ActionRow {
+                        TouchButton(
+                            text = "Backup DB",
+                            tone = ButtonTone.NEUTRAL,
+                            onClick = { exportDatabaseLauncher.launch("onlytechtake-pre-cleanup.db") }
+                        )
+                        TouchButton(
+                            text = "Export XLSX",
+                            tone = ButtonTone.NEUTRAL,
+                            onClick = { exportOrdersXlsxLauncher.launch("onlytechtake-pre-cleanup.xlsx") }
+                        )
+                    }
+                    
+                    HorizontalDivider()
+                    
+                    Row(
+                        modifier = Modifier.fillMaxWidth().clickable { ordersResetChecked = !ordersResetChecked },
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Checkbox(checked = ordersResetChecked, onCheckedChange = { ordersResetChecked = it })
+                        Text(stringResource(R.string.admin_confirm_delete_all_orders_checkbox), style = MaterialTheme.typography.bodySmall)
+                    }
+                    
+                    Field(
+                        value = ordersResetConfirmation,
+                        onValueChange = { ordersResetConfirmation = it },
+                        label = stringResource(R.string.admin_confirm_delete_all_orders_field)
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    enabled = ordersResetChecked && ordersResetConfirmation == "CANCELLA TUTTO",
+                    onClick = {
+                        viewModel.resetOrders(ordersResetConfirmation) {
+                            showOrdersResetDialog = false
+                            ordersResetConfirmation = ""
+                            ordersResetChecked = false
+                        }
+                    }
+                ) {
+                    Text(stringResource(R.string.confirm), color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showOrdersResetDialog = false }) {
+                    Text(stringResource(R.string.customer_cancel))
+                }
+            }
+        )
     }
 
     confirmTitle?.let { title ->

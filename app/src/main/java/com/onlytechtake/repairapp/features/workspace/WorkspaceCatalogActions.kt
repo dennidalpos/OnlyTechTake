@@ -7,12 +7,9 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.domain.workspace.OperatorInput
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 internal class WorkspaceCatalogActions(
     private val authenticatedActionRunner: AuthenticatedActionRunner,
-    private val scope: CoroutineScope,
     private val adminUserRepository: AdminUserRepository,
     private val customerRepository: CustomerRepository,
     private val catalogRepository: CatalogRepository,
@@ -27,12 +24,17 @@ internal class WorkspaceCatalogActions(
         adminUserRepository.setActive(actor, userId, active)
     }
 
+    fun setUserPermissions(userId: String, permissions: Set<com.onlytechtake.repairapp.data.local.entities.UserPermission>) = authenticatedActionRunner.run { actor ->
+        adminUserRepository.setPermissions(actor, userId, permissions)
+    }
+
     fun resetPassword(userId: String, password: String) = authenticatedActionRunner.run { actor ->
         adminUserRepository.resetPassword(actor, userId, password)
     }
 
     fun saveCustomer(input: CustomerInput, onSaved: (CustomerEntity) -> Unit = {}) {
-        scope.launch {
+        authenticatedActionRunner.runCustom { actor ->
+            com.onlytechtake.repairapp.core.permissions.PermissionService.requirePermission(actor, com.onlytechtake.repairapp.data.local.entities.UserPermission.MANAGE_CUSTOMERS)
             customerRepository.save(input).fold(
                 onSuccess = { customer ->
                     showSuccess("Cliente salvato")

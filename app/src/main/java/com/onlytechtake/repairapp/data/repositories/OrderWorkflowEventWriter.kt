@@ -270,6 +270,17 @@ internal class OrderWorkflowEventWriter(
         audit(actorUserId, AuditAction.DATA_RESET, null, null, now)
     }
 
+    suspend fun orderCleanup(actorUserId: String, operation: String, now: Long) {
+        audit(
+            actorUserId = actorUserId,
+            action = AuditAction.ORDER_CLEANUP,
+            orderId = null,
+            customerId = null,
+            now = now,
+            details = """{"operation":"$operation"}"""
+        )
+    }
+
     private suspend fun writeTimeline(event: TimelineEventEntity) {
         requireNotNull(timelineEventDao) { context.getString(R.string.timeline_writer_not_configured) }.upsert(event)
     }
@@ -312,6 +323,7 @@ internal class OrderWorkflowEventWriter(
         orderId: String?,
         customerId: String?,
         now: Long,
+        details: String? = null,
     ) {
         requireNotNull(auditLogDao) { context.getString(R.string.audit_writer_not_configured) }.upsert(
             AuditLogEntity(
@@ -320,7 +332,7 @@ internal class OrderWorkflowEventWriter(
                 actorUserId = actorUserId,
                 orderId = orderId,
                 customerId = customerId,
-                detailsJson = null,
+                detailsJson = details,
                 createdAt = now,
             ),
         )

@@ -24,7 +24,8 @@ import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventType
-import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
+import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
 import android.content.Context
@@ -61,7 +62,7 @@ class TemplateRepository(
 
     suspend fun setMessageMode(actor: AuthenticatedUser, mode: MessageMode): Result<Unit> =
         runCatching {
-            require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            PermissionService.requirePermission(actor, UserPermission.MANAGE_TEMPLATES)
             settingDao.upsert(
                 AppSettingEntity(
                     key = MESSAGE_MODE_SETTING_KEY,
@@ -95,7 +96,7 @@ class TemplateRepository(
         active: Boolean,
     ): Result<Unit> =
         runCatching {
-            require(actor.role == UserRole.ADMIN) { "Solo admin" }
+            PermissionService.requirePermission(actor, UserPermission.MANAGE_TEMPLATES)
             require(code.isNotBlank()) { "Codice template obbligatorio" }
             require(title.isNotBlank()) { "Titolo template obbligatorio" }
             require(body.isNotBlank()) { "Corpo template obbligatorio" }
@@ -132,7 +133,11 @@ class TemplateRepository(
     suspend fun prepareMessage(actor: AuthenticatedUser, orderId: String, templateCode: String): Result<PreparedMessage> =
         runCatching {
             val order = requireNotNull(orderDao.findById(orderId)) { "Commessa non trovata" }
-            require((actor.role == UserRole.ADMIN) || (order.assignedToUserId == actor.id)) { "Operatore non assegnato" }
+            if (order.assignedToUserId != actor.id) {
+                PermissionService.requirePermission(actor, UserPermission.EDIT_ALL_ORDERS)
+            } else {
+                PermissionService.requirePermission(actor, UserPermission.EDIT_OWN_ORDERS)
+            }
             val customer = requireNotNull(customerDao.findById(order.customerId)) { "Cliente non trovato" }
             val template = requireNotNull(templateDao.findActiveByCode(templateCode)) { "Template non trovato" }
             val categoryPath = categoryPath(order.categoryId)

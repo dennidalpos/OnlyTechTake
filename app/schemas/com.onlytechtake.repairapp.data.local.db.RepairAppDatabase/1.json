@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "8495b28bd5e8bc7fe0b2097a7245cbd2",
+    "identityHash": "df21b3d33e5c9b4358f7a6cf7181898b",
     "entities": [
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `displayName` TEXT NOT NULL, `username` TEXT NOT NULL, `passwordHash` TEXT NOT NULL, `passwordSalt` TEXT NOT NULL, `role` TEXT NOT NULL, `active` INTEGER NOT NULL DEFAULT 1, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `displayName` TEXT NOT NULL, `username` TEXT NOT NULL, `passwordHash` TEXT NOT NULL, `passwordSalt` TEXT NOT NULL, `role` TEXT NOT NULL, `permissions` TEXT NOT NULL, `active` INTEGER NOT NULL DEFAULT 1, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -41,6 +41,12 @@
           {
             "fieldPath": "role",
             "columnName": "role",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "permissions",
+            "columnName": "permissions",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -348,7 +354,7 @@
       },
       {
         "tableName": "repair_orders",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `orderNumber` TEXT NOT NULL, `customerId` TEXT NOT NULL, `title` TEXT NOT NULL, `categoryId` TEXT NOT NULL, `status` TEXT NOT NULL, `priority` TEXT NOT NULL, `assignedToUserId` TEXT, `createdByUserId` TEXT NOT NULL, `description` TEXT, `internalNotes` TEXT, `diagnosisOutcome` TEXT, `estimateAmountCents` INTEGER, `finalAmountCents` INTEGER, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, `closedAt` INTEGER, `closureReason` TEXT, `customerActionStatus` TEXT, `closeNote` TEXT, `closedByUserId` TEXT, `categoryPathSnapshot` TEXT, `lastCustomerContactAt` INTEGER, `deletedAt` INTEGER, `deletedByUserId` TEXT, `deleteReason` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`customerId`) REFERENCES `customers`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`categoryId`) REFERENCES `order_categories`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`assignedToUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL , FOREIGN KEY(`createdByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`deletedByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL , FOREIGN KEY(`closedByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `orderNumber` TEXT NOT NULL, `customerId` TEXT NOT NULL, `title` TEXT NOT NULL, `categoryId` TEXT NOT NULL, `status` TEXT NOT NULL, `priority` TEXT NOT NULL, `assignedToUserId` TEXT, `createdByUserId` TEXT NOT NULL, `description` TEXT, `internalNotes` TEXT, `diagnosisOutcome` TEXT, `estimateAmountCents` INTEGER, `finalAmountCents` INTEGER, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, `closedAt` INTEGER, `closureReason` TEXT, `customerActionStatus` TEXT, `closeNote` TEXT, `closedByUserId` TEXT, `categoryPathSnapshot` TEXT, `lastCustomerContactAt` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`customerId`) REFERENCES `customers`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`categoryId`) REFERENCES `order_categories`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`assignedToUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL , FOREIGN KEY(`createdByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`closedByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
         "fields": [
           {
             "fieldPath": "id",
@@ -474,21 +480,6 @@
             "fieldPath": "lastCustomerContactAt",
             "columnName": "lastCustomerContactAt",
             "affinity": "INTEGER"
-          },
-          {
-            "fieldPath": "deletedAt",
-            "columnName": "deletedAt",
-            "affinity": "INTEGER"
-          },
-          {
-            "fieldPath": "deletedByUserId",
-            "columnName": "deletedByUserId",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "deleteReason",
-            "columnName": "deleteReason",
-            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -553,15 +544,6 @@
             "createSql": "CREATE INDEX IF NOT EXISTS `index_repair_orders_createdByUserId` ON `${TABLE_NAME}` (`createdByUserId`)"
           },
           {
-            "name": "index_repair_orders_deletedByUserId",
-            "unique": false,
-            "columnNames": [
-              "deletedByUserId"
-            ],
-            "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_repair_orders_deletedByUserId` ON `${TABLE_NAME}` (`deletedByUserId`)"
-          },
-          {
             "name": "index_repair_orders_closedByUserId",
             "unique": false,
             "columnNames": [
@@ -569,15 +551,6 @@
             ],
             "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_repair_orders_closedByUserId` ON `${TABLE_NAME}` (`closedByUserId`)"
-          },
-          {
-            "name": "index_repair_orders_deletedAt",
-            "unique": false,
-            "columnNames": [
-              "deletedAt"
-            ],
-            "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_repair_orders_deletedAt` ON `${TABLE_NAME}` (`deletedAt`)"
           },
           {
             "name": "index_repair_orders_createdAt",
@@ -629,17 +602,6 @@
             "onUpdate": "NO ACTION",
             "columns": [
               "createdByUserId"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          },
-          {
-            "table": "users",
-            "onDelete": "SET NULL",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "deletedByUserId"
             ],
             "referencedColumns": [
               "id"
@@ -1776,11 +1738,77 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "login_attempts",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `username` TEXT NOT NULL, `successful` INTEGER NOT NULL, `ipAddress` TEXT, `userAgent` TEXT, `attemptAt` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "successful",
+            "columnName": "successful",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ipAddress",
+            "columnName": "ipAddress",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "userAgent",
+            "columnName": "userAgent",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "attemptAt",
+            "columnName": "attemptAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_login_attempts_username",
+            "unique": false,
+            "columnNames": [
+              "username"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_login_attempts_username` ON `${TABLE_NAME}` (`username`)"
+          },
+          {
+            "name": "index_login_attempts_attemptAt",
+            "unique": false,
+            "columnNames": [
+              "attemptAt"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_login_attempts_attemptAt` ON `${TABLE_NAME}` (`attemptAt`)"
+          }
+        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8495b28bd5e8bc7fe0b2097a7245cbd2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'df21b3d33e5c9b4358f7a6cf7181898b')"
     ]
   }
 }

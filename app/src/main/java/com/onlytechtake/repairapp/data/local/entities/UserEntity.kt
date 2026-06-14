@@ -19,6 +19,7 @@ data class UserEntity(
     val passwordHash: String,
     val passwordSalt: String,
     val role: UserRole,
+    val permissions: Set<UserPermission> = emptySet(),
     @ColumnInfo(defaultValue = "1") val active: Boolean,
     val createdAt: Long,
     val updatedAt: Long,

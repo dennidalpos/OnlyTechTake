@@ -35,12 +35,6 @@ import androidx.room.PrimaryKey
         ForeignKey(
             entity = UserEntity::class,
             parentColumns = ["id"],
-            childColumns = ["deletedByUserId"],
-            onDelete = ForeignKey.SET_NULL,
-        ),
-        ForeignKey(
-            entity = UserEntity::class,
-            parentColumns = ["id"],
             childColumns = ["closedByUserId"],
             onDelete = ForeignKey.SET_NULL,
         ),
@@ -52,9 +46,7 @@ import androidx.room.PrimaryKey
         Index(value = ["status"]),
         Index(value = ["assignedToUserId"]),
         Index(value = ["createdByUserId"]),
-        Index(value = ["deletedByUserId"]),
         Index(value = ["closedByUserId"]),
-        Index(value = ["deletedAt"]),
         Index(value = ["createdAt"]),
     ],
 )
@@ -82,7 +74,4 @@ data class RepairOrderEntity(
     val closedByUserId: String? = null,
     val categoryPathSnapshot: String? = null,
     val lastCustomerContactAt: Long? = null,
-    val deletedAt: Long? = null,
-    val deletedByUserId: String? = null,
-    val deleteReason: String? = null,
 )

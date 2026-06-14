@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.domain.auth
 
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 
 data class AuthenticatedUser(
@@ -7,6 +8,7 @@ data class AuthenticatedUser(
     val displayName: String,
     val username: String,
     val role: UserRole,
+    val permissions: Set<UserPermission> = emptySet(),
 )
 
 data class AuthState(

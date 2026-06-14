@@ -19,6 +19,7 @@ import com.onlytechtake.repairapp.data.repositories.CustomerRepository
 import com.onlytechtake.repairapp.data.repositories.DataResetRepository
 import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
 import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
+import com.onlytechtake.repairapp.data.repositories.OrderFileCleanupService
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
 import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
@@ -67,6 +68,8 @@ class WorkspaceViewModel(
     private val orderDocumentRepository: OrderDocumentRepository,
     private val generateOrderStatusPdfUseCase: GenerateOrderStatusPdfUseCase,
     private val shareDocumentIntentFactory: ShareDocumentIntentFactory,
+    private val storageStatsService: com.onlytechtake.repairapp.data.services.StorageStatsService,
+    private val orderFileCleanupService: OrderFileCleanupService,
 ) : ViewModel() {
     private val mutableUiState = MutableStateFlow(WorkspaceUiState())
     val uiState: StateFlow<WorkspaceUiState> = mutableUiState
@@ -98,7 +101,7 @@ class WorkspaceViewModel(
                 returnToIntakeAfterCategorySave = true,
             )
         }
-        navigateTo(WorkspaceDestination.CONFIG_CATEGORIES)
+        navigateTo(WorkspaceDestination.SETTINGS_CATEGORIES)
     }
 
     val currentUser = authRepository.currentUser
@@ -186,14 +189,12 @@ class WorkspaceViewModel(
         backupRepository = backupRepository,
         backupReminderPreferences = backupReminderPreferences,
         dataResetRepository = dataResetRepository,
-        orderRepository = orderRepository,
         showSuccess = ::showSuccess,
         showError = ::showError,
     )
 
     private val catalogActions = WorkspaceCatalogActions(
         authenticatedActionRunner = authenticatedActionRunner,
-        scope = viewModelScope,
         adminUserRepository = adminUserRepository,
         customerRepository = customerRepository,
         catalogRepository = catalogRepository,
@@ -208,6 +209,15 @@ class WorkspaceViewModel(
             if (_isCloudAvailable.value) {
                 _exportDestination.value = ExportDestination.CLOUD
             }
+            orderFileCleanupService.cleanupSharedCache()
+            refreshStorageStats()
+        }
+    }
+
+    fun refreshStorageStats() {
+        viewModelScope.launch {
+            val stats = storageStatsService.getStorageStats()
+            mutableUiState.update { it.copy(storageStats = stats) }
         }
     }
 
@@ -260,6 +270,9 @@ class WorkspaceViewModel(
 
     fun setUserActive(userId: String, active: Boolean) =
         catalogActions.setUserActive(userId, active)
+
+    fun setUserPermissions(userId: String, permissions: Set<com.onlytechtake.repairapp.data.local.entities.UserPermission>) =
+        catalogActions.setUserPermissions(userId, permissions)
 
     fun resetPassword(userId: String, password: String) =
         catalogActions.resetPassword(userId, password)
@@ -328,6 +341,7 @@ class WorkspaceViewModel(
     }
 
     fun togglePaymentStatus(orderId: String, isPaid: Boolean) = withUser { actor ->
+        com.onlytechtake.repairapp.core.permissions.PermissionService.requirePermission(actor, com.onlytechtake.repairapp.data.local.entities.UserPermission.MANAGE_PAYMENTS)
         orderRepository.togglePaymentStatus(actor, orderId, isPaid)
     }
 
@@ -461,11 +475,8 @@ class WorkspaceViewModel(
     fun resetAllData(confirmation: String, onReset: () -> Unit) =
         adminActions.resetAllData(confirmation, onReset)
 
-    fun archiveDiscardedClosedOrders() =
-        adminActions.archiveDiscardedClosedOrders()
-
-    fun deleteArchivedOrders() =
-        adminActions.deleteArchivedOrders()
+    fun resetOrders(confirmation: String, onReset: () -> Unit) =
+        adminActions.resetOrders(confirmation, onReset)
 
     fun onGenerateStatusPdfClicked(orderId: String, includeSignature: Boolean = true) {
         val actor = currentUser.value ?: return

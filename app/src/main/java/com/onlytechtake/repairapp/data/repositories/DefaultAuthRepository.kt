@@ -3,13 +3,14 @@ package com.onlytechtake.repairapp.data.repositories
 import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
+import com.onlytechtake.repairapp.data.local.dao.LoginAttemptDao
 import com.onlytechtake.repairapp.data.local.dao.UserDao
 import com.onlytechtake.repairapp.data.local.entities.AuditAction
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
+import com.onlytechtake.repairapp.data.local.entities.LoginAttemptEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
-import com.onlytechtake.repairapp.data.preferences.FailedLoginPreference
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.auth.AuthState
@@ -29,6 +30,7 @@ import kotlinx.coroutines.flow.onStart
 class DefaultAuthRepository(
     private val userDao: UserDao,
     private val auditLogDao: AuditLogDao,
+    private val loginAttemptDao: LoginAttemptDao,
     private val authPreferences: AuthPreferences,
     private val sessionStore: InMemorySessionStore,
     private val passwordHasher: PasswordHasher,
@@ -81,6 +83,7 @@ class DefaultAuthRepository(
             passwordHash = passwordHash.hash,
             passwordSalt = passwordHash.salt,
             role = UserRole.ADMIN,
+            permissions = com.onlytechtake.repairapp.data.local.entities.UserPermission.entries.toSet(),
             active = true,
             createdAt = now,
             updatedAt = now,
@@ -123,9 +126,10 @@ class DefaultAuthRepository(
         }
 
         val authenticatedUser = user.toAuthenticatedUser()
-        authPreferences.clearFailedLoginState(normalizedUsername)
         sessionStore.setCurrentUser(authenticatedUser, now)
         authPreferences.recordLogin(user.id, now)
+        loginAttemptDao.upsert(LoginAttemptEntity(username = normalizedUsername, successful = true, attemptAt = now))
+        
         if (user.role == UserRole.ADMIN) {
             writeAudit(AuditAction.ADMIN_LOGIN, user.id, now)
         }
@@ -140,6 +144,7 @@ class DefaultAuthRepository(
             displayName = "Demo Admin",
             username = "admin",
             role = UserRole.ADMIN,
+            permissions = com.onlytechtake.repairapp.data.local.entities.UserPermission.entries.toSet(),
         )
         sessionStore.setCurrentUser(demoUser, clockMillis())
         return LoginResult.Success(demoUser)
@@ -174,6 +179,7 @@ class DefaultAuthRepository(
             displayName = displayName,
             username = username,
             role = role,
+            permissions = permissions,
         )
 
     private fun inactivityTicker(): Flow<Long> =
@@ -185,27 +191,13 @@ class DefaultAuthRepository(
         }
 
     private suspend fun isLockedOut(username: String, now: Long): Boolean {
-        val state = authPreferences.failedLoginState(username) ?: return false
-        val lockedUntil = state.lockedUntilMillis ?: return false
-        if (now < lockedUntil) return true
-        authPreferences.clearFailedLoginState(username)
-        return false
+        val since = now - AuthPolicy.LOGIN_LOCKOUT_MILLIS
+        val failedAttempts = loginAttemptDao.countFailedAttempts(username, since)
+        return failedAttempts >= AuthPolicy.MAX_FAILED_LOGIN_ATTEMPTS
     }
 
     private suspend fun recordFailedAttempt(username: String, now: Long) {
-        val previous = authPreferences.failedLoginState(username)
-        val attempts = (previous?.attempts ?: 0) + 1
-        authPreferences.recordFailedLoginState(
-            username,
-            FailedLoginPreference(
-                attempts = attempts,
-                lockedUntilMillis = if (attempts >= AuthPolicy.MAX_FAILED_LOGIN_ATTEMPTS) {
-                    now + AuthPolicy.LOGIN_LOCKOUT_MILLIS
-                } else {
-                    previous?.lockedUntilMillis
-                },
-            ),
-        )
+        loginAttemptDao.upsert(LoginAttemptEntity(username = username, successful = false, attemptAt = now))
     }
 
     private companion object {

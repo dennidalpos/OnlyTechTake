@@ -132,8 +132,5 @@ class WorkspaceUiHelpersTest {
         updatedAt = 0L,
         closedAt = null,
         closureReason = null,
-        deletedAt = null,
-        deletedByUserId = null,
-        deleteReason = null,
     )
 }

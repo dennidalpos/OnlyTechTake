@@ -87,7 +87,7 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel, isAdmin: Boole
                 BackupReminderCard(
                     settings = backupReminderSettings,
                     onRunBackup = { exportZipLauncher.launch("onlytechtake-backup.zip") },
-                    onOpenSettings = { viewModel.navigateTo(WorkspaceDestination.CONFIG_EXPORT) }
+                    onOpenSettings = { viewModel.navigateTo(WorkspaceDestination.SETTINGS_BACKUP) }
                 )
             }
             queues.forEach { queue ->

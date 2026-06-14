@@ -49,7 +49,7 @@
     <string name="dashboard_customers">Clienti</string>
     <string name="dashboard_order">Commessa</string>
     <string name="dashboard_orders">Commesse</string>
-    <string name="dashboard_config">Config</string>
+    <string name="dashboard_config">Impostazioni</string>
     <string name="dashboard_admin">Admin</string>
     <string name="logout">Logout</string>
 
@@ -228,15 +228,15 @@
     <string name="admin_confirm_total_reset_title">Reset totale?</string>
     <string name="admin_confirm_total_reset_text">Questa azione elimina i dati locali dell\'app e riporta al primo setup admin.</string>
     <string name="admin_cleanup_orders">Pulizia commesse</string>
-    <string name="admin_archive_discarded">Archivia scartate</string>
-    <string name="admin_confirm_archive_title">Archiviare scartate?</string>
-    <string name="admin_confirm_archive_text">Le commesse rifiutate, annullate o non riparabili verranno archiviate.</string>
-    <string name="admin_delete_archived">Cancella archiviate</string>
-    <string name="admin_confirm_delete_title">Cancellare archiviate?</string>
-    <string name="admin_confirm_delete_text">Le commesse gia\' archiviate e i relativi file verranno eliminati.</string>
+    <string name="admin_delete_all_orders">Cancella tutte le commesse</string>
+    <string name="admin_confirm_delete_all_orders_title">Cancellazione totale commesse?</string>
+    <string name="admin_confirm_delete_all_orders_text">Tutte le commesse, timeline, messaggi, foto, firme e documenti verranno eliminati permanentemente.</string>
+    <string name="admin_confirm_delete_all_orders_warning">ATTENZIONE: Questa azione non può essere annullata. Assicurati di aver eseguito un backup se desideri conservare i dati.</string>
+    <string name="admin_confirm_delete_all_orders_checkbox">Confermo la cancellazione permanente di tutti i dati delle commesse</string>
+    <string name="admin_confirm_delete_all_orders_field">Digita CANCELLA TUTTO per confermare</string>
     <string name="admin_author">Autore</string>
 
-    <string name="config_back">Torna a Config</string>
+    <string name="config_back">Torna a Impostazioni</string>
     <string name="config_hub_categories_title">Categorie</string>
     <string name="config_hub_categories_subtitle">Catalogo commesse</string>
     <string name="config_hub_templates_title">Template</string>
@@ -315,6 +315,20 @@
     <string name="config_backup_confirm_restore_zip_text">Il backup ZIP sostituira\' database e file locali dell\'app. Dopo il ripristino sara\' richiesto un nuovo login.</string>
     <string name="config_backup_orders_export_title">Esportazione Commesse</string>
     <string name="config_backup_orders_export_desc">Esporta l\'elenco di tutte le commesse in un file Excel leggibile.</string>
+
+    <string name="storage_title">Archiviazione</string>
+    <string name="storage_free_device">Spazio libero dispositivo</string>
+    <string name="storage_app_used">Spazio usato dall\'app</string>
+    <string name="storage_db_size">Database</string>
+    <string name="storage_media_size">Media e Foto</string>
+    <string name="storage_docs_size">Documenti e Firme</string>
+    <string name="storage_cache_size">Cache e Staging</string>
+    <string name="storage_status_ok">Stato: OK</string>
+    <string name="storage_status_warning">Stato: ATTENZIONE</string>
+    <string name="storage_status_critical">Stato: CRITICO</string>
+    <string name="storage_status_blocked">Stato: BLOCCO SCRITTURA</string>
+    <string name="storage_refresh">Aggiorna</string>
+    <string name="storage_cleanup_cache">Svuota cache</string>
 
     <string name="catalog_path_separator">\u0020&gt;\u0020</string>
     <string name="catalog_error_only_admin_modify">Solo admin puo\' modificare categorie esistenti</string>

@@ -12,6 +12,7 @@ import com.onlytechtake.repairapp.data.repositories.CatalogRepository
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentFileStorage
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
 import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
+import com.onlytechtake.repairapp.domain.storage.StoragePolicy
 import kotlinx.coroutines.flow.firstOrNull
 import java.util.UUID
 
@@ -30,6 +31,7 @@ class GenerateOrderStatusPdfUseCase(
         userId: String,
         includeCustomerSignature: Boolean = true,
     ): Result<OrderDocumentEntity> = runCatching {
+        StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
         val detail = workflowRepository.observeOrderDetail(orderId).firstOrNull()
             ?: throw IllegalStateException("Commessa non trovata")
         

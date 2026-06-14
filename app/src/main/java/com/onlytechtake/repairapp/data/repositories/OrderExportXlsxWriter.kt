@@ -79,8 +79,6 @@ internal class OrderExportXlsxWriter(
             row.updatedAt.formatTime(),
             row.closedAt.formatTime(),
             row.closureReason.label(),
-            row.deletedAt.formatTime(),
-            row.deleteReason.orEmpty(),
         )
 
     private fun Long?.formatTime(): String =
@@ -176,8 +174,6 @@ private val headers = listOf(
     "Aggiornata",
     "Chiusa",
     "Motivo chiusura",
-    "Archiviata",
-    "Motivo archiviazione",
 )
 
 private const val contentTypesXml = """
