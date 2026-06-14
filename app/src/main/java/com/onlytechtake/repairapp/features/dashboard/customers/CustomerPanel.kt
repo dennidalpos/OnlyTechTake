@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.features.dashboard.customers
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
@@ -28,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.activity.compose.BackHandler
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
@@ -138,153 +141,159 @@ fun CustomerPanel(viewModel: WorkspaceViewModel) {
         showForm = true
     }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .imePadding(),
-        contentPadding = PaddingValues(DashboardSpacing.screenPadding),
-        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.TopCenter,
     ) {
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                SectionTitle(stringResource(R.string.customer_title))
-                TouchButton(
-                    text = stringResource(R.string.customer_new),
-                    testTag = RepairAppTestTags.CustomerNewButton,
-                    onClick = ::openNewCustomerForm,
-                )
-            }
-        }
-
-        item {
-            StandardCard {
-                Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .widthIn(max = DashboardSpacing.maxContentWidth)
+                .imePadding(),
+            contentPadding = PaddingValues(DashboardSpacing.screenPadding),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
+        ) {
+            item {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    OutlinedTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = uiState.customerSearchQuery,
-                        onValueChange = viewModel::setCustomerSearchQuery,
-                        label = { Text(stringResource(R.string.customer_search_label)) },
-                        singleLine = true,
-                        shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
-                        colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-                        ),
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Search,
-                            capitalization = KeyboardCapitalization.Words
-                        ),
-                        keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
+                    SectionTitle(stringResource(R.string.customer_title))
+                    TouchButton(
+                        text = stringResource(R.string.customer_new),
+                        testTag = RepairAppTestTags.CustomerNewButton,
+                        onClick = ::openNewCustomerForm,
                     )
                 }
             }
-        }
 
-        if (showForm) {
             item {
-                StandardCard(highlight = true) {
+                StandardCard {
                     Column(
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                     ) {
-                        Text(
-                            text = if (editingCustomerId == null) stringResource(R.string.customer_new) else stringResource(R.string.customer_edit),
-                            style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                        CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = { isBusiness = it })
-                        if (isBusiness) {
-                            Field(
-                                companyName,
-                                { companyName = it },
-                                stringResource(R.string.customer_field_company_name),
-                                required = true,
-                                showError = companyName.isBlank(),
-                                singleLine = true,
-                                capitalization = KeyboardCapitalization.Words,
-                                testTag = RepairAppTestTags.CustomerCompanyNameField,
-                            )
-                            Field(vatNumber, { vatNumber = it }, stringResource(R.string.customer_field_vat_number), showOptional = true, capitalization = KeyboardCapitalization.Characters, testTag = RepairAppTestTags.CustomerVatNumberField)
-                        } else {
-                            Field(
-                                firstName,
-                                { firstName = it },
-                                stringResource(R.string.customer_field_first_name),
-                                required = true,
-                                showError = firstName.isBlank(),
-                                singleLine = true,
-                                capitalization = KeyboardCapitalization.Words,
-                                testTag = RepairAppTestTags.CustomerFirstNameField,
-                            )
-                            Field(
-                                lastName,
-                                { lastName = it },
-                                stringResource(R.string.customer_field_last_name),
-                                required = true,
-                                showError = lastName.isBlank(),
-                                singleLine = true,
-                                capitalization = KeyboardCapitalization.Words,
-                                testTag = RepairAppTestTags.CustomerLastNameField,
-                            )
-                        }
-                        Field(taxCode, { taxCode = it }, stringResource(R.string.customer_field_tax_code), showOptional = true, capitalization = KeyboardCapitalization.Characters, testTag = RepairAppTestTags.CustomerTaxCodeField)
-                        Field(
-                            phone,
-                            { phone = it },
-                            stringResource(R.string.customer_field_phone),
-                            required = true,
-                            showError = phone.isBlank() && email.isBlank(),
+                        OutlinedTextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = uiState.customerSearchQuery,
+                            onValueChange = viewModel::setCustomerSearchQuery,
+                            label = { Text(stringResource(R.string.customer_search_label)) },
                             singleLine = true,
-                            keyboardType = KeyboardType.Phone,
-                            testTag = RepairAppTestTags.CustomerPhoneField,
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
+                            colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                            ),
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Search,
+                                capitalization = KeyboardCapitalization.Words
+                            ),
+                            keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
                         )
-                        Field(
-                            email,
-                            { email = it },
-                            stringResource(R.string.customer_field_email),
-                            required = true,
-                            showError = phone.isBlank() && email.isBlank(),
-                            singleLine = true,
-                            keyboardType = KeyboardType.Email,
-                            capitalization = KeyboardCapitalization.None,
-                            testTag = RepairAppTestTags.CustomerEmailField,
-                        )
-                        Field(address, { address = it }, stringResource(R.string.customer_field_address), showOptional = true, testTag = RepairAppTestTags.CustomerAddressField)
-                        NoteFieldWithDialog(notes, { notes = it }, testTag = RepairAppTestTags.CustomerNotesField)
-                        ActionRow {
-                            TouchButton(
-                                text = if (editingCustomerId == null) stringResource(R.string.customer_save) else stringResource(R.string.customer_update),
-                                enabled = canSave,
-                                testTag = RepairAppTestTags.CustomerSaveButton,
-                                onClick = { confirmSave = true }
+                    }
+                }
+            }
+
+            if (showForm) {
+                item {
+                    StandardCard(highlight = true) {
+                        Column(
+                            modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                        ) {
+                            Text(
+                                text = if (editingCustomerId == null) stringResource(R.string.customer_new) else stringResource(R.string.customer_edit),
+                                style = MaterialTheme.typography.titleLarge,
+                                color = MaterialTheme.colorScheme.primary
                             )
+                            CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = { isBusiness = it })
+                            if (isBusiness) {
+                                Field(
+                                    companyName,
+                                    { companyName = it },
+                                    stringResource(R.string.customer_field_company_name),
+                                    required = true,
+                                    showError = companyName.isBlank(),
+                                    singleLine = true,
+                                    capitalization = KeyboardCapitalization.Words,
+                                    testTag = RepairAppTestTags.CustomerCompanyNameField,
+                                )
+                                Field(vatNumber, { vatNumber = it }, stringResource(R.string.customer_field_vat_number), showOptional = true, capitalization = KeyboardCapitalization.Characters, testTag = RepairAppTestTags.CustomerVatNumberField)
+                            } else {
+                                Field(
+                                    firstName,
+                                    { firstName = it },
+                                    stringResource(R.string.customer_field_first_name),
+                                    required = true,
+                                    showError = firstName.isBlank(),
+                                    singleLine = true,
+                                    capitalization = KeyboardCapitalization.Words,
+                                    testTag = RepairAppTestTags.CustomerFirstNameField,
+                                )
+                                Field(
+                                    lastName,
+                                    { lastName = it },
+                                    stringResource(R.string.customer_field_last_name),
+                                    required = true,
+                                    showError = lastName.isBlank(),
+                                    singleLine = true,
+                                    capitalization = KeyboardCapitalization.Words,
+                                    testTag = RepairAppTestTags.CustomerLastNameField,
+                                )
+                            }
+                            Field(taxCode, { taxCode = it }, stringResource(R.string.customer_field_tax_code), showOptional = true, capitalization = KeyboardCapitalization.Characters, testTag = RepairAppTestTags.CustomerTaxCodeField)
+                            Field(
+                                phone,
+                                { phone = it },
+                                stringResource(R.string.customer_field_phone),
+                                required = true,
+                                showError = phone.isBlank() && email.isBlank(),
+                                singleLine = true,
+                                keyboardType = KeyboardType.Phone,
+                                testTag = RepairAppTestTags.CustomerPhoneField,
+                            )
+                            Field(
+                                email,
+                                { email = it },
+                                stringResource(R.string.customer_field_email),
+                                required = true,
+                                showError = phone.isBlank() && email.isBlank(),
+                                singleLine = true,
+                                keyboardType = KeyboardType.Email,
+                                capitalization = KeyboardCapitalization.None,
+                                testTag = RepairAppTestTags.CustomerEmailField,
+                            )
+                            Field(address, { address = it }, stringResource(R.string.customer_field_address), showOptional = true, testTag = RepairAppTestTags.CustomerAddressField)
+                            NoteFieldWithDialog(notes, { notes = it }, testTag = RepairAppTestTags.CustomerNotesField)
+                            ActionRow {
+                                TouchButton(
+                                    text = if (editingCustomerId == null) stringResource(R.string.customer_save) else stringResource(R.string.customer_update),
+                                    enabled = canSave,
+                                    testTag = RepairAppTestTags.CustomerSaveButton,
+                                    onClick = { confirmSave = true }
+                                )
+                            }
                         }
                     }
                 }
             }
-        }
 
-        item { SectionTitle(if (uiState.customerSearchQuery.isBlank()) stringResource(R.string.customer_recent) else stringResource(R.string.customer_search_results)) }
-        if (customers.isEmpty()) {
-            item {
-                CustomerEmptyState(
-                    hasQuery = uiState.customerSearchQuery.isNotBlank(),
-                    onNewCustomer = ::openNewCustomerForm,
-                )
-            }
-        } else {
-            items(customers) { customer ->
-                CustomerCard(
-                    customer = customer,
-                ) {
-                    editCustomer(customer)
+            item { SectionTitle(if (uiState.customerSearchQuery.isBlank()) stringResource(R.string.customer_recent) else stringResource(R.string.customer_search_results)) }
+            if (customers.isEmpty()) {
+                item {
+                    CustomerEmptyState(
+                        hasQuery = uiState.customerSearchQuery.isNotBlank(),
+                        onNewCustomer = ::openNewCustomerForm,
+                    )
+                }
+            } else {
+                items(customers) { customer ->
+                    CustomerCard(
+                        customer = customer,
+                    ) {
+                        editCustomer(customer)
+                    }
                 }
             }
         }

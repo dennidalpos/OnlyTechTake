@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.features.dashboard.orders
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
@@ -53,81 +55,87 @@ fun OrdersPanel(viewModel: WorkspaceViewModel) {
     val context = LocalContext.current
     var showFilterDialog by rememberSaveable { mutableStateOf(false) }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .imePadding(),
-        contentPadding = PaddingValues(DashboardSpacing.screenPadding),
-        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.TopCenter,
     ) {
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                SectionTitle(stringResource(R.string.orders_title))
-                TouchButton(
-                    text = stringResource(R.string.orders_filter_title),
-                    tone = if (uiState.orderFilter.hasActiveFilter()) ButtonTone.INFO else ButtonTone.NEUTRAL,
-                    onClick = { showFilterDialog = true }
-                )
-            }
-        }
-
-        if (uiState.orderFilter.hasActiveFilter()) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .widthIn(max = DashboardSpacing.maxContentWidth)
+                .imePadding(),
+            contentPadding = PaddingValues(DashboardSpacing.screenPadding),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
+        ) {
             item {
-                ActiveFilterInfo(uiState.orderFilter)
-            }
-        }
-
-        if (orderListItems.isEmpty()) {
-            item {
-                Text(stringResource(R.string.orders_empty_filter), style = MaterialTheme.typography.bodyMedium)
-            }
-        } else {
-            items(orderListItems) { item ->
-                val order = item.order
-                StandardCard(
-                    modifier = Modifier
-                        .testTag(RepairAppTestTags.orderCard(order.id)),
-                    onClick = {
-                        viewModel.selectOrder(order.id)
-                    },
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column(
-                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+                    SectionTitle(stringResource(R.string.orders_title))
+                    TouchButton(
+                        text = stringResource(R.string.orders_filter_title),
+                        tone = if (uiState.orderFilter.hasActiveFilter()) ButtonTone.INFO else ButtonTone.NEUTRAL,
+                        onClick = { showFilterDialog = true }
+                    )
+                }
+            }
+
+            if (uiState.orderFilter.hasActiveFilter()) {
+                item {
+                    ActiveFilterInfo(uiState.orderFilter)
+                }
+            }
+
+            if (orderListItems.isEmpty()) {
+                item {
+                    Text(stringResource(R.string.orders_empty_filter), style = MaterialTheme.typography.bodyMedium)
+                }
+            } else {
+                items(orderListItems) { item ->
+                    val order = item.order
+                    StandardCard(
+                        modifier = Modifier
+                            .testTag(RepairAppTestTags.orderCard(order.id)),
+                        onClick = {
+                            viewModel.selectOrder(order.id)
+                        },
                     ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.Top
+                        Column(
+                            modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
                         ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.Top
+                            ) {
+                                Text(
+                                    "${order.orderNumber} - ${order.title}",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    modifier = Modifier.weight(1f)
+                                )
+                                Text(
+                                    formatUiDateTime(order.updatedAt),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            OrderStatusStepper(status = order.status, compact = true)
                             Text(
-                                "${order.orderNumber} - ${order.title}",
-                                style = MaterialTheme.typography.titleMedium,
-                                modifier = Modifier.weight(1f)
+                                text = stringResource(
+                                    R.string.orders_customer_label,
+                                    item.customer?.displayName(context).orEmpty(),
+                                ),
+                                style = MaterialTheme.typography.bodyMedium,
                             )
                             Text(
-                                formatUiDateTime(order.updatedAt),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                text = stringResource(R.string.orders_next_action_label, nextActionLabel(order)),
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.secondary
                             )
                         }
-                        OrderStatusStepper(status = order.status, compact = true)
-                        Text(
-                            text = stringResource(
-                                R.string.orders_customer_label,
-                                item.customer?.displayName(context).orEmpty(),
-                            ),
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                        Text(
-                            text = stringResource(R.string.orders_next_action_label, nextActionLabel(order)),
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.secondary
-                        )
                     }
                 }
             }

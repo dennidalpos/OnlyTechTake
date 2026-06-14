@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -46,80 +47,85 @@ fun HomePanel(summary: AppSummary, viewModel: WorkspaceViewModel, isAdmin: Boole
     }
     val showBackupReminder = isAdmin && viewModel.isBackupReminderDue(backupReminderSettings)
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(DashboardSpacing.screenPadding),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.TopCenter,
     ) {
-        val showBanner = BuildConfig.IS_DEMO_VERSION || DemoMode.isEnabled
-        if (showBanner) {
-            val bannerText = if (DemoMode.isEnabled) {
-                stringResource(R.string.demo_mode_banner)
-            } else {
-                stringResource(R.string.demo_version_banner)
-            }
-            DemoBanner(bannerText)
-        }
-        SectionTitle(stringResource(R.string.home_title))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .widthIn(max = DashboardSpacing.maxContentWidth)
+                .verticalScroll(rememberScrollState())
+                .padding(DashboardSpacing.screenPadding),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
         ) {
-            MetricCard(stringResource(R.string.home_metric_users), summary.userCount.toString(), Modifier.weight(1f))
-            MetricCard(stringResource(R.string.home_metric_customers), summary.customerCount.toString(), Modifier.weight(1f))
-            MetricCard(stringResource(R.string.home_metric_active), summary.activeOrderCount.toString(), Modifier.weight(1f))
-        }
-        TouchButton(
-            modifier = Modifier.fillMaxWidth(),
-            text = stringResource(R.string.home_new_order),
-            onClick = viewModel::openNewOrder,
-        )
-        if (showBackupReminder) {
-            BackupReminderCard(
-                settings = backupReminderSettings,
-                onRunBackup = { exportZipLauncher.launch("onlytechtake-backup.zip") },
-            ) {
-                viewModel.navigateTo(WorkspaceDestination.CONFIG_EXPORT)
+            val showBanner = BuildConfig.IS_DEMO_VERSION || DemoMode.isEnabled
+            if (showBanner) {
+                val bannerText = if (DemoMode.isEnabled) {
+                    stringResource(R.string.demo_mode_banner)
+                } else {
+                    stringResource(R.string.demo_version_banner)
+                }
+                DemoBanner(bannerText)
             }
-        }
-        queues.forEach { queue ->
-            StandardCard {
-                Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                ) {
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                        Text(queue.title, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.secondary)
-                        androidx.compose.material3.Badge(
-                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                        ) {
-                            Text(queue.orders.size.toString(), modifier = Modifier.padding(4.dp))
+            SectionTitle(stringResource(R.string.home_title))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+            ) {
+                MetricCard(stringResource(R.string.home_metric_users), summary.userCount.toString(), Modifier.weight(1f))
+                MetricCard(stringResource(R.string.home_metric_customers), summary.customerCount.toString(), Modifier.weight(1f))
+                MetricCard(stringResource(R.string.home_metric_active), summary.activeOrderCount.toString(), Modifier.weight(1f))
+            }
+            TouchButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(R.string.home_new_order),
+                onClick = viewModel::openNewOrder,
+            )
+            if (showBackupReminder) {
+                BackupReminderCard(
+                    settings = backupReminderSettings,
+                    onRunBackup = { exportZipLauncher.launch("onlytechtake-backup.zip") },
+                    onOpenSettings = { viewModel.navigateTo(WorkspaceDestination.CONFIG_EXPORT) }
+                )
+            }
+            queues.forEach { queue ->
+                StandardCard {
+                    Column(
+                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                    ) {
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                            Text(queue.title, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.secondary)
+                            androidx.compose.material3.Badge(
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                            ) {
+                                Text(queue.orders.size.toString(), modifier = Modifier.padding(4.dp))
+                            }
                         }
-                    }
-                    if (queue.orders.isEmpty()) {
-                        Text(stringResource(R.string.home_empty_queue), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    } else {
-                        queue.orders.take(3).forEach { order ->
-                            TouchButton(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = "${order.orderNumber} - ${order.title}",
-                                tone = ButtonTone.NEUTRAL,
-                                onClick = { viewModel.selectOrder(order.id) },
-                            )
+                        if (queue.orders.isEmpty()) {
+                            Text(stringResource(R.string.home_empty_queue), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        } else {
+                            queue.orders.take(3).forEach { order ->
+                                TouchButton(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = "${order.orderNumber} - ${order.title}",
+                                    tone = ButtonTone.NEUTRAL,
+                                    onClick = { viewModel.selectOrder(order.id) },
+                                )
+                            }
                         }
+                        TouchButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(R.string.home_open_queue),
+                            onClick = {
+                                viewModel.setFilter(queueFilter(queue))
+                                viewModel.navigateTo(WorkspaceDestination.ORDERS)
+                            },
+                        )
                     }
-                    TouchButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.home_open_queue),
-                        onClick = {
-                            viewModel.setFilter(queueFilter(queue))
-                            viewModel.navigateTo(WorkspaceDestination.ORDERS)
-                        },
-                    )
                 }
             }
         }

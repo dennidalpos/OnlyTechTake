@@ -150,6 +150,7 @@ fun DashboardScreen(
                 navigationIcon = {
                     if (currentDestination != WorkspaceDestination.HOME.name) {
                         IconButton(
+                            modifier = Modifier.testTag(RepairAppTestTags.ConfigBackButton),
                             onClick = {
                                 if (isFormDirty) {
                                     pendingDestination = null // Pop back
@@ -210,14 +211,12 @@ fun DashboardScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .consumeWindowInsets(paddingValues)
-                .imePadding(),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .imePadding()
         ) {
             uiState.message?.let { message ->
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .widthIn(max = DashboardSpacing.maxContentWidth)
                         .padding(horizontal = 16.dp, vertical = 4.dp)
                         .semantics { liveRegion = LiveRegionMode.Polite },
                     text = message.text,
@@ -232,10 +231,7 @@ fun DashboardScreen(
                 isAdmin = isAdmin,
                 onAppDataRestored = onAppDataRestored,
                 onLogout = onLogout,
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .widthIn(max = DashboardSpacing.maxContentWidth),
+                modifier = Modifier.weight(1f)
             )
         }
     }

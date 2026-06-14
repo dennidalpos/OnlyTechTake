@@ -1,10 +1,13 @@
 package com.onlytechtake.repairapp.features.dashboard.admin
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
@@ -18,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.platform.LocalUriHandler
@@ -85,184 +89,191 @@ fun AdminPanel(
         return
     }
 
-    LazyColumn(
+    Box(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(DashboardSpacing.screenPadding),
-        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
+        contentAlignment = Alignment.TopCenter,
     ) {
-        item {
-            SectionTitle(stringResource(R.string.dashboard_admin))
-            StandardCard(highlight = true) {
-                Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                ) {
-                    Text(stringResource(R.string.admin_create_operator), style = MaterialTheme.typography.titleMedium)
-                    Field(displayName, { displayName = it }, stringResource(R.string.customer_field_first_name))
-                    Field(username, { username = it }, "Username")
-                    Field(
-                        value = password,
-                        onValueChange = { password = it },
-                        label = stringResource(R.string.admin_field_temp_password),
-                        singleLine = true,
-                        keyboardType = KeyboardType.Password,
-                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                        trailingIcon = {
-                            PasswordVisibilityButton(
-                                visible = passwordVisible,
-                                onVisibleChange = { passwordVisible = it },
-                                modifier = Modifier.focusProperties { canFocus = false }
-                            )
-                        },
-                    )
-                    TouchButton(
-                        text = stringResource(R.string.admin_create_operator),
-                        enabled = displayName.isNotBlank() && username.isNotBlank() && password.isNotBlank(),
-                        onClick = {
-                            requestConfirm(confirmCreateTitle, confirmCreateText) {
-                                viewModel.createOperator(displayName, username, password)
-                                displayName = ""
-                                username = ""
-                                password = ""
-                                passwordVisible = false
-                            }
-                        },
-                    )
-                }
-            }
-        }
-        item { SectionTitle(stringResource(R.string.admin_users_title)) }
-        if (users.isEmpty()) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .widthIn(max = DashboardSpacing.maxContentWidth),
+            contentPadding = PaddingValues(DashboardSpacing.screenPadding),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
+        ) {
             item {
-                StandardCard {
-                    Column(modifier = Modifier.padding(DashboardSpacing.cardPadding)) {
-                        Text(stringResource(R.string.admin_no_users), style = MaterialTheme.typography.bodyMedium)
+                SectionTitle(stringResource(R.string.dashboard_admin))
+                StandardCard(highlight = true) {
+                    Column(
+                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                    ) {
+                        Text(stringResource(R.string.admin_create_operator), style = MaterialTheme.typography.titleMedium)
+                        Field(displayName, { displayName = it }, stringResource(R.string.customer_field_first_name))
+                        Field(username, { username = it }, "Username")
+                        Field(
+                            value = password,
+                            onValueChange = { password = it },
+                            label = stringResource(R.string.admin_field_temp_password),
+                            singleLine = true,
+                            keyboardType = KeyboardType.Password,
+                            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                            trailingIcon = {
+                                PasswordVisibilityButton(
+                                    visible = passwordVisible,
+                                    onVisibleChange = { passwordVisible = it },
+                                    modifier = Modifier.focusProperties { canFocus = false },
+                                )
+                            },
+                        )
+                        TouchButton(
+                            text = stringResource(R.string.admin_create_operator),
+                            enabled = displayName.isNotBlank() && username.isNotBlank() && password.isNotBlank(),
+                            onClick = {
+                                requestConfirm(confirmCreateTitle, confirmCreateText) {
+                                    viewModel.createOperator(displayName, username, password)
+                                    displayName = ""
+                                    username = ""
+                                    password = ""
+                                    passwordVisible = false
+                                }
+                            },
+                        )
                     }
                 }
             }
-        } else {
-            items(users, key = { it.id }) { user ->
-                var resetPasswordVisible by rememberSaveable(user.id) { mutableStateOf(value = false) }
+            item { SectionTitle(stringResource(R.string.admin_users_title)) }
+            if (users.isEmpty()) {
+                item {
+                    StandardCard {
+                        Column(modifier = Modifier.padding(DashboardSpacing.cardPadding)) {
+                            Text(stringResource(R.string.admin_no_users), style = MaterialTheme.typography.bodyMedium)
+                        }
+                    }
+                }
+            } else {
+                items(users, key = { it.id }) { user ->
+                    var resetPasswordVisible by rememberSaveable(user.id) { mutableStateOf(value = false) }
+                    StandardCard {
+                        Column(
+                            modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                        ) {
+                            Text("${user.displayName} - ${user.username} (${user.role.name})", style = MaterialTheme.typography.titleMedium)
+                            Text(if (user.active) stringResource(R.string.admin_user_active) else stringResource(R.string.admin_user_inactive))
+                            Field(
+                                value = resetPasswords[user.id].orEmpty(),
+                                onValueChange = { value ->
+                                    resetPasswords += (user.id to value)
+                                },
+                                label = stringResource(R.string.admin_field_temp_password),
+                                singleLine = true,
+                                keyboardType = KeyboardType.Password,
+                                visualTransformation = if (resetPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                                trailingIcon = {
+                                    PasswordVisibilityButton(
+                                        visible = resetPasswordVisible,
+                                        onVisibleChange = { resetPasswordVisible = it },
+                                        modifier = Modifier.focusProperties { canFocus = false },
+                                    )
+                                },
+                            )
+                            ActionRow {
+                                TouchButton(
+                                    text = if (user.active) stringResource(R.string.admin_user_deactivate) else stringResource(R.string.admin_user_activate),
+                                    tone = if (user.active) ButtonTone.DANGER else ButtonTone.SUCCESS,
+                                    onClick = {
+                                        requestConfirm(confirmStatusTitle, confirmStatusTextTemplate.format(user.displayName)) {
+                                            viewModel.setUserActive(user.id, !user.active)
+                                        }
+                                    },
+                                )
+                                TouchButton(
+                                    text = stringResource(R.string.admin_reset_password),
+                                    enabled = resetPasswords[user.id]?.isNotBlank() == true,
+                                    tone = ButtonTone.NEUTRAL,
+                                    onClick = {
+                                        val resetPassword = resetPasswords[user.id].orEmpty()
+                                        requestConfirm(confirmResetTitle, confirmResetTextTemplate.format(user.displayName)) {
+                                            viewModel.resetPassword(user.id, resetPassword)
+                                            resetPasswords -= user.id
+                                        }
+                                    },
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            item {
                 StandardCard {
                     Column(
                         modifier = Modifier.padding(DashboardSpacing.cardPadding),
                         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                     ) {
-                        Text("${user.displayName} - ${user.username} (${user.role.name})", style = MaterialTheme.typography.titleMedium)
-                        Text(if (user.active) stringResource(R.string.admin_user_active) else stringResource(R.string.admin_user_inactive))
-                        Field(
-                            value = resetPasswords[user.id].orEmpty(),
-                            onValueChange = { value ->
-                                resetPasswords += (user.id to value)
-                            },
-                            label = stringResource(R.string.admin_field_temp_password),
-                            singleLine = true,
-                            keyboardType = KeyboardType.Password,
-                            visualTransformation = if (resetPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                            trailingIcon = {
-                                PasswordVisibilityButton(
-                                    visible = resetPasswordVisible,
-                                    onVisibleChange = { resetPasswordVisible = it },
-                                    modifier = Modifier.focusProperties { canFocus = false },
-                                )
+                        Text(stringResource(R.string.admin_total_reset), style = MaterialTheme.typography.titleMedium)
+                        Field(resetConfirmation, { resetConfirmation = it }, "Digita RESET")
+                        TouchButton(
+                            text = stringResource(R.string.admin_total_reset),
+                            enabled = resetConfirmation == "RESET",
+                            tone = ButtonTone.DANGER,
+                            onClick = {
+                                requestConfirm(confirmTotalResetTitle, confirmTotalResetText) {
+                                    viewModel.resetAllData(resetConfirmation, onResetComplete)
+                                    resetConfirmation = ""
+                                }
                             },
                         )
-                        ActionRow {
-                            TouchButton(
-                                text = if (user.active) stringResource(R.string.admin_user_deactivate) else stringResource(R.string.admin_user_activate),
-                                tone = if (user.active) ButtonTone.DANGER else ButtonTone.SUCCESS,
-                                onClick = {
-                                    requestConfirm(confirmStatusTitle, confirmStatusTextTemplate.format(user.displayName)) {
-                                        viewModel.setUserActive(user.id, !user.active)
-                                    }
-                                },
-                            )
-                            TouchButton(
-                                text = stringResource(R.string.admin_reset_password),
-                                enabled = resetPasswords[user.id]?.isNotBlank() == true,
-                                tone = ButtonTone.NEUTRAL,
-                                onClick = {
-                                    val resetPassword = resetPasswords[user.id].orEmpty()
-                                    requestConfirm(confirmResetTitle, confirmResetTextTemplate.format(user.displayName)) {
-                                        viewModel.resetPassword(user.id, resetPassword)
-                                        resetPasswords -= user.id
-                                    }
-                                },
-                            )
-                        }
                     }
                 }
             }
-        }
-        item {
-            StandardCard {
-                Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                ) {
-                    Text(stringResource(R.string.admin_total_reset), style = MaterialTheme.typography.titleMedium)
-                    Field(resetConfirmation, { resetConfirmation = it }, "Digita RESET")
-                    TouchButton(
-                        text = stringResource(R.string.admin_total_reset),
-                        enabled = resetConfirmation == "RESET",
-                        tone = ButtonTone.DANGER,
-                        onClick = {
-                            requestConfirm(confirmTotalResetTitle, confirmTotalResetText) {
-                                viewModel.resetAllData(resetConfirmation, onResetComplete)
-                                resetConfirmation = ""
-                            }
-                        },
-                    )
+            item {
+                StandardCard {
+                    Column(
+                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                    ) {
+                        Text(stringResource(R.string.admin_cleanup_orders), style = MaterialTheme.typography.titleMedium)
+                        Field(archiveConfirmation, { archiveConfirmation = it }, "Digita ARCHIVIA")
+                        TouchButton(
+                            text = stringResource(R.string.admin_archive_discarded),
+                            enabled = archiveConfirmation == "ARCHIVIA",
+                            tone = ButtonTone.WARNING,
+                            onClick = {
+                                requestConfirm(confirmArchiveTitle, confirmArchiveText) {
+                                    viewModel.archiveDiscardedClosedOrders()
+                                    archiveConfirmation = ""
+                                }
+                            },
+                        )
+                        Field(deleteConfirmation, { deleteConfirmation = it }, "Digita CANCELLA")
+                        TouchButton(
+                            text = stringResource(R.string.admin_delete_archived),
+                            enabled = deleteConfirmation == "CANCELLA",
+                            tone = ButtonTone.DANGER,
+                            onClick = {
+                                requestConfirm(confirmDeleteTitle, confirmDeleteText) {
+                                    viewModel.deleteArchivedOrders()
+                                    deleteConfirmation = ""
+                                }
+                            },
+                        )
+                    }
                 }
             }
-        }
-        item {
-            StandardCard {
-                Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                ) {
-                    Text(stringResource(R.string.admin_cleanup_orders), style = MaterialTheme.typography.titleMedium)
-                    Field(archiveConfirmation, { archiveConfirmation = it }, "Digita ARCHIVIA")
-                    TouchButton(
-                        text = stringResource(R.string.admin_archive_discarded),
-                        enabled = archiveConfirmation == "ARCHIVIA",
-                        tone = ButtonTone.WARNING,
-                        onClick = {
-                            requestConfirm(confirmArchiveTitle, confirmArchiveText) {
-                                viewModel.archiveDiscardedClosedOrders()
-                                archiveConfirmation = ""
-                            }
-                        },
-                    )
-                    Field(deleteConfirmation, { deleteConfirmation = it }, "Digita CANCELLA")
-                    TouchButton(
-                        text = stringResource(R.string.admin_delete_archived),
-                        enabled = deleteConfirmation == "CANCELLA",
-                        tone = ButtonTone.DANGER,
-                        onClick = {
-                            requestConfirm(confirmDeleteTitle, confirmDeleteText) {
-                                viewModel.deleteArchivedOrders()
-                                deleteConfirmation = ""
-                            }
-                        },
-                    )
-                }
-            }
-        }
-        item {
-            SectionTitle(stringResource(R.string.admin_author))
-            StandardCard {
-                Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                ) {
-                    Text("Danny Perondi", style = MaterialTheme.typography.titleMedium)
-                    TouchButton(
-                        text = "GitHub Repository",
-                        onClick = { uriHandler.openUri("https://github.com/dennidalpos/OnlyTechTake") },
-                        tone = ButtonTone.NEUTRAL,
-                    )
+            item {
+                SectionTitle(stringResource(R.string.admin_author))
+                StandardCard {
+                    Column(
+                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
+                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                    ) {
+                        Text("Danny Perondi", style = MaterialTheme.typography.titleMedium)
+                        TouchButton(
+                            text = "GitHub Repository",
+                            onClick = { uriHandler.openUri("https://github.com/dennidalpos/OnlyTechTake") },
+                            tone = ButtonTone.NEUTRAL,
+                        )
+                    }
                 }
             }
         }
@@ -288,14 +299,14 @@ fun AdminPanel(
                 }
             },
             dismissButton = {
-                TextButton(
+                TouchButton(
+                    text = stringResource(R.string.customer_cancel),
+                    tone = ButtonTone.NEUTRAL,
                     onClick = {
                         confirmTitle = null
                         confirmAction = null
                     },
-                ) {
-                    Text(stringResource(R.string.customer_cancel))
-                }
+                )
             },
         )
     }

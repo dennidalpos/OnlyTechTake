@@ -5,12 +5,16 @@ import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
@@ -93,7 +97,6 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
 
     var note by rememberSaveable { mutableStateOf("") }
     var showInternalNoteDialog by rememberSaveable { mutableStateOf(value = false) }
-    var showActionsModal by rememberSaveable { mutableStateOf(value = false) }
     var confirmTitle by remember { mutableStateOf<String?>(null) }
     var confirmText by remember { mutableStateOf("") }
     var confirmAction by remember { mutableStateOf<(() -> Unit)?>(null) }
@@ -257,23 +260,42 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                     modifier = Modifier.padding(DashboardSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                 ) {
-                    val actions = availableOrderStatusActions(selected.order.status)
-                    val forwardAction = actions.firstOrNull { it != OrderStatusAction.CLOSE_ORDER }
+                    SectionTitle("Azioni Commessa")
+                    
+                    ActionRow {
+                        val actions = availableOrderStatusActions(selected.order.status)
+                        val templateCode = statusTemplateCode(selected.order)
 
-                    forwardAction?.let {
-                        Text(
-                            text = stringResource(R.string.orders_next_action_label, it.label),
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        actions.forEach { action ->
+                            TouchButton(
+                                text = action.label,
+                                tone = action.tone(),
+                                onClick = {
+                                    statusAction = action
+                                    statusNote = ""
+                                    closureReason = null
+                                    resultSummary = ""
+                                    resultAmount = ""
+                                    diagnosisOutcome = selected.order.diagnosisOutcome
+                                }
+                            )
+                        }
+
+                        if (selected.order.status == OrderStatus.READY_FOR_PICKUP || selected.order.status == OrderStatus.CLOSED) {
+                            val isPaid = selected.isPaid
+                            TouchButton(
+                                text = if (isPaid) stringResource(R.string.order_not_paid_button) else stringResource(R.string.order_paid_button),
+                                tone = if (isPaid) ButtonTone.WARNING else ButtonTone.SUCCESS,
+                                onClick = { viewModel.togglePaymentStatus(selected.order.id, !isPaid) }
+                            )
+                        }
+
+                        TouchButton(
+                            text = stringResource(R.string.order_whatsapp_send),
+                            tone = ButtonTone.INFO,
+                            onClick = { viewModel.prepareMessage(selected.order.id, templateCode) }
                         )
                     }
-
-                    TouchButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "Azioni Commessa",
-                        tone = ButtonTone.PRIMARY,
-                        onClick = { showActionsModal = true }
-                    )
                 }
             }
         }
@@ -488,7 +510,7 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
-                            ) {
+                                ) {
                                 Row(
                                     modifier = Modifier.weight(1f).clickable { viewModel.onShareDocumentClicked(doc.id) },
                                     verticalAlignment = Alignment.CenterVertically
@@ -584,7 +606,10 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             onDismissRequest = { statusAction = null },
             title = { Text(action.label) },
             text = {
-                Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
+                Column(
+                    modifier = Modifier.verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)
+                ) {
                     Text(stringResource(R.string.order_confirm_status_update))
                     if (isResultStep) {
                         Field(
@@ -702,9 +727,12 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             onDismissRequest = { showInternalNoteDialog = false },
             title = { Text(stringResource(R.string.order_internal_notes)) },
             text = {
-                Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
+                Column(
+                    modifier = Modifier.verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)
+                ) {
                     selected.order.internalNotes?.takeIf { it.isNotBlank() }?.let {
-                        OperatorText(it, modifier = Modifier.weight(1f, fill = false))
+                        OperatorText(it)
                     }
                     Field(
                         value = note,
@@ -728,81 +756,6 @@ fun OrderDetailWorkspace(viewModel: WorkspaceViewModel) {
             },
             dismissButton = {
                 TextButton(onClick = { showInternalNoteDialog = false }) {
-                    Text(stringResource(R.string.customer_cancel))
-                }
-            },
-        )
-    }
-
-    if (showActionsModal) {
-        val actions = availableOrderStatusActions(selected.order.status)
-        val forwardAction = actions.firstOrNull { it != OrderStatusAction.CLOSE_ORDER }
-        val templateCode = statusTemplateCode(selected.order)
-        val closeAction = actions.find { it == OrderStatusAction.CLOSE_ORDER }
-
-        AlertDialog(
-            onDismissRequest = { showActionsModal = false },
-            title = { Text("Azioni disponibili") },
-            text = {
-                Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
-                    if (forwardAction != null && selected.order.status != OrderStatus.RESULT) {
-                        TouchButton(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = forwardAction.label,
-                            tone = forwardAction.tone(),
-                            onClick = {
-                                statusAction = forwardAction
-                                statusNote = ""
-                                closureReason = null
-                                resultSummary = ""
-                                resultAmount = ""
-                                diagnosisOutcome = selected.order.diagnosisOutcome
-                                showActionsModal = false
-                            }
-                        )
-                    }
-
-                    if (selected.order.status == OrderStatus.READY_FOR_PICKUP || selected.order.status == OrderStatus.CLOSED) {
-                        val isPaid = selected.isPaid
-                        TouchButton(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = if (isPaid) stringResource(R.string.order_not_paid_button) else stringResource(R.string.order_paid_button),
-                            tone = if (isPaid) ButtonTone.WARNING else ButtonTone.SUCCESS,
-                            onClick = {
-                                viewModel.togglePaymentStatus(selected.order.id, !isPaid)
-                                showActionsModal = false
-                            }
-                        )
-                    }
-
-                    TouchButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.order_whatsapp_send),
-                        tone = ButtonTone.INFO,
-                        onClick = {
-                            viewModel.prepareMessage(selected.order.id, templateCode)
-                            showActionsModal = false
-                        },
-                    )
-
-                    closeAction?.let { action ->
-                        TouchButton(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = action.label,
-                            tone = ButtonTone.DANGER,
-                            onClick = {
-                                statusAction = action
-                                statusNote = ""
-                                closureReason = null
-                                showActionsModal = false
-                            }
-                        )
-                    }
-                }
-            },
-            confirmButton = {},
-            dismissButton = {
-                TextButton(onClick = { showActionsModal = false }) {
                     Text(stringResource(R.string.customer_cancel))
                 }
             },
