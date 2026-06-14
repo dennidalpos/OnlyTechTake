@@ -32,7 +32,7 @@ $ErrorActionPreference = "Stop"
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 
-$supportScript = Join-Path $PSScriptRoot "support\android_env.ps1"
+$supportScript = Join-Path $PSScriptRoot "..\support\android_env.ps1"
 if (Test-Path $supportScript) {
     . $supportScript
     Set-AndroidCliEnvironment | Out-Null

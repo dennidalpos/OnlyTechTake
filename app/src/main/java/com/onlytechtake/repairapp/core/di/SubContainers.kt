@@ -64,33 +64,6 @@ class MediaContainer(context: Context, dataContainer: DataContainer) {
     )
 
     val shareDocumentIntentFactory = ShareDocumentIntentFactory(context)
-
-    // Temporary repo for PDF generator until all use OrderContainer's one
-    private val workflowRepo = OrderWorkflowRepository(
-        context = context.applicationContext,
-        repairOrderDao = dataContainer.database.repairOrderDao(),
-        customerDao = dataContainer.database.customerDao(),
-        categoryDao = dataContainer.database.orderCategoryDao(),
-        userDao = dataContainer.database.userDao(),
-        timelineEventDao = dataContainer.database.timelineEventDao(),
-        orderMediaDao = dataContainer.database.orderMediaDao(),
-        signatureDao = dataContainer.database.signatureDao(),
-        messageLogDao = dataContainer.database.messageLogDao(),
-        auditLogDao = dataContainer.database.auditLogDao(),
-        database = dataContainer.database,
-    )
-
-    val generateOrderStatusPdfUseCase = GenerateOrderStatusPdfUseCase(
-        context = context.applicationContext,
-        workflowRepository = workflowRepo,
-        catalogRepository = CatalogRepository(
-            context = context.applicationContext,
-            categoryDao = dataContainer.database.orderCategoryDao(),
-        ),
-        documentRepository = orderDocumentRepository,
-        userDao = dataContainer.database.userDao(),
-        fileStorage = orderDocumentFileStorage,
-    )
 }
 
 class OrderContainer(context: Context, dataContainer: DataContainer, mediaContainer: MediaContainer) {
@@ -133,6 +106,15 @@ class OrderContainer(context: Context, dataContainer: DataContainer, mediaContai
         orderMediaRepository = mediaContainer.orderMediaRepository,
         signatureRepository = signatureRepository,
     ) { block -> dataContainer.database.withTransaction { block() } }
+
+    val generateOrderStatusPdfUseCase = GenerateOrderStatusPdfUseCase(
+        context = context.applicationContext,
+        workflowRepository = orderWorkflowRepository,
+        catalogRepository = catalogRepository,
+        documentRepository = mediaContainer.orderDocumentRepository,
+        userDao = dataContainer.database.userDao(),
+        fileStorage = mediaContainer.orderDocumentFileStorage,
+    )
 }
 
 class SettingsContainer(context: Context, dataContainer: DataContainer, authContainer: AuthContainer, mediaContainer: MediaContainer) {

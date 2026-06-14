@@ -1,3 +1,5 @@
+Add-Type -AssemblyName System.Drawing
+
 function Assert-Command {
     param([Parameter(Mandatory = $true)][string]$Name)
 

@@ -22,7 +22,7 @@ $ErrorActionPreference = "Stop"
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 
-$environmentScript = Join-Path $PSScriptRoot "support\android_env.ps1"
+$environmentScript = Join-Path $PSScriptRoot "..\support\android_env.ps1"
 if (Test-Path $environmentScript) {
     . $environmentScript
     Set-AndroidCliEnvironment | Out-Null
@@ -150,8 +150,6 @@ New-Item -ItemType Directory -Path $OutputRoot | Out-Null
 
 $serial = Resolve-DemoDeviceSerial -AndroidHome $env:ANDROID_HOME -AvdName $AvdName -UseConnectedDevice:$UseConnectedDevice
 Invoke-DemoApkBuildAndInstall -RootPath $root -Serial $serial
-
-Add-Type -AssemblyName System.Drawing
 
 foreach ($source in $screenshotSources) {
     Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "shell", "rm", "-rf", $source.DeviceDirectory)

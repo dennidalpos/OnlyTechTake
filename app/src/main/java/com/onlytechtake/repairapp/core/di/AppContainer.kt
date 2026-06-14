@@ -22,13 +22,12 @@ class AppContainer(context: Context) {
     val customerRepository = orderContainer.customerRepository
     val catalogRepository = orderContainer.catalogRepository
     val orderWorkflowRepository = orderContainer.orderWorkflowRepository
-    val signatureRepository = orderContainer.signatureRepository
     val createIntakeOrderUseCase = orderContainer.createIntakeOrderUseCase
 
     val orderMediaRepository = mediaContainer.orderMediaRepository
     val orderDocumentRepository = mediaContainer.orderDocumentRepository
     val shareDocumentIntentFactory = mediaContainer.shareDocumentIntentFactory
-    val generateOrderStatusPdfUseCase = mediaContainer.generateOrderStatusPdfUseCase
+    val generateOrderStatusPdfUseCase = orderContainer.generateOrderStatusPdfUseCase
     val orderFileCleanupService = mediaContainer.orderFileCleanupService
 
     val templateRepository = settingsContainer.templateRepository

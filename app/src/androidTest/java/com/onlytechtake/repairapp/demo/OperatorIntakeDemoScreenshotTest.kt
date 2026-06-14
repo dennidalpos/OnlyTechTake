@@ -3,7 +3,7 @@ package com.onlytechtake.repairapp.demo
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
@@ -41,8 +41,7 @@ class OperatorIntakeDemoScreenshotTest {
         runBlocking { DemoDataSeeder.seedDemoProfile(context) }
         val outputDir = prepareScreenshotDirectory()
 
-        val scenario = ActivityScenario.launch(MainActivity::class.java)
-        try {
+         ActivityScenario.launch(MainActivity::class.java).use {
             waitForTag(RepairAppTestTags.AuthUsernameField)
             capture(outputDir, "01-login.png")
 
@@ -94,8 +93,6 @@ class OperatorIntakeDemoScreenshotTest {
             clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
             waitForText("Chiusa")
             capture(outputDir, "10-closed-timeline.png")
-        } finally {
-            scenario.close()
         }
     }
 
@@ -171,7 +168,7 @@ class OperatorIntakeDemoScreenshotTest {
                 return
             }
 
-            if (attempt == LOGIN_ATTEMPTS - 1 || !isTagPresent(RepairAppTestTags.AuthUsernameField)) {
+            if (attempt == (LOGIN_ATTEMPTS - 1) || !isTagPresent(RepairAppTestTags.AuthUsernameField)) {
                 waitForTag(RepairAppTestTags.dashboardTab("HOME"))
             }
             pauseForDemo()
@@ -262,11 +259,6 @@ class OperatorIntakeDemoScreenshotTest {
 
     private fun isTagPresent(tag: String): Boolean =
         composeRule.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()
-
-    private fun isTagDisplayed(tag: String): Boolean =
-        runCatching {
-            composeRule.onNodeWithTag(tag).assertIsDisplayed()
-        }.isSuccess
 
     private fun waitForText(text: String) {
         composeRule.waitUntil(timeoutMillis = WAIT_TIMEOUT_MILLIS) {

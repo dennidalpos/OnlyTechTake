@@ -70,8 +70,9 @@ if (-not (Test-Command "javac")) {
 }
 
 $androidSdk = if ($env:ANDROID_HOME) { $env:ANDROID_HOME } else { $env:ANDROID_SDK_ROOT }
-if (-not (Test-AndroidSdkPlatform -Path $androidSdk -ApiLevel 37)) {
-    throw "Android SDK Platform 37 non trovata. Installa android-37 da Android Studio SDK Manager."
+$requiredCompileSdk = if ($resolvedEnvironment.RequiredCompileSdk) { $resolvedEnvironment.RequiredCompileSdk } else { 37 }
+if (-not (Test-AndroidSdkPlatform -Path $androidSdk -ApiLevel $requiredCompileSdk)) {
+    throw "Android SDK Platform $requiredCompileSdk non trovata. Installa android-$requiredCompileSdk da Android Studio SDK Manager."
 }
 
 if (-not (Test-AndroidBuildToolsInstalled -Path $androidSdk)) {

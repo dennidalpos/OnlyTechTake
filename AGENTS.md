@@ -32,7 +32,7 @@ Do not add legacy compatibility layers, migration scaffolding, deprecated patter
 
 Prefer current conventions, clean architecture, minimal structure, and only the files needed for the requested scope.
 
-OnlyTechTake Repair App is currently a fresh app in early development. Keep Room `DATABASE_VERSION` / schema export at version 1 until an explicit request authorizes a schema version bump. Do not add Room migrations, legacy data workarounds, backend integrations, or credentials in source code. Prefer simple centralized domain/core helpers for workflow, validation, formatting, media, export, permissions, errors, and WhatsApp templates.
+OnlyTechTake Repair App is currently a fresh app in early development. Do not add Room migrations, legacy data workarounds, backend integrations, or credentials in source code. Prefer simple centralized domain/core helpers for workflow, validation, formatting, media, export, permissions, errors, and WhatsApp templates.
 
 ---
 
@@ -48,7 +48,6 @@ OnlyTechTake Repair App is currently a fresh app in early development. Keep Room
 * Do not enable Android cloud backup without explicit owner approval.
 * Use `android:hasFragileUserData="true"` if compatible with current manifest.
 * Do not promise data survival after uninstall.
-* Room schemaVersion must remain 1.
 * Any DB schema change must be marked:
   RICHIEDE CAMBIO SCHEMA - BLOCCATA
 

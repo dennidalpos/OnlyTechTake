@@ -24,7 +24,7 @@ $ErrorActionPreference = "Stop"
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 
-$environmentScript = Join-Path $PSScriptRoot "support\android_env.ps1"
+$environmentScript = Join-Path $PSScriptRoot "..\support\android_env.ps1"
 if (Test-Path $environmentScript) {
     . $environmentScript
     Set-AndroidCliEnvironment | Out-Null
@@ -86,8 +86,6 @@ $actualScreenshots = @(Get-ChildItem -Path $screenshotsDir -Filter "*.png" -File
 if ($actualScreenshots.Count -eq 0) {
     throw "Nessun screenshot catturato dal device."
 }
-
-Add-Type -AssemblyName System.Drawing
 
 $index = 1
 $concatPath = Join-Path $OutputRoot "slides.txt"

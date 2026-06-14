@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -69,10 +68,9 @@ fun OrdersPanel(
         var selectedOrderId by rememberSaveable { mutableStateOf<String?>(null) }
         Row(Modifier.fillMaxSize()) {
             Box(Modifier.weight(1f)) {
-                OrdersListContent(
-                    viewModel = viewModel,
-                    onOrderClick = { selectedOrderId = it }
-                )
+                OrdersListContent(viewModel = viewModel) {
+                    selectedOrderId = it
+                }
             }
             VerticalDivider()
             Box(Modifier.weight(1.5f)) {
@@ -89,7 +87,7 @@ fun OrdersPanel(
                             templateRepository = container.templateRepository,
                             generateOrderStatusPdfUseCase = container.generateOrderStatusPdfUseCase,
                             shareDocumentIntentFactory = container.shareDocumentIntentFactory,
-                            onSetFormDirty = { /* Handle dirty state if needed */ }
+                            onSetFormDirty = { /* Handle dirty state if needed */ },
                         )
                     )
                     OrderDetailWorkspace(
@@ -116,7 +114,7 @@ private fun OrdersListContent(
     val orderFilter by viewModel.orderFilter.collectAsState()
     val orderListItems by viewModel.orderListItems.collectAsState()
     val context = LocalContext.current
-    var showFilterDialog by rememberSaveable { mutableStateOf(false) }
+    var showFilterDialog by rememberSaveable { mutableStateOf(value = false) }
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -304,4 +302,4 @@ private fun QuickStatusGroupFilter(
 }
 
 private fun OrderFilter.hasActiveFilter(): Boolean =
-    showMineOnly || status != null || statuses.isNotEmpty() || query.isNotBlank()
+    showMineOnly || (status != null) || statuses.isNotEmpty() || query.isNotBlank()

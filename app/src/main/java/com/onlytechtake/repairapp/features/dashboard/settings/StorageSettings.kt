@@ -44,7 +44,7 @@ fun StorageSettings(
         item {
             SectionTitle(
                 text = stringResource(R.string.storage_title),
-                tooltip = "Monitora l'uso della memoria e pulisci i file temporanei per liberare spazio."
+                tooltip = "Monitora l'uso della memoria e pulisci i file temporanei per liberare spazio.",
             )
         }
 
@@ -63,7 +63,7 @@ fun StorageSettings(
                         StorageInfoRow(stringResource(R.string.storage_total_device), formatFileSize(stats.totalDeviceBytes))
                         StorageInfoRow(stringResource(R.string.storage_app_used), formatFileSize(stats.appUsedBytes))
                         
-                        val freePercentage = (stats.freeDeviceBytes.toDouble() / stats.totalDeviceBytes.toDouble() * 100).toInt()
+                        val freePercentage = ((stats.freeDeviceBytes.toDouble() / stats.totalDeviceBytes.toDouble()) * 100).toInt()
                         val usedProgress = (stats.totalDeviceBytes - stats.freeDeviceBytes).toDouble() / stats.totalDeviceBytes.toDouble()
                         
                         LinearProgressIndicator(
@@ -80,7 +80,7 @@ fun StorageSettings(
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 text = "Spazio libero: $freePercentage%",

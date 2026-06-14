@@ -199,6 +199,7 @@ function Set-AndroidCliEnvironment {
         JavaHome = if ($null -ne $jdk) { $jdk.Path } else { $null }
         JavaMajorVersion = if ($null -ne $jdk) { $jdk.MajorVersion } else { $null }
         AndroidSdk = $sdk
+        RequiredCompileSdk = 37
     }
 }
 
