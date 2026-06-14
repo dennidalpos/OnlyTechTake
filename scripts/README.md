@@ -12,8 +12,7 @@ Gli script calcolano automaticamente la root del progetto dal proprio percorso, 
 | Start app Android | `scripts\android\start_app.ps1` | Installa l'APK selezionato e avvia `MainActivity` via adb. | Supporta `-Flavor Full|Demo`, `-NoInstall`, `-ApkPath` e `-CleanInstall` per reinstallazione pulita. |
 | Check progetto | `scripts\windows\check_project.ps1` | Esegue lint, compile Kotlin debug, test unitari, build APK debug e, senza `-SkipReleaseBuild`, build APK release firmata. | Supporta `-Flavor Full|Demo`; `-AndroidTests` esegue il connected test del flavor selezionato. |
 | Audit vulnerabilita' dipendenze | `scripts\windows\check_dependency_vulnerabilities.ps1` | Interroga OSV sulle coordinate Maven presenti nei lockfile Gradle. | Separato dai check offline; non invia codice sorgente, solo group/artifact/version. |
-| Screenshot demo | `scripts\windows\create_demo_screenshots.ps1` | Genera PNG demo verticali 1080x1920 divisi per caso d'uso. | Usa AVD `OnlyTechTakeDemo` o un device USB con `-UseConnectedDevice`. |
-| Video demo operatore | `scripts\windows\create_demo_video.ps1` | Genera MP4 demo del flusso operatore al banco. | Richiede ffmpeg; usa AVD demo o device USB con `-UseConnectedDevice`. |
+| Asset demo unificati | `scripts\windows\create_demo_assets.ps1` | Genera screenshot verticali e video MP4 montati. | Richiede ffmpeg per i video; usa AVD `OnlyTechTakeDemo` o device USB. |
 | Registrazione demo USB | `scripts\windows\record_demo_device.ps1` | Registra video MP4 direttamente da device fisico USB. | Pulisce dati app, avvia app e usa `adb screenrecord`. |
 
 ## Comandi per obiettivo
@@ -21,20 +20,6 @@ Gli script calcolano automaticamente la root del progetto dal proprio percorso, 
 | Obiettivo | Comando |
 |---|---|
 | setup / env | `powershell -ExecutionPolicy Bypass -File scripts\android\check_env.ps1` |
-| check locale standard | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -Flavor Full -SkipReleaseBuild` |
-| check locale standard con device | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -Flavor Full -SkipReleaseBuild -AndroidTests` |
-| check completo con release firmata | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -Flavor Full` |
-| audit vulnerabilita' dipendenze | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_dependency_vulnerabilities.ps1` |
-| test unitari Full debug | `powershell -ExecutionPolicy Bypass -File scripts\android\gradle.ps1 -- --no-configuration-cache :app:testFullDebugUnitTest` |
-| build debug APK Full | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk` |
-| build debug APK Demo | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Demo -BuildType Debug -OutputType Apk` |
-| build release APK Full | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Apk` |
-| package release AAB Full | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Aab` |
-| dev smoke | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk -Install` |
-| installazione pulita e start | `powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -CleanInstall` |
-| start senza reinstallare | `powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -NoInstall` |
-| screenshot demo | `powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_screenshots.ps1` |
-| screenshot demo su device USB | `powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_screenshots.ps1 -UseConnectedDevice` |
-| video demo operatore | `powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_video.ps1` |
-| video demo su device USB | `powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_video.ps1 -UseConnectedDevice` |
+| asset demo (screen + video) | `powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_assets.ps1` |
+| asset demo su device USB | `powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_assets.ps1 -UseConnectedDevice` |
 | registrazione demo USB guidata | `powershell -ExecutionPolicy Bypass -File scripts\windows\record_demo_device.ps1` |
