@@ -95,7 +95,7 @@ fun StandardCard(
             border = effectiveBorder,
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(containerColor = containerColor),
-            content = content
+            content = content,
         )
     } else {
         Card(
