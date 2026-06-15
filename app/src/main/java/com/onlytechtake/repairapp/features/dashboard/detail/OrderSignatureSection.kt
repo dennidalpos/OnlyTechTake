@@ -13,6 +13,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.features.dashboard.common.LocalImagePreview
 import com.onlytechtake.repairapp.features.dashboard.common.LocalImageViewer
@@ -29,7 +31,10 @@ fun OrderSignatureSection(
     var selectedSignaturePath by rememberSaveable { mutableStateOf<String?>(null) }
     var selectedSignatureTitle by remember { mutableStateOf("") }
 
-    Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
+    Column(
+        modifier = Modifier.testTag(RepairAppTestTags.OrderSignatureSection),
+        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)
+    ) {
         SectionTitle("Firma privacy")
         if (detail.signatures.isEmpty()) {
             Text("Nessuna firma acquisita.")

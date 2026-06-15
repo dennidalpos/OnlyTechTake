@@ -15,10 +15,12 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.click
 import androidx.test.espresso.Espresso
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -56,18 +58,38 @@ class SocialStoryDemoScreenshotTest {
 
             clickDashboardTab("NEW_ORDER")
             waitForTag("quick_actions_screen")
-            clickText("Inserisci nuovo cliente")
+            
+            var formOpened = false
+            repeat(3) {
+                if (!formOpened) {
+                    if (isTagPresent(RepairAppTestTags.NewOrderInsertCustomerButton)) {
+                        clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
+                    }
+                    pauseForDemo()
+                    formOpened = isTagPresent(RepairAppTestTags.NewOrderFirstNameField)
+                }
+            }
+            
+            // Garantisce che il tag sia presente prima di procedere
+            waitForTagExists(RepairAppTestTags.NewOrderFirstNameField)
+            
             typeTag(RepairAppTestTags.NewOrderFirstNameField, "Giulia", scroll = true)
             typeTag(RepairAppTestTags.NewOrderLastNameField, "Bianchi", scroll = true)
             typeTag(RepairAppTestTags.NewOrderPhoneField, "+39 333 010 2020", scroll = true)
             typeTag(RepairAppTestTags.NewOrderEmailField, "giulia.bianchi@example.invalid", scroll = true)
             capture(outputDir, "03-nuovo-cliente.png")
 
-            clickText("Salva cliente", scroll = true)
+            clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
             waitForText("Cliente selezionato")
-            clickText("Avanti", scroll = true)
+            clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
+
+            // Selezione categoria (navigazione gerarchia fino a foglia)
             clickTag(RepairAppTestTags.categoryButton(DemoDataSeeder.DEMO_CATEGORY_ID), scroll = true)
-            clickText("Avanti", scroll = true)
+            clickTag(RepairAppTestTags.categoryButton("demo-cat-hp"), scroll = true)
+            clickTag(RepairAppTestTags.categoryButton("demo-cat-pavilion"), scroll = true)
+            clickTag(RepairAppTestTags.categoryButton("demo-cat-pavilion-15"), scroll = true)
+
+            clickTag(RepairAppTestTags.NewOrderStep2NextButton, scroll = true)
             typeTag(RepairAppTestTags.NewOrderProblemSummaryField, "Notebook non si accende", scroll = true)
             typeTag(
                 RepairAppTestTags.NewOrderProblemDetailsField,
@@ -78,7 +100,11 @@ class SocialStoryDemoScreenshotTest {
 
             clickDashboardTab("ORDERS")
             waitForText("Commesse")
-            clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
+            waitForTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
+            clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID))
+            
+            // Verifica di essere nel dettaglio
+            waitForTag(RepairAppTestTags.OrderStatusLabel)
             waitForText("Notebook HP")
             capture(outputDir, "05-commessa-aperta.png")
 
@@ -184,6 +210,33 @@ class SocialStoryDemoScreenshotTest {
         }
     }
 
+    @Test
+    fun capturesMaintenanceStories() {
+        runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        val outputDir = prepareCaseDirectory(CASE_MAINTENANCE)
+
+        withDemoApp {
+            waitForTag(RepairAppTestTags.AuthUsernameField)
+            loginDemo(DemoDataSeeder.DEMO_ADMIN_USERNAME)
+            
+            clickDashboardTab("SETTINGS")
+            waitForText("Setup")
+            
+            clickTag(RepairAppTestTags.ConfigHubStorageButton, scroll = true)
+            waitForText("Memoria")
+            capture(outputDir, "01-gestione-memoria.png")
+            clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
+
+            clickTag(RepairAppTestTags.ConfigHubBackupButton, scroll = true)
+            waitForText("Backup")
+            capture(outputDir, "02-backup-dati.png")
+            
+            clickText("Esporta Excel", scroll = true)
+            waitForText("Esportazione")
+            capture(outputDir, "03-export-excel.png")
+        }
+    }
+
     private fun withDemoApp(block: () -> Unit) {
         val scenario = ActivityScenario.launch(MainActivity::class.java)
         try {
@@ -194,7 +247,7 @@ class SocialStoryDemoScreenshotTest {
     }
 
     private fun applySimpleStatus(action: OrderStatusAction, expectedText: String) {
-        clickText("Azioni Commessa", scroll = true)
+        waitForTag(RepairAppTestTags.OrderActionSection, scroll = true)
         pauseForDemo()
         clickTag(RepairAppTestTags.statusAction(action.name), scroll = true)
         pauseForDemo()
@@ -206,7 +259,7 @@ class SocialStoryDemoScreenshotTest {
     }
 
     private fun applyResultStatus() {
-        clickText("Azioni Commessa", scroll = true)
+        waitForTag(RepairAppTestTags.OrderActionSection, scroll = true)
         pauseForDemo()
         clickTag(RepairAppTestTags.statusAction(OrderStatusAction.RECORD_RESULT.name), scroll = true)
         pauseForDemo()
@@ -230,7 +283,7 @@ class SocialStoryDemoScreenshotTest {
     }
 
     private fun closeOrder() {
-        clickText("Azioni Commessa", scroll = true)
+        waitForTag(RepairAppTestTags.OrderActionSection, scroll = true)
         pauseForDemo()
         clickTag(RepairAppTestTags.statusAction(OrderStatusAction.CLOSE_ORDER.name), scroll = true)
         pauseForDemo()
@@ -246,26 +299,17 @@ class SocialStoryDemoScreenshotTest {
 
     private fun clickDashboardTab(destination: String) {
         val tabTag = RepairAppTestTags.dashboardTab(destination)
-        waitForTagExists(RepairAppTestTags.DashboardTabs)
+        waitForTagExists(tabTag)
 
-        repeat(DASHBOARD_TAB_SWIPE_ATTEMPTS) {
-            if (isTagPresent(tabTag)) {
-                composeRule.onNodeWithTag(tabTag).performClick()
-                composeRule.waitForIdle()
+        composeRule.onNodeWithTag(tabTag).performClick()
+        composeRule.waitForIdle()
 
-                // Handle "Unsaved changes" dialog if it appears
-                if (isTextDisplayed("Dati non salvati")) {
-                    clickText("Esci e perdi dati")
-                }
-
-                Thread.sleep(2000)
-                return
-            }
-            composeRule.onNodeWithTag(RepairAppTestTags.DashboardTabs)
-                .performTouchInput { swipeLeft() }
-            composeRule.waitForIdle()
-            pauseForDemo()
+        // Handle "Unsaved changes" dialog if it appears
+        if (isTextDisplayed("Dati non salvati")) {
+            clickText("Esci e perdi dati")
         }
+
+        Thread.sleep(2000)
     }
 
     private fun isTextDisplayed(text: String): Boolean =
@@ -304,78 +348,104 @@ class SocialStoryDemoScreenshotTest {
     }
 
     private fun clickTag(tag: String, scroll: Boolean = false, requireDisplayed: Boolean = true) {
-        waitForTagExists(tag)
+        waitForTagExists(tag, scrollIfNotFound = scroll)
         val node = composeRule.onNodeWithTag(tag)
-        if (scroll) {
-            runCatching { node.performScrollTo() }
-            composeRule.waitForIdle()
-        }
-        if (requireDisplayed && scroll && runCatching { node.assertIsDisplayed() }.isFailure) {
-            var displayed = false
-            repeat(VISIBILITY_SWIPE_ATTEMPTS) {
-                if (displayed) return@repeat
-                performSafeSwipeUp()
-                composeRule.waitForIdle()
-                runCatching { node.performScrollTo() }
-                displayed = runCatching { node.assertIsDisplayed() }.isSuccess
-                pauseForDemo()
+        
+        // Approccio di click multi-livello invertito per priorità semantica (più robusto in emulatore)
+        try {
+            node.performClick()
+        } catch (e: Throwable) {
+            try {
+                node.performTouchInput { click() }
+            } catch (e2: Throwable) {
+                node.performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
             }
         }
-        if (requireDisplayed) {
-            node.assertIsDisplayed()
-        }
-        if (requireDisplayed) {
-            node.performClick()
-        } else {
-            node.performSemanticsAction(SemanticsActions.OnClick)
-        }
+
         composeRule.waitForIdle()
         pauseForDemo()
     }
 
     private fun clickText(text: String, scroll: Boolean = false, requireDisplayed: Boolean = true) {
-        waitForText(text)
-        val node = composeRule.onNodeWithText(text, substring = false)
-        if (scroll) {
-            runCatching { node.performScrollTo() }
-            composeRule.waitForIdle()
-        }
-        if (requireDisplayed && scroll && runCatching { node.assertIsDisplayed() }.isFailure) {
-            var displayed = false
-            repeat(VISIBILITY_SWIPE_ATTEMPTS) {
-                if (displayed) return@repeat
-                performSafeSwipeUp()
-                composeRule.waitForIdle()
-                runCatching { node.performScrollTo() }
-                displayed = runCatching { node.assertIsDisplayed() }.isSuccess
-                pauseForDemo()
+        waitForText(text, scrollIfNotFound = scroll)
+        val node = composeRule.onNodeWithText(text, substring = true)
+        
+        // Approccio di click multi-livello invertito per priorità semantica (più robusto in emulatore)
+        try {
+            node.performClick()
+        } catch (e: Throwable) {
+            try {
+                node.performTouchInput { click() }
+            } catch (e2: Throwable) {
+                node.performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
             }
         }
-        if (requireDisplayed) {
-            node.assertIsDisplayed()
-        }
-        if (requireDisplayed) {
-            node.performClick()
-        } else {
-            node.performSemanticsAction(SemanticsActions.OnClick)
-        }
+
         composeRule.waitForIdle()
         pauseForDemo()
     }
 
     private fun performSafeSwipeUp() {
-        composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { swipeUp() }
+        // Swipe UP = Scroll DOWN
+        try {
+            composeRule.onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn).performTouchInput {
+                swipeUp(startY = bottom * 0.7f, endY = top * 0.3f)
+            }
+        } catch (e: Throwable) {
+            composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { 
+                swipeUp(startY = bottom * 0.7f, endY = top * 0.3f)
+            }
+        }
+    }
+
+    private fun performSafeSwipeDown() {
+        // Swipe DOWN = Scroll UP
+        try {
+            composeRule.onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn).performTouchInput {
+                swipeDown(startY = top * 0.3f, endY = bottom * 0.7f)
+            }
+        } catch (e: Throwable) {
+            composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { 
+                swipeDown(startY = top * 0.3f, endY = bottom * 0.7f)
+            }
+        }
     }
 
 
-    private fun waitForTag(tag: String) {
-        waitForTagExists(tag)
+    private fun waitForTag(tag: String, scroll: Boolean = false) {
+        waitForTagExists(tag, scrollIfNotFound = scroll)
         composeRule.onNodeWithTag(tag).assertIsDisplayed()
     }
 
-    private fun waitForTagExists(tag: String) {
-        composeRule.waitUntil(timeoutMillis = WAIT_TIMEOUT_MILLIS) {
-            composeRule.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()
+    private fun waitForTagExists(tag: String, scrollIfNotFound: Boolean = false) {
+        var found = false
+        val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
+        var attempts = 0
+
+        while (!found && System.currentTimeMillis() < deadline) {
+            found = isTagPresent(tag)
+            if (!found && scrollIfNotFound && (attempts % 4 == 0)) {
+                // Prova native prima di swipe manuale
+                try {
+                    composeRule.onNodeWithTag(tag).performScrollTo()
+                    composeRule.waitForIdle()
+                } catch (e: Throwable) {
+                    // Alterna direzioni con priorità "Su" (per tornare da fondo pagina)
+                    if (attempts % 12 < 8) {
+                        performSafeSwipeDown() // Scroll UP
+                    } else {
+                        performSafeSwipeUp()   // Scroll DOWN
+                    }
+                    composeRule.waitForIdle()
+                }
+            }
+            if (!found) {
+                Thread.sleep(TAG_POLL_MILLIS)
+                attempts++
+            }
+        }
+        if (!found) {
+            composeRule.onNodeWithTag(tag).assertExists()
         }
     }
 
@@ -408,9 +478,33 @@ class SocialStoryDemoScreenshotTest {
             composeRule.onNodeWithTag(tag).assertIsDisplayed()
         }.isSuccess
 
-    private fun waitForText(text: String) {
-        composeRule.waitUntil(timeoutMillis = WAIT_TIMEOUT_MILLIS) {
-            composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+    private fun waitForText(text: String, scrollIfNotFound: Boolean = false) {
+        var found = false
+        val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
+        var attempts = 0
+
+        while (!found && System.currentTimeMillis() < deadline) {
+            found = isTextDisplayed(text)
+            if (!found && scrollIfNotFound && (attempts % 4 == 0)) {
+                try {
+                    composeRule.onNodeWithText(text, substring = true).performScrollTo()
+                    composeRule.waitForIdle()
+                } catch (e: Throwable) {
+                    if (attempts % 12 < 8) {
+                        performSafeSwipeDown() // Scroll UP
+                    } else {
+                        performSafeSwipeUp()   // Scroll DOWN
+                    }
+                    composeRule.waitForIdle()
+                }
+            }
+            if (!found) {
+                Thread.sleep(TAG_POLL_MILLIS)
+                attempts++
+            }
+        }
+        if (!found) {
+            composeRule.onNodeWithText(text, substring = true).assertExists()
         }
     }
 
@@ -445,11 +539,11 @@ class SocialStoryDemoScreenshotTest {
         const val CASE_ORDER = "01-commessa-nuovo-cliente-chiusura"
         const val CASE_CONFIG = "02-categorie-template"
         const val CASE_CUSTOMERS = "03-clienti-privato-azienda"
+        const val CASE_MAINTENANCE = "05-manutenzione-backup"
         const val SCREENSHOT_ROOT_DIR_NAME = "demo-social-screenshots"
         const val WAIT_TIMEOUT_MILLIS = 30_000L
         const val LOGIN_ATTEMPTS = 2
         const val LOGIN_ATTEMPT_TIMEOUT_MILLIS = 20_000L
-        const val DASHBOARD_TAB_SWIPE_ATTEMPTS = 4
         const val VISIBILITY_SWIPE_ATTEMPTS = 5
         const val TAG_POLL_MILLIS = 250L
         const val ACTION_PAUSE_MILLIS = 1_400L

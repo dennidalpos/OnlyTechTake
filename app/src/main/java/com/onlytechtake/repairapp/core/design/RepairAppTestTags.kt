@@ -33,6 +33,10 @@ object RepairAppTestTags {
     const val DiagnosisEstimateField = "diagnosis_estimate_field"
 
     const val OrderStatusLabel = "order_status_label"
+    const val OrderDetailLazyColumn = "order_detail_lazy_column"
+    const val OrderActionSection = "order_action_section"
+    const val OrderWhatsAppButton = "order_whatsapp_button"
+    const val OrderSignatureSection = "order_signature_section"
 
     const val CustomerNewButton = "customer_new_button"
     const val CustomerPrivateToggle = "customer_private_toggle"
@@ -51,7 +55,11 @@ object RepairAppTestTags {
 
     const val ConfigHubCategoriesButton = "config_hub_categories_button"
     const val ConfigHubTemplatesButton = "config_hub_templates_button"
+    const val ConfigHubWhatsappButton = "config_hub_whatsapp_button"
+    const val ConfigHubStorageButton = "config_hub_storage_button"
     const val ConfigHubBackupButton = "config_hub_backup_button"
+    const val ConfigHubAdminButton = "config_hub_admin_button"
+    const val ConfigHubAboutButton = "config_hub_about_button"
     const val ConfigBackButton = "config_back_button"
     const val ConfigCategoryNameField = "config_category_name_field"
     const val ConfigCategoryDescriptionField = "config_category_description_field"

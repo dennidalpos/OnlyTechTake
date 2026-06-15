@@ -393,14 +393,26 @@ function New-CaptionedSlide {
 
         $captionHeight = 170
         $overlayBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(190, 17, 24, 39))
-        $graphics.FillRectangle($overlayBrush, 0, $Height - $captionHeight, $Width, $captionHeight)
+        # Overlay barra testi centrato al video e della larghezza del video (drawWidth)
+        $graphics.FillRectangle($overlayBrush, $drawX, $Height - $captionHeight, $drawWidth, $captionHeight)
         $overlayBrush.Dispose()
 
-        $font = New-Object System.Drawing.Font("Segoe UI", 38, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
+        $font = New-Object System.Drawing.Font("Segoe UI", 32, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
         $captionBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::White)
-        $captionRect = New-Object System.Drawing.RectangleF(72, ($Height - $captionHeight + 42), ($Width - 144), 110)
+
+        # Margine interno testo proporzionale alla larghezza video (drawWidth)
+        $hMargin = [int]($drawWidth * 0.12)
+        if ($hMargin -lt 30) { $hMargin = 30 }
+
+        # Il rettangolo del testo deve stare dentro drawX e drawWidth
+        $captionRect = New-Object System.Drawing.RectangleF(($drawX + $hMargin), ($Height - $captionHeight + 35), ($drawWidth - 2 * $hMargin), 130)
+
         $format = New-Object System.Drawing.StringFormat
+        $format.Alignment = [System.Drawing.StringAlignment]::Center
+        $format.LineAlignment = [System.Drawing.StringAlignment]::Center
         $format.Trimming = [System.Drawing.StringTrimming]::EllipsisWord
+        $format.FormatFlags = [System.Drawing.StringFormatFlags]::LineLimit
+
         $graphics.DrawString($Caption, $font, $captionBrush, $captionRect, $format)
         $format.Dispose()
         $captionBrush.Dispose()

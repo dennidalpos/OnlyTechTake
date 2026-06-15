@@ -145,6 +145,7 @@ fun OrderDetailWorkspace(
         LazyColumn(
             modifier = Modifier
                 .weight(1f)
+                .testTag(RepairAppTestTags.OrderDetailLazyColumn)
                 .padding(DashboardSpacing.screenPadding),
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
         ) {

@@ -154,7 +154,7 @@ fun OrderActionCard(
     modifier: Modifier = Modifier,
 ) {
     StandardCard(
-        modifier = modifier,
+        modifier = modifier.testTag(RepairAppTestTags.OrderActionSection),
         containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
     ) {
         Column(
@@ -187,6 +187,7 @@ fun OrderActionCard(
                 TouchButton(
                     text = stringResource(R.string.order_whatsapp_send),
                     tone = ButtonTone.BRAND_WHATSAPP,
+                    testTag = RepairAppTestTags.OrderWhatsAppButton,
                     onClick = { onSendWhatsApp(templateCode) }
                 )
             }

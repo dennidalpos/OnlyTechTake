@@ -78,6 +78,7 @@ fun SettingsHub(
                 title = stringResource(R.string.config_hub_whatsapp_title),
                 subtitle = stringResource(R.string.config_hub_whatsapp_subtitle),
                 icon = Icons.AutoMirrored.Filled.Send,
+                testTag = RepairAppTestTags.ConfigHubWhatsappButton,
             ) {
                 onNavigate(DashboardRoutes.settings("WHATSAPP"))
             }
@@ -87,6 +88,7 @@ fun SettingsHub(
                 title = stringResource(R.string.storage_title),
                 subtitle = "Spazio disco e monitoraggio",
                 icon = Icons.Default.Storage,
+                testTag = RepairAppTestTags.ConfigHubStorageButton,
             ) {
                 onNavigate(DashboardRoutes.settings("STORAGE"))
             }
@@ -96,6 +98,7 @@ fun SettingsHub(
                 title = stringResource(R.string.config_hub_admin_title),
                 subtitle = stringResource(R.string.config_hub_admin_subtitle),
                 icon = Icons.Default.Lock,
+                testTag = RepairAppTestTags.ConfigHubAdminButton,
             ) {
                 onNavigate(DashboardRoutes.ADMIN)
             }
@@ -117,6 +120,7 @@ fun SettingsHub(
                 title = "Informazioni",
                 subtitle = "Versione e contatti dell'app",
                 icon = Icons.Default.Info,
+                testTag = RepairAppTestTags.ConfigHubAboutButton,
             ) {
                 onNavigate(DashboardRoutes.settings("ABOUT"))
             }

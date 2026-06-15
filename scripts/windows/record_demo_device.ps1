@@ -73,6 +73,11 @@ $recordingsConfig = @(
         Id = "customers"
         Description = "Anagrafiche Clienti (Privato/Azienda)"
         TestClass = "com.onlytechtake.repairapp.demo.SocialStoryDemoScreenshotTest#capturesPrivateAndBusinessCustomerStories"
+    },
+    [PSCustomObject]@{
+        Id = "maintenance"
+        Description = "Manutenzione (Storage, Backup, Export Excel)"
+        TestClass = "com.onlytechtake.repairapp.demo.SocialStoryDemoScreenshotTest#capturesMaintenanceStories"
     }
 )
 
@@ -92,9 +97,10 @@ if ($choice -match "^\d+$" -and [int]$choice -gt 0 -and [int]$choice -lt $i) {
     Write-Host "Verrà eseguito lo scenario: $($recordingsConfig[[int]$choice - 1].Description)" -ForegroundColor Green
 }
 
-# Grant necessary permissions for demo recording (Camera)
+# Grant necessary permissions for demo recording
 Write-Host "Concessione permessi..." -ForegroundColor Gray
 adb -s $serial shell pm grant $PackageName android.permission.CAMERA
+adb -s $serial shell pm grant $PackageName android.permission.POST_NOTIFICATIONS 2>$null
 
 if ($SeedData) {
     Write-Host "Seeding dati demo..." -ForegroundColor Yellow

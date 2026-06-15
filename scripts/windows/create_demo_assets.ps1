@@ -93,6 +93,12 @@ $assetsConfig = @(
                 TestMethod = "capturesPrivateAndBusinessCustomerStories"
                 SourceDirectory = "03-clienti-privato-azienda"
                 TargetDirectory = "screenshots/04-clienti-privato-azienda"
+            },
+            [PSCustomObject]@{
+                Id = "maintenance"
+                TestMethod = "capturesMaintenanceStories"
+                SourceDirectory = "05-manutenzione-backup"
+                TargetDirectory = "screenshots/05-manutenzione-backup"
             }
         )
     }
