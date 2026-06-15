@@ -30,6 +30,7 @@ import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import com.onlytechtake.repairapp.domain.backup.BackupReminderStatus
 import com.onlytechtake.repairapp.domain.models.AppSummary
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
+import com.onlytechtake.repairapp.features.dashboard.common.BackupReminderCard
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
@@ -155,60 +156,6 @@ private fun DemoBanner(text: String) {
         }
     }
 }
-
-@Composable
-private fun BackupReminderCard(
-    settings: BackupReminderSettings,
-    onRunBackup: () -> Unit,
-    onOpenSettings: () -> Unit,
-) {
-    StandardCard(highlight = true) {
-        Column(
-            modifier = Modifier.padding(DashboardSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-        ) {
-            Text(
-                text = stringResource(R.string.home_backup_reminder_title),
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary,
-            )
-            Text(
-                text = backupStatusLabel(settings),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
-            ) {
-                TouchButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.backup_run_full_zip),
-                    onClick = onRunBackup,
-                )
-                TouchButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.home_backup_reminder_settings),
-                    tone = ButtonTone.NEUTRAL,
-                    onClick = onOpenSettings,
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun backupStatusLabel(settings: BackupReminderSettings): String =
-    when {
-        settings.lastBackupStatus == BackupReminderStatus.FAILED ->
-            stringResource(R.string.backup_status_failed)
-        settings.lastSuccessfulBackupAtMillis == null ->
-            stringResource(R.string.backup_status_never)
-        else -> {
-            val days = BackupReminderPolicy.daysSinceLastSuccessfulBackup(settings, System.currentTimeMillis()) ?: 0L
-            stringResource(R.string.backup_status_days_ago, days)
-        }
-    }
 
 @Composable
 private fun MetricCard(label: String, value: String, modifier: Modifier = Modifier) {

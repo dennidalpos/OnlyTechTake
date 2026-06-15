@@ -9,7 +9,9 @@ import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.permissions.PermissionService
+import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -20,6 +22,7 @@ class DataResetRepository(
     private val authPreferences: AuthPreferences,
     private val sessionStore: InMemorySessionStore,
     private val fileCleanupService: OrderFileCleanupService,
+    private val mediaStorageProvider: MediaStorageProvider,
 ) {
     private val eventWriter = OrderWorkflowEventWriter(context, auditLogDao = auditLogDao)
 
@@ -35,13 +38,7 @@ class DataResetRepository(
                 eventWriter.dataReset(actor.id, System.currentTimeMillis())
                 
                 database.withTransaction {
-                    // Delete in order to respect foreign keys if possible, 
-                    // or just clear all tables if they are interdependent.
-                    // Room doesn't allow disabling FK easily in withTransaction.
-                    // We'll use a raw query if needed, but let's try ordered deletion first.
-                    
                     val db = database.openHelper.writableDatabase
-                    // Deleting in order to respect FK
                     TABLES_ORDERED_FOR_DELETION.forEach { table ->
                         db.execSQL("DELETE FROM $table")
                     }
@@ -52,7 +49,8 @@ class DataResetRepository(
                 
                 // Clear all files
                 fileCleanupService.cleanupSharedCache()
-                // For a full reset, we might want to just wipe the folders
+                // For a full reset, we wipe the centralized media folder and the rest of filesDir
+                mediaStorageProvider.getBaseMediaDir().deleteRecursively()
                 context.filesDir.listFiles()?.forEach { it.deleteRecursively() }
             }
         }
@@ -73,7 +71,13 @@ class DataResetRepository(
                     }
                 }
                 
-                // Clear files
+                // Clear centralized media related to orders and intake
+                File(mediaStorageProvider.getBaseMediaDir(), "order_media").deleteRecursively()
+                File(mediaStorageProvider.getBaseMediaDir(), "intake_media").deleteRecursively()
+                File(mediaStorageProvider.getBaseMediaDir(), "signatures").deleteRecursively()
+                File(mediaStorageProvider.getBaseMediaDir(), "documents").deleteRecursively()
+                
+                // Legacy cleanup for safety
                 context.filesDir.listFiles { _, name -> name == "orders" || name == "order_media" || name == "intake_media" }
                     ?.forEach { it.deleteRecursively() }
                 

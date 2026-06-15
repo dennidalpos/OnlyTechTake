@@ -31,21 +31,81 @@ object DemoMode {
         updatedAt = 1735689600000L,
     )
 
-    val demoCategory = OrderCategoryEntity(
-        id = "cat-smartphone",
-        parentId = null,
-        level = 0,
-        name = "Smartphone",
-        description = "Riparazione telefoni cellulari",
-        active = true
+    val demoCategories = listOf(
+        OrderCategoryEntity(
+            id = "cat-smartphone",
+            parentId = null,
+            level = 0,
+            name = "Smartphone",
+            description = "Riparazione telefoni cellulari",
+            active = true
+        ),
+        OrderCategoryEntity(
+            id = "cat-apple",
+            parentId = "cat-smartphone",
+            level = 1,
+            name = "Apple",
+            description = "iPhone, iPad, Watch",
+            active = true
+        ),
+        OrderCategoryEntity(
+            id = "cat-iphone",
+            parentId = "cat-apple",
+            level = 2,
+            name = "iPhone",
+            description = "Tutti i modelli",
+            active = true
+        ),
+        OrderCategoryEntity(
+            id = "cat-iphone-13",
+            parentId = "cat-iphone",
+            level = 3,
+            name = "iPhone 13",
+            description = "Riparazione Display",
+            active = true
+        ),
+        OrderCategoryEntity(
+            id = "cat-console",
+            parentId = null,
+            level = 0,
+            name = "Console",
+            description = "Gaming hardware",
+            active = true
+        ),
+        OrderCategoryEntity(
+            id = "cat-sony",
+            parentId = "cat-console",
+            level = 1,
+            name = "Sony",
+            description = "PlayStation World",
+            active = true
+        ),
+        OrderCategoryEntity(
+            id = "cat-ps5",
+            parentId = "cat-sony",
+            level = 2,
+            name = "PS5",
+            description = "Console Next-Gen",
+            active = true
+        ),
+        OrderCategoryEntity(
+            id = "cat-dualsense",
+            parentId = "cat-ps5",
+            level = 3,
+            name = "DualSense",
+            description = "Riparazione Drift",
+            active = true
+        )
     )
+
+    val demoCategory = demoCategories.last()
 
     val demoOrder = RepairOrderEntity(
         id = "demo-order-1",
         orderNumber = "OTT-2026-001",
         customerId = demoCustomer.id,
         title = "iPhone 13",
-        categoryId = "cat-smartphone",
+        categoryId = "cat-iphone-13",
         status = OrderStatus.RESULT,
         priority = OrderPriority.NORMAL,
         assignedToUserId = "admin",

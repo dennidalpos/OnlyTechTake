@@ -81,15 +81,65 @@ object DemoDataSeeder {
                 updatedAt = now,
             ),
         )
-        database.orderCategoryDao().upsert(
-            OrderCategoryEntity(
-                id = DEMO_CATEGORY_ID,
-                parentId = null,
-                level = 0,
-                name = "Notebook",
-                description = "Diagnosi e riparazioni notebook e ultrabook.",
-                active = true,
-            ),
+        database.orderCategoryDao().upsertAll(
+            listOf(
+                OrderCategoryEntity(
+                    id = "demo-cat-smartphone",
+                    parentId = null,
+                    level = 0,
+                    name = "Smartphone",
+                    description = "Riparazione telefoni cellulari",
+                    active = true,
+                ),
+                OrderCategoryEntity(
+                    id = "demo-cat-apple",
+                    parentId = "demo-cat-smartphone",
+                    level = 1,
+                    name = "Apple",
+                    description = "Dispositivi iOS",
+                    active = true,
+                ),
+                OrderCategoryEntity(
+                    id = "demo-cat-iphone",
+                    parentId = "demo-cat-apple",
+                    level = 2,
+                    name = "iPhone",
+                    description = "Tutti i modelli iPhone",
+                    active = true,
+                ),
+                OrderCategoryEntity(
+                    id = DEMO_CATEGORY_ID, // notebook
+                    parentId = null,
+                    level = 0,
+                    name = "Notebook",
+                    description = "Diagnosi e riparazioni notebook e ultrabook.",
+                    active = true,
+                ),
+                OrderCategoryEntity(
+                    id = "demo-cat-hp",
+                    parentId = DEMO_CATEGORY_ID,
+                    level = 1,
+                    name = "HP",
+                    description = "Portatili HP",
+                    active = true,
+                ),
+                OrderCategoryEntity(
+                    id = "demo-cat-pavilion",
+                    parentId = "demo-cat-hp",
+                    level = 2,
+                    name = "Pavilion",
+                    description = "Serie Pavilion",
+                    active = true,
+                ),
+                OrderCategoryEntity(
+                    id = "demo-cat-pavilion-15",
+                    parentId = "demo-cat-pavilion",
+                    level = 3,
+                    name = "Pavilion 15-eg",
+                    description = "Riparazione cerniere e display",
+                    active = true,
+                )
+            )
         )
         database.customerDao().upsert(
             CustomerEntity(
@@ -114,7 +164,7 @@ object DemoDataSeeder {
                 orderNumber = "2026-0001",
                 customerId = DEMO_CUSTOMER_ID,
                 title = "Notebook HP - non si accende",
-                categoryId = DEMO_CATEGORY_ID,
+                categoryId = "demo-cat-pavilion-15",
                 status = OrderStatus.OPEN,
                 priority = OrderPriority.NORMAL,
                 assignedToUserId = DEMO_OPERATOR_ID,

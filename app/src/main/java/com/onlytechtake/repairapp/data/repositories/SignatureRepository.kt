@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.data.repositories
 
 import android.content.Context
 import android.graphics.Bitmap
+import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.data.local.dao.MessageTemplateDao
 import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
 import com.onlytechtake.repairapp.data.local.dao.SignatureDao
@@ -21,6 +22,7 @@ class SignatureRepository(
     private val templateDao: MessageTemplateDao,
     private val timelineEventDao: TimelineEventDao,
     private val fileCleanupService: OrderFileCleanupService,
+    private val mediaStorageProvider: MediaStorageProvider,
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
     private val eventWriter = OrderWorkflowEventWriter(context, timelineEventDao = timelineEventDao)
@@ -48,8 +50,7 @@ class SignatureRepository(
             val now = clockMillis()
             val privacyTemplate = templateDao.findActiveByCode(PRIVACY_TEMPLATE_CODE)
             val termsTemplate = templateDao.findActiveByCode(TERMS_TEMPLATE_CODE)
-            val directory = File(context.filesDir, "orders/$orderId/signatures")
-            check(directory.exists() || directory.mkdirs()) { "Cartella firme non disponibile" }
+            val directory = mediaStorageProvider.getOrderSignaturesDir(orderId)
             val file = File(directory, "signature_$now.png")
 
             FileOutputStream(file).use { output ->

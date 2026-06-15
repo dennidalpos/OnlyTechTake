@@ -1,5 +1,8 @@
 package com.onlytechtake.repairapp.features.dashboard.common
 
+import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
+import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
+import com.onlytechtake.repairapp.domain.backup.BackupReminderStatus
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -79,11 +82,17 @@ fun SectionTitle(text: String, tooltip: String? = null) {
         )
         if (tooltip != null) {
             val scope = rememberCoroutineScope()
-            val tooltipState = rememberTooltipState()
+            val tooltipState = rememberTooltipState(isPersistent = true)
             TooltipBox(
-                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(),
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                    positioning = TooltipAnchorPosition.Above
+                ),
                 tooltip = {
-                    PlainTooltip {
+                    PlainTooltip(
+                        modifier = Modifier.clickable {
+                            scope.launch { tooltipState.dismiss() }
+                        }
+                    ) {
                         Text(tooltip)
                     }
                 },
@@ -521,3 +530,76 @@ fun NoteFieldWithDialog(
         )
     }
 }
+
+@Composable
+fun LocalMessageBanner(
+    message: String?,
+    isError: Boolean,
+    modifier: Modifier = Modifier
+) {
+    if (message != null) {
+        Text(
+            text = message,
+            color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = DashboardSpacing.screenPadding, vertical = 4.dp)
+        )
+    }
+}
+
+@Composable
+fun BackupReminderCard(
+    settings: BackupReminderSettings,
+    onRunBackup: () -> Unit,
+    onOpenSettings: () -> Unit,
+) {
+    StandardCard(highlight = true) {
+        Column(
+            modifier = Modifier.padding(DashboardSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+        ) {
+            Text(
+                text = stringResource(R.string.home_backup_reminder_title),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            Text(
+                text = backupStatusLabel(settings),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+            ) {
+                TouchButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.backup_run_full_zip),
+                    onClick = onRunBackup,
+                )
+                TouchButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.home_backup_reminder_settings),
+                    tone = ButtonTone.NEUTRAL,
+                    onClick = onOpenSettings,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun backupStatusLabel(settings: BackupReminderSettings): String =
+    when {
+        settings.lastBackupStatus == BackupReminderStatus.FAILED ->
+            stringResource(R.string.backup_status_failed)
+        settings.lastSuccessfulBackupAtMillis == null ->
+            stringResource(R.string.backup_status_never)
+        else -> {
+            val days = BackupReminderPolicy.daysSinceLastSuccessfulBackup(settings, System.currentTimeMillis()) ?: 0L
+            stringResource(R.string.backup_status_days_ago, days)
+        }
+    }
+

@@ -341,6 +341,7 @@
     <string name="catalog_error_cycle_detected">Il ramo categorie contiene un ciclo</string>
     <string name="catalog_error_self_parent">Una categoria non puo\' essere padre di se stessa</string>
     <string name="catalog_error_parent_not_found">Categoria padre non trovata</string>
+    <string name="catalog_error_depth_limit">Profondità massima raggiunta (4 livelli)</string>
 
     <string name="demo_error_order_limit">Limite Demo raggiunto. Hai creato il numero massimo di commesse disponibili nella versione Demo (%1$d). Per continuare senza limiti, attiva la versione Full.</string>
     <string name="demo_error_operator_limit">Limite Demo raggiunto. Massimo %1$d operatori consentiti nella versione Demo. Per continuare senza limiti, attiva la versione Full.</string>

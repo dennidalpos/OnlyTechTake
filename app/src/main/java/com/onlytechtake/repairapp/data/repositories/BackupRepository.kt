@@ -6,6 +6,7 @@ import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import android.provider.OpenableColumns
 import com.onlytechtake.repairapp.BuildConfig
+import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
@@ -41,11 +42,13 @@ class BackupRepository(
     private val templateDao: MessageTemplateDao,
     private val settingDao: AppSettingDao,
     private val auditLogDao: AuditLogDao,
+    private val backupReminderPreferences: com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences? = null,
     private val orderExportDao: OrderExportDao? = null,
     private val database: RepairAppDatabase? = null,
     private val authPreferences: AuthPreferences? = null,
     private val sessionStore: InMemorySessionStore? = null,
     private val storageStatsService: com.onlytechtake.repairapp.data.services.StorageStatsService? = null,
+    private val mediaStorageProvider: MediaStorageProvider? = null,
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
     private val eventWriter = OrderWorkflowEventWriter(context, auditLogDao = auditLogDao)
@@ -83,11 +86,15 @@ class BackupRepository(
                     zip.putTextEntry("metadata/backup.json", buildBackupMetadataJson())
                     zip.putTextEntry("config/configuration.json", buildConfigurationJson())
                     addDatabaseFiles(zip)
-                    addAppFiles(zip, directoryName = "orders")
-                    addAppFiles(zip, directoryName = "order_media")
+                    addAppFiles(zip, directoryName = "app_media")
                 }
             } ?: throw IOException("Destinazione non disponibile")
+            
+            val fileName = displayName(uri)
+            backupReminderPreferences?.recordSuccessfulFullBackup(fileName)
             eventWriter.dataExported(actor.id, clockMillis())
+        }.onFailure {
+            backupReminderPreferences?.recordFailedFullBackup()
         }
 
     suspend fun restoreCompleteBackup(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
@@ -351,14 +358,28 @@ class BackupRepository(
     }
 
     private fun replacePrivateFiles(restoreRoot: File) {
+        mediaStorageProvider?.getBaseMediaDir()?.deleteRecursively()
+        
+        // Cleanup old folders if they exist (migration/safety)
         listOf("orders", "order_media", "intake_media", "signatures").forEach { name ->
             File(context.filesDir, name).deleteRecursively()
         }
+
         val restoredFiles = File(restoreRoot, "files")
-        listOf("orders", "order_media").forEach { name ->
-            val source = File(restoredFiles, name)
-            if (source.exists()) {
-                source.copyRecursively(File(context.filesDir, name), overwrite = true)
+        
+        // Restore new centralized folder
+        val source = File(restoredFiles, "app_media")
+        if (source.exists()) {
+            val destination = mediaStorageProvider?.getBaseMediaDir() ?: File(context.filesDir, "app_media")
+            source.copyRecursively(destination, overwrite = true)
+        } else {
+            // Support legacy backup restore (mapping old folders to new centralized structure is omitted for simplicity 
+            // as this is a fresh app, but we at least restore the old folders if present to avoid data loss)
+            listOf("orders", "order_media").forEach { name ->
+                val legacySource = File(restoredFiles, name)
+                if (legacySource.exists()) {
+                    legacySource.copyRecursively(File(context.filesDir, name), overwrite = true)
+                }
             }
         }
     }

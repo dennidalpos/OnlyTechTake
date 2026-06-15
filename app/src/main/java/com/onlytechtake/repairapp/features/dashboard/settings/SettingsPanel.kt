@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.features.dashboard.common.LocalMessageBanner
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 
 @Composable
@@ -135,16 +136,21 @@ private fun SettingsSectionContent(
     onNavigate: (String) -> Unit = {},
     onBack: () -> Unit = {}
 ) {
-    when (section) {
-        "CATEGORIES" -> CategoriesSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)
-        "TEMPLATES" -> TemplatesSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)
-        "WHATSAPP" -> WhatsAppSettings(viewModel, requestConfirm, onBack = onBack)
-        "EXPORT" -> BackupSettings(viewModel, isAdmin, onBackupRestored, requestConfirm, onBack = onBack)
-        "STORAGE" -> StorageSettings(viewModel, onBack = onBack)
-        "ABOUT" -> AboutSettings(onBack = onBack)
-        else -> if (section == null) SettingsHub(isAdmin, onNavigate) else {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Seleziona una sezione")
+    val message by viewModel.message.collectAsState()
+
+    Column {
+        LocalMessageBanner(message?.text, message?.isError ?: false)
+        when (section) {
+            "CATEGORIES" -> CategoriesSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)
+            "TEMPLATES" -> TemplatesSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)
+            "WHATSAPP" -> WhatsAppSettings(viewModel, requestConfirm, onBack = onBack)
+            "EXPORT" -> BackupSettings(viewModel, isAdmin, onBackupRestored, requestConfirm, onBack = onBack)
+            "STORAGE" -> StorageSettings(viewModel, onBack = onBack)
+            "ABOUT" -> AboutSettings(onBack = onBack)
+            else -> if (section == null) SettingsHub(isAdmin, onNavigate) else {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Seleziona una sezione")
+                }
             }
         }
     }

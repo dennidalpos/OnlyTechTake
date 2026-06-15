@@ -1,6 +1,8 @@
 package com.onlytechtake.repairapp.features.dashboard.orders
 
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -56,6 +58,7 @@ import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
 fun OrdersPanel(
     viewModel: OrdersViewModel,
     onOrderClick: (String) -> Unit,
+    onOpenBackupSettings: () -> Unit,
 ) {
     val windowSizeClass = LocalWindowSizeClass.current
     val isWide = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Medium
@@ -64,9 +67,11 @@ fun OrdersPanel(
         var selectedOrderId by rememberSaveable { mutableStateOf<String?>(null) }
         Row(Modifier.fillMaxSize()) {
             Box(Modifier.weight(1f)) {
-                OrdersListContent(viewModel = viewModel) {
-                    selectedOrderId = it
-                }
+                OrdersListContent(
+                    viewModel = viewModel,
+                    onOrderClick = { selectedOrderId = it },
+                    onOpenBackupSettings = onOpenBackupSettings
+                )
             }
             VerticalDivider()
             Box(Modifier.weight(1.5f)) {
@@ -96,7 +101,7 @@ fun OrdersPanel(
             }
         }
     } else {
-        OrdersListContent(viewModel, onOrderClick)
+        OrdersListContent(viewModel, onOrderClick, onOpenBackupSettings)
     }
 }
 
@@ -104,11 +109,18 @@ fun OrdersPanel(
 private fun OrdersListContent(
     viewModel: OrdersViewModel,
     onOrderClick: (String) -> Unit,
+    onOpenBackupSettings: () -> Unit,
 ) {
     val orderFilter by viewModel.orderFilter.collectAsState()
     val orderListItems by viewModel.orderListItems.collectAsState()
+    val backupReminderSettings by viewModel.backupReminderSettings.collectAsState()
+    val showBackupReminder by viewModel.isBackupReminderDue.collectAsState()
     val context = LocalContext.current
     var showFilterDialog by rememberSaveable { mutableStateOf(value = false) }
+
+    val exportZipLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
+        uri?.let(viewModel::exportCompleteBackup)
+    }
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -133,6 +145,16 @@ private fun OrdersListContent(
                         text = stringResource(R.string.orders_filter_title),
                         tone = if (orderFilter.hasActiveFilter()) ButtonTone.INFO else ButtonTone.NEUTRAL,
                         onClick = { showFilterDialog = true },
+                    )
+                }
+            }
+
+            if (showBackupReminder) {
+                item {
+                    com.onlytechtake.repairapp.features.dashboard.common.BackupReminderCard(
+                        settings = backupReminderSettings,
+                        onRunBackup = { exportZipLauncher.launch("onlytechtake-backup.zip") },
+                        onOpenSettings = onOpenBackupSettings
                     )
                 }
             }

@@ -20,16 +20,13 @@ class CatalogRepository(
 ) {
     fun observeCategories(): Flow<List<OrderCategoryEntity>> {
         if (DemoMode.isEnabled) {
-            return flowOf(listOf(DemoMode.demoCategory))
+            return flowOf(DemoMode.demoCategories)
         }
         return categoryDao.observeAll()
     }
 
     suspend fun getCategoryPath(id: String): String {
-        if (DemoMode.isEnabled && (id == DemoMode.demoCategory.id)) {
-            return DemoMode.demoCategory.name
-        }
-        val all = categoryDao.findAll()
+        val all = if (DemoMode.isEnabled) DemoMode.demoCategories else categoryDao.findAll()
         val path = mutableListOf<String>()
         var currentId: String? = id
         while (currentId != null) {
@@ -68,6 +65,7 @@ class CatalogRepository(
                     errorNotFound = context.getString(R.string.catalog_error_not_found),
                     errorParentNotFound = context.getString(R.string.catalog_error_parent_not_found),
                     errorSelfParent = context.getString(R.string.catalog_error_self_parent),
+                    errorDepthLimit = context.getString(R.string.catalog_error_depth_limit),
                 ),
             )
             categoryId
@@ -124,6 +122,7 @@ internal fun normalizeCategoryTree(
     errorNotFound: String,
     errorParentNotFound: String,
     errorSelfParent: String,
+    errorDepthLimit: String,
 ): List<OrderCategoryEntity> {
     val categoryId = input.id ?: generatedId
     require(input.parentId != categoryId) { errorSelfParent }
@@ -149,6 +148,7 @@ internal fun normalizeCategoryTree(
             require(categories.containsKey(parentId)) { errorParentNotFound }
             resolveLevel(parentId) + 1
         } ?: 0
+        require(level < 4) { errorDepthLimit }
         resolving.remove(id)
         resolvedLevels[id] = level
         return level

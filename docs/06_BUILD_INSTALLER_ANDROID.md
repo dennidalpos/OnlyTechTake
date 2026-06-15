@@ -74,7 +74,7 @@ Al primo avvio pulito l'app mostra il setup admin locale. Il repository non cont
 
 ## Build
 
-I flavor Gradle disponibili sono `full` e `demo`; negli script il parametro e' `-Flavor Full|Demo` e il default e' `Full`.
+I flavor Gradle disponibili sono `full`, `demo` e `showcase`; negli script il parametro e' `-Flavor Full|Demo|Showcase` e il default e' `Full`.
 
 Debug APK Full:
 
@@ -86,6 +86,12 @@ Debug APK Demo:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Demo -BuildType Debug -OutputType Apk
+```
+
+Debug APK Showcase:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Showcase -BuildType Debug -OutputType Apk
 ```
 
 Release APK Full:
@@ -122,10 +128,13 @@ powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Fl
 
 - `app\build\outputs\apk\full\debug\app-full-debug.apk`
 - `app\build\outputs\apk\demo\debug\app-demo-debug.apk`
+- `app\build\outputs\apk\showcase\debug\app-showcase-debug.apk`
 - `app\build\outputs\apk\full\release\app-full-release.apk`
 - `app\build\outputs\apk\demo\release\app-demo-release.apk`
+- `app\build\outputs\apk\showcase\release\app-showcase-release.apk`
 - `app\build\outputs\bundle\fullRelease\app-full-release.aab`
 - `app\build\outputs\bundle\demoRelease\app-demo-release.aab`
+- `app\build\outputs\bundle\showcaseRelease\app-showcase-release.aab`
 
 ## Signing release
 
@@ -156,7 +165,7 @@ Per ridurre gli avvisi Play Protect:
 - preferire Android App Bundle caricato su Play Console, Internal Testing o Internal App Sharing;
 - se serve distribuire anche fuori Play, scaricare da Play Console l'APK universale firmato da Google oppure usare una chiave release gestita in modo coerente con Play App Signing.
 
-Un APK installato manualmente da sorgenti sconosciute e firmato con una chiave locale non riconosciuta puo' comunque mostrare avvisi Play Protect anche se il codice dell'app e' legittimo.
+Un APK installato manualmente da sorgenti sconnuosciute e firmato con una chiave locale non riconosciuta puo' comunque mostrare avvisi Play Protect anche se il codice dell'app e' legittimo.
 
 ## Installazione e start
 
@@ -188,7 +197,7 @@ Installare un APK specifico:
 powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -Flavor Full -ApkPath app\build\outputs\apk\full\debug\app-full-debug.apk
 ```
 
-Per il flavor Demo usare `-Flavor Demo`; il package avviato sara' `com.onlytechtake.repairapp.demo.debug` in debug e `com.onlytechtake.repairapp.demo` in release.
+Per il flavor Demo usare `-Flavor Demo`; per il flavor Showcase usare `-Flavor Showcase`. Il package avviato sara' `com.onlytechtake.repairapp.<flavor>.debug` in debug.
 
 ## Troubleshooting
 

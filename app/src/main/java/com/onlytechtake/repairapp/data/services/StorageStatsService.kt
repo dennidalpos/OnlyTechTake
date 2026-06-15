@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.data.services
 
 import android.content.Context
 import android.os.StatFs
+import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import java.io.File
 
 data class StorageStats(
@@ -14,7 +15,10 @@ data class StorageStats(
     val cacheBytes: Long,
 )
 
-class StorageStatsService(private val context: Context) {
+class StorageStatsService(
+    private val context: Context,
+    private val mediaStorageProvider: MediaStorageProvider,
+) {
     fun getStorageStats(): StorageStats {
         val stat = StatFs(context.filesDir.path)
         val freeBytes = stat.availableBytes
@@ -26,14 +30,12 @@ class StorageStatsService(private val context: Context) {
         val dbWal = File(dbFile.path + "-wal")
         val totalDbBytes = dbBytes + (if (dbJournal.exists()) dbJournal.length() else 0L) + (if (dbWal.exists()) dbWal.length() else 0L)
 
-        val orderMediaDir = File(context.filesDir, "order_media")
-        val mediaBytes = getDirectorySize(orderMediaDir)
+        val baseMediaDir = mediaStorageProvider.getBaseMediaDir()
         
-        val ordersDir = File(context.filesDir, "orders")
-        val ordersBytes = getDirectorySize(ordersDir)
-        
-        val intakeMediaDir = File(context.filesDir, "intake_media")
-        val intakeBytes = getDirectorySize(intakeMediaDir)
+        val mediaBytes = getDirectorySize(File(baseMediaDir, "order_media"))
+        val signatureBytes = getDirectorySize(File(baseMediaDir, "signatures"))
+        val documentBytes = getDirectorySize(File(baseMediaDir, "documents"))
+        val intakeBytes = getDirectorySize(File(baseMediaDir, "intake_media"))
         
         val cacheBytes = getDirectorySize(context.cacheDir)
         
@@ -45,7 +47,7 @@ class StorageStatsService(private val context: Context) {
             appUsedBytes = appUsedBytes,
             databaseBytes = totalDbBytes,
             mediaBytes = mediaBytes + intakeBytes,
-            documentsBytes = ordersBytes,
+            documentsBytes = documentBytes + signatureBytes,
             cacheBytes = cacheBytes
         )
     }

@@ -8,6 +8,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.core.security.PasswordHasher
+import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.AppSettingEntity
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
@@ -513,13 +514,15 @@ class RepositoryPathsInstrumentedTest {
             it.parentFile?.mkdirs()
             it.writeText("private")
         }
+        val mediaProvider = MediaStorageProvider(context)
         val repository = DataResetRepository(
             context = context,
             database = database,
             auditLogDao = database.auditLogDao(),
             authPreferences = authPreferences,
             sessionStore = sessionStore,
-            fileCleanupService = OrderFileCleanupService(context),
+            fileCleanupService = OrderFileCleanupService(context, mediaProvider),
+            mediaStorageProvider = mediaProvider,
         )
 
         repository.resetAll(actor, "RESET").getOrThrow()
@@ -606,13 +609,15 @@ class RepositoryPathsInstrumentedTest {
                 it.parentFile?.mkdirs()
                 it.writeText("private")
             }
+            val mediaProvider = MediaStorageProvider(context)
             val repository = DataResetRepository(
                 context = context,
                 database = fileBackedDatabase,
                 auditLogDao = fileBackedDatabase.auditLogDao(),
                 authPreferences = authPreferences,
                 sessionStore = sessionStore,
-                fileCleanupService = OrderFileCleanupService(context),
+                fileCleanupService = OrderFileCleanupService(context, mediaProvider),
+                mediaStorageProvider = mediaProvider,
             )
 
             repository.resetAll(actor, "RESET").getOrThrow()
@@ -739,16 +744,19 @@ class RepositoryPathsInstrumentedTest {
             clockMillis = { NOW },
         )
 
-    private fun orderMediaRepository(): OrderMediaRepository =
-        OrderMediaRepository(
+    private fun orderMediaRepository(): OrderMediaRepository {
+        val mediaProvider = MediaStorageProvider(context)
+        return OrderMediaRepository(
             context = context,
             repairOrderDao = database.repairOrderDao(),
             orderMediaDao = database.orderMediaDao(),
             timelineEventDao = database.timelineEventDao(),
-            fileCleanupService = OrderFileCleanupService(context),
+            fileCleanupService = OrderFileCleanupService(context, mediaProvider),
+            mediaStorageProvider = mediaProvider,
             database = database,
             clockMillis = { NOW },
         )
+    }
 
     private fun templateRepository(): TemplateRepository =
         TemplateRepository(
@@ -764,16 +772,19 @@ class RepositoryPathsInstrumentedTest {
             clockMillis = { NOW },
         )
 
-    private fun signatureRepository(): SignatureRepository =
-        SignatureRepository(
+    private fun signatureRepository(): SignatureRepository {
+        val mediaProvider = MediaStorageProvider(context)
+        return SignatureRepository(
             context = context,
             repairOrderDao = database.repairOrderDao(),
             signatureDao = database.signatureDao(),
             templateDao = database.messageTemplateDao(),
             timelineEventDao = database.timelineEventDao(),
-            fileCleanupService = OrderFileCleanupService(context),
+            fileCleanupService = OrderFileCleanupService(context, mediaProvider),
+            mediaStorageProvider = mediaProvider,
             clockMillis = { NOW },
         )
+    }
 
     private fun backupRepository(): BackupRepository =
         BackupRepository(
@@ -782,6 +793,7 @@ class RepositoryPathsInstrumentedTest {
             templateDao = database.messageTemplateDao(),
             settingDao = database.appSettingDao(),
             auditLogDao = database.auditLogDao(),
+            mediaStorageProvider = MediaStorageProvider(context),
             clockMillis = { NOW },
         )
 

@@ -29,7 +29,8 @@ internal fun colorForLevel(level: Int): Color = when (level) {
     0 -> Color(0xFF1976D2)
     1 -> Color(0xFF388E3C)
     2 -> Color(0xFFF57C00)
-    else -> Color(0xFF7B1FA2)
+    3 -> Color(0xFF7B1FA2)
+    else -> Color.Gray
 }
 
 @Composable

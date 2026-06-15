@@ -100,6 +100,7 @@ Before the final response for implementation tasks, verify that:
 - duplicate scripts, configs, assets, or docs were not introduced;
 - `.gitignore` covers local/generated outputs when appropriate.
 - **IMPORTANT**: Always update and verify demo scripts (screenshots and video) after any change that affects the UI, workflow, or database schema.
+- **Flavor Consistency**: Maintain and verify all build variants (`demo`, `showcase`, `full`) ensuring their seeders (`ShowcaseDataSeeder`, `DemoDataSeeder`) and hardcoded mocks (`DemoMode`) are updated to reflect current schema and feature changes.
 
 Minimum commands when available:
 

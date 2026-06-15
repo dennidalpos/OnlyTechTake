@@ -17,7 +17,9 @@ param(
     [switch]$UseConnectedDevice,
     [switch]$SkipBuild,
     [switch]$SkipVideo,
-    [string]$OutputRoot
+    [string]$OutputRoot,
+    [string]$AssetId,
+    [string]$CaseId
 )
 
 $ErrorActionPreference = "Stop"
@@ -38,7 +40,7 @@ if (Test-Path $demoSupportScript) {
 }
 
 if (-not $OutputRoot) {
-    $OutputRoot = Join-Path $root "reports\demo-assets"
+    $OutputRoot = Join-Path $root "reports/marketing-assets"
 } elseif (-not [System.IO.Path]::IsPathRooted($OutputRoot)) {
     $OutputRoot = Join-Path $root $OutputRoot
 }
@@ -53,13 +55,16 @@ $assetsConfig = @(
         StoryJson = "demo/video/operator-intake.story.json"
         Cases = @(
             [PSCustomObject]@{
+                Id = "full"
                 SourceDirectory = "."
                 TargetDirectory = "screenshots/01-operatore-banco"
                 ExpectedFiles = @(
                     "01-login.png", "02-home.png", "03-new-customer.png",
-                    "04-category-problem.png", "05-order-created.png", "06-in-progress.png",
-                    "07-diagnosis-result.png", "08-repairing.png", "09-ready-for-pickup.png",
-                    "10-closed-timeline.png"
+                    "04-category-problem.png", "05-signature-capture.png",
+                    "06-order-created.png", "07-whatsapp-preview.png",
+                    "08-in-progress.png", "09-diagnosis-result.png",
+                    "10-pdf-documents.png", "11-ready-for-pickup.png",
+                    "12-closed-timeline.png"
                 )
             }
         )
@@ -72,14 +77,20 @@ $assetsConfig = @(
         StoryJson = $null
         Cases = @(
             [PSCustomObject]@{
+                Id = "order-intake"
+                TestMethod = "capturesOrderIntakeToClosureStories"
                 SourceDirectory = "01-commessa-nuovo-cliente-chiusura"
                 TargetDirectory = "screenshots/02-commessa-nuovo-cliente-chiusura"
             },
             [PSCustomObject]@{
+                Id = "config"
+                TestMethod = "capturesCategoryAndTemplateStories"
                 SourceDirectory = "02-categorie-template"
                 TargetDirectory = "screenshots/03-categorie-template"
             },
             [PSCustomObject]@{
+                Id = "customers"
+                TestMethod = "capturesPrivateAndBusinessCustomerStories"
                 SourceDirectory = "03-clienti-privato-azienda"
                 TargetDirectory = "screenshots/04-clienti-privato-azienda"
             }
@@ -87,7 +98,36 @@ $assetsConfig = @(
     }
 )
 
+# Selezione interattiva se non specificato AssetId o CaseId
+if (-not $AssetId -and -not $CaseId) {
+    Write-Host "`n--- Selezione Flusso Demo ---" -ForegroundColor Yellow
+    Write-Host "0. Tutto (default)"
+    $i = 1
+    $menuItems = @()
+    foreach ($asset in $assetsConfig) {
+        if ($asset.Id -eq "social-stories") {
+            foreach ($case in $asset.Cases) {
+                Write-Host "$i. Social: $($case.Id) ($($case.TestMethod))"
+                $menuItems += [PSCustomObject]@{ Asset = $asset; Case = $case }
+                $i++
+            }
+        } else {
+            Write-Host "$i. $($asset.Id)"
+            $menuItems += [PSCustomObject]@{ Asset = $asset; Case = $null }
+            $i++
+        }
+    }
+
+    $choice = Read-Host "`nScegli il flusso da eseguire [0-$($i-1)]"
+    if ($choice -ne "0" -and $choice -match "^\d+$" -and [int]$choice -lt $i) {
+        $selected = $menuItems[[int]$choice - 1]
+        $AssetId = $selected.Asset.Id
+        $CaseId = if ($selected.Case) { $selected.Case.Id } else { $null }
+    }
+}
+
 function Process-VideoGeneration {
+
     param($Config, $PulledPath, $AssetOutputRoot)
 
     $storyPath = Join-Path $root $Config.StoryJson
@@ -103,7 +143,7 @@ function Process-VideoGeneration {
 
     Write-Host "Generazione video per $($Config.Id)..." -ForegroundColor Cyan
     $story = Get-Content -Path $storyPath -Raw | ConvertFrom-Json
-    $videoDir = Join-Path $AssetOutputRoot "video"
+    $videoDir = Join-Path $AssetOutputRoot "video-stories"
     $slidesDir = Join-Path $videoDir "temp_slides"
     New-Item -ItemType Directory -Path $slidesDir -Force | Out-Null
 
@@ -143,37 +183,60 @@ trap {
 }
 
 Assert-PathInsideRoot -Path $OutputRoot -RootPath $root
-if (Test-Path $OutputRoot) { Remove-Item -LiteralPath $OutputRoot -Recurse -Force }
-New-Item -ItemType Directory -Path $OutputRoot | Out-Null
+if (-not $AssetId) {
+    if (Test-Path $OutputRoot) { Remove-Item -LiteralPath $OutputRoot -Recurse -Force }
+    New-Item -ItemType Directory -Path $OutputRoot | Out-Null
+} elseif (-not (Test-Path $OutputRoot)) {
+    New-Item -ItemType Directory -Path $OutputRoot | Out-Null
+}
 
 $serial = Resolve-DemoDeviceSerial -AndroidHome $env:ANDROID_HOME -AvdName $AvdName -UseConnectedDevice:$UseConnectedDevice
 Invoke-DemoApkBuildAndInstall -RootPath $root -Serial $serial -SkipBuild:$SkipBuild
 
 foreach ($asset in $assetsConfig) {
+    if ($AssetId -and $AssetId -ne $asset.Id) { continue }
+
     Write-Host "`n--- Elaborazione Asset: $($asset.Id) ---" -ForegroundColor Cyan
+
+    $testTarget = $asset.TestClass
+    $activeCases = $asset.Cases
+
+    if ($CaseId) {
+        $case = $asset.Cases | Where-Object { $_.Id -eq $CaseId }
+        if ($case) {
+            if ($case.TestMethod) {
+                $testTarget = "$($asset.TestClass)#$($case.TestMethod)"
+            }
+            $activeCases = @($case)
+        }
+    }
 
     # Esecuzione Test
     Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "shell", "rm", "-rf", $asset.DeviceDirectory)
-    Invoke-DemoScreenshotTest -Serial $serial -TestClass $asset.TestClass
+    Invoke-DemoScreenshotTest -Serial $serial -TestClass $testTarget
 
     # Recupero e Processamento Screenshot
     $pulledRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("onlytechtake-assets-" + [System.Guid]::NewGuid().ToString("N"))
     try {
         Pull-DeviceDirectory -Serial $serial -DevicePath $asset.DeviceDirectory -TargetRoot $pulledRoot -PulledDirectoryName $asset.PulledDirectoryName
 
-        foreach ($case in $asset.Cases) {
+        foreach ($case in $activeCases) {
             $sourceCase = if ($case.SourceDirectory -eq ".") { $pulledRoot } else { Join-Path $pulledRoot $case.SourceDirectory }
             $targetCase = Join-Path $OutputRoot $case.TargetDirectory
             New-Item -ItemType Directory -Path $targetCase -Force | Out-Null
 
-            Get-ChildItem -Path $sourceCase -Filter "*.png" | ForEach-Object {
-                $targetPath = Join-Path $targetCase $_.Name
-                Convert-ToStoryPng -SourcePath $_.FullName -TargetPath $targetPath
+            if (Test-Path $sourceCase) {
+                Get-ChildItem -Path $sourceCase -Filter "*.png" | ForEach-Object {
+                    $targetPath = Join-Path $targetCase $_.Name
+                    Convert-ToStoryPng -SourcePath $_.FullName -TargetPath $targetPath
+                }
+            } else {
+                Write-Warning "Cartella sorgente non trovata: $sourceCase"
             }
         }
 
         # Generazione Video se previsto
-        if (-not $SkipVideo -and $asset.StoryJson) {
+        if (-not $SkipVideo -and $asset.StoryJson -and (-not $CaseId)) {
             Process-VideoGeneration -Config $asset -PulledPath $pulledRoot -AssetOutputRoot $OutputRoot
         }
     } finally {

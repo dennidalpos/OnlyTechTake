@@ -46,6 +46,7 @@ fun CustomerPanel(
     val windowSizeClass = LocalWindowSizeClass.current
     val isWide = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Medium
 
+    val message by viewModel.message.collectAsState()
     var selectedCustomer by remember { mutableStateOf<CustomerEntity?>(null) }
     var showForm by rememberSaveable { mutableStateOf(value = false) }
     var editingCustomerId by rememberSaveable { mutableStateOf<String?>(null) }
@@ -106,20 +107,71 @@ fun CustomerPanel(
         showForm = true
     }
 
-    if (isWide) {
-        Row(Modifier.fillMaxSize()) {
-            Box(Modifier.weight(1f)) {
-                CustomerListContent(
-                    viewModel = viewModel,
-                    onCustomerClick = { selectedCustomer = it },
-                    onNewCustomer = {
-                        clearForm()
-                        showForm = true
+    Column(Modifier.fillMaxSize()) {
+        LocalMessageBanner(message?.text, message?.isError ?: false)
+
+        if (isWide) {
+            Row(Modifier.weight(1f)) {
+                Box(Modifier.weight(1f)) {
+                    CustomerListContent(
+                        viewModel = viewModel,
+                        onCustomerClick = { selectedCustomer = it },
+                        onNewCustomer = {
+                            clearForm()
+                            showForm = true
+                        }
+                    )
+                }
+                VerticalDivider()
+                Box(Modifier.weight(1.5f)) {
+                    if (showForm) {
+                        CustomerForm(
+                            isEditing = editingCustomerId != null,
+                            isBusiness = isBusiness,
+                            onBusinessChange = { isBusiness = it },
+                            firstName = firstName,
+                            onFirstNameChange = { firstName = it },
+                            lastName = lastName,
+                            onLastNameChange = { lastName = it },
+                            companyName = companyName,
+                            onCompanyNameChange = { companyName = it },
+                            vatNumber = vatNumber,
+                            onVatNumberChange = { vatNumber = it },
+                            taxCode = taxCode,
+                            onTaxCodeChange = { taxCode = it },
+                            phone = phone,
+                            onPhoneChange = { phone = it },
+                            email = email,
+                            onEmailChange = { email = it },
+                            address = address,
+                            onAddressChange = { address = it },
+                            notes = notes,
+                            onNotesChange = { notes = it },
+                            onSave = { confirmSave = true },
+                            onCancel = {
+                                showForm = false
+                                clearForm()
+                            }
+                        )
+                    } else if (selectedCustomer != null) {
+                        CustomerDetailContent(
+                            customer = selectedCustomer!!,
+                            viewModel = viewModel,
+                            onEdit = {
+                                editCustomer(selectedCustomer!!)
+                            },
+                            onOrderClick = onOrderClick,
+                            onClose = { selectedCustomer = null }
+                        )
+                    } else {
+                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            Text("Seleziona un cliente per vedere i dettagli", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                     }
-                )
+                }
             }
-            VerticalDivider()
-            Box(Modifier.weight(1.5f)) {
+        } else {
+            Box(Modifier.weight(1f)) {
                 if (showForm) {
                     CustomerForm(
                         isEditing = editingCustomerId != null,
@@ -149,77 +201,30 @@ fun CustomerPanel(
                             clearForm()
                         }
                     )
-                } else if (selectedCustomer != null) {
-                    CustomerDetailContent(
-                        customer = selectedCustomer!!,
-                        viewModel = viewModel,
-                        onEdit = {
-                            editCustomer(selectedCustomer!!)
-                        },
-                        onOrderClick = onOrderClick,
-                        onClose = { selectedCustomer = null }
-                    )
                 } else {
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("Seleziona un cliente per vedere i dettagli", color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    }
+                    CustomerListContent(
+                        viewModel = viewModel,
+                        onCustomerClick = { selectedCustomer = it },
+                        onNewCustomer = {
+                            clearForm()
+                            showForm = true
+                        }
+                    )
                 }
             }
-        }
-    } else {
-        Box(Modifier.fillMaxSize()) {
-            if (showForm) {
-                CustomerForm(
-                    isEditing = editingCustomerId != null,
-                    isBusiness = isBusiness,
-                    onBusinessChange = { isBusiness = it },
-                    firstName = firstName,
-                    onFirstNameChange = { firstName = it },
-                    lastName = lastName,
-                    onLastNameChange = { lastName = it },
-                    companyName = companyName,
-                    onCompanyNameChange = { companyName = it },
-                    vatNumber = vatNumber,
-                    onVatNumberChange = { vatNumber = it },
-                    taxCode = taxCode,
-                    onTaxCodeChange = { taxCode = it },
-                    phone = phone,
-                    onPhoneChange = { phone = it },
-                    email = email,
-                    onEmailChange = { email = it },
-                    address = address,
-                    onAddressChange = { address = it },
-                    notes = notes,
-                    onNotesChange = { notes = it },
-                    onSave = { confirmSave = true },
-                    onCancel = {
-                        showForm = false
-                        clearForm()
-                    }
-                )
-            } else {
-                CustomerListContent(
+
+            selectedCustomer?.let { customer ->
+                CustomerDetailDialog(
+                    customer = customer,
                     viewModel = viewModel,
-                    onCustomerClick = { selectedCustomer = it },
-                    onNewCustomer = {
-                        clearForm()
-                        showForm = true
-                    }
+                    onDismiss = { selectedCustomer = null },
+                    onEdit = {
+                        editCustomer(customer)
+                        selectedCustomer = null
+                    },
+                    onOrderClick = onOrderClick
                 )
             }
-        }
-
-        selectedCustomer?.let { customer ->
-            CustomerDetailDialog(
-                customer = customer,
-                viewModel = viewModel,
-                onDismiss = { selectedCustomer = null },
-                onEdit = {
-                    editCustomer(customer)
-                    selectedCustomer = null
-                },
-                onOrderClick = onOrderClick
-            )
         }
     }
 
@@ -351,17 +356,17 @@ private fun CustomerForm(
         )
         CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = onBusinessChange)
         if (isBusiness) {
-            Field(companyName, onCompanyNameChange, stringResource(R.string.customer_field_company_name), required = true)
-            Field(vatNumber, onVatNumberChange, stringResource(R.string.customer_field_vat_number), showOptional = true)
+            Field(companyName, onCompanyNameChange, stringResource(R.string.customer_field_company_name), required = true, testTag = RepairAppTestTags.CustomerCompanyNameField)
+            Field(vatNumber, onVatNumberChange, stringResource(R.string.customer_field_vat_number), showOptional = true, testTag = RepairAppTestTags.CustomerVatNumberField)
         } else {
-            Field(firstName, onFirstNameChange, stringResource(R.string.customer_field_first_name), required = true)
-            Field(lastName, onLastNameChange, stringResource(R.string.customer_field_last_name), required = true)
+            Field(firstName, onFirstNameChange, stringResource(R.string.customer_field_first_name), required = true, testTag = RepairAppTestTags.CustomerFirstNameField)
+            Field(lastName, onLastNameChange, stringResource(R.string.customer_field_last_name), required = true, testTag = RepairAppTestTags.CustomerLastNameField)
         }
-        Field(taxCode, onTaxCodeChange, stringResource(R.string.customer_field_tax_code), showOptional = true)
-        Field(phone, onPhoneChange, stringResource(R.string.customer_field_phone), required = true, keyboardType = KeyboardType.Phone)
-        Field(email, onEmailChange, stringResource(R.string.customer_field_email), required = true, keyboardType = KeyboardType.Email)
-        Field(address, onAddressChange, stringResource(R.string.customer_field_address), showOptional = true)
-        NoteFieldWithDialog(notes, onNotesChange)
+        Field(taxCode, onTaxCodeChange, stringResource(R.string.customer_field_tax_code), showOptional = true, testTag = RepairAppTestTags.CustomerTaxCodeField)
+        Field(phone, onPhoneChange, stringResource(R.string.customer_field_phone), required = true, keyboardType = KeyboardType.Phone, testTag = RepairAppTestTags.CustomerPhoneField)
+        Field(email, onEmailChange, stringResource(R.string.customer_field_email), required = true, keyboardType = KeyboardType.Email, testTag = RepairAppTestTags.CustomerEmailField)
+        Field(address, onAddressChange, stringResource(R.string.customer_field_address), showOptional = true, testTag = RepairAppTestTags.CustomerAddressField)
+        NoteFieldWithDialog(notes, onNotesChange, testTag = RepairAppTestTags.CustomerNotesField)
         
         ActionRow {
             TouchButton(

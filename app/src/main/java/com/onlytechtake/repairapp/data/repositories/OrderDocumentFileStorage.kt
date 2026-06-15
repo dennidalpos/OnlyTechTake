@@ -1,19 +1,17 @@
 package com.onlytechtake.repairapp.data.repositories
 
-import android.content.Context
+import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import java.io.File
 
-class OrderDocumentFileStorage(private val context: Context) {
+class OrderDocumentFileStorage(
+    private val mediaStorageProvider: MediaStorageProvider
+) {
     
     fun getDocumentFile(orderId: String, fileName: String): File {
-        val dir = File(context.filesDir, "orders/$orderId/documents")
-        if (!dir.exists()) {
-            dir.mkdirs()
-        }
-        return File(dir, fileName)
+        return File(mediaStorageProvider.getOrderDocumentsDir(orderId), fileName)
     }
 
     fun getOrderDocumentsDir(orderId: String): File {
-        return File(context.filesDir, "orders/$orderId/documents")
+        return mediaStorageProvider.getOrderDocumentsDir(orderId)
     }
 }

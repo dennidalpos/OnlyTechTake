@@ -46,15 +46,7 @@ import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
-import com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision
-import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
-import com.onlytechtake.repairapp.features.dashboard.common.CompactExpandableRow
-import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
-import com.onlytechtake.repairapp.features.dashboard.common.Field
-import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
-import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
-import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
+import com.onlytechtake.repairapp.features.dashboard.common.*
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.domain.workspace.canConfirmDiagnosisResult
@@ -67,6 +59,7 @@ fun OrderDetailWorkspace(
     viewModel: OrderDetailViewModel,
     onBack: () -> Unit,
 ) {
+    val message by viewModel.message.collectAsState()
     val detail by viewModel.orderDetail.collectAsState()
     val documents by viewModel.documents.collectAsState()
     val preparedMessage by viewModel.preparedMessage.collectAsState()
@@ -146,12 +139,15 @@ fun OrderDetailWorkspace(
         }
     }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(DashboardSpacing.screenPadding),
-        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
-    ) {
+    Column(Modifier.fillMaxSize()) {
+        LocalMessageBanner(message?.text, message?.isError ?: false)
+
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .padding(DashboardSpacing.screenPadding),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
+        ) {
         item {
             OrderHeader(selected, context)
         }
@@ -607,4 +603,7 @@ fun OrderDetailWorkspace(
             }
         )
     }
+    }
 }
+
+

@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import androidx.exifinterface.media.ExifInterface
 import android.net.Uri
 import android.webkit.MimeTypeMap
+import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import androidx.room.withTransaction
 import com.onlytechtake.repairapp.core.media.AttachmentImportPolicy
 import com.onlytechtake.repairapp.core.media.MediaOptimizer
@@ -36,6 +37,7 @@ class OrderMediaRepository(
     private val orderMediaDao: OrderMediaDao,
     private val timelineEventDao: TimelineEventDao,
     private val fileCleanupService: OrderFileCleanupService,
+    private val mediaStorageProvider: MediaStorageProvider,
     private val database: RepairAppDatabase? = null,
     private val fileNamer: OrderMediaFileNamer = OrderMediaFileNamer(),
     private val attachmentPolicy: AttachmentImportPolicy = AttachmentImportPolicy(),
@@ -46,16 +48,12 @@ class OrderMediaRepository(
 
     fun createPhotoFile(orderId: String, orderNumber: String): File {
         StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
-        val orderDirectory = File(context.filesDir, "order_media/$orderId")
-        check(orderDirectory.exists() || orderDirectory.mkdirs()) { "Cartella media non disponibile" }
-        return File(orderDirectory, fileNamer.photoFileName(orderNumber, clockMillis()))
+        return File(mediaStorageProvider.getOrderMediaDir(orderId), fileNamer.photoFileName(orderNumber, clockMillis()))
     }
 
     fun createIntakePhotoFile(sessionId: String): File {
         StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
-        val intakeDirectory = File(context.filesDir, "intake_media/$sessionId")
-        check(intakeDirectory.exists() || intakeDirectory.mkdirs()) { "Cartella media presa in carico non disponibile" }
-        return File(intakeDirectory, fileNamer.photoFileName("presa_in_carico", clockMillis()))
+        return File(mediaStorageProvider.getIntakeMediaDir(sessionId), fileNamer.photoFileName("presa_in_carico", clockMillis()))
     }
 
     fun stageCapturedIntakePhoto(file: File): Result<StagedOrderMedia> =
@@ -80,8 +78,7 @@ class OrderMediaRepository(
             val sourceName = resolver.displayName(uri) ?: "allegato"
             val mimeType = attachmentPolicy.normalize(resolver.getType(uri))
             attachmentPolicy.requireAllowed(mimeType, resolver.openableSize(uri))
-            val directory = File(context.filesDir, "intake_media/$sessionId/attachments")
-            check(directory.exists() || directory.mkdirs()) { "Cartella allegati presa in carico non disponibile" }
+            val directory = mediaStorageProvider.getIntakeAttachmentsDir(sessionId)
             val now = clockMillis()
             val file = File(directory, uniqueAttachmentName(sourceName, mimeType, now))
 
@@ -173,8 +170,7 @@ class OrderMediaRepository(
             val sourceName = resolver.displayName(uri) ?: "allegato"
             val mimeType = attachmentPolicy.normalize(resolver.getType(uri))
             attachmentPolicy.requireAllowed(mimeType, resolver.openableSize(uri))
-            val directory = File(context.filesDir, "order_media/$orderId/attachments")
-            check(directory.exists() || directory.mkdirs()) { "Cartella allegati non disponibile" }
+            val directory = mediaStorageProvider.getOrderAttachmentsDir(orderId)
             val now = clockMillis()
             val file = File(directory, uniqueAttachmentName(sourceName, mimeType, now))
 
@@ -393,11 +389,10 @@ class OrderMediaRepository(
 
     private fun moveStagedFile(orderId: String, source: File, staged: StagedOrderMedia, now: Long): File {
         val directory = if (staged.mediaType == MEDIA_TYPE_PHOTO) {
-            File(context.filesDir, "order_media/$orderId")
+            mediaStorageProvider.getOrderMediaDir(orderId)
         } else {
-            File(context.filesDir, "order_media/$orderId/attachments")
+            mediaStorageProvider.getOrderAttachmentsDir(orderId)
         }
-        check(directory.exists() || directory.mkdirs()) { "Cartella media commessa non disponibile" }
         val destination = File(directory, uniqueAttachmentName(staged.fileName, staged.mimeType, now))
         return try {
             source.inputStream().use { input ->

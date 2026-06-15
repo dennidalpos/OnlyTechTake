@@ -1,15 +1,18 @@
 package com.onlytechtake.repairapp.data.repositories
 
 import android.content.Context
+import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import java.io.File
 
-class OrderFileCleanupService(private val context: Context) {
+class OrderFileCleanupService(
+    private val context: Context,
+    private val mediaStorageProvider: MediaStorageProvider,
+) {
 
     /**
      * Deletes all files and directories associated with an order.
      */
     fun deleteOrderFiles(orderId: String) {
-        deleteRecursively(getOrderMediaDir(orderId))
         deleteRecursively(getOrderRootDataDir(orderId))
     }
 
@@ -55,9 +58,8 @@ class OrderFileCleanupService(private val context: Context) {
         // Implementation for deep cleanup if needed
     }
 
-    private fun getOrderMediaDir(orderId: String) = File(context.filesDir, "order_media/$orderId")
-    private fun getOrderRootDataDir(orderId: String) = File(context.filesDir, "orders/$orderId")
-    private fun getIntakeMediaDir(sessionId: String) = File(context.filesDir, "intake_media/$sessionId")
+    private fun getOrderRootDataDir(orderId: String) = File(mediaStorageProvider.getBaseMediaDir(), "orders/$orderId")
+    private fun getIntakeMediaDir(sessionId: String) = mediaStorageProvider.getIntakeMediaDir(sessionId)
     private fun getSharedCacheDir() = File(context.cacheDir, "shared")
 
     private fun deleteRecursively(file: File) {

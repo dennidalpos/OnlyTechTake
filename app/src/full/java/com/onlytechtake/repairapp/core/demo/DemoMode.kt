@@ -14,4 +14,5 @@ object DemoMode {
     val demoCustomer: CustomerEntity get() = throw IllegalStateException("DemoMode non disponibile")
     val demoCategory: OrderCategoryEntity get() = throw IllegalStateException("DemoMode non disponibile")
     val demoOrder: RepairOrderEntity get() = throw IllegalStateException("DemoMode non disponibile")
+    val demoCategories: List<OrderCategoryEntity> get() = throw IllegalStateException("DemoMode non disponibile")
 }

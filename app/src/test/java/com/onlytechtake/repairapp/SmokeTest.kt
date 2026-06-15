@@ -11,12 +11,15 @@ class SmokeTest {
     fun appPackageIsStable() {
         val appId = BuildConfig.APPLICATION_ID
         val isDemo = appId.contains(".demo")
+        val isShowcase = appId.contains(".showcase")
         val isDebug = appId.endsWith(".debug")
 
         val base = "com.onlytechtake.repairapp"
         val expected = when {
             isDemo && isDebug -> "$base.demo.debug"
             isDemo -> "$base.demo"
+            isShowcase && isDebug -> "$base.showcase.debug"
+            isShowcase -> "$base.showcase"
             isDebug -> "$base.debug"
             else -> base
         }

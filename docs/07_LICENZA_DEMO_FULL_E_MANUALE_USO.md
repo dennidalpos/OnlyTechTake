@@ -1,20 +1,20 @@
 # Demo/Full e manuale operativo
 
-Documento operativo per usare e verificare i due flavor Android reali del repository. Non descrive prezzi, roadmap commerciale o funzionalita' non implementate.
+Documento operativo per usare e verificare i tre flavor Android reali del repository. Non descrive prezzi, roadmap commerciale o funzionalita' non implementate.
 
 ## Flavor implementati
 
-Il modulo `app` definisce due product flavor:
+Il modulo `app` definisce tre product flavor:
 
-| Voce | Demo | Full |
-|---|---|---|
-| Flavor Gradle | `demo` | `full` |
-| App release ID | `com.onlytechtake.repairapp.demo` | `com.onlytechtake.repairapp` |
-| App debug ID | `com.onlytechtake.repairapp.demo.debug` | `com.onlytechtake.repairapp.debug` |
-| Nome app | `OnlyTechTake Demo` | `OnlyTechTake` |
-| `IS_DEMO_VERSION` | `true` | `false` |
-| `IS_DEMO_MODE_ENABLED` | `true` | `false` |
-| `MAX_ORDERS` | `10` | `-1` |
+| Voce | Demo | Showcase | Full |
+|---|---|---|---|
+| Flavor Gradle | `demo` | `showcase` | `full` |
+| App release ID | `com.onlytechtake.repairapp.demo` | `com.onlytechtake.repairapp.showcase` | `com.onlytechtake.repairapp` |
+| App debug ID | `com.onlytechtake.repairapp.demo.debug` | `com.onlytechtake.repairapp.showcase.debug` | `com.onlytechtake.repairapp.debug` |
+| Nome app | `OnlyTechTake Demo` | `OnlyTechTake Showcase` | `OnlyTechTake` |
+| `IS_DEMO_VERSION` | `true` | `false` | `false` |
+| `IS_DEMO_MODE_ENABLED` | `true` | `false` | `false` |
+| `MAX_ORDERS` | `10` | `-1` | `-1` |
 
 ## Limiti Demo implementati
 
@@ -30,14 +30,22 @@ Nel flavor Demo sono implementati questi blocchi:
 - banner `VERSIONE DEMO` nella Home;
 - pulsante `Avvia Modalita Demo` nel login, con dati demo in memoria.
 
-Non risultano implementati:
+## Flavor Showcase (Dati precaricati)
 
-- licensing online;
-- attivazione remota;
-- trial a tempo;
-- pagamento in-app;
-- sincronizzazione cloud;
-- WhatsApp Business API.
+Il flavor Showcase e' progettato per presentazioni rapide con dati reali gia' inseriti.
+
+Caratteristiche:
+- **Popolamento automatico**: al primo avvio vengono creati 10 clienti (5 privati, 5 business) e 30 commesse (3 per cliente, incluse chiuse).
+- **Media di esempio**: ogni commessa include una foto dell'oggetto e una firma del cliente generate dinamicamente.
+- **Utenti predefiniti**: creati 3 operatori con permessi diversi e 1 admin.
+- **Auto-login**: l'app esegue l'accesso automatico come Admin al termine dell'inizializzazione.
+- **Icona dedicata**: riconoscibile dal banner blu "SHOW" sull'icona dell'app.
+
+Credenziali (password per tutti: `ShowcasePassword123`):
+- Admin: `admin`
+- Reception: `anna.reception`
+- Tecnico: `marco.tech`
+- Manager: `elena.manager`
 
 ## Funzioni Full implementate
 
@@ -56,7 +64,7 @@ Funzioni admin Full rilevanti:
 - reset totale dati con conferma `RESET`;
 - cancellazione totale commesse con conferma `CANCELLA TUTTO`.
 
-## Primo avvio
+## Primo avvio (Flavor Full/Demo)
 
 Su installazione pulita:
 
@@ -68,13 +76,6 @@ Dagli avvii successivi:
 
 1. Inserire username e password.
 2. Toccare `Accedi`.
-
-Regole auth implementate:
-
-- password minima 8 caratteri;
-- lockout temporaneo dopo 5 tentativi falliti;
-- scadenza sessione dopo 30 minuti di inattivita';
-- logout manuale dalla top bar.
 
 ## Flusso operativo minimo
 
@@ -90,21 +91,6 @@ Regole auth implementate:
 10. Gestire diagnosi, preventivo, WhatsApp manuale, riparazione o pronto ritiro dal dettaglio commessa.
 11. Chiudere la commessa con motivo e nota.
 
-## WhatsApp manuale
-
-OnlyTechTake non invia messaggi automaticamente.
-
-Flusso implementato:
-
-1. L'operatore prepara il messaggio dal dettaglio commessa.
-2. L'anteprima e' modificabile.
-3. L'app apre WhatsApp o il browser tramite intent/link.
-4. L'operatore invia manualmente.
-5. L'operatore torna in app e conferma l'invio.
-6. Timeline e message log vengono aggiornati.
-
-Non sono presenti backend, webhook, token o API WhatsApp Business nell'app.
-
 ## Backup operativo
 
 Il backup primario e' il ZIP completo manuale tramite Storage Access Framework.
@@ -117,54 +103,19 @@ Config > Backup > Esegui backup ZIP completo
 
 Il promemoria backup admin e' attivo di default ogni 7 giorni, si basa sull'ultimo ZIP completo riuscito e non blocca l'uso dell'app.
 
-Prima di cancellazioni o reset:
-
-- eseguire ZIP completo se i dati devono essere conservati;
-- verificare che il file sia stato salvato fuori dal dispositivo principale;
-- ricordare che disinstallazione o cancellazione dati Android possono eliminare i dati locali.
-
 ## Comandi build
 
-APK Demo debug:
+APK Showcase debug:
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Showcase -BuildType Debug -OutputType Apk
+```
 
+APK Demo debug:
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Demo -BuildType Debug -OutputType Apk
 ```
 
 APK Full debug:
-
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk
 ```
-
-APK Demo release:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Demo -BuildType Release -OutputType Apk
-```
-
-APK Full release:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Apk
-```
-
-AAB Full release:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Aab
-```
-
-Le build release richiedono `keystore.properties` locale configurato nella root.
-
-## Checklist consegna
-
-Prima di consegnare una build a un tester o a un'altra persona:
-
-- verificare `versionCode` e `versionName` in `app\build.gradle.kts`;
-- eseguire `scripts\android\check_env.ps1`;
-- eseguire `scripts\windows\check_project.ps1 -Flavor Full -SkipReleaseBuild`;
-- generare l'APK/AAB del flavor richiesto;
-- installare su device pulito con `start_app.ps1 -CleanInstall` quando si vuole evitare incompatibilita' dati locali;
-- verificare setup admin, creazione cliente, nuova commessa con media e firma, diagnosi, PDF, WhatsApp manuale, ZIP backup e restore se richiesto;
-- non usare dati reali in screenshot, video o demo pubbliche.

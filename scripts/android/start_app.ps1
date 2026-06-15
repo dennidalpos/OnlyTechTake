@@ -56,6 +56,9 @@ $packageName = "com.onlytechtake.repairapp"
 if ($Flavor -eq "Demo") {
     $packageName = "$packageName.demo"
 }
+elseif ($Flavor -eq "Showcase") {
+    $packageName = "$packageName.showcase"
+}
 if ($BuildType -eq "Debug") {
     $packageName = "$packageName.debug"
 }

@@ -5,9 +5,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
+import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
+import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
+import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
+import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.features.workspace.buildOperationalQueues
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,12 +29,26 @@ import kotlinx.coroutines.launch
 class OrdersViewModel(
     private val authRepository: AuthRepository,
     private val orderRepository: OrderWorkflowRepository,
+    private val backupRepository: BackupRepository? = null,
+    private val backupReminderPreferences: BackupReminderPreferences? = null,
 ) : ViewModel() {
 
     private val _orderFilter = MutableStateFlow(OrderFilter())
     val orderFilter = _orderFilter.asStateFlow()
 
     val currentUser = authRepository.currentUser
+    
+    val backupReminderSettings = backupReminderPreferences?.settings
+        ?.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), BackupReminderSettings())
+        ?: flowOf(BackupReminderSettings(enabled = false)).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), BackupReminderSettings(enabled = false))
+
+    val isBackupReminderDue = combine(
+        currentUser,
+        backupReminderSettings
+    ) { user, settings ->
+        PermissionService.isAdmin(user) && 
+        BackupReminderPolicy.shouldShowReminder(settings, System.currentTimeMillis())
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     val orderListItems = combine(currentUser, _orderFilter) { user, filter -> user to filter }
         .flatMapLatest { (user, filter) ->
@@ -58,6 +77,13 @@ class OrdersViewModel(
         }
     }
 
+    fun exportCompleteBackup(uri: android.net.Uri) {
+        val user = currentUser.value ?: return
+        viewModelScope.launch {
+            backupRepository?.exportCompleteBackup(user, uri)
+        }
+    }
+
     private fun launchWithUser(
         block: suspend (com.onlytechtake.repairapp.domain.auth.AuthenticatedUser) -> Result<*>
     ) {
@@ -72,10 +98,12 @@ class OrdersViewModel(
     class Factory(
         private val authRepository: AuthRepository,
         private val orderRepository: OrderWorkflowRepository,
+        private val backupRepository: BackupRepository? = null,
+        private val backupReminderPreferences: BackupReminderPreferences? = null,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return OrdersViewModel(authRepository, orderRepository) as T
+            return OrdersViewModel(authRepository, orderRepository, backupRepository, backupReminderPreferences) as T
         }
     }
 }

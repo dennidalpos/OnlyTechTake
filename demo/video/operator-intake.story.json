@@ -8,50 +8,60 @@
     {
       "file": "01-login.png",
       "caption": "Accesso sicuro dell'operatore al banco",
-      "durationSeconds": 5.0
+      "durationSeconds": 3.0
     },
     {
       "file": "02-home.png",
       "caption": "Dashboard con code operative sempre sotto controllo",
-      "durationSeconds": 5.0
+      "durationSeconds": 4.0
     },
     {
       "file": "03-new-customer.png",
       "caption": "Profilazione rapida del nuovo cliente",
-      "durationSeconds": 5.0
+      "durationSeconds": 4.0
     },
     {
       "file": "04-category-problem.png",
       "caption": "Categoria, problema e dettagli tecnici in pochi passaggi",
-      "durationSeconds": 5.0
+      "durationSeconds": 4.0
     },
     {
-      "file": "05-order-created.png",
-      "caption": "Commessa creata con foto, allegati e firma privacy",
-      "durationSeconds": 5.0
+      "file": "05-signature-capture.png",
+      "caption": "Firma digitale del cliente per privacy e consensi",
+      "durationSeconds": 4.0
     },
     {
-      "file": "06-in-progress.png",
+      "file": "06-order-created.png",
+      "caption": "Commessa creata con foto, allegati e firma",
+      "durationSeconds": 4.0
+    },
+    {
+      "file": "07-whatsapp-preview.png",
+      "caption": "Comunicazione professionale via WhatsApp",
+      "durationSeconds": 4.0
+    },
+    {
+      "file": "08-in-progress.png",
       "caption": "Presa in carico e avanzamento stato tracciati",
-      "durationSeconds": 5.0
+      "durationSeconds": 3.0
     },
     {
-      "file": "07-diagnosis-result.png",
-      "caption": "Diagnosi, risultato e preventivo registrati in app",
-      "durationSeconds": 5.0
+      "file": "09-diagnosis-result.png",
+      "caption": "Diagnosi, risultato e preventivo registrati",
+      "durationSeconds": 4.0
     },
     {
-      "file": "08-repairing.png",
-      "caption": "Riparazione avviata dopo accettazione del cliente",
-      "durationSeconds": 5.0
+      "file": "10-pdf-documents.png",
+      "caption": "Generazione report PDF professionali",
+      "durationSeconds": 4.0
     },
     {
-      "file": "09-ready-for-pickup.png",
+      "file": "11-ready-for-pickup.png",
       "caption": "Commessa pronta al ritiro con storico completo",
-      "durationSeconds": 5.0
+      "durationSeconds": 3.0
     },
     {
-      "file": "10-closed-timeline.png",
+      "file": "12-closed-timeline.png",
       "caption": "Chiusura commessa e timeline finale consultabile",
       "durationSeconds": 5.0
     }

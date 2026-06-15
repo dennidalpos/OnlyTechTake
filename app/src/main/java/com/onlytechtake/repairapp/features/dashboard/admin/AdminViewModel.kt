@@ -5,10 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
+import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.DataResetRepository
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
+import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.workspace.OperatorInput
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,6 +18,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -24,6 +28,7 @@ class AdminViewModel(
     private val adminUserRepository: AdminUserRepository,
     private val backupRepository: BackupRepository,
     private val dataResetRepository: DataResetRepository,
+    private val backupReminderPreferences: BackupReminderPreferences? = null,
 ) : ViewModel() {
 
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
@@ -34,6 +39,11 @@ class AdminViewModel(
 
     val currentUser = authRepository.currentUser
     val users = adminUserRepository.observeUsers().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    val isBackupReminderDue = backupReminderPreferences?.settings?.map { settings ->
+        BackupReminderPolicy.shouldShowReminder(settings, System.currentTimeMillis())
+    }?.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+    ?: flowOf(false).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     fun createOperator(displayName: String, username: String, password: CharArray) {
         launchWithUser { actor ->
@@ -123,10 +133,11 @@ class AdminViewModel(
         private val adminUserRepository: AdminUserRepository,
         private val backupRepository: BackupRepository,
         private val dataResetRepository: DataResetRepository,
+        private val backupReminderPreferences: BackupReminderPreferences? = null,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return AdminViewModel(authRepository, adminUserRepository, backupRepository, dataResetRepository) as T
+            return AdminViewModel(authRepository, adminUserRepository, backupRepository, dataResetRepository, backupReminderPreferences) as T
         }
     }
 }

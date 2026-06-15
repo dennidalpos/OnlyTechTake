@@ -14,6 +14,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 
+import com.onlytechtake.repairapp.demo.ShowcaseDataSeeder
+import android.content.Context
+
+import kotlinx.coroutines.delay
+
+import kotlin.time.Duration.Companion.milliseconds
+
 data class AuthFormState(
     val displayName: String = "",
     val username: String = "",
@@ -25,6 +32,7 @@ data class AuthFormState(
     val passwordChangeRequired: Boolean = false,
     val errorMessage: String? = null,
     val loading: Boolean = false,
+    val seeding: Boolean = false,
 )
 
 class AuthGateViewModel(
@@ -39,6 +47,33 @@ class AuthGateViewModel(
 
     private val mutableFormState = MutableStateFlow(AuthFormState())
     val formState: StateFlow<AuthFormState> = mutableFormState
+
+    fun seedShowcaseData(context: Context, onDone: () -> Unit) {
+        viewModelScope.launch {
+            android.util.Log.d("AuthGateViewModel", "Seed requested.")
+            if (mutableFormState.value.seeding) return@launch
+            
+            mutableFormState.update { it.copy(seeding = true, loading = true, errorMessage = null) }
+            runCatching {
+                ShowcaseDataSeeder.seedShowcaseData(context)
+            }.onSuccess {
+                android.util.Log.d("AuthGateViewModel", "Seed success. Requesting container refresh.")
+                onDone()
+            }.onFailure { e ->
+                android.util.Log.e("AuthGateViewModel", "Seed failed!", e)
+                mutableFormState.update { it.copy(seeding = false, loading = false, errorMessage = "Errore durante l'inizializzazione: ${e.message}") }
+            }
+        }
+    }
+
+    fun loginShowcaseAdmin() {
+        if (mutableFormState.value.loading) return
+        viewModelScope.launch {
+            mutableFormState.update { it.copy(loading = true, errorMessage = null) }
+            authRepository.login("admin", ShowcaseDataSeeder.DEFAULT_PASSWORD.toCharArray())
+            mutableFormState.update { it.copy(loading = false) }
+        }
+    }
 
     fun updateDisplayName(value: String) = updateForm { copy(displayName = value, errorMessage = null) }
     fun updateUsername(value: String) = updateForm { copy(username = value, errorMessage = null) }

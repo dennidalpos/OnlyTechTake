@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.*
+import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
@@ -26,6 +27,7 @@ class DataResetRepositoryInstrumentedTest {
     private lateinit var authPreferences: AuthPreferences
     private lateinit var sessionStore: InMemorySessionStore
     private lateinit var cleanupService: OrderFileCleanupService
+    private lateinit var mediaStorageProvider: MediaStorageProvider
 
     @Before
     fun setUp() {
@@ -35,7 +37,8 @@ class DataResetRepositoryInstrumentedTest {
             .build()
         authPreferences = AuthPreferences(context)
         sessionStore = InMemorySessionStore()
-        cleanupService = OrderFileCleanupService(context)
+        mediaStorageProvider = MediaStorageProvider(context)
+        cleanupService = OrderFileCleanupService(context, mediaStorageProvider)
         repository = DataResetRepository(
             context = context,
             database = database,
@@ -43,6 +46,7 @@ class DataResetRepositoryInstrumentedTest {
             authPreferences = authPreferences,
             sessionStore = sessionStore,
             fileCleanupService = cleanupService,
+            mediaStorageProvider = mediaStorageProvider,
         )
     }
 

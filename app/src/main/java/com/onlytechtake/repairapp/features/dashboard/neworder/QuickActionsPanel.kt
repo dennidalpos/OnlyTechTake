@@ -43,18 +43,7 @@ import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
 import com.onlytechtake.repairapp.domain.workspace.isReadyForSubmit
 import com.onlytechtake.repairapp.domain.workspace.validationErrors
-import com.onlytechtake.repairapp.features.dashboard.common.DEFAULT_PRIVACY_TEXT
-import com.onlytechtake.repairapp.features.dashboard.common.DEFAULT_TERMS_TEXT
-import com.onlytechtake.repairapp.features.dashboard.common.PRIVACY_TEMPLATE_CODE
-import com.onlytechtake.repairapp.features.dashboard.common.TERMS_TEMPLATE_CODE
-import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
-import com.onlytechtake.repairapp.features.dashboard.common.Field
-import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
-import com.onlytechtake.repairapp.features.dashboard.common.StepSectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
-import com.onlytechtake.repairapp.features.dashboard.common.WizardNavigationBar
-import com.onlytechtake.repairapp.features.dashboard.common.SignatureCaptureForm
+import com.onlytechtake.repairapp.features.dashboard.common.*
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeSignatureDraft
@@ -65,6 +54,7 @@ fun QuickActions(
     onOpenConfig: () -> Unit,
     onClose: () -> Unit,
 ) {
+    val message by viewModel.message.collectAsState()
     val draft by viewModel.quickIntakeDraft.collectAsState()
     val customerSuggestions by viewModel.customerSuggestions.collectAsState()
     val customerSearchQuery by viewModel.customerSearchQuery.collectAsState()
@@ -198,6 +188,7 @@ fun QuickActions(
             .padding(DashboardSpacing.screenPadding),
         verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
     ) {
+        LocalMessageBanner(message?.text, message?.isError ?: false)
         SectionTitle(
             text = stringResource(R.string.new_order_title),
             tooltip = "Compila i passaggi per creare una nuova commessa di riparazione. Puoi salvare una bozza e riprendere in seguito.",

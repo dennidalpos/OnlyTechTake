@@ -111,6 +111,8 @@ fun DashboardNavHost(
                 factory = OrdersViewModel.Factory(
                     authRepository = container.authRepository,
                     orderRepository = container.orderWorkflowRepository,
+                    backupRepository = container.backupRepository,
+                    backupReminderPreferences = container.backupReminderPreferences,
                 )
             )
             
@@ -127,6 +129,9 @@ fun DashboardNavHost(
                 viewModel = ordersViewModel,
                 onOrderClick = { orderId ->
                     navController.navigate(DashboardRoutes.orderDetail(orderId))
+                },
+                onOpenBackupSettings = {
+                    navController.navigate(DashboardRoutes.settings("EXPORT"))
                 }
             )
         }
@@ -190,6 +195,7 @@ fun DashboardNavHost(
                     adminUserRepository = container.adminUserRepository,
                     backupRepository = container.backupRepository,
                     dataResetRepository = container.dataResetRepository,
+                    backupReminderPreferences = container.backupReminderPreferences,
                 )
             )
             AdminPanel(

@@ -61,6 +61,7 @@ import com.onlytechtake.repairapp.core.design.PasswordVisibilityButton
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
+import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.features.dashboard.DashboardRoute
 
 @Composable
@@ -83,8 +84,34 @@ fun AuthGateRoute(
         }
     }
 
+    if (BuildConfig.IS_SHOWCASE_MODE_ENABLED && authState.initialized && !authState.configured) {
+        val appCtx = context.applicationContext
+        LaunchedEffect(authState.initialized, authState.configured, onAppDataRestored, viewModel) {
+            // Guard against multiple calls if state updates before restoration
+            if (!formState.seeding) {
+                android.util.Log.d("AuthGateRoute", "Triggering seedShowcaseData. Initialized: ${authState.initialized}, Configured: ${authState.configured}")
+                viewModel.seedShowcaseData(appCtx) {
+                    onAppDataRestored()
+                }
+            }
+        }
+    }
+
+    if (BuildConfig.IS_SHOWCASE_MODE_ENABLED && authState.initialized && authState.configured && authState.currentUser == null) {
+        LaunchedEffect(Unit) {
+            android.util.Log.d("AuthGateRoute", "Showcase auto-login triggered")
+            viewModel.loginShowcaseAdmin()
+        }
+    }
+
     when {
-        !authState.initialized -> AuthLoadingScreen()
+        !authState.initialized || (BuildConfig.IS_SHOWCASE_MODE_ENABLED && !authState.configured) || formState.seeding -> AuthLoadingScreen(
+            text = when {
+                formState.seeding -> "Inizializzazione dati showcase..."
+                BuildConfig.IS_SHOWCASE_MODE_ENABLED && !authState.configured -> "Preparazione ambiente (seeding)..."
+                else -> "Sistema pronto"
+            }
+        )
         authState.currentUser != null -> DashboardRoute(
             appInstanceKey = appInstanceKey,
             onLogout = viewModel::logout,
@@ -208,7 +235,7 @@ private fun AdminRecoveryScreen(
 }
 
 @Composable
-private fun AuthLoadingScreen() {
+private fun AuthLoadingScreen(text: String = "Caricamento autenticazione") {
     Scaffold { paddingValues ->
         Box(
             modifier = Modifier
@@ -217,8 +244,8 @@ private fun AuthLoadingScreen() {
             contentAlignment = Alignment.Center,
         ) {
             LoadingBrandIndicator(
-                text = "Caricamento autenticazione",
-                contentDescription = "Caricamento autenticazione",
+                text = text,
+                contentDescription = text,
             )
         }
     }

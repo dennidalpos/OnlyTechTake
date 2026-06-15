@@ -1,5 +1,5 @@
 param(
-    [string]$OutputRoot = "demo/recordings",
+    [string]$OutputRoot = "",
     [string]$OutputFile = "",
     [string]$PackageName = "com.onlytechtake.repairapp.debug",
     [string]$AvdName = "OnlyTechTakeDemo",
@@ -14,6 +14,12 @@ param(
 $ErrorActionPreference = "Stop"
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+
+if (-not $OutputRoot) {
+    $OutputRoot = Join-Path $root "reports/marketing-assets/recordings"
+} elseif (-not [System.IO.Path]::IsPathRooted($OutputRoot)) {
+    $OutputRoot = Join-Path $root $OutputRoot
+}
 $environmentScript = Join-Path $PSScriptRoot "..\support\android_env.ps1"
 if (Test-Path $environmentScript) {
     . $environmentScript
@@ -51,6 +57,41 @@ if (-not $SkipBuild) {
 Write-Host "Pulizia dati app $PackageName..." -ForegroundColor Gray
 adb -s $serial shell pm clear $PackageName
 
+# Configurazioni flussi demo per registrazione
+$recordingsConfig = @(
+    [PSCustomObject]@{
+        Id = "full-workflow"
+        Description = "Workflow Completo (Wizard, Firma, WhatsApp, PDF, Chiusura)"
+        TestClass = "com.onlytechtake.repairapp.demo.OperatorIntakeDemoScreenshotTest"
+    },
+    [PSCustomObject]@{
+        Id = "social-stories"
+        Description = "Social Stories (Wizard, Configurazione, Clienti)"
+        TestClass = "com.onlytechtake.repairapp.demo.SocialStoryDemoScreenshotTest"
+    },
+    [PSCustomObject]@{
+        Id = "customers"
+        Description = "Anagrafiche Clienti (Privato/Azienda)"
+        TestClass = "com.onlytechtake.repairapp.demo.SocialStoryDemoScreenshotTest#capturesPrivateAndBusinessCustomerStories"
+    }
+)
+
+# Selezione flussi se non specificato
+$selectedTestClass = $null
+Write-Host "`n--- Selezione Modalità Registrazione ---" -ForegroundColor Yellow
+Write-Host "0. Manuale (Avvia l'app e registra quello che fai)"
+$i = 1
+foreach ($flow in $recordingsConfig) {
+    Write-Host "$i. $($flow.Description)"
+    $i++
+}
+
+$choice = Read-Host "`nScegli il flusso da registrare [0-$($i-1)]"
+if ($choice -match "^\d+$" -and [int]$choice -gt 0 -and [int]$choice -lt $i) {
+    $selectedTestClass = $recordingsConfig[[int]$choice - 1].TestClass
+    Write-Host "Verrà eseguito lo scenario: $($recordingsConfig[[int]$choice - 1].Description)" -ForegroundColor Green
+}
+
 # Grant necessary permissions for demo recording (Camera)
 Write-Host "Concessione permessi..." -ForegroundColor Gray
 adb -s $serial shell pm grant $PackageName android.permission.CAMERA
@@ -60,12 +101,12 @@ if ($SeedData) {
     Invoke-DemoScreenshotTest -Serial $serial -TestClass "com.onlytechtake.repairapp.demo.SeedDemoDataTest" -FailureMessage "Seed dei dati fallito."
 }
 
-Write-Host "Avvio applicazione..." -ForegroundColor Gray
-# MainActivity is in com.onlytechtake.repairapp, and PackageName is typically com.onlytechtake.repairapp.debug (full flavor)
-adb -s $serial shell am start -W -n "$PackageName/com.onlytechtake.repairapp.MainActivity"
+if ($null -eq $selectedTestClass) {
+    Write-Host "Avvio applicazione in modalità MANUALE..." -ForegroundColor Gray
+    adb -s $serial shell am start -W -n "$PackageName/com.onlytechtake.repairapp.MainActivity"
+}
 
-Write-Host "Avvio registrazione (Massimo $MaxDurationSeconds secondi)..." -ForegroundColor Yellow
-Write-Host "Premi CTRL+C per fermare anticipatamente la registrazione." -ForegroundColor Gray
+Write-Host "Preparazione registrazione (Massimo $MaxDurationSeconds secondi)..." -ForegroundColor Yellow
 
 $screenRecordArgs = "/sdcard/demo_temp.mp4", "--time-limit", [string]$MaxDurationSeconds, "--bit-rate", [string]$BitRate
 if ($Size) {
@@ -73,16 +114,42 @@ if ($Size) {
     $screenRecordArgs += $Size
 }
 
-# We use a simple wait loop and trap CTRL+C
-$stopRequested = $false
-$Host.UI.RawUI.FlushInputBuffer()
+if ($selectedTestClass) {
+    Write-Host "Avvio registrazione e scenario AUTOMATICO..." -ForegroundColor Cyan
 
-try {
-    # Screenrecord blocks until time-limit or CTRL+C (which kills the shell command)
-    adb -s $serial shell screenrecord @screenRecordArgs
-}
-catch {
-    # This might catch termination
+    $fullRecordArgs = @("-s", $serial, "shell", "screenrecord") + $screenRecordArgs
+
+    # Avviamo screenrecord come processo separato per gestire meglio la terminazione
+    $recordProc = Start-Process -FilePath "adb" -ArgumentList $fullRecordArgs -PassThru -WindowStyle Hidden
+
+    try {
+        Start-Sleep -Seconds 3 # Buffer per inizializzazione codec
+        Invoke-DemoScreenshotTest -Serial $serial -TestClass $selectedTestClass
+        Write-Host "Scenario completato." -ForegroundColor Green
+    }
+    finally {
+        Write-Host "Finalizzazione file video sul dispositivo..." -ForegroundColor Gray
+        # Inviamo SIGINT (2) al processo screenrecord sul device per permettere la chiusura corretta del file MP4
+        # Silenziamo eventuali errori di pkill su processi di sistema protetti
+        adb -s $serial shell "pkill -2 screenrecord 2>/dev/null"
+
+        if ($recordProc) {
+            $recordProc | Wait-Process -Timeout 10 -ErrorAction SilentlyContinue
+            Stop-Process -Id $recordProc.Id -Force -ErrorAction SilentlyContinue
+        }
+        Start-Sleep -Seconds 2 # Buffer per il flushing del file su SDCard
+    }
+} else {
+    Write-Host "Premi INVIO per iniziare a registrare..." -ForegroundColor Yellow
+    Read-Host
+
+    Write-Host "REGISTRAZIONE IN CORSO... Premi CTRL+C per fermare anticipatamente." -ForegroundColor Red
+    try {
+        adb -s $serial shell screenrecord @screenRecordArgs
+    }
+    catch {
+        # Catch termination
+    }
 }
 
 Write-Host "`nRegistrazione terminata. Recupero file..." -ForegroundColor Cyan

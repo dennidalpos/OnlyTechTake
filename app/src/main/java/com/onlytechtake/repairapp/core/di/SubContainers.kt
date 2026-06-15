@@ -12,6 +12,7 @@ import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
 import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
+import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import androidx.room.withTransaction
 
 class DataContainer(context: Context) {
@@ -43,7 +44,8 @@ class AuthContainer(context: Context, dataContainer: DataContainer) {
 }
 
 class MediaContainer(context: Context, dataContainer: DataContainer) {
-    val orderFileCleanupService = OrderFileCleanupService(context.applicationContext)
+    val mediaStorageProvider = MediaStorageProvider(context.applicationContext)
+    val orderFileCleanupService = OrderFileCleanupService(context.applicationContext, mediaStorageProvider)
     private val mediaOptimizer = com.onlytechtake.repairapp.core.media.MediaOptimizer()
 
     val orderMediaRepository = OrderMediaRepository(
@@ -52,11 +54,12 @@ class MediaContainer(context: Context, dataContainer: DataContainer) {
         orderMediaDao = dataContainer.database.orderMediaDao(),
         timelineEventDao = dataContainer.database.timelineEventDao(),
         fileCleanupService = orderFileCleanupService,
+        mediaStorageProvider = mediaStorageProvider,
         database = dataContainer.database,
         mediaOptimizer = mediaOptimizer,
     )
 
-    val orderDocumentFileStorage = OrderDocumentFileStorage(context.applicationContext)
+    val orderDocumentFileStorage = OrderDocumentFileStorage(mediaStorageProvider)
 
     val orderDocumentRepository: OrderDocumentRepository = DefaultOrderDocumentRepository(
         dao = dataContainer.database.orderDocumentDao(),
@@ -97,6 +100,7 @@ class OrderContainer(context: Context, dataContainer: DataContainer, mediaContai
         templateDao = dataContainer.database.messageTemplateDao(),
         timelineEventDao = dataContainer.database.timelineEventDao(),
         fileCleanupService = mediaContainer.orderFileCleanupService,
+        mediaStorageProvider = mediaContainer.mediaStorageProvider,
     )
 
     val createIntakeOrderUseCase = CreateIntakeOrderUseCase(
@@ -119,7 +123,7 @@ class OrderContainer(context: Context, dataContainer: DataContainer, mediaContai
 
 class SettingsContainer(context: Context, dataContainer: DataContainer, authContainer: AuthContainer, mediaContainer: MediaContainer) {
     val backupReminderPreferences = BackupReminderPreferences(context.applicationContext)
-    val storageStatsService = StorageStatsService(context.applicationContext)
+    val storageStatsService = StorageStatsService(context.applicationContext, mediaContainer.mediaStorageProvider)
 
     val templateRepository = TemplateRepository(
         context = context.applicationContext,
@@ -139,11 +143,13 @@ class SettingsContainer(context: Context, dataContainer: DataContainer, authCont
         templateDao = dataContainer.database.messageTemplateDao(),
         settingDao = dataContainer.database.appSettingDao(),
         auditLogDao = dataContainer.database.auditLogDao(),
+        backupReminderPreferences = backupReminderPreferences,
         orderExportDao = dataContainer.database.orderExportDao(),
         database = dataContainer.database,
         authPreferences = authContainer.authPreferences,
         sessionStore = authContainer.sessionStore,
         storageStatsService = storageStatsService,
+        mediaStorageProvider = mediaContainer.mediaStorageProvider,
     )
 
     val dataResetRepository = DataResetRepository(
@@ -153,5 +159,6 @@ class SettingsContainer(context: Context, dataContainer: DataContainer, authCont
         authPreferences = authContainer.authPreferences,
         sessionStore = authContainer.sessionStore,
         fileCleanupService = mediaContainer.orderFileCleanupService,
+        mediaStorageProvider = mediaContainer.mediaStorageProvider,
     )
 }

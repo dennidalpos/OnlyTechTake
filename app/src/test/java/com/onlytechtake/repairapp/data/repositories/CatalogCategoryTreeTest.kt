@@ -8,20 +8,19 @@ import org.junit.Test
 
 class CatalogCategoryTreeTest {
     @Test
-    fun normalizesLevelsWithoutDepthLimit() {
+    fun respectsDepthLimit() {
         val categories = listOf(
             category("root", null, 0),
             category("one", "root", 1),
             category("two", "one", 2),
-            category("three", "two", 3),
         )
 
         val normalized = normalizeCategoryTree(
             existing = categories,
             input = CategoryInput(
-                id = "four",
-                parentId = "three",
-                name = "Livello quattro",
+                id = "three",
+                parentId = "two",
+                name = "Livello tre",
                 description = "",
             ),
             generatedId = "unused",
@@ -29,9 +28,28 @@ class CatalogCategoryTreeTest {
             errorNotFound = "not_found",
             errorParentNotFound = "parent_not_found",
             errorSelfParent = "self_parent",
+            errorDepthLimit = "depth_limit",
         )
 
-        assertEquals(4, normalized.single { it.id == "four" }.level)
+        assertEquals(3, normalized.single { it.id == "three" }.level)
+
+        assertThrows(IllegalArgumentException::class.java) {
+            normalizeCategoryTree(
+                existing = normalized,
+                input = CategoryInput(
+                    id = "four",
+                    parentId = "three",
+                    name = "Livello quattro",
+                    description = "",
+                ),
+                generatedId = "unused",
+                errorCycle = "cycle",
+                errorNotFound = "not_found",
+                errorParentNotFound = "parent_not_found",
+                errorSelfParent = "self_parent",
+                errorDepthLimit = "depth_limit",
+            )
+        }
     }
 
     @Test
@@ -56,6 +74,7 @@ class CatalogCategoryTreeTest {
             errorNotFound = "not_found",
             errorParentNotFound = "parent_not_found",
             errorSelfParent = "self_parent",
+            errorDepthLimit = "depth_limit",
         )
 
         assertEquals(0, normalized.single { it.id == "branch" }.level)
@@ -84,6 +103,7 @@ class CatalogCategoryTreeTest {
                 errorNotFound = "not_found",
                 errorParentNotFound = "parent_not_found",
                 errorSelfParent = "self_parent",
+                errorDepthLimit = "depth_limit",
             )
         }
     }

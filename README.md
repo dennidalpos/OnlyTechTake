@@ -9,7 +9,7 @@ App Android locale per tracciare commesse clienti dal banco alla diagnosi, alla 
 - Sistema di sviluppo supportato: Windows + PowerShell.
 - Runtime app: Android, package `com.onlytechtake.repairapp`.
 - Versione app: `0.1.0`, `versionCode` 1.
-- Flavor Gradle: `full` e `demo`; gli script usano `Full` come default.
+- Flavor Gradle: `full`, `demo` e `showcase`; gli script usano `Full` come default.
 - SDK Android: compile/target SDK 37, min SDK 26.
 - Stack: Kotlin, Jetpack Compose, Material 3, Navigation Compose, Room, DataStore, CameraX, Coroutines/Flow.
 - Dati: Room locale, DataStore per preferenze auth, file privati app, export tramite Storage Access Framework.
@@ -73,12 +73,14 @@ Al primo avvio, se non esiste un admin locale, l'app mostra il setup admin. Dopo
 
 Gli script PowerShell calcolano la root del progetto dal proprio percorso, quindi possono essere eseguiti anche da una sottocartella. Il comando diretto `.\gradlew.bat` va invece lanciato dalla root e usa la JVM gia' configurata nel processo PowerShell; se il processo punta a Java 8 o Java 26, usare gli script o impostare `JAVA_HOME` su JDK/JBR 17/21.
 
-`scripts\android\build_installer.ps1` e `scripts\android\start_app.ps1` accettano `-Flavor Full|Demo`; se omesso usano `Full`. I package reali sono:
+`scripts\android\build_installer.ps1` e `scripts\android\start_app.ps1` accettano `-Flavor Full|Demo|Showcase`; se omesso usano `Full`. I package reali sono:
 
 - `Full Debug`: `com.onlytechtake.repairapp.debug`
 - `Full Release`: `com.onlytechtake.repairapp`
 - `Demo Debug`: `com.onlytechtake.repairapp.demo.debug`
 - `Demo Release`: `com.onlytechtake.repairapp.demo`
+- `Showcase Debug`: `com.onlytechtake.repairapp.showcase.debug`
+- `Showcase Release`: `com.onlytechtake.repairapp.showcase`
 
 | Obiettivo | Comando |
 |---|---|
@@ -90,6 +92,7 @@ Gli script PowerShell calcolano la root del progetto dal proprio percorso, quind
 | Test unitari Full debug | `powershell -ExecutionPolicy Bypass -File scripts\android\gradle.ps1 -- --no-configuration-cache :app:testFullDebugUnitTest` |
 | Build APK debug Full | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk` |
 | Build APK debug Demo | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Demo -BuildType Debug -OutputType Apk` |
+| Build APK debug Showcase | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Showcase -BuildType Debug -OutputType Apk` |
 | Build APK release Full | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Apk` |
 | Build AAB release Full | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Aab` |
 | Dev smoke su device | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk -Install` |
@@ -110,10 +113,13 @@ Nota: file non tracciati sotto `docs\` non fanno parte della documentazione uffi
 
 - APK Full Debug: `app\build\outputs\apk\full\debug\app-full-debug.apk`
 - APK Demo Debug: `app\build\outputs\apk\demo\debug\app-demo-debug.apk`
+- APK Showcase Debug: `app\build\outputs\apk\showcase\debug\app-showcase-debug.apk`
 - APK Full Release: `app\build\outputs\apk\full\release\app-full-release.apk`
 - APK Demo Release: `app\build\outputs\apk\demo\release\app-demo-release.apk`
+- APK Showcase Release: `app\build\outputs\apk\showcase\release\app-showcase-release.apk`
 - AAB Full Release: `app\build\outputs\bundle\fullRelease\app-full-release.aab`
 - AAB Demo Release: `app\build\outputs\bundle\demoRelease\app-demo-release.aab`
+- AAB Showcase Release: `app\build\outputs\bundle\showcaseRelease\app-showcase-release.aab`
 
 ## Release Signing
 
@@ -138,6 +144,7 @@ Regole:
 ## Funzioni Implementate
 
 - Setup primo admin, login admin/operatore, logout, lockout dopo 5 tentativi falliti e scadenza sessione dopo 30 minuti di inattivita'.
+- **Modalità Showcase**: variante con popolamento automatico di 30 commesse (incluse chiuse), 10 clienti (5 privati, 5 business), 3 operatori e auto-login come admin al primo avvio.
 - Dashboard con tab Home, Nuova, Clienti, Commesse/Commessa, Config e Admin.
 - Home con metriche e quattro code operative che seguono il flusso banco, diagnosi, preventivo/riparazione e consegna.
 - Creazione commessa a step con cliente esistente o nuovo, categoria ad albero obbligatoria, problema, almeno un media/allegato, privacy e firma.
@@ -169,6 +176,7 @@ Regole:
 - `app\src\main\java\com\onlytechtake\repairapp\features\`: UI Compose e ViewModel.
 - `app\src\test\`: test unitari JVM.
 - `app\src\androidTest\`: test strumentali su device/emulatore.
+- `app\src\showcase\`: risorse e configurazioni specifiche per la variante Showcase.
 - `app\schemas\`: schema Room esportato; sono presenti `1.json` e `2.json`, coerenti con `DATABASE_VERSION = 2`.
 - `docs\`: documentazione operativa e funzionale.
 - `media\brand\`: logo, favicon, anteprime e cover README per GitHub.

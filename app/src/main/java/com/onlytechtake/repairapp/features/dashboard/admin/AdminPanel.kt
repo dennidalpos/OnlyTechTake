@@ -56,6 +56,7 @@ fun AdminPanel(
 ) {
     val users by viewModel.users.collectAsState()
     val recoveryCode by viewModel.recoveryCode.collectAsState()
+    val isBackupReminderDue by viewModel.isBackupReminderDue.collectAsState()
 
     val confirmCreateTitle = stringResource(R.string.admin_confirm_create_title)
     val confirmCreateText = stringResource(R.string.admin_confirm_create_text)
@@ -329,6 +330,26 @@ fun AdminPanel(
                     }
                 }
             }
+
+            if (isBackupReminderDue) {
+                item {
+                    StandardCard(containerColor = MaterialTheme.colorScheme.errorContainer) {
+                        Column(modifier = Modifier.padding(DashboardSpacing.cardPadding)) {
+                            Text(
+                                text = "ATTENZIONE: Nessun backup recente trovato!",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onErrorContainer
+                            )
+                            Text(
+                                text = "Si consiglia vivamente di eseguire un backup completo prima di procedere con operazioni di cancellazione dati.",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onErrorContainer
+                            )
+                        }
+                    }
+                }
+            }
+
             item {
                 StandardCard {
                     Column(

@@ -15,6 +15,7 @@ import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.test.swipeLeft
+import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.onFirst
@@ -74,29 +75,43 @@ class OperatorIntakeDemoScreenshotTest {
             )
             capture(outputDir, "04-category-problem.png")
 
+            // Simulate Signature Capture (we'll show the section in Order Detail for better visual consistency)
             clickDashboardTab("ORDERS")
             waitForText("Commesse")
             clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
             waitForText("Notebook HP")
-            capture(outputDir, "05-order-created.png")
+            
+            clickText("Firma privacy", scroll = true)
+            capture(outputDir, "05-signature-capture.png")
+
+            capture(outputDir, "06-order-created.png")
+
+            // WhatsApp Preview
+            clickText("Azioni Commessa", scroll = true)
+            clickText("Invia stato WhatsApp")
+            waitForText("Anteprima WhatsApp")
+            capture(outputDir, "07-whatsapp-preview.png")
+            clickText("Chiudi anteprima")
 
             applySimpleStatus(OrderStatusAction.START_PROGRESS, "In lavorazione")
-            capture(outputDir, "06-in-progress.png")
+            capture(outputDir, "08-in-progress.png")
 
             applySimpleStatus(OrderStatusAction.START_DIAGNOSIS, "Diagnosi")
             applyResultStatus()
-            capture(outputDir, "07-diagnosis-result.png")
+            capture(outputDir, "09-diagnosis-result.png")
+
+            // Documents / PDF
+            clickText("Documenti cliente", scroll = true)
+            capture(outputDir, "10-pdf-documents.png")
 
             acceptQuote()
-            capture(outputDir, "08-repairing.png")
-
             applySimpleStatus(OrderStatusAction.READY_FOR_PICKUP, "Pronta al ritiro")
-            capture(outputDir, "09-ready-for-pickup.png")
+            capture(outputDir, "11-ready-for-pickup.png")
 
             closeOrder()
             clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
             waitForText("Chiusa")
-            capture(outputDir, "10-closed-timeline.png")
+            capture(outputDir, "12-closed-timeline.png")
         }
     }
 
@@ -243,7 +258,7 @@ class OperatorIntakeDemoScreenshotTest {
 
     private fun clickText(text: String, scroll: Boolean = false) {
         waitForText(text)
-        val node = composeRule.onNodeWithText(text, substring = false)
+        val node = composeRule.onNodeWithText(text, substring = true)
         if (scroll) {
             runCatching { node.performScrollTo() }
             composeRule.waitForIdle()
