@@ -32,8 +32,10 @@ function Invoke-InstrumentationChecked {
 
     $output = & adb @Arguments 2>&1
     $output | ForEach-Object { Write-Host $_ }
-    if ($LASTEXITCODE -ne 0 -or ($output -join "`n") -match "FAILURES!!!|There was \d+ failure|INSTRUMENTATION_FAILED|Process crashed") {
-        throw $FailureMessage
+    $outputText = $output -join "`n"
+    if ($LASTEXITCODE -ne 0 -or $outputText -match "FAILURES!!!|There was \d+ failure|INSTRUMENTATION_FAILED|Process crashed") {
+        $failureDetails = @($output | Select-Object -Last 40) -join "`n"
+        throw "$FailureMessage`n`nDettagli strumentazione:`n$failureDetails"
     }
 }
 
@@ -266,11 +268,12 @@ function Invoke-DemoScreenshotTest {
     param(
         [Parameter(Mandatory = $true)][string]$Serial,
         [Parameter(Mandatory = $true)][string]$TestClass,
-        [string]$FailureMessage = "Scenario strumentato demo fallito."
+        [string]$FailureMessage = "Scenario strumentato demo fallito.",
+        [hashtable]$InstrumentationExtras = @{}
     )
 
     $runner = "com.onlytechtake.repairapp.debug.test/androidx.test.runner.AndroidJUnitRunner"
-    Invoke-InstrumentationChecked -FailureMessage $FailureMessage -Arguments @(
+    $arguments = @(
         "-s",
         $Serial,
         "shell",
@@ -279,9 +282,14 @@ function Invoke-DemoScreenshotTest {
         "-w",
         "-e",
         "class",
-        $TestClass,
-        $runner
+        $TestClass
     )
+    foreach ($entry in $InstrumentationExtras.GetEnumerator()) {
+        $arguments += @("-e", [string]$entry.Key, [string]$entry.Value)
+    }
+    $arguments += $runner
+
+    Invoke-InstrumentationChecked -FailureMessage $FailureMessage -Arguments $arguments
 }
 
 function Pull-DeviceDirectory {

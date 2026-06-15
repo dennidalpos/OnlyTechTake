@@ -11,6 +11,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
@@ -134,6 +135,7 @@ class OperatorIntakeDemoScreenshotTest {
     }
 
     private fun applySimpleStatus(action: OrderStatusAction, expectedText: String) {
+        scrollOrderDetailToTop()
         waitForTag(RepairAppTestTags.OrderActionSection, scroll = true)
         pauseForDemo()
         clickTag(RepairAppTestTags.statusAction(action.name), scroll = true)
@@ -296,6 +298,14 @@ class OperatorIntakeDemoScreenshotTest {
         composeRule.waitForIdle()
     }
 
+    private fun scrollOrderDetailToTop() {
+        composeRule
+            .onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn)
+            .performScrollToIndex(0)
+        composeRule.waitForIdle()
+        pauseForDemo()
+    }
+
     private fun waitForStatus(text: String) {
         composeRule.waitUntil(timeoutMillis = WAIT_TIMEOUT_MILLIS) {
             runCatching {
@@ -412,12 +422,15 @@ class OperatorIntakeDemoScreenshotTest {
     }
 
     private fun pauseForDemo() {
-        Thread.sleep(ACTION_PAUSE_MILLIS)
+        Thread.sleep(if (isRecordingDemo()) RECORDING_ACTION_PAUSE_MILLIS else ACTION_PAUSE_MILLIS)
     }
 
     private fun pauseForScreenshot() {
-        Thread.sleep(SCREENSHOT_PAUSE_MILLIS)
+        Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
+
+    private fun isRecordingDemo(): Boolean =
+        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     private fun prepareScreenshotDirectory(): File {
         val directory = File(requireNotNull(context.getExternalFilesDir(null)), SCREENSHOT_DIR_NAME)
@@ -434,5 +447,7 @@ class OperatorIntakeDemoScreenshotTest {
         const val TAG_POLL_MILLIS = 250L
         const val ACTION_PAUSE_MILLIS = 2_000L
         const val SCREENSHOT_PAUSE_MILLIS = 2_000L
+        const val RECORDING_ACTION_PAUSE_MILLIS = 500L
+        const val RECORDING_SCREENSHOT_PAUSE_MILLIS = 250L
     }
 }

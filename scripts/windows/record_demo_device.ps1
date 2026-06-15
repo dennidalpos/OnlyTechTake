@@ -15,6 +15,10 @@ $ErrorActionPreference = "Stop"
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 
+if ($MaxDurationSeconds -lt 1 -or $MaxDurationSeconds -gt 180) {
+    throw "MaxDurationSeconds deve essere compreso tra 1 e 180, limite di adb screenrecord."
+}
+
 if (-not $OutputRoot) {
     $OutputRoot = Join-Path $root "reports/marketing-assets/recordings"
 } elseif (-not [System.IO.Path]::IsPathRooted($OutputRoot)) {
@@ -45,17 +49,20 @@ $outputPath = Join-Path $OutputRoot $OutputFile
 
 Write-Host "--- OnlyTechTake Demo Recorder ---" -ForegroundColor Cyan
 
+trap {
+    Restore-DeviceGlobalSettings
+    throw $_
+}
+
 # Detect and resolve device
 $serial = Resolve-DemoDeviceSerial -AndroidHome $env:ANDROID_HOME -AvdName $AvdName -UseConnectedDevice:$UseConnectedDevice
 Write-Host "Uso device: $serial" -ForegroundColor Green
 
-if (-not $SkipBuild) {
-    Write-Host "Building and installing APK..." -ForegroundColor Gray
-    Invoke-DemoApkBuildAndInstall -RootPath $root -Serial $serial -SkipBuild:$SkipBuild
-}
+Write-Host "Preparazione e installazione APK..." -ForegroundColor Gray
+Invoke-DemoApkBuildAndInstall -RootPath $root -Serial $serial -SkipBuild:$SkipBuild
 
 Write-Host "Pulizia dati app $PackageName..." -ForegroundColor Gray
-adb -s $serial shell pm clear $PackageName
+Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "shell", "pm", "clear", $PackageName)
 
 # Configurazioni flussi demo per registrazione
 $recordingsConfig = @(
@@ -114,11 +121,15 @@ if ($null -eq $selectedTestClass) {
 
 Write-Host "Preparazione registrazione (Massimo $MaxDurationSeconds secondi)..." -ForegroundColor Yellow
 
-$screenRecordArgs = "/sdcard/demo_temp.mp4", "--time-limit", [string]$MaxDurationSeconds, "--bit-rate", [string]$BitRate
+$remoteVideoPath = "/sdcard/demo_temp.mp4"
+Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "shell", "rm", "-f", $remoteVideoPath)
+
+$screenRecordArgs = @("--time-limit", [string]$MaxDurationSeconds, "--bit-rate", [string]$BitRate)
 if ($Size) {
     $screenRecordArgs += "--size"
     $screenRecordArgs += $Size
 }
+$screenRecordArgs += $remoteVideoPath
 
 if ($selectedTestClass) {
     Write-Host "Avvio registrazione e scenario AUTOMATICO..." -ForegroundColor Cyan
@@ -130,7 +141,10 @@ if ($selectedTestClass) {
 
     try {
         Start-Sleep -Seconds 3 # Buffer per inizializzazione codec
-        Invoke-DemoScreenshotTest -Serial $serial -TestClass $selectedTestClass
+        Invoke-DemoScreenshotTest `
+            -Serial $serial `
+            -TestClass $selectedTestClass `
+            -InstrumentationExtras @{ demoRecording = "true" }
         Write-Host "Scenario completato." -ForegroundColor Green
     }
     finally {
@@ -159,13 +173,23 @@ if ($selectedTestClass) {
 }
 
 Write-Host "`nRegistrazione terminata. Recupero file..." -ForegroundColor Cyan
-Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "pull", "/sdcard/demo_temp.mp4", $outputPath)
-adb -s $serial shell rm /sdcard/demo_temp.mp4
+Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "shell", "test", "-s", $remoteVideoPath)
+Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "pull", $remoteVideoPath, $outputPath)
+Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "shell", "rm", "-f", $remoteVideoPath)
 
 if (Test-Path $outputPath) {
+    if ($null -ne (Get-Command "ffprobe" -ErrorAction SilentlyContinue)) {
+        Invoke-Checked -FilePath "ffprobe" -Arguments @(
+            "-v", "error",
+            "-select_streams", "v:0",
+            "-show_entries", "stream=codec_name,width,height,duration",
+            "-of", "default=noprint_wrappers=1",
+            $outputPath
+        )
+    }
     Write-Host "File salvato correttamente in: $outputPath" -ForegroundColor Green
 } else {
-    Write-Host "ERRORE: Recupero file non riuscito." -ForegroundColor Red
+    throw "Recupero file non riuscito: $outputPath"
 }
 
 Restore-DeviceGlobalSettings

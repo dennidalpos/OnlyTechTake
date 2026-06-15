@@ -534,12 +534,15 @@ class SocialStoryDemoScreenshotTest {
     }
 
     private fun pauseForDemo() {
-        Thread.sleep(ACTION_PAUSE_MILLIS)
+        Thread.sleep(if (isRecordingDemo()) RECORDING_ACTION_PAUSE_MILLIS else ACTION_PAUSE_MILLIS)
     }
 
     private fun pauseForScreenshot() {
-        Thread.sleep(SCREENSHOT_PAUSE_MILLIS)
+        Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
+
+    private fun isRecordingDemo(): Boolean =
+        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     private companion object {
         const val CASE_ORDER = "01-commessa-nuovo-cliente-chiusura"
@@ -554,5 +557,7 @@ class SocialStoryDemoScreenshotTest {
         const val TAG_POLL_MILLIS = 250L
         const val ACTION_PAUSE_MILLIS = 1_400L
         const val SCREENSHOT_PAUSE_MILLIS = 1_400L
+        const val RECORDING_ACTION_PAUSE_MILLIS = 500L
+        const val RECORDING_SCREENSHOT_PAUSE_MILLIS = 250L
     }
 }
