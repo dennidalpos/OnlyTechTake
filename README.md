@@ -13,9 +13,9 @@ App Android locale per tracciare commesse clienti dal banco alla diagnosi, alla 
 - SDK Android: compile/target SDK 37, min SDK 26.
 - Stack: Kotlin, Jetpack Compose, Material 3, Navigation Compose, Room, DataStore, CameraX, Coroutines/Flow.
 - Dati: Room locale, DataStore per preferenze auth, file privati app, export tramite Storage Access Framework.
-- Schema Room corrente: `DATABASE_VERSION = 2`; sono tracciati gli export `1.json` e `2.json`. Il codice non contiene classi di migrazione e usa reinstallazione pulita o fallback distruttivo in questa fase fresh-app.
+- Schema Room corrente: `DATABASE_VERSION = 4`; sono tracciati gli export `1.json`, `2.json` e `4.json`. Il codice non contiene classi di migrazione e usa reinstallazione pulita o fallback distruttivo in questa fase fresh-app.
 - Backend: assente. WhatsApp e' solo manuale.
-- CI: non configurata nel repository; i gate sono locali.
+- CI: `.github/workflows/android.yml` verifica lint/compile/test Full e compile/test Demo e Showcase.
 
 ## Documentazione
 
@@ -26,8 +26,10 @@ App Android locale per tracciare commesse clienti dal banco alla diagnosi, alla 
 - [Privacy, WhatsApp e feedback](docs/04_PRIVACY_WHATSAPP_FEEDBACK.md)
 - [Export e backup locale](docs/05_EXPORT_BACKUP_LOCALE.md)
 - [Build, installazione e verifica](docs/06_BUILD_INSTALLER_ANDROID.md)
-- [Demo/Full e manuale operativo](docs/07_LICENZA_DEMO_FULL_E_MANUALE_USO.md)
-- [Handoff futuro backend, non implementato nell'app attuale](docs/07_BACKEND_AGENT_TRACKER.md)
+- [Checklist di Release](docs/release/RELEASE_CHECKLIST.md)
+- [Demo, Showcase, Full e manuale operativo](docs/08_LICENZA_DEMO_FULL_E_MANUALE_USO.md)
+- [Marketing: Screenshot e Video](docs/marketing/)
+- [Handoff futuro backend](docs/09_BACKEND_AGENT_TRACKER.md)
 - [Script PowerShell](scripts/README.md)
 
 ## Prerequisiti
@@ -105,7 +107,7 @@ Prima di consegnare il repository:
 1. Controllare lo stato con `git status --short` e distinguere modifiche tracciate da file non tracciati.
 2. Leggere `PROJECT_STATUS.json`: contiene solo todo incompleti correnti.
 3. Eseguire almeno `check_env.ps1`, `check_project.ps1 -Flavor Full -SkipReleaseBuild` e una build/install debug se serve validare su device.
-4. Usare `start_app.ps1 -CleanInstall` quando lo schema Room locale e' incompatibile con dati gia' installati; il codice corrente e' Room v2 senza migrazioni conservative.
+4. Usare `start_app.ps1 -CleanInstall` quando lo schema Room locale e' incompatibile con dati gia' installati; il codice corrente e' Room v4 senza migrazioni conservative.
 
 Nota: file non tracciati sotto `docs\` non fanno parte della documentazione ufficiale del repository finche' non vengono revisionati e aggiunti intenzionalmente.
 
@@ -150,21 +152,22 @@ Regole:
 - Creazione commessa a step con cliente esistente o nuovo, categoria ad albero obbligatoria, problema, almeno un media/allegato, privacy e firma.
 - Workspace commessa con esito diagnosi esplicito `REPAIRABLE`/`NOT_REPAIRABLE`, preventivo obbligatorio solo nel ramo riparabile, azioni post-diagnosi guidate, note, media, firma, timeline, WhatsApp manuale locale, stato pagamento e condivisione PDF.
 - Le anteprime immagini locali rispettano l'orientamento EXIF; CameraX usa la rotazione reale del display prima del bind e dello scatto.
-- Admin: utenti, reset password, pulizia commesse scartate/archiviate e reset totale dati con conferma `RESET`.
+- Admin: utenti, reset password, cancellazione di tutte le commesse e dei relativi media con conferma `CANCELLA TUTTO`, e reset totale dati con conferma `RESET`.
 - Config admin: categorie multilivello, template privacy/condizioni/WhatsApp, modalita WhatsApp manuale, backup ZIP, ripristino ZIP ed export XLSX.
 - Import allegati tramite SAF per JPEG/PNG/WebP, PDF, TXT, DOC/DOCX e XLS/XLSX fino a 25 MiB.
+- Storage privato canonico: tutti i media applicativi vivono sotto `filesDir/app_media`; i percorsi `files/orders` e `files/order_media` sono riconosciuti esclusivamente durante il restore di backup legacy.
 - Export admin: ZIP completo e XLSX da Config > Backup; database e XLSX pre-cleanup dalla sezione Admin; configurazione JSON nel repository ma non esposta come pulsante dedicato nella schermata Backup corrente. Ripristino ZIP completo tramite SAF per admin. Condivisione PDF della singola commessa dal dettaglio.
 - Promemoria backup admin: attivo di default ogni 7 giorni, basato sull'ultimo ZIP completo riuscito; non blocca l'uso normale dell'app.
 - Demo release: massimo 10 commesse, massimo 2 operatori, export database/ZIP/XLSX e restore ZIP bloccati, PDF con watermark `VERSIONE DEMO`.
-- Se il device espone provider come Drive, OneDrive o Dropbox nel selettore documenti Android, vengono usati tramite SAF come destinazione scelta dall'utente; non esiste integrazione cloud proprietaria.
+- Il selettore documenti Android consente all'utente di scegliere memoria locale o un provider documenti installato; non esiste integrazione cloud proprietaria.
 
 ## Limiti Noti
 
 - Nessun backend e nessuna API WhatsApp.
 - Export JSON, database, PDF e ZIP non sono cifrati dall'app.
-- Non esiste un gate CI remoto tracciato nel repository.
+- La CI non esegue test strumentati o verifiche su device.
 - La build release richiede signing locale non tracciato.
-- Il codice sorgente e' gia' a Room v2, mentre alcune istruzioni di governance repository richiedono approvazione owner per ulteriori cambi schema; non aggiungere altri cambi schema senza decisione esplicita.
+- Il codice sorgente usa Room v4. Ogni ulteriore cambio schema resta bloccato dalle regole repository finche' non viene autorizzato.
 - Le verifiche manuali residue sono elencate in `PROJECT_STATUS.json`.
 
 ## Struttura
@@ -177,7 +180,7 @@ Regole:
 - `app\src\test\`: test unitari JVM.
 - `app\src\androidTest\`: test strumentali su device/emulatore.
 - `app\src\showcase\`: risorse e configurazioni specifiche per la variante Showcase.
-- `app\schemas\`: schema Room esportato; sono presenti `1.json` e `2.json`, coerenti con `DATABASE_VERSION = 2`.
+- `app\schemas\`: schema Room esportato; sono presenti `1.json`, `2.json` e `4.json`, coerenti con `DATABASE_VERSION = 4`.
 - `docs\`: documentazione operativa e funzionale.
 - `media\brand\`: logo, favicon, anteprime e cover README per GitHub.
 - `scripts\android\`: script PowerShell ufficiali per ambiente, Gradle, build/install e start app.

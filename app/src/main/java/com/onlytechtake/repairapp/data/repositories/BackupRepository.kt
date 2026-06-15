@@ -29,7 +29,6 @@ import java.io.IOException
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.zip.ZipInputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 import kotlinx.coroutines.Dispatchers
@@ -86,7 +85,12 @@ class BackupRepository(
                     zip.putTextEntry("metadata/backup.json", buildBackupMetadataJson())
                     zip.putTextEntry("config/configuration.json", buildConfigurationJson())
                     addDatabaseFiles(zip)
-                    addAppFiles(zip, directoryName = "app_media")
+                    BackupArchive.addDirectory(
+                        zip = zip,
+                        directory = mediaStorageProvider?.getBaseMediaDir()
+                            ?: File(context.filesDir, BackupArchive.CANONICAL_MEDIA_DIRECTORY),
+                        entryDirectory = "files/${BackupArchive.CANONICAL_MEDIA_DIRECTORY}",
+                    )
                 }
             } ?: throw IOException("Destinazione non disponibile")
             
@@ -110,7 +114,9 @@ class BackupRepository(
                     check(it.mkdirs()) { "Area ripristino non disponibile" }
                 }
                 try {
-                    val extracted = extractBackup(uri, stagingDir)
+                    val extracted = context.contentResolver.openInputStream(uri)?.use { input ->
+                        BackupArchive.extract(input, stagingDir)
+                    } ?: throw IOException("Backup non disponibile")
                     require(extracted.metadataText.contains("\"databaseVersion\": ${RepairAppDatabase.DATABASE_VERSION}")) {
                         "Versione backup non compatibile"
                     }
@@ -140,19 +146,23 @@ class BackupRepository(
                         authPreferences?.clear()
                         sessionStore?.clear()
 
-                        // Log the restore event in the NEW database
                         val now = clockMillis()
-                        auditLogDao.upsert(
-                            com.onlytechtake.repairapp.data.local.entities.AuditLogEntity(
-                                id = java.util.UUID.randomUUID().toString(),
-                                action = com.onlytechtake.repairapp.data.local.entities.AuditAction.DATA_RESET,
-                                actorUserId = actor.id,
-                                orderId = null,
-                                customerId = null,
-                                detailsJson = """{"operation":"backup_restored","at":"${formatTime(now)}"}""",
-                                createdAt = now,
+                        val restoredDatabase = RepairAppDatabase.getInstance(context)
+                        try {
+                            restoredDatabase.auditLogDao().upsert(
+                                com.onlytechtake.repairapp.data.local.entities.AuditLogEntity(
+                                    id = java.util.UUID.randomUUID().toString(),
+                                    action = com.onlytechtake.repairapp.data.local.entities.AuditAction.DATA_RESET,
+                                    actorUserId = actor.id,
+                                    orderId = null,
+                                    customerId = null,
+                                    detailsJson = """{"operation":"backup_restored","at":"${formatTime(now)}"}""",
+                                    createdAt = now,
+                                ),
                             )
-                        )
+                        } finally {
+                            RepairAppDatabase.closeInstance()
+                        }
                     } catch (e: Exception) {
                         // Rollback DB if possible (partial restore of files is harder)
                         oldDbBackupDir.listFiles()?.forEach { 
@@ -276,68 +286,6 @@ class BackupRepository(
         }
     }
 
-    private fun extractBackup(uri: Uri, restoreRoot: File): ExtractedBackup {
-        val metadata = StringBuilder()
-        val databaseFiles = mutableMapOf<String, File>()
-        var hasMetadata = false
-
-        context.contentResolver.openInputStream(uri)?.use { input ->
-            ZipInputStream(input).use { zip ->
-                while (true) {
-                    val entry = zip.nextEntry ?: break
-                    try {
-                        if (entry.isDirectory) continue
-                        requireSafeZipEntry(entry.name)
-                        when {
-                            entry.name == BACKUP_METADATA_ENTRY -> {
-                                hasMetadata = true
-                                metadata.append(zip.readBytes().toString(Charsets.UTF_8))
-                            }
-                            entry.name.startsWith(DATABASE_ENTRY_PREFIX) -> {
-                                val fileName = entry.name.removePrefix(DATABASE_ENTRY_PREFIX)
-                                require(fileName.isNotBlank() && !fileName.contains('/')) { "Backup database non valido" }
-                                val destination = File(restoreRoot, "database/$fileName")
-                                destination.parentFile?.mkdirs()
-                                destination.outputStream().use { output -> zip.copyTo(output) }
-                                databaseFiles[fileName] = destination
-                            }
-                            entry.name.startsWith(FILES_ENTRY_PREFIX) -> {
-                                val relativePath = entry.name.removePrefix(FILES_ENTRY_PREFIX)
-                                require(relativePath.startsWith("orders/") || relativePath.startsWith("order_media/")) {
-                                    "Backup contiene file app non supportati"
-                                }
-                                val destination = safeChild(File(restoreRoot, "files"), relativePath)
-                                destination.parentFile?.mkdirs()
-                                destination.outputStream().use { output -> zip.copyTo(output) }
-                            }
-                        }
-                    } finally {
-                        zip.closeEntry()
-                    }
-                }
-            }
-        } ?: throw IOException("Backup non disponibile")
-
-        require(hasMetadata) { "Metadata backup mancanti" }
-        require(databaseFiles.containsKey(RepairAppDatabase.DATABASE_NAME)) { "Database backup mancante" }
-        return ExtractedBackup(metadata.toString(), databaseFiles)
-    }
-
-    private fun requireSafeZipEntry(name: String) {
-        require(name.isNotBlank()) { "Backup ZIP non valido" }
-        require(!name.startsWith("/") && !name.startsWith("\\")) { "Percorso backup non valido" }
-        val parts = name.replace('\\', '/').split('/')
-        require(parts.none { (it == "..") || it.isBlank() }) { "Percorso backup non valido" }
-    }
-
-    private fun safeChild(root: File, relativePath: String): File {
-        val destination = File(root, relativePath)
-        val rootPath = root.canonicalPath + File.separator
-        val destinationPath = destination.canonicalPath
-        require(destinationPath.startsWith(rootPath)) { "Percorso backup non valido" }
-        return destination
-    }
-
     private fun validateDatabase(file: File) {
         SQLiteDatabase.openDatabase(file.absolutePath, null, SQLiteDatabase.OPEN_READONLY).use { db ->
             db.rawQuery("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'users'", null).use { cursor ->
@@ -358,29 +306,12 @@ class BackupRepository(
     }
 
     private fun replacePrivateFiles(restoreRoot: File) {
-        mediaStorageProvider?.getBaseMediaDir()?.deleteRecursively()
-        
-        // Cleanup old folders if they exist (migration/safety)
+        val destination = mediaStorageProvider?.getBaseMediaDir()
+            ?: File(context.filesDir, BackupArchive.CANONICAL_MEDIA_DIRECTORY)
+        BackupArchive.restoreAppMedia(File(restoreRoot, "files"), destination)
+
         listOf("orders", "order_media", "intake_media", "signatures").forEach { name ->
             File(context.filesDir, name).deleteRecursively()
-        }
-
-        val restoredFiles = File(restoreRoot, "files")
-        
-        // Restore new centralized folder
-        val source = File(restoredFiles, "app_media")
-        if (source.exists()) {
-            val destination = mediaStorageProvider?.getBaseMediaDir() ?: File(context.filesDir, "app_media")
-            source.copyRecursively(destination, overwrite = true)
-        } else {
-            // Support legacy backup restore (mapping old folders to new centralized structure is omitted for simplicity 
-            // as this is a fresh app, but we at least restore the old folders if present to avoid data loss)
-            listOf("orders", "order_media").forEach { name ->
-                val legacySource = File(restoredFiles, name)
-                if (legacySource.exists()) {
-                    legacySource.copyRecursively(File(context.filesDir, name), overwrite = true)
-                }
-            }
         }
     }
 
@@ -422,7 +353,7 @@ class BackupRepository(
             appendLine("  \"createdAt\": ${jsonString(formatTime(clockMillis()))},")
             appendLine("  \"databaseName\": ${jsonString(RepairAppDatabase.DATABASE_NAME)},")
             appendLine("  \"databaseVersion\": ${RepairAppDatabase.DATABASE_VERSION},")
-            appendLine("  \"includes\": [\"database\", \"configuration\", \"order_media\", \"signatures\"]")
+            appendLine("  \"includes\": [\"database\", \"configuration\", \"app_media\"]")
             appendLine("}")
         }
 
@@ -438,17 +369,6 @@ class BackupRepository(
         }
     }
 
-    private fun addAppFiles(zip: ZipOutputStream, directoryName: String) {
-        val directory = File(context.filesDir, directoryName)
-        if (!directory.exists()) return
-        directory.walkTopDown()
-            .filter { it.isFile }
-            .forEach { file ->
-                val relativePath = file.relativeTo(directory).invariantSeparatorsPath
-                zip.putFileEntry(file, "files/$directoryName/$relativePath")
-            }
-    }
-
     private fun writeText(uri: Uri, text: String) {
         context.contentResolver.openOutputStream(uri)?.use { output ->
             output.write(text.toByteArray(Charsets.UTF_8))
@@ -457,17 +377,9 @@ class BackupRepository(
 
     private companion object {
         const val RESTORE_WORK_DIR = "onlytechtake_restore"
-        const val BACKUP_METADATA_ENTRY = "metadata/backup.json"
-        const val DATABASE_ENTRY_PREFIX = "database/"
-        const val FILES_ENTRY_PREFIX = "files/"
     }
 
 }
-
-private data class ExtractedBackup(
-    val metadataText: String,
-    val databaseFiles: Map<String, File>,
-)
 
 private fun ZipOutputStream.putTextEntry(name: String, text: String) {
     putNextEntry(ZipEntry(name))
@@ -475,11 +387,6 @@ private fun ZipOutputStream.putTextEntry(name: String, text: String) {
     closeEntry()
 }
 
-private fun ZipOutputStream.putFileEntry(file: File, entryName: String) {
-    putNextEntry(ZipEntry(entryName))
-    file.inputStream().use { input -> input.copyTo(this) }
-    closeEntry()
-}
 
 private fun formatTimelineEvent(event: TimelineEventEntity): String {
     val parts = buildList {

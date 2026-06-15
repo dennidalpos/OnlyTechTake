@@ -27,6 +27,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.core.design.RepairAppSizes
+import com.onlytechtake.repairapp.core.design.repairColors
 
 data class AttachmentCounts(
     val images: Int,
@@ -116,7 +118,7 @@ fun OrderStatusStepper(
         OrderStatus.CLOSED -> 5
     }
 
-    val dotSize = if (compact) 12.dp else 24.dp
+    val dotSize = if (compact) RepairAppSizes.orderStepperDot else 24.dp
     val spacing = if (compact) 4.dp else 12.dp
 
     Row(
@@ -124,8 +126,8 @@ fun OrderStatusStepper(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val completedColor = Color(0xFF2E7D32) // Use a standard green
-        val inactiveColor = MaterialTheme.colorScheme.outlineVariant
+        val completedColor = MaterialTheme.repairColors.stepCompleted
+        val inactiveColor = MaterialTheme.repairColors.stepInactive
 
         steps.forEachIndexed { index, _ ->
             val isCompleted = index < currentStepIndex
@@ -144,9 +146,9 @@ fun OrderStatusStepper(
             ) {
                 if (!compact) {
                     if (isCompleted) {
-                        Text("✓", color = Color.White, style = MaterialTheme.typography.labelSmall)
+                        Text("✓", color = MaterialTheme.repairColors.onSuccess, style = MaterialTheme.typography.labelSmall)
                     } else {
-                        Text((index + 1).toString(), color = if (isCurrent) Color.White else MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelSmall)
+                        Text((index + 1).toString(), color = if (isCurrent) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelSmall)
                     }
                 }
             }

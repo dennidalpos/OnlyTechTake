@@ -24,11 +24,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.onlytechtake.repairapp.core.media.normalizeCameraTargetRotation
+import com.onlytechtake.repairapp.R
 import java.io.File
 
 @Composable
@@ -41,10 +43,11 @@ fun CameraCapturePreview(
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val previewDescription = stringResource(R.string.camera_preview_description)
     val executor = remember(context) { ContextCompat.getMainExecutor(context) }
-    val previewView = remember(context) {
+    val previewView = remember(context, previewDescription) {
         PreviewView(context).apply {
-            contentDescription = "Anteprima camera per acquisire una foto"
+            contentDescription = previewDescription
         }
     }
     val imageCapture = remember { ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY).build() }

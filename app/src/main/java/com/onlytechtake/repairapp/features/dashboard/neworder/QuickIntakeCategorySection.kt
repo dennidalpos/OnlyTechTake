@@ -87,23 +87,24 @@ fun QuickIntakeCategorySection(
                 }
 
                 if (selectedPath.isNotBlank()) {
-                    OperatorText("Selezionata: $selectedPath")
+                    OperatorText(stringResource(R.string.intake_category_selected, selectedPath))
                 }
 
                 Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
                     visibleCategories.forEach { category ->
                         val hasChildren = activeCategories.any { child -> child.parentId == category.id }
                         val isSelected = category.id == selectedCategoryId
+                        val categoryState = when {
+                            hasChildren -> stringResource(R.string.intake_category_branch_state)
+                            isSelected -> stringResource(R.string.intake_category_selected_state)
+                            else -> stringResource(R.string.intake_category_not_selected_state)
+                        }
                         StandardCard(
                             modifier = Modifier
                                 .testTag(RepairAppTestTags.categoryButton(category.id))
                                 .semantics {
                                     selected = isSelected
-                                    stateDescription = when {
-                                        hasChildren -> "Ramo categoria"
-                                        isSelected -> "Categoria selezionata"
-                                        else -> "Categoria non selezionata"
-                                    }
+                                    stateDescription = categoryState
                                 },
                             onClick = {
                                 if (hasChildren) {
@@ -112,7 +113,8 @@ fun QuickIntakeCategorySection(
                                     onCategorySelected(category.id)
                                 }
                             },
-                            containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                            containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                            role = Role.RadioButton,
                         ) {
                             Row(
                                 modifier = Modifier
@@ -123,9 +125,9 @@ fun QuickIntakeCategorySection(
                             ) {
                                 Text(category.name, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
                                 if (hasChildren) {
-                                    Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Apri")
+                                    Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = stringResource(R.string.intake_category_open))
                                 } else if (isSelected) {
-                                    Icon(Icons.Default.Check, contentDescription = "Selezionata", tint = MaterialTheme.colorScheme.primary)
+                                    Icon(Icons.Default.Check, contentDescription = stringResource(R.string.intake_category_selected_icon), tint = MaterialTheme.colorScheme.primary)
                                 }
                             }
                         }

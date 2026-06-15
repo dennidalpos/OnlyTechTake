@@ -334,7 +334,7 @@ fun OrderDetailWorkspace(
                                 ) {
                                     androidx.compose.material3.Icon(
                                         imageVector = Icons.Default.Delete,
-                                        contentDescription = "Elimina",
+                                        contentDescription = stringResource(R.string.content_description_delete),
                                         tint = MaterialTheme.colorScheme.error
                                     )
                                 }

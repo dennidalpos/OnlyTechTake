@@ -1,4 +1,4 @@
-# Demo/Full e manuale operativo
+# 08 - Demo, Showcase, Full e manuale operativo
 
 Documento operativo per usare e verificare i tre flavor Android reali del repository. Non descrive prezzi, roadmap commerciale o funzionalita' non implementate.
 

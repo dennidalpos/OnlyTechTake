@@ -133,7 +133,7 @@ data class OrderMediaEntity(
 ```
 
 Le foto CameraX vengono salvate nello spazio privato app sotto
-`files/order_media/<orderId>/` e collegate alla timeline con evento
+`files/app_media/order_media/<orderId>/` e collegate alla timeline con evento
 `MEDIA_ADDED`.
 
 ## Signature
@@ -250,7 +250,7 @@ STATUS_PROGRESS_PDF
 ```
 
 I PDF di stato vengono salvati nello spazio privato app sotto
-`files/orders/<orderId>/documents/` e condivisi tramite `FileProvider`.
+`files/app_media/documents/<orderId>/` e condivisi tramite `FileProvider`.
 
 ## User
 
@@ -287,9 +287,10 @@ Non usare una tabella diversa per ogni tipo di negozio.
 Non aggiungere colonne tipo `imei`, `marca`, `modello`, `taglia`, `colore`, ecc. nella tabella commesse.
 
 Usare categorie, descrizione, note interne, media, firme, timeline e messaggi.
-Lo schema Room corrente nel codice e' v2, con export tracciati in
+Lo schema Room corrente nel codice e' v4, con export tracciati in
 `app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json`
-e `app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/2.json`.
+`app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/2.json`
+e `app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/4.json`.
 Non sono presenti classi di migrazione Room: in questa fase fresh-app, dati
 locali incompatibili richiedono reinstallazione pulita o vengono gestiti dal
 fallback distruttivo configurato nel database builder. Non include tabelle custom

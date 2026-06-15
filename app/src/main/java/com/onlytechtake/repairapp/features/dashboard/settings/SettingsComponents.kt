@@ -13,8 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
+import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.repairColors
 
 @Composable
 internal fun LevelDot(level: Int) {
@@ -25,13 +28,11 @@ internal fun LevelDot(level: Int) {
     )
 }
 
-internal fun colorForLevel(level: Int): Color = when (level) {
-    0 -> Color(0xFF1976D2)
-    1 -> Color(0xFF388E3C)
-    2 -> Color(0xFFF57C00)
-    3 -> Color(0xFF7B1FA2)
-    else -> Color.Gray
-}
+@Composable
+internal fun colorForLevel(level: Int): Color =
+    MaterialTheme.repairColors.categoryLevels.getOrElse(level) {
+        MaterialTheme.repairColors.categoryLevels.last()
+    }
 
 @Composable
 internal fun CategoryBreadcrumb(categories: List<OrderCategoryEntity>, parentId: String?) {
@@ -48,7 +49,7 @@ internal fun CategoryBreadcrumb(categories: List<OrderCategoryEntity>, parentId:
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         modifier = Modifier.padding(vertical = 4.dp)
     ) {
-        Text("Radice", style = MaterialTheme.typography.bodySmall)
+        Text(stringResource(R.string.config_category_root), style = MaterialTheme.typography.bodySmall)
         nodes.forEach { node ->
             Text(">", style = MaterialTheme.typography.bodySmall)
             LevelDot(node.level)

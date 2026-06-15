@@ -1,7 +1,5 @@
 package com.onlytechtake.repairapp.core.design
 
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -11,6 +9,9 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.components.AppIconButton
 
 @Composable
 fun PasswordVisibilityButton(
@@ -18,15 +19,14 @@ fun PasswordVisibilityButton(
     onVisibleChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    IconButton(
+    AppIconButton(
+        icon = if (visible) PasswordVisibleIcon else PasswordHiddenIcon,
+        contentDescription = stringResource(
+            if (visible) R.string.auth_hide_password else R.string.auth_show_password,
+        ),
         onClick = { onVisibleChange(!visible) },
-        modifier = modifier
-    ) {
-        Icon(
-            imageVector = if (visible) PasswordVisibleIcon else PasswordHiddenIcon,
-            contentDescription = if (visible) "Nascondi password" else "Mostra password",
-        )
-    }
+        modifier = modifier,
+    )
 }
 
 private val PasswordVisibleIcon: ImageVector = ImageVector.Builder(

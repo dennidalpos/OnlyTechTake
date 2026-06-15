@@ -44,8 +44,9 @@ metadata/backup.json
 config/configuration.json
 database/repair_app.db
 database/repair_app.db-*
-files/orders/<orderId>/signatures/...
-files/order_media/<orderId>/...
+files/app_media/order_media/<orderId>/...
+files/app_media/signatures/<orderId>/...
+files/app_media/documents/<orderId>/...
 ```
 
 Foto CameraX, allegati importati e firme restano in spazio privato app e vengono copiati byte per byte nel backup completo, conservando metadati EXIF e orientamento. L'anteprima applica EXIF in lettura; le modifiche esplicite dell'operatore riscrivono invece l'immagine normalizzata.
@@ -68,7 +69,8 @@ Il ripristino:
 - richiede ruolo admin;
 - valida metadata, versione database e presenza di `database/repair_app.db`;
 - rifiuta percorsi ZIP non sicuri o file app fuori dalle cartelle supportate;
-- sostituisce database locale e file privati `orders` / `order_media`;
+- sostituisce database locale e directory canonica `filesDir/app_media`;
+- accetta i vecchi layout `files/orders` e `files/order_media` solo in ingresso, mappandoli nelle directory canoniche;
 - cancella sessione locale e richiede un nuovo login.
 
 Il ripristino e' pensato per trasferire l'app su un altro telefono con lo stesso pacchetto applicativo. Prima di ripristinare, salvare un export ZIP recente dal telefono sorgente.
@@ -87,7 +89,7 @@ Il promemoria backup admin e' implementato.
 ## Metadata
 
 Il backup completo include metadati con data creazione, nome database, versione database e sezioni incluse.
-La versione database attesa e' quella di `RepairAppDatabase.DATABASE_VERSION`; nello stato corrente del codice e' `2`.
+La versione database attesa e' quella di `RepairAppDatabase.DATABASE_VERSION`; nello stato corrente del codice e' `4`.
 
 ## Sicurezza
 

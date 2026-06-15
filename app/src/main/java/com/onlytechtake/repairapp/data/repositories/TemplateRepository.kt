@@ -12,7 +12,6 @@ import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
 import com.onlytechtake.repairapp.data.local.entities.AppSettingEntity
 import com.onlytechtake.repairapp.data.local.entities.AuditAction
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
-import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.MessageChannel
@@ -21,7 +20,6 @@ import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.data.local.entities.MessageStatus
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventType
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
@@ -30,6 +28,7 @@ import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
 import android.content.Context
 import com.onlytechtake.repairapp.core.utils.formatEuroCentsForExport
+import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
 import java.util.UUID
 import kotlinx.coroutines.flow.Flow
@@ -151,15 +150,17 @@ class TemplateRepository(
                 mapOf(
                     "numero_commessa" to order.orderNumber,
                     "titolo_commessa" to order.title,
-                    "stato_commessa" to order.status.label(),
+                    "stato_commessa" to order.status.label(context),
                     "cliente" to listOfNotNull(customer.companyName, customer.firstName, customer.lastName)
                         .joinToString(" ")
                         .ifBlank { "Cliente" },
+                    "esito_diagnosi" to order.diagnosisOutcome?.label(context).orEmpty(),
                     "importo_preventivo" to order.estimateAmountCents.formatEuroCentsForExport(),
                     "prossima_azione" to nextActionLabel(order),
                     "motivo_chiusura" to when {
-                        order.closureReason != null -> order.closureReason.label()
-                        order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE -> "Diagnosi tecnica: non riparabile"
+                        order.closureReason != null -> order.closureReason.label(context)
+                        order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE ->
+                            context.getString(com.onlytechtake.repairapp.R.string.template_diagnosis_not_repairable_reason)
                         else -> ""
                     },
                     "categoria_percorso" to categoryPath,
@@ -226,6 +227,7 @@ class TemplateRepository(
             "titolo_commessa",
             "stato_commessa",
             "cliente",
+            "esito_diagnosi",
             "importo_preventivo",
             "prossima_azione",
             "motivo_chiusura",
@@ -274,7 +276,7 @@ class TemplateRepository(
                 code = "whatsapp_risultato",
                 title = "WhatsApp risultato",
                 channel = MessageChannel.WHATSAPP,
-                body = "Ciao {{cliente}}, abbiamo completato la diagnosi della commessa {{numero_commessa}}.\nStato: {{stato_commessa}}.\nProssima azione: {{prossima_azione}}.",
+                body = "Ciao {{cliente}}, abbiamo completato la diagnosi della commessa {{numero_commessa}}.\nEsito: {{esito_diagnosi}}.\nStato: {{stato_commessa}}.\nProssima azione: {{prossima_azione}}.",
                 active = true,
                 version = 1,
                 updatedByUserId = null,
@@ -392,23 +394,3 @@ class TemplateRepository(
         )
     }
 }
-
-private fun OrderStatus.label(): String =
-    when (this) {
-        OrderStatus.OPEN -> "Aperta"
-        OrderStatus.IN_PROGRESS -> "In lavorazione"
-        OrderStatus.DIAGNOSIS -> "In diagnosi"
-        OrderStatus.RESULT -> "Risultato"
-        OrderStatus.REPAIRING -> "In riparazione"
-        OrderStatus.READY_FOR_PICKUP -> "Pronta al ritiro"
-        OrderStatus.CLOSED -> "Chiusa"
-    }
-
-private fun ClosureReason.label(): String =
-    when (this) {
-        ClosureReason.COMPLETED -> "Completata"
-        ClosureReason.CUSTOMER_DECLINED -> "Rifiutata dal cliente"
-        ClosureReason.NOT_REPAIRABLE -> "Non riparabile"
-        ClosureReason.CANCELLED -> "Annullata"
-        ClosureReason.OTHER -> "Altro"
-    }

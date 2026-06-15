@@ -4,7 +4,7 @@
 #>
 
 param(
-    [ValidateSet("Full", "Demo")]
+    [ValidateSet("Full", "Demo", "Showcase")]
     [string]$Flavor = "Full",
 
     [ValidateSet("Debug", "Release")]

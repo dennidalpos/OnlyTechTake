@@ -33,10 +33,16 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.RepairAppSizes
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
@@ -191,7 +197,7 @@ fun QuickActions(
         LocalMessageBanner(message?.text, message?.isError ?: false)
         SectionTitle(
             text = stringResource(R.string.new_order_title),
-            tooltip = "Compila i passaggi per creare una nuova commessa di riparazione. Puoi salvare una bozza e riprendere in seguito.",
+            tooltip = stringResource(R.string.intake_help),
         )
 
         StepperIndicator(
@@ -235,9 +241,9 @@ fun QuickActions(
                         color = MaterialTheme.colorScheme.primary
                     )
                     TouchButton(
-                        modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.intake_change_customer),
                         tone = ButtonTone.NEUTRAL,
+                        size = AppButtonSize.Compact,
                         onClick = {
                             updateDraft {
                                 it.copy(
@@ -272,9 +278,9 @@ fun QuickActions(
                 }
                 if (draft.selectedCustomerId == null && !draft.showNewCustomerForm) {
                     TouchButton(
-                        modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.intake_insert_new_customer),
                         tone = ButtonTone.NEUTRAL,
+                        size = AppButtonSize.Compact,
                         testTag = RepairAppTestTags.NewOrderInsertCustomerButton,
                         onClick = {
                             updateDraft {
@@ -318,9 +324,9 @@ fun QuickActions(
                         doneAction = doneAction,
                     )
                     TouchButton(
-                        modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.customer_save),
                         enabled = canSaveNewCustomer,
+                        size = AppButtonSize.Compact,
                         testTag = RepairAppTestTags.NewOrderSaveCustomerButton,
                         onClick = {
                             viewModel.saveCustomer(newCustomerInput) { customer ->
@@ -499,11 +505,12 @@ fun QuickActions(
 }
 
 @Composable
-private fun StepperIndicator(
+internal fun StepperIndicator(
     currentStep: Int,
     completedStep: Int,
     onStepClick: (Int) -> Unit
 ) {
+    val semanticColors = MaterialTheme.repairColors
     Row(
         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
@@ -512,35 +519,47 @@ private fun StepperIndicator(
         for (i in 1..LAST_INTAKE_STEP) {
             val isCompleted = i <= completedStep
             val isCurrent = i == currentStep
-            val completedColor = Color(0xFF2E7D32)
-
             Box(
                 modifier = Modifier
-                    .size(32.dp)
-                    .background(
-                        color = when {
-                            isCurrent -> MaterialTheme.colorScheme.primary
-                            isCompleted -> completedColor
-                            else -> MaterialTheme.colorScheme.surfaceVariant
-                        },
-                        shape = CircleShape,
-                    )
+                    .size(RepairAppSizes.touchTarget)
+                    .testTag(RepairAppTestTags.intakeStepperStep(i))
+                    .semantics { role = Role.Button }
                     .clickable(enabled = isCompleted || i == 1) { onStepClick(i) },
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
-                Text(
-                    text = i.toString(),
-                    color = when {
-                        isCurrent -> MaterialTheme.colorScheme.onPrimary
-                        isCompleted -> Color.White
-                        else -> MaterialTheme.colorScheme.onSurfaceVariant
-                    },
-                    style = MaterialTheme.typography.labelLarge,
-                )
+                Box(
+                    modifier = Modifier
+                        .size(RepairAppSizes.intakeStepperDot)
+                        .background(
+                            color = when {
+                                isCurrent -> MaterialTheme.colorScheme.primary
+                                isCompleted -> semanticColors.stepCompleted
+                                else -> semanticColors.stepInactive
+                            },
+                            shape = CircleShape,
+                        ),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = i.toString(),
+                        color = when {
+                            isCurrent -> MaterialTheme.colorScheme.onPrimary
+                            isCompleted -> semanticColors.onSuccess
+                            else -> MaterialTheme.colorScheme.onSurfaceVariant
+                        },
+                        style = MaterialTheme.typography.labelLarge,
+                    )
+                }
             }
             if (i < LAST_INTAKE_STEP) {
                 androidx.compose.foundation.Canvas(modifier = Modifier.weight(1f).height(4.dp)) {
-                    drawRect(color = if (i <= completedStep) completedColor else Color.LightGray)
+                    drawRect(
+                        color = if (i <= completedStep) {
+                            semanticColors.stepCompleted
+                        } else {
+                            semanticColors.stepInactive
+                        },
+                    )
                 }
             }
         }

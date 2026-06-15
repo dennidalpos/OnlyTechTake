@@ -1,0 +1,21 @@
+{
+  "name": "OnlyTechTake Repair App",
+  "short_name": "OTT Repair",
+  "description": "App Android locale per gestire commesse di riparazione.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#102026",
+  "theme_color": "#102026",
+  "icons": [
+    {
+      "src": "assets/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

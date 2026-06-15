@@ -57,7 +57,7 @@ class OperatorIntakeDemoScreenshotTest {
             loginOperatorDemo()
             capture(outputDir, "02-home.png")
 
-            clickDashboardTab("NEW_ORDER")
+            clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
             pauseForDemo() 
             waitForTag("quick_actions_screen")
             
@@ -201,7 +201,7 @@ class OperatorIntakeDemoScreenshotTest {
         composeRule.waitForIdle()
 
         if (isTextDisplayed("Dati non salvati")) {
-            clickText("Esci e perdi dati")
+            clickTag(RepairAppTestTags.DashboardDiscardChangesButton)
         }
 
         composeRule.waitForIdle()

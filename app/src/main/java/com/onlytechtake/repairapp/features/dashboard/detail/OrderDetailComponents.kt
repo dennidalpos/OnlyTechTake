@@ -5,12 +5,12 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,8 +21,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.semantics.Role
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.RepairAppShapes
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.core.utils.label
@@ -71,12 +75,12 @@ fun OrderHeader(
 
             if (detail.isPaid) {
                 Text(
-                    text = "PAGATO",
+                    text = stringResource(R.string.order_paid_badge),
                     style = MaterialTheme.typography.labelLarge,
-                    color = Color(0xFF237A3B),
+                    color = MaterialTheme.repairColors.paid,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
-                        .background(Color(0xFFE8F5E9), RoundedCornerShape(4.dp))
+                        .background(MaterialTheme.repairColors.paidContainer, RepairAppShapes.badge)
                         .padding(horizontal = 8.dp, vertical = 2.dp)
                 )
             }
@@ -99,7 +103,7 @@ fun OrderHeader(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "Operatore: ${detail.assignedUser?.displayName.orEmpty()}",
+                    text = stringResource(R.string.order_operator_label, detail.assignedUser?.displayName.orEmpty()),
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
@@ -162,7 +166,7 @@ fun OrderActionCard(
             modifier = Modifier.padding(DashboardSpacing.cardPadding),
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
         ) {
-            SectionTitle("Azioni Commessa")
+            SectionTitle(stringResource(R.string.order_actions_title))
             
             ActionRow {
                 val actions = availableOrderStatusActions(status)
@@ -210,16 +214,16 @@ fun QuoteDecisionPanel(
             modifier = Modifier.padding(DashboardSpacing.cardPadding),
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
         ) {
-            Text("Esito preventivo", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+            Text(stringResource(R.string.order_quote_outcome), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
             QuoteDecisionRow(
-                text = "Preventivo accettato",
+                text = stringResource(R.string.order_quote_accepted),
                 checked = quoteDecision == QuoteDecision.ACCEPTED,
                 testTag = RepairAppTestTags.QuoteAcceptedToggle,
             ) {
                 onQuoteDecisionChange(toggleQuoteDecision(quoteDecision, QuoteDecision.ACCEPTED))
             }
             QuoteDecisionRow(
-                text = "Preventivo rifiutato",
+                text = stringResource(R.string.order_quote_rejected),
                 checked = quoteDecision == QuoteDecision.REJECTED,
                 testTag = RepairAppTestTags.QuoteRejectedToggle,
             ) {
@@ -229,14 +233,14 @@ fun QuoteDecisionPanel(
                 Field(
                     value = quoteRejectNote,
                     onValueChange = onQuoteRejectNoteChange,
-                    label = "Motivo rifiuto",
+                    label = stringResource(R.string.order_quote_reject_reason),
                     required = true,
                     showError = quoteRejectNote.isBlank(),
                 )
             }
             TouchButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Conferma esito preventivo",
+                text = stringResource(R.string.order_quote_confirm),
                 tone = if (quoteDecision == QuoteDecision.REJECTED) ButtonTone.DANGER else ButtonTone.SUCCESS,
                 enabled = canConfirmQuoteDecision(quoteDecision, quoteRejectNote),
                 testTag = RepairAppTestTags.QuoteConfirmButton,
@@ -316,9 +320,9 @@ fun InternalNotesPanel(
                 OperatorText(it)
             }
             TouchButton(
-                modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.order_internal_notes),
                 tone = ButtonTone.NEUTRAL,
+                size = AppButtonSize.Compact,
                 onClick = onAddNoteClick
             )
         }
@@ -336,12 +340,16 @@ fun QuoteDecisionRow(
         modifier = Modifier
             .fillMaxWidth()
             .testTag(testTag)
-            .clickable(onClick = onClick)
+            .selectable(
+                selected = checked,
+                role = Role.RadioButton,
+                onClick = onClick,
+            )
             .padding(vertical = DashboardSpacing.compactGap / 2),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
     ) {
-        Checkbox(checked = checked, onCheckedChange = { onClick() })
+        Checkbox(checked = checked, onCheckedChange = null)
         Text(text, style = MaterialTheme.typography.bodyLarge)
     }
 }

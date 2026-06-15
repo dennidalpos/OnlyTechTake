@@ -1,4 +1,4 @@
-# BACKEND_AGENT_TRACKER.md
+# 09 - Backend Agent Tracker
 
 ## Scopo del file
 
@@ -793,8 +793,8 @@ L'app Android è in fase di sviluppo iniziale e lo schema locale non va modifica
 
 ```text
 Room schema version deve restare al valore reale/autorizzato del sorgente corrente.
-Stato sorgente corrente: RepairAppDatabase.DATABASE_VERSION = 2.
-Export schema tracciati: 1.json e 2.json.
+Stato sorgente corrente: RepairAppDatabase.DATABASE_VERSION = 4.
+Export schema tracciati: 1.json, 2.json e 4.json.
 Vietato incrementare ulteriormente schemaVersion senza approvazione esplicita.
 Vietato aggiungere migrazioni Room.
 Vietato modificare entità Room in modo incompatibile senza autorizzazione esplicita.

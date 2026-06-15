@@ -86,7 +86,7 @@ fun SettingsHub(
         item {
             SettingsHubCard(
                 title = stringResource(R.string.storage_title),
-                subtitle = "Spazio disco e monitoraggio",
+                subtitle = stringResource(R.string.config_hub_storage_subtitle),
                 icon = Icons.Default.Storage,
                 testTag = RepairAppTestTags.ConfigHubStorageButton,
             ) {
@@ -117,8 +117,8 @@ fun SettingsHub(
         }
         item {
             SettingsHubCard(
-                title = "Informazioni",
-                subtitle = "Versione e contatti dell'app",
+                title = stringResource(R.string.config_hub_about_title),
+                subtitle = stringResource(R.string.config_hub_about_subtitle),
                 icon = Icons.Default.Info,
                 testTag = RepairAppTestTags.ConfigHubAboutButton,
             ) {

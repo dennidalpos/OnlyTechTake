@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.features.dashboard.neworder
 import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -13,7 +14,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
 import com.onlytechtake.repairapp.features.dashboard.common.CameraCapturePreview
 import com.onlytechtake.repairapp.features.dashboard.common.LocalImagePreview
@@ -48,9 +54,9 @@ fun QuickIntakeMediaSection(
             modifier = Modifier.padding(DashboardSpacing.cardPadding),
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
         ) {
-            StepSectionTitle(stepNumber, "Foto e allegati")
+            StepSectionTitle(stepNumber, stringResource(R.string.intake_step_media))
             if (stagedMedia.isEmpty()) {
-                Text("Aggiungi almeno una foto o un allegato.", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.intake_media_empty), style = MaterialTheme.typography.bodyMedium)
             } else {
                 stagedMedia.forEach { media ->
                     if (media.isImageAttachment()) {
@@ -84,16 +90,32 @@ fun QuickIntakeMediaSection(
                 }
             }
             ActionRow {
-                TouchButton(text = "Scatta foto", onClick = { onShowCameraChange(true) })
-                TouchButton(text = "Allega file", onClick = onLaunchAttachmentPicker)
+                TouchButton(
+                    text = stringResource(R.string.intake_media_take_photo),
+                    size = AppButtonSize.Compact,
+                    testTag = RepairAppTestTags.IntakeMediaTakePhotoButton,
+                    onClick = { onShowCameraChange(true) },
+                )
+                TouchButton(
+                    text = stringResource(R.string.intake_media_attach_file),
+                    size = AppButtonSize.Compact,
+                    testTag = RepairAppTestTags.IntakeMediaAttachFileButton,
+                    onClick = onLaunchAttachmentPicker,
+                )
                 if (showCamera) {
-                    TouchButton(text = "Chiudi camera", tone = ButtonTone.NEUTRAL, onClick = { onShowCameraChange(false) })
+                    TouchButton(
+                        text = stringResource(R.string.intake_media_close_camera),
+                        tone = ButtonTone.NEUTRAL,
+                        size = AppButtonSize.Compact,
+                        testTag = RepairAppTestTags.IntakeMediaCloseCameraButton,
+                        onClick = { onShowCameraChange(false) },
+                    )
                 }
             }
             if (showCamera) {
                 androidx.compose.material3.AlertDialog(
                     onDismissRequest = { onShowCameraChange(false) },
-                    title = { Text("Scatta foto") },
+                    title = { Text(stringResource(R.string.intake_media_take_photo)) },
                     text = {
                         CameraCapturePreview(
                             orderId = intakeSessionId,
@@ -109,7 +131,7 @@ fun QuickIntakeMediaSection(
                     confirmButton = {},
                     dismissButton = {
                         androidx.compose.material3.TextButton(onClick = { onShowCameraChange(false) }) {
-                            Text("Chiudi")
+                            Text(stringResource(R.string.customer_detail_close))
                         }
                     },
                 )
@@ -137,24 +159,30 @@ private fun StagedMediaSummary(
     media: StagedOrderMedia,
     onRemoveMedia: (String) -> Unit,
 ) {
-    Column(
+    Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+        horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(
-            text = media.fileName,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-        )
-        Text(
-            text = "${media.mediaType} - ${media.sizeBytes / 1024} KB",
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+        ) {
+            Text(
+                text = media.fileName,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Text(
+                text = stringResource(R.string.intake_media_summary, media.mediaType, media.sizeBytes / 1024),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
         TouchButton(
-            modifier = Modifier.fillMaxWidth(),
-            text = "Rimuovi",
+            text = stringResource(R.string.intake_media_remove),
             tone = ButtonTone.DANGER,
+            size = AppButtonSize.Compact,
             onClick = { onRemoveMedia(media.localPath) },
         )
     }

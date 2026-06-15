@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.BuildConfig
@@ -35,6 +36,9 @@ import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
+import com.onlytechtake.repairapp.features.dashboard.common.TouchButtonWithIcon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.queueFilter
 
@@ -86,9 +90,12 @@ fun HomePanel(
                 MetricCard(stringResource(R.string.home_metric_customers), summary.customerCount.toString(), Modifier.weight(1f))
                 MetricCard(stringResource(R.string.home_metric_active), summary.activeOrderCount.toString(), Modifier.weight(1f))
             }
-            TouchButton(
+            TouchButtonWithIcon(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.home_new_order),
+                icon = Icons.Default.Add,
+                testTag = com.onlytechtake.repairapp.core.design.RepairAppTestTags.HomeNewOrderButton,
+                fullWidth = true,
                 onClick = onNewOrder,
             )
             if (showBackupReminder) {
@@ -117,17 +124,21 @@ fun HomePanel(
                             Text(stringResource(R.string.home_empty_queue), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         } else {
                             queue.orders.take(3).forEach { order ->
-                                TouchButton(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    text = "${order.orderNumber} - ${order.title}",
-                                    tone = ButtonTone.NEUTRAL,
+                                StandardCard(
                                     onClick = { onSelectOrder(order.id) },
-                                )
+                                ) {
+                                    Text(
+                                        text = "${order.orderNumber} - ${order.title}",
+                                        modifier = Modifier.padding(DashboardSpacing.compactGap),
+                                        style = MaterialTheme.typography.bodyLarge,
+                                    )
+                                }
                             }
                         }
                         TouchButton(
                             modifier = Modifier.fillMaxWidth(),
                             text = stringResource(R.string.home_open_queue),
+                            fullWidth = true,
                             onClick = {
                                 onOpenQueue(queueFilter(queue))
                             },

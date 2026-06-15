@@ -44,6 +44,35 @@
 
     <string name="share_pdf_text">In allegato lo stato avanzamento della commessa.</string>
 
+    <string name="auth_showcase_initializing">Inizializzazione dati showcase...</string>
+    <string name="auth_showcase_preparing">Preparazione ambiente...</string>
+    <string name="auth_system_ready">Sistema pronto</string>
+    <string name="auth_password_change_top">Cambio password obbligatorio</string>
+    <string name="auth_security_title">Sicurezza account</string>
+    <string name="auth_security_subtitle">È richiesto il cambio password al primo accesso</string>
+    <string name="auth_update_password">Aggiorna password</string>
+    <string name="auth_recovery_top">Recupero account admin</string>
+    <string name="auth_recovery_title">Ripristino credenziali</string>
+    <string name="auth_recovery_subtitle">Inserisci il codice master per impostare una nuova password admin</string>
+    <string name="auth_reset_admin_password">Reimposta password admin</string>
+    <string name="auth_setup_top">Configurazione admin</string>
+    <string name="auth_setup_title">Primo avvio</string>
+    <string name="auth_setup_subtitle">Account admin locale</string>
+    <string name="auth_create_admin">Crea admin</string>
+    <string name="auth_login_title">Accesso</string>
+    <string name="auth_login_submit">Accedi</string>
+    <string name="auth_close_app">Chiudi app</string>
+    <string name="auth_admin_name">Nome admin</string>
+    <string name="auth_username">Username</string>
+    <string name="auth_recovery_code">Codice di recupero</string>
+    <string name="auth_password">Password</string>
+    <string name="auth_confirm_password">Conferma password</string>
+    <string name="auth_working">Operazione in corso</string>
+    <string name="auth_recovery_action">Problemi di accesso? Recupero admin</string>
+    <string name="auth_demo_action">Avvia modalità demo</string>
+    <string name="auth_show_password">Mostra password</string>
+    <string name="auth_hide_password">Nascondi password</string>
+
     <string name="dashboard_home">Home</string>
     <string name="dashboard_new">Nuova</string>
     <string name="dashboard_customers">Clienti</string>
@@ -52,6 +81,12 @@
     <string name="dashboard_config">Setup</string>
     <string name="dashboard_admin">Admin</string>
     <string name="logout">Logout</string>
+    <string name="dashboard_role_admin">Admin</string>
+    <string name="dashboard_role_operator">Operatore</string>
+    <string name="dashboard_unsaved_title">Dati non salvati</string>
+    <string name="dashboard_unsaved_text">Ci sono modifiche non salvate. Uscire e perdere i dati oppure continuare la compilazione?</string>
+    <string name="dashboard_unsaved_leave">Esci e perdi i dati</string>
+    <string name="dashboard_unsaved_continue">Continua la compilazione</string>
 
     <string name="home_title">Banco riparazioni</string>
     <string name="home_metric_users">Utenti</string>
@@ -69,6 +104,16 @@
 
     <string name="nav_back">Indietro</string>
     <string name="nav_next">Avanti</string>
+    <string name="nav_cancel_and_close">Annulla e chiudi</string>
+    <string name="content_description_info">Informazioni</string>
+    <string name="content_description_back">Indietro</string>
+    <string name="content_description_close">Chiudi</string>
+    <string name="content_description_delete">Elimina</string>
+    <string name="content_description_edit">Modifica</string>
+    <string name="content_description_open">Apri</string>
+    <string name="content_description_clear">Pulisci</string>
+    <string name="camera_preview_description">Anteprima camera per acquisire una foto</string>
+    <string name="signature_canvas_description">Area firma cliente. Traccia la firma con dito o pennino.</string>
 
     <string name="label_optional">opzionale</string>
 
@@ -100,6 +145,17 @@
     <string name="customer_confirm_save_text">Salvare il cliente?</string>
     <string name="customer_confirm_update_text">Aggiornare i dati del cliente selezionato?</string>
     <string name="confirm">Conferma</string>
+    <string name="customer_select_detail_hint">Seleziona un cliente per vedere i dettagli</string>
+    <string name="customer_detail_close">Chiudi</string>
+    <string name="customer_detail_edit">Modifica</string>
+    <string name="customer_phone_value">Tel: %s</string>
+    <string name="customer_email_value">Email: %s</string>
+    <string name="customer_address_value">Indirizzo: %s</string>
+    <string name="customer_open_orders">Commesse aperte (%1$d)</string>
+    <string name="customer_closed_orders">Storico chiuse (%1$d)</string>
+    <string name="customer_no_open_orders">Nessuna commessa aperta</string>
+    <string name="customer_no_closed_orders">Nessuna commessa chiusa</string>
+    <string name="customer_no_recent">Nessun cliente recente</string>
 
     <string name="customer_field_company_name">Ragione sociale</string>
     <string name="customer_field_vat_number">P.IVA</string>
@@ -131,6 +187,24 @@
     <string name="intake_not_set">Non impostato</string>
     <string name="intake_edit_step">Modifica</string>
     <string name="intake_confirm_all_steps">Confermare tutti gli step</string>
+    <string name="intake_media_empty">Aggiungi almeno una foto o un allegato.</string>
+    <string name="intake_media_take_photo">Scatta foto</string>
+    <string name="intake_media_attach_file">Allega file</string>
+    <string name="intake_media_close_camera">Chiudi camera</string>
+    <string name="intake_media_remove">Rimuovi</string>
+    <string name="intake_media_summary">%1$s - %2$d KB</string>
+    <string name="intake_submit_title">Conferma</string>
+    <string name="intake_submit_missing">Mancano: %s</string>
+    <string name="intake_submit_create">Crea commessa in carico</string>
+    <string name="intake_help">Compila i passaggi per creare una nuova commessa. Puoi salvare una bozza e riprendere in seguito.</string>
+    <string name="intake_category_selected">Selezionata: %s</string>
+    <string name="intake_category_open">Apri categoria</string>
+    <string name="intake_category_selected_icon">Categoria selezionata</string>
+    <string name="intake_category_branch_state">Ramo categoria</string>
+    <string name="intake_category_selected_state">Categoria selezionata</string>
+    <string name="intake_category_not_selected_state">Categoria non selezionata</string>
+    <string name="intake_problem_title">Titolo lavorazione</string>
+    <string name="intake_problem_description">Descrizione</string>
 
     <string name="customer_select">Seleziona cliente</string>
     <string name="customer_details">Dettagli</string>
@@ -152,6 +226,8 @@
     <string name="orders_filter_progress">Lav./diagnosi</string>
     <string name="orders_filter_result">Ris./rip.</string>
     <string name="orders_filter_ready">Pronte</string>
+    <string name="orders_search_label">Cerca per cliente, telefono, email o commessa</string>
+    <string name="orders_select_detail_hint">Seleziona una commessa per vedere i dettagli</string>
 
     <string name="order_detail_title">Scheda commessa</string>
     <string name="order_none_selected">Nessuna commessa selezionata</string>
@@ -197,12 +273,21 @@
     <string name="order_result_summary">Sintesi risultato</string>
     <string name="order_diagnosis_repairable">Riparabile</string>
     <string name="order_diagnosis_not_repairable">Non riparabile</string>
+    <string name="template_diagnosis_not_repairable_reason">Diagnosi tecnica: non riparabile</string>
     <string name="order_estimate_amount">Importo preventivo (€)</string>
     <string name="order_status_note_label">Nota opzionale</string>
     <string name="order_closure_note_label">Nota chiusura</string>
     <string name="order_closure_reason_title">Motivo chiusura</string>
     <string name="order_paid_button">Pagato</string>
     <string name="order_not_paid_button">Non pagato</string>
+    <string name="order_paid_badge">PAGATO</string>
+    <string name="order_operator_label">Operatore: %s</string>
+    <string name="order_actions_title">Azioni commessa</string>
+    <string name="order_quote_outcome">Esito preventivo</string>
+    <string name="order_quote_accepted">Preventivo accettato</string>
+    <string name="order_quote_rejected">Preventivo rifiutato</string>
+    <string name="order_quote_reject_reason">Motivo rifiuto</string>
+    <string name="order_quote_confirm">Conferma esito preventivo</string>
     <string name="order_pdf_sent_confirm_title">Conferma invio</string>
     <string name="order_pdf_sent_confirm_text">Hai completato l\'invio del PDF al cliente?</string>
     <string name="yes_confirmed">Sì, confermato</string>
@@ -235,6 +320,33 @@
     <string name="admin_confirm_delete_all_orders_checkbox">Confermo la cancellazione permanente di tutti i dati delle commesse</string>
     <string name="admin_confirm_delete_all_orders_field">Digita CANCELLA TUTTO per confermare</string>
     <string name="admin_author">Autore</string>
+    <string name="admin_access_security">Accessi e sicurezza</string>
+    <string name="admin_recovery_kit">Kit di recupero admin</string>
+    <string name="admin_recovery_generate">Genera nuovo kit di recupero</string>
+    <string name="admin_recovery_master_code">Codice master:</string>
+    <string name="admin_recovery_hide">Fatto, nascondi codice</string>
+    <string name="admin_permissions_title">Aree e permessi</string>
+    <string name="admin_permission_create_orders">Creazione commesse</string>
+    <string name="admin_permission_edit_own_orders">Modifica proprie commesse</string>
+    <string name="admin_permission_edit_all_orders">Modifica tutte le commesse</string>
+    <string name="admin_permission_close_orders">Chiusura commesse</string>
+    <string name="admin_permission_manage_customers">Gestione anagrafica clienti</string>
+    <string name="admin_permission_manage_categories">Gestione catalogo categorie</string>
+    <string name="admin_permission_manage_templates">Gestione template messaggi</string>
+    <string name="admin_permission_manage_payments">Gestione pagamenti</string>
+    <string name="admin_permission_export_data">Esportazione dati (Excel/PDF)</string>
+    <string name="admin_permission_manage_storage">Pulizia cache e statistiche</string>
+    <string name="admin_recovery_offline_warning">Scrivi questo codice e conservalo offline. Scomparirà al riavvio della schermata.</string>
+    <string name="admin_new_password">Nuova password</string>
+    <string name="admin_change_password">Cambia password</string>
+    <string name="admin_recovery_tooltip">Il kit di recupero consente di reimpostare la password admin. Conservalo in un luogo sicuro fuori dal dispositivo.</string>
+    <string name="admin_current_password">Password attuale</string>
+    <string name="admin_delete_all_orders_tooltip">Elimina permanentemente commesse, timeline, messaggi, foto, firme e documenti.</string>
+    <string name="admin_total_reset_tooltip">Rimuove account, clienti, configurazioni e commesse, riportando l\'app allo stato iniziale.</string>
+    <string name="admin_backup_overdue_title">Attenzione: nessun backup recente trovato</string>
+    <string name="admin_backup_overdue_text">Esegui un backup completo prima di procedere con operazioni di cancellazione dati.</string>
+    <string name="admin_delete_all_orders_field_short">Digita CANCELLA TUTTO</string>
+    <string name="admin_total_reset_field">Digita RESET</string>
 
     <string name="config_back">Torna a Setup</string>
     <string name="config_hub_categories_title">Categorie</string>
@@ -248,6 +360,9 @@
     <string name="config_hub_admin_subtitle">Area admin</string>
     <string name="config_hub_backup_title">Backup</string>
     <string name="config_hub_backup_subtitle">Export e ripristino</string>
+    <string name="config_hub_storage_subtitle">Spazio disco e monitoraggio</string>
+    <string name="config_hub_about_title">Informazioni</string>
+    <string name="config_hub_about_subtitle">Versione e contatti dell\'app</string>
     <string name="config_categories_admin_only">Area riservata admin. Le categorie sono disponibili solo in consultazione.</string>
     <string name="config_category_level_main">Categoria principale</string>
     <string name="config_category_level_sub">Sottocategoria livello %1$d</string>
@@ -295,9 +410,14 @@
     <string name="config_backup_android_archive_note">Android può archiviare app inutilizzate per liberare spazio. L’archiviazione dovrebbe mantenere i dati, ma la disinstallazione completa può eliminarli. Esegui periodicamente un backup ZIP completo e salvalo fuori dal dispositivo.</string>
     <string name="config_backup_destination_label">Destinazione export:</string>
     <string name="config_backup_destination_local">Locale</string>
-    <string name="config_backup_destination_cloud">Cloud (G-Drive)</string>
+    <string name="config_backup_destination_cloud">Provider documenti</string>
     <string name="config_backup_destination_local_desc">Salva su memoria interna o SD.</string>
-    <string name="config_backup_destination_cloud_desc">Invia a Google Drive o altri servizi Cloud.</string>
+    <string name="config_backup_destination_cloud_desc">Usa il selettore documenti Android per scegliere un provider disponibile.</string>
+    <string name="config_backup_provider_unavailable">Nessun provider documenti esterno rilevato. Il selettore Android resta disponibile per le destinazioni locali.</string>
+    <string name="config_backup_tooltip">Gestisci promemoria e file tramite il selettore documenti Android.</string>
+    <string name="config_backup_close">Chiudi setup backup</string>
+    <string name="config_backup_warning_indicator">Attenzione</string>
+    <string name="config_backup_orders_tooltip">Esporta tutte le commesse in un file Excel leggibile da PC.</string>
     <string name="config_backup_export_config">Export config</string>
     <string name="config_backup_confirm_export_config_title">Esportare configurazione?</string>
     <string name="config_backup_confirm_export_config_text">Verra\' creato un file JSON non cifrato %1$s tramite selettore di sistema.</string>

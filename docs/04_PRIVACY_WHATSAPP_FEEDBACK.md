@@ -57,7 +57,7 @@ Alla firma vengono salvati:
 I file sono salvati in directory privata app:
 
 ```text
-files/orders/<orderId>/signatures/
+files/app_media/signatures/<orderId>/
 ```
 
 Il salvataggio crea anche evento timeline "Firma acquisita" (`SIGNATURE_CAPTURED`).
@@ -71,6 +71,7 @@ Variabili supportate:
 {{titolo_commessa}}
 {{stato_commessa}}
 {{cliente}}
+{{esito_diagnosi}}
 {{importo_preventivo}}
 {{prossima_azione}}
 {{motivo_chiusura}}

@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.Field
@@ -29,11 +31,11 @@ fun QuickIntakeProblemSection(
             modifier = Modifier.padding(DashboardSpacing.cardPadding),
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
         ) {
-            StepSectionTitle(stepNumber, "Dettagli commessa")
+            StepSectionTitle(stepNumber, stringResource(R.string.intake_step_problem))
             Field(
                 value = problemSummary,
                 onValueChange = onProblemSummaryChange,
-                label = "Titolo lavorazione",
+                label = stringResource(R.string.intake_problem_title),
                 required = true,
                 showError = problemSummary.isBlank(),
                 singleLine = true,
@@ -44,7 +46,7 @@ fun QuickIntakeProblemSection(
             Field(
                 value = problemDetails,
                 onValueChange = onProblemDetailsChange,
-                label = "Descrizione",
+                label = stringResource(R.string.intake_problem_description),
                 showOptional = true,
                 imeAction = ImeAction.Done,
                 keyboardActions = doneAction,

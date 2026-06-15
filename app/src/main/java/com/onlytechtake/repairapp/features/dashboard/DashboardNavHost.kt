@@ -130,6 +130,7 @@ fun DashboardNavHost(
                 onOrderClick = { orderId ->
                     navController.navigate(DashboardRoutes.orderDetail(orderId))
                 },
+                onNewOrder = { navController.navigate(DashboardRoutes.NEW_ORDER) },
                 onOpenBackupSettings = {
                     navController.navigate(DashboardRoutes.settings("EXPORT"))
                 }

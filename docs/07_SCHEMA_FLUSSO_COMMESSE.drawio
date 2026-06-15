@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2026-06-02T22:24:44.000+02:00" agent="Codex" version="24.7.17" type="device">
+<mxfile host="app.diagrams.net" modified="2026-06-16T00:25:00.000+02:00" agent="Codex" version="24.7.17" type="device">
   <diagram id="onlytechtake-commesse-flow" name="Flusso commesse semplificato">
     <mxGraphModel dx="1800" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -78,8 +78,8 @@
         <mxCell id="w_sections" value="Sempre accessibili nel dettaglio&lt;br&gt;note rapide, WhatsApp guidato,&lt;br&gt;foto/allegati, firme, PDF, timeline" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="710" y="805" width="260" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="w_status_map" value="Mappa stati operativa&lt;br&gt;OPEN -&gt; IN_PROGRESS&lt;br&gt;IN_PROGRESS -&gt; DIAGNOSIS&lt;br&gt;DIAGNOSIS -&gt; RESULT&lt;br&gt;RESULT -&gt; REPAIRING&lt;br&gt;REPAIRING -&gt; READY_FOR_PICKUP&lt;br&gt;READY_FOR_PICKUP -&gt; CLOSED&lt;br&gt;CLOSED richiede motivo chiusura" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
-          <mxGeometry x="1015" y="800" width="320" height="170" as="geometry" />
+        <mxCell id="w_status_map" value="Mappa stati operativa&lt;br&gt;OPEN -&gt; IN_PROGRESS (Presa in carico)&lt;br&gt;IN_PROGRESS -&gt; DIAGNOSIS (Avvio diagnosi)&lt;br&gt;DIAGNOSIS -&gt; RESULT (Registra esito e preventivo)&lt;br&gt;RESULT fork:&lt;br&gt;  - REPAIRABLE + Approvato -&gt; REPAIRING&lt;br&gt;  - REPAIRABLE + Rifiutato -&gt; CLOSED&lt;br&gt;  - NOT_REPAIRABLE -&gt; READY_FOR_PICKUP&lt;br&gt;REPAIRING -&gt; READY_FOR_PICKUP (Lavoro finito)&lt;br&gt;READY_FOR_PICKUP -&gt; CLOSED (Consegna)&lt;br&gt;CLOSED richiede motivo chiusura" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1015" y="780" width="360" height="210" as="geometry" />
         </mxCell>
         <mxCell id="compat_note" value="Schema pulito: il flusso usa repair_orders.status e timeline_events." style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
           <mxGeometry x="1400" y="800" width="180" height="110" as="geometry" />

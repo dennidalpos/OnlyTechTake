@@ -58,7 +58,7 @@ class SocialStoryDemoScreenshotTest {
             waitForText("Operatore")
             capture(outputDir, "02-dashboard-home.png")
 
-            clickDashboardTab("NEW_ORDER")
+            clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
             waitForTag("quick_actions_screen")
             
             var formOpened = false
@@ -310,7 +310,7 @@ class SocialStoryDemoScreenshotTest {
         composeRule.waitForIdle()
 
         if (isTextDisplayed("Dati non salvati")) {
-            clickText("Esci e perdi dati")
+            clickTag(RepairAppTestTags.DashboardDiscardChangesButton)
         }
 
         Thread.sleep(2000)

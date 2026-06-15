@@ -128,7 +128,9 @@ fun DashboardScreen(
                         ) {
                             Icon(
                                 if (isCloseIcon) Icons.Default.Close else Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = null
+                                contentDescription = stringResource(
+                                    if (isCloseIcon) R.string.content_description_close else R.string.content_description_back,
+                                ),
                             )
                         }
                     }
@@ -136,7 +138,9 @@ fun DashboardScreen(
                 actions = {
                     currentUser?.let { user ->
                         Text(
-                            text = if (PermissionService.isAdmin(user)) "Admin" else "Operatore",
+                            text = stringResource(
+                                if (PermissionService.isAdmin(user)) R.string.dashboard_role_admin else R.string.dashboard_role_operator,
+                            ),
                             style = MaterialTheme.typography.labelSmall,
                             modifier = Modifier.padding(end = 8.dp),
                         )
@@ -254,10 +258,11 @@ fun DashboardScreen(
     if (showUnsavedChangesDialog) {
         AlertDialog(
             onDismissRequest = { showUnsavedChangesDialog = false },
-            title = { Text("Dati non salvati") },
-            text = { Text("Ci sono modifiche non salvate. Vuoi uscire comunque perdendo i dati o continuare a compilare?") },
+            title = { Text(stringResource(R.string.dashboard_unsaved_title)) },
+            text = { Text(stringResource(R.string.dashboard_unsaved_text)) },
             confirmButton = {
                 TextButton(
+                    modifier = Modifier.testTag(RepairAppTestTags.DashboardDiscardChangesButton),
                     onClick = {
                         showUnsavedChangesDialog = false
                         sharedViewModel.setFormDirty(dirty = false)
@@ -266,12 +271,12 @@ fun DashboardScreen(
                         } ?: navController.popBackStack()
                     }
                 ) {
-                    Text("Esci e perdi dati")
+                    Text(stringResource(R.string.dashboard_unsaved_leave))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showUnsavedChangesDialog = false }) {
-                    Text("Continua compilazione")
+                    Text(stringResource(R.string.dashboard_unsaved_continue))
                 }
             }
         )

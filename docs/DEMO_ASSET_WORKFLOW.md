@@ -50,6 +50,7 @@ Command:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\windows\record_demo_device.ps1
+powershell -ExecutionPolicy Bypass -File scripts\windows\record_demo_device.ps1 -UseConnectedDevice -ScenarioId full-workflow -StartImmediately
 ```
 
 Flow:
@@ -88,6 +89,7 @@ Add one row for each repository change that affects demo assets. Keep completed 
 | Change | Affected flow/assets | Required updates | Validation | Residual |
 |---|---|---|---|---|
 | Demo asset governance and pipeline mapping introduced | Both scripts and all mapped scenarios | Maintain this document together with scenario, script, helper, and story changes | Documentation review completed | Run affected device flows after the next UI/workflow change |
+| Shared design tokens, compact actions, localized copy and stable CTA tags | Operator intake, order intake, customers, maintenance/backup, assembled operator video, direct device videos | Intake scenarios now open from `HomeNewOrderButton`; dashboard discard uses `DashboardDiscardChangesButton`; direct recorder supports `-ScenarioId` and `-StartImmediately`; existing filenames, package paths, captions and timing remain valid | Screenshots verified on physical device; assembled operator video verified; direct `full-workflow` and `social-stories` recordings verified and normalized | Use generated assets for store and landing publishing |
 
 Use concise validation values such as `not run`, `compile only`, `screenshots verified`, or `screenshots and recording verified`. Do not mark a device flow verified unless it actually ran.
 

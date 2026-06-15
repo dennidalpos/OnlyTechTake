@@ -127,7 +127,7 @@ fun CategoriesSettings(
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
                             IconButton(onClick = { searchQuery = "" }) {
-                                Icon(Icons.Default.Delete, contentDescription = "Pulisci")
+                                Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.content_description_clear))
                             }
                         }
                     }
@@ -193,7 +193,7 @@ fun CategoriesSettings(
                                 color = MaterialTheme.colorScheme.primary
                             )
                             IconButton(onClick = { showEditCard = false }) {
-                                Icon(Icons.Default.Close, contentDescription = "Chiudi")
+                                Icon(Icons.Default.Close, contentDescription = stringResource(R.string.content_description_close))
                             }
                         }
                         
@@ -285,13 +285,13 @@ fun CategoriesSettings(
                                 IconButton(
                                     onClick = { selectCategoryForEdit(category) },
                                 ) {
-                                    Icon(Icons.Default.Edit, contentDescription = "Modifica")
+                                    Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.content_description_edit))
                                 }
                             }
                             IconButton(
                                 onClick = { openCategoryBranch(category.id) },
                             ) {
-                                Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Apri")
+                                Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = stringResource(R.string.content_description_open))
                             }
                             if (isAdmin) {
                                 IconButton(onClick = {
@@ -303,7 +303,7 @@ fun CategoriesSettings(
                                         loadNewCategory()
                                     }
                                 }) {
-                                    Icon(Icons.Default.Delete, contentDescription = "Elimina", tint = MaterialTheme.colorScheme.error)
+                                    Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.content_description_delete), tint = MaterialTheme.colorScheme.error)
                                 }
                             }
                         }

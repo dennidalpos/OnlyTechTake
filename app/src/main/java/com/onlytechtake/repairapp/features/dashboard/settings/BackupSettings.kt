@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.data.local.entities.ExportDestination
 import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
@@ -76,7 +77,7 @@ fun BackupSettings(
                 Column(modifier = Modifier.padding(DashboardSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
                     SectionTitle(
                         text = stringResource(R.string.config_backup_title),
-                        tooltip = "Gestisci la frequenza dei promemoria e la destinazione dei file esportati.",
+                        tooltip = stringResource(R.string.config_backup_tooltip),
                     )
                     if (!isAdmin) {
                         Text(stringResource(R.string.admin_only_section))
@@ -112,7 +113,7 @@ fun BackupSettings(
                             modifier = Modifier.padding(vertical = 4.dp),
                         ) {
                             Text(
-                                text = "⚠️",
+                                text = stringResource(R.string.config_backup_warning_indicator),
                                 style = MaterialTheme.typography.titleMedium,
                             )
                             Text(
@@ -126,17 +127,18 @@ fun BackupSettings(
                             TouchButton(
                                 text = stringResource(R.string.config_backup_destination_local),
                                 tone = if (exportDestination == ExportDestination.LOCAL) ButtonTone.PRIMARY else ButtonTone.NEUTRAL,
+                                size = AppButtonSize.Compact,
                                 onClick = { viewModel.setExportDestination(ExportDestination.LOCAL) },
                             )
                             TouchButton(
                                 text = stringResource(R.string.config_backup_destination_cloud),
                                 tone = if (exportDestination == ExportDestination.CLOUD) ButtonTone.PRIMARY else ButtonTone.NEUTRAL,
-                                enabled = isCloudAvailable,
+                                size = AppButtonSize.Compact,
                                 onClick = { viewModel.setExportDestination(ExportDestination.CLOUD) },
                             )
                         }
                         if (!isCloudAvailable) {
-                            OperatorText("Nessun provider cloud (Drive, OneDrive, Dropbox) rilevato. L'esportazione avverra' solo in locale.")
+                            OperatorText(stringResource(R.string.config_backup_provider_unavailable))
                         }
 
                         ActionRow {
@@ -146,6 +148,7 @@ fun BackupSettings(
                             val confirmExportZipText = stringResource(R.string.config_backup_confirm_export_zip_text)
                             TouchButton(
                                 text = stringResource(R.string.backup_run_full_zip),
+                                size = AppButtonSize.Compact,
                                 testTag = RepairAppTestTags.ConfigBackupRunZipButton,
                                 onClick = {
                                     val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
@@ -159,6 +162,8 @@ fun BackupSettings(
                             TouchButton(
                                 text = stringResource(R.string.config_backup_restore_zip),
                                 tone = ButtonTone.WARNING,
+                                size = AppButtonSize.Compact,
+                                testTag = RepairAppTestTags.BackupRestoreZipButton,
                                 onClick = {
                                     onRequestConfirm(
                                         confirmRestoreZipTitle,
@@ -172,7 +177,7 @@ fun BackupSettings(
 
                         SectionTitle(
                             text = stringResource(R.string.config_backup_orders_export_title),
-                            tooltip = "Esporta l'elenco di tutte le commesse in un file Excel leggibile da PC.",
+                            tooltip = stringResource(R.string.config_backup_orders_tooltip),
                         )
                         ActionRow {
                             val destMsgLocal = stringResource(R.string.order_export_local)
@@ -181,6 +186,7 @@ fun BackupSettings(
                             val confirmExportXlsxText = stringResource(R.string.config_backup_confirm_export_xlsx_text)
                             TouchButton(
                                 text = stringResource(R.string.config_backup_export_xlsx),
+                                size = AppButtonSize.Compact,
                                 onClick = {
                                     val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
                                     onRequestConfirm(confirmExportXlsxTitle, confirmExportXlsxText.format(destMsg)) {
@@ -196,9 +202,11 @@ fun BackupSettings(
 
         item {
             TouchButton(
-                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
-                text = "Chiudi Setup backup",
+                modifier = Modifier.padding(top = 16.dp),
+                text = stringResource(R.string.config_backup_close),
                 tone = ButtonTone.NEUTRAL,
+                size = AppButtonSize.Compact,
+                testTag = RepairAppTestTags.BackupCloseButton,
                 onClick = onBack,
             )
         }

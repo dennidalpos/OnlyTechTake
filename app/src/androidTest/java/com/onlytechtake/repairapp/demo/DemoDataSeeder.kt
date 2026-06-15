@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
@@ -40,7 +41,8 @@ object DemoDataSeeder {
         RepairAppDatabase.closeInstance()
         context.deleteDatabase(RepairAppDatabase.DATABASE_NAME)
         AuthPreferences(context).clear()
-        File(context.filesDir, "demo-media").deleteRecursively()
+        val mediaStorageProvider = MediaStorageProvider(context)
+        mediaStorageProvider.getBaseMediaDir().deleteRecursively()
 
         val now = 1_780_830_000_000L
         val passwordHasher = PasswordHasher()
@@ -180,7 +182,12 @@ object DemoDataSeeder {
             ),
         )
 
-        val mediaPath = writeDemoBitmap(context, "demo-oggetto.png", "Foto oggetto", Color.rgb(229, 241, 255))
+        val mediaPath = writeDemoBitmap(
+            directory = mediaStorageProvider.getOrderMediaDir(DEMO_ORDER_ID),
+            fileName = "demo-oggetto.png",
+            label = "Foto oggetto",
+            backgroundColor = Color.rgb(229, 241, 255),
+        )
         database.orderMediaDao().upsert(
             OrderMediaEntity(
                 id = "demo-media-intake",
@@ -198,7 +205,12 @@ object DemoDataSeeder {
             ),
         )
 
-        val signaturePath = writeDemoBitmap(context, "demo-firma.png", "Firma cliente", Color.WHITE)
+        val signaturePath = writeDemoBitmap(
+            directory = mediaStorageProvider.getOrderSignaturesDir(DEMO_ORDER_ID),
+            fileName = "demo-firma.png",
+            label = "Firma cliente",
+            backgroundColor = Color.WHITE,
+        )
         database.signatureDao().upsert(
             SignatureEntity(
                 id = "demo-signature-intake",
@@ -268,8 +280,8 @@ object DemoDataSeeder {
         AuthPreferences(context).markConfigured()
     }
 
-    private fun writeDemoBitmap(context: Context, fileName: String, label: String, backgroundColor: Int): File {
-        val directory = File(context.filesDir, "demo-media").apply { mkdirs() }
+    private fun writeDemoBitmap(directory: File, fileName: String, label: String, backgroundColor: Int): File {
+        directory.mkdirs()
         val file = File(directory, fileName)
         val bitmap = Bitmap.createBitmap(1280, 720, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)

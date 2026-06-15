@@ -62,7 +62,11 @@ import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.BuildConfig
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.features.dashboard.DashboardRoute
+import androidx.compose.ui.res.stringResource
+
+private var showcaseSeedRequested = false
 
 @Composable
 fun AuthGateRoute(
@@ -87,8 +91,8 @@ fun AuthGateRoute(
     if (BuildConfig.IS_SHOWCASE_MODE_ENABLED && authState.initialized && !authState.configured) {
         val appCtx = context.applicationContext
         LaunchedEffect(authState.initialized, authState.configured, onAppDataRestored, viewModel) {
-            // Guard against multiple calls if state updates before restoration
-            if (!formState.seeding) {
+            if (!showcaseSeedRequested) {
+                showcaseSeedRequested = true
                 android.util.Log.d("AuthGateRoute", "Triggering seedShowcaseData. Initialized: ${authState.initialized}, Configured: ${authState.configured}")
                 viewModel.seedShowcaseData(appCtx) {
                     onAppDataRestored()
@@ -107,9 +111,9 @@ fun AuthGateRoute(
     when {
         !authState.initialized || (BuildConfig.IS_SHOWCASE_MODE_ENABLED && !authState.configured) || formState.seeding -> AuthLoadingScreen(
             text = when {
-                formState.seeding -> "Inizializzazione dati showcase..."
-                BuildConfig.IS_SHOWCASE_MODE_ENABLED && !authState.configured -> "Preparazione ambiente (seeding)..."
-                else -> "Sistema pronto"
+                formState.seeding -> stringResource(R.string.auth_showcase_initializing)
+                BuildConfig.IS_SHOWCASE_MODE_ENABLED && !authState.configured -> stringResource(R.string.auth_showcase_preparing)
+                else -> stringResource(R.string.auth_system_ready)
             }
         )
         authState.currentUser != null -> DashboardRoute(
@@ -165,21 +169,21 @@ private fun MandatoryPasswordChangeScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Cambio password obbligatorio") },
+                title = { Text(text = stringResource(R.string.auth_password_change_top)) },
                 navigationIcon = {
                     IconButton(onClick = onCancel) {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Annulla")
+                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.customer_cancel))
                     }
                 }
             )
         },
     ) { paddingValues ->
         AuthForm(
-            title = "Sicurezza account",
-            subtitle = "È richiesto il cambio password al primo accesso",
+            title = stringResource(R.string.auth_security_title),
+            subtitle = stringResource(R.string.auth_security_subtitle),
             formState = formState,
             paddingValues = paddingValues,
-            submitLabel = "Aggiorna password",
+            submitLabel = stringResource(R.string.auth_update_password),
             onDisplayNameChange = {},
             onUsernameChange = {},
             onPasswordChange = onPasswordChange,
@@ -205,21 +209,21 @@ private fun AdminRecoveryScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Recupero account admin") },
+                title = { Text(text = stringResource(R.string.auth_recovery_top)) },
                 navigationIcon = {
                     IconButton(onClick = onCancel) {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Indietro")
+                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.content_description_back))
                     }
                 }
             )
         },
     ) { paddingValues ->
         AuthForm(
-            title = "Ripristino credenziali",
-            subtitle = "Inserisci il codice master per impostare una nuova password admin",
+            title = stringResource(R.string.auth_recovery_title),
+            subtitle = stringResource(R.string.auth_recovery_subtitle),
             formState = formState,
             paddingValues = paddingValues,
-            submitLabel = "Resetta Password Admin",
+            submitLabel = stringResource(R.string.auth_reset_admin_password),
             onDisplayNameChange = {},
             onUsernameChange = {},
             onPasswordChange = onPasswordChange,
@@ -235,7 +239,7 @@ private fun AdminRecoveryScreen(
 }
 
 @Composable
-private fun AuthLoadingScreen(text: String = "Caricamento autenticazione") {
+private fun AuthLoadingScreen(text: String) {
     Scaffold { paddingValues ->
         Box(
             modifier = Modifier
@@ -265,21 +269,21 @@ private fun FirstSetupScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Configurazione admin") },
+                title = { Text(text = stringResource(R.string.auth_setup_top)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Indietro")
+                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.content_description_back))
                     }
                 }
             )
         },
     ) { paddingValues ->
         AuthForm(
-            title = "Primo avvio",
-            subtitle = "Account admin locale",
+            title = stringResource(R.string.auth_setup_title),
+            subtitle = stringResource(R.string.auth_setup_subtitle),
             formState = formState,
             paddingValues = paddingValues,
-            submitLabel = "Crea admin",
+            submitLabel = stringResource(R.string.auth_create_admin),
             onDisplayNameChange = onDisplayNameChange,
             onUsernameChange = onUsernameChange,
             onPasswordChange = onPasswordChange,
@@ -305,21 +309,21 @@ private fun LoginScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "OnlyTechTake") },
+                title = { Text(text = stringResource(R.string.app_name)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Chiudi app")
+                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.auth_close_app))
                     }
                 }
             )
         },
     ) { paddingValues ->
         AuthForm(
-            title = "Login",
+            title = stringResource(R.string.auth_login_title),
             subtitle = null,
             formState = formState,
             paddingValues = paddingValues,
-            submitLabel = "Accedi",
+            submitLabel = stringResource(R.string.auth_login_submit),
             onDisplayNameChange = {},
             onUsernameChange = onUsernameChange,
             onPasswordChange = onPasswordChange,
@@ -394,7 +398,7 @@ private fun AuthForm(
                     modifier = Modifier.fillMaxWidth(),
                     value = formState.displayName,
                     onValueChange = onDisplayNameChange,
-                    label = { Text(text = "Nome admin") },
+                    label = { Text(text = stringResource(R.string.auth_admin_name)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                     keyboardActions = nextAction,
@@ -408,7 +412,7 @@ private fun AuthForm(
                         .testTag(RepairAppTestTags.AuthUsernameField),
                     value = formState.username,
                     onValueChange = onUsernameChange,
-                    label = { Text(text = "Username") },
+                    label = { Text(text = stringResource(R.string.auth_username)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Next,
@@ -424,7 +428,7 @@ private fun AuthForm(
                     modifier = Modifier.fillMaxWidth(),
                     value = formState.recoveryCode,
                     onValueChange = onRecoveryCodeChange,
-                    label = { Text(text = "Codice di recupero (Master Code)") },
+                    label = { Text(text = stringResource(R.string.auth_recovery_code)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Next,
@@ -440,7 +444,7 @@ private fun AuthForm(
                     .testTag(RepairAppTestTags.AuthPasswordField),
                 value = formState.password,
                 onValueChange = onPasswordChange,
-                label = { Text(text = "Password") },
+                label = { Text(text = stringResource(R.string.auth_password)) },
                 singleLine = true,
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
@@ -469,7 +473,7 @@ private fun AuthForm(
                     modifier = Modifier.fillMaxWidth(),
                     value = formState.confirmPassword,
                     onValueChange = onConfirmPasswordChange,
-                    label = { Text(text = "Conferma password") },
+                    label = { Text(text = stringResource(R.string.auth_confirm_password)) },
                     singleLine = true,
                     visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(
@@ -509,7 +513,7 @@ private fun AuthForm(
                     ) {
                         CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
                         Text(
-                            text = "Operazione in corso",
+                            text = stringResource(R.string.auth_working),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
@@ -521,21 +525,19 @@ private fun AuthForm(
 
             if (onRecovery != null) {
                 androidx.compose.material3.TextButton(
-                    modifier = Modifier.fillMaxWidth(),
                     onClick = onRecovery,
                     enabled = !formState.loading,
                 ) {
-                    Text(text = "Problemi di accesso? Recupero Admin")
+                    Text(text = stringResource(R.string.auth_recovery_action))
                 }
             }
 
             if (onDemoLogin != null && (DemoMode.canEnable())) {
                 androidx.compose.material3.TextButton(
-                    modifier = Modifier.fillMaxWidth(),
                     onClick = onDemoLogin,
                     enabled = !formState.loading,
                 ) {
-                    Text(text = "Avvia Modalità Demo")
+                    Text(text = stringResource(R.string.auth_demo_action))
                 }
             }
         }

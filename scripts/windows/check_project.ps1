@@ -17,11 +17,11 @@
   PowerShell, Android SDK, JDK 17+ e Gradle Wrapper. I task Gradle sono
   lanciati in sequenza per evitare file lock su Windows.
   Senza -SkipReleaseBuild verifica anche il signing locale e genera la release.
-  Il flavor predefinito e' Full; usare -Flavor Demo per il flavor demo.
+  Il flavor predefinito e' Full; sono supportati anche Demo e Showcase.
 #>
 
 param(
-    [ValidateSet("Full", "Demo")]
+    [ValidateSet("Full", "Demo", "Showcase")]
     [string]$Flavor = "Full",
 
     [switch]$AndroidTests,

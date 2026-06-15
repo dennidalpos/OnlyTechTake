@@ -1,83 +1,154 @@
 package com.onlytechtake.repairapp.data.repositories
 
-import android.content.ContentResolver
-import android.content.Context
-import android.net.Uri
-import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
-import com.onlytechtake.repairapp.data.local.entities.UserPermission
-import com.onlytechtake.repairapp.data.local.entities.UserRole
-import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
-import io.mockk.every
-import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.util.UUID
+import java.util.zip.ZipEntry
+import java.util.zip.ZipInputStream
+import java.util.zip.ZipOutputStream
+import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import java.io.ByteArrayInputStream
-import java.io.File
-import java.util.zip.ZipEntry
-import java.util.zip.ZipOutputStream
-import java.io.ByteArrayOutputStream
 
 class BackupRepositoryTest {
-    private val context = mockk<Context>(relaxed = true)
-    private val contentResolver = mockk<ContentResolver>()
-    private val repository = BackupRepository(
-        context = context,
-        categoryDao = mockk(),
-        templateDao = mockk(),
-        settingDao = mockk(),
-        auditLogDao = mockk(relaxed = true),
-    )
+    private lateinit var testRoot: File
 
     @Before
     fun setUp() {
-        every { context.contentResolver } returns contentResolver
-        every { context.cacheDir } returns File("build/tmp/test_restore").also { it.mkdirs() }
-        every { context.filesDir } returns File("build/tmp/test_files").also { it.mkdirs() }
+        testRoot = File("build/tmp/backup-${UUID.randomUUID()}").apply { mkdirs() }
+    }
+
+    @After
+    fun tearDown() {
+        testRoot.deleteRecursively()
     }
 
     @Test
-    fun restoreCompleteBackupFailsWithIncompatibleVersion() = runBlocking {
-        val actor = mockAdmin()
-        val uri = mockk<Uri>()
-        
-        // Create a fake ZIP with wrong databaseVersion
-        val zipContent = createFakeBackupZip(databaseVersion = 0)
-        every { contentResolver.openInputStream(uri) } returns ByteArrayInputStream(zipContent)
-        
-        val result = repository.restoreCompleteBackup(actor, uri)
-        
-        assertTrue(result.isFailure)
-        val expectedMessage = if (BuildConfig.IS_DEMO_VERSION) {
-            "Funzione disponibile nella versione Full"
-        } else {
-            "Versione backup non compatibile"
+    fun exportIncludesCanonicalAppMediaPath() {
+        val mediaRoot = File(testRoot, "app_media")
+        File(mediaRoot, "order_media/order-1/photo.jpg").also {
+            it.parentFile?.mkdirs()
+            it.writeText("photo")
         }
-        assertEquals(expectedMessage, result.exceptionOrNull()?.message)
+        val output = ByteArrayOutputStream()
+
+        ZipOutputStream(output).use { zip ->
+            BackupArchive.addDirectory(zip, mediaRoot, "files/app_media")
+        }
+
+        assertEquals(
+            mapOf("files/app_media/order_media/order-1/photo.jpg" to "photo"),
+            unzip(output.toByteArray()),
+        )
     }
 
-    private fun createFakeBackupZip(databaseVersion: Int): ByteArray {
-        val bos = ByteArrayOutputStream()
-        ZipOutputStream(bos).use { zip ->
-            zip.putNextEntry(ZipEntry("metadata/backup.json"))
-            zip.write("""{"databaseVersion": $databaseVersion}""".toByteArray())
-            zip.closeEntry()
-            
-            zip.putNextEntry(ZipEntry("database/${RepairAppDatabase.DATABASE_NAME}"))
-            zip.write("fake db content".toByteArray())
-            zip.closeEntry()
-        }
-        return bos.toByteArray()
+    @Test
+    fun restoreAcceptsCanonicalAppMedia() {
+        val extracted = extract(
+            mapOf(
+                "files/app_media/order_media/order-1/photo.jpg" to "photo",
+                "files/app_media/signatures/order-1/signature.png" to "signature",
+            ),
+        )
+        val destination = File(testRoot, "restored")
+
+        BackupArchive.restoreAppMedia(File(extracted, "files"), destination)
+
+        assertEquals("photo", File(destination, "order_media/order-1/photo.jpg").readText())
+        assertEquals("signature", File(destination, "signatures/order-1/signature.png").readText())
     }
 
-    private fun mockAdmin() = AuthenticatedUser(
-        id = "admin-1",
-        displayName = "Admin",
-        username = "admin",
-        role = UserRole.ADMIN,
-        permissions = UserPermission.entries.toSet()
-    )
+    @Test
+    fun restoreMapsLegacyMediaAndOrderDirectoriesToCanonicalLayout() {
+        val extracted = extract(
+            mapOf(
+                "files/order_media/order-1/photo.jpg" to "legacy-photo",
+                "files/orders/order-1/signatures/signature.png" to "legacy-signature",
+                "files/orders/order-1/documents/status.pdf" to "legacy-document",
+            ),
+        )
+        val destination = File(testRoot, "restored")
+
+        BackupArchive.restoreAppMedia(File(extracted, "files"), destination)
+
+        assertEquals("legacy-photo", File(destination, "order_media/order-1/photo.jpg").readText())
+        assertEquals("legacy-signature", File(destination, "signatures/order-1/signature.png").readText())
+        assertEquals("legacy-document", File(destination, "documents/order-1/status.pdf").readText())
+        assertFalse(File(destination.parentFile, "orders").exists())
+        assertFalse(File(destination.parentFile, "order_media").exists())
+    }
+
+    @Test
+    fun canonicalFilesTakePrecedenceOverLegacyCopies() {
+        val extracted = extract(
+            mapOf(
+                "files/app_media/order_media/order-1/photo.jpg" to "canonical",
+                "files/order_media/order-1/photo.jpg" to "legacy",
+            ),
+        )
+        val destination = File(testRoot, "restored")
+
+        BackupArchive.restoreAppMedia(File(extracted, "files"), destination)
+
+        assertEquals("canonical", File(destination, "order_media/order-1/photo.jpg").readText())
+    }
+
+    @Test
+    fun extractionRejectsUnsafeZipPaths() {
+        listOf(
+            "../outside.txt",
+            "/absolute.txt",
+            "files/app_media/../../outside.txt",
+            "files\\app_media\\photo.jpg",
+        ).forEach { unsafePath ->
+            val error = assertThrows(IllegalArgumentException::class.java) {
+                BackupArchive.extract(
+                    ByteArrayInputStream(backupZip(mapOf(unsafePath to "unsafe"))),
+                    File(testRoot, "unsafe-${unsafePath.hashCode()}"),
+                )
+            }
+            assertEquals("Percorso backup non valido", error.message)
+        }
+    }
+
+    private fun extract(files: Map<String, String>): File {
+        val destination = File(testRoot, "extract-${UUID.randomUUID()}")
+        BackupArchive.extract(ByteArrayInputStream(backupZip(files)), destination)
+        return destination
+    }
+
+    private fun backupZip(files: Map<String, String>): ByteArray {
+        val output = ByteArrayOutputStream()
+        ZipOutputStream(output).use { zip ->
+            val requiredEntries = linkedMapOf(
+                BackupArchive.METADATA_ENTRY to
+                    """{"databaseVersion": ${RepairAppDatabase.DATABASE_VERSION}}""",
+                "${BackupArchive.DATABASE_ENTRY_PREFIX}${RepairAppDatabase.DATABASE_NAME}" to "database",
+            )
+            (requiredEntries + files).forEach { (name, content) ->
+                zip.putNextEntry(ZipEntry(name))
+                zip.write(content.toByteArray())
+                zip.closeEntry()
+            }
+        }
+        return output.toByteArray()
+    }
+
+    private fun unzip(bytes: ByteArray): Map<String, String> {
+        val entries = mutableMapOf<String, String>()
+        ZipInputStream(ByteArrayInputStream(bytes)).use { zip ->
+            while (true) {
+                val entry = zip.nextEntry ?: break
+                entries[entry.name] = zip.readBytes().toString(Charsets.UTF_8)
+                zip.closeEntry()
+            }
+        }
+        return entries
+    }
 }

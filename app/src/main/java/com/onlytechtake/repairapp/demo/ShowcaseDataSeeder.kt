@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.*
@@ -30,9 +31,8 @@ object ShowcaseDataSeeder {
 
         authPreferences.clear()
         
-        val showcaseMediaDir = File(context.filesDir, "showcase-media")
-        showcaseMediaDir.deleteRecursively()
-        showcaseMediaDir.mkdirs()
+        val mediaStorageProvider = MediaStorageProvider(context)
+        mediaStorageProvider.getBaseMediaDir().deleteRecursively()
 
         // Re-get instance after deletion
         val db = RepairAppDatabase.getInstance(context)
@@ -270,7 +270,12 @@ object ShowcaseDataSeeder {
                 }
 
                 // Add Sample Photo
-                val photoFile = writeDemoBitmap(context, "photo-$orderId.png", "Oggetto: ${order.title}", Color.LTGRAY)
+                val photoFile = writeDemoBitmap(
+                    directory = mediaStorageProvider.getOrderMediaDir(orderId),
+                    fileName = "photo-$orderId.png",
+                    label = "Oggetto: ${order.title}",
+                    backgroundColor = Color.LTGRAY,
+                )
                 db.orderMediaDao().upsert(
                     OrderMediaEntity(
                         id = "media-$orderId",
@@ -289,7 +294,12 @@ object ShowcaseDataSeeder {
                 )
 
                 // Add Sample Signature
-                val sigFile = writeDemoBitmap(context, "sig-$orderId.png", "Firma: ${customer.firstName ?: customer.companyName}", Color.WHITE)
+                val sigFile = writeDemoBitmap(
+                    directory = mediaStorageProvider.getOrderSignaturesDir(orderId),
+                    fileName = "sig-$orderId.png",
+                    label = "Firma: ${customer.firstName ?: customer.companyName}",
+                    backgroundColor = Color.WHITE,
+                )
                 db.signatureDao().upsert(
                     SignatureEntity(
                         id = "sig-$orderId",
@@ -343,9 +353,8 @@ object ShowcaseDataSeeder {
         authPreferences.markConfigured()
     }
 
-    private fun writeDemoBitmap(context: Context, fileName: String, label: String, backgroundColor: Int): File {
-        val directory = File(context.filesDir, "showcase-media")
-        if (!directory.exists()) directory.mkdirs()
+    private fun writeDemoBitmap(directory: File, fileName: String, label: String, backgroundColor: Int): File {
+        directory.mkdirs()
         val file = File(directory, fileName)
         val bitmap = Bitmap.createBitmap(1280, 720, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)

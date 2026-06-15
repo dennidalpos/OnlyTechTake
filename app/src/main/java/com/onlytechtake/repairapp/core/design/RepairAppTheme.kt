@@ -6,6 +6,7 @@ import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -19,11 +20,6 @@ private val Amber = Color(0xFF7D5800)
 private val AmberDark = Color(0xFFFFBA28)
 private val Danger = Color(0xFFBA1A1A)
 private val DangerDark = Color(0xFFFFB4AB)
-val SuccessGreen = Color(0xFF237A3B)
-val WhatsAppGreen = Color(0xFF25D366)
-val WarningAmber = Color(0xFFE8A600)
-val WarningOnAmber = Color(0xFF2A2100)
-
 private val AppTypography = Typography(
     headlineLarge = TextStyle(
         fontFamily = FontFamily.Default,
@@ -39,6 +35,13 @@ private val AppTypography = Typography(
         lineHeight = 32.sp,
         letterSpacing = 0.sp
     ),
+    headlineMedium = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Bold,
+        fontSize = 28.sp,
+        lineHeight = 36.sp,
+        letterSpacing = 0.sp,
+    ),
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
@@ -53,6 +56,13 @@ private val AppTypography = Typography(
         lineHeight = 24.sp,
         letterSpacing = 0.15.sp
     ),
+    titleSmall = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.1.sp,
+    ),
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
@@ -66,6 +76,20 @@ private val AppTypography = Typography(
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.25.sp
+    ),
+    bodySmall = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.4.sp,
+    ),
+    labelLarge = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.1.sp,
     ),
     labelMedium = TextStyle(
         fontFamily = FontFamily.Default,
@@ -142,9 +166,16 @@ fun RepairAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
-    MaterialTheme(
-        colorScheme = if (darkTheme) DarkColors else LightColors,
-        typography = AppTypography,
-        content = content,
-    )
+    CompositionLocalProvider(
+        LocalRepairAppSemanticColors provides if (darkTheme) DarkSemanticColors else LightSemanticColors,
+    ) {
+        MaterialTheme(
+            colorScheme = if (darkTheme) DarkColors else LightColors,
+            typography = AppTypography,
+            content = content,
+        )
+    }
 }
+
+val MaterialTheme.repairColors: RepairAppSemanticColors
+    @Composable get() = LocalRepairAppSemanticColors.current

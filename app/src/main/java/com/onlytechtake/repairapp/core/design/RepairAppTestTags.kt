@@ -3,6 +3,9 @@ package com.onlytechtake.repairapp.core.design
 object RepairAppTestTags {
     const val DashboardTabs = "dashboard_tabs"
     const val LogoutButton = "logout_button"
+    const val HomeNewOrderButton = "home_new_order_button"
+    const val OrdersFilterButton = "orders_filter_button"
+    const val DashboardDiscardChangesButton = "dashboard_discard_changes_button"
 
     const val AuthUsernameField = "auth_username_field"
     const val AuthPasswordField = "auth_password_field"
@@ -21,6 +24,11 @@ object RepairAppTestTags {
     const val NewOrderProblemDetailsField = "new_order_problem_details_field"
     const val NewOrderNotesField = "new_order_notes_field"
     const val SignatureCanvas = "signature_canvas"
+    const val IntakeMediaTakePhotoButton = "intake_media_take_photo_button"
+    const val IntakeMediaAttachFileButton = "intake_media_attach_file_button"
+    const val IntakeMediaCloseCameraButton = "intake_media_close_camera_button"
+    const val IntakeSubmitButton = "intake_submit_button"
+    const val IntakeStepperStep = "intake_stepper_step"
 
     const val StatusResultSummaryField = "status_result_summary_field"
     const val StatusNoteField = "status_note_field"
@@ -56,6 +64,8 @@ object RepairAppTestTags {
     const val CustomerNotesField = "customer_notes_field"
     const val CustomerSaveButton = "customer_save_button"
     const val CustomerConfirmSaveButton = "customer_confirm_save_button"
+    const val CustomerDetailCloseButton = "customer_detail_close_button"
+    const val CustomerDetailEditButton = "customer_detail_edit_button"
 
     const val ConfigHubCategoriesButton = "config_hub_categories_button"
     const val ConfigHubTemplatesButton = "config_hub_templates_button"
@@ -78,6 +88,11 @@ object RepairAppTestTags {
     const val ConfigBackupReminderSwitch = "config_backup_reminder_switch"
     const val ConfigBackupIntervalField = "config_backup_interval_field"
     const val ConfigBackupRunZipButton = "config_backup_run_zip_button"
+    const val BackupRestoreZipButton = "backup_restore_zip_button"
+    const val BackupCloseButton = "backup_close_button"
+    const val AdminCreateOperatorButton = "admin_create_operator_button"
+    const val AdminDeleteAllOrdersButton = "admin_delete_all_orders_button"
+    const val AdminTotalResetButton = "admin_total_reset_button"
 
     fun dashboardTab(destination: String) = "dashboard_tab_${destination.lowercase()}"
 
@@ -88,4 +103,6 @@ object RepairAppTestTags {
     fun statusAction(actionName: String) = "order_status_action_${actionName.lowercase()}"
 
     fun closureReason(reasonName: String) = "closure_reason_${reasonName.lowercase()}"
+
+    fun intakeStepperStep(step: Int) = "${IntakeStepperStep}_$step"
 }

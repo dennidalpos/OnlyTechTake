@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">OnlyTechTake mark</title>
+  <desc id="desc">A repair work order card with a check mark and diagnostic accent.</desc>
+  <rect width="512" height="512" rx="112" fill="#102026"/>
+  <path d="M154 120h204c25 0 45 20 45 45v217c0 25-20 45-45 45H154c-25 0-45-20-45-45V165c0-25 20-45 45-45Z" fill="#F8FAFC"/>
+  <path d="M151 169h210v39H151z" fill="#12B7A7"/>
+  <path d="M164 249h136v26H164zM164 303h105v26H164z" fill="#102026" opacity=".9"/>
+  <path d="M319 351l-50-50 28-28 22 22 78-78 28 28-106 106Z" fill="#F59E0B"/>
+  <path d="M111 164c0-24 20-44 44-44h203c25 0 45 20 45 45v217c0 25-20 45-45 45H154c-24 0-43-19-43-43" fill="none" stroke="#12B7A7" stroke-width="16" stroke-linecap="round" opacity=".55"/>
+</svg>

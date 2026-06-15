@@ -6,6 +6,9 @@ param(
     [switch]$UseConnectedDevice,
     [switch]$SkipBuild,
     [switch]$SeedData,
+    [ValidateSet("", "manual", "full-workflow", "social-stories", "customers", "maintenance")]
+    [string]$ScenarioId = "",
+    [switch]$StartImmediately,
     [int]$MaxDurationSeconds = 180,
     [int]$BitRate = 4000000,
     [double]$AutomaticTrimStartSeconds = 7,
@@ -95,18 +98,29 @@ $recordingsConfig = @(
 
 # Selezione flussi se non specificato
 $selectedTestClass = $null
-Write-Host "`n--- Selezione Modalità Registrazione ---" -ForegroundColor Yellow
-Write-Host "0. Manuale (Avvia l'app e registra quello che fai)"
-$i = 1
-foreach ($flow in $recordingsConfig) {
-    Write-Host "$i. $($flow.Description)"
-    $i++
-}
+if ($ScenarioId) {
+    if ($ScenarioId -ne "manual") {
+        $selectedFlow = $recordingsConfig | Where-Object { $_.Id -eq $ScenarioId } | Select-Object -First 1
+        if ($null -eq $selectedFlow) {
+            throw "ScenarioId non valido: $ScenarioId"
+        }
+        $selectedTestClass = $selectedFlow.TestClass
+        Write-Host "Verrà eseguito lo scenario: $($selectedFlow.Description)" -ForegroundColor Green
+    }
+} else {
+    Write-Host "`n--- Selezione Modalità Registrazione ---" -ForegroundColor Yellow
+    Write-Host "0. Manuale (Avvia l'app e registra quello che fai)"
+    $i = 1
+    foreach ($flow in $recordingsConfig) {
+        Write-Host "$i. $($flow.Description)"
+        $i++
+    }
 
-$choice = Read-Host "`nScegli il flusso da registrare [0-$($i-1)]"
-if ($choice -match "^\d+$" -and [int]$choice -gt 0 -and [int]$choice -lt $i) {
-    $selectedTestClass = $recordingsConfig[[int]$choice - 1].TestClass
-    Write-Host "Verrà eseguito lo scenario: $($recordingsConfig[[int]$choice - 1].Description)" -ForegroundColor Green
+    $choice = Read-Host "`nScegli il flusso da registrare [0-$($i-1)]"
+    if ($choice -match "^\d+$" -and [int]$choice -gt 0 -and [int]$choice -lt $i) {
+        $selectedTestClass = $recordingsConfig[[int]$choice - 1].TestClass
+        Write-Host "Verrà eseguito lo scenario: $($recordingsConfig[[int]$choice - 1].Description)" -ForegroundColor Green
+    }
 }
 
 # Grant necessary permissions for demo recording
@@ -165,8 +179,10 @@ if ($selectedTestClass) {
         Start-Sleep -Seconds 2 # Buffer per il flushing del file su SDCard
     }
 } else {
-    Write-Host "Premi INVIO per iniziare a registrare..." -ForegroundColor Yellow
-    Read-Host
+    if (-not $StartImmediately) {
+        Write-Host "Premi INVIO per iniziare a registrare..." -ForegroundColor Yellow
+        Read-Host
+    }
 
     Write-Host "REGISTRAZIONE IN CORSO... Premi CTRL+C per fermare anticipatamente." -ForegroundColor Red
     try {

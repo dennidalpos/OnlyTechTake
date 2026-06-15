@@ -130,7 +130,7 @@ fun TemplatesSettings(
                     }
                     Icon(
                         imageVector = Icons.Default.Edit,
-                        contentDescription = "Modifica",
+                        contentDescription = stringResource(R.string.content_description_edit),
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(start = 8.dp)
                     )

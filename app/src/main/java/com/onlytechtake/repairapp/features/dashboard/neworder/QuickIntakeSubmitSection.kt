@@ -8,6 +8,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.StepSectionTitle
@@ -25,18 +28,20 @@ fun QuickIntakeSubmitSection(
             modifier = Modifier.padding(DashboardSpacing.cardPadding),
             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
         ) {
-            StepSectionTitle(stepNumber, "Conferma")
+            StepSectionTitle(stepNumber, stringResource(R.string.intake_submit_title))
             if (missingRequirements.isNotEmpty()) {
                 Text(
-                    text = "Mancano: ${missingRequirements.joinToString(", ")}",
+                    text = stringResource(R.string.intake_submit_missing, missingRequirements.joinToString(", ")),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }
             TouchButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Crea commessa in carico",
+                text = stringResource(R.string.intake_submit_create),
                 enabled = enabled,
+                fullWidth = true,
+                testTag = RepairAppTestTags.IntakeSubmitButton,
                 onClick = onSubmit,
             )
         }

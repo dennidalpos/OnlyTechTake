@@ -54,8 +54,7 @@ class DataResetRepositoryInstrumentedTest {
     fun tearDown() {
         database.close()
         // Cleanup actual files created during test
-        File(context.filesDir, "orders").deleteRecursively()
-        File(context.filesDir, "order_media").deleteRecursively()
+        File(context.filesDir, "app_media").deleteRecursively()
         File(context.filesDir, "other").deleteRecursively()
     }
 
@@ -64,7 +63,7 @@ class DataResetRepositoryInstrumentedTest {
         val actor = mockAdmin()
         seedData()
         
-        val orderFile = File(context.filesDir, "orders/order-1/test.txt")
+        val orderFile = File(context.filesDir, "app_media/documents/order-1/test.txt")
         orderFile.parentFile?.mkdirs()
         orderFile.writeText("test")
 
@@ -91,7 +90,7 @@ class DataResetRepositoryInstrumentedTest {
         val actor = mockAdmin()
         seedData()
         
-        val orderFile = File(context.filesDir, "orders/order-1/test.txt")
+        val orderFile = File(context.filesDir, "app_media/documents/order-1/test.txt")
         orderFile.parentFile?.mkdirs()
         orderFile.writeText("test")
         

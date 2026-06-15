@@ -6,6 +6,7 @@ import com.onlytechtake.repairapp.domain.backup.BackupReminderStatus
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -17,11 +18,12 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,6 +41,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.input.ImeAction
@@ -50,10 +53,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.SuccessGreen
-import com.onlytechtake.repairapp.core.design.WhatsAppGreen
-import com.onlytechtake.repairapp.core.design.WarningAmber
-import com.onlytechtake.repairapp.core.design.WarningOnAmber
+import com.onlytechtake.repairapp.core.design.RepairAppShapes
+import com.onlytechtake.repairapp.core.design.RepairAppSizes
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.StandardCard as CoreStandardCard
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 
 object DashboardSpacing {
@@ -100,7 +105,7 @@ fun SectionTitle(text: String, tooltip: String? = null) {
             ) {
                 Icon(
                     imageVector = Icons.Default.Info,
-                    contentDescription = "Info",
+                    contentDescription = stringResource(R.string.content_description_info),
                     tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
                     modifier = Modifier
                         .size(20.dp)
@@ -120,32 +125,18 @@ fun StandardCard(
     containerColor: Color = MaterialTheme.colorScheme.surface,
     highlight: Boolean = false,
     border: BorderStroke? = null,
+    role: Role = Role.Button,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val effectiveBorder = border ?: if (highlight) {
-        BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
-    } else {
-        BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f))
-    }
-
-    val cardModifier = modifier.fillMaxWidth()
-    if (onClick != null) {
-        Card(
-            modifier = cardModifier.clickable(onClick = onClick),
-            border = effectiveBorder,
-            shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(containerColor = containerColor),
-            content = content,
-        )
-    } else {
-        Card(
-            modifier = cardModifier,
-            border = effectiveBorder,
-            shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(containerColor = containerColor),
-            content = content
-        )
-    }
+    CoreStandardCard(
+        modifier = modifier,
+        onClick = onClick,
+        containerColor = containerColor,
+        highlight = highlight,
+        border = border,
+        role = role,
+        content = content,
+    )
 }
 
 @Composable
@@ -197,7 +188,7 @@ fun Field(
         label = { Text(labelText) },
         singleLine = singleLine,
         isError = showError,
-        shape = RoundedCornerShape(12.dp),
+        shape = RepairAppShapes.field,
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.primary,
             unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
@@ -249,6 +240,7 @@ fun WizardNavigationBar(
                         modifier = Modifier.weight(1f),
                         text = stringResource(R.string.nav_back),
                         tone = ButtonTone.NEUTRAL,
+                        size = AppButtonSize.Compact,
                         onClick = it,
                     )
                 }
@@ -256,15 +248,16 @@ fun WizardNavigationBar(
                     modifier = Modifier.weight(1f),
                     text = nextLabel,
                     enabled = nextEnabled,
+                    size = AppButtonSize.Compact,
                     testTag = nextTestTag,
                     onClick = onNext,
                 )
             }
             onCancel?.let {
                 TouchButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "Annulla e chiudi",
+                    text = stringResource(R.string.nav_cancel_and_close),
                     tone = ButtonTone.NEUTRAL,
+                    size = AppButtonSize.Compact,
                     onClick = it
                 )
             }
@@ -277,7 +270,7 @@ fun OperatorText(text: String, modifier: Modifier = Modifier) {
     Text(
         modifier = modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.secondaryContainer, RoundedCornerShape(8.dp))
+            .background(MaterialTheme.colorScheme.secondaryContainer, RepairAppShapes.compactButton)
             .padding(10.dp),
         text = text,
         color = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -324,35 +317,20 @@ fun TouchButton(
     selected: Boolean? = null,
     stateDescription: String? = null,
     testTag: String? = null,
+    fullWidth: Boolean = false,
+    size: AppButtonSize = AppButtonSize.Default,
 ) {
-    Button(
-        modifier = modifier
-            .defaultMinSize(minWidth = 100.dp, minHeight = 44.dp)
-            .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
-            .semantics {
-                selected?.let { this.selected = it }
-                stateDescription?.let { this.stateDescription = it }
-            },
-        enabled = enabled,
-        shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = tone.containerColor(),
-            contentColor = tone.contentColor(),
-            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.38f),
-            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f),
-        ),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
+    AppButton(
+        modifier = modifier,
+        text = text,
         onClick = onClick,
-    ) {
-        Text(
-            text = text,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.labelLarge,
-            softWrap = false,
-        )
-    }
+        enabled = enabled,
+        variant = tone.appButtonVariant(),
+        size = if (fullWidth) AppButtonSize.FullWidth else size,
+        selected = selected,
+        stateDescription = stateDescription,
+        testTag = testTag,
+    )
 }
 
 @Composable
@@ -364,56 +342,30 @@ fun TouchButtonWithIcon(
     enabled: Boolean = true,
     tone: ButtonTone = ButtonTone.PRIMARY,
     testTag: String? = null,
+    fullWidth: Boolean = false,
+    size: AppButtonSize = AppButtonSize.Compact,
 ) {
-    Button(
-        modifier = modifier
-            .defaultMinSize(minWidth = 60.dp, minHeight = 36.dp)
-            .then(testTag?.let { Modifier.testTag(it) } ?: Modifier),
-        enabled = enabled,
-        shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = tone.containerColor(),
-            contentColor = tone.contentColor(),
-        ),
-        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp),
+    AppButton(
+        modifier = modifier,
+        text = text,
         onClick = onClick,
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            modifier = Modifier.padding(end = 4.dp).size(16.dp)
-        )
-        Text(
-            text = text,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.labelMedium,
-        )
-    }
+        enabled = enabled,
+        variant = tone.appButtonVariant(),
+        size = if (fullWidth) AppButtonSize.FullWidth else size,
+        testTag = testTag,
+        leadingIcon = icon,
+    )
 }
 
-@Composable
-private fun ButtonTone.containerColor(): Color =
+private fun ButtonTone.appButtonVariant(): AppButtonVariant =
     when (this) {
-        ButtonTone.PRIMARY -> MaterialTheme.colorScheme.primary
-        ButtonTone.NEUTRAL -> MaterialTheme.colorScheme.secondaryContainer
-        ButtonTone.SUCCESS -> SuccessGreen
-        ButtonTone.INFO -> MaterialTheme.colorScheme.tertiary
-        ButtonTone.WARNING -> WarningAmber
-        ButtonTone.DANGER -> MaterialTheme.colorScheme.error
-        ButtonTone.BRAND_WHATSAPP -> WhatsAppGreen
-    }
-
-@Composable
-private fun ButtonTone.contentColor(): Color =
-    when (this) {
-        ButtonTone.PRIMARY -> MaterialTheme.colorScheme.onPrimary
-        ButtonTone.NEUTRAL -> MaterialTheme.colorScheme.onSecondaryContainer
-        ButtonTone.INFO -> MaterialTheme.colorScheme.onTertiary
-        ButtonTone.DANGER -> MaterialTheme.colorScheme.onError
-        ButtonTone.WARNING -> WarningOnAmber
-        ButtonTone.SUCCESS -> Color.White
-        ButtonTone.BRAND_WHATSAPP -> Color.White
+        ButtonTone.PRIMARY -> AppButtonVariant.Primary
+        ButtonTone.NEUTRAL -> AppButtonVariant.Secondary
+        ButtonTone.SUCCESS -> AppButtonVariant.Success
+        ButtonTone.INFO -> AppButtonVariant.Info
+        ButtonTone.WARNING -> AppButtonVariant.Warning
+        ButtonTone.DANGER -> AppButtonVariant.Danger
+        ButtonTone.BRAND_WHATSAPP -> AppButtonVariant.WhatsApp
     }
 
 @Composable
@@ -453,24 +405,47 @@ private fun TypeToggleButton(
 ) {
     val selectedState = if (selected) stringResource(R.string.state_selected) else stringResource(R.string.state_not_selected)
     
-    TextButton(
+    Surface(
         modifier = modifier
-            .defaultMinSize(minHeight = 44.dp)
+            .minimumInteractiveComponentSize()
+            .defaultMinSize(minHeight = RepairAppSizes.buttonDefault)
             .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
+            .selectable(
+                selected = selected,
+                role = Role.RadioButton,
+                onClick = onClick,
+            )
             .semantics {
                 this.selected = selected
                 stateDescription = selectedState
             },
-        shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.textButtonColors(
-            containerColor = if (selected) selectedTone.containerColor() else MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
-            contentColor = if (selected) selectedTone.contentColor() else MaterialTheme.colorScheme.onSecondaryContainer,
-        ),
-        onClick = onClick,
+        shape = RepairAppShapes.button,
+        color = if (selected) selectedTone.selectedContainerColor() else MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
+        contentColor = if (selected) selectedTone.selectedContentColor() else MaterialTheme.colorScheme.onSecondaryContainer,
     ) {
-        Text(text, style = MaterialTheme.typography.labelLarge)
+        Text(
+            text = text,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+            style = MaterialTheme.typography.labelLarge,
+            textAlign = TextAlign.Center,
+        )
     }
 }
+
+@Composable
+private fun ButtonTone.selectedContainerColor(): Color =
+    when (this) {
+        ButtonTone.SUCCESS -> MaterialTheme.colorScheme.primary
+        ButtonTone.INFO -> MaterialTheme.colorScheme.tertiary
+        else -> MaterialTheme.colorScheme.primary
+    }
+
+@Composable
+private fun ButtonTone.selectedContentColor(): Color =
+    when (this) {
+        ButtonTone.INFO -> MaterialTheme.colorScheme.onTertiary
+        else -> MaterialTheme.colorScheme.onPrimary
+    }
 
 @Composable
 fun NoteFieldWithDialog(
@@ -488,9 +463,9 @@ fun NoteFieldWithDialog(
             OperatorText(note)
         }
         TouchButton(
-            modifier = Modifier.fillMaxWidth(),
             text = if (note.isBlank()) label else "$label (${stringResource(R.string.customer_edit).lowercase()})",
             tone = ButtonTone.NEUTRAL,
+            size = AppButtonSize.Compact,
             testTag = testTag,
             onClick = {
                 tempNote = note
@@ -558,34 +533,37 @@ fun BackupReminderCard(
     StandardCard(highlight = true) {
         Column(
             modifier = Modifier.padding(DashboardSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
         ) {
-            Text(
-                text = stringResource(R.string.home_backup_reminder_title),
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary,
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(R.string.home_backup_reminder_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                IconButton(onClick = onOpenSettings, modifier = Modifier.size(24.dp)) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = stringResource(R.string.home_backup_reminder_settings),
+                        tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
+                    )
+                }
+            }
             Text(
                 text = backupStatusLabel(settings),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            Column(
+            TouchButton(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
-            ) {
-                TouchButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.backup_run_full_zip),
-                    onClick = onRunBackup,
-                )
-                TouchButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.home_backup_reminder_settings),
-                    tone = ButtonTone.NEUTRAL,
-                    onClick = onOpenSettings,
-                )
-            }
+                text = stringResource(R.string.backup_run_full_zip),
+                onClick = onRunBackup,
+                fullWidth = true,
+            )
         }
     }
 }
@@ -602,4 +580,3 @@ fun backupStatusLabel(settings: BackupReminderSettings): String =
             stringResource(R.string.backup_status_days_ago, days)
         }
     }
-

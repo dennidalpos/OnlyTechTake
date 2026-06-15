@@ -33,11 +33,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path as ComposePath
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
+import com.onlytechtake.repairapp.R
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
@@ -251,6 +253,7 @@ private fun SignatureCanvas(
     onDrag: (SignaturePoint) -> Unit,
     onEnd: () -> Unit,
 ) {
+    val canvasDescription = stringResource(R.string.signature_canvas_description)
     Canvas(
         modifier = Modifier
             .fillMaxWidth()
@@ -259,7 +262,7 @@ private fun SignatureCanvas(
             .background(androidx.compose.ui.graphics.Color.White)
             .border(1.dp, MaterialTheme.colorScheme.outline)
             .semantics {
-                contentDescription = "Area firma cliente. Tracciare la firma con dito o pennino."
+                contentDescription = canvasDescription
             }
             .pointerInput(Unit) {
                 detectTapGestures { offset ->

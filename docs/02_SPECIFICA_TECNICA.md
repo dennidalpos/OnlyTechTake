@@ -75,13 +75,13 @@ Nome database:
 repair_app.db
 ```
 
-Lo schema corrente nel codice e' Room v2:
+Lo schema corrente nel codice e' Room v4:
 
 ```kotlin
-const val DATABASE_VERSION = 2
+const val DATABASE_VERSION = 4
 ```
 
-Sono presenti export schema `1.json` e `2.json`. Il progetto e' trattato come
+Sono presenti export schema `1.json`, `2.json` e `4.json`. Il progetto e' trattato come
 fresh app in sviluppo iniziale: non sono presenti classi di migrazione Room e
 la builder usa `fallbackToDestructiveMigration(dropAllTables = true)`. Dopo
 modifiche incompatibili o quando si passa tra build con schema diverso, usare
@@ -89,13 +89,14 @@ una reinstallazione pulita del package installato.
 
 Nota governance: alcune istruzioni repository richiedono approvazione owner per
 ulteriori cambi schema. Lo stato reale del codice al momento di questo handoff
-e' v2; non incrementare ancora `DATABASE_VERSION` senza richiesta esplicita.
+e' v4; non incrementare ancora `DATABASE_VERSION` senza richiesta esplicita.
 
 Schema esportato corrente:
 
 ```text
 app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json
 app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/2.json
+app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/4.json
 ```
 
 ## Entità principali
@@ -193,7 +194,7 @@ Permessi manifest:
 - Camera;
 - nessun permesso storage globale.
 
-L'app usa `FileProvider` per la condivisione sicura dei PDF generati in `files/orders/<orderId>/documents/`. Le autorizzazioni sono concesse tramite `FLAG_GRANT_READ_URI_PERMISSION`.
+L'app usa `FileProvider` per la condivisione sicura dei PDF generati in `files/app_media/documents/<orderId>/`. Le autorizzazioni sono concesse tramite `FLAG_GRANT_READ_URI_PERMISSION`.
 
 Import allegati ed export usano Storage Access Framework, quindi non richiedono
 permessi larghi di lettura/scrittura storage.
@@ -203,9 +204,10 @@ permessi larghi di lettura/scrittura storage.
 Salvare file in directory private app:
 
 ```text
-files/order_media/<orderId>/
-files/orders/<orderId>/signatures/
-files/orders/<orderId>/documents/
+files/app_media/order_media/<orderId>/
+files/app_media/signatures/<orderId>/
+files/app_media/documents/<orderId>/
+files/app_media/intake_media/<sessionId>/
 ```
 
 Nel database salvare path locale privato e metadati essenziali. Le foto acquisite
@@ -216,7 +218,7 @@ senza schema dedicato. `ImageCapture.targetRotation` viene impostato dalla rotaz
 del `PreviewView` prima del bind e prima dello scatto. Le anteprime locali applicano
 l'orientamento EXIF senza riscrivere il file originale. Le
 firme sono registrate in `signatures`, salvate come PNG in
-`files/orders/<orderId>/signatures/` e includono snapshot/versione dei testi
+`files/app_media/signatures/<orderId>/` e includono snapshot/versione dei testi
 privacy e condizioni usati al momento della firma.
 
 La presa in carico usa `CreateIntakeOrderUseCase`: dopo la validazione crea
@@ -241,11 +243,10 @@ metadata/backup.json
 config/configuration.json
 database/repair_app.db
 database/repair_app.db-*
-files/orders/...
-files/order_media/...
+files/app_media/...
 ```
 
-Il ripristino ZIP completo e' supportato per admin tramite Storage Access Framework e sostituisce database e file privati dell'app.
+Il ripristino ZIP completo e' supportato per admin tramite Storage Access Framework e sostituisce database e `filesDir/app_media`. Per compatibilita' di import accetta anche backup legacy con `files/orders` e `files/order_media`, mappandoli nel layout canonico senza ricreare cartelle obsolete nella root.
 
 ## WhatsApp
 
@@ -276,6 +277,7 @@ I testi admin devono supportare variabili:
 {{titolo_commessa}}
 {{stato_commessa}}
 {{cliente}}
+{{esito_diagnosi}}
 {{importo_preventivo}}
 {{prossima_azione}}
 {{motivo_chiusura}}
@@ -315,7 +317,7 @@ Le azioni sensibili tracciate includono:
 Limiti attuali:
 
 - nessuna cifratura applicativa degli export;
-- nessuna CI tracciata nel repository;
+- CI Android tracciata in `.github/workflows/android.yml`, senza signing release;
 - nessun backend o invio WhatsApp API.
 - eventuali provider Drive/OneDrive/Dropbox sono solo destinazioni SAF esposte dal device, non integrazioni cloud proprietarie.
 
@@ -325,6 +327,7 @@ Flavor Gradle correnti:
 
 - `full`
 - `demo`
+- `showcase`
 
 Output principali:
 

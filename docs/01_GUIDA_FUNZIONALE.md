@@ -63,16 +63,17 @@ Dopo il primo avvio l'app mostra il login. La password minima e' di 8 caratteri.
 
 ## Dashboard
 
-La dashboard implementata usa tab:
+La dashboard implementata usa queste sezioni principali accessibili dalla barra di navigazione:
 
 ```text
-Home
-Nuova
-Clienti
-Commesse / Commessa
-Config
-Admin
+Home (Dashboard con metriche e code)
+Nuova (Creazione rapida commessa)
+Clienti (Anagrafica e ricerca)
+Commesse (Elenco filtrabile e ricerca)
+Config (Impostazioni applicative e accesso Admin)
 ```
+
+La sezione **Admin** (utenti, reset dati, archiviazione batch) è raggiungibile tramite la tab **Config**.
 
 La Home mostra metriche locali e quattro code operative:
 
@@ -243,9 +244,9 @@ Il feedback cliente automatico non e' implementato. La risposta viene registrata
 
 Export implementati:
 
-- ZIP completo con database, configurazione e file privati rilevanti;
-- XLSX commesse;
-- database Room dalla sezione Admin prima della cancellazione totale commesse;
+- ZIP completo con database, configurazione e file privati rilevanti (foto, firme, PDF);
+- XLSX commesse con esito diagnosi;
+- database Room dalla sezione Admin;
 - PDF riepilogo della singola commessa con timeline completa.
 
 Nota: la logica di export configurazione JSON esiste nel repository, ma la UI corrente non espone un pulsante dedicato nella schermata Backup.
@@ -261,4 +262,4 @@ Limiti noti:
 - export non cifrati dall'app;
 - nessuna API WhatsApp;
 - nessun backend;
-- nessuna CI tracciata nel repository.
+- CI Android tracciata in `.github/workflows/android.yml`; le verifiche su device restano locali.

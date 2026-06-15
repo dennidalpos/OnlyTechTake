@@ -51,13 +51,19 @@ import com.onlytechtake.repairapp.features.dashboard.common.Field
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
+import com.onlytechtake.repairapp.features.dashboard.common.TouchButtonWithIcon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.Add
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 
 @Composable
 fun OrdersPanel(
     viewModel: OrdersViewModel,
     onOrderClick: (String) -> Unit,
+    onNewOrder: () -> Unit,
     onOpenBackupSettings: () -> Unit,
 ) {
     val windowSizeClass = LocalWindowSizeClass.current
@@ -70,6 +76,7 @@ fun OrdersPanel(
                 OrdersListContent(
                     viewModel = viewModel,
                     onOrderClick = { selectedOrderId = it },
+                    onNewOrder = onNewOrder,
                     onOpenBackupSettings = onOpenBackupSettings
                 )
             }
@@ -95,13 +102,13 @@ fun OrdersPanel(
                     ) { selectedOrderId = null }
                 } else {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("Seleziona una commessa per vedere i dettagli", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(stringResource(R.string.orders_select_detail_hint), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
         }
     } else {
-        OrdersListContent(viewModel, onOrderClick, onOpenBackupSettings)
+        OrdersListContent(viewModel, onOrderClick, onNewOrder, onOpenBackupSettings)
     }
 }
 
@@ -109,6 +116,7 @@ fun OrdersPanel(
 private fun OrdersListContent(
     viewModel: OrdersViewModel,
     onOrderClick: (String) -> Unit,
+    onNewOrder: () -> Unit,
     onOpenBackupSettings: () -> Unit,
 ) {
     val orderFilter by viewModel.orderFilter.collectAsState()
@@ -141,11 +149,22 @@ private fun OrdersListContent(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     SectionTitle(stringResource(R.string.orders_title))
-                    TouchButton(
-                        text = stringResource(R.string.orders_filter_title),
-                        tone = if (orderFilter.hasActiveFilter()) ButtonTone.INFO else ButtonTone.NEUTRAL,
-                        onClick = { showFilterDialog = true },
-                    )
+                    Row(horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
+                        TouchButtonWithIcon(
+                            text = stringResource(R.string.home_new_order),
+                            icon = Icons.Default.Add,
+                            size = AppButtonSize.Compact,
+                            onClick = onNewOrder,
+                        )
+                        TouchButtonWithIcon(
+                            text = stringResource(R.string.orders_filter_title),
+                            icon = Icons.Default.FilterList,
+                            tone = if (orderFilter.hasActiveFilter()) ButtonTone.INFO else ButtonTone.NEUTRAL,
+                            size = AppButtonSize.Compact,
+                            testTag = RepairAppTestTags.OrdersFilterButton,
+                            onClick = { showFilterDialog = true },
+                        )
+                    }
                 }
             }
 
@@ -163,7 +182,7 @@ private fun OrdersListContent(
                 Field(
                     value = orderFilter.query,
                     onValueChange = { viewModel.setFilter(orderFilter.copy(query = it)) },
-                    label = "Cerca per cliente, telefono, email o commessa...",
+                    label = stringResource(R.string.orders_search_label),
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
@@ -277,6 +296,7 @@ private fun OrderFilterBar(
                 tone = if (allSelected) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
                 selected = allSelected,
                 stateDescription = if (allSelected) stringResource(R.string.state_selected) else stringResource(R.string.state_not_selected),
+                size = AppButtonSize.Compact,
                 onClick = { onFilter(OrderFilter()) },
             )
             TouchButton(
@@ -284,6 +304,7 @@ private fun OrderFilterBar(
                 tone = if (filter.showMineOnly) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
                 selected = filter.showMineOnly,
                 stateDescription = if (filter.showMineOnly) stringResource(R.string.state_selected) else stringResource(R.string.state_not_selected),
+                size = AppButtonSize.Compact,
                 onClick = { onFilter(filter.copy(showMineOnly = !filter.showMineOnly)) },
             )
             QuickStatusGroupFilter(stringResource(R.string.orders_filter_open), setOf(OrderStatus.OPEN), filter, onFilter)
@@ -306,6 +327,7 @@ private fun QuickStatusGroupFilter(
         tone = if (filter.statuses == statuses) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
         selected = filter.statuses == statuses,
         stateDescription = if (filter.statuses == statuses) stringResource(R.string.state_selected) else stringResource(R.string.state_not_selected),
+        size = AppButtonSize.Compact,
         onClick = {
             onFilter(
                 filter.copy(

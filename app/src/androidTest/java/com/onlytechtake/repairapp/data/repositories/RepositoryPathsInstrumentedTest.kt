@@ -234,6 +234,52 @@ class RepositoryPathsInstrumentedTest {
     }
 
     @Test
+    fun diagnosisOutcomeTemplateVariableSavesAndRendersAllStates() = runBlocking {
+        val actor = seedAdmin()
+        seedCustomer()
+        seedCategory()
+        val workflow = orderWorkflowRepository()
+        val templates = templateRepository()
+        templates.saveTemplate(
+            actor = actor,
+            code = "diagnosis_outcome_test",
+            title = "Esito diagnosi",
+            body = "Esito: {{esito_diagnosi}}",
+            active = true,
+        ).getOrThrow()
+
+        val repairable = workflow.createOrder(
+            actor,
+            RepairOrderInput(CUSTOMER_ID, "Riparabile", CATEGORY_ID),
+        ).getOrThrow()
+        database.repairOrderDao().upsert(repairable.copy(diagnosisOutcome = DiagnosisOutcome.REPAIRABLE))
+
+        val notRepairable = workflow.createOrder(
+            actor,
+            RepairOrderInput(CUSTOMER_ID, "Non riparabile", CATEGORY_ID),
+        ).getOrThrow()
+        database.repairOrderDao().upsert(notRepairable.copy(diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE))
+
+        val missing = workflow.createOrder(
+            actor,
+            RepairOrderInput(CUSTOMER_ID, "Non registrato", CATEGORY_ID),
+        ).getOrThrow()
+
+        assertEquals(
+            "Esito: Riparabile",
+            templates.prepareMessage(actor, repairable.id, "diagnosis_outcome_test").getOrThrow().body,
+        )
+        assertEquals(
+            "Esito: Non riparabile",
+            templates.prepareMessage(actor, notRepairable.id, "diagnosis_outcome_test").getOrThrow().body,
+        )
+        assertEquals(
+            "Esito: ",
+            templates.prepareMessage(actor, missing.id, "diagnosis_outcome_test").getOrThrow().body,
+        )
+    }
+
+    @Test
     fun customerUpdatePreservesExistingOrderRelationship() = runBlocking {
         val actor = seedAdmin()
         seedCustomer()
@@ -382,11 +428,11 @@ class RepositoryPathsInstrumentedTest {
                     updatedAt = NOW,
                 ),
             )
-            File(context.filesDir, "orders/order-1/signatures/signature.png").also {
+            File(context.filesDir, "app_media/signatures/order-1/signature.png").also {
                 it.parentFile?.mkdirs()
                 it.writeText("signature")
             }
-            File(context.filesDir, "order_media/order-1/photo.jpg").also {
+            File(context.filesDir, "app_media/order_media/order-1/photo.jpg").also {
                 it.parentFile?.mkdirs()
                 it.writeBytes(byteArrayOf(1, 2, 3, 4))
             }
@@ -402,11 +448,11 @@ class RepositoryPathsInstrumentedTest {
             repository.exportCompleteBackup(actor, Uri.fromFile(output)).getOrThrow()
 
             val entries = output.unzipTextEntries()
-            assertTrue(entries.getValue("metadata/backup.json").contains("\"databaseVersion\": 1"))
+            assertTrue(entries.getValue("metadata/backup.json").contains("\"databaseVersion\": ${RepairAppDatabase.DATABASE_VERSION}"))
             assertTrue(entries.getValue("config/configuration.json").contains("Smartphone"))
             assertTrue(entries.containsKey("database/$databaseName"))
-            assertTrue(entries.getValue("files/orders/order-1/signatures/signature.png").contains("signature"))
-            assertTrue(entries.containsKey("files/order_media/order-1/photo.jpg"))
+            assertTrue(entries.getValue("files/app_media/signatures/order-1/signature.png").contains("signature"))
+            assertTrue(entries.containsKey("files/app_media/order_media/order-1/photo.jpg"))
             assertEquals(1, fileBackedDatabase.auditLogDao().observeRecent().first().size)
         } finally {
             fileBackedDatabase.close()
@@ -454,7 +500,7 @@ class RepositoryPathsInstrumentedTest {
                     active = true,
                 ),
             )
-            File(context.filesDir, "order_media/order-1/photo.jpg").also {
+            File(context.filesDir, "app_media/order_media/order-1/photo.jpg").also {
                 it.parentFile?.mkdirs()
                 it.writeBytes(byteArrayOf(1, 2, 3, 4))
             }
@@ -481,7 +527,7 @@ class RepositoryPathsInstrumentedTest {
                     active = true,
                 ),
             )
-            File(context.filesDir, "order_media/order-1/photo.jpg").writeText("changed")
+            File(context.filesDir, "app_media/order_media/order-1/photo.jpg").writeText("changed")
 
             repository.restoreCompleteBackup(actor, Uri.fromFile(output)).getOrThrow()
 
@@ -490,7 +536,7 @@ class RepositoryPathsInstrumentedTest {
                 .build()
             try {
                 assertEquals("Smartphone", restoredDatabase.orderCategoryDao().findById(CATEGORY_ID)?.name)
-                assertTrue(File(context.filesDir, "order_media/order-1/photo.jpg").readBytes().contentEquals(byteArrayOf(1, 2, 3, 4)))
+                assertTrue(File(context.filesDir, "app_media/order_media/order-1/photo.jpg").readBytes().contentEquals(byteArrayOf(1, 2, 3, 4)))
                 assertEquals(null, sessionStore.currentUser.value)
             } finally {
                 restoredDatabase.close()
@@ -510,7 +556,7 @@ class RepositoryPathsInstrumentedTest {
         val actor = seedAdmin()
         authPreferences.markConfigured()
         val sessionStore = InMemorySessionStore().also { it.setCurrentUser(actor, NOW) }
-        val orderFile = File(context.filesDir, "orders/order-1/file.txt").also {
+        val orderFile = File(context.filesDir, "app_media/documents/order-1/file.txt").also {
             it.parentFile?.mkdirs()
             it.writeText("private")
         }
@@ -605,7 +651,7 @@ class RepositoryPathsInstrumentedTest {
                     closureReason = null,
                 ),
             )
-            val orderFile = File(context.filesDir, "orders/order-1/file.txt").also {
+            val orderFile = File(context.filesDir, "app_media/documents/order-1/file.txt").also {
                 it.parentFile?.mkdirs()
                 it.writeText("private")
             }
@@ -651,7 +697,7 @@ class RepositoryPathsInstrumentedTest {
                 error("Commit fallito")
             },
         )
-        val stagedFile = File(context.filesDir, "intake_media/session/photo.jpg").also {
+        val stagedFile = File(context.filesDir, "app_media/intake_media/session/photo.jpg").also {
             it.parentFile?.mkdirs()
             it.writeBytes(byteArrayOf(1, 2, 3, 4))
         }
@@ -681,8 +727,8 @@ class RepositoryPathsInstrumentedTest {
         )
 
         assertTrue(result.isFailure)
-        assertFalse(File(context.filesDir, "order_media").walkFiles().any())
-        assertFalse(File(context.filesDir, "orders").walkFiles().any())
+        assertFalse(File(context.filesDir, "app_media/order_media").walkFiles().any())
+        assertFalse(File(context.filesDir, "app_media/signatures").walkFiles().any())
     }
 
     @Test
@@ -867,7 +913,7 @@ class RepositoryPathsInstrumentedTest {
     }
 
     private fun clearAppFiles() {
-        listOf("orders", "order_media", "intake_media", "signatures").forEach { name ->
+        listOf("app_media", "orders", "order_media", "intake_media", "signatures").forEach { name ->
             File(context.filesDir, name).deleteRecursively()
         }
     }

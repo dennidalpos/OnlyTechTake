@@ -36,7 +36,7 @@ L\'App non vende né condivide dati con terze parti per finalità di marketing.
 La condivisione dei dati avviene solo su iniziativa manuale dell\'utente tramite le funzioni di sistema di Android:
 - **WhatsApp:** Invio di messaggi preimpostati al cliente.
 - **PDF:** Condivisione del report tramite email o altre app di messaggistica.
-- **Backup:** Esportazione di file ZIP o Excel verso destinazioni scelte dall\'utente (es. Google Drive, SD Card).
+- **Backup:** Esportazione di file ZIP o Excel verso una destinazione scelta dall\'utente tramite il selettore documenti Android.
 
 ## 6. Diritti dell\'Interessato (Clienti finali)
 Poiché i dati risiedono localmente sul dispositivo dell\'utilizzatore, i clienti finali che desiderano esercitare i propri diritti (accesso, rettifica, cancellazione) devono rivolgersi direttamente al titolare del negozio.

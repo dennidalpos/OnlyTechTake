@@ -29,6 +29,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
@@ -165,7 +166,7 @@ fun CustomerPanel(
                         )
                     } else {
                         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            Text("Seleziona un cliente per vedere i dettagli", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(stringResource(R.string.customer_select_detail_hint), color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
                 }
@@ -372,10 +373,16 @@ private fun CustomerForm(
             TouchButton(
                 text = stringResource(R.string.customer_save),
                 enabled = canSave,
+                size = AppButtonSize.Compact,
                 testTag = RepairAppTestTags.CustomerSaveButton,
                 onClick = onSave
             )
-            TouchButton(text = stringResource(R.string.customer_cancel), tone = ButtonTone.NEUTRAL, onClick = onCancel)
+            TouchButton(
+                text = stringResource(R.string.customer_cancel),
+                tone = ButtonTone.NEUTRAL,
+                size = AppButtonSize.Compact,
+                onClick = onCancel,
+            )
         }
     }
 }
@@ -404,31 +411,42 @@ private fun CustomerDetailContent(
                     Text(text = customer.type.label(context), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
                 }
                 Row {
-                    TouchButton(text = "Chiudi", tone = ButtonTone.NEUTRAL, onClick = onClose)
+                    TouchButton(
+                        text = stringResource(R.string.customer_detail_close),
+                        tone = ButtonTone.NEUTRAL,
+                        size = AppButtonSize.Compact,
+                        testTag = RepairAppTestTags.CustomerDetailCloseButton,
+                        onClick = onClose,
+                    )
                     Spacer(Modifier.width(8.dp))
-                    TouchButton(text = "Modifica", onClick = onEdit)
+                    TouchButton(
+                        text = stringResource(R.string.customer_detail_edit),
+                        size = AppButtonSize.Compact,
+                        testTag = RepairAppTestTags.CustomerDetailEditButton,
+                        onClick = onEdit,
+                    )
                 }
             }
         }
         item {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                customer.phone?.let { Text("Tel: $it", style = MaterialTheme.typography.bodyLarge) }
-                customer.email?.let { Text("Email: $it", style = MaterialTheme.typography.bodyLarge) }
-                customer.address?.let { Text("Indirizzo: $it", style = MaterialTheme.typography.bodyMedium) }
+                customer.phone?.let { Text(stringResource(R.string.customer_phone_value, it), style = MaterialTheme.typography.bodyLarge) }
+                customer.email?.let { Text(stringResource(R.string.customer_email_value, it), style = MaterialTheme.typography.bodyLarge) }
+                customer.address?.let { Text(stringResource(R.string.customer_address_value, it), style = MaterialTheme.typography.bodyMedium) }
             }
         }
         if (!customer.notes.isNullOrBlank()) {
             item { OperatorText(customer.notes) }
         }
-        item { SectionTitle("Commesse Aperte (${openOrders.size})") }
+        item { SectionTitle(stringResource(R.string.customer_open_orders, openOrders.size)) }
         if (openOrders.isEmpty()) {
-            item { Text("Nessuna commessa aperta", color = MaterialTheme.colorScheme.outline) }
+            item { Text(stringResource(R.string.customer_no_open_orders), color = MaterialTheme.colorScheme.outline) }
         } else {
             items(openOrders) { item -> OrderSummaryRow(item, onOrderClick) }
         }
-        item { SectionTitle("Storico Chiuse (${closedOrders.size})") }
+        item { SectionTitle(stringResource(R.string.customer_closed_orders, closedOrders.size)) }
         if (closedOrders.isEmpty()) {
-            item { Text("Nessuna commessa chiusa", color = MaterialTheme.colorScheme.outline) }
+            item { Text(stringResource(R.string.customer_no_closed_orders), color = MaterialTheme.colorScheme.outline) }
         } else {
             items(closedOrders) { item -> OrderSummaryRow(item, onOrderClick) }
         }
@@ -486,8 +504,8 @@ private fun CustomerCard(customer: CustomerEntity, onClick: () -> Unit) {
 private fun CustomerEmptyState(hasQuery: Boolean, onNewCustomer: () -> Unit) {
     StandardCard {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text(text = if (hasQuery) "Nessun risultato" else "Nessun cliente recente")
-            if (hasQuery) TouchButton(text = "Nuovo Cliente", onClick = onNewCustomer)
+            Text(text = if (hasQuery) stringResource(R.string.customer_no_results) else stringResource(R.string.customer_no_recent))
+            if (hasQuery) TouchButton(text = stringResource(R.string.customer_new), size = AppButtonSize.Compact, onClick = onNewCustomer)
         }
     }
 }
