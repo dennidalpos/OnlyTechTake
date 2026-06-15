@@ -12,8 +12,8 @@ Gli script calcolano automaticamente la root del progetto dal proprio percorso, 
 | Start app Android | `scripts\android\start_app.ps1` | Installa l'APK selezionato e avvia `MainActivity` via adb. | Supporta `-Flavor Full|Demo`, `-NoInstall`, `-ApkPath` e `-CleanInstall` per reinstallazione pulita. |
 | Check progetto | `scripts\windows\check_project.ps1` | Esegue lint, compile Kotlin debug, test unitari, build APK debug e, senza `-SkipReleaseBuild`, build APK release firmata. | Supporta `-Flavor Full|Demo`; `-AndroidTests` esegue il connected test del flavor selezionato. |
 | Audit vulnerabilita' dipendenze | `scripts\windows\check_dependency_vulnerabilities.ps1` | Interroga OSV sulle coordinate Maven presenti nei lockfile Gradle. | Separato dai check offline; non invia codice sorgente, solo group/artifact/version. |
-| Asset demo unificati | `scripts\windows\create_demo_assets.ps1` | Genera screenshot verticali e video MP4 montati. | Richiede ffmpeg per i video; usa AVD `OnlyTechTakeDemo` o device USB. |
-| Registrazione demo USB | `scripts\windows\record_demo_device.ps1` | Registra video MP4 direttamente da device fisico USB. | Pulisce dati app, avvia app e usa `adb screenrecord`. |
+| Asset demo unificati | `scripts\windows\create_demo_assets.ps1` | Genera screenshot verticali e video MP4 montati dagli scenari strumentati. | Richiede ffmpeg per i video; usa AVD `OnlyTechTakeDemo` o device fisico. Mappa completa in `docs\DEMO_ASSET_WORKFLOW.md`. |
+| Registrazione demo device | `scripts\windows\record_demo_device.ps1` | Registra video MP4 manuali o automatici tramite `adb screenrecord`. | Supporta emulatore o device fisico, pulisce i dati app e riusa gli scenari strumentati mappati in `docs\DEMO_ASSET_WORKFLOW.md`. |
 
 ## Comandi per obiettivo
 
@@ -23,3 +23,7 @@ Gli script calcolano automaticamente la root del progetto dal proprio percorso, 
 | asset demo (screen + video) | `powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_assets.ps1` |
 | asset demo su device USB | `powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_assets.ps1 -UseConnectedDevice` |
 | registrazione demo USB guidata | `powershell -ExecutionPolicy Bypass -File scripts\windows\record_demo_device.ps1` |
+
+## Manutenzione asset demo
+
+`docs\DEMO_ASSET_WORKFLOW.md` descrive il flusso completo, la corrispondenza tra test strumentati e output e il registro degli impatti. Dopo modifiche a UI, navigazione, copy, test tag, permessi, schema o seed demo, aggiornare insieme scenari, script, helper e file `demo\video\*.story.json`; riportare in `PROJECT_STATUS.json` solo i residui ancora incompleti.

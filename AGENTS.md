@@ -135,6 +135,7 @@ Rules:
 - Do not store completed work, prompt/chat history, secrets, credentials, personal data, check results, decisions, assumptions, risks, blockers, timestamps, changelog entries, or status notes.
 - Prefer fewer accurate todos over many stale todos.
 - Do not update it for read-only tasks unless requested.
+- Use `docs/DEMO_ASSET_WORKFLOW.md` to track demo asset pipeline changes, affected scenarios, validation evidence, and completed history. Copy only unresolved actionable residuals from that tracker into `PROJECT_STATUS.json`.
 
 ---
 
@@ -159,6 +160,26 @@ When adding Windows-first local scripts, prefer PowerShell wrappers under `scrip
 Scripts must run from the repository root, validate required tools, fail with non-zero exit codes on errors, and avoid duplicating an existing script. Keep public scripts thin; put shared script logic in `scripts/support/` when needed.
 
 Update `scripts/README.md` when public scripts are added, removed, or renamed.
+
+### Demo asset pipeline
+
+The repository has two authoritative demo asset scripts:
+
+- `scripts/windows/create_demo_assets.ps1` generates screenshots and assembled videos from the instrumented demo scenarios.
+- `scripts/windows/record_demo_device.ps1` records the same supported scenarios directly from an emulator or physical device with `adb screenrecord`.
+
+Use `docs/DEMO_ASSET_WORKFLOW.md` as the source of truth for scenario mapping, inputs, outputs, commands, and the asset-impact register.
+
+After any change that affects UI, navigation, workflow, visible copy, test tags, permissions, database/schema-dependent screens, demo/showcase seed data, or captured content:
+
+1. Inspect the affected scenario map in `docs/DEMO_ASSET_WORKFLOW.md`.
+2. Update the relevant instrumented scenario in `app/src/androidTest/java/com/onlytechtake/repairapp/demo/`, preferring stable test tags over visible text for actions.
+3. Update `create_demo_assets.ps1`, `record_demo_device.ps1`, shared helper `scripts/windows/support/android_demo.ps1`, and `demo/video/*.story.json` wherever scenario names, methods, package paths, expected files, captions, timing, or outputs changed.
+4. Record the change, affected flows, required asset regeneration, validation state, and remaining work in `docs/DEMO_ASSET_WORKFLOW.md`.
+5. Run the impacted screenshot and recording flows when a device is available. Do not claim asset verification from compile-only checks.
+6. Add only incomplete actionable residuals to `PROJECT_STATUS.json`; remove them once the tracker records successful validation.
+
+Keep generated screenshots and videos under ignored output paths such as `reports/demo-assets`; do not commit disposable generated outputs unless the user explicitly requests publishing them.
 
 ---
 

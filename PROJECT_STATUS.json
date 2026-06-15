@@ -43,7 +43,7 @@
     "[P3] UI compile and static checks: eseguire compileFullDebugKotlin, testFullDebugUnitTest, lintFullDebug, compileDemoDebugKotlin e compileShowcaseDebugKotlin senza configuration cache.",
     "[P3] UI flavor validation: eseguire scripts/windows/check_project.ps1 per Full, Demo e Showcase con SkipReleaseBuild e correggere eventuali divergenze tra varianti.",
     "[P3] UI flow validation: verificare login demo/operator/admin, wizard, categorie, clienti, transizioni stato, WhatsApp, PDF, backup launcher e operazioni admin dopo il refactor.",
-    "[P3] Demo assets: aggiornare e verificare test e script screenshot/video dopo le modifiche UI, rigenerare gli asset necessari e rimuovere output temporanei dal working tree.",
+    "[P3] Demo assets: usare docs/DEMO_ASSET_WORKFLOW.md per aggiornare test strumentati, create_demo_assets.ps1, record_demo_device.ps1, helper e story JSON dopo le modifiche UI, quindi rigenerare e verificare gli asset su device rimuovendo gli output temporanei.",
     "[P3] UI consistency residual: verificare che nelle schermate principali non restino pulsanti secondari full width, target inferiori a 48dp, colori o shape condivise hardcoded, ruoli mancanti o copy non localizzata nei file modificati.",
     "[P3] UI cleanup: verificare git status e git ls-files, assenza di output generati o riferimenti obsoleti, e rimuovere i todo UI completati lasciando solo verifiche realmente residue.",
     "[P3] Repository cleanup: cercare riferimenti obsoleti a percorsi storage, nomi documenti, wording cloud, soli due flavor, CI assente e Room v2.",
