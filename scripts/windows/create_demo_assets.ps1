@@ -40,7 +40,7 @@ if (Test-Path $demoSupportScript) {
 }
 
 if (-not $OutputRoot) {
-    $OutputRoot = Join-Path $root "reports/marketing-assets"
+    $OutputRoot = Join-Path $root "reports/demo-assets"
 } elseif (-not [System.IO.Path]::IsPathRooted($OutputRoot)) {
     $OutputRoot = Join-Path $root $OutputRoot
 }
@@ -149,38 +149,42 @@ function Process-VideoGeneration {
 
     Write-Host "Generazione video per $($Config.Id)..." -ForegroundColor Cyan
     $story = Get-Content -Path $storyPath -Raw | ConvertFrom-Json
-    $videoDir = Join-Path $AssetOutputRoot "video-stories"
+    $videoDir = Join-Path $AssetOutputRoot "videos/automated"
     $slidesDir = Join-Path $videoDir "temp_slides"
     New-Item -ItemType Directory -Path $slidesDir -Force | Out-Null
 
     $concatPath = Join-Path $videoDir "slides.txt"
     if (Test-Path $concatPath) { Remove-Item $concatPath }
 
-    $index = 1
-    foreach ($scene in $story.scenes) {
-        $sourceImg = Join-Path $PulledPath $scene.file
-        if (-not (Test-Path $sourceImg)) { continue }
+    try {
+        $index = 1
+        foreach ($scene in $story.scenes) {
+            $sourceImg = Join-Path $PulledPath $scene.file
+            if (-not (Test-Path $sourceImg)) { continue }
 
-        $slidePath = Join-Path $slidesDir ("slide_{0:D2}.png" -f $index)
-        New-CaptionedSlide -SourcePath $sourceImg -Caption $scene.caption -TargetPath $slidePath -Width $story.width -Height $story.height
+            $slidePath = Join-Path $slidesDir ("slide_{0:D2}.png" -f $index)
+            New-CaptionedSlide -SourcePath $sourceImg -Caption $scene.caption -TargetPath $slidePath -Width $story.width -Height $story.height
 
-        Add-Content -Path $concatPath -Value ("file '{0}'" -f (Convert-ToConcatPath $slidePath))
-        Add-Content -Path $concatPath -Value ("duration {0}" -f ([string]$scene.durationSeconds).Replace(",", "."))
-        $index++
+            Add-Content -Path $concatPath -Value ("file '{0}'" -f (Convert-ToConcatPath $slidePath))
+            Add-Content -Path $concatPath -Value ("duration {0}" -f ([string]$scene.durationSeconds).Replace(",", "."))
+            $index++
+        }
+        # Ultimo frame per evitare troncamenti ffmpeg
+        $lastSlide = Join-Path $slidesDir ("slide_{0:D2}.png" -f ($index - 1))
+        Add-Content -Path $concatPath -Value ("file '{0}'" -f (Convert-ToConcatPath $lastSlide))
+
+        $outputVideo = Join-Path $videoDir $story.outputFile
+        Invoke-Checked -FilePath "ffmpeg" -Arguments @(
+            "-y", "-f", "concat", "-safe", "0", "-i", $concatPath,
+            "-vcodec", "libx264", "-preset", "ultrafast", "-crf", "22",
+            "-pix_fmt", "yuv420p", "-movflags", "+faststart", $outputVideo
+        )
+
+        Write-Host "Video creato: $outputVideo" -ForegroundColor Green
+    } finally {
+        if (Test-Path $slidesDir) { Remove-Item $slidesDir -Recurse -Force }
+        if (Test-Path $concatPath) { Remove-Item $concatPath -Force }
     }
-    # Ultimo frame per evitare troncamenti ffmpeg
-    $lastSlide = Join-Path $slidesDir ("slide_{0:D2}.png" -f ($index - 1))
-    Add-Content -Path $concatPath -Value ("file '{0}'" -f (Convert-ToConcatPath $lastSlide))
-
-    $outputVideo = Join-Path $videoDir $story.outputFile
-    Invoke-Checked -FilePath "ffmpeg" -Arguments @(
-        "-y", "-f", "concat", "-safe", "0", "-i", $concatPath,
-        "-vcodec", "libx264", "-preset", "ultrafast", "-crf", "22",
-        "-pix_fmt", "yuv420p", "-movflags", "+faststart", $outputVideo
-    )
-
-    Remove-Item $slidesDir -Recurse -Force
-    Write-Host "Video creato: $outputVideo" -ForegroundColor Green
 }
 
 trap {
@@ -190,8 +194,16 @@ trap {
 
 Assert-PathInsideRoot -Path $OutputRoot -RootPath $root
 if (-not $AssetId) {
-    if (Test-Path $OutputRoot) { Remove-Item -LiteralPath $OutputRoot -Recurse -Force }
-    New-Item -ItemType Directory -Path $OutputRoot | Out-Null
+    foreach ($managedDirectory in @("screenshots", "videos/automated")) {
+        $managedPath = Join-Path $OutputRoot $managedDirectory
+        Assert-PathInsideRoot -Path $managedPath -RootPath $root
+        if (Test-Path $managedPath) {
+            Remove-Item -LiteralPath $managedPath -Recurse -Force
+        }
+    }
+    if (-not (Test-Path $OutputRoot)) {
+        New-Item -ItemType Directory -Path $OutputRoot | Out-Null
+    }
 } elseif (-not (Test-Path $OutputRoot)) {
     New-Item -ItemType Directory -Path $OutputRoot | Out-Null
 }
@@ -219,7 +231,19 @@ foreach ($asset in $assetsConfig) {
 
     # Esecuzione Test
     Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "shell", "rm", "-rf", $asset.DeviceDirectory)
-    Invoke-DemoScreenshotTest -Serial $serial -TestClass $testTarget
+    $testTargets = @(
+        if (-not $CaseId) {
+            $activeCases |
+                Where-Object { $_.TestMethod } |
+                ForEach-Object { "$($asset.TestClass)#$($_.TestMethod)" }
+        }
+    )
+    if ($testTargets.Count -eq 0) {
+        $testTargets = @($testTarget)
+    }
+    foreach ($target in $testTargets) {
+        Invoke-DemoScreenshotTest -Serial $serial -TestClass $target
+    }
 
     # Recupero e Processamento Screenshot
     $pulledRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("onlytechtake-assets-" + [System.Guid]::NewGuid().ToString("N"))

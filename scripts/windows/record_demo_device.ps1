@@ -8,6 +8,8 @@ param(
     [switch]$SeedData,
     [int]$MaxDurationSeconds = 180,
     [int]$BitRate = 4000000,
+    [double]$AutomaticTrimStartSeconds = 7,
+    [double]$AutomaticTrimEndSeconds = 2,
     [string]$Size
 )
 
@@ -18,9 +20,12 @@ $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 if ($MaxDurationSeconds -lt 1 -or $MaxDurationSeconds -gt 180) {
     throw "MaxDurationSeconds deve essere compreso tra 1 e 180, limite di adb screenrecord."
 }
+if ($AutomaticTrimStartSeconds -lt 0 -or $AutomaticTrimEndSeconds -lt 0) {
+    throw "I margini di taglio automatico non possono essere negativi."
+}
 
 if (-not $OutputRoot) {
-    $OutputRoot = Join-Path $root "reports/marketing-assets/recordings"
+    $OutputRoot = Join-Path $root "reports/demo-assets/videos/device"
 } elseif (-not [System.IO.Path]::IsPathRooted($OutputRoot)) {
     $OutputRoot = Join-Path $root $OutputRoot
 }
@@ -38,7 +43,7 @@ if (Test-Path $demoSupportScript) {
 }
 
 if ($OutputFile -eq "") {
-    $OutputFile = "demo_$(Get-Date -Format 'yyyyMMdd_HHmmss').mp4"
+    $OutputFile = "onlytechtake-demo-workflow-completo.mp4"
 }
 
 if (-not (Test-Path $OutputRoot)) {
@@ -178,6 +183,55 @@ Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "pull", $remoteVideoP
 Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "shell", "rm", "-f", $remoteVideoPath)
 
 if (Test-Path $outputPath) {
+    if ($selectedTestClass -and
+        $null -ne (Get-Command "ffmpeg" -ErrorAction SilentlyContinue) -and
+        $null -ne (Get-Command "ffprobe" -ErrorAction SilentlyContinue)
+    ) {
+        $probeJson = & ffprobe -v error -show_entries format=duration -of json $outputPath
+        if ($LASTEXITCODE -ne 0) {
+            throw "Impossibile leggere la durata della registrazione: $outputPath"
+        }
+        $durationText = (($probeJson -join "`n") | ConvertFrom-Json).format.duration
+        $duration = [double]::Parse(
+            [string]$durationText,
+            [System.Globalization.CultureInfo]::InvariantCulture
+        )
+        $normalizedDuration = $duration - $AutomaticTrimStartSeconds - $AutomaticTrimEndSeconds
+        if ($normalizedDuration -le 0) {
+            throw "Margini di taglio superiori alla durata della registrazione ($duration secondi)."
+        }
+
+        $normalizedPath = Join-Path $OutputRoot (
+            ".{0}.normalized.mp4" -f [System.IO.Path]::GetFileNameWithoutExtension($OutputFile)
+        )
+        try {
+            Write-Host "Normalizzazione video automatico..." -ForegroundColor Gray
+            Invoke-Checked -FilePath "ffmpeg" -Arguments @(
+                "-y",
+                "-fflags", "+genpts",
+                "-ss", $AutomaticTrimStartSeconds.ToString([System.Globalization.CultureInfo]::InvariantCulture),
+                "-i", $outputPath,
+                "-t", $normalizedDuration.ToString([System.Globalization.CultureInfo]::InvariantCulture),
+                "-map", "0:v:0",
+                "-an",
+                "-vf", "setpts=PTS-STARTPTS,fps=30",
+                "-c:v", "libx264",
+                "-preset", "veryfast",
+                "-crf", "20",
+                "-pix_fmt", "yuv420p",
+                "-movflags", "+faststart",
+                $normalizedPath
+            )
+            Move-Item -LiteralPath $normalizedPath -Destination $outputPath -Force
+        } finally {
+            if (Test-Path $normalizedPath) {
+                Remove-Item -LiteralPath $normalizedPath -Force
+            }
+        }
+    } elseif ($selectedTestClass) {
+        Write-Warning "ffmpeg/ffprobe non disponibili: registrazione automatica salvata senza taglio e normalizzazione."
+    }
+
     if ($null -ne (Get-Command "ffprobe" -ErrorAction SilentlyContinue)) {
         Invoke-Checked -FilePath "ffprobe" -Arguments @(
             "-v", "error",

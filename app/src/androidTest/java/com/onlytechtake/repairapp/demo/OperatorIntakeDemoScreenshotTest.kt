@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.demo
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
@@ -163,7 +164,12 @@ class OperatorIntakeDemoScreenshotTest {
     }
 
     private fun acceptQuote() {
-        waitForTag(RepairAppTestTags.QuoteAcceptedToggle, scroll = true)
+        composeRule
+            .onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn)
+            .performScrollToIndex(2)
+        composeRule.waitForIdle()
+        pauseForDemo()
+        waitForTag(RepairAppTestTags.QuoteAcceptedToggle)
         clickTag(RepairAppTestTags.QuoteAcceptedToggle)
         pauseForDemo()
         clickTag(RepairAppTestTags.QuoteConfirmButton, scroll = true)
@@ -307,11 +313,18 @@ class OperatorIntakeDemoScreenshotTest {
     }
 
     private fun waitForStatus(text: String) {
+        composeRule
+            .onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn)
+            .performScrollToIndex(0)
+        composeRule.waitForIdle()
         composeRule.waitUntil(timeoutMillis = WAIT_TIMEOUT_MILLIS) {
             runCatching {
-                composeRule.onNodeWithTag(RepairAppTestTags.OrderStatusLabel).performScrollTo()
-            }
-            isTextDisplayed(text)
+                composeRule
+                    .onNodeWithTag(RepairAppTestTags.OrderStatusLabel)
+                    .performScrollTo()
+                    .assertTextContains(text, substring = true)
+                true
+            }.getOrDefault(false)
         }
     }
 

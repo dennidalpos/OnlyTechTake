@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.demo
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
@@ -11,6 +12,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
@@ -142,8 +144,8 @@ class SocialStoryDemoScreenshotTest {
 
             clickTag(RepairAppTestTags.ConfigHubCategoriesButton, scroll = true)
             clickTag(RepairAppTestTags.ConfigCategoryNewButton, scroll = true)
-            typeTag(RepairAppTestTags.ConfigCategoryNameField, "Smartphone", scroll = true)
-            typeTag(RepairAppTestTags.ConfigCategoryDescriptionField, "Riparazioni smartphone, display e batterie.", scroll = true)
+            typeTag(RepairAppTestTags.ConfigCategoryNameField, "Console portatile", scroll = true)
+            typeTag(RepairAppTestTags.ConfigCategoryDescriptionField, "Riparazioni console portatili, display e batterie.", scroll = true)
             capture(outputDir, "03-creazione-categoria.png")
             clickTag(RepairAppTestTags.ConfigCategorySaveButton, scroll = true)
             clickText("Conferma")
@@ -220,7 +222,7 @@ class SocialStoryDemoScreenshotTest {
             waitForText("Setup")
             
             clickTag(RepairAppTestTags.ConfigHubStorageButton, scroll = true)
-            waitForText("Memoria")
+            waitForText("Archiviazione")
             capture(outputDir, "01-gestione-memoria.png")
             clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
 
@@ -271,7 +273,12 @@ class SocialStoryDemoScreenshotTest {
     }
 
     private fun acceptQuote() {
-        waitForTag(RepairAppTestTags.QuoteAcceptedToggle, scroll = true)
+        composeRule
+            .onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn)
+            .performScrollToIndex(2)
+        composeRule.waitForIdle()
+        pauseForDemo()
+        waitForTag(RepairAppTestTags.QuoteAcceptedToggle)
         clickTag(RepairAppTestTags.QuoteAcceptedToggle)
         pauseForDemo()
         clickTag(RepairAppTestTags.QuoteConfirmButton, scroll = true)
@@ -464,11 +471,18 @@ class SocialStoryDemoScreenshotTest {
         composeRule.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()
 
     private fun waitForStatus(text: String) {
+        composeRule
+            .onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn)
+            .performScrollToIndex(0)
+        composeRule.waitForIdle()
         composeRule.waitUntil(timeoutMillis = WAIT_TIMEOUT_MILLIS) {
             runCatching {
-                composeRule.onNodeWithTag(RepairAppTestTags.OrderStatusLabel).performScrollTo()
-            }
-            isTextDisplayed(text)
+                composeRule
+                    .onNodeWithTag(RepairAppTestTags.OrderStatusLabel)
+                    .performScrollTo()
+                    .assertTextContains(text, substring = true)
+                true
+            }.getOrDefault(false)
         }
     }
 

@@ -1,10 +1,9 @@
 {
   "todos": [
     "[P1] Showcase Validation: Verificare su device fisico con installazione pulita il flusso completo della variante 'showcase' (seeding -> auto-login -> navigazione 30 commesse).",
-    "[P2] Asset Marketing: Rigenerare il nuovo set di 12 screenshot marketing utilizzando 'create_demo_assets.ps1'. Il set ora include WhatsApp Preview, Firma Privacy e Documenti PDF.",
     "[P2] Storage Centralization: Verificare il corretto funzionamento del nuovo sistema di archiviazione centralizzato 'app_media' (Salvataggio foto, firme, PDF e ripristino backup).",
     "[P3] UI Consistency: Verificare in tutte le sezioni (es. Nuova Commessa, Admin) che non siano rimasti pulsanti con dimensioni hardcoded o stili non standard.",
-    "[P4] Play Store: Completare la scheda dello Store con gli screenshot e i video generati in 'reports/marketing-assets'.",
-    "[P5] Landing Page: Aggiornare gli asset multimediali con le versioni prodotte dagli script in 'reports/marketing-assets'."
+    "[P4] Play Store: Completare la scheda dello Store con gli screenshot e i video generati in 'reports/demo-assets'.",
+    "[P5] Landing Page: Aggiornare gli asset multimediali con le versioni prodotte dagli script in 'reports/demo-assets'."
   ]
 }
