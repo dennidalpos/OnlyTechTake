@@ -1,7 +1,5 @@
 {
   "todos": [
-    "[P1] Demo Script: Allineare 'record_demo_device.ps1' alla nuova logica di 'android_demo.ps1' (rilevamento robusto AVD, fallback emulatore unico, attesa boot) per garantire registrazioni affidabili.",
-    "[P2] Demo Script: Correggere il percorso di avvio MainActivity in 'record_demo_device.ps1' per riflettere il pacchetto debug corretto e aggiungere la gestione dei permessi dell'operatore demo.",
     "[P2] Asset Marketing: Rigenerare l'intero set di screenshot marketing (01-10) utilizzando 'create_demo_assets.ps1' dopo l'allineamento visivo (pulsanti WhatsApp verdi, uniformità dimensioni).",
     "[P3] UI Consistency: Verificare in tutte le sezioni (es. Nuova Commessa, Admin) che non siano rimasti pulsanti con dimensioni hardcoded o stili non standard.",
     "[P4] Play Store: Completare la scheda dello Store con gli screenshot e i video generati dai nuovi script automatici.",
