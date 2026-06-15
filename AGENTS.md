@@ -99,6 +99,7 @@ Before the final response for implementation tasks, verify that:
 - stale references were not left after renames or splits;
 - duplicate scripts, configs, assets, or docs were not introduced;
 - `.gitignore` covers local/generated outputs when appropriate.
+- **IMPORTANT**: Always update and verify demo scripts (screenshots and video) after any change that affects the UI, workflow, or database schema.
 
 Minimum commands when available:
 

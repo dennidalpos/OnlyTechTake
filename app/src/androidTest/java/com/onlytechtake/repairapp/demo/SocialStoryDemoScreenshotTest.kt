@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
@@ -17,6 +17,9 @@ import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeUp
+import androidx.compose.ui.test.isRoot
+import androidx.compose.ui.test.onFirst
+import androidx.test.espresso.Espresso
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -82,7 +85,7 @@ class SocialStoryDemoScreenshotTest {
             applySimpleStatus(OrderStatusAction.START_PROGRESS, "In lavorazione")
             capture(outputDir, "06-presa-in-carico.png")
 
-            applySimpleStatus(OrderStatusAction.START_DIAGNOSIS, "In diagnosi")
+            applySimpleStatus(OrderStatusAction.START_DIAGNOSIS, "Diagnosi")
             applyResultStatus()
             capture(outputDir, "07-diagnosi-risultato.png")
 
@@ -110,11 +113,12 @@ class SocialStoryDemoScreenshotTest {
             waitForText("Admin")
             capture(outputDir, "01-dashboard-admin.png")
 
-            clickDashboardTab("CONFIG")
-            waitForText("Config")
+            clickDashboardTab("SETTINGS")
+            waitForText("Setup")
             capture(outputDir, "02-config-hub.png")
 
             clickTag(RepairAppTestTags.ConfigHubCategoriesButton, scroll = true)
+            clickTag(RepairAppTestTags.ConfigCategoryNewButton, scroll = true)
             typeTag(RepairAppTestTags.ConfigCategoryNameField, "Smartphone", scroll = true)
             typeTag(RepairAppTestTags.ConfigCategoryDescriptionField, "Riparazioni smartphone, display e batterie.", scroll = true)
             capture(outputDir, "03-creazione-categoria.png")
@@ -125,6 +129,7 @@ class SocialStoryDemoScreenshotTest {
 
             clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
             clickTag(RepairAppTestTags.ConfigHubTemplatesButton, scroll = true)
+            clickTag(RepairAppTestTags.ConfigTemplateNewButton, scroll = true)
             typeTag(RepairAppTestTags.ConfigTemplateCodeField, "whatsapp_demo_social", scroll = true)
             typeTag(RepairAppTestTags.ConfigTemplateTitleField, "Aggiornamento social demo", scroll = true)
             typeTag(
@@ -190,33 +195,52 @@ class SocialStoryDemoScreenshotTest {
 
     private fun applySimpleStatus(action: OrderStatusAction, expectedText: String) {
         clickText("Azioni Commessa", scroll = true)
-        clickText(action.label)
+        pauseForDemo()
+        clickTag(RepairAppTestTags.statusAction(action.name), scroll = true)
+        pauseForDemo()
+        waitForTag(RepairAppTestTags.StatusDialogConfirmButton)
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
-        waitForText(expectedText)
+        composeRule.waitForIdle()
+        pauseForDemo()
+        waitForStatus(expectedText)
     }
 
     private fun applyResultStatus() {
         clickText("Azioni Commessa", scroll = true)
-        clickText(OrderStatusAction.RECORD_RESULT.label)
+        pauseForDemo()
+        clickTag(RepairAppTestTags.statusAction(OrderStatusAction.RECORD_RESULT.name), scroll = true)
+        pauseForDemo()
+        waitForTag(RepairAppTestTags.StatusResultSummaryField)
         typeTag(RepairAppTestTags.StatusResultSummaryField, "Connettore di alimentazione danneggiato.", scroll = false)
         clickTag(RepairAppTestTags.DiagnosisRepairableToggle)
         typeTag(RepairAppTestTags.DiagnosisEstimateField, "149,00", scroll = false)
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
-        waitForText("Risultato")
+        composeRule.waitForIdle()
+        pauseForDemo()
+        waitForStatus("Risultato")
     }
 
     private fun acceptQuote() {
         clickTag(RepairAppTestTags.QuoteAcceptedToggle, scroll = true)
-        clickText("Conferma esito preventivo", scroll = true)
-        waitForText("In riparazione")
+        pauseForDemo()
+        clickTag(RepairAppTestTags.QuoteConfirmButton, scroll = true)
+        composeRule.waitForIdle()
+        pauseForDemo()
+        waitForStatus("Riparazione")
     }
 
     private fun closeOrder() {
         clickText("Azioni Commessa", scroll = true)
-        clickText(OrderStatusAction.CLOSE_ORDER.label)
+        pauseForDemo()
+        clickTag(RepairAppTestTags.statusAction(OrderStatusAction.CLOSE_ORDER.name), scroll = true)
+        pauseForDemo()
+        waitForTag(RepairAppTestTags.StatusNoteField)
         typeTag(RepairAppTestTags.StatusNoteField, "Riparazione completata e consegnata al cliente.")
-        clickText("Completata", scroll = true)
+        clickTag(RepairAppTestTags.closureReason("COMPLETED"), scroll = true)
+        pauseForDemo()
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
+        composeRule.waitForIdle()
+        pauseForDemo()
         waitForText("Commesse")
     }
 
@@ -275,6 +299,7 @@ class SocialStoryDemoScreenshotTest {
         node.performClick()
         node.performTextReplacement(text)
         composeRule.waitForIdle()
+        Espresso.closeSoftKeyboard()
         pauseForDemo()
     }
 
@@ -289,7 +314,7 @@ class SocialStoryDemoScreenshotTest {
             var displayed = false
             repeat(VISIBILITY_SWIPE_ATTEMPTS) {
                 if (displayed) return@repeat
-                composeRule.onRoot().performTouchInput { swipeUp() }
+                performSafeSwipeUp()
                 composeRule.waitForIdle()
                 runCatching { node.performScrollTo() }
                 displayed = runCatching { node.assertIsDisplayed() }.isSuccess
@@ -319,7 +344,7 @@ class SocialStoryDemoScreenshotTest {
             var displayed = false
             repeat(VISIBILITY_SWIPE_ATTEMPTS) {
                 if (displayed) return@repeat
-                composeRule.onRoot().performTouchInput { swipeUp() }
+                performSafeSwipeUp()
                 composeRule.waitForIdle()
                 runCatching { node.performScrollTo() }
                 displayed = runCatching { node.assertIsDisplayed() }.isSuccess
@@ -336,6 +361,10 @@ class SocialStoryDemoScreenshotTest {
         }
         composeRule.waitForIdle()
         pauseForDemo()
+    }
+
+    private fun performSafeSwipeUp() {
+        composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { swipeUp() }
     }
 
 
@@ -364,6 +393,15 @@ class SocialStoryDemoScreenshotTest {
 
     private fun isTagPresent(tag: String): Boolean =
         composeRule.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()
+
+    private fun waitForStatus(text: String) {
+        composeRule.waitUntil(timeoutMillis = WAIT_TIMEOUT_MILLIS) {
+            runCatching {
+                composeRule.onNodeWithTag(RepairAppTestTags.OrderStatusLabel).performScrollTo()
+            }
+            isTextDisplayed(text)
+        }
+    }
 
     private fun isTagDisplayed(tag: String): Boolean =
         runCatching {

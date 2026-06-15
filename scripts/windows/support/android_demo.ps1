@@ -67,6 +67,20 @@ function Restore-DeviceGlobalSettings {
     $script:DeviceSettingsToRestore = @()
 }
 
+function Get-RunningEmulatorName {
+    param([Parameter(Mandatory = $true)][string]$Serial)
+
+    $name = (adb -s $Serial shell getprop ro.boot.qemu.avd_name 2>$null).Trim()
+    if ([string]::IsNullOrWhiteSpace($name)) {
+        $name = (adb -s $Serial shell getprop ro.kernel.qemu.avd_name 2>$null).Trim()
+    }
+    if ([string]::IsNullOrWhiteSpace($name)) {
+        $avdOutput = adb -s $Serial emu avd name 2>$null
+        $name = $avdOutput | Where-Object { $_ -and $_ -ne "OK" } | Select-Object -First 1
+    }
+    return $name
+}
+
 function Get-EmulatorSerialForAvd {
     param([Parameter(Mandatory = $true)][string]$Name)
 
@@ -76,8 +90,7 @@ function Get-EmulatorSerialForAvd {
         ForEach-Object { ($_ -split "\s+")[0] }
 
     foreach ($serial in $devices) {
-        $avdOutput = adb -s $serial emu avd name 2>$null
-        $runningName = $avdOutput | Where-Object { $_ -and $_ -ne "OK" } | Select-Object -First 1
+        $runningName = Get-RunningEmulatorName -Serial $serial
         if ($runningName -eq $Name) {
             return $serial
         }
@@ -146,19 +159,17 @@ function Resolve-DemoDeviceSerial {
         throw "emulator.exe non trovato in ANDROID_HOME. Esegui prima check_android_env.ps1."
     }
 
-    $availableAvds = & $emulatorPath -list-avds
-    if ($availableAvds -notcontains $AvdName) {
-        throw @"
-AVD '$AvdName' non trovato.
-Crea un emulatore dedicato da Android Studio Device Manager con nome '$AvdName'.
-Consigliato: API 36, profilo Pixel/Tablet stabile, risoluzione 1920x1080 o simile.
-Lo script non installa system image o modifica l'SDK automaticamente.
-Per usare temporaneamente un device fisico collegato, esegui con -UseConnectedDevice.
-"@
+    # 1. Vediamo se l'emulatore richiesto è già in esecuzione
+    $serial = Get-EmulatorSerialForAvd -Name $AvdName
+    if ($serial) {
+        Wait-ForBoot -Serial $serial
+        Write-Host "Uso emulatore in esecuzione $serial ($AvdName)."
+        return $serial
     }
 
-    $serial = Get-EmulatorSerialForAvd -Name $AvdName
-    if (-not $serial) {
+    # 2. Se non è in esecuzione, vediamo se esiste tra i definiti
+    $availableAvds = & $emulatorPath -list-avds
+    if ($availableAvds -contains $AvdName) {
         Write-Host "Avvio emulatore $AvdName..."
         Start-Process -FilePath $emulatorPath -ArgumentList @("-avd", $AvdName, "-no-snapshot-save") -WindowStyle Hidden | Out-Null
         Start-Sleep -Seconds 5
@@ -168,15 +179,42 @@ Per usare temporaneamente un device fisico collegato, esegui con -UseConnectedDe
             if ($serial) { break }
             Start-Sleep -Seconds 2
         } while ((Get-Date) -lt $deadline)
+
+        if (-not $serial) {
+            throw "Emulatore $AvdName non rilevato dopo l'avvio."
+        }
+
+        Wait-ForBoot -Serial $serial
+        Write-Host "Uso emulatore $serial ($AvdName)."
+        return $serial
     }
 
-    if (-not $serial) {
-        throw "Emulatore $AvdName non rilevato dopo l'avvio."
+    # 3. Se non esiste l'AVD specifico, cerchiamo se c'è UN SOLO emulatore già avviato (fallback automatico)
+    $runningEmulators = adb devices | Select-Object -Skip 1 |
+        ForEach-Object { $_.Trim() } |
+        Where-Object { $_ -match "^emulator-\d+\s+device$" } |
+        ForEach-Object { ($_ -split "\s+")[0] }
+
+    if (@($runningEmulators).Count -eq 1) {
+        $serial = $runningEmulators[0]
+        $actualName = Get-RunningEmulatorName -Serial $serial
+        Write-Warning "AVD '$AvdName' non trovato, ma ho rilevato un emulatore in esecuzione: $serial ($actualName)."
+        Write-Warning "Uso questo emulatore per la sessione demo."
+        Wait-ForBoot -Serial $serial
+        return $serial
     }
 
-    Wait-ForBoot -Serial $serial
-    Write-Host "Uso emulatore $serial ($AvdName)."
-    return $serial
+    # 4. Fallimento finale con suggerimenti
+    $avdList = if ($availableAvds) { $availableAvds -join ", " } else { "nessuno" }
+    throw @"
+AVD '$AvdName' non trovato e nessun emulatore alternativo rilevato in esecuzione.
+AVD configurati sul sistema: $avdList.
+
+Crea un emulatore dedicato da Android Studio Device Manager con nome '$AvdName'.
+Consigliato: API 36, profilo Pixel/Tablet stabile, risoluzione 1920x1080 o simile.
+Lo script non installa system image o modifica l'SDK automaticamente.
+Per usare temporaneamente un device fisico collegato, esegui con -UseConnectedDevice.
+"@
 }
 
 function Assert-PathInsideRoot {
@@ -201,8 +239,13 @@ function Invoke-DemoApkBuildAndInstall {
 
     if (-not $SkipBuild) {
         $gradle = Join-Path $RootPath "gradlew.bat"
-        # Removed --no-configuration-cache to speed up repeated builds
-        Invoke-Checked -FilePath $gradle -Arguments @(":app:assembleFullDebug", ":app:assembleFullDebugAndroidTest")
+        Push-Location $RootPath
+        try {
+            # Removed --no-configuration-cache to speed up repeated builds
+            Invoke-Checked -FilePath $gradle -Arguments @(":app:assembleFullDebug", ":app:assembleFullDebugAndroidTest")
+        } finally {
+            Pop-Location
+        }
     } else {
         Write-Host "Salto build APK (richiesto -SkipBuild)."
     }

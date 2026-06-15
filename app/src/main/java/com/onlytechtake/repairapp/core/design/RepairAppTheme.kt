@@ -20,6 +20,7 @@ private val AmberDark = Color(0xFFFFBA28)
 private val Danger = Color(0xFFBA1A1A)
 private val DangerDark = Color(0xFFFFB4AB)
 val SuccessGreen = Color(0xFF237A3B)
+val WhatsAppGreen = Color(0xFF25D366)
 val WarningAmber = Color(0xFFE8A600)
 val WarningOnAmber = Color(0xFF2A2100)
 

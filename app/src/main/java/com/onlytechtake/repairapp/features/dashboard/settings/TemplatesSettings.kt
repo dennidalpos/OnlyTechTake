@@ -40,6 +40,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.data.local.entities.MessageChannel
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
@@ -75,6 +76,30 @@ fun TemplatesSettings(
                 text = stringResource(R.string.config_hub_templates_title),
                 tooltip = "Personalizza i messaggi predefiniti per ogni fase della lavorazione e le informative legali."
             )
+        }
+
+        if (isAdmin) {
+            item {
+                TouchButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Nuovo Template",
+                    testTag = RepairAppTestTags.ConfigTemplateNewButton,
+                    onClick = {
+                        editingTemplate = MessageTemplateEntity(
+                            id = "",
+                            code = "",
+                            title = "",
+                            channel = MessageChannel.WHATSAPP,
+                            body = "",
+                            active = true,
+                            version = 1,
+                            updatedByUserId = null,
+                            updatedAt = 0L,
+                            step = null
+                        )
+                    }
+                )
+            }
         }
 
         items(templates) { template ->
@@ -154,6 +179,8 @@ fun TemplateEditDialog(
     onDismiss: () -> Unit,
     onSave: (String, String, String, Boolean, String?) -> Unit,
 ) {
+    val isNew = template.id.isEmpty()
+    var code by rememberSaveable { mutableStateOf(template.code) }
     var title by rememberSaveable { mutableStateOf(template.title) }
     var body by rememberSaveable { mutableStateOf(template.body) }
     var active by rememberSaveable { mutableStateOf(template.active) }
@@ -183,11 +210,20 @@ fun TemplateEditDialog(
                     fontWeight = FontWeight.Bold
                 )
                 
-                Text(
-                    text = "Codice: ${template.code}",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.outline
-                )
+                if (isNew) {
+                    Field(
+                        value = code,
+                        onValueChange = { code = it },
+                        label = stringResource(R.string.config_template_code_label),
+                        testTag = RepairAppTestTags.ConfigTemplateCodeField
+                    )
+                } else {
+                    Text(
+                        text = "Codice: ${template.code}",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                }
 
                 HorizontalDivider(modifier = Modifier.padding(vertical = DashboardSpacing.compactGap))
 
@@ -249,8 +285,9 @@ fun TemplateEditDialog(
                     TouchButton(
                         text = stringResource(R.string.config_template_save),
                         testTag = RepairAppTestTags.ConfigTemplateSaveButton,
+                        enabled = title.isNotBlank() && body.isNotBlank() && (!isNew || code.isNotBlank()),
                         onClick = {
-                            onSave(template.code, title, body, active, step.ifBlank { null })
+                            onSave(if (isNew) code else template.code, title, body, active, step.ifBlank { null })
                         },
                     )
                 }

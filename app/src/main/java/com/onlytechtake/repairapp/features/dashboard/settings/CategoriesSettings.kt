@@ -165,6 +165,7 @@ fun CategoriesSettings(
                         text = if (currentCategoryParentId == null) "Nuova Categoria principale" else "Nuova Sottocategoria",
                         icon = Icons.Default.Add,
                         tone = ButtonTone.PRIMARY,
+                        testTag = RepairAppTestTags.ConfigCategoryNewButton,
                         onClick = ::loadNewCategory
                     )
                 }

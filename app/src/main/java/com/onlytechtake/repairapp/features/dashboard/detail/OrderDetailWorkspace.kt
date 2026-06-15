@@ -474,17 +474,15 @@ fun OrderDetailWorkspace(
                             )
                         }
                     } else if (isClosure) {
-                        if (closureReason == ClosureReason.OTHER) {
-                            Field(
-                                value = statusNote,
-                                onValueChange = { statusNote = it },
-                                label = stringResource(R.string.order_closure_note_label),
-                                required = true,
-                                showError = statusNote.isBlank(),
-                                imeAction = ImeAction.Done,
-                                testTag = RepairAppTestTags.StatusNoteField,
-                            )
-                        }
+                        Field(
+                            value = statusNote,
+                            onValueChange = { statusNote = it },
+                            label = stringResource(R.string.order_closure_note_label),
+                            required = closureReason == ClosureReason.OTHER,
+                            showError = (closureReason == ClosureReason.OTHER) && statusNote.isBlank(),
+                            imeAction = ImeAction.Done,
+                            testTag = RepairAppTestTags.StatusNoteField,
+                        )
                     }
                     if (isClosure) {
                         Text(stringResource(R.string.order_closure_reason_title), style = MaterialTheme.typography.titleSmall)

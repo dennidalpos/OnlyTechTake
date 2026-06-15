@@ -32,6 +32,8 @@ object RepairAppTestTags {
     const val DiagnosisNotRepairableToggle = "diagnosis_not_repairable_toggle"
     const val DiagnosisEstimateField = "diagnosis_estimate_field"
 
+    const val OrderStatusLabel = "order_status_label"
+
     const val CustomerNewButton = "customer_new_button"
     const val CustomerPrivateToggle = "customer_private_toggle"
     const val CustomerBusinessToggle = "customer_business_toggle"
@@ -59,6 +61,7 @@ object RepairAppTestTags {
     const val ConfigTemplateCodeField = "config_template_code_field"
     const val ConfigTemplateTitleField = "config_template_title_field"
     const val ConfigTemplateBodyField = "config_template_body_field"
+    const val ConfigTemplateNewButton = "config_template_new_button"
     const val ConfigTemplateSaveButton = "config_template_save_button"
     const val ConfigBackupReminderSwitch = "config_backup_reminder_switch"
     const val ConfigBackupIntervalField = "config_backup_interval_field"

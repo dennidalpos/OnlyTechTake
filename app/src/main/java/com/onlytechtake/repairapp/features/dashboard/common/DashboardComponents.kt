@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.SuccessGreen
+import com.onlytechtake.repairapp.core.design.WhatsAppGreen
 import com.onlytechtake.repairapp.core.design.WarningAmber
 import com.onlytechtake.repairapp.core.design.WarningOnAmber
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
@@ -310,21 +311,21 @@ fun TouchButton(
 ) {
     Button(
         modifier = modifier
-            .defaultMinSize(minWidth = 60.dp, minHeight = 36.dp)
+            .defaultMinSize(minWidth = 100.dp, minHeight = 44.dp)
             .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
             .semantics {
                 selected?.let { this.selected = it }
                 stateDescription?.let { this.stateDescription = it }
             },
         enabled = enabled,
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = tone.containerColor(),
             contentColor = tone.contentColor(),
             disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.38f),
             disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f),
         ),
-        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
         onClick = onClick,
     ) {
         Text(
@@ -332,7 +333,7 @@ fun TouchButton(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.labelMedium,
+            style = MaterialTheme.typography.labelLarge,
             softWrap = false,
         )
     }
@@ -384,6 +385,7 @@ private fun ButtonTone.containerColor(): Color =
         ButtonTone.INFO -> MaterialTheme.colorScheme.tertiary
         ButtonTone.WARNING -> WarningAmber
         ButtonTone.DANGER -> MaterialTheme.colorScheme.error
+        ButtonTone.BRAND_WHATSAPP -> WhatsAppGreen
     }
 
 @Composable
@@ -395,6 +397,7 @@ private fun ButtonTone.contentColor(): Color =
         ButtonTone.DANGER -> MaterialTheme.colorScheme.onError
         ButtonTone.WARNING -> WarningOnAmber
         ButtonTone.SUCCESS -> Color.White
+        ButtonTone.BRAND_WHATSAPP -> Color.White
     }
 
 @Composable
@@ -436,20 +439,20 @@ private fun TypeToggleButton(
     
     TextButton(
         modifier = modifier
-            .defaultMinSize(minHeight = 40.dp)
+            .defaultMinSize(minHeight = 44.dp)
             .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
             .semantics {
                 this.selected = selected
                 stateDescription = selectedState
             },
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.textButtonColors(
-            containerColor = if (selected) selectedTone.containerColor() else MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = if (selected) selectedTone.contentColor() else MaterialTheme.colorScheme.onSurfaceVariant,
+            containerColor = if (selected) selectedTone.containerColor() else MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
+            contentColor = if (selected) selectedTone.contentColor() else MaterialTheme.colorScheme.onSecondaryContainer,
         ),
         onClick = onClick,
     ) {
-        Text(text)
+        Text(text, style = MaterialTheme.typography.labelLarge)
     }
 }
 

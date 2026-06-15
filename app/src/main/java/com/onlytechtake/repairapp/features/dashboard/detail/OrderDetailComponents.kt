@@ -63,7 +63,9 @@ fun OrderHeader(
                 text = detail.order.status.label(context),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .testTag(RepairAppTestTags.OrderStatusLabel),
             )
 
             if (detail.isPaid) {
@@ -169,6 +171,7 @@ fun OrderActionCard(
                     TouchButton(
                         text = action.label,
                         tone = action.tone(),
+                        testTag = RepairAppTestTags.statusAction(action.name),
                         onClick = { onActionClick(action) }
                     )
                 }
@@ -183,7 +186,7 @@ fun OrderActionCard(
 
                 TouchButton(
                     text = stringResource(R.string.order_whatsapp_send),
-                    tone = ButtonTone.INFO,
+                    tone = ButtonTone.BRAND_WHATSAPP,
                     onClick = { onSendWhatsApp(templateCode) }
                 )
             }
@@ -274,7 +277,7 @@ fun WhatsAppPreviewPanel(
             ActionRow {
                 TouchButton(
                     text = stringResource(R.string.order_wa_open),
-                    tone = ButtonTone.INFO,
+                    tone = ButtonTone.BRAND_WHATSAPP,
                     onClick = onOpenWhatsApp
                 )
                 TouchButton(

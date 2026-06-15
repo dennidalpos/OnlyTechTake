@@ -1,8 +1,10 @@
 {
   "todos": [
-    "[P5] Asset Marketing: importare screenshot reali (01-10) generati da script o device reale in landing\\assets\\screenshots\\",
-    "[P5] Asset Marketing: importare video demo (01-06) e video promozionale in landing\\assets\\videos\\",
-    "[P5] Play Store: caricare AAB su console e completare Store Listing con asset grafici definitivi",
-    "[P5] Demo device: verificare record_demo_device.ps1 su device USB reale con build/install FullDebug"
+    "[P1] Demo Script: Allineare 'record_demo_device.ps1' alla nuova logica di 'android_demo.ps1' (rilevamento robusto AVD, fallback emulatore unico, attesa boot) per garantire registrazioni affidabili.",
+    "[P2] Demo Script: Correggere il percorso di avvio MainActivity in 'record_demo_device.ps1' per riflettere il pacchetto debug corretto e aggiungere la gestione dei permessi dell'operatore demo.",
+    "[P2] Asset Marketing: Rigenerare l'intero set di screenshot marketing (01-10) utilizzando 'create_demo_assets.ps1' dopo l'allineamento visivo (pulsanti WhatsApp verdi, uniformità dimensioni).",
+    "[P3] UI Consistency: Verificare in tutte le sezioni (es. Nuova Commessa, Admin) che non siano rimasti pulsanti con dimensioni hardcoded o stili non standard.",
+    "[P4] Play Store: Completare la scheda dello Store con gli screenshot e i video generati dai nuovi script automatici.",
+    "[P5] Landing Page: Aggiornare gli asset multimediali con le versioni prodotte dagli script di marketing."
   ]
 }

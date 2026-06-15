@@ -364,7 +364,12 @@ private fun CustomerForm(
         NoteFieldWithDialog(notes, onNotesChange)
         
         ActionRow {
-            TouchButton(text = stringResource(R.string.customer_save), enabled = canSave, onClick = onSave)
+            TouchButton(
+                text = stringResource(R.string.customer_save),
+                enabled = canSave,
+                testTag = RepairAppTestTags.CustomerSaveButton,
+                onClick = onSave
+            )
             TouchButton(text = stringResource(R.string.customer_cancel), tone = ButtonTone.NEUTRAL, onClick = onCancel)
         }
     }

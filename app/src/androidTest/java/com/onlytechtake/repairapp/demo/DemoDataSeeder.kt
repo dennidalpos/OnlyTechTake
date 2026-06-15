@@ -20,6 +20,7 @@ import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventType
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import java.io.File
@@ -68,6 +69,13 @@ object DemoDataSeeder {
                 passwordHash = operatorHash.hash,
                 passwordSalt = operatorHash.salt,
                 role = UserRole.OPERATOR,
+                permissions = setOf(
+                    UserPermission.CREATE_ORDERS,
+                    UserPermission.EDIT_OWN_ORDERS,
+                    UserPermission.CLOSE_ORDERS,
+                    UserPermission.MANAGE_CUSTOMERS,
+                    UserPermission.MANAGE_PAYMENTS
+                ),
                 active = true,
                 createdAt = now,
                 updatedAt = now,

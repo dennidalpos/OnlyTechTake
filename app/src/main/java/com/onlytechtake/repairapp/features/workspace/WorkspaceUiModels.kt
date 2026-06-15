@@ -96,4 +96,5 @@ enum class ButtonTone {
     INFO,
     WARNING,
     DANGER,
+    BRAND_WHATSAPP,
 }

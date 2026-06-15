@@ -87,7 +87,9 @@ class SettingsViewModel(
     }
 
     fun saveCategory(id: String?, parentId: String?, name: String, description: String, active: Boolean, onSaved: (String) -> Unit = {}) {
-        launchWithUser { actor ->
+        launchWithUser(onSuccess = { 
+            _message.value = WorkspaceMessage("Operazione completata", false) 
+        }) { actor ->
             catalogRepository.saveCategory(
                 actor,
                 CategoryInput(id, parentId, name, description, active)
@@ -96,13 +98,17 @@ class SettingsViewModel(
     }
 
     fun deleteCategory(categoryId: String) {
-        launchWithUser { actor ->
+        launchWithUser(onSuccess = { 
+            _message.value = WorkspaceMessage("Operazione completata", false) 
+        }) { actor ->
             catalogRepository.deleteCategory(actor, categoryId)
         }
     }
 
     fun saveTemplate(code: String, title: String, body: String, active: Boolean, step: String? = null) {
-        launchWithUser { actor ->
+        launchWithUser(onSuccess = { 
+            _message.value = WorkspaceMessage("Operazione completata", false) 
+        }) { actor ->
             templateRepository.saveTemplate(actor, code, title, body, active, step)
         }
     }

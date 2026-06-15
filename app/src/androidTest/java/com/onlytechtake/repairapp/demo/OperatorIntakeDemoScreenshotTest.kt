@@ -13,8 +13,12 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeUp
+import androidx.compose.ui.test.isRoot
+import androidx.compose.ui.test.onFirst
+import androidx.test.espresso.Espresso
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -79,7 +83,7 @@ class OperatorIntakeDemoScreenshotTest {
             applySimpleStatus(OrderStatusAction.START_PROGRESS, "In lavorazione")
             capture(outputDir, "06-in-progress.png")
 
-            applySimpleStatus(OrderStatusAction.START_DIAGNOSIS, "In diagnosi")
+            applySimpleStatus(OrderStatusAction.START_DIAGNOSIS, "Diagnosi")
             applyResultStatus()
             capture(outputDir, "07-diagnosis-result.png")
 
@@ -98,33 +102,58 @@ class OperatorIntakeDemoScreenshotTest {
 
     private fun applySimpleStatus(action: OrderStatusAction, expectedText: String) {
         clickText("Azioni Commessa", scroll = true)
-        clickText(action.label)
+        pauseForDemo()
+        // Clicca l'azione specifica usando il tag
+        clickTag(RepairAppTestTags.statusAction(action.name), scroll = true)
+        pauseForDemo()
+        // Attende che il dialogo di conferma sia visibile e clicca conferma
+        waitForTag(RepairAppTestTags.StatusDialogConfirmButton)
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
-        waitForText(expectedText)
+        composeRule.waitForIdle()
+        pauseForDemo()
+        // Verifica il cambio di stato nell'header
+        waitForStatus(expectedText)
     }
 
     private fun applyResultStatus() {
         clickText("Azioni Commessa", scroll = true)
-        clickText(OrderStatusAction.RECORD_RESULT.label)
+        pauseForDemo()
+        clickTag(RepairAppTestTags.statusAction(OrderStatusAction.RECORD_RESULT.name), scroll = true)
+        pauseForDemo()
+        waitForTag(RepairAppTestTags.StatusResultSummaryField)
         typeTag(RepairAppTestTags.StatusResultSummaryField, "Connettore di alimentazione danneggiato.", scroll = false)
         clickTag(RepairAppTestTags.DiagnosisRepairableToggle)
         typeTag(RepairAppTestTags.DiagnosisEstimateField, "149,00", scroll = false)
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
-        waitForText("Risultato")
+        composeRule.waitForIdle()
+        pauseForDemo()
+        waitForStatus("Risultato")
     }
 
     private fun acceptQuote() {
+        // Pannello esito preventivo
         clickTag(RepairAppTestTags.QuoteAcceptedToggle, scroll = true)
-        clickText("Conferma esito preventivo", scroll = true)
-        waitForText("In riparazione")
+        pauseForDemo()
+        clickTag(RepairAppTestTags.QuoteConfirmButton, scroll = true)
+        composeRule.waitForIdle()
+        pauseForDemo()
+        waitForStatus("Riparazione")
     }
 
     private fun closeOrder() {
         clickText("Azioni Commessa", scroll = true)
-        clickText(OrderStatusAction.CLOSE_ORDER.label)
+        pauseForDemo()
+        clickTag(RepairAppTestTags.statusAction(OrderStatusAction.CLOSE_ORDER.name), scroll = true)
+        pauseForDemo()
+        waitForTag(RepairAppTestTags.StatusNoteField)
         typeTag(RepairAppTestTags.StatusNoteField, "Riparazione completata e consegnata al cliente.")
-        clickText("Completata", scroll = true)
+        // Seleziona motivo COMPLETATA
+        clickTag(RepairAppTestTags.closureReason("COMPLETED"), scroll = true)
+        pauseForDemo()
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
+        composeRule.waitForIdle()
+        pauseForDemo()
+        // Torna alla lista commesse dopo la chiusura
         waitForText("Commesse")
     }
 
@@ -183,6 +212,7 @@ class OperatorIntakeDemoScreenshotTest {
         node.performClick()
         node.performTextReplacement(text)
         composeRule.waitForIdle()
+        Espresso.closeSoftKeyboard()
         pauseForDemo()
     }
 
@@ -197,7 +227,7 @@ class OperatorIntakeDemoScreenshotTest {
             var displayed = false
             repeat(VISIBILITY_SWIPE_ATTEMPTS) {
                 if (displayed) return@repeat
-                composeRule.onRoot().performTouchInput { swipeUp() }
+                performSafeSwipeUp()
                 composeRule.waitForIdle()
                 runCatching { node.performScrollTo() }
                 displayed = runCatching { node.assertIsDisplayed() }.isSuccess
@@ -221,7 +251,7 @@ class OperatorIntakeDemoScreenshotTest {
             var displayed = false
             repeat(VISIBILITY_SWIPE_ATTEMPTS) {
                 if (displayed) return@repeat
-                composeRule.onRoot().performTouchInput { swipeUp() }
+                performSafeSwipeUp()
                 composeRule.waitForIdle()
                 runCatching { node.performScrollTo() }
                 displayed = runCatching { node.assertIsDisplayed() }.isSuccess
@@ -232,6 +262,20 @@ class OperatorIntakeDemoScreenshotTest {
         node.performClick()
         composeRule.waitForIdle()
         pauseForDemo()
+    }
+
+    private fun performSafeSwipeUp() {
+        composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { swipeUp() }
+    }
+
+    private fun waitForStatus(text: String) {
+        composeRule.waitUntil(timeoutMillis = WAIT_TIMEOUT_MILLIS) {
+            // Force scroll up to see the header status label
+            runCatching {
+                composeRule.onNodeWithTag(RepairAppTestTags.OrderStatusLabel).performScrollTo()
+            }
+            isTextDisplayed(text)
+        }
     }
 
     private fun waitForTag(tag: String) {
