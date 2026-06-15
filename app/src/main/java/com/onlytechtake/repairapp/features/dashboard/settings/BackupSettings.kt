@@ -76,7 +76,7 @@ fun BackupSettings(
                 Column(modifier = Modifier.padding(DashboardSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
                     SectionTitle(
                         text = stringResource(R.string.config_backup_title),
-                        tooltip = "Gestisci la frequenza dei promemoria e la destinazione dei file esportati."
+                        tooltip = "Gestisci la frequenza dei promemoria e la destinazione dei file esportati.",
                     )
                     if (!isAdmin) {
                         Text(stringResource(R.string.admin_only_section))
@@ -109,16 +109,16 @@ fun BackupSettings(
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier.padding(vertical = 4.dp)
+                            modifier = Modifier.padding(vertical = 4.dp),
                         ) {
                             Text(
                                 text = "⚠️",
-                                style = MaterialTheme.typography.titleMedium
+                                style = MaterialTheme.typography.titleMedium,
                             )
                             Text(
                                 text = stringResource(R.string.config_backup_unencrypted_warning),
                                 color = MaterialTheme.colorScheme.error,
-                                style = MaterialTheme.typography.bodyMedium
+                                style = MaterialTheme.typography.bodyMedium,
                             )
                         }
                         Text(stringResource(R.string.config_backup_destination_label), style = MaterialTheme.typography.titleSmall)
@@ -126,13 +126,13 @@ fun BackupSettings(
                             TouchButton(
                                 text = stringResource(R.string.config_backup_destination_local),
                                 tone = if (exportDestination == ExportDestination.LOCAL) ButtonTone.PRIMARY else ButtonTone.NEUTRAL,
-                                onClick = { viewModel.setExportDestination(ExportDestination.LOCAL) }
+                                onClick = { viewModel.setExportDestination(ExportDestination.LOCAL) },
                             )
                             TouchButton(
                                 text = stringResource(R.string.config_backup_destination_cloud),
                                 tone = if (exportDestination == ExportDestination.CLOUD) ButtonTone.PRIMARY else ButtonTone.NEUTRAL,
                                 enabled = isCloudAvailable,
-                                onClick = { viewModel.setExportDestination(ExportDestination.CLOUD) }
+                                onClick = { viewModel.setExportDestination(ExportDestination.CLOUD) },
                             )
                         }
                         if (!isCloudAvailable) {
@@ -172,7 +172,7 @@ fun BackupSettings(
 
                         SectionTitle(
                             text = stringResource(R.string.config_backup_orders_export_title),
-                            tooltip = "Esporta l'elenco di tutte le commesse in un file Excel leggibile da PC."
+                            tooltip = "Esporta l'elenco di tutte le commesse in un file Excel leggibile da PC.",
                         )
                         ActionRow {
                             val destMsgLocal = stringResource(R.string.order_export_local)
@@ -199,7 +199,7 @@ fun BackupSettings(
                 modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
                 text = "Chiudi Setup backup",
                 tone = ButtonTone.NEUTRAL,
-                onClick = onBack
+                onClick = onBack,
             )
         }
     }

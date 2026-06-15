@@ -203,15 +203,18 @@ fun AdminPanel(
             } else {
                 items(users, key = { it.id }) { user ->
                     var resetPasswordVisible by rememberSaveable(user.id) { mutableStateOf(false) }
+                    var currentPassword by rememberSaveable(user.id) { mutableStateOf("") }
+                    var currentPasswordVisible by rememberSaveable(user.id) { mutableStateOf(false) }
+
                     StandardCard {
                         Column(
                             modifier = Modifier.padding(DashboardSpacing.cardPadding),
                             verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
                         ) {
                             Text("${user.displayName} - ${user.username} (${user.role.name})", style = MaterialTheme.typography.titleMedium)
-                            Text(if (user.active) stringResource(R.string.admin_user_active) else stringResource(R.string.admin_user_inactive))
                             
                             if (user.role != UserRole.ADMIN) {
+                                Text(if (user.active) stringResource(R.string.admin_user_active) else stringResource(R.string.admin_user_inactive))
                                 HorizontalDivider()
                                 Text("Aree e Permessi", style = MaterialTheme.typography.labelLarge)
                                 
@@ -252,12 +255,30 @@ fun AdminPanel(
                                 HorizontalDivider()
                             }
 
+                            if (user.role == UserRole.ADMIN) {
+                                Field(
+                                    value = currentPassword,
+                                    onValueChange = { currentPassword = it },
+                                    label = "Password Attuale",
+                                    singleLine = true,
+                                    keyboardType = KeyboardType.Password,
+                                    visualTransformation = if (currentPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                                    trailingIcon = {
+                                        PasswordVisibilityButton(
+                                            visible = currentPasswordVisible,
+                                            onVisibleChange = { currentPasswordVisible = it },
+                                            modifier = Modifier.focusProperties { canFocus = false },
+                                        )
+                                    },
+                                )
+                            }
+
                             Field(
                                 value = resetPasswords[user.id].orEmpty(),
                                 onValueChange = { value ->
                                     resetPasswords += (user.id to value)
                                 },
-                                label = stringResource(R.string.admin_field_temp_password),
+                                label = if (user.role == UserRole.ADMIN) "Nuova Password" else stringResource(R.string.admin_field_temp_password),
                                 singleLine = true,
                                 keyboardType = KeyboardType.Password,
                                 visualTransformation = if (resetPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -270,24 +291,36 @@ fun AdminPanel(
                                 },
                             )
                             ActionRow {
+                                if (user.role != UserRole.ADMIN) {
+                                    TouchButton(
+                                        text = if (user.active) stringResource(R.string.admin_user_deactivate) else stringResource(R.string.admin_user_activate),
+                                        tone = if (user.active) ButtonTone.DANGER else ButtonTone.SUCCESS,
+                                        onClick = {
+                                            requestConfirm(confirmStatusTitle, confirmStatusTextTemplate.format(user.displayName)) {
+                                                viewModel.setUserActive(user.id, !user.active)
+                                            }
+                                        },
+                                    )
+                                }
                                 TouchButton(
-                                    text = if (user.active) stringResource(R.string.admin_user_deactivate) else stringResource(R.string.admin_user_activate),
-                                    tone = if (user.active) ButtonTone.DANGER else ButtonTone.SUCCESS,
-                                    onClick = {
-                                        requestConfirm(confirmStatusTitle, confirmStatusTextTemplate.format(user.displayName)) {
-                                            viewModel.setUserActive(user.id, !user.active)
-                                        }
+                                    text = if (user.role == UserRole.ADMIN) "Cambia Password" else stringResource(R.string.admin_reset_password),
+                                    enabled = if (user.role == UserRole.ADMIN) {
+                                        currentPassword.isNotBlank() && resetPasswords[user.id]?.isNotBlank() == true
+                                    } else {
+                                        resetPasswords[user.id]?.isNotBlank() == true
                                     },
-                                )
-                                TouchButton(
-                                    text = stringResource(R.string.admin_reset_password),
-                                    enabled = resetPasswords[user.id]?.isNotBlank() == true,
                                     tone = ButtonTone.NEUTRAL,
                                     onClick = {
                                         val resetPassword = resetPasswords[user.id].orEmpty()
-                                        requestConfirm(confirmResetTitle, confirmResetTextTemplate.format(user.displayName)) {
-                                            viewModel.resetPassword(user.id, resetPassword.toCharArray())
+                                        if (user.role == UserRole.ADMIN) {
+                                            viewModel.changePassword(user.username, currentPassword.toCharArray(), resetPassword.toCharArray())
+                                            currentPassword = ""
                                             resetPasswords -= user.id
+                                        } else {
+                                            requestConfirm(confirmResetTitle, confirmResetTextTemplate.format(user.displayName)) {
+                                                viewModel.resetPassword(user.id, resetPassword.toCharArray())
+                                                resetPasswords -= user.id
+                                            }
                                         }
                                     },
                                 )

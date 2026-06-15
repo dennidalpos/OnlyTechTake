@@ -2,21 +2,17 @@ package com.onlytechtake.repairapp.features.dashboard.detail
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -32,7 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.activity.compose.BackHandler
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -44,14 +39,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.core.utils.parseEuroCentsOrNull
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
-import com.onlytechtake.repairapp.data.local.entities.ExportDestination
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
@@ -63,13 +56,7 @@ import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
-import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
-import com.onlytechtake.repairapp.features.workspace.applyStatusAction
-import com.onlytechtake.repairapp.features.workspace.attachmentCounts
-import com.onlytechtake.repairapp.features.workspace.label as attachmentLabel
-import com.onlytechtake.repairapp.features.workspace.tone
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
-import com.onlytechtake.repairapp.domain.workspace.availableOrderStatusActions
 import com.onlytechtake.repairapp.domain.workspace.canConfirmDiagnosisResult
 import com.onlytechtake.repairapp.domain.workspace.requiresConfirmation
 import com.onlytechtake.repairapp.domain.workspace.shouldShowDiagnosisEstimate
@@ -182,7 +169,7 @@ fun OrderDetailWorkspace(
                     diagnosisOutcome = selected.order.diagnosisOutcome
                 },
                 onTogglePayment = viewModel::togglePaymentStatus,
-                onSendWhatsApp = viewModel::prepareMessage
+                onSendWhatsApp = viewModel::prepareMessage,
             )
         }
 
@@ -201,7 +188,7 @@ fun OrderDetailWorkspace(
                         } else {
                             viewModel.recordFeedback(feedback, note, closureReason) { onBack() }
                         }
-                    }
+                    },
                 )
             }
         }
@@ -259,7 +246,7 @@ fun OrderDetailWorkspace(
                     onConfirmSent = {
                         requestConfirm(waSentConfirmTitle, waSentConfirmText) { viewModel.confirmSentMessage() }
                     },
-                    onClose = viewModel::clearPreparedMessage
+                    onClose = viewModel::clearPreparedMessage,
                 )
             }
         }
@@ -270,7 +257,7 @@ fun OrderDetailWorkspace(
                 onAddNoteClick = {
                     note = ""
                     showInternalNoteDialog = true
-                }
+                },
             )
         }
 
@@ -318,18 +305,18 @@ fun OrderDetailWorkspace(
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically,
                                 ) {
                                 Row(
                                     modifier = Modifier.weight(1f).clickable { viewModel.onShareDocumentClicked(doc.id) },
-                                    verticalAlignment = Alignment.CenterVertically
+                                    verticalAlignment = Alignment.CenterVertically,
                                 ) {
                                     Column(modifier = Modifier.weight(1f)) {
                                         Text(doc.fileName, style = MaterialTheme.typography.bodyMedium)
                                         Text(
                                             text = stringResource(R.string.order_document_generated, formatUiDateTime(doc.createdAt)) + (if (doc.sharedAt != null) stringResource(R.string.order_document_sent) else ""),
                                             style = MaterialTheme.typography.labelSmall,
-                                            color = MaterialTheme.colorScheme.secondary
+                                            color = MaterialTheme.colorScheme.secondary,
                                         )
                                     }
                                     TouchButton(
@@ -447,19 +434,17 @@ fun OrderDetailWorkspace(
                             text = stringResource(R.string.order_diagnosis_repairable),
                             checked = diagnosisOutcome == DiagnosisOutcome.REPAIRABLE,
                             testTag = RepairAppTestTags.DiagnosisRepairableToggle,
-                            onClick = {
-                                diagnosisOutcome = DiagnosisOutcome.REPAIRABLE
-                            },
-                        )
+                        ) {
+                            diagnosisOutcome = DiagnosisOutcome.REPAIRABLE
+                        }
                         QuoteDecisionRow(
                             text = stringResource(R.string.order_diagnosis_not_repairable),
                             checked = diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE,
                             testTag = RepairAppTestTags.DiagnosisNotRepairableToggle,
-                            onClick = {
-                                diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE
-                                resultAmount = ""
-                            },
-                        )
+                        ) {
+                            diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE
+                            resultAmount = ""
+                        }
                         if (shouldShowDiagnosisEstimate(diagnosisOutcome)) {
                             Field(
                                 value = resultAmount,
@@ -510,7 +495,7 @@ fun OrderDetailWorkspace(
                             outcome = diagnosisOutcome,
                             estimateAmountCents = parseEuroCentsOrNull(resultAmount),
                         )
-                        isClosure -> closureReason != null && (closureReason != ClosureReason.OTHER || statusNote.isNotBlank())
+                        isClosure -> (closureReason != null) && ((closureReason != ClosureReason.OTHER) || statusNote.isNotBlank())
                         else -> true
                     },
                     onClick = {
@@ -521,30 +506,28 @@ fun OrderDetailWorkspace(
                                 summary = resultSummary,
                                 diagnosisOutcome = outcome,
                                 estimateAmountCents = estimateAmountCents,
-                                onSuccess = {
-                                    viewModel.prepareMessage(
-                                        if (outcome == DiagnosisOutcome.REPAIRABLE) {
-                                            "whatsapp_preventivo_intervento"
-                                        } else {
-                                            "whatsapp_non_riparabile"
-                                        },
-                                    )
-                                },
-                            )
+                            ) {
+                                viewModel.prepareMessage(
+                                    if (outcome == DiagnosisOutcome.REPAIRABLE) {
+                                        "whatsapp_preventivo_intervento"
+                                    } else {
+                                        "whatsapp_non_riparabile"
+                                    },
+                                )
+                            }
                         } else {
                             val targetStatus = action.targetStatus ?: return@TextButton
                             viewModel.changeStatus(
                                 status = targetStatus,
                                 note = statusNote,
                                 closureReason = closureReason,
-                                onSuccess = {
-                                    if (targetStatus == OrderStatus.CLOSED && closureReason == ClosureReason.NOT_REPAIRABLE) {
-                                        viewModel.prepareMessage("whatsapp_non_riparabile")
-                                    } else if (targetStatus == OrderStatus.CLOSED) {
-                                        onBack()
-                                    }
-                                },
-                            )
+                            ) {
+                                if ((targetStatus == OrderStatus.CLOSED) && (closureReason == ClosureReason.NOT_REPAIRABLE)) {
+                                    viewModel.prepareMessage("whatsapp_non_riparabile")
+                                } else if (targetStatus == OrderStatus.CLOSED) {
+                                    onBack()
+                                }
+                            }
                         }
                         statusAction = null
                     },

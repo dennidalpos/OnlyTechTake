@@ -29,7 +29,7 @@ class AdminUserRepositoryTest {
     }
 
     @Test
-    fun setActiveFailsWhenDeactivatingLastAdmin() = runBlocking {
+    fun setActiveFailsForAdmin() = runBlocking {
         val actor = mockAdmin()
         val admin = UserEntity(
             id = "admin-1",
@@ -44,36 +44,11 @@ class AdminUserRepositoryTest {
         )
         
         coEvery { userDao.findById("admin-1") } returns admin
-        coEvery { userDao.countActiveByRole(UserRole.ADMIN) } returns 1
         
         val result = repository.setActive(actor, "admin-1", false)
         
         assertTrue(result.isFailure)
-        assertEquals("L'ultimo account Admin attivo non può essere disattivato", result.exceptionOrNull()?.message)
-    }
-
-    @Test
-    fun setActiveSucceedsWhenMultipleAdmins() = runBlocking {
-        val actor = mockAdmin()
-        val admin = UserEntity(
-            id = "admin-1",
-            displayName = "Admin",
-            username = "admin",
-            passwordHash = "h",
-            passwordSalt = "s",
-            role = UserRole.ADMIN,
-            active = true,
-            createdAt = 0,
-            updatedAt = 0
-        )
-        
-        coEvery { userDao.findById("admin-1") } returns admin
-        coEvery { userDao.countActiveByRole(UserRole.ADMIN) } returns 2
-        coEvery { userDao.upsert(any()) } returns Unit
-        
-        val result = repository.setActive(actor, "admin-1", false)
-        
-        assertTrue(result.isSuccess)
+        assertEquals("L'account Admin non può essere disattivato", result.exceptionOrNull()?.message)
     }
 
     private fun mockAdmin() = AuthenticatedUser(

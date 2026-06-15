@@ -200,7 +200,7 @@ fun QuickActions(
     ) {
         SectionTitle(
             text = stringResource(R.string.new_order_title),
-            tooltip = "Compila i passaggi per creare una nuova commessa di riparazione. Puoi salvare una bozza e riprendere in seguito."
+            tooltip = "Compila i passaggi per creare una nuova commessa di riparazione. Puoi salvare una bozza e riprendere in seguito.",
         )
 
         StepperIndicator(
@@ -516,7 +516,7 @@ private fun StepperIndicator(
     Row(
         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         for (i in 1..LAST_INTAKE_STEP) {
             val isCompleted = i <= completedStep
@@ -532,7 +532,7 @@ private fun StepperIndicator(
                             isCompleted -> completedColor
                             else -> MaterialTheme.colorScheme.surfaceVariant
                         },
-                        shape = CircleShape
+                        shape = CircleShape,
                     )
                     .clickable(enabled = isCompleted || i == 1) { onStepClick(i) },
                 contentAlignment = Alignment.Center
@@ -544,7 +544,7 @@ private fun StepperIndicator(
                         isCompleted -> Color.White
                         else -> MaterialTheme.colorScheme.onSurfaceVariant
                     },
-                    style = MaterialTheme.typography.labelLarge
+                    style = MaterialTheme.typography.labelLarge,
                 )
             }
             if (i < LAST_INTAKE_STEP) {

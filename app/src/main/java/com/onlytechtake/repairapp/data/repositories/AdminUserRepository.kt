@@ -119,10 +119,7 @@ class AdminUserRepository(
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
             val existing = requireNotNull(userDao.findById(userId)) { "Utente non trovato" }
             if (!active && existing.role == UserRole.ADMIN) {
-                val activeAdmins = userDao.countActiveByRole(UserRole.ADMIN)
-                if (activeAdmins <= 1) {
-                    throw IllegalStateException("L'ultimo account Admin attivo non può essere disattivato")
-                }
+                throw IllegalStateException("L'account Admin non può essere disattivato")
             }
 
             val now = clockMillis()

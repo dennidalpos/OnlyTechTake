@@ -59,6 +59,12 @@ class AdminViewModel(
         }
     }
 
+    fun changePassword(username: String, currentPassword: CharArray, newPassword: CharArray) {
+        launchWithUser { actor ->
+            authRepository.changePassword(username, currentPassword, newPassword)
+        }
+    }
+
     fun exportDatabase(uri: Uri) {
         launchWithUser { actor ->
             backupRepository.exportDatabase(actor, uri)

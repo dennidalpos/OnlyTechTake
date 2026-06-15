@@ -61,9 +61,8 @@ if ($SeedData) {
 }
 
 Write-Host "Avvio applicazione..." -ForegroundColor Gray
-# Corrected MainActivity path: PackageName/PackageNameWithoutSuffix.MainActivity or just PackageName/.MainActivity
-# Since MainActivity is in com.onlytechtake.repairapp, and PackageName is com.onlytechtake.repairapp.debug
-adb -s $serial shell am start -n "$PackageName/com.onlytechtake.repairapp.MainActivity"
+# MainActivity is in com.onlytechtake.repairapp, and PackageName is typically com.onlytechtake.repairapp.debug (full flavor)
+adb -s $serial shell am start -W -n "$PackageName/com.onlytechtake.repairapp.MainActivity"
 
 Write-Host "Avvio registrazione (Massimo $MaxDurationSeconds secondi)..." -ForegroundColor Yellow
 Write-Host "Premi CTRL+C per fermare anticipatamente la registrazione." -ForegroundColor Gray

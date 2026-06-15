@@ -17,14 +17,12 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -37,7 +35,6 @@ import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
@@ -54,7 +51,6 @@ import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
-import com.onlytechtake.repairapp.features.workspace.label as attachmentLabel
 
 @Composable
 fun OrdersPanel(
@@ -87,13 +83,11 @@ fun OrdersPanel(
                             templateRepository = container.templateRepository,
                             generateOrderStatusPdfUseCase = container.generateOrderStatusPdfUseCase,
                             shareDocumentIntentFactory = container.shareDocumentIntentFactory,
-                            onSetFormDirty = { /* Handle dirty state if needed */ },
-                        )
+                        ) { /* Handle dirty state if needed */ },
                     )
                     OrderDetailWorkspace(
                         viewModel = detailViewModel,
-                        onBack = { selectedOrderId = null }
-                    )
+                    ) { selectedOrderId = null }
                 } else {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text("Seleziona una commessa per vedere i dettagli", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -132,13 +126,13 @@ private fun OrdersListContent(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     SectionTitle(stringResource(R.string.orders_title))
                     TouchButton(
                         text = stringResource(R.string.orders_filter_title),
                         tone = if (orderFilter.hasActiveFilter()) ButtonTone.INFO else ButtonTone.NEUTRAL,
-                        onClick = { showFilterDialog = true }
+                        onClick = { showFilterDialog = true },
                     )
                 }
             }
@@ -148,7 +142,7 @@ private fun OrdersListContent(
                     value = orderFilter.query,
                     onValueChange = { viewModel.setFilter(orderFilter.copy(query = it)) },
                     label = "Cerca per cliente, telefono, email o commessa...",
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
 
@@ -179,17 +173,17 @@ private fun OrdersListContent(
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.Top
+                                verticalAlignment = Alignment.Top,
                             ) {
                                 Text(
                                     "${order.orderNumber} - ${order.title}",
                                     style = MaterialTheme.typography.titleMedium,
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier.weight(1f),
                                 )
                                 Text(
                                     formatUiDateTime(order.updatedAt),
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             }
                             OrderStatusStepper(status = order.status, compact = true)
@@ -203,7 +197,7 @@ private fun OrdersListContent(
                             Text(
                                 text = stringResource(R.string.orders_next_action_label, nextActionLabel(order)),
                                 style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.secondary
+                                color = MaterialTheme.colorScheme.secondary,
                             )
                         }
                     }
@@ -226,7 +220,7 @@ private fun OrdersListContent(
                 TextButton(onClick = { showFilterDialog = false }) {
                     Text(stringResource(R.string.confirm))
                 }
-            }
+            },
         )
     }
 }
@@ -241,7 +235,7 @@ private fun ActiveFilterInfo(filter: OrderFilter) {
                 stringResource(R.string.orders_filter_mine).lowercase().takeIf { filter.showMineOnly },
                 filter.status?.label(context),
                 filter.statuses.takeIf { it.isNotEmpty() }?.joinToString(" / ") { it.label(context) },
-            ).joinToString(", ")
+            ).joinToString(", "),
         ),
         style = MaterialTheme.typography.labelSmall,
         color = MaterialTheme.colorScheme.secondary,

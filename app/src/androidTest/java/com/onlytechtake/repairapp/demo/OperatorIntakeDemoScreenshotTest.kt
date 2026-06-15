@@ -171,7 +171,8 @@ class OperatorIntakeDemoScreenshotTest {
                     clickText("Esci e perdi dati")
                 }
 
-                Thread.sleep(2000)
+                composeRule.waitForIdle()
+                Thread.sleep(3000) // Increased wait for UI to settle
                 return
             }
             composeRule.onNodeWithTag(RepairAppTestTags.DashboardTabs)

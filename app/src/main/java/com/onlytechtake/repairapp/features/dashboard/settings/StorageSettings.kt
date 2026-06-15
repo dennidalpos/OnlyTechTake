@@ -89,7 +89,7 @@ fun StorageSettings(
                                     freePercentage < 5 -> MaterialTheme.colorScheme.error
                                     freePercentage < 15 -> MaterialTheme.colorScheme.tertiary
                                     else -> MaterialTheme.colorScheme.primary
-                                }
+                                },
                             )
 
                             Text(
@@ -98,7 +98,7 @@ fun StorageSettings(
                                         freePercentage < 5 -> R.string.storage_status_critical
                                         freePercentage < 15 -> R.string.storage_status_warning
                                         else -> R.string.storage_status_ok
-                                    }
+                                    },
                                 ),
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
@@ -106,7 +106,7 @@ fun StorageSettings(
                                     freePercentage < 5 -> MaterialTheme.colorScheme.error
                                     freePercentage < 15 -> MaterialTheme.colorScheme.tertiary
                                     else -> MaterialTheme.colorScheme.primary
-                                }
+                                },
                             )
                         }
                     }
