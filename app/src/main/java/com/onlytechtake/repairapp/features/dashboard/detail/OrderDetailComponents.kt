@@ -33,6 +33,7 @@ import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
 import com.onlytechtake.repairapp.domain.workspace.availableOrderStatusActions
+import com.onlytechtake.repairapp.domain.workspace.statusTemplateCode
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.Field
@@ -266,7 +267,7 @@ fun WhatsAppPreviewPanel(
     modifier: Modifier = Modifier,
 ) {
     StandardCard(
-        modifier = modifier,
+        modifier = modifier.testTag(RepairAppTestTags.OrderWhatsAppPreviewPanel),
         containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f)
     ) {
         Column(
@@ -279,16 +280,19 @@ fun WhatsAppPreviewPanel(
                 TouchButton(
                     text = stringResource(R.string.order_wa_open),
                     tone = ButtonTone.BRAND_WHATSAPP,
+                    testTag = RepairAppTestTags.OrderWhatsAppOpenButton,
                     onClick = onOpenWhatsApp
                 )
                 TouchButton(
                     text = stringResource(R.string.order_wa_sent),
                     tone = ButtonTone.SUCCESS,
+                    testTag = RepairAppTestTags.OrderWhatsAppSentButton,
                     onClick = onConfirmSent
                 )
                 TouchButton(
                     text = stringResource(R.string.order_wa_close_preview),
                     tone = ButtonTone.NEUTRAL,
+                    testTag = RepairAppTestTags.OrderWhatsAppClosePreviewButton,
                     onClick = onClose
                 )
             }
@@ -352,13 +356,3 @@ private fun canConfirmQuoteDecision(decision: QuoteDecision?, rejectNote: String
         null -> false
     }
 
-private fun statusTemplateCode(status: OrderStatus): String =
-    when (status) {
-        OrderStatus.OPEN -> "whatsapp_accettazione"
-        OrderStatus.DIAGNOSIS -> "whatsapp_in_diagnosi"
-        OrderStatus.RESULT -> "whatsapp_preventivo_intervento"
-        OrderStatus.REPAIRING -> "whatsapp_in_riparazione"
-        OrderStatus.READY_FOR_PICKUP -> "whatsapp_pronto_ritiro"
-        OrderStatus.CLOSED -> "whatsapp_consegnato"
-        else -> "whatsapp_generic"
-    }

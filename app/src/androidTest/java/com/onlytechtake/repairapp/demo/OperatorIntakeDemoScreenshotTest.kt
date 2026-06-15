@@ -56,12 +56,11 @@ class OperatorIntakeDemoScreenshotTest {
             capture(outputDir, "02-home.png")
 
             clickDashboardTab("NEW_ORDER")
-            pauseForDemo() // Attesa extra per caricamento ViewModel
+            pauseForDemo() 
             waitForTag("quick_actions_screen")
             
-            // Tentativo ripetuto di click se il form non appare (gestione glitch transizione)
             var formOpened = false
-            repeat(3) { attempt ->
+            repeat(3) {
                 if (!formOpened) {
                     if (isTagPresent(RepairAppTestTags.NewOrderInsertCustomerButton)) {
                         clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
@@ -70,9 +69,6 @@ class OperatorIntakeDemoScreenshotTest {
                     formOpened = isTagPresent(RepairAppTestTags.NewOrderFirstNameField)
                 }
             }
-            
-            // Garantisce che il tag sia presente prima di procedere
-            waitForTagExists(RepairAppTestTags.NewOrderFirstNameField)
             
             typeTag(RepairAppTestTags.NewOrderFirstNameField, "Giulia", scroll = true)
             typeTag(RepairAppTestTags.NewOrderLastNameField, "Bianchi", scroll = true)
@@ -84,7 +80,6 @@ class OperatorIntakeDemoScreenshotTest {
             waitForText("Cliente selezionato")
             clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
             
-            // Selezione categoria (navigazione gerarchia fino a foglia)
             clickTag(RepairAppTestTags.categoryButton(DemoDataSeeder.DEMO_CATEGORY_ID), scroll = true)
             clickTag(RepairAppTestTags.categoryButton("demo-cat-hp"), scroll = true)
             clickTag(RepairAppTestTags.categoryButton("demo-cat-pavilion"), scroll = true)
@@ -99,29 +94,23 @@ class OperatorIntakeDemoScreenshotTest {
             )
             capture(outputDir, "04-category-problem.png")
 
-            // Simulate Signature Capture (we'll show the section in Order Detail for better visual consistency)
             clickDashboardTab("ORDERS")
             waitForText("Commesse")
             waitForTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
             clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID))
             
-            // Verifica di essere nel dettaglio (tag unico della testata dettaglio)
             waitForTag(RepairAppTestTags.OrderStatusLabel)
             waitForText("Notebook HP")
-            
-            // Scroll alla sezione firma usando il tag dedicato per massima affidabilità
-            waitForTag(RepairAppTestTags.OrderSignatureSection, scroll = true)
-            capture(outputDir, "05-signature-capture.png")
-
             capture(outputDir, "06-order-created.png")
 
-            // WhatsApp Preview - Torna su alla sezione azioni
             waitForTag(RepairAppTestTags.OrderWhatsAppButton, scroll = true)
             clickTag(RepairAppTestTags.OrderWhatsAppButton)
-            
-            waitForText("Anteprima WhatsApp")
+            waitForTag(RepairAppTestTags.OrderWhatsAppPreviewPanel, scroll = true)
             capture(outputDir, "07-whatsapp-preview.png")
-            clickText("Chiudi anteprima")
+            clickTag(RepairAppTestTags.OrderWhatsAppClosePreviewButton, scroll = true)
+
+            waitForTag(RepairAppTestTags.OrderSignatureSection, scroll = true)
+            capture(outputDir, "05-signature-capture.png")
 
             applySimpleStatus(OrderStatusAction.START_PROGRESS, "In lavorazione")
             capture(outputDir, "08-in-progress.png")
@@ -130,8 +119,7 @@ class OperatorIntakeDemoScreenshotTest {
             applyResultStatus()
             capture(outputDir, "09-diagnosis-result.png")
 
-            // Documents / PDF
-            clickText("Documenti cliente", scroll = true)
+            waitForText("Documenti cliente", scroll = true)
             capture(outputDir, "10-pdf-documents.png")
 
             acceptQuote()
@@ -148,15 +136,12 @@ class OperatorIntakeDemoScreenshotTest {
     private fun applySimpleStatus(action: OrderStatusAction, expectedText: String) {
         waitForTag(RepairAppTestTags.OrderActionSection, scroll = true)
         pauseForDemo()
-        // Clicca l'azione specifica usando il tag
         clickTag(RepairAppTestTags.statusAction(action.name), scroll = true)
         pauseForDemo()
-        // Attende che il dialogo di conferma sia visibile e clicca conferma
         waitForTag(RepairAppTestTags.StatusDialogConfirmButton)
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
         composeRule.waitForIdle()
         pauseForDemo()
-        // Verifica il cambio di stato nell'header
         waitForStatus(expectedText)
     }
 
@@ -176,8 +161,8 @@ class OperatorIntakeDemoScreenshotTest {
     }
 
     private fun acceptQuote() {
-        // Pannello esito preventivo
-        clickTag(RepairAppTestTags.QuoteAcceptedToggle, scroll = true)
+        waitForTag(RepairAppTestTags.QuoteAcceptedToggle, scroll = true)
+        clickTag(RepairAppTestTags.QuoteAcceptedToggle)
         pauseForDemo()
         clickTag(RepairAppTestTags.QuoteConfirmButton, scroll = true)
         composeRule.waitForIdle()
@@ -192,13 +177,11 @@ class OperatorIntakeDemoScreenshotTest {
         pauseForDemo()
         waitForTag(RepairAppTestTags.StatusNoteField)
         typeTag(RepairAppTestTags.StatusNoteField, "Riparazione completata e consegnata al cliente.")
-        // Seleziona motivo COMPLETATA
         clickTag(RepairAppTestTags.closureReason("COMPLETED"), scroll = true)
         pauseForDemo()
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
         composeRule.waitForIdle()
         pauseForDemo()
-        // Torna alla lista commesse dopo la chiusura
         waitForText("Commesse")
     }
 
@@ -209,13 +192,12 @@ class OperatorIntakeDemoScreenshotTest {
         composeRule.onNodeWithTag(tabTag).performClick()
         composeRule.waitForIdle()
 
-        // Handle "Unsaved changes" dialog if it appears
         if (isTextDisplayed("Dati non salvati")) {
             clickText("Esci e perdi dati")
         }
 
         composeRule.waitForIdle()
-        Thread.sleep(2000) // Wait for UI to settle
+        Thread.sleep(2000)
     }
 
     private fun isTextDisplayed(text: String): Boolean =
@@ -242,9 +224,8 @@ class OperatorIntakeDemoScreenshotTest {
     }
 
     private fun typeTag(tag: String, text: String, scroll: Boolean = false) {
-        waitForTagExists(tag)
+        waitForTagExists(tag, scroll = scroll)
         val node = composeRule.onNodeWithTag(tag)
-        if (scroll) runCatching { node.performScrollTo() }
         node.assertIsDisplayed()
         node.performClick()
         node.performTextReplacement(text)
@@ -253,11 +234,10 @@ class OperatorIntakeDemoScreenshotTest {
         pauseForDemo()
     }
 
-    private fun clickTag(tag: String, scroll: Boolean = false, requireDisplayed: Boolean = true) {
-        waitForTagExists(tag, scrollIfNotFound = scroll)
+    private fun clickTag(tag: String, scroll: Boolean = false) {
+        waitForTagExists(tag, scroll = scroll)
         val node = composeRule.onNodeWithTag(tag)
         
-        // Approccio di click multi-livello invertito per priorità semantica (più robusto in emulatore)
         try {
             node.performClick()
         } catch (e: Throwable) {
@@ -272,11 +252,10 @@ class OperatorIntakeDemoScreenshotTest {
         pauseForDemo()
     }
 
-    private fun clickText(text: String, scroll: Boolean = false, requireDisplayed: Boolean = true) {
-        waitForText(text, scrollIfNotFound = scroll)
+    private fun clickText(text: String, scroll: Boolean = false) {
+        waitForText(text, scroll = scroll)
         val node = composeRule.onNodeWithText(text, substring = true)
         
-        // Approccio di click multi-livello invertito per priorità semantica (più robusto in emulatore)
         try {
             node.performClick()
         } catch (e: Throwable) {
@@ -292,34 +271,33 @@ class OperatorIntakeDemoScreenshotTest {
     }
 
     private fun performSafeSwipeUp() {
-        // Swipe UP = Scroll DOWN
         try {
             composeRule.onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn).performTouchInput {
-                swipeUp(startY = bottom * 0.7f, endY = top * 0.3f)
+                swipeUp(startY = bottom * 0.8f, endY = top + 30f)
             }
         } catch (e: Throwable) {
             composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { 
-                swipeUp(startY = bottom * 0.7f, endY = top * 0.3f)
+                swipeUp(startY = bottom * 0.8f, endY = top + 30f)
             }
         }
+        composeRule.waitForIdle()
     }
 
     private fun performSafeSwipeDown() {
-        // Swipe DOWN = Scroll UP
         try {
             composeRule.onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn).performTouchInput {
-                swipeDown(startY = top * 0.3f, endY = bottom * 0.7f)
+                swipeDown(startY = top + 30f, endY = bottom * 0.8f)
             }
         } catch (e: Throwable) {
             composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { 
-                swipeDown(startY = top * 0.3f, endY = bottom * 0.7f)
+                swipeDown(startY = top + 30f, endY = bottom * 0.8f)
             }
         }
+        composeRule.waitForIdle()
     }
 
     private fun waitForStatus(text: String) {
         composeRule.waitUntil(timeoutMillis = WAIT_TIMEOUT_MILLIS) {
-            // Force scroll up to see the header status label
             runCatching {
                 composeRule.onNodeWithTag(RepairAppTestTags.OrderStatusLabel).performScrollTo()
             }
@@ -328,30 +306,36 @@ class OperatorIntakeDemoScreenshotTest {
     }
 
     private fun waitForTag(tag: String, scroll: Boolean = false) {
-        waitForTagExists(tag, scrollIfNotFound = scroll)
+        waitForTagExists(tag, scroll = scroll)
         composeRule.onNodeWithTag(tag).assertIsDisplayed()
     }
 
-    private fun waitForTagExists(tag: String, scrollIfNotFound: Boolean = false) {
+    private fun waitForTagExists(tag: String, scroll: Boolean = false) {
         var found = false
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
         
         while (!found && System.currentTimeMillis() < deadline) {
             found = isTagPresent(tag)
-            if (!found && scrollIfNotFound && (attempts % 4 == 0)) {
-                // Prova native prima di swipe manuale
-                try {
-                    composeRule.onNodeWithTag(tag).performScrollTo()
-                    composeRule.waitForIdle()
-                } catch (e: Throwable) {
-                    // Alterna direzioni con priorità "Su" (per tornare da fondo pagina)
-                    if (attempts % 12 < 8) {
-                        performSafeSwipeDown() // Scroll UP
-                    } else {
-                        performSafeSwipeUp()   // Scroll DOWN
+            if (found) break
+
+            if (scroll) {
+                if (attempts % 2 == 0) {
+                    try {
+                        composeRule.onNodeWithTag(tag).performScrollTo()
+                        composeRule.waitForIdle()
+                        if (isTagPresent(tag)) {
+                            found = true
+                            break
+                        }
+                    } catch (e: Throwable) {
+                        // Scan logic: try UP a lot, then DOWN a bit
+                        if (attempts % 15 < 10) {
+                            performSafeSwipeDown() // Scroll UP
+                        } else {
+                            performSafeSwipeUp()   // Scroll DOWN
+                        }
                     }
-                    composeRule.waitForIdle()
                 }
             }
             if (!found) {
@@ -379,24 +363,31 @@ class OperatorIntakeDemoScreenshotTest {
     private fun isTagPresent(tag: String): Boolean =
         composeRule.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()
 
-    private fun waitForText(text: String, scrollIfNotFound: Boolean = false) {
+    private fun waitForText(text: String, scroll: Boolean = false) {
         var found = false
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
 
         while (!found && System.currentTimeMillis() < deadline) {
             found = isTextDisplayed(text)
-            if (!found && scrollIfNotFound && (attempts % 4 == 0)) {
-                try {
-                    composeRule.onNodeWithText(text, substring = true).performScrollTo()
-                    composeRule.waitForIdle()
-                } catch (e: Throwable) {
-                    if (attempts % 12 < 8) {
-                        performSafeSwipeDown() // Scroll UP
-                    } else {
-                        performSafeSwipeUp()   // Scroll DOWN
+            if (found) break
+
+            if (scroll) {
+                if (attempts % 2 == 0) {
+                    try {
+                        composeRule.onNodeWithText(text, substring = true).performScrollTo()
+                        composeRule.waitForIdle()
+                        if (isTextDisplayed(text)) {
+                            found = true
+                            break
+                        }
+                    } catch (e: Throwable) {
+                        if (attempts % 15 < 10) {
+                            performSafeSwipeDown() // Scroll UP
+                        } else {
+                            performSafeSwipeUp()   // Scroll DOWN
+                        }
                     }
-                    composeRule.waitForIdle()
                 }
             }
             if (!found) {
@@ -440,7 +431,6 @@ class OperatorIntakeDemoScreenshotTest {
         const val WAIT_TIMEOUT_MILLIS = 30_000L
         const val LOGIN_ATTEMPTS = 2
         const val LOGIN_ATTEMPT_TIMEOUT_MILLIS = 20_000L
-        const val VISIBILITY_SWIPE_ATTEMPTS = 5
         const val TAG_POLL_MILLIS = 250L
         const val ACTION_PAUSE_MILLIS = 2_000L
         const val SCREENSHOT_PAUSE_MILLIS = 2_000L

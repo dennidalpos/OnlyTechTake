@@ -257,7 +257,7 @@ object DemoDataSeeder {
                     code = code,
                     title = title,
                     channel = MessageChannel.WHATSAPP,
-                    body = "Aggiornamento {{orderNumber}}: {{orderStatus}} per {{customerName}}.",
+                    body = "Aggiornamento {{numero_commessa}}: {{stato_commessa}} per {{cliente}}.",
                     active = true,
                     version = 1,
                     updatedByUserId = DEMO_ADMIN_ID,

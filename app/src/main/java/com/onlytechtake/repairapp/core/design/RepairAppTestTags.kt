@@ -36,6 +36,10 @@ object RepairAppTestTags {
     const val OrderDetailLazyColumn = "order_detail_lazy_column"
     const val OrderActionSection = "order_action_section"
     const val OrderWhatsAppButton = "order_whatsapp_button"
+    const val OrderWhatsAppPreviewPanel = "order_whatsapp_preview_panel"
+    const val OrderWhatsAppOpenButton = "order_whatsapp_open_button"
+    const val OrderWhatsAppSentButton = "order_whatsapp_sent_button"
+    const val OrderWhatsAppClosePreviewButton = "order_whatsapp_close_preview_button"
     const val OrderSignatureSection = "order_signature_section"
 
     const val CustomerNewButton = "customer_new_button"

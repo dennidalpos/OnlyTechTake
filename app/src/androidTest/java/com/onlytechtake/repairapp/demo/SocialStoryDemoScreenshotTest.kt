@@ -2,7 +2,6 @@ package com.onlytechtake.repairapp.demo
 
 import android.content.Context
 import android.graphics.Bitmap
-import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
@@ -17,6 +16,7 @@ import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.test.swipeLeft
+import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.onFirst
@@ -70,7 +70,6 @@ class SocialStoryDemoScreenshotTest {
                 }
             }
             
-            // Garantisce che il tag sia presente prima di procedere
             waitForTagExists(RepairAppTestTags.NewOrderFirstNameField)
             
             typeTag(RepairAppTestTags.NewOrderFirstNameField, "Giulia", scroll = true)
@@ -83,7 +82,6 @@ class SocialStoryDemoScreenshotTest {
             waitForText("Cliente selezionato")
             clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
 
-            // Selezione categoria (navigazione gerarchia fino a foglia)
             clickTag(RepairAppTestTags.categoryButton(DemoDataSeeder.DEMO_CATEGORY_ID), scroll = true)
             clickTag(RepairAppTestTags.categoryButton("demo-cat-hp"), scroll = true)
             clickTag(RepairAppTestTags.categoryButton("demo-cat-pavilion"), scroll = true)
@@ -103,7 +101,6 @@ class SocialStoryDemoScreenshotTest {
             waitForTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
             clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID))
             
-            // Verifica di essere nel dettaglio
             waitForTag(RepairAppTestTags.OrderStatusLabel)
             waitForText("Notebook HP")
             capture(outputDir, "05-commessa-aperta.png")
@@ -190,7 +187,7 @@ class SocialStoryDemoScreenshotTest {
             typeTag(RepairAppTestTags.CustomerPhoneField, "+39 333 010 3030", scroll = true)
             typeTag(RepairAppTestTags.CustomerEmailField, "luca.rossi@example.invalid", scroll = true)
             capture(outputDir, "02-cliente-privato.png")
-            clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true, requireDisplayed = false)
+            clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
             clickTag(RepairAppTestTags.CustomerConfirmSaveButton)
             waitForText("Luca Rossi")
             capture(outputDir, "03-privato-salvato.png")
@@ -203,7 +200,7 @@ class SocialStoryDemoScreenshotTest {
             typeTag(RepairAppTestTags.CustomerEmailField, "amministrazione@example.invalid", scroll = true)
             typeTag(RepairAppTestTags.CustomerAddressField, "Via Demo 24, Milano", scroll = true)
             capture(outputDir, "04-cliente-azienda.png")
-            clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true, requireDisplayed = false)
+            clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
             clickTag(RepairAppTestTags.CustomerConfirmSaveButton)
             waitForText("Demo Lab Srl")
             capture(outputDir, "05-azienda-salvata.png")
@@ -231,7 +228,7 @@ class SocialStoryDemoScreenshotTest {
             waitForText("Backup")
             capture(outputDir, "02-backup-dati.png")
             
-            clickText("Esporta Excel", scroll = true)
+            clickText("Esportazione Commesse", scroll = true)
             waitForText("Esportazione")
             capture(outputDir, "03-export-excel.png")
         }
@@ -274,7 +271,8 @@ class SocialStoryDemoScreenshotTest {
     }
 
     private fun acceptQuote() {
-        clickTag(RepairAppTestTags.QuoteAcceptedToggle, scroll = true)
+        waitForTag(RepairAppTestTags.QuoteAcceptedToggle, scroll = true)
+        clickTag(RepairAppTestTags.QuoteAcceptedToggle)
         pauseForDemo()
         clickTag(RepairAppTestTags.QuoteConfirmButton, scroll = true)
         composeRule.waitForIdle()
@@ -304,7 +302,6 @@ class SocialStoryDemoScreenshotTest {
         composeRule.onNodeWithTag(tabTag).performClick()
         composeRule.waitForIdle()
 
-        // Handle "Unsaved changes" dialog if it appears
         if (isTextDisplayed("Dati non salvati")) {
             clickText("Esci e perdi dati")
         }
@@ -336,9 +333,8 @@ class SocialStoryDemoScreenshotTest {
     }
 
     private fun typeTag(tag: String, text: String, scroll: Boolean = false) {
-        waitForTagExists(tag)
+        waitForTagExists(tag, scrollIfNotFound = scroll)
         val node = composeRule.onNodeWithTag(tag)
-        if (scroll) runCatching { node.performScrollTo() }
         node.assertIsDisplayed()
         node.performClick()
         node.performTextReplacement(text)
@@ -347,11 +343,10 @@ class SocialStoryDemoScreenshotTest {
         pauseForDemo()
     }
 
-    private fun clickTag(tag: String, scroll: Boolean = false, requireDisplayed: Boolean = true) {
+    private fun clickTag(tag: String, scroll: Boolean = false) {
         waitForTagExists(tag, scrollIfNotFound = scroll)
         val node = composeRule.onNodeWithTag(tag)
         
-        // Approccio di click multi-livello invertito per priorità semantica (più robusto in emulatore)
         try {
             node.performClick()
         } catch (e: Throwable) {
@@ -366,11 +361,10 @@ class SocialStoryDemoScreenshotTest {
         pauseForDemo()
     }
 
-    private fun clickText(text: String, scroll: Boolean = false, requireDisplayed: Boolean = true) {
+    private fun clickText(text: String, scroll: Boolean = false) {
         waitForText(text, scrollIfNotFound = scroll)
         val node = composeRule.onNodeWithText(text, substring = true)
         
-        // Approccio di click multi-livello invertito per priorità semantica (più robusto in emulatore)
         try {
             node.performClick()
         } catch (e: Throwable) {
@@ -386,29 +380,29 @@ class SocialStoryDemoScreenshotTest {
     }
 
     private fun performSafeSwipeUp() {
-        // Swipe UP = Scroll DOWN
         try {
             composeRule.onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn).performTouchInput {
-                swipeUp(startY = bottom * 0.7f, endY = top * 0.3f)
+                swipeUp(startY = bottom * 0.8f, endY = top + 30f)
             }
         } catch (e: Throwable) {
             composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { 
-                swipeUp(startY = bottom * 0.7f, endY = top * 0.3f)
+                swipeUp(startY = bottom * 0.8f, endY = top + 30f)
             }
         }
+        composeRule.waitForIdle()
     }
 
     private fun performSafeSwipeDown() {
-        // Swipe DOWN = Scroll UP
         try {
             composeRule.onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn).performTouchInput {
-                swipeDown(startY = top * 0.3f, endY = bottom * 0.7f)
+                swipeDown(startY = top + 30f, endY = bottom * 0.8f)
             }
         } catch (e: Throwable) {
             composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { 
-                swipeDown(startY = top * 0.3f, endY = bottom * 0.7f)
+                swipeDown(startY = top + 30f, endY = bottom * 0.8f)
             }
         }
+        composeRule.waitForIdle()
     }
 
 
@@ -424,19 +418,24 @@ class SocialStoryDemoScreenshotTest {
 
         while (!found && System.currentTimeMillis() < deadline) {
             found = isTagPresent(tag)
-            if (!found && scrollIfNotFound && (attempts % 4 == 0)) {
-                // Prova native prima di swipe manuale
-                try {
-                    composeRule.onNodeWithTag(tag).performScrollTo()
-                    composeRule.waitForIdle()
-                } catch (e: Throwable) {
-                    // Alterna direzioni con priorità "Su" (per tornare da fondo pagina)
-                    if (attempts % 12 < 8) {
-                        performSafeSwipeDown() // Scroll UP
-                    } else {
-                        performSafeSwipeUp()   // Scroll DOWN
+            if (found) break
+
+            if (scrollIfNotFound) {
+                if (attempts % 2 == 0) {
+                    try {
+                        composeRule.onNodeWithTag(tag).performScrollTo()
+                        composeRule.waitForIdle()
+                        if (isTagPresent(tag)) {
+                            found = true
+                            break
+                        }
+                    } catch (e: Throwable) {
+                        if (attempts % 15 < 10) {
+                            performSafeSwipeDown() // Scroll UP
+                        } else {
+                            performSafeSwipeUp()   // Scroll DOWN
+                        }
                     }
-                    composeRule.waitForIdle()
                 }
             }
             if (!found) {
@@ -485,17 +484,24 @@ class SocialStoryDemoScreenshotTest {
 
         while (!found && System.currentTimeMillis() < deadline) {
             found = isTextDisplayed(text)
-            if (!found && scrollIfNotFound && (attempts % 4 == 0)) {
-                try {
-                    composeRule.onNodeWithText(text, substring = true).performScrollTo()
-                    composeRule.waitForIdle()
-                } catch (e: Throwable) {
-                    if (attempts % 12 < 8) {
-                        performSafeSwipeDown() // Scroll UP
-                    } else {
-                        performSafeSwipeUp()   // Scroll DOWN
+            if (found) break
+
+            if (scrollIfNotFound) {
+                if (attempts % 2 == 0) {
+                    try {
+                        composeRule.onNodeWithText(text, substring = true).performScrollTo()
+                        composeRule.waitForIdle()
+                        if (isTextDisplayed(text)) {
+                            found = true
+                            break
+                        }
+                    } catch (e: Throwable) {
+                        if (attempts % 15 < 10) {
+                            performSafeSwipeDown() // Scroll UP
+                        } else {
+                            performSafeSwipeUp()   // Scroll DOWN
+                        }
                     }
-                    composeRule.waitForIdle()
                 }
             }
             if (!found) {
