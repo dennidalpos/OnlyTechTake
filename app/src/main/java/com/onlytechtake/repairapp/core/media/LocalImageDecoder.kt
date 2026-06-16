@@ -4,9 +4,16 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import androidx.exifinterface.media.ExifInterface
+import kotlin.math.max
 
-fun decodeOrientedBitmap(path: String): Bitmap? {
-    val source = BitmapFactory.decodeFile(path) ?: return null
+fun decodeOrientedBitmap(path: String, maxDimension: Int = Int.MAX_VALUE): Bitmap? {
+    val options = BitmapFactory.Options()
+    if (maxDimension != Int.MAX_VALUE) {
+        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeFile(path, bounds)
+        options.inSampleSize = calculateBitmapSampleSize(bounds.outWidth, bounds.outHeight, maxDimension)
+    }
+    val source = BitmapFactory.decodeFile(path, options) ?: return null
     val orientation = runCatching {
         ExifInterface(path).getAttributeInt(
             ExifInterface.TAG_ORIENTATION,
@@ -44,3 +51,13 @@ fun exifOrientationTransform(orientation: Int): ExifOrientationTransform =
         8 -> ExifOrientationTransform(rotationDegrees = -90f)
         else -> ExifOrientationTransform()
     }
+
+fun calculateBitmapSampleSize(width: Int, height: Int, maxDimension: Int): Int {
+    if (width <= 0 || height <= 0 || maxDimension <= 0) return 1
+    var sampleSize = 1
+    val largestDimension = max(width, height)
+    while ((largestDimension / (sampleSize * 2)) >= maxDimension) {
+        sampleSize *= 2
+    }
+    return sampleSize
+}

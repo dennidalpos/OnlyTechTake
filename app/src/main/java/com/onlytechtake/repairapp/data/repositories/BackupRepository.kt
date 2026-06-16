@@ -59,7 +59,9 @@ class BackupRepository(
     suspend fun exportConfiguration(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.EXPORT_DATA)
-            writeText(uri, buildConfigurationJson())
+            withContext(Dispatchers.IO) {
+                writeText(uri, buildConfigurationJson())
+            }
             eventWriter.dataExported(actor.id, clockMillis())
         }
 
@@ -69,11 +71,13 @@ class BackupRepository(
             if (BuildConfig.IS_DEMO_VERSION) {
                 throw IllegalStateException("Funzione disponibile nella versione Full")
             }
-            val dbFile = databaseFile()
-            require(dbFile.exists()) { "Database non ancora creato" }
-            context.contentResolver.openOutputStream(uri)?.use { output ->
-                dbFile.inputStream().use { input -> input.copyTo(output) }
-            } ?: throw IOException("Destinazione non disponibile")
+            withContext(Dispatchers.IO) {
+                val dbFile = databaseFile()
+                require(dbFile.exists()) { "Database non ancora creato" }
+                context.contentResolver.openOutputStream(uri)?.use { output ->
+                    dbFile.inputStream().use { input -> input.copyTo(output) }
+                } ?: throw IOException("Destinazione non disponibile")
+            }
             eventWriter.dataExported(actor.id, clockMillis())
         }
 
@@ -88,20 +92,22 @@ class BackupRepository(
             val securitySettings = securityPreferences?.settings?.first()
             val password = securitySettings?.backupEncryptionPassword?.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
 
-            context.contentResolver.openOutputStream(uri)?.use { output ->
-                ZipOutputStream(output, password?.toCharArray()).use { zip ->
-                    zip.putTextEntry("metadata/backup.json", buildBackupMetadataJson(), password)
-                    zip.putTextEntry("config/configuration.json", buildConfigurationJson(), password)
-                    addDatabaseFiles(zip, password)
-                    BackupArchive.addDirectory(
-                        zip = zip,
-                        directory = mediaStorageProvider?.getBaseMediaDir()
-                            ?: File(context.filesDir, BackupArchive.CANONICAL_MEDIA_DIRECTORY),
-                        entryDirectory = "files/${BackupArchive.CANONICAL_MEDIA_DIRECTORY}",
-                        password = password,
-                    )
-                }
-            } ?: throw IOException("Destinazione non disponibile")
+            withContext(Dispatchers.IO) {
+                context.contentResolver.openOutputStream(uri)?.use { output ->
+                    ZipOutputStream(output, password?.toCharArray()).use { zip ->
+                        zip.putTextEntry("metadata/backup.json", buildBackupMetadataJson(), password)
+                        zip.putTextEntry("config/configuration.json", buildConfigurationJson(), password)
+                        addDatabaseFiles(zip, password)
+                        BackupArchive.addDirectory(
+                            zip = zip,
+                            directory = mediaStorageProvider?.getBaseMediaDir()
+                                ?: File(context.filesDir, BackupArchive.CANONICAL_MEDIA_DIRECTORY),
+                            entryDirectory = "files/${BackupArchive.CANONICAL_MEDIA_DIRECTORY}",
+                            password = password,
+                        )
+                    }
+                } ?: throw IOException("Destinazione non disponibile")
+            }
             
             val fileName = displayName(uri)
             backupReminderPreferences?.recordSuccessfulFullBackup(fileName)
@@ -218,54 +224,56 @@ class BackupRepository(
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.EXPORT_DATA)
-            val document = PdfDocument()
-            try {
-                val writer = PdfTextWriter(document)
-                if (BuildConfig.IS_DEMO_VERSION) {
-                    writer.setWatermark("VERSIONE DEMO")
-                }
-                writer.title("Riepilogo commessa ${detail.order.orderNumber}")
-                writer.line("Numero: ${detail.order.orderNumber}")
-                writer.line("Titolo: ${detail.order.title}")
-                writer.line("Stato: ${detail.order.status.label(context)}")
-                detail.order.closureReason?.let { reason ->
-                    writer.line("Motivo chiusura: ${reason.label(context)}")
-                }
-                writer.line("Cliente: ${detail.customer?.displayName(context) ?: ""}")
-                writer.line("Categoria: ${detail.category?.name.orEmpty().ifBlank { "Nessuna" }}")
-                writer.line("Operatore: ${detail.assignedUser?.displayName.orEmpty().ifBlank { "Non assegnato" }}")
-                writer.line("Data creazione: ${formatTime(detail.order.createdAt)}")
-                writer.line("Descrizione: ${detail.order.description.orEmpty().ifBlank { "Nessuna" }}")
-                writer.section("Timeline")
-                if (detail.timeline.isEmpty()) {
-                    writer.line("Nessun evento registrato.")
-                } else {
-                    detail.timeline
-                        .sortedBy { it.createdAt }
-                        .forEach { event ->
-                            writer.line(formatTimelineEvent(event))
+            withContext(Dispatchers.IO) {
+                val document = PdfDocument()
+                try {
+                    val writer = PdfTextWriter(document)
+                    if (BuildConfig.IS_DEMO_VERSION) {
+                        writer.setWatermark("VERSIONE DEMO")
+                    }
+                    writer.title("Riepilogo commessa ${detail.order.orderNumber}")
+                    writer.line("Numero: ${detail.order.orderNumber}")
+                    writer.line("Titolo: ${detail.order.title}")
+                    writer.line("Stato: ${detail.order.status.label(context)}")
+                    detail.order.closureReason?.let { reason ->
+                        writer.line("Motivo chiusura: ${reason.label(context)}")
+                    }
+                    writer.line("Cliente: ${detail.customer?.displayName(context) ?: ""}")
+                    writer.line("Categoria: ${detail.category?.name.orEmpty().ifBlank { "Nessuna" }}")
+                    writer.line("Operatore: ${detail.assignedUser?.displayName.orEmpty().ifBlank { "Non assegnato" }}")
+                    writer.line("Data creazione: ${formatTime(detail.order.createdAt)}")
+                    writer.line("Descrizione: ${detail.order.description.orEmpty().ifBlank { "Nessuna" }}")
+                    writer.section("Timeline")
+                    if (detail.timeline.isEmpty()) {
+                        writer.line("Nessun evento registrato.")
+                    } else {
+                        detail.timeline
+                            .sortedBy { it.createdAt }
+                            .forEach { event ->
+                                writer.line(formatTimelineEvent(event))
+                            }
+                    }
+                    writer.section("Firme")
+                    if (detail.signatures.isEmpty()) {
+                        writer.line("Nessuna firma acquisita.")
+                    } else {
+                        detail.signatures.forEach { signature ->
+                            writer.line("${signature.signerName} - ${formatTime(signature.signedAt)} - ${signature.fileName}")
                         }
-                }
-                writer.section("Firme")
-                if (detail.signatures.isEmpty()) {
-                    writer.line("Nessuna firma acquisita.")
-                } else {
-                    detail.signatures.forEach { signature ->
-                        writer.line("${signature.signerName} - ${formatTime(signature.signedAt)} - ${signature.fileName}")
+                        detail.signatures.firstOrNull()?.let { signature ->
+                            writer.section("Condizioni firmate")
+                            writer.line("Privacy v${signature.privacyTemplateVersion}: ${signature.privacyTextSnapshot}")
+                            writer.line("Condizioni v${signature.termsTemplateVersion}: ${signature.termsTextSnapshot}")
+                        }
                     }
-                    detail.signatures.firstOrNull()?.let { signature ->
-                        writer.section("Condizioni firmate")
-                        writer.line("Privacy v${signature.privacyTemplateVersion}: ${signature.privacyTextSnapshot}")
-                        writer.line("Condizioni v${signature.termsTemplateVersion}: ${signature.termsTextSnapshot}")
-                    }
-                }
-                writer.finish()
+                    writer.finish()
 
-                context.contentResolver.openOutputStream(uri)?.use { output ->
-                    document.writeTo(output)
-                } ?: throw IOException("Destinazione non disponibile")
-            } finally {
-                document.close()
+                    context.contentResolver.openOutputStream(uri)?.use { output ->
+                        document.writeTo(output)
+                    } ?: throw IOException("Destinazione non disponibile")
+                } finally {
+                    document.close()
+                }
             }
             eventWriter.dataExported(actor.id, clockMillis())
         }

@@ -1,12 +1,11 @@
 package com.onlytechtake.repairapp.core.pdf
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
+import com.onlytechtake.repairapp.core.media.decodeOrientedBitmap
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
@@ -158,7 +157,7 @@ class OrderStatusPdfGenerator {
             canvas.drawText("Condizioni: Accettate (v${payload.signature.termsTemplateVersion})", margin, y, textPaint)
             y += 10f
 
-            val bitmap = BitmapFactory.decodeFile(payload.signature.localPath)
+            val bitmap = decodeOrientedBitmap(payload.signature.localPath, SIGNATURE_MAX_DECODE_DIMENSION)
             if (bitmap != null) {
                 val maxWidth = 220f
                 val maxHeight = 90f
@@ -196,3 +195,5 @@ class OrderStatusPdfGenerator {
         return currentY + paint.textSize + 2f
     }
 }
+
+private const val SIGNATURE_MAX_DECODE_DIMENSION = 480

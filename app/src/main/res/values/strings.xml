@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="demo_mode_banner">MODALITÀ DEMO ATTIVA</string>
     <string name="demo_version_banner">VERSIONE DEMO</string>
     <string name="order_created_title">Commessa creata</string>
@@ -44,8 +44,8 @@
 
     <string name="share_pdf_text">In allegato lo stato avanzamento della commessa.</string>
 
-    <string name="auth_showcase_initializing">Inizializzazione dati showcase...</string>
-    <string name="auth_showcase_preparing">Preparazione ambiente...</string>
+    <string name="auth_showcase_initializing">Inizializzazione dati showcase…</string>
+    <string name="auth_showcase_preparing">Preparazione ambiente…</string>
     <string name="auth_system_ready">Sistema pronto</string>
     <string name="auth_password_change_top">Cambio password obbligatorio</string>
     <string name="auth_security_title">Sicurezza account</string>
@@ -100,7 +100,10 @@
     <string name="home_backup_reminder_settings">Setup backup</string>
     <string name="backup_run_full_zip">Esegui backup ZIP completo</string>
     <string name="backup_status_never">Mai eseguito</string>
-    <string name="backup_status_days_ago">%1$d giorni fa</string>
+    <plurals name="backup_status_days_ago">
+        <item quantity="one">%1$d giorno fa</item>
+        <item quantity="other">%1$d giorni fa</item>
+    </plurals>
     <string name="backup_status_failed">Ultimo tentativo fallito</string>
 
     <string name="nav_back">Indietro</string>
@@ -273,7 +276,7 @@
     <string name="order_save_note">Salva nota</string>
     <string name="order_customer_documents">Documenti cliente</string>
     <string name="order_generate_status_pdf">Genera PDF stato avanzamento</string>
-    <string name="order_generating_pdf">Generazione PDF in corso...</string>
+    <string name="order_generating_pdf">Generazione PDF in corso…</string>
     <string name="order_pdf_missing_signature_title">Firma mancante</string>
     <string name="order_pdf_missing_signature_text">Firma cliente non trovata. Generare comunque il PDF senza firma?</string>
     <string name="order_document_history">Storico documenti:</string>
@@ -428,8 +431,8 @@
     <string name="config_category_confirm_save_text">La categoria verra\' aggiornata nel catalogo locale.</string>
     <string name="config_category_delete">Elimina</string>
     <string name="config_category_confirm_delete_title">Eliminare categoria?</string>
-    <string name="config_category_confirm_delete_text">La categoria e tutte le sue sottocategorie verranno eliminate. Non e\' possibile eliminare categorie usate in commesse esistenti.</string>
-    <string name="config_category_confirm_delete_specific_text">La categoria \'%1$s\' e tutte le sue sottocategorie verranno eliminate. Non e\' possibile eliminare categorie usate in commesse esistenti.</string>
+    <string name="config_category_confirm_delete_text" tools:ignore="Typos">La categoria e tutte le sue sottocategorie verranno eliminate. Non e\' possibile eliminare categorie usate in commesse esistenti.</string>
+    <string name="config_category_confirm_delete_specific_text" tools:ignore="Typos">La categoria \'%1$s\' e tutte le sue sottocategorie verranno eliminate. Non e\' possibile eliminare categorie usate in commesse esistenti.</string>
     <string name="config_category_open_branch">Apri ramo</string>
     <string name="config_category_empty_branch">Nessuna categoria in questo ramo.</string>
     <string name="config_template_code_label">Codice</string>
@@ -454,7 +457,11 @@
     <string name="config_backup_admin_only">Area riservata admin.</string>
     <string name="config_backup_reminder_enabled">Promemoria backup attivo</string>
     <string name="config_backup_interval_days">Intervallo promemoria (giorni)</string>
-    <string name="config_backup_reminder_info">Stato: %1$s\nUltimo backup riuscito: %2$s\nIntervallo: ogni %3$d giorni\nFile: %4$s</string>
+    <string name="config_backup_reminder_info">Stato: %1$s\nUltimo backup riuscito: %2$s\nIntervallo: %3$s\nFile: %4$s</string>
+    <plurals name="config_backup_reminder_interval">
+        <item quantity="one">ogni %1$d giorno</item>
+        <item quantity="other">ogni %1$d giorni</item>
+    </plurals>
     <string name="config_backup_last_success_none">Nessuno</string>
     <string name="config_backup_last_file_none">Non disponibile</string>
     <string name="config_backup_security_title">Sicurezza ed Encryption</string>
@@ -509,7 +516,7 @@
     <string name="storage_cleanup_orphans">Pulisci file orfani</string>
     <string name="storage_cleanup_orphans_tooltip">Rimuove permanentemente i file non più referenziati nel database (es. foto di commesse eliminate).</string>
     <string name="storage_tooltip">Monitora l\'uso della memoria e pulisci i file temporanei per liberare spazio.</string>
-    <string name="storage_loading">Caricamento statistiche...</string>
+    <string name="storage_loading">Caricamento statistiche…</string>
     <string name="storage_free_percentage">Spazio libero: %1$d%% (%2$s)</string>
     <string name="storage_app_detail_title">Dettaglio uso App</string>
     <string name="storage_close">Chiudi setup memoria</string>
@@ -527,5 +534,8 @@
     <string name="catalog_error_depth_limit">Profondità massima raggiunta (4 livelli)</string>
 
     <string name="demo_error_order_limit">Limite Demo raggiunto. Hai creato il numero massimo di commesse disponibili nella versione Demo (%1$d). Per continuare senza limiti, attiva la versione Full.</string>
-    <string name="demo_error_operator_limit">Limite Demo raggiunto. Massimo %1$d operatori consentiti nella versione Demo. Per continuare senza limiti, attiva la versione Full.</string>
+    <plurals name="demo_error_operator_limit">
+        <item quantity="one">Limite Demo raggiunto. Massimo %1$d operatore consentito nella versione Demo. Per continuare senza limiti, attiva la versione Full.</item>
+        <item quantity="other">Limite Demo raggiunto. Massimo %1$d operatori consentiti nella versione Demo. Per continuare senza limiti, attiva la versione Full.</item>
+    </plurals>
 </resources>

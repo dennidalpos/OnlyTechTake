@@ -25,11 +25,9 @@ fun RepairAppNavHost(windowSizeClass: WindowSizeClass) {
     val context = LocalContext.current
     var appInstanceKey by remember { mutableIntStateOf(0) }
     val appContainer = remember(context, appInstanceKey) {
-        android.util.Log.d("NavHost", "Creating AppContainer for instance: $appInstanceKey")
         AppContainer(context.applicationContext)
     }
     val recreateAppContainer = {
-        android.util.Log.d("NavHost", "Recreating AppContainer request.")
         appContainer.close()
         appInstanceKey += 1
     }

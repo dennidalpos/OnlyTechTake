@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -242,6 +243,7 @@ fun BackupSettings(
 
 @Composable
 private fun backupReminderInfo(settings: BackupReminderSettings): String {
+    val resources = LocalResources.current
     val status = when {
         settings.lastBackupStatus == BackupReminderStatus.FAILED ->
             stringResource(R.string.backup_status_failed)
@@ -249,9 +251,18 @@ private fun backupReminderInfo(settings: BackupReminderSettings): String {
             stringResource(R.string.backup_status_never)
         else -> {
             val days = BackupReminderPolicy.daysSinceLastSuccessfulBackup(settings, System.currentTimeMillis()) ?: 0L
-            stringResource(R.string.backup_status_days_ago, days)
+            resources.getQuantityString(
+                R.plurals.backup_status_days_ago,
+                days.toInt(),
+                days,
+            )
         }
     }
+    val interval = resources.getQuantityString(
+        R.plurals.config_backup_reminder_interval,
+        settings.intervalDays,
+        settings.intervalDays,
+    )
     val lastSuccessful = settings.lastSuccessfulBackupAtMillis
         ?.let { formatUiDateTime(it) }
         ?: stringResource(R.string.config_backup_last_success_none)
@@ -261,7 +272,7 @@ private fun backupReminderInfo(settings: BackupReminderSettings): String {
         R.string.config_backup_reminder_info,
         status,
         lastSuccessful,
-        settings.intervalDays,
+        interval,
         fileName,
     )
 }

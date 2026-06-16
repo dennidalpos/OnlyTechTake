@@ -115,14 +115,18 @@ class NewOrderViewModel(
     }
 
     fun deleteStagedMedia(path: String) {
-        orderMediaRepository.deleteStagedMedia(path)
+        viewModelScope.launch {
+            orderMediaRepository.deleteStagedMedia(path)
+        }
     }
 
     fun replaceStagedImage(staged: StagedOrderMedia, bitmap: Bitmap, onReplaced: (StagedOrderMedia) -> Unit) {
-        orderMediaRepository.replaceStagedImage(staged, bitmap).fold(
-            onSuccess = { onReplaced(it) },
-            onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) }
-        )
+        viewModelScope.launch {
+            orderMediaRepository.replaceStagedImage(staged, bitmap).fold(
+                onSuccess = { onReplaced(it) },
+                onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) }
+            )
+        }
     }
 
     fun createIntakePhotoFile(sessionId: String): Result<File> {
@@ -130,10 +134,12 @@ class NewOrderViewModel(
     }
 
     fun stageCapturedIntakePhoto(file: File, onStaged: (StagedOrderMedia) -> Unit) {
-        orderMediaRepository.stageCapturedIntakePhoto(file).fold(
-            onSuccess = { onStaged(it) },
-            onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) }
-        )
+        viewModelScope.launch {
+            orderMediaRepository.stageCapturedIntakePhoto(file).fold(
+                onSuccess = { onStaged(it) },
+                onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) }
+            )
+        }
     }
 
     fun reportCameraError(message: String) {

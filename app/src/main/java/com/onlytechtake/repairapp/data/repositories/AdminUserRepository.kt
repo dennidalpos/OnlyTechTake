@@ -39,7 +39,13 @@ class AdminUserRepository(
             if (BuildConfig.IS_DEMO_VERSION) {
                 val operatorCount = userDao.countActiveByRole(UserRole.OPERATOR)
                 if (operatorCount >= MAX_DEMO_OPERATORS) {
-                    throw IllegalStateException(context.getString(R.string.demo_error_operator_limit, MAX_DEMO_OPERATORS))
+                    throw IllegalStateException(
+                        context.resources.getQuantityString(
+                            R.plurals.demo_error_operator_limit,
+                            MAX_DEMO_OPERATORS,
+                            MAX_DEMO_OPERATORS,
+                        )
+                    )
                 }
             }
 

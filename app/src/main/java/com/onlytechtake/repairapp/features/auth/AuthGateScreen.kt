@@ -99,7 +99,6 @@ fun AuthGateRoute(
         LaunchedEffect(authState.initialized, authState.configured, onAppDataRestored, viewModel) {
             if (!showcaseSeedRequested) {
                 showcaseSeedRequested = true
-                android.util.Log.d("AuthGateRoute", "Triggering seedShowcaseData. Initialized: ${authState.initialized}, Configured: ${authState.configured}")
                 viewModel.seedShowcaseData(appCtx) {
                     onAppDataRestored()
                 }
@@ -109,7 +108,6 @@ fun AuthGateRoute(
 
     if (BuildConfig.IS_SHOWCASE_MODE_ENABLED && authState.initialized && authState.configured && authState.currentUser == null) {
         LaunchedEffect(Unit) {
-            android.util.Log.d("AuthGateRoute", "Showcase auto-login triggered")
             viewModel.loginShowcaseAdmin()
         }
     }

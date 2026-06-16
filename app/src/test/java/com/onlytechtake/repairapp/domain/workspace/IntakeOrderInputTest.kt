@@ -56,6 +56,43 @@ class IntakeOrderInputTest {
     }
 
     @Test
+    fun validationRejectsBlankExistingCustomerAndIncompleteNewCustomer() {
+        val input = IntakeOrderInput(
+            existingCustomerId = "   ",
+            newCustomer = CustomerInput(
+                type = CustomerType.PRIVATE,
+                firstName = "Mario",
+                lastName = "Rossi",
+                phone = "   ",
+                email = "",
+            ),
+            problemSummary = "Display rotto",
+            categoryId = "phone",
+            stagedMediaCount = 1,
+            hasPrivacySignature = true,
+        )
+
+        assertEquals(listOf("Cliente obbligatorio"), input.validationErrors())
+    }
+
+    @Test
+    fun validationRejectsBusinessCustomerWithoutCompanyName() {
+        val input = IntakeOrderInput(
+            newCustomer = CustomerInput(
+                type = CustomerType.BUSINESS,
+                companyName = " ",
+                email = "azienda@example.test",
+            ),
+            problemSummary = "Notebook non si avvia",
+            categoryId = "notebook",
+            stagedMediaCount = 1,
+            hasPrivacySignature = true,
+        )
+
+        assertEquals(listOf("Cliente obbligatorio"), input.validationErrors())
+    }
+
+    @Test
     fun validationAcceptsCategoryWithoutDynamicFields() {
         val input = IntakeOrderInput(
             existingCustomerId = "customer-1",

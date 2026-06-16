@@ -15,6 +15,13 @@ class IntakeStepperTest {
     }
 
     @Test
+    fun stepNavigationIsClampedToKnownBounds() {
+        assertEquals(0, completedStepAfterEdit(completedStep = 5, step = -2))
+        assertEquals(5, completedStepAfterAdvance(completedStep = 0, step = 99))
+        assertEquals(6, currentStepAfterAdvance(step = 99))
+    }
+
+    @Test
     fun editingPreviousStepRequiresFollowingStepsToBeConfirmedAgain() {
         assertEquals(1, completedStepAfterEdit(completedStep = 5, step = 2))
         assertFalse(isIntakeSubmitUnlocked(completedStep = 1))

@@ -30,6 +30,8 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.UUID
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class OrderMediaRepository(
     private val context: Context,
@@ -56,8 +58,9 @@ class OrderMediaRepository(
         return File(mediaStorageProvider.getIntakeMediaDir(sessionId), fileNamer.photoFileName("presa_in_carico", clockMillis()))
     }
 
-    fun stageCapturedIntakePhoto(file: File): Result<StagedOrderMedia> =
-        runCatching {
+    suspend fun stageCapturedIntakePhoto(file: File): Result<StagedOrderMedia> =
+        withContext(Dispatchers.IO) {
+            runCatching {
             require(file.exists() && (file.length() > 0L)) { "Foto non salvata" }
             mediaOptimizer.optimize(file)
             val bounds = readImageBounds(file)
@@ -71,9 +74,11 @@ class OrderMediaRepository(
                 height = bounds.height,
             )
         }
+        }
 
-    fun importIntakeAttachment(sessionId: String, uri: Uri): Result<StagedOrderMedia> =
-        runCatching {
+    suspend fun importIntakeAttachment(sessionId: String, uri: Uri): Result<StagedOrderMedia> =
+        withContext(Dispatchers.IO) {
+            runCatching {
             val resolver = context.contentResolver
             val sourceName = resolver.displayName(uri) ?: "allegato"
             val mimeType = attachmentPolicy.normalize(resolver.getType(uri))
@@ -106,6 +111,7 @@ class OrderMediaRepository(
                 height = bounds.height,
             )
         }
+        }
 
     suspend fun registerCapturedPhoto(actor: AuthenticatedUser, orderId: String, file: File): Result<OrderMediaEntity> =
         registerCapturedImage(
@@ -132,7 +138,8 @@ class OrderMediaRepository(
         mediaType: String,
         timelineTitle: String,
     ): Result<OrderMediaEntity> =
-        runCatching {
+        withContext(Dispatchers.IO) {
+            runCatching {
             requireWritableOrder(actor, orderId)
             require(file.exists() && file.length() > 0L) { "Foto non salvata" }
             
@@ -161,9 +168,11 @@ class OrderMediaRepository(
             }
             media
         }
+        }
 
     suspend fun importAttachment(actor: AuthenticatedUser, orderId: String, uri: Uri): Result<OrderMediaEntity> =
-        runCatching {
+        withContext(Dispatchers.IO) {
+            runCatching {
             StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
             requireWritableOrder(actor, orderId)
             val resolver = context.contentResolver
@@ -214,9 +223,11 @@ class OrderMediaRepository(
             }
             media
         }
+        }
 
     suspend fun deleteMedia(actor: AuthenticatedUser, mediaId: String): Result<Unit> =
-        runCatching {
+        withContext(Dispatchers.IO) {
+            runCatching {
             val media = requireNotNull(orderMediaDao.findById(mediaId)) { "Media non trovato" }
             requireWritableOrder(actor, media.orderId)
             val now = clockMillis()
@@ -228,9 +239,11 @@ class OrderMediaRepository(
             }
             fileCleanupService.deleteSpecificFile(media.localPath)
         }
+        }
 
     suspend fun replaceImage(actor: AuthenticatedUser, mediaId: String, bitmap: Bitmap): Result<OrderMediaEntity> =
-        runCatching {
+        withContext(Dispatchers.IO) {
+            runCatching {
             val media = requireNotNull(orderMediaDao.findById(mediaId)) { "Media non trovato" }
             requireWritableOrder(actor, media.orderId)
             require(media.mimeType.startsWith("image/", ignoreCase = true)) { "Il media selezionato non e' un'immagine" }
@@ -251,13 +264,15 @@ class OrderMediaRepository(
             }
             updated
         }
+        }
 
     suspend fun attachStagedMedia(
         actor: AuthenticatedUser,
         orderId: String,
         stagedMedia: List<StagedOrderMedia>,
     ): Result<List<OrderMediaEntity>> =
-        runCatching {
+        withContext(Dispatchers.IO) {
+            runCatching {
             requireWritableOrder(actor, orderId)
             if (stagedMedia.isEmpty()) return@runCatching emptyList()
 
@@ -297,18 +312,24 @@ class OrderMediaRepository(
             }
             entities
         }
-
-    fun deleteMediaFiles(media: List<OrderMediaEntity>) {
-        media.forEach { entity -> fileCleanupService.deleteSpecificFile(entity.localPath) }
-    }
-
-    fun deleteStagedMedia(path: String): Result<Unit> =
-        runCatching {
-            fileCleanupService.deleteSpecificFile(path)
         }
 
-    fun replaceStagedImage(staged: StagedOrderMedia, bitmap: Bitmap): Result<StagedOrderMedia> =
-        runCatching {
+    suspend fun deleteMediaFiles(media: List<OrderMediaEntity>) {
+        withContext(Dispatchers.IO) {
+            media.forEach { entity -> fileCleanupService.deleteSpecificFile(entity.localPath) }
+        }
+    }
+
+    suspend fun deleteStagedMedia(path: String): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+            fileCleanupService.deleteSpecificFile(path)
+        }
+        }
+
+    suspend fun replaceStagedImage(staged: StagedOrderMedia, bitmap: Bitmap): Result<StagedOrderMedia> =
+        withContext(Dispatchers.IO) {
+            runCatching {
             require(staged.mimeType.startsWith("image/", ignoreCase = true)) { "Il media selezionato non e' un'immagine" }
             val file = File(staged.localPath)
             val savedMimeType = writeBitmapReplacing(file, bitmap, staged.mimeType)
@@ -319,6 +340,7 @@ class OrderMediaRepository(
                 width = bounds.width,
                 height = bounds.height,
             )
+        }
         }
 
     private fun readImageBounds(file: File): ImageBounds {

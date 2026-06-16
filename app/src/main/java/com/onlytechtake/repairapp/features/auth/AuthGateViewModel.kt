@@ -50,14 +50,12 @@ class AuthGateViewModel(
 
     fun seedShowcaseData(context: Context, onDone: () -> Unit) {
         viewModelScope.launch {
-            android.util.Log.d("AuthGateViewModel", "Seed requested.")
             if (mutableFormState.value.seeding) return@launch
             
             mutableFormState.update { it.copy(seeding = true, loading = true, errorMessage = null) }
             runCatching {
                 ShowcaseDataSeeder.seedShowcaseData(context)
             }.onSuccess {
-                android.util.Log.d("AuthGateViewModel", "Seed success. Requesting container refresh.")
                 onDone()
             }.onFailure { e ->
                 android.util.Log.e("AuthGateViewModel", "Seed failed!", e)

@@ -19,11 +19,11 @@ class MediaOptimizer(
     fun optimize(file: File): Result<File> = runCatching {
         if (!isImage(file)) return@runCatching file
 
-        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-        BitmapFactory.decodeFile(file.absolutePath, options)
+        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeFile(file.absolutePath, bounds)
 
-        val width = options.outWidth
-        val height = options.outHeight
+        val width = bounds.outWidth
+        val height = bounds.outHeight
 
         if (width <= 0 || height <= 0) return@runCatching file
 
@@ -46,16 +46,21 @@ class MediaOptimizer(
             ExifInterface.ORIENTATION_NORMAL
         }
 
-        val matrix = Matrix()
-        if (scale < 1.0f) {
-            matrix.postScale(scale, scale)
+        val decodeOptions = BitmapFactory.Options().apply {
+            inSampleSize = calculateBitmapSampleSize(width, height, maxDimension)
+        }
+        val original = BitmapFactory.decodeFile(file.absolutePath, decodeOptions) ?: return@runCatching file
+
+        val targetWidth = width * scale
+        val targetHeight = height * scale
+        val matrix = Matrix().apply {
+            postScale(targetWidth / original.width.toFloat(), targetHeight / original.height.toFloat())
         }
         
         applyExifRotation(matrix, orientation)
 
-        val original = BitmapFactory.decodeFile(file.absolutePath) ?: return@runCatching file
         val optimized = try {
-            Bitmap.createBitmap(original, 0, 0, width, height, matrix, true)
+            Bitmap.createBitmap(original, 0, 0, original.width, original.height, matrix, true)
         } finally {
             // original will be recycled later if it's different from optimized
         }

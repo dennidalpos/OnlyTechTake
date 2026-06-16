@@ -82,6 +82,63 @@ class BackupRepositoryTest {
         }
     }
 
+    @Test
+    fun extractionRequiresMetadataAndMainDatabase() {
+        val missingMetadata = assertThrows(IllegalArgumentException::class.java) {
+            BackupArchive.extract(
+                ByteArrayInputStream(
+                    rawZip(
+                        mapOf("${BackupArchive.DATABASE_ENTRY_PREFIX}${RepairAppDatabase.DATABASE_NAME}" to "database"),
+                    ),
+                ),
+                File(testRoot, "missing-metadata"),
+            )
+        }
+        assertEquals("Metadata backup mancanti", missingMetadata.message)
+
+        val missingDatabase = assertThrows(IllegalArgumentException::class.java) {
+            BackupArchive.extract(
+                ByteArrayInputStream(
+                    rawZip(mapOf(BackupArchive.METADATA_ENTRY to """{"databaseVersion": ${RepairAppDatabase.DATABASE_VERSION}}""")),
+                ),
+                File(testRoot, "missing-database"),
+            )
+        }
+        assertEquals("Database backup mancante", missingDatabase.message)
+    }
+
+    @Test
+    fun extractionRejectsFilesOutsideCanonicalAppMedia() {
+        listOf(
+            "files/databases/${RepairAppDatabase.DATABASE_NAME}",
+            "files/shared_prefs/database_security_prefs.xml",
+            "files/cache/shared/document.pdf",
+        ).forEach { unsupportedPath ->
+            val error = assertThrows(IllegalArgumentException::class.java) {
+                BackupArchive.extract(
+                    ByteArrayInputStream(backupZip(mapOf(unsupportedPath to "data"))),
+                    File(testRoot, "unsupported-${unsupportedPath.hashCode()}"),
+                )
+            }
+            assertEquals("Backup contiene file app non supportati", error.message)
+        }
+    }
+
+    @Test
+    fun restoreWithoutCanonicalAppMediaClearsDestinationOnly() {
+        val stagedFilesRoot = File(testRoot, "staged-files").apply { mkdirs() }
+        val destination = File(testRoot, "destination")
+        File(destination, "order_media/order-1/photo.jpg").also {
+            it.parentFile?.mkdirs()
+            it.writeText("old photo")
+        }
+
+        BackupArchive.restoreAppMedia(stagedFilesRoot, destination)
+
+        assertTrue(destination.exists())
+        assertFalse(File(destination, "order_media/order-1/photo.jpg").exists())
+    }
+
     private fun extract(files: Map<String, String>): File {
         val destination = File(testRoot, "extract-${UUID.randomUUID()}")
         BackupArchive.extract(ByteArrayInputStream(backupZip(files)), destination)
@@ -89,14 +146,19 @@ class BackupRepositoryTest {
     }
 
     private fun backupZip(files: Map<String, String>): ByteArray {
-        val output = ByteArrayOutputStream()
-        ZipOutputStream(output).use { zip ->
-            val requiredEntries = linkedMapOf(
+        return rawZip(
+            linkedMapOf(
                 BackupArchive.METADATA_ENTRY to
                     """{"databaseVersion": ${RepairAppDatabase.DATABASE_VERSION}}""",
                 "${BackupArchive.DATABASE_ENTRY_PREFIX}${RepairAppDatabase.DATABASE_NAME}" to "database",
-            )
-            (requiredEntries + files).forEach { (name, content) ->
+            ) + files,
+        )
+    }
+
+    private fun rawZip(files: Map<String, String>): ByteArray {
+        val output = ByteArrayOutputStream()
+        ZipOutputStream(output).use { zip ->
+            files.forEach { (name, content) ->
                 val params = ZipParameters().apply { fileNameInZip = name }
                 zip.putNextEntry(params)
                 zip.write(content.toByteArray())

@@ -24,10 +24,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -53,6 +55,8 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.media.decodeOrientedBitmap
 import java.io.File
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.floor
@@ -68,10 +72,7 @@ fun LocalImagePreview(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
 ) {
-    val imageFile = remember(path) { File(path) }
-    val bitmap = remember(path, imageFile.lastModified(), imageFile.length()) {
-        decodeOrientedBitmap(path)?.asImageBitmap()
-    }
+    val bitmap by rememberDecodedLocalBitmap(path, PREVIEW_MAX_DIMENSION)
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -85,11 +86,12 @@ fun LocalImagePreview(
             ),
         contentAlignment = Alignment.Center,
     ) {
-        if (bitmap == null) {
+        val previewBitmap = bitmap
+        if (previewBitmap == null) {
             Text(stringResource(R.string.image_preview_unavailable), style = MaterialTheme.typography.bodySmall)
         } else {
             Image(
-                bitmap = bitmap,
+                bitmap = previewBitmap.asImageBitmap(),
                 contentDescription = description,
                 modifier = Modifier.fillMaxWidth(),
                 contentScale = ContentScale.Fit,
@@ -202,15 +204,18 @@ private fun EditableLocalImage(
     modifier: Modifier = Modifier,
     onBuildEditedBitmapChange: (() -> Bitmap?) -> Unit,
 ) {
-    var bitmap by remember(path) {
-        mutableStateOf(decodeOrientedBitmap(path)?.copy(Bitmap.Config.ARGB_8888, true))
-    }
+    val decodedBitmap by rememberDecodedLocalBitmap(path, EDIT_MAX_DIMENSION)
+    var bitmap by remember(path) { mutableStateOf<Bitmap?>(null) }
     var editMode by remember(path) { mutableStateOf(ImageEditMode.ARROW) }
     var arrows by remember(path) { mutableStateOf(emptyList<ImageEditArrow>()) }
     var cropRect by remember(path) { mutableStateOf<Rect?>(null) }
     var dragStart by remember(path) { mutableStateOf<Offset?>(null) }
     var dragCurrent by remember(path) { mutableStateOf<Offset?>(null) }
     var canvasSize by remember(path) { mutableStateOf(IntSize.Zero) }
+
+    LaunchedEffect(decodedBitmap) {
+        bitmap = decodedBitmap?.copy(Bitmap.Config.ARGB_8888, true)
+    }
 
     SideEffect {
         onBuildEditedBitmapChange {
@@ -380,7 +385,7 @@ private fun ZoomableLocalImage(
     description: String,
     modifier: Modifier = Modifier,
 ) {
-    val bitmap = remember(path) { decodeOrientedBitmap(path)?.asImageBitmap() }
+    val bitmap by rememberDecodedLocalBitmap(path, VIEWER_MAX_DIMENSION)
     var scale by remember(path) { mutableFloatStateOf(1f) }
     var offset by remember(path) { mutableStateOf(Offset.Zero) }
     val transformState = rememberTransformableState { _, zoomChange, panChange, _ ->
@@ -394,15 +399,16 @@ private fun ZoomableLocalImage(
             .clipToBounds(),
         contentAlignment = Alignment.Center,
     ) {
-        if (bitmap == null) {
+        val viewerBitmap = bitmap
+        if (viewerBitmap == null) {
             Text(stringResource(R.string.image_preview_unavailable), style = MaterialTheme.typography.bodySmall)
         } else {
             Image(
-                bitmap = bitmap,
+                bitmap = viewerBitmap.asImageBitmap(),
                 contentDescription = description,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(bitmap.width.toFloat() / bitmap.height.coerceAtLeast(1).toFloat())
+                    .aspectRatio(viewerBitmap.width.toFloat() / viewerBitmap.height.coerceAtLeast(1).toFloat())
                     .graphicsLayer {
                         scaleX = scale
                         scaleY = scale
@@ -415,6 +421,17 @@ private fun ZoomableLocalImage(
         }
     }
 }
+
+@Composable
+private fun rememberDecodedLocalBitmap(path: String, maxDimension: Int) =
+    produceState<Bitmap?>(initialValue = null, path, maxDimension, fileVersion(path)) {
+        value = withContext(Dispatchers.IO) {
+            decodeOrientedBitmap(path, maxDimension)
+        }
+    }
+
+private fun fileVersion(path: String): Pair<Long, Long> =
+    File(path).let { file -> file.lastModified() to file.length() }
 
 private enum class ImageEditMode {
     CROP,
@@ -542,3 +559,6 @@ private fun drawAndroidArrowHead(canvas: AndroidCanvas, paint: AndroidPaint, sta
 private const val MIN_DRAG_DISTANCE = 12f
 private const val MIN_CROP_SIZE = 24f
 private const val ARROW_HEAD_ANGLE = 0.7f
+private const val PREVIEW_MAX_DIMENSION = 640
+private const val VIEWER_MAX_DIMENSION = 1920
+private const val EDIT_MAX_DIMENSION = 1920

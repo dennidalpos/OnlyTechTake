@@ -16,9 +16,9 @@ import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 fun AppQueueCard(
     title: String,
     count: Int,
+    modifier: Modifier = Modifier,
     lastElementTitle: String? = null,
     onOpenQueue: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     StandardCard(
         modifier = modifier,

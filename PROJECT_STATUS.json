@@ -1,6 +1,1083 @@
 {
+  "agent_execution_directives": {
+    "status": "active",
+    "updated_at": "2026-06-16",
+    "purpose": "Usare i blocchi sotto come entry point del backlog. I piani dettagliati piu' in basso restano la fonte tecnica per evidenze, fix minimi, test e vincoli.",
+    "rules": [
+      "Quando l'utente chiede di risolvere PROJECT_STATUS.json, scegliere un solo blocco open per volta e dichiararlo prima di iniziare.",
+      "Non risolvere task fuori dal blocco scelto, salvo dipendenza esplicita indicata nello stesso blocco o richiesta diretta dell'utente.",
+      "Dentro un blocco rispettare recommended_batch_size: se il blocco contiene piu' item, chiudere solo il numero consigliato nella singola sessione.",
+      "Non accorpare blocchi medium, high, approval_required o external_device senza approvazione esplicita dell'utente.",
+      "I blocchi con schema_guarded=true non possono modificare Room, DATABASE_VERSION, schema export o migrazioni senza approvazione owner.",
+      "I blocchi con owner_approval_required=true sono da trattare come pianificazione finche' l'utente non approva l'implementazione.",
+      "A fine blocco aggiornare questo file rimuovendo o segnando solo i residui realmente chiusi, riportando comandi eseguiti e risultati."
+    ],
+    "default_next_block": "B01"
+  },
   "todos": [
-    "[P1] AndroidTests: validare :app:connectedFullDebugAndroidTest sulla workflow GitHub `Android Instrumented Tests` o in locale con Android SDK/adb nel PATH. Il 2026-06-16 lint, unit test e assembleDebug sono passati, ma `adb devices` non era eseguibile (`adb` non riconosciuto). Chiudere solo con report connected test a 0 failure/0 error; registrare come nuovi todo eventuali crash o warning accessibilita'.",
-    "[P1] Backup restore: progettare e verificare un flusso sicuro per ripristino ZIP su nuova installazione/nuovo telefono con database SQLCipher. Il backup corrente sostituisce database e media ma non esporta/importa la chiave protetta da Android Keystore; finche' non esiste un flusso chiave dedicato, documentare il ripristino come valido solo con chiave locale compatibile."
-  ]
+    {
+      "block_id": "B01",
+      "title": "Gate release esterni e baseline device",
+      "complexity": "external_device",
+      "status": "open",
+      "recommended_batch_size": 1,
+      "schema_guarded": false,
+      "owner_approval_required": false,
+      "why_this_block": "Richiede adb/device/emulatore o workflow GitHub; non va mescolato con fix codice finche' manca la baseline runtime.",
+      "items": [
+        {
+          "priority": "P1",
+          "summary": "AndroidTests: validare :app:connectedFullDebugAndroidTest sulla workflow GitHub `Android Instrumented Tests` o in locale con Android SDK/adb nel PATH.",
+          "refs": [
+            "performance_residual_plan.priority_order.DeviceBaselineAndProfiler"
+          ],
+          "completion_criteria": "Report connected test a 0 failure/0 error; eventuali crash o warning accessibilita' diventano nuovi todo."
+        },
+        {
+          "priority": "P1",
+          "summary": "Performance device baseline: misurare startup, dashboard/detail, media, import SAF, backup ZIP, export XLSX/PDF e generazione PDF stato.",
+          "refs": [
+            "performance_residual_plan.priority_order.DeviceBaselineAndProfiler"
+          ],
+          "completion_criteria": "Metriche before/after o baseline su dataset realistico, senza regressioni UI/storage."
+        }
+      ]
+    },
+    {
+      "block_id": "B02",
+      "title": "Backup restore e consistenza dati",
+      "complexity": "high",
+      "status": "open",
+      "recommended_batch_size": 1,
+      "schema_guarded": false,
+      "owner_approval_required": false,
+      "why_this_block": "Tocca SQLCipher, Keystore, database e media privati; va risolto in sessione dedicata con test mirati e attenzione al rollback.",
+      "items": [
+        {
+          "priority": "P1",
+          "summary": "Backup restore: progettare e verificare un flusso sicuro per ripristino ZIP su nuova installazione/nuovo telefono con database SQLCipher.",
+          "refs": [
+            "functional_review_residual_plan.priority_order.F05"
+          ],
+          "completion_criteria": "Limite Keystore documentato; restore valido solo con chiave locale compatibile finche' non esiste un flusso chiave dedicato."
+        },
+        {
+          "priority": "P1",
+          "summary": "Functional restore consistency: rendere robusto restoreCompleteBackup quando l'actor corrente non esiste nel DB ripristinato e quando fallisce dopo replacePrivateFiles.",
+          "refs": [
+            "functional_review_residual_plan.priority_order.F05"
+          ],
+          "completion_criteria": "Test restore valido senza actor e test failure post-sostituzione media con stato DB/app_media coerente."
+        }
+      ]
+    },
+    {
+      "block_id": "B03",
+      "title": "Bug funzionali P1 senza cambio schema",
+      "complexity": "medium",
+      "status": "open",
+      "recommended_batch_size": 2,
+      "schema_guarded": false,
+      "owner_approval_required": false,
+      "why_this_block": "Fix mirati in domain/repository/UI con test unitari o strumentati, ma indipendenti da Room schema e migrazioni.",
+      "items": [
+        {
+          "priority": "P1",
+          "summary": "Functional PDF Demo watermark: il PDF stato generato dal dettaglio commessa deve applicare watermark `VERSIONE DEMO` nel flavor Demo.",
+          "refs": [
+            "functional_review_residual_plan.priority_order.F01"
+          ],
+          "completion_criteria": "Test Demo che verifica il watermark nel PDF condiviso dal percorso GenerateOrderStatusPdfUseCase/OrderStatusPdfGenerator."
+        },
+        {
+          "priority": "P1",
+          "summary": "Functional permissions close orders: allineare il permesso CLOSE_ORDERS al comportamento reale di changeStatus/recordFeedback.",
+          "refs": [
+            "functional_review_residual_plan.priority_order.F02"
+          ],
+          "completion_criteria": "Test chiusura diretta e rifiuto preventivo con e senza CLOSE_ORDERS."
+        },
+        {
+          "priority": "P1",
+          "summary": "Functional permissions manage customers: CustomerRepository.save deve ricevere actor e verificare MANAGE_CUSTOMERS.",
+          "refs": [
+            "functional_review_residual_plan.priority_order.F03"
+          ],
+          "completion_criteria": "Test salvataggio negato senza permesso e intake preservato per utenti autorizzati."
+        },
+        {
+          "priority": "P1",
+          "summary": "Functional WhatsApp template result: il bottone WhatsApp generale nel dettaglio deve usare statusTemplateAnchor(order).",
+          "refs": [
+            "functional_review_residual_plan.priority_order.F04"
+          ],
+          "completion_criteria": "Test mapping/UI mirato per RESULT+REPAIRABLE => preventivo e RESULT+NOT_REPAIRABLE => non riparabile."
+        }
+      ]
+    },
+    {
+      "block_id": "B04",
+      "title": "Funzionale P2 e allineamento documentazione",
+      "complexity": "medium",
+      "status": "open",
+      "recommended_batch_size": 2,
+      "schema_guarded": false,
+      "owner_approval_required": false,
+      "why_this_block": "Migliorie operative e decisioni docs senza migrazioni; separato dai P1 per non diluire i fix bloccanti.",
+      "items": [
+        {
+          "priority": "P2",
+          "summary": "Functional XLSX payment export: includere nell'export XLSX lo stato pagamento derivato dall'ultimo evento PAYMENT_RECEIVED/PAYMENT_REMOVED senza cambiare schema Room.",
+          "refs": [
+            "functional_review_residual_plan.priority_order.F06"
+          ],
+          "completion_criteria": "Test DAO/export writer per colonna pagamento e valori derivati."
+        },
+        {
+          "priority": "P2",
+          "summary": "Functional docs cleanup archive mismatch: allineare docs al codice corrente sulla pulizia admin, senza implementare archiviazione o soft delete.",
+          "refs": [
+            "functional_review_residual_plan.priority_order.F07"
+          ],
+          "completion_criteria": "Diff documentale coerente con reset commesse reale e nessun cambio schema."
+        },
+        {
+          "priority": "P2",
+          "summary": "Functional PDF timeline contract: decidere e documentare se il PDF commessa per cliente include solo eventi visibleToCustomer o timeline completa.",
+          "refs": [
+            "functional_review_residual_plan.priority_order.F08"
+          ],
+          "completion_criteria": "Contratto PDF documentato e, se cambia comportamento, test aggiornati."
+        }
+      ]
+    },
+    {
+      "block_id": "B05",
+      "title": "Performance senza schema change",
+      "complexity": "medium",
+      "status": "open",
+      "recommended_batch_size": 1,
+      "schema_guarded": false,
+      "owner_approval_required": false,
+      "why_this_block": "Sono ottimizzazioni da guidare con misure; ogni intervento deve restare piccolo e verificabile.",
+      "items": [
+        {
+          "priority": "P2",
+          "summary": "Performance Compose recomposition: profilare dashboard/detail/new order/settings e ridurre recomposition ampie solo dove misurato.",
+          "refs": [
+            "performance_residual_plan.priority_order.ComposeRecompositionState"
+          ],
+          "completion_criteria": "Metriche o screenshot profiler prima/dopo e diff limitato ai composable misurati."
+        },
+        {
+          "priority": "P2",
+          "summary": "Performance large export memory: misurare export XLSX/backup su dataset grande e progettare paging/cursor streaming solo se necessario.",
+          "refs": [
+            "performance_residual_plan.priority_order.LargeExportMemory"
+          ],
+          "completion_criteria": "Export grande entro soglie concordate, XLSX apribile/equivalente e nessun cambio schema."
+        },
+        {
+          "priority": "P3",
+          "summary": "Performance startup/DI: misurare cold start e rendere lazy solo inizializzazioni costose dimostrate.",
+          "refs": [
+            "performance_residual_plan.priority_order.StartupDI"
+          ],
+          "completion_criteria": "Startup migliorata con metrica ripetibile e nessuna regressione fresh install/login/restore."
+        },
+        {
+          "priority": "P3",
+          "summary": "Performance showcase seeding: misurare ShowcaseDataSeeder e valutare batch/withTransaction senza cambiare dati demo.",
+          "refs": [
+            "performance_residual_plan.priority_order.ShowcaseSeeding"
+          ],
+          "completion_criteria": "Tempo seed documentato e pipeline demo/showcase verde."
+        }
+      ]
+    },
+    {
+      "block_id": "B06",
+      "title": "Lint, risorse e dipendenze test",
+      "complexity": "medium",
+      "status": "open",
+      "recommended_batch_size": 1,
+      "schema_guarded": false,
+      "owner_approval_required": false,
+      "why_this_block": "Audit ampio ma meccanico: procedere per feature evita rimozioni di stringhe ancora usate indirettamente.",
+      "items": [
+        {
+          "priority": "P2",
+          "summary": "Lint UnusedResources: completare audit delle 70 risorse segnalate come inutilizzate in strings.xml.",
+          "refs": [
+            "lint_warning_residual_plan.priority_order.UnusedResources"
+          ],
+          "completion_criteria": ":app:lintFullDebug senza UnusedResources non motivati e nessuna regressione di copy/test tag/demo."
+        },
+        {
+          "priority": "P3",
+          "summary": "Lint dependency warnings: valutare update androidx.test.ext:junit, androidx.test:core e mockk solo dopo verifica compatibilita'.",
+          "refs": [
+            "lint_warning_residual_plan.priority_order.GradleDependency/NewerVersionAvailable"
+          ],
+          "completion_criteria": "Dipendenze aggiornate con motivazione e test verdi, oppure warning accettati con decisione owner."
+        },
+        {
+          "priority": "P3",
+          "summary": "Lint PluralsCandidate residuo: decidere se rimuovere R.string.intake_media_count o convertirla a plurals se torna in uso.",
+          "refs": [
+            "lint_warning_residual_plan.priority_order.PluralsCandidate"
+          ],
+          "completion_criteria": "Warning sparito per rimozione sicura o conversione plurale corretta."
+        }
+      ]
+    },
+    {
+      "block_id": "B07",
+      "title": "Refactor quick wins approvati",
+      "complexity": "medium",
+      "status": "proposed_pending_owner_approval",
+      "recommended_batch_size": 1,
+      "schema_guarded": false,
+      "owner_approval_required": true,
+      "why_this_block": "Refactor utili ma non bloccanti; implementarli solo quando l'utente chiede esplicitamente di procedere con il refactor.",
+      "items": [
+        {
+          "priority": "P3",
+          "summary": "R01: Estrarre stato e dialog del dettaglio commessa.",
+          "refs": [
+            "refactor_plan.interventions.R01"
+          ],
+          "completion_criteria": "State holder/reducer testabile, flussi e test tag invariati."
+        },
+        {
+          "priority": "P3",
+          "summary": "R02: Spezzare componenti puri del dettaglio commessa.",
+          "refs": [
+            "refactor_plan.interventions.R02"
+          ],
+          "completion_criteria": "Componenti stateless e nessun cambio a ViewModel/repository."
+        },
+        {
+          "priority": "P3",
+          "summary": "R03: Separare image editing da preview/viewer.",
+          "refs": [
+            "refactor_plan.interventions.R03"
+          ],
+          "completion_criteria": "Geometria e trasformazioni testabili senza regressioni preview/zoom/crop."
+        },
+        {
+          "priority": "P3",
+          "summary": "R04: Centralizzare messaggi, errori e sessione ViewModel.",
+          "refs": [
+            "refactor_plan.interventions.R04"
+          ],
+          "completion_criteria": "Duplicazioni launchWithUser rimosse e messaggi coerenti."
+        },
+        {
+          "priority": "P3",
+          "summary": "R05: Localizzare copy visibile residua.",
+          "refs": [
+            "refactor_plan.interventions.R05"
+          ],
+          "completion_criteria": "Copy utente in strings.xml senza cambiare testo o comportamento."
+        }
+      ]
+    },
+    {
+      "block_id": "B08",
+      "title": "Refactor medio/alto rischio",
+      "complexity": "high",
+      "status": "proposed_pending_owner_approval",
+      "recommended_batch_size": 1,
+      "schema_guarded": false,
+      "owner_approval_required": true,
+      "why_this_block": "Tocca confini e classi centrali; ogni item deve essere una sessione dedicata con test mirati.",
+      "items": [
+        {
+          "priority": "P3",
+          "summary": "R06: Ridurre QuickActionsPanel con state mapper wizard.",
+          "refs": [
+            "refactor_plan.interventions.R06"
+          ],
+          "completion_criteria": "Wizard testabile senza Compose e flusso intake invariato."
+        },
+        {
+          "priority": "P3",
+          "summary": "R07: Scomporre SettingsViewModel per area funzionale.",
+          "refs": [
+            "refactor_plan.interventions.R07"
+          ],
+          "completion_criteria": "Facade pubblica stabile e messaggi/permessi invariati."
+        },
+        {
+          "priority": "P3",
+          "summary": "R08: Separare query/read model da comandi workflow.",
+          "refs": [
+            "refactor_plan.interventions.R08"
+          ],
+          "completion_criteria": "Facade OrderWorkflowRepository stabile, audit/timeline/pagamento equivalenti."
+        },
+        {
+          "priority": "P3",
+          "summary": "R09: Separare backup in servizi archive, database, SAF e metadata.",
+          "refs": [
+            "refactor_plan.interventions.R09"
+          ],
+          "completion_criteria": "BackupRepository resta facade e restore mantiene validazioni DATABASE_VERSION 4."
+        },
+        {
+          "priority": "P3",
+          "summary": "R10: Stabilizzare confine domain/data per use case futuri.",
+          "refs": [
+            "refactor_plan.interventions.R10"
+          ],
+          "completion_criteria": "Contratti minimi testabili, LOCAL_ONLY invariato e nessuna astrazione speculativa."
+        }
+      ]
+    },
+    {
+      "block_id": "B09",
+      "title": "Schema Room e indici",
+      "complexity": "approval_required",
+      "status": "blocked_until_owner_approval",
+      "recommended_batch_size": 1,
+      "schema_guarded": true,
+      "owner_approval_required": true,
+      "why_this_block": "Qualsiasi implementazione puo' richiedere DATABASE_VERSION, schema export e migrazione; va isolata e approvata.",
+      "items": [
+        {
+          "priority": "P2",
+          "summary": "Performance Room/index proposal: valutare indici su query calde di lista ordini, updatedAt, assignedToUserId, status e customerId.",
+          "refs": [
+            "performance_residual_plan.priority_order.RoomQueryIndexesSchemaProposal"
+          ],
+          "completion_criteria": "Decisione owner documentata; se approvato, schema export e test Room/strumentati verdi."
+        }
+      ]
+    }
+  ],
+  "functional_review_residual_plan": {
+    "status": "open",
+    "created_at": "2026-06-16",
+    "source_work": "Review funzionale statica dei flussi app locale commesse riparazioni: confronto README/docs con domain, repository e ViewModel. Nessuna modifica codice implementata in questa review.",
+    "last_verified_commands": [],
+    "last_verified_result": "Review statica soltanto; non sono stati eseguiti Gradle, lint, unit test o test strumentati.",
+    "scope_guardrails": [
+      "Non cambiare schema Room, RepairAppDatabase.DATABASE_VERSION, schema export o migrazioni senza approvazione owner.",
+      "Non introdurre cloud, backend, WhatsApp API, analytics o telemetria.",
+      "Non trattare backup ZIP come migrazione cross-device finche' chiave SQLCipher/Keystore non e' progettata.",
+      "Preferire fix minimi nei repository/domain/ViewModel esistenti e test mirati.",
+      "Aggiornare docs solo quando il comportamento reale cambia o quando le docs sono avanti rispetto al codice."
+    ],
+    "priority_order": [
+      {
+        "id": "F01",
+        "priority": "P1",
+        "classification": "bug",
+        "title": "PDF stato nel flavor Demo senza watermark",
+        "residual": "Il limite Demo documentato richiede watermark `VERSIONE DEMO` sui PDF, ma il percorso UI dettaglio usa GenerateOrderStatusPdfUseCase e OrderStatusPdfGenerator senza controllo BuildConfig.IS_DEMO_VERSION. Il watermark esiste solo nel PDF export legacy di BackupRepository.",
+        "evidence": [
+          "docs/08_LICENZA_DEMO_FULL_E_MANUALE_USO.md:29",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailViewModel.kt:212",
+          "app/src/main/java/com/onlytechtake/repairapp/domain/workspace/GenerateOrderStatusPdfUseCase.kt:67",
+          "app/src/main/java/com/onlytechtake/repairapp/core/pdf/OrderStatusPdfGenerator.kt:60",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupRepository.kt:231"
+        ],
+        "minimal_fix": [
+          "Aggiungere a OrderStatusPdfPayload un campo watermarkText nullable oppure isDemo.",
+          "Impostare `VERSIONE DEMO` in GenerateOrderStatusPdfUseCase quando BuildConfig.IS_DEMO_VERSION e' true.",
+          "Disegnare il watermark in OrderStatusPdfGenerator su ogni pagina generata, senza cambiare schema o storage."
+        ],
+        "tests_required": [
+          "Test unitario o strumentato sul generator che verifica presenza del testo watermark nel PDF Demo.",
+          "Compile/test del flavor Demo per il percorso GenerateOrderStatusPdfUseCase.",
+          "Smoke manuale o strumentato: dettaglio commessa > genera PDF > condivisione mantiene watermark."
+        ],
+        "docs_project_status_impact": "Nessun aggiornamento docs se corretto; mantenere questo residuo P1 in PROJECT_STATUS.json finche' non passa il test Demo."
+      },
+      {
+        "id": "F02",
+        "priority": "P1",
+        "classification": "bug",
+        "title": "Permesso CLOSE_ORDERS esposto ma non applicato",
+        "residual": "CLOSE_ORDERS e' selezionabile nella UI admin e presente nel modello permessi, ma le chiusure passano da changeStatus/recordFeedback con il solo gate di scrittura sulla commessa. Un operatore con EDIT_OWN_ORDERS puo' chiudere una propria commessa anche senza CLOSE_ORDERS.",
+        "evidence": [
+          "app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt:122",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/admin/AdminPanel.kt:238",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowRepository.kt:228",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowRepository.kt:353",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowRepository.kt:454"
+        ],
+        "minimal_fix": [
+          "In OrderWorkflowRepository richiedere UserPermission.CLOSE_ORDERS quando targetStatus e' CLOSED, sia in changeStatus sia nel ramo recordFeedback che chiude.",
+          "Decidere se l'operatore standard deve avere CLOSE_ORDERS; se si', aggiungerlo ai permessi default creati da AdminUserRepository.",
+          "Mostrare errore permesso mancante tramite il flusso WorkspaceMessage gia' esistente."
+        ],
+        "tests_required": [
+          "OrderWorkflowRepositoryInstrumentedTest: operatore assigned con EDIT_OWN_ORDERS ma senza CLOSE_ORDERS non puo' chiudere.",
+          "OrderWorkflowRepositoryInstrumentedTest: operatore con CLOSE_ORDERS puo' chiudere con closureReason.",
+          "Test rifiuto preventivo: recordFeedback(REJECT) rispetta CLOSE_ORDERS."
+        ],
+        "docs_project_status_impact": "Docs da aggiornare solo se cambia il profilo permessi default dell'operatore; residuo P1 finche' non coperto da test."
+      },
+      {
+        "id": "F03",
+        "priority": "P1",
+        "classification": "bug",
+        "title": "Salvataggio clienti senza enforcement MANAGE_CUSTOMERS",
+        "residual": "CustomerRepository.save non riceve actor e non verifica MANAGE_CUSTOMERS, nonostante il permesso esista e sia assegnabile. Il salvataggio e' chiamato sia dalla sezione Clienti sia dal flusso Nuova commessa.",
+        "evidence": [
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/CustomerRepository.kt:47",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/customers/CustomersViewModel.kt:65",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/NewOrderViewModel.kt:99",
+          "app/src/main/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCase.kt:56",
+          "app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt:124"
+        ],
+        "minimal_fix": [
+          "Cambiare CustomerRepository.save in save(actor, input) e richiedere UserPermission.MANAGE_CUSTOMERS.",
+          "Aggiornare CustomersViewModel, NewOrderViewModel e CreateIntakeOrderUseCase per passare l'actor corrente.",
+          "Preservare intake operatori default, che gia' ricevono MANAGE_CUSTOMERS in AdminUserRepository."
+        ],
+        "tests_required": [
+          "CustomerRepositoryTest: save fallisce senza MANAGE_CUSTOMERS.",
+          "CustomerRepositoryTest: save riesce con MANAGE_CUSTOMERS.",
+          "Test intake/use case: creazione commessa con nuovo cliente resta atomica e autorizzata per operatore con permesso."
+        ],
+        "docs_project_status_impact": "Nessuna doc se si conferma che operatori autorizzati possono creare clienti; residuo P1 finche' non coperto."
+      },
+      {
+        "id": "F04",
+        "priority": "P1",
+        "classification": "bug",
+        "title": "Template WhatsApp generale ignora esito diagnosi",
+        "residual": "Il domain espone statusTemplateAnchor(order) con special case per RESULT+REPAIRABLE e RESULT+NOT_REPAIRABLE, ma la card azioni usa solo lo stato e il binding workspace forza WHATSAPP_UPDATE. Nel momento di preventivo/non riparabile puo' partire un messaggio generico invece del template corretto.",
+        "evidence": [
+          "app/src/main/java/com/onlytechtake/repairapp/domain/workspace/OrderStatusWorkflow.kt:41",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailWorkspace.kt:169",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailComponents.kt:162",
+          "app/src/test/java/com/onlytechtake/repairapp/features/workspace/StatusWorkflowTest.kt:47"
+        ],
+        "minimal_fix": [
+          "Calcolare l'anchor nel workspace con statusTemplateAnchor(selected.order) e passarlo alla card.",
+          "Rimuovere il fallback forzato a TemplateAnchor.WHATSAPP_UPDATE nel bottone generale.",
+          "Mantenere i bottoni guidati post-diagnosi gia' presenti per quote/non riparabile."
+        ],
+        "tests_required": [
+          "Test unitario del binding/mapping: RESULT+REPAIRABLE produce WHATSAPP_QUOTE.",
+          "Test unitario del binding/mapping: RESULT+NOT_REPAIRABLE produce WHATSAPP_NOT_REPAIRABLE.",
+          "Eventuale test Compose leggero se esiste infrastruttura per cliccare il bottone WhatsApp in dettaglio."
+        ],
+        "docs_project_status_impact": "Nessuna doc; residuo P1 finche' il percorso UI usa il mapping order-aware."
+      },
+      {
+        "id": "F05",
+        "priority": "P1",
+        "classification": "rischio dati/sicurezza",
+        "title": "Restore ZIP non completamente robusto dopo sostituzione DB/media",
+        "residual": "restoreCompleteBackup valida il DB con la chiave locale, sostituisce DB e app_media, poi scrive audit con actor.id proveniente dal DB precedente. Se l'actor non esiste nel DB ripristinato o fallisce dopo replacePrivateFiles, il rollback dichiarato copre il DB ma non garantisce rollback dei media.",
+        "evidence": [
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupRepository.kt:119",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupRepository.kt:144",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupRepository.kt:162",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupRepository.kt:163",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupRepository.kt:175",
+          "app/src/main/java/com/onlytechtake/repairapp/data/local/entities/AuditLogEntity.kt:11"
+        ],
+        "minimal_fix": [
+          "Dopo apertura del DB ripristinato, verificare se actor.id esiste; in caso contrario scrivere audit con actorUserId null o con un valore ammesso dal modello.",
+          "Non lasciare che l'audit post-restore invalidi un restore gia' applicato.",
+          "Aggiungere snapshot/rollback di app_media o rendere la sostituzione media atomica quanto possibile con directory temporanea e rename controllato."
+        ],
+        "tests_required": [
+          "BackupRepository/strumentato: restore di backup valido dove actor corrente non esiste nel DB ripristinato termina con successo e richiede nuovo login.",
+          "Test di failure post-replacePrivateFiles che verifica DB e app_media coerenti o rollback esplicito documentato.",
+          "RepositoryPathsInstrumentedTest se cambiano path o sostituzione media."
+        ],
+        "docs_project_status_impact": "Integrare il todo backup esistente con questo caso di consistency locale; non cambiare la nota cross-device/Keystore finche' il flusso chiave non e' progettato."
+      },
+      {
+        "id": "F06",
+        "priority": "P2",
+        "classification": "rischio dati/UX",
+        "title": "Export XLSX non include stato pagamento",
+        "residual": "Il pagamento e' stato funzionale indipendente e derivato dall'ultimo evento PAYMENT_RECEIVED/PAYMENT_REMOVED, ma l'export XLSX non include alcuna colonna pagamento. L'utente che esporta commesse perde un dato operativo importante.",
+        "evidence": [
+          "docs/01_GUIDA_FUNZIONALE.md:192",
+          "app/src/main/java/com/onlytechtake/repairapp/domain/workspace/WorkspaceModels.kt:146",
+          "app/src/main/java/com/onlytechtake/repairapp/data/local/dao/RepairAppDaos.kt:40",
+          "app/src/main/java/com/onlytechtake/repairapp/data/local/dao/RepairAppDaos.kt:84",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt:185"
+        ],
+        "minimal_fix": [
+          "Senza schema change, aggiungere a OrderExportDao una subquery che calcola l'ultimo evento pagamento per ordine.",
+          "Aggiungere a OrderExportRow un campo paymentStatusLabel/isPaid derivato e una colonna XLSX `Pagamento`.",
+          "Aggiornare OrderExportXlsxWriter mantenendo output streaming e cifratura opzionale."
+        ],
+        "tests_required": [
+          "OrderExportXlsxWriterTest: intestazione e valore pagamento esportati.",
+          "Test DAO strumentato: ultimo PAYMENT_RECEIVED => Pagato; ultimo PAYMENT_REMOVED o assente => Non pagato/blank secondo decisione UX.",
+          "Compile/test Full e Demo se tocca export bloccati da BuildConfig."
+        ],
+        "docs_project_status_impact": "Aggiornare docs export XLSX quando la colonna viene aggiunta; residuo P2 se rinviato."
+      },
+      {
+        "id": "F07",
+        "priority": "P2",
+        "classification": "debito tecnico/documentazione",
+        "title": "Docs archiviazione batch e soft delete non allineate al codice",
+        "residual": "La guida funzionale documenta archiviazione batch con ARCHIVIA/CANCELLA e il modello dati cita deletedAt/deleteReason, ma RepairOrderEntity corrente non ha quei campi e il repository implementa reset commesse con CANCELLA TUTTO. Implementare l'archiviazione richiederebbe schema change non autorizzato.",
+        "evidence": [
+          "docs/01_GUIDA_FUNZIONALE.md:24",
+          "docs/01_GUIDA_FUNZIONALE.md:219",
+          "docs/03_MODELLO_DATI_GENERICO.md:79",
+          "app/src/main/java/com/onlytechtake/repairapp/data/local/entities/RepairOrderEntity.kt:53",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/DataResetRepository.kt:61",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/DataResetRepository.kt:105"
+        ],
+        "minimal_fix": [
+          "Aggiornare docs/01 e docs/03 per descrivere lo stato reale: reset commesse con CANCELLA TUTTO e nessun soft delete commessa.",
+          "Spostare archiviazione batch/soft delete tra idee future solo dopo approvazione schema Room.",
+          "Non aggiungere deletedAt/deleteReason senza incremento DATABASE_VERSION, export schema e decisione owner."
+        ],
+        "tests_required": [
+          "Per solo allineamento docs: verificare diff e coerenza testo.",
+          "Se in futuro approvato schema: test fresh-install, schema export, DAO filtri archived/deleted e cleanup media."
+        ],
+        "docs_project_status_impact": "Aggiornare docs subito o mantenere residuo P2; se owner vuole archiviazione, creare piano schema separato."
+      },
+      {
+        "id": "F08",
+        "priority": "P2",
+        "classification": "domanda aperta/rischio UX",
+        "title": "Contratto PDF timeline completa vs eventi visibili cliente",
+        "residual": "La guida parla di PDF riepilogo con timeline completa, mentre OrderStatusPdfGenerator filtra solo eventi visibleToCustomer. Il filtro puo' essere corretto per privacy, ma il contratto va deciso per evitare aspettative sbagliate.",
+        "evidence": [
+          "docs/01_GUIDA_FUNZIONALE.md:239",
+          "docs/01_GUIDA_FUNZIONALE.md:250",
+          "app/src/main/java/com/onlytechtake/repairapp/core/pdf/OrderStatusPdfGenerator.kt:131",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupRepository.kt:246"
+        ],
+        "minimal_fix": [
+          "Decidere: PDF cliente stato avanzamento include solo visibleToCustomer; export/admin PDF puo' includere timeline completa.",
+          "Aggiornare copy/docs per distinguere PDF cliente da PDF admin, senza cambiare schema.",
+          "Se serve timeline completa nel PDF cliente, aggiungere opzione esplicita e conferma privacy prima di esportare."
+        ],
+        "tests_required": [
+          "Test generator: eventi non visibleToCustomer esclusi/inclusi secondo decisione.",
+          "Se si aggiunge opzione, test UI del toggle e test PDF."
+        ],
+        "docs_project_status_impact": "Aggiornare docs quando viene presa la decisione; mantenere domanda aperta P2 finche' il contratto non e' esplicito."
+      }
+    ],
+    "recommended_sequence": [
+      "Chiudere prima F01-F04: sono bug funzionali piccoli, senza schema change e con test mirati.",
+      "Affrontare F05 subito dopo o in parallelo al piano backup esistente, perche' tocca consistenza dati locale.",
+      "Implementare F06 come miglioramento export senza schema change.",
+      "Allineare F07-F08 con decisione owner/documentazione prima di introdurre qualunque modifica schema o nuovo flusso PDF."
+    ],
+    "schema_changes_not_implemented": [
+      "Nessun campo deletedAt/deletedByUserId/deleteReason e nessuna archiviazione commessa sono stati implementati.",
+      "Nessuna colonna pagamento e nessun cambio DATABASE_VERSION sono richiesti dai fix minimi F01-F06."
+    ],
+    "future_ideas_not_to_implement_now": [
+      "Archiviazione batch/soft delete commesse con stato deletedAt/deleteReason: richiede piano schema separato.",
+      "Migrazione affidabile backup ZIP tra device/installazioni: richiede design esplicito export/import chiave SQLCipher/Keystore.",
+      "Backend, cloud o WhatsApp API: fuori scope e vietati dai vincoli correnti."
+    ]
+  },
+  "performance_residual_plan": {
+    "status": "open",
+    "created_at": "2026-06-16",
+    "source_work": "Analisi performance Android locale con baseline check_env/check_project, fix bitmap downsampling, I/O Dispatchers.IO e test LocalImageDecoderTest.",
+    "last_verified_commands": [
+      "powershell -ExecutionPolicy Bypass -File scripts\\android\\check_env.ps1",
+      "powershell -ExecutionPolicy Bypass -File scripts\\windows\\check_project.ps1 -Flavor Full -SkipReleaseBuild",
+      "powershell -ExecutionPolicy Bypass -File scripts\\android\\gradle.ps1 -- --no-configuration-cache :app:testFullDebugUnitTest --tests com.onlytechtake.repairapp.core.media.LocalImageDecoderTest"
+    ],
+    "last_verified_result": "check_env passato; check_project Full passato; lint 0 errors/74 warnings; unit test 88 tests, 0 failures, 0 errors. adb non disponibile nel PATH, quindi nessun profiler/device test locale.",
+    "completed_low_risk_fixes": [
+      {
+        "id": "PFIX01",
+        "priority": "P1",
+        "title": "Bitmap preview/viewer downsampling e decode su IO",
+        "files": [
+          "app/src/main/java/com/onlytechtake/repairapp/core/media/LocalImageDecoder.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/common/LocalImageComponents.kt",
+          "app/src/test/java/com/onlytechtake/repairapp/core/media/LocalImageDecoderTest.kt"
+        ],
+        "result": "Preview limitate a 640px; viewer/editor a 1920px; decode Compose spostato su Dispatchers.IO; sample size coperto da test unitari."
+      },
+      {
+        "id": "PFIX02",
+        "priority": "P1",
+        "title": "Riduzione picco memoria MediaOptimizer e PDF firma",
+        "files": [
+          "app/src/main/java/com/onlytechtake/repairapp/core/media/MediaOptimizer.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/core/pdf/OrderStatusPdfGenerator.kt"
+        ],
+        "result": "MediaOptimizer usa inSampleSize prima di scalare; PDF stato decodifica firma con limite 480px."
+      },
+      {
+        "id": "PFIX03",
+        "priority": "P1",
+        "title": "File I/O media e backup confinato a Dispatchers.IO",
+        "files": [
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderMediaRepository.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupRepository.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/NewOrderViewModel.kt"
+        ],
+        "result": "Import SAF, compressione immagini, replace/delete media, attach staged, export config/database/backup/XLSX/PDF summary spostati su IO senza cambio schema o API UI pubbliche."
+      }
+    ],
+    "priority_order": [
+      {
+        "priority": "P1",
+        "type": "DeviceBaselineAndProfiler",
+        "risk": "medium",
+        "residual": "Mancano metriche runtime su device per startup, navigazione, import/media, backup/export e PDF perche' adb non e' disponibile nel PATH locale.",
+        "plan": [
+          "Rendere disponibile adb o usare workflow strumentato esistente.",
+          "Misurare cold/warm startup, prima apertura dashboard, dettaglio commessa con media, editor immagine, import SAF grande, backup ZIP, export XLSX e generazione PDF stato.",
+          "Ripetere su dataset realistico Full e, se utile, Demo/Showcase; registrare device, build variant, dimensione dataset e tempi p50/p95.",
+          "Solo dopo misure runtime, promuovere nuovi fix performance mirati."
+        ],
+        "completion_criteria": [
+          "Report con metriche before/after o baseline stabile per ogni flusso P1.",
+          ":app:connectedFullDebugAndroidTest o workflow equivalente a 0 failure/0 error quando disponibile.",
+          "Nessuna regressione storage, SAF, CameraX, Room reale o share PDF."
+        ]
+      },
+      {
+        "priority": "P2",
+        "type": "RoomQueryIndexesSchemaProposal",
+        "risk": "medium_high",
+        "residual": "Le query lista/search ordini usano indici esistenti su assignedToUserId/status/customerId/createdAt, ma l'ordinamento caldo e' spesso updatedAt DESC e non esiste un indice dedicato o composito. Implementarlo richiede cambio schema.",
+        "plan": [
+          "Raccogliere EXPLAIN QUERY PLAN su observeFiltered, observeOrderListProjection, search ed exportAllOrders con dataset realistico.",
+          "Proporre indici dedicati solo se il piano mostra scan/sort costosi, per esempio updatedAt o compositi coerenti con filtri reali.",
+          "Preparare modifica schema separata con incremento DATABASE_VERSION, schema export e test fresh-install/migrazione solo dopo approvazione owner."
+        ],
+        "completion_criteria": [
+          "Decisione owner documentata: nessun indice necessario oppure schema change approvato.",
+          "Se approvato, RepairAppDatabase.DATABASE_VERSION aggiornato con schema esportato e test Room/strumentati verdi.",
+          "Nessuna migrazione o indice introdotti senza richiesta esplicita."
+        ]
+      },
+      {
+        "priority": "P2",
+        "type": "ComposeRecompositionState",
+        "risk": "medium",
+        "residual": "Dashboard/detail/new order/settings raccolgono piu' StateFlow nello stesso composable e alcune LazyColumn non sono state ottimizzate con key/contentType perche' mancavano misure profiler.",
+        "plan": [
+          "Profilare recomposition con Layout Inspector/Compose tooling su dashboard, dettaglio commessa con media, nuova commessa e settings.",
+          "Aggregare solo gli stati che causano recomposition ampie reali; evitare refactor preventivi.",
+          "Aggiungere key/contentType alle LazyColumn dove liste dinamiche mostrano churn misurato.",
+          "Valutare collectAsStateWithLifecycle solo se coerente con dipendenze gia' presenti e senza introdurre nuove librerie."
+        ],
+        "completion_criteria": [
+          "Metriche recomposition prima/dopo o screenshot profiler allegati al report.",
+          "Diff limitato ai composable misurati.",
+          "Check Full e test UI/strumentati mirati verdi se cambiano gerarchie o test tag."
+        ]
+      },
+      {
+        "priority": "P2",
+        "type": "LargeExportMemory",
+        "risk": "medium",
+        "residual": "OrderExportXlsxWriter scrive XLSX in streaming, ma OrderExportDao.exportAllOrders restituisce una List completa; su dataset grande puo' diventare il collo di bottiglia memoria.",
+        "plan": [
+          "Misurare export XLSX cifrato e non cifrato con dataset grande.",
+          "Se la List completa e' costosa, progettare paging DAO o cursor streaming mantenendo identico il formato XLSX.",
+          "Aggiungere test unitari su escaping XML, ordine righe e output cifrato/non cifrato; eseguire test strumentati solo se il percorso SAF reale viene toccato."
+        ],
+        "completion_criteria": [
+          "Export grande completato entro soglie concordate senza picchi memoria anomali.",
+          "Output XLSX apribile e equivalente ai test esistenti.",
+          "Nessun cambio schema Room salvo approvazione separata."
+        ]
+      },
+      {
+        "priority": "P3",
+        "type": "StartupDI",
+        "risk": "medium",
+        "residual": "AppContainer, RepairAppDatabase e RepairAppNavHost non sono stati ottimizzati oltre alla rimozione log gia' presente nel working tree; eventuale lazy init richiede misure startup.",
+        "plan": [
+          "Misurare cold start e creazione AppContainer con profiler o trace su device.",
+          "Identificare init costose non necessarie alla prima schermata.",
+          "Rendere lazy solo repository/servizi realmente costosi, preservando init sicurezza SQLCipher e reset container."
+        ],
+        "completion_criteria": [
+          "Startup migliorata con metrica ripetibile.",
+          "Fresh install, login/setup e restore backup non regrediscono.",
+          "Nessun cambio a chiavi, SQLCipher o gestione sessione senza test dedicati."
+        ]
+      },
+      {
+        "priority": "P3",
+        "type": "ShowcaseSeeding",
+        "risk": "low",
+        "residual": "ShowcaseDataSeeder puo' fare molte upsert e generazioni bitmap in sequenza; non e' stato cambiato oltre a modifiche preesistenti nel working tree.",
+        "plan": [
+          "Misurare tempo seed Showcase su installazione pulita.",
+          "Se lento, valutare batch/withTransaction e riuso controllato di bitmap/paint dove non cambia output demo.",
+          "Verificare che dati, immagini demo e credenziali showcase restino identici."
+        ],
+        "completion_criteria": [
+          "Tempo seed documentato prima/dopo.",
+          "Pipeline demo/showcase verde.",
+          "Nessun cambio funzionale ai dati demo salvo approvazione."
+        ]
+      }
+    ],
+    "schema_changes_not_implemented": [
+      "Nessun indice, DATABASE_VERSION, entita' Room, DAO schema export o migrazione sono stati modificati nel lavoro performance corrente."
+    ]
+  },
+  "lint_warning_residual_plan": {
+    "status": "open",
+    "created_at": "2026-06-16",
+    "source_report": "app/build/reports/lint-results-fullDebug.txt",
+    "last_verified_command": "powershell -ExecutionPolicy Bypass -File scripts\\android\\gradle.ps1 -- --no-configuration-cache :app:lintFullDebug :app:testFullDebugUnitTest",
+    "last_verified_result": "0 errors, 74 warnings; 86 tests, 0 failures, 0 errors",
+    "scope_guardrails": [
+      "Non modificare schema Room, RepairAppDatabase.DATABASE_VERSION o migrazioni.",
+      "Non aggiornare dipendenze senza verifica compatibilita' AGP/Kotlin e motivo reale.",
+      "Non eliminare risorse UI senza audit del flusso o della feature proprietaria.",
+      "Preferire fix piccoli, reversibili e verificati con lint/test Full."
+    ],
+    "priority_order": [
+      {
+        "priority": "P2",
+        "type": "UnusedResources",
+        "count": 70,
+        "risk": "medium",
+        "decision": "Residuo reale ma non sicuro da correggere in blocco: molte stringhe appartengono a schermate operative, setup, backup, ordini e admin.",
+        "plan": [
+          "Raggruppare le risorse per feature e confrontarle con schermate, test tag, demo/showcase e flussi condizionali.",
+          "Per ogni risorsa, scegliere una sola azione: rimuovere se realmente morta, ripristinare il riferimento se la UI la deve usare, oppure sopprimere con motivazione puntuale se usata indirettamente.",
+          "Dopo ogni gruppo eseguire :app:lintFullDebug e test mirati se la feature e' toccata."
+        ],
+        "completion_criteria": [
+          "Nessun UnusedResources residuo non motivato nel report lint Full.",
+          "Nessuna regressione di copy, test tag, demo/showcase o schermate admin/settings.",
+          "Diff limitato alle feature auditate."
+        ]
+      },
+      {
+        "priority": "P3",
+        "type": "GradleDependency/NewerVersionAvailable",
+        "count": 3,
+        "risk": "medium",
+        "decision": "Non aggiornare ora: sono warning di versione test-only e richiedono verifica coordinata del version catalog e della compatibilita' toolchain.",
+        "plan": [
+          "Verificare changelog e compatibilita' con AGP, Kotlin, AndroidX Test e MockK.",
+          "Aggiornare solo il version catalog se il beneficio e' chiaro e non rompe test JVM/strumentati.",
+          "Eseguire lint, test Full e, appena disponibile device/emulatore o workflow, connectedFullDebugAndroidTest."
+        ],
+        "completion_criteria": [
+          "Dipendenze aggiornate con motivazione documentata oppure warning accettati con owner decision.",
+          "Test JVM Full e check_project Full verdi.",
+          "Nessuna modifica non necessaria a lockfile/configurazione."
+        ]
+      },
+      {
+        "priority": "P3",
+        "type": "PluralsCandidate",
+        "count": 1,
+        "risk": "low",
+        "decision": "R.string.intake_media_count e' attualmente inutilizzata; non conviene convertirla finche' resta candidata a rimozione nell'audit UnusedResources.",
+        "plan": [
+          "Durante l'audit intake/media, verificare se la risorsa serve ancora.",
+          "Se inutilizzata, rimuoverla insieme alle altre risorse morte della feature.",
+          "Se torna usata in UI, convertirla a plurals e aggiornare i call site con getQuantityString/stringResource plurale appropriato."
+        ],
+        "completion_criteria": [
+          "Il warning PluralsCandidate sparisce per rimozione sicura o conversione a plurals.",
+          "La UI intake/media mostra correttamente singolare/plurale se la risorsa viene mantenuta."
+        ]
+      }
+    ]
+  },
+  "refactor_plan": {
+    "status": "proposed_pending_owner_approval",
+    "created_at": "2026-06-16",
+    "scope": "Android-only refactor incrementale per leggibilita', scalabilita' e testabilita'. Nessuna implementazione finche' non approvata.",
+    "guardrails": [
+      "Mantenere comportamento e flavor Full/Demo/Showcase compatibili.",
+      "Non introdurre backend, cloud, analytics o telemetria.",
+      "Non modificare entita' Room, DAO, schema esportati o RepairAppDatabase.DATABASE_VERSION.",
+      "Non aggiungere migrazioni Room.",
+      "Non aggiungere nuove dipendenze salvo forte motivazione approvata.",
+      "Preservare modifiche utente gia' presenti nel working tree.",
+      "Preferire refactor piccoli, reversibili e coperti da test mirati."
+    ],
+    "current_structure_map": {
+      "core": "Design system, componenti condivisi, media, PDF, template, sicurezza, permessi, DI manuale.",
+      "domain": "Policy, modelli workflow, use case intake/PDF, contratti repository/auth.",
+      "data": "Room/SQLCipher, DataStore, repository locali, sessione, media storage, backup/export.",
+      "features": "Compose UI, ViewModel e state holder per auth, dashboard, workspace, ordini, clienti, settings e admin."
+    },
+    "observed_couplings": [
+      "Composable grandi mescolano layout, stato locale, conferme, orchestrazione ViewModel e copy utente.",
+      "ViewModel duplicano gestione sessione, successo, errore e WorkspaceMessage nonostante esista AuthenticatedActionRunner.",
+      "LocalImageComponents combina preview, viewer, canvas Compose, geometria edit e trasformazioni Bitmap.",
+      "OrderWorkflowRepository e BackupRepository aggregano query, comandi, validazioni, audit, file I/O e transazioni.",
+      "SettingsViewModel orchestra troppe aree funzionali: categorie, template, backup, storage, sicurezza e utenti.",
+      "Alcune stringhe visibili restano hardcoded in UI/domain/data invece di passare da strings.xml."
+    ],
+    "interventions": [
+      {
+        "id": "R01",
+        "phase": "quick_wins",
+        "priority": 1,
+        "title": "Estrarre stato e dialog del dettaglio commessa",
+        "objective": "Ridurre OrderDetailWorkspace separando conferme, dialog, note, diagnosi, esito preventivo, PDF e WhatsApp in uno state holder testabile.",
+        "files": [
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailWorkspace.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailDialogState.kt"
+        ],
+        "risk": "medium",
+        "tests": [
+          "Aggiungere test JVM sullo state holder/reducer del dialog.",
+          "Eseguire :app:testFullDebugUnitTest.",
+          "Eseguire check_project Full se il layout cambia in modo visibile."
+        ],
+        "completion_criteria": [
+          "OrderDetailWorkspace scende sotto circa 350 righe.",
+          "Test tag e flussi utente restano invariati.",
+          "Back handling e conferme continuano a funzionare come prima."
+        ]
+      },
+      {
+        "id": "R02",
+        "phase": "quick_wins",
+        "priority": 2,
+        "title": "Spezzare componenti puri del dettaglio commessa",
+        "objective": "Spostare pannelli puramente presentazionali in file focalizzati e lasciare a OrderDetailWorkspace solo composizione e binding.",
+        "files": [
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailWorkspace.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailComponents.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailDialogs.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailDocuments.kt"
+        ],
+        "risk": "low",
+        "tests": [
+          "Compile Full debug.",
+          "Eseguire test strumentati solo se cambiano gerarchie/test tag Compose."
+        ],
+        "completion_criteria": [
+          "Componenti stateless con parametri espliciti.",
+          "Nessun cambio a ViewModel o repository.",
+          "Copy e test tag invariati o localizzati con stesso significato."
+        ]
+      },
+      {
+        "id": "R03",
+        "phase": "quick_wins",
+        "priority": 3,
+        "title": "Separare image editing da preview/viewer",
+        "objective": "Rendere testabili geometria crop/frecce/placement e trasformazioni Bitmap, lasciando LocalImageComponents concentrato sulla UI Compose.",
+        "files": [
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/common/LocalImageComponents.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/core/media/ImageEditGeometry.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/core/media/ImageEditBitmap.kt",
+          "app/src/test/java/com/onlytechtake/repairapp/core/media/ImageEditGeometryTest.kt"
+        ],
+        "risk": "medium",
+        "tests": [
+          "Test JVM per imagePlacement, mapping canvas/bitmap e normalizzazione crop.",
+          "Test Bitmap dove supportato da ambiente JVM o copertura limitata con funzioni pure.",
+          "Eseguire LocalImageDecoderTest e test media esistenti."
+        ],
+        "completion_criteria": [
+          "LocalImageComponents contiene principalmente Composable.",
+          "Funzioni pure non dipendono da Compose UI quando non necessario.",
+          "Preview, zoom, crop, frecce e salvataggio mantengono comportamento attuale."
+        ]
+      },
+      {
+        "id": "R04",
+        "phase": "quick_wins",
+        "priority": 4,
+        "title": "Centralizzare messaggi, errori e sessione ViewModel",
+        "objective": "Eliminare duplicazioni launchWithUser e uniformare successo, errore generico e sessione scaduta usando AuthenticatedActionRunner o helper equivalente.",
+        "files": [
+          "app/src/main/java/com/onlytechtake/repairapp/features/workspace/AuthenticatedActionRunner.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailViewModel.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/SettingsViewModel.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/admin/AdminViewModel.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/orders/OrdersViewModel.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/NewOrderViewModel.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/customers/CustomersViewModel.kt"
+        ],
+        "risk": "medium",
+        "tests": [
+          "Aggiornare AuthGateViewModelTest o aggiungere test per runner sessione scaduta.",
+          "Aggiungere test ViewModel mirati per errore repository e messaggio successo.",
+          "Eseguire :app:testFullDebugUnitTest."
+        ],
+        "completion_criteria": [
+          "Nessuna duplicazione locale di launchWithUser nei ViewModel dashboard.",
+          "WorkspaceMessage usa fallback coerente per errore e successo.",
+          "Logout/touchSession restano invariati."
+        ]
+      },
+      {
+        "id": "R05",
+        "phase": "quick_wins",
+        "priority": 5,
+        "title": "Localizzare copy visibile residua",
+        "objective": "Spostare stringhe utente hardcoded in strings.xml senza cambiare testo, test tag o comportamento.",
+        "files": [
+          "app/src/main/res/values/strings.xml",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailWorkspace.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailComponents.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/common/DashboardComponents.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/workspace/WorkspaceUiHelpers.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/auth/AuthGateScreen.kt"
+        ],
+        "risk": "low",
+        "tests": [
+          "Compile Full debug.",
+          "Eseguire eventuali test Compose se cambiano stringResource in schermate coperte."
+        ],
+        "completion_criteria": [
+          "Nessuna copy visibile significativa resta hardcoded nelle schermate principali.",
+          "Stringhe in italiano preservate.",
+          "Nessun cambio a logica, schema o flavor."
+        ]
+      },
+      {
+        "id": "R06",
+        "phase": "medium_risk",
+        "priority": 6,
+        "title": "Ridurre QuickActionsPanel con state mapper wizard",
+        "objective": "Spostare calcoli di draft, validazione, dirty state, step navigation e submit readiness fuori dalla UI Compose.",
+        "files": [
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/QuickActionsPanel.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/IntakeStepperLogic.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/workspace/WorkspaceUiModels.kt",
+          "app/src/test/java/com/onlytechtake/repairapp/features/dashboard/neworder/IntakeStepperTest.kt",
+          "app/src/test/java/com/onlytechtake/repairapp/features/workspace/QuickIntakeDraftTest.kt"
+        ],
+        "risk": "medium",
+        "tests": [
+          "Estendere IntakeStepperTest per edit/advance/unlock submit.",
+          "Estendere QuickIntakeDraftTest per dirty state e reset.",
+          "Test intake input validation gia' presenti devono restare verdi."
+        ],
+        "completion_criteria": [
+          "QuickActionsPanel contiene prevalentemente layout e callback.",
+          "Step wizard testabile senza Compose.",
+          "Flusso intake resta compatibile con demo/showcase e limiti demo."
+        ]
+      },
+      {
+        "id": "R07",
+        "phase": "medium_risk",
+        "priority": 7,
+        "title": "Scomporre SettingsViewModel per area funzionale",
+        "objective": "Separare categorie, template, backup, storage, sicurezza e utenti in delegate interni o state holder, mantenendo la facade pubblica usata dalla UI.",
+        "files": [
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/SettingsViewModel.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/BackupSettings.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/CategoriesSettings.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/TemplatesSettings.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/core/di/SubContainers.kt"
+        ],
+        "risk": "medium",
+        "tests": [
+          "Aggiungere test per azioni backup/settings se mancano fake semplici.",
+          "Eseguire :app:testFullDebugUnitTest.",
+          "Compilare Demo e Showcase se tocca export/backup o BuildConfig."
+        ],
+        "completion_criteria": [
+          "API consumata dalle schermate settings resta stabile.",
+          "Costruttore o logica interna del ViewModel risulta meno accoppiata.",
+          "Messaggi e permessi admin restano invariati."
+        ]
+      },
+      {
+        "id": "R08",
+        "phase": "medium_risk",
+        "priority": 8,
+        "title": "Separare query/read model da comandi workflow",
+        "objective": "Dividere letture observe/search/detail dai comandi mutanti di commessa, senza cambiare DAO, entita' Room o transazioni.",
+        "files": [
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowRepository.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowQueries.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowCommands.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowEventWriter.kt"
+        ],
+        "risk": "medium_high",
+        "tests": [
+          "Eseguire OrderWorkflowRepositoryInstrumentedTest.",
+          "Aggiungere test unitari o strumentati per transizioni critiche se non coperte.",
+          "Eseguire StatusWorkflowTest e OperationalQueuesTest."
+        ],
+        "completion_criteria": [
+          "Facade OrderWorkflowRepository mantiene metodi pubblici necessari alla UI.",
+          "Nessun cambio a RepairAppDaos, entita' o DATABASE_VERSION.",
+          "Audit, timeline e pagamento restano equivalenti."
+        ]
+      },
+      {
+        "id": "R09",
+        "phase": "medium_risk",
+        "priority": 9,
+        "title": "Separare backup in servizi archive, database, SAF e metadata",
+        "objective": "Rendere export/restore piu' leggibili e testabili, mantenendo il limite SQLCipher/Keystore gia' documentato.",
+        "files": [
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupRepository.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupArchive.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupMetadata.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/DatabaseBackupFileService.kt",
+          "app/src/test/java/com/onlytechtake/repairapp/data/repositories/BackupRepositoryTest.kt"
+        ],
+        "risk": "medium_high",
+        "tests": [
+          "Estendere BackupRepositoryTest per metadata, versione DB, password errata e file mancanti.",
+          "Eseguire RepositoryPathsInstrumentedTest se cambia gestione path.",
+          "Eseguire test strumentato restore solo con device/emulatore disponibile."
+        ],
+        "completion_criteria": [
+          "BackupRepository resta facade delle operazioni pubbliche.",
+          "Restore continua a validare DATABASE_VERSION 4 e database apribile con chiave locale.",
+          "Nessun nuovo flusso cloud o cambio schema."
+        ]
+      },
+      {
+        "id": "R10",
+        "phase": "future_refactor",
+        "priority": 10,
+        "title": "Stabilizzare confine domain/data per use case futuri",
+        "objective": "Introdurre contratti minimi per order/media/template/PDF dove servono fake testabili, senza introdurre backend o astrazioni speculative.",
+        "files": [
+          "app/src/main/java/com/onlytechtake/repairapp/domain/repositories/RepairAppRepository.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCase.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/domain/workspace/GenerateOrderStatusPdfUseCase.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowRepository.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderMediaRepository.kt",
+          "app/src/main/java/com/onlytechtake/repairapp/data/repositories/TemplateRepository.kt"
+        ],
+        "risk": "high",
+        "tests": [
+          "Aggiungere test use case con fake contract.",
+          "Eseguire test repository esistenti.",
+          "Compilare Full, Demo e Showcase."
+        ],
+        "completion_criteria": [
+          "Use case principali non dipendono direttamente da implementazioni data quando non necessario.",
+          "Nessuna API pubblica interna cambia senza bisogno reale.",
+          "LOCAL_ONLY resta comportamento default e unico implementato."
+        ]
+      }
+    ],
+    "recommended_sequence": [
+      "Approvare e implementare prima R01, R03 e R04.",
+      "Procedere poi con R02 e R05 come cleanup a basso rischio.",
+      "Affrontare R06 e R07 dopo test ViewModel/state piu' solidi.",
+      "Tenere R08, R09 e R10 per tranche dedicate con verifica strumentata quando disponibile."
+    ]
+  }
 }

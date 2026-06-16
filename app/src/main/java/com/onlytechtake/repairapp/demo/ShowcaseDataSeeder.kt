@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import androidx.core.graphics.createBitmap
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
@@ -18,7 +19,6 @@ object ShowcaseDataSeeder {
     const val DEFAULT_PASSWORD = "ShowcasePassword123"
 
     suspend fun seedShowcaseData(context: Context) {
-        android.util.Log.d("ShowcaseDataSeeder", "Starting seeding process...")
         val authPreferences = AuthPreferences(context)
         
         // Clean up before seeding
@@ -36,7 +36,6 @@ object ShowcaseDataSeeder {
 
         // Re-get instance after deletion
         val db = RepairAppDatabase.getInstance(context)
-        android.util.Log.d("ShowcaseDataSeeder", "Database instance acquired.")
 
         val now = System.currentTimeMillis()
         val passwordHasher = PasswordHasher()
@@ -108,7 +107,6 @@ object ShowcaseDataSeeder {
             )
         )
         operators.forEach { db.userDao().upsert(it) }
-        android.util.Log.d("ShowcaseDataSeeder", "Operators seeded.")
 
         // 2. Create Categories
         val categories = listOf(
@@ -143,7 +141,6 @@ object ShowcaseDataSeeder {
             OrderCategoryEntity("cat-ipad-glass", "cat-ipad-pro", 3, "Sostituzione Vetro/LCD", "Riparazione pannello touch", true)
         )
         categories.forEach { db.orderCategoryDao().upsert(it) }
-        android.util.Log.d("ShowcaseDataSeeder", "Categories seeded.")
 
         // 3. Create Private Customers (5)
         val privateCustomers = (1..5).map { i ->
@@ -164,7 +161,6 @@ object ShowcaseDataSeeder {
             )
         }
         privateCustomers.forEach { db.customerDao().upsert(it) }
-        android.util.Log.d("ShowcaseDataSeeder", "Private customers seeded.")
 
         // 4. Create Business Customers (5)
         val businessCustomers = (1..5).map { i ->
@@ -185,7 +181,6 @@ object ShowcaseDataSeeder {
             )
         }
         businessCustomers.forEach { db.customerDao().upsert(it) }
-        android.util.Log.d("ShowcaseDataSeeder", "Business customers seeded.")
 
         // 5. Create Orders for each customer
         val allCustomers = privateCustomers + businessCustomers
@@ -356,7 +351,7 @@ object ShowcaseDataSeeder {
     private fun writeDemoBitmap(directory: File, fileName: String, label: String, backgroundColor: Int): File {
         directory.mkdirs()
         val file = File(directory, fileName)
-        val bitmap = Bitmap.createBitmap(1280, 720, Bitmap.Config.ARGB_8888)
+        val bitmap = createBitmap(1280, 720)
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         canvas.drawColor(backgroundColor)
