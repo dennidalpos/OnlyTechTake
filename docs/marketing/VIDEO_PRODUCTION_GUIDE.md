@@ -8,6 +8,14 @@ Guida per la registrazione e il montaggio del video demo (30-45 secondi) per il 
 - **Durata Massima**: 45 secondi (Play Store), 15 secondi (Social/Reels).
 - **Formato**: MP4 (H.264).
 
+## Asset disponibili
+
+Gli MP4 aggiornati generati localmente sono sotto `reports/demo-assets/videos`:
+
+- `automated/onlytechtake-demo-operatore-banco.mp4`: video montato dagli screenshot del flusso operatore.
+- `device/onlytechtake-demo-workflow-completo.mp4`: registrazione device del workflow completo.
+- `device/onlytechtake-device-social-stories.mp4`: registrazione device delle storie social.
+
 ## Script Video (30-45 secondi)
 
 | Scena | Azione | Testo Overlay | Voiceover (Opzionale) |

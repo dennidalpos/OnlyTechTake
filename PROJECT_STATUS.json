@@ -1,19 +1,5 @@
 {
   "todos": [
-    "[P2] CI: Configurare esecuzione test strumentali (AndroidTests) in una pipeline dedicata o locale prima della release.",
-    "[P2] Design System: Verificare contrasti cromatici e touch target su device fisico dopo il refactor UI (WhatsApp button, category levels).",
-    "[P3] Play Store: completare la scheda Store usando screenshot e video aggiornati prodotti in reports/demo-assets."
-  ],
-  "last_build_status": {
-    "date": "2024-06-16",
-    "status": "SUCCESS",
-    "actions": [
-      "Implementata persistenza categoryPathSnapshot in createOrder per integrità storica (P1)",
-      "Migliorata validazione database in BackupRepository con PRAGMA integrity_check via SQLCipher (P1)",
-      "Aggiornato export Excel e UI dettaglio per usare categoryPathSnapshot come fallback primario (P2)",
-      "Localizzate stringhe residue in LocalImageComponents, SignatureCapture, AboutSettings, TemplatesSettings (P2)",
-      "Implementata pulizia profonda dei file orfani in OrderFileCleanupService ed esposta nella UI StorageSettings (P3)",
-      "Avviata rigenerazione demo assets per riflettere le modifiche alla UI (richiede verifica manuale)"
-    ]
-  }
+    "[P1] AndroidTests: validare :app:connectedFullDebugAndroidTest sulla workflow GitHub `Android Instrumented Tests` o in locale con Android SDK/adb nel PATH. Il 2026-06-16 lint, unit test e assembleDebug sono passati, ma `adb devices` non era eseguibile (`adb` non riconosciuto). Chiudere solo con report connected test a 0 failure/0 error; registrare come nuovi todo eventuali crash o warning accessibilita'."
+  ]
 }

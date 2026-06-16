@@ -17,6 +17,14 @@ Strategia per la cattura e la produzione degli screenshot marketing per il Googl
 
 ## Piano Screenshot (Play Store)
 
+Gli asset aggiornati generati localmente sono sotto `reports/demo-assets/screenshots`:
+
+- `01-operatore-banco`: flusso operatore completo, login, intake, WhatsApp, PDF e chiusura.
+- `02-commessa-nuovo-cliente-chiusura`: nuova commessa, avanzamento stati e timeline finale.
+- `03-categorie-template`: configurazione categorie e template.
+- `04-clienti-privato-azienda`: anagrafica cliente privato e azienda.
+- `05-manutenzione-backup`: memoria, backup ed export Excel.
+
 | # | Nome File | Schermata | Overlay Marketing (Testo Suggerito) | Dati Demo Consigliati |
 |---|-----------|-----------|---------------------------|-----------------------|
 | 1 | `01_dashboard` | Dashboard Home | **Tutto sotto controllo.** Statistiche e code in tempo reale. | 12 Utenti, 150 Clienti, 8 Commesse attive. |

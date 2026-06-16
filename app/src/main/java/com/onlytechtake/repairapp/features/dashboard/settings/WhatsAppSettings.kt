@@ -45,9 +45,9 @@ fun ColumnScope.WhatsAppSettings(
                 Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)) {
                     SectionTitle(
                         text = stringResource(R.string.config_hub_whatsapp_title),
-                        tooltip = "Configura la modalità di invio dei messaggi ai clienti. Attualmente è supportato l'invio manuale tramite WhatsApp."
+                        tooltip = stringResource(R.string.config_whatsapp_tooltip),
                     )
-                    Text(stringResource(R.string.config_whatsapp_mode, "Manuale"))
+                    Text(stringResource(R.string.config_whatsapp_mode, stringResource(R.string.config_whatsapp_manual)))
                     ActionRow {
                         val confirmTitle = stringResource(R.string.config_whatsapp_confirm_manual_title)
                         val confirmText = stringResource(R.string.config_whatsapp_confirm_manual_text)
@@ -67,7 +67,7 @@ fun ColumnScope.WhatsAppSettings(
         item {
             AppButton(
                 modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
-                text = "Chiudi Setup WhatsApp",
+                text = stringResource(R.string.config_whatsapp_close),
                 variant = AppButtonVariant.Secondary,
                 onClick = onBack
             )

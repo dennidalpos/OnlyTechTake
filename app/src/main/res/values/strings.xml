@@ -446,6 +446,8 @@
     <string name="config_template_empty">Nessun template configurato.</string>
     <string name="config_whatsapp_mode">Modalita\': %1$s</string>
     <string name="config_whatsapp_manual">Manuale</string>
+    <string name="config_whatsapp_tooltip">Configura la modalita\' di invio dei messaggi ai clienti. Attualmente e\' supportato l\'invio manuale tramite WhatsApp.</string>
+    <string name="config_whatsapp_close">Chiudi Setup WhatsApp</string>
     <string name="config_whatsapp_confirm_manual_title">Impostare modalita\' manuale?</string>
     <string name="config_whatsapp_confirm_manual_text">La modalita\' WhatsApp verra\' salvata.</string>
     <string name="config_backup_title">Backup e Ripristino</string>

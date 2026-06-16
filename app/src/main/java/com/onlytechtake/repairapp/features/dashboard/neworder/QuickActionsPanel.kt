@@ -21,6 +21,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.templates.LegalTemplateFallbacks
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
@@ -101,8 +102,8 @@ fun QuickActions(
     val privacyCode = anchorMappings[TemplateAnchor.PRIVACY_TEXT] ?: TemplateAnchor.PRIVACY_TEXT.defaultCode
     val termsCode = anchorMappings[TemplateAnchor.TERMS_TEXT] ?: TemplateAnchor.TERMS_TEXT.defaultCode
     
-    val privacyText = templates.firstOrNull { (it.code == privacyCode) && it.active }?.body ?: DEFAULT_PRIVACY_TEXT
-    val termsText = templates.firstOrNull { (it.code == termsCode) && it.active }?.body ?: DEFAULT_TERMS_TEXT
+    val privacyText = templates.firstOrNull { (it.code == privacyCode) && it.active }?.body ?: LegalTemplateFallbacks.PrivacyText
+    val termsText = templates.firstOrNull { (it.code == termsCode) && it.active }?.body ?: LegalTemplateFallbacks.TermsText
     val missingRequirements = intakeInput.validationErrors()
 
     LaunchedEffect(
