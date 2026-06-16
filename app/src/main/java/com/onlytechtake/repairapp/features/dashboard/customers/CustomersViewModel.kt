@@ -54,6 +54,10 @@ class CustomersViewModel(
         onSetFormDirty(dirty)
     }
 
+    fun clearMessage() {
+        _message.value = null
+    }
+
     fun setSearchQuery(query: String) {
         _searchQuery.value = query
     }

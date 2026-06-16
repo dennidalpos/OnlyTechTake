@@ -103,6 +103,8 @@ Config > Backup > Esegui backup ZIP completo
 
 Il promemoria backup admin e' attivo di default ogni 7 giorni, si basa sull'ultimo ZIP completo riuscito e non blocca l'uso dell'app.
 
+Limite corrente: il database incluso nel ZIP e' cifrato con SQLCipher e la chiave resta protetta localmente da Android Keystore. Il ripristino ZIP sostituisce database e media, ma non e' una procedura garantita di migrazione verso una nuova installazione o un nuovo telefono finche' non viene implementato un flusso dedicato per la chiave.
+
 ## Comandi build
 
 APK Showcase debug:

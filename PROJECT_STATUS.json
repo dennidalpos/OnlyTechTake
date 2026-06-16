@@ -1,5 +1,6 @@
 {
   "todos": [
-    "[P1] AndroidTests: validare :app:connectedFullDebugAndroidTest sulla workflow GitHub `Android Instrumented Tests` o in locale con Android SDK/adb nel PATH. Il 2026-06-16 lint, unit test e assembleDebug sono passati, ma `adb devices` non era eseguibile (`adb` non riconosciuto). Chiudere solo con report connected test a 0 failure/0 error; registrare come nuovi todo eventuali crash o warning accessibilita'."
+    "[P1] AndroidTests: validare :app:connectedFullDebugAndroidTest sulla workflow GitHub `Android Instrumented Tests` o in locale con Android SDK/adb nel PATH. Il 2026-06-16 lint, unit test e assembleDebug sono passati, ma `adb devices` non era eseguibile (`adb` non riconosciuto). Chiudere solo con report connected test a 0 failure/0 error; registrare come nuovi todo eventuali crash o warning accessibilita'.",
+    "[P1] Backup restore: progettare e verificare un flusso sicuro per ripristino ZIP su nuova installazione/nuovo telefono con database SQLCipher. Il backup corrente sostituisce database e media ma non esporta/importa la chiave protetta da Android Keystore; finche' non esiste un flusso chiave dedicato, documentare il ripristino come valido solo con chiave locale compatibile."
   ]
 }

@@ -11,14 +11,15 @@ App Android locale per tracciare commesse clienti dal banco alla diagnosi, alla 
 - Versione app: `0.1.0`, `versionCode` 1.
 - Flavor Gradle: `full`, `demo` e `showcase`; gli script usano `Full` come default.
 - SDK Android: compile/target SDK 37, min SDK 26.
-- Stack: Kotlin, Jetpack Compose, Material 3, Navigation Compose, Room, DataStore, CameraX, Coroutines/Flow.
-- Dati: Room locale, DataStore per preferenze auth, file privati app, export tramite Storage Access Framework.
+- Stack: Kotlin, Jetpack Compose, Material 3, Navigation Compose, Room, SQLCipher, DataStore, CameraX, Coroutines/Flow.
+- Dati: Room locale cifrato con SQLCipher, DataStore/preferenze locali, file privati app, export tramite Storage Access Framework.
 - Schema Room corrente: `DATABASE_VERSION = 4`; sono tracciati gli export `1.json`, `2.json` e `4.json`. Il codice non contiene classi di migrazione e usa reinstallazione pulita o fallback distruttivo in questa fase fresh-app.
 - Backend: assente. WhatsApp e' solo manuale.
-- CI: `.github/workflows/android.yml` verifica lint/compile/test Full e compile/test Demo e Showcase.
+- CI: `.github/workflows/android.yml` verifica lint/compile/test Full e compile/test Demo/Showcase; `.github/workflows/android-instrumented.yml` esegue `:app:connectedFullDebugAndroidTest` su emulatore quando attivata o sui PR che toccano app/test/build.
 
 ## Documentazione
 
+- [Indice documentazione](docs/README.md)
 - [Guida funzionale](docs/01_GUIDA_FUNZIONALE.md)
 - [Specifica tecnica](docs/02_SPECIFICA_TECNICA.md)
 - [Modello dati](docs/03_MODELLO_DATI_GENERICO.md)
@@ -28,7 +29,7 @@ App Android locale per tracciare commesse clienti dal banco alla diagnosi, alla 
 - [Build, installazione e verifica](docs/06_BUILD_INSTALLER_ANDROID.md)
 - [Checklist di Release](docs/release/RELEASE_CHECKLIST.md)
 - [Demo, Showcase, Full e manuale operativo](docs/08_LICENZA_DEMO_FULL_E_MANUALE_USO.md)
-- [Marketing: Screenshot e Video](docs/marketing/)
+- [Marketing e asset demo](docs/marketing/README.md)
 - [Handoff futuro backend](docs/09_BACKEND_AGENT_TRACKER.md)
 - [Script PowerShell](scripts/README.md)
 
@@ -106,7 +107,7 @@ Prima di consegnare il repository:
 
 1. Controllare lo stato con `git status --short` e distinguere modifiche tracciate da file non tracciati.
 2. Leggere `PROJECT_STATUS.json`: contiene solo todo incompleti correnti.
-3. Eseguire almeno `check_env.ps1`, `check_project.ps1 -Flavor Full -SkipReleaseBuild` e una build/install debug se serve validare su device.
+3. Eseguire almeno `check_env.ps1`, `check_project.ps1 -Flavor Full -SkipReleaseBuild` e una build/install debug se serve validare su device. Per il gate strumentato usare la workflow `Android Instrumented Tests` o `check_project.ps1 -Flavor Full -SkipReleaseBuild -AndroidTests` con device disponibile.
 4. Usare `start_app.ps1 -CleanInstall` quando lo schema Room locale e' incompatibile con dati gia' installati; il codice corrente e' Room v4 senza migrazioni conservative.
 
 Nota: file non tracciati sotto `docs\` non fanno parte della documentazione ufficiale del repository finche' non vengono revisionati e aggiunti intenzionalmente.
@@ -153,7 +154,7 @@ Regole:
 - Workspace commessa con esito diagnosi esplicito `REPAIRABLE`/`NOT_REPAIRABLE`, preventivo obbligatorio solo nel ramo riparabile, azioni post-diagnosi guidate, note, media, firma, timeline, WhatsApp manuale locale, stato pagamento e condivisione PDF.
 - Le anteprime immagini locali rispettano l'orientamento EXIF; CameraX usa la rotazione reale del display prima del bind e dello scatto.
 - Admin: utenti, reset password, cancellazione di tutte le commesse e dei relativi media con conferma `CANCELLA TUTTO`, e reset totale dati con conferma `RESET`.
-- Config admin: categorie multilivello, template privacy/condizioni/WhatsApp, modalita WhatsApp manuale, backup ZIP, ripristino ZIP ed export XLSX.
+- Config admin: categorie multilivello, template privacy/condizioni/WhatsApp, modalita WhatsApp manuale, backup ZIP, ripristino ZIP, export XLSX e cifratura opzionale ZIP/XLSX con password.
 - Import allegati tramite SAF per JPEG/PNG/WebP, PDF, TXT, DOC/DOCX e XLS/XLSX fino a 25 MiB.
 - Storage privato canonico: tutti i media applicativi vivono sotto `filesDir/app_media`.
 - Export admin: ZIP completo e XLSX da Config > Backup; database e XLSX pre-cleanup dalla sezione Admin; configurazione JSON nel repository ma non esposta come pulsante dedicato nella schermata Backup corrente. Ripristino ZIP completo tramite SAF per admin. Condivisione PDF della singola commessa dal dettaglio.
@@ -164,8 +165,9 @@ Regole:
 ## Limiti Noti
 
 - Nessun backend e nessuna API WhatsApp.
-- Export JSON, database, PDF e ZIP non sono cifrati dall'app.
-- La CI non esegue test strumentati o verifiche su device.
+- Il database locale e' cifrato con SQLCipher. ZIP e XLSX possono essere cifrati con password da Config > Backup; PDF, configurazione JSON e altri documenti condivisi singolarmente non sono cifrati dall'app.
+- Il ripristino ZIP sostituisce database e media, ma nello stato corrente non esporta/importa la chiave SQLCipher protetta da Android Keystore; non va trattato come migrazione affidabile verso una nuova installazione o un nuovo telefono finche' il flusso chiave non viene progettato.
+- La CI principale non esegue test strumentati; esiste una workflow dedicata per `connectedFullDebugAndroidTest`, mentre le verifiche su device fisico restano manuali/locali.
 - La build release richiede signing locale non tracciato.
 - Il codice sorgente usa Room v4. Ogni ulteriore cambio schema resta bloccato dalle regole repository finche' non viene autorizzato.
 - Le verifiche manuali residue sono elencate in `PROJECT_STATUS.json`.

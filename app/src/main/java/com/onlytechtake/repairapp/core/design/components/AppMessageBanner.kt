@@ -3,21 +3,26 @@ package com.onlytechtake.repairapp.core.design.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.repairColors
+import kotlinx.coroutines.delay
 
 enum class BannerType {
     Info,
@@ -84,4 +89,34 @@ fun AppMessageBanner(
             action?.invoke()
         }
     }
+}
+
+@Composable
+fun DismissibleAppMessageBanner(
+    message: String,
+    type: BannerType,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+    autoDismissMillis: Long = if (type == BannerType.Error) 8_000L else 4_000L,
+) {
+    LaunchedEffect(message, type) {
+        if (autoDismissMillis > 0L) {
+            delay(autoDismissMillis)
+            onDismiss()
+        }
+    }
+
+    AppMessageBanner(
+        message = message,
+        type = type,
+        modifier = modifier,
+        action = {
+            AppIconButton(
+                imageVector = Icons.Default.Close,
+                contentDescription = stringResource(R.string.content_description_close),
+                onClick = onDismiss,
+                tint = LocalContentColor.current,
+            )
+        },
+    )
 }

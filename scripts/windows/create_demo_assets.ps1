@@ -9,7 +9,7 @@
 .DESCRIPTION
   Lo script unifica la generazione di screenshot e video. Esegue gli scenari
   strumentati demo, processa le immagini per il marketing e, se ffmpeg è presente,
-  monta i video MP4 basati sui file .story.json trovati nella cartella demo.
+  monta i video MP4 basati sugli story JSON configurati nello script.
 #>
 
 param(

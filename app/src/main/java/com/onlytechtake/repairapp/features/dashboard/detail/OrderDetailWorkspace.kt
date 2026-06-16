@@ -132,7 +132,14 @@ fun OrderDetailWorkspace(
     }
 
     Column(Modifier.fillMaxSize()) {
-        message?.let { AppMessageBanner(message = it.text, type = if (it.isError) BannerType.Error else BannerType.Info, modifier = Modifier.padding(RepairAppSpacing.compactGap)) }
+        message?.let {
+            DismissibleAppMessageBanner(
+                message = it.text,
+                type = if (it.isError) BannerType.Error else BannerType.Info,
+                onDismiss = viewModel::clearMessage,
+                modifier = Modifier.padding(RepairAppSpacing.compactGap),
+            )
+        }
 
         AppScreenContainer(scrollable = false) {
             LazyColumn(

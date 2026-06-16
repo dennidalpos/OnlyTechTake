@@ -77,6 +77,10 @@ class NewOrderViewModel(
         onSetFormDirty(dirty)
     }
 
+    fun clearMessage() {
+        _message.value = null
+    }
+
     fun updateQuickIntakeDraft(transform: (QuickIntakeDraft) -> QuickIntakeDraft) {
         _quickIntakeDraft.update(transform)
     }

@@ -5,8 +5,9 @@ Documento di riferimento per la compilazione dei questionari obbligatori su Goog
 ## 1. Accesso all'app (App Access)
 - **Opzione:** Tutte o alcune parti dell'app sono limitate.
 - **Istruzioni per i revisori:**
-  - Fornire le credenziali dell'account Admin predefinito.
-  - Esempio: "L'app richiede un login locale. Usare Username: `admin` e Password: `password123`. L'app non richiede connessione internet per il login."
+  - Per il flavor Full, spiegare che al primo avvio pulito il revisore deve creare un admin locale e poi usare quelle credenziali.
+  - Se si consegna un build Showcase, indicare le credenziali reali documentate in `docs/08_LICENZA_DEMO_FULL_E_MANUALE_USO.md`.
+  - Esempio Full: "L'app richiede un login locale. Su installazione pulita viene mostrato il setup admin; creare un admin locale e accedere. L'app non richiede connessione internet per il login."
 
 ## 2. Annunci (Ads)
 - **Risposta:** No, l'app non contiene annunci.
@@ -30,8 +31,10 @@ OnlyTechTake gestisce i dati esclusivamente in locale, ma Google richiede di dic
 | Identificatori dispositivo | No | No | - |
 
 **Note per il modulo:**
-- I dati sono criptati in transito? **Sì** (se si considera l'invio via WhatsApp o la condivisione PDF che usa canali sicuri del sistema).
-- L'utente può richiedere l'eliminazione dei dati? **Sì**, l'admin può eliminare singoli record o eseguire il reset totale dall'app.
+- Backend proprietario: assente. L'app non sincronizza dati verso server OnlyTechTake.
+- Dati in transito: non dichiarare un trasferimento app-server proprietario. WhatsApp, email, Drive o altri provider sono aperti manualmente dall'utente tramite app/SAF di terze parti.
+- Dati a riposo: il database locale usa SQLCipher; ZIP/XLSX possono essere cifrati con password se l'admin abilita l'opzione. PDF e configurazione JSON esportati singolarmente non sono cifrati dall'app.
+- L'utente può richiedere l'eliminazione dei dati? **Sì**, l'admin può eliminare singoli record, cancellare tutte le commesse o eseguire il reset totale dall'app.
 
 ## 5. App di monitoraggio (News/COVID-19/Gov)
 - **Risposte:** No a tutte (l'app non è un'app di news, né legata al COVID-19 o a enti governativi).

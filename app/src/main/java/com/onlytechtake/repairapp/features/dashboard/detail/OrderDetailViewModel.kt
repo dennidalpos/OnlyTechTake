@@ -78,6 +78,10 @@ class OrderDetailViewModel(
         onSetFormDirty(dirty)
     }
 
+    fun clearMessage() {
+        _message.value = null
+    }
+
     fun changeStatus(status: OrderStatus, note: String = "", closureReason: ClosureReason? = null, onSuccess: () -> Unit = {}) {
         launchWithUser(onSuccess = {
             clearPreparedMessage()

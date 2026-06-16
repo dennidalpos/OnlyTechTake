@@ -3,20 +3,20 @@
 **App Name:** OnlyTechTake
 **Short Description:** Professional repair management for smartphones, PCs, and tablets.
 **Full Description:**
-OnlyTechTake is the ultimate digital assistant for your repair shop. Designed for technicians and shop owners, the app allows you to manage the entire lifecycle of a repair easily, quickly, and professionally.
+OnlyTechTake is a local Android repair management app for repair shops. Designed for technicians and shop owners, it helps track a repair from intake to diagnosis, work in progress, and delivery.
 
 Forget paper forms and clutter: with OnlyTechTake, you have everything under control on your Android device.
 
 **Key Features:**
 - **Order Management:** Create and track every repair from "Open" to "Closed," including diagnosis and work-in-progress stages.
-- **Customer Database:** Securely store your customers' data (individuals and businesses) for quick access and effective communication.
+- **Customer Database:** Store your customers' data locally (individuals and businesses) for quick access and effective communication.
 - **Digital Signature:** Capture the customer's signature directly on the screen for privacy acceptance and repair terms.
 - **Photo Documentation:** Take and attach photos of incoming devices to document their condition and any detected damage.
-- **WhatsApp & PDF:** Send real-time updates to customers via pre-set WhatsApp messages and generate professional PDF service reports.
+- **WhatsApp & PDF:** Prepare pre-set WhatsApp messages for manual sending and generate order summary PDF files.
 - **Category Catalog:** Customize repair types (Smartphone, Notebook, Console, etc.) for precise categorization.
-- **Full Local Backup:** Protect your data with full ZIP backups that include the database and photos, ready to be saved to your preferred cloud service.
+- **Full Local Backup:** Create ZIP backups through Android's document picker and save them to local storage or an installed document provider.
 
-OnlyTechTake works locally: your data stays on your device, ensuring maximum privacy and speed of use even without a constant internet connection.
+OnlyTechTake works locally: it does not require a proprietary backend and can be used without a constant internet connection.
 
 Optimize your workflow, improve customer communication, and give a professional touch to your shop with OnlyTechTake!
 
@@ -25,7 +25,7 @@ Optimize your workflow, improve customer communication, and give a professional 
 2. Signature and photo capture for maximum legal protection.
 3. Fast communication via WhatsApp and PDF reports.
 4. Local-first operation for maximum data privacy.
-5. Simple and secure backups to ensure no data is ever lost.
+5. Manual ZIP/XLSX backups, with optional encryption where supported by the app.
 
 **ASO Keywords:**
 smartphone repair, shop management, technical assistance, pc repair, repair tracking, lab software, work orders, tablet assistance, console repair, digital signature.

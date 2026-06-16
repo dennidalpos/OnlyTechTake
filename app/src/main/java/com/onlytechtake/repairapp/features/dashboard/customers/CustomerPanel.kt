@@ -42,6 +42,7 @@ fun CustomerPanel(
 ) {
     val windowSizeClass = LocalWindowSizeClass.current
     val isWide = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Medium
+    val message by viewModel.message.collectAsState()
 
     var selectedCustomer by remember { mutableStateOf<CustomerEntity?>(null) }
     var showForm by rememberSaveable { mutableStateOf(value = false) }
@@ -103,20 +104,78 @@ fun CustomerPanel(
         showForm = true
     }
 
-    if (isWide) {
-        Row(Modifier.fillMaxSize()) {
-            Box(Modifier.weight(1f)) {
-                CustomerListContent(
-                    viewModel = viewModel,
-                    onCustomerClick = { selectedCustomer = it },
-                    onNewCustomer = {
-                        clearForm()
-                        showForm = true
+    Column(Modifier.fillMaxSize()) {
+        message?.let {
+            DismissibleAppMessageBanner(
+                message = it.text,
+                type = if (it.isError) BannerType.Error else BannerType.Info,
+                onDismiss = viewModel::clearMessage,
+                modifier = Modifier.padding(RepairAppSpacing.compactGap),
+            )
+        }
+
+        Box(Modifier.weight(1f)) {
+            if (isWide) {
+                Row(Modifier.fillMaxSize()) {
+                    Box(Modifier.weight(1f)) {
+                        CustomerListContent(
+                            viewModel = viewModel,
+                            onCustomerClick = { selectedCustomer = it },
+                            onNewCustomer = {
+                                clearForm()
+                                showForm = true
+                            }
+                        )
                     }
-                )
-            }
-            VerticalDivider()
-            Box(Modifier.weight(1.5f)) {
+                    VerticalDivider()
+                    Box(Modifier.weight(1.5f)) {
+                        if (showForm) {
+                            CustomerForm(
+                                isEditing = editingCustomerId != null,
+                                isBusiness = isBusiness,
+                                onBusinessChange = { isBusiness = it },
+                                firstName = firstName,
+                                onFirstNameChange = { firstName = it },
+                                lastName = lastName,
+                                onLastNameChange = { lastName = it },
+                                companyName = companyName,
+                                onCompanyNameChange = { companyName = it },
+                                vatNumber = vatNumber,
+                                onVatNumberChange = { vatNumber = it },
+                                taxCode = taxCode,
+                                onTaxCodeChange = { taxCode = it },
+                                phone = phone,
+                                onPhoneChange = { phone = it },
+                                email = email,
+                                onEmailChange = { email = it },
+                                address = address,
+                                onAddressChange = { address = it },
+                                notes = notes,
+                                onNotesChange = { notes = it },
+                                onSave = { confirmSave = true },
+                                onCancel = {
+                                    showForm = false
+                                    clearForm()
+                                }
+                            )
+                        } else if (selectedCustomer != null) {
+                            CustomerDetailContent(
+                                customer = selectedCustomer!!,
+                                viewModel = viewModel,
+                                onEdit = {
+                                    editCustomer(selectedCustomer!!)
+                                },
+                                onOrderClick = onOrderClick,
+                                onClose = { selectedCustomer = null }
+                            )
+                        } else {
+                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                Text(stringResource(R.string.customer_select_detail_hint), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                        }
+                    }
+                }
+            } else {
                 if (showForm) {
                     CustomerForm(
                         isEditing = editingCustomerId != null,
@@ -146,62 +205,17 @@ fun CustomerPanel(
                             clearForm()
                         }
                     )
-                } else if (selectedCustomer != null) {
-                    CustomerDetailContent(
-                        customer = selectedCustomer!!,
-                        viewModel = viewModel,
-                        onEdit = {
-                            editCustomer(selectedCustomer!!)
-                        },
-                        onOrderClick = onOrderClick,
-                        onClose = { selectedCustomer = null }
-                    )
                 } else {
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(stringResource(R.string.customer_select_detail_hint), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    }
+                    CustomerListContent(
+                        viewModel = viewModel,
+                        onCustomerClick = { selectedCustomer = it },
+                        onNewCustomer = {
+                            clearForm()
+                            showForm = true
+                        }
+                    )
                 }
             }
-        }
-    } else {
-        if (showForm) {
-            CustomerForm(
-                isEditing = editingCustomerId != null,
-                isBusiness = isBusiness,
-                onBusinessChange = { isBusiness = it },
-                firstName = firstName,
-                onFirstNameChange = { firstName = it },
-                lastName = lastName,
-                onLastNameChange = { lastName = it },
-                companyName = companyName,
-                onCompanyNameChange = { companyName = it },
-                vatNumber = vatNumber,
-                onVatNumberChange = { vatNumber = it },
-                taxCode = taxCode,
-                onTaxCodeChange = { taxCode = it },
-                phone = phone,
-                onPhoneChange = { phone = it },
-                email = email,
-                onEmailChange = { email = it },
-                address = address,
-                onAddressChange = { address = it },
-                notes = notes,
-                onNotesChange = { notes = it },
-                onSave = { confirmSave = true },
-                onCancel = {
-                    showForm = false
-                    clearForm()
-                }
-            )
-        } else {
-            CustomerListContent(
-                viewModel = viewModel,
-                onCustomerClick = { selectedCustomer = it },
-                onNewCustomer = {
-                    clearForm()
-                    showForm = true
-                }
-            )
         }
 
         selectedCustomer?.let { customer ->

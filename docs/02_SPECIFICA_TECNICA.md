@@ -7,6 +7,7 @@
 - Material 3
 - Android Architecture Components
 - Room
+- SQLCipher
 - DataStore
 - CameraX
 - Kotlin Coroutines
@@ -67,7 +68,7 @@ app/src/main/java/<package>/
 
 ## Database
 
-Database locale Room.
+Database locale Room cifrato con SQLCipher.
 
 Nome database:
 
@@ -187,6 +188,20 @@ appConfigured true/false
 
 Richiedere nuovamente password dopo inattività.
 
+## Cifratura database
+
+`RepairAppDatabase` usa `SupportOpenHelperFactory` di SQLCipher. La password
+SQLCipher viene generata localmente da `DatabaseKeyManager`, salvata in
+SharedPreferences e protetta da una master key Android Keystore.
+
+Limiti operativi correnti:
+
+- la chiave database non viene esportata nel backup ZIP;
+- un database copiato su un'altra installazione senza la stessa chiave non e'
+  apribile;
+- se Android Keystore non riesce piu' a decifrare la chiave, il codice genera
+  una nuova chiave e cancella il database locale non apribile.
+
 ## Permessi runtime Android
 
 Permessi manifest:
@@ -247,6 +262,14 @@ files/app_media/...
 ```
 
 Il ripristino ZIP completo e' supportato per admin tramite Storage Access Framework e sostituisce database e `filesDir/app_media`.
+ZIP completo e XLSX possono essere cifrati con password AES-256 quando
+l'opzione e' attivata in Config > Backup. PDF, configurazione JSON e documenti
+condivisi singolarmente non hanno cifratura applicativa propria.
+
+Limite: poiche' il ZIP non contiene la chiave SQLCipher/Keystore, il ripristino
+e' affidabile solo quando database e chiave locale sono compatibili. Non usarlo
+come procedura garantita di migrazione verso una nuova installazione o un nuovo
+telefono finche' non esiste un flusso esplicito di export/import chiave.
 
 ## WhatsApp
 
@@ -316,8 +339,8 @@ Le azioni sensibili tracciate includono:
 
 Limiti attuali:
 
-- nessuna cifratura applicativa degli export;
-- CI Android tracciata in `.github/workflows/android.yml`, senza signing release;
+- CI Android tracciata in `.github/workflows/android.yml` per lint/compile/test JVM e in `.github/workflows/android-instrumented.yml` per `:app:connectedFullDebugAndroidTest` su emulatore;
+- la CI non genera release firmate perche' il signing resta locale;
 - nessun backend o invio WhatsApp API.
 - eventuali provider Drive/OneDrive/Dropbox sono solo destinazioni SAF esposte dal device, non integrazioni cloud proprietarie.
 
@@ -333,6 +356,7 @@ Output principali:
 
 - APK debug Full: `app/build/outputs/apk/full/debug/app-full-debug.apk`;
 - APK debug Demo: `app/build/outputs/apk/demo/debug/app-demo-debug.apk`;
+- APK debug Showcase: `app/build/outputs/apk/showcase/debug/app-showcase-debug.apk`;
 - APK release Full: `app/build/outputs/apk/full/release/app-full-release.apk`;
 - AAB release Full: `app/build/outputs/bundle/fullRelease/app-full-release.aab`.
 

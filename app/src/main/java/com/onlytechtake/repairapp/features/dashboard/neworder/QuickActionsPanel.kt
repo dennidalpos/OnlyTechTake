@@ -48,6 +48,7 @@ fun QuickActions(
     val templates by viewModel.templates.collectAsState()
     val anchorMappings by viewModel.anchorMappings.collectAsState()
     val currentUser by viewModel.currentUser.collectAsState()
+    val message by viewModel.message.collectAsState()
 
     val unnamedPrivate = stringResource(R.string.customer_unnamed_private)
     val unnamedBusiness = stringResource(R.string.customer_unnamed_business)
@@ -170,6 +171,14 @@ fun QuickActions(
     }
 
     AppScreenContainer(modifier = Modifier.testTag("quick_actions_screen")) {
+        message?.let {
+            DismissibleAppMessageBanner(
+                message = it.text,
+                type = if (it.isError) BannerType.Error else BannerType.Info,
+                onDismiss = viewModel::clearMessage,
+            )
+        }
+
         SectionTitle(
             text = stringResource(R.string.new_order_title),
             tooltip = stringResource(R.string.intake_help),

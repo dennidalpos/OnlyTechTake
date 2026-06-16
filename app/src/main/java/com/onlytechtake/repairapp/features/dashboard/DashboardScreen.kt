@@ -233,9 +233,10 @@ fun DashboardScreen(
                     .imePadding()
             ) {
                 globalMessage?.let { message ->
-                    AppMessageBanner(
+                    DismissibleAppMessageBanner(
                         message = message.text,
                         type = if (message.isError) BannerType.Error else BannerType.Info,
+                        onDismiss = sharedViewModel::clearMessage,
                         modifier = Modifier.padding(horizontal = RepairAppSpacing.screenHorizontal, vertical = RepairAppSpacing.compactGap)
                     )
                 }

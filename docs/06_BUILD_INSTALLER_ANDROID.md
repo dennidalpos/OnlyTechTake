@@ -70,7 +70,7 @@ powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Fl
 powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -CleanInstall
 ```
 
-Al primo avvio pulito l'app mostra il setup admin locale. Il repository non contiene CI remota: questi sono i gate operativi locali.
+Al primo avvio pulito l'app mostra il setup admin locale. I gate locali sopra sono allineati alla CI principale `.github/workflows/android.yml`; i test strumentati sono coperti dalla workflow dedicata `.github/workflows/android-instrumented.yml` oppure dal comando locale con `-AndroidTests` quando e' disponibile un device/emulatore.
 
 ## Build
 
@@ -165,7 +165,7 @@ Per ridurre gli avvisi Play Protect:
 - preferire Android App Bundle caricato su Play Console, Internal Testing o Internal App Sharing;
 - se serve distribuire anche fuori Play, scaricare da Play Console l'APK universale firmato da Google oppure usare una chiave release gestita in modo coerente con Play App Signing.
 
-Un APK installato manualmente da sorgenti sconnuosciute e firmato con una chiave locale non riconosciuta puo' comunque mostrare avvisi Play Protect anche se il codice dell'app e' legittimo.
+Un APK installato manualmente da sorgenti sconosciute e firmato con una chiave locale non riconosciuta puo' comunque mostrare avvisi Play Protect anche se il codice dell'app e' legittimo.
 
 ## Installazione e start
 
@@ -197,7 +197,7 @@ Installare un APK specifico:
 powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -Flavor Full -ApkPath app\build\outputs\apk\full\debug\app-full-debug.apk
 ```
 
-Per il flavor Demo usare `-Flavor Demo`; per il flavor Showcase usare `-Flavor Showcase`. Il package avviato sara' `com.onlytechtake.repairapp.<flavor>.debug` in debug.
+Per il flavor Demo usare `-Flavor Demo`; per il flavor Showcase usare `-Flavor Showcase`. I package debug sono `com.onlytechtake.repairapp.debug`, `com.onlytechtake.repairapp.demo.debug` e `com.onlytechtake.repairapp.showcase.debug`.
 
 ## Troubleshooting
 

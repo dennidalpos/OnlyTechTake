@@ -113,6 +113,10 @@ class AdminViewModel(
         _recoveryCode.value = null
     }
 
+    fun clearMessage() {
+        _message.value = null
+    }
+
     private fun launchWithUser(
         onSuccess: () -> Unit = {},
         block: suspend (com.onlytechtake.repairapp.domain.auth.AuthenticatedUser) -> Result<*>

@@ -26,4 +26,4 @@ Gli script calcolano automaticamente la root del progetto dal proprio percorso, 
 
 ## Manutenzione asset demo
 
-`docs\DEMO_ASSET_WORKFLOW.md` descrive il flusso completo, la corrispondenza tra test strumentati e output e il registro degli impatti. Dopo modifiche a UI, navigazione, copy, test tag, permessi, schema o seed demo, aggiornare insieme scenari, script, helper e file `demo\video\*.story.json`; riportare in `PROJECT_STATUS.json` solo i residui ancora incompleti.
+`docs\DEMO_ASSET_WORKFLOW.md` descrive il flusso completo, la corrispondenza tra test strumentati e output e il registro degli impatti. Dopo modifiche a UI, navigazione, copy, test tag, permessi, schema o seed demo, aggiornare insieme scenari, script, helper e `demo\video\operator-intake.story.json`; riportare in `PROJECT_STATUS.json` solo i residui ancora incompleti.

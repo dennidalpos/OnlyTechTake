@@ -256,10 +256,11 @@ Ripristino backup:
 - supportato per admin tramite ZIP completo selezionato con SAF;
 - sostituisce database e file privati;
 - richiede nuovo login dopo il completamento.
+- non e' una migrazione garantita verso nuova installazione o nuovo telefono, perche' il database e' cifrato con SQLCipher e la chiave resta protetta localmente da Android Keystore.
 
 Limiti noti:
 
-- export non cifrati dall'app;
+- database locale cifrato con SQLCipher; ZIP/XLSX cifrabili con password da Config > Backup; PDF e configurazione JSON singola non cifrati dall'app;
 - nessuna API WhatsApp;
 - nessun backend;
-- CI Android tracciata in `.github/workflows/android.yml`; le verifiche su device restano locali.
+- CI Android tracciata in `.github/workflows/android.yml` e `.github/workflows/android-instrumented.yml`; le verifiche su device fisico restano locali/manuali.

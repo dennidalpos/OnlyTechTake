@@ -7,10 +7,9 @@ La cartella `landing/` contiene una bozza HTML/CSS/JS statica. Non richiede buil
 - `index.html`: pagina statica.
 - `styles.css`: stili della landing.
 - `script.js`: smooth scroll e validazione base del form.
-- `assets/`: presente solo con `.gitkeep`.
-- `assets/screenshots/`: non presente nel repository corrente.
+- `assets/`: logo, mark, favicon, cover e social preview duplicati da `media/brand` per pubblicazione statica.
 
-La landing non pubblica APK, non contiene link Play Store reali, non contiene video e non contiene contatti pubblici verificati. Prima della pubblicazione vanno aggiunti asset reali e link approvati.
+La landing non pubblica APK, non contiene link Play Store reali e non contiene video. Prima della pubblicazione vanno verificati contatti, link, privacy policy e canale di distribuzione.
 
 ## Uso locale
 
@@ -20,7 +19,7 @@ Aprire `landing/index.html` nel browser. Non serve avviare un dev server.
 
 Per sostituire i placeholder:
 
-1. Generare screenshot reali con `scripts\windows\create_demo_screenshots.ps1` oppure da device reale.
+1. Generare screenshot reali con `scripts\windows\create_demo_assets.ps1` oppure da device reale.
 2. Salvare immagini tracciabili sotto `landing\assets\screenshots\`.
 3. Aggiornare `index.html` sostituendo i blocchi `screenshot-placeholder` con tag `img`.
 4. Aggiungere un video locale o un embed solo quando il file/link e' reale e approvato.

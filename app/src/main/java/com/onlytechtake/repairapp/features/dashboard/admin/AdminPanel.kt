@@ -36,6 +36,7 @@ fun AdminPanel(
     val users by viewModel.users.collectAsState()
     val recoveryCode by viewModel.recoveryCode.collectAsState()
     val isBackupReminderDue by viewModel.isBackupReminderDue.collectAsState()
+    val message by viewModel.message.collectAsState()
 
     val confirmCreateTitle = stringResource(R.string.admin_confirm_create_title)
     val confirmCreateText = stringResource(R.string.admin_confirm_create_text)
@@ -76,6 +77,14 @@ fun AdminPanel(
     }
 
     AppScreenContainer {
+        message?.let {
+            DismissibleAppMessageBanner(
+                message = it.text,
+                type = if (it.isError) BannerType.Error else BannerType.Info,
+                onDismiss = viewModel::clearMessage,
+            )
+        }
+
         SectionTitle(stringResource(R.string.admin_access_security))
         
         StandardCard {

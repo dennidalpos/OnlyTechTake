@@ -51,6 +51,10 @@ class SettingsViewModel(
         }
     }
 
+    fun clearMessage() {
+        _message.value = null
+    }
+
     private val _storageStats = MutableStateFlow<com.onlytechtake.repairapp.data.services.StorageStats?>(null)
     val storageStats = _storageStats.asStateFlow()
 

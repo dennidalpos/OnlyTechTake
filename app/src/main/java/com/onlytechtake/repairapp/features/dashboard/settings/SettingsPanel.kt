@@ -146,7 +146,14 @@ private fun SettingsSectionContent(
             .fillMaxSize()
             .padding(bottom = RepairAppSpacing.bottomContentPadding)
     ) {
-        message?.let { AppMessageBanner(message = it.text, type = if (it.isError) BannerType.Error else BannerType.Info, modifier = Modifier.padding(RepairAppSpacing.screenHorizontal)) }
+        message?.let {
+            DismissibleAppMessageBanner(
+                message = it.text,
+                type = if (it.isError) BannerType.Error else BannerType.Info,
+                onDismiss = viewModel::clearMessage,
+                modifier = Modifier.padding(RepairAppSpacing.screenHorizontal),
+            )
+        }
         when (section) {
             "CATEGORIES" -> CategoriesSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)
             "TEMPLATES" -> TemplatesSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)
