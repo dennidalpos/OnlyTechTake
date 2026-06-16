@@ -15,7 +15,6 @@ import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.MessageTemplateDao
 import com.onlytechtake.repairapp.data.local.dao.OrderExportDao
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
-import com.onlytechtake.repairapp.core.security.DatabaseKeyManager
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
