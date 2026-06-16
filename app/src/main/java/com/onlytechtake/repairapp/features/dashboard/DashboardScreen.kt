@@ -23,6 +23,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -109,14 +111,18 @@ fun DashboardScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = summary.title) },
+            AppTopBar(
+                title = summary.title,
                 navigationIcon = {
                     if (currentDestination != DashboardRoutes.HOME) {
                         val isCloseIcon = currentDestination == DashboardRoutes.NEW_ORDER || 
                                          currentDestination.startsWith("order_detail/")
-                        IconButton(
+                        AppIconButton(
                             modifier = Modifier.testTag(RepairAppTestTags.ConfigBackButton),
+                            imageVector = if (isCloseIcon) Icons.Default.Close else Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(
+                                if (isCloseIcon) R.string.content_description_close else R.string.content_description_back,
+                            ),
                             onClick = {
                                 if (isFormDirty) {
                                     pendingRoute = null // Pop back
@@ -125,14 +131,7 @@ fun DashboardScreen(
                                     navController.popBackStack()
                                 }
                             }
-                        ) {
-                            Icon(
-                                if (isCloseIcon) Icons.Default.Close else Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = stringResource(
-                                    if (isCloseIcon) R.string.content_description_close else R.string.content_description_back,
-                                ),
-                            )
-                        }
+                        )
                     }
                 },
                 actions = {
@@ -143,14 +142,16 @@ fun DashboardScreen(
                             ),
                             style = MaterialTheme.typography.labelSmall,
                             modifier = Modifier.padding(end = 8.dp),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
-                    TextButton(
+                    AppButton(
+                        text = stringResource(R.string.logout),
                         onClick = onLogout,
-                        modifier = Modifier.testTag(RepairAppTestTags.LogoutButton)
-                    ) {
-                        Text(text = stringResource(R.string.logout))
-                    }
+                        variant = AppButtonVariant.Ghost,
+                        size = AppButtonSize.Compact,
+                        testTag = RepairAppTestTags.LogoutButton
+                    )
                 },
             )
         },
@@ -232,13 +233,10 @@ fun DashboardScreen(
                     .imePadding()
             ) {
                 globalMessage?.let { message ->
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 4.dp)
-                            .semantics { liveRegion = LiveRegionMode.Polite },
-                        text = message.text,
-                        color = if (message.isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                    AppMessageBanner(
+                        message = message.text,
+                        type = if (message.isError) BannerType.Error else BannerType.Info,
+                        modifier = Modifier.padding(horizontal = RepairAppSpacing.screenHorizontal, vertical = RepairAppSpacing.compactGap)
                     )
                 }
 
@@ -256,28 +254,32 @@ fun DashboardScreen(
     }
 
     if (showUnsavedChangesDialog) {
-        AlertDialog(
+        AppDialog(
             onDismissRequest = { showUnsavedChangesDialog = false },
-            title = { Text(stringResource(R.string.dashboard_unsaved_title)) },
-            text = { Text(stringResource(R.string.dashboard_unsaved_text)) },
+            title = stringResource(R.string.dashboard_unsaved_title),
+            text = stringResource(R.string.dashboard_unsaved_text),
             confirmButton = {
-                TextButton(
-                    modifier = Modifier.testTag(RepairAppTestTags.DashboardDiscardChangesButton),
+                AppButton(
+                    text = stringResource(R.string.dashboard_unsaved_leave),
                     onClick = {
                         showUnsavedChangesDialog = false
                         sharedViewModel.setFormDirty(dirty = false)
                         pendingRoute?.let {
                             performNavigation(it)
                         } ?: navController.popBackStack()
-                    }
-                ) {
-                    Text(stringResource(R.string.dashboard_unsaved_leave))
-                }
+                    },
+                    variant = AppButtonVariant.Danger,
+                    size = AppButtonSize.Compact,
+                    testTag = RepairAppTestTags.DashboardDiscardChangesButton
+                )
             },
             dismissButton = {
-                TextButton(onClick = { showUnsavedChangesDialog = false }) {
-                    Text(stringResource(R.string.dashboard_unsaved_continue))
-                }
+                AppButton(
+                    text = stringResource(R.string.dashboard_unsaved_continue),
+                    onClick = { showUnsavedChangesDialog = false },
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact
+                )
             }
         )
     }

@@ -1,6 +1,6 @@
 # AGENTS.md — Repository Instructions
 
-Repository-specific instructions for Codex.
+Repository-specific instructions for AI Agents (Android Studio + Codex).
 
 Primary local environment: **Windows + PowerShell**.
 
@@ -10,222 +10,78 @@ Use repository conventions when they are clear. Keep changes small, focused, ver
 
 ## 1. Priorities
 
-1. Preserve user work.
-2. Make the smallest correct repository change.
-3. Keep the repository clean and navigable.
-4. Follow existing repository conventions.
-5. Verify with available repository checks.
-6. Keep `PROJECT_STATUS.json` as a todo-only file when present or requested.
-7. Report changes, checks, and remaining uncertainty.
+1. **Preserve user work**: Inspect working tree before editing.
+2. **Android Studio first**: Use IDE-native tools for analysis, refactoring, and resource management. Use Codex for complex automation, broad refactors, and logical implementations.
+3. **Release Readiness**: Treat the project as "fresh" (no legacy dependencies) but target a "Production/Ready-for-Release" quality. Avoid temporary hacks or non-localized UI strings.
+4. **Maintainability & Future-proofing**: Adhere to Clean Architecture and SOLID principles to allow future expansion (e.g., transition from LOCAL_ONLY to Cloud/Centralized backend) without breaking changes.
+5. **Verified changes**: Run Gradle builds, lint, and available tests before considering a task complete.
+6. **Project Hygiene**: Keep `PROJECT_STATUS.json` updated with actionable residuals only.
 
 Do not change unrelated files. Do not introduce dependencies, public API changes, config/deployment changes, broad refactors, migrations, or destructive operations unless the task clearly requires them.
 
-Do not claim a check passed unless it was actually run and passed.
+---
+
+## 2. Fresh project policy & Scalability
+
+OnlyTechTake Repair App is a modern app in active development.
+
+* **Freshness**: Do not add Room migrations (unless requested), legacy workarounds, or historical cleanup. Prefer current Jetpack Compose and Material 3 standards.
+* **Architecture**: Use the existing `AppContainer` based Dependency Injection.
+* **Backend Readiness**: Design Repository and Data Source layers using interfaces to allow future swapping of local Room storage with a Cloud/API backend.
+* **Localization**: Move all user-visible strings to `strings.xml`. Do not use hardcoded strings in Composable files.
+* **Design System**: Use `RepairAppTheme` and components in `core/design/components`. Avoid direct Material 3 component usage if a Design System wrapper exists.
 
 ---
 
-## 2. Fresh project policy
+## 3. Data & Backup Policy
 
-When creating or initializing a new project, treat it as fresh/greenfield unless the user explicitly says it must integrate with legacy systems.
-
-Do not add legacy compatibility layers, migration scaffolding, deprecated patterns, transitional folder names, backward-compatibility shims, historical cleanup work, or assumptions about previous production users/data/APIs.
-
-Prefer current conventions, clean architecture, minimal structure, and only the files needed for the requested scope.
-
-OnlyTechTake Repair App is currently a fresh app in early development. Do not add Room migrations, legacy data workarounds, backend integrations, or credentials in source code. Prefer simple centralized domain/core helpers for workflow, validation, formatting, media, export, permissions, errors, and WhatsApp templates.
-
----
-
-## Backup reminder and Android data preservation
-
-* Fresh install must work in LOCAL_ONLY mode.
-* Manual ZIP backup is the primary local recovery mechanism.
-* Admin can configure backup reminder every N days.
-* Default reminder interval is 7 days.
-* Reminder is based on last successful full ZIP backup.
-* Do not block normal app use when backup is overdue.
-* Before destructive operations, warn strongly if no recent backup exists.
-* Do not enable Android cloud backup without explicit owner approval.
-* Use `android:hasFragileUserData="true"` if compatible with current manifest.
-* Do not promise data survival after uninstall.
-* Any DB schema change must be marked:
+* **LOCAL_ONLY by default**: Current phase is strictly offline.
+* **Manual ZIP backup**: Primary recovery mechanism.
+* **Android Data Preservation**: Use `android:hasFragileUserData="true"`.
+* **Database Safety**: Any schema change must be documented and tested for fresh installs.
   RICHIEDE CAMBIO SCHEMA - BLOCCATA
-
----
-
-## 3. Windows-first rules
-
-Use PowerShell-compatible commands unless repository evidence requires another shell, container, CI image, or deployment target.
-
-Assume local development is Windows. Avoid local assumptions about Bash, WSL, GNU-only flags, `/tmp`, `/home`, `chmod`, `sed -i`, `rm -rf`, or Unix-only path separators.
-
-Use repository-relative paths, quote paths that may contain spaces, avoid hardcoded absolute paths, and prefer cross-platform path APIs in code.
 
 ---
 
 ## 4. Workflow
 
-For implementation tasks:
-
-1. Inspect only files needed for the requested change, including applicable local instructions and nearby patterns.
-2. Check the working tree before editing:
-
-   ```powershell
-   git status --short
-   ```
-
-3. Do not overwrite unrelated uncommitted user changes.
-4. Implement the smallest production-quality change.
-5. Add or update tests when behavior changes and a test framework exists.
-6. Update docs only when setup, commands, behavior, public API, deployment, scripts, or structure change.
-7. Run the most relevant available checks.
-8. Perform a cleanliness check before the final response.
-
-For read-only tasks, do not modify files. Report findings, affected areas, recommended fixes, and review limits.
+1. **Check status**: `git status --short`.
+2. **IDE Inspection**: Use Android Studio's "Analyze File" and "Find Usages" before editing.
+3. **Atomic Implementation**: Smallest contiguous production-quality change.
+4. **Documentation Sync**: Update relevant files in `docs/` or `README.md` if behavior, setup, or structure changes.
+5. **Validation**: Run `:app:assembleDebug` and relevant unit tests.
+6. **Reporting**: State what changed, files affected, and remaining tasks in `PROJECT_STATUS.json`.
 
 ---
 
-## 5. Cleanliness check
+## 5. Cleanliness & Demo Pipeline
 
-Keep the repository clean by default. Do not leave local cache folders, build outputs, generated reports, temporary files, debug artifacts, APK/AAB outputs, screenshots, recordings, or other disposable generated files in the working tree after a task. Remove safe disposable outputs you created, and prefer updating `.gitignore` when a generated path is expected to recur.
-
-Do not delete local configuration, credentials, signing keys, IDE settings, or user-created files as part of cleanup unless explicitly requested and the target is verified.
-
-Before the final response for implementation tasks, verify that:
-
-- unrelated files were not changed;
-- new files are in the correct responsibility folder;
-- generated, temporary, debug, build, report, or log files were not left in source folders;
-- stale references were not left after renames or splits;
-- duplicate scripts, configs, assets, or docs were not introduced;
-- `.gitignore` covers local/generated outputs when appropriate.
-- **IMPORTANT**: Always update and verify demo scripts (screenshots and video) after any change that affects the UI, workflow, or database schema.
-- **Flavor Consistency**: Maintain and verify all build variants (`demo`, `showcase`, `full`) ensuring their seeders (`ShowcaseDataSeeder`, `DemoDataSeeder`) and hardcoded mocks (`DemoMode`) are updated to reflect current schema and feature changes.
-
-Minimum commands when available:
-
-```powershell
-git status --short
-git ls-files
-```
-
-Then run relevant project-native checks: format, lint, typecheck, tests, build, or security checks. State why any relevant check was not run.
-
----
-
-## 6. `PROJECT_STATUS.json`
-
-`PROJECT_STATUS.json` is optional unless already present or explicitly requested.
-
-When it exists, it must contain **only current incomplete todo tasks**.
-
-Allowed schema:
-
-```json
-{
-  "todos": [
-    "Short actionable task"
-  ]
-}
-```
-
-Rules:
-
-- Remove completed, obsolete, duplicated, invalidated, or historical items.
-- Do not store completed work, prompt/chat history, secrets, credentials, personal data, check results, decisions, assumptions, risks, blockers, timestamps, changelog entries, or status notes.
-- Prefer fewer accurate todos over many stale todos.
-- Do not update it for read-only tasks unless requested.
-- Use `docs/DEMO_ASSET_WORKFLOW.md` to track demo asset pipeline changes, affected scenarios, validation evidence, and completed history. Copy only unresolved actionable residuals from that tracker into `PROJECT_STATUS.json`.
-
----
-
-## 7. Structure and files
-
-Use the existing structure when coherent. For new or unclear areas, start minimal and add folders only when real responsibilities exist.
-
-Keep each source file focused on one responsibility. Split files only when responsibilities are mixed or maintenance is clearly worse without a split. Do not perform large unrelated splits.
-
-Prefer explicit names. Avoid vague folders like `misc`, `stuff`, `old`, `new`, `final`, `temp2`, `backup`; avoid vague files like `utils.*`, `helpers.*`, `common.*`, `manager.*`, or unqualified `service.*` unless already established by the repository.
-
-`index.*` files should contain exports, framework-required entrypoints, or very small composition code; not substantial implementation logic.
-
----
-
-## 8. Scripts
-
-Use repository-native scripts first.
-
-When adding Windows-first local scripts, prefer PowerShell wrappers under `scripts/`.
-
-Scripts must run from the repository root, validate required tools, fail with non-zero exit codes on errors, and avoid duplicating an existing script. Keep public scripts thin; put shared script logic in `scripts/support/` when needed.
-
-Update `scripts/README.md` when public scripts are added, removed, or renamed.
+Keep the repository clean of build artifacts, temporary files, and uncommitted generated reports.
 
 ### Demo asset pipeline
 
-The repository has two authoritative demo asset scripts:
-
-- `scripts/windows/create_demo_assets.ps1` generates screenshots and assembled videos from the instrumented demo scenarios.
-- `scripts/windows/record_demo_device.ps1` records the same supported scenarios directly from an emulator or physical device with `adb screenrecord`.
-
-Use `docs/DEMO_ASSET_WORKFLOW.md` as the source of truth for scenario mapping, inputs, outputs, commands, and the asset-impact register.
-
-After any change that affects UI, navigation, workflow, visible copy, test tags, permissions, database/schema-dependent screens, demo/showcase seed data, or captured content:
-
-1. Inspect the affected scenario map in `docs/DEMO_ASSET_WORKFLOW.md`.
-2. Update the relevant instrumented scenario in `app/src/androidTest/java/com/onlytechtake/repairapp/demo/`, preferring stable test tags over visible text for actions.
-3. Update `create_demo_assets.ps1`, `record_demo_device.ps1`, shared helper `scripts/windows/support/android_demo.ps1`, and `demo/video/*.story.json` wherever scenario names, methods, package paths, expected files, captions, timing, or outputs changed.
-4. Record the change, affected flows, required asset regeneration, validation state, and remaining work in `docs/DEMO_ASSET_WORKFLOW.md`.
-5. Run the impacted screenshot and recording flows when a device is available. Do not claim asset verification from compile-only checks.
-6. Add only incomplete actionable residuals to `PROJECT_STATUS.json`; remove them once the tracker records successful validation.
-
-Keep generated screenshots and videos under ignored output paths such as `reports/demo-assets`; do not commit disposable generated outputs unless the user explicitly requests publishing them.
+Use `docs/DEMO_ASSET_WORKFLOW.md` as the source of truth for assets.
+After UI or workflow changes:
+1. Update instrumented scenarios in `app/src/androidTest/.../demo/`.
+2. Update and run `scripts/windows/create_demo_assets.ps1`.
+3. Record the change in `docs/DEMO_ASSET_WORKFLOW.md`.
 
 ---
 
-## 9. Verification
+## 6. Structure & Maintainability
 
-When behavior changes, add or update tests using the existing framework.
-
-If no test framework exists, do not install one automatically unless required. Provide a practical manual verification path instead.
-
-Run relevant available checks and report exact commands and results. Do not stop at the first failed check if useful static review can continue.
+* **One Responsibility**: Keep files focused. Split logic from UI (ViewModel vs Composable).
+* **Naming**: Be explicit. Avoid `utils`, `helpers`, `common` unless following existing patterns.
+* **Extensibility**: When adding features (e.g., WhatsApp integration, PDF export), centralize templates and logic in `core` or `domain` to ensure consistency.
 
 ---
 
-## 10. Security and dependencies
-
-Never create, print, commit, or expose secrets.
-
-Use `.env.example` for required environment variables. Do not put credentials, private keys, tokens, passwords, or personal data into docs, logs, examples, or status files.
-
-Validate external input, escape output where required, use parameterized database queries, and avoid logging sensitive data.
-
-Before adding a dependency, check whether the repository already has a suitable dependency. Prefer the standard library or existing utilities. Respect the existing package manager and lockfile. Do not add dependencies only for convenience.
-
----
-
-## 11. Git hygiene
-
-Inspect the working tree before editing. Do not overwrite user changes.
-
-Avoid destructive Git operations: `git reset --hard`, `git clean -fd`, force pushes, branch deletion, and history rewriting.
-
-Only stage or commit when explicitly requested.
-
----
-
-## 12. Final response
+## 7. Final response requirements
 
 For implementation tasks, include:
-
-- what changed;
-- files changed;
-- checks run and results;
-- cleanliness result;
-- `PROJECT_STATUS.json` todo update, if applicable;
-- remaining risks, blockers, or next steps.
-
-For review-only tasks, include findings by severity, affected files/areas, suggested fixes, assumptions, and review limits.
-
-Be factual and concise. Do not claim production readiness unless relevant checks passed or limitations are clearly stated.
+1. What changed.
+2. Files changed.
+3. Documentation updated (if applicable).
+4. Build/Test results.
+5. `PROJECT_STATUS.json` update.
+6. Future integration risks (Backend, Cloud, etc.).

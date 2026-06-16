@@ -1,63 +1,42 @@
 package com.onlytechtake.repairapp.features.dashboard.orders
 
-
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.*
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
-import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspace
-import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.onlytechtake.repairapp.core.di.LocalAppContainer
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
-import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
-import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
-import com.onlytechtake.repairapp.features.dashboard.common.Field
-import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
-import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
-import com.onlytechtake.repairapp.features.dashboard.common.TouchButtonWithIcon
+import com.onlytechtake.repairapp.features.dashboard.common.*
+import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspace
+import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Add
-import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
-import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 
 @Composable
 fun OrdersPanel(
@@ -130,115 +109,108 @@ private fun OrdersListContent(
         uri?.let(viewModel::exportCompleteBackup)
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.TopCenter,
-    ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .widthIn(max = DashboardSpacing.maxContentWidth)
-                .imePadding(),
-            contentPadding = PaddingValues(DashboardSpacing.screenPadding),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
+    AppScreenContainer(scrollable = false) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    SectionTitle(stringResource(R.string.orders_title))
-                    Row(horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
-                        TouchButtonWithIcon(
-                            text = stringResource(R.string.home_new_order),
-                            icon = Icons.Default.Add,
-                            size = AppButtonSize.Compact,
-                            onClick = onNewOrder,
-                        )
-                        TouchButtonWithIcon(
-                            text = stringResource(R.string.orders_filter_title),
-                            icon = Icons.Default.FilterList,
-                            tone = if (orderFilter.hasActiveFilter()) ButtonTone.INFO else ButtonTone.NEUTRAL,
-                            size = AppButtonSize.Compact,
-                            testTag = RepairAppTestTags.OrdersFilterButton,
-                            onClick = { showFilterDialog = true },
-                        )
-                    }
-                }
-            }
-
-            if (showBackupReminder) {
-                item {
-                    com.onlytechtake.repairapp.features.dashboard.common.BackupReminderCard(
-                        settings = backupReminderSettings,
-                        onRunBackup = { exportZipLauncher.launch("onlytechtake-backup.zip") },
-                        onOpenSettings = onOpenBackupSettings
-                    )
-                }
-            }
-
-            item {
-                Field(
-                    value = orderFilter.query,
-                    onValueChange = { viewModel.setFilter(orderFilter.copy(query = it)) },
-                    label = stringResource(R.string.orders_search_label),
-                    modifier = Modifier.fillMaxWidth(),
+            SectionTitle(stringResource(R.string.orders_title))
+            Row(horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+                AppButton(
+                    text = stringResource(R.string.home_new_order),
+                    onClick = onNewOrder,
+                    variant = AppButtonVariant.Primary,
+                    size = AppButtonSize.Compact,
+                    leadingIcon = Icons.Default.Add
+                )
+                AppButton(
+                    text = stringResource(R.string.orders_filter_title),
+                    onClick = { showFilterDialog = true },
+                    variant = if (orderFilter.hasActiveFilter()) AppButtonVariant.Info else AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact,
+                    leadingIcon = Icons.Default.FilterList,
+                    testTag = RepairAppTestTags.OrdersFilterButton
                 )
             }
+        }
 
-            if (orderFilter.hasActiveFilter()) {
-                item {
-                    ActiveFilterInfo(orderFilter)
-                }
-            }
+        Spacer(Modifier.height(RepairAppSpacing.cardGap))
 
+        if (showBackupReminder) {
+            BackupReminderCard(
+                settings = backupReminderSettings,
+                onRunBackup = { exportZipLauncher.launch("onlytechtake-backup.zip") },
+                onOpenSettings = onOpenBackupSettings
+            )
+            Spacer(Modifier.height(RepairAppSpacing.cardGap))
+        }
+
+        AppTextField(
+            value = orderFilter.query,
+            onValueChange = { viewModel.setFilter(orderFilter.copy(query = it)) },
+            label = stringResource(R.string.orders_search_label),
+            modifier = Modifier.fillMaxWidth(),
+        )
+
+        if (orderFilter.hasActiveFilter()) {
+            Spacer(Modifier.height(4.dp))
+            ActiveFilterInfo(orderFilter)
+        }
+
+        Spacer(Modifier.height(RepairAppSpacing.sectionGap))
+
+        LazyColumn(
+            modifier = Modifier.weight(1f).fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
+            contentPadding = PaddingValues(vertical = RepairAppSpacing.compactGap)
+        ) {
             if (orderListItems.isEmpty()) {
                 item {
-                    Text(stringResource(R.string.orders_empty_filter), style = MaterialTheme.typography.bodyMedium)
+                    Text(stringResource(R.string.orders_empty_filter), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             } else {
                 items(orderListItems, key = { it.order.id }) { item ->
                     val order = item.order
                     StandardCard(
-                        modifier = Modifier
-                            .testTag(RepairAppTestTags.orderCard(order.id)),
-                        onClick = {
-                            onOrderClick(order.id)
-                        },
+                        modifier = Modifier.testTag(RepairAppTestTags.orderCard(order.id)),
+                        onClick = { onOrderClick(order.id) },
                     ) {
                         Column(
-                            modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+                            modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                         ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.Top,
                             ) {
-                                Text(
-                                    "${order.orderNumber} - ${order.title}",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    modifier = Modifier.weight(1f),
-                                )
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = "${order.orderNumber} - ${order.title}",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        text = item.customer?.displayName(context).orEmpty(),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.secondary
+                                    )
+                                }
                                 Text(
                                     formatUiDateTime(order.updatedAt),
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    color = MaterialTheme.colorScheme.outline,
                                 )
                             }
+                            
                             OrderStatusStepper(status = order.status, compact = true)
-                            Text(
-                                text = stringResource(
-                                    R.string.orders_customer_label,
-                                    item.customer?.displayName(context).orEmpty(),
-                                ),
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
+                            
                             Text(
                                 text = stringResource(R.string.orders_next_action_label, nextActionLabel(order)),
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.secondary,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.Medium
                             )
                         }
                     }
@@ -248,19 +220,22 @@ private fun OrdersListContent(
     }
 
     if (showFilterDialog) {
-        AlertDialog(
+        AppDialog(
             onDismissRequest = { showFilterDialog = false },
-            title = { Text(stringResource(R.string.orders_filter_title)) },
-            text = {
+            title = stringResource(R.string.orders_filter_title),
+            content = {
                 OrderFilterBar(
                     filter = orderFilter,
                     onFilter = viewModel::setFilter,
                 )
             },
             confirmButton = {
-                TextButton(onClick = { showFilterDialog = false }) {
-                    Text(stringResource(R.string.confirm))
-                }
+                AppButton(
+                    text = stringResource(R.string.confirm),
+                    onClick = { showFilterDialog = false },
+                    variant = AppButtonVariant.Primary,
+                    size = AppButtonSize.Compact
+                )
             },
         )
     }
@@ -269,18 +244,19 @@ private fun OrdersListContent(
 @Composable
 private fun ActiveFilterInfo(filter: OrderFilter) {
     val context = LocalContext.current
-    Text(
-        text = stringResource(
-            R.string.orders_filter_active,
-            listOfNotNull(
-                stringResource(R.string.orders_filter_mine).lowercase().takeIf { filter.showMineOnly },
-                filter.status?.label(context),
-                filter.statuses.takeIf { it.isNotEmpty() }?.joinToString(" / ") { it.label(context) },
-            ).joinToString(", "),
-        ),
-        style = MaterialTheme.typography.labelSmall,
-        color = MaterialTheme.colorScheme.secondary,
-    )
+    val filterText = listOfNotNull(
+        stringResource(R.string.orders_filter_mine).lowercase().takeIf { filter.showMineOnly },
+        filter.status?.label(context),
+        filter.statuses.takeIf { it.isNotEmpty() }?.joinToString(" / ") { it.label(context) },
+    ).joinToString(", ")
+    
+    if (filterText.isNotBlank()) {
+        AppStatusChip(
+            text = stringResource(R.string.orders_filter_active, filterText),
+            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+        )
+    }
 }
 
 @Composable
@@ -288,31 +264,44 @@ private fun OrderFilterBar(
     filter: OrderFilter,
     onFilter: (OrderFilter) -> Unit,
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
-        ActionRow {
-            val allSelected = !filter.hasActiveFilter()
-            TouchButton(
-                text = stringResource(R.string.orders_filter_all),
-                tone = if (allSelected) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
-                selected = allSelected,
-                stateDescription = if (allSelected) stringResource(R.string.state_selected) else stringResource(R.string.state_not_selected),
-                size = AppButtonSize.Compact,
-                onClick = { onFilter(OrderFilter()) },
-            )
-            TouchButton(
-                text = stringResource(R.string.orders_filter_mine),
-                tone = if (filter.showMineOnly) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
-                selected = filter.showMineOnly,
-                stateDescription = if (filter.showMineOnly) stringResource(R.string.state_selected) else stringResource(R.string.state_not_selected),
-                size = AppButtonSize.Compact,
-                onClick = { onFilter(filter.copy(showMineOnly = !filter.showMineOnly)) },
-            )
-            QuickStatusGroupFilter(stringResource(R.string.orders_filter_open), setOf(OrderStatus.OPEN), filter, onFilter)
-            QuickStatusGroupFilter(stringResource(R.string.orders_filter_progress), setOf(OrderStatus.IN_PROGRESS, OrderStatus.DIAGNOSIS), filter, onFilter)
-            QuickStatusGroupFilter(stringResource(R.string.orders_filter_result), setOf(OrderStatus.RESULT, OrderStatus.REPAIRING), filter, onFilter)
-            QuickStatusGroupFilter(stringResource(R.string.orders_filter_ready), setOf(OrderStatus.READY_FOR_PICKUP), filter, onFilter)
-        }
+    Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+        val allSelected = !filter.hasActiveFilter()
+        
+        FilterToggleButton(
+            text = stringResource(R.string.orders_filter_all),
+            selected = allSelected,
+            onClick = { onFilter(OrderFilter()) }
+        )
+        
+        FilterToggleButton(
+            text = stringResource(R.string.orders_filter_mine),
+            selected = filter.showMineOnly,
+            onClick = { onFilter(filter.copy(showMineOnly = !filter.showMineOnly)) }
+        )
+        
+        HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp).alpha(0.3f))
+        
+        QuickStatusGroupFilter(stringResource(R.string.orders_filter_open), setOf(OrderStatus.OPEN), filter, onFilter)
+        QuickStatusGroupFilter(stringResource(R.string.orders_filter_progress), setOf(OrderStatus.IN_PROGRESS, OrderStatus.DIAGNOSIS), filter, onFilter)
+        QuickStatusGroupFilter(stringResource(R.string.orders_filter_result), setOf(OrderStatus.RESULT, OrderStatus.REPAIRING), filter, onFilter)
+        QuickStatusGroupFilter(stringResource(R.string.orders_filter_ready), setOf(OrderStatus.READY_FOR_PICKUP), filter, onFilter)
     }
+}
+
+@Composable
+private fun FilterToggleButton(
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    AppButton(
+        text = text,
+        onClick = onClick,
+        variant = if (selected) AppButtonVariant.Primary else AppButtonVariant.Ghost,
+        size = AppButtonSize.Compact,
+        modifier = Modifier.fillMaxWidth(),
+        selected = selected
+    )
 }
 
 @Composable
@@ -322,17 +311,15 @@ private fun QuickStatusGroupFilter(
     filter: OrderFilter,
     onFilter: (OrderFilter) -> Unit,
 ) {
-    TouchButton(
+    val isSelected = filter.statuses == statuses
+    FilterToggleButton(
         text = label,
-        tone = if (filter.statuses == statuses) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
-        selected = filter.statuses == statuses,
-        stateDescription = if (filter.statuses == statuses) stringResource(R.string.state_selected) else stringResource(R.string.state_not_selected),
-        size = AppButtonSize.Compact,
+        selected = isSelected,
         onClick = {
             onFilter(
                 filter.copy(
                     status = null,
-                    statuses = statuses.takeUnless { filter.statuses == statuses } ?: emptySet(),
+                    statuses = statuses.takeUnless { isSelected } ?: emptySet(),
                 ),
             )
         },

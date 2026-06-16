@@ -3,17 +3,12 @@ package com.onlytechtake.repairapp.features.dashboard.customers
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.activity.compose.BackHandler
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -24,20 +19,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
+import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.*
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 
 @Composable
 fun CustomerPanel(
@@ -47,7 +43,6 @@ fun CustomerPanel(
     val windowSizeClass = LocalWindowSizeClass.current
     val isWide = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Medium
 
-    val message by viewModel.message.collectAsState()
     var selectedCustomer by remember { mutableStateOf<CustomerEntity?>(null) }
     var showForm by rememberSaveable { mutableStateOf(value = false) }
     var editingCustomerId by rememberSaveable { mutableStateOf<String?>(null) }
@@ -108,71 +103,20 @@ fun CustomerPanel(
         showForm = true
     }
 
-    Column(Modifier.fillMaxSize()) {
-        LocalMessageBanner(message?.text, message?.isError ?: false)
-
-        if (isWide) {
-            Row(Modifier.weight(1f)) {
-                Box(Modifier.weight(1f)) {
-                    CustomerListContent(
-                        viewModel = viewModel,
-                        onCustomerClick = { selectedCustomer = it },
-                        onNewCustomer = {
-                            clearForm()
-                            showForm = true
-                        }
-                    )
-                }
-                VerticalDivider()
-                Box(Modifier.weight(1.5f)) {
-                    if (showForm) {
-                        CustomerForm(
-                            isEditing = editingCustomerId != null,
-                            isBusiness = isBusiness,
-                            onBusinessChange = { isBusiness = it },
-                            firstName = firstName,
-                            onFirstNameChange = { firstName = it },
-                            lastName = lastName,
-                            onLastNameChange = { lastName = it },
-                            companyName = companyName,
-                            onCompanyNameChange = { companyName = it },
-                            vatNumber = vatNumber,
-                            onVatNumberChange = { vatNumber = it },
-                            taxCode = taxCode,
-                            onTaxCodeChange = { taxCode = it },
-                            phone = phone,
-                            onPhoneChange = { phone = it },
-                            email = email,
-                            onEmailChange = { email = it },
-                            address = address,
-                            onAddressChange = { address = it },
-                            notes = notes,
-                            onNotesChange = { notes = it },
-                            onSave = { confirmSave = true },
-                            onCancel = {
-                                showForm = false
-                                clearForm()
-                            }
-                        )
-                    } else if (selectedCustomer != null) {
-                        CustomerDetailContent(
-                            customer = selectedCustomer!!,
-                            viewModel = viewModel,
-                            onEdit = {
-                                editCustomer(selectedCustomer!!)
-                            },
-                            onOrderClick = onOrderClick,
-                            onClose = { selectedCustomer = null }
-                        )
-                    } else {
-                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            Text(stringResource(R.string.customer_select_detail_hint), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        }
-                    }
-                }
-            }
-        } else {
+    if (isWide) {
+        Row(Modifier.fillMaxSize()) {
             Box(Modifier.weight(1f)) {
+                CustomerListContent(
+                    viewModel = viewModel,
+                    onCustomerClick = { selectedCustomer = it },
+                    onNewCustomer = {
+                        clearForm()
+                        showForm = true
+                    }
+                )
+            }
+            VerticalDivider()
+            Box(Modifier.weight(1.5f)) {
                 if (showForm) {
                     CustomerForm(
                         isEditing = editingCustomerId != null,
@@ -202,40 +146,107 @@ fun CustomerPanel(
                             clearForm()
                         }
                     )
-                } else {
-                    CustomerListContent(
+                } else if (selectedCustomer != null) {
+                    CustomerDetailContent(
+                        customer = selectedCustomer!!,
                         viewModel = viewModel,
-                        onCustomerClick = { selectedCustomer = it },
-                        onNewCustomer = {
-                            clearForm()
-                            showForm = true
-                        }
+                        onEdit = {
+                            editCustomer(selectedCustomer!!)
+                        },
+                        onOrderClick = onOrderClick,
+                        onClose = { selectedCustomer = null }
                     )
+                } else {
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text(stringResource(R.string.customer_select_detail_hint), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
                 }
             }
+        }
+    } else {
+        if (showForm) {
+            CustomerForm(
+                isEditing = editingCustomerId != null,
+                isBusiness = isBusiness,
+                onBusinessChange = { isBusiness = it },
+                firstName = firstName,
+                onFirstNameChange = { firstName = it },
+                lastName = lastName,
+                onLastNameChange = { lastName = it },
+                companyName = companyName,
+                onCompanyNameChange = { companyName = it },
+                vatNumber = vatNumber,
+                onVatNumberChange = { vatNumber = it },
+                taxCode = taxCode,
+                onTaxCodeChange = { taxCode = it },
+                phone = phone,
+                onPhoneChange = { phone = it },
+                email = email,
+                onEmailChange = { email = it },
+                address = address,
+                onAddressChange = { address = it },
+                notes = notes,
+                onNotesChange = { notes = it },
+                onSave = { confirmSave = true },
+                onCancel = {
+                    showForm = false
+                    clearForm()
+                }
+            )
+        } else {
+            CustomerListContent(
+                viewModel = viewModel,
+                onCustomerClick = { selectedCustomer = it },
+                onNewCustomer = {
+                    clearForm()
+                    showForm = true
+                }
+            )
+        }
 
-            selectedCustomer?.let { customer ->
-                CustomerDetailDialog(
-                    customer = customer,
-                    viewModel = viewModel,
-                    onDismiss = { selectedCustomer = null },
-                    onEdit = {
-                        editCustomer(customer)
-                        selectedCustomer = null
-                    },
-                    onOrderClick = onOrderClick
-                )
-            }
+        selectedCustomer?.let { customer ->
+            AppDialog(
+                onDismissRequest = { selectedCustomer = null },
+                confirmButton = {
+                    AppButton(
+                        text = stringResource(R.string.customer_detail_edit),
+                        onClick = {
+                            editCustomer(customer)
+                            selectedCustomer = null
+                        },
+                        variant = AppButtonVariant.Primary,
+                        size = AppButtonSize.Compact
+                    )
+                },
+                dismissButton = {
+                    AppButton(
+                        text = stringResource(R.string.customer_detail_close),
+                        onClick = { selectedCustomer = null },
+                        variant = AppButtonVariant.Secondary,
+                        size = AppButtonSize.Compact
+                    )
+                },
+                content = {
+                    CustomerDetailContent(
+                        customer = customer,
+                        viewModel = viewModel,
+                        onEdit = {}, // Handled by dialog button
+                        onOrderClick = onOrderClick,
+                        onClose = { selectedCustomer = null }
+                    )
+                }
+            )
         }
     }
 
     if (confirmSave) {
-        AlertDialog(
+        AppDialog(
             onDismissRequest = { confirmSave = false },
-            title = { Text(if (editingCustomerId == null) stringResource(R.string.customer_confirm_save_title) else stringResource(R.string.customer_confirm_update_title)) },
-            text = { Text(if (editingCustomerId == null) stringResource(R.string.customer_confirm_save_text) else stringResource(R.string.customer_confirm_update_text)) },
+            title = if (editingCustomerId == null) stringResource(R.string.customer_confirm_save_title) else stringResource(R.string.customer_confirm_update_title),
+            text = if (editingCustomerId == null) stringResource(R.string.customer_confirm_save_text) else stringResource(R.string.customer_confirm_update_text),
             confirmButton = {
-                TextButton(
+                AppButton(
+                    text = stringResource(R.string.confirm),
                     onClick = {
                         confirmSave = false
                         viewModel.saveCustomer(input) {
@@ -243,15 +254,18 @@ fun CustomerPanel(
                             showForm = false
                         }
                     },
-                    modifier = Modifier.testTag(RepairAppTestTags.CustomerConfirmSaveButton),
-                ) {
-                    Text(stringResource(R.string.confirm))
-                }
+                    variant = AppButtonVariant.Primary,
+                    size = AppButtonSize.Compact,
+                    testTag = RepairAppTestTags.CustomerConfirmSaveButton,
+                )
             },
             dismissButton = {
-                TextButton(onClick = { confirmSave = false }) {
-                    Text(stringResource(R.string.customer_cancel))
-                }
+                AppButton(
+                    text = stringResource(R.string.customer_cancel),
+                    onClick = { confirmSave = false },
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact
+                )
             },
         )
     }
@@ -267,51 +281,52 @@ private fun CustomerListContent(
     val searchQuery by viewModel.searchQuery.collectAsState()
     val focusManager = LocalFocusManager.current
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize().imePadding(),
-        contentPadding = PaddingValues(DashboardSpacing.screenPadding),
-        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap)
-    ) {
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                SectionTitle(stringResource(R.string.customer_title))
-                TouchButton(
-                    text = stringResource(R.string.customer_new),
-                    testTag = RepairAppTestTags.CustomerNewButton,
-                    onClick = onNewCustomer,
-                )
-            }
-        }
-
-        item {
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = searchQuery,
-                onValueChange = viewModel::setSearchQuery,
-                label = { Text(stringResource(R.string.customer_search_label)) },
-                singleLine = true,
-                shape = MaterialTheme.shapes.medium,
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Search,
-                    capitalization = KeyboardCapitalization.Words
-                ),
-                keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
+    AppScreenContainer(scrollable = false) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            SectionTitle(stringResource(R.string.customer_title))
+            AppButton(
+                text = stringResource(R.string.customer_new),
+                onClick = onNewCustomer,
+                variant = AppButtonVariant.Primary,
+                size = AppButtonSize.Compact,
+                testTag = RepairAppTestTags.CustomerNewButton
             )
         }
 
-        item { SectionTitle(if (searchQuery.isBlank()) stringResource(R.string.customer_recent) else stringResource(R.string.customer_search_results)) }
+        Spacer(Modifier.height(RepairAppSpacing.cardGap))
+
+        AppTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = searchQuery,
+            onValueChange = viewModel::setSearchQuery,
+            label = stringResource(R.string.customer_search_label),
+            singleLine = true,
+            imeAction = ImeAction.Search,
+            keyboardType = KeyboardType.Text,
+            capitalization = KeyboardCapitalization.Words,
+            keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
+        )
+
+        Spacer(Modifier.height(RepairAppSpacing.sectionGap))
+        SectionTitle(if (searchQuery.isBlank()) stringResource(R.string.customer_recent) else stringResource(R.string.customer_search_results))
         
-        if (customers.isEmpty()) {
-            item {
-                CustomerEmptyState(hasQuery = searchQuery.isNotBlank(), onNewCustomer = onNewCustomer)
-            }
-        } else {
-            items(customers) { customer ->
-                CustomerCard(customer = customer, onClick = { onCustomerClick(customer) })
+        LazyColumn(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
+            contentPadding = PaddingValues(vertical = RepairAppSpacing.compactGap)
+        ) {
+            if (customers.isEmpty()) {
+                item {
+                    CustomerEmptyState(hasQuery = searchQuery.isNotBlank(), onNewCustomer = onNewCustomer)
+                }
+            } else {
+                items(customers, key = { it.id }) { customer ->
+                    CustomerCard(customer = customer, onClick = { onCustomerClick(customer) })
+                }
             }
         }
     }
@@ -346,44 +361,55 @@ private fun CustomerForm(
     val canSave = (phone.isNotBlank() || email.isNotBlank()) &&
         if (isBusiness) companyName.isNotBlank() else firstName.isNotBlank() && lastName.isNotBlank()
 
-    Column(
-        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(DashboardSpacing.screenPadding),
-        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)
-    ) {
+    AppScreenContainer {
         Text(
             text = if (!isEditing) stringResource(R.string.customer_new) else stringResource(R.string.customer_edit),
-            style = MaterialTheme.typography.titleLarge,
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary
         )
-        CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = onBusinessChange)
-        if (isBusiness) {
-            Field(companyName, onCompanyNameChange, stringResource(R.string.customer_field_company_name), required = true, testTag = RepairAppTestTags.CustomerCompanyNameField)
-            Field(vatNumber, onVatNumberChange, stringResource(R.string.customer_field_vat_number), showOptional = true, testTag = RepairAppTestTags.CustomerVatNumberField)
-        } else {
-            Field(firstName, onFirstNameChange, stringResource(R.string.customer_field_first_name), required = true, testTag = RepairAppTestTags.CustomerFirstNameField)
-            Field(lastName, onLastNameChange, stringResource(R.string.customer_field_last_name), required = true, testTag = RepairAppTestTags.CustomerLastNameField)
-        }
-        Field(taxCode, onTaxCodeChange, stringResource(R.string.customer_field_tax_code), showOptional = true, testTag = RepairAppTestTags.CustomerTaxCodeField)
-        Field(phone, onPhoneChange, stringResource(R.string.customer_field_phone), required = true, keyboardType = KeyboardType.Phone, testTag = RepairAppTestTags.CustomerPhoneField)
-        Field(email, onEmailChange, stringResource(R.string.customer_field_email), required = true, keyboardType = KeyboardType.Email, testTag = RepairAppTestTags.CustomerEmailField)
-        Field(address, onAddressChange, stringResource(R.string.customer_field_address), showOptional = true, testTag = RepairAppTestTags.CustomerAddressField)
-        NoteFieldWithDialog(notes, onNotesChange, testTag = RepairAppTestTags.CustomerNotesField)
         
-        ActionRow {
-            TouchButton(
-                text = stringResource(R.string.customer_save),
-                enabled = canSave,
-                size = AppButtonSize.Compact,
-                testTag = RepairAppTestTags.CustomerSaveButton,
-                onClick = onSave
-            )
-            TouchButton(
-                text = stringResource(R.string.customer_cancel),
-                tone = ButtonTone.NEUTRAL,
-                size = AppButtonSize.Compact,
-                onClick = onCancel,
-            )
+        Spacer(Modifier.height(RepairAppSpacing.sectionGap))
+        
+        CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = onBusinessChange)
+        
+        Spacer(Modifier.height(RepairAppSpacing.sectionGap))
+
+        Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)) {
+            if (isBusiness) {
+                AppTextField(companyName, onCompanyNameChange, stringResource(R.string.customer_field_company_name), required = true, testTag = RepairAppTestTags.CustomerCompanyNameField)
+                AppTextField(vatNumber, onVatNumberChange, stringResource(R.string.customer_field_vat_number), showOptional = true, testTag = RepairAppTestTags.CustomerVatNumberField)
+            } else {
+                AppTextField(firstName, onFirstNameChange, stringResource(R.string.customer_field_first_name), required = true, testTag = RepairAppTestTags.CustomerFirstNameField)
+                AppTextField(lastName, onLastNameChange, stringResource(R.string.customer_field_last_name), required = true, testTag = RepairAppTestTags.CustomerLastNameField)
+            }
+            AppTextField(taxCode, onTaxCodeChange, stringResource(R.string.customer_field_tax_code), showOptional = true, testTag = RepairAppTestTags.CustomerTaxCodeField)
+            AppTextField(phone, onPhoneChange, stringResource(R.string.customer_field_phone), required = true, keyboardType = KeyboardType.Phone, testTag = RepairAppTestTags.CustomerPhoneField)
+            AppTextField(email, onEmailChange, stringResource(R.string.customer_field_email), required = true, keyboardType = KeyboardType.Email, testTag = RepairAppTestTags.CustomerEmailField)
+            AppTextField(address, onAddressChange, stringResource(R.string.customer_field_address), showOptional = true, testTag = RepairAppTestTags.CustomerAddressField)
+            
+            Spacer(Modifier.height(RepairAppSpacing.compactGap))
+            SectionTitle(stringResource(R.string.customer_field_notes))
+            NoteFieldWithDialog(notes, onNotesChange, testTag = RepairAppTestTags.CustomerNotesField)
         }
+        
+        Spacer(Modifier.height(RepairAppSpacing.sectionGap))
+
+        AppButton(
+            text = if (isEditing) stringResource(R.string.customer_update) else stringResource(R.string.customer_save),
+            onClick = onSave,
+            enabled = canSave,
+            variant = AppButtonVariant.Primary,
+            size = AppButtonSize.FullWidth,
+            testTag = RepairAppTestTags.CustomerSaveButton
+        )
+        Spacer(Modifier.height(RepairAppSpacing.cardGap))
+        AppButton(
+            text = stringResource(R.string.customer_cancel),
+            onClick = onCancel,
+            variant = AppButtonVariant.Ghost,
+            size = AppButtonSize.FullWidth
+        )
     }
 }
 
@@ -400,88 +426,73 @@ private fun CustomerDetailContent(
     val closedOrders = allOrders.filter { it.order.status == com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED }
     val context = LocalContext.current
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(DashboardSpacing.screenPadding),
-        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap)
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap)
     ) {
-        item {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Column {
-                    Text(text = customer.displayName(context), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-                    Text(text = customer.type.label(context), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
-                }
-                Row {
-                    TouchButton(
-                        text = stringResource(R.string.customer_detail_close),
-                        tone = ButtonTone.NEUTRAL,
-                        size = AppButtonSize.Compact,
-                        testTag = RepairAppTestTags.CustomerDetailCloseButton,
-                        onClick = onClose,
-                    )
-                    Spacer(Modifier.width(8.dp))
-                    TouchButton(
-                        text = stringResource(R.string.customer_detail_edit),
-                        size = AppButtonSize.Compact,
-                        testTag = RepairAppTestTags.CustomerDetailEditButton,
-                        onClick = onEdit,
-                    )
-                }
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Top) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(text = customer.displayName(context), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                AppStatusChip(
+                    text = customer.type.label(context),
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                )
+            }
+            AppIconButton(
+                imageVector = Icons.Default.Info, // Placeholder for Edit if we want an icon
+                contentDescription = stringResource(R.string.customer_detail_edit),
+                onClick = onEdit,
+                tint = MaterialTheme.colorScheme.primary
+            )
+        }
+
+        StandardCard {
+            Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+                customer.phone?.let { AppKeyValueRow(label = stringResource(R.string.customer_field_phone), value = it) }
+                customer.email?.let { AppKeyValueRow(label = stringResource(R.string.customer_field_email), value = it) }
+                customer.address?.let { AppKeyValueRow(label = stringResource(R.string.customer_field_address), value = it) }
             }
         }
-        item {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                customer.phone?.let { Text(stringResource(R.string.customer_phone_value, it), style = MaterialTheme.typography.bodyLarge) }
-                customer.email?.let { Text(stringResource(R.string.customer_email_value, it), style = MaterialTheme.typography.bodyLarge) }
-                customer.address?.let { Text(stringResource(R.string.customer_address_value, it), style = MaterialTheme.typography.bodyMedium) }
-            }
-        }
+
         if (!customer.notes.isNullOrBlank()) {
-            item { OperatorText(customer.notes) }
+            SectionTitle(stringResource(R.string.customer_field_notes))
+            OperatorText(customer.notes)
         }
-        item { SectionTitle(stringResource(R.string.customer_open_orders, openOrders.size)) }
+
+        SectionTitle(stringResource(R.string.customer_open_orders, openOrders.size))
         if (openOrders.isEmpty()) {
-            item { Text(stringResource(R.string.customer_no_open_orders), color = MaterialTheme.colorScheme.outline) }
+            Text(stringResource(R.string.customer_no_open_orders), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
         } else {
-            items(openOrders) { item -> OrderSummaryRow(item, onOrderClick) }
+            openOrders.forEach { item -> OrderSummaryRow(item, onOrderClick) }
         }
-        item { SectionTitle(stringResource(R.string.customer_closed_orders, closedOrders.size)) }
+
+        SectionTitle(stringResource(R.string.customer_closed_orders, closedOrders.size))
         if (closedOrders.isEmpty()) {
-            item { Text(stringResource(R.string.customer_no_closed_orders), color = MaterialTheme.colorScheme.outline) }
+            Text(stringResource(R.string.customer_no_closed_orders), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
         } else {
-            items(closedOrders) { item -> OrderSummaryRow(item, onOrderClick) }
+            closedOrders.forEach { item -> OrderSummaryRow(item, onOrderClick) }
         }
     }
 }
 
 @Composable
-fun CustomerDetailDialog(
-    customer: CustomerEntity,
-    viewModel: CustomersViewModel,
-    onDismiss: () -> Unit,
-    onEdit: () -> Unit,
-    onOrderClick: (String) -> Unit,
-) {
-    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
-        Surface(
-            modifier = Modifier.fillMaxWidth(0.95f).widthIn(max = 600.dp),
-            shape = MaterialTheme.shapes.extraLarge,
-            color = MaterialTheme.colorScheme.surface,
-            tonalElevation = 6.dp
-        ) {
-            CustomerDetailContent(customer, viewModel, onEdit, onOrderClick, onDismiss)
-        }
+fun AppKeyValueRow(label: String, value: String) {
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        Text(text = label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(text = value, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
     }
 }
 
 @Composable
 fun OrderSummaryRow(item: com.onlytechtake.repairapp.domain.workspace.OrderListItem, onOrderClick: (String) -> Unit) {
-    StandardCard(onClick = { onOrderClick(item.order.id) }) {
-        Row(modifier = Modifier.padding(12.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+    StandardCard(onClick = { onOrderClick(item.order.id) }, modifier = Modifier.padding(bottom = 4.dp)) {
+        Row(modifier = Modifier.padding(RepairAppSpacing.compactGap).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
             Column {
-                Text(text = "${item.order.orderNumber}: ${item.order.title}", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
-                Text(text = item.order.status.label(LocalContext.current), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+                Text(text = "${item.order.orderNumber}: ${item.order.title}", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                Text(text = item.order.status.label(LocalContext.current), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
             }
-            Icon(Icons.Default.Info, contentDescription = null, modifier = Modifier.size(20.dp), tint = MaterialTheme.colorScheme.primary)
+            Icon(Icons.Default.Info, contentDescription = null, modifier = Modifier.size(18.dp), tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f))
         }
     }
 }
@@ -489,13 +500,13 @@ fun OrderSummaryRow(item: com.onlytechtake.repairapp.domain.workspace.OrderListI
 @Composable
 private fun CustomerCard(customer: CustomerEntity, onClick: () -> Unit) {
     StandardCard(onClick = onClick) {
-        Row(modifier = Modifier.padding(16.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+        Row(modifier = Modifier.padding(RepairAppSpacing.cardPadding).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
             Column {
                 val context = LocalContext.current
-                Text(customer.displayName(context), style = MaterialTheme.typography.titleMedium)
-                Text(text = listOfNotNull(customer.type.label(context), customer.phone).joinToString(" - "), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(customer.displayName(context), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text(text = listOfNotNull(customer.type.label(context), customer.phone).joinToString(" - "), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            Icon(Icons.Default.Info, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+            Icon(Icons.Default.Info, contentDescription = null, tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f))
         }
     }
 }
@@ -503,9 +514,20 @@ private fun CustomerCard(customer: CustomerEntity, onClick: () -> Unit) {
 @Composable
 private fun CustomerEmptyState(hasQuery: Boolean, onNewCustomer: () -> Unit) {
     StandardCard {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text(text = if (hasQuery) stringResource(R.string.customer_no_results) else stringResource(R.string.customer_no_recent))
-            if (hasQuery) TouchButton(text = stringResource(R.string.customer_new), size = AppButtonSize.Compact, onClick = onNewCustomer)
+        Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap), horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = if (hasQuery) stringResource(R.string.customer_no_results) else stringResource(R.string.customer_no_recent),
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center
+            )
+            if (hasQuery) {
+                AppButton(
+                    text = stringResource(R.string.customer_new),
+                    onClick = onNewCustomer,
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact
+                )
+            }
         }
     }
 }

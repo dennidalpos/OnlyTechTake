@@ -172,6 +172,11 @@ fun RepairAppTheme(
         MaterialTheme(
             colorScheme = if (darkTheme) DarkColors else LightColors,
             typography = AppTypography,
+            shapes = androidx.compose.material3.Shapes(
+                small = RepairAppShapes.compactButton,
+                medium = RepairAppShapes.card,
+                large = RepairAppShapes.card
+            ),
             content = content,
         )
     }

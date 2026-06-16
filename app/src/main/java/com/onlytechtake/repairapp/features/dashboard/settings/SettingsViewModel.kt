@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
+import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
@@ -33,6 +34,7 @@ class SettingsViewModel(
     private val templateRepository: TemplateRepository,
     private val backupRepository: BackupRepository,
     private val backupReminderPreferences: BackupReminderPreferences,
+    private val securityPreferences: SecurityPreferences,
     private val storageStatsService: StorageStatsService,
     private val orderFileCleanupService: OrderFileCleanupService,
 ) : ViewModel() {
@@ -62,6 +64,7 @@ class SettingsViewModel(
     val templates = templateRepository.observeTemplates().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     val messageMode = templateRepository.observeMessageMode().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), MessageMode.MANUAL_WHATSAPP)
     val backupReminderSettings = backupReminderPreferences.settings.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), BackupReminderSettings())
+    val securitySettings = securityPreferences.settings.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), com.onlytechtake.repairapp.data.preferences.SecuritySettings())
 
     init {
         refreshStorageStats()
@@ -132,6 +135,24 @@ class SettingsViewModel(
     fun setBackupReminderIntervalDays(days: Int) {
         viewModelScope.launch {
             backupReminderPreferences.setIntervalDays(days)
+        }
+    }
+
+    fun setBackupEncryptionEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            securityPreferences.setBackupEncryptionEnabled(enabled)
+        }
+    }
+
+    fun setBackupEncryptionPassword(password: String) {
+        viewModelScope.launch {
+            securityPreferences.setBackupEncryptionPassword(password)
+        }
+    }
+
+    fun setDatabaseEncryptionEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            securityPreferences.setDatabaseEncryptionEnabled(enabled)
         }
     }
 
@@ -211,6 +232,7 @@ class SettingsViewModel(
         private val templateRepository: TemplateRepository,
         private val backupRepository: BackupRepository,
         private val backupReminderPreferences: BackupReminderPreferences,
+        private val securityPreferences: SecurityPreferences,
         private val storageStatsService: StorageStatsService,
         private val orderFileCleanupService: OrderFileCleanupService,
     ) : ViewModelProvider.Factory {
@@ -219,6 +241,7 @@ class SettingsViewModel(
             return SettingsViewModel(
                 authRepository, adminUserRepository, catalogRepository,
                 templateRepository, backupRepository, backupReminderPreferences,
+                securityPreferences,
                 storageStatsService, orderFileCleanupService
             ) as T
         }

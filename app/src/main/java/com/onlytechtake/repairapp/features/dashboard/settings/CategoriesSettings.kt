@@ -36,13 +36,9 @@ import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
-import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
-import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
-import com.onlytechtake.repairapp.features.dashboard.common.Field
-import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
-import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
-import com.onlytechtake.repairapp.features.dashboard.common.TouchButtonWithIcon
+import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.features.dashboard.common.*
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 
 @Composable
@@ -108,9 +104,9 @@ fun CategoriesSettings(
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .widthIn(max = DashboardSpacing.maxContentWidth),
-        contentPadding = PaddingValues(DashboardSpacing.screenPadding),
-        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
+            .widthIn(max = RepairAppSpacing.maxContentWidth),
+        contentPadding = PaddingValues(RepairAppSpacing.screenPadding),
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.listGap),
     ) {
         item {
             SectionTitle(
@@ -118,17 +114,19 @@ fun CategoriesSettings(
                 tooltip = "Organizza il catalogo delle riparazioni. Puoi creare una gerarchia di categorie e sottocategorie."
             )
             
-            Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
-                Field(
+            Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+                AppTextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
                     label = "Cerca categorie...",
                     singleLine = true,
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
-                            IconButton(onClick = { searchQuery = "" }) {
-                                Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.content_description_clear))
-                            }
+                            AppIconButton(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = stringResource(R.string.content_description_clear),
+                                onClick = { searchQuery = "" }
+                            )
                         }
                     }
                 )
@@ -179,8 +177,8 @@ fun CategoriesSettings(
                     highlight = true,
                 ) {
                     Column(
-                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                        modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.formGap),
                     ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -192,18 +190,20 @@ fun CategoriesSettings(
                                 style = MaterialTheme.typography.titleMedium,
                                 color = MaterialTheme.colorScheme.primary
                             )
-                            IconButton(onClick = { showEditCard = false }) {
-                                Icon(Icons.Default.Close, contentDescription = stringResource(R.string.content_description_close))
-                            }
+                            AppIconButton(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = stringResource(R.string.content_description_close),
+                                onClick = { showEditCard = false }
+                            )
                         }
                         
-                        Field(
+                        AppTextField(
                             categoryName,
                             { categoryName = it },
                             stringResource(R.string.config_category_name_label),
                             testTag = RepairAppTestTags.ConfigCategoryNameField
                         )
-                        Field(
+                        AppTextField(
                             categoryDescription,
                             { categoryDescription = it },
                             stringResource(R.string.config_category_description_label),
@@ -262,8 +262,8 @@ fun CategoriesSettings(
                 onClick = { openCategoryBranch(category.id) },
             ) {
                 Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -282,29 +282,32 @@ fun CategoriesSettings(
                         }
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             if (isAdmin) {
-                                IconButton(
-                                    onClick = { selectCategoryForEdit(category) },
-                                ) {
-                                    Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.content_description_edit))
-                                }
+                                AppIconButton(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = stringResource(R.string.content_description_edit),
+                                    onClick = { selectCategoryForEdit(category) }
+                                )
                             }
-                            IconButton(
-                                onClick = { openCategoryBranch(category.id) },
-                            ) {
-                                Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = stringResource(R.string.content_description_open))
-                            }
+                            AppIconButton(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                contentDescription = stringResource(R.string.content_description_open),
+                                onClick = { openCategoryBranch(category.id) }
+                            )
                             if (isAdmin) {
-                                IconButton(onClick = {
-                                    onRequestConfirm(
-                                        confirmTitle,
-                                        confirmText
-                                    ) {
-                                        viewModel.deleteCategory(category.id)
-                                        loadNewCategory()
+                                AppIconButton(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = stringResource(R.string.content_description_delete),
+                                    tint = MaterialTheme.colorScheme.error,
+                                    onClick = {
+                                        onRequestConfirm(
+                                            confirmTitle,
+                                            confirmText
+                                        ) {
+                                            viewModel.deleteCategory(category.id)
+                                            loadNewCategory()
+                                        }
                                     }
-                                }) {
-                                    Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.content_description_delete), tint = MaterialTheme.colorScheme.error)
-                                }
+                                )
                             }
                         }
                     }
@@ -320,7 +323,7 @@ fun CategoriesSettings(
 
         item {
             TouchButton(
-                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenPadding),
                 text = "Chiudi Categorie",
                 tone = ButtonTone.NEUTRAL,
                 onClick = onBack
@@ -328,3 +331,5 @@ fun CategoriesSettings(
         }
     }
 }
+
+

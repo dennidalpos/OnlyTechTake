@@ -1,31 +1,31 @@
 package com.onlytechtake.repairapp.features.dashboard.detail
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Message
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.semantics.Role
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
-import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
@@ -33,119 +33,83 @@ import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
+import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
 import com.onlytechtake.repairapp.domain.workspace.availableOrderStatusActions
 import com.onlytechtake.repairapp.domain.workspace.statusTemplateCode
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
-import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
-import com.onlytechtake.repairapp.features.dashboard.common.Field
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
-import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
-import com.onlytechtake.repairapp.features.workspace.ButtonTone
-import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
-import com.onlytechtake.repairapp.features.workspace.attachmentCounts
-import com.onlytechtake.repairapp.features.workspace.label as attachmentLabel
-import com.onlytechtake.repairapp.features.workspace.tone
+import com.onlytechtake.repairapp.features.dashboard.common.CompactExpandableRow
 
 @Composable
-fun OrderHeader(
-    detail: OrderDetail,
-    context: Context,
-    modifier: Modifier = Modifier,
-) {
-    StandardCard(highlight = true, modifier = modifier) {
+fun OrderHeader(detail: OrderDetail, context: Context) {
+    StandardCard {
         Column(
-            modifier = Modifier.padding(DashboardSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+            modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
         ) {
-            OrderStatusStepper(detail.order.status)
-            Text(
-                text = detail.order.status.label(context),
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .testTag(RepairAppTestTags.OrderStatusLabel),
-            )
-
-            if (detail.isPaid) {
-                Text(
-                    text = stringResource(R.string.order_paid_badge),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.repairColors.paid,
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .background(MaterialTheme.repairColors.paidContainer, RepairAppShapes.badge)
-                        .padding(horizontal = 8.dp, vertical = 2.dp)
-                )
-            }
-
-            Text(
-                text = "${detail.order.orderNumber} - ${detail.order.title}",
-                style = MaterialTheme.typography.headlineSmall
-            )
-
-            Text(
-                text = stringResource(
-                    R.string.orders_customer_label,
-                    detail.customer?.displayName(context).orEmpty()
-                ),
-                style = MaterialTheme.typography.bodyLarge
-            )
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top,
             ) {
-                Text(
-                    text = stringResource(R.string.order_operator_label, detail.assignedUser?.displayName.orEmpty()),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Text(
-                    text = formatUiDateTime(detail.order.updatedAt),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.secondary
-                )
-            }
-
-            if (detail.order.description?.isNotBlank() == true) {
-                OperatorText(
-                    text = stringResource(R.string.order_problem_label, detail.order.description),
-                )
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = attachmentCounts(detail.media, detail.signatures).attachmentLabel(),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-                detail.order.diagnosisOutcome?.let {
+                Column(modifier = Modifier.weight(1f)) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            text = detail.order.orderNumber,
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                        AppStatusChip(
+                            text = detail.order.status.label(context),
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    }
                     Text(
-                        text = "• ${it.label(context)}",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.secondary
+                        text = detail.order.title,
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = detail.customer?.displayName(context) ?: stringResource(R.string.orders_customer_unavailable),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.secondary,
+                    )
+                }
+                if (detail.isPaid) {
+                    AppBadge(
+                        text = stringResource(R.string.order_paid_badge),
+                        containerColor = MaterialTheme.repairColors.successContainer,
+                        contentColor = MaterialTheme.repairColors.onSuccessContainer,
                     )
                 }
             }
-
-            detail.order.closureReason?.let {
-                Text(
-                    text = stringResource(R.string.closure_reason_prefix, it.label(context)),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.error
-                )
+            
+            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp).alpha(0.5f))
+            
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                InfoMetadata(label = "Aggiornata", value = formatUiDateTime(detail.order.updatedAt))
+                detail.order.assignedToUserId?.let { InfoMetadata(label = "Operatore", value = it) }
             }
         }
+    }
+}
+
+@Composable
+private fun InfoMetadata(label: String, value: String) {
+    Column {
+        Text(text = label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.outline)
+        Text(text = value, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
     }
 }
 
@@ -154,48 +118,61 @@ fun OrderActionCard(
     status: OrderStatus,
     isPaid: Boolean,
     onActionClick: (OrderStatusAction) -> Unit,
-    onTogglePayment: (Boolean) -> Unit,
+    onTogglePayment: () -> Unit,
     onSendWhatsApp: (String) -> Unit,
-    modifier: Modifier = Modifier,
 ) {
-    StandardCard(
-        modifier = modifier.testTag(RepairAppTestTags.OrderActionSection),
-        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
-    ) {
-        Column(
-            modifier = Modifier.padding(DashboardSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-        ) {
-            SectionTitle(stringResource(R.string.order_actions_title))
-            
-            ActionRow {
-                val actions = availableOrderStatusActions(status)
-                val templateCode = statusTemplateCode(status)
-
-                actions.forEach { action ->
-                    TouchButton(
-                        text = action.label,
-                        tone = action.tone(),
-                        testTag = RepairAppTestTags.statusAction(action.name),
-                        onClick = { onActionClick(action) }
-                    )
-                }
-
-                if (status == OrderStatus.READY_FOR_PICKUP || status == OrderStatus.CLOSED) {
-                    TouchButton(
-                        text = if (isPaid) stringResource(R.string.order_not_paid_button) else stringResource(R.string.order_paid_button),
-                        tone = if (isPaid) ButtonTone.WARNING else ButtonTone.SUCCESS,
-                        onClick = { onTogglePayment(!isPaid) }
-                    )
-                }
-
-                TouchButton(
-                    text = stringResource(R.string.order_whatsapp_send),
-                    tone = ButtonTone.BRAND_WHATSAPP,
-                    testTag = RepairAppTestTags.OrderWhatsAppButton,
-                    onClick = { onSendWhatsApp(templateCode) }
+    AppActionPanel(title = stringResource(R.string.order_actions_title)) {
+        Text(stringResource(R.string.order_actions_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        
+        ActionRow {
+            availableOrderStatusActions(status).forEach { action ->
+                AppButton(
+                    text = action.label,
+                    onClick = { onActionClick(action) },
+                    variant = if (action == OrderStatusAction.RECORD_RESULT) AppButtonVariant.Primary else AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact,
                 )
             }
+        }
+
+        HorizontalDivider(modifier = Modifier.alpha(0.3f))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(role = Role.Checkbox, onClick = onTogglePayment),
+            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Checkbox(checked = isPaid, onCheckedChange = null)
+            Text(stringResource(R.string.order_paid_button), style = MaterialTheme.typography.bodyMedium)
+        }
+
+        HorizontalDivider(modifier = Modifier.alpha(0.3f))
+
+        AppButton(
+            text = stringResource(R.string.order_whatsapp_send),
+            variant = AppButtonVariant.WhatsApp,
+            onClick = { onSendWhatsApp(statusTemplateCode(status)) },
+            size = AppButtonSize.Compact,
+            leadingIcon = Icons.AutoMirrored.Filled.Message,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+fun AppActionPanel(
+    title: String,
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    StandardCard(modifier = modifier) {
+        Column(
+            modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.formGap)
+        ) {
+            content()
         }
     }
 }
@@ -204,57 +181,122 @@ fun OrderActionCard(
 fun QuoteDecisionPanel(
     quoteDecision: QuoteDecision?,
     quoteRejectNote: String,
-    onQuoteDecisionChange: (QuoteDecision?) -> Unit,
+    onQuoteDecisionChange: (QuoteDecision) -> Unit,
     onQuoteRejectNoteChange: (String) -> Unit,
     onConfirm: (CustomerFeedbackType, String, ClosureReason?) -> Unit,
-    modifier: Modifier = Modifier,
 ) {
-    StandardCard(modifier = modifier) {
+    StandardCard {
         Column(
-            modifier = Modifier.padding(DashboardSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+            modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.formGap),
         ) {
-            Text(stringResource(R.string.order_quote_outcome), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-            QuoteDecisionRow(
-                text = stringResource(R.string.order_quote_accepted),
-                checked = quoteDecision == QuoteDecision.ACCEPTED,
-                testTag = RepairAppTestTags.QuoteAcceptedToggle,
-            ) {
-                onQuoteDecisionChange(toggleQuoteDecision(quoteDecision, QuoteDecision.ACCEPTED))
+            Text(stringResource(R.string.order_quote_outcome), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            
+            Row(horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap)) {
+                QuoteDecisionButton(
+                    text = stringResource(R.string.order_quote_accepted),
+                    selected = quoteDecision == QuoteDecision.ACCEPTED,
+                    modifier = Modifier.weight(1f),
+                    onClick = { onQuoteDecisionChange(QuoteDecision.ACCEPTED) }
+                )
+
+                QuoteDecisionButton(
+                    text = stringResource(R.string.order_quote_rejected),
+                    selected = quoteDecision == QuoteDecision.REJECTED,
+                    modifier = Modifier.weight(1f),
+                    onClick = { onQuoteDecisionChange(QuoteDecision.REJECTED) }
+                )
             }
-            QuoteDecisionRow(
-                text = stringResource(R.string.order_quote_rejected),
-                checked = quoteDecision == QuoteDecision.REJECTED,
-                testTag = RepairAppTestTags.QuoteRejectedToggle,
-            ) {
-                onQuoteDecisionChange(toggleQuoteDecision(quoteDecision, QuoteDecision.REJECTED))
-            }
+
             if (quoteDecision == QuoteDecision.REJECTED) {
-                Field(
+                AppTextField(
                     value = quoteRejectNote,
                     onValueChange = onQuoteRejectNoteChange,
                     label = stringResource(R.string.order_quote_reject_reason),
-                    required = true,
-                    showError = quoteRejectNote.isBlank(),
+                    showOptional = true,
                 )
             }
-            TouchButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.order_quote_confirm),
-                tone = if (quoteDecision == QuoteDecision.REJECTED) ButtonTone.DANGER else ButtonTone.SUCCESS,
-                enabled = canConfirmQuoteDecision(quoteDecision, quoteRejectNote),
-                testTag = RepairAppTestTags.QuoteConfirmButton,
-                onClick = {
-                    when (quoteDecision) {
-                        QuoteDecision.ACCEPTED -> {
+
+            if (quoteDecision != null) {
+                AppButton(
+                    text = stringResource(R.string.confirm),
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        if (quoteDecision == QuoteDecision.ACCEPTED) {
                             onConfirm(CustomerFeedbackType.ACCEPT, "Preventivo accettato", null)
-                        }
-                        QuoteDecision.REJECTED -> {
+                        } else {
                             onConfirm(CustomerFeedbackType.REJECT, quoteRejectNote, ClosureReason.CUSTOMER_DECLINED)
                         }
-                        null -> Unit
-                    }
-                },
+                    },
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun QuoteDecisionButton(
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    AppButton(
+        text = text,
+        onClick = onClick,
+        variant = if (selected) AppButtonVariant.Primary else AppButtonVariant.Ghost,
+        size = AppButtonSize.Compact,
+        modifier = modifier,
+        selected = selected
+    )
+}
+
+@Composable
+fun QuoteDecisionRow(
+    text: String,
+    checked: Boolean,
+    modifier: Modifier = Modifier,
+    testTag: String? = null,
+    onSelect: () -> Unit,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
+            .selectable(selected = checked, onClick = onSelect, role = Role.RadioButton)
+            .background(
+                if (checked) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else Color.Transparent,
+                RepairAppShapes.compactButton,
+            )
+            .padding(horizontal = 8.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        RadioButton(selected = checked, onClick = null)
+        Text(text, style = MaterialTheme.typography.bodyMedium)
+    }
+}
+
+@Composable
+fun InternalNotesPanel(
+    notes: String?,
+    onAddNoteClick: () -> Unit,
+) {
+    StandardCard {
+        Column(
+            modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+        ) {
+            Text(stringResource(R.string.order_internal_notes), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            notes?.takeIf { it.isNotBlank() }?.let {
+                OperatorText(it)
+            }
+            AppButton(
+                text = stringResource(R.string.order_save_note),
+                variant = AppButtonVariant.Ghost,
+                onClick = onAddNoteClick,
+                size = AppButtonSize.Compact,
+                modifier = Modifier.align(Alignment.End)
             )
         }
     }
@@ -268,36 +310,46 @@ fun WhatsAppPreviewPanel(
     onOpenWhatsApp: () -> Unit,
     onConfirmSent: () -> Unit,
     onClose: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
-    StandardCard(
-        modifier = modifier.testTag(RepairAppTestTags.OrderWhatsAppPreviewPanel),
-        containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f)
-    ) {
+    StandardCard {
         Column(
-            modifier = Modifier.padding(DashboardSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+            modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
         ) {
-            SectionTitle(stringResource(R.string.order_wa_preview_title))
-            Field(body, onBodyChange, stringResource(R.string.order_wa_message_label))
-            ActionRow {
-                TouchButton(
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Text(stringResource(R.string.order_wa_preview_title), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+                AppIconButton(imageVector = Icons.Default.Close, contentDescription = stringResource(R.string.order_wa_close_preview), onClick = onClose)
+            }
+            
+            AppMessageBanner(
+                message = "Inviando a: ${prepared.phone}",
+                type = BannerType.Info
+            )
+            
+            AppTextField(
+                value = body,
+                onValueChange = onBodyChange,
+                label = stringResource(R.string.order_wa_message_label),
+                modifier = Modifier.fillMaxWidth(),
+            )
+            
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.actionGap)
+            ) {
+                AppButton(
+                    modifier = Modifier.weight(1f),
                     text = stringResource(R.string.order_wa_open),
-                    tone = ButtonTone.BRAND_WHATSAPP,
-                    testTag = RepairAppTestTags.OrderWhatsAppOpenButton,
-                    onClick = onOpenWhatsApp
+                    variant = AppButtonVariant.WhatsApp,
+                    onClick = onOpenWhatsApp,
+                    size = AppButtonSize.Compact,
                 )
-                TouchButton(
+                AppButton(
+                    modifier = Modifier.weight(1f),
                     text = stringResource(R.string.order_wa_sent),
-                    tone = ButtonTone.SUCCESS,
-                    testTag = RepairAppTestTags.OrderWhatsAppSentButton,
-                    onClick = onConfirmSent
-                )
-                TouchButton(
-                    text = stringResource(R.string.order_wa_close_preview),
-                    tone = ButtonTone.NEUTRAL,
-                    testTag = RepairAppTestTags.OrderWhatsAppClosePreviewButton,
-                    onClick = onClose
+                    variant = AppButtonVariant.Success,
+                    onClick = onConfirmSent,
+                    size = AppButtonSize.Compact,
                 )
             }
         }
@@ -305,62 +357,109 @@ fun WhatsAppPreviewPanel(
 }
 
 @Composable
-fun InternalNotesPanel(
-    notes: String?,
-    onAddNoteClick: () -> Unit,
-    modifier: Modifier = Modifier,
+fun OrderDocumentSection(
+    isGeneratingPdf: Boolean,
+    pdfError: String?,
+    documents: List<OrderDocumentEntity>,
+    hasSignatures: Boolean,
+    onGeneratePdf: (Boolean) -> Unit,
+    onShareDocument: (String) -> Unit,
+    onDeleteDocument: (String) -> Unit,
+    requestConfirm: (String, String, () -> Unit) -> Unit,
 ) {
-    StandardCard(modifier = modifier) {
+    StandardCard {
         Column(
-            modifier = Modifier.padding(DashboardSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+            modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.formGap),
         ) {
-            Text(stringResource(R.string.order_internal_notes), style = MaterialTheme.typography.titleMedium)
-            notes?.takeIf { it.isNotBlank() }?.let {
-                OperatorText(it)
-            }
-            TouchButton(
-                text = stringResource(R.string.order_internal_notes),
-                tone = ButtonTone.NEUTRAL,
+            Text(stringResource(R.string.order_customer_documents), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            
+            AppButton(
+                text = stringResource(R.string.order_generate_status_pdf),
+                variant = AppButtonVariant.Secondary,
+                enabled = !isGeneratingPdf,
                 size = AppButtonSize.Compact,
-                onClick = onAddNoteClick
+                onClick = {
+                    if (!hasSignatures) {
+                        requestConfirm(
+                            "Firma mancante",
+                            "Il documento non conterra' la firma del cliente. Proseguire?"
+                        ) {
+                            onGeneratePdf(false)
+                        }
+                    } else {
+                        onGeneratePdf(true)
+                    }
+                },
             )
+            
+            if (isGeneratingPdf) {
+                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            }
+            pdfError?.let { error ->
+                AppMessageBanner(message = "Errore: $error", type = BannerType.Error)
+            }
+
+            if (documents.isNotEmpty()) {
+                Text(stringResource(R.string.order_document_history), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.outline)
+                documents.forEach { doc ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Column(modifier = Modifier.weight(1f).clickable { onShareDocument(doc.id) }) {
+                            Text(doc.fileName, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
+                            Text(
+                                text = stringResource(R.string.order_document_generated, formatUiDateTime(doc.createdAt)) + (if (doc.sharedAt != null) " (${stringResource(R.string.order_wa_sent)})" else ""),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.secondary,
+                            )
+                        }
+                        Row {
+                            AppIconButton(
+                                imageVector = Icons.Default.Info,
+                                contentDescription = stringResource(R.string.order_share),
+                                onClick = { onShareDocument(doc.id) },
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            AppIconButton(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = stringResource(R.string.content_description_delete),
+                                tint = MaterialTheme.colorScheme.error,
+                                onClick = {
+                                    requestConfirm(
+                                        "Eliminare documento?",
+                                        "Il file ${doc.fileName} verra' rimosso permanentemente."
+                                    ) {
+                                        onDeleteDocument(doc.id)
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }
 
 @Composable
-fun QuoteDecisionRow(
-    text: String,
-    checked: Boolean,
-    testTag: String,
-    onClick: () -> Unit,
+fun OrderTimelineSection(
+    timeline: List<TimelineEventEntity>,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag(testTag)
-            .selectable(
-                selected = checked,
-                role = Role.RadioButton,
-                onClick = onClick,
+    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+        SectionTitle(
+            text = stringResource(R.string.order_timeline),
+            tooltip = "Cronologia di tutti gli eventi e cambiamenti di stato relativi a questa commessa."
+        )
+        timeline.forEachIndexed { index, event ->
+            val eventNumber = timeline.size - index
+            CompactExpandableRow(
+                title = "$eventNumber. ${event.title}",
+                subtitle = formatUiDateTime(event.createdAt),
+                detail = event.description.orEmpty(),
             )
-            .padding(vertical = DashboardSpacing.compactGap / 2),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
-    ) {
-        Checkbox(checked = checked, onCheckedChange = null)
-        Text(text, style = MaterialTheme.typography.bodyLarge)
+        }
     }
 }
-
-private fun toggleQuoteDecision(current: QuoteDecision?, new: QuoteDecision): QuoteDecision? =
-    if (current == new) null else new
-
-private fun canConfirmQuoteDecision(decision: QuoteDecision?, rejectNote: String): Boolean =
-    when (decision) {
-        QuoteDecision.ACCEPTED -> true
-        QuoteDecision.REJECTED -> rejectNote.isNotBlank()
-        null -> false
-    }
-

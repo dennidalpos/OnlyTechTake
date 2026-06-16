@@ -1,28 +1,19 @@
 package com.onlytechtake.repairapp.features.dashboard.detail
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.components.StandardCard
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
-import com.onlytechtake.repairapp.features.dashboard.common.LocalImagePreview
-import com.onlytechtake.repairapp.features.dashboard.common.LocalImageViewer
-import com.onlytechtake.repairapp.features.dashboard.common.CompactExpandableRow
-import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
-import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
-import com.onlytechtake.repairapp.core.utils.formatUiDateTime
+import com.onlytechtake.repairapp.features.dashboard.common.*
 
 @Composable
 fun OrderSignatureSection(
@@ -33,17 +24,18 @@ fun OrderSignatureSection(
 
     Column(
         modifier = Modifier.testTag(RepairAppTestTags.OrderSignatureSection),
-        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
     ) {
-        SectionTitle("Firma privacy")
+        SectionTitle("Firme privacy")
+        
         if (detail.signatures.isEmpty()) {
-            Text("Nessuna firma acquisita.")
+            Text("Nessuna firma acquisita.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
         } else {
             detail.signatures.forEach { signature ->
                 StandardCard {
                     Column(
-                        modifier = Modifier.padding(DashboardSpacing.compactGap),
-                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+                        modifier = Modifier.padding(RepairAppSpacing.compactGap),
+                        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                     ) {
                         LocalImagePreview(
                             path = signature.localPath,
@@ -53,10 +45,15 @@ fun OrderSignatureSection(
                                 selectedSignatureTitle = "Firma ${signature.signerName}"
                             },
                         )
-                        CompactExpandableRow(
-                            title = signature.signerName,
-                            subtitle = formatUiDateTime(signature.signedAt),
-                            detail = "Privacy accettata: ${if (signature.privacyAccepted) "si" else "no"}\nCondizioni accettate: ${if (signature.termsAccepted) "si" else "no"}",
+                        Text(
+                            text = "Firmatario: ${signature.signerName}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = if (signature.privacyAccepted) "Privacy accettata" else "Privacy NON accettata",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = if (signature.privacyAccepted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
                         )
                     }
                 }

@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.media.normalizeCameraTargetRotation
 import com.onlytechtake.repairapp.R
 import java.io.File
@@ -97,7 +98,7 @@ fun CameraCapturePreview(
         }
     }
 
-    Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
+    Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
         AndroidView(
             modifier = Modifier
                 .fillMaxWidth()
@@ -141,3 +142,4 @@ private fun cameraTargetRotation(context: Context, previewView: PreviewView): In
         ?.rotation
     return normalizeCameraTargetRotation(previewView.display?.rotation ?: windowRotation)
 }
+

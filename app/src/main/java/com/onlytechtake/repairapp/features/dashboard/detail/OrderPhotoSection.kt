@@ -3,37 +3,23 @@ package com.onlytechtake.repairapp.features.dashboard.detail
 import android.graphics.Bitmap
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
-import com.onlytechtake.repairapp.features.dashboard.common.LocalImagePreview
-import com.onlytechtake.repairapp.features.dashboard.common.LocalImageViewer
-import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
-import com.onlytechtake.repairapp.features.dashboard.common.CameraCapturePreview
-import com.onlytechtake.repairapp.features.dashboard.common.CompactExpandableRow
-import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
-import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
-import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
-import com.onlytechtake.repairapp.features.workspace.ButtonTone
+import com.onlytechtake.repairapp.features.dashboard.common.*
 import com.onlytechtake.repairapp.features.workspace.isFinalPhoto
 import com.onlytechtake.repairapp.features.workspace.isImageAttachment
+import java.io.File
 
 @Composable
 fun OrderPhotoSection(
@@ -41,142 +27,93 @@ fun OrderPhotoSection(
     viewModel: OrderDetailViewModel,
 ) {
     var showCamera by rememberSaveable { mutableStateOf(false) }
-    var showFinalCamera by rememberSaveable { mutableStateOf(false) }
     var selectedImageId by rememberSaveable { mutableStateOf<String?>(null) }
     var deleteMedia by remember { mutableStateOf<OrderMediaEntity?>(null) }
     val attachmentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let { viewModel.importAttachment(detail.order.id, it) }
     }
-    val finalPhotos = detail.media.filter { it.isFinalPhoto() }
     val images = detail.media.filter { it.isImageAttachment() && !it.isFinalPhoto() }
     val documents = detail.media.filterNot { it.isImageAttachment() }
 
-    Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
-        SectionTitle("Foto e allegati")
+    Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+        SectionTitle(stringResource(R.string.intake_step_media))
+        
         if (images.isEmpty() && documents.isEmpty()) {
-            Text("Nessuna foto o allegato.")
+            Text(stringResource(R.string.intake_media_empty), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
         } else {
             if (images.isNotEmpty()) {
-                Text("Immagini", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.secondary)
+                Text("Immagini", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
                 images.forEach { media ->
                     StandardCard {
                         Column(
-                            modifier = Modifier.padding(DashboardSpacing.compactGap),
-                            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+                            modifier = Modifier.padding(RepairAppSpacing.compactGap),
+                            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                         ) {
                             LocalImagePreview(
                                 path = media.localPath,
-                                description = "Foto commessa",
+                                description = media.fileName,
                                 onClick = { selectedImageId = media.id },
                             )
-                        }
-                    }
-                }
-            }
-            if (documents.isNotEmpty()) {
-                Text("Documenti", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.secondary)
-                documents.forEach { media ->
-                    CompactExpandableRow(
-                        title = "Allegato",
-                        subtitle = "Documento commessa",
-                        detail = media.fileName,
-                    )
-                }
-            }
-            if (finalPhotos.isNotEmpty()) {
-                Text("Lavoro finale", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.tertiary)
-                finalPhotos.forEach { media ->
-                    StandardCard {
-                        Column(
-                            modifier = Modifier.padding(DashboardSpacing.compactGap),
-                            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
-                        ) {
-                            LocalImagePreview(
-                                path = media.localPath,
-                                description = "Foto finale",
-                                onClick = { selectedImageId = media.id },
-                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                            ) {
+                                Text(media.fileName, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
+                                AppButton(
+                                    text = stringResource(R.string.content_description_delete),
+                                    variant = AppButtonVariant.Ghost,
+                                    size = AppButtonSize.Compact,
+                                    onClick = { deleteMedia = media }
+                                )
+                            }
                         }
                     }
                 }
             }
         }
 
-        val canCaptureFinal = detail.order.status == OrderStatus.READY_FOR_PICKUP || 
-                           detail.order.status == OrderStatus.CLOSED
-
-        ActionRow {
-            TouchButton(text = "Scatta foto", onClick = {
-                showFinalCamera = false
-                showCamera = true
-            })
-            if (canCaptureFinal) {
-                TouchButton(text = "Foto finale", onClick = {
-                    showCamera = false
-                    showFinalCamera = true
-                })
-            }
-            TouchButton(text = "Allega file", onClick = { attachmentLauncher.launch("*/*") })
-            if (showCamera) {
-                TouchButton(text = "Chiudi camera", tone = ButtonTone.NEUTRAL, onClick = { showCamera = false })
-            }
-            if (showFinalCamera) {
-                TouchButton(text = "Chiudi foto finale", tone = ButtonTone.NEUTRAL, onClick = { showFinalCamera = false })
-            }
-        }
-
-        if (showCamera) {
-            AlertDialog(
-                onDismissRequest = { showCamera = false },
-                title = { Text("Acquisisci foto") },
-                text = {
-                    CameraCapturePreview(
-                        orderId = detail.order.id,
-                        orderNumber = detail.order.orderNumber,
-                        createPhotoFile = viewModel::createPhotoFile,
-                        onPhotoCaptured = { file ->
-                            viewModel.registerCapturedPhoto(detail.order.id, file)
-                            showCamera = false
-                        },
-                        onError = viewModel::reportCameraError,
-                    )
-                },
-                confirmButton = {},
-                dismissButton = {
-                    TextButton(onClick = { showCamera = false }) {
-                        Text("Annulla")
-                    }
-                },
-            )
-        }
-        if (showFinalCamera) {
-            AlertDialog(
-                onDismissRequest = { showFinalCamera = false },
-                title = { Text("Acquisisci foto finale") },
-                text = {
-                    CameraCapturePreview(
-                        orderId = detail.order.id,
-                        orderNumber = detail.order.orderNumber,
-                        createPhotoFile = viewModel::createPhotoFile,
-                        onPhotoCaptured = { file ->
-                            viewModel.registerCapturedFinalPhoto(detail.order.id, file)
-                            showFinalCamera = false
-                        },
-                        onError = viewModel::reportCameraError,
-                    )
-                },
-                confirmButton = {},
-                dismissButton = {
-                    TextButton(onClick = { showFinalCamera = false }) {
-                        Text("Annulla")
-                    }
-                },
-            )
-        }
+        AppButton(
+            text = stringResource(R.string.intake_media_take_photo),
+            variant = AppButtonVariant.Secondary,
+            size = AppButtonSize.Compact,
+            onClick = { showCamera = true },
+            modifier = Modifier.fillMaxWidth()
+        )
+        AppButton(
+            text = stringResource(R.string.intake_media_attach_file),
+            variant = AppButtonVariant.Ghost,
+            size = AppButtonSize.Compact,
+            onClick = { attachmentLauncher.launch("*/*") },
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 
-    selectedImageId?.let { mediaId ->
-        val media = detail.media.firstOrNull { it.id == mediaId }
+    if (showCamera) {
+        AppDialog(
+            onDismissRequest = { showCamera = false },
+            title = stringResource(R.string.intake_media_take_photo),
+            content = {
+                CameraCapturePreview(
+                    orderId = detail.order.id,
+                    orderNumber = detail.order.orderNumber,
+                    createPhotoFile = viewModel::createPhotoFile,
+                    onPhotoCaptured = {
+                        viewModel.registerCapturedPhoto(detail.order.id, it)
+                        showCamera = false
+                    },
+                    onError = viewModel::reportCameraError,
+                )
+            },
+            confirmButton = {},
+            dismissButton = {
+                AppButton(text = stringResource(R.string.customer_detail_close), onClick = { showCamera = false }, variant = AppButtonVariant.Secondary, size = AppButtonSize.Compact)
+            }
+        )
+    }
+
+    selectedImageId?.let { id ->
+        val media = detail.media.firstOrNull { it.id == id }
         if (media == null) {
             selectedImageId = null
         } else {
@@ -184,36 +121,35 @@ fun OrderPhotoSection(
                 path = media.localPath,
                 title = media.fileName,
                 onDismiss = { selectedImageId = null },
-                onSaveEdited = { bitmap: Bitmap ->
-                    viewModel.replaceImage(media.id, bitmap)
-                },
-                onDelete = {
-                    deleteMedia = media
-                },
+                onSaveEdited = { bitmap -> viewModel.replaceImage(media.id, bitmap) },
             )
         }
     }
 
     deleteMedia?.let { media ->
-        AlertDialog(
+        AppDialog(
             onDismissRequest = { deleteMedia = null },
-            title = { Text("Eliminare foto?") },
-            text = { Text("La foto ${media.fileName} verra' rimossa dalla commessa.") },
+            title = "Eliminare media?",
+            text = "Il file ${media.fileName} verra' rimosso permanentemente.",
             confirmButton = {
-                TextButton(
+                AppButton(
+                    text = stringResource(R.string.confirm),
                     onClick = {
                         viewModel.deleteMedia(media.id)
                         deleteMedia = null
                     },
-                ) {
-                    Text("Elimina")
-                }
+                    variant = AppButtonVariant.Danger,
+                    size = AppButtonSize.Compact
+                )
             },
             dismissButton = {
-                TextButton(onClick = { deleteMedia = null }) {
-                    Text("Annulla")
-                }
-            },
+                AppButton(
+                    text = stringResource(R.string.customer_cancel),
+                    onClick = { deleteMedia = null },
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact
+                )
+            }
         )
     }
 }

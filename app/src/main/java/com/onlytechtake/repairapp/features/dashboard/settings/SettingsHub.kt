@@ -1,16 +1,6 @@
 package com.onlytechtake.repairapp.features.dashboard.settings
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.automirrored.filled.Send
@@ -28,12 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.DashboardRoutes
 
 @Composable
@@ -41,18 +32,12 @@ fun SettingsHub(
     isAdmin: Boolean,
     onNavigate: (String) -> Unit,
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .widthIn(max = DashboardSpacing.maxContentWidth),
-        contentPadding = PaddingValues(DashboardSpacing.screenPadding),
-        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
-    ) {
-        item {
-            SectionTitle(stringResource(R.string.dashboard_config))
-        }
+    AppScreenContainer {
+        SectionTitle(stringResource(R.string.dashboard_config))
+        
+        Spacer(Modifier.height(RepairAppSpacing.cardGap))
 
-        item {
+        Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap)) {
             SettingsHubCard(
                 title = stringResource(R.string.config_hub_categories_title),
                 subtitle = stringResource(R.string.config_hub_categories_subtitle),
@@ -61,8 +46,7 @@ fun SettingsHub(
             ) {
                 onNavigate(DashboardRoutes.settings("CATEGORIES"))
             }
-        }
-        item {
+            
             SettingsHubCard(
                 title = stringResource(R.string.config_hub_templates_title),
                 subtitle = if (isAdmin) stringResource(R.string.config_hub_templates_subtitle_admin) else stringResource(R.string.config_hub_templates_subtitle_user),
@@ -72,8 +56,7 @@ fun SettingsHub(
             ) {
                 onNavigate(DashboardRoutes.settings("TEMPLATES"))
             }
-        }
-        item {
+            
             SettingsHubCard(
                 title = stringResource(R.string.config_hub_whatsapp_title),
                 subtitle = stringResource(R.string.config_hub_whatsapp_subtitle),
@@ -82,8 +65,7 @@ fun SettingsHub(
             ) {
                 onNavigate(DashboardRoutes.settings("WHATSAPP"))
             }
-        }
-        item {
+            
             SettingsHubCard(
                 title = stringResource(R.string.storage_title),
                 subtitle = stringResource(R.string.config_hub_storage_subtitle),
@@ -92,8 +74,7 @@ fun SettingsHub(
             ) {
                 onNavigate(DashboardRoutes.settings("STORAGE"))
             }
-        }
-        item {
+            
             SettingsHubCard(
                 title = stringResource(R.string.config_hub_admin_title),
                 subtitle = stringResource(R.string.config_hub_admin_subtitle),
@@ -102,9 +83,8 @@ fun SettingsHub(
             ) {
                 onNavigate(DashboardRoutes.ADMIN)
             }
-        }
-        if (isAdmin) {
-            item {
+            
+            if (isAdmin) {
                 SettingsHubCard(
                     title = stringResource(R.string.config_hub_backup_title),
                     subtitle = stringResource(R.string.config_hub_backup_subtitle),
@@ -114,8 +94,7 @@ fun SettingsHub(
                     onNavigate(DashboardRoutes.settings("EXPORT"))
                 }
             }
-        }
-        item {
+            
             SettingsHubCard(
                 title = stringResource(R.string.config_hub_about_title),
                 subtitle = stringResource(R.string.config_hub_about_subtitle),
@@ -142,26 +121,29 @@ internal fun SettingsHubCard(
         onClick = if (enabled) onClick else null,
     ) {
         Row(
-            modifier = Modifier.padding(DashboardSpacing.cardPadding),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(28.dp)
             )
-            Spacer(Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
                     color = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.outline
                 )
                 Text(
                     text = subtitle,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = if (enabled) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.outline
+                    style = MaterialTheme.typography.bodySmall,
+                    color = if (enabled) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.outline,
+                    maxLines = 2,
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                 )
             }
         }

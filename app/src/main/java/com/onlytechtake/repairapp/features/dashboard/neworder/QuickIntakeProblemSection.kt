@@ -4,16 +4,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
-import com.onlytechtake.repairapp.features.dashboard.common.Field
-import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
-import com.onlytechtake.repairapp.features.dashboard.common.StepSectionTitle
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.components.AppTextField
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 
 @Composable
 fun QuickIntakeProblemSection(
@@ -24,15 +26,19 @@ fun QuickIntakeProblemSection(
     onProblemDetailsChange: (String) -> Unit,
     nextAction: KeyboardActions,
     doneAction: KeyboardActions,
-    highlight: Boolean = false,
 ) {
-    StandardCard(highlight = highlight) {
+    StandardCard {
         Column(
-            modifier = Modifier.padding(DashboardSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+            modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
         ) {
-            StepSectionTitle(stepNumber, stringResource(R.string.intake_step_problem))
-            Field(
+            Text(
+                text = stringResource(R.string.intake_step_problem),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+            AppTextField(
                 value = problemSummary,
                 onValueChange = onProblemSummaryChange,
                 label = stringResource(R.string.intake_problem_title),
@@ -43,7 +49,7 @@ fun QuickIntakeProblemSection(
                 keyboardActions = nextAction,
                 testTag = RepairAppTestTags.NewOrderProblemSummaryField,
             )
-            Field(
+            AppTextField(
                 value = problemDetails,
                 onValueChange = onProblemDetailsChange,
                 label = stringResource(R.string.intake_problem_description),

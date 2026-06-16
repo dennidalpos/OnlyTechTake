@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -24,6 +25,7 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -39,6 +41,7 @@ enum class AppButtonVariant {
     Warning,
     Danger,
     WhatsApp,
+    Ghost,
 }
 
 enum class AppButtonSize {
@@ -53,6 +56,7 @@ fun AppButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    loading: Boolean = false,
     variant: AppButtonVariant = AppButtonVariant.Primary,
     size: AppButtonSize = AppButtonSize.Default,
     selected: Boolean? = null,
@@ -63,13 +67,14 @@ fun AppButton(
     val compact = size == AppButtonSize.Compact
     val colors = variant.colors()
     val widthModifier = if (size == AppButtonSize.FullWidth) Modifier.fillMaxWidth() else Modifier
+    val effectiveEnabled = enabled && !loading
 
-    val containerColor = if (enabled) {
+    val containerColor = if (effectiveEnabled || loading) {
         colors.container
     } else {
         MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.38f)
     }
-    val contentColor = if (enabled) {
+    val contentColor = if (effectiveEnabled || loading) {
         colors.content
     } else {
         MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f)
@@ -90,7 +95,7 @@ fun AppButton(
                 minHeight = RepairAppSizes.touchTarget,
             )
             .clickable(
-                enabled = enabled,
+                enabled = effectiveEnabled,
                 role = Role.Button,
                 onClick = onClick,
             ),
@@ -109,19 +114,27 @@ fun AppButton(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                leadingIcon?.let { icon ->
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = null,
-                        modifier = Modifier.padding(end = 6.dp).size(if (compact) 16.dp else 18.dp),
+                if (loading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.padding(end = 8.dp).size(if (compact) 14.dp else 18.dp),
+                        strokeWidth = 2.dp,
+                        color = contentColor
                     )
+                } else {
+                    leadingIcon?.let { icon ->
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = null,
+                            modifier = Modifier.padding(end = 6.dp).size(if (compact) 16.dp else 18.dp),
+                        )
+                    }
                 }
                 Text(
                     text = text,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center,
-                    style = if (compact) MaterialTheme.typography.labelMedium else MaterialTheme.typography.labelLarge,
+                    style = (if (compact) MaterialTheme.typography.labelMedium else MaterialTheme.typography.labelLarge).copy(fontWeight = FontWeight.Bold),
                     softWrap = false,
                 )
             }
@@ -148,4 +161,6 @@ private fun AppButtonVariant.colors(): AppButtonColors =
             AppButtonColors(MaterialTheme.colorScheme.error, MaterialTheme.colorScheme.onError)
         AppButtonVariant.WhatsApp ->
             AppButtonColors(MaterialTheme.repairColors.whatsapp, MaterialTheme.repairColors.onWhatsapp)
+        AppButtonVariant.Ghost ->
+            AppButtonColors(Color.Transparent, MaterialTheme.colorScheme.primary)
     }

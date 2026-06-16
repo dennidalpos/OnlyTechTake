@@ -16,10 +16,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
-import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 
 @Composable
@@ -33,13 +33,13 @@ fun WhatsAppSettings(
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .widthIn(max = DashboardSpacing.maxContentWidth),
-        contentPadding = PaddingValues(DashboardSpacing.screenPadding),
-        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
+            .widthIn(max = RepairAppSpacing.maxContentWidth),
+        contentPadding = PaddingValues(RepairAppSpacing.screenPadding),
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.listGap),
     ) {
         item {
             StandardCard(highlight = true) {
-                Column(modifier = Modifier.padding(DashboardSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
+                Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.formGap)) {
                     SectionTitle(
                         text = stringResource(R.string.config_hub_whatsapp_title),
                         tooltip = "Configura la modalità di invio dei messaggi ai clienti. Attualmente è supportato l'invio manuale tramite WhatsApp."
@@ -63,7 +63,7 @@ fun WhatsAppSettings(
 
         item {
             TouchButton(
-                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenPadding),
                 text = "Chiudi Setup WhatsApp",
                 tone = com.onlytechtake.repairapp.features.workspace.ButtonTone.NEUTRAL,
                 onClick = onBack
@@ -71,3 +71,5 @@ fun WhatsAppSettings(
         }
     }
 }
+
+

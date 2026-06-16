@@ -151,6 +151,9 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.exifinterface)
+    implementation(libs.zip4j)
+    implementation(libs.sqlcipher)
+    implementation(libs.sqlite.ktx)
 
     ksp(libs.androidx.room.compiler)
 

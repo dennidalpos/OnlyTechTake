@@ -12,9 +12,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.StandardCard
+import com.onlytechtake.repairapp.core.design.components.AppStepper
 import com.onlytechtake.repairapp.features.dashboard.common.CustomerTypeToggle
 import com.onlytechtake.repairapp.features.dashboard.neworder.LAST_INTAKE_STEP
-import com.onlytechtake.repairapp.features.dashboard.neworder.StepperIndicator
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -73,13 +73,19 @@ class DesignComponentsTest {
     fun intakeStepperExposesStableTagsAndTouchTargets() {
         composeRule.setContent {
             RepairAppTheme {
-                StepperIndicator(currentStep = 1, completedStep = 0, onStepClick = {})
+                AppStepper(
+                    currentStep = 1,
+                    totalSteps = LAST_INTAKE_STEP,
+                    completedStep = 0,
+                    onStepClick = {},
+                    stepTestTag = { RepairAppTestTags.intakeStepperStep(it) }
+                )
             }
         }
 
         composeRule.onNodeWithTag(RepairAppTestTags.intakeStepperStep(1))
-            .assertHeightIsAtLeast(48.dp)
+            .assertHeightIsAtLeast(RepairAppSizes.touchTarget)
         composeRule.onNodeWithTag(RepairAppTestTags.intakeStepperStep(LAST_INTAKE_STEP))
-            .assertHeightIsAtLeast(48.dp)
+            .assertHeightIsAtLeast(RepairAppSizes.touchTarget)
     }
 }

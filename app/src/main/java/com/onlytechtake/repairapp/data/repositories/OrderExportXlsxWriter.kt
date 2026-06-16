@@ -7,13 +7,15 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import net.lingala.zip4j.io.outputstream.ZipOutputStream
+import net.lingala.zip4j.model.ZipParameters
+import net.lingala.zip4j.model.enums.AesKeyStrength
+import net.lingala.zip4j.model.enums.EncryptionMethod
 import java.io.OutputStream
 import java.io.Writer
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.zip.ZipEntry
-import java.util.zip.ZipOutputStream
 
 internal class OrderExportXlsxWriter(
     private val zoneId: ZoneId = ZoneId.systemDefault(),
@@ -21,15 +23,16 @@ internal class OrderExportXlsxWriter(
     /**
      * Scrive l'export in formato XLSX in modo streaming per gestire dataset di grandi dimensioni.
      */
-    fun write(rows: List<OrderExportRow>, output: OutputStream) {
-        ZipOutputStream(output).use { zip ->
-            zip.putTextEntry("[Content_Types].xml", contentTypesXml)
-            zip.putTextEntry("_rels/.rels", rootRelationshipsXml)
-            zip.putTextEntry("xl/workbook.xml", workbookXml)
-            zip.putTextEntry("xl/_rels/workbook.xml.rels", workbookRelationshipsXml)
-            zip.putTextEntry("xl/styles.xml", stylesXml)
+    fun write(rows: List<OrderExportRow>, output: OutputStream, password: String? = null) {
+        ZipOutputStream(output, password?.toCharArray()).use { zip ->
+            zip.putTextEntry("[Content_Types].xml", contentTypesXml, password)
+            zip.putTextEntry("_rels/.rels", rootRelationshipsXml, password)
+            zip.putTextEntry("xl/workbook.xml", workbookXml, password)
+            zip.putTextEntry("xl/_rels/workbook.xml.rels", workbookRelationshipsXml, password)
+            zip.putTextEntry("xl/styles.xml", stylesXml, password)
             
-            zip.putNextEntry(ZipEntry("xl/worksheets/sheet1.xml"))
+            val sheetParams = createZipParameters("xl/worksheets/sheet1.xml", password)
+            zip.putNextEntry(sheetParams)
             writeWorksheet(rows, zip)
             zip.closeEntry()
         }
@@ -158,11 +161,26 @@ internal class OrderExportXlsxWriter(
             .replace("'", "&apos;")
 }
 
-private fun ZipOutputStream.putTextEntry(name: String, text: String) {
-    putNextEntry(ZipEntry(name))
+private fun ZipOutputStream.putTextEntry(name: String, text: String, password: String?) {
+    val params = createZipParameters(name, password)
+    putNextEntry(params)
     write(text.trimIndent().toByteArray(Charsets.UTF_8))
     closeEntry()
 }
+
+private fun createZipParameters(fileName: String, password: String?): ZipParameters {
+    val params = ZipParameters()
+    params.fileNameInZip = fileName
+    if (password != null) {
+        params.isEncryptFiles = true
+        params.encryptionMethod = EncryptionMethod.AES
+        params.aesKeyStrength = AesKeyStrength.KEY_STRENGTH_256
+    }
+    return params
+}
+
+private fun ZipOutputStream.writer(): Writer =
+    java.io.OutputStreamWriter(this, Charsets.UTF_8)
 
 private val headers = listOf(
     "Numero commessa",

@@ -3,54 +3,33 @@ package com.onlytechtake.repairapp.features.dashboard.neworder
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.RepairAppSizes
-import com.onlytechtake.repairapp.core.design.components.AppButtonSize
-import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
 import com.onlytechtake.repairapp.domain.workspace.isReadyForSubmit
 import com.onlytechtake.repairapp.domain.workspace.validationErrors
+import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.*
-import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeSignatureDraft
 
@@ -60,7 +39,6 @@ fun QuickActions(
     onOpenConfig: () -> Unit,
     onClose: () -> Unit,
 ) {
-    val message by viewModel.message.collectAsState()
     val draft by viewModel.quickIntakeDraft.collectAsState()
     val customerSuggestions by viewModel.customerSuggestions.collectAsState()
     val customerSearchQuery by viewModel.customerSearchQuery.collectAsState()
@@ -75,7 +53,7 @@ fun QuickActions(
         viewModel.updateQuickIntakeDraft(transform)
     }
 
-    androidx.compose.runtime.LaunchedEffect(Unit) {
+    LaunchedEffect(Unit) {
         if (draft.returnToIntakeAfterCategorySave) {
             updateDraft { it.copy(returnToIntakeAfterCategorySave = false) }
         }
@@ -122,7 +100,7 @@ fun QuickActions(
     val termsText = templates.firstOrNull { (it.code == TERMS_TEMPLATE_CODE) && it.active }?.body ?: DEFAULT_TERMS_TEXT
     val missingRequirements = intakeInput.validationErrors()
 
-    androidx.compose.runtime.LaunchedEffect(
+    LaunchedEffect(
         draft.selectedCustomerId,
         draft.selectedCategoryId,
         draft.problemSummary,
@@ -185,170 +163,185 @@ fun QuickActions(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .testTag("quick_actions_screen")
-            .imePadding()
-            .verticalScroll(rememberScrollState())
-            .padding(DashboardSpacing.screenPadding),
-        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
-    ) {
-        LocalMessageBanner(message?.text, message?.isError ?: false)
+    AppScreenContainer(modifier = Modifier.testTag("quick_actions_screen")) {
         SectionTitle(
             text = stringResource(R.string.new_order_title),
             tooltip = stringResource(R.string.intake_help),
         )
 
-        StepperIndicator(
+        AppStepper(
             currentStep = draft.currentStep,
+            totalSteps = LAST_INTAKE_STEP,
             completedStep = draft.completedStep,
-        ) { step ->
-            if (step <= draft.completedStep + 1) {
-                editStep(step)
-            }
-        }
+            onStepClick = { step ->
+                if (step <= draft.completedStep + 1) {
+                    editStep(step)
+                }
+            },
+            modifier = Modifier.padding(vertical = RepairAppSpacing.cardGap),
+            stepTestTag = { RepairAppTestTags.intakeStepperStep(it) }
+        )
 
         if (draft.currentStep == 1) {
-            StandardCard(highlight = true) {
-            Column(
-                modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-            ) {
-                StepSectionTitle(1, stringResource(R.string.intake_step_customer))
-                Field(
-                    value = customerSearchQuery,
-                    onValueChange = { query ->
-                        updateDraft { draftState ->
-                            draftState.copy(
-                                selectedCustomerId = null,
-                                selectedCustomerLabel = null,
-                                showNewCustomerForm = false,
-                            )
-                        }
-                        viewModel.setCustomerSearchQuery(query)
-                    },
-                    label = stringResource(R.string.intake_search_customer),
-                    singleLine = true,
-                    imeAction = ImeAction.Next,
-                    keyboardActions = nextAction,
-                    testTag = RepairAppTestTags.NewOrderCustomerSearchField,
-                )
-                if (draft.selectedCustomerId != null) {
+            StandardCard {
+                Column(
+                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
+                ) {
                     Text(
-                        stringResource(R.string.intake_selected_customer, selectedCustomerDisplayName.orEmpty()),
-                        style = MaterialTheme.typography.bodyLarge,
+                        text = stringResource(R.string.intake_step_customer),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary
                     )
-                    TouchButton(
-                        text = stringResource(R.string.intake_change_customer),
-                        tone = ButtonTone.NEUTRAL,
-                        size = AppButtonSize.Compact,
-                        onClick = {
-                            updateDraft {
-                                it.copy(
-                                    selectedCustomerId = null,
-                                    selectedCustomerLabel = null,
-                                    showNewCustomerForm = false,
-                                )
-                            }
-                            viewModel.setCustomerSearchQuery("")
-                        },
-                    )
-                } else if (customerSuggestions.isNotEmpty()) {
-                    customerSuggestions.forEach { customer ->
-                        CustomerSuggestionCard(
-                            customer = customer,
-                            onClick = {
-                                val label = customer.displayName(
-                                    unnamedPrivate = unnamedPrivate,
-                                    unnamedBusiness = unnamedBusiness
-                                )
-                                updateDraft {
-                                    it.copy(
-                                        selectedCustomerId = customer.id,
-                                        selectedCustomerLabel = label,
+                    
+                    if (draft.selectedCustomerId != null) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                stringResource(R.string.intake_selected_customer, selectedCustomerDisplayName.orEmpty()),
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier.weight(1f)
+                            )
+                            AppButton(
+                                text = stringResource(R.string.intake_change_customer),
+                                variant = AppButtonVariant.Ghost,
+                                size = AppButtonSize.Compact,
+                                onClick = {
+                                    updateDraft {
+                                        it.copy(
+                                            selectedCustomerId = null,
+                                            selectedCustomerLabel = null,
+                                            showNewCustomerForm = false,
+                                        )
+                                    }
+                                    viewModel.setCustomerSearchQuery("")
+                                },
+                            )
+                        }
+                    } else {
+                        AppTextField(
+                            value = customerSearchQuery,
+                            onValueChange = { query ->
+                                updateDraft { draftState ->
+                                    draftState.copy(
+                                        selectedCustomerId = null,
+                                        selectedCustomerLabel = null,
                                         showNewCustomerForm = false,
                                     )
                                 }
-                                viewModel.setCustomerSearchQuery(label)
+                                viewModel.setCustomerSearchQuery(query)
+                            },
+                            label = stringResource(R.string.intake_search_customer),
+                            singleLine = true,
+                            imeAction = ImeAction.Search,
+                            keyboardActions = doneAction,
+                            testTag = RepairAppTestTags.NewOrderCustomerSearchField,
+                        )
+                        
+                        if (!draft.showNewCustomerForm) {
+                            if (customerSuggestions.isNotEmpty()) {
+                                customerSuggestions.take(3).forEach { customer ->
+                                    CustomerSuggestionCard(
+                                        customer = customer,
+                                        onClick = {
+                                            val label = customer.displayName(
+                                                unnamedPrivate = unnamedPrivate,
+                                                unnamedBusiness = unnamedBusiness
+                                            )
+                                            updateDraft {
+                                                it.copy(
+                                                    selectedCustomerId = customer.id,
+                                                    selectedCustomerLabel = label,
+                                                    showNewCustomerForm = false,
+                                                )
+                                            }
+                                            viewModel.setCustomerSearchQuery(label)
+                                        },
+                                    )
+                                }
+                            }
+                            
+                            AppButton(
+                                text = stringResource(R.string.intake_insert_new_customer),
+                                variant = AppButtonVariant.Ghost,
+                                size = AppButtonSize.Compact,
+                                testTag = RepairAppTestTags.NewOrderInsertCustomerButton,
+                                onClick = {
+                                    updateDraft {
+                                        it.copy(
+                                            selectedCustomerId = null,
+                                            selectedCustomerLabel = null,
+                                            showNewCustomerForm = true,
+                                        )
+                                    }
+                                    viewModel.setCustomerSearchQuery("")
+                                },
+                            )
+                        }
+                    }
+                    
+                    if (draft.showNewCustomerForm && draft.selectedCustomerId == null) {
+                        HorizontalDivider(modifier = Modifier.padding(vertical = RepairAppSpacing.compactGap))
+                        IntakeCustomerFields(
+                            isBusiness = isBusiness,
+                            onBusinessChange = { business ->
+                                updateDraft {
+                                    it.copy(customerType = if (business) CustomerType.BUSINESS else CustomerType.PRIVATE)
+                                }
+                            },
+                            firstName = draft.firstName,
+                            onFirstNameChange = { value -> updateDraft { it.copy(firstName = value) } },
+                            lastName = draft.lastName,
+                            onLastNameChange = { value -> updateDraft { it.copy(lastName = value) } },
+                            companyName = draft.companyName,
+                            onCompanyNameChange = { value -> updateDraft { it.copy(companyName = value) } },
+                            vatNumber = draft.vatNumber,
+                            onVatNumberChange = { value -> updateDraft { it.copy(vatNumber = value) } },
+                            taxCode = draft.taxCode,
+                            onTaxCodeChange = { value -> updateDraft { it.copy(taxCode = value) } },
+                            phone = draft.phone,
+                            onPhoneChange = { value -> updateDraft { it.copy(phone = value) } },
+                            email = draft.email,
+                            onEmailChange = { value -> updateDraft { it.copy(email = value) } },
+                            address = draft.address,
+                            onAddressChange = { value -> updateDraft { it.copy(address = value) } },
+                            notes = draft.notes,
+                            onNotesChange = { value -> updateDraft { it.copy(notes = value) } },
+                            nextAction = nextAction,
+                            doneAction = doneAction,
+                        )
+                        AppButton(
+                            text = stringResource(R.string.customer_save),
+                            enabled = canSaveNewCustomer,
+                            variant = AppButtonVariant.Primary,
+                            size = AppButtonSize.FullWidth,
+                            testTag = RepairAppTestTags.NewOrderSaveCustomerButton,
+                            onClick = {
+                                viewModel.saveCustomer(newCustomerInput) { customer ->
+                                    val label = customer.displayName(
+                                        unnamedPrivate = unnamedPrivate,
+                                        unnamedBusiness = unnamedBusiness
+                                    )
+                                    updateDraft {
+                                        it.copy(
+                                            selectedCustomerId = customer.id,
+                                            selectedCustomerLabel = label,
+                                            showNewCustomerForm = false,
+                                        )
+                                    }
+                                    clearNewCustomerFields()
+                                    viewModel.setCustomerSearchQuery(label)
+                                }
                             },
                         )
                     }
                 }
-                if (draft.selectedCustomerId == null && !draft.showNewCustomerForm) {
-                    TouchButton(
-                        text = stringResource(R.string.intake_insert_new_customer),
-                        tone = ButtonTone.NEUTRAL,
-                        size = AppButtonSize.Compact,
-                        testTag = RepairAppTestTags.NewOrderInsertCustomerButton,
-                        onClick = {
-                            updateDraft {
-                                it.copy(
-                                    selectedCustomerId = null,
-                                    selectedCustomerLabel = null,
-                                    showNewCustomerForm = true,
-                                )
-                            }
-                            viewModel.setCustomerSearchQuery("")
-                        },
-                    )
-                }
-                if (draft.showNewCustomerForm) {
-                    IntakeCustomerFields(
-                        isBusiness = isBusiness,
-                        onBusinessChange = { business ->
-                            updateDraft {
-                                it.copy(customerType = if (business) CustomerType.BUSINESS else CustomerType.PRIVATE)
-                            }
-                        },
-                        firstName = draft.firstName,
-                        onFirstNameChange = { value -> updateDraft { it.copy(firstName = value) } },
-                        lastName = draft.lastName,
-                        onLastNameChange = { value -> updateDraft { it.copy(lastName = value) } },
-                        companyName = draft.companyName,
-                        onCompanyNameChange = { value -> updateDraft { it.copy(companyName = value) } },
-                        vatNumber = draft.vatNumber,
-                        onVatNumberChange = { value -> updateDraft { it.copy(vatNumber = value) } },
-                        taxCode = draft.taxCode,
-                        onTaxCodeChange = { value -> updateDraft { it.copy(taxCode = value) } },
-                        phone = draft.phone,
-                        onPhoneChange = { value -> updateDraft { it.copy(phone = value) } },
-                        email = draft.email,
-                        onEmailChange = { value -> updateDraft { it.copy(email = value) } },
-                        address = draft.address,
-                        onAddressChange = { value -> updateDraft { it.copy(address = value) } },
-                        notes = draft.notes,
-                        onNotesChange = { value -> updateDraft { it.copy(notes = value) } },
-                        nextAction = nextAction,
-                        doneAction = doneAction,
-                    )
-                    TouchButton(
-                        text = stringResource(R.string.customer_save),
-                        enabled = canSaveNewCustomer,
-                        size = AppButtonSize.Compact,
-                        testTag = RepairAppTestTags.NewOrderSaveCustomerButton,
-                        onClick = {
-                            viewModel.saveCustomer(newCustomerInput) { customer ->
-                                val label = customer.displayName(
-                                    unnamedPrivate = unnamedPrivate,
-                                    unnamedBusiness = unnamedBusiness
-                                )
-                                updateDraft {
-                                    it.copy(
-                                        selectedCustomerId = customer.id,
-                                        selectedCustomerLabel = label,
-                                        showNewCustomerForm = false,
-                                    )
-                                }
-                                clearNewCustomerFields()
-                                viewModel.setCustomerSearchQuery(label)
-                            }
-                        },
-                    )
-                }
             }
-        }
             WizardNavigationBar(
                 nextEnabled = draft.selectedCustomerId != null,
                 nextTestTag = RepairAppTestTags.NewOrderStep1NextButton,
@@ -371,7 +364,6 @@ fun QuickActions(
                     }
                 },
                 onOpenConfig = onOpenConfig,
-                highlight = true,
             )
             WizardNavigationBar(
                 onBack = { editStep(1) },
@@ -391,7 +383,6 @@ fun QuickActions(
                 onProblemDetailsChange = { value -> updateDraft { it.copy(problemDetails = value) } },
                 nextAction = nextAction,
                 doneAction = doneAction,
-                highlight = true,
             )
             WizardNavigationBar(
                 onBack = { editStep(2) },
@@ -444,8 +435,8 @@ fun QuickActions(
             key(draft.intakeSessionId) {
                 StandardCard {
                     SignatureCaptureForm(
-                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                        title = "5. ${stringResource(R.string.intake_step_privacy)}",
+                        modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                        title = stringResource(R.string.intake_step_privacy),
                         privacyText = privacyText,
                         termsText = termsText,
                         onCaptureChanged = { capture ->
@@ -500,68 +491,6 @@ fun QuickActions(
                     }
                 },
             )
-        }
-    }
-}
-
-@Composable
-internal fun StepperIndicator(
-    currentStep: Int,
-    completedStep: Int,
-    onStepClick: (Int) -> Unit
-) {
-    val semanticColors = MaterialTheme.repairColors
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        for (i in 1..LAST_INTAKE_STEP) {
-            val isCompleted = i <= completedStep
-            val isCurrent = i == currentStep
-            Box(
-                modifier = Modifier
-                    .size(RepairAppSizes.touchTarget)
-                    .testTag(RepairAppTestTags.intakeStepperStep(i))
-                    .semantics { role = Role.Button }
-                    .clickable(enabled = isCompleted || i == 1) { onStepClick(i) },
-                contentAlignment = Alignment.Center,
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(RepairAppSizes.intakeStepperDot)
-                        .background(
-                            color = when {
-                                isCurrent -> MaterialTheme.colorScheme.primary
-                                isCompleted -> semanticColors.stepCompleted
-                                else -> semanticColors.stepInactive
-                            },
-                            shape = CircleShape,
-                        ),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = i.toString(),
-                        color = when {
-                            isCurrent -> MaterialTheme.colorScheme.onPrimary
-                            isCompleted -> semanticColors.onSuccess
-                            else -> MaterialTheme.colorScheme.onSurfaceVariant
-                        },
-                        style = MaterialTheme.typography.labelLarge,
-                    )
-                }
-            }
-            if (i < LAST_INTAKE_STEP) {
-                androidx.compose.foundation.Canvas(modifier = Modifier.weight(1f).height(4.dp)) {
-                    drawRect(
-                        color = if (i <= completedStep) {
-                            semanticColors.stepCompleted
-                        } else {
-                            semanticColors.stepInactive
-                        },
-                    )
-                }
-            }
         }
     }
 }

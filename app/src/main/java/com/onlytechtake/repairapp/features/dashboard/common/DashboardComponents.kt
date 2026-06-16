@@ -55,30 +55,23 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSizes
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
-import com.onlytechtake.repairapp.core.design.components.StandardCard as CoreStandardCard
+import com.onlytechtake.repairapp.core.design.components.StandardCard
+import com.onlytechtake.repairapp.core.design.components.AppTextField
+import com.onlytechtake.repairapp.core.design.components.AppIconButton
+import com.onlytechtake.repairapp.core.design.components.AppDialog
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
-
-object DashboardSpacing {
-    val screenPadding = 16.dp
-    val listGap = 12.dp
-    val cardPadding = 12.dp
-    val formGap = 12.dp
-    val compactGap = 8.dp
-    val actionGap = 8.dp
-    val maxContentWidth = 840.dp
-    val dialogElevation = 6.dp
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SectionTitle(text: String, tooltip: String? = null) {
     Row(
-        modifier = Modifier.padding(bottom = 4.dp),
+        modifier = Modifier.padding(bottom = RepairAppSpacing.compactGap),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
     ) {
         Text(
             text = text,
@@ -118,35 +111,6 @@ fun SectionTitle(text: String, tooltip: String? = null) {
     }
 }
 
-@Composable
-fun StandardCard(
-    modifier: Modifier = Modifier,
-    onClick: (() -> Unit)? = null,
-    containerColor: Color = MaterialTheme.colorScheme.surface,
-    highlight: Boolean = false,
-    border: BorderStroke? = null,
-    role: Role = Role.Button,
-    content: @Composable ColumnScope.() -> Unit,
-) {
-    CoreStandardCard(
-        modifier = modifier,
-        onClick = onClick,
-        containerColor = containerColor,
-        highlight = highlight,
-        border = border,
-        role = role,
-        content = content,
-    )
-}
-
-@Composable
-fun StepSectionTitle(stepNumber: Int, text: String) {
-    Text(
-        text = "$stepNumber. $text",
-        style = MaterialTheme.typography.titleMedium,
-        color = MaterialTheme.colorScheme.secondary
-    )
-}
 
 @Composable
 fun Field(
@@ -173,35 +137,23 @@ fun Field(
         onDone = { focusManager.clearFocus() },
     )
 
-    val labelText = when {
-        required -> "$label *"
-        showOptional -> "$label (${stringResource(R.string.label_optional)})"
-        else -> label
-    }
-
-    OutlinedTextField(
+    AppTextField(
         modifier = modifier
             .fillMaxWidth()
             .then(testTag?.let { Modifier.testTag(it) } ?: Modifier),
         value = value,
         onValueChange = onValueChange,
-        label = { Text(labelText) },
+        label = label,
+        required = required,
+        showOptional = showOptional,
+        showError = showError,
         singleLine = singleLine,
-        isError = showError,
-        shape = RepairAppShapes.field,
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-        ),
-        keyboardOptions = KeyboardOptions(
-            keyboardType = keyboardType,
-            imeAction = effectiveImeAction,
-            capitalization = capitalization
-        ),
+        imeAction = effectiveImeAction,
+        keyboardType = keyboardType,
+        capitalization = capitalization,
         visualTransformation = visualTransformation,
         keyboardActions = effectiveKeyboardActions,
         trailingIcon = trailingIcon,
-        textStyle = MaterialTheme.typography.bodyLarge
     )
 }
 
@@ -210,8 +162,8 @@ fun Field(
 fun ActionRow(content: @Composable () -> Unit) {
     FlowRow(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.actionGap),
-        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.actionGap),
+        horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.actionGap),
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.actionGap),
     ) {
         content()
     }
@@ -226,41 +178,43 @@ fun WizardNavigationBar(
     onNext: () -> Unit,
     onCancel: (() -> Unit)? = null,
 ) {
-    StandardCard {
-        Column(
-            modifier = Modifier.padding(DashboardSpacing.compactGap),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = RepairAppSpacing.cardGap),
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.actionGap),
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.actionGap),
-            ) {
-                onBack?.let {
-                    TouchButton(
-                        modifier = Modifier.weight(1f),
-                        text = stringResource(R.string.nav_back),
-                        tone = ButtonTone.NEUTRAL,
-                        size = AppButtonSize.Compact,
-                        onClick = it,
-                    )
-                }
-                TouchButton(
+            if (onBack != null) {
+                AppButton(
                     modifier = Modifier.weight(1f),
-                    text = nextLabel,
-                    enabled = nextEnabled,
-                    size = AppButtonSize.Compact,
-                    testTag = nextTestTag,
-                    onClick = onNext,
+                    text = stringResource(R.string.nav_back),
+                    variant = AppButtonVariant.Ghost,
+                    size = AppButtonSize.Default,
+                    onClick = onBack,
                 )
             }
-            onCancel?.let {
-                TouchButton(
-                    text = stringResource(R.string.nav_cancel_and_close),
-                    tone = ButtonTone.NEUTRAL,
-                    size = AppButtonSize.Compact,
-                    onClick = it
-                )
-            }
+            AppButton(
+                modifier = Modifier.weight(if (onBack != null) 1.5f else 1f),
+                text = nextLabel,
+                enabled = nextEnabled,
+                variant = AppButtonVariant.Primary,
+                size = AppButtonSize.Default,
+                testTag = nextTestTag,
+                onClick = onNext,
+            )
+        }
+        if (onCancel != null) {
+            AppButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(R.string.nav_cancel_and_close),
+                variant = AppButtonVariant.Ghost,
+                size = AppButtonSize.Compact,
+                onClick = onCancel
+            )
         }
     }
 }
@@ -295,8 +249,8 @@ fun CompactExpandableRow(
         onClick = { expanded = !expanded },
     ) {
         Column(
-            modifier = Modifier.padding(DashboardSpacing.compactGap),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+            modifier = Modifier.padding(RepairAppSpacing.compactGap),
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
         ) {
             Text(title, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(subtitle, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -374,78 +328,36 @@ fun CustomerTypeToggle(
     onBusinessChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.actionGap)) {
-        TypeToggleButton(
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f), RepairAppShapes.pill)
+            .padding(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        val privateSelected = !isBusiness
+        val businessSelected = isBusiness
+
+        AppButton(
             text = stringResource(R.string.customer_type_private),
-            selected = !isBusiness,
-            selectedTone = ButtonTone.SUCCESS,
             onClick = { onBusinessChange(false) },
             modifier = Modifier.weight(1f),
+            variant = if (privateSelected) AppButtonVariant.Primary else AppButtonVariant.Ghost,
+            size = AppButtonSize.Compact,
+            selected = privateSelected,
             testTag = RepairAppTestTags.CustomerPrivateToggle,
         )
-        TypeToggleButton(
+        AppButton(
             text = stringResource(R.string.customer_type_business),
-            selected = isBusiness,
-            selectedTone = ButtonTone.INFO,
             onClick = { onBusinessChange(true) },
             modifier = Modifier.weight(1f),
+            variant = if (businessSelected) AppButtonVariant.Primary else AppButtonVariant.Ghost,
+            size = AppButtonSize.Compact,
+            selected = businessSelected,
             testTag = RepairAppTestTags.CustomerBusinessToggle,
         )
     }
 }
-
-@Composable
-private fun TypeToggleButton(
-    text: String,
-    selected: Boolean,
-    selectedTone: ButtonTone,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    testTag: String? = null,
-) {
-    val selectedState = if (selected) stringResource(R.string.state_selected) else stringResource(R.string.state_not_selected)
-    
-    Surface(
-        modifier = modifier
-            .minimumInteractiveComponentSize()
-            .defaultMinSize(minHeight = RepairAppSizes.buttonDefault)
-            .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
-            .selectable(
-                selected = selected,
-                role = Role.RadioButton,
-                onClick = onClick,
-            )
-            .semantics {
-                this.selected = selected
-                stateDescription = selectedState
-            },
-        shape = RepairAppShapes.button,
-        color = if (selected) selectedTone.selectedContainerColor() else MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
-        contentColor = if (selected) selectedTone.selectedContentColor() else MaterialTheme.colorScheme.onSecondaryContainer,
-    ) {
-        Text(
-            text = text,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
-            style = MaterialTheme.typography.labelLarge,
-            textAlign = TextAlign.Center,
-        )
-    }
-}
-
-@Composable
-private fun ButtonTone.selectedContainerColor(): Color =
-    when (this) {
-        ButtonTone.SUCCESS -> MaterialTheme.colorScheme.primary
-        ButtonTone.INFO -> MaterialTheme.colorScheme.tertiary
-        else -> MaterialTheme.colorScheme.primary
-    }
-
-@Composable
-private fun ButtonTone.selectedContentColor(): Color =
-    when (this) {
-        ButtonTone.INFO -> MaterialTheme.colorScheme.onTertiary
-        else -> MaterialTheme.colorScheme.onPrimary
-    }
 
 @Composable
 fun NoteFieldWithDialog(
@@ -458,7 +370,7 @@ fun NoteFieldWithDialog(
     var showDialog by rememberSaveable { mutableStateOf(value = false) }
     var tempNote by rememberSaveable { mutableStateOf(note) }
 
-    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
+    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
         if (note.isNotBlank()) {
             OperatorText(note)
         }
@@ -475,51 +387,36 @@ fun NoteFieldWithDialog(
     }
 
     if (showDialog) {
-        androidx.compose.material3.AlertDialog(
+        AppDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text(label) },
-            text = {
-                OutlinedTextField(
+            title = label,
+            content = {
+                AppTextField(
                     value = tempNote,
                     onValueChange = { tempNote = it },
                     modifier = Modifier.fillMaxWidth(),
-                    label = { Text(label) },
-                    minLines = 3,
+                    label = label,
                 )
             },
             confirmButton = {
-                TextButton(
+                AppButton(
+                    text = stringResource(R.string.confirm),
                     onClick = {
                         onNoteChange(tempNote)
                         showDialog = false
-                    }
-                ) {
-                    Text(stringResource(R.string.confirm))
-                }
+                    },
+                    variant = AppButtonVariant.Primary,
+                    size = AppButtonSize.Compact
+                )
             },
             dismissButton = {
-                TextButton(onClick = { showDialog = false }) {
-                    Text(stringResource(R.string.customer_cancel))
-                }
+                AppButton(
+                    text = stringResource(R.string.customer_cancel),
+                    onClick = { showDialog = false },
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact
+                )
             },
-        )
-    }
-}
-
-@Composable
-fun LocalMessageBanner(
-    message: String?,
-    isError: Boolean,
-    modifier: Modifier = Modifier
-) {
-    if (message != null) {
-        Text(
-            text = message,
-            color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = DashboardSpacing.screenPadding, vertical = 4.dp)
         )
     }
 }
@@ -532,8 +429,8 @@ fun BackupReminderCard(
 ) {
     StandardCard(highlight = true) {
         Column(
-            modifier = Modifier.padding(DashboardSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+            modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -545,13 +442,13 @@ fun BackupReminderCard(
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.primary,
                 )
-                IconButton(onClick = onOpenSettings, modifier = Modifier.size(24.dp)) {
-                    Icon(
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = stringResource(R.string.home_backup_reminder_settings),
-                        tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
-                    )
-                }
+                AppIconButton(
+            onClick = onOpenSettings,
+            imageVector = Icons.Default.Settings,
+            contentDescription = stringResource(R.string.home_backup_reminder_settings),
+            modifier = Modifier.size(24.dp),
+            tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
+        )
             }
             Text(
                 text = backupStatusLabel(settings),
@@ -580,3 +477,4 @@ fun backupStatusLabel(settings: BackupReminderSettings): String =
             stringResource(R.string.backup_status_days_ago, days)
         }
     }
+

@@ -77,20 +77,48 @@ internal val LocalRepairAppSemanticColors = staticCompositionLocalOf {
     LightSemanticColors
 }
 
+object RepairAppSpacing {
+    val screenHorizontal = 16.dp
+    val screenVertical = 16.dp
+    val sectionGap = 24.dp
+    val cardGap = 16.dp
+    val cardPadding = 16.dp
+    val fieldGap = 12.dp
+    val actionGap = 16.dp
+    val compactGap = 8.dp
+    val bottomContentPadding = 80.dp
+    
+    val maxContentWidthCompact = 600.dp
+    val maxContentWidthMedium = 840.dp
+    val maxContentWidthExpanded = 1200.dp
+    
+    // Deprecated/Legacy aliases to avoid immediate breakage
+    val screenPadding = screenHorizontal
+    val listGap = cardGap
+    val formGap = fieldGap
+    val maxContentWidth = maxContentWidthMedium
+    val dialogElevation = 6.dp
+}
+
 object RepairAppSizes {
     val touchTarget = 48.dp
-    val buttonDefault = 44.dp
+    val buttonDefault = 48.dp
     val buttonCompact = 36.dp
-    val iconButton = 36.dp
+    val iconButton = 40.dp
     val intakeStepperDot = 32.dp
     val orderStepperDot = 12.dp
+    val metricCardHeight = 100.dp
 }
 
 object RepairAppShapes {
-    val card = RoundedCornerShape(12.dp)
+    val screenContainer = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+    val card = RoundedCornerShape(16.dp)
+    val cardSelected = RoundedCornerShape(16.dp)
     val button = RoundedCornerShape(12.dp)
     val compactButton = RoundedCornerShape(8.dp)
-    val chip = RoundedCornerShape(20.dp)
+    val pill = RoundedCornerShape(50)
+    val chip = RoundedCornerShape(8.dp)
     val badge = RoundedCornerShape(4.dp)
     val field = RoundedCornerShape(12.dp)
+    val dialog = RoundedCornerShape(28.dp)
 }

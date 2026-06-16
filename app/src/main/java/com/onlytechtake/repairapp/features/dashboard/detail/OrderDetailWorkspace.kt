@@ -2,20 +2,17 @@ package com.onlytechtake.repairapp.features.dashboard.detail
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -33,26 +30,23 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.core.utils.parseEuroCentsOrNull
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.core.design.LoadingBrandIndicator
+import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.*
-import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.domain.workspace.canConfirmDiagnosisResult
 import com.onlytechtake.repairapp.domain.workspace.requiresConfirmation
 import com.onlytechtake.repairapp.domain.workspace.shouldShowDiagnosisEstimate
-import com.onlytechtake.repairapp.domain.workspace.statusTemplateCode
 
 @Composable
 fun OrderDetailWorkspace(
@@ -72,8 +66,6 @@ fun OrderDetailWorkspace(
 
     val exitConfirmTitle = stringResource(R.string.order_exit_confirm_title)
     val exitConfirmText = stringResource(R.string.order_exit_confirm_text)
-    val missingSignatureTitle = stringResource(R.string.order_pdf_missing_signature_title)
-    val missingSignatureText = stringResource(R.string.order_pdf_missing_signature_text)
     val waOpenConfirmTitle = stringResource(R.string.order_wa_open_confirm_title)
     val waOpenConfirmText = stringResource(R.string.order_wa_open_confirm_text)
     val waSentConfirmTitle = stringResource(R.string.order_wa_sent_confirm_title)
@@ -96,12 +88,11 @@ fun OrderDetailWorkspace(
     val selected = detail
     if (selected == null) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(DashboardSpacing.screenPadding),
+            modifier = Modifier.fillMaxSize().padding(RepairAppSpacing.screenPadding),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            androidx.compose.material3.CircularProgressIndicator()
-            Text("Caricamento commessa...", modifier = Modifier.padding(top = 8.dp))
+            LoadingBrandIndicator(text = "Caricamento commessa...")
         }
         return
     }
@@ -140,261 +131,196 @@ fun OrderDetailWorkspace(
     }
 
     Column(Modifier.fillMaxSize()) {
-        LocalMessageBanner(message?.text, message?.isError ?: false)
+        message?.let { AppMessageBanner(message = it.text, type = if (it.isError) BannerType.Error else BannerType.Info, modifier = Modifier.padding(RepairAppSpacing.compactGap)) }
 
-        LazyColumn(
-            modifier = Modifier
-                .weight(1f)
-                .testTag(RepairAppTestTags.OrderDetailLazyColumn)
-                .padding(DashboardSpacing.screenPadding),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
-        ) {
-        item {
-            OrderHeader(selected, context)
-        }
+        AppScreenContainer(scrollable = false) {
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f)
+                    .testTag(RepairAppTestTags.OrderDetailLazyColumn),
+                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
+                contentPadding = PaddingValues(bottom = RepairAppSpacing.bottomContentPadding)
+            ) {
+                item {
+                    OrderHeader(selected, context)
+                }
 
-        item {
-            OrderActionCard(
-                status = selected.order.status,
-                isPaid = selected.isPaid,
-                onActionClick = { action ->
-                    statusAction = action
-                    statusNote = ""
-                    closureReason = null
-                    resultSummary = ""
-                    resultAmount = ""
-                    diagnosisOutcome = selected.order.diagnosisOutcome
-                },
-                onTogglePayment = viewModel::togglePaymentStatus,
-                onSendWhatsApp = viewModel::prepareMessage,
-            )
-        }
+                item {
+                    OrderActionCard(
+                        status = selected.order.status,
+                        isPaid = selected.isPaid,
+                        onActionClick = { action ->
+                            statusAction = action
+                            statusNote = ""
+                            closureReason = null
+                            resultSummary = ""
+                            resultAmount = ""
+                            diagnosisOutcome = selected.order.diagnosisOutcome
+                        },
+                        onTogglePayment = { viewModel.togglePaymentStatus(!selected.isPaid) },
+                        onSendWhatsApp = viewModel::prepareMessage,
+                    )
+                }
 
-        if ((selected.order.status == OrderStatus.RESULT) &&
-            (selected.order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE)
-        ) {
-            item {
-                QuoteDecisionPanel(
-                    quoteDecision = quoteDecision,
-                    quoteRejectNote = quoteRejectNote,
-                    onQuoteDecisionChange = { quoteDecision = it },
-                    onQuoteRejectNoteChange = { quoteRejectNote = it },
-                    onConfirm = { feedback, note, closureReason ->
-                        if (feedback == CustomerFeedbackType.ACCEPT) {
-                            viewModel.recordFeedback(feedback, note)
-                        } else {
-                            viewModel.recordFeedback(feedback, note, closureReason) { onBack() }
-                        }
-                    },
-                )
-            }
-        }
-
-        if ((selected.order.status == OrderStatus.RESULT) &&
-            (selected.order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE)
-        ) {
-            item {
-                StandardCard {
-                    Column(
-                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                    ) {
-                        Text("Esito diagnosi", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.error)
-                        OperatorText("Il dispositivo non e' riparabile. Avvisa il cliente prima di preparare il ritiro.")
-                        TouchButton(
-                            text = "Cliente avvisato / pronto per il ritiro",
-                            tone = ButtonTone.SUCCESS,
-                            modifier = Modifier.fillMaxWidth(),
-                            onClick = {
-                                requestConfirm(
-                                    "Cliente avvisato?",
-                                    "La commessa passera' a pronta per il ritiro.",
-                                ) {
-                                    viewModel.changeStatus(
-                                        status = OrderStatus.READY_FOR_PICKUP,
-                                        note = "Cliente avvisato: dispositivo non riparabile",
-                                    )
+                if ((selected.order.status == OrderStatus.RESULT) &&
+                    (selected.order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE)
+                ) {
+                    item {
+                        QuoteDecisionPanel(
+                            quoteDecision = quoteDecision,
+                            quoteRejectNote = quoteRejectNote,
+                            onQuoteDecisionChange = { quoteDecision = it },
+                            onQuoteRejectNoteChange = { quoteRejectNote = it },
+                            onConfirm = { feedback, note, closureReason ->
+                                if (feedback == CustomerFeedbackType.ACCEPT) {
+                                    viewModel.recordFeedback(feedback, note)
+                                } else {
+                                    viewModel.recordFeedback(feedback, note, closureReason) { onBack() }
                                 }
                             },
                         )
                     }
                 }
-            }
-        }
 
-        preparedMessage
-            ?.takeIf { it.orderId == selected.order.id }
-            ?.let { prepared ->
-            item {
-                WhatsAppPreviewPanel(
-                    prepared = prepared,
-                    body = preparedMessageBody,
-                    onBodyChange = viewModel::updatePreparedMessageBody,
-                    onOpenWhatsApp = {
-                        requestConfirm(waOpenConfirmTitle, waOpenConfirmText) {
-                            viewModel.recordPreparedMessage()
-                            val intent = Intent(
-                                Intent.ACTION_VIEW,
-                                "https://wa.me/${prepared.phone}?text=${Uri.encode(preparedMessageBody)}".toUri(),
-                            )
-                            context.startActivity(intent)
-                        }
-                    },
-                    onConfirmSent = {
-                        requestConfirm(waSentConfirmTitle, waSentConfirmText) { viewModel.confirmSentMessage() }
-                    },
-                    onClose = viewModel::clearPreparedMessage,
-                )
-            }
-        }
-
-        item {
-            InternalNotesPanel(
-                notes = selected.order.internalNotes,
-                onAddNoteClick = {
-                    note = ""
-                    showInternalNoteDialog = true
-                },
-            )
-        }
-
-        item {
-            OrderPhotoSection(selected, viewModel)
-        }
-
-        item {
-            OrderSignatureSection(selected)
-        }
-
-        item {
-            StandardCard {
-                Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                if ((selected.order.status == OrderStatus.RESULT) &&
+                    (selected.order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE)
                 ) {
-                    Text(stringResource(R.string.order_customer_documents), style = MaterialTheme.typography.titleMedium)
-                    ActionRow {
-                        TouchButton(
-                            text = stringResource(R.string.order_generate_status_pdf),
-                            tone = ButtonTone.INFO,
-                            enabled = !isGeneratingStatusPdf,
-                            onClick = {
-                                if (selected.signatures.isEmpty()) {
-                                    requestConfirm(missingSignatureTitle, missingSignatureText) {
-                                        viewModel.generateStatusPdf(includeSignature = false)
-                                    }
-                                } else {
-                                    viewModel.generateStatusPdf(includeSignature = true)
-                                }
-                            },
-                        )
-                    }
-                    if (isGeneratingStatusPdf) {
-                        Text(stringResource(R.string.order_generating_pdf), style = MaterialTheme.typography.bodyMedium)
-                    }
-                    statusPdfError?.let { error ->
-                        Text("Errore: $error", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
-                    }
-
-                    if (documents.isNotEmpty()) {
-                        Text(stringResource(R.string.order_document_history), style = MaterialTheme.typography.titleSmall)
-                        documents.forEach { doc ->
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                Row(
-                                    modifier = Modifier.weight(1f).clickable { viewModel.onShareDocumentClicked(doc.id) },
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    Column(modifier = Modifier.weight(1f)) {
-                                        Text(doc.fileName, style = MaterialTheme.typography.bodyMedium)
-                                        Text(
-                                            text = stringResource(R.string.order_document_generated, formatUiDateTime(doc.createdAt)) + (if (doc.sharedAt != null) stringResource(R.string.order_document_sent) else ""),
-                                            style = MaterialTheme.typography.labelSmall,
-                                            color = MaterialTheme.colorScheme.secondary,
-                                        )
-                                    }
-                                    TouchButton(
-                                        text = stringResource(R.string.order_share),
-                                        tone = ButtonTone.NEUTRAL,
-                                        onClick = { viewModel.onShareDocumentClicked(doc.id) }
-                                    )
-                                }
-                                androidx.compose.material3.IconButton(
+                    item {
+                        StandardCard {
+                            Column(
+                                modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.formGap),
+                            ) {
+                                Text("Esito diagnosi", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.error)
+                                OperatorText("Il dispositivo non e' riparabile. Avvisa il cliente prima di preparare il ritiro.")
+                                AppButton(
+                                    text = "Cliente avvisato / pronto per il ritiro",
+                                    variant = AppButtonVariant.Success,
+                                    modifier = Modifier.fillMaxWidth(),
                                     onClick = {
                                         requestConfirm(
-                                            "Eliminare documento?",
-                                            "Il file ${doc.fileName} verra' rimosso permanentemente."
+                                            "Cliente avvisato?",
+                                            "La commessa passera' a pronta per il ritiro.",
                                         ) {
-                                            viewModel.onDeleteDocumentClicked(doc.id)
+                                            viewModel.changeStatus(
+                                                status = OrderStatus.READY_FOR_PICKUP,
+                                                note = "Cliente avvisato: dispositivo non riparabile",
+                                            )
                                         }
-                                    }
-                                ) {
-                                    androidx.compose.material3.Icon(
-                                        imageVector = Icons.Default.Delete,
-                                        contentDescription = stringResource(R.string.content_description_delete),
-                                        tint = MaterialTheme.colorScheme.error
-                                    )
-                                }
+                                    },
+                                )
                             }
                         }
                     }
                 }
-            }
-        }
 
-        item {
-            Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
-                SectionTitle(
-                    text = stringResource(R.string.order_timeline),
-                    tooltip = "Cronologia di tutti gli eventi e cambiamenti di stato relativi a questa commessa."
-                )
-                selected.timeline.forEachIndexed { index, event ->
-                    val eventNumber = selected.timeline.size - index
-                    CompactExpandableRow(
-                        title = "$eventNumber. ${event.title}",
-                        subtitle = formatUiDateTime(event.createdAt),
-                        detail = event.description.orEmpty(),
+                preparedMessage
+                    ?.takeIf { it.orderId == selected.order.id }
+                    ?.let { prepared ->
+                    item {
+                        WhatsAppPreviewPanel(
+                            prepared = prepared,
+                            body = preparedMessageBody,
+                            onBodyChange = viewModel::updatePreparedMessageBody,
+                            onOpenWhatsApp = {
+                                requestConfirm(waOpenConfirmTitle, waOpenConfirmText) {
+                                    viewModel.recordPreparedMessage()
+                                    val intent = Intent(
+                                        Intent.ACTION_VIEW,
+                                        "https://wa.me/${prepared.phone}?text=${Uri.encode(preparedMessageBody)}".toUri(),
+                                    )
+                                    context.startActivity(intent)
+                                }
+                            },
+                            onConfirmSent = {
+                                requestConfirm(waSentConfirmTitle, waSentConfirmText) { viewModel.confirmSentMessage() }
+                            },
+                            onClose = viewModel::clearPreparedMessage,
+                        )
+                    }
+                }
+
+                item {
+                    InternalNotesPanel(
+                        notes = selected.order.internalNotes,
+                        onAddNoteClick = {
+                            note = ""
+                            showInternalNoteDialog = true
+                        },
+                    )
+                }
+
+                item {
+                    OrderPhotoSection(selected, viewModel)
+                }
+
+                item {
+                    OrderSignatureSection(selected)
+                }
+
+                item {
+                    OrderDocumentSection(
+                        isGeneratingPdf = isGeneratingStatusPdf,
+                        pdfError = statusPdfError,
+                        documents = documents,
+                        hasSignatures = selected.signatures.isNotEmpty(),
+                        onGeneratePdf = { includeSignature ->
+                            viewModel.generateStatusPdf(includeSignature = includeSignature)
+                        },
+                        onShareDocument = { viewModel.onShareDocumentClicked(it) },
+                        onDeleteDocument = { docId ->
+                            requestConfirm(
+                                "Eliminare documento?",
+                                "Il file verra' rimosso permanentemente."
+                            ) {
+                                viewModel.onDeleteDocumentClicked(docId)
+                            }
+                        },
+                        requestConfirm = ::requestConfirm
+                    )
+                }
+
+                item {
+                    OrderTimelineSection(timeline = selected.timeline)
+                }
+
+                item {
+                    AppButton(
+                        modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenPadding),
+                        text = "Chiudi ed esci",
+                        variant = AppButtonVariant.Secondary,
+                        onClick = onBack
                     )
                 }
             }
         }
-
-        item {
-            TouchButton(
-                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
-                text = "Chiudi ed esci",
-                tone = ButtonTone.NEUTRAL,
-                onClick = onBack
-            )
-        }
     }
 
     confirmTitle?.let { title ->
-        AlertDialog(
+        AppDialog(
             onDismissRequest = {
                 confirmTitle = null
                 confirmAction = null
             },
-            title = { Text(title) },
-            text = { Text(confirmText) },
+            title = title,
+            text = confirmText,
             confirmButton = {
-                TextButton(
+                AppButton(
+                    text = stringResource(R.string.confirm),
                     onClick = {
                         confirmAction?.invoke()
                         confirmTitle = null
                         confirmAction = null
                     },
-                ) {
-                    Text(stringResource(R.string.confirm))
-                }
+                    variant = AppButtonVariant.Primary,
+                    size = AppButtonSize.Compact
+                )
             },
             dismissButton = {
-                TouchButton(
+                AppButton(
                     text = stringResource(R.string.customer_cancel),
-                    tone = ButtonTone.NEUTRAL,
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact,
                     onClick = {
                         confirmTitle = null
                         confirmAction = null
@@ -407,17 +333,17 @@ fun OrderDetailWorkspace(
     statusAction?.let { action ->
         val isResultStep = action == OrderStatusAction.RECORD_RESULT
         val isClosure = action.requiresConfirmation()
-        AlertDialog(
+        AppDialog(
             onDismissRequest = { statusAction = null },
-            title = { Text(action.label) },
-            text = {
+            title = action.label,
+            content = {
                 Column(
                     modifier = Modifier.verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
                 ) {
                     Text(stringResource(R.string.order_confirm_status_update))
                     if (isResultStep) {
-                        Field(
+                        AppTextField(
                             value = resultSummary,
                             onValueChange = { resultSummary = it },
                             label = stringResource(R.string.order_result_summary),
@@ -443,7 +369,7 @@ fun OrderDetailWorkspace(
                             resultAmount = ""
                         }
                         if (shouldShowDiagnosisEstimate(diagnosisOutcome)) {
-                            Field(
+                            AppTextField(
                                 value = resultAmount,
                                 onValueChange = { resultAmount = it },
                                 label = stringResource(R.string.order_estimate_amount),
@@ -456,7 +382,7 @@ fun OrderDetailWorkspace(
                             )
                         }
                     } else if (isClosure) {
-                        Field(
+                        AppTextField(
                             value = statusNote,
                             onValueChange = { statusNote = it },
                             label = stringResource(R.string.order_closure_note_label),
@@ -471,13 +397,14 @@ fun OrderDetailWorkspace(
                         ActionRow {
                             ClosureReason.entries.forEach { reason ->
                                 val selectedReason = closureReason == reason
-                                TouchButton(
+                                AppButton(
                                     text = reason.label(context),
-                                    tone = if (selectedReason) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
+                                    variant = if (selectedReason) AppButtonVariant.Success else AppButtonVariant.Secondary,
                                     selected = selectedReason,
                                     stateDescription = if (selectedReason) stringResource(R.string.state_selected) else stringResource(R.string.state_not_selected),
                                     testTag = RepairAppTestTags.closureReason(reason.name),
                                     onClick = { closureReason = reason },
+                                    size = AppButtonSize.Compact,
                                 )
                             }
                         }
@@ -485,7 +412,8 @@ fun OrderDetailWorkspace(
                 }
             },
             confirmButton = {
-                TextButton(
+                AppButton(
+                    text = stringResource(R.string.confirm),
                     enabled = when {
                         isResultStep -> canConfirmDiagnosisResult(
                             summary = resultSummary,
@@ -497,7 +425,7 @@ fun OrderDetailWorkspace(
                     },
                     onClick = {
                         if (action == OrderStatusAction.RECORD_RESULT) {
-                            val outcome = diagnosisOutcome ?: return@TextButton
+                            val outcome = diagnosisOutcome ?: return@AppButton
                             val estimateAmountCents = parseEuroCentsOrNull(resultAmount)
                             viewModel.recordResult(
                                 summary = resultSummary,
@@ -513,7 +441,7 @@ fun OrderDetailWorkspace(
                                 )
                             }
                         } else {
-                            val targetStatus = action.targetStatus ?: return@TextButton
+                            val targetStatus = action.targetStatus ?: return@AppButton
                             viewModel.changeStatus(
                                 status = targetStatus,
                                 note = statusNote,
@@ -528,15 +456,16 @@ fun OrderDetailWorkspace(
                         }
                         statusAction = null
                     },
-                    modifier = Modifier.testTag(RepairAppTestTags.StatusDialogConfirmButton),
-                ) {
-                    Text(stringResource(R.string.confirm))
-                }
+                    variant = AppButtonVariant.Primary,
+                    size = AppButtonSize.Compact,
+                    testTag = RepairAppTestTags.StatusDialogConfirmButton
+                )
             },
             dismissButton = {
-                TouchButton(
+                AppButton(
                     text = stringResource(R.string.customer_cancel),
-                    tone = ButtonTone.NEUTRAL,
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact,
                     onClick = { statusAction = null }
                 )
             },
@@ -544,18 +473,18 @@ fun OrderDetailWorkspace(
     }
 
     if (showInternalNoteDialog) {
-        AlertDialog(
+        AppDialog(
             onDismissRequest = { showInternalNoteDialog = false },
-            title = { Text(stringResource(R.string.order_internal_notes)) },
-            text = {
+            title = stringResource(R.string.order_internal_notes),
+            content = {
                 Column(
                     modifier = Modifier.verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
                 ) {
                     selected.order.internalNotes?.takeIf { it.isNotBlank() }?.let {
                         OperatorText(it)
                     }
-                    Field(
+                    AppTextField(
                         value = note,
                         onValueChange = { note = it },
                         label = stringResource(R.string.order_new_note),
@@ -564,47 +493,52 @@ fun OrderDetailWorkspace(
                 }
             },
             confirmButton = {
-                TextButton(
+                AppButton(
+                    text = stringResource(R.string.order_save_note),
                     enabled = note.isNotBlank(),
                     onClick = {
                         viewModel.addNote(note)
                         note = ""
                         showInternalNoteDialog = false
                     },
-                ) {
-                    Text(stringResource(R.string.order_save_note))
-                }
+                    variant = AppButtonVariant.Primary,
+                    size = AppButtonSize.Compact
+                )
             },
             dismissButton = {
-                TextButton(onClick = { showInternalNoteDialog = false }) {
-                    Text(stringResource(R.string.customer_cancel))
-                }
+                AppButton(
+                    text = stringResource(R.string.customer_cancel),
+                    onClick = { showInternalNoteDialog = false },
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact
+                )
             },
         )
     }
 
     if (showPdfSentConfirmation) {
-        AlertDialog(
+        AppDialog(
             onDismissRequest = { viewModel.onPdfSentDismissed() },
-            title = { Text(stringResource(R.string.order_pdf_sent_confirm_title)) },
-            text = { Text(stringResource(R.string.order_pdf_sent_confirm_text)) },
+            title = stringResource(R.string.order_pdf_sent_confirm_title),
+            text = stringResource(R.string.order_pdf_sent_confirm_text),
             confirmButton = {
-                TextButton(
+                AppButton(
+                    text = stringResource(R.string.yes_confirmed),
                     onClick = { 
                         viewModel.onPdfSentConfirmed()
-                    }
-                ) {
-                    Text(stringResource(R.string.yes_confirmed))
-                }
+                    },
+                    variant = AppButtonVariant.Primary,
+                    size = AppButtonSize.Compact
+                )
             },
             dismissButton = {
-                TextButton(onClick = { viewModel.onPdfSentDismissed() }) {
-                    Text(stringResource(R.string.no_cancel))
-                }
+                AppButton(
+                    text = stringResource(R.string.no_cancel),
+                    onClick = { viewModel.onPdfSentDismissed() },
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact
+                )
             }
         )
     }
-    }
 }
-
-

@@ -33,6 +33,7 @@ class AppContainer(context: Context) {
     val templateRepository = settingsContainer.templateRepository
     val backupRepository = settingsContainer.backupRepository
     val backupReminderPreferences = settingsContainer.backupReminderPreferences
+    val securityPreferences = settingsContainer.securityPreferences
     val dataResetRepository = settingsContainer.dataResetRepository
     val storageStatsService = settingsContainer.storageStatsService
 

@@ -17,9 +17,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 
@@ -30,9 +30,9 @@ fun AboutSettings(onBack: () -> Unit) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .widthIn(max = DashboardSpacing.maxContentWidth),
-        contentPadding = PaddingValues(DashboardSpacing.screenPadding),
-        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
+            .widthIn(max = RepairAppSpacing.maxContentWidth),
+        contentPadding = PaddingValues(RepairAppSpacing.screenPadding),
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.listGap),
     ) {
         item {
             SectionTitle(
@@ -44,8 +44,8 @@ fun AboutSettings(onBack: () -> Unit) {
         item {
             StandardCard(highlight = true) {
                 Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)
+                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
                 ) {
                     Text("OnlyTechTake Repair App", style = MaterialTheme.typography.titleLarge)
                     Text("Versione: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})", style = MaterialTheme.typography.bodyMedium)
@@ -57,8 +57,8 @@ fun AboutSettings(onBack: () -> Unit) {
         item {
             StandardCard {
                 Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)
+                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
                 ) {
                     Text("Descrizione", style = MaterialTheme.typography.titleSmall)
                     Text(
@@ -73,8 +73,8 @@ fun AboutSettings(onBack: () -> Unit) {
         item {
             StandardCard {
                 Column(
-                    modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)
+                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
                 ) {
                     Text("Sviluppo", style = MaterialTheme.typography.titleSmall)
                     Text("© 2026 OnlyTechTake", style = MaterialTheme.typography.bodyMedium)
@@ -97,7 +97,7 @@ fun AboutSettings(onBack: () -> Unit) {
 
         item {
             TouchButton(
-                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenPadding),
                 text = "Chiudi Informazioni",
                 tone = ButtonTone.NEUTRAL,
                 onClick = onBack
@@ -105,3 +105,5 @@ fun AboutSettings(onBack: () -> Unit) {
         }
     }
 }
+
+

@@ -8,7 +8,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.features.dashboard.common.LocalMessageBanner
+import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 
 @Composable
@@ -94,33 +95,35 @@ fun SettingsPanel(
     }
 
     confirmTitle?.let { title ->
-        AlertDialog(
+        AppDialog(
             onDismissRequest = {
                 confirmTitle = null
                 confirmAction = null
             },
-            title = { Text(title) },
-            text = { Text(confirmText) },
+            title = title,
+            text = confirmText,
             confirmButton = {
-                TextButton(
+                AppButton(
+                    text = stringResource(R.string.confirm),
                     onClick = {
                         confirmAction?.invoke()
                         confirmTitle = null
                         confirmAction = null
                     },
-                ) {
-                    Text(stringResource(R.string.confirm))
-                }
+                    variant = AppButtonVariant.Primary,
+                    size = AppButtonSize.Compact
+                )
             },
             dismissButton = {
-                TextButton(
+                AppButton(
+                    text = stringResource(R.string.customer_cancel),
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact,
                     onClick = {
                         confirmTitle = null
                         confirmAction = null
                     },
-                ) {
-                    Text(stringResource(R.string.customer_cancel))
-                }
+                )
             },
         )
     }
@@ -139,7 +142,7 @@ private fun SettingsSectionContent(
     val message by viewModel.message.collectAsState()
 
     Column {
-        LocalMessageBanner(message?.text, message?.isError ?: false)
+        message?.let { AppMessageBanner(message = it.text, type = if (it.isError) BannerType.Error else BannerType.Info, modifier = Modifier.padding(RepairAppSpacing.screenHorizontal)) }
         when (section) {
             "CATEGORIES" -> CategoriesSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)
             "TEMPLATES" -> TemplatesSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)

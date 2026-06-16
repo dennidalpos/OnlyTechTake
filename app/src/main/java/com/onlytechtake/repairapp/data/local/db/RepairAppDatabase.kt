@@ -35,6 +35,8 @@ import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
 
+import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
+
 @Database(
     entities = [
         UserEntity::class,
@@ -88,6 +90,7 @@ abstract class RepairAppDatabase : RoomDatabase() {
                     RepairAppDatabase::class.java,
                     DATABASE_NAME,
                 )
+                    .openHelperFactory(SupportOpenHelperFactory("".toByteArray()))
                     .fallbackToDestructiveMigration(dropAllTables = true)
                     .build()
                     .also { instance = it }

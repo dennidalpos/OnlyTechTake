@@ -6,6 +6,7 @@ import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
+import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
 import com.onlytechtake.repairapp.data.repositories.*
 import com.onlytechtake.repairapp.data.services.StorageStatsService
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
@@ -123,6 +124,7 @@ class OrderContainer(context: Context, dataContainer: DataContainer, mediaContai
 
 class SettingsContainer(context: Context, dataContainer: DataContainer, authContainer: AuthContainer, mediaContainer: MediaContainer) {
     val backupReminderPreferences = BackupReminderPreferences(context.applicationContext)
+    val securityPreferences = SecurityPreferences(context.applicationContext)
     val storageStatsService = StorageStatsService(context.applicationContext, mediaContainer.mediaStorageProvider)
 
     val templateRepository = TemplateRepository(
@@ -144,6 +146,7 @@ class SettingsContainer(context: Context, dataContainer: DataContainer, authCont
         settingDao = dataContainer.database.appSettingDao(),
         auditLogDao = dataContainer.database.auditLogDao(),
         backupReminderPreferences = backupReminderPreferences,
+        securityPreferences = securityPreferences,
         orderExportDao = dataContainer.database.orderExportDao(),
         database = dataContainer.database,
         authPreferences = authContainer.authPreferences,

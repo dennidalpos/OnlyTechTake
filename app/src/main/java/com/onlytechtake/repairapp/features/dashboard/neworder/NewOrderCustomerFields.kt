@@ -29,28 +29,26 @@ import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
+import com.onlytechtake.repairapp.core.design.components.AppTextField
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.CustomerTypeToggle
-import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
-import com.onlytechtake.repairapp.features.dashboard.common.Field
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.NoteFieldWithDialog
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
-import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
-import com.onlytechtake.repairapp.features.workspace.ButtonTone
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 
 @Composable
 fun CustomerSuggestionCard(customer: CustomerEntity, onClick: () -> Unit) {
     val context = LocalContext.current
     var expanded by rememberSaveable(customer.id) { mutableStateOf(value = false) }
-    Card(
+    StandardCard(
         modifier = Modifier.fillMaxWidth(),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-        )
     ) {
         Column(
-            modifier = Modifier.padding(DashboardSpacing.compactGap),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+            modifier = Modifier.padding(RepairAppSpacing.compactGap),
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
         ) {
             Text(
                 customer.displayName(context),
@@ -70,10 +68,11 @@ fun CustomerSuggestionCard(customer: CustomerEntity, onClick: () -> Unit) {
                 ).joinToString("\n")
                 if (details.isNotBlank()) OperatorText(details)
             }
-            TouchButton(
+            AppButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.customer_select),
-                tone = if (expanded) ButtonTone.SUCCESS else ButtonTone.NEUTRAL,
+                variant = if (expanded) AppButtonVariant.Success else AppButtonVariant.Secondary,
+                size = AppButtonSize.Compact,
                 onClick = {
                     if (expanded) onClick() else expanded = true
                 },
@@ -109,19 +108,20 @@ fun IntakeCustomerFields(
 ) {
     val contactMissing = phone.isBlank() && email.isBlank()
 
-    Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
+    Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.formGap)) {
         CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = onBusinessChange)
         if (isBusiness) {
-            Field(companyName, onCompanyNameChange, stringResource(R.string.customer_field_company_name), required = true, showError = companyName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, capitalization = KeyboardCapitalization.Words)
-            Field(vatNumber, onVatNumberChange, stringResource(R.string.customer_field_vat_number), showOptional = true, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, capitalization = KeyboardCapitalization.Characters)
+            AppTextField(companyName, onCompanyNameChange, stringResource(R.string.customer_field_company_name), required = true, showError = companyName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, capitalization = KeyboardCapitalization.Words)
+            AppTextField(vatNumber, onVatNumberChange, stringResource(R.string.customer_field_vat_number), showOptional = true, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, capitalization = KeyboardCapitalization.Characters)
         } else {
-            Field(firstName, onFirstNameChange, stringResource(R.string.customer_field_first_name), required = true, showError = firstName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, capitalization = KeyboardCapitalization.Words, testTag = RepairAppTestTags.NewOrderFirstNameField)
-            Field(lastName, onLastNameChange, stringResource(R.string.customer_field_last_name), required = true, showError = lastName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, capitalization = KeyboardCapitalization.Words, testTag = RepairAppTestTags.NewOrderLastNameField)
+            AppTextField(firstName, onFirstNameChange, stringResource(R.string.customer_field_first_name), required = true, showError = firstName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, capitalization = KeyboardCapitalization.Words, testTag = RepairAppTestTags.NewOrderFirstNameField)
+            AppTextField(lastName, onLastNameChange, stringResource(R.string.customer_field_last_name), required = true, showError = lastName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, capitalization = KeyboardCapitalization.Words, testTag = RepairAppTestTags.NewOrderLastNameField)
         }
-        Field(taxCode, onTaxCodeChange, stringResource(R.string.customer_field_tax_code), showOptional = true, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, capitalization = KeyboardCapitalization.Characters)
-        Field(phone, onPhoneChange, stringResource(R.string.customer_field_phone), required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, keyboardType = KeyboardType.Phone, testTag = RepairAppTestTags.NewOrderPhoneField)
-        Field(email, onEmailChange, stringResource(R.string.customer_field_email), required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, keyboardType = KeyboardType.Email, capitalization = KeyboardCapitalization.None, testTag = RepairAppTestTags.NewOrderEmailField)
-        Field(address, onAddressChange, stringResource(R.string.customer_field_address), showOptional = true, singleLine = true, imeAction = ImeAction.Done, keyboardActions = doneAction, capitalization = KeyboardCapitalization.Words)
+        AppTextField(taxCode, onTaxCodeChange, stringResource(R.string.customer_field_tax_code), showOptional = true, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, capitalization = KeyboardCapitalization.Characters)
+        AppTextField(phone, onPhoneChange, stringResource(R.string.customer_field_phone), required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, keyboardType = KeyboardType.Phone, testTag = RepairAppTestTags.NewOrderPhoneField)
+        AppTextField(email, onEmailChange, stringResource(R.string.customer_field_email), required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, keyboardType = KeyboardType.Email, capitalization = KeyboardCapitalization.None, testTag = RepairAppTestTags.NewOrderEmailField)
+        AppTextField(address, onAddressChange, stringResource(R.string.customer_field_address), showOptional = true, singleLine = true, imeAction = ImeAction.Done, keyboardActions = doneAction, capitalization = KeyboardCapitalization.Words)
         NoteFieldWithDialog(notes, onNotesChange, testTag = RepairAppTestTags.NewOrderNotesField)
     }
 }
+

@@ -1,16 +1,10 @@
 package com.onlytechtake.repairapp.features.dashboard.neworder
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,15 +18,15 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
-import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
-import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
-import com.onlytechtake.repairapp.features.dashboard.common.StepSectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
-import com.onlytechtake.repairapp.features.workspace.ButtonTone
+import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.workspace.categoryPath
 
 @Composable
@@ -42,55 +36,74 @@ fun QuickIntakeCategorySection(
     selectedCategoryId: String?,
     onCategorySelected: (String) -> Unit,
     onOpenConfig: () -> Unit,
-    highlight: Boolean = false,
 ) {
     var currentParentId by rememberSaveable { mutableStateOf<String?>(null) }
     val visibleCategories = activeCategories.filter { it.parentId == currentParentId }
     val currentParent = currentParentId?.let { id -> activeCategories.firstOrNull { it.id == id } }
     val selectedPath = selectedCategoryId?.let { categoryPath(activeCategories, it) }.orEmpty()
 
-    StandardCard(highlight = highlight) {
+    StandardCard {
         Column(
-            modifier = Modifier.padding(DashboardSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+            modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
         ) {
-            StepSectionTitle(stepNumber, stringResource(R.string.intake_step_category))
+            Text(
+                text = stringResource(R.string.intake_step_category),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+            
             if (activeCategories.isEmpty()) {
-                Text(
-                    text = stringResource(R.string.intake_no_active_categories),
-                    color = MaterialTheme.colorScheme.error,
+                AppMessageBanner(
+                    message = stringResource(R.string.intake_no_active_categories),
+                    type = BannerType.Error
                 )
-                TouchButton(
+                AppButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.intake_create_category),
                     onClick = onOpenConfig,
                 )
             } else {
-                TouchButton(
+                Row(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.intake_add_missing_category),
-                    tone = ButtonTone.NEUTRAL,
-                    onClick = onOpenConfig,
-                )
-                if (currentParentId != null) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)
-                    ) {
-                        TouchButton(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (currentParentId != null) {
+                        AppButton(
                             text = stringResource(R.string.nav_back),
-                            tone = ButtonTone.NEUTRAL,
+                            variant = AppButtonVariant.Ghost,
+                            size = AppButtonSize.Compact,
                             onClick = { currentParentId = currentParent?.parentId },
                         )
-                        Text(currentParent?.name.orEmpty(), style = MaterialTheme.typography.titleLarge)
+                        Text(
+                            currentParent?.name.orEmpty(),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.weight(1f).padding(start = 8.dp)
+                        )
+                    } else {
+                        Text(
+                            stringResource(R.string.config_category_root),
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier.weight(1f)
+                        )
                     }
+                    
+                    AppButton(
+                        text = stringResource(R.string.intake_add_missing_category),
+                        variant = AppButtonVariant.Ghost,
+                        size = AppButtonSize.Compact,
+                        onClick = onOpenConfig,
+                    )
                 }
 
                 if (selectedPath.isNotBlank()) {
                     OperatorText(stringResource(R.string.intake_category_selected, selectedPath))
                 }
 
-                Column(verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
+                Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
                     visibleCategories.forEach { category ->
                         val hasChildren = activeCategories.any { child -> child.parentId == category.id }
                         val isSelected = category.id == selectedCategoryId
@@ -113,28 +126,28 @@ fun QuickIntakeCategorySection(
                                     onCategorySelected(category.id)
                                 }
                             },
-                            containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                            containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.1f),
                             role = Role.RadioButton,
                         ) {
                             Row(
                                 modifier = Modifier
-                                    .padding(DashboardSpacing.cardPadding)
+                                    .padding(horizontal = 12.dp, vertical = 12.dp)
                                     .fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(category.name, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+                                Text(category.name, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
                                 if (hasChildren) {
-                                    Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = stringResource(R.string.intake_category_open))
+                                    Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = stringResource(R.string.intake_category_open), modifier = Modifier.size(20.dp))
                                 } else if (isSelected) {
-                                    Icon(Icons.Default.Check, contentDescription = stringResource(R.string.intake_category_selected_icon), tint = MaterialTheme.colorScheme.primary)
+                                    Icon(Icons.Default.Check, contentDescription = stringResource(R.string.intake_category_selected_icon), tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
                                 }
                             }
                         }
                     }
                 }
                 if (visibleCategories.isEmpty()) {
-                    Text(stringResource(R.string.config_category_empty_branch), style = MaterialTheme.typography.bodyMedium)
+                    Text(stringResource(R.string.config_category_empty_branch), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
                 }
             }
         }

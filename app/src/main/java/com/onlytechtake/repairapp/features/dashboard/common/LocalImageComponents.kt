@@ -48,6 +48,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.media.decodeOrientedBitmap
 import java.io.File
 import kotlin.math.atan2
@@ -105,10 +106,10 @@ fun LocalImageViewer(
 ) {
     var buildEditedBitmap by remember(path) { mutableStateOf<(() -> Bitmap?)?>(null) }
     var editedBitmapToConfirm by remember(path) { mutableStateOf<Bitmap?>(null) }
-    AlertDialog(
+    AppDialog(
         onDismissRequest = onDismiss,
-        title = { Text(title) },
-        text = {
+        title = title,
+        content = {
             if (onSaveEdited == null) {
                 ZoomableLocalImage(
                     path = path,
@@ -133,51 +134,60 @@ fun LocalImageViewer(
         confirmButton = {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 onDelete?.let { delete ->
-                    TextButton(
+                    AppButton(
+                        text = "Elimina",
                         onClick = {
                             delete()
                             onDismiss()
                         },
-                    ) {
-                        Text("Elimina")
-                    }
+                        variant = AppButtonVariant.Danger,
+                        size = AppButtonSize.Compact
+                    )
                 }
                 if (onSaveEdited != null) {
-                    TextButton(
+                    AppButton(
+                        text = "Salva",
                         onClick = {
                             editedBitmapToConfirm = buildEditedBitmap?.invoke()
                         },
-                    ) {
-                        Text("Salva")
-                    }
+                        variant = AppButtonVariant.Primary,
+                        size = AppButtonSize.Compact
+                    )
                 }
-                TextButton(onClick = onDismiss) {
-                    Text("Chiudi")
-                }
+                AppButton(
+                    text = "Chiudi",
+                    onClick = onDismiss,
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact
+                )
             }
         },
     )
 
     editedBitmapToConfirm?.let { bitmap ->
-        AlertDialog(
+        AppDialog(
             onDismissRequest = { editedBitmapToConfirm = null },
-            title = { Text("Sostituire foto?") },
-            text = { Text("La foto modificata sostituira' l'immagine originale.") },
+            title = "Sostituire foto?",
+            text = "La foto modificata sostituira' l'immagine originale.",
             confirmButton = {
-                TextButton(
+                AppButton(
+                    text = "Sostituisci",
                     onClick = {
                         onSaveEdited?.invoke(bitmap)
                         editedBitmapToConfirm = null
                         onDismiss()
                     },
-                ) {
-                    Text("Sostituisci")
-                }
+                    variant = AppButtonVariant.Primary,
+                    size = AppButtonSize.Compact
+                )
             },
             dismissButton = {
-                TextButton(onClick = { editedBitmapToConfirm = null }) {
-                    Text("Annulla")
-                }
+                AppButton(
+                    text = "Annulla",
+                    onClick = { editedBitmapToConfirm = null },
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact
+                )
             },
         )
     }
@@ -208,27 +218,42 @@ private fun EditableLocalImage(
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         ActionRow {
-            TextButton(
+            AppButton(
+                text = "Ruota",
                 onClick = {
                     bitmap = bitmap?.rotateRight()
                     arrows = emptyList()
                     cropRect = null
                 },
-            ) {
-                Text("Ruota")
-            }
-            TextButton(onClick = { editMode = ImageEditMode.CROP }) {
-                Text("Ritaglio")
-            }
-            TextButton(onClick = { editMode = ImageEditMode.ARROW }) {
-                Text("Freccia")
-            }
-            TextButton(enabled = arrows.isNotEmpty(), onClick = { arrows = arrows.dropLast(1) }) {
-                Text("Annulla freccia")
-            }
-            TextButton(enabled = cropRect != null, onClick = { cropRect = null }) {
-                Text("Cancella ritaglio")
-            }
+                variant = AppButtonVariant.Secondary,
+                size = AppButtonSize.Compact
+            )
+            AppButton(
+                text = "Ritaglio",
+                onClick = { editMode = ImageEditMode.CROP },
+                variant = if (editMode == ImageEditMode.CROP) AppButtonVariant.Primary else AppButtonVariant.Secondary,
+                size = AppButtonSize.Compact
+            )
+            AppButton(
+                text = "Freccia",
+                onClick = { editMode = ImageEditMode.ARROW },
+                variant = if (editMode == ImageEditMode.ARROW) AppButtonVariant.Primary else AppButtonVariant.Secondary,
+                size = AppButtonSize.Compact
+            )
+            AppButton(
+                text = "Annulla freccia",
+                enabled = arrows.isNotEmpty(),
+                onClick = { arrows = arrows.dropLast(1) },
+                variant = AppButtonVariant.Secondary,
+                size = AppButtonSize.Compact
+            )
+            AppButton(
+                text = "Cancella ritaglio",
+                enabled = cropRect != null,
+                onClick = { cropRect = null },
+                variant = AppButtonVariant.Secondary,
+                size = AppButtonSize.Compact
+            )
         }
         ImageEditCanvas(
             bitmap = bitmap,

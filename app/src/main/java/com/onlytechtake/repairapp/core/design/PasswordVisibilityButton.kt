@@ -20,7 +20,7 @@ fun PasswordVisibilityButton(
     modifier: Modifier = Modifier,
 ) {
     AppIconButton(
-        icon = if (visible) PasswordVisibleIcon else PasswordHiddenIcon,
+        imageVector = if (visible) PasswordVisibleIcon else PasswordHiddenIcon,
         contentDescription = stringResource(
             if (visible) R.string.auth_hide_password else R.string.auth_show_password,
         ),

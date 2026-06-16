@@ -1,12 +1,14 @@
 package com.onlytechtake.repairapp.data.repositories
 
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
+import net.lingala.zip4j.io.inputstream.ZipInputStream
+import net.lingala.zip4j.io.outputstream.ZipOutputStream
+import net.lingala.zip4j.model.ZipParameters
+import net.lingala.zip4j.model.enums.AesKeyStrength
+import net.lingala.zip4j.model.enums.EncryptionMethod
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
-import java.util.zip.ZipEntry
-import java.util.zip.ZipInputStream
-import java.util.zip.ZipOutputStream
 
 internal data class ExtractedBackup(
     val metadataText: String,
@@ -19,25 +21,25 @@ internal object BackupArchive {
     const val FILES_ENTRY_PREFIX = "files/"
     const val CANONICAL_MEDIA_DIRECTORY = "app_media"
 
-    fun extract(input: InputStream, restoreRoot: File): ExtractedBackup {
+    fun extract(input: InputStream, restoreRoot: File, password: CharArray? = null): ExtractedBackup {
         val metadata = StringBuilder()
         val databaseFiles = mutableMapOf<String, File>()
         var hasMetadata = false
 
-        ZipInputStream(input).use { zip ->
+        ZipInputStream(input, password).use { zip ->
             while (true) {
-                val entry = zip.nextEntry ?: break
+                val entry = zip.getNextEntry() ?: break
                 try {
                     if (entry.isDirectory) continue
-                    requireSafeEntry(entry.name)
+                    requireSafeEntry(entry.fileName)
                     when {
-                        entry.name == METADATA_ENTRY -> {
+                        entry.fileName == METADATA_ENTRY -> {
                             hasMetadata = true
                             metadata.append(zip.readBytes().toString(Charsets.UTF_8))
                         }
 
-                        entry.name.startsWith(DATABASE_ENTRY_PREFIX) -> {
-                            val fileName = entry.name.removePrefix(DATABASE_ENTRY_PREFIX)
+                        entry.fileName.startsWith(DATABASE_ENTRY_PREFIX) -> {
+                            val fileName = entry.fileName.removePrefix(DATABASE_ENTRY_PREFIX)
                             require(fileName.isNotBlank() && !fileName.contains('/')) {
                                 "Backup database non valido"
                             }
@@ -47,8 +49,8 @@ internal object BackupArchive {
                             databaseFiles[fileName] = destination
                         }
 
-                        entry.name.startsWith(FILES_ENTRY_PREFIX) -> {
-                            val relativePath = entry.name.removePrefix(FILES_ENTRY_PREFIX)
+                        entry.fileName.startsWith(FILES_ENTRY_PREFIX) -> {
+                            val relativePath = entry.fileName.removePrefix(FILES_ENTRY_PREFIX)
                             require(isSupportedAppFile(relativePath)) {
                                 "Backup contiene file app non supportati"
                             }
@@ -58,7 +60,7 @@ internal object BackupArchive {
                         }
                     }
                 } finally {
-                    zip.closeEntry()
+                    // zip4j does not have closeEntry for input stream
                 }
             }
         }
@@ -89,13 +91,13 @@ internal object BackupArchive {
         )
     }
 
-    fun addDirectory(zip: ZipOutputStream, directory: File, entryDirectory: String) {
+    fun addDirectory(zip: ZipOutputStream, directory: File, entryDirectory: String, password: String? = null) {
         if (!directory.exists()) return
         directory.walkTopDown()
             .filter(File::isFile)
             .forEach { file ->
                 val relativePath = file.relativeTo(directory).invariantSeparatorsPath
-                zip.putFileEntry(file, "$entryDirectory/$relativePath")
+                zip.putFileEntry(file, "$entryDirectory/$relativePath", password)
             }
     }
 
@@ -153,8 +155,15 @@ internal object BackupArchive {
     }
 }
 
-internal fun ZipOutputStream.putFileEntry(file: File, entryName: String) {
-    putNextEntry(ZipEntry(entryName))
+internal fun ZipOutputStream.putFileEntry(file: File, entryName: String, password: String? = null) {
+    val params = ZipParameters()
+    params.fileNameInZip = entryName
+    if (password != null) {
+        params.isEncryptFiles = true
+        params.encryptionMethod = EncryptionMethod.AES
+        params.aesKeyStrength = AesKeyStrength.KEY_STRENGTH_256
+    }
+    putNextEntry(params)
     file.inputStream().use { input -> input.copyTo(this) }
     closeEntry()
 }

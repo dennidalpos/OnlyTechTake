@@ -5,9 +5,9 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.UUID
-import java.util.zip.ZipEntry
-import java.util.zip.ZipInputStream
-import java.util.zip.ZipOutputStream
+import net.lingala.zip4j.io.inputstream.ZipInputStream
+import net.lingala.zip4j.io.outputstream.ZipOutputStream
+import net.lingala.zip4j.model.ZipParameters
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -132,7 +132,8 @@ class BackupRepositoryTest {
                 "${BackupArchive.DATABASE_ENTRY_PREFIX}${RepairAppDatabase.DATABASE_NAME}" to "database",
             )
             (requiredEntries + files).forEach { (name, content) ->
-                zip.putNextEntry(ZipEntry(name))
+                val params = ZipParameters().apply { fileNameInZip = name }
+                zip.putNextEntry(params)
                 zip.write(content.toByteArray())
                 zip.closeEntry()
             }
@@ -144,9 +145,8 @@ class BackupRepositoryTest {
         val entries = mutableMapOf<String, String>()
         ZipInputStream(ByteArrayInputStream(bytes)).use { zip ->
             while (true) {
-                val entry = zip.nextEntry ?: break
-                entries[entry.name] = zip.readBytes().toString(Charsets.UTF_8)
-                zip.closeEntry()
+                val entry = zip.getNextEntry() ?: break
+                entries[entry.fileName] = zip.readBytes().toString(Charsets.UTF_8)
             }
         }
         return entries

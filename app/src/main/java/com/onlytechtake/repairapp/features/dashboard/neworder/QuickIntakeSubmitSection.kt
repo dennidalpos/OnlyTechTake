@@ -9,12 +9,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
-import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
-import com.onlytechtake.repairapp.features.dashboard.common.StepSectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.components.*
 
 @Composable
 fun QuickIntakeSubmitSection(
@@ -25,22 +24,29 @@ fun QuickIntakeSubmitSection(
 ) {
     StandardCard {
         Column(
-            modifier = Modifier.padding(DashboardSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+            modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
         ) {
-            StepSectionTitle(stepNumber, stringResource(R.string.intake_submit_title))
+            Text(
+                text = stringResource(R.string.intake_submit_title),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+            
             if (missingRequirements.isNotEmpty()) {
-                Text(
-                    text = stringResource(R.string.intake_submit_missing, missingRequirements.joinToString(", ")),
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodyMedium,
+                AppMessageBanner(
+                    message = stringResource(R.string.intake_submit_missing, missingRequirements.joinToString(", ")),
+                    type = BannerType.Warning
                 )
             }
-            TouchButton(
+            
+            AppButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.intake_submit_create),
                 enabled = enabled,
-                fullWidth = true,
+                variant = AppButtonVariant.Primary,
+                size = AppButtonSize.Default,
                 testTag = RepairAppTestTags.IntakeSubmitButton,
                 onClick = onSubmit,
             )

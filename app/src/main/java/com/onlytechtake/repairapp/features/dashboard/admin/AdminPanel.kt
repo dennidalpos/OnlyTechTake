@@ -1,37 +1,18 @@
 package com.onlytechtake.repairapp.features.dashboard.admin
 
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.focusProperties
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -39,17 +20,12 @@ import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.PasswordVisibilityButton
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
-import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
-import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
-import com.onlytechtake.repairapp.features.dashboard.common.Field
-import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
-import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
-import com.onlytechtake.repairapp.features.workspace.ButtonTone
+import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.features.dashboard.common.*
 
 @Composable
 fun AdminPanel(
@@ -93,344 +69,268 @@ fun AdminPanel(
     }
 
     if (!isAdmin) {
-        Text(modifier = Modifier.padding(DashboardSpacing.screenPadding), text = stringResource(R.string.admin_only_section))
+        AppScreenContainer {
+            AppMessageBanner(message = stringResource(R.string.admin_only_section), type = BannerType.Warning)
+        }
         return
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.TopCenter,
-    ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .widthIn(max = DashboardSpacing.maxContentWidth),
-            contentPadding = PaddingValues(DashboardSpacing.screenPadding),
-            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
-        ) {
-            item {
-                SectionTitle(stringResource(R.string.admin_access_security))
-                StandardCard(highlight = true) {
-                    Column(
-                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                    ) {
-                        Text(stringResource(R.string.admin_create_operator), style = MaterialTheme.typography.titleMedium)
-                        Field(displayName, { displayName = it }, stringResource(R.string.customer_field_first_name))
-                        Field(username, { username = it }, stringResource(R.string.auth_username))
-                        Field(
-                            value = password,
-                            onValueChange = { password = it },
-                            label = stringResource(R.string.admin_field_temp_password),
-                            singleLine = true,
-                            keyboardType = KeyboardType.Password,
-                            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                            trailingIcon = {
-                                PasswordVisibilityButton(
-                                    visible = passwordVisible,
-                                    onVisibleChange = { passwordVisible = it },
-                                    modifier = Modifier.focusProperties { canFocus = false },
-                                )
-                            },
+    AppScreenContainer {
+        SectionTitle(stringResource(R.string.admin_access_security))
+        
+        StandardCard {
+            Column(
+                modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
+            ) {
+                Text(stringResource(R.string.admin_create_operator), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                AppTextField(displayName, { displayName = it }, stringResource(R.string.customer_field_first_name), required = true)
+                AppTextField(username, { username = it }, stringResource(R.string.auth_username), required = true)
+                AppTextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    label = stringResource(R.string.admin_field_temp_password),
+                    required = true,
+                    singleLine = true,
+                    keyboardType = KeyboardType.Password,
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    trailingIcon = {
+                        PasswordVisibilityButton(
+                            visible = passwordVisible,
+                            onVisibleChange = { passwordVisible = it },
+                            modifier = Modifier.focusProperties { canFocus = false },
                         )
-                        TouchButton(
-                            text = stringResource(R.string.admin_create_operator),
-                            enabled = displayName.isNotBlank() && username.isNotBlank() && password.isNotBlank(),
-                            size = AppButtonSize.Compact,
-                            testTag = RepairAppTestTags.AdminCreateOperatorButton,
-                            onClick = {
-                                requestConfirm(confirmCreateTitle, confirmCreateText) {
-                                    viewModel.createOperator(displayName, username, password.toCharArray())
-                                    displayName = ""
-                                    username = ""
-                                    password = ""
-                                    passwordVisible = false
-                                }
-                            },
-                        )
-                    }
-                }
-            }
-            item {
-                StandardCard(highlight = true) {
-                    Column(
-                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                    ) {
-                        SectionTitle(
-                            text = stringResource(R.string.admin_recovery_kit),
-                            tooltip = stringResource(R.string.admin_recovery_tooltip),
-                        )
-                        
-                        if (recoveryCode == null) {
-                            TouchButton(
-                                text = stringResource(R.string.admin_recovery_generate),
-                                tone = ButtonTone.NEUTRAL,
-                                size = AppButtonSize.Compact,
-                                onClick = { viewModel.generateRecoveryKit() }
-                            )
-                        } else {
-                            StandardCard {
-                                Column(
-                                    modifier = Modifier.padding(8.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                                ) {
-                                    Text(stringResource(R.string.admin_recovery_master_code), style = MaterialTheme.typography.labelSmall)
-                                    Text(
-                                        text = recoveryCode!!,
-                                        style = MaterialTheme.typography.headlineMedium,
-                                        color = MaterialTheme.colorScheme.primary
-                                    )
-                                    Text(
-                                        stringResource(R.string.admin_recovery_offline_warning),
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.error
-                                    )
-                                    TouchButton(
-                                        text = stringResource(R.string.admin_recovery_hide),
-                                        size = AppButtonSize.Compact,
-                                        onClick = { viewModel.clearRecoveryCode() }
-                                    )
-                                }
-                            }
+                    },
+                )
+                AppButton(
+                    text = stringResource(R.string.admin_create_operator),
+                    enabled = displayName.isNotBlank() && username.isNotBlank() && password.isNotBlank(),
+                    size = AppButtonSize.Default,
+                    variant = AppButtonVariant.Primary,
+                    modifier = Modifier.fillMaxWidth(),
+                    testTag = RepairAppTestTags.AdminCreateOperatorButton,
+                    onClick = {
+                        requestConfirm(confirmCreateTitle, confirmCreateText) {
+                            viewModel.createOperator(displayName, username, password.toCharArray())
+                            displayName = ""
+                            username = ""
+                            password = ""
+                            passwordVisible = false
                         }
-                    }
-                }
+                    },
+                )
             }
-            item { SectionTitle(stringResource(R.string.admin_users_title)) }
-            if (users.isEmpty()) {
-                item {
-                    StandardCard {
-                        Column(modifier = Modifier.padding(DashboardSpacing.cardPadding)) {
-                            Text(stringResource(R.string.admin_no_users), style = MaterialTheme.typography.bodyMedium)
-                        }
-                    }
-                }
-            } else {
-                items(users, key = { it.id }) { user ->
-                    var resetPasswordVisible by rememberSaveable(user.id) { mutableStateOf(false) }
-                    var currentPassword by rememberSaveable(user.id) { mutableStateOf("") }
-                    var currentPasswordVisible by rememberSaveable(user.id) { mutableStateOf(false) }
+        }
 
-                    StandardCard {
+        Spacer(Modifier.height(RepairAppSpacing.cardGap))
+
+        StandardCard {
+            Column(
+                modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
+            ) {
+                SectionTitle(
+                    text = stringResource(R.string.admin_recovery_kit),
+                    tooltip = stringResource(R.string.admin_recovery_tooltip),
+                )
+                
+                if (recoveryCode == null) {
+                    AppButton(
+                        text = stringResource(R.string.admin_recovery_generate),
+                        variant = AppButtonVariant.Secondary,
+                        size = AppButtonSize.Compact,
+                        onClick = { viewModel.generateRecoveryKit() }
+                    )
+                } else {
+                    AppMessageBanner(
+                        message = stringResource(R.string.admin_recovery_offline_warning),
+                        type = BannerType.Warning
+                    )
+                    StandardCard(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)) {
                         Column(
-                            modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                            verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
+                            modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
                         ) {
-                            Text("${user.displayName} - ${user.username} (${user.role.name})", style = MaterialTheme.typography.titleMedium)
-                            
-                            if (user.role != UserRole.ADMIN) {
-                                Text(if (user.active) stringResource(R.string.admin_user_active) else stringResource(R.string.admin_user_inactive))
-                                HorizontalDivider()
-                                Text(stringResource(R.string.admin_permissions_title), style = MaterialTheme.typography.labelLarge)
-                                
-                                val permissionGroups = listOf(
-                                    PermissionUIItem(UserPermission.CREATE_ORDERS, stringResource(R.string.admin_permission_create_orders)),
-                                    PermissionUIItem(UserPermission.EDIT_OWN_ORDERS, stringResource(R.string.admin_permission_edit_own_orders)),
-                                    PermissionUIItem(UserPermission.EDIT_ALL_ORDERS, stringResource(R.string.admin_permission_edit_all_orders)),
-                                    PermissionUIItem(UserPermission.CLOSE_ORDERS, stringResource(R.string.admin_permission_close_orders)),
-                                    PermissionUIItem(UserPermission.MANAGE_CUSTOMERS, stringResource(R.string.admin_permission_manage_customers)),
-                                    PermissionUIItem(UserPermission.MANAGE_CATEGORIES, stringResource(R.string.admin_permission_manage_categories)),
-                                    PermissionUIItem(UserPermission.MANAGE_TEMPLATES, stringResource(R.string.admin_permission_manage_templates)),
-                                    PermissionUIItem(UserPermission.MANAGE_PAYMENTS, stringResource(R.string.admin_permission_manage_payments)),
-                                    PermissionUIItem(UserPermission.EXPORT_DATA, stringResource(R.string.admin_permission_export_data)),
-                                    PermissionUIItem(UserPermission.MANAGE_STORAGE, stringResource(R.string.admin_permission_manage_storage)),
-                                )
+                            Text(stringResource(R.string.admin_recovery_master_code), style = MaterialTheme.typography.labelSmall)
+                            Text(
+                                text = recoveryCode!!,
+                                style = MaterialTheme.typography.headlineMedium,
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.Bold
+                            )
+                            AppButton(
+                                text = stringResource(R.string.admin_recovery_hide),
+                                variant = AppButtonVariant.Ghost,
+                                size = AppButtonSize.Compact,
+                                onClick = { viewModel.clearRecoveryCode() }
+                            )
+                        }
+                    }
+                }
+            }
+        }
 
-                                permissionGroups.forEach { item ->
-                                    val hasPermission = user.permissions.contains(item.permission)
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .toggleable(
-                                                value = hasPermission,
-                                                role = Role.Switch,
-                                                onValueChange = { checked ->
-                                                    val newPermissions = if (checked) {
-                                                        user.permissions + item.permission
-                                                    } else {
-                                                        user.permissions - item.permission
-                                                    }
-                                                    viewModel.setUserPermissions(user.id, newPermissions)
-                                                },
-                                            ),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.SpaceBetween
-                                    ) {
-                                        Text(item.label, style = MaterialTheme.typography.bodySmall)
-                                        Switch(
-                                            checked = hasPermission,
-                                            onCheckedChange = null,
-                                            modifier = Modifier.scale(0.7f)
-                                        )
+        Spacer(Modifier.height(RepairAppSpacing.sectionGap))
+        SectionTitle(stringResource(R.string.admin_users_title))
+        
+        if (users.isEmpty()) {
+            Text(stringResource(R.string.admin_no_users), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
+        } else {
+            users.forEach { user ->
+                var resetPasswordVisible by rememberSaveable(user.id) { mutableStateOf(false) }
+                var currentPassword by rememberSaveable(user.id) { mutableStateOf("") }
+                var currentPasswordVisible by rememberSaveable(user.id) { mutableStateOf(false) }
+
+                StandardCard(modifier = Modifier.padding(bottom = RepairAppSpacing.cardGap)) {
+                    Column(
+                        modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
+                    ) {
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(user.displayName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                                Text(user.username, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                            AppStatusChip(
+                                text = user.role.name,
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                        }
+                        
+                        if (user.role != UserRole.ADMIN) {
+                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Text(
+                                    text = if (user.active) stringResource(R.string.admin_user_active) else stringResource(R.string.admin_user_inactive),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = if (user.active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
+                                )
+                                Spacer(Modifier.weight(1f))
+                                AppButton(
+                                    text = if (user.active) stringResource(R.string.admin_user_deactivate) else stringResource(R.string.admin_user_activate),
+                                    variant = if (user.active) AppButtonVariant.Ghost else AppButtonVariant.Success,
+                                    size = AppButtonSize.Compact,
+                                    onClick = {
+                                        requestConfirm(confirmStatusTitle, confirmStatusTextTemplate.format(user.displayName)) {
+                                            viewModel.setUserActive(user.id, !user.active)
+                                        }
                                     }
-                                }
-                                HorizontalDivider()
-                            }
-
-                            if (user.role == UserRole.ADMIN) {
-                                Field(
-                                    value = currentPassword,
-                                    onValueChange = { currentPassword = it },
-                                    label = stringResource(R.string.admin_current_password),
-                                    singleLine = true,
-                                    keyboardType = KeyboardType.Password,
-                                    visualTransformation = if (currentPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                                    trailingIcon = {
-                                        PasswordVisibilityButton(
-                                            visible = currentPasswordVisible,
-                                            onVisibleChange = { currentPasswordVisible = it },
-                                            modifier = Modifier.focusProperties { canFocus = false },
-                                        )
-                                    },
                                 )
                             }
+                            
+                            HorizontalDivider(modifier = Modifier.alpha(0.3f))
+                            Text(stringResource(R.string.admin_permissions_title), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                            
+                            val permissionGroups = listOf(
+                                PermissionUIItem(UserPermission.CREATE_ORDERS, stringResource(R.string.admin_permission_create_orders)),
+                                PermissionUIItem(UserPermission.EDIT_OWN_ORDERS, stringResource(R.string.admin_permission_edit_own_orders)),
+                                PermissionUIItem(UserPermission.EDIT_ALL_ORDERS, stringResource(R.string.admin_permission_edit_all_orders)),
+                                PermissionUIItem(UserPermission.CLOSE_ORDERS, stringResource(R.string.admin_permission_close_orders)),
+                                PermissionUIItem(UserPermission.MANAGE_CUSTOMERS, stringResource(R.string.admin_permission_manage_customers)),
+                                PermissionUIItem(UserPermission.MANAGE_CATEGORIES, stringResource(R.string.admin_permission_manage_categories)),
+                                PermissionUIItem(UserPermission.MANAGE_TEMPLATES, stringResource(R.string.admin_permission_manage_templates)),
+                                PermissionUIItem(UserPermission.MANAGE_PAYMENTS, stringResource(R.string.admin_permission_manage_payments)),
+                                PermissionUIItem(UserPermission.EXPORT_DATA, stringResource(R.string.admin_permission_export_data)),
+                                PermissionUIItem(UserPermission.MANAGE_STORAGE, stringResource(R.string.admin_permission_manage_storage)),
+                            )
 
-                            Field(
-                                value = resetPasswords[user.id].orEmpty(),
-                                onValueChange = { value ->
-                                    resetPasswords += (user.id to value)
-                                },
-                                label = if (user.role == UserRole.ADMIN) {
-                                    stringResource(R.string.admin_new_password)
-                                } else {
-                                    stringResource(R.string.admin_field_temp_password)
-                                },
+                            permissionGroups.forEach { item ->
+                                val hasPermission = user.permissions.contains(item.permission)
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .toggleable(
+                                            value = hasPermission,
+                                            role = Role.Switch,
+                                            onValueChange = { checked ->
+                                                val newPermissions = if (checked) {
+                                                    user.permissions + item.permission
+                                                } else {
+                                                    user.permissions - item.permission
+                                                }
+                                                viewModel.setUserPermissions(user.id, newPermissions)
+                                            },
+                                        ),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(item.label, style = MaterialTheme.typography.bodySmall)
+                                    Switch(
+                                        checked = hasPermission,
+                                        onCheckedChange = null,
+                                        modifier = Modifier.scale(0.7f)
+                                    )
+                                }
+                            }
+                            HorizontalDivider(modifier = Modifier.alpha(0.3f))
+                        }
+
+                        if (user.role == UserRole.ADMIN) {
+                            AppTextField(
+                                value = currentPassword,
+                                onValueChange = { currentPassword = it },
+                                label = stringResource(R.string.admin_current_password),
                                 singleLine = true,
                                 keyboardType = KeyboardType.Password,
-                                visualTransformation = if (resetPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                                visualTransformation = if (currentPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                                 trailingIcon = {
                                     PasswordVisibilityButton(
-                                        visible = resetPasswordVisible,
-                                        onVisibleChange = { resetPasswordVisible = it },
+                                        visible = currentPasswordVisible,
+                                        onVisibleChange = { currentPasswordVisible = it },
                                         modifier = Modifier.focusProperties { canFocus = false },
                                     )
                                 },
                             )
-                            ActionRow {
-                                if (user.role != UserRole.ADMIN) {
-                                    TouchButton(
-                                        text = if (user.active) stringResource(R.string.admin_user_deactivate) else stringResource(R.string.admin_user_activate),
-                                        tone = if (user.active) ButtonTone.DANGER else ButtonTone.SUCCESS,
-                                        size = AppButtonSize.Compact,
-                                        onClick = {
-                                            requestConfirm(confirmStatusTitle, confirmStatusTextTemplate.format(user.displayName)) {
-                                                viewModel.setUserActive(user.id, !user.active)
-                                            }
-                                        },
-                                    )
-                                }
-                                TouchButton(
-                                    text = if (user.role == UserRole.ADMIN) {
-                                        stringResource(R.string.admin_change_password)
-                                    } else {
-                                        stringResource(R.string.admin_reset_password)
-                                    },
-                                    enabled = if (user.role == UserRole.ADMIN) {
-                                        currentPassword.isNotBlank() && resetPasswords[user.id]?.isNotBlank() == true
-                                    } else {
-                                        resetPasswords[user.id]?.isNotBlank() == true
-                                    },
-                                    tone = ButtonTone.NEUTRAL,
-                                    size = AppButtonSize.Compact,
-                                    onClick = {
-                                        val resetPassword = resetPasswords[user.id].orEmpty()
-                                        if (user.role == UserRole.ADMIN) {
-                                            viewModel.changePassword(user.username, currentPassword.toCharArray(), resetPassword.toCharArray())
-                                            currentPassword = ""
-                                            resetPasswords -= user.id
-                                        } else {
-                                            requestConfirm(confirmResetTitle, confirmResetTextTemplate.format(user.displayName)) {
-                                                viewModel.resetPassword(user.id, resetPassword.toCharArray())
-                                                resetPasswords -= user.id
-                                            }
-                                        }
-                                    },
+                        }
+
+                        AppTextField(
+                            value = resetPasswords[user.id].orEmpty(),
+                            onValueChange = { value ->
+                                resetPasswords += (user.id to value)
+                            },
+                            label = if (user.role == UserRole.ADMIN) {
+                                stringResource(R.string.admin_new_password)
+                            } else {
+                                stringResource(R.string.admin_field_temp_password)
+                            },
+                            singleLine = true,
+                            keyboardType = KeyboardType.Password,
+                            visualTransformation = if (resetPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                            trailingIcon = {
+                                PasswordVisibilityButton(
+                                    visible = resetPasswordVisible,
+                                    onVisibleChange = { resetPasswordVisible = it },
+                                    modifier = Modifier.focusProperties { canFocus = false },
                                 )
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (isBackupReminderDue) {
-                item {
-                    StandardCard(containerColor = MaterialTheme.colorScheme.errorContainer) {
-                        Column(modifier = Modifier.padding(DashboardSpacing.cardPadding)) {
-                            Text(
-                                text = stringResource(R.string.admin_backup_overdue_title),
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.onErrorContainer
-                            )
-                            Text(
-                                text = stringResource(R.string.admin_backup_overdue_text),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onErrorContainer
-                            )
-                        }
-                    }
-                }
-            }
-
-            item {
-                StandardCard {
-                    Column(
-                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                    ) {
-                        SectionTitle(
-                            text = stringResource(R.string.admin_delete_all_orders),
-                            tooltip = stringResource(R.string.admin_delete_all_orders_tooltip),
+                            },
                         )
-                        Field(
-                            value = ordersResetConfirmation,
-                            onValueChange = { ordersResetConfirmation = it },
-                            label = stringResource(R.string.admin_delete_all_orders_field_short)
-                        )
-                        TouchButton(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = stringResource(R.string.admin_delete_all_orders),
-                            enabled = ordersResetConfirmation == "CANCELLA TUTTO",
-                            tone = ButtonTone.WARNING,
-                            fullWidth = true,
-                            testTag = RepairAppTestTags.AdminDeleteAllOrdersButton,
+                        
+                        AppButton(
+                            text = if (user.role == UserRole.ADMIN) {
+                                stringResource(R.string.admin_change_password)
+                            } else {
+                                stringResource(R.string.admin_reset_password)
+                            },
+                            enabled = if (user.role == UserRole.ADMIN) {
+                                currentPassword.isNotBlank() && resetPasswords[user.id]?.isNotBlank() == true
+                            } else {
+                                resetPasswords[user.id]?.isNotBlank() == true
+                            },
+                            variant = AppButtonVariant.Secondary,
+                            size = AppButtonSize.Compact,
+                            modifier = Modifier.align(Alignment.End),
                             onClick = {
-                                requestConfirm(
-                                    confirmDeleteAllOrdersTitle,
-                                    confirmDeleteAllOrdersText,
-                                ) {
-                                    viewModel.resetOrders(ordersResetConfirmation) {
-                                        ordersResetConfirmation = ""
+                                val resetPassword = resetPasswords[user.id].orEmpty()
+                                if (user.role == UserRole.ADMIN) {
+                                    viewModel.changePassword(user.username, currentPassword.toCharArray(), resetPassword.toCharArray())
+                                    currentPassword = ""
+                                    resetPasswords -= user.id
+                                } else {
+                                    requestConfirm(confirmResetTitle, confirmResetTextTemplate.format(user.displayName)) {
+                                        viewModel.resetPassword(user.id, resetPassword.toCharArray())
+                                        resetPasswords -= user.id
                                     }
-                                }
-                            }
-                        )
-                    }
-                }
-            }
-            item {
-                StandardCard {
-                    Column(
-                        modifier = Modifier.padding(DashboardSpacing.cardPadding),
-                        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap),
-                    ) {
-                        SectionTitle(
-                            text = stringResource(R.string.admin_total_reset),
-                            tooltip = stringResource(R.string.admin_total_reset_tooltip),
-                        )
-                        Field(resetConfirmation, { resetConfirmation = it }, stringResource(R.string.admin_total_reset_field))
-                        TouchButton(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = stringResource(R.string.admin_total_reset),
-                            enabled = resetConfirmation == "RESET",
-                            tone = ButtonTone.DANGER,
-                            fullWidth = true,
-                            testTag = RepairAppTestTags.AdminTotalResetButton,
-                            onClick = {
-                                requestConfirm(confirmTotalResetTitle, confirmTotalResetText) {
-                                    viewModel.resetAllData(resetConfirmation, onResetComplete)
-                                    resetConfirmation = ""
                                 }
                             },
                         )
@@ -438,31 +338,102 @@ fun AdminPanel(
                 }
             }
         }
+
+        if (isBackupReminderDue) {
+            AppMessageBanner(
+                message = "${stringResource(R.string.admin_backup_overdue_title)}: ${stringResource(R.string.admin_backup_overdue_text)}",
+                type = BannerType.Error
+            )
+            Spacer(Modifier.height(RepairAppSpacing.cardGap))
+        }
+
+        StandardCard {
+            Column(
+                modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
+            ) {
+                SectionTitle(
+                    text = stringResource(R.string.admin_delete_all_orders),
+                    tooltip = stringResource(R.string.admin_delete_all_orders_tooltip),
+                )
+                AppTextField(
+                    value = ordersResetConfirmation,
+                    onValueChange = { ordersResetConfirmation = it },
+                    label = stringResource(R.string.admin_delete_all_orders_field_short)
+                )
+                AppButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.admin_delete_all_orders),
+                    enabled = ordersResetConfirmation == "CANCELLA TUTTO",
+                    variant = AppButtonVariant.Warning,
+                    testTag = RepairAppTestTags.AdminDeleteAllOrdersButton,
+                    onClick = {
+                        requestConfirm(
+                            confirmDeleteAllOrdersTitle,
+                            confirmDeleteAllOrdersText,
+                        ) {
+                            viewModel.resetOrders(ordersResetConfirmation) {
+                                ordersResetConfirmation = ""
+                            }
+                        }
+                    }
+                )
+            }
+        }
+        
+        Spacer(Modifier.height(RepairAppSpacing.cardGap))
+
+        StandardCard {
+            Column(
+                modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
+            ) {
+                SectionTitle(
+                    text = stringResource(R.string.admin_total_reset),
+                    tooltip = stringResource(R.string.admin_total_reset_tooltip),
+                )
+                AppTextField(resetConfirmation, { resetConfirmation = it }, stringResource(R.string.admin_total_reset_field))
+                AppButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.admin_total_reset),
+                    enabled = resetConfirmation == "RESET",
+                    variant = AppButtonVariant.Danger,
+                    testTag = RepairAppTestTags.AdminTotalResetButton,
+                    onClick = {
+                        requestConfirm(confirmTotalResetTitle, confirmTotalResetText) {
+                            viewModel.resetAllData(resetConfirmation, onResetComplete)
+                            resetConfirmation = ""
+                        }
+                    },
+                )
+            }
+        }
     }
 
     confirmTitle?.let { title ->
-        AlertDialog(
+        AppDialog(
             onDismissRequest = {
                 confirmTitle = null
                 confirmAction = null
             },
-            title = { Text(title) },
-            text = { Text(confirmText) },
+            title = title,
+            text = confirmText,
             confirmButton = {
-                TextButton(
+                AppButton(
+                    text = stringResource(R.string.confirm),
                     onClick = {
                         confirmAction?.invoke()
                         confirmTitle = null
                         confirmAction = null
                     },
-                ) {
-                    Text(stringResource(R.string.confirm))
-                }
+                    variant = AppButtonVariant.Primary,
+                    size = AppButtonSize.Compact
+                )
             },
             dismissButton = {
-                TouchButton(
+                AppButton(
                     text = stringResource(R.string.customer_cancel),
-                    tone = ButtonTone.NEUTRAL,
+                    variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact,
                     onClick = {
                         confirmTitle = null

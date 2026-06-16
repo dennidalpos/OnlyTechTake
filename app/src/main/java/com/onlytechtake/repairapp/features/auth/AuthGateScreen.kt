@@ -59,6 +59,12 @@ import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.design.LoadingBrandIndicator
 import com.onlytechtake.repairapp.core.design.PasswordVisibilityButton
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppTextField
+import com.onlytechtake.repairapp.core.design.components.AppIconButton
+import com.onlytechtake.repairapp.core.design.components.AppTopBar
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.BuildConfig
@@ -168,12 +174,14 @@ private fun MandatoryPasswordChangeScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(R.string.auth_password_change_top)) },
+            AppTopBar(
+                title = stringResource(R.string.auth_password_change_top),
                 navigationIcon = {
-                    IconButton(onClick = onCancel) {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.customer_cancel))
-                    }
+                    AppIconButton(
+                        onClick = onCancel,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.customer_cancel)
+                    )
                 }
             )
         },
@@ -208,12 +216,14 @@ private fun AdminRecoveryScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(R.string.auth_recovery_top)) },
+            AppTopBar(
+                title = stringResource(R.string.auth_recovery_top),
                 navigationIcon = {
-                    IconButton(onClick = onCancel) {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.content_description_back))
-                    }
+                    AppIconButton(
+                        onClick = onCancel,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.content_description_back)
+                    )
                 }
             )
         },
@@ -268,12 +278,14 @@ private fun FirstSetupScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(R.string.auth_setup_top)) },
+            AppTopBar(
+                title = stringResource(R.string.auth_setup_top),
                 navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.content_description_back))
-                    }
+                    AppIconButton(
+                        onClick = onBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.content_description_back)
+                    )
                 }
             )
         },
@@ -308,12 +320,14 @@ private fun LoginScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(R.string.app_name)) },
+            AppTopBar(
+                title = stringResource(R.string.app_name),
                 navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.auth_close_app))
-                    }
+                    AppIconButton(
+                        onClick = onBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.auth_close_app)
+                    )
                 }
             )
         },
@@ -381,76 +395,64 @@ private fun AuthForm(
             modifier = Modifier
                 .fillMaxHeight()
                 .fillMaxWidth()
-                .widthIn(max = 760.dp)
+                .widthIn(max = RepairAppSpacing.maxContentWidth)
                 .verticalScroll(rememberScrollState())
                 .imePadding()
-                .padding(horizontal = 16.dp, vertical = if (compactHeight) 8.dp else 16.dp),
-            verticalArrangement = Arrangement.spacedBy(if (compactHeight) 8.dp else 12.dp),
+                .padding(horizontal = RepairAppSpacing.screenPadding, vertical = if (compactHeight) RepairAppSpacing.compactGap else RepairAppSpacing.screenPadding),
+            verticalArrangement = Arrangement.spacedBy(if (compactHeight) RepairAppSpacing.compactGap else RepairAppSpacing.formGap),
         ) {
             Text(
                 text = title,
                 style = if (compactHeight) MaterialTheme.typography.titleLarge else MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurface
             )
-            subtitle?.let { Text(text = it, style = MaterialTheme.typography.bodyMedium) }
+            subtitle?.let { Text(text = it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
 
             if (showDisplayName) {
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
+                AppTextField(
                     value = formState.displayName,
                     onValueChange = onDisplayNameChange,
-                    label = { Text(text = stringResource(R.string.auth_admin_name)) },
+                    label = stringResource(R.string.auth_admin_name),
                     singleLine = true,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                    imeAction = ImeAction.Next,
                     keyboardActions = nextAction,
                 )
             }
 
             if (showUsername) {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag(RepairAppTestTags.AuthUsernameField),
+                AppTextField(
                     value = formState.username,
                     onValueChange = onUsernameChange,
-                    label = { Text(text = stringResource(R.string.auth_username)) },
+                    label = stringResource(R.string.auth_username),
                     singleLine = true,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next,
-                        keyboardType = KeyboardType.Email,
-                        capitalization = KeyboardCapitalization.None
-                    ),
+                    keyboardType = KeyboardType.Email,
+                    capitalization = KeyboardCapitalization.None,
+                    imeAction = ImeAction.Next,
                     keyboardActions = nextAction,
+                    testTag = RepairAppTestTags.AuthUsernameField
                 )
             }
 
             if (showRecoveryCode) {
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
+                AppTextField(
                     value = formState.recoveryCode,
                     onValueChange = onRecoveryCodeChange,
-                    label = { Text(text = stringResource(R.string.auth_recovery_code)) },
+                    label = stringResource(R.string.auth_recovery_code),
                     singleLine = true,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next,
-                        capitalization = KeyboardCapitalization.Characters
-                    ),
+                    capitalization = KeyboardCapitalization.Characters,
+                    imeAction = ImeAction.Next,
                     keyboardActions = nextAction,
                 )
             }
 
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag(RepairAppTestTags.AuthPasswordField),
+            AppTextField(
                 value = formState.password,
                 onValueChange = onPasswordChange,
-                label = { Text(text = stringResource(R.string.auth_password)) },
+                label = stringResource(R.string.auth_password),
                 singleLine = true,
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = if (showConfirmPassword) ImeAction.Next else ImeAction.Done,
-                ),
+                keyboardType = KeyboardType.Password,
+                imeAction = if (showConfirmPassword) ImeAction.Next else ImeAction.Done,
                 keyboardActions = KeyboardActions(
                     onNext = { focusManager.moveFocus(FocusDirection.Down) },
                     onDone = {
@@ -466,20 +468,18 @@ private fun AuthForm(
                         modifier = Modifier.focusProperties { canFocus = false }
                     )
                 },
+                testTag = RepairAppTestTags.AuthPasswordField
             )
 
             if (showConfirmPassword) {
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
+                AppTextField(
                     value = formState.confirmPassword,
                     onValueChange = onConfirmPasswordChange,
-                    label = { Text(text = stringResource(R.string.auth_confirm_password)) },
+                    label = stringResource(R.string.auth_confirm_password),
                     singleLine = true,
                     visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Password,
-                        imeAction = ImeAction.Done,
-                    ),
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done,
                     keyboardActions = KeyboardActions(onDone = { submitAction() }),
                     trailingIcon = {
                         PasswordVisibilityButton(
@@ -495,51 +495,40 @@ private fun AuthForm(
                 Text(
                     modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
                     text = errorMessage,
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.error,
                 )
             }
 
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag(RepairAppTestTags.AuthSubmitButton),
-                enabled = !formState.loading,
+            AppButton(
+                text = submitLabel,
                 onClick = submitAction,
-            ) {
-                if (formState.loading) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
-                        Text(
-                            text = stringResource(R.string.auth_working),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
-                } else {
-                    Text(text = submitLabel)
-                }
-            }
+                enabled = !formState.loading,
+                loading = formState.loading,
+                modifier = Modifier.fillMaxWidth(),
+                testTag = RepairAppTestTags.AuthSubmitButton
+            )
 
             if (onRecovery != null) {
-                androidx.compose.material3.TextButton(
+                AppButton(
+                    text = stringResource(R.string.auth_recovery_action),
                     onClick = onRecovery,
                     enabled = !formState.loading,
-                ) {
-                    Text(text = stringResource(R.string.auth_recovery_action))
-                }
+                    variant = AppButtonVariant.Secondary,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
 
             if (onDemoLogin != null && (DemoMode.canEnable())) {
-                androidx.compose.material3.TextButton(
+                AppButton(
+                    text = stringResource(R.string.auth_demo_action),
                     onClick = onDemoLogin,
                     enabled = !formState.loading,
-                ) {
-                    Text(text = stringResource(R.string.auth_demo_action))
-                }
+                    variant = AppButtonVariant.Secondary,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
     }
 }
+

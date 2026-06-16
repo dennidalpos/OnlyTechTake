@@ -40,14 +40,12 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.data.local.entities.MessageChannel
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
-import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
-import com.onlytechtake.repairapp.features.dashboard.common.Field
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
-import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 
 @Composable
@@ -67,9 +65,9 @@ fun TemplatesSettings(
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .widthIn(max = DashboardSpacing.maxContentWidth),
-        contentPadding = PaddingValues(DashboardSpacing.screenPadding),
-        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
+            .widthIn(max = RepairAppSpacing.maxContentWidth),
+        contentPadding = PaddingValues(RepairAppSpacing.screenPadding),
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.listGap),
     ) {
         item {
             SectionTitle(
@@ -109,11 +107,11 @@ fun TemplatesSettings(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(DashboardSpacing.cardPadding),
+                        .padding(RepairAppSpacing.cardPadding),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
+                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
                         Text(template.title, style = MaterialTheme.typography.titleMedium)
                         Text(
                             text = (template.step ?: "Generale") + " • " + if (template.active) stringResource(R.string.config_template_active) else stringResource(R.string.config_template_archived),
@@ -132,7 +130,7 @@ fun TemplatesSettings(
                         imageVector = Icons.Default.Edit,
                         contentDescription = stringResource(R.string.content_description_edit),
                         tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.padding(start = 8.dp)
+                        modifier = Modifier.padding(start = RepairAppSpacing.compactGap)
                     )
                 }
             }
@@ -145,10 +143,11 @@ fun TemplatesSettings(
         }
 
         item {
-            TouchButton(
-                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+            AppButton(
+                modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenPadding),
                 text = "Chiudi Setup Template",
-                tone = ButtonTone.NEUTRAL,
+                variant = AppButtonVariant.Secondary,
+                size = AppButtonSize.Compact,
                 onClick = onBack
             )
         }
@@ -194,15 +193,15 @@ fun TemplateEditDialog(
             modifier = Modifier
                 .fillMaxWidth(0.95f)
                 .fillMaxHeight(0.95f)
-                .widthIn(max = DashboardSpacing.maxContentWidth),
+                .widthIn(max = RepairAppSpacing.maxContentWidth),
             shape = MaterialTheme.shapes.extraLarge,
             color = MaterialTheme.colorScheme.surface,
-            tonalElevation = DashboardSpacing.dialogElevation
+            tonalElevation = RepairAppSpacing.dialogElevation
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(DashboardSpacing.screenPadding),
+                    .padding(RepairAppSpacing.screenPadding),
             ) {
                 Text(
                     text = "Modifica Template",
@@ -211,7 +210,7 @@ fun TemplateEditDialog(
                 )
                 
                 if (isNew) {
-                    Field(
+                    AppTextField(
                         value = code,
                         onValueChange = { code = it },
                         label = stringResource(R.string.config_template_code_label),
@@ -225,28 +224,28 @@ fun TemplateEditDialog(
                     )
                 }
 
-                HorizontalDivider(modifier = Modifier.padding(vertical = DashboardSpacing.compactGap))
+                HorizontalDivider(modifier = Modifier.padding(vertical = RepairAppSpacing.compactGap))
 
                 Column(
                     modifier = Modifier
                         .weight(1f)
                         .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.formGap)
                 ) {
-                    Field(
+                    AppTextField(
                         value = title,
                         onValueChange = { title = it },
                         label = stringResource(R.string.config_template_title_label),
                         testTag = RepairAppTestTags.ConfigTemplateTitleField
                     )
 
-                    Field(
+                    AppTextField(
                         value = step,
                         onValueChange = { step = it },
                         label = "Step associato",
                     )
 
-                    Field(
+                    AppTextField(
                         value = body,
                         onValueChange = { body = it },
                         label = stringResource(R.string.config_template_body_label),
@@ -271,24 +270,27 @@ fun TemplateEditDialog(
                         )
                     }
                     
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(RepairAppSpacing.compactGap))
                 }
 
-                HorizontalDivider(modifier = Modifier.padding(vertical = DashboardSpacing.compactGap))
+                HorizontalDivider(modifier = Modifier.padding(vertical = RepairAppSpacing.compactGap))
 
                 ActionRow {
-                    TouchButton(
+                    AppButton(
                         text = "Annulla",
-                        tone = ButtonTone.NEUTRAL,
-                        onClick = onDismiss
+                        onClick = onDismiss,
+                        variant = AppButtonVariant.Secondary,
+                        size = AppButtonSize.Compact
                     )
-                    TouchButton(
+                    AppButton(
                         text = stringResource(R.string.config_template_save),
-                        testTag = RepairAppTestTags.ConfigTemplateSaveButton,
                         enabled = title.isNotBlank() && body.isNotBlank() && (!isNew || code.isNotBlank()),
                         onClick = {
                             onSave(if (isNew) code else template.code, title, body, active, step.ifBlank { null })
                         },
+                        variant = AppButtonVariant.Primary,
+                        size = AppButtonSize.Compact,
+                        testTag = RepairAppTestTags.ConfigTemplateSaveButton
                     )
                 }
             }
@@ -313,3 +315,9 @@ private val systemTemplateCodes = setOf(
 
 private fun isRiskyTemplateChange(loadedCode: String?, currentCode: String, active: Boolean): Boolean =
     (loadedCode != null && loadedCode != currentCode) || (currentCode in systemTemplateCodes && !active)
+
+@Composable
+private fun TouchButton(modifier: Modifier, text: String, testTag: String, onClick: () -> Unit) {
+    AppButton(modifier = modifier, text = text, testTag = testTag, onClick = onClick)
+}
+

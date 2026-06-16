@@ -17,20 +17,22 @@ import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
-import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
+import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.storage.StoragePolicy
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.core.permissions.PermissionService
+import net.lingala.zip4j.io.outputstream.ZipOutputStream
+import net.lingala.zip4j.model.ZipParameters
+import net.lingala.zip4j.model.enums.AesKeyStrength
+import net.lingala.zip4j.model.enums.EncryptionMethod
 import java.io.File
 import java.io.IOException
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.zip.ZipEntry
-import java.util.zip.ZipOutputStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -42,6 +44,7 @@ class BackupRepository(
     private val settingDao: AppSettingDao,
     private val auditLogDao: AuditLogDao,
     private val backupReminderPreferences: com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences? = null,
+    private val securityPreferences: SecurityPreferences? = null,
     private val orderExportDao: OrderExportDao? = null,
     private val database: RepairAppDatabase? = null,
     private val authPreferences: AuthPreferences? = null,
@@ -80,16 +83,21 @@ class BackupRepository(
             if (BuildConfig.IS_DEMO_VERSION) {
                 throw IllegalStateException("Funzione disponibile nella versione Full")
             }
+
+            val securitySettings = securityPreferences?.settings?.first()
+            val password = securitySettings?.backupEncryptionPassword?.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
+
             context.contentResolver.openOutputStream(uri)?.use { output ->
-                ZipOutputStream(output).use { zip ->
-                    zip.putTextEntry("metadata/backup.json", buildBackupMetadataJson())
-                    zip.putTextEntry("config/configuration.json", buildConfigurationJson())
-                    addDatabaseFiles(zip)
+                ZipOutputStream(output, password?.toCharArray()).use { zip ->
+                    zip.putTextEntry("metadata/backup.json", buildBackupMetadataJson(), password)
+                    zip.putTextEntry("config/configuration.json", buildConfigurationJson(), password)
+                    addDatabaseFiles(zip, password)
                     BackupArchive.addDirectory(
                         zip = zip,
                         directory = mediaStorageProvider?.getBaseMediaDir()
                             ?: File(context.filesDir, BackupArchive.CANONICAL_MEDIA_DIRECTORY),
                         entryDirectory = "files/${BackupArchive.CANONICAL_MEDIA_DIRECTORY}",
+                        password = password,
                     )
                 }
             } ?: throw IOException("Destinazione non disponibile")
@@ -108,6 +116,10 @@ class BackupRepository(
             if (BuildConfig.IS_DEMO_VERSION) {
                 throw IllegalStateException("Funzione disponibile nella versione Full")
             }
+            
+            val securitySettings = securityPreferences?.settings?.first()
+            val password = securitySettings?.backupEncryptionPassword?.takeIf { it.isNotBlank() }
+
             withContext(Dispatchers.IO) {
                 val stagingDir = File(context.cacheDir, RESTORE_WORK_DIR).also {
                     it.deleteRecursively()
@@ -115,7 +127,7 @@ class BackupRepository(
                 }
                 try {
                     val extracted = context.contentResolver.openInputStream(uri)?.use { input ->
-                        BackupArchive.extract(input, stagingDir)
+                        BackupArchive.extract(input, stagingDir, password?.toCharArray())
                     } ?: throw IOException("Backup non disponibile")
                     require(extracted.metadataText.contains("\"databaseVersion\": ${RepairAppDatabase.DATABASE_VERSION}")) {
                         "Versione backup non compatibile"
@@ -184,11 +196,15 @@ class BackupRepository(
             if (BuildConfig.IS_DEMO_VERSION) {
                 throw IllegalStateException("Funzione disponibile nella versione Full")
             }
+            
+            val securitySettings = securityPreferences?.settings?.first()
+            val password = securitySettings?.backupEncryptionPassword?.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
+
             val exportDao = requireNotNull(orderExportDao) { "Export commesse non configurato" }
             withContext(Dispatchers.IO) {
                 val rows = exportDao.exportAllOrders()
                 context.contentResolver.openOutputStream(uri)?.use { output ->
-                    OrderExportXlsxWriter().write(rows, output)
+                    OrderExportXlsxWriter().write(rows, output, password)
                 } ?: throw IOException("Destinazione non disponibile")
             }
             eventWriter.dataExported(actor.id, clockMillis())
@@ -214,7 +230,7 @@ class BackupRepository(
                 detail.order.closureReason?.let { reason ->
                     writer.line("Motivo chiusura: ${reason.label(context)}")
                 }
-                writer.line("Cliente: ${detail.customer.displayName(context)}")
+                writer.line("Cliente: ${detail.customer?.displayName(context) ?: ""}")
                 writer.line("Categoria: ${detail.category?.name.orEmpty().ifBlank { "Nessuna" }}")
                 writer.line("Operatore: ${detail.assignedUser?.displayName.orEmpty().ifBlank { "Non assegnato" }}")
                 writer.line("Data creazione: ${formatTime(detail.order.createdAt)}")
@@ -357,7 +373,7 @@ class BackupRepository(
             appendLine("}")
         }
 
-    private fun addDatabaseFiles(zip: ZipOutputStream) {
+    private fun addDatabaseFiles(zip: ZipOutputStream, password: String?) {
         val dbFile = databaseFile()
         require(dbFile.exists()) { "Database non ancora creato" }
         val databaseFiles = dbFile.parentFile
@@ -365,7 +381,7 @@ class BackupRepository(
             ?.sortedBy { it.name }
             .orEmpty()
         databaseFiles.forEach { file ->
-            zip.putFileEntry(file, "database/${file.name}")
+            zip.putFileEntry(file, "database/${file.name}", password)
         }
     }
 
@@ -381,8 +397,15 @@ class BackupRepository(
 
 }
 
-private fun ZipOutputStream.putTextEntry(name: String, text: String) {
-    putNextEntry(ZipEntry(name))
+private fun ZipOutputStream.putTextEntry(name: String, text: String, password: String?) {
+    val params = ZipParameters()
+    params.fileNameInZip = name
+    if (password != null) {
+        params.isEncryptFiles = true
+        params.encryptionMethod = EncryptionMethod.AES
+        params.aesKeyStrength = AesKeyStrength.KEY_STRENGTH_256
+    }
+    putNextEntry(params)
     write(text.toByteArray(Charsets.UTF_8))
     closeEntry()
 }

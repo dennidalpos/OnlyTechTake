@@ -18,12 +18,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -48,6 +45,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.createBitmap
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.core.utils.formatFileSize
@@ -94,13 +93,13 @@ fun SignatureCaptureForm(
         onCaptureChanged(capture)
     }
 
-    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap)) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
         SectionTitle(title)
         existingSignatures.forEach { signature ->
-            Card(modifier = Modifier.fillMaxWidth()) {
+            StandardCard(modifier = Modifier.fillMaxWidth()) {
                 Column(
-                    modifier = Modifier.padding(DashboardSpacing.compactGap),
-                    verticalArrangement = Arrangement.spacedBy(DashboardSpacing.compactGap),
+                    modifier = Modifier.padding(RepairAppSpacing.compactGap),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                 ) {
                     LocalImagePreview(
                         path = signature.localPath,
@@ -147,7 +146,7 @@ fun SignatureCaptureForm(
                     role = Role.Checkbox,
                     onValueChange = { privacyAccepted = it },
                 ),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Checkbox(checked = privacyAccepted, onCheckedChange = null)
@@ -161,7 +160,7 @@ fun SignatureCaptureForm(
                     role = Role.Checkbox,
                     onValueChange = { termsAccepted = it },
                 ),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Checkbox(checked = termsAccepted, onCheckedChange = null)
@@ -190,19 +189,22 @@ fun SignatureCaptureForm(
         )
 
         ActionRow {
-            TouchButton(
+            AppButton(
                 text = "Pulisci firma",
-                tone = ButtonTone.NEUTRAL,
                 onClick = {
                     strokes = emptyList()
                     currentStroke = null
                 },
+                variant = AppButtonVariant.Secondary,
+                size = AppButtonSize.Compact
             )
             if (submitText != null) {
-                TouchButton(
+                AppButton(
                     text = submitText,
                     enabled = capture != null,
                     onClick = { capture?.let(onSubmit) },
+                    variant = AppButtonVariant.Primary,
+                    size = AppButtonSize.Compact
                 )
             }
         }
@@ -217,28 +219,23 @@ fun SignatureCaptureForm(
     }
 
     textDialog?.let { dialog ->
-        AlertDialog(
+        AppDialog(
             onDismissRequest = { textDialog = null },
-            title = {
-                Text(
-                    when (dialog) {
-                        SignatureTextDialog.PRIVACY -> "Informativa privacy"
-                        SignatureTextDialog.TERMS -> "Condizioni di presa in carico"
-                    },
-                )
+            title = when (dialog) {
+                SignatureTextDialog.PRIVACY -> "Informativa privacy"
+                SignatureTextDialog.TERMS -> "Condizioni di presa in carico"
             },
-            text = {
-                Text(
-                    when (dialog) {
-                        SignatureTextDialog.PRIVACY -> privacyText
-                        SignatureTextDialog.TERMS -> termsText
-                    },
-                )
+            text = when (dialog) {
+                SignatureTextDialog.PRIVACY -> privacyText
+                SignatureTextDialog.TERMS -> termsText
             },
             confirmButton = {
-                TextButton(onClick = { textDialog = null }) {
-                    Text("Chiudi")
-                }
+                AppButton(
+                    text = "Chiudi",
+                    onClick = { textDialog = null },
+                    variant = AppButtonVariant.Primary,
+                    size = AppButtonSize.Compact
+                )
             },
         )
     }
@@ -350,3 +347,4 @@ private const val BITMAP_HEIGHT = 400
 private const val BITMAP_STROKE_WIDTH = 8f
 private const val SIGNATURE_DOT_DELTA = 0.001f
 private const val DEFAULT_SIGNER_NAME = "Cliente"
+

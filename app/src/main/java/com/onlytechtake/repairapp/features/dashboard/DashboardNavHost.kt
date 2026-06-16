@@ -177,6 +177,7 @@ fun DashboardNavHost(
                     templateRepository = container.templateRepository,
                     backupRepository = container.backupRepository,
                     backupReminderPreferences = container.backupReminderPreferences,
+                    securityPreferences = container.securityPreferences,
                     storageStatsService = container.storageStatsService,
                     orderFileCleanupService = container.orderFileCleanupService,
                 )

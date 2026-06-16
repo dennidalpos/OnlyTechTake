@@ -2,45 +2,30 @@ package com.onlytechtake.repairapp.features.dashboard.settings
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.data.local.entities.ExportDestination
 import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import com.onlytechtake.repairapp.domain.backup.BackupReminderStatus
-import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
-import com.onlytechtake.repairapp.features.dashboard.common.DashboardSpacing
-import com.onlytechtake.repairapp.features.dashboard.common.Field
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.StandardCard
-import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
-import com.onlytechtake.repairapp.features.workspace.ButtonTone
 
 @Composable
 fun BackupSettings(
@@ -53,7 +38,9 @@ fun BackupSettings(
     val exportDestination by viewModel.exportDestination.collectAsState()
     val isCloudAvailable by viewModel.isCloudAvailable.collectAsState()
     val backupReminderSettings by viewModel.backupReminderSettings.collectAsState()
+    val securitySettings by viewModel.securitySettings.collectAsState()
     var backupIntervalDays by rememberSaveable { mutableStateOf(backupReminderSettings.intervalDays.toString()) }
+    var backupPassword by rememberSaveable { mutableStateOf(securitySettings.backupEncryptionPassword) }
 
     val exportZipLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
         uri?.let(viewModel::exportCompleteBackup)
@@ -65,151 +52,191 @@ fun BackupSettings(
         uri?.let(viewModel::exportOrdersXlsx)
     }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .widthIn(max = DashboardSpacing.maxContentWidth),
-        contentPadding = PaddingValues(DashboardSpacing.screenPadding),
-        verticalArrangement = Arrangement.spacedBy(DashboardSpacing.listGap),
-    ) {
-        item {
-            StandardCard(highlight = true) {
-                Column(modifier = Modifier.padding(DashboardSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(DashboardSpacing.formGap)) {
-                    SectionTitle(
-                        text = stringResource(R.string.config_backup_title),
-                        tooltip = stringResource(R.string.config_backup_tooltip),
-                    )
-                    if (!isAdmin) {
-                        Text(stringResource(R.string.admin_only_section))
-                    } else {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(stringResource(R.string.config_backup_reminder_enabled))
-                            Switch(
-                                checked = backupReminderSettings.enabled,
-                                onCheckedChange = viewModel::setBackupReminderEnabled,
-                                modifier = Modifier.testTag(RepairAppTestTags.ConfigBackupReminderSwitch),
-                            )
-                        }
-                        Field(
-                            value = backupIntervalDays,
-                            onValueChange = { raw ->
-                                val digits = raw.filter { it.isDigit() }.take(3)
-                                backupIntervalDays = digits
-                                digits.toIntOrNull()?.let(viewModel::setBackupReminderIntervalDays)
-                            },
-                            label = stringResource(R.string.config_backup_interval_days),
-                            singleLine = true,
-                            keyboardType = KeyboardType.Number,
-                            testTag = RepairAppTestTags.ConfigBackupIntervalField,
-                        )
-                        OperatorText(backupReminderInfo(backupReminderSettings))
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier.padding(vertical = 4.dp),
-                        ) {
-                            Text(
-                                text = stringResource(R.string.config_backup_warning_indicator),
-                                style = MaterialTheme.typography.titleMedium,
-                            )
-                            Text(
-                                text = stringResource(R.string.config_backup_unencrypted_warning),
-                                color = MaterialTheme.colorScheme.error,
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
-                        }
-                        Text(stringResource(R.string.config_backup_destination_label), style = MaterialTheme.typography.titleSmall)
-                        ActionRow {
-                            TouchButton(
-                                text = stringResource(R.string.config_backup_destination_local),
-                                tone = if (exportDestination == ExportDestination.LOCAL) ButtonTone.PRIMARY else ButtonTone.NEUTRAL,
-                                size = AppButtonSize.Compact,
-                                onClick = { viewModel.setExportDestination(ExportDestination.LOCAL) },
-                            )
-                            TouchButton(
-                                text = stringResource(R.string.config_backup_destination_cloud),
-                                tone = if (exportDestination == ExportDestination.CLOUD) ButtonTone.PRIMARY else ButtonTone.NEUTRAL,
-                                size = AppButtonSize.Compact,
-                                onClick = { viewModel.setExportDestination(ExportDestination.CLOUD) },
-                            )
-                        }
-                        if (!isCloudAvailable) {
-                            OperatorText(stringResource(R.string.config_backup_provider_unavailable))
-                        }
+    // Pre-fetch strings for callbacks
+    val destMsgLocal = stringResource(R.string.order_export_local)
+    val destMsgCloud = stringResource(R.string.order_export_cloud)
+    val confirmExportZipTitle = stringResource(R.string.config_backup_confirm_export_zip_title)
+    val confirmExportZipText = stringResource(R.string.config_backup_confirm_export_zip_text)
+    val confirmRestoreZipTitle = stringResource(R.string.config_backup_confirm_restore_zip_title)
+    val confirmRestoreZipText = stringResource(R.string.config_backup_confirm_restore_zip_text)
+    val confirmExportXlsxTitle = stringResource(R.string.config_backup_confirm_export_xlsx_title)
+    val confirmExportXlsxText = stringResource(R.string.config_backup_confirm_export_xlsx_text)
 
-                        ActionRow {
-                            val destMsgLocal = stringResource(R.string.order_export_local)
-                            val destMsgCloud = stringResource(R.string.order_export_cloud)
-                            val confirmExportZipTitle = stringResource(R.string.config_backup_confirm_export_zip_title)
-                            val confirmExportZipText = stringResource(R.string.config_backup_confirm_export_zip_text)
-                            TouchButton(
-                                text = stringResource(R.string.backup_run_full_zip),
-                                size = AppButtonSize.Compact,
-                                testTag = RepairAppTestTags.ConfigBackupRunZipButton,
-                                onClick = {
-                                    val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
-                                    onRequestConfirm(confirmExportZipTitle, confirmExportZipText.format(destMsg)) {
-                                        exportZipLauncher.launch("onlytechtake-backup.zip")
-                                    }
-                                },
-                            )
-                            val confirmRestoreZipTitle = stringResource(R.string.config_backup_confirm_restore_zip_title)
-                            val confirmRestoreZipText = stringResource(R.string.config_backup_confirm_restore_zip_text)
-                            TouchButton(
-                                text = stringResource(R.string.config_backup_restore_zip),
-                                tone = ButtonTone.WARNING,
-                                size = AppButtonSize.Compact,
-                                testTag = RepairAppTestTags.BackupRestoreZipButton,
-                                onClick = {
-                                    onRequestConfirm(
-                                        confirmRestoreZipTitle,
-                                        confirmRestoreZipText,
-                                    ) {
-                                        restoreZipLauncher.launch(arrayOf("application/zip", "application/octet-stream", "*/*"))
-                                    }
-                                },
-                            )
-                        }
+    AppScreenContainer {
+        SectionTitle(
+            text = stringResource(R.string.config_backup_title),
+            tooltip = stringResource(R.string.config_backup_tooltip),
+        )
 
-                        SectionTitle(
-                            text = stringResource(R.string.config_backup_orders_export_title),
-                            tooltip = stringResource(R.string.config_backup_orders_tooltip),
+        if (!isAdmin) {
+            AppMessageBanner(
+                message = stringResource(R.string.admin_only_section),
+                type = BannerType.Warning
+            )
+        } else {
+            StandardCard {
+                Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(stringResource(R.string.config_backup_reminder_enabled), style = MaterialTheme.typography.bodyMedium)
+                        Switch(
+                            checked = backupReminderSettings.enabled,
+                            onCheckedChange = viewModel::setBackupReminderEnabled,
+                            modifier = Modifier.testTag(RepairAppTestTags.ConfigBackupReminderSwitch),
                         )
-                        ActionRow {
-                            val destMsgLocal = stringResource(R.string.order_export_local)
-                            val destMsgCloud = stringResource(R.string.order_export_cloud)
-                            val confirmExportXlsxTitle = stringResource(R.string.config_backup_confirm_export_xlsx_title)
-                            val confirmExportXlsxText = stringResource(R.string.config_backup_confirm_export_xlsx_text)
-                            TouchButton(
-                                text = stringResource(R.string.config_backup_export_xlsx),
-                                size = AppButtonSize.Compact,
-                                onClick = {
-                                    val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
-                                    onRequestConfirm(confirmExportXlsxTitle, confirmExportXlsxText.format(destMsg)) {
-                                        exportOrdersXlsxLauncher.launch("onlytechtake-commesse.xlsx")
-                                    }
-                                },
-                            )
-                        }
                     }
+                    AppTextField(
+                        value = backupIntervalDays,
+                        onValueChange = { raw ->
+                            val digits = raw.filter { it.isDigit() }.take(3)
+                            backupIntervalDays = digits
+                            digits.toIntOrNull()?.let(viewModel::setBackupReminderIntervalDays)
+                        },
+                        label = stringResource(R.string.config_backup_interval_days),
+                        singleLine = true,
+                        keyboardType = KeyboardType.Number,
+                        testTag = RepairAppTestTags.ConfigBackupIntervalField,
+                    )
+                    OperatorText(backupReminderInfo(backupReminderSettings))
                 }
             }
-        }
 
-        item {
-            TouchButton(
-                modifier = Modifier.padding(top = 16.dp),
-                text = stringResource(R.string.config_backup_close),
-                tone = ButtonTone.NEUTRAL,
-                size = AppButtonSize.Compact,
-                testTag = RepairAppTestTags.BackupCloseButton,
-                onClick = onBack,
+            Spacer(Modifier.height(RepairAppSpacing.cardGap))
+
+            StandardCard {
+                Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)) {
+                    Text(
+                        text = "Sicurezza ed Encryption",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text("Cifra backup (ZIP/XLSX)", style = MaterialTheme.typography.bodyMedium)
+                        Switch(
+                            checked = securitySettings.isBackupEncryptionEnabled,
+                            onCheckedChange = viewModel::setBackupEncryptionEnabled,
+                        )
+                    }
+                    if (securitySettings.isBackupEncryptionEnabled) {
+                        AppTextField(
+                            value = backupPassword,
+                            onValueChange = { 
+                                backupPassword = it
+                                viewModel.setBackupEncryptionPassword(it)
+                            },
+                            label = "Password cifratura",
+                            required = true,
+                            showError = backupPassword.isBlank(),
+                            visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
+                            keyboardType = KeyboardType.Password,
+                        )
+                    }
+
+                    AppMessageBanner(
+                        message = if (securitySettings.isBackupEncryptionEnabled) "I backup verranno cifrati." else stringResource(R.string.config_backup_unencrypted_warning),
+                        type = if (securitySettings.isBackupEncryptionEnabled) BannerType.Success else BannerType.Warning
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(RepairAppSpacing.cardGap))
+
+            StandardCard {
+                Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)) {
+                    Text(stringResource(R.string.config_backup_destination_label), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                    
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+                        AppButton(
+                            modifier = Modifier.weight(1f),
+                            text = stringResource(R.string.config_backup_destination_local),
+                            variant = if (exportDestination == ExportDestination.LOCAL) AppButtonVariant.Primary else AppButtonVariant.Ghost,
+                            size = AppButtonSize.Compact,
+                            onClick = { viewModel.setExportDestination(ExportDestination.LOCAL) },
+                            selected = exportDestination == ExportDestination.LOCAL
+                        )
+                        AppButton(
+                            modifier = Modifier.weight(1f),
+                            text = stringResource(R.string.config_backup_destination_cloud),
+                            variant = if (exportDestination == ExportDestination.CLOUD) AppButtonVariant.Primary else AppButtonVariant.Ghost,
+                            size = AppButtonSize.Compact,
+                            onClick = { viewModel.setExportDestination(ExportDestination.CLOUD) },
+                            selected = exportDestination == ExportDestination.CLOUD
+                        )
+                    }
+                    
+                    if (!isCloudAvailable && exportDestination == ExportDestination.CLOUD) {
+                        AppMessageBanner(message = stringResource(R.string.config_backup_provider_unavailable), type = BannerType.Info)
+                    }
+
+                    Spacer(Modifier.height(8.dp))
+                    
+                    AppButton(
+                        text = stringResource(R.string.backup_run_full_zip),
+                        size = AppButtonSize.Default,
+                        variant = AppButtonVariant.Primary,
+                        modifier = Modifier.fillMaxWidth(),
+                        testTag = RepairAppTestTags.ConfigBackupRunZipButton,
+                        onClick = {
+                            val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
+                            onRequestConfirm(confirmExportZipTitle, confirmExportZipText.format(destMsg)) {
+                                exportZipLauncher.launch("onlytechtake-backup.zip")
+                            }
+                        },
+                    )
+                    
+                    AppButton(
+                        text = stringResource(R.string.config_backup_restore_zip),
+                        variant = AppButtonVariant.Warning,
+                        size = AppButtonSize.Compact,
+                        modifier = Modifier.fillMaxWidth(),
+                        testTag = RepairAppTestTags.BackupRestoreZipButton,
+                        onClick = {
+                            onRequestConfirm(confirmRestoreZipTitle, confirmRestoreZipText) {
+                                restoreZipLauncher.launch(arrayOf("application/zip", "application/octet-stream", "*/*"))
+                            }
+                        },
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(RepairAppSpacing.sectionGap))
+
+            SectionTitle(
+                text = stringResource(R.string.config_backup_orders_export_title),
+                tooltip = stringResource(R.string.config_backup_orders_tooltip),
+            )
+            
+            AppButton(
+                text = stringResource(R.string.config_backup_export_xlsx),
+                size = AppButtonSize.Default,
+                variant = AppButtonVariant.Secondary,
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
+                    onRequestConfirm(confirmExportXlsxTitle, confirmExportXlsxText.format(destMsg)) {
+                        exportOrdersXlsxLauncher.launch("onlytechtake-commesse.xlsx")
+                    }
+                },
             )
         }
+
+        Spacer(Modifier.height(RepairAppSpacing.sectionGap))
+
+        AppButton(
+            text = stringResource(R.string.config_backup_close),
+            variant = AppButtonVariant.Ghost,
+            size = AppButtonSize.Default,
+            modifier = Modifier.fillMaxWidth(),
+            testTag = RepairAppTestTags.BackupCloseButton,
+            onClick = onBack,
+        )
     }
 }
 

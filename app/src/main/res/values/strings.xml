@@ -88,6 +88,7 @@
     <string name="dashboard_unsaved_leave">Esci e perdi i dati</string>
     <string name="dashboard_unsaved_continue">Continua la compilazione</string>
 
+    <string name="home_queues_title">Code operative</string>
     <string name="home_title">Banco riparazioni</string>
     <string name="home_metric_users">Utenti</string>
     <string name="home_metric_customers">Clienti</string>

@@ -1,9 +1,24 @@
 {
   "todos": [
-    "[P1] Security: Implementare cifratura opzionale per export ZIP/XLSX e database locale per proteggere dati sensibili clienti.",
+    "[P1] Security: Completata cifratura opzionale per export ZIP/XLSX tramite Zip4j. Da completare: migrazione cifrata database locale.",
+    "[P1] Demo Assets: Rigenerare screenshot e video tramite scripts/windows/create_demo_assets.ps1 poiché la UI è cambiata significativamente.",
     "[P2] CI: Configurare esecuzione test strumentali (AndroidTests) in una pipeline dedicata o locale prima della release.",
-    "[P2] Refactor: Valutare lo split di OrderDetailWorkspace.kt (611 righe) per migliorare la manutenibilità.",
+    "[P2] Design System: Verificare contrasti cromatici e touch target su device fisico dopo il refactor UI (WhatsApp button, category levels).",
+    "[P3] Design System: Continuare sostituzione progressiva TouchButton/Field con AppButton/AppTextField (già effettuata in detail/ e neworder/).",
     "[P3] Cleanliness: Revisionare e aggiungere o rimuovere i file non tracciati sotto docs/ e app/src/ per mantenere pulito il repository.",
     "[P3] Play Store: completare la scheda Store usando screenshot e video aggiornati prodotti in reports/demo-assets."
-  ]
+  ],
+  "last_build_status": {
+    "date": "2024-05-23",
+    "status": "SUCCESS",
+    "actions": [
+      "Updated SQLCipher to 4.16.0 and SQLite to 2.6.2 for 16 KB page size compatibility on Android 15+",
+      "Integrated net.zetetic.database.sqlcipher.SupportOpenHelperFactory in RepairAppDatabase",
+      "Updated dependency lockfiles with --write-locks",
+      "Fixed ZipOutputStream type mismatch in BackupRepositoryTest.kt after migration to Zip4j",
+      "Fixed AutoboxingStateCreation warning in OnlyTechTakeMark.kt by using mutableFloatStateOf",
+      "Resolved ObsoleteSdkInt warning by merging mipmap-anydpi-v26 into mipmap-anydpi",
+      "Verified all variants (demo, showcase, full) in both Debug and Release build types"
+    ]
+  }
 }
