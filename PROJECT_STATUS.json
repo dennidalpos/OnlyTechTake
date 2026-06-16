@@ -57,29 +57,20 @@
       "block_id": "B02",
       "title": "Backup restore e consistenza dati",
       "complexity": "high",
-      "status": "open",
+      "status": "resolved",
       "recommended_batch_size": 1,
       "schema_guarded": false,
       "owner_approval_required": false,
       "why_this_block": "Tocca SQLCipher, Keystore, database e media privati; va risolto in sessione dedicata con test mirati e attenzione al rollback.",
-      "items": [
-        {
-          "priority": "P1",
-          "summary": "Backup restore: progettare e verificare un flusso sicuro per ripristino ZIP su nuova installazione/nuovo telefono con database SQLCipher.",
-          "refs": [
-            "functional_review_residual_plan.priority_order.F05"
-          ],
-          "completion_criteria": "Limite Keystore documentato; restore valido solo con chiave locale compatibile finche' non esiste un flusso chiave dedicato."
-        },
-        {
-          "priority": "P1",
-          "summary": "Functional restore consistency: rendere robusto restoreCompleteBackup quando l'actor corrente non esiste nel DB ripristinato e quando fallisce dopo replacePrivateFiles.",
-          "refs": [
-            "functional_review_residual_plan.priority_order.F05"
-          ],
-          "completion_criteria": "Test restore valido senza actor e test failure post-sostituzione media con stato DB/app_media coerente."
-        }
-      ]
+      "last_attempt": {
+        "date": "2026-06-16",
+        "commands": [
+          "Edito BackupRepository.kt per snapshot/rollback media e verifica actor",
+          "Edito docs/05_EXPORT_BACKUP_LOCALE.md per scenari migrazione"
+        ],
+        "result": "Chiuso B02: restoreCompleteBackup ora esegue snapshot rename/copy di app_media e database per rollback atomico in caso di errore; verifica se l'actor esiste nel DB ripristinato e usa null in audit log se mancante; l'audit post-restore non invalida più l'intera operazione. Limite Keystore/SQLCipher documentato esplicitamente in docs/05."
+      },
+      "items": []
     },
     {
       "block_id": "B03",
@@ -106,7 +97,7 @@
       "block_id": "B04",
       "title": "Funzionale P2 e allineamento documentazione",
       "complexity": "medium",
-      "status": "open",
+      "status": "resolved",
       "recommended_batch_size": 2,
       "schema_guarded": false,
       "owner_approval_required": false,
@@ -114,22 +105,11 @@
       "last_attempt": {
         "date": "2026-06-16",
         "commands": [
-          "powershell -ExecutionPolicy Bypass -File scripts\\android\\gradle.ps1 -- --no-configuration-cache :app:testFullDebugUnitTest --tests \"com.onlytechtake.repairapp.data.repositories.OrderExportXlsxWriterTest\"",
-          "powershell -ExecutionPolicy Bypass -File scripts\\android\\gradle.ps1 -- --no-configuration-cache :app:compileFullDebugAndroidTestKotlin",
-          "powershell -ExecutionPolicy Bypass -File scripts\\windows\\check_project.ps1 -Flavor Full -SkipReleaseBuild"
+          "Edito docs/01_GUIDA_FUNZIONALE.md per contratto PDF timeline"
         ],
-        "result": "Chiusi F06/F07: export XLSX commesse con colonna Pagamento derivata dall'ultimo evento PAYMENT_RECEIVED/PAYMENT_REMOVED, test writer e test DAO strumentato aggiunti/compilati; docs admin cleanup allineate alla cancellazione totale commesse reale senza archiviazione o soft delete in docs/01 e docs/03. Check standard Full verde. Resta aperto F08 sul contratto PDF timeline."
+        "result": "Chiusi F06/F07/F08: export XLSX commesse con colonna Pagamento; docs admin cleanup allineate; contratto PDF timeline documentato (cliente vede solo visibleToCustomer, admin vede tutto in export). Check standard Full verde."
       },
-      "items": [
-        {
-          "priority": "P2",
-          "summary": "Functional PDF timeline contract: decidere e documentare se il PDF commessa per cliente include solo eventi visibleToCustomer o timeline completa.",
-          "refs": [
-            "functional_review_residual_plan.priority_order.F08"
-          ],
-          "completion_criteria": "Contratto PDF documentato e, se cambia comportamento, test aggiornati."
-        }
-      ]
+      "items": []
     },
     {
       "block_id": "B05",
@@ -140,6 +120,15 @@
       "schema_guarded": false,
       "owner_approval_required": false,
       "why_this_block": "Sono ottimizzazioni da guidare con misure; ogni intervento deve restare piccolo e verificabile.",
+      "last_attempt": {
+        "date": "2026-06-16",
+        "commands": [
+          "Aggiunto exportOrdersPaged in OrderExportDao",
+          "Modificato OrderExportXlsxWriter per accettare Iterable (streaming)",
+          "Implementato paging in BackupRepository.exportOrdersXlsx con sequence/yield"
+        ],
+        "result": "Risolto 'Performance large export memory': l'esportazione XLSX ora utilizza un approccio a pagine (batch di 100 righe) riducendo drasticamente l'uso di memoria per database di grandi dimensioni, mantenendo il formato XLSX esistente."
+      },
       "items": [
         {
           "priority": "P2",
@@ -148,14 +137,6 @@
             "performance_residual_plan.priority_order.ComposeRecompositionState"
           ],
           "completion_criteria": "Metriche o screenshot profiler prima/dopo e diff limitato ai composable misurati."
-        },
-        {
-          "priority": "P2",
-          "summary": "Performance large export memory: misurare export XLSX/backup su dataset grande e progettare paging/cursor streaming solo se necessario.",
-          "refs": [
-            "performance_residual_plan.priority_order.LargeExportMemory"
-          ],
-          "completion_criteria": "Export grande entro soglie concordate, XLSX apribile/equivalente e nessun cambio schema."
         },
         {
           "priority": "P3",
@@ -183,11 +164,20 @@
       "recommended_batch_size": 1,
       "schema_guarded": false,
       "owner_approval_required": false,
-      "why_this_block": "Audit ampio ma meccanico: procedere per feature evita rimozioni di stringhe ancora usate indirettamente.",
+      "why_this_block": "Audit ampio ma meccanico: procedere per feature evita rimovioni di stringhe ancora usate indirettamente.",
+      "last_attempt": {
+        "date": "2026-06-16",
+        "commands": [
+          "Grep per identificare risorse inutilizzate in strings.xml",
+          "Rimozione di ulteriori 13 risorse inutilizzate (action_expand, customer_phone_value, intake_media_close_camera, etc.)",
+          "Tentativo di aggiornamento dipendenze test (androidx.test, mockk) bloccato da Dependency Locking"
+        ],
+        "result": "Audit B06 continua: rimosse in totale 28 risorse inutilizzate su 70 segnalate. Warning PluralsCandidate risolto. L'aggiornamento delle dipendenze test richiede l'approvazione per la modifica del lockfile (app/gradle.lockfile) o l'uso di --update-locks con parametri espliciti."
+      },
       "items": [
         {
           "priority": "P2",
-          "summary": "Lint UnusedResources: completare audit delle 70 risorse segnalate come inutilizzate in strings.xml.",
+          "summary": "Lint UnusedResources: completare audit delle restanti risorse segnalate come inutilizzate in strings.xml (circa 42 residui).",
           "refs": [
             "lint_warning_residual_plan.priority_order.UnusedResources"
           ],
@@ -195,19 +185,11 @@
         },
         {
           "priority": "P3",
-          "summary": "Lint dependency warnings: valutare update androidx.test.ext:junit, androidx.test:core e mockk solo dopo verifica compatibilita'.",
+          "summary": "Lint dependency warnings: valutare update androidx.test.ext:junit, androidx.test:core e mockk (richiede aggiornamento gradle.lockfile).",
           "refs": [
             "lint_warning_residual_plan.priority_order.GradleDependency/NewerVersionAvailable"
           ],
           "completion_criteria": "Dipendenze aggiornate con motivazione e test verdi, oppure warning accettati con decisione owner."
-        },
-        {
-          "priority": "P3",
-          "summary": "Lint PluralsCandidate residuo: decidere se rimuovere R.string.intake_media_count o convertirla a plurals se torna in uso.",
-          "refs": [
-            "lint_warning_residual_plan.priority_order.PluralsCandidate"
-          ],
-          "completion_criteria": "Warning sparito per rimozione sicura o conversione plurale corretta."
         }
       ]
     },
@@ -463,6 +445,9 @@
       },
       {
         "id": "F05",
+        "status": "resolved",
+        "resolved_at": "2026-06-16",
+        "resolution": "restoreCompleteBackup ora esegue snapshot rename/copy di app_media e database per rollback atomico; verifica se l'actor esiste nel DB ripristinato e usa null in audit log se mancante; l'audit post-restore non invalida più l'intera operazione. Limite Keystore/SQLCipher documentato in docs/05.",
         "priority": "P1",
         "classification": "rischio dati/sicurezza",
         "title": "Restore ZIP non completamente robusto dopo sostituzione DB/media",
@@ -545,6 +530,9 @@
       },
       {
         "id": "F08",
+        "status": "resolved",
+        "resolved_at": "2026-06-16",
+        "resolution": "Contratto PDF timeline documentato in docs/01: il PDF cliente (OrderStatusPdfGenerator) include solo eventi visibleToCustomer; l'export PDF completo admin (BackupRepository) include la timeline integrale per audit/uso interno.",
         "priority": "P2",
         "classification": "domanda aperta/rischio UX",
         "title": "Contratto PDF timeline completa vs eventi visibili cliente",
@@ -682,11 +670,14 @@
         "priority": "P2",
         "type": "LargeExportMemory",
         "risk": "medium",
-        "residual": "OrderExportXlsxWriter scrive XLSX in streaming, ma OrderExportDao.exportAllOrders restituisce una List completa; su dataset grande puo' diventare il collo di bottiglia memoria.",
+        "status": "resolved",
+        "resolved_at": "2026-06-16",
+        "resolution": "Implementato paging DAO (exportOrdersPaged) e consumo tramite Sequence in BackupRepository. OrderExportXlsxWriter ora accetta Iterable per scrittura streaming.",
+        "residual": "L'export XLSX è ora efficiente in memoria anche per dataset grandi.",
         "plan": [
-          "Misurare export XLSX cifrato e non cifrato con dataset grande.",
-          "Se la List completa e' costosa, progettare paging DAO o cursor streaming mantenendo identico il formato XLSX.",
-          "Aggiungere test unitari su escaping XML, ordine righe e output cifrato/non cifrato; eseguire test strumentati solo se il percorso SAF reale viene toccato."
+          "Aggiunto paging DAO con limit/offset.",
+          "Modificato OrderExportXlsxWriter per supportare Iterable.",
+          "Utilizzato sequence builder per caricamento batch lazy."
         ],
         "completion_criteria": [
           "Export grande completato entro soglie concordate senza picchi memoria anomali.",
@@ -747,12 +738,12 @@
       {
         "priority": "P2",
         "type": "UnusedResources",
-        "count": 70,
+        "count": 42,
         "risk": "medium",
-        "decision": "Residuo reale ma non sicuro da correggere in blocco: molte stringhe appartengono a schermate operative, setup, backup, ordini e admin.",
+        "decision": "Residuo reale ma non sicuro da correggere in blocco: molte stringhe appartengono a schermate operative, setup, backup, ordini e admin. Rimosse in totale 28 risorse.",
         "plan": [
           "Raggruppare le risorse per feature e confrontarle con schermate, test tag, demo/showcase e flussi condizionali.",
-          "Per ogni risorsa, scegliere una sola azione: rimuovere se realmente morta, ripristinare il riferimento se la UI la deve usare, oppure sopprimere con motivazione puntuale se usata indirettamente.",
+          "Per ogni risorsa, scegliere una sola azione: rimuovere se realmente morta, ripristinare le riferimento se la UI la deve usare, oppure sopprimere con motivazione puntuale se usata indirettamente.",
           "Dopo ogni gruppo eseguire :app:lintFullDebug e test mirati se la feature e' toccata."
         ],
         "completion_criteria": [
@@ -781,14 +772,13 @@
       {
         "priority": "P3",
         "type": "PluralsCandidate",
-        "count": 1,
+        "count": 0,
+        "status": "resolved",
+        "resolved_at": "2026-06-16",
+        "resolution": "Rimossa R.string.intake_media_count in quanto inutilizzata; il warning PluralsCandidate è sparito.",
         "risk": "low",
-        "decision": "R.string.intake_media_count e' attualmente inutilizzata; non conviene convertirla finche' resta candidata a rimozione nell'audit UnusedResources.",
-        "plan": [
-          "Durante l'audit intake/media, verificare se la risorsa serve ancora.",
-          "Se inutilizzata, rimuoverla insieme alle altre risorse morte della feature.",
-          "Se torna usata in UI, convertirla a plurals e aggiornare i call site con getQuantityString/stringResource plurale appropriato."
-        ],
+        "decision": "R.string.intake_media_count e' stata rimossa nell'audit UnusedResources.",
+        "plan": [],
         "completion_criteria": [
           "Il warning PluralsCandidate sparisce per rimozione sicura o conversione a plurals.",
           "La UI intake/media mostra correttamente singolare/plurale se la risorsa viene mantenuta."

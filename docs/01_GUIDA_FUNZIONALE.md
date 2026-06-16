@@ -239,6 +239,8 @@ Non sono implementati backend, WhatsApp Business Platform, webhook o conferme au
 
 L'operatore può inoltre esportare e condividere un PDF di riepilogo della commessa (stato, timeline, dettagli) tramite il tasto di condivisione. Il PDF viene generato localmente e condiviso tramite le app installate sul device (es. WhatsApp, Email).
 
+Il PDF generato per la condivisione cliente include solo gli eventi della timeline contrassegnati come visibili al cliente (es. creazione, cambi stato, disponibilità al ritiro). L'export PDF completo per uso admin (disponibile in Backup) include invece la timeline integrale.
+
 Il feedback cliente automatico non e' implementato. La risposta viene registrata manualmente e aggiorna timeline e ultimo message log disponibile. Il ramo non riparabile usa il normale flusso pronto ritiro e chiusura motivata.
 
 ## Backup e limiti

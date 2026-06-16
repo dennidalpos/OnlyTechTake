@@ -23,7 +23,7 @@ internal class OrderExportXlsxWriter(
     /**
      * Scrive l'export in formato XLSX in modo streaming per gestire dataset di grandi dimensioni.
      */
-    fun write(rows: List<OrderExportRow>, output: OutputStream, password: String? = null) {
+    fun write(rows: Iterable<OrderExportRow>, output: OutputStream, password: String? = null) {
         ZipOutputStream(output, password?.toCharArray()).use { zip ->
             zip.putTextEntry("[Content_Types].xml", contentTypesXml, password)
             zip.putTextEntry("_rels/.rels", rootRelationshipsXml, password)
@@ -38,7 +38,7 @@ internal class OrderExportXlsxWriter(
         }
     }
 
-    private fun writeWorksheet(rows: List<OrderExportRow>, zip: ZipOutputStream) {
+    private fun writeWorksheet(rows: Iterable<OrderExportRow>, zip: ZipOutputStream) {
         val writer = zip.writer()
         writer.write("""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>""")
         writer.write("""<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">""")

@@ -67,7 +67,6 @@
     <string name="auth_recovery_code">Codice di recupero</string>
     <string name="auth_password">Password</string>
     <string name="auth_confirm_password">Conferma password</string>
-    <string name="auth_working">Operazione in corso</string>
     <string name="auth_recovery_action">Problemi di accesso? Recupero admin</string>
     <string name="auth_demo_action">Avvia modalità demo</string>
     <string name="auth_show_password">Mostra password</string>
@@ -147,8 +146,6 @@
     <string name="state_collapsed">Compresso</string>
     <string name="state_selected">Selezionato</string>
     <string name="state_not_selected">Non selezionato</string>
-    <string name="action_expand">Espandi dettaglio</string>
-    <string name="action_collapse">Comprimi dettaglio</string>
 
     <string name="customer_type_private">Privato</string>
     <string name="customer_type_business">Azienda</string>
@@ -174,9 +171,6 @@
     <string name="customer_select_detail_hint">Seleziona un cliente per vedere i dettagli</string>
     <string name="customer_detail_close">Chiudi</string>
     <string name="customer_detail_edit">Modifica</string>
-    <string name="customer_phone_value">Tel: %s</string>
-    <string name="customer_email_value">Email: %s</string>
-    <string name="customer_address_value">Indirizzo: %s</string>
     <string name="customer_open_orders">Commesse aperte (%1$d)</string>
     <string name="customer_closed_orders">Storico chiuse (%1$d)</string>
     <string name="customer_no_open_orders">Nessuna commessa aperta</string>
@@ -208,15 +202,10 @@
     <string name="intake_no_active_categories">Nessuna categoria attiva.</string>
     <string name="intake_create_category">Crea categoria</string>
     <string name="intake_add_missing_category">Aggiungi categoria mancante</string>
-    <string name="intake_media_count">%d media</string>
-    <string name="intake_signature_captured">Firma acquisita</string>
-    <string name="intake_not_set">Non impostato</string>
-    <string name="intake_edit_step">Modifica</string>
     <string name="intake_confirm_all_steps">Confermare tutti gli step</string>
     <string name="intake_media_empty">Aggiungi almeno una foto o un allegato.</string>
     <string name="intake_media_take_photo">Scatta foto</string>
     <string name="intake_media_attach_file">Allega file</string>
-    <string name="intake_media_close_camera">Chiudi camera</string>
     <string name="intake_media_remove">Rimuovi</string>
     <string name="intake_media_summary">%1$s - %2$d KB</string>
     <string name="intake_submit_title">Conferma</string>
@@ -243,7 +232,6 @@
     <string name="orders_customer_unavailable">Cliente non disponibile</string>
     <string name="orders_status_label">Stato: %s</string>
     <string name="orders_next_action_label">Prossima azione: %s</string>
-    <string name="orders_updated_label">Aggiornata: %s</string>
     <string name="orders_media_label">Media e firme: %s</string>
     <string name="orders_filter_active">Filtro attivo: %s</string>
     <string name="orders_filter_all">Tutte</string>
@@ -266,11 +254,9 @@
     <string name="order_export_cloud">su cloud</string>
     <string name="order_exit_confirm_title">Uscire dalla scheda?</string>
     <string name="order_exit_confirm_text">Nota non salvata o anteprima WhatsApp verranno scartate.</string>
-    <string name="order_status_current">Stato corrente: %s</string>
     <string name="order_diagnosis_outcome_label">Esito diagnosi: %s</string>
     <string name="order_problem_label">Problema: %s</string>
     <string name="order_actions">Azioni</string>
-    <string name="order_no_actions">Nessuna azione disponibile per questo stato.</string>
     <string name="order_internal_notes">Note interne</string>
     <string name="order_new_note">Nuova nota</string>
     <string name="order_save_note">Salva nota</string>
@@ -281,7 +267,6 @@
     <string name="order_pdf_missing_signature_text">Firma cliente non trovata. Generare comunque il PDF senza firma?</string>
     <string name="order_document_history">Storico documenti:</string>
     <string name="order_document_generated">Generato: %s</string>
-    <string name="order_document_sent"> - Inviato</string>
     <string name="order_share">Condividi</string>
     <string name="order_whatsapp_send">Invia stato WhatsApp</string>
     <string name="order_wa_preview_title">Anteprima WhatsApp</string>
@@ -343,10 +328,6 @@
     <string name="admin_delete_all_orders">Cancella tutte le commesse</string>
     <string name="admin_confirm_delete_all_orders_title">Cancellazione totale commesse?</string>
     <string name="admin_confirm_delete_all_orders_text">Tutte le commesse, timeline, messaggi, foto, firme e documenti verranno eliminati permanentemente.</string>
-    <string name="admin_confirm_delete_all_orders_warning">ATTENZIONE: Questa azione non può essere annullata. Assicurati di aver eseguito un backup se desideri conservare i dati.</string>
-    <string name="admin_confirm_delete_all_orders_checkbox">Confermo la cancellazione permanente di tutti i dati delle commesse</string>
-    <string name="admin_confirm_delete_all_orders_field">Digita CANCELLA TUTTO per confermare</string>
-    <string name="admin_author">Autore</string>
     <string name="admin_access_security">Accessi e sicurezza</string>
     <string name="admin_recovery_kit">Kit di recupero admin</string>
     <string name="admin_recovery_generate">Genera nuovo kit di recupero</string>
@@ -416,7 +397,6 @@
     <string name="about_close">Chiudi Informazioni</string>
     <string name="about_development">Sviluppo</string>
 
-    <string name="config_categories_admin_only">Area riservata admin. Le categorie sono disponibili solo in consultazione.</string>
     <string name="config_category_level_main">Categoria principale</string>
     <string name="config_category_level_sub">Sottocategoria livello %1$d</string>
     <string name="config_category_root">Radice</string>
@@ -445,7 +425,6 @@
     <string name="config_template_confirm_save_title">Salvare template?</string>
     <string name="config_template_confirm_save_risky">La modifica puo\' interrompere i flussi che usano questo codice. Le firme salvate non cambiano.</string>
     <string name="config_template_confirm_save_new_version">Verra\' salvata una nuova versione.</string>
-    <string name="config_template_version_label">%1$s v%2$d</string>
     <string name="config_template_empty">Nessun template configurato.</string>
     <string name="config_whatsapp_mode">Modalita\': %1$s</string>
     <string name="config_whatsapp_manual">Manuale</string>
@@ -454,7 +433,6 @@
     <string name="config_whatsapp_confirm_manual_title">Impostare modalita\' manuale?</string>
     <string name="config_whatsapp_confirm_manual_text">La modalita\' WhatsApp verra\' salvata.</string>
     <string name="config_backup_title">Backup e Ripristino</string>
-    <string name="config_backup_admin_only">Area riservata admin.</string>
     <string name="config_backup_reminder_enabled">Promemoria backup attivo</string>
     <string name="config_backup_interval_days">Intervallo promemoria (giorni)</string>
     <string name="config_backup_reminder_info">Stato: %1$s\nUltimo backup riuscito: %2$s\nIntervallo: %3$s\nFile: %4$s</string>
@@ -469,8 +447,6 @@
     <string name="config_backup_password_label">Password cifratura</string>
     <string name="config_backup_encrypted_success">I backup verranno cifrati.</string>
     <string name="config_backup_unencrypted_warning">File non cifrati: usare solo destinazioni protette.</string>
-    <string name="config_backup_full_zip_includes">Il backup completo include database locale, configurazioni e tutti i media (foto e firme).</string>
-    <string name="config_backup_android_archive_note">Android può archiviare app inutilizzate per liberare spazio. L’archiviazione dovrebbe mantenere i dati, ma la disinstallazione completa può eliminarli. Esegui periodicamente un backup ZIP completo e salvalo fuori dal dispositivo.</string>
     <string name="config_backup_destination_label">Destinazione export:</string>
     <string name="config_backup_destination_local">Locale</string>
     <string name="config_backup_destination_cloud">Provider documenti</string>
@@ -479,14 +455,8 @@
     <string name="config_backup_provider_unavailable">Nessun provider documenti esterno rilevato. Il selettore Android resta disponibile per le destinazioni locali.</string>
     <string name="config_backup_tooltip">Gestisci promemoria e file tramite il selettore documenti Android.</string>
     <string name="config_backup_close">Chiudi setup backup</string>
-    <string name="config_backup_warning_indicator">Attenzione</string>
     <string name="config_backup_orders_tooltip">Esporta tutte le commesse in un file Excel leggibile da PC.</string>
     <string name="config_backup_export_config">Export config</string>
-    <string name="config_backup_confirm_export_config_title">Esportare configurazione?</string>
-    <string name="config_backup_confirm_export_config_text">Verra\' creato un file JSON non cifrato %1$s tramite selettore di sistema.</string>
-    <string name="config_backup_export_db">Export DB</string>
-    <string name="config_backup_confirm_export_db_title">Esportare database?</string>
-    <string name="config_backup_confirm_export_db_text">Verra\' creato un file database non cifrato %1$s tramite selettore di sistema.</string>
     <string name="config_backup_export_xlsx">Export commesse XLSX</string>
     <string name="config_backup_confirm_export_xlsx_title">Esportare commesse?</string>
     <string name="config_backup_confirm_export_xlsx_text">Verra\' creato un file XLSX non cifrato %1$s tramite selettore di sistema.</string>
@@ -510,7 +480,6 @@
     <string name="storage_status_ok">Stato: OK</string>
     <string name="storage_status_warning">Stato: ATTENZIONE</string>
     <string name="storage_status_critical">Stato: CRITICO</string>
-    <string name="storage_status_blocked">Stato: BLOCCO SCRITTURA</string>
     <string name="storage_refresh">Aggiorna</string>
     <string name="storage_cleanup_cache">Svuota cache</string>
     <string name="storage_cleanup_orphans">Pulisci file orfani</string>

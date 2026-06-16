@@ -158,6 +158,17 @@ class BackupRepository(
                         (file.name == currentDbFile.name) || file.name.startsWith("${currentDbFile.name}-") 
                     }?.forEach { it.copyTo(File(oldDbBackupDir, it.name)) }
 
+                    // Snapshot current media for rollback
+                    val mediaDir = mediaStorageProvider?.getBaseMediaDir()
+                        ?: File(context.filesDir, BackupArchive.CANONICAL_MEDIA_DIRECTORY)
+                    val oldMediaBackupDir = File(context.cacheDir, "media_backup_pre_restore")
+                    oldMediaBackupDir.deleteRecursively()
+                    if (mediaDir.exists()) {
+                        if (!mediaDir.renameTo(oldMediaBackupDir)) {
+                            mediaDir.copyRecursively(oldMediaBackupDir)
+                        }
+                    }
+
                     try {
                         replaceDatabaseFiles(extracted.databaseFiles)
                         replacePrivateFiles(stagingDir)
@@ -168,28 +179,43 @@ class BackupRepository(
                         val now = clockMillis()
                         val restoredDatabase = RepairAppDatabase.getInstance(context)
                         try {
+                            // Verify if actor exists in restored database
+                            val actorExists = restoredDatabase.userDao().findById(actor.id) != null
+                            val finalActorId = if (actorExists) actor.id else null
+
                             restoredDatabase.auditLogDao().upsert(
                                 com.onlytechtake.repairapp.data.local.entities.AuditLogEntity(
                                     id = java.util.UUID.randomUUID().toString(),
                                     action = com.onlytechtake.repairapp.data.local.entities.AuditAction.DATA_RESET,
-                                    actorUserId = actor.id,
+                                    actorUserId = finalActorId,
                                     orderId = null,
                                     customerId = null,
                                     detailsJson = """{"operation":"backup_restored","at":"${formatTime(now)}"}""",
                                     createdAt = now,
                                 ),
                             )
+                        } catch (auditError: Exception) {
+                            // Don't let audit log failure invalidate a successful restore
+                            android.util.Log.e("BackupRepository", "Failed to write audit log after restore", auditError)
                         } finally {
                             RepairAppDatabase.closeInstance()
                         }
                     } catch (e: Exception) {
-                        // Rollback DB if possible (partial restore of files is harder)
+                        // Rollback DB
                         oldDbBackupDir.listFiles()?.forEach { 
                             it.copyTo(File(currentDbFile.parentFile, it.name), overwrite = true)
+                        }
+                        // Rollback Media
+                        if (oldMediaBackupDir.exists()) {
+                            mediaDir.deleteRecursively()
+                            if (!oldMediaBackupDir.renameTo(mediaDir)) {
+                                oldMediaBackupDir.copyRecursively(mediaDir)
+                            }
                         }
                         throw e
                     } finally {
                         oldDbBackupDir.deleteRecursively()
+                        oldMediaBackupDir.deleteRecursively()
                     }
                 } finally {
                     stagingDir.deleteRecursively()
@@ -209,9 +235,20 @@ class BackupRepository(
 
             val exportDao = requireNotNull(orderExportDao) { "Export commesse non configurato" }
             withContext(Dispatchers.IO) {
-                val rows = exportDao.exportAllOrders()
+                val rowSequence = sequence {
+                    var offset = 0
+                    val limit = 100
+                    while (true) {
+                        val batch = kotlinx.coroutines.runBlocking {
+                            exportDao.exportOrdersPaged(limit, offset)
+                        }
+                        if (batch.isEmpty()) break
+                        yieldAll(batch)
+                        offset += limit
+                    }
+                }
                 context.contentResolver.openOutputStream(uri)?.use { output ->
-                    OrderExportXlsxWriter().write(rows, output, password)
+                    OrderExportXlsxWriter().write(rowSequence.asIterable(), output, password)
                 } ?: throw IOException("Destinazione non disponibile")
             }
             eventWriter.dataExported(actor.id, clockMillis())

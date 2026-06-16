@@ -70,10 +70,19 @@ Il ripristino:
 - valida metadata, versione database e presenza di `database/repair_app.db`;
 - valida che il database sia apribile con la chiave SQLCipher locale corrente;
 - rifiuta percorsi ZIP non sicuri o file app fuori dalle cartelle supportate;
+- applica un meccanismo di snapshot/rollback: se la sostituzione di database o media fallisce, l'app tenta di ripristinare lo stato precedente da una copia temporanea in cache;
+- gestisce la consistenza dell'attore: se l'utente che esegue il ripristino non esiste nel database appena caricato, l'audit log registra l'operazione senza riferimento utente (null) per evitare violazioni di integrità;
 - sostituisce database locale e directory canonica `filesDir/app_media`;
 - cancella sessione locale e richiede un nuovo login.
 
-Limite corrente: il backup ZIP non include la chiave SQLCipher/Android Keystore. Il ripristino e' quindi affidabile solo quando il database nel backup e la chiave locale dell'installazione sono compatibili. Non usarlo come procedura garantita di migrazione verso un nuovo telefono o una nuova installazione finche' non viene implementato un flusso dedicato di export/import chiave.
+### Scenari di migrazione e limiti
+
+Il backup ZIP completo **non include** la chiave di cifratura SQLCipher (protetta da Android Keystore).
+
+1. **Stesso dispositivo, stessa installazione**: il ripristino è garantito poiché la chiave nel Keystore è identica.
+2. **Nuovo dispositivo o reinstallazione totale**: il database nel backup risulterà illeggibile poiché la nuova installazione genererà una chiave diversa. Il ripristino fallirà con errore di validazione (chiave errata).
+
+**Raccomandazione**: non usare il backup ZIP come unica procedura di migrazione verso un nuovo telefono. In assenza di un flusso di esportazione chiavi dedicato (non ancora implementato), la migrazione dei dati cifrati tra dispositivi diversi non è supportata dal solo file ZIP.
 
 ## Promemoria backup
 
