@@ -39,6 +39,7 @@ Flow:
 | Operator intake | `OperatorIntakeDemoScreenshotTest` | `demo-screenshots` | `screenshots/01-operatore-banco` |
 | Order intake and closure | `SocialStoryDemoScreenshotTest#capturesOrderIntakeToClosureStories` | `demo-social-screenshots/01-commessa-nuovo-cliente-chiusura` | `screenshots/02-commessa-nuovo-cliente-chiusura` |
 | Categories and templates | `SocialStoryDemoScreenshotTest#capturesCategoryAndTemplateStories` | `demo-social-screenshots/02-categorie-template` | `screenshots/03-categorie-template` |
+| Template Anchors | Manual verification recommended (Settings -> Templates) | N/A | N/A |
 | Customers | `SocialStoryDemoScreenshotTest#capturesPrivateAndBusinessCustomerStories` | `demo-social-screenshots/03-clienti-privato-azienda` | `screenshots/04-clienti-privato-azienda` |
 | Maintenance and backup | `SocialStoryDemoScreenshotTest#capturesMaintenanceStories` | `demo-social-screenshots/05-manutenzione-backup` | `screenshots/05-manutenzione-backup` |
 
@@ -90,6 +91,7 @@ Add one row for each repository change that affects demo assets. Keep completed 
 |---|---|---|---|---|
 | Demo asset governance and pipeline mapping introduced | Both scripts and all mapped scenarios | Maintain this document together with scenario, script, helper, and story changes | Documentation review completed | Run affected device flows after the next UI/workflow change |
 | Shared design tokens, compact actions, localized copy and stable CTA tags | Operator intake, order intake, customers, maintenance/backup, assembled operator video, direct device videos | Intake scenarios now open from `HomeNewOrderButton`; dashboard discard uses `DashboardDiscardChangesButton`; direct recorder supports `-ScenarioId` and `-StartImmediately`; existing filenames, package paths, captions and timing remain valid | Screenshots verified on physical device; assembled operator video verified; direct `full-workflow` and `social-stories` recordings verified and normalized | Use generated assets for store and landing publishing |
+| Template Anchors: interchangeable templates with logical mapping | Categories and templates, WhatsApp flows | Added "Associazione Template" section in Settings; app now uses `TemplateAnchor` instead of hardcoded strings; validation added to prevent archiving active anchors | Build verified; repository paths verified; manual UI verification recommended for association flow | None |
 
 Use concise validation values such as `not run`, `compile only`, `screenshots verified`, or `screenshots and recording verified`. Do not mark a device flow verified unless it actually ran.
 

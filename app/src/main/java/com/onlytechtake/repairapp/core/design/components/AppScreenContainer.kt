@@ -30,6 +30,7 @@ fun AppScreenContainer(
             modifier = Modifier
                 .widthIn(max = maxWidth)
                 .fillMaxWidth()
+                .then(if (!scrollable) Modifier.fillMaxHeight() else Modifier)
                 .padding(horizontal = horizontalPadding)
                 .padding(top = RepairAppSpacing.screenVertical, bottom = RepairAppSpacing.bottomContentPadding),
             verticalArrangement = verticalArrangement,

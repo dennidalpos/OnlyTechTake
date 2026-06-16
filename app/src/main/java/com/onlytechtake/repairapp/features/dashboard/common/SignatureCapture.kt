@@ -64,7 +64,7 @@ fun SignatureCaptureForm(
     privacyText: String,
     termsText: String,
     modifier: Modifier = Modifier,
-    title: String = "Privacy e firma",
+    title: String = stringResource(R.string.signature_form_title),
     existingSignatures: List<SignatureEntity> = emptyList(),
     submitText: String? = null,
     onSubmit: (SignatureCaptureResult) -> Unit = {},
@@ -78,9 +78,10 @@ fun SignatureCaptureForm(
     var strokes by remember { mutableStateOf<List<SignatureStroke>>(emptyList()) }
     var currentStroke by remember { mutableStateOf<SignatureStroke?>(null) }
     val hasSignature = strokes.any { it.points.size > 1 }
+    val defaultSignerName = stringResource(R.string.signature_default_signer)
     val capture = if (privacyAccepted && termsAccepted && hasSignature) {
         SignatureCaptureResult(
-            signerName = DEFAULT_SIGNER_NAME,
+            signerName = defaultSignerName,
             privacyAccepted = privacyAccepted,
             termsAccepted = termsAccepted,
             bitmap = renderSignatureBitmap(strokes),
@@ -96,6 +97,7 @@ fun SignatureCaptureForm(
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
         SectionTitle(title)
         existingSignatures.forEach { signature ->
+            val desc = stringResource(R.string.signature_signer_label, signature.signerName)
             StandardCard(modifier = Modifier.fillMaxWidth()) {
                 Column(
                     modifier = Modifier.padding(RepairAppSpacing.compactGap),
@@ -103,10 +105,10 @@ fun SignatureCaptureForm(
                 ) {
                     LocalImagePreview(
                         path = signature.localPath,
-                        description = "Firma ${signature.signerName}",
+                        description = desc,
                         onClick = {
                             selectedSignaturePath = signature.localPath
-                            selectedSignatureTitle = "Firma ${signature.signerName}"
+                            selectedSignatureTitle = desc
                         },
                     )
                     Text("${signature.signerName} - ${formatUiDateTime(signature.signedAt)}")
@@ -115,26 +117,26 @@ fun SignatureCaptureForm(
             }
         }
         if (existingSignatures.isEmpty() && submitText != null) {
-            Text("Nessuna firma acquisita.")
+            Text(stringResource(R.string.signature_empty))
         }
 
         Text(
             modifier = Modifier.clickable(
-                onClickLabel = "Apri informativa privacy",
+                onClickLabel = stringResource(R.string.signature_read_privacy),
                 role = Role.Button,
                 onClick = { textDialog = SignatureTextDialog.PRIVACY },
             ),
-            text = "Leggi informativa privacy",
+            text = stringResource(R.string.signature_read_privacy),
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.bodySmall,
         )
         Text(
             modifier = Modifier.clickable(
-                onClickLabel = "Apri condizioni di presa in carico",
+                onClickLabel = stringResource(R.string.signature_read_terms),
                 role = Role.Button,
                 onClick = { textDialog = SignatureTextDialog.TERMS },
             ),
-            text = "Leggi condizioni di presa in carico",
+            text = stringResource(R.string.signature_read_terms),
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.bodySmall,
         )
@@ -150,7 +152,7 @@ fun SignatureCaptureForm(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Checkbox(checked = privacyAccepted, onCheckedChange = null)
-            Text("Accetta informativa privacy")
+            Text(stringResource(R.string.signature_accept_privacy))
         }
         Row(
             modifier = Modifier
@@ -164,7 +166,7 @@ fun SignatureCaptureForm(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Checkbox(checked = termsAccepted, onCheckedChange = null)
-            Text("Accetta condizioni di presa in carico")
+            Text(stringResource(R.string.signature_accept_terms))
         }
 
         SignatureCanvas(
@@ -190,7 +192,7 @@ fun SignatureCaptureForm(
 
         ActionRow {
             AppButton(
-                text = "Pulisci firma",
+                text = stringResource(R.string.signature_clear),
                 onClick = {
                     strokes = emptyList()
                     currentStroke = null
@@ -222,8 +224,8 @@ fun SignatureCaptureForm(
         AppDialog(
             onDismissRequest = { textDialog = null },
             title = when (dialog) {
-                SignatureTextDialog.PRIVACY -> "Informativa privacy"
-                SignatureTextDialog.TERMS -> "Condizioni di presa in carico"
+                SignatureTextDialog.PRIVACY -> stringResource(R.string.signature_privacy_title)
+                SignatureTextDialog.TERMS -> stringResource(R.string.signature_terms_title)
             },
             text = when (dialog) {
                 SignatureTextDialog.PRIVACY -> privacyText
@@ -231,7 +233,7 @@ fun SignatureCaptureForm(
             },
             confirmButton = {
                 AppButton(
-                    text = "Chiudi",
+                    text = stringResource(R.string.content_description_close),
                     onClick = { textDialog = null },
                     variant = AppButtonVariant.Primary,
                     size = AppButtonSize.Compact

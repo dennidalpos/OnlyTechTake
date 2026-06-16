@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.features.workspace
 
+import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
@@ -9,7 +10,7 @@ import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.domain.workspace.availableOrderStatusActions
 import com.onlytechtake.repairapp.domain.workspace.requiresConfirmation
-import com.onlytechtake.repairapp.domain.workspace.statusTemplateCode
+import com.onlytechtake.repairapp.domain.workspace.statusTemplateAnchor
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Assert.assertThrows
@@ -61,15 +62,15 @@ class StatusWorkflowTest {
     @Test
     fun statusMessageTemplateUsesSpecialCases() {
         assertEquals(
-            "whatsapp_preventivo_intervento",
-            statusTemplateCode(order(OrderStatus.RESULT, diagnosisOutcome = DiagnosisOutcome.REPAIRABLE)),
+            TemplateAnchor.WHATSAPP_QUOTE,
+            statusTemplateAnchor(order(OrderStatus.RESULT, diagnosisOutcome = DiagnosisOutcome.REPAIRABLE)),
         )
         assertEquals(
-            "whatsapp_non_riparabile",
-            statusTemplateCode(order(OrderStatus.RESULT, diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE)),
+            TemplateAnchor.WHATSAPP_NOT_REPAIRABLE,
+            statusTemplateAnchor(order(OrderStatus.RESULT, diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE)),
         )
-        assertEquals("whatsapp_non_riparabile", statusTemplateCode(order(OrderStatus.CLOSED, closureReason = ClosureReason.NOT_REPAIRABLE)))
-        assertEquals("whatsapp_diagnosi", statusTemplateCode(order(OrderStatus.DIAGNOSIS)))
+        assertEquals(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE, statusTemplateAnchor(order(OrderStatus.CLOSED, closureReason = ClosureReason.NOT_REPAIRABLE)))
+        assertEquals(TemplateAnchor.WHATSAPP_DIAGNOSIS, statusTemplateAnchor(order(OrderStatus.DIAGNOSIS)))
     }
 
     private fun order(

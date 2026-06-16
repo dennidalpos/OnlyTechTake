@@ -13,7 +13,9 @@ class OrderFileCleanupService(
      * Deletes all files and directories associated with an order.
      */
     fun deleteOrderFiles(orderId: String) {
-        deleteRecursively(getOrderRootDataDir(orderId))
+        deleteRecursively(mediaStorageProvider.getOrderMediaDir(orderId))
+        deleteRecursively(mediaStorageProvider.getOrderSignaturesDir(orderId))
+        deleteRecursively(mediaStorageProvider.getOrderDocumentsDir(orderId))
     }
 
     /**
@@ -55,10 +57,26 @@ class OrderFileCleanupService(
      * This should be called with caution and typically by an admin.
      */
     fun cleanupOrphanedFiles(referencedPaths: Set<String>) {
-        // Implementation for deep cleanup if needed
+        val baseDir = mediaStorageProvider.getBaseMediaDir()
+        if (!baseDir.exists()) return
+
+        baseDir.walkTopDown().forEach { file ->
+            if (file.isFile) {
+                val path = file.absolutePath
+                if (!referencedPaths.contains(path) && !path.contains("intake_media")) {
+                    file.delete()
+                }
+            }
+        }
+
+        // Clean up empty directories
+        baseDir.walkBottomUp().forEach { file ->
+            if (file.isDirectory && file != baseDir && !file.absolutePath.contains("intake_media")) {
+                file.deleteIfEmpty()
+            }
+        }
     }
 
-    private fun getOrderRootDataDir(orderId: String) = File(mediaStorageProvider.getBaseMediaDir(), "orders/$orderId")
     private fun getIntakeMediaDir(sessionId: String) = mediaStorageProvider.getIntakeMediaDir(sessionId)
     private fun getSharedCacheDir() = File(context.cacheDir, "shared")
 

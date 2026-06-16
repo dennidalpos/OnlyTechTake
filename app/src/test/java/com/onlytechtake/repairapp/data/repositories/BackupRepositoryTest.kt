@@ -65,41 +65,6 @@ class BackupRepositoryTest {
     }
 
     @Test
-    fun restoreMapsLegacyMediaAndOrderDirectoriesToCanonicalLayout() {
-        val extracted = extract(
-            mapOf(
-                "files/order_media/order-1/photo.jpg" to "legacy-photo",
-                "files/orders/order-1/signatures/signature.png" to "legacy-signature",
-                "files/orders/order-1/documents/status.pdf" to "legacy-document",
-            ),
-        )
-        val destination = File(testRoot, "restored")
-
-        BackupArchive.restoreAppMedia(File(extracted, "files"), destination)
-
-        assertEquals("legacy-photo", File(destination, "order_media/order-1/photo.jpg").readText())
-        assertEquals("legacy-signature", File(destination, "signatures/order-1/signature.png").readText())
-        assertEquals("legacy-document", File(destination, "documents/order-1/status.pdf").readText())
-        assertFalse(File(destination.parentFile, "orders").exists())
-        assertFalse(File(destination.parentFile, "order_media").exists())
-    }
-
-    @Test
-    fun canonicalFilesTakePrecedenceOverLegacyCopies() {
-        val extracted = extract(
-            mapOf(
-                "files/app_media/order_media/order-1/photo.jpg" to "canonical",
-                "files/order_media/order-1/photo.jpg" to "legacy",
-            ),
-        )
-        val destination = File(testRoot, "restored")
-
-        BackupArchive.restoreAppMedia(File(extracted, "files"), destination)
-
-        assertEquals("canonical", File(destination, "order_media/order-1/photo.jpg").readText())
-    }
-
-    @Test
     fun extractionRejectsUnsafeZipPaths() {
         listOf(
             "../outside.txt",

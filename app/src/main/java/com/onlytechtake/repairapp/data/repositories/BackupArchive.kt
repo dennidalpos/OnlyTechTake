@@ -80,15 +80,6 @@ internal object BackupArchive {
         if (canonicalSource.exists()) {
             canonicalSource.copyRecursively(destination, overwrite = true)
         }
-
-        copyMissingTree(
-            source = File(stagedFilesRoot, "order_media"),
-            destination = File(destination, "order_media"),
-        )
-        restoreLegacyOrderTrees(
-            source = File(stagedFilesRoot, "orders"),
-            destination = destination,
-        )
     }
 
     fun addDirectory(zip: ZipOutputStream, directory: File, entryDirectory: String, password: String? = null) {
@@ -101,41 +92,8 @@ internal object BackupArchive {
             }
     }
 
-    private fun restoreLegacyOrderTrees(source: File, destination: File) {
-        source.listFiles(File::isDirectory).orEmpty().forEach { orderDirectory ->
-            val orderId = orderDirectory.name
-            copyMissingTree(
-                source = File(orderDirectory, "signatures"),
-                destination = File(destination, "signatures/$orderId"),
-            )
-            copyMissingTree(
-                source = File(orderDirectory, "documents"),
-                destination = File(destination, "documents/$orderId"),
-            )
-            copyMissingTree(
-                source = File(orderDirectory, "media"),
-                destination = File(destination, "order_media/$orderId"),
-            )
-        }
-    }
-
-    private fun copyMissingTree(source: File, destination: File) {
-        if (!source.exists()) return
-        source.walkTopDown()
-            .filter(File::isFile)
-            .forEach { file ->
-                val target = safeChild(destination, file.relativeTo(source).invariantSeparatorsPath)
-                if (!target.exists()) {
-                    target.parentFile?.mkdirs()
-                    file.copyTo(target)
-                }
-            }
-    }
-
     private fun isSupportedAppFile(relativePath: String): Boolean =
-        relativePath.startsWith("$CANONICAL_MEDIA_DIRECTORY/") ||
-            relativePath.startsWith("orders/") ||
-            relativePath.startsWith("order_media/")
+        relativePath.startsWith("$CANONICAL_MEDIA_DIRECTORY/")
 
     private fun requireSafeEntry(name: String) {
         require(name.isNotBlank()) { "Backup ZIP non valido" }

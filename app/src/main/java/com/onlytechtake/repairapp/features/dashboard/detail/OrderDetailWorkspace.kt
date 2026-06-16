@@ -33,6 +33,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.core.net.toUri
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.core.utils.parseEuroCentsOrNull
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
@@ -139,7 +140,7 @@ fun OrderDetailWorkspace(
                     .weight(1f)
                     .testTag(RepairAppTestTags.OrderDetailLazyColumn),
                 verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
-                contentPadding = PaddingValues(bottom = RepairAppSpacing.bottomContentPadding)
+                contentPadding = PaddingValues(bottom = RepairAppSpacing.compactGap)
             ) {
                 item {
                     OrderHeader(selected, context)
@@ -158,7 +159,7 @@ fun OrderDetailWorkspace(
                             diagnosisOutcome = selected.order.diagnosisOutcome
                         },
                         onTogglePayment = { viewModel.togglePaymentStatus(!selected.isPaid) },
-                        onSendWhatsApp = viewModel::prepareMessage,
+                        onSendWhatsApp = { viewModel.prepareMessage(TemplateAnchor.WHATSAPP_UPDATE) },
                     )
                 }
 
@@ -205,7 +206,9 @@ fun OrderDetailWorkspace(
                                             viewModel.changeStatus(
                                                 status = OrderStatus.READY_FOR_PICKUP,
                                                 note = "Cliente avvisato: dispositivo non riparabile",
-                                            )
+                                            ) {
+                                                viewModel.prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
+                                            }
                                         }
                                     },
                                 )
@@ -434,9 +437,9 @@ fun OrderDetailWorkspace(
                             ) {
                                 viewModel.prepareMessage(
                                     if (outcome == DiagnosisOutcome.REPAIRABLE) {
-                                        "whatsapp_preventivo_intervento"
+                                        TemplateAnchor.WHATSAPP_QUOTE
                                     } else {
-                                        "whatsapp_non_riparabile"
+                                        TemplateAnchor.WHATSAPP_NOT_REPAIRABLE
                                     },
                                 )
                             }
@@ -448,7 +451,9 @@ fun OrderDetailWorkspace(
                                 closureReason = closureReason,
                             ) {
                                 if ((targetStatus == OrderStatus.CLOSED) && (closureReason == ClosureReason.NOT_REPAIRABLE)) {
-                                    viewModel.prepareMessage("whatsapp_non_riparabile")
+                                    viewModel.prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
+                                } else if (targetStatus == OrderStatus.READY_FOR_PICKUP) {
+                                    viewModel.prepareMessage(TemplateAnchor.WHATSAPP_READY)
                                 } else if (targetStatus == OrderStatus.CLOSED) {
                                     onBack()
                                 }

@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
@@ -37,6 +38,7 @@ class SettingsViewModel(
     private val securityPreferences: SecurityPreferences,
     private val storageStatsService: StorageStatsService,
     private val orderFileCleanupService: OrderFileCleanupService,
+    private val database: com.onlytechtake.repairapp.data.local.db.RepairAppDatabase,
 ) : ViewModel() {
 
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
@@ -62,6 +64,7 @@ class SettingsViewModel(
     val users = adminUserRepository.observeUsers().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     val categories = catalogRepository.observeCategories().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     val templates = templateRepository.observeTemplates().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    val anchorMappings = templateRepository.observeAnchorMappings().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyMap())
     val messageMode = templateRepository.observeMessageMode().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), MessageMode.MANUAL_WHATSAPP)
     val backupReminderSettings = backupReminderPreferences.settings.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), BackupReminderSettings())
     val securitySettings = securityPreferences.settings.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), com.onlytechtake.repairapp.data.preferences.SecuritySettings())
@@ -89,6 +92,22 @@ class SettingsViewModel(
         }
     }
 
+    fun cleanupOrphanedFiles() {
+        launchWithUser(onSuccess = {
+            _message.value = WorkspaceMessage("Pulizia file orfani completata", false)
+            refreshStorageStats()
+        }) { actor ->
+            runCatching {
+                com.onlytechtake.repairapp.core.permissions.PermissionService.requirePermission(actor, UserPermission.MANAGE_STORAGE)
+                val paths = mutableSetOf<String>()
+                paths.addAll(database.orderMediaDao().getAllPaths())
+                paths.addAll(database.signatureDao().getAllPaths())
+                paths.addAll(database.orderDocumentDao().getAllPaths())
+                orderFileCleanupService.cleanupOrphanedFiles(paths)
+            }
+        }
+    }
+
     fun saveCategory(id: String?, parentId: String?, name: String, description: String, active: Boolean, onSaved: (String) -> Unit = {}) {
         launchWithUser(onSuccess = { 
             _message.value = WorkspaceMessage("Operazione completata", false) 
@@ -113,6 +132,14 @@ class SettingsViewModel(
             _message.value = WorkspaceMessage("Operazione completata", false) 
         }) { actor ->
             templateRepository.saveTemplate(actor, code, title, body, active, step)
+        }
+    }
+
+    fun setTemplateForAnchor(anchor: TemplateAnchor, templateCode: String) {
+        launchWithUser(onSuccess = {
+            _message.value = WorkspaceMessage("Associazione aggiornata", false)
+        }) { actor ->
+            templateRepository.setTemplateForAnchor(actor, anchor, templateCode)
         }
     }
 
@@ -235,6 +262,7 @@ class SettingsViewModel(
         private val securityPreferences: SecurityPreferences,
         private val storageStatsService: StorageStatsService,
         private val orderFileCleanupService: OrderFileCleanupService,
+        private val database: com.onlytechtake.repairapp.data.local.db.RepairAppDatabase,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -242,7 +270,8 @@ class SettingsViewModel(
                 authRepository, adminUserRepository, catalogRepository,
                 templateRepository, backupRepository, backupReminderPreferences,
                 securityPreferences,
-                storageStatsService, orderFileCleanupService
+                storageStatsService, orderFileCleanupService,
+                database
             ) as T
         }
     }

@@ -155,7 +155,7 @@ Regole:
 - Admin: utenti, reset password, cancellazione di tutte le commesse e dei relativi media con conferma `CANCELLA TUTTO`, e reset totale dati con conferma `RESET`.
 - Config admin: categorie multilivello, template privacy/condizioni/WhatsApp, modalita WhatsApp manuale, backup ZIP, ripristino ZIP ed export XLSX.
 - Import allegati tramite SAF per JPEG/PNG/WebP, PDF, TXT, DOC/DOCX e XLS/XLSX fino a 25 MiB.
-- Storage privato canonico: tutti i media applicativi vivono sotto `filesDir/app_media`; i percorsi `files/orders` e `files/order_media` sono riconosciuti esclusivamente durante il restore di backup legacy.
+- Storage privato canonico: tutti i media applicativi vivono sotto `filesDir/app_media`.
 - Export admin: ZIP completo e XLSX da Config > Backup; database e XLSX pre-cleanup dalla sezione Admin; configurazione JSON nel repository ma non esposta come pulsante dedicato nella schermata Backup corrente. Ripristino ZIP completo tramite SAF per admin. Condivisione PDF della singola commessa dal dettaglio.
 - Promemoria backup admin: attivo di default ogni 7 giorni, basato sull'ultimo ZIP completo riuscito; non blocca l'uso normale dell'app.
 - Demo release: massimo 10 commesse, massimo 2 operatori, export database/ZIP/XLSX e restore ZIP bloccati, PDF con watermark `VERSIONE DEMO`.

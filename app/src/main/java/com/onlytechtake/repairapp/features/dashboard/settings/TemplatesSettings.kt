@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.features.dashboard.settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -42,20 +43,23 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.entities.MessageChannel
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 
 @Composable
-fun TemplatesSettings(
+fun ColumnScope.TemplatesSettings(
     viewModel: SettingsViewModel,
     isAdmin: Boolean,
     onRequestConfirm: (String, String, () -> Unit) -> Unit,
     onBack: () -> Unit,
 ) {
     val templates by viewModel.templates.collectAsState()
+    val anchorMappings by viewModel.anchorMappings.collectAsState()
     var editingTemplate by remember { mutableStateOf<MessageTemplateEntity?>(null) }
+    var selectingAnchorForTemplate by remember { mutableStateOf<TemplateAnchor?>(null) }
 
     val confirmTitle = stringResource(R.string.config_template_confirm_save_title)
     val confirmRisky = stringResource(R.string.config_template_confirm_save_risky)
@@ -64,6 +68,7 @@ fun TemplatesSettings(
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
+            .weight(1f)
             .widthIn(max = RepairAppSpacing.maxContentWidthMedium),
         contentPadding = PaddingValues(RepairAppSpacing.screenHorizontal),
         verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
@@ -77,9 +82,50 @@ fun TemplatesSettings(
 
         if (isAdmin) {
             item {
+                SectionTitle(
+                    text = stringResource(R.string.config_template_association_title),
+                    tooltip = stringResource(R.string.config_template_association_tooltip)
+                )
+            }
+
+            items(TemplateAnchor.entries) { anchor ->
+                val assignedCode = anchorMappings[anchor]
+                val assignedTemplate = templates.find { it.code == assignedCode }
+                
+                StandardCard(
+                    onClick = { selectingAnchorForTemplate = anchor }
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(RepairAppSpacing.cardPadding),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(anchor.label, style = MaterialTheme.typography.titleSmall)
+                            Text(anchor.description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
+                            Spacer(modifier = Modifier.height(RepairAppSpacing.compactGap))
+                            Text(
+                                text = assignedTemplate?.title ?: stringResource(R.string.config_template_default_label, anchor.defaultCode),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                        Icon(Icons.Default.Edit, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                    }
+                }
+            }
+
+            item {
+                HorizontalDivider(modifier = Modifier.padding(vertical = RepairAppSpacing.screenHorizontal))
+            }
+
+            item {
                 AppButton(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Nuovo Template",
+                    text = stringResource(R.string.config_template_new),
                     testTag = RepairAppTestTags.ConfigTemplateNewButton,
                     onClick = {
                         editingTemplate = MessageTemplateEntity(
@@ -113,7 +159,7 @@ fun TemplatesSettings(
                     Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
                         Text(template.title, style = MaterialTheme.typography.titleMedium)
                         Text(
-                            text = (template.step ?: "Generale") + " • " + if (template.active) stringResource(R.string.config_template_active) else stringResource(R.string.config_template_archived),
+                            text = (template.step ?: stringResource(R.string.config_template_general)) + " • " + if (template.active) stringResource(R.string.config_template_active) else stringResource(R.string.config_template_archived),
                             style = MaterialTheme.typography.bodySmall,
                             color = if (template.active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
                         )
@@ -144,7 +190,7 @@ fun TemplatesSettings(
         item {
             AppButton(
                 modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
-                text = "Chiudi Setup Template",
+                text = stringResource(R.string.config_template_close),
                 variant = AppButtonVariant.Secondary,
                 size = AppButtonSize.Compact,
                 onClick = onBack
@@ -153,21 +199,115 @@ fun TemplatesSettings(
     }
 
     editingTemplate?.let { template ->
+        val assignedAnchors = TemplateAnchor.entries.filter { anchorMappings[it] == template.code }
+        val associatedWarning = if (assignedAnchors.isNotEmpty()) {
+            stringResource(R.string.config_template_associated_warning, assignedAnchors.joinToString { it.label })
+        } else ""
+
         TemplateEditDialog(
             template = template,
             onDismiss = { editingTemplate = null },
             onSave = { code, title, body, active, step ->
-                val riskyTemplateChange = isRiskyTemplateChange(template.code, code, active)
+                val riskyTemplateChange = isRiskyTemplateChange(template.code, code, active) || (assignedAnchors.isNotEmpty() && !active)
                 
+                val warningText = if (assignedAnchors.isNotEmpty() && !active) {
+                    associatedWarning
+                } else if (riskyTemplateChange) {
+                    confirmRisky
+                } else {
+                    confirmNewVersion
+                }
+
                 onRequestConfirm(
                     confirmTitle,
-                    if (riskyTemplateChange) confirmRisky else confirmNewVersion,
+                    warningText,
                 ) {
                     viewModel.saveTemplate(code, title, body, active, step)
                     editingTemplate = null
                 }
             }
         )
+    }
+
+    selectingAnchorForTemplate?.let { anchor ->
+        AnchorSelectionDialog(
+            anchor = anchor,
+            templates = templates.filter { it.active },
+            currentMapping = anchorMappings[anchor],
+            onDismiss = { selectingAnchorForTemplate = null },
+            onSelect = { templateCode ->
+                viewModel.setTemplateForAnchor(anchor, templateCode)
+                selectingAnchorForTemplate = null
+            }
+        )
+    }
+}
+
+@Composable
+fun AnchorSelectionDialog(
+    anchor: TemplateAnchor,
+    templates: List<MessageTemplateEntity>,
+    currentMapping: String?,
+    onDismiss: () -> Unit,
+    onSelect: (String) -> Unit
+) {
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            shape = MaterialTheme.shapes.extraLarge,
+            color = MaterialTheme.colorScheme.surface,
+            tonalElevation = 6.dp
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(RepairAppSpacing.screenHorizontal)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = stringResource(R.string.config_template_associate_with, anchor.label),
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(RepairAppSpacing.cardGap))
+                
+                LazyColumn(
+                    modifier = Modifier.weight(1f, fill = false),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+                ) {
+                    item {
+                        StandardCard(
+                            onClick = { onSelect(anchor.defaultCode) },
+                            highlight = currentMapping == null || currentMapping == anchor.defaultCode
+                        ) {
+                            Text(
+                                text = stringResource(R.string.config_template_default_label, anchor.defaultCode),
+                                modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                    
+                    items(templates) { template ->
+                        StandardCard(
+                            onClick = { onSelect(template.code) },
+                            highlight = currentMapping == template.code
+                        ) {
+                            Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding)) {
+                                Text(template.title, style = MaterialTheme.typography.bodyMedium)
+                                Text(template.code, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.outline)
+                            }
+                        }
+                    }
+                }
+                
+                Spacer(modifier = Modifier.height(RepairAppSpacing.cardGap))
+                AppButton(
+                    text = "Annulla",
+                    onClick = onDismiss,
+                    variant = AppButtonVariant.Secondary,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
     }
 }
 
@@ -203,7 +343,7 @@ fun TemplateEditDialog(
                     .padding(RepairAppSpacing.screenHorizontal),
             ) {
                 Text(
-                    text = "Modifica Template",
+                    text = stringResource(R.string.config_template_edit_title),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
@@ -217,7 +357,7 @@ fun TemplateEditDialog(
                     )
                 } else {
                     Text(
-                        text = "Codice: ${template.code}",
+                        text = stringResource(R.string.config_template_code_value, template.code),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.outline
                     )
@@ -241,7 +381,7 @@ fun TemplateEditDialog(
                     AppTextField(
                         value = step,
                         onValueChange = { step = it },
-                        label = "Step associato",
+                        label = stringResource(R.string.config_template_step_label),
                     )
 
                     AppTextField(
@@ -254,7 +394,7 @@ fun TemplateEditDialog(
 
                     SectionTitle(
                         text = stringResource(R.string.config_template_variables),
-                        tooltip = "{{numero_commessa}}, {{stato_commessa}}, {{categoria_percorso}}, {{cliente}}, {{esito_diagnosi}}, {{importo_preventivo}}"
+                        tooltip = stringResource(R.string.config_template_variables_tooltip)
                     )
 
                     Row(

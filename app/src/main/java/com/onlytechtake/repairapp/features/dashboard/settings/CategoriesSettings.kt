@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.features.dashboard.settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,7 +42,7 @@ import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.*
 
 @Composable
-fun CategoriesSettings(
+fun ColumnScope.CategoriesSettings(
     viewModel: SettingsViewModel,
     isAdmin: Boolean,
     onRequestConfirm: (String, String, () -> Unit) -> Unit,
@@ -103,8 +104,12 @@ fun CategoriesSettings(
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
+            .weight(1f)
             .widthIn(max = RepairAppSpacing.maxContentWidthMedium),
-        contentPadding = PaddingValues(RepairAppSpacing.screenHorizontal),
+        contentPadding = PaddingValues(
+            horizontal = RepairAppSpacing.screenHorizontal,
+            vertical = RepairAppSpacing.screenHorizontal
+        ),
         verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
     ) {
         item {

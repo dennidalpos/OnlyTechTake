@@ -70,7 +70,6 @@ Il ripristino:
 - valida metadata, versione database e presenza di `database/repair_app.db`;
 - rifiuta percorsi ZIP non sicuri o file app fuori dalle cartelle supportate;
 - sostituisce database locale e directory canonica `filesDir/app_media`;
-- accetta i vecchi layout `files/orders` e `files/order_media` solo in ingresso, mappandoli nelle directory canoniche;
 - cancella sessione locale e richiede un nuovo login.
 
 Il ripristino e' pensato per trasferire l'app su un altro telefono con lo stesso pacchetto applicativo. Prima di ripristinare, salvare un export ZIP recente dal telefono sorgente.
@@ -98,7 +97,5 @@ La versione database attesa e' quella di `RepairAppDatabase.DATABASE_VERSION`; n
 - Export e ripristino richiedono ruolo admin.
 - Ogni export registra audit `DATA_EXPORTED`.
 - Prima di azioni distruttive, usare il backup ZIP completo quando serve preservare dati locali; la cancellazione/disinstallazione completa puo' eliminare i dati.
-- Configurazione, database, PDF e backup ZIP non sono cifrati dall'app. La
-  cifratura non e' attivata in questo rilascio per evitare gestione passphrase e
-  recupero chiavi dentro l'app locale; salvare gli export solo su supporti,
-  cartelle o volumi protetti secondo procedura operativa.
+- L'app supporta la cifratura dei backup ZIP e XLSX tramite password AES-256 configurabile dall'admin in Config > Backup.
+- I PDF, gli export database singoli e la configurazione JSON singola non sono cifrati; salvare gli export solo su supporti, cartelle o volumi protetti secondo procedura operativa.

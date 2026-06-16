@@ -30,6 +30,7 @@ import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.core.utils.label
+import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
@@ -39,7 +40,7 @@ import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
 import com.onlytechtake.repairapp.domain.workspace.availableOrderStatusActions
-import com.onlytechtake.repairapp.domain.workspace.statusTemplateCode
+import com.onlytechtake.repairapp.domain.workspace.statusTemplateAnchor
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision
@@ -82,6 +83,11 @@ fun OrderHeader(detail: OrderDetail, context: Context) {
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.secondary,
                     )
+                    Text(
+                        text = detail.order.categoryPathSnapshot ?: detail.category?.name ?: stringResource(R.string.orders_category_unavailable),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.outline,
+                    )
                 }
                 if (detail.isPaid) {
                     AppBadge(
@@ -119,7 +125,7 @@ fun OrderActionCard(
     isPaid: Boolean,
     onActionClick: (OrderStatusAction) -> Unit,
     onTogglePayment: () -> Unit,
-    onSendWhatsApp: (String) -> Unit,
+    onSendWhatsApp: (TemplateAnchor) -> Unit,
 ) {
     AppActionPanel(title = stringResource(R.string.order_actions_title)) {
         Text(stringResource(R.string.order_actions_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
@@ -153,7 +159,7 @@ fun OrderActionCard(
         AppButton(
             text = stringResource(R.string.order_whatsapp_send),
             variant = AppButtonVariant.WhatsApp,
-            onClick = { onSendWhatsApp(statusTemplateCode(status)) },
+            onClick = { onSendWhatsApp(statusTemplateAnchor(status)) },
             size = AppButtonSize.Compact,
             leadingIcon = Icons.AutoMirrored.Filled.Message,
             modifier = Modifier.fillMaxWidth()

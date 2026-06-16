@@ -8,6 +8,7 @@ import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
 import com.onlytechtake.repairapp.core.utils.parseEuroCentsOrNull
+import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import androidx.compose.foundation.Canvas
@@ -182,9 +183,9 @@ fun applyStatusAction(
             onSuccess = {
                 viewModel.prepareMessage(
                     if (outcome == DiagnosisOutcome.REPAIRABLE) {
-                        "whatsapp_preventivo_intervento"
+                        TemplateAnchor.WHATSAPP_QUOTE
                     } else {
-                        "whatsapp_non_riparabile"
+                        TemplateAnchor.WHATSAPP_NOT_REPAIRABLE
                     },
                 )
             },
@@ -198,7 +199,9 @@ fun applyStatusAction(
         closureReason = closureReason,
         onSuccess = {
             if (targetStatus == OrderStatus.CLOSED && closureReason == ClosureReason.NOT_REPAIRABLE) {
-                viewModel.prepareMessage("whatsapp_non_riparabile")
+                viewModel.prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
+            } else if (targetStatus == OrderStatus.READY_FOR_PICKUP) {
+                viewModel.prepareMessage(TemplateAnchor.WHATSAPP_READY)
             }
         },
     )

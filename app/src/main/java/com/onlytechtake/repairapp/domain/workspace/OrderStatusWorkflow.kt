@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.domain.workspace
 
+import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
@@ -26,26 +27,26 @@ fun availableOrderStatusActions(status: OrderStatus): List<OrderStatusAction> =
 fun OrderStatusAction.requiresConfirmation(): Boolean =
     targetStatus == OrderStatus.CLOSED
 
-fun statusTemplateCode(status: OrderStatus): String =
+fun statusTemplateAnchor(status: OrderStatus): TemplateAnchor =
     when (status) {
-        OrderStatus.OPEN -> "whatsapp_presa_in_carico"
-        OrderStatus.IN_PROGRESS -> "whatsapp_lavorazione"
-        OrderStatus.DIAGNOSIS -> "whatsapp_diagnosi"
-        OrderStatus.RESULT -> "whatsapp_risultato"
-        OrderStatus.REPAIRING -> "whatsapp_riparazione"
+        OrderStatus.OPEN -> TemplateAnchor.WHATSAPP_INTAKE
+        OrderStatus.IN_PROGRESS -> TemplateAnchor.WHATSAPP_UPDATE
+        OrderStatus.DIAGNOSIS -> TemplateAnchor.WHATSAPP_DIAGNOSIS
+        OrderStatus.RESULT -> TemplateAnchor.WHATSAPP_UPDATE
+        OrderStatus.REPAIRING -> TemplateAnchor.WHATSAPP_REPAIRING
         OrderStatus.READY_FOR_PICKUP,
-        OrderStatus.CLOSED -> "whatsapp_pronto_ritiro"
+        OrderStatus.CLOSED -> TemplateAnchor.WHATSAPP_READY
     }
 
-fun statusTemplateCode(order: RepairOrderEntity): String =
+fun statusTemplateAnchor(order: RepairOrderEntity): TemplateAnchor =
     when {
         order.status == OrderStatus.RESULT && order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE ->
-            "whatsapp_preventivo_intervento"
+            TemplateAnchor.WHATSAPP_QUOTE
         order.status == OrderStatus.RESULT && order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE ->
-            "whatsapp_non_riparabile"
+            TemplateAnchor.WHATSAPP_NOT_REPAIRABLE
         order.status == OrderStatus.CLOSED && order.closureReason == ClosureReason.NOT_REPAIRABLE ->
-            "whatsapp_non_riparabile"
-        else -> statusTemplateCode(order.status)
+            TemplateAnchor.WHATSAPP_NOT_REPAIRABLE
+        else -> statusTemplateAnchor(order.status)
     }
 
 fun nextActionLabel(status: OrderStatus): String =

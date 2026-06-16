@@ -77,10 +77,6 @@ class DataResetRepository(
                 File(mediaStorageProvider.getBaseMediaDir(), "signatures").deleteRecursively()
                 File(mediaStorageProvider.getBaseMediaDir(), "documents").deleteRecursively()
                 
-                // Legacy cleanup for safety
-                context.filesDir.listFiles { _, name -> name == "orders" || name == "order_media" || name == "intake_media" }
-                    ?.forEach { it.deleteRecursively() }
-                
                 fileCleanupService.cleanupSharedCache()
                 
                 eventWriter.orderCleanup(actor.id, "all_orders_deleted", System.currentTimeMillis())

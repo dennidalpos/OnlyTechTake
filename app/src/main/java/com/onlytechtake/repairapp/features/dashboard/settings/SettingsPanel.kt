@@ -141,7 +141,11 @@ private fun SettingsSectionContent(
 ) {
     val message by viewModel.message.collectAsState()
 
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = RepairAppSpacing.bottomContentPadding)
+    ) {
         message?.let { AppMessageBanner(message = it.text, type = if (it.isError) BannerType.Error else BannerType.Info, modifier = Modifier.padding(RepairAppSpacing.screenHorizontal)) }
         when (section) {
             "CATEGORIES" -> CategoriesSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)

@@ -109,7 +109,7 @@ fun BackupSettings(
             StandardCard {
                 Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)) {
                     Text(
-                        text = "Sicurezza ed Encryption",
+                        text = stringResource(R.string.config_backup_security_title),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -118,7 +118,7 @@ fun BackupSettings(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text("Cifra backup (ZIP/XLSX)", style = MaterialTheme.typography.bodyMedium)
+                        Text(stringResource(R.string.config_backup_encrypt_label), style = MaterialTheme.typography.bodyMedium)
                         Switch(
                             checked = securitySettings.isBackupEncryptionEnabled,
                             onCheckedChange = viewModel::setBackupEncryptionEnabled,
@@ -131,7 +131,7 @@ fun BackupSettings(
                                 backupPassword = it
                                 viewModel.setBackupEncryptionPassword(it)
                             },
-                            label = "Password cifratura",
+                            label = stringResource(R.string.config_backup_password_label),
                             required = true,
                             showError = backupPassword.isBlank(),
                             visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
@@ -140,7 +140,7 @@ fun BackupSettings(
                     }
 
                     AppMessageBanner(
-                        message = if (securitySettings.isBackupEncryptionEnabled) "I backup verranno cifrati." else stringResource(R.string.config_backup_unencrypted_warning),
+                        message = if (securitySettings.isBackupEncryptionEnabled) stringResource(R.string.config_backup_encrypted_success) else stringResource(R.string.config_backup_unencrypted_warning),
                         type = if (securitySettings.isBackupEncryptionEnabled) BannerType.Success else BannerType.Warning
                     )
                 }

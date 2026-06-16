@@ -96,7 +96,7 @@ interface OrderExportDao {
             customers.type AS customerType,
             customers.phone AS phone,
             customers.email AS email,
-            order_categories.name AS categoryName,
+            COALESCE(repair_orders.categoryPathSnapshot, order_categories.name) AS categoryName,
             users.displayName AS assignedUserName,
             repair_orders.description AS description,
             repair_orders.internalNotes AS internalNotes,
@@ -352,6 +352,9 @@ interface OrderMediaDao {
 
     @Query("DELETE FROM order_media WHERE id = :id")
     suspend fun deleteById(id: String): Int
+
+    @Query("SELECT localPath FROM order_media")
+    suspend fun getAllPaths(): List<String>
 }
 
 @Dao
@@ -370,6 +373,9 @@ interface SignatureDao {
 
     @Query("SELECT orderId, COUNT(*) AS signatures FROM signatures GROUP BY orderId")
     fun observeAggregates(): Flow<List<SignatureAggregate>>
+
+    @Query("SELECT localPath FROM signatures")
+    suspend fun getAllPaths(): List<String>
 }
 
 @Dao
@@ -442,4 +448,7 @@ interface OrderDocumentDao {
 
     @Query("DELETE FROM order_documents WHERE id = :id")
     suspend fun deleteById(id: String)
+
+    @Query("SELECT localPath FROM order_documents")
+    suspend fun getAllPaths(): List<String>
 }

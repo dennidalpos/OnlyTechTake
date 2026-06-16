@@ -180,6 +180,7 @@ fun DashboardNavHost(
                     securityPreferences = container.securityPreferences,
                     storageStatsService = container.storageStatsService,
                     orderFileCleanupService = container.orderFileCleanupService,
+                    database = container.database,
                 )
             )
             SettingsPanel(

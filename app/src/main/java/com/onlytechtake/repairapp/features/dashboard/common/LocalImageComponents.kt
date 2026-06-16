@@ -44,10 +44,12 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.media.decodeOrientedBitmap
 import java.io.File
@@ -84,7 +86,7 @@ fun LocalImagePreview(
         contentAlignment = Alignment.Center,
     ) {
         if (bitmap == null) {
-            Text("Anteprima non disponibile", style = MaterialTheme.typography.bodySmall)
+            Text(stringResource(R.string.image_preview_unavailable), style = MaterialTheme.typography.bodySmall)
         } else {
             Image(
                 bitmap = bitmap,
@@ -135,7 +137,7 @@ fun LocalImageViewer(
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 onDelete?.let { delete ->
                     AppButton(
-                        text = "Elimina",
+                        text = stringResource(R.string.content_description_delete),
                         onClick = {
                             delete()
                             onDismiss()
@@ -146,7 +148,7 @@ fun LocalImageViewer(
                 }
                 if (onSaveEdited != null) {
                     AppButton(
-                        text = "Salva",
+                        text = stringResource(R.string.customer_save),
                         onClick = {
                             editedBitmapToConfirm = buildEditedBitmap?.invoke()
                         },
@@ -155,7 +157,7 @@ fun LocalImageViewer(
                     )
                 }
                 AppButton(
-                    text = "Chiudi",
+                    text = stringResource(R.string.content_description_close),
                     onClick = onDismiss,
                     variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact
@@ -167,11 +169,11 @@ fun LocalImageViewer(
     editedBitmapToConfirm?.let { bitmap ->
         AppDialog(
             onDismissRequest = { editedBitmapToConfirm = null },
-            title = "Sostituire foto?",
-            text = "La foto modificata sostituira' l'immagine originale.",
+            title = stringResource(R.string.image_replace_confirm_title),
+            text = stringResource(R.string.image_replace_confirm_text),
             confirmButton = {
                 AppButton(
-                    text = "Sostituisci",
+                    text = stringResource(R.string.image_replace_confirm_action),
                     onClick = {
                         onSaveEdited?.invoke(bitmap)
                         editedBitmapToConfirm = null
@@ -183,7 +185,7 @@ fun LocalImageViewer(
             },
             dismissButton = {
                 AppButton(
-                    text = "Annulla",
+                    text = stringResource(R.string.customer_cancel),
                     onClick = { editedBitmapToConfirm = null },
                     variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact
@@ -219,7 +221,7 @@ private fun EditableLocalImage(
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         ActionRow {
             AppButton(
-                text = "Ruota",
+                text = stringResource(R.string.image_edit_rotate),
                 onClick = {
                     bitmap = bitmap?.rotateRight()
                     arrows = emptyList()
@@ -229,26 +231,26 @@ private fun EditableLocalImage(
                 size = AppButtonSize.Compact
             )
             AppButton(
-                text = "Ritaglio",
+                text = stringResource(R.string.image_edit_crop),
                 onClick = { editMode = ImageEditMode.CROP },
                 variant = if (editMode == ImageEditMode.CROP) AppButtonVariant.Primary else AppButtonVariant.Secondary,
                 size = AppButtonSize.Compact
             )
             AppButton(
-                text = "Freccia",
+                text = stringResource(R.string.image_edit_arrow),
                 onClick = { editMode = ImageEditMode.ARROW },
                 variant = if (editMode == ImageEditMode.ARROW) AppButtonVariant.Primary else AppButtonVariant.Secondary,
                 size = AppButtonSize.Compact
             )
             AppButton(
-                text = "Annulla freccia",
+                text = stringResource(R.string.image_edit_undo_arrow),
                 enabled = arrows.isNotEmpty(),
                 onClick = { arrows = arrows.dropLast(1) },
                 variant = AppButtonVariant.Secondary,
                 size = AppButtonSize.Compact
             )
             AppButton(
-                text = "Cancella ritaglio",
+                text = stringResource(R.string.image_edit_clear_crop),
                 enabled = cropRect != null,
                 onClick = { cropRect = null },
                 variant = AppButtonVariant.Secondary,
@@ -316,7 +318,7 @@ private fun ImageEditCanvas(
 ) {
     Box(modifier = modifier.clipToBounds(), contentAlignment = Alignment.Center) {
         if (bitmap == null) {
-            Text("Anteprima non disponibile", style = MaterialTheme.typography.bodySmall)
+            Text(stringResource(R.string.image_preview_unavailable), style = MaterialTheme.typography.bodySmall)
         } else {
             val imageBitmap = remember(bitmap) { bitmap.asImageBitmap() }
             Canvas(
@@ -393,7 +395,7 @@ private fun ZoomableLocalImage(
         contentAlignment = Alignment.Center,
     ) {
         if (bitmap == null) {
-            Text("Anteprima non disponibile", style = MaterialTheme.typography.bodySmall)
+            Text(stringResource(R.string.image_preview_unavailable), style = MaterialTheme.typography.bodySmall)
         } else {
             Image(
                 bitmap = bitmap,

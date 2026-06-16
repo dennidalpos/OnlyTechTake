@@ -1,20 +1,19 @@
 {
   "todos": [
-    "[P1] Demo Assets: Rigenerare screenshot e video tramite scripts/windows/create_demo_assets.ps1 poiché la UI è cambiata significativamente.",
     "[P2] CI: Configurare esecuzione test strumentali (AndroidTests) in una pipeline dedicata o locale prima della release.",
     "[P2] Design System: Verificare contrasti cromatici e touch target su device fisico dopo il refactor UI (WhatsApp button, category levels).",
     "[P3] Play Store: completare la scheda Store usando screenshot e video aggiornati prodotti in reports/demo-assets."
   ],
   "last_build_status": {
-    "date": "2024-05-24",
+    "date": "2024-06-16",
     "status": "SUCCESS",
     "actions": [
-      "Replaced deprecated androidx.security:security-crypto with manual Android KeyStore + AES/GCM implementation in DatabaseKeyManager",
-      "Completed full database encryption using SQLCipher and device-unique key protected by KeyStore",
-      "Removed legacy UI wrappers (TouchButton, Field) and migrated all features to AppButton/AppTextField",
-      "Cleaned up legacy spacing aliases in RepairAppSpacing and updated all UI layouts",
-      "Updated dependency lockfiles for all flavors (demo, showcase, full) to resolve Configuration Cache errors",
-      "Verified build and unit tests (86 passed) for all variants"
+      "Implementata persistenza categoryPathSnapshot in createOrder per integrità storica (P1)",
+      "Migliorata validazione database in BackupRepository con PRAGMA integrity_check via SQLCipher (P1)",
+      "Aggiornato export Excel e UI dettaglio per usare categoryPathSnapshot come fallback primario (P2)",
+      "Localizzate stringhe residue in LocalImageComponents, SignatureCapture, AboutSettings, TemplatesSettings (P2)",
+      "Implementata pulizia profonda dei file orfani in OrderFileCleanupService ed esposta nella UI StorageSettings (P3)",
+      "Avviata rigenerazione demo assets per riflettere le modifiche alla UI (richiede verifica manuale)"
     ]
   }
 }

@@ -21,6 +21,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
@@ -44,6 +45,7 @@ fun QuickActions(
     val customerSearchQuery by viewModel.customerSearchQuery.collectAsState()
     val categories by viewModel.categories.collectAsState()
     val templates by viewModel.templates.collectAsState()
+    val anchorMappings by viewModel.anchorMappings.collectAsState()
     val currentUser by viewModel.currentUser.collectAsState()
 
     val unnamedPrivate = stringResource(R.string.customer_unnamed_private)
@@ -96,8 +98,11 @@ fun QuickActions(
         stagedMediaCount = draft.stagedMedia.size,
         hasPrivacySignature = draft.signatureCapture != null,
     )
-    val privacyText = templates.firstOrNull { (it.code == PRIVACY_TEMPLATE_CODE) && it.active }?.body ?: DEFAULT_PRIVACY_TEXT
-    val termsText = templates.firstOrNull { (it.code == TERMS_TEMPLATE_CODE) && it.active }?.body ?: DEFAULT_TERMS_TEXT
+    val privacyCode = anchorMappings[TemplateAnchor.PRIVACY_TEXT] ?: TemplateAnchor.PRIVACY_TEXT.defaultCode
+    val termsCode = anchorMappings[TemplateAnchor.TERMS_TEXT] ?: TemplateAnchor.TERMS_TEXT.defaultCode
+    
+    val privacyText = templates.firstOrNull { (it.code == privacyCode) && it.active }?.body ?: DEFAULT_PRIVACY_TEXT
+    val termsText = templates.firstOrNull { (it.code == termsCode) && it.active }?.body ?: DEFAULT_TERMS_TEXT
     val missingRequirements = intakeInput.validationErrors()
 
     LaunchedEffect(

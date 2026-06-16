@@ -36,8 +36,8 @@ fun AboutSettings(onBack: () -> Unit) {
     ) {
         item {
             SectionTitle(
-                text = "Informazioni",
-                tooltip = "Dettagli sulla versione dell'applicazione e contatti per lo sviluppo."
+                text = stringResource(R.string.config_hub_about_title),
+                tooltip = stringResource(R.string.about_tooltip)
             )
         }
 
@@ -47,9 +47,16 @@ fun AboutSettings(onBack: () -> Unit) {
                     modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
                 ) {
-                    Text("OnlyTechTake Repair App", style = MaterialTheme.typography.titleLarge)
-                    Text("Versione: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})", style = MaterialTheme.typography.bodyMedium)
-                    Text("Build Type: ${BuildConfig.BUILD_TYPE}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                    Text(stringResource(R.string.about_app_name), style = MaterialTheme.typography.titleLarge)
+                    Text(
+                        text = stringResource(R.string.about_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        text = stringResource(R.string.about_build_type, BuildConfig.BUILD_TYPE),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
                 }
             }
         }
@@ -60,10 +67,9 @@ fun AboutSettings(onBack: () -> Unit) {
                     modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
                 ) {
-                    Text("Descrizione", style = MaterialTheme.typography.titleSmall)
+                    Text(stringResource(R.string.about_description_title), style = MaterialTheme.typography.titleSmall)
                     Text(
-                        "OnlyTechTake è un gestionale locale per laboratori di riparazione. " +
-                        "Tutti i tuoi dati restano sul dispositivo per garantirti massima privacy e velocità.",
+                        text = stringResource(R.string.about_description_text),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -76,17 +82,17 @@ fun AboutSettings(onBack: () -> Unit) {
                     modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
                 ) {
-                    Text("Sviluppo", style = MaterialTheme.typography.titleSmall)
-                    Text("© 2026 OnlyTechTake", style = MaterialTheme.typography.bodyMedium)
+                    Text(stringResource(R.string.about_development), style = MaterialTheme.typography.titleSmall)
+                    Text(stringResource(R.string.about_copyright), style = MaterialTheme.typography.bodyMedium)
                     
                     AppButton(
-                        text = "GitHub: dennidalpos",
+                        text = stringResource(R.string.about_github),
                         variant = AppButtonVariant.Secondary,
                         onClick = { uriHandler.openUri("https://github.com/dennidalpos") }
                     )
 
                     Text(
-                        "Sito web: https://onlytechtake.com",
+                        text = stringResource(R.string.about_website),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.clickable { uriHandler.openUri("https://onlytechtake.com") }
@@ -98,7 +104,7 @@ fun AboutSettings(onBack: () -> Unit) {
         item {
             AppButton(
                 modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
-                text = "Chiudi Informazioni",
+                text = stringResource(R.string.about_close),
                 variant = AppButtonVariant.Secondary,
                 onClick = onBack
             )

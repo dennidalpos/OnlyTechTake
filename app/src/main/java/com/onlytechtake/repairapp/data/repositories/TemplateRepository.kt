@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.data.repositories
 
 import com.onlytechtake.repairapp.core.templates.TemplateRenderer
+import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.CustomerDao
 import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
@@ -50,6 +51,27 @@ class TemplateRepository(
     private val eventWriter = OrderWorkflowEventWriter(context, timelineEventDao = timelineEventDao)
 
     fun observeTemplates(): Flow<List<MessageTemplateEntity>> = templateDao.observeAll()
+
+    fun observeAnchorMappings(): Flow<Map<TemplateAnchor, String>> =
+        settingDao.observeAll().map { settings ->
+            TemplateAnchor.entries.associateWith { anchor ->
+                settings.find { it.key == anchor.settingKey }?.value ?: anchor.defaultCode
+            }
+        }
+
+    suspend fun setTemplateForAnchor(actor: AuthenticatedUser, anchor: TemplateAnchor, templateCode: String): Result<Unit> =
+        runCatching {
+            PermissionService.requirePermission(actor, UserPermission.MANAGE_TEMPLATES)
+            require(templateDao.findByCode(templateCode) != null) { "Template non trovato" }
+            settingDao.upsert(
+                AppSettingEntity(
+                    key = anchor.settingKey,
+                    value = templateCode,
+                    updatedByUserId = actor.id,
+                    updatedAt = clockMillis(),
+                ),
+            )
+        }
 
     fun observeMessageMode(): Flow<MessageMode> =
         settingDao.observeAll().map { settings ->
@@ -130,6 +152,15 @@ class TemplateRepository(
                 ),
             )
         }
+
+    suspend fun prepareMessage(actor: AuthenticatedUser, orderId: String, anchor: TemplateAnchor): Result<PreparedMessage> {
+        val templateCode = resolveAnchor(anchor)
+        return prepareMessage(actor, orderId, templateCode)
+    }
+
+    private suspend fun resolveAnchor(anchor: TemplateAnchor): String {
+        return settingDao.findByKey(anchor.settingKey)?.value ?: anchor.defaultCode
+    }
 
     suspend fun prepareMessage(actor: AuthenticatedUser, orderId: String, templateCode: String): Result<PreparedMessage> =
         runCatching {

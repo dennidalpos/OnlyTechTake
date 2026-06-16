@@ -37,6 +37,8 @@ import com.onlytechtake.repairapp.data.local.entities.UserEntity
 
 import com.onlytechtake.repairapp.core.security.DatabaseKeyManager
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
+import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.sqlite.db.SupportSQLiteOpenHelper
 
 @Database(
     entities = [
@@ -92,12 +94,45 @@ abstract class RepairAppDatabase : RoomDatabase() {
             instance ?: synchronized(this) {
                 instance ?: run {
                     val key = DatabaseKeyManager(context).getDatabaseKey()
+                    val factory = SupportOpenHelperFactory(key.toByteArray())
+
+                    // Verify if the database can be opened with the current key to handle Keystore resets
+                    val dbFile = context.getDatabasePath(DATABASE_NAME)
+                    if (dbFile.exists()) {
+                        val config = SupportSQLiteOpenHelper.Configuration.builder(context)
+                            .name(DATABASE_NAME)
+                            .callback(object : SupportSQLiteOpenHelper.Callback(DATABASE_VERSION) {
+                                override fun onCreate(db: SupportSQLiteDatabase) {}
+                                override fun onUpgrade(db: SupportSQLiteDatabase, oldVersion: Int, newVersion: Int) {}
+                            })
+                            .build()
+                        val helper = factory.create(config)
+                        try {
+                            // Raw SQLCipher open check - bypasses Room's main thread check
+                            helper.writableDatabase
+                            helper.close()
+                        } catch (e: Exception) {
+                            val message = e.message?.lowercase() ?: ""
+                            if (message.contains("file is not a database") || 
+                                e is net.zetetic.database.sqlcipher.SQLiteNotADatabaseException) {
+                                android.util.Log.e("RepairAppDatabase", "Database corruption or wrong key detected. Wiping database.", e)
+                                helper.close()
+                                context.deleteDatabase(DATABASE_NAME)
+                                context.deleteDatabase("$DATABASE_NAME-wal")
+                                context.deleteDatabase("$DATABASE_NAME-shm")
+                            } else {
+                                helper.close()
+                                throw e
+                            }
+                        }
+                    }
+
                     Room.databaseBuilder(
                         context.applicationContext,
                         RepairAppDatabase::class.java,
                         DATABASE_NAME,
                     )
-                        .openHelperFactory(SupportOpenHelperFactory(key.toByteArray()))
+                        .openHelperFactory(factory)
                         .fallbackToDestructiveMigration(dropAllTables = true)
                         .build()
                         .also { instance = it }

@@ -116,6 +116,28 @@
     <string name="camera_preview_description">Anteprima camera per acquisire una foto</string>
     <string name="signature_canvas_description">Area firma cliente. Traccia la firma con dito o pennino.</string>
 
+    <string name="signature_form_title">Privacy e firma</string>
+    <string name="signature_signer_label">Firma %s</string>
+    <string name="signature_empty">Nessuna firma acquisita.</string>
+    <string name="signature_read_privacy">Leggi informativa privacy</string>
+    <string name="signature_read_terms">Leggi condizioni di presa in carico</string>
+    <string name="signature_accept_privacy">Accetta informativa privacy</string>
+    <string name="signature_accept_terms">Accetta condizioni di presa in carico</string>
+    <string name="signature_clear">Pulisci firma</string>
+    <string name="signature_privacy_title">Informativa privacy</string>
+    <string name="signature_terms_title">Condizioni di presa in carico</string>
+    <string name="signature_default_signer">Cliente</string>
+
+    <string name="image_preview_unavailable">Anteprima non disponibile</string>
+    <string name="image_edit_rotate">Ruota</string>
+    <string name="image_edit_crop">Ritaglio</string>
+    <string name="image_edit_arrow">Freccia</string>
+    <string name="image_edit_undo_arrow">Annulla freccia</string>
+    <string name="image_edit_clear_crop">Cancella ritaglio</string>
+    <string name="image_replace_confirm_title">Sostituire foto?</string>
+    <string name="image_replace_confirm_text">La foto modificata sostituirà l\'immagine originale.</string>
+    <string name="image_replace_confirm_action">Sostituisci</string>
+
     <string name="label_optional">opzionale</string>
 
     <string name="state_expanded">Espanso</string>
@@ -229,6 +251,7 @@
     <string name="orders_filter_ready">Pronte</string>
     <string name="orders_search_label">Cerca per cliente, telefono, email o commessa</string>
     <string name="orders_select_detail_hint">Seleziona una commessa per vedere i dettagli</string>
+    <string name="orders_category_unavailable">Categoria non disponibile</string>
 
     <string name="order_detail_title">Scheda commessa</string>
     <string name="order_none_selected">Nessuna commessa selezionata</string>
@@ -354,6 +377,20 @@
     <string name="config_hub_categories_subtitle">Catalogo commesse</string>
     <string name="config_hub_templates_title">Template</string>
     <string name="config_hub_templates_subtitle_admin">Messaggi e documenti</string>
+    <string name="config_template_tooltip">Personalizza i messaggi predefiniti per ogni fase della lavorazione e le informative legali.</string>
+    <string name="config_template_association_title">Associazione Template</string>
+    <string name="config_template_association_tooltip">Collega i template ai momenti chiave dell\'app (es. apertura commessa, preventivo).</string>
+    <string name="config_template_default_label">Default (%s)</string>
+    <string name="config_template_new">Nuovo Template</string>
+    <string name="config_template_general">Generale</string>
+    <string name="config_template_close">Chiudi Setup Template</string>
+    <string name="config_template_associated_warning">Attenzione: questo template è associato a: %s. Archiviarlo ripristinerà i default per questi punti.</string>
+    <string name="config_template_associate_with">Associa a %s</string>
+    <string name="config_template_edit_title">Modifica Template</string>
+    <string name="config_template_code_value">Codice: %s</string>
+    <string name="config_template_step_label">Step associato</string>
+    <string name="config_template_variables_tooltip">{{numero_commessa}}, {{stato_commessa}}, {{categoria_percorso}}, {{cliente}}, {{esito_diagnosi}}, {{importo_preventivo}}</string>
+
     <string name="config_hub_templates_subtitle_user">Area admin</string>
     <string name="config_hub_whatsapp_title">WhatsApp</string>
     <string name="config_hub_whatsapp_subtitle">Invio manuale</string>
@@ -364,6 +401,18 @@
     <string name="config_hub_storage_subtitle">Spazio disco e monitoraggio</string>
     <string name="config_hub_about_title">Informazioni</string>
     <string name="config_hub_about_subtitle">Versione e contatti dell\'app</string>
+    <string name="about_tooltip">Dettagli sulla versione dell\'applicazione e contatti per lo sviluppo.</string>
+    <string name="about_app_name">OnlyTechTake Repair App</string>
+    <string name="about_version">Versione: %1$s (%2$d)</string>
+    <string name="about_build_type">Build Type: %s</string>
+    <string name="about_description_title">Descrizione</string>
+    <string name="about_description_text">OnlyTechTake è un gestionale locale per laboratori di riparazione. Tutti i tuoi dati restano sul dispositivo per garantirti massima privacy e velocità.</string>
+    <string name="about_copyright">© 2026 OnlyTechTake</string>
+    <string name="about_github">GitHub: dennidalpos</string>
+    <string name="about_website">Sito web: https://onlytechtake.com</string>
+    <string name="about_close">Chiudi Informazioni</string>
+    <string name="about_development">Sviluppo</string>
+
     <string name="config_categories_admin_only">Area riservata admin. Le categorie sono disponibili solo in consultazione.</string>
     <string name="config_category_level_main">Categoria principale</string>
     <string name="config_category_level_sub">Sottocategoria livello %1$d</string>
@@ -406,6 +455,10 @@
     <string name="config_backup_reminder_info">Stato: %1$s\nUltimo backup riuscito: %2$s\nIntervallo: ogni %3$d giorni\nFile: %4$s</string>
     <string name="config_backup_last_success_none">Nessuno</string>
     <string name="config_backup_last_file_none">Non disponibile</string>
+    <string name="config_backup_security_title">Sicurezza ed Encryption</string>
+    <string name="config_backup_encrypt_label">Cifra backup (ZIP/XLSX)</string>
+    <string name="config_backup_password_label">Password cifratura</string>
+    <string name="config_backup_encrypted_success">I backup verranno cifrati.</string>
     <string name="config_backup_unencrypted_warning">File non cifrati: usare solo destinazioni protette.</string>
     <string name="config_backup_full_zip_includes">Il backup completo include database locale, configurazioni e tutti i media (foto e firme).</string>
     <string name="config_backup_android_archive_note">Android può archiviare app inutilizzate per liberare spazio. L’archiviazione dovrebbe mantenere i dati, ma la disinstallazione completa può eliminarli. Esegui periodicamente un backup ZIP completo e salvalo fuori dal dispositivo.</string>
@@ -451,6 +504,13 @@
     <string name="storage_status_blocked">Stato: BLOCCO SCRITTURA</string>
     <string name="storage_refresh">Aggiorna</string>
     <string name="storage_cleanup_cache">Svuota cache</string>
+    <string name="storage_cleanup_orphans">Pulisci file orfani</string>
+    <string name="storage_cleanup_orphans_tooltip">Rimuove permanentemente i file non più referenziati nel database (es. foto di commesse eliminate).</string>
+    <string name="storage_tooltip">Monitora l\'uso della memoria e pulisci i file temporanei per liberare spazio.</string>
+    <string name="storage_loading">Caricamento statistiche...</string>
+    <string name="storage_free_percentage">Spazio libero: %1$d%% (%2$s)</string>
+    <string name="storage_app_detail_title">Dettaglio uso App</string>
+    <string name="storage_close">Chiudi setup memoria</string>
 
     <string name="catalog_path_separator">\u0020&gt;\u0020</string>
     <string name="catalog_error_only_admin_modify">Solo admin puo\' modificare categorie esistenti</string>

@@ -3,6 +3,8 @@ package com.onlytechtake.repairapp.data.repositories
 import android.content.Context
 import android.graphics.Bitmap
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
+import com.onlytechtake.repairapp.core.templates.TemplateAnchor
+import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
 import com.onlytechtake.repairapp.data.local.dao.MessageTemplateDao
 import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
 import com.onlytechtake.repairapp.data.local.dao.SignatureDao
@@ -20,6 +22,7 @@ class SignatureRepository(
     private val repairOrderDao: RepairOrderDao,
     private val signatureDao: SignatureDao,
     private val templateDao: MessageTemplateDao,
+    private val settingDao: AppSettingDao,
     private val timelineEventDao: TimelineEventDao,
     private val fileCleanupService: OrderFileCleanupService,
     private val mediaStorageProvider: MediaStorageProvider,
@@ -48,8 +51,11 @@ class SignatureRepository(
             require(bitmap.width > 0 && bitmap.height > 0) { "Firma non valida" }
 
             val now = clockMillis()
-            val privacyTemplate = templateDao.findActiveByCode(PRIVACY_TEMPLATE_CODE)
-            val termsTemplate = templateDao.findActiveByCode(TERMS_TEMPLATE_CODE)
+            val privacyCode = settingDao.findByKey(TemplateAnchor.PRIVACY_TEXT.settingKey)?.value ?: TemplateAnchor.PRIVACY_TEXT.defaultCode
+            val termsCode = settingDao.findByKey(TemplateAnchor.TERMS_TEXT.settingKey)?.value ?: TemplateAnchor.TERMS_TEXT.defaultCode
+            
+            val privacyTemplate = templateDao.findActiveByCode(privacyCode)
+            val termsTemplate = templateDao.findActiveByCode(termsCode)
             val directory = mediaStorageProvider.getOrderSignaturesDir(orderId)
             val file = File(directory, "signature_$now.png")
 
@@ -88,8 +94,6 @@ class SignatureRepository(
     }
 
     private companion object {
-        const val PRIVACY_TEMPLATE_CODE = "privacy_breve"
-        const val TERMS_TEMPLATE_CODE = "condizioni_presa_in_carico"
         const val MIME_TYPE_PNG = "image/png"
         const val PNG_QUALITY = 100
         const val DEFAULT_SIGNER_NAME = "Cliente"

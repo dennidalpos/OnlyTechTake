@@ -15,6 +15,7 @@ import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.MessageTemplateDao
 import com.onlytechtake.repairapp.data.local.dao.OrderExportDao
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
+import com.onlytechtake.repairapp.core.security.DatabaseKeyManager
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
@@ -304,9 +305,35 @@ class BackupRepository(
     }
 
     private fun validateDatabase(file: File) {
-        // Validation skipped for encrypted database during migration.
-        // The restore process will fail later if the key is wrong when Room tries to open it.
         if (!file.exists()) throw IOException("File database non trovato")
+        
+        val key = DatabaseKeyManager(context).getDatabaseKey()
+        try {
+            val db = net.zetetic.database.sqlcipher.SQLiteDatabase.openDatabase(
+                file.absolutePath,
+                key,
+                null,
+                net.zetetic.database.sqlcipher.SQLiteDatabase.OPEN_READONLY,
+                null,
+                null
+            )
+            try {
+                db.rawQuery("PRAGMA integrity_check", null).use { cursor ->
+                    if (cursor.moveToFirst()) {
+                        val result = cursor.getString(0)
+                        if (result != "ok") {
+                            throw IOException("Integrità database compromessa: $result")
+                        }
+                    } else {
+                        throw IOException("Impossibile verificare integrità database")
+                    }
+                }
+            } finally {
+                db.close()
+            }
+        } catch (e: Exception) {
+            throw IOException("Validazione database fallita (chiave errata o file corrotto): ${e.message}", e)
+        }
     }
 
     private fun replaceDatabaseFiles(databaseFiles: Map<String, File>) {
@@ -324,10 +351,6 @@ class BackupRepository(
         val destination = mediaStorageProvider?.getBaseMediaDir()
             ?: File(context.filesDir, BackupArchive.CANONICAL_MEDIA_DIRECTORY)
         BackupArchive.restoreAppMedia(File(restoreRoot, "files"), destination)
-
-        listOf("orders", "order_media", "intake_media", "signatures").forEach { name ->
-            File(context.filesDir, name).deleteRecursively()
-        }
     }
 
     private suspend fun buildConfigurationJson(): String {

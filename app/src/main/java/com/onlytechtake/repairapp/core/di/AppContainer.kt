@@ -7,35 +7,38 @@ import com.onlytechtake.repairapp.data.repositories.DefaultRepairAppRepository
 
 class AppContainer(context: Context) {
     private val dataContainer = DataContainer(context)
-    private val authContainer = AuthContainer(context, dataContainer)
-    private val mediaContainer = MediaContainer(context, dataContainer)
-    private val orderContainer = OrderContainer(context, dataContainer, mediaContainer)
-    private val settingsContainer = SettingsContainer(context, dataContainer, authContainer, mediaContainer)
+    private val authContainer by lazy { AuthContainer(context, dataContainer) }
+    private val mediaContainer by lazy { MediaContainer(context, dataContainer) }
+    private val orderContainer by lazy { OrderContainer(context, dataContainer, mediaContainer) }
+    private val settingsContainer by lazy { SettingsContainer(context, dataContainer, authContainer, mediaContainer) }
 
-    val repairAppRepository: RepairAppRepository = DefaultRepairAppRepository(
-        dashboardDao = dataContainer.database.dashboardDao(),
-    )
+    val repairAppRepository: RepairAppRepository by lazy {
+        DefaultRepairAppRepository(
+            dashboardDao = dataContainer.database.dashboardDao(),
+        )
+    }
 
-    val authRepository = authContainer.authRepository
-    val adminUserRepository = authContainer.adminUserRepository
+    val authRepository get() = authContainer.authRepository
+    val adminUserRepository get() = authContainer.adminUserRepository
+    val database get() = dataContainer.database
     
-    val customerRepository = orderContainer.customerRepository
-    val catalogRepository = orderContainer.catalogRepository
-    val orderWorkflowRepository = orderContainer.orderWorkflowRepository
-    val createIntakeOrderUseCase = orderContainer.createIntakeOrderUseCase
+    val customerRepository get() = orderContainer.customerRepository
+    val catalogRepository get() = orderContainer.catalogRepository
+    val orderWorkflowRepository get() = orderContainer.orderWorkflowRepository
+    val createIntakeOrderUseCase get() = orderContainer.createIntakeOrderUseCase
 
-    val orderMediaRepository = mediaContainer.orderMediaRepository
-    val orderDocumentRepository = mediaContainer.orderDocumentRepository
-    val shareDocumentIntentFactory = mediaContainer.shareDocumentIntentFactory
-    val generateOrderStatusPdfUseCase = orderContainer.generateOrderStatusPdfUseCase
-    val orderFileCleanupService = mediaContainer.orderFileCleanupService
+    val orderMediaRepository get() = mediaContainer.orderMediaRepository
+    val orderDocumentRepository get() = mediaContainer.orderDocumentRepository
+    val shareDocumentIntentFactory get() = mediaContainer.shareDocumentIntentFactory
+    val generateOrderStatusPdfUseCase get() = orderContainer.generateOrderStatusPdfUseCase
+    val orderFileCleanupService get() = mediaContainer.orderFileCleanupService
 
-    val templateRepository = settingsContainer.templateRepository
-    val backupRepository = settingsContainer.backupRepository
-    val backupReminderPreferences = settingsContainer.backupReminderPreferences
-    val securityPreferences = settingsContainer.securityPreferences
-    val dataResetRepository = settingsContainer.dataResetRepository
-    val storageStatsService = settingsContainer.storageStatsService
+    val templateRepository get() = settingsContainer.templateRepository
+    val backupRepository get() = settingsContainer.backupRepository
+    val backupReminderPreferences get() = settingsContainer.backupReminderPreferences
+    val securityPreferences get() = settingsContainer.securityPreferences
+    val dataResetRepository get() = settingsContainer.dataResetRepository
+    val storageStatsService get() = settingsContainer.storageStatsService
 
     fun close() {
         dataContainer.database.close()

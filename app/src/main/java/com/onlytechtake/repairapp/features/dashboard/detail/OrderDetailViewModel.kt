@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
+import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
@@ -157,6 +158,16 @@ class OrderDetailViewModel(
 
     fun reportCameraError(message: String) {
         _message.value = WorkspaceMessage(message, true)
+    }
+
+    fun prepareMessage(anchor: TemplateAnchor) {
+        launchWithUser { actor ->
+            templateRepository.prepareMessage(actor, orderId, anchor).map { prepared ->
+                _preparedMessage.value = prepared
+                _preparedMessageBody.value = prepared.body
+                setFormDirty(true)
+            }
+        }
     }
 
     fun prepareMessage(templateCode: String) {

@@ -9,6 +9,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
+import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.AppSettingEntity
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
@@ -179,7 +180,7 @@ class RepositoryPathsInstrumentedTest {
         val acceptedResult = database.repairOrderDao().findById(acceptedOrder.id)
         assertEquals(DiagnosisOutcome.REPAIRABLE, acceptedResult?.diagnosisOutcome)
         assertEquals(12_300L, acceptedResult?.estimateAmountCents)
-        val quote = templates.prepareMessage(actor, acceptedOrder.id, "whatsapp_preventivo_intervento").getOrThrow()
+        val quote = templates.prepareMessage(actor, acceptedOrder.id, TemplateAnchor.WHATSAPP_QUOTE).getOrThrow()
         assertTrue(quote.body.contains("EUR 123,00"))
         templates.recordPrepared(actor, quote, quote.body).getOrThrow()
         workflow.recordFeedback(
@@ -214,7 +215,7 @@ class RepositoryPathsInstrumentedTest {
         val notRepairable = database.repairOrderDao().findById(notRepairableOrder.id)
         assertEquals(DiagnosisOutcome.NOT_REPAIRABLE, notRepairable?.diagnosisOutcome)
         assertEquals(null, notRepairable?.estimateAmountCents)
-        val message = templates.prepareMessage(actor, notRepairableOrder.id, "whatsapp_non_riparabile").getOrThrow()
+        val message = templates.prepareMessage(actor, notRepairableOrder.id, TemplateAnchor.WHATSAPP_NOT_REPAIRABLE).getOrThrow()
         assertTrue(message.body.contains("non riparabile"))
         assertFalse(message.body.contains("Motivo: ."))
         workflow.changeStatus(
@@ -825,6 +826,7 @@ class RepositoryPathsInstrumentedTest {
             repairOrderDao = database.repairOrderDao(),
             signatureDao = database.signatureDao(),
             templateDao = database.messageTemplateDao(),
+            settingDao = database.appSettingDao(),
             timelineEventDao = database.timelineEventDao(),
             fileCleanupService = OrderFileCleanupService(context, mediaProvider),
             mediaStorageProvider = mediaProvider,

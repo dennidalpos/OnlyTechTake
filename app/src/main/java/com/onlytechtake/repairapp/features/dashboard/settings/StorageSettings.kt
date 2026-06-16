@@ -28,11 +28,11 @@ fun StorageSettings(
     AppScreenContainer {
         SectionTitle(
             text = stringResource(R.string.storage_title),
-            tooltip = "Monitora l'uso della memoria e pulisci i file temporanei per liberare spazio.",
+            tooltip = stringResource(R.string.storage_tooltip),
         )
 
         if (stats == null) {
-            Text("Caricamento statistiche...", style = MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.storage_loading), style = MaterialTheme.typography.bodyMedium)
         } else {
             StandardCard {
                 Column(
@@ -61,7 +61,7 @@ fun StorageSettings(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = "Spazio libero: $freePercentage% (${formatFileSize(stats.freeDeviceBytes)})",
+                            text = stringResource(R.string.storage_free_percentage, freePercentage, formatFileSize(stats.freeDeviceBytes)),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -100,11 +100,35 @@ fun StorageSettings(
                     modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                 ) {
-                    Text("Dettaglio uso App", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.storage_app_detail_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                     AppKeyValueRow(label = stringResource(R.string.storage_db_size), value = formatFileSize(stats.databaseBytes))
                     AppKeyValueRow(label = stringResource(R.string.storage_media_size), value = formatFileSize(stats.mediaBytes))
                     AppKeyValueRow(label = stringResource(R.string.storage_docs_size), value = formatFileSize(stats.documentsBytes))
                     AppKeyValueRow(label = stringResource(R.string.storage_cache_size), value = formatFileSize(stats.cacheBytes))
+                }
+            }
+
+            Spacer(Modifier.height(RepairAppSpacing.cardGap))
+
+            StandardCard {
+                Column(
+                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+                ) {
+                    Text("Manutenzione profonda", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                    Text(
+                        text = stringResource(R.string.storage_cleanup_orphans_tooltip),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    AppButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.storage_cleanup_orphans),
+                        variant = AppButtonVariant.Secondary,
+                        size = AppButtonSize.Compact,
+                        onClick = viewModel::cleanupOrphanedFiles
+                    )
                 }
             }
 
@@ -135,7 +159,7 @@ fun StorageSettings(
 
         AppButton(
             modifier = Modifier.fillMaxWidth(),
-            text = "Chiudi Setup memoria",
+            text = stringResource(R.string.storage_close),
             variant = AppButtonVariant.Ghost,
             onClick = onBack
         )

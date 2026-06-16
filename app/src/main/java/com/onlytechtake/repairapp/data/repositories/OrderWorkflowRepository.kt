@@ -196,12 +196,14 @@ class OrderWorkflowRepository(
 
                 val now = clockMillis()
                 val prefix = orderNumberGenerator.yearPrefix(now)
+                val categoryPathSnapshot = buildCategoryPathSnapshot(input.categoryId)
                 val order = RepairOrderEntity(
                     id = UUID.randomUUID().toString(),
                     orderNumber = orderNumberGenerator.next(prefix, repairOrderDao.findLatestOrderNumberForYear(prefix)),
                     customerId = input.customerId,
                     title = input.title.trim().capitalizeFirst(),
                     categoryId = input.categoryId,
+                    categoryPathSnapshot = categoryPathSnapshot,
                     status = OrderStatus.OPEN,
                     priority = input.priority,
                     assignedToUserId = input.assignedToUserId ?: actor.id,
@@ -462,10 +464,18 @@ class OrderWorkflowRepository(
     private suspend fun <T> inTransaction(block: suspend () -> T): T =
         database?.withTransaction { block() } ?: block()
 
-    private fun File.deleteIfEmpty() {
-        if (exists() && isDirectory && listFiles().isNullOrEmpty()) {
-            delete()
-        }
-    }
+    private suspend fun buildCategoryPathSnapshot(categoryId: String): String? {
+        val path = mutableListOf<String>()
+        var currentId: String? = categoryId
+        val visited = mutableSetOf<String>()
 
+        while (currentId != null && !visited.contains(currentId)) {
+            visited.add(currentId)
+            val category = categoryDao.findById(currentId) ?: break
+            path.add(0, category.name)
+            currentId = category.parentId
+        }
+
+        return if (path.isEmpty()) null else path.joinToString(" > ")
+    }
 }

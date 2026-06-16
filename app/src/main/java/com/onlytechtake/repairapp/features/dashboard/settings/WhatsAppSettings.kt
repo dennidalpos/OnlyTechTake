@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.features.dashboard.settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,7 +25,7 @@ import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 
 @Composable
-fun WhatsAppSettings(
+fun ColumnScope.WhatsAppSettings(
     viewModel: SettingsViewModel,
     onRequestConfirm: (String, String, () -> Unit) -> Unit,
     onBack: () -> Unit,
@@ -34,6 +35,7 @@ fun WhatsAppSettings(
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
+            .weight(1f)
             .widthIn(max = RepairAppSpacing.maxContentWidthMedium),
         contentPadding = PaddingValues(RepairAppSpacing.screenHorizontal),
         verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),

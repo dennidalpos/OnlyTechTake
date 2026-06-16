@@ -17,7 +17,7 @@ import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import androidx.room.withTransaction
 
 class DataContainer(context: Context) {
-    val database = RepairAppDatabase.getInstance(context)
+    val database by lazy { RepairAppDatabase.getInstance(context) }
     val clockMillis: () -> Long = System::currentTimeMillis
 }
 
@@ -99,6 +99,7 @@ class OrderContainer(context: Context, dataContainer: DataContainer, mediaContai
         repairOrderDao = dataContainer.database.repairOrderDao(),
         signatureDao = dataContainer.database.signatureDao(),
         templateDao = dataContainer.database.messageTemplateDao(),
+        settingDao = dataContainer.database.appSettingDao(),
         timelineEventDao = dataContainer.database.timelineEventDao(),
         fileCleanupService = mediaContainer.orderFileCleanupService,
         mediaStorageProvider = mediaContainer.mediaStorageProvider,

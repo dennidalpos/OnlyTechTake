@@ -25,16 +25,25 @@ class DatabaseKeyManager(private val context: Context) {
         val ivBase64 = prefs.getString(KEY_IV, null)
 
         return if (encryptedKeyBase64 != null && ivBase64 != null) {
-            decryptKey(encryptedKeyBase64, ivBase64)
-        } else {
-            val newKey = generateRandomKey()
-            val (encryptedKey, iv) = encryptKey(newKey)
-            prefs.edit {
-                putString(KEY_ENCRYPTED_DB_PASSWORD, encryptedKey)
-                putString(KEY_IV, iv)
+            try {
+                decryptKey(encryptedKeyBase64, ivBase64)
+            } catch (e: Exception) {
+                android.util.Log.e("DatabaseKeyManager", "Failed to decrypt database key, generating new one", e)
+                generateAndSaveNewKey(prefs)
             }
-            newKey
+        } else {
+            generateAndSaveNewKey(prefs)
         }
+    }
+
+    private fun generateAndSaveNewKey(prefs: android.content.SharedPreferences): String {
+        val newKey = generateRandomKey()
+        val (encryptedKey, iv) = encryptKey(newKey)
+        prefs.edit {
+            putString(KEY_ENCRYPTED_DB_PASSWORD, encryptedKey)
+            putString(KEY_IV, iv)
+        }
+        return newKey
     }
 
     private fun getOrCreateMasterKey(): SecretKey {

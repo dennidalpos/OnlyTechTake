@@ -246,7 +246,7 @@ database/repair_app.db-*
 files/app_media/...
 ```
 
-Il ripristino ZIP completo e' supportato per admin tramite Storage Access Framework e sostituisce database e `filesDir/app_media`. Per compatibilita' di import accetta anche backup legacy con `files/orders` e `files/order_media`, mappandoli nel layout canonico senza ricreare cartelle obsolete nella root.
+Il ripristino ZIP completo e' supportato per admin tramite Storage Access Framework e sostituisce database e `filesDir/app_media`.
 
 ## WhatsApp
 
