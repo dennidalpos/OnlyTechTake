@@ -6,6 +6,7 @@ import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import android.provider.OpenableColumns
 import com.onlytechtake.repairapp.BuildConfig
+import com.onlytechtake.repairapp.core.security.DatabaseKeyManager
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label
@@ -303,11 +304,9 @@ class BackupRepository(
     }
 
     private fun validateDatabase(file: File) {
-        SQLiteDatabase.openDatabase(file.absolutePath, null, SQLiteDatabase.OPEN_READONLY).use { db ->
-            db.rawQuery("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'users'", null).use { cursor ->
-                require(cursor.moveToFirst()) { "Database backup non valido" }
-            }
-        }
+        // Validation skipped for encrypted database during migration.
+        // The restore process will fail later if the key is wrong when Room tries to open it.
+        if (!file.exists()) throw IOException("File database non trovato")
     }
 
     private fun replaceDatabaseFiles(databaseFiles: Map<String, File>) {

@@ -108,7 +108,7 @@ fun IntakeCustomerFields(
 ) {
     val contactMissing = phone.isBlank() && email.isBlank()
 
-    Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.formGap)) {
+    Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)) {
         CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = onBusinessChange)
         if (isBusiness) {
             AppTextField(companyName, onCompanyNameChange, stringResource(R.string.customer_field_company_name), required = true, showError = companyName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, capitalization = KeyboardCapitalization.Words)

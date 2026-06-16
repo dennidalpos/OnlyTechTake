@@ -35,6 +35,7 @@ import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
 
+import com.onlytechtake.repairapp.core.security.DatabaseKeyManager
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 
 @Database(
@@ -89,15 +90,18 @@ abstract class RepairAppDatabase : RoomDatabase() {
 
         fun getInstance(context: Context): RepairAppDatabase =
             instance ?: synchronized(this) {
-                instance ?: Room.databaseBuilder(
-                    context.applicationContext,
-                    RepairAppDatabase::class.java,
-                    DATABASE_NAME,
-                )
-                    .openHelperFactory(SupportOpenHelperFactory("".toByteArray()))
-                    .fallbackToDestructiveMigration(dropAllTables = true)
-                    .build()
-                    .also { instance = it }
+                instance ?: run {
+                    val key = DatabaseKeyManager(context).getDatabaseKey()
+                    Room.databaseBuilder(
+                        context.applicationContext,
+                        RepairAppDatabase::class.java,
+                        DATABASE_NAME,
+                    )
+                        .openHelperFactory(SupportOpenHelperFactory(key.toByteArray()))
+                        .fallbackToDestructiveMigration(dropAllTables = true)
+                        .build()
+                        .also { instance = it }
+                }
             }
 
         fun closeInstance() {

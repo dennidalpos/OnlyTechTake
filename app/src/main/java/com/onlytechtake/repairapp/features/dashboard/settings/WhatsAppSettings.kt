@@ -18,9 +18,10 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.components.StandardCard
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
 
 @Composable
 fun WhatsAppSettings(
@@ -33,13 +34,13 @@ fun WhatsAppSettings(
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .widthIn(max = RepairAppSpacing.maxContentWidth),
-        contentPadding = PaddingValues(RepairAppSpacing.screenPadding),
-        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.listGap),
+            .widthIn(max = RepairAppSpacing.maxContentWidthMedium),
+        contentPadding = PaddingValues(RepairAppSpacing.screenHorizontal),
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
     ) {
         item {
             StandardCard(highlight = true) {
-                Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.formGap)) {
+                Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)) {
                     SectionTitle(
                         text = stringResource(R.string.config_hub_whatsapp_title),
                         tooltip = "Configura la modalità di invio dei messaggi ai clienti. Attualmente è supportato l'invio manuale tramite WhatsApp."
@@ -48,7 +49,7 @@ fun WhatsAppSettings(
                     ActionRow {
                         val confirmTitle = stringResource(R.string.config_whatsapp_confirm_manual_title)
                         val confirmText = stringResource(R.string.config_whatsapp_confirm_manual_text)
-                        TouchButton(
+                        AppButton(
                             text = stringResource(R.string.config_whatsapp_manual),
                             onClick = {
                                 onRequestConfirm(confirmTitle, confirmText) {
@@ -62,10 +63,10 @@ fun WhatsAppSettings(
         }
 
         item {
-            TouchButton(
-                modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenPadding),
+            AppButton(
+                modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
                 text = "Chiudi Setup WhatsApp",
-                tone = com.onlytechtake.repairapp.features.workspace.ButtonTone.NEUTRAL,
+                variant = AppButtonVariant.Secondary,
                 onClick = onBack
             )
         }

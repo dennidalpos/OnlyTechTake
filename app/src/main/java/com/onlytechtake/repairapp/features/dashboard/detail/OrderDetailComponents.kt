@@ -170,7 +170,7 @@ fun AppActionPanel(
     StandardCard(modifier = modifier) {
         Column(
             modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.formGap)
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)
         ) {
             content()
         }
@@ -188,7 +188,7 @@ fun QuoteDecisionPanel(
     StandardCard {
         Column(
             modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.formGap),
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
         ) {
             Text(stringResource(R.string.order_quote_outcome), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             
@@ -370,7 +370,7 @@ fun OrderDocumentSection(
     StandardCard {
         Column(
             modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.formGap),
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
         ) {
             Text(stringResource(R.string.order_customer_documents), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             

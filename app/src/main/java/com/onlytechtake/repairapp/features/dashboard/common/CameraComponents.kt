@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.media.normalizeCameraTargetRotation
 import com.onlytechtake.repairapp.R
@@ -61,7 +62,7 @@ fun CameraCapturePreview(
     }
 
     if (!hasCameraPermission) {
-        TouchButton(text = "Concedi permesso camera", onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) })
+        AppButton(text = "Concedi permesso camera", onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) })
         return
     }
 
@@ -105,7 +106,7 @@ fun CameraCapturePreview(
                 .height(280.dp),
             factory = { previewView },
         )
-        TouchButton(
+        AppButton(
             modifier = Modifier.fillMaxWidth(),
             text = "Acquisisci foto",
             onClick = {

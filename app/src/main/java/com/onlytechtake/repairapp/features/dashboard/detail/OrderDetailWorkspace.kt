@@ -88,7 +88,7 @@ fun OrderDetailWorkspace(
     val selected = detail
     if (selected == null) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(RepairAppSpacing.screenPadding),
+            modifier = Modifier.fillMaxSize().padding(RepairAppSpacing.screenHorizontal),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -189,7 +189,7 @@ fun OrderDetailWorkspace(
                         StandardCard {
                             Column(
                                 modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-                                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.formGap),
+                                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
                             ) {
                                 Text("Esito diagnosi", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.error)
                                 OperatorText("Il dispositivo non e' riparabile. Avvisa il cliente prima di preparare il ritiro.")
@@ -286,7 +286,7 @@ fun OrderDetailWorkspace(
 
                 item {
                     AppButton(
-                        modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenPadding),
+                        modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
                         text = "Chiudi ed esci",
                         variant = AppButtonVariant.Secondary,
                         onClick = onBack

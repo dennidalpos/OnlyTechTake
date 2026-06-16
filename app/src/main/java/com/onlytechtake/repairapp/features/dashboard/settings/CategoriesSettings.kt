@@ -39,7 +39,6 @@ import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.*
-import com.onlytechtake.repairapp.features.workspace.ButtonTone
 
 @Composable
 fun CategoriesSettings(
@@ -104,9 +103,9 @@ fun CategoriesSettings(
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .widthIn(max = RepairAppSpacing.maxContentWidth),
-        contentPadding = PaddingValues(RepairAppSpacing.screenPadding),
-        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.listGap),
+            .widthIn(max = RepairAppSpacing.maxContentWidthMedium),
+        contentPadding = PaddingValues(RepairAppSpacing.screenHorizontal),
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
     ) {
         item {
             SectionTitle(
@@ -135,21 +134,21 @@ fun CategoriesSettings(
                     CategoryBreadcrumb(categories, currentCategoryParentId)
                     if (currentCategoryParentId != null) {
                         ActionRow {
-                            TouchButton(
+                            AppButton(
                                 text = stringResource(R.string.config_category_root),
-                                tone = ButtonTone.NEUTRAL,
+                                variant = AppButtonVariant.Secondary,
                                 onClick = { openCategoryBranch(null) },
                             )
                             currentParent?.parentId?.let { parentId ->
-                                TouchButton(
+                                AppButton(
                                     text = stringResource(R.string.config_category_up),
-                                    tone = ButtonTone.NEUTRAL,
+                                    variant = AppButtonVariant.Secondary,
                                     onClick = { openCategoryBranch(parentId) },
                                 )
                             } ?: run {
-                                TouchButton(
+                                AppButton(
                                     text = stringResource(R.string.config_category_up),
-                                    tone = ButtonTone.NEUTRAL,
+                                    variant = AppButtonVariant.Secondary,
                                     onClick = { openCategoryBranch(null) },
                                 )
                             }
@@ -158,11 +157,11 @@ fun CategoriesSettings(
                 }
                 
                 if (!showEditCard && searchQuery.isBlank()) {
-                    TouchButtonWithIcon(
+                    AppButton(
                         modifier = Modifier.fillMaxWidth(),
                         text = if (currentCategoryParentId == null) "Nuova Categoria principale" else "Nuova Sottocategoria",
-                        icon = Icons.Default.Add,
-                        tone = ButtonTone.PRIMARY,
+                        leadingIcon = Icons.Default.Add,
+                        variant = AppButtonVariant.Primary,
                         testTag = RepairAppTestTags.ConfigCategoryNewButton,
                         onClick = ::loadNewCategory
                     )
@@ -178,7 +177,7 @@ fun CategoriesSettings(
                 ) {
                     Column(
                         modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-                        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.formGap),
+                        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
                     ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -223,17 +222,17 @@ fun CategoriesSettings(
                             )
                         }
                         ActionRow {
-                            TouchButton(
+                            AppButton(
                                 text = "Annulla",
-                                tone = ButtonTone.NEUTRAL,
+                                variant = AppButtonVariant.Secondary,
                                 onClick = { showEditCard = false }
                             )
                             if ((categoryId == null) || isAdmin) {
                                 val confirmTitle = stringResource(R.string.config_category_confirm_save_title)
                                 val confirmText = stringResource(R.string.config_category_confirm_save_text)
-                                TouchButtonWithIcon(
+                                AppButton(
                                     text = stringResource(R.string.config_category_save),
-                                    icon = Icons.Default.Check,
+                                    leadingIcon = Icons.Default.Check,
                                     testTag = RepairAppTestTags.ConfigCategorySaveButton,
                                     onClick = {
                                         onRequestConfirm(confirmTitle, confirmText) {
@@ -322,10 +321,10 @@ fun CategoriesSettings(
         }
 
         item {
-            TouchButton(
-                modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenPadding),
+            AppButton(
+                modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
                 text = "Chiudi Categorie",
-                tone = ButtonTone.NEUTRAL,
+                variant = AppButtonVariant.Secondary,
                 onClick = onBack
             )
         }

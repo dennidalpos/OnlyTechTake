@@ -46,7 +46,6 @@ import com.onlytechtake.repairapp.data.local.entities.MessageChannel
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
-import com.onlytechtake.repairapp.features.workspace.ButtonTone
 
 @Composable
 fun TemplatesSettings(
@@ -65,9 +64,9 @@ fun TemplatesSettings(
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .widthIn(max = RepairAppSpacing.maxContentWidth),
-        contentPadding = PaddingValues(RepairAppSpacing.screenPadding),
-        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.listGap),
+            .widthIn(max = RepairAppSpacing.maxContentWidthMedium),
+        contentPadding = PaddingValues(RepairAppSpacing.screenHorizontal),
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
     ) {
         item {
             SectionTitle(
@@ -78,7 +77,7 @@ fun TemplatesSettings(
 
         if (isAdmin) {
             item {
-                TouchButton(
+                AppButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = "Nuovo Template",
                     testTag = RepairAppTestTags.ConfigTemplateNewButton,
@@ -144,7 +143,7 @@ fun TemplatesSettings(
 
         item {
             AppButton(
-                modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenPadding),
+                modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
                 text = "Chiudi Setup Template",
                 variant = AppButtonVariant.Secondary,
                 size = AppButtonSize.Compact,
@@ -193,15 +192,15 @@ fun TemplateEditDialog(
             modifier = Modifier
                 .fillMaxWidth(0.95f)
                 .fillMaxHeight(0.95f)
-                .widthIn(max = RepairAppSpacing.maxContentWidth),
+                .widthIn(max = RepairAppSpacing.maxContentWidthMedium),
             shape = MaterialTheme.shapes.extraLarge,
             color = MaterialTheme.colorScheme.surface,
-            tonalElevation = RepairAppSpacing.dialogElevation
+            tonalElevation = 6.dp
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(RepairAppSpacing.screenPadding),
+                    .padding(RepairAppSpacing.screenHorizontal),
             ) {
                 Text(
                     text = "Modifica Template",
@@ -230,7 +229,7 @@ fun TemplateEditDialog(
                     modifier = Modifier
                         .weight(1f)
                         .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.formGap)
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)
                 ) {
                     AppTextField(
                         value = title,
@@ -315,9 +314,4 @@ private val systemTemplateCodes = setOf(
 
 private fun isRiskyTemplateChange(loadedCode: String?, currentCode: String, active: Boolean): Boolean =
     (loadedCode != null && loadedCode != currentCode) || (currentCode in systemTemplateCodes && !active)
-
-@Composable
-private fun TouchButton(modifier: Modifier, text: String, testTag: String, onClick: () -> Unit) {
-    AppButton(modifier = modifier, text = text, testTag = testTag, onClick = onClick)
-}
 

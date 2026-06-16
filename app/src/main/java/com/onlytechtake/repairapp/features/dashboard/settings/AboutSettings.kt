@@ -19,9 +19,9 @@ import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.components.StandardCard
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.TouchButton
-import com.onlytechtake.repairapp.features.workspace.ButtonTone
 
 @Composable
 fun AboutSettings(onBack: () -> Unit) {
@@ -30,9 +30,9 @@ fun AboutSettings(onBack: () -> Unit) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .widthIn(max = RepairAppSpacing.maxContentWidth),
-        contentPadding = PaddingValues(RepairAppSpacing.screenPadding),
-        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.listGap),
+            .widthIn(max = RepairAppSpacing.maxContentWidthMedium),
+        contentPadding = PaddingValues(RepairAppSpacing.screenHorizontal),
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
     ) {
         item {
             SectionTitle(
@@ -79,9 +79,9 @@ fun AboutSettings(onBack: () -> Unit) {
                     Text("Sviluppo", style = MaterialTheme.typography.titleSmall)
                     Text("© 2026 OnlyTechTake", style = MaterialTheme.typography.bodyMedium)
                     
-                    TouchButton(
+                    AppButton(
                         text = "GitHub: dennidalpos",
-                        tone = ButtonTone.NEUTRAL,
+                        variant = AppButtonVariant.Secondary,
                         onClick = { uriHandler.openUri("https://github.com/dennidalpos") }
                     )
 
@@ -96,10 +96,10 @@ fun AboutSettings(onBack: () -> Unit) {
         }
 
         item {
-            TouchButton(
-                modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenPadding),
+            AppButton(
+                modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
                 text = "Chiudi Informazioni",
-                tone = ButtonTone.NEUTRAL,
+                variant = AppButtonVariant.Secondary,
                 onClick = onBack
             )
         }

@@ -3,26 +3,18 @@ package com.onlytechtake.repairapp.features.dashboard.common
 import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import com.onlytechtake.repairapp.domain.backup.BackupReminderStatus
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -34,27 +26,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import kotlinx.coroutines.launch
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.selected
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
-import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
@@ -63,7 +42,6 @@ import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.design.components.AppTextField
 import com.onlytechtake.repairapp.core.design.components.AppIconButton
 import com.onlytechtake.repairapp.core.design.components.AppDialog
-import com.onlytechtake.repairapp.features.workspace.ButtonTone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -109,52 +87,6 @@ fun SectionTitle(text: String, tooltip: String? = null) {
             }
         }
     }
-}
-
-
-@Composable
-fun Field(
-    value: String,
-    onValueChange: (String) -> Unit,
-    label: String,
-    modifier: Modifier = Modifier,
-    required: Boolean = false,
-    showOptional: Boolean = false,
-    showError: Boolean = false,
-    singleLine: Boolean = false,
-    imeAction: ImeAction = ImeAction.Default,
-    keyboardType: KeyboardType = KeyboardType.Text,
-    capitalization: KeyboardCapitalization = KeyboardCapitalization.Sentences,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
-    keyboardActions: KeyboardActions? = null,
-    trailingIcon: (@Composable () -> Unit)? = null,
-    testTag: String? = null,
-) {
-    val focusManager = LocalFocusManager.current
-    val effectiveImeAction = if (imeAction == ImeAction.Default) ImeAction.Next else imeAction
-    val effectiveKeyboardActions = keyboardActions ?: KeyboardActions(
-        onNext = { focusManager.moveFocus(FocusDirection.Down) },
-        onDone = { focusManager.clearFocus() },
-    )
-
-    AppTextField(
-        modifier = modifier
-            .fillMaxWidth()
-            .then(testTag?.let { Modifier.testTag(it) } ?: Modifier),
-        value = value,
-        onValueChange = onValueChange,
-        label = label,
-        required = required,
-        showOptional = showOptional,
-        showError = showError,
-        singleLine = singleLine,
-        imeAction = effectiveImeAction,
-        keyboardType = keyboardType,
-        capitalization = capitalization,
-        visualTransformation = visualTransformation,
-        keyboardActions = effectiveKeyboardActions,
-        trailingIcon = trailingIcon,
-    )
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -262,67 +194,6 @@ fun CompactExpandableRow(
 }
 
 @Composable
-fun TouchButton(
-    text: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    tone: ButtonTone = ButtonTone.PRIMARY,
-    selected: Boolean? = null,
-    stateDescription: String? = null,
-    testTag: String? = null,
-    fullWidth: Boolean = false,
-    size: AppButtonSize = AppButtonSize.Default,
-) {
-    AppButton(
-        modifier = modifier,
-        text = text,
-        onClick = onClick,
-        enabled = enabled,
-        variant = tone.appButtonVariant(),
-        size = if (fullWidth) AppButtonSize.FullWidth else size,
-        selected = selected,
-        stateDescription = stateDescription,
-        testTag = testTag,
-    )
-}
-
-@Composable
-fun TouchButtonWithIcon(
-    text: String,
-    icon: ImageVector,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    tone: ButtonTone = ButtonTone.PRIMARY,
-    testTag: String? = null,
-    fullWidth: Boolean = false,
-    size: AppButtonSize = AppButtonSize.Compact,
-) {
-    AppButton(
-        modifier = modifier,
-        text = text,
-        onClick = onClick,
-        enabled = enabled,
-        variant = tone.appButtonVariant(),
-        size = if (fullWidth) AppButtonSize.FullWidth else size,
-        testTag = testTag,
-        leadingIcon = icon,
-    )
-}
-
-private fun ButtonTone.appButtonVariant(): AppButtonVariant =
-    when (this) {
-        ButtonTone.PRIMARY -> AppButtonVariant.Primary
-        ButtonTone.NEUTRAL -> AppButtonVariant.Secondary
-        ButtonTone.SUCCESS -> AppButtonVariant.Success
-        ButtonTone.INFO -> AppButtonVariant.Info
-        ButtonTone.WARNING -> AppButtonVariant.Warning
-        ButtonTone.DANGER -> AppButtonVariant.Danger
-        ButtonTone.BRAND_WHATSAPP -> AppButtonVariant.WhatsApp
-    }
-
-@Composable
 fun CustomerTypeToggle(
     isBusiness: Boolean,
     onBusinessChange: (Boolean) -> Unit,
@@ -374,9 +245,9 @@ fun NoteFieldWithDialog(
         if (note.isNotBlank()) {
             OperatorText(note)
         }
-        TouchButton(
+        AppButton(
             text = if (note.isBlank()) label else "$label (${stringResource(R.string.customer_edit).lowercase()})",
-            tone = ButtonTone.NEUTRAL,
+            variant = AppButtonVariant.Secondary,
             size = AppButtonSize.Compact,
             testTag = testTag,
             onClick = {
@@ -455,11 +326,11 @@ fun BackupReminderCard(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            TouchButton(
+            AppButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.backup_run_full_zip),
                 onClick = onRunBackup,
-                fullWidth = true,
+                size = AppButtonSize.FullWidth,
             )
         }
     }
@@ -477,4 +348,3 @@ fun backupStatusLabel(settings: BackupReminderSettings): String =
             stringResource(R.string.backup_status_days_ago, days)
         }
     }
-

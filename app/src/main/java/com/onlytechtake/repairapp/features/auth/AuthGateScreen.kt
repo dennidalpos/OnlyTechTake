@@ -395,11 +395,11 @@ private fun AuthForm(
             modifier = Modifier
                 .fillMaxHeight()
                 .fillMaxWidth()
-                .widthIn(max = RepairAppSpacing.maxContentWidth)
+                .widthIn(max = RepairAppSpacing.maxContentWidthMedium)
                 .verticalScroll(rememberScrollState())
                 .imePadding()
-                .padding(horizontal = RepairAppSpacing.screenPadding, vertical = if (compactHeight) RepairAppSpacing.compactGap else RepairAppSpacing.screenPadding),
-            verticalArrangement = Arrangement.spacedBy(if (compactHeight) RepairAppSpacing.compactGap else RepairAppSpacing.formGap),
+                .padding(horizontal = RepairAppSpacing.screenHorizontal, vertical = if (compactHeight) RepairAppSpacing.compactGap else RepairAppSpacing.screenHorizontal),
+            verticalArrangement = Arrangement.spacedBy(if (compactHeight) RepairAppSpacing.compactGap else RepairAppSpacing.fieldGap),
         ) {
             Text(
                 text = title,

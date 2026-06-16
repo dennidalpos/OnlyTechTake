@@ -91,13 +91,6 @@ object RepairAppSpacing {
     val maxContentWidthCompact = 600.dp
     val maxContentWidthMedium = 840.dp
     val maxContentWidthExpanded = 1200.dp
-    
-    // Deprecated/Legacy aliases to avoid immediate breakage
-    val screenPadding = screenHorizontal
-    val listGap = cardGap
-    val formGap = fieldGap
-    val maxContentWidth = maxContentWidthMedium
-    val dialogElevation = 6.dp
 }
 
 object RepairAppSizes {
