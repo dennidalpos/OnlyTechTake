@@ -77,6 +77,10 @@ abstract class RepairAppDatabase : RoomDatabase() {
     abstract fun loginAttemptDao(): com.onlytechtake.repairapp.data.local.dao.LoginAttemptDao
 
     companion object {
+        init {
+            System.loadLibrary("sqlcipher")
+        }
+
         const val DATABASE_NAME = "repair_app.db"
         const val DATABASE_VERSION = 4
 

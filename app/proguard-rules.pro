@@ -29,3 +29,8 @@
 -keep class androidx.camera.camera2.** { *; }
 -keep class androidx.camera.lifecycle.** { *; }
 -keep class androidx.camera.view.** { *; }
+
+# SQLCipher
+-keep class net.zetetic.** { *; }
+-keep class androidx.sqlite.db.** { *; }
+-keep class androidx.sqlite.db.framework.** { *; }
