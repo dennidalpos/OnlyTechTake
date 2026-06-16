@@ -2,11 +2,15 @@ package com.onlytechtake.repairapp.data.repositories
 
 import com.onlytechtake.repairapp.data.local.dao.CustomerDao
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
+import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class CustomerRepositoryTest {
@@ -20,6 +24,20 @@ class CustomerRepositoryTest {
     }
 
     private val repository = CustomerRepository(stubDao)
+    private val manager = AuthenticatedUser(
+        id = "manager",
+        displayName = "Manager",
+        username = "manager",
+        role = UserRole.OPERATOR,
+        permissions = setOf(UserPermission.MANAGE_CUSTOMERS),
+    )
+    private val operator = AuthenticatedUser(
+        id = "operator",
+        displayName = "Operator",
+        username = "operator",
+        role = UserRole.OPERATOR,
+        permissions = emptySet(),
+    )
 
     @Test
     fun normalizesFieldsOnSave() = runBlocking {
@@ -33,7 +51,7 @@ class CustomerRepositoryTest {
             notes = " alcune note "
         )
 
-        repository.save(input)
+        repository.save(manager, input)
 
         val saved = stubDao.lastUpserted!!
         assertEquals("Mario", saved.firstName)
@@ -44,4 +62,27 @@ class CustomerRepositoryTest {
         assertEquals("Via roma 1", saved.address)
         assertEquals("Alcune note", saved.notes)
     }
+
+    @Test
+    fun saveFailsWithoutManageCustomersPermission() = runBlocking {
+        val result = repository.save(operator, validCustomerInput())
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is SecurityException)
+        assertEquals(null, stubDao.lastUpserted)
+    }
+
+    @Test
+    fun saveSucceedsWithManageCustomersPermission() = runBlocking {
+        val result = repository.save(manager, validCustomerInput())
+
+        assertTrue(result.isSuccess)
+        assertEquals("Mario", stubDao.lastUpserted?.firstName)
+    }
+
+    private fun validCustomerInput() = CustomerInput(
+        firstName = "Mario",
+        lastName = "Rossi",
+        phone = "+39123456789",
+    )
 }

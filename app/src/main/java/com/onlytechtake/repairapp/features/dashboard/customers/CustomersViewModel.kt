@@ -64,7 +64,7 @@ class CustomersViewModel(
 
     fun saveCustomer(input: CustomerInput, onSaved: (CustomerEntity) -> Unit = {}) {
         viewModelScope.launch {
-            customerRepository.save(input).fold(
+            customerRepository.save(currentUser.value, input).fold(
                 onSuccess = { 
                     onSaved(it)
                     _searchQuery.value = ""

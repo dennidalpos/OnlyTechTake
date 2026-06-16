@@ -98,7 +98,7 @@ class NewOrderViewModel(
 
     fun saveCustomer(input: CustomerInput, onSaved: (CustomerEntity) -> Unit) {
         viewModelScope.launch {
-            customerRepository.save(input).fold(
+            customerRepository.save(currentUser.value, input).fold(
                 onSuccess = { onSaved(it) },
                 onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) }
             )

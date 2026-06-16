@@ -1,10 +1,13 @@
 package com.onlytechtake.repairapp.data.repositories
 
 import com.onlytechtake.repairapp.core.demo.DemoMode
+import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.data.local.dao.CustomerDao
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.core.utils.capitalizeFirst
+import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import java.util.UUID
 import kotlinx.coroutines.flow.Flow
@@ -44,8 +47,9 @@ class CustomerRepository(
         return customerDao.findById(id)
     }
 
-    suspend fun save(input: CustomerInput): Result<CustomerEntity> =
+    suspend fun save(actor: AuthenticatedUser?, input: CustomerInput): Result<CustomerEntity> =
         runCatching {
+            PermissionService.requirePermission(actor, UserPermission.MANAGE_CUSTOMERS)
             val now = clockMillis()
             val existing = input.id?.let { customerDao.findById(it) }
             require(isValid(input)) { "Inserisci i dati cliente obbligatori" }

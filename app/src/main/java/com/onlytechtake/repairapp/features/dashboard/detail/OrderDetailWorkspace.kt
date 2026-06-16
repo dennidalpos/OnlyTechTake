@@ -48,6 +48,7 @@ import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.domain.workspace.canConfirmDiagnosisResult
 import com.onlytechtake.repairapp.domain.workspace.requiresConfirmation
 import com.onlytechtake.repairapp.domain.workspace.shouldShowDiagnosisEstimate
+import com.onlytechtake.repairapp.domain.workspace.statusTemplateAnchor
 
 @Composable
 fun OrderDetailWorkspace(
@@ -157,6 +158,7 @@ fun OrderDetailWorkspace(
                     OrderActionCard(
                         status = selected.order.status,
                         isPaid = selected.isPaid,
+                        whatsAppAnchor = statusTemplateAnchor(selected.order),
                         onActionClick = { action ->
                             statusAction = action
                             statusNote = ""
@@ -166,7 +168,7 @@ fun OrderDetailWorkspace(
                             diagnosisOutcome = selected.order.diagnosisOutcome
                         },
                         onTogglePayment = { viewModel.togglePaymentStatus(!selected.isPaid) },
-                        onSendWhatsApp = { viewModel.prepareMessage(TemplateAnchor.WHATSAPP_UPDATE) },
+                        onSendWhatsApp = viewModel::prepareMessage,
                     )
                 }
 

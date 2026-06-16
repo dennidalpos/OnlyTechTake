@@ -53,7 +53,7 @@ class CreateIntakeOrderUseCase(
             try {
                 runAtomically {
                     val customerId = normalizedInput.existingCustomerId?.takeIf { it.isNotBlank() }
-                        ?: customerRepository.save(requireNotNull(normalizedInput.newCustomer) { "Cliente obbligatorio" })
+                        ?: customerRepository.save(actor, requireNotNull(normalizedInput.newCustomer) { "Cliente obbligatorio" })
                             .getOrThrow()
                             .id
 

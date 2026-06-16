@@ -296,6 +296,7 @@ class RepositoryPathsInstrumentedTest {
         val repository = CustomerRepository(database.customerDao(), clockMillis = { NOW + 1L })
 
         val updated = repository.save(
+            actor,
             com.onlytechtake.repairapp.domain.workspace.CustomerInput(
                 id = CUSTOMER_ID,
                 type = CustomerType.PRIVATE,

@@ -40,7 +40,6 @@ import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
 import com.onlytechtake.repairapp.domain.workspace.availableOrderStatusActions
-import com.onlytechtake.repairapp.domain.workspace.statusTemplateAnchor
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision
@@ -123,6 +122,7 @@ private fun InfoMetadata(label: String, value: String) {
 fun OrderActionCard(
     status: OrderStatus,
     isPaid: Boolean,
+    whatsAppAnchor: TemplateAnchor,
     onActionClick: (OrderStatusAction) -> Unit,
     onTogglePayment: () -> Unit,
     onSendWhatsApp: (TemplateAnchor) -> Unit,
@@ -159,7 +159,7 @@ fun OrderActionCard(
         AppButton(
             text = stringResource(R.string.order_whatsapp_send),
             variant = AppButtonVariant.WhatsApp,
-            onClick = { onSendWhatsApp(statusTemplateAnchor(status)) },
+            onClick = { onSendWhatsApp(whatsAppAnchor) },
             size = AppButtonSize.Compact,
             leadingIcon = Icons.AutoMirrored.Filled.Message,
             modifier = Modifier.fillMaxWidth()

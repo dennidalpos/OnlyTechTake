@@ -85,7 +85,7 @@
       "block_id": "B03",
       "title": "Bug funzionali P1 senza cambio schema",
       "complexity": "medium",
-      "status": "open",
+      "status": "resolved",
       "recommended_batch_size": 2,
       "schema_guarded": false,
       "owner_approval_required": false,
@@ -93,30 +93,14 @@
       "last_attempt": {
         "date": "2026-06-16",
         "commands": [
+          "powershell -ExecutionPolicy Bypass -File scripts\\android\\gradle.ps1 -- --no-configuration-cache :app:testFullDebugUnitTest --tests \"com.onlytechtake.repairapp.data.repositories.CustomerRepositoryTest\" --tests \"com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCaseTest\"",
           "powershell -ExecutionPolicy Bypass -File scripts\\android\\gradle.ps1 -- --no-configuration-cache :app:testFullDebugUnitTest",
-          "powershell -ExecutionPolicy Bypass -File scripts\\android\\gradle.ps1 -- --no-configuration-cache :app:testDemoDebugUnitTest --tests \"com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCaseDemoTest\"",
-          "powershell -ExecutionPolicy Bypass -File scripts\\android\\gradle.ps1 -- --no-configuration-cache :app:compileFullDebugAndroidTestKotlin"
+          "powershell -ExecutionPolicy Bypass -File scripts\\android\\gradle.ps1 -- --no-configuration-cache :app:compileFullDebugAndroidTestKotlin",
+          "powershell -ExecutionPolicy Bypass -File scripts\\windows\\check_project.ps1 -Flavor Full -SkipReleaseBuild"
         ],
-        "result": "Chiusi F01/F02: Full unit test verde, test Demo mirato watermark verde, compile androidTest Full verde. Il task :app:testDemoDebugUnitTest completo resta non usabile come gate perche' include test src/test preesistenti Full-only (DemoModeFullTest)."
+        "result": "Chiusi F03/F04: CustomerRepository.save richiede actor e MANAGE_CUSTOMERS, i flussi clienti/nuova commessa/use case passano l'actor corrente, il bottone WhatsApp generale del dettaglio usa statusTemplateAnchor(order). Test mirati verdi, Full unit test verde, compile androidTest Full verde e check_project Full verde."
       },
-      "items": [
-        {
-          "priority": "P1",
-          "summary": "Functional permissions manage customers: CustomerRepository.save deve ricevere actor e verificare MANAGE_CUSTOMERS.",
-          "refs": [
-            "functional_review_residual_plan.priority_order.F03"
-          ],
-          "completion_criteria": "Test salvataggio negato senza permesso e intake preservato per utenti autorizzati."
-        },
-        {
-          "priority": "P1",
-          "summary": "Functional WhatsApp template result: il bottone WhatsApp generale nel dettaglio deve usare statusTemplateAnchor(order).",
-          "refs": [
-            "functional_review_residual_plan.priority_order.F04"
-          ],
-          "completion_criteria": "Test mapping/UI mirato per RESULT+REPAIRABLE => preventivo e RESULT+NOT_REPAIRABLE => non riparabile."
-        }
-      ]
+      "items": []
     },
     {
       "block_id": "B04",
@@ -431,6 +415,9 @@
       },
       {
         "id": "F03",
+        "status": "resolved",
+        "resolved_at": "2026-06-16",
+        "resolution": "CustomerRepository.save ora riceve actor e richiede MANAGE_CUSTOMERS tramite PermissionService. CustomersViewModel, NewOrderViewModel e CreateIntakeOrderUseCase passano l'actor corrente; il percorso intake con nuovo cliente autorizzato e' coperto da test use case.",
         "priority": "P1",
         "classification": "bug",
         "title": "Salvataggio clienti senza enforcement MANAGE_CUSTOMERS",
@@ -456,6 +443,9 @@
       },
       {
         "id": "F04",
+        "status": "resolved",
+        "resolved_at": "2026-06-16",
+        "resolution": "OrderDetailWorkspace calcola l'anchor del bottone WhatsApp generale con statusTemplateAnchor(selected.order) e OrderActionCard usa l'anchor ricevuto senza forzare WHATSAPP_UPDATE. I casi RESULT+REPAIRABLE e RESULT+NOT_REPAIRABLE restano coperti da StatusWorkflowTest.",
         "priority": "P1",
         "classification": "bug",
         "title": "Template WhatsApp generale ignora esito diagnosi",
