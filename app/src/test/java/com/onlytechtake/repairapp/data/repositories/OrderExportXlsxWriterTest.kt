@@ -31,6 +31,7 @@ class OrderExportXlsxWriterTest {
             description = "Display \"nero\"",
             internalNotes = "Nota con apostrofo '",
             diagnosisOutcome = DiagnosisOutcome.REPAIRABLE,
+            isPaid = true,
             estimateAmountCents = 12345,
             finalAmountCents = null,
             createdAt = 1_717_171_717_000L,
@@ -54,6 +55,8 @@ class OrderExportXlsxWriterTest {
         assertTrue(sheet.contains("Display &quot;nero&quot;"))
         assertTrue(sheet.contains("Nota con apostrofo &apos;"))
         assertTrue(sheet.contains("Riparabile"))
+        assertTrue(sheet.contains("Pagamento"))
+        assertTrue(sheet.contains("Pagato"))
         assertTrue(sheet.contains("EUR 123,45"))
     }
 

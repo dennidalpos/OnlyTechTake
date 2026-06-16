@@ -86,6 +86,7 @@ internal class OrderExportXlsxWriter(
             row.description.orEmpty(),
             row.internalNotes.orEmpty(),
             row.diagnosisOutcome.label(),
+            row.isPaid.paymentLabel(),
             row.estimateAmountCents.formatEuroCentsForExport(),
             row.finalAmountCents.formatEuroCentsForExport(),
             row.createdAt.formatTime(),
@@ -131,6 +132,9 @@ internal class OrderExportXlsxWriter(
             DiagnosisOutcome.NOT_REPAIRABLE -> "Non riparabile"
             null -> ""
         }
+
+    private fun Boolean.paymentLabel(): String =
+        if (this) "Pagato" else "Non pagato"
 
     private fun ClosureReason?.label(): String =
         when (this) {
@@ -196,6 +200,7 @@ private val headers = listOf(
     "Descrizione",
     "Note interne",
     "Esito diagnosi",
+    "Pagamento",
     "Importo preventivo",
     "Importo finale",
     "Creata",

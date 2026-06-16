@@ -51,6 +51,7 @@ data class OrderExportRow(
     val description: String?,
     val internalNotes: String?,
     val diagnosisOutcome: DiagnosisOutcome? = null,
+    val isPaid: Boolean,
     val estimateAmountCents: Long?,
     val finalAmountCents: Long?,
     val createdAt: Long,
@@ -101,6 +102,17 @@ interface OrderExportDao {
             repair_orders.description AS description,
             repair_orders.internalNotes AS internalNotes,
             repair_orders.diagnosisOutcome AS diagnosisOutcome,
+            CASE
+                WHEN (
+                    SELECT timeline_events.type
+                    FROM timeline_events
+                    WHERE timeline_events.orderId = repair_orders.id
+                        AND timeline_events.type IN ('PAYMENT_RECEIVED', 'PAYMENT_REMOVED')
+                    ORDER BY timeline_events.createdAt DESC, timeline_events.id DESC
+                    LIMIT 1
+                ) = 'PAYMENT_RECEIVED' THEN 1
+                ELSE 0
+            END AS isPaid,
             repair_orders.estimateAmountCents AS estimateAmountCents,
             repair_orders.finalAmountCents AS finalAmountCents,
             repair_orders.createdAt AS createdAt,

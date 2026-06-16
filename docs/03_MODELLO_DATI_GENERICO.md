@@ -75,10 +75,7 @@ data class RepairOrderEntity(
     val closeNote: String? = null,
     val closedByUserId: String? = null,
     val categoryPathSnapshot: String? = null,
-    val lastCustomerContactAt: Long? = null,
-    val deletedAt: Long? = null,
-    val deletedByUserId: String? = null,
-    val deleteReason: String? = null
+    val lastCustomerContactAt: Long? = null
 )
 ```
 
@@ -86,6 +83,10 @@ data class RepairOrderEntity(
 dall'importo: il preventivo deve essere positivo nel primo ramo ed e' sempre
 azzerato nel secondo. `RESULT` rappresenta l'attesa del riscontro cliente o
 dell'avviso per il ritiro, senza introdurre uno stato `WAITING_CUSTOMER`.
+
+Le commesse non hanno soft delete o archiviazione batch nello schema corrente.
+La pulizia admin implementata cancella tutte le commesse e i dati collegati con
+conferma testuale `CANCELLA TUTTO`.
 
 ## OrderCategory
 

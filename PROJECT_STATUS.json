@@ -111,23 +111,16 @@
       "schema_guarded": false,
       "owner_approval_required": false,
       "why_this_block": "Migliorie operative e decisioni docs senza migrazioni; separato dai P1 per non diluire i fix bloccanti.",
+      "last_attempt": {
+        "date": "2026-06-16",
+        "commands": [
+          "powershell -ExecutionPolicy Bypass -File scripts\\android\\gradle.ps1 -- --no-configuration-cache :app:testFullDebugUnitTest --tests \"com.onlytechtake.repairapp.data.repositories.OrderExportXlsxWriterTest\"",
+          "powershell -ExecutionPolicy Bypass -File scripts\\android\\gradle.ps1 -- --no-configuration-cache :app:compileFullDebugAndroidTestKotlin",
+          "powershell -ExecutionPolicy Bypass -File scripts\\windows\\check_project.ps1 -Flavor Full -SkipReleaseBuild"
+        ],
+        "result": "Chiusi F06/F07: export XLSX commesse con colonna Pagamento derivata dall'ultimo evento PAYMENT_RECEIVED/PAYMENT_REMOVED, test writer e test DAO strumentato aggiunti/compilati; docs admin cleanup allineate alla cancellazione totale commesse reale senza archiviazione o soft delete in docs/01 e docs/03. Check standard Full verde. Resta aperto F08 sul contratto PDF timeline."
+      },
       "items": [
-        {
-          "priority": "P2",
-          "summary": "Functional XLSX payment export: includere nell'export XLSX lo stato pagamento derivato dall'ultimo evento PAYMENT_RECEIVED/PAYMENT_REMOVED senza cambiare schema Room.",
-          "refs": [
-            "functional_review_residual_plan.priority_order.F06"
-          ],
-          "completion_criteria": "Test DAO/export writer per colonna pagamento e valori derivati."
-        },
-        {
-          "priority": "P2",
-          "summary": "Functional docs cleanup archive mismatch: allineare docs al codice corrente sulla pulizia admin, senza implementare archiviazione o soft delete.",
-          "refs": [
-            "functional_review_residual_plan.priority_order.F07"
-          ],
-          "completion_criteria": "Diff documentale coerente con reset commesse reale e nessun cambio schema."
-        },
         {
           "priority": "P2",
           "summary": "Functional PDF timeline contract: decidere e documentare se il PDF commessa per cliente include solo eventi visibleToCustomer o timeline completa.",
@@ -496,6 +489,9 @@
       },
       {
         "id": "F06",
+        "status": "resolved",
+        "resolved_at": "2026-06-16",
+        "resolution": "OrderExportDao calcola isPaid dall'ultimo evento PAYMENT_RECEIVED/PAYMENT_REMOVED senza schema change; OrderExportXlsxWriter esporta la colonna Pagamento con valori Pagato/Non pagato. Coperto da OrderExportXlsxWriterTest e OrderExportDaoInstrumentedTest compilato.",
         "priority": "P2",
         "classification": "rischio dati/UX",
         "title": "Export XLSX non include stato pagamento",
@@ -521,6 +517,9 @@
       },
       {
         "id": "F07",
+        "status": "resolved",
+        "resolved_at": "2026-06-16",
+        "resolution": "docs/01_GUIDA_FUNZIONALE.md descrive la pulizia admin reale come cancellazione totale commesse con CANCELLA TUTTO; docs/03_MODELLO_DATI_GENERICO.md rimuove i campi soft delete non presenti da RepairOrderEntity e chiarisce che archiviazione/soft delete commesse non sono implementate; nessun cambio schema.",
         "priority": "P2",
         "classification": "debito tecnico/documentazione",
         "title": "Docs archiviazione batch e soft delete non allineate al codice",

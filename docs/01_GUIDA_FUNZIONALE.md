@@ -21,7 +21,7 @@ Funzioni implementate:
 - modificare template privacy, condizioni e WhatsApp;
 - impostare la modalita WhatsApp manuale;
 - esportare ZIP completo, XLSX commesse, database pre-cleanup e PDF commessa;
-- archiviare in batch le commesse scartate e cancellare definitivamente quelle gia' archiviate;
+- cancellare definitivamente tutte le commesse e i relativi file con conferma testuale `CANCELLA TUTTO`;
 - eseguire reset totale dati con conferma testuale `RESET`.
 
 ### Operatore
@@ -73,7 +73,7 @@ Commesse (Elenco filtrabile e ricerca)
 Config (Impostazioni applicative e accesso Admin)
 ```
 
-La sezione **Admin** (utenti, reset dati, archiviazione batch) è raggiungibile tramite la tab **Config**.
+La sezione **Admin** (utenti, reset dati e pulizia commesse) e' raggiungibile tramite la tab **Config**.
 
 La Home mostra metriche locali e quattro code operative:
 
@@ -206,7 +206,6 @@ Ogni azione importante crea un evento timeline, tra cui:
 - commessa riassegnata;
 - nota aggiunta;
 - commessa chiusa;
-- commessa eliminata logicamente;
 - PDF riepilogo condiviso;
 - stato azione cliente aggiornato;
 - pagamento ricevuto o rimosso;
@@ -216,8 +215,10 @@ Ogni azione importante crea un evento timeline, tra cui:
 
 L'admin puo':
 
-- archiviare in batch le commesse chiuse come rifiutate, annullate o non riparabili digitando `ARCHIVIA`;
-- cancellare definitivamente le commesse gia' archiviate e i relativi file digitando `CANCELLA`.
+- esportare un backup database e un XLSX prima della pulizia;
+- cancellare definitivamente tutte le commesse, timeline, messaggi, foto, firme e documenti digitando `CANCELLA TUTTO`.
+
+Non e' implementato un flusso di archiviazione o soft delete delle commesse.
 
 ## WhatsApp, feedback e PDF
 
@@ -245,7 +246,7 @@ Il feedback cliente automatico non e' implementato. La risposta viene registrata
 Export implementati:
 
 - ZIP completo con database, configurazione e file privati rilevanti (foto, firme, PDF);
-- XLSX commesse con esito diagnosi;
+- XLSX commesse con esito diagnosi e stato pagamento;
 - database Room dalla sezione Admin;
 - PDF riepilogo della singola commessa con timeline completa.
 

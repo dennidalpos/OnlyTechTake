@@ -55,7 +55,7 @@ Foto CameraX, allegati importati e firme restano in spazio privato app e vengono
 
 Output: `onlytechtake-commesse.xlsx`.
 
-Contiene l'export tabellare delle commesse per uso admin, incluso l'esito diagnosi.
+Contiene l'export tabellare delle commesse per uso admin, inclusi esito diagnosi e stato pagamento derivato dall'ultimo evento `PAYMENT_RECEIVED` o `PAYMENT_REMOVED` registrato nella timeline.
 
 Il PDF della commessa elenca timeline e nomi dei media; non incorpora bitmap,
 quindi non altera ne' ricodifica l'orientamento delle foto.
