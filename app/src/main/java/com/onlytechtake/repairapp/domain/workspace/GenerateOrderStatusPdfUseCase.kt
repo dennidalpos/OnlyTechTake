@@ -1,8 +1,11 @@
 package com.onlytechtake.repairapp.domain.workspace
 
 import android.content.Context
+import com.onlytechtake.repairapp.BuildConfig
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.pdf.OrderStatusPdfGenerator
 import com.onlytechtake.repairapp.core.pdf.OrderStatusPdfPayload
+import com.onlytechtake.repairapp.core.pdf.OrderStatusPdfWriter
 import com.onlytechtake.repairapp.core.utils.formatEuroCents
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.dao.UserDao
@@ -23,7 +26,7 @@ class GenerateOrderStatusPdfUseCase(
     private val documentRepository: OrderDocumentRepository,
     private val userDao: UserDao,
     private val fileStorage: OrderDocumentFileStorage,
-    private val pdfGenerator: OrderStatusPdfGenerator = OrderStatusPdfGenerator(),
+    private val pdfGenerator: OrderStatusPdfWriter = OrderStatusPdfGenerator(),
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
     suspend operator fun invoke(
@@ -59,6 +62,11 @@ class GenerateOrderStatusPdfUseCase(
             signature = signature,
             generatedAt = now,
             generatedBy = user.displayName,
+            watermarkText = if (BuildConfig.IS_DEMO_VERSION) {
+                context.getString(R.string.demo_version_banner)
+            } else {
+                null
+            },
         )
         
         val fileName = "stato-avanzamento-${detail.order.orderNumber}-$now.pdf"

@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
+import androidx.core.graphics.withRotation
 import com.onlytechtake.repairapp.core.media.decodeOrientedBitmap
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
@@ -27,10 +28,15 @@ data class OrderStatusPdfPayload(
     val timeline: List<TimelineEventEntity>,
     val signature: SignatureEntity?,
     val generatedAt: Long,
-    val generatedBy: String
+    val generatedBy: String,
+    val watermarkText: String? = null,
 )
 
-class OrderStatusPdfGenerator {
+interface OrderStatusPdfWriter {
+    fun generate(outputFile: File, payload: OrderStatusPdfPayload): File
+}
+
+class OrderStatusPdfGenerator : OrderStatusPdfWriter {
 
     private val titlePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textSize = 18f
@@ -55,9 +61,17 @@ class OrderStatusPdfGenerator {
         color = Color.BLACK
     }
 
+    private val watermarkPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        textSize = 56f
+        typeface = Typeface.DEFAULT_BOLD
+        color = Color.RED
+        alpha = 38
+        textAlign = Paint.Align.CENTER
+    }
+
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
 
-    fun generate(outputFile: File, payload: OrderStatusPdfPayload): File {
+    override fun generate(outputFile: File, payload: OrderStatusPdfPayload): File {
         val document = PdfDocument()
         val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create() // A4
         var page = document.startPage(pageInfo)
@@ -66,9 +80,14 @@ class OrderStatusPdfGenerator {
         val margin = 36f
         val contentWidth = 595f - 2 * margin
 
+        fun finishCurrentPage() {
+            drawWatermark(canvas, payload.watermarkText)
+            document.finishPage(page)
+        }
+
         fun checkNewPage(neededHeight: Float) {
             if (y + neededHeight > 842f - margin) {
-                document.finishPage(page)
+                finishCurrentPage()
                 page = document.startPage(PdfDocument.PageInfo.Builder(595, 842, pageInfo.pageNumber + 1).create())
                 canvas = page.canvas
                 y = margin
@@ -171,10 +190,17 @@ class OrderStatusPdfGenerator {
             }
         }
 
-        document.finishPage(page)
+        finishCurrentPage()
         FileOutputStream(outputFile).use { document.writeTo(it) }
         document.close()
         return outputFile
+    }
+
+    private fun drawWatermark(canvas: Canvas, watermarkText: String?) {
+        if (watermarkText.isNullOrBlank()) return
+        canvas.withRotation(-35f, PAGE_WIDTH / 2f, PAGE_HEIGHT / 2f) {
+            drawText(watermarkText, PAGE_WIDTH / 2f, PAGE_HEIGHT / 2f, watermarkPaint)
+        }
     }
 
     private fun drawWrappedText(canvas: Canvas, text: String, x: Float, y: Float, maxWidth: Float, paint: Paint): Float {
@@ -197,3 +223,5 @@ class OrderStatusPdfGenerator {
 }
 
 private const val SIGNATURE_MAX_DECODE_DIMENSION = 480
+private const val PAGE_WIDTH = 595f
+private const val PAGE_HEIGHT = 842f

@@ -34,6 +34,7 @@ import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
 import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
 import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
+import com.onlytechtake.repairapp.domain.workspace.OrderClosurePermissionPolicy
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.domain.workspace.OrderListItem
@@ -237,6 +238,7 @@ class OrderWorkflowRepository(
                 val order = requireWritableOrder(actor, orderId)
                 if (order.status == status) return@inTransaction
                 OrderStatusPolicy.requireAllowed(order.status, status, closureReason)
+                OrderClosurePermissionPolicy.requireClosePermissionIfNeeded(actor, status)
                 if ((order.status == OrderStatus.RESULT) && (status == OrderStatus.REPAIRING)) {
                     require(order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
                         "Solo una diagnosi riparabile puo' passare in riparazione"
@@ -386,6 +388,7 @@ class OrderWorkflowRepository(
                 }
                 if (targetStatus != order.status) {
                     OrderStatusPolicy.requireAllowed(order.status, targetStatus, closureReason)
+                    OrderClosurePermissionPolicy.requireClosePermissionIfNeeded(actor, targetStatus)
                 }
                 repairOrderDao.upsert(
                     order.copy(

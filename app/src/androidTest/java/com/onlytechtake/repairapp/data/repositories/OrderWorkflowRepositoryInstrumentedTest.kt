@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.*
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -86,6 +87,93 @@ class OrderWorkflowRepositoryInstrumentedTest {
         assertEquals("Test close", updated?.closeNote)
     }
 
+    @Test
+    fun changeStatusToClosedRequiresCloseOrdersPermission() = runBlocking {
+        val actor = mockOperator(permissions = setOf(UserPermission.EDIT_OWN_ORDERS))
+        seedCoreData(userId = actor.id, role = UserRole.OPERATOR, permissions = actor.permissions)
+        val order = createTestOrder(assignedToUserId = actor.id)
+
+        val result = repository.changeStatus(
+            actor,
+            order.id,
+            OrderStatus.CLOSED,
+            note = "Cliente rinuncia",
+            closureReason = ClosureReason.CUSTOMER_DECLINED,
+        )
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is SecurityException)
+        assertEquals(OrderStatus.OPEN, database.repairOrderDao().findById(order.id)?.status)
+    }
+
+    @Test
+    fun changeStatusToClosedSucceedsWithCloseOrdersPermission() = runBlocking {
+        val actor = mockOperator(permissions = setOf(UserPermission.EDIT_OWN_ORDERS, UserPermission.CLOSE_ORDERS))
+        seedCoreData(userId = actor.id, role = UserRole.OPERATOR, permissions = actor.permissions)
+        val order = createTestOrder(assignedToUserId = actor.id)
+
+        val result = repository.changeStatus(
+            actor,
+            order.id,
+            OrderStatus.CLOSED,
+            note = "Completata",
+            closureReason = ClosureReason.COMPLETED,
+        )
+
+        assertTrue(result.isSuccess)
+        val updated = database.repairOrderDao().findById(order.id)
+        assertEquals(OrderStatus.CLOSED, updated?.status)
+        assertEquals(ClosureReason.COMPLETED, updated?.closureReason)
+    }
+
+    @Test
+    fun recordFeedbackRejectRequiresCloseOrdersPermission() = runBlocking {
+        val actor = mockOperator(permissions = setOf(UserPermission.EDIT_OWN_ORDERS))
+        seedCoreData(userId = actor.id, role = UserRole.OPERATOR, permissions = actor.permissions)
+        val order = createTestOrder(
+            assignedToUserId = actor.id,
+            status = OrderStatus.RESULT,
+            diagnosisOutcome = DiagnosisOutcome.REPAIRABLE,
+            estimateAmountCents = 12_300L,
+            customerActionStatus = CustomerActionStatus.WAITING_ACCEPTANCE,
+        )
+
+        val result = repository.recordFeedback(
+            actor,
+            order.id,
+            FeedbackInput(CustomerFeedbackType.REJECT, note = "Troppo caro"),
+        )
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is SecurityException)
+        assertEquals(OrderStatus.RESULT, database.repairOrderDao().findById(order.id)?.status)
+    }
+
+    @Test
+    fun recordFeedbackRejectSucceedsWithCloseOrdersPermission() = runBlocking {
+        val actor = mockOperator(permissions = setOf(UserPermission.EDIT_OWN_ORDERS, UserPermission.CLOSE_ORDERS))
+        seedCoreData(userId = actor.id, role = UserRole.OPERATOR, permissions = actor.permissions)
+        val order = createTestOrder(
+            assignedToUserId = actor.id,
+            status = OrderStatus.RESULT,
+            diagnosisOutcome = DiagnosisOutcome.REPAIRABLE,
+            estimateAmountCents = 12_300L,
+            customerActionStatus = CustomerActionStatus.WAITING_ACCEPTANCE,
+        )
+
+        val result = repository.recordFeedback(
+            actor,
+            order.id,
+            FeedbackInput(CustomerFeedbackType.REJECT, note = "Troppo caro"),
+        )
+
+        assertTrue(result.isSuccess)
+        val updated = database.repairOrderDao().findById(order.id)
+        assertEquals(OrderStatus.CLOSED, updated?.status)
+        assertEquals(ClosureReason.CUSTOMER_DECLINED, updated?.closureReason)
+        assertEquals(actor.id, updated?.closedByUserId)
+    }
+
     private fun mockAdmin() = AuthenticatedUser(
         id = "admin-1",
         displayName = "Admin",
@@ -94,16 +182,28 @@ class OrderWorkflowRepositoryInstrumentedTest {
         permissions = UserPermission.entries.toSet()
     )
 
-    private suspend fun seedCoreData() {
+    private fun mockOperator(permissions: Set<UserPermission>) = AuthenticatedUser(
+        id = "operator-1",
+        displayName = "Operatore",
+        username = "operatore",
+        role = UserRole.OPERATOR,
+        permissions = permissions,
+    )
+
+    private suspend fun seedCoreData(
+        userId: String = "admin-1",
+        role: UserRole = UserRole.ADMIN,
+        permissions: Set<UserPermission> = UserPermission.entries.toSet(),
+    ) {
         val now = System.currentTimeMillis()
         database.userDao().upsert(UserEntity(
-            id = "admin-1", 
-            displayName = "Admin", 
-            username = "admin", 
+            id = userId,
+            displayName = if (role == UserRole.ADMIN) "Admin" else "Operatore",
+            username = if (role == UserRole.ADMIN) "admin" else "operatore",
             passwordHash = "h", 
             passwordSalt = "s", 
-            role = UserRole.ADMIN, 
-            permissions = UserPermission.entries.toSet(),
+            role = role,
+            permissions = permissions,
             active = true, 
             forcePasswordChange = false,
             createdAt = now, 
@@ -113,7 +213,13 @@ class OrderWorkflowRepositoryInstrumentedTest {
         database.customerDao().upsert(CustomerEntity("cust-1", CustomerType.PRIVATE, "M", "R", null, null, null, "1", null, null, null, now, now))
     }
 
-    private suspend fun createTestOrder(): RepairOrderEntity {
+    private suspend fun createTestOrder(
+        assignedToUserId: String = "admin-1",
+        status: OrderStatus = OrderStatus.OPEN,
+        diagnosisOutcome: DiagnosisOutcome? = null,
+        estimateAmountCents: Long? = null,
+        customerActionStatus: CustomerActionStatus = CustomerActionStatus.NONE,
+    ): RepairOrderEntity {
         val now = System.currentTimeMillis()
         val order = RepairOrderEntity(
             id = "order-1", 
@@ -121,20 +227,20 @@ class OrderWorkflowRepositoryInstrumentedTest {
             customerId = "cust-1", 
             title = "T", 
             categoryId = "cat-1", 
-            status = OrderStatus.OPEN, 
+            status = status,
             priority = OrderPriority.NORMAL, 
-            assignedToUserId = "admin-1", 
-            createdByUserId = "admin-1", 
+            assignedToUserId = assignedToUserId,
+            createdByUserId = assignedToUserId,
             description = "D", 
             internalNotes = null, 
-            diagnosisOutcome = null, 
-            estimateAmountCents = null, 
+            diagnosisOutcome = diagnosisOutcome,
+            estimateAmountCents = estimateAmountCents,
             finalAmountCents = null, 
             createdAt = now, 
             updatedAt = now, 
             closedAt = null, 
             closureReason = null, 
-            customerActionStatus = CustomerActionStatus.NONE,
+            customerActionStatus = customerActionStatus,
             closeNote = null,
             closedByUserId = null,
             categoryPathSnapshot = null,

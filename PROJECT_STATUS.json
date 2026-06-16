@@ -24,6 +24,16 @@
       "schema_guarded": false,
       "owner_approval_required": false,
       "why_this_block": "Richiede adb/device/emulatore o workflow GitHub; non va mescolato con fix codice finche' manca la baseline runtime.",
+      "last_attempt": {
+        "date": "2026-06-16",
+        "commands": [
+          "powershell -ExecutionPolicy Bypass -File scripts\\android\\check_env.ps1",
+          ". scripts\\support\\android_env.ps1; Set-AndroidCliEnvironment; adb devices tramite platform-tools\\adb.exe",
+          "emulator.exe -list-avds",
+          "GitHub connector: fetch commit workflow runs for e5e9fc2e7ceaba5ca64318e38be8a52da7322494"
+        ],
+        "result": "Ambiente Android/Gradle rilevato, ma nessun device adb collegato, nessun AVD configurato e nessuna run GitHub Actions associata al commit corrente. B01 resta aperto finche' non e' disponibile un device/emulatore o una workflow dispatch GitHub autenticata."
+      },
       "items": [
         {
           "priority": "P1",
@@ -80,23 +90,16 @@
       "schema_guarded": false,
       "owner_approval_required": false,
       "why_this_block": "Fix mirati in domain/repository/UI con test unitari o strumentati, ma indipendenti da Room schema e migrazioni.",
+      "last_attempt": {
+        "date": "2026-06-16",
+        "commands": [
+          "powershell -ExecutionPolicy Bypass -File scripts\\android\\gradle.ps1 -- --no-configuration-cache :app:testFullDebugUnitTest",
+          "powershell -ExecutionPolicy Bypass -File scripts\\android\\gradle.ps1 -- --no-configuration-cache :app:testDemoDebugUnitTest --tests \"com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCaseDemoTest\"",
+          "powershell -ExecutionPolicy Bypass -File scripts\\android\\gradle.ps1 -- --no-configuration-cache :app:compileFullDebugAndroidTestKotlin"
+        ],
+        "result": "Chiusi F01/F02: Full unit test verde, test Demo mirato watermark verde, compile androidTest Full verde. Il task :app:testDemoDebugUnitTest completo resta non usabile come gate perche' include test src/test preesistenti Full-only (DemoModeFullTest)."
+      },
       "items": [
-        {
-          "priority": "P1",
-          "summary": "Functional PDF Demo watermark: il PDF stato generato dal dettaglio commessa deve applicare watermark `VERSIONE DEMO` nel flavor Demo.",
-          "refs": [
-            "functional_review_residual_plan.priority_order.F01"
-          ],
-          "completion_criteria": "Test Demo che verifica il watermark nel PDF condiviso dal percorso GenerateOrderStatusPdfUseCase/OrderStatusPdfGenerator."
-        },
-        {
-          "priority": "P1",
-          "summary": "Functional permissions close orders: allineare il permesso CLOSE_ORDERS al comportamento reale di changeStatus/recordFeedback.",
-          "refs": [
-            "functional_review_residual_plan.priority_order.F02"
-          ],
-          "completion_criteria": "Test chiusura diretta e rifiuto preventivo con e senza CLOSE_ORDERS."
-        },
         {
           "priority": "P1",
           "summary": "Functional permissions manage customers: CustomerRepository.save deve ricevere actor e verificare MANAGE_CUSTOMERS.",
@@ -372,6 +375,9 @@
     "priority_order": [
       {
         "id": "F01",
+        "status": "resolved",
+        "resolved_at": "2026-06-16",
+        "resolution": "OrderStatusPdfPayload espone watermarkText, GenerateOrderStatusPdfUseCase lo valorizza con R.string.demo_version_banner nel flavor Demo e OrderStatusPdfGenerator lo disegna su ogni pagina. Coperto da test Demo mirato.",
         "priority": "P1",
         "classification": "bug",
         "title": "PDF stato nel flavor Demo senza watermark",
@@ -397,6 +403,9 @@
       },
       {
         "id": "F02",
+        "status": "resolved",
+        "resolved_at": "2026-06-16",
+        "resolution": "OrderWorkflowRepository richiede CLOSE_ORDERS per target CLOSED in changeStatus e recordFeedback(REJECT). Coperto da policy unit test e compile dei test strumentati repository per chiusura diretta/rifiuto con e senza permesso.",
         "priority": "P1",
         "classification": "bug",
         "title": "Permesso CLOSE_ORDERS esposto ma non applicato",
