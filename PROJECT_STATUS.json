@@ -31,23 +31,7 @@
           ],
           "completion_criteria": "Report connected test a 0 failure/0 error.",
           "status": "in_progress",
-          "notes": "Raggiunto 39/41 (SocialStoryDemoScreenshotTest migliorato). Restano fallimenti su OperatorIntake (waitForStatus) e Customer (click Conferma) probabilmente per timing device."
-        },
-        {
-          "priority": "P1",
-          "summary": "Performance device baseline: misurato startup e PDF su device reale.",
-          "refs": [
-            "performance_residual_plan.priority_order.DeviceBaselineAndProfiler"
-          ],
-          "completion_criteria": "Metriche baseline registrate.",
-          "status": "done",
-          "baseline": {
-            "startup_cold_ms": 2794,
-            "startup_warm_ms": 492,
-            "transition_home_new_order_ms": 1800,
-            "pdf_generation_status_ms": 2000,
-            "sqlcipher_keying_delay_ms": 1100
-          }
+          "notes": "Raggiunto 39/41 (SocialStoryDemoScreenshotTest migliorato). Dipendenze androidx.test.ext:junit e mockk allineate a versioni stabili (1.2.1 e 1.13.17). Restano fallimenti su OperatorIntake (waitForStatus) e Customer (click Conferma) probabilmente per timing device."
         }
       ]
     },
