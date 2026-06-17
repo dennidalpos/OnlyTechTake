@@ -14,14 +14,14 @@ Il modulo `app` definisce tre product flavor:
 | Nome app | `OnlyTechTake Demo` | `OnlyTechTake Showcase` | `OnlyTechTake` |
 | `IS_DEMO_VERSION` | `true` | `false` | `false` |
 | `IS_DEMO_MODE_ENABLED` | `true` | `false` | `false` |
-| `MAX_ORDERS` | `10` | `-1` | `-1` |
+| `MAX_ORDERS` | `1` | `-1` | `-1` |
 
 ## Limiti Demo implementati
 
 Nel flavor Demo sono implementati questi blocchi:
 
-- massimo 10 commesse totali;
-- massimo 2 operatori oltre all'admin;
+- massimo 1 commessa totale;
+- nessun operatore: il flavor Demo e' utilizzabile solo con account admin locale;
 - export database bloccato;
 - export ZIP completo bloccato;
 - ripristino ZIP bloccato;
@@ -76,6 +76,8 @@ Dagli avvii successivi:
 
 1. Inserire username e password.
 2. Toccare `Accedi`.
+
+Nota Demo: dopo il primo avvio resta disponibile solo l'admin locale; la creazione di operatori e' bloccata.
 
 ## Flusso operativo minimo
 

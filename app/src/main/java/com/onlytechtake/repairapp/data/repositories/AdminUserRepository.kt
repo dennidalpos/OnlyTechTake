@@ -37,14 +37,17 @@ class AdminUserRepository(
             require(userDao.findByUsername(input.username.trim()) == null) { "Username gia' esistente" }
 
             if (BuildConfig.IS_DEMO_VERSION) {
-                val operatorCount = userDao.countActiveByRole(UserRole.OPERATOR)
-                if (operatorCount >= MAX_DEMO_OPERATORS) {
+                if (MAX_DEMO_OPERATORS <= 0) {
+                    throw IllegalStateException(context.getString(R.string.demo_error_operator_not_available))
+                }
+
+                if (userDao.countActiveByRole(UserRole.OPERATOR) >= MAX_DEMO_OPERATORS) {
                     throw IllegalStateException(
                         context.resources.getQuantityString(
                             R.plurals.demo_error_operator_limit,
                             MAX_DEMO_OPERATORS,
                             MAX_DEMO_OPERATORS,
-                        )
+                        ),
                     )
                 }
             }
@@ -160,6 +163,6 @@ class AdminUserRepository(
 
     private companion object {
         const val MIN_PASSWORD_LENGTH = 8
-        const val MAX_DEMO_OPERATORS = 2
+        const val MAX_DEMO_OPERATORS = 0
     }
 }

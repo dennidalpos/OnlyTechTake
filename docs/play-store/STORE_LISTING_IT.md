@@ -1,6 +1,8 @@
 # Store Listing - Italiano
 
-**Nome app:** OnlyTechTake
+## OnlyTechTake Pro
+
+**Nome app:** OnlyTechTake Pro
 **Descrizione breve:** Gestione riparazioni professionale per smartphone, PC e tablet.
 **Descrizione completa:**
 OnlyTechTake è il gestionale Android "local-first" per laboratori di riparazione. Progettata per tecnici e negozianti, l'app permette di tracciare il ciclo di vita di ogni riparazione: dall'accettazione alla diagnosi, fino alla consegna.
@@ -28,3 +30,18 @@ riparazione smartphone, gestione negozio, assistenza tecnica, riparazione pc, ge
 
 **Categoria:** Produttività / Business.
 **Testo promozionale:** Trasforma il tuo laboratorio con OnlyTechTake: l'app all-in-one per gestire riparazioni, clienti e documenti in totale privacy.
+
+## OnlyTechTake Demo
+
+**Nome app:** OnlyTechTake Demo
+**Descrizione breve:** Prova guidata del gestionale riparazioni OnlyTechTake.
+**Descrizione completa:**
+OnlyTechTake Demo permette di provare il flusso principale del gestionale Android per laboratori di riparazione, con dati locali sul dispositivo e senza backend proprietario.
+
+La versione Demo e' pensata solo per valutazione:
+- massimo 1 commessa totale;
+- nessun account operatore: uso solo con admin locale;
+- export database, backup ZIP, ripristino ZIP ed export XLSX bloccati;
+- PDF generati con watermark `VERSIONE DEMO`.
+
+Per uso continuativo e senza questi limiti e' prevista la versione OnlyTechTake Pro.

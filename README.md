@@ -13,7 +13,7 @@ App Android locale per tracciare commesse clienti dal banco alla diagnosi, alla 
 - SDK Android: compile/target SDK 37, min SDK 26.
 - Stack: Kotlin, Jetpack Compose, Material 3, Navigation Compose, Room, SQLCipher, DataStore, CameraX, Coroutines/Flow.
 - Dati: Room locale cifrato con SQLCipher, DataStore/preferenze locali, file privati app, export tramite Storage Access Framework.
-- Schema Room corrente: `DATABASE_VERSION = 4`; sono tracciati gli export `1.json`, `2.json` e `4.json`. Il codice non contiene classi di migrazione e usa reinstallazione pulita o fallback distruttivo in questa fase fresh-app.
+- Schema Room corrente: `DATABASE_VERSION = 1`; e' tracciato solo l'export `1.json`, rigenerato come baseline fresh con lo schema attuale. Lo schema e' bloccato fino a ordine esplicito dell'owner.
 - Backend: assente. WhatsApp e' solo manuale.
 - CI: `.github/workflows/android.yml` verifica lint/compile/test Full e compile/test Demo/Showcase; `.github/workflows/android-instrumented.yml` esegue `:app:connectedFullDebugAndroidTest` su emulatore quando attivata o sui PR che toccano app/test/build.
 
@@ -108,7 +108,7 @@ Prima di consegnare il repository:
 1. Controllare lo stato con `git status --short` e distinguere modifiche tracciate da file non tracciati.
 2. Leggere `PROJECT_STATUS.json`: contiene solo todo incompleti correnti.
 3. Eseguire almeno `check_env.ps1`, `check_project.ps1 -Flavor Full -SkipReleaseBuild` e una build/install debug se serve validare su device. Per il gate strumentato usare la workflow `Android Instrumented Tests` o `check_project.ps1 -Flavor Full -SkipReleaseBuild -AndroidTests` con device disponibile.
-4. Usare `start_app.ps1 -CleanInstall` quando lo schema Room locale e' incompatibile con dati gia' installati; il codice corrente e' Room v4 senza migrazioni conservative.
+4. Usare `start_app.ps1 -CleanInstall` quando lo schema Room locale e' incompatibile con dati gia' installati; il codice corrente e' Room v1 senza migrazioni conservative.
 
 Nota: file non tracciati sotto `docs\` non fanno parte della documentazione ufficiale del repository finche' non vengono revisionati e aggiunti intenzionalmente.
 
@@ -159,7 +159,7 @@ Regole:
 - Storage privato canonico: tutti i media applicativi vivono sotto `filesDir/app_media`.
 - Export admin: ZIP completo e XLSX da Config > Backup; database e XLSX pre-cleanup dalla sezione Admin; configurazione JSON dalla sezione Backup. Ripristino ZIP completo tramite SAF per admin. Condivisione PDF della singola commessa dal dettaglio.
 - Promemoria backup admin: attivo di default ogni 7 giorni, basato sull'ultimo ZIP completo riuscito; non blocca l'uso normale dell'app.
-- Demo release: massimo 10 commesse, massimo 2 operatori, export database/ZIP/XLSX e restore ZIP bloccati, PDF con watermark `VERSIONE DEMO`.
+- Demo release: massimo 1 commessa, nessun operatore oltre all'admin locale, export database/ZIP/XLSX e restore ZIP bloccati, PDF con watermark `VERSIONE DEMO`.
 - Il selettore documenti Android consente all'utente di scegliere memoria locale o un provider documenti installato; non esiste integrazione cloud proprietaria.
 
 ## Limiti Noti
@@ -169,7 +169,7 @@ Regole:
 - Il ripristino ZIP sostituisce database e media, ma nello stato corrente non esporta/importa la chiave SQLCipher protetta da Android Keystore; non va trattato come migrazione affidabile verso una nuova installazione o un nuovo telefono finche' il flusso chiave non viene progettato.
 - La CI principale non esegue test strumentati; esiste una workflow dedicata per `connectedFullDebugAndroidTest`, mentre le verifiche su device fisico restano manuali/locali.
 - La build release richiede signing locale non tracciato.
-- Il codice sorgente usa Room v4. Ogni ulteriore cambio schema resta bloccato dalle regole repository finche' non viene autorizzato.
+- Il codice sorgente usa Room v1 come baseline fresh. Ogni ulteriore cambio schema resta bloccato dalle regole repository finche' non viene autorizzato esplicitamente.
 - Le verifiche manuali residue sono elencate in `PROJECT_STATUS.json`.
 
 ## Struttura
@@ -182,7 +182,7 @@ Regole:
 - `app\src\test\`: test unitari JVM.
 - `app\src\androidTest\`: test strumentali su device/emulatore.
 - `app\src\showcase\`: risorse e configurazioni specifiche per la variante Showcase.
-- `app\schemas\`: schema Room esportato; sono presenti `1.json`, `2.json` e `4.json`, coerenti con `DATABASE_VERSION = 4`.
+- `app\schemas\`: schema Room esportato; e' presente solo `1.json`, coerente con `DATABASE_VERSION = 1`.
 - `docs\`: documentazione operativa e funzionale.
 - `media\brand\`: logo, favicon, anteprime e cover README per GitHub.
 - `scripts\android\`: script PowerShell ufficiali per ambiente, Gradle, build/install e start app.

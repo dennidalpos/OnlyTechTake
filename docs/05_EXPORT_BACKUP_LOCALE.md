@@ -97,7 +97,7 @@ Il promemoria backup admin e' implementato.
 ## Metadata
 
 Il backup completo include metadati con data creazione, nome database, versione database e sezioni incluse.
-La versione database attesa e' quella di `RepairAppDatabase.DATABASE_VERSION`; nello stato corrente del codice e' `4`.
+La versione database attesa e' quella di `RepairAppDatabase.DATABASE_VERSION`; nello stato corrente del codice e' `1`. Lo schema Room e' bloccato su v1 fino a ordine esplicito dell'owner.
 
 ## Sicurezza
 

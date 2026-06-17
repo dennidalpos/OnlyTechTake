@@ -288,11 +288,11 @@ Non usare una tabella diversa per ogni tipo di negozio.
 Non aggiungere colonne tipo `imei`, `marca`, `modello`, `taglia`, `colore`, ecc. nella tabella commesse.
 
 Usare categorie, descrizione, note interne, media, firme, timeline e messaggi.
-Lo schema Room corrente nel codice e' v4, con export tracciati in
-`app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json`
-`app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/2.json`
-e `app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/4.json`.
+Lo schema Room corrente nel codice e' v1, con export tracciato solo in
+`app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json`.
 Non sono presenti classi di migrazione Room: in questa fase fresh-app, dati
 locali incompatibili richiedono reinstallazione pulita o vengono gestiti dal
 fallback distruttivo configurato nel database builder. Non include tabelle custom
-field o workflow parallele a `repair_orders.status`.
+field o workflow parallele a `repair_orders.status`. Lo schema e' bloccato su v1:
+non modificare entita' Room, DAO con impatto schema, indici persistenti,
+`DATABASE_VERSION` o migrazioni Room senza ordine esplicito dell'owner.

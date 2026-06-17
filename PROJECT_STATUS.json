@@ -2,62 +2,122 @@
   "agent_execution_directives": {
     "status": "active",
     "updated_at": "2026-06-17",
-    "purpose": "Backlog residuo organizzato per priorità. Risolvere un blocco alla volta.",
+    "purpose": "Backlog residuo attivo in ordine di priorita'. Non usare come changelog.",
     "rules": [
       "Quando l'utente chiede di risolvere PROJECT_STATUS.json, scegliere un solo blocco open per volta e dichiararlo prima di iniziare.",
       "Non risolvere task fuori dal blocco scelto, salvo dipendenza esplicita.",
       "Dentro un blocco rispettare recommended_batch_size.",
-      "I blocchi con schema_guarded=true richiedono approvazione per modifiche Room/DATABASE_VERSION.",
+      "I blocchi con schema_guarded=true richiedono ordine esplicito owner per modifiche Room/DATABASE_VERSION, entita', DAO con impatto schema, indici persistenti o migrazioni.",
       "Aggiornare questo file rimuovendo i residui chiusi dopo ogni sessione."
     ]
   },
   "todos": [
     {
-      "block_id": "B10",
-      "title": "Aggiornamento Asset Demo Precedenti",
-      "priority": "P2",
-      "complexity": "low",
+      "block_id": "B11",
+      "title": "Pubblicazione Google Play Pro e Demo",
+      "priority": "P1",
+      "complexity": "medium",
       "status": "open",
       "recommended_batch_size": 1,
-      "why_this_block": "Cambiamenti UI precedenti in Customer Panel e New Order wizard richiedono asset aggiornati.",
+      "why_this_block": "Le due pubblicazioni Play richiedono dati finali, questionari, upload AAB e validazioni Console prima della produzione.",
+      "items": [
+        {
+          "priority": "P1",
+          "summary": "Completare privacy policy con dati pubblici reali e URL HTTPS pubblico della sola policy, senza inserire sito sviluppatore.",
+          "refs": [
+            "docs/play-store/PRIVACY_POLICY_IT.md",
+            "docs/play-store/PLAY_CONSOLE_GUIDE_IT.md"
+          ],
+          "completion_criteria": "Privacy policy senza placeholder pubblicata a URL HTTPS reale e inserita in Play Console; campo website sviluppatore lasciato vuoto."
+        },
+        {
+          "priority": "P1",
+          "summary": "Creare due app Play separate e caricare AAB firmati: Pro paid e Demo free.",
+          "refs": [
+            "docs/play-store/PUBLISH_PRO_IT.md",
+            "docs/play-store/PUBLISH_DEMO_IT.md",
+            "app/build.gradle.kts"
+          ],
+          "completion_criteria": "Play Console accetta `app-full-release.aab` per `com.onlytechtake.repairapp` e `app-demo-release.aab` per `com.onlytechtake.repairapp.demo`."
+        },
+        {
+          "priority": "P1",
+          "summary": "Completare App content, Data Safety, App Access, Content Rating, pricing Pro a 19,99 EUR e test track richiesti dall'account personale.",
+          "refs": [
+            "docs/release/RELEASE_CHECKLIST.md",
+            "docs/play-store/PLAY_CONSOLE_GUIDE_IT.md"
+          ],
+          "completion_criteria": "App content completo per Pro e Demo, Pre-launch Report senza crash bloccanti e closed testing completato se richiesto da Google per account personale."
+        }
+      ]
+    },
+    {
+      "block_id": "B12",
+      "title": "Baseline runtime su device",
+      "priority": "P1",
+      "complexity": "medium",
+      "status": "open",
+      "recommended_batch_size": 1,
+      "why_this_block": "Prima della pubblicazione servono misure runtime su device reale per startup, I/O pesante e PDF.",
+      "items": [
+        {
+          "priority": "P1",
+          "summary": "Misurare cold/warm startup, operazioni I/O pesante e generazione PDF su dataset realistico.",
+          "refs": [
+            "performance_residual_plan.priority_order.DeviceBaselineAndProfiler"
+          ],
+          "completion_criteria": "Baseline p50/p95 registrata con device, build flavor e dataset usati; regressioni bloccanti corrette o tracciate."
+        }
+      ]
+    },
+    {
+      "block_id": "B10",
+      "title": "Screenshot e video store",
+      "priority": "P2",
+      "complexity": "medium",
+      "status": "open",
+      "recommended_batch_size": 1,
+      "why_this_block": "Le icone statiche Play sono generate; restano screenshot e recording separati Pro/Demo coerenti con i limiti Demo admin-only.",
       "items": [
         {
           "priority": "P2",
-          "summary": "Aggiornare screenshot e video demo per riflettere le migliorie nella selezione categorie (guida testuale e hint sottocategorie).",
+          "summary": "Rendere flavor-aware la generazione asset per produrre output separati Pro e Demo.",
           "refs": [
             "docs/DEMO_ASSET_WORKFLOW.md",
-            "com.onlytechtake.repairapp.features.dashboard.neworder.QuickIntakeCategorySection"
+            "scripts\\windows\\create_demo_assets.ps1",
+            "scripts\\windows\\record_demo_device.ps1"
           ],
-          "completion_criteria": "Asset aggiornati."
+          "completion_criteria": "Gli script accettano il flavor e scrivono screenshot/video separati per Pro e Demo."
         },
         {
           "priority": "P2",
-          "summary": "Aggiornare asset per la nuova posizione del pulsante 'Nuovo Cliente' e correggere il recording customers che fallisce su customer_confirm_save_button.",
+          "summary": "Rigenerare screenshot e video Play per Pro e Demo con dati fittizi, senza sito, e con limiti Demo reali.",
           "refs": [
-            "docs/DEMO_ASSET_WORKFLOW.md",
-            "com.onlytechtake.repairapp.demo.SocialStoryDemoScreenshotTest#capturesPrivateAndBusinessCustomerStories"
+            "reports\\demo-assets",
+            "media\\play-store",
+            "docs/DEMO_ASSET_WORKFLOW.md"
           ],
-          "completion_criteria": "Asset aggiornati e scripts\\windows\\record_demo_device.ps1 -ScenarioId customers completato con successo."
+          "completion_criteria": "Screenshot e recording Pro/Demo generati, verificati per dimensioni/leggibilita' e coerenti con 1 commessa, 0 operatori e watermark Demo."
         }
       ]
     },
     {
       "block_id": "B09",
-      "title": "Schema Room e indici",
+      "title": "Schema Room bloccato",
       "priority": "P3",
       "complexity": "approval_required",
-      "status": "blocked_until_owner_approval",
+      "status": "blocked_until_owner_order",
       "recommended_batch_size": 1,
       "schema_guarded": true,
-      "why_this_block": "Richiede cambio DATABASE_VERSION e migrazioni; va isolato e approvato dall'owner.",
+      "why_this_block": "Lo schema Room e' baseline v1 e resta bloccato fino a ordine esplicito dell'owner.",
       "items": [
         {
           "priority": "P3",
-          "summary": "Performance Room/index proposal: valutare indici su query calde (updatedAt, assignedToUserId, status).",
+          "summary": "Performance Room/index proposal: valutare indici su query calde solo come proposta bloccata.",
           "refs": [
             "performance_residual_plan.priority_order.RoomQueryIndexesSchemaProposal"
           ],
-          "completion_criteria": "Approvazione owner e test Room verdi."
+          "completion_criteria": "Ordine esplicito owner per cambiare schema Room e test Room verdi."
         }
       ]
     }
@@ -68,21 +128,21 @@
       {
         "priority": "P1",
         "type": "DeviceBaselineAndProfiler",
-        "residual": "Mancano metriche runtime su device (startup, I/O pesante, PDF) per assenza adb nel PATH locale.",
+        "residual": "Mancano metriche runtime su device per startup, I/O pesante e PDF.",
         "plan": [
-          "Rendere disponibile adb o usare workflow strumentato GitHub.",
-          "Misurare cold/warm startup e operazioni I/O su dataset reale.",
+          "Usare device fisico o workflow strumentato con adb disponibile.",
+          "Misurare cold/warm startup e operazioni I/O su dataset realistico.",
           "Registrare baseline p50/p95."
         ]
       },
       {
-        "priority": "P2",
+        "priority": "P3",
         "type": "RoomQueryIndexesSchemaProposal",
-        "residual": "L'ordinamento updatedAt DESC nelle liste ordini non ha un indice dedicato.",
+        "residual": "L'ordinamento updatedAt DESC nelle liste ordini non ha un indice dedicato; qualunque indice persistente e' bloccato dallo schema lock v1.",
         "plan": [
-          "Analizzare EXPLAIN QUERY PLAN su dataset grande.",
+          "Analizzare EXPLAIN QUERY PLAN su dataset grande solo dopo ordine owner.",
           "Proporre indici solo se misurabili benefici reali.",
-          "Richiedere approvazione per incremento DATABASE_VERSION."
+          "Non modificare DATABASE_VERSION, entita', DAO con impatto schema o migrazioni senza ordine esplicito."
         ]
       }
     ]

@@ -793,11 +793,11 @@ L'app Android è in fase di sviluppo iniziale e lo schema locale non va modifica
 
 ```text
 Room schema version deve restare al valore reale/autorizzato del sorgente corrente.
-Stato sorgente corrente: RepairAppDatabase.DATABASE_VERSION = 4.
-Export schema tracciati: 1.json, 2.json e 4.json.
-Vietato incrementare ulteriormente schemaVersion senza approvazione esplicita.
+Stato sorgente corrente: RepairAppDatabase.DATABASE_VERSION = 1.
+Export schema tracciato: solo 1.json.
+Vietato cambiare schemaVersion senza approvazione esplicita.
 Vietato aggiungere migrazioni Room.
-Vietato modificare entità Room in modo incompatibile senza autorizzazione esplicita.
+Vietato modificare entità Room, DAO con impatto schema o indici persistenti senza autorizzazione esplicita.
 Ogni modifica che richiede cambio schema Android deve essere marcata:
 RICHIEDE CAMBIO SCHEMA ANDROID - BLOCCATA.
 ```

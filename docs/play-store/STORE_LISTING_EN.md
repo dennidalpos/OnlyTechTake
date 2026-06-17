@@ -1,6 +1,8 @@
 # Store Listing - English
 
-**App Name:** OnlyTechTake
+## OnlyTechTake Pro
+
+**App Name:** OnlyTechTake Pro
 **Short Description:** Professional repair management for smartphones, PCs, and tablets.
 **Full Description:**
 OnlyTechTake is a "local-first" Android repair management app for tech shops. Designed for technicians and shop owners, it helps you track the entire lifecycle of a repair: from intake to diagnosis and final delivery.
@@ -28,3 +30,18 @@ smartphone repair, shop management, technical assistance, pc repair, repair trac
 
 **Recommended Category:** Productivity / Business.
 **Promotional Text:** Transform your lab with OnlyTechTake: the all-in-one app to manage repairs, customers, and documents with total privacy.
+
+## OnlyTechTake Demo
+
+**App Name:** OnlyTechTake Demo
+**Short Description:** Guided trial of the OnlyTechTake repair workflow.
+**Full Description:**
+OnlyTechTake Demo lets repair shops evaluate the core Android workflow with local on-device data and no proprietary backend.
+
+Demo limitations:
+- maximum 1 total order;
+- no operator accounts: local admin only;
+- database export, ZIP backup, ZIP restore, and XLSX export are blocked;
+- generated PDFs include a `VERSIONE DEMO` watermark.
+
+For ongoing use without these limits, use OnlyTechTake Pro.

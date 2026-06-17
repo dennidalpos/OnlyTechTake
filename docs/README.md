@@ -23,10 +23,11 @@ Indice canonico della documentazione tracciata. Il README della root resta il pu
 - [`DEMO_ASSET_WORKFLOW.md`](DEMO_ASSET_WORKFLOW.md): pipeline tecnica screenshot/video.
 - [`marketing/README.md`](marketing/README.md): regole sintetiche per asset marketing.
 - [`play-store/PLAY_CONSOLE_GUIDE_IT.md`](play-store/PLAY_CONSOLE_GUIDE_IT.md): risposte operative Play Console.
+- [`play-store/PUBLISH_PRO_IT.md`](play-store/PUBLISH_PRO_IT.md): flusso pubblicazione Google Play per OnlyTechTake Pro.
+- [`play-store/PUBLISH_DEMO_IT.md`](play-store/PUBLISH_DEMO_IT.md): flusso pubblicazione Google Play per OnlyTechTake Demo.
 - [`play-store/STORE_LISTING_IT.md`](play-store/STORE_LISTING_IT.md) e [`play-store/STORE_LISTING_EN.md`](play-store/STORE_LISTING_EN.md): bozze listing store.
 - [`play-store/PRIVACY_POLICY_IT.md`](play-store/PRIVACY_POLICY_IT.md): bozza privacy policy pubblicabile dopo revisione legale.
 
 ## Handoff futuro
 
 - [`09_BACKEND_AGENT_TRACKER.md`](09_BACKEND_AGENT_TRACKER.md): handoff per progettazione backend futura. Non descrive funzionalita' implementate nell'app Android corrente.
-

@@ -97,9 +97,9 @@ Questo repository, allo stato corrente, e' Android-only:
 - Flavor Gradle: `full`, `demo`, `showcase`.
 - Stack: Kotlin, Compose, Material 3, Navigation Compose, Room, SQLCipher, DataStore, CameraX, Coroutines/Flow.
 - Backend: assente; WhatsApp e' solo manuale.
-- Database: Room `DATABASE_VERSION = 4`, schema esportati `1.json`, `2.json`, `4.json`.
+- Database: Room `DATABASE_VERSION = 1`, schema esportato solo `1.json`.
 - Persistenza: database locale cifrato SQLCipher, file privati in `filesDir/app_media`, export/import tramite SAF.
-- Governance schema: non incrementare `DATABASE_VERSION`, non aggiungere migrazioni Room e non modificare schema senza richiesta esplicita dell'owner.
+- Governance schema: schema Room bloccato su v1 fino a ordine esplicito dell'owner; non cambiare entita' Room, DAO con impatto schema, indici persistenti, `DATABASE_VERSION` o migrazioni Room senza approvazione.
 - Script canonici: `scripts\android`; `scripts\windows` contiene wrapper compatibili e pipeline demo/check.
 
 ---

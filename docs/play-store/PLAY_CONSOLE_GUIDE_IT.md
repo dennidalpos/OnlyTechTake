@@ -1,12 +1,13 @@
 # Guida Play Console (Questionari e Risposte)
 
-Documento di riferimento per la compilazione dei questionari obbligatori su Google Play Console per OnlyTechTake Repair App.
+Documento di riferimento per la compilazione dei questionari obbligatori su Google Play Console per OnlyTechTake Pro e OnlyTechTake Demo. Non inserire un sito web sviluppatore: al momento non esiste. Dove Google richiede una privacy policy pubblica, usare un URL HTTPS pubblico reale solo quando sara' disponibile.
 
 ## 1. Accesso all'app (App Access)
 - **Opzione:** Tutte o alcune parti dell'app sono limitate.
 - **Istruzioni per i revisori:**
-  - Per il flavor Full, spiegare che al primo avvio pulito il revisore deve creare un admin locale e poi usare quelle credenziali.
-  - Se si consegna un build Showcase, indicare le credenziali reali documentate in `docs/08_LICENZA_DEMO_FULL_E_MANUALE_USO.md`.
+  - Per OnlyTechTake Pro, spiegare che al primo avvio pulito il revisore deve creare un admin locale e poi usare quelle credenziali.
+  - Per OnlyTechTake Demo, spiegare che al primo avvio pulito il revisore deve creare un admin locale oppure usare il pulsante `Avvia modalità demo`; il flavor Demo consente 1 sola commessa, nessun operatore, export/restore bloccati e PDF con watermark.
+  - Showcase non e' una pubblicazione Play: usarlo solo per presentazioni commerciali fuori store.
   - Esempio Full: "L'app richiede un login locale. Su installazione pulita viene mostrato il setup admin; creare un admin locale e accedere. L'app non richiede connessione internet per il login."
 
 ## 2. Annunci (Ads)

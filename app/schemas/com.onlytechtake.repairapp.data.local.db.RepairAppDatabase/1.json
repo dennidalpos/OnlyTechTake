@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "df21b3d33e5c9b4358f7a6cf7181898b",
+    "identityHash": "7f54c22703cb4b3afdb86a4b2dcc685b",
     "entities": [
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `displayName` TEXT NOT NULL, `username` TEXT NOT NULL, `passwordHash` TEXT NOT NULL, `passwordSalt` TEXT NOT NULL, `role` TEXT NOT NULL, `permissions` TEXT NOT NULL, `active` INTEGER NOT NULL DEFAULT 1, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `displayName` TEXT NOT NULL, `username` TEXT NOT NULL, `passwordHash` TEXT NOT NULL, `passwordSalt` TEXT NOT NULL, `role` TEXT NOT NULL, `permissions` TEXT NOT NULL, `active` INTEGER NOT NULL DEFAULT 1, `forcePasswordChange` INTEGER NOT NULL DEFAULT 0, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -56,6 +56,13 @@
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "1"
+          },
+          {
+            "fieldPath": "forcePasswordChange",
+            "columnName": "forcePasswordChange",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
           },
           {
             "fieldPath": "createdAt",
@@ -250,6 +257,68 @@
             "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_customers_taxCode` ON `${TABLE_NAME}` (`taxCode`)"
           }
+        ]
+      },
+      {
+        "tableName": "customers_fts",
+        "createSql": "CREATE VIRTUAL TABLE IF NOT EXISTS `${TABLE_NAME}` USING FTS4(`firstName` TEXT, `lastName` TEXT, `companyName` TEXT, `phone` TEXT, `email` TEXT, `vatNumber` TEXT, `taxCode` TEXT, content=`customers`)",
+        "fields": [
+          {
+            "fieldPath": "firstName",
+            "columnName": "firstName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "lastName",
+            "columnName": "lastName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "companyName",
+            "columnName": "companyName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "phone",
+            "columnName": "phone",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "vatNumber",
+            "columnName": "vatNumber",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "taxCode",
+            "columnName": "taxCode",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": []
+        },
+        "ftsVersion": "FTS4",
+        "ftsOptions": {
+          "tokenizer": "simple",
+          "tokenizerArgs": [],
+          "contentTable": "customers",
+          "languageIdColumnName": "",
+          "matchInfo": "FTS4",
+          "notIndexedColumns": [],
+          "prefixSizes": [],
+          "preferredOrder": "ASC"
+        },
+        "contentSyncTriggers": [
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_customers_fts_BEFORE_UPDATE BEFORE UPDATE ON `customers` BEGIN DELETE FROM `customers_fts` WHERE `docid`=OLD.`rowid`; END",
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_customers_fts_BEFORE_DELETE BEFORE DELETE ON `customers` BEGIN DELETE FROM `customers_fts` WHERE `docid`=OLD.`rowid`; END",
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_customers_fts_AFTER_UPDATE AFTER UPDATE ON `customers` BEGIN INSERT INTO `customers_fts`(`docid`, `firstName`, `lastName`, `companyName`, `phone`, `email`, `vatNumber`, `taxCode`) VALUES (NEW.`rowid`, NEW.`firstName`, NEW.`lastName`, NEW.`companyName`, NEW.`phone`, NEW.`email`, NEW.`vatNumber`, NEW.`taxCode`); END",
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_customers_fts_AFTER_INSERT AFTER INSERT ON `customers` BEGIN INSERT INTO `customers_fts`(`docid`, `firstName`, `lastName`, `companyName`, `phone`, `email`, `vatNumber`, `taxCode`) VALUES (NEW.`rowid`, NEW.`firstName`, NEW.`lastName`, NEW.`companyName`, NEW.`phone`, NEW.`email`, NEW.`vatNumber`, NEW.`taxCode`); END"
         ]
       },
       {
@@ -621,6 +690,50 @@
         ]
       },
       {
+        "tableName": "repair_orders_fts",
+        "createSql": "CREATE VIRTUAL TABLE IF NOT EXISTS `${TABLE_NAME}` USING FTS4(`orderNumber` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT, content=`repair_orders`)",
+        "fields": [
+          {
+            "fieldPath": "orderNumber",
+            "columnName": "orderNumber",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": []
+        },
+        "ftsVersion": "FTS4",
+        "ftsOptions": {
+          "tokenizer": "simple",
+          "tokenizerArgs": [],
+          "contentTable": "repair_orders",
+          "languageIdColumnName": "",
+          "matchInfo": "FTS4",
+          "notIndexedColumns": [],
+          "prefixSizes": [],
+          "preferredOrder": "ASC"
+        },
+        "contentSyncTriggers": [
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_repair_orders_fts_BEFORE_UPDATE BEFORE UPDATE ON `repair_orders` BEGIN DELETE FROM `repair_orders_fts` WHERE `docid`=OLD.`rowid`; END",
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_repair_orders_fts_BEFORE_DELETE BEFORE DELETE ON `repair_orders` BEGIN DELETE FROM `repair_orders_fts` WHERE `docid`=OLD.`rowid`; END",
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_repair_orders_fts_AFTER_UPDATE AFTER UPDATE ON `repair_orders` BEGIN INSERT INTO `repair_orders_fts`(`docid`, `orderNumber`, `title`, `description`) VALUES (NEW.`rowid`, NEW.`orderNumber`, NEW.`title`, NEW.`description`); END",
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_repair_orders_fts_AFTER_INSERT AFTER INSERT ON `repair_orders` BEGIN INSERT INTO `repair_orders_fts`(`docid`, `orderNumber`, `title`, `description`) VALUES (NEW.`rowid`, NEW.`orderNumber`, NEW.`title`, NEW.`description`); END"
+        ]
+      },
+      {
         "tableName": "timeline_events",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `orderId` TEXT NOT NULL, `type` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT, `oldStatus` TEXT, `newStatus` TEXT, `visibleToCustomer` INTEGER NOT NULL DEFAULT 0, `requiresCustomerFeedback` INTEGER NOT NULL DEFAULT 0, `expectedFeedbackType` TEXT, `customerFeedback` TEXT, `customerFeedbackNote` TEXT, `customerFeedbackAt` INTEGER, `createdByUserId` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`orderId`) REFERENCES `repair_orders`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`createdByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
         "fields": [
@@ -781,7 +894,7 @@
       },
       {
         "tableName": "message_templates",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `code` TEXT NOT NULL, `title` TEXT NOT NULL, `channel` TEXT NOT NULL, `body` TEXT NOT NULL, `active` INTEGER NOT NULL DEFAULT 1, `version` INTEGER NOT NULL DEFAULT 1, `updatedByUserId` TEXT, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`updatedByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `code` TEXT NOT NULL, `title` TEXT NOT NULL, `channel` TEXT NOT NULL, `body` TEXT NOT NULL, `active` INTEGER NOT NULL DEFAULT 1, `version` INTEGER NOT NULL DEFAULT 1, `updatedByUserId` TEXT, `updatedAt` INTEGER NOT NULL, `step` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`updatedByUserId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
         "fields": [
           {
             "fieldPath": "id",
@@ -837,6 +950,11 @@
             "columnName": "updatedAt",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "step",
+            "columnName": "step",
+            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -1808,7 +1926,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'df21b3d33e5c9b4358f7a6cf7181898b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7f54c22703cb4b3afdb86a4b2dcc685b')"
     ]
   }
 }

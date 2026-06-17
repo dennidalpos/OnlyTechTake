@@ -53,7 +53,7 @@ android {
             buildConfigField("boolean", "IS_DEMO_VERSION", "true")
             buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "true")
             buildConfigField("boolean", "IS_SHOWCASE_MODE_ENABLED", "false")
-            buildConfigField("int", "MAX_ORDERS", "10")
+            buildConfigField("int", "MAX_ORDERS", "1")
         }
         create("showcase") {
             dimension = "version"

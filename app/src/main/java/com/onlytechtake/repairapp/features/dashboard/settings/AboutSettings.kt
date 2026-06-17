@@ -1,6 +1,5 @@
 package com.onlytechtake.repairapp.features.dashboard.settings
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -91,12 +90,6 @@ fun AboutSettings(onBack: () -> Unit) {
                         onClick = { uriHandler.openUri("https://github.com/dennidalpos") }
                     )
 
-                    Text(
-                        text = stringResource(R.string.about_website),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.clickable { uriHandler.openUri("https://onlytechtake.com") }
-                    )
                 }
             }
         }

@@ -3,7 +3,6 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- Main Logo: Scaled and balanced -->
     <group
         android:translateX="18.9"
         android:translateY="10.8"
@@ -23,12 +22,10 @@
             android:pathData="M72,83l-17,-17l8,-8l9,9l25,-25l8,8z" />
     </group>
 
-    <!-- Robust DEMO Banner (Centered in Safe Zone) -->
     <path
         android:fillColor="#EF4444"
         android:pathData="M20,72 L88,72 L88,92 L20,92 Z" />
 
-    <!-- "DEMO" Text - Bolder and Centered -->
     <group
         android:translateX="38"
         android:translateY="77">
