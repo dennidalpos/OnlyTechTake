@@ -13,70 +13,6 @@
   },
   "todos": [
     {
-      "block_id": "B11",
-      "title": "Refactor Sistema Template",
-      "priority": "P1",
-      "complexity": "medium",
-      "status": "open",
-      "recommended_batch_size": 1,
-      "why_this_block": "Il sistema di template necessita di un'associazione più chiara tramite trigger logici (step) e di una funzione di ripristino per garantire la robustezza dei flussi di lavoro.",
-      "items": [
-        {
-          "priority": "P1",
-          "summary": "Estendere TemplateAnchor con informazioni sugli step (numero e nome) per supportare la visualizzazione a barre.",
-          "refs": [
-            "com.onlytechtake.repairapp.core.templates.TemplateAnchor"
-          ],
-          "completion_criteria": "Enum aggiornato e validato."
-        },
-        {
-          "priority": "P1",
-          "summary": "Implementare resetToDefaults in TemplateRepository e aggiungere query di cancellazione in AppSettingDao.",
-          "refs": [
-            "com.onlytechtake.repairapp.data.repositories.TemplateRepository",
-            "com.onlytechtake.repairapp.data.local.dao.AppSettingDao"
-          ],
-          "completion_criteria": "Funzionalità di ripristino testata e auditata."
-        },
-        {
-          "priority": "P1",
-          "summary": "Aggiornare UI TemplatesSettings con barra step negli attivatori, evidenziazione template attivi/inutilizzati e nuovo workflow di associazione.",
-          "refs": [
-            "com.onlytechtake.repairapp.features.dashboard.settings.TemplatesSettings"
-          ],
-          "completion_criteria": "Interfaccia allineata ai nuovi requisiti e workflow fluido."
-        }
-      ]
-    },
-    {
-      "block_id": "B12",
-      "title": "Verifica e Aggiornamento Asset",
-      "priority": "P2",
-      "complexity": "low",
-      "status": "open",
-      "recommended_batch_size": 1,
-      "why_this_block": "Le modifiche al sistema di template e alla UI di configurazione richiedono l'aggiornamento dei test e degli screenshot demo.",
-      "items": [
-        {
-          "priority": "P2",
-          "summary": "Aggiornare unit test TemplateRendererTest e aggiungere test per il nuovo workflow di reset/associazione.",
-          "refs": [
-            "com.onlytechtake.repairapp.core.templates.TemplateRendererTest"
-          ],
-          "completion_criteria": "Test verdi su tutte le varianti."
-        },
-        {
-          "priority": "P2",
-          "summary": "Rigenerare screenshot per la sezione 'Categorie e Template' per riflettere la nuova UI con Step Bar e gestione attivatori.",
-          "refs": [
-            "docs/DEMO_ASSET_WORKFLOW.md",
-            "reports/demo-assets/screenshots/03-categorie-template/"
-          ],
-          "completion_criteria": "Nuovi asset generati tramite scripts\\windows\\create_demo_assets.ps1."
-        }
-      ]
-    },
-    {
       "block_id": "B10",
       "title": "Aggiornamento Asset Demo Precedenti",
       "priority": "P2",
@@ -96,11 +32,12 @@
         },
         {
           "priority": "P2",
-          "summary": "Aggiornare asset per la nuova posizione del pulsante 'Nuovo Cliente'.",
+          "summary": "Aggiornare asset per la nuova posizione del pulsante 'Nuovo Cliente' e correggere il recording customers che fallisce su customer_confirm_save_button.",
           "refs": [
-            "docs/DEMO_ASSET_WORKFLOW.md"
+            "docs/DEMO_ASSET_WORKFLOW.md",
+            "com.onlytechtake.repairapp.demo.SocialStoryDemoScreenshotTest#capturesPrivateAndBusinessCustomerStories"
           ],
-          "completion_criteria": "Asset aggiornati."
+          "completion_criteria": "Asset aggiornati e scripts\\windows\\record_demo_device.ps1 -ScenarioId customers completato con successo."
         }
       ]
     },

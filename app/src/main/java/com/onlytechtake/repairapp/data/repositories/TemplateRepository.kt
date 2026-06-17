@@ -109,6 +109,36 @@ class TemplateRepository(
         }
     }
 
+    suspend fun resetToDefaults(actor: AuthenticatedUser): Result<Unit> =
+        runCatching {
+            PermissionService.requirePermission(actor, UserPermission.MANAGE_TEMPLATES)
+            val now = clockMillis()
+            defaultTemplates.forEach { template ->
+                val existing = templateDao.findByCode(template.code)
+                templateDao.upsert(
+                    template.copy(
+                        id = existing?.id ?: UUID.randomUUID().toString(),
+                        active = true,
+                        version = (existing?.version ?: 0) + 1,
+                        updatedByUserId = actor.id,
+                        updatedAt = now,
+                    ),
+                )
+            }
+            settingDao.deleteByKeys(TemplateAnchor.entries.map { it.settingKey })
+            auditLogDao.upsert(
+                AuditLogEntity(
+                    id = UUID.randomUUID().toString(),
+                    action = AuditAction.TEMPLATE_UPDATED,
+                    actorUserId = actor.id,
+                    orderId = null,
+                    customerId = null,
+                    detailsJson = """{"action":"reset_to_defaults","templates":${defaultTemplates.size},"anchors":${TemplateAnchor.entries.size}}""",
+                    createdAt = now,
+                ),
+            )
+        }
+
     suspend fun saveTemplate(
         actor: AuthenticatedUser,
         code: String,

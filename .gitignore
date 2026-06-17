@@ -3,6 +3,10 @@
 .kotlin/
 build/
 app/build/
+.cxx/
+app/.cxx/
+.externalNativeBuild/
+app/.externalNativeBuild/
 
 # Android Studio / IntelliJ
 .idea/
@@ -24,6 +28,8 @@ Thumbs.db
 /logs/
 /tmp/
 /demo/recordings/
+/demo/screenshots/
+/demo/videos/
 *.apk
 *.aab
 *.ap_

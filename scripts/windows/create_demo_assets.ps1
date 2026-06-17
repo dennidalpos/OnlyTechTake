@@ -150,6 +150,7 @@ function Process-VideoGeneration {
     Write-Host "Generazione video per $($Config.Id)..." -ForegroundColor Cyan
     $story = Get-Content -Path $storyPath -Raw | ConvertFrom-Json
     $videoDir = Join-Path $AssetOutputRoot "videos/automated"
+    Reset-ManagedAssetDirectory -Path $videoDir
     $slidesDir = Join-Path $videoDir "temp_slides"
     New-Item -ItemType Directory -Path $slidesDir -Force | Out-Null
 
@@ -187,6 +188,16 @@ function Process-VideoGeneration {
     }
 }
 
+function Reset-ManagedAssetDirectory {
+    param([Parameter(Mandatory = $true)][string]$Path)
+
+    Assert-PathInsideRoot -Path $Path -RootPath $root
+    if (Test-Path $Path) {
+        Remove-Item -LiteralPath $Path -Recurse -Force
+    }
+    New-Item -ItemType Directory -Path $Path -Force | Out-Null
+}
+
 trap {
     Restore-DeviceGlobalSettings
     throw $_
@@ -196,10 +207,7 @@ Assert-PathInsideRoot -Path $OutputRoot -RootPath $root
 if (-not $AssetId) {
     foreach ($managedDirectory in @("screenshots", "videos/automated")) {
         $managedPath = Join-Path $OutputRoot $managedDirectory
-        Assert-PathInsideRoot -Path $managedPath -RootPath $root
-        if (Test-Path $managedPath) {
-            Remove-Item -LiteralPath $managedPath -Recurse -Force
-        }
+        Reset-ManagedAssetDirectory -Path $managedPath
     }
     if (-not (Test-Path $OutputRoot)) {
         New-Item -ItemType Directory -Path $OutputRoot | Out-Null
@@ -253,7 +261,7 @@ foreach ($asset in $assetsConfig) {
         foreach ($case in $activeCases) {
             $sourceCase = if ($case.SourceDirectory -eq ".") { $pulledRoot } else { Join-Path $pulledRoot $case.SourceDirectory }
             $targetCase = Join-Path $OutputRoot $case.TargetDirectory
-            New-Item -ItemType Directory -Path $targetCase -Force | Out-Null
+            Reset-ManagedAssetDirectory -Path $targetCase
 
             if (Test-Path $sourceCase) {
                 Get-ChildItem -Path $sourceCase -Filter "*.png" | ForEach-Object {

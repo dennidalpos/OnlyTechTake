@@ -365,6 +365,13 @@
     <string name="config_template_association_title">Associazione Template</string>
     <string name="config_template_association_tooltip">Collega i template ai momenti chiave dell\'app (es. apertura commessa, preventivo).</string>
     <string name="config_template_default_label">Default (%s)</string>
+    <string name="config_template_step_prefix">Step %1$d</string>
+    <string name="config_template_legal_step">Legale</string>
+    <string name="config_template_assigned_template">Template assegnato: %s</string>
+    <string name="config_template_unassigned_label">Non usato da attivatori</string>
+    <string name="config_template_reset_defaults">Ripristina template default</string>
+    <string name="config_template_reset_confirm_title">Ripristinare template default?</string>
+    <string name="config_template_reset_confirm_text">I template di sistema torneranno ai testi predefiniti e le associazioni personalizzate verranno rimosse. I template personalizzati resteranno disponibili ma non associati.</string>
     <string name="config_template_new">Nuovo Template</string>
     <string name="config_template_general">Generale</string>
     <string name="config_template_close">Chiudi Setup Template</string>

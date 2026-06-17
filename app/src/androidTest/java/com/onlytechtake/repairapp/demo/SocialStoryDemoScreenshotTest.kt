@@ -156,6 +156,8 @@ class SocialStoryDemoScreenshotTest {
 
             clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
             clickTag(RepairAppTestTags.ConfigHubTemplatesButton, scroll = true)
+            waitForText("Associazione Template")
+            capture(outputDir, "05-template-associazioni.png")
             clickTag(RepairAppTestTags.ConfigTemplateNewButton, scroll = true)
             typeTag(RepairAppTestTags.ConfigTemplateCodeField, "whatsapp_demo_social", scroll = true)
             typeTag(RepairAppTestTags.ConfigTemplateTitleField, "Aggiornamento social demo", scroll = true)

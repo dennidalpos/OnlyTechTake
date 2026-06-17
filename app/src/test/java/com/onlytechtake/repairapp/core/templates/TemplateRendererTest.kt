@@ -40,4 +40,12 @@ class TemplateRendererTest {
             renderer.requireSupportedVariables("{{cliente}} {{missing}}", setOf("cliente"))
         }
     }
+
+    @Test
+    fun templateAnchorsExposeStepMetadataForSettingsWorkflow() {
+        assertEquals(1, TemplateAnchor.WHATSAPP_INTAKE.stepNumber)
+        assertEquals("Ingresso", TemplateAnchor.WHATSAPP_INTAKE.stepName)
+        assertEquals(0, TemplateAnchor.PRIVACY_TEXT.stepNumber)
+        assertEquals("Legale", TemplateAnchor.PRIVACY_TEXT.stepName)
+    }
 }

@@ -65,6 +65,9 @@ fun ColumnScope.TemplatesSettings(
     val confirmTitle = stringResource(R.string.config_template_confirm_save_title)
     val confirmRisky = stringResource(R.string.config_template_confirm_save_risky)
     val confirmNewVersion = stringResource(R.string.config_template_confirm_save_new_version)
+    val resetTitle = stringResource(R.string.config_template_reset_confirm_title)
+    val resetText = stringResource(R.string.config_template_reset_confirm_text)
+    val usedTemplateCodes = remember(anchorMappings) { anchorMappings.values.toSet() }
 
     LazyColumn(
         modifier = Modifier
@@ -95,7 +98,8 @@ fun ColumnScope.TemplatesSettings(
                 val assignedTemplate = templates.find { it.code == assignedCode }
                 
                 StandardCard(
-                    onClick = { selectingAnchorForTemplate = anchor }
+                    onClick = { selectingAnchorForTemplate = anchor },
+                    highlight = assignedTemplate?.active == true,
                 ) {
                     Row(
                         modifier = Modifier
@@ -105,11 +109,16 @@ fun ColumnScope.TemplatesSettings(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
+                            AnchorStepHeader(anchor)
+                            Spacer(modifier = Modifier.height(RepairAppSpacing.compactGap))
                             Text(anchor.label, style = MaterialTheme.typography.titleSmall)
                             Text(anchor.description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
                             Spacer(modifier = Modifier.height(RepairAppSpacing.compactGap))
                             Text(
-                                text = assignedTemplate?.title ?: stringResource(R.string.config_template_default_label, anchor.defaultCode),
+                                text = stringResource(
+                                    R.string.config_template_assigned_template,
+                                    assignedTemplate?.title ?: stringResource(R.string.config_template_default_label, anchor.defaultCode),
+                                ),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.primary,
                                 fontWeight = FontWeight.Bold
@@ -122,6 +131,19 @@ fun ColumnScope.TemplatesSettings(
 
             item {
                 HorizontalDivider(modifier = Modifier.padding(vertical = RepairAppSpacing.screenHorizontal))
+            }
+
+            item {
+                AppButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.config_template_reset_defaults),
+                    variant = AppButtonVariant.Secondary,
+                    onClick = {
+                        onRequestConfirm(resetTitle, resetText) {
+                            viewModel.resetTemplatesToDefaults()
+                        }
+                    }
+                )
             }
 
             item {
@@ -148,8 +170,10 @@ fun ColumnScope.TemplatesSettings(
         }
 
         items(templates) { template ->
+            val isUsed = template.code in usedTemplateCodes
             StandardCard(
                 onClick = { editingTemplate = template },
+                highlight = template.active && isUsed,
             ) {
                 Row(
                     modifier = Modifier
@@ -159,12 +183,38 @@ fun ColumnScope.TemplatesSettings(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+                        Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+                            AppBadge(
+                                text = template.step ?: stringResource(R.string.config_template_general),
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                            )
+                            AppBadge(
+                                text = if (template.active) {
+                                    stringResource(R.string.config_template_active)
+                                } else {
+                                    stringResource(R.string.config_template_archived)
+                                },
+                                containerColor = if (template.active) {
+                                    MaterialTheme.colorScheme.primary
+                                } else {
+                                    MaterialTheme.colorScheme.surfaceVariant
+                                },
+                                contentColor = if (template.active) {
+                                    MaterialTheme.colorScheme.onPrimary
+                                } else {
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                                },
+                            )
+                            if (!isUsed) {
+                                AppBadge(
+                                    text = stringResource(R.string.config_template_unassigned_label),
+                                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                                )
+                            }
+                        }
                         Text(template.title, style = MaterialTheme.typography.titleMedium)
-                        Text(
-                            text = (template.step ?: stringResource(R.string.config_template_general)) + " • " + if (template.active) stringResource(R.string.config_template_active) else stringResource(R.string.config_template_archived),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = if (template.active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
-                        )
                         Text(
                             text = template.body,
                             style = MaterialTheme.typography.bodySmall,
@@ -245,6 +295,30 @@ fun ColumnScope.TemplatesSettings(
                 viewModel.setTemplateForAnchor(anchor, templateCode)
                 selectingAnchorForTemplate = null
             }
+        )
+    }
+}
+
+@Composable
+private fun AnchorStepHeader(anchor: TemplateAnchor) {
+    val stepLabel = if (anchor.stepNumber == 0) {
+        stringResource(R.string.config_template_legal_step)
+    } else {
+        stringResource(R.string.config_template_step_prefix, anchor.stepNumber)
+    }
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        AppBadge(
+            text = stepLabel,
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        )
+        Text(
+            text = anchor.stepName,
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
@@ -478,6 +552,7 @@ private val systemTemplateCodes = setOf(
     "whatsapp_lavorazione",
     "whatsapp_completamento",
     "whatsapp_pronto_ritiro",
+    "whatsapp_stato_avanzamento_pdf",
 )
 
 private fun isRiskyTemplateChange(loadedCode: String?, currentCode: String, active: Boolean): Boolean =

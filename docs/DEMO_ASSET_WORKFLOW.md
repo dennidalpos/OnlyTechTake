@@ -66,6 +66,7 @@ Flow:
 |---|---|
 | Full workflow | `OperatorIntakeDemoScreenshotTest` |
 | Social stories | `SocialStoryDemoScreenshotTest` |
+| Config | `SocialStoryDemoScreenshotTest#capturesCategoryAndTemplateStories` |
 | Customers | `SocialStoryDemoScreenshotTest#capturesPrivateAndBusinessCustomerStories` |
 | Maintenance | `SocialStoryDemoScreenshotTest#capturesMaintenanceStories` |
 
@@ -74,6 +75,7 @@ Flow:
 For every relevant repository change:
 
 - Map each changed screen or workflow to the scenario table above.
+- Treat generated asset directories as fully managed output: before recreating screenshots or videos, the script must delete and recreate the whole target directory instead of overwriting files in place.
 - Update action lookup to stable `RepairAppTestTags`; keep text assertions only when validating user-visible copy.
 - Synchronize expected screenshot filenames and device directories in `create_demo_assets.ps1`.
 - Synchronize recording menu entries and test selectors in `record_demo_device.ps1`.
@@ -94,6 +96,7 @@ Add one row for each repository change that affects demo assets. Keep completed 
 | Template Anchors: interchangeable templates with logical mapping | Categories and templates, WhatsApp flows | Added "Associazione Template" section in Settings; app now uses `TemplateAnchor` instead of hardcoded strings; validation added to prevent archiving active anchors | Build verified; repository paths verified; manual UI verification recommended for association flow | None |
 | Release residual closure: instrumented CI, token contrast and store asset mapping | AndroidTests, WhatsApp action color, category level dots, Play Store screenshots/video | Added dedicated GitHub workflow for connected Full debug tests; darkened low-contrast light-theme tokens; documented generated screenshot/video directories for store upload | Unit contrast test added; generated assets already present under `reports/demo-assets` | Physical-device accessibility review remains a release checklist gate |
 | Performance and cleanup: batch seeding, lazy DI and recomposition stability | Showcase seeding, Dashboard, Detail, Quick intake | Showcase seeder now uses withTransaction and batch upserts for faster environment prep; added keys to detail list and remember to navigation/validation states; removed 30 unused string resources | Compile and seeder unit logic verified; manual UI verification passed | Regression test on physical device for UI stability |
+| Template settings step bar and default reset | Categories and templates, direct config recording | `capturesCategoryAndTemplateStories` now captures `05-template-associazioni.png`; regenerate `screenshots/03-categorie-template` with `create_demo_assets.ps1 -AssetId social-stories -CaseId config`; direct recorder supports `-ScenarioId config` for this isolated flow; asset scripts recreate managed target directories before writing | screenshots verified; config recording verified | None |
 
 Use concise validation values such as `not run`, `compile only`, `screenshots verified`, or `screenshots and recording verified`. Do not mark a device flow verified unless it actually ran.
 

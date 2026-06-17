@@ -6,7 +6,7 @@ param(
     [switch]$UseConnectedDevice,
     [switch]$SkipBuild,
     [switch]$SeedData,
-    [ValidateSet("", "manual", "full-workflow", "social-stories", "customers", "maintenance")]
+    [ValidateSet("", "manual", "full-workflow", "social-stories", "config", "customers", "maintenance")]
     [string]$ScenarioId = "",
     [switch]$StartImmediately,
     [int]$MaxDurationSeconds = 180,
@@ -49,9 +49,11 @@ if ($OutputFile -eq "") {
     $OutputFile = "onlytechtake-demo-workflow-completo.mp4"
 }
 
-if (-not (Test-Path $OutputRoot)) {
-    New-Item -ItemType Directory -Path $OutputRoot | Out-Null
+Assert-PathInsideRoot -Path $OutputRoot -RootPath $root
+if (Test-Path $OutputRoot) {
+    Remove-Item -LiteralPath $OutputRoot -Recurse -Force
 }
+New-Item -ItemType Directory -Path $OutputRoot -Force | Out-Null
 
 $outputPath = Join-Path $OutputRoot $OutputFile
 
@@ -83,6 +85,11 @@ $recordingsConfig = @(
         Id = "social-stories"
         Description = "Social Stories (Wizard, Configurazione, Clienti)"
         TestClass = "com.onlytechtake.repairapp.demo.SocialStoryDemoScreenshotTest"
+    },
+    [PSCustomObject]@{
+        Id = "config"
+        Description = "Configurazione (Categorie e Template)"
+        TestClass = "com.onlytechtake.repairapp.demo.SocialStoryDemoScreenshotTest#capturesCategoryAndTemplateStories"
     },
     [PSCustomObject]@{
         Id = "customers"

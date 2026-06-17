@@ -128,6 +128,8 @@ class SettingsViewModel(
     fun setTemplateForAnchor(anchor: TemplateAnchor, templateCode: String) =
         templateDelegate.setTemplateForAnchor(anchor, templateCode)
 
+    fun resetTemplatesToDefaults() = templateDelegate.resetTemplatesToDefaults()
+
     fun setMessageMode(mode: MessageMode) = templateDelegate.setMessageMode(mode)
 
     fun setExportDestination(destination: com.onlytechtake.repairapp.data.local.entities.ExportDestination) {

@@ -53,6 +53,12 @@ internal class TemplateSettingsDelegate(
         }
     }
 
+    fun resetTemplatesToDefaults() {
+        actionRunner.run(successMessage = "Template ripristinati") { actor ->
+            templateRepository.resetToDefaults(actor)
+        }
+    }
+
     fun setMessageMode(mode: MessageMode) {
         actionRunner.run { actor ->
             templateRepository.setMessageMode(actor, mode)

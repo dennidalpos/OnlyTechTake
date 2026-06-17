@@ -488,6 +488,9 @@ interface AppSettingDao {
 
     @Query("SELECT * FROM app_settings WHERE `key` = :key LIMIT 1")
     suspend fun findByKey(key: String): AppSettingEntity?
+
+    @Query("DELETE FROM app_settings WHERE `key` IN (:keys)")
+    suspend fun deleteByKeys(keys: List<String>): Int
 }
 
 @Dao
