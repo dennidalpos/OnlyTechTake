@@ -132,6 +132,8 @@ Per questo repository:
 - Usare `scripts\windows\check_project.ps1 -Flavor Full -SkipReleaseBuild` come check locale standard senza signing release.
 - Usare `docs\DEMO_ASSET_WORKFLOW.md` come fonte di verita' per screenshot/video demo, aggiornare il workflow se viene cambiato.
 
+*Nota CI: In GitHub Actions è attiva la variabile `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true` per garantire la compatibilità con i futuri runtime.*
+
 ---
 
 ## 9. Verification
