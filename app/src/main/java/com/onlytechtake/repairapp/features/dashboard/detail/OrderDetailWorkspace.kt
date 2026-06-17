@@ -65,6 +65,7 @@ fun OrderDetailWorkspace(
     val showPdfSentConfirmation by viewModel.showPdfSentConfirmation.collectAsState()
     val pendingShareIntent by viewModel.pendingShareIntent.collectAsState()
     val context = LocalContext.current
+    val workspaceState = rememberOrderDetailWorkspaceState()
 
     val exitConfirmTitle = stringResource(R.string.order_exit_confirm_title)
     val exitConfirmText = stringResource(R.string.order_exit_confirm_text)
@@ -72,20 +73,10 @@ fun OrderDetailWorkspace(
     val waOpenConfirmText = stringResource(R.string.order_wa_open_confirm_text)
     val waSentConfirmTitle = stringResource(R.string.order_wa_sent_confirm_title)
     val waSentConfirmText = stringResource(R.string.order_wa_sent_confirm_text)
-
-    var note by rememberSaveable { mutableStateOf("") }
-    var showInternalNoteDialog by rememberSaveable { mutableStateOf(value = false) }
-    var confirmTitle by remember { mutableStateOf<String?>(null) }
-    var confirmText by remember { mutableStateOf("") }
-    var confirmAction by remember { mutableStateOf<(() -> Unit)?>(null) }
-    var statusAction by remember { mutableStateOf<OrderStatusAction?>(null) }
-    var statusNote by rememberSaveable { mutableStateOf("") }
-    var closureReason by rememberSaveable { mutableStateOf<ClosureReason?>(null) }
-    var resultSummary by rememberSaveable { mutableStateOf("") }
-    var resultAmount by rememberSaveable { mutableStateOf("") }
-    var diagnosisOutcome by rememberSaveable { mutableStateOf<DiagnosisOutcome?>(null) }
-    var quoteDecision by rememberSaveable { mutableStateOf<QuoteDecision?>(null) }
-    var quoteRejectNote by rememberSaveable { mutableStateOf("") }
+    val diagnosisOutcomeConfirmTitle = stringResource(R.string.order_confirm_diagnosis_outcome_title)
+    val diagnosisOutcomeConfirmText = stringResource(R.string.order_confirm_diagnosis_outcome_text)
+    val deleteDocumentConfirmTitle = stringResource(R.string.order_confirm_delete_document_title)
+    val deleteDocumentConfirmText = stringResource(R.string.order_confirm_delete_document_text)
 
     val selected = detail
     if (selected == null) {
@@ -100,8 +91,7 @@ fun OrderDetailWorkspace(
     }
 
     LaunchedEffect(selected.order.id, selected.order.status) {
-        quoteDecision = null
-        quoteRejectNote = ""
+        workspaceState.resetQuoteDecision()
     }
     DisposableEffect(selected.order.id) {
         onDispose { viewModel.clearPreparedMessage() }
@@ -114,17 +104,11 @@ fun OrderDetailWorkspace(
         }
     }
 
-    fun requestConfirm(title: String, text: String, action: () -> Unit) {
-        confirmTitle = title
-        confirmText = text
-        confirmAction = action
-    }
-
-    val hasUnsavedLocalWork = (note.isNotBlank() || (preparedMessage != null))
+    val hasUnsavedLocalWork = (workspaceState.note.isNotBlank() || (preparedMessage != null))
     BackHandler(enabled = true) {
         if (hasUnsavedLocalWork) {
-            requestConfirm(exitConfirmTitle, exitConfirmText) {
-                note = ""
+            workspaceState.requestConfirm(exitConfirmTitle, exitConfirmText) {
+                workspaceState.note = ""
                 onBack()
             }
         } else {
@@ -160,12 +144,7 @@ fun OrderDetailWorkspace(
                         isPaid = selected.isPaid,
                         whatsAppAnchor = statusTemplateAnchor(selected.order),
                         onActionClick = { action ->
-                            statusAction = action
-                            statusNote = ""
-                            closureReason = null
-                            resultSummary = ""
-                            resultAmount = ""
-                            diagnosisOutcome = selected.order.diagnosisOutcome
+                            workspaceState.openStatusAction(action, selected.order.diagnosisOutcome)
                         },
                         onTogglePayment = { viewModel.togglePaymentStatus(!selected.isPaid) },
                         onSendWhatsApp = viewModel::prepareMessage,
@@ -177,10 +156,10 @@ fun OrderDetailWorkspace(
                 ) {
                     item(key = "quote_decision", contentType = "decision") {
                         QuoteDecisionPanel(
-                            quoteDecision = quoteDecision,
-                            quoteRejectNote = quoteRejectNote,
-                            onQuoteDecisionChange = { quoteDecision = it },
-                            onQuoteRejectNoteChange = { quoteRejectNote = it },
+                            quoteDecision = workspaceState.quoteDecision,
+                            quoteRejectNote = workspaceState.quoteRejectNote,
+                            onQuoteDecisionChange = { workspaceState.quoteDecision = it },
+                            onQuoteRejectNoteChange = { workspaceState.quoteRejectNote = it },
                             onConfirm = { feedback, note, closureReason ->
                                 if (feedback == CustomerFeedbackType.ACCEPT) {
                                     viewModel.recordFeedback(feedback, note)
@@ -208,9 +187,9 @@ fun OrderDetailWorkspace(
                                     variant = AppButtonVariant.Success,
                                     modifier = Modifier.fillMaxWidth(),
                                     onClick = {
-                                        requestConfirm(
-                                            "Cliente avvisato?",
-                                            "La commessa passera' a pronta per il ritiro.",
+                                        workspaceState.requestConfirm(
+                                            diagnosisOutcomeConfirmTitle,
+                                            diagnosisOutcomeConfirmText,
                                         ) {
                                             viewModel.changeStatus(
                                                 status = OrderStatus.READY_FOR_PICKUP,
@@ -235,7 +214,7 @@ fun OrderDetailWorkspace(
                             body = preparedMessageBody,
                             onBodyChange = viewModel::updatePreparedMessageBody,
                             onOpenWhatsApp = {
-                                requestConfirm(waOpenConfirmTitle, waOpenConfirmText) {
+                                workspaceState.requestConfirm(waOpenConfirmTitle, waOpenConfirmText) {
                                     viewModel.recordPreparedMessage()
                                     val intent = Intent(
                                         Intent.ACTION_VIEW,
@@ -245,7 +224,7 @@ fun OrderDetailWorkspace(
                                 }
                             },
                             onConfirmSent = {
-                                requestConfirm(waSentConfirmTitle, waSentConfirmText) { viewModel.confirmSentMessage() }
+                                workspaceState.requestConfirm(waSentConfirmTitle, waSentConfirmText) { viewModel.confirmSentMessage() }
                             },
                             onClose = viewModel::clearPreparedMessage,
                         )
@@ -256,8 +235,7 @@ fun OrderDetailWorkspace(
                     InternalNotesPanel(
                         notes = selected.order.internalNotes,
                         onAddNoteClick = {
-                            note = ""
-                            showInternalNoteDialog = true
+                            workspaceState.openInternalNote()
                         },
                     )
                 }
@@ -281,14 +259,16 @@ fun OrderDetailWorkspace(
                         },
                         onShareDocument = { viewModel.onShareDocumentClicked(it) },
                         onDeleteDocument = { docId ->
-                            requestConfirm(
-                                "Eliminare documento?",
-                                "Il file verra' rimosso permanentemente."
+                            workspaceState.requestConfirm(
+                                deleteDocumentConfirmTitle,
+                                deleteDocumentConfirmText
                             ) {
                                 viewModel.onDeleteDocumentClicked(docId)
                             }
                         },
-                        requestConfirm = ::requestConfirm
+                        requestConfirm = { title, text, action ->
+                            workspaceState.requestConfirm(title, text, action)
+                        }
                     )
                 }
 
@@ -308,251 +288,52 @@ fun OrderDetailWorkspace(
         }
     }
 
-    confirmTitle?.let { title ->
-        AppDialog(
-            onDismissRequest = {
-                confirmTitle = null
-                confirmAction = null
-            },
-            title = title,
-            text = confirmText,
-            confirmButton = {
-                AppButton(
-                    text = stringResource(R.string.confirm),
-                    onClick = {
-                        confirmAction?.invoke()
-                        confirmTitle = null
-                        confirmAction = null
-                    },
-                    variant = AppButtonVariant.Primary,
-                    size = AppButtonSize.Compact
-                )
-            },
-            dismissButton = {
-                AppButton(
-                    text = stringResource(R.string.customer_cancel),
-                    variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact,
-                    onClick = {
-                        confirmTitle = null
-                        confirmAction = null
-                    },
-                )
-            },
-        )
-    }
+    OrderConfirmDialog(workspaceState)
 
-    statusAction?.let { action ->
-        val isResultStep = action == OrderStatusAction.RECORD_RESULT
-        val isClosure = action.requiresConfirmation()
-        AppDialog(
-            onDismissRequest = { statusAction = null },
-            title = action.label,
-            content = {
-                Column(
-                    modifier = Modifier.verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
-                ) {
-                    Text(stringResource(R.string.order_confirm_status_update))
-                    if (isResultStep) {
-                        AppTextField(
-                            value = resultSummary,
-                            onValueChange = { resultSummary = it },
-                            label = stringResource(R.string.order_result_summary),
-                            required = true,
-                            showError = resultSummary.isBlank(),
-                            imeAction = ImeAction.Next,
-                            testTag = RepairAppTestTags.StatusResultSummaryField,
-                        )
-                        Text("Esito diagnosi", style = MaterialTheme.typography.titleSmall)
-                        QuoteDecisionRow(
-                            text = stringResource(R.string.order_diagnosis_repairable),
-                            checked = diagnosisOutcome == DiagnosisOutcome.REPAIRABLE,
-                            testTag = RepairAppTestTags.DiagnosisRepairableToggle,
-                        ) {
-                            diagnosisOutcome = DiagnosisOutcome.REPAIRABLE
-                        }
-                        QuoteDecisionRow(
-                            text = stringResource(R.string.order_diagnosis_not_repairable),
-                            checked = diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE,
-                            testTag = RepairAppTestTags.DiagnosisNotRepairableToggle,
-                        ) {
-                            diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE
-                            resultAmount = ""
-                        }
-                        if (shouldShowDiagnosisEstimate(diagnosisOutcome)) {
-                            AppTextField(
-                                value = resultAmount,
-                                onValueChange = { resultAmount = it },
-                                label = stringResource(R.string.order_estimate_amount),
-                                required = true,
-                                showError = parseEuroCentsOrNull(resultAmount)?.let { it <= 0L } != false,
-                                singleLine = true,
-                                imeAction = ImeAction.Done,
-                                keyboardType = KeyboardType.Decimal,
-                                testTag = RepairAppTestTags.DiagnosisEstimateField,
-                            )
-                        }
-                    } else if (isClosure) {
-                        AppTextField(
-                            value = statusNote,
-                            onValueChange = { statusNote = it },
-                            label = stringResource(R.string.order_closure_note_label),
-                            required = closureReason == ClosureReason.OTHER,
-                            showError = (closureReason == ClosureReason.OTHER) && statusNote.isBlank(),
-                            imeAction = ImeAction.Done,
-                            testTag = RepairAppTestTags.StatusNoteField,
-                        )
-                    }
-                    if (isClosure) {
-                        Text(stringResource(R.string.order_closure_reason_title), style = MaterialTheme.typography.titleSmall)
-                        ActionRow {
-                            ClosureReason.entries.forEach { reason ->
-                                val selectedReason = closureReason == reason
-                                AppButton(
-                                    text = reason.label(context),
-                                    variant = if (selectedReason) AppButtonVariant.Success else AppButtonVariant.Secondary,
-                                    selected = selectedReason,
-                                    stateDescription = if (selectedReason) stringResource(R.string.state_selected) else stringResource(R.string.state_not_selected),
-                                    testTag = RepairAppTestTags.closureReason(reason.name),
-                                    onClick = { closureReason = reason },
-                                    size = AppButtonSize.Compact,
-                                )
-                            }
-                        }
-                    }
-                }
-            },
-            confirmButton = {
-                AppButton(
-                    text = stringResource(R.string.confirm),
-                    enabled = when {
-                        isResultStep -> canConfirmDiagnosisResult(
-                            summary = resultSummary,
-                            outcome = diagnosisOutcome,
-                            estimateAmountCents = parseEuroCentsOrNull(resultAmount),
-                        )
-                        isClosure -> (closureReason != null) && ((closureReason != ClosureReason.OTHER) || statusNote.isNotBlank())
-                        else -> true
+    OrderStatusActionDialog(
+        state = workspaceState,
+        context = context,
+        onRecordResult = { summary, outcome, estimateAmountCents ->
+            viewModel.recordResult(
+                summary = summary,
+                diagnosisOutcome = outcome,
+                estimateAmountCents = estimateAmountCents,
+            ) {
+                viewModel.prepareMessage(
+                    if (outcome == DiagnosisOutcome.REPAIRABLE) {
+                        TemplateAnchor.WHATSAPP_QUOTE
+                    } else {
+                        TemplateAnchor.WHATSAPP_NOT_REPAIRABLE
                     },
-                    onClick = {
-                        if (action == OrderStatusAction.RECORD_RESULT) {
-                            val outcome = diagnosisOutcome ?: return@AppButton
-                            val estimateAmountCents = parseEuroCentsOrNull(resultAmount)
-                            viewModel.recordResult(
-                                summary = resultSummary,
-                                diagnosisOutcome = outcome,
-                                estimateAmountCents = estimateAmountCents,
-                            ) {
-                                viewModel.prepareMessage(
-                                    if (outcome == DiagnosisOutcome.REPAIRABLE) {
-                                        TemplateAnchor.WHATSAPP_QUOTE
-                                    } else {
-                                        TemplateAnchor.WHATSAPP_NOT_REPAIRABLE
-                                    },
-                                )
-                            }
-                        } else {
-                            val targetStatus = action.targetStatus ?: return@AppButton
-                            viewModel.changeStatus(
-                                status = targetStatus,
-                                note = statusNote,
-                                closureReason = closureReason,
-                            ) {
-                                if ((targetStatus == OrderStatus.CLOSED) && (closureReason == ClosureReason.NOT_REPAIRABLE)) {
-                                    viewModel.prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
-                                } else if (targetStatus == OrderStatus.READY_FOR_PICKUP) {
-                                    viewModel.prepareMessage(TemplateAnchor.WHATSAPP_READY)
-                                } else if (targetStatus == OrderStatus.CLOSED) {
-                                    onBack()
-                                }
-                            }
-                        }
-                        statusAction = null
-                    },
-                    variant = AppButtonVariant.Primary,
-                    size = AppButtonSize.Compact,
-                    testTag = RepairAppTestTags.StatusDialogConfirmButton
-                )
-            },
-            dismissButton = {
-                AppButton(
-                    text = stringResource(R.string.customer_cancel),
-                    variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact,
-                    onClick = { statusAction = null }
-                )
-            },
-        )
-    }
-
-    if (showInternalNoteDialog) {
-        AppDialog(
-            onDismissRequest = { showInternalNoteDialog = false },
-            title = stringResource(R.string.order_internal_notes),
-            content = {
-                Column(
-                    modifier = Modifier.verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
-                ) {
-                    selected.order.internalNotes?.takeIf { it.isNotBlank() }?.let {
-                        OperatorText(it)
-                    }
-                    AppTextField(
-                        value = note,
-                        onValueChange = { note = it },
-                        label = stringResource(R.string.order_new_note),
-                        imeAction = ImeAction.Done,
-                    )
-                }
-            },
-            confirmButton = {
-                AppButton(
-                    text = stringResource(R.string.order_save_note),
-                    enabled = note.isNotBlank(),
-                    onClick = {
-                        viewModel.addNote(note)
-                        note = ""
-                        showInternalNoteDialog = false
-                    },
-                    variant = AppButtonVariant.Primary,
-                    size = AppButtonSize.Compact
-                )
-            },
-            dismissButton = {
-                AppButton(
-                    text = stringResource(R.string.customer_cancel),
-                    onClick = { showInternalNoteDialog = false },
-                    variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact
-                )
-            },
-        )
-    }
-
-    if (showPdfSentConfirmation) {
-        AppDialog(
-            onDismissRequest = { viewModel.onPdfSentDismissed() },
-            title = stringResource(R.string.order_pdf_sent_confirm_title),
-            text = stringResource(R.string.order_pdf_sent_confirm_text),
-            confirmButton = {
-                AppButton(
-                    text = stringResource(R.string.yes_confirmed),
-                    onClick = { 
-                        viewModel.onPdfSentConfirmed()
-                    },
-                    variant = AppButtonVariant.Primary,
-                    size = AppButtonSize.Compact
-                )
-            },
-            dismissButton = {
-                AppButton(
-                    text = stringResource(R.string.no_cancel),
-                    onClick = { viewModel.onPdfSentDismissed() },
-                    variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact
                 )
             }
-        )
-    }
+        },
+        onChangeStatus = { targetStatus, statusNote, closureReason ->
+            viewModel.changeStatus(
+                status = targetStatus,
+                note = statusNote,
+                closureReason = closureReason,
+            ) {
+                if ((targetStatus == OrderStatus.CLOSED) && (closureReason == ClosureReason.NOT_REPAIRABLE)) {
+                    viewModel.prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
+                } else if (targetStatus == OrderStatus.READY_FOR_PICKUP) {
+                    viewModel.prepareMessage(TemplateAnchor.WHATSAPP_READY)
+                } else if (targetStatus == OrderStatus.CLOSED) {
+                    onBack()
+                }
+            }
+        }
+    )
+
+    InternalNoteDialog(
+        state = workspaceState,
+        currentInternalNotes = selected.order.internalNotes,
+        onAddNote = viewModel::addNote
+    )
+
+    OrderPdfSentConfirmationDialog(
+        show = showPdfSentConfirmation,
+        onDismiss = viewModel::onPdfSentDismissed,
+        onConfirm = viewModel::onPdfSentConfirmed
+    )
 }

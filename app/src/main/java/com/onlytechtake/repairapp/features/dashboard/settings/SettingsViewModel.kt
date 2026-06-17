@@ -19,6 +19,7 @@ import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import com.onlytechtake.repairapp.domain.workspace.OperatorInput
+import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,6 +44,20 @@ class SettingsViewModel(
 
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
+
+    private val actionRunner = AuthenticatedActionRunner(
+        authRepository = authRepository,
+        currentUser = authRepository.currentUser,
+        scope = viewModelScope,
+        showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) }
+    )
+
+    private val catalogDelegate = CatalogSettingsDelegate(catalogRepository, actionRunner)
+    private val templateDelegate = TemplateSettingsDelegate(templateRepository, actionRunner)
+    private val backupDelegate = BackupSettingsDelegate(backupRepository, backupReminderPreferences, actionRunner, viewModelScope)
+    private val securityDelegate = SecuritySettingsDelegate(securityPreferences, viewModelScope)
+    private val adminDelegate = AdminSettingsDelegate(adminUserRepository, actionRunner)
+    private val storageDelegate = StorageSettingsDelegate(storageStatsService, orderFileCleanupService, database, actionRunner, viewModelScope, ::refreshStorageStats)
 
     fun initializeTemplatesIfNeeded() {
         viewModelScope.launch {
@@ -89,172 +104,58 @@ class SettingsViewModel(
         }
     }
 
-    fun cleanupCache() {
-        viewModelScope.launch {
-            orderFileCleanupService.cleanupSharedCache()
-            refreshStorageStats()
-        }
-    }
+    fun cleanupCache() = storageDelegate.cleanupCache()
 
-    fun cleanupOrphanedFiles() {
-        launchWithUser(onSuccess = {
-            _message.value = WorkspaceMessage("Pulizia file orfani completata", false)
-            refreshStorageStats()
-        }) { actor ->
-            runCatching {
-                com.onlytechtake.repairapp.core.permissions.PermissionService.requirePermission(actor, UserPermission.MANAGE_STORAGE)
-                val paths = mutableSetOf<String>()
-                paths.addAll(database.orderMediaDao().getAllPaths())
-                paths.addAll(database.signatureDao().getAllPaths())
-                paths.addAll(database.orderDocumentDao().getAllPaths())
-                orderFileCleanupService.cleanupOrphanedFiles(paths)
-            }
-        }
-    }
+    fun cleanupOrphanedFiles() = storageDelegate.cleanupOrphanedFiles()
 
-    fun saveCategory(id: String?, parentId: String?, name: String, description: String, active: Boolean, onSaved: (String) -> Unit = {}) {
-        launchWithUser(onSuccess = { 
-            _message.value = WorkspaceMessage("Operazione completata", false) 
-        }) { actor ->
-            catalogRepository.saveCategory(
-                actor,
-                CategoryInput(id, parentId, name, description, active)
-            ).onSuccess { onSaved(it) }
-        }
-    }
+    fun saveCategory(id: String?, parentId: String?, name: String, description: String, active: Boolean, onSaved: (String) -> Unit = {}) =
+        catalogDelegate.saveCategory(id, parentId, name, description, active, onSaved)
 
-    fun deleteCategory(categoryId: String) {
-        launchWithUser(onSuccess = { 
-            _message.value = WorkspaceMessage("Operazione completata", false) 
-        }) { actor ->
-            catalogRepository.deleteCategory(actor, categoryId)
-        }
-    }
+    fun deleteCategory(categoryId: String) = catalogDelegate.deleteCategory(categoryId)
 
-    fun saveTemplate(code: String, title: String, body: String, active: Boolean, step: String? = null) {
-        launchWithUser(onSuccess = { 
-            _message.value = WorkspaceMessage("Operazione completata", false) 
-        }) { actor ->
-            templateRepository.saveTemplate(actor, code, title, body, active, step)
-        }
-    }
+    fun saveTemplate(code: String, title: String, body: String, active: Boolean, step: String? = null) =
+        templateDelegate.saveTemplate(code, title, body, active, step)
 
-    fun setTemplateForAnchor(anchor: TemplateAnchor, templateCode: String) {
-        launchWithUser(onSuccess = {
-            _message.value = WorkspaceMessage("Associazione aggiornata", false)
-        }) { actor ->
-            templateRepository.setTemplateForAnchor(actor, anchor, templateCode)
-        }
-    }
+    fun setTemplateForAnchor(anchor: TemplateAnchor, templateCode: String) =
+        templateDelegate.setTemplateForAnchor(anchor, templateCode)
 
-    fun setMessageMode(mode: MessageMode) {
-        launchWithUser { actor ->
-            templateRepository.setMessageMode(actor, mode)
-        }
-    }
+    fun setMessageMode(mode: MessageMode) = templateDelegate.setMessageMode(mode)
 
     fun setExportDestination(destination: com.onlytechtake.repairapp.data.local.entities.ExportDestination) {
         _exportDestination.value = destination
     }
 
-    fun setBackupReminderEnabled(enabled: Boolean) {
-        viewModelScope.launch {
-            backupReminderPreferences.setEnabled(enabled)
-        }
-    }
+    fun setBackupReminderEnabled(enabled: Boolean) = backupDelegate.setBackupReminderEnabled(enabled)
 
-    fun setBackupReminderIntervalDays(days: Int) {
-        viewModelScope.launch {
-            backupReminderPreferences.setIntervalDays(days)
-        }
-    }
+    fun setBackupReminderIntervalDays(days: Int) = backupDelegate.setBackupReminderIntervalDays(days)
 
-    fun setBackupEncryptionEnabled(enabled: Boolean) {
-        viewModelScope.launch {
-            securityPreferences.setBackupEncryptionEnabled(enabled)
-        }
-    }
+    fun setBackupEncryptionEnabled(enabled: Boolean) = securityDelegate.setBackupEncryptionEnabled(enabled)
 
-    fun setBackupEncryptionPassword(password: String) {
-        viewModelScope.launch {
-            securityPreferences.setBackupEncryptionPassword(password)
-        }
-    }
+    fun setBackupEncryptionPassword(password: String) = securityDelegate.setBackupEncryptionPassword(password)
 
-    fun setDatabaseEncryptionEnabled(enabled: Boolean) {
-        viewModelScope.launch {
-            securityPreferences.setDatabaseEncryptionEnabled(enabled)
-        }
-    }
+    fun setDatabaseEncryptionEnabled(enabled: Boolean) = securityDelegate.setDatabaseEncryptionEnabled(enabled)
 
-    fun createOperator(displayName: String, username: String, password: CharArray) {
-        launchWithUser { actor ->
-            adminUserRepository.createOperator(actor, OperatorInput(displayName, username, password))
-        }
-    }
+    fun createOperator(displayName: String, username: String, password: CharArray) =
+        adminDelegate.createOperator(displayName, username, password)
 
-    fun setUserActive(userId: String, active: Boolean) {
-        launchWithUser { actor ->
-            adminUserRepository.setActive(actor, userId, active)
-        }
-    }
+    fun setUserActive(userId: String, active: Boolean) = adminDelegate.setUserActive(userId, active)
 
-    fun setUserPermissions(userId: String, permissions: Set<UserPermission>) {
-        launchWithUser { actor ->
-            adminUserRepository.setPermissions(actor, userId, permissions)
-        }
-    }
+    fun setUserPermissions(userId: String, permissions: Set<UserPermission>) =
+        adminDelegate.setUserPermissions(userId, permissions)
 
-    fun resetPassword(userId: String, password: CharArray) {
-        launchWithUser { actor ->
-            adminUserRepository.resetPassword(actor, userId, password)
-        }
-    }
+    fun resetPassword(userId: String, password: CharArray) = adminDelegate.resetPassword(userId, password)
 
-    fun exportConfiguration(uri: Uri) {
-        launchWithUser { actor ->
-            backupRepository.exportConfiguration(actor, uri)
-        }
-    }
+    fun exportConfiguration(uri: Uri) = backupDelegate.exportConfiguration(uri)
 
-    fun exportDatabase(uri: Uri) {
-        launchWithUser { actor ->
-            backupRepository.exportDatabase(actor, uri)
-        }
-    }
+    fun exportDatabase(uri: Uri) = backupDelegate.exportDatabase(uri)
 
-    fun exportCompleteBackup(uri: Uri) {
-        launchWithUser { actor ->
-            backupRepository.exportCompleteBackup(actor, uri)
-        }
-    }
+    fun exportCompleteBackup(uri: Uri) = backupDelegate.exportCompleteBackup(uri)
 
-    fun exportOrdersXlsx(uri: Uri) {
-        launchWithUser { actor ->
-            backupRepository.exportOrdersXlsx(actor, uri)
-        }
-    }
+    fun exportOrdersXlsx(uri: Uri) = backupDelegate.exportOrdersXlsx(uri)
 
-    fun restoreCompleteBackup(uri: Uri, onRestored: () -> Unit) {
-        launchWithUser(onSuccess = onRestored) { actor ->
-            backupRepository.restoreCompleteBackup(actor, uri)
-        }
-    }
+    fun restoreCompleteBackup(uri: Uri, onRestored: () -> Unit) =
+        backupDelegate.restoreCompleteBackup(uri, onRestored)
 
-    private fun launchWithUser(
-        onSuccess: () -> Unit = {},
-        block: suspend (com.onlytechtake.repairapp.domain.auth.AuthenticatedUser) -> Result<*>
-    ) {
-        val user = currentUser.value
-        if (user != null) {
-            viewModelScope.launch {
-                block(user).fold(
-                    onSuccess = { onSuccess() },
-                    onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) }
-                )
-            }
-        }
-    }
 
     class Factory(
         private val authRepository: AuthRepository,

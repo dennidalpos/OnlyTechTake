@@ -158,7 +158,6 @@
     <string name="customer_edit">Modifica cliente</string>
     <string name="customer_recent">Clienti recenti</string>
     <string name="customer_search_results">Risultati ricerca</string>
-    <string name="customer_empty">Nessun cliente registrato.</string>
     <string name="customer_no_results">Nessun cliente trovato per questa ricerca.</string>
     <string name="customer_save">Salva cliente</string>
     <string name="customer_update">Aggiorna cliente</string>
@@ -255,8 +254,6 @@
     <string name="order_customer_documents">Documenti cliente</string>
     <string name="order_generate_status_pdf">Genera PDF stato avanzamento</string>
 
-    <string name="order_pdf_missing_signature_title">Firma mancante</string>
-    <string name="order_pdf_missing_signature_text">Firma cliente non trovata. Generare comunque il PDF senza firma?</string>
     <string name="order_document_history">Storico documenti:</string>
     <string name="order_document_generated">Generato: %s</string>
     <string name="order_share">Condividi</string>
@@ -283,9 +280,7 @@
     <string name="order_closure_note_label">Nota chiusura</string>
     <string name="order_closure_reason_title">Motivo chiusura</string>
     <string name="order_paid_button">Pagato</string>
-    <string name="order_not_paid_button">Non pagato</string>
     <string name="order_paid_badge">PAGATO</string>
-    <string name="order_operator_label">Operatore: %s</string>
     <string name="order_actions_title">Azioni commessa</string>
     <string name="order_quote_outcome">Esito preventivo</string>
     <string name="order_quote_accepted">Preventivo accettato</string>
@@ -294,6 +289,12 @@
 
     <string name="order_pdf_sent_confirm_title">Conferma invio</string>
     <string name="order_pdf_sent_confirm_text">Hai completato l\'invio del PDF al cliente?</string>
+    <string name="order_confirm_diagnosis_outcome_title">Cliente avvisato?</string>
+    <string name="order_confirm_diagnosis_outcome_text">La commessa passera\' a pronta per il ritiro.</string>
+    <string name="order_confirm_delete_document_title">Eliminare documento?</string>
+    <string name="order_confirm_delete_document_text">Il file verra\' rimosso permanentemente.</string>
+    <string name="order_pdf_missing_signature_title">Firma mancante</string>
+    <string name="order_pdf_missing_signature_text">Il documento non conterra\' la firma del cliente. Proseguire?</string>
     <string name="yes_confirmed">Sì, confermato</string>
     <string name="no_cancel">No, annulla</string>
 
@@ -316,7 +317,6 @@
     <string name="admin_total_reset">Reset totale dati</string>
     <string name="admin_confirm_total_reset_title">Reset totale?</string>
     <string name="admin_confirm_total_reset_text">Questa azione elimina i dati locali dell\'app e riporta al primo setup admin.</string>
-    <string name="admin_cleanup_orders">Pulizia commesse</string>
     <string name="admin_delete_all_orders">Cancella tutte le commesse</string>
     <string name="admin_confirm_delete_all_orders_title">Cancellazione totale commesse?</string>
     <string name="admin_confirm_delete_all_orders_text">Tutte le commesse, timeline, messaggi, foto, firme e documenti verranno eliminati permanentemente.</string>
@@ -348,7 +348,6 @@
     <string name="admin_delete_all_orders_field_short">Digita CANCELLA TUTTO</string>
     <string name="admin_total_reset_field">Digita RESET</string>
 
-    <string name="config_back">Torna a Setup</string>
     <string name="config_hub_categories_title">Categorie</string>
     <string name="config_hub_categories_subtitle">Catalogo commesse</string>
     <string name="config_hub_templates_title">Template</string>

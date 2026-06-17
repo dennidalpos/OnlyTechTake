@@ -19,6 +19,7 @@ import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
 import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
 import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
 import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
+import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
 import java.io.File
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -44,6 +45,13 @@ class OrderDetailViewModel(
 
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
+
+    private val actionRunner = AuthenticatedActionRunner(
+        authRepository = authRepository,
+        currentUser = authRepository.currentUser,
+        scope = viewModelScope,
+        showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) }
+    )
 
     private val _isGeneratingStatusPdf = MutableStateFlow(false)
     val isGeneratingStatusPdf = _isGeneratingStatusPdf.asStateFlow()
@@ -83,7 +91,7 @@ class OrderDetailViewModel(
     }
 
     fun changeStatus(status: OrderStatus, note: String = "", closureReason: ClosureReason? = null, onSuccess: () -> Unit = {}) {
-        launchWithUser(onSuccess = {
+        actionRunner.run(onSuccess = {
             clearPreparedMessage()
             onSuccess()
         }) { actor ->
@@ -92,7 +100,7 @@ class OrderDetailViewModel(
     }
 
     fun recordResult(summary: String, diagnosisOutcome: DiagnosisOutcome, estimateAmountCents: Long?, onSuccess: () -> Unit = {}) {
-        launchWithUser(onSuccess = {
+        actionRunner.run(onSuccess = {
             clearPreparedMessage()
             onSuccess()
         }) { actor ->
@@ -106,7 +114,7 @@ class OrderDetailViewModel(
         closureReason: ClosureReason? = null,
         onSuccess: () -> Unit = {},
     ) {
-        launchWithUser(onSuccess = {
+        actionRunner.run(onSuccess = {
             clearPreparedMessage()
             onSuccess()
         }) { actor ->
@@ -115,14 +123,14 @@ class OrderDetailViewModel(
     }
 
     fun togglePaymentStatus(isPaid: Boolean) {
-        launchWithUser { actor ->
+        actionRunner.run { actor ->
             com.onlytechtake.repairapp.core.permissions.PermissionService.requirePermission(actor, com.onlytechtake.repairapp.data.local.entities.UserPermission.MANAGE_PAYMENTS)
             orderRepository.togglePaymentStatus(actor, orderId, isPaid)
         }
     }
 
     fun addNote(note: String) {
-        launchWithUser { actor ->
+        actionRunner.run { actor ->
             orderRepository.addInternalNote(actor, orderId, note)
         }
     }
@@ -131,31 +139,31 @@ class OrderDetailViewModel(
         runCatching { orderMediaRepository.createPhotoFile(id, orderNumber) }
 
     fun registerCapturedPhoto(id: String, file: File) {
-        launchWithUser { actor ->
+        actionRunner.run { actor ->
             orderMediaRepository.registerCapturedPhoto(actor, id, file)
         }
     }
 
     fun registerCapturedFinalPhoto(id: String, file: File) {
-        launchWithUser { actor ->
+        actionRunner.run { actor ->
             orderMediaRepository.registerCapturedFinalPhoto(actor, id, file)
         }
     }
 
     fun importAttachment(id: String, uri: Uri) {
-        launchWithUser { actor ->
+        actionRunner.run { actor ->
             orderMediaRepository.importAttachment(actor, id, uri)
         }
     }
 
     fun deleteMedia(mediaId: String) {
-        launchWithUser { actor ->
+        actionRunner.run { actor ->
             orderMediaRepository.deleteMedia(actor, mediaId)
         }
     }
 
     fun replaceImage(mediaId: String, bitmap: Bitmap) {
-        launchWithUser { actor ->
+        actionRunner.run { actor ->
             orderMediaRepository.replaceImage(actor, mediaId, bitmap)
         }
     }
@@ -165,8 +173,8 @@ class OrderDetailViewModel(
     }
 
     fun prepareMessage(anchor: TemplateAnchor) {
-        launchWithUser { actor ->
-            templateRepository.prepareMessage(actor, orderId, anchor).map { prepared ->
+        actionRunner.run { actor ->
+            templateRepository.prepareMessage(actor, orderId, anchor).onSuccess { prepared ->
                 _preparedMessage.value = prepared
                 _preparedMessageBody.value = prepared.body
                 setFormDirty(true)
@@ -175,8 +183,8 @@ class OrderDetailViewModel(
     }
 
     fun prepareMessage(templateCode: String) {
-        launchWithUser { actor ->
-            templateRepository.prepareMessage(actor, orderId, templateCode).map { prepared ->
+        actionRunner.run { actor ->
+            templateRepository.prepareMessage(actor, orderId, templateCode).onSuccess { prepared ->
                 _preparedMessage.value = prepared
                 _preparedMessageBody.value = prepared.body
                 setFormDirty(true)
@@ -197,14 +205,14 @@ class OrderDetailViewModel(
 
     fun recordPreparedMessage() {
         val prepared = _preparedMessage.value ?: return
-        launchWithUser { actor ->
+        actionRunner.run { actor ->
             templateRepository.recordPrepared(actor, prepared, _preparedMessageBody.value)
         }
     }
 
     fun confirmSentMessage() {
         val prepared = _preparedMessage.value ?: return
-        launchWithUser(onSuccess = { clearPreparedMessage() }) { actor ->
+        actionRunner.run(onSuccess = { clearPreparedMessage() }) { actor ->
             templateRepository.confirmSent(actor, prepared, _preparedMessageBody.value)
         }
     }
@@ -286,20 +294,6 @@ class OrderDetailViewModel(
         _pendingShareIntent.value = null
     }
 
-    private fun launchWithUser(
-        onSuccess: () -> Unit = {},
-        block: suspend (com.onlytechtake.repairapp.domain.auth.AuthenticatedUser) -> Result<*>
-    ) {
-        val user = currentUser.value
-        if (user != null) {
-            viewModelScope.launch {
-                block(user).fold(
-                    onSuccess = { onSuccess() },
-                    onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) }
-                )
-            }
-        }
-    }
 
     class Factory(
         private val orderId: String,

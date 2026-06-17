@@ -10,12 +10,10 @@ internal class AuthenticatedActionRunner(
     private val authRepository: AuthRepository,
     private val currentUser: StateFlow<AuthenticatedUser?>,
     private val scope: CoroutineScope,
-    private val showSuccess: (String) -> Unit,
-    private val showError: (Throwable) -> Unit,
     private val showMessage: (String, Boolean) -> Unit,
 ) {
     fun run(
-        successMessage: String = "Operazione completata",
+        successMessage: String? = null,
         onSuccess: () -> Unit = {},
         block: suspend (AuthenticatedUser) -> Result<*>,
     ) {
@@ -30,10 +28,12 @@ internal class AuthenticatedActionRunner(
             authRepository.touchSession()
             block(actor).fold(
                 onSuccess = { result ->
-                    showSuccess(result as? String ?: successMessage)
+                    (result as? String ?: successMessage)?.let { showMessage(it, false) }
                     onSuccess()
                 },
-                onFailure = showError,
+                onFailure = { error ->
+                    showMessage(error.message ?: "Errore", true)
+                },
             )
         }
     }

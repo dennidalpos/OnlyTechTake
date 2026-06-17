@@ -78,7 +78,7 @@ fun ColumnScope.TemplatesSettings(
         item {
             SectionTitle(
                 text = stringResource(R.string.config_hub_templates_title),
-                tooltip = "Personalizza i messaggi predefiniti per ogni fase della lavorazione e le informative legali."
+                tooltip = stringResource(R.string.config_template_tooltip)
             )
         }
 

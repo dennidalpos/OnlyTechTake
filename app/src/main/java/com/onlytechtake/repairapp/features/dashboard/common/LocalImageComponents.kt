@@ -53,15 +53,12 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.components.*
-import com.onlytechtake.repairapp.core.media.decodeOrientedBitmap
+import com.onlytechtake.repairapp.core.media.*
 import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.math.atan2
 import kotlin.math.cos
-import kotlin.math.floor
-import kotlin.math.max
-import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlin.math.sin
 
@@ -433,71 +430,6 @@ private fun rememberDecodedLocalBitmap(path: String, maxDimension: Int) =
 private fun fileVersion(path: String): Pair<Long, Long> =
     File(path).let { file -> file.lastModified() to file.length() }
 
-private enum class ImageEditMode {
-    CROP,
-    ARROW,
-}
-
-private data class ImageEditArrow(
-    val start: Offset,
-    val end: Offset,
-)
-
-private data class ImagePlacement(
-    val left: Float,
-    val top: Float,
-    val width: Float,
-    val height: Float,
-)
-
-private fun imagePlacement(imageSize: Size, canvasSize: Size): ImagePlacement {
-    val scale = min(canvasSize.width / imageSize.width, canvasSize.height / imageSize.height)
-    val width = imageSize.width * scale
-    val height = imageSize.height * scale
-    return ImagePlacement(
-        left = (canvasSize.width - width) / 2f,
-        top = (canvasSize.height - height) / 2f,
-        width = width,
-        height = height,
-    )
-}
-
-private fun Offset.toCanvasOffset(placement: ImagePlacement, bitmap: Bitmap): Offset =
-    Offset(
-        x = placement.left + (x / bitmap.width.toFloat()) * placement.width,
-        y = placement.top + (y / bitmap.height.toFloat()) * placement.height,
-    )
-
-private fun Size.toCanvasSize(placement: ImagePlacement, bitmap: Bitmap): Size =
-    Size(
-        width = (width / bitmap.width.toFloat()) * placement.width,
-        height = (height / bitmap.height.toFloat()) * placement.height,
-    )
-
-private fun Offset.toBitmapOffset(canvasSize: IntSize, bitmap: Bitmap): Offset? {
-    if (canvasSize.width <= 0 || canvasSize.height <= 0) return null
-    val placement = imagePlacement(
-        imageSize = Size(bitmap.width.toFloat(), bitmap.height.toFloat()),
-        canvasSize = Size(canvasSize.width.toFloat(), canvasSize.height.toFloat()),
-    )
-    if (x < placement.left || x > placement.left + placement.width) return null
-    if (y < placement.top || y > placement.top + placement.height) return null
-    return Offset(
-        x = ((x - placement.left) / placement.width * bitmap.width).coerceIn(0f, bitmap.width.toFloat()),
-        y = ((y - placement.top) / placement.height * bitmap.height).coerceIn(0f, bitmap.height.toFloat()),
-    )
-}
-
-private fun normalizeBitmapRect(start: Offset, end: Offset, bitmap: Bitmap?): Rect? {
-    bitmap ?: return null
-    val left = min(start.x, end.x).coerceIn(0f, bitmap.width.toFloat())
-    val top = min(start.y, end.y).coerceIn(0f, bitmap.height.toFloat())
-    val right = max(start.x, end.x).coerceIn(0f, bitmap.width.toFloat())
-    val bottom = max(start.y, end.y).coerceIn(0f, bitmap.height.toFloat())
-    if (right - left < MIN_CROP_SIZE || bottom - top < MIN_CROP_SIZE) return null
-    return Rect(left, top, right, bottom)
-}
-
 private fun DrawScope.drawBitmapArrow(
     start: Offset,
     end: Offset,
@@ -519,46 +451,6 @@ private fun DrawScope.drawBitmapArrow(
     drawLine(color = color, start = end, end = right, strokeWidth = strokeWidth)
 }
 
-private fun Bitmap.rotateRight(): Bitmap {
-    val matrix = Matrix().apply { postRotate(90f) }
-    return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
-}
-
-private fun buildEditedBitmap(source: Bitmap, arrows: List<ImageEditArrow>, cropRect: Rect?): Bitmap {
-    val output = source.copy(Bitmap.Config.ARGB_8888, true)
-    val canvas = AndroidCanvas(output)
-    val paint = AndroidPaint(AndroidPaint.ANTI_ALIAS_FLAG).apply {
-        color = AndroidColor.RED
-        strokeWidth = max(6f, source.width / 160f)
-        style = AndroidPaint.Style.STROKE
-        strokeCap = AndroidPaint.Cap.ROUND
-    }
-    arrows.forEach { arrow ->
-        canvas.drawLine(arrow.start.x, arrow.start.y, arrow.end.x, arrow.end.y, paint)
-        drawAndroidArrowHead(canvas, paint, arrow.start, arrow.end)
-    }
-    val rect = cropRect ?: return output
-    val left = floor(rect.left).toInt().coerceIn(0, output.width - 1)
-    val top = floor(rect.top).toInt().coerceIn(0, output.height - 1)
-    val right = rect.right.roundToInt().coerceIn(left + 1, output.width)
-    val bottom = rect.bottom.roundToInt().coerceIn(top + 1, output.height)
-    return Bitmap.createBitmap(output, left, top, right - left, bottom - top)
-}
-
-private fun drawAndroidArrowHead(canvas: AndroidCanvas, paint: AndroidPaint, start: Offset, end: Offset) {
-    val angle = atan2(end.y - start.y, end.x - start.x)
-    val headLength = max(24f, paint.strokeWidth * 4f)
-    val leftX = end.x - headLength * cos(angle - ARROW_HEAD_ANGLE)
-    val leftY = end.y - headLength * sin(angle - ARROW_HEAD_ANGLE)
-    val rightX = end.x - headLength * cos(angle + ARROW_HEAD_ANGLE)
-    val rightY = end.y - headLength * sin(angle + ARROW_HEAD_ANGLE)
-    canvas.drawLine(end.x, end.y, leftX, leftY, paint)
-    canvas.drawLine(end.x, end.y, rightX, rightY, paint)
-}
-
-private const val MIN_DRAG_DISTANCE = 12f
-private const val MIN_CROP_SIZE = 24f
-private const val ARROW_HEAD_ANGLE = 0.7f
 private const val PREVIEW_MAX_DIMENSION = 640
 private const val VIEWER_MAX_DIMENSION = 1920
 private const val EDIT_MAX_DIMENSION = 1920

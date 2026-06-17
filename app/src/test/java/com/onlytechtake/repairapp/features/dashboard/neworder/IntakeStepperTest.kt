@@ -1,6 +1,9 @@
 package com.onlytechtake.repairapp.features.dashboard.neworder
 
+import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
+import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
+import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
 import com.onlytechtake.repairapp.features.workspace.categoryPath
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -59,5 +62,39 @@ class IntakeStepperTest {
         }
 
         assertEquals("L0 > L1 > L2 > L3 > L4 > L5", categoryPath(categories, "level-5"))
+    }
+
+    @Test
+    fun dirtyStateIdentifiesUserChanges() {
+        val draft = QuickIntakeDraft()
+        assertFalse(calculateIsDirty(draft))
+
+        assertTrue(calculateIsDirty(draft.copy(problemSummary = "Broken screen")))
+        assertTrue(calculateIsDirty(draft.copy(selectedCategoryId = "display")))
+        assertTrue(calculateIsDirty(draft.copy(stagedMedia = listOf(
+            StagedOrderMedia(
+                localPath = "p",
+                fileName = "p.jpg",
+                mimeType = "image/jpeg",
+                mediaType = "PHOTO",
+                sizeBytes = 1024,
+                width = 800,
+                height = 600
+            )
+        ))))
+    }
+
+    @Test
+    fun canSaveNewCustomerValidatesMinimumFields() {
+        assertFalse(calculateCanSaveNewCustomer(CustomerType.PRIVATE, "", "", "", "", ""))
+
+        // Private requires First Name, Last Name and Phone or Email
+        assertFalse(calculateCanSaveNewCustomer(CustomerType.PRIVATE, "John", "", "", "123", ""))
+        assertTrue(calculateCanSaveNewCustomer(CustomerType.PRIVATE, "John", "Doe", "", "123", ""))
+        assertTrue(calculateCanSaveNewCustomer(CustomerType.PRIVATE, "John", "Doe", "", "", "john@example.com"))
+
+        // Business requires Company Name and Phone or Email
+        assertFalse(calculateCanSaveNewCustomer(CustomerType.BUSINESS, "", "", "Acme Corp", "", ""))
+        assertTrue(calculateCanSaveNewCustomer(CustomerType.BUSINESS, "", "", "Acme Corp", "123", ""))
     }
 }

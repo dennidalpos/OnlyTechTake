@@ -13,18 +13,20 @@ import java.util.UUID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
+import com.onlytechtake.repairapp.domain.repositories.CustomerRepository
+
 class CustomerRepository(
     private val customerDao: CustomerDao,
     private val clockMillis: () -> Long = System::currentTimeMillis,
-) {
-    fun observeRecent(): Flow<List<CustomerEntity>> {
+) : CustomerRepository {
+    override fun observeRecent(): Flow<List<CustomerEntity>> {
         if (DemoMode.isEnabled) {
             return flowOf(listOf(DemoMode.demoCustomer))
         }
         return customerDao.observeRecent()
     }
 
-    fun search(query: String): Flow<List<CustomerEntity>> {
+    override fun search(query: String): Flow<List<CustomerEntity>> {
         if (DemoMode.isEnabled) {
             val q = query.trim().lowercase()
             return if (DemoMode.demoCustomer.firstName?.lowercase()?.contains(q) == true ||
@@ -40,14 +42,14 @@ class CustomerRepository(
         return customerDao.search(sanitized)
     }
 
-    suspend fun findById(id: String): CustomerEntity? {
+    override suspend fun findById(id: String): CustomerEntity? {
         if (DemoMode.isEnabled && id == DemoMode.demoCustomer.id) {
             return DemoMode.demoCustomer
         }
         return customerDao.findById(id)
     }
 
-    suspend fun save(actor: AuthenticatedUser?, input: CustomerInput): Result<CustomerEntity> =
+    override suspend fun save(actor: AuthenticatedUser?, input: CustomerInput): Result<CustomerEntity> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_CUSTOMERS)
             val now = clockMillis()
@@ -73,7 +75,7 @@ class CustomerRepository(
             entity
         }
 
-    private fun isValid(input: CustomerInput): Boolean =
+    override fun isValid(input: CustomerInput): Boolean =
         when (input.type) {
             CustomerType.PRIVATE -> input.firstName.isNotBlank() || input.lastName.isNotBlank()
             CustomerType.BUSINESS -> input.companyName.isNotBlank()

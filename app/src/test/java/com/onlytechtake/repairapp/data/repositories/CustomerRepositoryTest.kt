@@ -21,6 +21,7 @@ class CustomerRepositoryTest {
         override fun search(query: String): Flow<List<CustomerEntity>> = emptyFlow()
         override suspend fun findById(id: String): CustomerEntity? = null
         override suspend fun upsert(customer: CustomerEntity) { lastUpserted = customer }
+        override suspend fun upsertAll(customers: List<CustomerEntity>) { /* stub */ }
     }
 
     private val repository = CustomerRepository(stubDao)

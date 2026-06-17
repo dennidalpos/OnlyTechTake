@@ -72,56 +72,20 @@ fun QuickActions(
             focusManager.clearFocus()
         },
     )
+    val stepperState = remember(draft, categories, templates, anchorMappings, currentUser) {
+        IntakeStepperState(draft, categories, templates, anchorMappings, currentUser)
+    }
+
     val selectedCustomer = draft.selectedCustomerId?.let { id -> customerSuggestions.firstOrNull { it.id == id } }
     val selectedCustomerDisplayName = selectedCustomer?.displayName(
         unnamedPrivate = unnamedPrivate,
         unnamedBusiness = unnamedBusiness,
     ) ?: draft.selectedCustomerLabel
-    val activeCategories = categories.filter { it.active }
-    val newCustomerInput = CustomerInput(
-        type = draft.customerType,
-        firstName = draft.firstName,
-        lastName = draft.lastName,
-        companyName = draft.companyName,
-        phone = draft.phone,
-        email = draft.email,
-        vatNumber = draft.vatNumber,
-        taxCode = draft.taxCode,
-        address = draft.address,
-        notes = draft.notes,
-    )
-    val intakeInput = IntakeOrderInput(
-        existingCustomerId = draft.selectedCustomerId,
-        newCustomer = null,
-        problemSummary = draft.problemSummary,
-        problemDetails = draft.problemDetails,
-        categoryId = draft.selectedCategoryId,
-        assignedToUserId = currentUser?.id,
-        stagedMediaCount = draft.stagedMedia.size,
-        hasPrivacySignature = draft.signatureCapture != null,
-    )
-    val privacyCode = anchorMappings[TemplateAnchor.PRIVACY_TEXT] ?: TemplateAnchor.PRIVACY_TEXT.defaultCode
-    val termsCode = anchorMappings[TemplateAnchor.TERMS_TEXT] ?: TemplateAnchor.TERMS_TEXT.defaultCode
     
-    val privacyText = templates.firstOrNull { (it.code == privacyCode) && it.active }?.body ?: LegalTemplateFallbacks.PrivacyText
-    val termsText = templates.firstOrNull { (it.code == termsCode) && it.active }?.body ?: LegalTemplateFallbacks.TermsText
-    val missingRequirements = remember(intakeInput) { intakeInput.validationErrors() }
+    val missingRequirements = remember(stepperState.intakeInput) { stepperState.intakeInput.validationErrors() }
 
-    LaunchedEffect(
-        draft.selectedCustomerId,
-        draft.selectedCategoryId,
-        draft.problemSummary,
-        draft.problemDetails,
-        draft.stagedMedia,
-        draft.signatureCapture,
-    ) {
-        val isDirty = draft.selectedCustomerId != null ||
-                draft.selectedCategoryId != null ||
-                draft.problemSummary.isNotBlank() ||
-                draft.problemDetails.isNotBlank() ||
-                draft.stagedMedia.isNotEmpty() ||
-                draft.signatureCapture != null
-        viewModel.setFormDirty(isDirty)
+    LaunchedEffect(stepperState.isDirty) {
+        viewModel.setFormDirty(stepperState.isDirty)
     }
 
     val attachmentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -153,9 +117,8 @@ fun QuickActions(
         }
     }
 
-    val isBusiness = draft.customerType == CustomerType.BUSINESS
-    val canSaveNewCustomer = (draft.phone.isNotBlank() || draft.email.isNotBlank()) &&
-        if (isBusiness) draft.companyName.isNotBlank() else draft.firstName.isNotBlank() && draft.lastName.isNotBlank()
+    val isBusiness = stepperState.isBusiness
+    val canSaveNewCustomer = stepperState.canSaveNewCustomer
 
     fun editStep(step: Int) {
         updateDraft { it.copy(currentStep = step, completedStep = completedStepAfterEdit(it.completedStep, step)) }
@@ -337,7 +300,7 @@ fun QuickActions(
                             size = AppButtonSize.FullWidth,
                             testTag = RepairAppTestTags.NewOrderSaveCustomerButton,
                             onClick = {
-                                viewModel.saveCustomer(newCustomerInput) { customer ->
+                                viewModel.saveCustomer(stepperState.newCustomerInput) { customer ->
                                     val label = customer.displayName(
                                         unnamedPrivate = unnamedPrivate,
                                         unnamedBusiness = unnamedBusiness
@@ -368,7 +331,7 @@ fun QuickActions(
         if (draft.currentStep == 2) {
             QuickIntakeCategorySection(
                 stepNumber = 2,
-                activeCategories = activeCategories,
+                activeCategories = stepperState.activeCategories,
                 selectedCategoryId = draft.selectedCategoryId,
                 onCategorySelected = { categoryId ->
                     updateDraft {
@@ -452,8 +415,8 @@ fun QuickActions(
                     SignatureCaptureForm(
                         modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                         title = stringResource(R.string.intake_step_privacy),
-                        privacyText = privacyText,
-                        termsText = termsText,
+                        privacyText = stepperState.privacyText,
+                        termsText = stepperState.termsText,
                         onCaptureChanged = { capture ->
                             if (capture != null || draft.signatureCapture == null) {
                                 updateDraft {
@@ -490,12 +453,12 @@ fun QuickActions(
                     listOf(stringResource(R.string.intake_confirm_all_steps))
                 },
                 enabled = isIntakeSubmitUnlocked(draft.completedStep) &&
-                    activeCategories.isNotEmpty() &&
-                    intakeInput.isReadyForSubmit(),
+                    stepperState.activeCategories.isNotEmpty() &&
+                    stepperState.intakeInput.isReadyForSubmit(),
                 onSubmit = {
                     draft.signatureCapture?.let { capture ->
                         viewModel.createIntakeOrder(
-                            input = intakeInput,
+                            input = stepperState.intakeInput,
                             stagedMedia = draft.stagedMedia,
                             signerName = capture.signerName,
                             privacyAccepted = capture.privacyAccepted,

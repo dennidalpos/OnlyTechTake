@@ -1,20 +1,14 @@
 package com.onlytechtake.repairapp.data.repositories
 
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
 import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import android.provider.OpenableColumns
 import com.onlytechtake.repairapp.BuildConfig
-import com.onlytechtake.repairapp.core.security.DatabaseKeyManager
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label
-import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
-import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
-import com.onlytechtake.repairapp.data.local.dao.MessageTemplateDao
-import com.onlytechtake.repairapp.data.local.dao.OrderExportDao
-import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
+import com.onlytechtake.repairapp.data.local.dao.*
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
@@ -26,14 +20,8 @@ import com.onlytechtake.repairapp.domain.storage.StoragePolicy
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import net.lingala.zip4j.io.outputstream.ZipOutputStream
-import net.lingala.zip4j.model.ZipParameters
-import net.lingala.zip4j.model.enums.AesKeyStrength
-import net.lingala.zip4j.model.enums.EncryptionMethod
 import java.io.File
 import java.io.IOException
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -55,12 +43,15 @@ class BackupRepository(
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
     private val eventWriter = OrderWorkflowEventWriter(context, auditLogDao = auditLogDao)
+    
+    private val metadataService = BackupMetadataService(categoryDao, templateDao, settingDao, clockMillis)
+    private val dbBackupService = DatabaseBackupFileService(context)
 
     suspend fun exportConfiguration(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.EXPORT_DATA)
             withContext(Dispatchers.IO) {
-                writeText(uri, buildConfigurationJson())
+                writeText(uri, metadataService.buildConfigurationJson())
             }
             eventWriter.dataExported(actor.id, clockMillis())
         }
@@ -72,7 +63,7 @@ class BackupRepository(
                 throw IllegalStateException("Funzione disponibile nella versione Full")
             }
             withContext(Dispatchers.IO) {
-                val dbFile = databaseFile()
+                val dbFile = dbBackupService.databaseFile()
                 require(dbFile.exists()) { "Database non ancora creato" }
                 context.contentResolver.openOutputStream(uri)?.use { output ->
                     dbFile.inputStream().use { input -> input.copyTo(output) }
@@ -95,9 +86,9 @@ class BackupRepository(
             withContext(Dispatchers.IO) {
                 context.contentResolver.openOutputStream(uri)?.use { output ->
                     ZipOutputStream(output, password?.toCharArray()).use { zip ->
-                        zip.putTextEntry("metadata/backup.json", buildBackupMetadataJson(), password)
-                        zip.putTextEntry("config/configuration.json", buildConfigurationJson(), password)
-                        addDatabaseFiles(zip, password)
+                        zip.putTextEntry("metadata/backup.json", metadataService.buildBackupMetadataJson(), password)
+                        zip.putTextEntry("config/configuration.json", metadataService.buildConfigurationJson(), password)
+                        dbBackupService.addDatabaseFiles(zip, password)
                         BackupArchive.addDirectory(
                             zip = zip,
                             directory = mediaStorageProvider?.getBaseMediaDir()
@@ -141,13 +132,13 @@ class BackupRepository(
                     }
                     val backupDbFile = extracted.databaseFiles[RepairAppDatabase.DATABASE_NAME]
                         ?: throw IOException("Database mancante nel backup")
-                    validateDatabase(backupDbFile)
+                    dbBackupService.validateDatabase(backupDbFile)
                     
                     // Atomic replacement: close, move current to backup, move new to current, delete backup
                     database?.close()
                     RepairAppDatabase.closeInstance()
                     
-                    val currentDbFile = databaseFile()
+                    val currentDbFile = dbBackupService.databaseFile()
                     val oldDbBackupDir = File(context.cacheDir, "db_backup_pre_restore").also {
                         it.deleteRecursively()
                         it.mkdirs()
@@ -170,7 +161,7 @@ class BackupRepository(
                     }
 
                     try {
-                        replaceDatabaseFiles(extracted.databaseFiles)
+                        dbBackupService.replaceDatabaseFiles(extracted.databaseFiles)
                         replacePrivateFiles(stagingDir)
                         
                         authPreferences?.clear()
@@ -315,7 +306,7 @@ class BackupRepository(
             eventWriter.dataExported(actor.id, clockMillis())
         }
 
-    fun databaseFile(): File = context.getDatabasePath(RepairAppDatabase.DATABASE_NAME)
+    fun databaseFile(): File = dbBackupService.databaseFile()
 
     fun displayName(uri: Uri): String? =
         runCatching {
@@ -348,107 +339,10 @@ class BackupRepository(
         }
     }
 
-    private fun validateDatabase(file: File) {
-        if (!file.exists()) throw IOException("File database non trovato")
-        
-        val key = DatabaseKeyManager(context).getDatabaseKey()
-        try {
-            val db = net.zetetic.database.sqlcipher.SQLiteDatabase.openDatabase(
-                file.absolutePath,
-                key,
-                null,
-                net.zetetic.database.sqlcipher.SQLiteDatabase.OPEN_READONLY,
-                null,
-                null
-            )
-            try {
-                db.rawQuery("PRAGMA integrity_check", null).use { cursor ->
-                    if (cursor.moveToFirst()) {
-                        val result = cursor.getString(0)
-                        if (result != "ok") {
-                            throw IOException("Integrità database compromessa: $result")
-                        }
-                    } else {
-                        throw IOException("Impossibile verificare integrità database")
-                    }
-                }
-            } finally {
-                db.close()
-            }
-        } catch (e: Exception) {
-            throw IOException("Validazione database fallita (chiave errata o file corrotto): ${e.message}", e)
-        }
-    }
-
-    private fun replaceDatabaseFiles(databaseFiles: Map<String, File>) {
-        val dbFile = databaseFile()
-        dbFile.parentFile?.mkdirs()
-        dbFile.parentFile
-            ?.listFiles { file -> (file.name == dbFile.name) || file.name.startsWith("${dbFile.name}-") }
-            ?.forEach { it.delete() }
-        databaseFiles.forEach { (fileName, source) ->
-            source.copyTo(File(dbFile.parentFile, fileName), overwrite = true)
-        }
-    }
-
     private fun replacePrivateFiles(restoreRoot: File) {
         val destination = mediaStorageProvider?.getBaseMediaDir()
             ?: File(context.filesDir, BackupArchive.CANONICAL_MEDIA_DIRECTORY)
         BackupArchive.restoreAppMedia(File(restoreRoot, "files"), destination)
-    }
-
-    private suspend fun buildConfigurationJson(): String {
-        val categories = categoryDao.observeAll().first()
-        val templates = templateDao.observeAll().first()
-        val settings = settingDao.observeAll().first()
-        return buildString {
-            appendLine("{")
-            appendLine("  \"exportedAt\": ${jsonString(formatTime(clockMillis()))},")
-            appendLine("  \"categories\": [")
-            appendLine(
-                categories.joinToString(",\n") { category ->
-                    "    {\"id\": ${jsonString(category.id)}, \"parentId\": ${jsonString(category.parentId)}, \"level\": ${category.level}, \"name\": ${jsonString(category.name)}, \"active\": ${category.active}}"
-                },
-            )
-            appendLine("  ],")
-            appendLine("  \"templates\": [")
-            appendLine(
-                templates.joinToString(",\n") { template ->
-                    "    {\"code\": ${jsonString(template.code)}, \"title\": ${jsonString(template.title)}, \"channel\": ${jsonString(template.channel.name)}, \"active\": ${template.active}, \"version\": ${template.version}, \"body\": ${jsonString(template.body)}}"
-                },
-            )
-            appendLine("  ],")
-            appendLine("  \"settings\": [")
-            appendLine(
-                settings.joinToString(",\n") { setting ->
-                    "    {\"key\": ${jsonString(setting.key)}, \"value\": ${jsonString(setting.value)}, \"updatedAt\": ${setting.updatedAt}}"
-                },
-            )
-            appendLine("  ]")
-            appendLine("}")
-        }
-    }
-
-    private fun buildBackupMetadataJson(): String =
-        buildString {
-            appendLine("{")
-            appendLine("  \"createdAt\": ${jsonString(formatTime(clockMillis()))},")
-            appendLine("  \"databaseName\": ${jsonString(RepairAppDatabase.DATABASE_NAME)},")
-            appendLine("  \"databaseVersion\": ${RepairAppDatabase.DATABASE_VERSION},")
-            appendLine("  \"includes\": [\"database\", \"configuration\", \"app_media\"]")
-            appendLine("}")
-        }
-
-    private fun addDatabaseFiles(zip: ZipOutputStream, password: String?) {
-        val dbFile = databaseFile()
-        require(dbFile.exists()) { "Database non ancora creato" }
-        val databaseFiles = dbFile.parentFile
-            ?.listFiles { file -> (file.name == dbFile.name) || file.name.startsWith("${dbFile.name}-") }
-            ?.sortedBy { it.name }
-            .orEmpty()
-        databaseFiles.forEach { file ->
-            zip.putFileEntry(file, "database/${file.name}", password)
-        }
     }
 
     private fun writeText(uri: Uri, text: String) {
@@ -464,12 +358,12 @@ class BackupRepository(
 }
 
 private fun ZipOutputStream.putTextEntry(name: String, text: String, password: String?) {
-    val params = ZipParameters()
+    val params = net.lingala.zip4j.model.ZipParameters()
     params.fileNameInZip = name
     if (password != null) {
         params.isEncryptFiles = true
-        params.encryptionMethod = EncryptionMethod.AES
-        params.aesKeyStrength = AesKeyStrength.KEY_STRENGTH_256
+        params.encryptionMethod = net.lingala.zip4j.model.enums.EncryptionMethod.AES
+        params.aesKeyStrength = net.lingala.zip4j.model.enums.AesKeyStrength.KEY_STRENGTH_256
     }
     putNextEntry(params)
     write(text.toByteArray(Charsets.UTF_8))
@@ -491,17 +385,3 @@ private fun formatTimelineEvent(event: TimelineEventEntity): String {
     }
     return parts.joinToString(" | ")
 }
-
-private fun formatTime(millis: Long): String =
-    DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(
-        Instant.ofEpochMilli(millis).atZone(ZoneId.systemDefault()),
-    )
-
-private fun jsonString(value: String?): String =
-    value
-        ?.replace("\\", "\\\\")
-        ?.replace("\"", "\\\"")
-        ?.replace("\r", "\\r")
-        ?.replace("\n", "\\n")
-        ?.let { "\"$it\"" }
-        ?: "null"
