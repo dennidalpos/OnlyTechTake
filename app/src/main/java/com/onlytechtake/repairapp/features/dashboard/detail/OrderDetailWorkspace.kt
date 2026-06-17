@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
@@ -130,9 +131,13 @@ fun OrderDetailWorkspace(
             LazyColumn(
                 modifier = Modifier
                     .weight(1f)
-                    .testTag(RepairAppTestTags.OrderDetailLazyColumn),
+                    .testTag(RepairAppTestTags.OrderDetailLazyColumn)
+                    .imePadding(),
                 verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
-                contentPadding = PaddingValues(bottom = RepairAppSpacing.compactGap)
+                contentPadding = PaddingValues(
+                    top = RepairAppSpacing.compactGap,
+                    bottom = RepairAppSpacing.bottomContentPadding,
+                )
             ) {
                 item(key = "header", contentType = "header") {
                     OrderHeader(selected, context)

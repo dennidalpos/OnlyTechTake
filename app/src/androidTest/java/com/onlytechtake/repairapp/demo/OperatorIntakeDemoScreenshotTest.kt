@@ -100,9 +100,15 @@ class OperatorIntakeDemoScreenshotTest {
             clickDashboardTab("ORDERS")
             waitForText("Commesse")
             waitForTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
+            waitForTag(RepairAppTestTags.orderCardOrderReference(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
+            waitForTag(RepairAppTestTags.orderCardCustomerReference(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
+            waitForTag(RepairAppTestTags.orderCardStatusStep(DemoDataSeeder.DEMO_ORDER_ID, 1), scroll = true)
             clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID))
             
             waitForTag(RepairAppTestTags.OrderStatusLabel)
+            waitForTag(RepairAppTestTags.OrderDetailOrderReference)
+            waitForTag(RepairAppTestTags.OrderDetailCustomerReference)
+            waitForTag(RepairAppTestTags.orderDetailStatusStep(1))
             waitForText("Notebook HP")
             capture(outputDir, "06-order-created.png")
 

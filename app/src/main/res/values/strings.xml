@@ -236,6 +236,8 @@
     <string name="orders_empty_filter">Nessuna commessa per questo filtro.</string>
 
     <string name="orders_customer_unavailable">Cliente non disponibile</string>
+    <string name="orders_order_reference">Commessa %1$s - %2$s</string>
+    <string name="orders_customer_reference">Cliente: %1$s</string>
 
     <string name="orders_next_action_label">Prossima azione: %s</string>
 

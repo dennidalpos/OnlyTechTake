@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.core.design.repairColors
@@ -95,11 +96,22 @@ fun categoryPath(categories: List<OrderCategoryEntity>, categoryId: String?): St
     return names.asReversed().joinToString(" > ").ifBlank { null }
 }
 
+fun orderStatusStepNumber(status: OrderStatus): Int =
+    when (status) {
+        OrderStatus.OPEN -> 1
+        OrderStatus.IN_PROGRESS, OrderStatus.DIAGNOSIS -> 2
+        OrderStatus.RESULT -> 3
+        OrderStatus.REPAIRING -> 4
+        OrderStatus.READY_FOR_PICKUP -> 5
+        OrderStatus.CLOSED -> 6
+    }
+
 @Composable
 fun OrderStatusStepper(
     status: OrderStatus,
     modifier: Modifier = Modifier,
-    compact: Boolean = false
+    compact: Boolean = false,
+    stepTestTag: ((Int) -> String)? = null,
 ) {
     val steps = listOf(
         OrderStatus.OPEN,
@@ -110,14 +122,7 @@ fun OrderStatusStepper(
         OrderStatus.CLOSED
     )
 
-    val currentStepIndex = when (status) {
-        OrderStatus.OPEN -> 0
-        OrderStatus.IN_PROGRESS, OrderStatus.DIAGNOSIS -> 1
-        OrderStatus.RESULT -> 2
-        OrderStatus.REPAIRING -> 3
-        OrderStatus.READY_FOR_PICKUP -> 4
-        OrderStatus.CLOSED -> 5
-    }
+    val currentStepIndex = orderStatusStepNumber(status) - 1
 
     val dotSize = if (compact) RepairAppSizes.orderStepperDot else 24.dp
     val spacing = if (compact) 4.dp else 12.dp
@@ -145,13 +150,16 @@ fun OrderStatusStepper(
                     .background(color = color, shape = CircleShape),
                 contentAlignment = Alignment.Center
             ) {
-                if (!compact) {
-                    if (isCompleted) {
-                        Text("✓", color = MaterialTheme.repairColors.onSuccess, style = MaterialTheme.typography.labelSmall)
-                    } else {
-                        Text((index + 1).toString(), color = if (isCurrent) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelSmall)
-                    }
-                }
+                Text(
+                    text = (index + 1).toString(),
+                    modifier = stepTestTag?.let { Modifier.testTag(it(index + 1)) } ?: Modifier,
+                    color = when {
+                        isCurrent -> MaterialTheme.colorScheme.onPrimary
+                        isCompleted -> MaterialTheme.repairColors.onSuccess
+                        else -> MaterialTheme.colorScheme.onSurfaceVariant
+                    },
+                    style = MaterialTheme.typography.labelSmall,
+                )
             }
 
             if (index < steps.size - 1) {

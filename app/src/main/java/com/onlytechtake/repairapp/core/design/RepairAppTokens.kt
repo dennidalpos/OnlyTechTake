@@ -99,7 +99,7 @@ object RepairAppSizes {
     val buttonCompact = 36.dp
     val iconButton = 40.dp
     val intakeStepperDot = 32.dp
-    val orderStepperDot = 12.dp
+    val orderStepperDot = 20.dp
     val metricCardHeight = 100.dp
 }
 

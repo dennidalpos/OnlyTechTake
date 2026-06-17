@@ -43,6 +43,9 @@ object RepairAppTestTags {
 
     const val OrderStatusLabel = "order_status_label"
     const val OrderDetailLazyColumn = "order_detail_lazy_column"
+    const val OrderDetailOrderReference = "order_detail_order_reference"
+    const val OrderDetailCustomerReference = "order_detail_customer_reference"
+    const val OrderDetailStatusStepper = "order_detail_status_stepper"
     const val OrderActionSection = "order_action_section"
     const val OrderWhatsAppButton = "order_whatsapp_button"
     const val OrderWhatsAppPreviewPanel = "order_whatsapp_preview_panel"
@@ -100,6 +103,18 @@ object RepairAppTestTags {
     fun categoryButton(categoryId: String) = "new_order_category_$categoryId"
 
     fun orderCard(orderId: String) = "order_card_$orderId"
+
+    fun orderCardOrderReference(orderId: String) = "order_card_order_reference_$orderId"
+
+    fun orderCardCustomerReference(orderId: String) = "order_card_customer_reference_$orderId"
+
+    fun orderCardStatusStepper(orderId: String) = "order_card_status_stepper_$orderId"
+
+    fun orderStatusStepperStep(step: Int) = "order_status_stepper_step_$step"
+
+    fun orderCardStatusStep(orderId: String, step: Int) = "order_card_status_step_${orderId}_$step"
+
+    fun orderDetailStatusStep(step: Int) = "order_detail_status_step_$step"
 
     fun statusAction(actionName: String) = "order_status_action_${actionName.lowercase()}"
 

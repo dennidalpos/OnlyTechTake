@@ -46,6 +46,7 @@ import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.CompactExpandableRow
+import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
 
 @Composable
 fun OrderHeader(detail: OrderDetail, context: Context) {
@@ -75,12 +76,17 @@ fun OrderHeader(detail: OrderDetail, context: Context) {
                         )
                     }
                     Text(
-                        text = detail.order.title,
+                        text = stringResource(R.string.orders_order_reference, detail.order.orderNumber, detail.order.title),
+                        modifier = Modifier.testTag(RepairAppTestTags.OrderDetailOrderReference),
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = detail.customer?.displayName(context) ?: stringResource(R.string.orders_customer_unavailable),
+                        text = stringResource(
+                            R.string.orders_customer_reference,
+                            detail.customer?.displayName(context) ?: stringResource(R.string.orders_customer_unavailable),
+                        ),
+                        modifier = Modifier.testTag(RepairAppTestTags.OrderDetailCustomerReference),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.secondary,
                     )
@@ -100,6 +106,12 @@ fun OrderHeader(detail: OrderDetail, context: Context) {
             }
             
             HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp).alpha(0.5f))
+
+            OrderStatusStepper(
+                status = detail.order.status,
+                modifier = Modifier.testTag(RepairAppTestTags.OrderDetailStatusStepper),
+                stepTestTag = RepairAppTestTags::orderDetailStatusStep,
+            )
             
             Row(
                 modifier = Modifier.fillMaxWidth(),

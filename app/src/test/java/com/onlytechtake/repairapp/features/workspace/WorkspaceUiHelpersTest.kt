@@ -67,6 +67,17 @@ class WorkspaceUiHelpersTest {
     }
 
     @Test
+    fun orderStatusStepNumberMapsWorkflowStates() {
+        assertEquals(1, orderStatusStepNumber(OrderStatus.OPEN))
+        assertEquals(2, orderStatusStepNumber(OrderStatus.IN_PROGRESS))
+        assertEquals(2, orderStatusStepNumber(OrderStatus.DIAGNOSIS))
+        assertEquals(3, orderStatusStepNumber(OrderStatus.RESULT))
+        assertEquals(4, orderStatusStepNumber(OrderStatus.REPAIRING))
+        assertEquals(5, orderStatusStepNumber(OrderStatus.READY_FOR_PICKUP))
+        assertEquals(6, orderStatusStepNumber(OrderStatus.CLOSED))
+    }
+
+    @Test
     fun diagnosisUiRequiresOutcomeAndPositiveEstimateOnlyWhenRepairable() {
         assertTrue(!shouldShowDiagnosisEstimate(null))
         assertTrue(shouldShowDiagnosisEstimate(DiagnosisOutcome.REPAIRABLE))

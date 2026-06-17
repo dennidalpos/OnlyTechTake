@@ -178,9 +178,15 @@ private fun OrdersListContent(
         Spacer(Modifier.height(RepairAppSpacing.sectionGap))
 
         LazyColumn(
-            modifier = Modifier.weight(1f).fillMaxWidth(),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .imePadding(),
             verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
-            contentPadding = PaddingValues(vertical = RepairAppSpacing.compactGap)
+            contentPadding = PaddingValues(
+                top = RepairAppSpacing.compactGap,
+                bottom = RepairAppSpacing.bottomContentPadding,
+            )
         ) {
             if (orderListItems.isEmpty()) {
                 item {
@@ -189,6 +195,8 @@ private fun OrdersListContent(
             } else {
                 items(orderListItems, key = { it.order.id }) { item ->
                     val order = item.order
+                    val customerName = item.customer?.displayName(context)
+                        ?: stringResource(R.string.orders_customer_unavailable)
                     StandardCard(
                         modifier = Modifier.testTag(RepairAppTestTags.orderCard(order.id)),
                         onClick = { onOrderClick(order.id) },
@@ -204,12 +212,14 @@ private fun OrdersListContent(
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(
-                                        text = "${order.orderNumber} - ${order.title}",
+                                        text = stringResource(R.string.orders_order_reference, order.orderNumber, order.title),
+                                        modifier = Modifier.testTag(RepairAppTestTags.orderCardOrderReference(order.id)),
                                         style = MaterialTheme.typography.titleMedium,
                                         fontWeight = FontWeight.Bold
                                     )
                                     Text(
-                                        text = item.customer?.displayName(context).orEmpty(),
+                                        text = stringResource(R.string.orders_customer_reference, customerName),
+                                        modifier = Modifier.testTag(RepairAppTestTags.orderCardCustomerReference(order.id)),
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.secondary
                                     )
@@ -221,7 +231,12 @@ private fun OrdersListContent(
                                 )
                             }
                             
-                            OrderStatusStepper(status = order.status, compact = true)
+                            OrderStatusStepper(
+                                status = order.status,
+                                compact = true,
+                                modifier = Modifier.testTag(RepairAppTestTags.orderCardStatusStepper(order.id)),
+                                stepTestTag = { step -> RepairAppTestTags.orderCardStatusStep(order.id, step) },
+                            )
                             
                             Text(
                                 text = stringResource(R.string.orders_next_action_label, nextActionLabel(order)),

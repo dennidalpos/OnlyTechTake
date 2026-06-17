@@ -5,6 +5,7 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.unit.dp
@@ -13,8 +14,10 @@ import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.design.components.AppStepper
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.features.dashboard.common.CustomerTypeToggle
 import com.onlytechtake.repairapp.features.dashboard.neworder.LAST_INTAKE_STEP
+import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -87,5 +90,23 @@ class DesignComponentsTest {
             .assertHeightIsAtLeast(RepairAppSizes.touchTarget)
         composeRule.onNodeWithTag(RepairAppTestTags.intakeStepperStep(LAST_INTAKE_STEP))
             .assertHeightIsAtLeast(RepairAppSizes.touchTarget)
+    }
+
+    @Test
+    fun compactOrderStepperExposesNumberedStableSteps() {
+        composeRule.setContent {
+            RepairAppTheme {
+                OrderStatusStepper(
+                    status = OrderStatus.RESULT,
+                    compact = true,
+                    stepTestTag = RepairAppTestTags::orderStatusStepperStep,
+                )
+            }
+        }
+
+        (1..6).forEach { step ->
+            composeRule.onNodeWithTag(RepairAppTestTags.orderStatusStepperStep(step))
+                .assertTextContains(step.toString())
+        }
     }
 }

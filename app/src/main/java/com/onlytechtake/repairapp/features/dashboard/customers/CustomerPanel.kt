@@ -327,9 +327,15 @@ private fun CustomerListContent(
             SectionTitle(stringResource(R.string.customer_search_results))
             
             LazyColumn(
-                modifier = Modifier.weight(1f).testTag("customer_list"),
+                modifier = Modifier
+                    .weight(1f)
+                    .testTag("customer_list")
+                    .imePadding(),
                 verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
-                contentPadding = PaddingValues(vertical = RepairAppSpacing.compactGap)
+                contentPadding = PaddingValues(
+                    top = RepairAppSpacing.compactGap,
+                    bottom = RepairAppSpacing.bottomContentPadding,
+                )
             ) {
                 if (customers.isEmpty()) {
                     item {
