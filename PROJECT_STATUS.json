@@ -1,40 +1,18 @@
 {
   "agent_execution_directives": {
     "status": "active",
-    "updated_at": "2026-06-17",
+    "updated_at": "2026-06-18",
     "purpose": "Backlog residuo attivo in ordine di priorita'. Non usare come changelog.",
     "rules": [
       "Quando l'utente chiede di risolvere PROJECT_STATUS.json, scegliere un solo blocco open per volta e dichiararlo prima di iniziare.",
       "Non risolvere task fuori dal blocco scelto, salvo dipendenza esplicita.",
       "Dentro un blocco rispettare recommended_batch_size.",
       "I blocchi con schema_guarded=true richiedono ordine esplicito owner per modifiche Room/DATABASE_VERSION, entita', DAO con impatto schema, indici persistenti o migrazioni.",
-      "Aggiornare questo file rimuovendo i residui chiusi dopo ogni sessione."
+      "Aggiornare questo file rimuovendo i residui chiusi dopo ogni sessione.",
+      "Ogni blocco deve mantenere identified_residual e plan aggiornati finche' resta aperto."
     ]
   },
   "todos": [
-    {
-      "block_id": "B13",
-      "title": "Rigenerazione asset dopo correzione UI commesse",
-      "priority": "P2",
-      "complexity": "low",
-      "status": "open",
-      "recommended_batch_size": 1,
-      "why_this_block": "La UI commesse e' stata corretta e ora gli screenshot/recording che includono lista commesse, dettaglio, foto e firme vanno rigenerati per riflettere layout, riferimenti cliente/commessa e step numerati.",
-      "identified_residual": "Asset Impact Register aggiornato in `docs\\DEMO_ASSET_WORKFLOW.md`; mancano esecuzione e verifica della pipeline screenshot/video sui flussi impattati.",
-      "items": [
-        {
-          "priority": "P2",
-          "summary": "Rigenerare e verificare screenshot/recording impattati dalla UI commesse.",
-          "refs": [
-            "docs\\DEMO_ASSET_WORKFLOW.md",
-            "scripts\\windows\\create_demo_assets.ps1",
-            "scripts\\windows\\record_demo_device.ps1",
-            "reports\\demo-assets"
-          ],
-          "completion_criteria": "Screenshot e video che includono lista/dettaglio commessa, firma e foto sono rigenerati, verificati per dimensioni/leggibilita' e il registro asset marca il residuo come None."
-        }
-      ]
-    },
     {
       "block_id": "B11",
       "title": "Pubblicazione Google Play Pro e Demo",
@@ -42,7 +20,15 @@
       "complexity": "medium",
       "status": "open",
       "recommended_batch_size": 1,
-      "why_this_block": "Le due pubblicazioni Play richiedono dati finali, questionari, upload AAB e validazioni Console prima della produzione.",
+      "identified_residual": "Mancano dati pubblici finali, privacy policy pubblicata, creazione app Play separate, upload AAB firmati e completamento questionari Play Console per Pro e Demo.",
+      "why_this_block": "La pubblicazione Play e' il gate principale prima della distribuzione esterna; richiede azioni manuali owner/Console e verifica su artefatti release firmati.",
+      "plan": [
+        "Finalizzare privacy policy con dati reali del titolare e pubblicarla a URL HTTPS pubblico dedicato alla sola policy.",
+        "Preparare signing release locale senza tracciare segreti e generare AAB Full e Demo.",
+        "Creare due app Play separate con package Pro e Demo corretti e caricare gli AAB firmati in test track.",
+        "Completare App Access, Data Safety, Content Rating, target audience, pricing Pro e app content per entrambe le app.",
+        "Attendere Pre-launch Report e correggere o tracciare solo crash/errori realmente bloccanti."
+      ],
       "items": [
         {
           "priority": "P1",
@@ -81,13 +67,23 @@
       "complexity": "medium",
       "status": "open",
       "recommended_batch_size": 1,
-      "why_this_block": "Prima della pubblicazione servono misure runtime su device reale per startup, I/O pesante e PDF.",
+      "identified_residual": "Mancano metriche runtime p50/p95 su device reale per cold/warm startup, operazioni I/O pesante e generazione PDF su dataset realistico.",
+      "why_this_block": "Prima della pubblicazione servono misure minime ripetibili per distinguere regressioni reali da percezioni soggettive su device.",
+      "plan": [
+        "Selezionare device fisico, build flavor, versione Android e dataset realistico da usare come baseline.",
+        "Misurare cold startup e warm startup con adb o profiler, registrando almeno p50 e p95.",
+        "Misurare operazioni I/O pesante: caricamento liste commesse, export/backup e accesso media su dataset realistico.",
+        "Misurare generazione PDF stato avanzamento con firma/media presenti.",
+        "Correggere regressioni bloccanti emerse oppure aggiungere un residuo prioritizzato con criterio di chiusura misurabile."
+      ],
       "items": [
         {
           "priority": "P1",
           "summary": "Misurare cold/warm startup, operazioni I/O pesante e generazione PDF su dataset realistico.",
           "refs": [
-            "performance_residual_plan.priority_order.DeviceBaselineAndProfiler"
+            "scripts\\windows\\check_project.ps1",
+            "scripts\\android\\gradle.ps1",
+            "docs\\release\\RELEASE_CHECKLIST.md"
           ],
           "completion_criteria": "Baseline p50/p95 registrata con device, build flavor e dataset usati; regressioni bloccanti corrette o tracciate."
         }
@@ -95,22 +91,30 @@
     },
     {
       "block_id": "B10",
-      "title": "Screenshot e video store",
+      "title": "Screenshot e video store Pro/Demo",
       "priority": "P2",
       "complexity": "medium",
       "status": "open",
       "recommended_batch_size": 1,
-      "why_this_block": "Le icone statiche Play sono generate; restano screenshot e recording separati Pro/Demo coerenti con i limiti Demo admin-only.",
+      "identified_residual": "Gli asset statici Play esistono, ma la generazione screenshot/video non produce ancora output separati e flavor-aware per Pro e Demo con limiti Demo reali.",
+      "why_this_block": "Gli asset Play devono distinguere Pro e Demo; la Demo ha vincoli visibili e non deve essere presentata come app completa.",
+      "plan": [
+        "Aggiungere parametro flavor agli script pubblici di screenshot e recording, mantenendo default compatibile con Full.",
+        "Separare package, APK installati, directory output e naming file per Pro e Demo.",
+        "Aggiornare scenari o seed dove serve per mostrare i limiti Demo reali: 1 commessa, 0 operatori e watermark Demo.",
+        "Rigenerare screenshot e recording Pro/Demo con dati fittizi e senza sito sviluppatore.",
+        "Verificare dimensioni, leggibilita', coerenza dei limiti Demo e assenza di dati personali prima del caricamento Play."
+      ],
       "items": [
         {
           "priority": "P2",
           "summary": "Rendere flavor-aware la generazione asset per produrre output separati Pro e Demo.",
           "refs": [
-            "docs/DEMO_ASSET_WORKFLOW.md",
+            "docs\\DEMO_ASSET_WORKFLOW.md",
             "scripts\\windows\\create_demo_assets.ps1",
             "scripts\\windows\\record_demo_device.ps1"
           ],
-          "completion_criteria": "Gli script accettano il flavor e scrivono screenshot/video separati per Pro e Demo."
+          "completion_criteria": "Gli script accettano il flavor e scrivono screenshot/video separati per Pro e Demo senza sovrascrivere output dell'altro flavor."
         },
         {
           "priority": "P2",
@@ -118,7 +122,7 @@
           "refs": [
             "reports\\demo-assets",
             "media\\play-store",
-            "docs/DEMO_ASSET_WORKFLOW.md"
+            "docs\\DEMO_ASSET_WORKFLOW.md"
           ],
           "completion_criteria": "Screenshot e recording Pro/Demo generati, verificati per dimensioni/leggibilita' e coerenti con 1 commessa, 0 operatori e watermark Demo."
         }
@@ -132,42 +136,27 @@
       "status": "blocked_until_owner_order",
       "recommended_batch_size": 1,
       "schema_guarded": true,
-      "why_this_block": "Lo schema Room e' baseline v1 e resta bloccato fino a ordine esplicito dell'owner.",
+      "identified_residual": "L'ordinamento `updatedAt DESC` nelle liste commesse non ha un indice dedicato; qualunque indice persistente richiede ordine esplicito owner perche' lo schema Room resta bloccato su v1.",
+      "why_this_block": "La proposta puo' migliorare query calde, ma e' subordinata alla governance schema e non va implementata senza approvazione esplicita.",
+      "plan": [
+        "Attendere ordine esplicito owner prima di modificare entita', DAO con impatto schema, indici persistenti, DATABASE_VERSION o migrazioni.",
+        "Dopo approvazione, misurare EXPLAIN QUERY PLAN e tempi su dataset grande prima di proporre indici.",
+        "Applicare solo indici con beneficio misurabile e aggiornare schema Room esportato.",
+        "Eseguire test Room, test fresh-install e verifiche query impattate.",
+        "Chiudere il blocco solo con schema aggiornato, test verdi e criterio di rollback chiaro."
+      ],
       "items": [
         {
           "priority": "P3",
           "summary": "Performance Room/index proposal: valutare indici su query calde solo come proposta bloccata.",
           "refs": [
-            "performance_residual_plan.priority_order.RoomQueryIndexesSchemaProposal"
+            "app\\schemas",
+            "app\\src\\main\\java\\com\\onlytechtake\\repairapp\\data\\local",
+            "docs\\03_MODELLO_DATI_GENERICO.md"
           ],
           "completion_criteria": "Ordine esplicito owner per cambiare schema Room e test Room verdi."
         }
       ]
     }
-  ],
-  "performance_residual_plan": {
-    "status": "open",
-    "priority_order": [
-      {
-        "priority": "P1",
-        "type": "DeviceBaselineAndProfiler",
-        "residual": "Mancano metriche runtime su device per startup, I/O pesante e PDF.",
-        "plan": [
-          "Usare device fisico o workflow strumentato con adb disponibile.",
-          "Misurare cold/warm startup e operazioni I/O su dataset realistico.",
-          "Registrare baseline p50/p95."
-        ]
-      },
-      {
-        "priority": "P3",
-        "type": "RoomQueryIndexesSchemaProposal",
-        "residual": "L'ordinamento updatedAt DESC nelle liste ordini non ha un indice dedicato; qualunque indice persistente e' bloccato dallo schema lock v1.",
-        "plan": [
-          "Analizzare EXPLAIN QUERY PLAN su dataset grande solo dopo ordine owner.",
-          "Proporre indici solo se misurabili benefici reali.",
-          "Non modificare DATABASE_VERSION, entita', DAO con impatto schema o migrazioni senza ordine esplicito."
-        ]
-      }
-    ]
-  }
+  ]
 }

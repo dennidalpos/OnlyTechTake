@@ -70,6 +70,7 @@ object RepairAppTestTags {
     const val CustomerConfirmSaveButton = "customer_confirm_save_button"
     const val CustomerDetailCloseButton = "customer_detail_close_button"
     const val CustomerDetailEditButton = "customer_detail_edit_button"
+    const val CustomerSearchField = "customer_search_field"
 
     const val ConfigHubCategoriesButton = "config_hub_categories_button"
     const val ConfigHubTemplatesButton = "config_hub_templates_button"

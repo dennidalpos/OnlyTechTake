@@ -50,12 +50,12 @@ if ($OutputFile -eq "") {
 }
 
 Assert-PathInsideRoot -Path $OutputRoot -RootPath $root
-if (Test-Path $OutputRoot) {
-    Remove-Item -LiteralPath $OutputRoot -Recurse -Force
-}
 New-Item -ItemType Directory -Path $OutputRoot -Force | Out-Null
 
 $outputPath = Join-Path $OutputRoot $OutputFile
+if (Test-Path $outputPath) {
+    Remove-Item -LiteralPath $outputPath -Force
+}
 
 Write-Host "--- OnlyTechTake Demo Recorder ---" -ForegroundColor Cyan
 

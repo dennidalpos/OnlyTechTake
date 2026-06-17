@@ -312,6 +312,7 @@ private fun CustomerListContent(
                 keyboardType = KeyboardType.Text,
                 capitalization = KeyboardCapitalization.Words,
                 keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
+                testTag = RepairAppTestTags.CustomerSearchField,
             )
             AppButton(
                 text = stringResource(R.string.customer_new),

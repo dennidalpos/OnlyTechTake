@@ -106,7 +106,7 @@ Gli script PowerShell calcolano la root del progetto dal proprio percorso, quind
 Prima di consegnare il repository:
 
 1. Controllare lo stato con `git status --short` e distinguere modifiche tracciate da file non tracciati.
-2. Leggere `PROJECT_STATUS.json`: contiene solo todo incompleti correnti.
+2. Leggere `PROJECT_STATUS.json`: contiene solo todo incompleti correnti, ordinati per priorita', con `identified_residual` e `plan` per ogni blocco.
 3. Eseguire almeno `check_env.ps1`, `check_project.ps1 -Flavor Full -SkipReleaseBuild` e una build/install debug se serve validare su device. Per il gate strumentato usare la workflow `Android Instrumented Tests` o `check_project.ps1 -Flavor Full -SkipReleaseBuild -AndroidTests` con device disponibile.
 4. Usare `start_app.ps1 -CleanInstall` quando lo schema Room locale e' incompatibile con dati gia' installati; il codice corrente e' Room v1 senza migrazioni conservative.
 
@@ -170,7 +170,7 @@ Regole:
 - La CI principale non esegue test strumentati; esiste una workflow dedicata per `connectedFullDebugAndroidTest`, mentre le verifiche su device fisico restano manuali/locali.
 - La build release richiede signing locale non tracciato.
 - Il codice sorgente usa Room v1 come baseline fresh. Ogni ulteriore cambio schema resta bloccato dalle regole repository finche' non viene autorizzato esplicitamente.
-- Le verifiche manuali residue sono elencate in `PROJECT_STATUS.json`.
+- Le verifiche manuali residue sono elencate in `PROJECT_STATUS.json`; il file non deve contenere storico dei task completati.
 
 ## Struttura
 

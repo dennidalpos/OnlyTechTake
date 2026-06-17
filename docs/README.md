@@ -4,6 +4,7 @@ Indice canonico della documentazione tracciata. Il README della root resta il pu
 
 ## Operativo
 
+- [`../PROJECT_STATUS.json`](../PROJECT_STATUS.json): backlog residuo attivo, ordinato per priorita', senza storico dei task completati.
 - [`01_GUIDA_FUNZIONALE.md`](01_GUIDA_FUNZIONALE.md): funzioni implementate, ruoli e flussi.
 - [`06_BUILD_INSTALLER_ANDROID.md`](06_BUILD_INSTALLER_ANDROID.md): prerequisiti, setup, build, installazione e troubleshooting.
 - [`08_LICENZA_DEMO_FULL_E_MANUALE_USO.md`](08_LICENZA_DEMO_FULL_E_MANUALE_USO.md): flavor Full, Demo e Showcase.

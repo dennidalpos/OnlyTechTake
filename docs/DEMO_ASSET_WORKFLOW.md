@@ -61,6 +61,7 @@ Flow:
 3. For automated flows, it starts `adb screenrecord` and launches the selected instrumented test with `demoRecording=true`.
 4. The tests use shorter recording pauses while following the same navigation paths used for screenshots.
 5. The script stops recording, pulls the MP4 into `reports/demo-assets/videos/device`, and normalizes it with `ffmpeg` when available.
+6. Re-running one recording replaces only the selected output file, preserving other MP4 files already present in the device-video output directory.
 
 | Recording choice | Instrumented scenario |
 |---|---|
@@ -87,18 +88,11 @@ For every relevant repository change:
 
 ## Asset Impact Register
 
-Add one row for each repository change that affects demo assets. Keep completed rows as history here; put only unresolved work in `PROJECT_STATUS.json`.
+This register lists only active demo-asset residuals. Do not keep completed rows here as history; completed evidence belongs in command output or release notes when explicitly needed, not in this workflow file.
 
 | Change | Affected flow/assets | Required updates | Validation | Residual |
 |---|---|---|---|---|
-| Demo asset governance and pipeline mapping introduced | Both scripts and all mapped scenarios | Maintain this document together with scenario, script, helper, and story changes | Documentation review completed | Run affected device flows after the next UI/workflow change |
-| Shared design tokens, compact actions, localized copy and stable CTA tags | Operator intake, order intake, customers, maintenance/backup, assembled operator video, direct device videos | Intake scenarios now open from `HomeNewOrderButton`; dashboard discard uses `DashboardDiscardChangesButton`; direct recorder supports `-ScenarioId` and `-StartImmediately`; existing filenames, package paths, captions and timing remain valid | Screenshots verified on physical device; assembled operator video verified; direct `full-workflow` and `social-stories` recordings verified and normalized | Use generated assets for store and landing publishing |
-| Template Anchors: interchangeable templates with logical mapping | Categories and templates, WhatsApp flows | Added "Associazione Template" section in Settings; app now uses `TemplateAnchor` instead of hardcoded strings; validation added to prevent archiving active anchors | Build verified; repository paths verified; manual UI verification recommended for association flow | None |
-| Release residual closure: instrumented CI, token contrast and store asset mapping | AndroidTests, WhatsApp action color, category level dots, Play Store screenshots/video | Added dedicated GitHub workflow for connected Full debug tests; darkened low-contrast light-theme tokens; documented generated screenshot/video directories for store upload | Unit contrast test added; generated assets already present under `reports/demo-assets` | Physical-device accessibility review remains a release checklist gate |
-| Performance and cleanup: batch seeding, lazy DI and recomposition stability | Showcase seeding, Dashboard, Detail, Quick intake | Showcase seeder now uses withTransaction and batch upserts for faster environment prep; added keys to detail list and remember to navigation/validation states; removed 30 unused string resources | Compile and seeder unit logic verified; manual UI verification passed | Regression test on physical device for UI stability |
-| Template settings step bar and default reset | Categories and templates, direct config recording | `capturesCategoryAndTemplateStories` now captures `05-template-associazioni.png`; regenerate `screenshots/03-categorie-template` with `create_demo_assets.ps1 -AssetId social-stories -CaseId config`; direct recorder supports `-ScenarioId config` for this isolated flow; asset scripts recreate managed target directories before writing | screenshots verified; config recording verified | None |
-| Demo admin-only, Room v1 baseline, and Pro/Demo store split | Pro listing screenshots, Demo listing screenshots/video, launcher/store icons | Demo now allows 1 order, 0 operators and admin-only use; Room schema reset to v1; Play docs split Pro/Demo and remove website references; launcher labels and static Play icon/feature assets generated for PRO, DEMO and SHOW. | static icons verified | Add flavor-aware screenshot/video generation and regenerate Pro/Demo screenshots and recordings |
-| Order scroll clipping and numbered progress references | Operator intake, order intake/closure, direct full-workflow and social-stories recordings | Order list/detail screenshots now rely on stable order/customer/progress tags; regenerate order list/detail/firma/foto screenshots after layout verification | not run | Regenerate affected screenshots and device recordings |
+| Pro/Demo store asset split | Pro listing screenshots, Demo listing screenshots/video | Add flavor-aware screenshot/video generation; keep output paths separated by flavor; regenerate Pro and Demo assets with demo-only limits visible where relevant | not run | Tracked in `PROJECT_STATUS.json` block `B10` |
 
 Use concise validation values such as `not run`, `compile only`, `screenshots verified`, or `screenshots and recording verified`. Do not mark a device flow verified unless it actually ran.
 
@@ -107,5 +101,5 @@ Use concise validation values such as `not run`, `compile only`, `screenshots ve
 After updating the register:
 
 1. Convert every unresolved, actionable residual into one prioritized todo in `PROJECT_STATUS.json`.
-2. Do not copy completed history, dates, evidence, or check results into the JSON file.
+2. Do not copy completed history, dates, evidence, or check results into this document or the JSON file.
 3. Remove the todo when the register records successful verification and no work remains.

@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
-import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
@@ -102,29 +101,29 @@ class SocialStoryDemoScreenshotTest {
             clickDashboardTab("ORDERS")
             waitForText("Commesse")
             waitForTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
-            waitForTag(RepairAppTestTags.orderCardOrderReference(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
-            waitForTag(RepairAppTestTags.orderCardCustomerReference(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
-            waitForTag(RepairAppTestTags.orderCardStatusStep(DemoDataSeeder.DEMO_ORDER_ID, 1), scroll = true)
+            waitForTag(RepairAppTestTags.orderCardOrderReference(DemoDataSeeder.DEMO_ORDER_ID), scroll = true, useUnmergedTree = true)
+            waitForTag(RepairAppTestTags.orderCardCustomerReference(DemoDataSeeder.DEMO_ORDER_ID), scroll = true, useUnmergedTree = true)
+            waitForTag(RepairAppTestTags.orderCardStatusStep(DemoDataSeeder.DEMO_ORDER_ID, 1), scroll = true, useUnmergedTree = true)
             clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID))
             
             waitForTag(RepairAppTestTags.OrderStatusLabel)
-            waitForTag(RepairAppTestTags.OrderDetailOrderReference)
-            waitForTag(RepairAppTestTags.OrderDetailCustomerReference)
-            waitForTag(RepairAppTestTags.orderDetailStatusStep(1))
+            waitForTag(RepairAppTestTags.OrderDetailOrderReference, useUnmergedTree = true)
+            waitForTag(RepairAppTestTags.OrderDetailCustomerReference, useUnmergedTree = true)
+            waitForTag(RepairAppTestTags.orderDetailStatusStep(1), useUnmergedTree = true)
             waitForText("Notebook HP")
             capture(outputDir, "05-commessa-aperta.png")
 
-            applySimpleStatus(OrderStatusAction.START_PROGRESS, "In lavorazione")
+            applySimpleStatus(OrderStatusAction.START_PROGRESS, nextAction = OrderStatusAction.START_DIAGNOSIS)
             capture(outputDir, "06-presa-in-carico.png")
 
-            applySimpleStatus(OrderStatusAction.START_DIAGNOSIS, "Diagnosi")
+            applySimpleStatus(OrderStatusAction.START_DIAGNOSIS, nextAction = OrderStatusAction.RECORD_RESULT)
             applyResultStatus()
             capture(outputDir, "07-diagnosi-risultato.png")
 
             acceptQuote()
             capture(outputDir, "08-riparazione.png")
 
-            applySimpleStatus(OrderStatusAction.READY_FOR_PICKUP, "Pronta al ritiro")
+            applySimpleStatus(OrderStatusAction.READY_FOR_PICKUP, nextAction = OrderStatusAction.CLOSE_ORDER)
             capture(outputDir, "09-pronta-ritiro.png")
 
             closeOrder()
@@ -201,8 +200,9 @@ class SocialStoryDemoScreenshotTest {
             typeTag(RepairAppTestTags.CustomerEmailField, "luca.rossi@example.invalid", scroll = true)
             capture(outputDir, "02-cliente-privato.png")
             clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
-            waitForTag(RepairAppTestTags.CustomerConfirmSaveButton)
-            clickTag(RepairAppTestTags.CustomerConfirmSaveButton)
+            waitForTag(RepairAppTestTags.CustomerConfirmSaveButton, useUnmergedTree = true)
+            clickText("Conferma")
+            typeTag(RepairAppTestTags.CustomerSearchField, "Luca")
             waitForText("Luca Rossi")
             capture(outputDir, "03-privato-salvato.png")
 
@@ -215,8 +215,9 @@ class SocialStoryDemoScreenshotTest {
             typeTag(RepairAppTestTags.CustomerAddressField, "Via Demo 24, Milano", scroll = true)
             capture(outputDir, "04-cliente-azienda.png")
             clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
-            waitForTag(RepairAppTestTags.CustomerConfirmSaveButton)
-            clickTag(RepairAppTestTags.CustomerConfirmSaveButton)
+            waitForTag(RepairAppTestTags.CustomerConfirmSaveButton, useUnmergedTree = true)
+            clickText("Conferma")
+            typeTag(RepairAppTestTags.CustomerSearchField, "Demo")
             waitForText("Demo Lab Srl")
             capture(outputDir, "05-azienda-salvata.png")
         }
@@ -258,7 +259,7 @@ class SocialStoryDemoScreenshotTest {
         }
     }
 
-    private fun applySimpleStatus(action: OrderStatusAction, expectedText: String) {
+    private fun applySimpleStatus(action: OrderStatusAction, nextAction: OrderStatusAction) {
         waitForTag(RepairAppTestTags.OrderActionSection, scroll = true)
         pauseForDemo()
         clickTag(RepairAppTestTags.statusAction(action.name), scroll = true)
@@ -267,7 +268,7 @@ class SocialStoryDemoScreenshotTest {
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
         composeRule.waitForIdle()
         pauseForDemo()
-        waitForStatus(expectedText)
+        waitForTag(RepairAppTestTags.statusAction(nextAction.name), scroll = true)
     }
 
     private fun applyResultStatus() {
@@ -282,7 +283,7 @@ class SocialStoryDemoScreenshotTest {
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
         composeRule.waitForIdle()
         pauseForDemo()
-        waitForStatus("Risultato")
+        waitForTag(RepairAppTestTags.QuoteAcceptedToggle, scroll = true)
     }
 
     private fun acceptQuote() {
@@ -297,7 +298,7 @@ class SocialStoryDemoScreenshotTest {
         clickTag(RepairAppTestTags.QuoteConfirmButton, scroll = true)
         composeRule.waitForIdle()
         pauseForDemo()
-        waitForStatus("Riparazione")
+        waitForTag(RepairAppTestTags.statusAction(OrderStatusAction.READY_FOR_PICKUP.name), scroll = true)
     }
 
     private fun closeOrder() {
@@ -365,9 +366,9 @@ class SocialStoryDemoScreenshotTest {
         pauseForDemo()
     }
 
-    private fun clickTag(tag: String, scroll: Boolean = false) {
-        waitForTagExists(tag, scrollIfNotFound = scroll)
-        val node = composeRule.onNodeWithTag(tag)
+    private fun clickTag(tag: String, scroll: Boolean = false, useUnmergedTree: Boolean = false) {
+        waitForTag(tag, scroll = scroll, useUnmergedTree = useUnmergedTree)
+        val node = composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
         
         // Ensure the node is enabled before clicking
         try {
@@ -375,7 +376,7 @@ class SocialStoryDemoScreenshotTest {
                 runCatching { node.assertIsEnabled() }.isSuccess
             }
         } catch (e: Throwable) {
-            // Continue anyway, performClick will fail if it's really a problem
+            node.assertIsEnabled()
         }
 
         try {
@@ -449,26 +450,50 @@ class SocialStoryDemoScreenshotTest {
     }
 
 
-    private fun waitForTag(tag: String, scroll: Boolean = false) {
-        waitForTagExists(tag, scrollIfNotFound = scroll)
-        composeRule.onNodeWithTag(tag).assertIsDisplayed()
+    private fun waitForTag(tag: String, scroll: Boolean = false, useUnmergedTree: Boolean = false) {
+        waitForTagExists(tag, scrollIfNotFound = scroll, useUnmergedTree = useUnmergedTree)
+        val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
+        var attempts = 0
+        while (System.currentTimeMillis() < deadline) {
+            val displayed = runCatching {
+                val node = composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
+                if (scroll) {
+                    runCatching { node.performScrollTo() }
+                    composeRule.waitForIdle()
+                }
+                node.assertIsDisplayed()
+                true
+            }.getOrDefault(false)
+            if (displayed) return
+
+            if (scroll) {
+                if (attempts % 15 < 10) {
+                    performSafeSwipeUp()
+                } else {
+                    performSafeSwipeDown()
+                }
+            }
+            Thread.sleep(TAG_POLL_MILLIS)
+            attempts++
+        }
+        composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).assertIsDisplayed()
     }
 
-    private fun waitForTagExists(tag: String, scrollIfNotFound: Boolean = false) {
+    private fun waitForTagExists(tag: String, scrollIfNotFound: Boolean = false, useUnmergedTree: Boolean = false) {
         var found = false
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
 
         while (!found && System.currentTimeMillis() < deadline) {
-            found = isTagPresent(tag)
+            found = isTagPresent(tag, useUnmergedTree)
             if (found) break
 
             if (scrollIfNotFound) {
                 if (attempts % 2 == 0) {
                     try {
-                        composeRule.onNodeWithTag(tag).performScrollTo()
+                        composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).performScrollTo()
                         composeRule.waitForIdle()
-                        if (isTagPresent(tag)) {
+                        if (isTagPresent(tag, useUnmergedTree)) {
                             found = true
                             break
                         }
@@ -487,7 +512,7 @@ class SocialStoryDemoScreenshotTest {
             }
         }
         if (!found) {
-            composeRule.onNodeWithTag(tag).assertExists()
+            composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).assertExists()
         }
     }
 
@@ -503,21 +528,8 @@ class SocialStoryDemoScreenshotTest {
         return false
     }
 
-    private fun isTagPresent(tag: String): Boolean =
-        composeRule.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()
-
-    private fun waitForStatus(text: String) {
-        composeRule
-            .onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn)
-            .performScrollToIndex(0)
-        composeRule.waitForIdle()
-        composeRule.waitUntil(timeoutMillis = WAIT_TIMEOUT_MILLIS) {
-            runCatching {
-                composeRule.onNodeWithText(text, substring = true).assertExists()
-                true
-            }.getOrDefault(false)
-        }
-    }
+    private fun isTagPresent(tag: String, useUnmergedTree: Boolean = false): Boolean =
+        composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).fetchSemanticsNodes().isNotEmpty()
 
     private fun isTagDisplayed(tag: String): Boolean =
         runCatching {

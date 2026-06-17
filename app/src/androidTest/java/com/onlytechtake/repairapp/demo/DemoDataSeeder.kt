@@ -254,31 +254,41 @@ object DemoDataSeeder {
         )
 
         listOf(
-            "privacy" to "Informativa privacy",
-            "terms" to "Condizioni presa in carico",
-            "whatsapp_presa_in_carico" to "Presa in carico",
-            "whatsapp_lavorazione" to "Aggiornamento lavorazione",
-            "whatsapp_diagnosi" to "Diagnosi",
-            "whatsapp_risultato" to "Risultato diagnosi",
-            "whatsapp_riparazione" to "Riparazione",
-            "whatsapp_pronto_ritiro" to "Pronto ritiro",
-        ).forEachIndexed { index, (code, title) ->
+            DemoTemplate("privacy_breve", "Informativa privacy", "Legale"),
+            DemoTemplate("condizioni_presa_in_carico", "Condizioni presa in carico", "Legale"),
+            DemoTemplate("whatsapp_presa_in_carico", "Presa in carico", "Ingresso"),
+            DemoTemplate("whatsapp_aggiornamento", "Aggiornamento commessa", "Aggiornamento"),
+            DemoTemplate("whatsapp_diagnosi", "Diagnosi", "Diagnosi"),
+            DemoTemplate("whatsapp_risultato", "Risultato diagnosi", "Risultato"),
+            DemoTemplate("whatsapp_preventivo_intervento", "Preventivo intervento", "Preventivo"),
+            DemoTemplate("whatsapp_non_riparabile", "Non riparabile", "Esito"),
+            DemoTemplate("whatsapp_riparazione", "Riparazione", "Riparazione"),
+            DemoTemplate("whatsapp_pronto_ritiro", "Pronto ritiro", "Ritiro"),
+            DemoTemplate("whatsapp_stato_avanzamento_pdf", "Stato avanzamento PDF", "Documenti"),
+        ).forEachIndexed { index, template ->
             database.messageTemplateDao().upsert(
                 MessageTemplateEntity(
                     id = "demo-template-$index",
-                    code = code,
-                    title = title,
+                    code = template.code,
+                    title = template.title,
                     channel = MessageChannel.WHATSAPP,
                     body = "Aggiornamento {{numero_commessa}}: {{stato_commessa}} per {{cliente}}.",
                     active = true,
                     version = 1,
                     updatedByUserId = DEMO_ADMIN_ID,
                     updatedAt = now,
+                    step = template.step,
                 ),
             )
         }
         AuthPreferences(context).markConfigured()
     }
+
+    private data class DemoTemplate(
+        val code: String,
+        val title: String,
+        val step: String,
+    )
 
     private fun writeDemoBitmap(directory: File, fileName: String, label: String, backgroundColor: Int): File {
         directory.mkdirs()
