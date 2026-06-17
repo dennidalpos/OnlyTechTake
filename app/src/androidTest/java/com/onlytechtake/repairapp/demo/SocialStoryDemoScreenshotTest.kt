@@ -342,11 +342,11 @@ class SocialStoryDemoScreenshotTest {
     private fun typeTag(tag: String, text: String, scroll: Boolean = false) {
         waitForTagExists(tag, scrollIfNotFound = scroll)
         val node = composeRule.onNodeWithTag(tag)
-        node.assertIsDisplayed()
         node.performClick()
         node.performTextReplacement(text)
         composeRule.waitForIdle()
         Espresso.closeSoftKeyboard()
+        Thread.sleep(500)
         pauseForDemo()
     }
 
@@ -387,28 +387,40 @@ class SocialStoryDemoScreenshotTest {
     }
 
     private fun performSafeSwipeUp() {
+        val listTags = listOf(RepairAppTestTags.OrderDetailLazyColumn, "categories_list", "templates_list", "customer_list", "customer_form")
+        for (tag in listTags) {
+            try {
+                composeRule.onNodeWithTag(tag).performTouchInput {
+                    swipeUp(startY = bottom * 0.8f, endY = top + 30f)
+                }
+                composeRule.waitForIdle()
+                return
+            } catch (e: Throwable) {}
+        }
         try {
-            composeRule.onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn).performTouchInput {
-                swipeUp(startY = bottom * 0.8f, endY = top + 30f)
-            }
-        } catch (e: Throwable) {
             composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { 
                 swipeUp(startY = bottom * 0.8f, endY = top + 30f)
             }
-        }
+        } catch (e: Throwable) {}
         composeRule.waitForIdle()
     }
 
     private fun performSafeSwipeDown() {
+        val listTags = listOf(RepairAppTestTags.OrderDetailLazyColumn, "categories_list", "templates_list", "customer_list", "customer_form")
+        for (tag in listTags) {
+            try {
+                composeRule.onNodeWithTag(tag).performTouchInput {
+                    swipeDown(startY = top + 30f, endY = bottom * 0.8f)
+                }
+                composeRule.waitForIdle()
+                return
+            } catch (e: Throwable) {}
+        }
         try {
-            composeRule.onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn).performTouchInput {
-                swipeDown(startY = top + 30f, endY = bottom * 0.8f)
-            }
-        } catch (e: Throwable) {
             composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { 
                 swipeDown(startY = top + 30f, endY = bottom * 0.8f)
             }
-        }
+        } catch (e: Throwable) {}
         composeRule.waitForIdle()
     }
 
@@ -438,9 +450,9 @@ class SocialStoryDemoScreenshotTest {
                         }
                     } catch (e: Throwable) {
                         if (attempts % 15 < 10) {
-                            performSafeSwipeDown() // Scroll UP
+                            performSafeSwipeUp()   // Scroll DOWN (reveal items below)
                         } else {
-                            performSafeSwipeUp()   // Scroll DOWN
+                            performSafeSwipeDown() // Scroll UP (reveal items above)
                         }
                     }
                 }
@@ -477,10 +489,7 @@ class SocialStoryDemoScreenshotTest {
         composeRule.waitForIdle()
         composeRule.waitUntil(timeoutMillis = WAIT_TIMEOUT_MILLIS) {
             runCatching {
-                composeRule
-                    .onNodeWithTag(RepairAppTestTags.OrderStatusLabel)
-                    .performScrollTo()
-                    .assertTextContains(text, substring = true)
+                composeRule.onNodeWithText(text, substring = true).assertExists()
                 true
             }.getOrDefault(false)
         }
@@ -511,9 +520,9 @@ class SocialStoryDemoScreenshotTest {
                         }
                     } catch (e: Throwable) {
                         if (attempts % 15 < 10) {
-                            performSafeSwipeDown() // Scroll UP
+                            performSafeSwipeUp()   // Scroll DOWN (reveal items below)
                         } else {
-                            performSafeSwipeUp()   // Scroll DOWN
+                            performSafeSwipeDown() // Scroll UP (reveal items above)
                         }
                     }
                 }

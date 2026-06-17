@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.activity.compose.BackHandler
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
@@ -105,7 +106,8 @@ fun ColumnScope.CategoriesSettings(
         modifier = Modifier
             .fillMaxWidth()
             .weight(1f)
-            .widthIn(max = RepairAppSpacing.maxContentWidthMedium),
+            .widthIn(max = RepairAppSpacing.maxContentWidthMedium)
+            .testTag("categories_list"),
         contentPadding = PaddingValues(
             horizontal = RepairAppSpacing.screenHorizontal,
             vertical = RepairAppSpacing.screenHorizontal

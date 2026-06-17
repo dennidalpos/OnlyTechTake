@@ -8,9 +8,11 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.core.security.PasswordHasher
+import com.onlytechtake.repairapp.core.security.DatabaseKeyManager
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
+import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 import com.onlytechtake.repairapp.data.local.entities.AppSettingEntity
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
@@ -59,7 +61,10 @@ class RepositoryPathsInstrumentedTest {
     @Before
     fun setUp() = runBlocking {
         context = ApplicationProvider.getApplicationContext()
+        val key = DatabaseKeyManager(context).getDatabaseKey()
+        val factory = SupportOpenHelperFactory(key.toByteArray())
         database = Room.inMemoryDatabaseBuilder(context, RepairAppDatabase::class.java)
+            .openHelperFactory(factory)
             .allowMainThreadQueries()
             .build()
         authPreferences = AuthPreferences(context)
@@ -392,7 +397,10 @@ class RepositoryPathsInstrumentedTest {
         if (BuildConfig.IS_DEMO_VERSION) return@runBlocking
         val databaseName = RepairAppDatabase.DATABASE_NAME
         context.deleteDatabase(databaseName)
+        val key = DatabaseKeyManager(context).getDatabaseKey()
+        val factory = SupportOpenHelperFactory(key.toByteArray())
         val fileBackedDatabase = Room.databaseBuilder(context, RepairAppDatabase::class.java, databaseName)
+            .openHelperFactory(factory)
             .allowMainThreadQueries()
             .build()
         val output = File(context.cacheDir, "complete-backup-test.zip")
@@ -470,7 +478,10 @@ class RepositoryPathsInstrumentedTest {
         if (BuildConfig.IS_DEMO_VERSION) return@runBlocking
         val databaseName = RepairAppDatabase.DATABASE_NAME
         context.deleteDatabase(databaseName)
+        val key = DatabaseKeyManager(context).getDatabaseKey()
+        val factory = SupportOpenHelperFactory(key.toByteArray())
         val fileBackedDatabase = Room.databaseBuilder(context, RepairAppDatabase::class.java, databaseName)
+            .openHelperFactory(factory)
             .allowMainThreadQueries()
             .build()
         val output = File(context.cacheDir, "complete-restore-test.zip")
@@ -534,6 +545,7 @@ class RepositoryPathsInstrumentedTest {
             repository.restoreCompleteBackup(actor, Uri.fromFile(output)).getOrThrow()
 
             val restoredDatabase = Room.databaseBuilder(context, RepairAppDatabase::class.java, databaseName)
+                .openHelperFactory(factory)
                 .allowMainThreadQueries()
                 .build()
             try {
@@ -584,7 +596,10 @@ class RepositoryPathsInstrumentedTest {
     fun dataResetClearsFileBackedDatabaseWithoutLocking() = runBlocking {
         val databaseName = "reset-file-backed.db"
         context.deleteDatabase(databaseName)
+        val key = DatabaseKeyManager(context).getDatabaseKey()
+        val factory = SupportOpenHelperFactory(key.toByteArray())
         val fileBackedDatabase = Room.databaseBuilder(context, RepairAppDatabase::class.java, databaseName)
+            .openHelperFactory(factory)
             .allowMainThreadQueries()
             .build()
         val actor = AuthenticatedUser(ADMIN_ID, "Admin", "admin", UserRole.ADMIN)

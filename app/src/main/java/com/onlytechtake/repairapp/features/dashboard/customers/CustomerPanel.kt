@@ -329,7 +329,7 @@ private fun CustomerListContent(
         SectionTitle(if (searchQuery.isBlank()) stringResource(R.string.customer_recent) else stringResource(R.string.customer_search_results))
         
         LazyColumn(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(1f).testTag("customer_list"),
             verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
             contentPadding = PaddingValues(vertical = RepairAppSpacing.compactGap)
         ) {
@@ -375,7 +375,7 @@ private fun CustomerForm(
     val canSave = (phone.isNotBlank() || email.isNotBlank()) &&
         if (isBusiness) companyName.isNotBlank() else firstName.isNotBlank() && lastName.isNotBlank()
 
-    AppScreenContainer {
+    AppScreenContainer(modifier = Modifier.testTag("customer_form")) {
         Text(
             text = if (!isEditing) stringResource(R.string.customer_new) else stringResource(R.string.customer_edit),
             style = MaterialTheme.typography.headlineSmall,

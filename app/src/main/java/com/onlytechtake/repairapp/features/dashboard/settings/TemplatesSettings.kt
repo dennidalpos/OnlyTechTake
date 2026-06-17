@@ -33,6 +33,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -69,7 +70,8 @@ fun ColumnScope.TemplatesSettings(
         modifier = Modifier
             .fillMaxWidth()
             .weight(1f)
-            .widthIn(max = RepairAppSpacing.maxContentWidthMedium),
+            .widthIn(max = RepairAppSpacing.maxContentWidthMedium)
+            .testTag("templates_list"),
         contentPadding = PaddingValues(RepairAppSpacing.screenHorizontal),
         verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
     ) {

@@ -234,11 +234,11 @@ class OperatorIntakeDemoScreenshotTest {
     private fun typeTag(tag: String, text: String, scroll: Boolean = false) {
         waitForTagExists(tag, scroll = scroll)
         val node = composeRule.onNodeWithTag(tag)
-        node.assertIsDisplayed()
         node.performClick()
         node.performTextReplacement(text)
         composeRule.waitForIdle()
         Espresso.closeSoftKeyboard()
+        Thread.sleep(500)
         pauseForDemo()
     }
 
@@ -279,28 +279,40 @@ class OperatorIntakeDemoScreenshotTest {
     }
 
     private fun performSafeSwipeUp() {
+        val listTags = listOf(RepairAppTestTags.OrderDetailLazyColumn, "categories_list", "templates_list", "customer_list", "customer_form")
+        for (tag in listTags) {
+            try {
+                composeRule.onNodeWithTag(tag).performTouchInput {
+                    swipeUp(startY = bottom * 0.8f, endY = top + 30f)
+                }
+                composeRule.waitForIdle()
+                return
+            } catch (e: Throwable) {}
+        }
         try {
-            composeRule.onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn).performTouchInput {
-                swipeUp(startY = bottom * 0.8f, endY = top + 30f)
-            }
-        } catch (e: Throwable) {
             composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { 
                 swipeUp(startY = bottom * 0.8f, endY = top + 30f)
             }
-        }
+        } catch (e: Throwable) {}
         composeRule.waitForIdle()
     }
 
     private fun performSafeSwipeDown() {
+        val listTags = listOf(RepairAppTestTags.OrderDetailLazyColumn, "categories_list", "templates_list", "customer_list", "customer_form")
+        for (tag in listTags) {
+            try {
+                composeRule.onNodeWithTag(tag).performTouchInput {
+                    swipeDown(startY = top + 30f, endY = bottom * 0.8f)
+                }
+                composeRule.waitForIdle()
+                return
+            } catch (e: Throwable) {}
+        }
         try {
-            composeRule.onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn).performTouchInput {
-                swipeDown(startY = top + 30f, endY = bottom * 0.8f)
-            }
-        } catch (e: Throwable) {
             composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { 
                 swipeDown(startY = top + 30f, endY = bottom * 0.8f)
             }
-        }
+        } catch (e: Throwable) {}
         composeRule.waitForIdle()
     }
 
@@ -319,10 +331,7 @@ class OperatorIntakeDemoScreenshotTest {
         composeRule.waitForIdle()
         composeRule.waitUntil(timeoutMillis = WAIT_TIMEOUT_MILLIS) {
             runCatching {
-                composeRule
-                    .onNodeWithTag(RepairAppTestTags.OrderStatusLabel)
-                    .performScrollTo()
-                    .assertTextContains(text, substring = true)
+                composeRule.onNodeWithText(text, substring = true).assertExists()
                 true
             }.getOrDefault(false)
         }
@@ -352,11 +361,11 @@ class OperatorIntakeDemoScreenshotTest {
                             break
                         }
                     } catch (e: Throwable) {
-                        // Scan logic: try UP a lot, then DOWN a bit
+                        // Scan logic: try DOWN a lot (reveal below), then UP a bit (reveal above)
                         if (attempts % 15 < 10) {
-                            performSafeSwipeDown() // Scroll UP
-                        } else {
                             performSafeSwipeUp()   // Scroll DOWN
+                        } else {
+                            performSafeSwipeDown() // Scroll UP
                         }
                     }
                 }

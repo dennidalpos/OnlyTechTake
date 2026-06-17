@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.semantics.Role
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
@@ -69,7 +70,8 @@ fun OrderHeader(detail: OrderDetail, context: Context) {
                         AppStatusChip(
                             text = detail.order.status.label(context),
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.testTag(RepairAppTestTags.OrderStatusLabel)
                         )
                     }
                     Text(
@@ -127,7 +129,10 @@ fun OrderActionCard(
     onTogglePayment: () -> Unit,
     onSendWhatsApp: (TemplateAnchor) -> Unit,
 ) {
-    AppActionPanel(title = stringResource(R.string.order_actions_title)) {
+    AppActionPanel(
+        title = stringResource(R.string.order_actions_title),
+        modifier = Modifier.testTag(RepairAppTestTags.OrderActionSection)
+    ) {
         Text(stringResource(R.string.order_actions_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
         
         ActionRow {
@@ -137,6 +142,7 @@ fun OrderActionCard(
                     onClick = { onActionClick(action) },
                     variant = if (action == OrderStatusAction.RECORD_RESULT) AppButtonVariant.Primary else AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact,
+                    testTag = RepairAppTestTags.statusAction(action.name)
                 )
             }
         }
@@ -162,7 +168,7 @@ fun OrderActionCard(
             onClick = { onSendWhatsApp(whatsAppAnchor) },
             size = AppButtonSize.Compact,
             leadingIcon = Icons.AutoMirrored.Filled.Message,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().testTag(RepairAppTestTags.OrderWhatsAppButton)
         )
     }
 }
@@ -203,6 +209,7 @@ fun QuoteDecisionPanel(
                     text = stringResource(R.string.order_quote_accepted),
                     selected = quoteDecision == QuoteDecision.ACCEPTED,
                     modifier = Modifier.weight(1f),
+                    testTag = RepairAppTestTags.QuoteAcceptedToggle,
                     onClick = { onQuoteDecisionChange(QuoteDecision.ACCEPTED) }
                 )
 
@@ -210,6 +217,7 @@ fun QuoteDecisionPanel(
                     text = stringResource(R.string.order_quote_rejected),
                     selected = quoteDecision == QuoteDecision.REJECTED,
                     modifier = Modifier.weight(1f),
+                    testTag = RepairAppTestTags.QuoteRejectedToggle,
                     onClick = { onQuoteDecisionChange(QuoteDecision.REJECTED) }
                 )
             }
@@ -227,6 +235,7 @@ fun QuoteDecisionPanel(
                 AppButton(
                     text = stringResource(R.string.confirm),
                     modifier = Modifier.fillMaxWidth(),
+                    testTag = RepairAppTestTags.QuoteConfirmButton,
                     onClick = {
                         if (quoteDecision == QuoteDecision.ACCEPTED) {
                             onConfirm(CustomerFeedbackType.ACCEPT, "Preventivo accettato", null)
@@ -245,7 +254,8 @@ private fun QuoteDecisionButton(
     text: String,
     selected: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    testTag: String? = null,
 ) {
     AppButton(
         text = text,
@@ -253,7 +263,8 @@ private fun QuoteDecisionButton(
         variant = if (selected) AppButtonVariant.Primary else AppButtonVariant.Ghost,
         size = AppButtonSize.Compact,
         modifier = modifier,
-        selected = selected
+        selected = selected,
+        testTag = testTag
     )
 }
 
@@ -317,14 +328,19 @@ fun WhatsAppPreviewPanel(
     onConfirmSent: () -> Unit,
     onClose: () -> Unit,
 ) {
-    StandardCard {
+    StandardCard(modifier = Modifier.testTag(RepairAppTestTags.OrderWhatsAppPreviewPanel)) {
         Column(
             modifier = Modifier.padding(RepairAppSpacing.cardPadding),
             verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
         ) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Text(stringResource(R.string.order_wa_preview_title), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
-                AppIconButton(imageVector = Icons.Default.Close, contentDescription = stringResource(R.string.order_wa_close_preview), onClick = onClose)
+                AppIconButton(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(R.string.order_wa_close_preview),
+                    onClick = onClose,
+                    modifier = Modifier.testTag(RepairAppTestTags.OrderWhatsAppClosePreviewButton)
+                )
             }
             
             AppMessageBanner(

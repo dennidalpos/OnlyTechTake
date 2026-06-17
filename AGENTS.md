@@ -129,7 +129,7 @@ Per questo repository:
 - Usare `scripts\android\check_env.ps1` per validare ambiente Android.
 - Usare `scripts\android\gradle.ps1 -- <task>` quando serve Gradle con JDK/SDK risolti dallo script.
 - Usare `scripts\windows\check_project.ps1 -Flavor Full -SkipReleaseBuild` come check locale standard senza signing release.
-- Usare `docs\DEMO_ASSET_WORKFLOW.md` come fonte di verita' per screenshot/video demo.
+- Usare `docs\DEMO_ASSET_WORKFLOW.md` come fonte di verita' per screenshot/video demo, aggiornare il workflow se viene cambiato.
 
 ---
 
