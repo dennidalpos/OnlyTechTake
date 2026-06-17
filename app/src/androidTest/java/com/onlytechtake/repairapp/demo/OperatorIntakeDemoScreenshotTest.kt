@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.demo
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
@@ -235,6 +236,8 @@ class OperatorIntakeDemoScreenshotTest {
         waitForTagExists(tag, scroll = scroll)
         val node = composeRule.onNodeWithTag(tag)
         node.performClick()
+        composeRule.waitForIdle()
+        Thread.sleep(200)
         node.performTextReplacement(text)
         composeRule.waitForIdle()
         Espresso.closeSoftKeyboard()
@@ -246,6 +249,15 @@ class OperatorIntakeDemoScreenshotTest {
         waitForTagExists(tag, scroll = scroll)
         val node = composeRule.onNodeWithTag(tag)
         
+        // Ensure the node is enabled before clicking
+        try {
+            composeRule.waitUntil(timeoutMillis = 5_000) {
+                runCatching { node.assertIsEnabled() }.isSuccess
+            }
+        } catch (e: Throwable) {
+            // Continue anyway
+        }
+
         try {
             node.performClick()
         } catch (e: Throwable) {
@@ -325,13 +337,13 @@ class OperatorIntakeDemoScreenshotTest {
     }
 
     private fun waitForStatus(text: String) {
-        composeRule
-            .onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn)
-            .performScrollToIndex(0)
-        composeRule.waitForIdle()
+        pauseForDemo()
         composeRule.waitUntil(timeoutMillis = WAIT_TIMEOUT_MILLIS) {
             runCatching {
-                composeRule.onNodeWithText(text, substring = true).assertExists()
+                try {
+                    composeRule.onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn).performScrollToIndex(0)
+                } catch (e: Throwable) {}
+                composeRule.onNodeWithText(text, substring = true).assertIsDisplayed()
                 true
             }.getOrDefault(false)
         }

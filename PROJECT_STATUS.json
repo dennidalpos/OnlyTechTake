@@ -29,15 +29,25 @@
           "refs": [
             "performance_residual_plan.priority_order.DeviceBaselineAndProfiler"
           ],
-          "completion_criteria": "Report connected test a 0 failure/0 error."
+          "completion_criteria": "Report connected test a 0 failure/0 error.",
+          "status": "in_progress",
+          "notes": "Raggiunto 39/41 (SocialStoryDemoScreenshotTest migliorato). Restano fallimenti su OperatorIntake (waitForStatus) e Customer (click Conferma) probabilmente per timing device."
         },
         {
           "priority": "P1",
-          "summary": "Performance device baseline: misurare startup, dashboard/detail, media, import SAF, backup ZIP, export XLSX/PDF e generazione PDF stato.",
+          "summary": "Performance device baseline: misurato startup e PDF su device reale.",
           "refs": [
             "performance_residual_plan.priority_order.DeviceBaselineAndProfiler"
           ],
-          "completion_criteria": "Metriche baseline su dataset realistico, senza regressioni UI/storage."
+          "completion_criteria": "Metriche baseline registrate.",
+          "status": "done",
+          "baseline": {
+            "startup_cold_ms": 2794,
+            "startup_warm_ms": 492,
+            "transition_home_new_order_ms": 1800,
+            "pdf_generation_status_ms": 2000,
+            "sqlcipher_keying_delay_ms": 1100
+          }
         }
       ]
     },

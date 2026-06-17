@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.demo
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
@@ -190,7 +191,7 @@ class SocialStoryDemoScreenshotTest {
             typeTag(RepairAppTestTags.CustomerEmailField, "luca.rossi@example.invalid", scroll = true)
             capture(outputDir, "02-cliente-privato.png")
             clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
-            clickTag(RepairAppTestTags.CustomerConfirmSaveButton)
+            clickText("Conferma")
             waitForText("Luca Rossi")
             capture(outputDir, "03-privato-salvato.png")
 
@@ -203,7 +204,7 @@ class SocialStoryDemoScreenshotTest {
             typeTag(RepairAppTestTags.CustomerAddressField, "Via Demo 24, Milano", scroll = true)
             capture(outputDir, "04-cliente-azienda.png")
             clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
-            clickTag(RepairAppTestTags.CustomerConfirmSaveButton)
+            clickText("Conferma")
             waitForText("Demo Lab Srl")
             capture(outputDir, "05-azienda-salvata.png")
         }
@@ -343,6 +344,8 @@ class SocialStoryDemoScreenshotTest {
         waitForTagExists(tag, scrollIfNotFound = scroll)
         val node = composeRule.onNodeWithTag(tag)
         node.performClick()
+        composeRule.waitForIdle()
+        Thread.sleep(200)
         node.performTextReplacement(text)
         composeRule.waitForIdle()
         Espresso.closeSoftKeyboard()
@@ -354,6 +357,15 @@ class SocialStoryDemoScreenshotTest {
         waitForTagExists(tag, scrollIfNotFound = scroll)
         val node = composeRule.onNodeWithTag(tag)
         
+        // Ensure the node is enabled before clicking
+        try {
+            composeRule.waitUntil(timeoutMillis = 5_000) {
+                runCatching { node.assertIsEnabled() }.isSuccess
+            }
+        } catch (e: Throwable) {
+            // Continue anyway, performClick will fail if it's really a problem
+        }
+
         try {
             node.performClick()
         } catch (e: Throwable) {

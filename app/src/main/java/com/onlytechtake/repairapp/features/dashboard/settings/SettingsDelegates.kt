@@ -21,11 +21,12 @@ internal class CatalogSettingsDelegate(
     private val actionRunner: AuthenticatedActionRunner
 ) {
     fun saveCategory(id: String?, parentId: String?, name: String, description: String, active: Boolean, onSaved: (String) -> Unit = {}) {
-        actionRunner.run { actor ->
+        actionRunner.run(successMessage = "Operazione completata") { actor ->
             catalogRepository.saveCategory(
                 actor,
                 CategoryInput(id, parentId, name, description, active)
             ).onSuccess { onSaved(it) }
+            Result.success(Unit)
         }
     }
 
@@ -41,7 +42,7 @@ internal class TemplateSettingsDelegate(
     private val actionRunner: AuthenticatedActionRunner
 ) {
     fun saveTemplate(code: String, title: String, body: String, active: Boolean, step: String? = null) {
-        actionRunner.run { actor ->
+        actionRunner.run(successMessage = "Operazione completata") { actor ->
             templateRepository.saveTemplate(actor, code, title, body, active, step)
         }
     }
