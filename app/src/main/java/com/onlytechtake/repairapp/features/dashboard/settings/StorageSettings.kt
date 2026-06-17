@@ -115,7 +115,7 @@ fun StorageSettings(
                     modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                 ) {
-                    Text("Manutenzione profonda", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.storage_deep_maintenance), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                     Text(
                         text = stringResource(R.string.storage_cleanup_orphans_tooltip),
                         style = MaterialTheme.typography.bodySmall,

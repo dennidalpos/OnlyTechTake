@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.data.repositories
 
 import com.onlytechtake.repairapp.data.local.dao.OrderExportRow
+import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderPriority
@@ -14,6 +15,22 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class OrderExportXlsxWriterTest {
+    private val testLabels = OrderExportLabels(
+        headers = listOf(
+            "Numero commessa", "Titolo", "Stato", "Priorità", "Cliente", "Tipo cliente",
+            "Telefono", "Email", "Categoria", "Operatore", "Descrizione", "Note interne",
+            "Esito diagnosi", "Pagamento", "Importo preventivo", "Importo finale",
+            "Creata", "Aggiornata", "Chiusa", "Motivo chiusura"
+        ),
+        statusLabels = OrderStatus.entries.associateWith { it.name },
+        priorityLabels = OrderPriority.entries.associateWith { it.name },
+        customerTypeLabels = CustomerType.entries.associateWith { it.name },
+        diagnosisOutcomeLabels = DiagnosisOutcome.entries.associateWith { it.name },
+        closureReasonLabels = ClosureReason.entries.associateWith { it.name },
+        paidLabel = "Pagato",
+        notPaidLabel = "Non pagato"
+    )
+
     @Test
     fun writesValidXlsxEntriesAndEscapesCellText() {
         val output = ByteArrayOutputStream()
@@ -40,7 +57,7 @@ class OrderExportXlsxWriterTest {
             closureReason = null,
         )
 
-        OrderExportXlsxWriter(ZoneId.of("UTC")).write(listOf(row), output)
+        OrderExportXlsxWriter(testLabels, ZoneId.of("UTC")).write(listOf(row), output)
 
         val entries = unzip(output.toByteArray())
         assertNotNull(entries["[Content_Types].xml"])
@@ -54,7 +71,7 @@ class OrderExportXlsxWriterTest {
         assertTrue(sheet.contains("Schermo &amp; vetro &lt;rotto&gt;"))
         assertTrue(sheet.contains("Display &quot;nero&quot;"))
         assertTrue(sheet.contains("Nota con apostrofo &apos;"))
-        assertTrue(sheet.contains("Riparabile"))
+        assertTrue(sheet.contains("REPAIRABLE")) // Using .name in testLabels
         assertTrue(sheet.contains("Pagamento"))
         assertTrue(sheet.contains("Pagato"))
         assertTrue(sheet.contains("EUR 123,45"))

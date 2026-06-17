@@ -303,7 +303,7 @@ fun AnchorSelectionDialog(
                 
                 Spacer(modifier = Modifier.height(RepairAppSpacing.cardGap))
                 AppButton(
-                    text = "Annulla",
+                    text = stringResource(R.string.customer_cancel),
                     onClick = onDismiss,
                     variant = AppButtonVariant.Secondary,
                     modifier = Modifier.fillMaxWidth()
@@ -418,7 +418,7 @@ fun TemplateEditDialog(
 
                 ActionRow {
                     AppButton(
-                        text = "Annulla",
+                        text = stringResource(R.string.customer_cancel),
                         onClick = onDismiss,
                         variant = AppButtonVariant.Secondary,
                         size = AppButtonSize.Compact

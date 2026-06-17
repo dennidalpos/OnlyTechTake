@@ -149,7 +149,8 @@ class SocialStoryDemoScreenshotTest {
             typeTag(RepairAppTestTags.ConfigCategoryDescriptionField, "Riparazioni console portatili, display e batterie.", scroll = true)
             capture(outputDir, "03-creazione-categoria.png")
             clickTag(RepairAppTestTags.ConfigCategorySaveButton, scroll = true)
-            clickText("Conferma")
+            waitForTag(RepairAppTestTags.GenericConfirmButton)
+            clickTag(RepairAppTestTags.GenericConfirmButton)
             waitForText("Operazione completata")
             capture(outputDir, "04-categoria-salvata.png")
 
@@ -165,7 +166,8 @@ class SocialStoryDemoScreenshotTest {
             )
             capture(outputDir, "05-creazione-template.png")
             clickTag(RepairAppTestTags.ConfigTemplateSaveButton, scroll = true)
-            clickText("Conferma")
+            waitForTag(RepairAppTestTags.GenericConfirmButton)
+            clickTag(RepairAppTestTags.GenericConfirmButton)
             waitForText("Operazione completata")
             capture(outputDir, "06-template-salvato.png")
         }
@@ -191,7 +193,8 @@ class SocialStoryDemoScreenshotTest {
             typeTag(RepairAppTestTags.CustomerEmailField, "luca.rossi@example.invalid", scroll = true)
             capture(outputDir, "02-cliente-privato.png")
             clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
-            clickText("Conferma")
+            waitForTag(RepairAppTestTags.CustomerConfirmSaveButton)
+            clickTag(RepairAppTestTags.CustomerConfirmSaveButton)
             waitForText("Luca Rossi")
             capture(outputDir, "03-privato-salvato.png")
 
@@ -204,7 +207,8 @@ class SocialStoryDemoScreenshotTest {
             typeTag(RepairAppTestTags.CustomerAddressField, "Via Demo 24, Milano", scroll = true)
             capture(outputDir, "04-cliente-azienda.png")
             clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
-            clickText("Conferma")
+            waitForTag(RepairAppTestTags.CustomerConfirmSaveButton)
+            clickTag(RepairAppTestTags.CustomerConfirmSaveButton)
             waitForText("Demo Lab Srl")
             capture(outputDir, "05-azienda-salvata.png")
         }

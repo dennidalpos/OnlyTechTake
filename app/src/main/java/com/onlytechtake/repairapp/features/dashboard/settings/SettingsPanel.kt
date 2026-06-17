@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
@@ -111,7 +112,8 @@ fun SettingsPanel(
                         confirmAction = null
                     },
                     variant = AppButtonVariant.Primary,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
+                    testTag = RepairAppTestTags.GenericConfirmButton,
                 )
             },
             dismissButton = {

@@ -17,7 +17,19 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
+internal data class OrderExportLabels(
+    val headers: List<String>,
+    val statusLabels: Map<OrderStatus, String>,
+    val priorityLabels: Map<OrderPriority, String>,
+    val customerTypeLabels: Map<CustomerType, String>,
+    val diagnosisOutcomeLabels: Map<DiagnosisOutcome, String>,
+    val closureReasonLabels: Map<ClosureReason, String>,
+    val paidLabel: String,
+    val notPaidLabel: String,
+)
+
 internal class OrderExportXlsxWriter(
+    private val labels: OrderExportLabels,
     private val zoneId: ZoneId = ZoneId.systemDefault(),
 ) {
     /**
@@ -42,13 +54,12 @@ internal class OrderExportXlsxWriter(
         val writer = zip.writer()
         writer.write("""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>""")
         writer.write("""<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">""")
-        // Dimension omitted as it's optional for most readers and hard to know in advance when streaming
         writer.write("<sheetViews><sheetView workbookViewId=\"0\"/></sheetViews>")
         writer.write("<sheetFormatPr defaultRowHeight=\"15\"/>")
         writer.write("<sheetData>")
         
         // Intestazioni (Riga 1)
-        writeRow(writer, 1, headers)
+        writeRow(writer, 1, labels.headers)
         
         // Dati (Righe 2+)
         rows.forEachIndexed { index, row ->
@@ -75,76 +86,30 @@ internal class OrderExportXlsxWriter(
         listOf(
             row.orderNumber,
             row.title,
-            row.status.label(),
-            row.priority.label(),
+            labels.statusLabels[row.status] ?: row.status.name,
+            labels.priorityLabels[row.priority] ?: row.priority.name,
             row.customerName.orEmpty(),
-            row.customerType.label(),
+            labels.customerTypeLabels[row.customerType] ?: row.customerType?.name ?: "",
             row.phone.orEmpty(),
             row.email.orEmpty(),
             row.categoryName.orEmpty(),
             row.assignedUserName.orEmpty(),
             row.description.orEmpty(),
             row.internalNotes.orEmpty(),
-            row.diagnosisOutcome.label(),
-            row.isPaid.paymentLabel(),
+            labels.diagnosisOutcomeLabels[row.diagnosisOutcome] ?: row.diagnosisOutcome?.name ?: "",
+            if (row.isPaid) labels.paidLabel else labels.notPaidLabel,
             row.estimateAmountCents.formatEuroCentsForExport(),
             row.finalAmountCents.formatEuroCentsForExport(),
             row.createdAt.formatTime(),
             row.updatedAt.formatTime(),
             row.closedAt.formatTime(),
-            row.closureReason.label(),
+            labels.closureReasonLabels[row.closureReason] ?: row.closureReason?.name ?: "",
         )
 
     private fun Long?.formatTime(): String =
         this?.let {
             DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(Instant.ofEpochMilli(it).atZone(zoneId))
         }.orEmpty()
-
-    private fun CustomerType?.label(): String =
-        when (this) {
-            CustomerType.PRIVATE -> "Privato"
-            CustomerType.BUSINESS -> "Azienda"
-            null -> ""
-        }
-
-    private fun OrderStatus.label(): String =
-        when (this) {
-            OrderStatus.OPEN -> "Aperta"
-            OrderStatus.IN_PROGRESS -> "In lavorazione"
-            OrderStatus.DIAGNOSIS -> "In diagnosi"
-            OrderStatus.RESULT -> "Risultato"
-            OrderStatus.REPAIRING -> "In riparazione"
-            OrderStatus.READY_FOR_PICKUP -> "Pronta al ritiro"
-            OrderStatus.CLOSED -> "Chiusa"
-        }
-
-    private fun OrderPriority.label(): String =
-        when (this) {
-            OrderPriority.LOW -> "Bassa"
-            OrderPriority.NORMAL -> "Normale"
-            OrderPriority.HIGH -> "Alta"
-            OrderPriority.URGENT -> "Urgente"
-        }
-
-    private fun DiagnosisOutcome?.label(): String =
-        when (this) {
-            DiagnosisOutcome.REPAIRABLE -> "Riparabile"
-            DiagnosisOutcome.NOT_REPAIRABLE -> "Non riparabile"
-            null -> ""
-        }
-
-    private fun Boolean.paymentLabel(): String =
-        if (this) "Pagato" else "Non pagato"
-
-    private fun ClosureReason?.label(): String =
-        when (this) {
-            ClosureReason.COMPLETED -> "Completata"
-            ClosureReason.CUSTOMER_DECLINED -> "Rifiutata dal cliente"
-            ClosureReason.NOT_REPAIRABLE -> "Non riparabile"
-            ClosureReason.CANCELLED -> "Annullata"
-            ClosureReason.OTHER -> "Altro"
-            null -> ""
-        }
 
     private fun columnName(index: Int): String {
         var remaining = index
@@ -185,29 +150,6 @@ private fun createZipParameters(fileName: String, password: String?): ZipParamet
 
 private fun ZipOutputStream.writer(): Writer =
     java.io.OutputStreamWriter(this, Charsets.UTF_8)
-
-private val headers = listOf(
-    "Numero commessa",
-    "Titolo",
-    "Stato",
-    "Priorita",
-    "Cliente",
-    "Tipo cliente",
-    "Telefono",
-    "Email",
-    "Categoria",
-    "Operatore",
-    "Descrizione",
-    "Note interne",
-    "Esito diagnosi",
-    "Pagamento",
-    "Importo preventivo",
-    "Importo finale",
-    "Creata",
-    "Aggiornata",
-    "Chiusa",
-    "Motivo chiusura",
-)
 
 private const val contentTypesXml = """
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>

@@ -46,7 +46,8 @@ fun OrderConfirmDialog(
                         state.dismissConfirm()
                     },
                     variant = AppButtonVariant.Primary,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
+                    testTag = RepairAppTestTags.GenericConfirmButton,
                 )
             },
             dismissButton = {
@@ -225,7 +226,8 @@ fun InternalNoteDialog(
                         state.dismissInternalNote()
                     },
                     variant = AppButtonVariant.Primary,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
+                    testTag = RepairAppTestTags.GenericConfirmButton,
                 )
             },
             dismissButton = {
@@ -256,7 +258,8 @@ fun OrderPdfSentConfirmationDialog(
                     text = stringResource(R.string.yes_confirmed),
                     onClick = onConfirm,
                     variant = AppButtonVariant.Primary,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
+                    testTag = RepairAppTestTags.GenericConfirmButton,
                 )
             },
             dismissButton = {

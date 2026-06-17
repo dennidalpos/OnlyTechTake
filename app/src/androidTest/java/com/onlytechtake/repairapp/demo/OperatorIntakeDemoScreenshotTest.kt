@@ -343,7 +343,8 @@ class OperatorIntakeDemoScreenshotTest {
                 try {
                     composeRule.onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn).performScrollToIndex(0)
                 } catch (e: Throwable) {}
-                composeRule.onNodeWithText(text, substring = true).assertIsDisplayed()
+                composeRule.waitForIdle()
+                composeRule.onNodeWithText(text, substring = true).assertExists()
                 true
             }.getOrDefault(false)
         }

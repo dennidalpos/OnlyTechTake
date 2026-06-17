@@ -6,6 +6,7 @@ import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerActionStatus
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
+import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 
 fun OrderStatus.label(context: Context): String =
@@ -50,4 +51,12 @@ fun CustomerType.label(context: Context): String =
     when (this) {
         CustomerType.PRIVATE -> context.getString(R.string.customer_type_private)
         CustomerType.BUSINESS -> context.getString(R.string.customer_type_business)
+    }
+
+fun OrderPriority.label(context: Context): String =
+    when (this) {
+        OrderPriority.LOW -> context.getString(R.string.priority_low)
+        OrderPriority.NORMAL -> context.getString(R.string.priority_normal)
+        OrderPriority.HIGH -> context.getString(R.string.priority_high)
+        OrderPriority.URGENT -> context.getString(R.string.priority_urgent)
     }

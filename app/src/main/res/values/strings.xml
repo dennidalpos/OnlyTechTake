@@ -27,6 +27,12 @@
     <string name="status_ready_for_pickup">Pronta al ritiro</string>
     <string name="status_closed">Chiusa</string>
 
+    <string name="priority_low">Bassa</string>
+    <string name="priority_normal">Normale</string>
+    <string name="priority_high">Alta</string>
+    <string name="priority_urgent">Urgente</string>
+
+
     <string name="reason_completed">Completata</string>
     <string name="reason_customer_declined">Rifiutata dal cliente</string>
     <string name="reason_not_repairable">Non riparabile</string>
@@ -397,11 +403,21 @@
     <string name="config_category_active">Categoria attiva</string>
     <string name="config_category_archived">Categoria archiviata</string>
 
+    <string name="config_category_tooltip">Organizza il catalogo delle riparazioni. Puoi creare una gerarchia di categorie e sottocategorie.</string>
+    <string name="config_category_search_label">Cerca categorie…</string>
+    <string name="config_category_new_root">Nuova Categoria principale</string>
+    <string name="config_category_new_sub">Nuova Sottocategoria</string>
+    <string name="config_category_dialog_title_new">Nuova Categoria</string>
+    <string name="config_category_dialog_title_edit">Modifica Categoria</string>
+
     <string name="config_category_save">Salva categoria</string>
+
     <string name="config_category_confirm_save_title">Salvare categoria?</string>
     <string name="config_category_confirm_save_text">La categoria verra\' aggiornata nel catalogo locale.</string>
 
     <string name="config_category_confirm_delete_title">Eliminare categoria?</string>
+    <string name="config_category_close">Chiudi Categorie</string>
+
 
     <string name="config_category_confirm_delete_specific_text" tools:ignore="Typos">La categoria \'%1$s\' e tutte le sue sottocategorie verranno eliminate. Non e\' possibile eliminare categorie usate in commesse esistenti.</string>
 
@@ -458,6 +474,31 @@
     <string name="config_backup_confirm_restore_zip_text">Il backup ZIP sostituira\' database e file locali dell\'app. Dopo il ripristino sara\' richiesto un nuovo login.</string>
     <string name="config_backup_orders_export_title">Esportazione Commesse</string>
 
+    <string name="export_xlsx_header_order_number">Numero commessa</string>
+    <string name="export_xlsx_header_title">Titolo</string>
+    <string name="export_xlsx_header_status">Stato</string>
+    <string name="export_xlsx_header_priority">Priorità</string>
+    <string name="export_xlsx_header_customer">Cliente</string>
+    <string name="export_xlsx_header_customer_type">Tipo cliente</string>
+    <string name="export_xlsx_header_phone">Telefono</string>
+    <string name="export_xlsx_header_email">Email</string>
+    <string name="export_xlsx_header_category">Categoria</string>
+    <string name="export_xlsx_header_operator">Operatore</string>
+    <string name="export_xlsx_header_description">Descrizione</string>
+    <string name="export_xlsx_header_internal_notes">Note interne</string>
+    <string name="export_xlsx_header_diagnosis_outcome">Esito diagnosi</string>
+    <string name="export_xlsx_header_payment">Pagamento</string>
+    <string name="export_xlsx_header_estimate_amount">Importo preventivo</string>
+    <string name="export_xlsx_header_final_amount">Importo finale</string>
+    <string name="export_xlsx_header_created_at">Creata</string>
+    <string name="export_xlsx_header_updated_at">Aggiornata</string>
+    <string name="export_xlsx_header_closed_at">Chiusa</string>
+    <string name="export_xlsx_header_closure_reason">Motivo chiusura</string>
+
+    <string name="export_xlsx_value_paid">Pagato</string>
+    <string name="export_xlsx_value_not_paid">Non pagato</string>
+
+
 
     <string name="storage_title">Archiviazione</string>
     <string name="storage_free_device">Spazio libero dispositivo</string>
@@ -471,6 +512,8 @@
     <string name="storage_status_warning">Stato: ATTENZIONE</string>
     <string name="storage_status_critical">Stato: CRITICO</string>
     <string name="storage_refresh">Aggiorna</string>
+    <string name="storage_deep_maintenance">Manutenzione profonda</string>
+
     <string name="storage_cleanup_cache">Svuota cache</string>
     <string name="storage_cleanup_orphans">Pulisci file orfani</string>
     <string name="storage_cleanup_orphans_tooltip">Rimuove permanentemente i file non più referenziati nel database (es. foto di commesse eliminate).</string>

@@ -117,14 +117,14 @@ fun ColumnScope.CategoriesSettings(
         item {
             SectionTitle(
                 text = stringResource(R.string.config_hub_categories_title),
-                tooltip = "Organizza il catalogo delle riparazioni. Puoi creare una gerarchia di categorie e sottocategorie."
+                tooltip = stringResource(R.string.config_category_tooltip)
             )
             
             Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
                 AppTextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
-                    label = "Cerca categorie...",
+                    label = stringResource(R.string.config_category_search_label),
                     singleLine = true,
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
@@ -166,7 +166,7 @@ fun ColumnScope.CategoriesSettings(
                 if (!showEditCard && searchQuery.isBlank()) {
                     AppButton(
                         modifier = Modifier.fillMaxWidth(),
-                        text = if (currentCategoryParentId == null) "Nuova Categoria principale" else "Nuova Sottocategoria",
+                        text = if (currentCategoryParentId == null) stringResource(R.string.config_category_new_root) else stringResource(R.string.config_category_new_sub),
                         leadingIcon = Icons.Default.Add,
                         variant = AppButtonVariant.Primary,
                         testTag = RepairAppTestTags.ConfigCategoryNewButton,
@@ -192,7 +192,7 @@ fun ColumnScope.CategoriesSettings(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = if (categoryId == null) "Nuova Categoria" else "Modifica Categoria",
+                                text = if (categoryId == null) stringResource(R.string.config_category_dialog_title_new) else stringResource(R.string.config_category_dialog_title_edit),
                                 style = MaterialTheme.typography.titleMedium,
                                 color = MaterialTheme.colorScheme.primary
                             )
@@ -230,7 +230,7 @@ fun ColumnScope.CategoriesSettings(
                         }
                         ActionRow {
                             AppButton(
-                                text = "Annulla",
+                                text = stringResource(R.string.customer_cancel),
                                 variant = AppButtonVariant.Secondary,
                                 onClick = { showEditCard = false }
                             )
@@ -330,7 +330,7 @@ fun ColumnScope.CategoriesSettings(
         item {
             AppButton(
                 modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
-                text = "Chiudi Categorie",
+                text = stringResource(R.string.config_category_close),
                 variant = AppButtonVariant.Secondary,
                 onClick = onBack
             )

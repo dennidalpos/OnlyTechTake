@@ -5,10 +5,12 @@ import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import android.provider.OpenableColumns
 import com.onlytechtake.repairapp.BuildConfig
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.dao.*
+import com.onlytechtake.repairapp.data.local.entities.*
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
@@ -225,6 +227,38 @@ class BackupRepository(
             val password = securitySettings?.backupEncryptionPassword?.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
 
             val exportDao = requireNotNull(orderExportDao) { "Export commesse non configurato" }
+            val labels = OrderExportLabels(
+                headers = listOf(
+                    context.getString(R.string.export_xlsx_header_order_number),
+                    context.getString(R.string.export_xlsx_header_title),
+                    context.getString(R.string.export_xlsx_header_status),
+                    context.getString(R.string.export_xlsx_header_priority),
+                    context.getString(R.string.export_xlsx_header_customer),
+                    context.getString(R.string.export_xlsx_header_customer_type),
+                    context.getString(R.string.export_xlsx_header_phone),
+                    context.getString(R.string.export_xlsx_header_email),
+                    context.getString(R.string.export_xlsx_header_category),
+                    context.getString(R.string.export_xlsx_header_operator),
+                    context.getString(R.string.export_xlsx_header_description),
+                    context.getString(R.string.export_xlsx_header_internal_notes),
+                    context.getString(R.string.export_xlsx_header_diagnosis_outcome),
+                    context.getString(R.string.export_xlsx_header_payment),
+                    context.getString(R.string.export_xlsx_header_estimate_amount),
+                    context.getString(R.string.export_xlsx_header_final_amount),
+                    context.getString(R.string.export_xlsx_header_created_at),
+                    context.getString(R.string.export_xlsx_header_updated_at),
+                    context.getString(R.string.export_xlsx_header_closed_at),
+                    context.getString(R.string.export_xlsx_header_closure_reason),
+                ),
+                statusLabels = OrderStatus.entries.associateWith { it.label(context) },
+                priorityLabels = OrderPriority.entries.associateWith { it.label(context) },
+                customerTypeLabels = CustomerType.entries.associateWith { it.label(context) },
+                diagnosisOutcomeLabels = DiagnosisOutcome.entries.associateWith { it.label(context) },
+                closureReasonLabels = ClosureReason.entries.associateWith { it.label(context) },
+                paidLabel = context.getString(R.string.export_xlsx_value_paid),
+                notPaidLabel = context.getString(R.string.export_xlsx_value_not_paid)
+            )
+
             withContext(Dispatchers.IO) {
                 val rowSequence = sequence {
                     var offset = 0
@@ -239,7 +273,7 @@ class BackupRepository(
                     }
                 }
                 context.contentResolver.openOutputStream(uri)?.use { output ->
-                    OrderExportXlsxWriter().write(rowSequence.asIterable(), output, password)
+                    OrderExportXlsxWriter(labels).write(rowSequence.asIterable(), output, password)
                 } ?: throw IOException("Destinazione non disponibile")
             }
             eventWriter.dataExported(actor.id, clockMillis())
