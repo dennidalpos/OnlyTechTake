@@ -6,7 +6,7 @@ object DashboardRoutes {
     const val ORDERS = "orders?status={status}&customerId={customerId}"
     const val NEW_ORDER = "new_order"
     const val ORDER_DETAIL = "order_detail/{orderId}"
-    const val SETTINGS = "settings?section={section}"
+    const val SETTINGS = "settings?section={section}&fromIntake={fromIntake}"
     const val ADMIN = "admin"
 
     fun orderDetail(orderId: String) = "order_detail/$orderId"
@@ -17,5 +17,11 @@ object DashboardRoutes {
         )
         return if (params.isEmpty()) "orders" else "orders?${params.joinToString("&")}"
     }
-    fun settings(section: String? = null) = if (section != null) "settings?section=$section" else "settings"
+    fun settings(section: String? = null, fromIntake: Boolean = false): String {
+        val params = listOfNotNull(
+            section?.let { "section=$it" },
+            if (fromIntake) "fromIntake=true" else null
+        )
+        return if (params.isEmpty()) "settings" else "settings?${params.joinToString("&")}"
+    }
 }

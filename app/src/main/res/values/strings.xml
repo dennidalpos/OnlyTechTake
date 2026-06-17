@@ -197,6 +197,8 @@
     <string name="new_order_title">Nuova commessa</string>
     <string name="intake_step_customer">Cliente</string>
     <string name="intake_step_category">Categoria</string>
+    <string name="intake_category_select_hint">Naviga fino all\'ultimo livello per selezionare la categoria finale.</string>
+    <string name="intake_category_step_hint">Seleziona una sottocategoria per continuare.</string>
     <string name="intake_step_problem">Dettagli commessa</string>
     <string name="intake_step_media">Foto e allegati</string>
     <string name="intake_step_privacy">Privacy e firma</string>
@@ -403,6 +405,7 @@
     <string name="config_category_description_label">Descrizione</string>
     <string name="config_category_active">Categoria attiva</string>
     <string name="config_category_archived">Categoria archiviata</string>
+    <string name="config_category_return_to_intake">Torna alla commessa</string>
 
     <string name="config_category_tooltip">Organizza il catalogo delle riparazioni. Puoi creare una gerarchia di categorie e sottocategorie.</string>
     <string name="config_category_search_label">Cerca categorie…</string>

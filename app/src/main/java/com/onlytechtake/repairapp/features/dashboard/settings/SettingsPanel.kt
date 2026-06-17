@@ -20,6 +20,7 @@ fun SettingsPanel(
     onBackupRestored: () -> Unit,
     onNavigate: (String) -> Unit,
     initialSection: String? = null,
+    fromIntake: Boolean = false,
 ) {
     LaunchedEffect(Unit) {
         viewModel.initializeTemplatesIfNeeded()
@@ -71,6 +72,7 @@ fun SettingsPanel(
                     section = currentSection,
                     viewModel = viewModel,
                     isAdmin = isAdmin,
+                    fromIntake = fromIntake,
                     onBackupRestored = onBackupRestored,
                     requestConfirm = ::requestConfirm,
                     onNavigate = onNavigate,
@@ -87,6 +89,7 @@ fun SettingsPanel(
                 section = initialSection,
                 viewModel = viewModel,
                 isAdmin = isAdmin,
+                fromIntake = fromIntake,
                 onBackupRestored = onBackupRestored,
                 requestConfirm = ::requestConfirm,
                 onNavigate = onNavigate,
@@ -136,6 +139,7 @@ private fun SettingsSectionContent(
     section: String?,
     viewModel: SettingsViewModel,
     isAdmin: Boolean,
+    fromIntake: Boolean,
     onBackupRestored: () -> Unit,
     requestConfirm: (String, String, () -> Unit) -> Unit,
     onNavigate: (String) -> Unit = {},
@@ -157,7 +161,7 @@ private fun SettingsSectionContent(
             )
         }
         when (section) {
-            "CATEGORIES" -> CategoriesSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)
+            "CATEGORIES" -> CategoriesSettings(viewModel, isAdmin, fromIntake, requestConfirm, onBack = onBack)
             "TEMPLATES" -> TemplatesSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)
             "WHATSAPP" -> WhatsAppSettings(viewModel, requestConfirm, onBack = onBack)
             "EXPORT" -> BackupSettings(viewModel, isAdmin, onBackupRestored, requestConfirm, onBack = onBack)

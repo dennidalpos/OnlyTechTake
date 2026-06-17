@@ -46,6 +46,7 @@ import com.onlytechtake.repairapp.features.dashboard.common.*
 fun ColumnScope.CategoriesSettings(
     viewModel: SettingsViewModel,
     isAdmin: Boolean,
+    fromIntake: Boolean = false,
     onRequestConfirm: (String, String, () -> Unit) -> Unit,
     onBack: () -> Unit,
 ) {
@@ -346,12 +347,22 @@ fun ColumnScope.CategoriesSettings(
         }
 
         item {
-            AppButton(
-                modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
-                text = stringResource(R.string.config_category_close),
-                variant = AppButtonVariant.Secondary,
-                onClick = onBack
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+                AppButton(
+                    modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
+                    text = stringResource(R.string.config_category_close),
+                    variant = AppButtonVariant.Secondary,
+                    onClick = onBack
+                )
+                if (fromIntake) {
+                    AppButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.config_category_return_to_intake),
+                        variant = AppButtonVariant.Primary,
+                        onClick = onBack
+                    )
+                }
+            }
         }
     }
 }

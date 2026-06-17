@@ -13,28 +13,101 @@
   },
   "todos": [
     {
-      "block_id": "B10",
-      "title": "Update Demo Assets and Screenshots",
+      "block_id": "B11",
+      "title": "Refactor Sistema Template",
+      "priority": "P1",
+      "complexity": "medium",
+      "status": "open",
+      "recommended_batch_size": 1,
+      "why_this_block": "Il sistema di template necessita di un'associazione più chiara tramite trigger logici (step) e di una funzione di ripristino per garantire la robustezza dei flussi di lavoro.",
+      "items": [
+        {
+          "priority": "P1",
+          "summary": "Estendere TemplateAnchor con informazioni sugli step (numero e nome) per supportare la visualizzazione a barre.",
+          "refs": [
+            "com.onlytechtake.repairapp.core.templates.TemplateAnchor"
+          ],
+          "completion_criteria": "Enum aggiornato e validato."
+        },
+        {
+          "priority": "P1",
+          "summary": "Implementare resetToDefaults in TemplateRepository e aggiungere query di cancellazione in AppSettingDao.",
+          "refs": [
+            "com.onlytechtake.repairapp.data.repositories.TemplateRepository",
+            "com.onlytechtake.repairapp.data.local.dao.AppSettingDao"
+          ],
+          "completion_criteria": "Funzionalità di ripristino testata e auditata."
+        },
+        {
+          "priority": "P1",
+          "summary": "Aggiornare UI TemplatesSettings con barra step negli attivatori, evidenziazione template attivi/inutilizzati e nuovo workflow di associazione.",
+          "refs": [
+            "com.onlytechtake.repairapp.features.dashboard.settings.TemplatesSettings"
+          ],
+          "completion_criteria": "Interfaccia allineata ai nuovi requisiti e workflow fluido."
+        }
+      ]
+    },
+    {
+      "block_id": "B12",
+      "title": "Verifica e Aggiornamento Asset",
       "priority": "P2",
       "complexity": "low",
       "status": "open",
       "recommended_batch_size": 1,
-      "why_this_block": "UI changes in Customer Panel and New Order wizard require updated screenshots and demo media for documentation and store listings.",
+      "why_this_block": "Le modifiche al sistema di template e alla UI di configurazione richiedono l'aggiornamento dei test e degli screenshot demo.",
       "items": [
         {
           "priority": "P2",
-          "summary": "Aggiornare screenshot e video demo seguendo docs\\DEMO_ASSET_WORKFLOW.md per riflettere la nuova posizione del pulsante 'Nuovo Cliente' e il comportamento della ricerca.",
+          "summary": "Aggiornare unit test TemplateRendererTest e aggiungere test per il nuovo workflow di reset/associazione.",
+          "refs": [
+            "com.onlytechtake.repairapp.core.templates.TemplateRendererTest"
+          ],
+          "completion_criteria": "Test verdi su tutte le varianti."
+        },
+        {
+          "priority": "P2",
+          "summary": "Rigenerare screenshot per la sezione 'Categorie e Template' per riflettere la nuova UI con Step Bar e gestione attivatori.",
+          "refs": [
+            "docs/DEMO_ASSET_WORKFLOW.md",
+            "reports/demo-assets/screenshots/03-categorie-template/"
+          ],
+          "completion_criteria": "Nuovi asset generati tramite scripts\\windows\\create_demo_assets.ps1."
+        }
+      ]
+    },
+    {
+      "block_id": "B10",
+      "title": "Aggiornamento Asset Demo Precedenti",
+      "priority": "P2",
+      "complexity": "low",
+      "status": "open",
+      "recommended_batch_size": 1,
+      "why_this_block": "Cambiamenti UI precedenti in Customer Panel e New Order wizard richiedono asset aggiornati.",
+      "items": [
+        {
+          "priority": "P2",
+          "summary": "Aggiornare screenshot e video demo per riflettere le migliorie nella selezione categorie (guida testuale e hint sottocategorie).",
+          "refs": [
+            "docs/DEMO_ASSET_WORKFLOW.md",
+            "com.onlytechtake.repairapp.features.dashboard.neworder.QuickIntakeCategorySection"
+          ],
+          "completion_criteria": "Asset aggiornati."
+        },
+        {
+          "priority": "P2",
+          "summary": "Aggiornare asset per la nuova posizione del pulsante 'Nuovo Cliente'.",
           "refs": [
             "docs/DEMO_ASSET_WORKFLOW.md"
           ],
-          "completion_criteria": "Nuovi asset generati e validati."
+          "completion_criteria": "Asset aggiornati."
         }
       ]
     },
     {
       "block_id": "B09",
       "title": "Schema Room e indici",
-      "priority": "P2",
+      "priority": "P3",
       "complexity": "approval_required",
       "status": "blocked_until_owner_approval",
       "recommended_batch_size": 1,
@@ -42,12 +115,12 @@
       "why_this_block": "Richiede cambio DATABASE_VERSION e migrazioni; va isolato e approvato dall'owner.",
       "items": [
         {
-          "priority": "P2",
-          "summary": "Performance Room/index proposal: valutare indici su query calde (updatedAt, assignedToUserId, status) dopo analisi EXPLAIN QUERY PLAN.",
+          "priority": "P3",
+          "summary": "Performance Room/index proposal: valutare indici su query calde (updatedAt, assignedToUserId, status).",
           "refs": [
             "performance_residual_plan.priority_order.RoomQueryIndexesSchemaProposal"
           ],
-          "completion_criteria": "Approvazione owner e test Room/migrazione verdi."
+          "completion_criteria": "Approvazione owner e test Room verdi."
         }
       ]
     }
@@ -60,7 +133,6 @@
         "type": "DeviceBaselineAndProfiler",
         "residual": "Mancano metriche runtime su device (startup, I/O pesante, PDF) per assenza adb nel PATH locale.",
         "plan": [
-          "DONE: Migliorata robustezza test strumentati per screenshot demo.",
           "Rendere disponibile adb o usare workflow strumentato GitHub.",
           "Misurare cold/warm startup e operazioni I/O su dataset reale.",
           "Registrare baseline p50/p95."

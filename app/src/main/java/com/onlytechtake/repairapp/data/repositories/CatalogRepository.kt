@@ -25,6 +25,13 @@ class CatalogRepository(
         return categoryDao.observeAll()
     }
 
+    fun observeActiveCategories(): Flow<List<OrderCategoryEntity>> {
+        if (DemoMode.isEnabled) {
+            return flowOf(DemoMode.demoCategories.filter { it.active })
+        }
+        return categoryDao.observeActiveCategories()
+    }
+
     suspend fun getCategoryPath(id: String): String {
         val all = if (DemoMode.isEnabled) DemoMode.demoCategories else categoryDao.findAll()
         val path = mutableListOf<String>()

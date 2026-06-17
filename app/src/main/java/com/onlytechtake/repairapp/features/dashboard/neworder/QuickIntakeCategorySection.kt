@@ -99,7 +99,9 @@ fun QuickIntakeCategorySection(
                     )
                 }
 
-                if (selectedPath.isNotBlank()) {
+                if (selectedPath.isBlank()) {
+                    OperatorText(stringResource(R.string.intake_category_select_hint))
+                } else {
                     OperatorText(stringResource(R.string.intake_category_selected, selectedPath))
                 }
 
@@ -136,7 +138,16 @@ fun QuickIntakeCategorySection(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(category.name, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(category.name, style = MaterialTheme.typography.bodyLarge)
+                                    if (hasChildren) {
+                                        Text(
+                                            text = stringResource(R.string.intake_category_step_hint),
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = MaterialTheme.colorScheme.primary
+                                        )
+                                    }
+                                }
                                 if (hasChildren) {
                                     Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = stringResource(R.string.intake_category_open), modifier = Modifier.size(20.dp))
                                 } else if (isSelected) {

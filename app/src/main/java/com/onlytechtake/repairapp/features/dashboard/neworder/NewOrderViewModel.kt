@@ -66,7 +66,7 @@ class NewOrderViewModel(
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    val categories = catalogRepository.observeCategories()
+    val categories = catalogRepository.observeActiveCategories()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     val templates = templateRepository.observeTemplates()

@@ -78,7 +78,7 @@ fun DashboardNavHost(
             )
             QuickActions(
                 viewModel = newOrderViewModel,
-                onOpenConfig = { navController.navigate(DashboardRoutes.settings("CATEGORIES")) },
+                onOpenConfig = { navController.navigate(DashboardRoutes.settings("CATEGORIES", fromIntake = true)) },
                 onClose = { navController.popBackStack() }
             )
         }
@@ -163,13 +163,20 @@ fun DashboardNavHost(
         }
         composable(
             route = DashboardRoutes.SETTINGS,
-            arguments = listOf(navArgument("section") { 
-                type = androidx.navigation.NavType.StringType
-                nullable = true
-                defaultValue = null
-            })
+            arguments = listOf(
+                navArgument("section") { 
+                    type = androidx.navigation.NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                },
+                navArgument("fromIntake") {
+                    type = androidx.navigation.NavType.BoolType
+                    defaultValue = false
+                }
+            )
         ) { backStackEntry ->
             val section = backStackEntry.arguments?.getString("section")
+            val fromIntake = backStackEntry.arguments?.getBoolean("fromIntake") ?: false
             val settingsViewModel: SettingsViewModel = viewModel(
                 factory = SettingsViewModel.Factory(
                     authRepository = container.authRepository,
@@ -189,6 +196,7 @@ fun DashboardNavHost(
                 viewModel = settingsViewModel,
                 isAdmin = isAdmin,
                 initialSection = section,
+                fromIntake = fromIntake,
                 onBackupRestored = onAppDataRestored,
                 onNavigate = { route -> navController.navigate(route) }
             )
