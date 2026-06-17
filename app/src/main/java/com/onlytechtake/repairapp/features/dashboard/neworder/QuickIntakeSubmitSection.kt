@@ -31,7 +31,7 @@ fun QuickIntakeSubmitSection(
                 text = stringResource(R.string.intake_submit_title),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.onSurface
             )
             
             if (missingRequirements.isNotEmpty()) {

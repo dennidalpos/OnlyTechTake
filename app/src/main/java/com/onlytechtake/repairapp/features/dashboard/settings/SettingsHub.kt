@@ -119,22 +119,23 @@ internal fun SettingsHubCard(
     StandardCard(
         modifier = testTag?.let { Modifier.testTag(it) } ?: Modifier,
         onClick = if (enabled) onClick else null,
+        density = StandardCardDensity.Compact,
     ) {
         Row(
             modifier = Modifier.padding(RepairAppSpacing.cardPadding),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
-                modifier = Modifier.size(28.dp)
+                modifier = Modifier.size(24.dp)
             )
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.outline
                 )

@@ -41,6 +41,7 @@ import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
 import com.onlytechtake.repairapp.domain.workspace.availableOrderStatusActions
+import com.onlytechtake.repairapp.domain.workspace.requiresConfirmation
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision
@@ -117,8 +118,8 @@ fun OrderHeader(detail: OrderDetail, context: Context) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                InfoMetadata(label = "Aggiornata", value = formatUiDateTime(detail.order.updatedAt))
-                detail.order.assignedToUserId?.let { InfoMetadata(label = "Operatore", value = it) }
+                InfoMetadata(label = stringResource(R.string.order_updated_label), value = formatUiDateTime(detail.order.updatedAt))
+                detail.order.assignedToUserId?.let { InfoMetadata(label = stringResource(R.string.order_operator_label), value = it) }
             }
         }
     }
@@ -141,22 +142,51 @@ fun OrderActionCard(
     onTogglePayment: () -> Unit,
     onSendWhatsApp: (TemplateAnchor) -> Unit,
 ) {
+    val actions = availableOrderStatusActions(status)
+    val primaryAction = actions.firstOrNull { !it.requiresConfirmation() } ?: actions.firstOrNull()
+    val secondaryActions = actions.filterNot { it == primaryAction }
+
     AppActionPanel(
         title = stringResource(R.string.order_actions_title),
         modifier = Modifier.testTag(RepairAppTestTags.OrderActionSection)
     ) {
-        Text(stringResource(R.string.order_actions_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-        
-        ActionRow {
-            availableOrderStatusActions(status).forEach { action ->
-                AppButton(
-                    text = action.label,
-                    onClick = { onActionClick(action) },
-                    variant = if (action == OrderStatusAction.RECORD_RESULT) AppButtonVariant.Primary else AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact,
-                    testTag = RepairAppTestTags.statusAction(action.name)
-                )
+        Text(stringResource(R.string.order_next_action_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+
+        if (primaryAction != null) {
+            AppButton(
+                text = primaryAction.label,
+                onClick = { onActionClick(primaryAction) },
+                variant = if (primaryAction.requiresConfirmation()) AppButtonVariant.Warning else AppButtonVariant.Primary,
+                size = AppButtonSize.FullWidth,
+                testTag = RepairAppTestTags.statusAction(primaryAction.name)
+            )
+        }
+
+        if (secondaryActions.isNotEmpty()) {
+            Text(
+                stringResource(R.string.order_secondary_actions_title),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            ActionRow {
+                secondaryActions.forEach { action ->
+                    AppButton(
+                        text = action.label,
+                        onClick = { onActionClick(action) },
+                        variant = if (action.requiresConfirmation()) AppButtonVariant.Warning else AppButtonVariant.Secondary,
+                        size = AppButtonSize.Compact,
+                        testTag = RepairAppTestTags.statusAction(action.name)
+                    )
+                }
             }
+        }
+
+        if (actions.isEmpty()) {
+            Text(
+                text = stringResource(R.string.action_none),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
 
         HorizontalDivider(modifier = Modifier.alpha(0.3f))
@@ -346,7 +376,7 @@ fun WhatsAppPreviewPanel(
             verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
         ) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(R.string.order_wa_preview_title), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.order_wa_preview_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                 AppIconButton(
                     imageVector = Icons.Default.Close,
                     contentDescription = stringResource(R.string.order_wa_close_preview),
@@ -356,7 +386,7 @@ fun WhatsAppPreviewPanel(
             }
             
             AppMessageBanner(
-                message = "Inviando a: ${prepared.phone}",
+                message = stringResource(R.string.order_wa_sending_to, prepared.phone),
                 type = BannerType.Info
             )
             
@@ -398,7 +428,7 @@ fun OrderTimelineSection(
     Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
         SectionTitle(
             text = stringResource(R.string.order_timeline),
-            tooltip = "Cronologia di tutti gli eventi e cambiamenti di stato relativi a questa commessa."
+            tooltip = stringResource(R.string.order_timeline_tooltip)
         )
         timeline.forEachIndexed { index, event ->
             val eventNumber = timeline.size - index

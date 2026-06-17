@@ -198,7 +198,10 @@ fun AdminPanel(
         SectionTitle(stringResource(R.string.admin_users_title))
         
         if (users.isEmpty()) {
-            Text(stringResource(R.string.admin_no_users), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
+            AppEmptyState(
+                title = stringResource(R.string.admin_no_users_title),
+                body = stringResource(R.string.admin_no_users_body),
+            )
         } else {
             users.forEach { user ->
                 var resetPasswordVisible by rememberSaveable(user.id) { mutableStateOf(false) }

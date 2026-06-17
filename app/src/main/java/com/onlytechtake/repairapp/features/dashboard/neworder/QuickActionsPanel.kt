@@ -170,7 +170,7 @@ fun QuickActions(
                         text = stringResource(R.string.intake_step_customer),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     
                     if (draft.selectedCustomerId != null) {

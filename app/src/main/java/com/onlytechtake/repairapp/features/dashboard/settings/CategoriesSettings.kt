@@ -198,7 +198,7 @@ fun ColumnScope.CategoriesSettings(
                             Text(
                                 text = if (categoryId == null) stringResource(R.string.config_category_dialog_title_new) else stringResource(R.string.config_category_dialog_title_edit),
                                 style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.primary
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                             AppIconButton(
                                 imageVector = Icons.Default.Close,
@@ -342,7 +342,12 @@ fun ColumnScope.CategoriesSettings(
         }
         if (visibleCategories.isEmpty()) {
             item {
-                Text(stringResource(R.string.config_category_empty_branch), style = MaterialTheme.typography.bodyMedium)
+                AppEmptyState(
+                    title = stringResource(R.string.config_category_empty_title),
+                    body = stringResource(R.string.config_category_empty_branch),
+                    actionLabel = stringResource(R.string.config_category_new_sub).takeIf { isAdmin && !showEditCard },
+                    onAction = ::loadNewCategory.takeIf { isAdmin && !showEditCard },
+                )
             }
         }
 

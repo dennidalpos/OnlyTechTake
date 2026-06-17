@@ -11,6 +11,7 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 
 @Composable
@@ -169,7 +170,10 @@ private fun SettingsSectionContent(
             "ABOUT" -> AboutSettings(onBack = onBack)
             else -> if (section == null) SettingsHub(isAdmin, onNavigate) else {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("Seleziona una sezione")
+                    AppEmptyState(
+                        title = stringResource(R.string.settings_select_section_title),
+                        body = stringResource(R.string.settings_select_section_body),
+                    )
                 }
             }
         }

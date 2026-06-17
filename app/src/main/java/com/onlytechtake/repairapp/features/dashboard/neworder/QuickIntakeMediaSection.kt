@@ -45,7 +45,7 @@ fun QuickIntakeMediaSection(
                 text = stringResource(R.string.intake_step_media),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.onSurface
             )
             
             if (stagedMedia.isEmpty()) {

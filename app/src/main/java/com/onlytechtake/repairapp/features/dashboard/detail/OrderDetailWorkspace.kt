@@ -67,6 +67,7 @@ fun OrderDetailWorkspace(
     val pendingShareIntent by viewModel.pendingShareIntent.collectAsState()
     val context = LocalContext.current
     val workspaceState = rememberOrderDetailWorkspaceState()
+    val shareStatusChooserTitle = stringResource(R.string.order_share_status_chooser)
 
     val exitConfirmTitle = stringResource(R.string.order_exit_confirm_title)
     val exitConfirmText = stringResource(R.string.order_exit_confirm_text)
@@ -86,7 +87,7 @@ fun OrderDetailWorkspace(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            LoadingBrandIndicator(text = "Caricamento commessa...")
+            LoadingBrandIndicator(text = stringResource(R.string.order_loading_detail))
         }
         return
     }
@@ -100,7 +101,7 @@ fun OrderDetailWorkspace(
 
     LaunchedEffect(pendingShareIntent) {
         pendingShareIntent?.let { intent ->
-            context.startActivity(Intent.createChooser(intent, "Invia stato avanzamento"))
+            context.startActivity(Intent.createChooser(intent, shareStatusChooserTitle))
             viewModel.clearPendingShareIntent()
         }
     }
@@ -185,10 +186,14 @@ fun OrderDetailWorkspace(
                                 modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                                 verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
                             ) {
-                                Text("Esito diagnosi", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.error)
-                                OperatorText("Il dispositivo non e' riparabile. Avvisa il cliente prima di preparare il ritiro.")
+                                Text(
+                                    stringResource(R.string.order_not_repairable_title),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.error,
+                                )
+                                OperatorText(stringResource(R.string.order_not_repairable_body))
                                 AppButton(
-                                    text = "Cliente avvisato / pronto per il ritiro",
+                                    text = stringResource(R.string.order_not_repairable_ready),
                                     variant = AppButtonVariant.Success,
                                     modifier = Modifier.fillMaxWidth(),
                                     onClick = {

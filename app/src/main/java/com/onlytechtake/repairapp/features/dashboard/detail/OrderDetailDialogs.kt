@@ -91,7 +91,7 @@ fun OrderStatusActionDialog(
                             imeAction = ImeAction.Next,
                             testTag = RepairAppTestTags.StatusResultSummaryField,
                         )
-                        Text("Esito diagnosi", style = MaterialTheme.typography.titleSmall)
+                        Text(stringResource(R.string.order_not_repairable_title), style = MaterialTheme.typography.titleSmall)
                         QuoteDecisionRow(
                             text = stringResource(R.string.order_diagnosis_repairable),
                             checked = state.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE,

@@ -86,7 +86,10 @@ fun OrdersPanel(
                     ) { selectedOrderId = null }
                 } else {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(stringResource(R.string.orders_select_detail_hint), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        AppEmptyState(
+                            title = stringResource(R.string.orders_select_detail_title),
+                            body = stringResource(R.string.orders_select_detail_hint),
+                        )
                     }
                 }
             }
@@ -190,7 +193,12 @@ private fun OrdersListContent(
         ) {
             if (orderListItems.isEmpty()) {
                 item {
-                    Text(stringResource(R.string.orders_empty_filter), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    AppEmptyState(
+                        title = stringResource(R.string.orders_empty_title),
+                        body = stringResource(R.string.orders_empty_body),
+                        actionLabel = stringResource(R.string.home_new_order),
+                        onAction = onNewOrder,
+                    )
                 }
             } else {
                 items(orderListItems, key = { it.order.id }) { item ->

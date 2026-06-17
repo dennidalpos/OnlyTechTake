@@ -36,7 +36,7 @@ fun QuickIntakeProblemSection(
                 text = stringResource(R.string.intake_step_problem),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.onSurface
             )
             AppTextField(
                 value = problemSummary,

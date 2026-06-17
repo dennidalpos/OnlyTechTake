@@ -7,8 +7,10 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
@@ -26,12 +28,13 @@ fun OrderSignatureSection(
         modifier = Modifier.testTag(RepairAppTestTags.OrderSignatureSection),
         verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
     ) {
-        SectionTitle("Firme privacy")
+        SectionTitle(stringResource(R.string.signature_section_title))
         
         if (detail.signatures.isEmpty()) {
-            Text("Nessuna firma acquisita.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
+            Text(stringResource(R.string.signature_empty), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
         } else {
             detail.signatures.forEach { signature ->
+                val signatureTitle = stringResource(R.string.signature_image_description, signature.signerName)
                 StandardCard {
                     Column(
                         modifier = Modifier.padding(RepairAppSpacing.compactGap),
@@ -39,19 +42,19 @@ fun OrderSignatureSection(
                     ) {
                         LocalImagePreview(
                             path = signature.localPath,
-                            description = "Firma ${signature.signerName}",
+                            description = signatureTitle,
                             onClick = {
                                 selectedSignaturePath = signature.localPath
-                                selectedSignatureTitle = "Firma ${signature.signerName}"
+                                selectedSignatureTitle = signatureTitle
                             },
                         )
                         Text(
-                            text = "Firmatario: ${signature.signerName}",
+                            text = stringResource(R.string.signature_signer_value, signature.signerName),
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = if (signature.privacyAccepted) "Privacy accettata" else "Privacy NON accettata",
+                            text = stringResource(if (signature.privacyAccepted) R.string.signature_privacy_accepted else R.string.signature_privacy_rejected),
                             style = MaterialTheme.typography.bodySmall,
                             color = if (signature.privacyAccepted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
                         )

@@ -171,7 +171,10 @@ fun CustomerPanel(
                             )
                         } else {
                             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                                Text(stringResource(R.string.customer_select_detail_hint), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                AppEmptyState(
+                                    title = stringResource(R.string.customer_select_detail_title),
+                                    body = stringResource(R.string.customer_select_detail_hint),
+                                )
                             }
                         }
                     }
@@ -350,11 +353,11 @@ private fun CustomerListContent(
             }
         } else {
             Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                Text(
-                    text = stringResource(R.string.customer_search_hint),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.outline,
-                    textAlign = TextAlign.Center
+                AppEmptyState(
+                    title = stringResource(R.string.customer_search_empty_title),
+                    body = stringResource(R.string.customer_search_empty_body),
+                    actionLabel = stringResource(R.string.customer_new),
+                    onAction = onNewCustomer,
                 )
             }
         }
@@ -395,7 +398,7 @@ private fun CustomerForm(
             text = if (!isEditing) stringResource(R.string.customer_new) else stringResource(R.string.customer_edit),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.onSurface
         )
         
         Spacer(Modifier.height(RepairAppSpacing.sectionGap))
@@ -542,21 +545,10 @@ private fun CustomerCard(customer: CustomerEntity, onClick: () -> Unit) {
 
 @Composable
 private fun CustomerEmptyState(hasQuery: Boolean, onNewCustomer: () -> Unit) {
-    StandardCard {
-        Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = if (hasQuery) stringResource(R.string.customer_no_results) else stringResource(R.string.customer_no_recent),
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center
-            )
-            if (hasQuery) {
-                AppButton(
-                    text = stringResource(R.string.customer_new),
-                    onClick = onNewCustomer,
-                    variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact
-                )
-            }
-        }
-    }
+    AppEmptyState(
+        title = if (hasQuery) stringResource(R.string.customer_no_results_title) else stringResource(R.string.customer_no_recent),
+        body = if (hasQuery) stringResource(R.string.customer_no_results) else stringResource(R.string.customer_search_hint),
+        actionLabel = stringResource(R.string.customer_new).takeIf { hasQuery },
+        onAction = onNewCustomer.takeIf { hasQuery },
+    )
 }

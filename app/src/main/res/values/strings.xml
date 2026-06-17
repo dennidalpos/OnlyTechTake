@@ -83,6 +83,8 @@
     <string name="dashboard_customers">Clienti</string>
     <string name="dashboard_orders">Commesse</string>
     <string name="dashboard_config">Setup</string>
+    <string name="settings_select_section_title">Seleziona una sezione</string>
+    <string name="settings_select_section_body">Scegli una voce del setup per modificare catalogo, template, backup o preferenze operative.</string>
 
     <string name="logout">Esci</string>
 
@@ -100,6 +102,8 @@
     <string name="home_metric_active">Attive</string>
     <string name="home_new_order">Nuova commessa</string>
     <string name="home_empty_queue">Nessuna commessa in questa coda.</string>
+    <string name="home_empty_queues_title">Nessuna coda attiva</string>
+    <string name="home_empty_queues_body">Quando una commessa entra in lavorazione, diagnosi o ritiro apparirà qui con la prossima azione.</string>
     <string name="home_open_queue">Apri coda</string>
     <string name="home_backup_reminder_title">Backup consigliato</string>
     <string name="home_backup_reminder_settings">Setup backup</string>
@@ -127,6 +131,11 @@
     <string name="signature_form_title">Privacy e firma</string>
     <string name="signature_signer_label">Firma %s</string>
     <string name="signature_empty">Nessuna firma acquisita.</string>
+    <string name="signature_section_title">Firme privacy</string>
+    <string name="signature_image_description">Firma %s</string>
+    <string name="signature_signer_value">Firmatario: %s</string>
+    <string name="signature_privacy_accepted">Privacy accettata</string>
+    <string name="signature_privacy_rejected">Privacy NON accettata</string>
     <string name="signature_read_privacy">Leggi informativa privacy</string>
     <string name="signature_read_terms">Leggi condizioni di presa in carico</string>
     <string name="signature_accept_privacy">Accetta informativa privacy</string>
@@ -165,7 +174,10 @@
     <string name="customer_recent">Clienti recenti</string>
     <string name="customer_search_results">Risultati ricerca</string>
     <string name="customer_search_hint">Inizia a digitare per cercare un cliente…</string>
+    <string name="customer_search_empty_title">Cerca nell\'archivio clienti</string>
+    <string name="customer_search_empty_body">Trova un cliente, una commessa o crea una nuova anagrafica prima di aprire una scheda.</string>
     <string name="customer_no_results">Nessun cliente trovato per questa ricerca.</string>
+    <string name="customer_no_results_title">Nessun risultato</string>
     <string name="customer_save">Salva cliente</string>
     <string name="customer_update">Aggiorna cliente</string>
     <string name="customer_cancel">Annulla</string>
@@ -176,6 +188,7 @@
     <string name="customer_select">Seleziona cliente</string>
     <string name="confirm">Conferma</string>
     <string name="customer_select_detail_hint">Seleziona un cliente per vedere i dettagli</string>
+    <string name="customer_select_detail_title">Nessun cliente selezionato</string>
     <string name="customer_detail_close">Chiudi</string>
     <string name="customer_detail_edit">Modifica</string>
     <string name="customer_open_orders">Commesse aperte (%1$d)</string>
@@ -209,6 +222,7 @@
     <string name="intake_change_customer">Cambia cliente</string>
     <string name="intake_insert_new_customer">Inserisci nuovo cliente</string>
     <string name="intake_no_active_categories">Nessuna categoria attiva.</string>
+    <string name="config_category_empty_title">Nessuna categoria qui</string>
     <string name="intake_create_category">Crea categoria</string>
     <string name="intake_add_missing_category">Aggiungi categoria mancante</string>
     <string name="intake_confirm_all_steps">Confermare tutti gli step</string>
@@ -234,6 +248,8 @@
     <string name="orders_filter_title">Filtri</string>
     <string name="orders_title">Commesse</string>
     <string name="orders_empty_filter">Nessuna commessa per questo filtro.</string>
+    <string name="orders_empty_title">Nessuna commessa trovata</string>
+    <string name="orders_empty_body">Modifica ricerca o filtri, oppure crea una nuova commessa dal banco.</string>
 
     <string name="orders_customer_unavailable">Cliente non disponibile</string>
     <string name="orders_order_reference">Commessa %1$s - %2$s</string>
@@ -250,6 +266,7 @@
     <string name="orders_filter_ready">Pronte</string>
     <string name="orders_search_label">Cerca per cliente, telefono, email o commessa</string>
     <string name="orders_select_detail_hint">Seleziona una commessa per vedere i dettagli</string>
+    <string name="orders_select_detail_title">Nessuna commessa selezionata</string>
     <string name="orders_category_unavailable">Categoria non disponibile</string>
 
 
@@ -263,6 +280,7 @@
     <string name="order_new_note">Nuova nota</string>
     <string name="order_save_note">Salva nota</string>
     <string name="order_customer_documents">Documenti cliente</string>
+    <string name="order_images_title">Immagini</string>
     <string name="order_generate_status_pdf">Genera PDF stato avanzamento</string>
 
     <string name="order_document_history">Storico documenti:</string>
@@ -283,6 +301,8 @@
     <string name="order_timeline">Timeline</string>
     <string name="order_confirm_status_update">Aggiornare lo stato della commessa?</string>
     <string name="order_result_summary">Sintesi risultato</string>
+    <string name="order_loading_detail">Caricamento commessa...</string>
+    <string name="order_share_status_chooser">Invia stato avanzamento</string>
     <string name="order_diagnosis_repairable">Riparabile</string>
     <string name="order_diagnosis_not_repairable">Non riparabile</string>
     <string name="template_diagnosis_not_repairable_reason">Diagnosi tecnica: non riparabile</string>
@@ -293,6 +313,15 @@
     <string name="order_paid_button">Pagato</string>
     <string name="order_paid_badge">PAGATO</string>
     <string name="order_actions_title">Azioni commessa</string>
+    <string name="order_next_action_title">Prossima azione</string>
+    <string name="order_secondary_actions_title">Altre azioni</string>
+    <string name="order_not_repairable_title">Esito diagnosi</string>
+    <string name="order_not_repairable_body">Il dispositivo non è riparabile. Avvisa il cliente prima di preparare il ritiro.</string>
+    <string name="order_not_repairable_ready">Cliente avvisato / pronto per il ritiro</string>
+    <string name="order_updated_label">Aggiornata</string>
+    <string name="order_operator_label">Operatore</string>
+    <string name="order_wa_sending_to">Inviando a: %s</string>
+    <string name="order_timeline_tooltip">Cronologia di tutti gli eventi e cambiamenti di stato relativi a questa commessa.</string>
     <string name="order_quote_outcome">Esito preventivo</string>
     <string name="order_quote_accepted">Preventivo accettato</string>
     <string name="order_quote_rejected">Preventivo rifiutato</string>
@@ -316,6 +345,8 @@
     <string name="admin_confirm_create_text">Il nuovo operatore verra\' salvato nel database locale.</string>
     <string name="admin_users_title">Utenti</string>
     <string name="admin_no_users">Nessun utente configurato.</string>
+    <string name="admin_no_users_title">Nessun operatore</string>
+    <string name="admin_no_users_body">Crea almeno un operatore per separare accessi, permessi e responsabilità sulle commesse.</string>
     <string name="admin_user_active">Attivo</string>
     <string name="admin_user_inactive">Disattivo</string>
     <string name="admin_user_activate">Attiva</string>

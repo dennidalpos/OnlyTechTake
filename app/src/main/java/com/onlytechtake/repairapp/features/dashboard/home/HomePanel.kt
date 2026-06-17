@@ -16,6 +16,7 @@ import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
 import com.onlytechtake.repairapp.features.dashboard.common.BackupReminderCard
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.workspace.queueFilter
@@ -96,16 +97,25 @@ fun HomePanel(
         }
 
         Spacer(Modifier.height(RepairAppSpacing.sectionGap))
-        SectionTitle(stringResource(R.string.home_queues_title)) // Added a title for queues section if it makes sense
+        SectionTitle(stringResource(R.string.home_queues_title))
 
-        queues.forEach { queue ->
-            AppQueueCard(
-                title = queue.title,
-                count = queue.orders.size,
-                lastElementTitle = queue.orders.firstOrNull()?.let { "${it.orderNumber} - ${it.title}" },
-                onOpenQueue = { onOpenQueue(queueFilter(queue)) },
-                modifier = Modifier.padding(bottom = RepairAppSpacing.cardGap)
+        if (queues.isEmpty() || queues.all { it.orders.isEmpty() }) {
+            AppEmptyState(
+                title = stringResource(R.string.home_empty_queues_title),
+                body = stringResource(R.string.home_empty_queues_body),
+                actionLabel = stringResource(R.string.home_new_order),
+                onAction = onNewOrder,
             )
+        } else {
+            queues.forEach { queue ->
+                AppQueueCard(
+                    title = queue.title,
+                    count = queue.orders.size,
+                    lastElementTitle = queue.orders.firstOrNull()?.let { "${it.orderNumber} - ${it.title}" },
+                    onOpenQueue = { onOpenQueue(queueFilter(queue)) },
+                    modifier = Modifier.padding(bottom = RepairAppSpacing.cardGap)
+                )
+            }
         }
     }
 }

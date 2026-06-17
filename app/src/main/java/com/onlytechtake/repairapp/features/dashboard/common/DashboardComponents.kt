@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Inbox
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
@@ -32,6 +33,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
@@ -43,6 +45,7 @@ import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.design.components.AppTextField
 import com.onlytechtake.repairapp.core.design.components.AppIconButton
 import com.onlytechtake.repairapp.core.design.components.AppDialog
+import com.onlytechtake.repairapp.core.design.components.StandardCardVariant
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,7 +58,7 @@ fun SectionTitle(text: String, tooltip: String? = null) {
         Text(
             text = text,
             style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.onSurface,
         )
         if (tooltip != null) {
             val scope = rememberCoroutineScope()
@@ -78,12 +81,58 @@ fun SectionTitle(text: String, tooltip: String? = null) {
                 Icon(
                     imageVector = Icons.Default.Info,
                     contentDescription = stringResource(R.string.content_description_info),
-                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier
                         .size(20.dp)
                         .clickable {
                             scope.launch { tooltipState.show() }
                         }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun AppEmptyState(
+    title: String,
+    body: String,
+    modifier: Modifier = Modifier,
+    icon: ImageVector = Icons.Default.Inbox,
+    actionLabel: String? = null,
+    onAction: (() -> Unit)? = null,
+) {
+    StandardCard(variant = StandardCardVariant.Filled) {
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(RepairAppSpacing.cardPadding),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(32.dp),
+            )
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            Text(
+                text = body,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            )
+            if (actionLabel != null && onAction != null) {
+                AppButton(
+                    text = actionLabel,
+                    onClick = onAction,
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact,
                 )
             }
         }

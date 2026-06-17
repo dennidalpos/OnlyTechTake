@@ -42,7 +42,12 @@ fun OrderPhotoSection(
             Text(stringResource(R.string.intake_media_empty), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
         } else {
             if (images.isNotEmpty()) {
-                Text("Immagini", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+                Text(
+                    stringResource(R.string.order_images_title),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontWeight = FontWeight.Bold,
+                )
                 images.forEach { media ->
                     StandardCard {
                         Column(
