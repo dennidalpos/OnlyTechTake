@@ -13,6 +13,77 @@
   },
   "todos": [
     {
+      "block_id": "B13",
+      "title": "Avanzamento commesse e clipping UI durante scroll",
+      "priority": "P1",
+      "complexity": "medium",
+      "status": "open",
+      "recommended_batch_size": 1,
+      "why_this_block": "La lista commesse, il dettaglio commessa e l'area firma/foto mostrano contenuti tagliati o coperti dallo sfondo durante scroll, specialmente con bottom navigation o tastiera aperta; serve anche rendere espliciti riferimenti cliente/commessa e numeri step nella barra avanzamento.",
+      "identified_residual": "Il problema non e' nelle singole card: `AppScreenContainer(scrollable = false)` applica padding basso fisso a contenitori che includono gia' una `LazyColumn` interna. La viewport della lista viene accorciata e lo sfondo del contenitore esterno appare come fascia che copre o taglia card, foto e firma. Il pattern e' condiviso da lista commesse, dettaglio commessa e schermate simili.",
+      "implementation_plan": [
+        "Correggere il contratto di `AppScreenContainer` distinguendo contenuto statico scrollabile da contenuto con scroll interno, evitando `bottomContentPadding` esterno quando la schermata passa una `LazyColumn` o contenuto pesato.",
+        "Spostare il padding finale nei `contentPadding` delle `LazyColumn` interessate, includendo spazio sufficiente per bottom navigation, IME e contenuti finali senza clipping.",
+        "Applicare background esplicito ai contenitori principali di dashboard e dettaglio per evitare fasce nere o superfici non tematizzate durante scroll, transizioni e tastiera.",
+        "Aggiornare `OrderStatusStepper` per mostrare numeri step anche nella variante compatta usata nelle card commessa, mantenendo dimensioni stabili e contrasto leggibile.",
+        "Rendere sempre visibili e testabili riferimento cliente, numero commessa/titolo commessa e stato avanzamento in lista commesse e dettaglio commessa.",
+        "Aggiornare test tag, test unitari/strumentati e documentazione asset quando cambiano UI, copy, navigazione o screenshot attesi."
+      ],
+      "items": [
+        {
+          "priority": "P1",
+          "summary": "Eliminare clipping e copertura da sfondo nelle schermate con scroll interno.",
+          "refs": [
+            "app\\src\\main\\java\\com\\onlytechtake\\repairapp\\core\\design\\components\\AppScreenContainer.kt",
+            "app\\src\\main\\java\\com\\onlytechtake\\repairapp\\features\\dashboard\\orders\\OrdersPanel.kt",
+            "app\\src\\main\\java\\com\\onlytechtake\\repairapp\\features\\dashboard\\detail\\OrderDetailWorkspace.kt"
+          ],
+          "completion_criteria": "Card commesse, foto e area firma restano completamente visibili durante scroll, con bottom navigation e con tastiera aperta; nessuna fascia di sfondo copre o taglia il contenuto."
+        },
+        {
+          "priority": "P1",
+          "summary": "Mostrare riferimento cliente, riferimento commessa e step numerati nella barra avanzamento.",
+          "refs": [
+            "app\\src\\main\\java\\com\\onlytechtake\\repairapp\\features\\workspace\\WorkspaceUiHelpers.kt",
+            "app\\src\\main\\java\\com\\onlytechtake\\repairapp\\features\\dashboard\\orders\\OrdersPanel.kt",
+            "app\\src\\main\\java\\com\\onlytechtake\\repairapp\\features\\dashboard\\detail\\OrderDetailComponents.kt"
+          ],
+          "completion_criteria": "Ogni commessa in lista e dettaglio mostra cliente, numero/titolo commessa e barra progressiva con numero visibile in ogni step, inclusa la variante compatta."
+        },
+        {
+          "priority": "P1",
+          "summary": "Aggiornare test tag e copertura test per layout, riferimenti commessa e stepper.",
+          "refs": [
+            "app\\src\\main\\java\\com\\onlytechtake\\repairapp\\core\\design\\RepairAppTestTags.kt",
+            "app\\src\\test\\java\\com\\onlytechtake\\repairapp\\features\\workspace\\WorkspaceUiHelpersTest.kt",
+            "app\\src\\androidTest\\java\\com\\onlytechtake\\repairapp\\demo"
+          ],
+          "completion_criteria": "Test mirati aggiornati o aggiunti per mapping stato-step, presenza riferimenti cliente/commessa e stabilita' dei tag usati dagli screenshot."
+        },
+        {
+          "priority": "P1",
+          "summary": "Buildare tutte le varianti e correggere eventuali errori introdotti.",
+          "refs": [
+            "scripts\\android\\check_env.ps1",
+            "scripts\\android\\gradle.ps1",
+            "scripts\\windows\\check_project.ps1"
+          ],
+          "completion_criteria": "`check_env.ps1`, test unitari mirati, assemble debug/release di `full`, `demo`, `showcase` e `check_project.ps1 -Flavor Full -SkipReleaseBuild` completano senza errori oppure ogni blocco residuo e' registrato con causa concreta."
+        },
+        {
+          "priority": "P2",
+          "summary": "Aggiornare workflow demo asset e rigenerare screenshot/recording impattati.",
+          "refs": [
+            "docs\\DEMO_ASSET_WORKFLOW.md",
+            "scripts\\windows\\create_demo_assets.ps1",
+            "scripts\\windows\\record_demo_device.ps1",
+            "reports\\demo-assets"
+          ],
+          "completion_criteria": "Asset Impact Register aggiornato; screenshot e video che includono lista/dettaglio commessa e firma/foto rigenerati o residuo specifico mantenuto in questo file."
+        }
+      ]
+    },
+    {
       "block_id": "B11",
       "title": "Pubblicazione Google Play Pro e Demo",
       "priority": "P1",
