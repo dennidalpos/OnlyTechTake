@@ -54,7 +54,7 @@ class OrdersViewModel(
         .flatMapLatest { (user, filter) ->
             when {
                 user == null -> flowOf(emptyList())
-                filter.query.isNotBlank() -> orderRepository.searchOrders(user, filter.query)
+                filter.query.isNotBlank() -> orderRepository.searchOrders(user, filter)
                 else -> orderRepository.observeOrderList(user, filter)
             }
         }

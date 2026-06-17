@@ -356,14 +356,23 @@ interface RepairOrderDao {
             (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND UPPER(m.mediaType) = 'FINAL_PHOTO') AS finalPhotosCount
         FROM repair_orders o
         LEFT JOIN customers c ON o.customerId = c.id
-        WHERE :query = ''
+        WHERE (:query = ''
            OR o.rowid IN (SELECT rowid FROM repair_orders_fts WHERE repair_orders_fts MATCH :query || '*')
-           OR c.rowid IN (SELECT rowid FROM customers_fts WHERE customers_fts MATCH :query || '*')
+           OR c.rowid IN (SELECT rowid FROM customers_fts WHERE customers_fts MATCH :query || '*'))
+           AND (:assignedToUserId IS NULL OR o.assignedToUserId = :assignedToUserId)
+           AND (:status IS NULL OR o.status = :status)
+           AND (:customerId IS NULL OR o.customerId = :customerId)
         ORDER BY o.updatedAt DESC
         LIMIT :limit
         """
     )
-    fun search(query: String, limit: Int = 100): Flow<List<OrderListItemProjection>>
+    fun search(
+        query: String,
+        assignedToUserId: String? = null,
+        status: OrderStatus? = null,
+        customerId: String? = null,
+        limit: Int = 100
+    ): Flow<List<OrderListItemProjection>>
 }
 
 @Dao

@@ -33,8 +33,11 @@ import com.onlytechtake.repairapp.features.dashboard.common.*
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspace
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.ui.text.input.ImeAction
 import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 
@@ -151,6 +154,18 @@ private fun OrdersListContent(
             onValueChange = { viewModel.setFilter(orderFilter.copy(query = it)) },
             label = stringResource(R.string.orders_search_label),
             modifier = Modifier.fillMaxWidth(),
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+            trailingIcon = if (orderFilter.query.isNotEmpty()) {
+                {
+                    AppIconButton(
+                        imageVector = Icons.Default.Clear,
+                        contentDescription = stringResource(R.string.content_description_clear),
+                        onClick = { viewModel.setFilter(orderFilter.copy(query = "")) }
+                    )
+                }
+            } else null,
+            imeAction = ImeAction.Search,
+            singleLine = true
         )
 
         if (orderFilter.hasActiveFilter()) {

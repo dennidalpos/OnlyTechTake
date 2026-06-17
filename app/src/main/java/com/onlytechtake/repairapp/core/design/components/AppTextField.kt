@@ -35,6 +35,7 @@ fun AppTextField(
     capitalization: KeyboardCapitalization = KeyboardCapitalization.Sentences,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardActions: KeyboardActions? = null,
+    leadingIcon: (@Composable () -> Unit)? = null,
     trailingIcon: (@Composable () -> Unit)? = null,
     testTag: String? = null,
 ) {
@@ -72,6 +73,7 @@ fun AppTextField(
         ),
         visualTransformation = visualTransformation,
         keyboardActions = effectiveKeyboardActions,
+        leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         textStyle = MaterialTheme.typography.bodyLarge
     )

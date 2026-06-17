@@ -84,12 +84,25 @@ class OrderWorkflowRepository(
 
     suspend fun countAllOrders(): Int = repairOrderDao.countAll()
 
-    fun searchOrders(actor: AuthenticatedUser, query: String): Flow<List<OrderListItem>> {
+    fun searchOrders(actor: AuthenticatedUser, filter: OrderFilter): Flow<List<OrderListItem>> {
         if (DemoMode.isEnabled) return flowOf(emptyList())
+        val query = filter.query
         val sanitized = query.trim().split(" ").filter { it.isNotBlank() }.joinToString(" ") { "$it*" }
-        if (sanitized.isBlank()) return observeOrderList(actor, OrderFilter())
+        if (sanitized.isBlank()) return observeOrderList(actor, filter)
         
-        return repairOrderDao.search(sanitized).map { projections ->
+        val assignedToUserId = if (filter.showMineOnly) actor.id else null
+        val status = filter.status.takeIf { filter.statuses.isEmpty() }
+        
+        val base = repairOrderDao.search(
+            query = sanitized,
+            assignedToUserId = assignedToUserId,
+            status = status,
+            customerId = filter.customerId,
+        )
+
+        return (if (filter.statuses.isEmpty()) base else base.map { items ->
+            items.filter { it.order.status in filter.statuses }
+        }).map { projections ->
             projections.map { p ->
                 OrderListItem(
                     order = p.order,
