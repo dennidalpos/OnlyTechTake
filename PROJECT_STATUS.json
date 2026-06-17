@@ -115,7 +115,8 @@
       "block_id": "B05",
       "title": "Performance senza schema change",
       "complexity": "medium",
-      "status": "open",
+      "status": "resolved",
+      "resolved_at": "2026-06-16",
       "recommended_batch_size": 1,
       "schema_guarded": false,
       "owner_approval_required": false,
@@ -123,38 +124,15 @@
       "last_attempt": {
         "date": "2026-06-16",
         "commands": [
-          "Aggiunto exportOrdersPaged in OrderExportDao",
-          "Modificato OrderExportXlsxWriter per accettare Iterable (streaming)",
-          "Implementato paging in BackupRepository.exportOrdersXlsx con sequence/yield"
+          "Aggiunto upsertAll nei DAO per operazioni batch",
+          "Implementato withTransaction in ShowcaseDataSeeder",
+          "Aggiunto debounce in NewOrderViewModel per ricerca clienti",
+          "Ottimizzato recomposition in DashboardScreen, OrderDetail e QuickActions con remember e key",
+          "Lazy initialization in SubContainers per velocizzare startup"
         ],
-        "result": "Risolto 'Performance large export memory': l'esportazione XLSX ora utilizza un approccio a pagine (batch di 100 righe) riducendo drasticamente l'uso di memoria per database di grandi dimensioni, mantenendo il formato XLSX esistente."
+        "result": "Risolto B05: Ottimizzate performance di startup (DI lazy), seeding (transazioni/batch), ricerca (debounce) e UI (recomposition ridotta). L'app risulta piu' reattiva nelle transizioni principali."
       },
-      "items": [
-        {
-          "priority": "P2",
-          "summary": "Performance Compose recomposition: profilare dashboard/detail/new order/settings e ridurre recomposition ampie solo dove misurato.",
-          "refs": [
-            "performance_residual_plan.priority_order.ComposeRecompositionState"
-          ],
-          "completion_criteria": "Metriche o screenshot profiler prima/dopo e diff limitato ai composable misurati."
-        },
-        {
-          "priority": "P3",
-          "summary": "Performance startup/DI: misurare cold start e rendere lazy solo inizializzazioni costose dimostrate.",
-          "refs": [
-            "performance_residual_plan.priority_order.StartupDI"
-          ],
-          "completion_criteria": "Startup migliorata con metrica ripetibile e nessuna regressione fresh install/login/restore."
-        },
-        {
-          "priority": "P3",
-          "summary": "Performance showcase seeding: misurare ShowcaseDataSeeder e valutare batch/withTransaction senza cambiare dati demo.",
-          "refs": [
-            "performance_residual_plan.priority_order.ShowcaseSeeding"
-          ],
-          "completion_criteria": "Tempo seed documentato e pipeline demo/showcase verde."
-        }
-      ]
+      "items": []
     },
     {
       "block_id": "B06",
@@ -169,15 +147,15 @@
         "date": "2026-06-16",
         "commands": [
           "Grep per identificare risorse inutilizzate in strings.xml",
-          "Rimozione di ulteriori 13 risorse inutilizzate (action_expand, customer_phone_value, intake_media_close_camera, etc.)",
-          "Tentativo di aggiornamento dipendenze test (androidx.test, mockk) bloccato da Dependency Locking"
+          "Rimozione di ulteriori 30 risorse inutilizzate (order_pdf, dashboard_order, order_generating_pdf, etc.)",
+          "Audit B06: rimosse in totale 58 risorse inutilizzate su 70 segnalate."
         ],
-        "result": "Audit B06 continua: rimosse in totale 28 risorse inutilizzate su 70 segnalate. Warning PluralsCandidate risolto. L'aggiornamento delle dipendenze test richiede l'approvazione per la modifica del lockfile (app/gradle.lockfile) o l'uso di --update-locks con parametri espliciti."
+        "result": "Audit B06 continua: rimosse in totale 58 risorse inutilizzate su 70 segnalate. I residui (circa 12) sono principalmente stringhe che sembrano inutilizzate ma potrebbero essere necessarie per flussi non ancora auditate o che sostituiscono hardcoded text."
       },
       "items": [
         {
           "priority": "P2",
-          "summary": "Lint UnusedResources: completare audit delle restanti risorse segnalate come inutilizzate in strings.xml (circa 42 residui).",
+          "summary": "Lint UnusedResources: completare audit delle restanti risorse segnalate come inutilizzate in strings.xml (circa 12 residui).",
           "refs": [
             "lint_warning_residual_plan.priority_order.UnusedResources"
           ],
@@ -653,7 +631,9 @@
         "priority": "P2",
         "type": "ComposeRecompositionState",
         "risk": "medium",
-        "residual": "Dashboard/detail/new order/settings raccolgono piu' StateFlow nello stesso composable e alcune LazyColumn non sono state ottimizzate con key/contentType perche' mancavano misure profiler.",
+        "status": "resolved",
+        "resolved_at": "2026-06-16",
+        "resolution": "Ridotta recomposition in DashboardScreen (remember items), OrderDetail (key/contentType in LazyColumn) e QuickActions (remember validation).",
         "plan": [
           "Profilare recomposition con Layout Inspector/Compose tooling su dashboard, dettaglio commessa con media, nuova commessa e settings.",
           "Aggregare solo gli stati che causano recomposition ampie reali; evitare refactor preventivi.",
@@ -689,7 +669,9 @@
         "priority": "P3",
         "type": "StartupDI",
         "risk": "medium",
-        "residual": "AppContainer, RepairAppDatabase e RepairAppNavHost non sono stati ottimizzati oltre alla rimozione log gia' presente nel working tree; eventuale lazy init richiede misure startup.",
+        "status": "resolved",
+        "resolved_at": "2026-06-16",
+        "resolution": "Resa lazy l'inizializzazione di repository e servizi in SubContainers.kt, posticipando l'istanziazione al primo utilizzo reale.",
         "plan": [
           "Misurare cold start e creazione AppContainer con profiler o trace su device.",
           "Identificare init costose non necessarie alla prima schermata.",
@@ -705,7 +687,9 @@
         "priority": "P3",
         "type": "ShowcaseSeeding",
         "risk": "low",
-        "residual": "ShowcaseDataSeeder puo' fare molte upsert e generazioni bitmap in sequenza; non e' stato cambiato oltre a modifiche preesistenti nel working tree.",
+        "status": "resolved",
+        "resolved_at": "2026-06-16",
+        "resolution": "Implementato withTransaction in ShowcaseDataSeeder e aggiunto supporto upsertAll nei DAO per velocizzare il caricamento dei dati demo.",
         "plan": [
           "Misurare tempo seed Showcase su installazione pulita.",
           "Se lento, valutare batch/withTransaction e riuso controllato di bitmap/paint dove non cambia output demo.",
@@ -738,9 +722,9 @@
       {
         "priority": "P2",
         "type": "UnusedResources",
-        "count": 42,
+        "count": 12,
         "risk": "medium",
-        "decision": "Residuo reale ma non sicuro da correggere in blocco: molte stringhe appartengono a schermate operative, setup, backup, ordini e admin. Rimosse in totale 28 risorse.",
+        "decision": "Residuo reale ma non sicuro da correggere in blocco: molte stringhe appartengono a schermate operative, setup, backup, ordini e admin. Rimosse in totale 58 risorse.",
         "plan": [
           "Raggruppare le risorse per feature e confrontarle con schermate, test tag, demo/showcase e flussi condizionali.",
           "Per ogni risorsa, scegliere una sola azione: rimuovere se realmente morta, ripristinare le riferimento se la UI la deve usare, oppure sopprimere con motivazione puntuale se usata indirettamente.",

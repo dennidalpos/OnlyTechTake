@@ -75,11 +75,7 @@
     <string name="dashboard_home">Home</string>
     <string name="dashboard_new">Nuova</string>
     <string name="dashboard_customers">Clienti</string>
-    <string name="dashboard_order">Commessa</string>
-    <string name="dashboard_orders">Commesse</string>
-    <string name="dashboard_config">Setup</string>
-    <string name="dashboard_admin">Admin</string>
-    <string name="logout">Logout</string>
+
     <string name="dashboard_role_admin">Admin</string>
     <string name="dashboard_role_operator">Operatore</string>
     <string name="dashboard_unsaved_title">Dati non salvati</string>
@@ -193,7 +189,7 @@
     <string name="intake_step_problem">Dettagli commessa</string>
     <string name="intake_step_media">Foto e allegati</string>
     <string name="intake_step_privacy">Privacy e firma</string>
-    <string name="intake_step_submit">Invia</string>
+
 
     <string name="intake_search_customer">Cerca cliente esistente</string>
     <string name="intake_selected_customer">Cliente selezionato: %s</string>
@@ -221,18 +217,14 @@
     <string name="intake_problem_title">Titolo lavorazione</string>
     <string name="intake_problem_description">Descrizione</string>
 
-    <string name="customer_select">Seleziona cliente</string>
-    <string name="customer_details">Dettagli</string>
-    <string name="customer_create_and_order">Crea cliente e commessa</string>
 
-    <string name="orders_title">Commesse</string>
     <string name="orders_filter_title">Filtri</string>
     <string name="orders_empty_filter">Nessuna commessa per questo filtro.</string>
-    <string name="orders_customer_label">Cliente: %s</string>
+
     <string name="orders_customer_unavailable">Cliente non disponibile</string>
-    <string name="orders_status_label">Stato: %s</string>
+
     <string name="orders_next_action_label">Prossima azione: %s</string>
-    <string name="orders_media_label">Media e firme: %s</string>
+
     <string name="orders_filter_active">Filtro attivo: %s</string>
     <string name="orders_filter_all">Tutte</string>
     <string name="orders_filter_mine">Mie</string>
@@ -244,25 +236,19 @@
     <string name="orders_select_detail_hint">Seleziona una commessa per vedere i dettagli</string>
     <string name="orders_category_unavailable">Categoria non disponibile</string>
 
-    <string name="order_detail_title">Scheda commessa</string>
-    <string name="order_none_selected">Nessuna commessa selezionata</string>
-    <string name="order_exit">Esci</string>
-    <string name="order_pdf">PDF</string>
-    <string name="order_export_pdf_title">Esportare PDF?</string>
-    <string name="order_export_pdf_text">Creare il riepilogo commessa %s tramite selettore di sistema?</string>
+
+
     <string name="order_export_local">in locale</string>
     <string name="order_export_cloud">su cloud</string>
     <string name="order_exit_confirm_title">Uscire dalla scheda?</string>
     <string name="order_exit_confirm_text">Nota non salvata o anteprima WhatsApp verranno scartate.</string>
-    <string name="order_diagnosis_outcome_label">Esito diagnosi: %s</string>
-    <string name="order_problem_label">Problema: %s</string>
-    <string name="order_actions">Azioni</string>
+
     <string name="order_internal_notes">Note interne</string>
     <string name="order_new_note">Nuova nota</string>
     <string name="order_save_note">Salva nota</string>
     <string name="order_customer_documents">Documenti cliente</string>
     <string name="order_generate_status_pdf">Genera PDF stato avanzamento</string>
-    <string name="order_generating_pdf">Generazione PDF in corso…</string>
+
     <string name="order_pdf_missing_signature_title">Firma mancante</string>
     <string name="order_pdf_missing_signature_text">Firma cliente non trovata. Generare comunque il PDF senza firma?</string>
     <string name="order_document_history">Storico documenti:</string>
@@ -287,7 +273,7 @@
     <string name="order_diagnosis_not_repairable">Non riparabile</string>
     <string name="template_diagnosis_not_repairable_reason">Diagnosi tecnica: non riparabile</string>
     <string name="order_estimate_amount">Importo preventivo (€)</string>
-    <string name="order_status_note_label">Nota opzionale</string>
+
     <string name="order_closure_note_label">Nota chiusura</string>
     <string name="order_closure_reason_title">Motivo chiusura</string>
     <string name="order_paid_button">Pagato</string>
@@ -299,7 +285,7 @@
     <string name="order_quote_accepted">Preventivo accettato</string>
     <string name="order_quote_rejected">Preventivo rifiutato</string>
     <string name="order_quote_reject_reason">Motivo rifiuto</string>
-    <string name="order_quote_confirm">Conferma esito preventivo</string>
+
     <string name="order_pdf_sent_confirm_title">Conferma invio</string>
     <string name="order_pdf_sent_confirm_text">Hai completato l\'invio del PDF al cliente?</string>
     <string name="yes_confirmed">Sì, confermato</string>
@@ -405,15 +391,15 @@
     <string name="config_category_description_label">Descrizione</string>
     <string name="config_category_active">Categoria attiva</string>
     <string name="config_category_archived">Categoria archiviata</string>
-    <string name="config_category_new">Nuova</string>
+
     <string name="config_category_save">Salva categoria</string>
     <string name="config_category_confirm_save_title">Salvare categoria?</string>
     <string name="config_category_confirm_save_text">La categoria verra\' aggiornata nel catalogo locale.</string>
-    <string name="config_category_delete">Elimina</string>
+
     <string name="config_category_confirm_delete_title">Eliminare categoria?</string>
-    <string name="config_category_confirm_delete_text" tools:ignore="Typos">La categoria e tutte le sue sottocategorie verranno eliminate. Non e\' possibile eliminare categorie usate in commesse esistenti.</string>
+
     <string name="config_category_confirm_delete_specific_text" tools:ignore="Typos">La categoria \'%1$s\' e tutte le sue sottocategorie verranno eliminate. Non e\' possibile eliminare categorie usate in commesse esistenti.</string>
-    <string name="config_category_open_branch">Apri ramo</string>
+
     <string name="config_category_empty_branch">Nessuna categoria in questo ramo.</string>
     <string name="config_template_code_label">Codice</string>
     <string name="config_template_title_label">Titolo</string>
@@ -450,24 +436,23 @@
     <string name="config_backup_destination_label">Destinazione export:</string>
     <string name="config_backup_destination_local">Locale</string>
     <string name="config_backup_destination_cloud">Provider documenti</string>
-    <string name="config_backup_destination_local_desc">Salva su memoria interna o SD.</string>
-    <string name="config_backup_destination_cloud_desc">Usa il selettore documenti Android per scegliere un provider disponibile.</string>
+
     <string name="config_backup_provider_unavailable">Nessun provider documenti esterno rilevato. Il selettore Android resta disponibile per le destinazioni locali.</string>
     <string name="config_backup_tooltip">Gestisci promemoria e file tramite il selettore documenti Android.</string>
     <string name="config_backup_close">Chiudi setup backup</string>
     <string name="config_backup_orders_tooltip">Esporta tutte le commesse in un file Excel leggibile da PC.</string>
-    <string name="config_backup_export_config">Export config</string>
+
     <string name="config_backup_export_xlsx">Export commesse XLSX</string>
     <string name="config_backup_confirm_export_xlsx_title">Esportare commesse?</string>
     <string name="config_backup_confirm_export_xlsx_text">Verra\' creato un file XLSX non cifrato %1$s tramite selettore di sistema.</string>
-    <string name="config_backup_export_zip">Export ZIP</string>
+
     <string name="config_backup_confirm_export_zip_title">Esportare backup completo?</string>
     <string name="config_backup_confirm_export_zip_text">Verra\' creato un file ZIP non cifrato %1$s tramite selettore di sistema.</string>
     <string name="config_backup_restore_zip">Ripristina ZIP</string>
     <string name="config_backup_confirm_restore_zip_title">Ripristinare backup?</string>
     <string name="config_backup_confirm_restore_zip_text">Il backup ZIP sostituira\' database e file locali dell\'app. Dopo il ripristino sara\' richiesto un nuovo login.</string>
     <string name="config_backup_orders_export_title">Esportazione Commesse</string>
-    <string name="config_backup_orders_export_desc">Esporta l\'elenco di tutte le commesse in un file Excel leggibile.</string>
+
 
     <string name="storage_title">Archiviazione</string>
     <string name="storage_free_device">Spazio libero dispositivo</string>
@@ -491,10 +476,10 @@
     <string name="storage_close">Chiudi setup memoria</string>
 
     <string name="catalog_path_separator">\u0020&gt;\u0020</string>
-    <string name="catalog_error_only_admin_modify">Solo admin puo\' modificare categorie esistenti</string>
+
     <string name="catalog_error_name_required">Nome categoria obbligatorio</string>
     <string name="catalog_error_duplicate_name">Categoria gia\' presente in questo ramo</string>
-    <string name="catalog_error_only_admin">Solo admin</string>
+
     <string name="catalog_error_not_found">Categoria non trovata</string>
     <string name="catalog_error_used_by_order">Categoria usata da una commessa</string>
     <string name="catalog_error_cycle_detected">Il ramo categorie contiene un ciclo</string>

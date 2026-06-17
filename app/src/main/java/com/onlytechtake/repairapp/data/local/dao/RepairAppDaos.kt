@@ -180,6 +180,9 @@ interface UserDao {
     @Upsert
     suspend fun upsert(user: UserEntity)
 
+    @Upsert
+    suspend fun upsertAll(users: List<UserEntity>)
+
     @Query("SELECT * FROM users ORDER BY role ASC, active DESC, displayName ASC")
     fun observeAll(): Flow<List<UserEntity>>
 
@@ -206,6 +209,9 @@ interface UserDao {
 interface CustomerDao {
     @Upsert
     suspend fun upsert(customer: CustomerEntity)
+
+    @Upsert
+    suspend fun upsertAll(customers: List<CustomerEntity>)
 
     @Query("SELECT * FROM customers ORDER BY updatedAt DESC")
     fun observeRecent(): Flow<List<CustomerEntity>>
@@ -269,6 +275,9 @@ interface OrderCategoryDao {
 interface RepairOrderDao {
     @Upsert
     suspend fun upsert(order: RepairOrderEntity)
+
+    @Upsert
+    suspend fun upsertAll(orders: List<RepairOrderEntity>)
 
     @Query("SELECT * FROM repair_orders WHERE id = :id LIMIT 1")
     suspend fun findById(id: String): RepairOrderEntity?
@@ -362,6 +371,9 @@ interface TimelineEventDao {
     @Upsert
     suspend fun upsert(event: TimelineEventEntity)
 
+    @Upsert
+    suspend fun upsertAll(events: List<TimelineEventEntity>)
+
     @Query("SELECT * FROM timeline_events WHERE orderId = :orderId ORDER BY createdAt DESC")
     fun observeForOrder(orderId: String): Flow<List<TimelineEventEntity>>
 }
@@ -370,6 +382,9 @@ interface TimelineEventDao {
 interface MessageTemplateDao {
     @Upsert
     suspend fun upsert(template: MessageTemplateEntity)
+
+    @Upsert
+    suspend fun upsertAll(templates: List<MessageTemplateEntity>)
 
     @Query("SELECT * FROM message_templates ORDER BY code ASC")
     fun observeAll(): Flow<List<MessageTemplateEntity>>
@@ -385,6 +400,9 @@ interface MessageTemplateDao {
 interface OrderMediaDao {
     @Upsert
     suspend fun upsert(media: OrderMediaEntity)
+
+    @Upsert
+    suspend fun upsertAll(media: List<OrderMediaEntity>)
 
     @Query("SELECT * FROM order_media WHERE id = :id LIMIT 1")
     suspend fun findById(id: String): OrderMediaEntity?
@@ -419,6 +437,9 @@ interface OrderMediaDao {
 interface SignatureDao {
     @Upsert
     suspend fun upsert(signature: SignatureEntity)
+
+    @Upsert
+    suspend fun upsertAll(signatures: List<SignatureEntity>)
 
     @Query("SELECT * FROM signatures WHERE orderId = :orderId ORDER BY signedAt DESC")
     fun observeForOrder(orderId: String): Flow<List<SignatureEntity>>

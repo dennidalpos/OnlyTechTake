@@ -20,9 +20,11 @@ import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
 import java.io.File
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -30,7 +32,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class NewOrderViewModel(
     private val authRepository: AuthRepository,
     private val customerRepository: CustomerRepository,
@@ -58,6 +60,7 @@ class NewOrderViewModel(
     val customerSuggestions = _customerSearchQuery
         .map { it.trim() }
         .distinctUntilChanged()
+        .debounce { query -> if (query.isBlank()) 0L else 300L }
         .flatMapLatest { query ->
             if (query.isBlank()) customerRepository.observeRecent() else customerRepository.search(query)
         }

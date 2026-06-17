@@ -105,7 +105,7 @@ fun QuickActions(
     
     val privacyText = templates.firstOrNull { (it.code == privacyCode) && it.active }?.body ?: LegalTemplateFallbacks.PrivacyText
     val termsText = templates.firstOrNull { (it.code == termsCode) && it.active }?.body ?: LegalTemplateFallbacks.TermsText
-    val missingRequirements = intakeInput.validationErrors()
+    val missingRequirements = remember(intakeInput) { intakeInput.validationErrors() }
 
     LaunchedEffect(
         draft.selectedCustomerId,

@@ -150,11 +150,11 @@ fun OrderDetailWorkspace(
                 verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
                 contentPadding = PaddingValues(bottom = RepairAppSpacing.compactGap)
             ) {
-                item {
+                item(key = "header", contentType = "header") {
                     OrderHeader(selected, context)
                 }
 
-                item {
+                item(key = "actions", contentType = "actions") {
                     OrderActionCard(
                         status = selected.order.status,
                         isPaid = selected.isPaid,
@@ -175,7 +175,7 @@ fun OrderDetailWorkspace(
                 if ((selected.order.status == OrderStatus.RESULT) &&
                     (selected.order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE)
                 ) {
-                    item {
+                    item(key = "quote_decision", contentType = "decision") {
                         QuoteDecisionPanel(
                             quoteDecision = quoteDecision,
                             quoteRejectNote = quoteRejectNote,
@@ -195,7 +195,7 @@ fun OrderDetailWorkspace(
                 if ((selected.order.status == OrderStatus.RESULT) &&
                     (selected.order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE)
                 ) {
-                    item {
+                    item(key = "not_repairable", contentType = "info") {
                         StandardCard {
                             Column(
                                 modifier = Modifier.padding(RepairAppSpacing.cardPadding),
@@ -229,7 +229,7 @@ fun OrderDetailWorkspace(
                 preparedMessage
                     ?.takeIf { it.orderId == selected.order.id }
                     ?.let { prepared ->
-                    item {
+                    item(key = "wa_preview", contentType = "whatsapp") {
                         WhatsAppPreviewPanel(
                             prepared = prepared,
                             body = preparedMessageBody,
@@ -252,7 +252,7 @@ fun OrderDetailWorkspace(
                     }
                 }
 
-                item {
+                item(key = "notes", contentType = "notes") {
                     InternalNotesPanel(
                         notes = selected.order.internalNotes,
                         onAddNoteClick = {
@@ -262,15 +262,15 @@ fun OrderDetailWorkspace(
                     )
                 }
 
-                item {
+                item(key = "photos", contentType = "photos") {
                     OrderPhotoSection(selected, viewModel)
                 }
 
-                item {
+                item(key = "signatures", contentType = "signatures") {
                     OrderSignatureSection(selected)
                 }
 
-                item {
+                item(key = "documents", contentType = "documents") {
                     OrderDocumentSection(
                         isGeneratingPdf = isGeneratingStatusPdf,
                         pdfError = statusPdfError,
@@ -292,11 +292,11 @@ fun OrderDetailWorkspace(
                     )
                 }
 
-                item {
+                item(key = "timeline", contentType = "timeline") {
                     OrderTimelineSection(timeline = selected.timeline)
                 }
 
-                item {
+                item(key = "footer", contentType = "actions") {
                     AppButton(
                         modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
                         text = "Chiudi ed esci",

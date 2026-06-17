@@ -121,8 +121,9 @@ Questo repository, allo stato corrente, e' Android-only:
 3. Preservare modifiche utente non correlate; non fare revert di lavoro non proprio.
 4. Fare modifiche atomiche, piccole e verificabili.
 5. Aggiornare documentazione solo se cambiano comportamento, setup, architettura, release flow o asset demo.
-6. Aggiornare `PROJECT_STATUS.json` solo con residui reali, azionabili e ancora incompleti; non usarlo come changelog.
-7. Non lasciare artifact temporanei, report generati o output build non richiesti nel working tree.
+6. Aggiornare `docs\DEMO_ASSET_WORKFLOW.md` ad ogni modifica di UI, navigazione, copy, test tag o dati demo che impatta la generazione di screenshot e video.
+7. Aggiornare `PROJECT_STATUS.json` solo con residui reali, azionabili e ancora incompleti; non usarlo come changelog.
+8. Non lasciare artifact temporanei, report generati o output build non richiesti nel working tree.
 
 Per questo repository:
 
