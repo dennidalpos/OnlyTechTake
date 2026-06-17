@@ -2,9 +2,8 @@
 
 ## Stato operativo
 
-Export ZIP completo, XLSX commesse e ripristino ZIP completo sono esposti agli admin tramite Config > Backup e Storage Access Framework.
+Export ZIP completo, XLSX commesse, configurazione JSON e ripristino ZIP completo sono esposti agli admin tramite Config > Backup e Storage Access Framework.
 L'export database e l'export XLSX pre-cleanup sono esposti nella sezione Admin prima della cancellazione totale commesse.
-Il repository contiene anche la logica di export configurazione JSON, ma la schermata Backup corrente non espone un pulsante dedicato per quel file.
 Eventuali provider come Drive, OneDrive o Dropbox compaiono solo come destinazioni del selettore documenti Android: non esiste un backend o una sincronizzazione cloud proprietaria.
 
 ## Sezione app

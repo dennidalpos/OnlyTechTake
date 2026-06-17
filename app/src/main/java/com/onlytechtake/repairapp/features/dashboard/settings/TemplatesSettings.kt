@@ -208,7 +208,10 @@ fun ColumnScope.TemplatesSettings(
 
         TemplateEditDialog(
             template = template,
-            onDismiss = { editingTemplate = null },
+            onDismiss = { 
+                editingTemplate = null
+                viewModel.setFormDirty(false)
+            },
             onSave = { code, title, body, active, step ->
                 val riskyTemplateChange = isRiskyTemplateChange(template.code, code, active) || (assignedAnchors.isNotEmpty() && !active)
                 
@@ -227,7 +230,8 @@ fun ColumnScope.TemplatesSettings(
                     viewModel.saveTemplate(code, title, body, active, step)
                     editingTemplate = null
                 }
-            }
+            },
+            onSetDirty = { viewModel.setFormDirty(it) }
         )
     }
 
@@ -318,6 +322,7 @@ fun TemplateEditDialog(
     template: MessageTemplateEntity,
     onDismiss: () -> Unit,
     onSave: (String, String, String, Boolean, String?) -> Unit,
+    onSetDirty: (Boolean) -> Unit = {},
 ) {
     val isNew = template.id.isEmpty()
     var code by rememberSaveable { mutableStateOf(template.code) }
@@ -327,7 +332,10 @@ fun TemplateEditDialog(
     var step by rememberSaveable { mutableStateOf(template.step ?: "") }
 
     Dialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = {
+            onDismiss()
+            onSetDirty(false)
+        },
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         Surface(
@@ -353,7 +361,10 @@ fun TemplateEditDialog(
                 if (isNew) {
                     AppTextField(
                         value = code,
-                        onValueChange = { code = it },
+                        onValueChange = { 
+                            code = it
+                            onSetDirty(true)
+                        },
                         label = stringResource(R.string.config_template_code_label),
                         testTag = RepairAppTestTags.ConfigTemplateCodeField
                     )
@@ -375,20 +386,29 @@ fun TemplateEditDialog(
                 ) {
                     AppTextField(
                         value = title,
-                        onValueChange = { title = it },
+                        onValueChange = { 
+                            title = it
+                            onSetDirty(true)
+                        },
                         label = stringResource(R.string.config_template_title_label),
                         testTag = RepairAppTestTags.ConfigTemplateTitleField
                     )
 
                     AppTextField(
                         value = step,
-                        onValueChange = { step = it },
+                        onValueChange = { 
+                            step = it
+                            onSetDirty(true)
+                        },
                         label = stringResource(R.string.config_template_step_label),
                     )
 
                     AppTextField(
                         value = body,
-                        onValueChange = { body = it },
+                        onValueChange = { 
+                            body = it
+                            onSetDirty(true)
+                        },
                         label = stringResource(R.string.config_template_body_label),
                         testTag = RepairAppTestTags.ConfigTemplateBodyField,
                         singleLine = false
@@ -407,7 +427,10 @@ fun TemplateEditDialog(
                         Text(if (active) stringResource(R.string.config_template_active) else stringResource(R.string.config_template_archived))
                         Switch(
                             checked = active,
-                            onCheckedChange = { active = it },
+                            onCheckedChange = { 
+                                active = it
+                                onSetDirty(true)
+                            },
                         )
                     }
                     
@@ -419,7 +442,10 @@ fun TemplateEditDialog(
                 ActionRow {
                     AppButton(
                         text = stringResource(R.string.customer_cancel),
-                        onClick = onDismiss,
+                        onClick = {
+                            onDismiss()
+                            onSetDirty(false)
+                        },
                         variant = AppButtonVariant.Secondary,
                         size = AppButtonSize.Compact
                     )

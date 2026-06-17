@@ -17,7 +17,6 @@ import com.onlytechtake.repairapp.data.repositories.TemplateRepository
 import com.onlytechtake.repairapp.data.services.StorageStatsService
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
-import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import com.onlytechtake.repairapp.domain.workspace.OperatorInput
 import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
@@ -40,6 +39,7 @@ class SettingsViewModel(
     private val storageStatsService: StorageStatsService,
     private val orderFileCleanupService: OrderFileCleanupService,
     private val database: com.onlytechtake.repairapp.data.local.db.RepairAppDatabase,
+    private val onSetFormDirty: (Boolean) -> Unit,
 ) : ViewModel() {
 
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
@@ -68,6 +68,10 @@ class SettingsViewModel(
 
     fun clearMessage() {
         _message.value = null
+    }
+
+    fun setFormDirty(dirty: Boolean) {
+        onSetFormDirty(dirty)
     }
 
     private val _storageStats = MutableStateFlow<com.onlytechtake.repairapp.data.services.StorageStats?>(null)
@@ -109,12 +113,17 @@ class SettingsViewModel(
     fun cleanupOrphanedFiles() = storageDelegate.cleanupOrphanedFiles()
 
     fun saveCategory(id: String?, parentId: String?, name: String, description: String, active: Boolean, onSaved: (String) -> Unit = {}) =
-        catalogDelegate.saveCategory(id, parentId, name, description, active, onSaved)
+        catalogDelegate.saveCategory(id, parentId, name, description, active) {
+            setFormDirty(false)
+            onSaved(it)
+        }
 
     fun deleteCategory(categoryId: String) = catalogDelegate.deleteCategory(categoryId)
 
     fun saveTemplate(code: String, title: String, body: String, active: Boolean, step: String? = null) =
-        templateDelegate.saveTemplate(code, title, body, active, step)
+        templateDelegate.saveTemplate(code, title, body, active, step).also {
+            setFormDirty(false)
+        }
 
     fun setTemplateForAnchor(anchor: TemplateAnchor, templateCode: String) =
         templateDelegate.setTemplateForAnchor(anchor, templateCode)
@@ -168,6 +177,7 @@ class SettingsViewModel(
         private val storageStatsService: StorageStatsService,
         private val orderFileCleanupService: OrderFileCleanupService,
         private val database: com.onlytechtake.repairapp.data.local.db.RepairAppDatabase,
+        private val onSetFormDirty: (Boolean) -> Unit,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -176,7 +186,8 @@ class SettingsViewModel(
                 templateRepository, backupRepository, backupReminderPreferences,
                 securityPreferences,
                 storageStatsService, orderFileCleanupService,
-                database
+                database,
+                onSetFormDirty
             ) as T
         }
     }

@@ -133,7 +133,8 @@ fun DashboardNavHost(
                 onNewOrder = { navController.navigate(DashboardRoutes.NEW_ORDER) },
                 onOpenBackupSettings = {
                     navController.navigate(DashboardRoutes.settings("EXPORT"))
-                }
+                },
+                onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) }
             )
         }
         composable(
@@ -181,6 +182,7 @@ fun DashboardNavHost(
                     storageStatsService = container.storageStatsService,
                     orderFileCleanupService = container.orderFileCleanupService,
                     database = container.database,
+                    onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) }
                 )
             )
             SettingsPanel(

@@ -1,5 +1,7 @@
 package com.onlytechtake.repairapp.features.dashboard.admin
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -38,6 +40,13 @@ fun AdminPanel(
     val isBackupReminderDue by viewModel.isBackupReminderDue.collectAsState()
     val message by viewModel.message.collectAsState()
 
+    val exportDatabaseLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/x-sqlite3")) { uri ->
+        uri?.let(viewModel::exportDatabase)
+    }
+    val exportOrdersXlsxLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) { uri ->
+        uri?.let(viewModel::exportOrdersXlsx)
+    }
+
     val confirmCreateTitle = stringResource(R.string.admin_confirm_create_title)
     val confirmCreateText = stringResource(R.string.admin_confirm_create_text)
     val confirmStatusTitle = stringResource(R.string.admin_confirm_status_title)
@@ -48,6 +57,11 @@ fun AdminPanel(
     val confirmTotalResetText = stringResource(R.string.admin_confirm_total_reset_text)
     val confirmDeleteAllOrdersTitle = stringResource(R.string.admin_confirm_delete_all_orders_title)
     val confirmDeleteAllOrdersText = stringResource(R.string.admin_confirm_delete_all_orders_text)
+    val confirmExportDatabaseTitle = stringResource(R.string.admin_confirm_export_database_title)
+    val confirmExportDatabaseText = stringResource(R.string.admin_confirm_export_database_text)
+    val confirmExportXlsxTitle = stringResource(R.string.config_backup_confirm_export_xlsx_title)
+    val confirmExportXlsxText = stringResource(R.string.config_backup_confirm_export_xlsx_text)
+    val destMsgLocal = stringResource(R.string.order_export_local)
 
     var displayName by rememberSaveable { mutableStateOf("") }
     var username by rememberSaveable { mutableStateOf("") }
@@ -355,6 +369,42 @@ fun AdminPanel(
             )
             Spacer(Modifier.height(RepairAppSpacing.cardGap))
         }
+
+        StandardCard {
+            Column(
+                modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
+            ) {
+                SectionTitle(
+                    text = stringResource(R.string.config_backup_orders_export_title),
+                    tooltip = stringResource(R.string.config_backup_orders_tooltip),
+                )
+                AppButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.admin_export_database),
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact,
+                    onClick = {
+                        requestConfirm(confirmExportDatabaseTitle, confirmExportDatabaseText.format(destMsgLocal)) {
+                            exportDatabaseLauncher.launch("repairapp-export.db")
+                        }
+                    }
+                )
+                AppButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.config_backup_export_xlsx),
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact,
+                    onClick = {
+                        requestConfirm(confirmExportXlsxTitle, confirmExportXlsxText.format(destMsgLocal)) {
+                            exportOrdersXlsxLauncher.launch("repairapp-commesse.xlsx")
+                        }
+                    }
+                )
+            }
+        }
+
+        Spacer(Modifier.height(RepairAppSpacing.cardGap))
 
         StandardCard {
             Column(

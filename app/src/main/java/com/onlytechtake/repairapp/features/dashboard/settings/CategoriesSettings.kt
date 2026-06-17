@@ -88,7 +88,10 @@ fun ColumnScope.CategoriesSettings(
     
     BackHandler(enabled = currentCategoryParentId != null || showEditCard || searchQuery.isNotEmpty()) {
         when {
-            showEditCard -> showEditCard = false
+            showEditCard -> {
+                showEditCard = false
+                viewModel.setFormDirty(false)
+            }
             searchQuery.isNotEmpty() -> searchQuery = ""
             currentCategoryParentId != null -> currentCategoryParentId = currentParent?.parentId
         }
@@ -199,19 +202,28 @@ fun ColumnScope.CategoriesSettings(
                             AppIconButton(
                                 imageVector = Icons.Default.Close,
                                 contentDescription = stringResource(R.string.content_description_close),
-                                onClick = { showEditCard = false }
+                                onClick = { 
+                                    showEditCard = false
+                                    viewModel.setFormDirty(false)
+                                }
                             )
                         }
                         
                         AppTextField(
                             categoryName,
-                            { categoryName = it },
+                            { 
+                                categoryName = it
+                                viewModel.setFormDirty(true)
+                            },
                             stringResource(R.string.config_category_name_label),
                             testTag = RepairAppTestTags.ConfigCategoryNameField
                         )
                         AppTextField(
                             categoryDescription,
-                            { categoryDescription = it },
+                            { 
+                                categoryDescription = it
+                                viewModel.setFormDirty(true)
+                            },
                             stringResource(R.string.config_category_description_label),
                             showOptional = true,
                             testTag = RepairAppTestTags.ConfigCategoryDescriptionField
@@ -225,14 +237,20 @@ fun ColumnScope.CategoriesSettings(
                             Switch(
                                 checked = categoryActive,
                                 enabled = isAdmin,
-                                onCheckedChange = { categoryActive = it },
+                                onCheckedChange = { 
+                                    categoryActive = it
+                                    viewModel.setFormDirty(true)
+                                },
                             )
                         }
                         ActionRow {
                             AppButton(
                                 text = stringResource(R.string.customer_cancel),
                                 variant = AppButtonVariant.Secondary,
-                                onClick = { showEditCard = false }
+                                onClick = { 
+                                    showEditCard = false
+                                    viewModel.setFormDirty(false)
+                                }
                             )
                             if ((categoryId == null) || isAdmin) {
                                 val confirmTitle = stringResource(R.string.config_category_confirm_save_title)

@@ -250,9 +250,8 @@ Export implementati:
 - ZIP completo con database, configurazione e file privati rilevanti (foto, firme, PDF);
 - XLSX commesse con esito diagnosi e stato pagamento;
 - database Room dalla sezione Admin;
+- configurazione JSON dalla sezione Backup;
 - PDF riepilogo della singola commessa con timeline completa.
-
-Nota: la logica di export configurazione JSON esiste nel repository, ma la UI corrente non espone un pulsante dedicato nella schermata Backup.
 
 Ripristino backup:
 

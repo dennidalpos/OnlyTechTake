@@ -474,6 +474,14 @@
     <string name="config_backup_confirm_restore_zip_text">Il backup ZIP sostituira\' database e file locali dell\'app. Dopo il ripristino sara\' richiesto un nuovo login.</string>
     <string name="config_backup_orders_export_title">Esportazione Commesse</string>
 
+    <string name="config_backup_export_config">Export configurazione JSON</string>
+    <string name="config_backup_confirm_export_config_title">Esportare configurazione?</string>
+    <string name="config_backup_confirm_export_config_text">Verra\' creato un file JSON non cifrato %1$s contenente categorie e template.</string>
+
+    <string name="admin_export_database">Export database SQLite</string>
+    <string name="admin_confirm_export_database_title">Esportare database?</string>
+    <string name="admin_confirm_export_database_text">Verra\' creato un file .db non cifrato %1$s. Attenzione: contiene tutti i dati sensibili dell\'app.</string>
+
     <string name="export_xlsx_header_order_number">Numero commessa</string>
     <string name="export_xlsx_header_title">Titolo</string>
     <string name="export_xlsx_header_status">Stato</string>

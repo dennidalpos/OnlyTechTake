@@ -87,6 +87,7 @@ fun CustomerPanel(
         vatNumber = ""
         address = ""
         notes = ""
+        viewModel.setFormDirty(false)
     }
 
     fun editCustomer(customer: CustomerEntity) {
@@ -133,25 +134,25 @@ fun CustomerPanel(
                             CustomerForm(
                                 isEditing = editingCustomerId != null,
                                 isBusiness = isBusiness,
-                                onBusinessChange = { isBusiness = it },
+                                onBusinessChange = { isBusiness = it; viewModel.setFormDirty(true) },
                                 firstName = firstName,
-                                onFirstNameChange = { firstName = it },
+                                onFirstNameChange = { firstName = it; viewModel.setFormDirty(true) },
                                 lastName = lastName,
-                                onLastNameChange = { lastName = it },
+                                onLastNameChange = { lastName = it; viewModel.setFormDirty(true) },
                                 companyName = companyName,
-                                onCompanyNameChange = { companyName = it },
+                                onCompanyNameChange = { companyName = it; viewModel.setFormDirty(true) },
                                 vatNumber = vatNumber,
-                                onVatNumberChange = { vatNumber = it },
+                                onVatNumberChange = { vatNumber = it; viewModel.setFormDirty(true) },
                                 taxCode = taxCode,
-                                onTaxCodeChange = { taxCode = it },
+                                onTaxCodeChange = { taxCode = it; viewModel.setFormDirty(true) },
                                 phone = phone,
-                                onPhoneChange = { phone = it },
+                                onPhoneChange = { phone = it; viewModel.setFormDirty(true) },
                                 email = email,
-                                onEmailChange = { email = it },
+                                onEmailChange = { email = it; viewModel.setFormDirty(true) },
                                 address = address,
-                                onAddressChange = { address = it },
+                                onAddressChange = { address = it; viewModel.setFormDirty(true) },
                                 notes = notes,
-                                onNotesChange = { notes = it },
+                                onNotesChange = { notes = it; viewModel.setFormDirty(true) },
                                 onSave = { confirmSave = true },
                                 onCancel = {
                                     showForm = false
@@ -180,25 +181,25 @@ fun CustomerPanel(
                     CustomerForm(
                         isEditing = editingCustomerId != null,
                         isBusiness = isBusiness,
-                        onBusinessChange = { isBusiness = it },
+                        onBusinessChange = { isBusiness = it; viewModel.setFormDirty(true) },
                         firstName = firstName,
-                        onFirstNameChange = { firstName = it },
+                        onFirstNameChange = { firstName = it; viewModel.setFormDirty(true) },
                         lastName = lastName,
-                        onLastNameChange = { lastName = it },
+                        onLastNameChange = { lastName = it; viewModel.setFormDirty(true) },
                         companyName = companyName,
-                        onCompanyNameChange = { companyName = it },
+                        onCompanyNameChange = { companyName = it; viewModel.setFormDirty(true) },
                         vatNumber = vatNumber,
-                        onVatNumberChange = { vatNumber = it },
+                        onVatNumberChange = { vatNumber = it; viewModel.setFormDirty(true) },
                         taxCode = taxCode,
-                        onTaxCodeChange = { taxCode = it },
+                        onTaxCodeChange = { taxCode = it; viewModel.setFormDirty(true) },
                         phone = phone,
-                        onPhoneChange = { phone = it },
+                        onPhoneChange = { phone = it; viewModel.setFormDirty(true) },
                         email = email,
-                        onEmailChange = { email = it },
+                        onEmailChange = { email = it; viewModel.setFormDirty(true) },
                         address = address,
-                        onAddressChange = { address = it },
+                        onAddressChange = { address = it; viewModel.setFormDirty(true) },
                         notes = notes,
-                        onNotesChange = { notes = it },
+                        onNotesChange = { notes = it; viewModel.setFormDirty(true) },
                         onSave = { confirmSave = true },
                         onCancel = {
                             showForm = false

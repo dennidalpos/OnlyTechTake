@@ -47,6 +47,7 @@ fun OrdersPanel(
     onOrderClick: (String) -> Unit,
     onNewOrder: () -> Unit,
     onOpenBackupSettings: () -> Unit,
+    onSetFormDirty: (Boolean) -> Unit = {},
 ) {
     val windowSizeClass = LocalWindowSizeClass.current
     val isWide = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Medium
@@ -77,7 +78,8 @@ fun OrdersPanel(
                             templateRepository = container.templateRepository,
                             generateOrderStatusPdfUseCase = container.generateOrderStatusPdfUseCase,
                             shareDocumentIntentFactory = container.shareDocumentIntentFactory,
-                        ) { /* Handle dirty state if needed */ },
+                            onSetFormDirty = onSetFormDirty
+                        ),
                     )
                     OrderDetailWorkspace(
                         viewModel = detailViewModel,

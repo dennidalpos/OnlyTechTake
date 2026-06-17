@@ -52,6 +52,9 @@ fun BackupSettings(
     val exportOrdersXlsxLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) { uri ->
         uri?.let(viewModel::exportOrdersXlsx)
     }
+    val exportConfigLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+        uri?.let(viewModel::exportConfiguration)
+    }
 
     // Pre-fetch strings for callbacks
     val destMsgLocal = stringResource(R.string.order_export_local)
@@ -62,6 +65,8 @@ fun BackupSettings(
     val confirmRestoreZipText = stringResource(R.string.config_backup_confirm_restore_zip_text)
     val confirmExportXlsxTitle = stringResource(R.string.config_backup_confirm_export_xlsx_title)
     val confirmExportXlsxText = stringResource(R.string.config_backup_confirm_export_xlsx_text)
+    val confirmExportConfigTitle = stringResource(R.string.config_backup_confirm_export_config_title)
+    val confirmExportConfigText = stringResource(R.string.config_backup_confirm_export_config_text)
 
     AppScreenContainer {
         SectionTitle(
@@ -223,6 +228,21 @@ fun BackupSettings(
                     val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
                     onRequestConfirm(confirmExportXlsxTitle, confirmExportXlsxText.format(destMsg)) {
                         exportOrdersXlsxLauncher.launch("onlytechtake-commesse.xlsx")
+                    }
+                },
+            )
+
+            Spacer(Modifier.height(RepairAppSpacing.cardGap))
+
+            AppButton(
+                text = stringResource(R.string.config_backup_export_config),
+                size = AppButtonSize.Compact,
+                variant = AppButtonVariant.Ghost,
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
+                    onRequestConfirm(confirmExportConfigTitle, confirmExportConfigText.format(destMsg)) {
+                        exportConfigLauncher.launch("onlytechtake-config.json")
                     }
                 },
             )

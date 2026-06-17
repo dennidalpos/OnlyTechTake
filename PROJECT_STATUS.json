@@ -9,8 +9,7 @@
       "Dentro un blocco rispettare recommended_batch_size.",
       "I blocchi con schema_guarded=true richiedono approvazione per modifiche Room/DATABASE_VERSION.",
       "Aggiornare questo file rimuovendo i residui chiusi dopo ogni sessione."
-    ],
-    "default_next_block": "B01"
+    ]
   },
   "todos": [
     {
