@@ -202,26 +202,52 @@ fun QuickActions(
                             )
                         }
                     } else {
-                        AppTextField(
-                            value = customerSearchQuery,
-                            onValueChange = { query ->
-                                updateDraft { draftState ->
-                                    draftState.copy(
-                                        selectedCustomerId = null,
-                                        selectedCustomerLabel = null,
-                                        showNewCustomerForm = false,
-                                    )
-                                }
-                                viewModel.setCustomerSearchQuery(query)
-                            },
-                            label = stringResource(R.string.intake_search_customer),
-                            singleLine = true,
-                            imeAction = ImeAction.Search,
-                            keyboardActions = doneAction,
-                            testTag = RepairAppTestTags.NewOrderCustomerSearchField,
-                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap)
+                        ) {
+                            AppTextField(
+                                modifier = Modifier.weight(1f),
+                                value = customerSearchQuery,
+                                onValueChange = { query ->
+                                    updateDraft { draftState ->
+                                        draftState.copy(
+                                            selectedCustomerId = null,
+                                            selectedCustomerLabel = null,
+                                            showNewCustomerForm = false,
+                                        )
+                                    }
+                                    viewModel.setCustomerSearchQuery(query)
+                                },
+                                label = stringResource(R.string.intake_search_customer),
+                                singleLine = true,
+                                imeAction = ImeAction.Search,
+                                keyboardActions = doneAction,
+                                testTag = RepairAppTestTags.NewOrderCustomerSearchField,
+                            )
+
+                            if (!draft.showNewCustomerForm) {
+                                AppButton(
+                                    text = stringResource(R.string.intake_insert_new_customer),
+                                    variant = AppButtonVariant.Primary,
+                                    size = AppButtonSize.Compact,
+                                    testTag = RepairAppTestTags.NewOrderInsertCustomerButton,
+                                    onClick = {
+                                        updateDraft {
+                                            it.copy(
+                                                selectedCustomerId = null,
+                                                selectedCustomerLabel = null,
+                                                showNewCustomerForm = true,
+                                            )
+                                        }
+                                        viewModel.setCustomerSearchQuery("")
+                                    },
+                                )
+                            }
+                        }
                         
-                        if (!draft.showNewCustomerForm) {
+                        if (!draft.showNewCustomerForm && customerSearchQuery.isNotBlank()) {
                             if (customerSuggestions.isNotEmpty()) {
                                 customerSuggestions.take(3).forEach { customer ->
                                     CustomerSuggestionCard(
@@ -243,23 +269,6 @@ fun QuickActions(
                                     )
                                 }
                             }
-                            
-                            AppButton(
-                                text = stringResource(R.string.intake_insert_new_customer),
-                                variant = AppButtonVariant.Ghost,
-                                size = AppButtonSize.Compact,
-                                testTag = RepairAppTestTags.NewOrderInsertCustomerButton,
-                                onClick = {
-                                    updateDraft {
-                                        it.copy(
-                                            selectedCustomerId = null,
-                                            selectedCustomerLabel = null,
-                                            showNewCustomerForm = true,
-                                        )
-                                    }
-                                    viewModel.setCustomerSearchQuery("")
-                                },
-                            )
                         }
                     }
                     

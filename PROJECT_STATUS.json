@@ -13,6 +13,25 @@
   },
   "todos": [
     {
+      "block_id": "B10",
+      "title": "Update Demo Assets and Screenshots",
+      "priority": "P2",
+      "complexity": "low",
+      "status": "open",
+      "recommended_batch_size": 1,
+      "why_this_block": "UI changes in Customer Panel and New Order wizard require updated screenshots and demo media for documentation and store listings.",
+      "items": [
+        {
+          "priority": "P2",
+          "summary": "Aggiornare screenshot e video demo seguendo docs\\DEMO_ASSET_WORKFLOW.md per riflettere la nuova posizione del pulsante 'Nuovo Cliente' e il comportamento della ricerca.",
+          "refs": [
+            "docs/DEMO_ASSET_WORKFLOW.md"
+          ],
+          "completion_criteria": "Nuovi asset generati e validati."
+        }
+      ]
+    },
+    {
       "block_id": "B09",
       "title": "Schema Room e indici",
       "priority": "P2",

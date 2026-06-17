@@ -164,6 +164,7 @@
     <string name="customer_edit">Modifica cliente</string>
     <string name="customer_recent">Clienti recenti</string>
     <string name="customer_search_results">Risultati ricerca</string>
+    <string name="customer_search_hint">Inizia a digitare per cercare un cliente…</string>
     <string name="customer_no_results">Nessun cliente trovato per questa ricerca.</string>
     <string name="customer_save">Salva cliente</string>
     <string name="customer_update">Aggiorna cliente</string>

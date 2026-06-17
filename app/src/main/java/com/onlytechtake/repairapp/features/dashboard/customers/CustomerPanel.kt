@@ -299,10 +299,20 @@ private fun CustomerListContent(
     AppScreenContainer(scrollable = false) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
         ) {
-            SectionTitle(stringResource(R.string.customer_title))
+            AppTextField(
+                modifier = Modifier.weight(1f),
+                value = searchQuery,
+                onValueChange = viewModel::setSearchQuery,
+                label = stringResource(R.string.customer_search_label),
+                singleLine = true,
+                imeAction = ImeAction.Search,
+                keyboardType = KeyboardType.Text,
+                capitalization = KeyboardCapitalization.Words,
+                keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
+            )
             AppButton(
                 text = stringResource(R.string.customer_new),
                 onClick = onNewCustomer,
@@ -312,36 +322,33 @@ private fun CustomerListContent(
             )
         }
 
-        Spacer(Modifier.height(RepairAppSpacing.cardGap))
-
-        AppTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = searchQuery,
-            onValueChange = viewModel::setSearchQuery,
-            label = stringResource(R.string.customer_search_label),
-            singleLine = true,
-            imeAction = ImeAction.Search,
-            keyboardType = KeyboardType.Text,
-            capitalization = KeyboardCapitalization.Words,
-            keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
-        )
-
-        Spacer(Modifier.height(RepairAppSpacing.sectionGap))
-        SectionTitle(if (searchQuery.isBlank()) stringResource(R.string.customer_recent) else stringResource(R.string.customer_search_results))
-        
-        LazyColumn(
-            modifier = Modifier.weight(1f).testTag("customer_list"),
-            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
-            contentPadding = PaddingValues(vertical = RepairAppSpacing.compactGap)
-        ) {
-            if (customers.isEmpty()) {
-                item {
-                    CustomerEmptyState(hasQuery = searchQuery.isNotBlank(), onNewCustomer = onNewCustomer)
+        if (searchQuery.isNotBlank()) {
+            Spacer(Modifier.height(RepairAppSpacing.sectionGap))
+            SectionTitle(stringResource(R.string.customer_search_results))
+            
+            LazyColumn(
+                modifier = Modifier.weight(1f).testTag("customer_list"),
+                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
+                contentPadding = PaddingValues(vertical = RepairAppSpacing.compactGap)
+            ) {
+                if (customers.isEmpty()) {
+                    item {
+                        CustomerEmptyState(hasQuery = true, onNewCustomer = onNewCustomer)
+                    }
+                } else {
+                    items(customers, key = { it.id }) { customer ->
+                        CustomerCard(customer = customer, onClick = { onCustomerClick(customer) })
+                    }
                 }
-            } else {
-                items(customers, key = { it.id }) { customer ->
-                    CustomerCard(customer = customer, onClick = { onCustomerClick(customer) })
-                }
+            }
+        } else {
+            Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                Text(
+                    text = stringResource(R.string.customer_search_hint),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.outline,
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }
