@@ -3,33 +3,28 @@
 **App Name:** OnlyTechTake
 **Short Description:** Professional repair management for smartphones, PCs, and tablets.
 **Full Description:**
-OnlyTechTake is a local Android repair management app for repair shops. Designed for technicians and shop owners, it helps track a repair from intake to diagnosis, work in progress, and delivery.
+OnlyTechTake is a "local-first" Android repair management app for tech shops. Designed for technicians and shop owners, it helps you track the entire lifecycle of a repair: from intake to diagnosis and final delivery.
 
-Forget paper forms and clutter: with OnlyTechTake, you have everything under control on your Android device.
+Forget paper forms and clutter: with OnlyTechTake, you have everything under control on your Android device, with no constant internet connection required.
 
 **Key Features:**
-- **Order Management:** Create and track every repair from "Open" to "Closed," including diagnosis and work-in-progress stages.
-- **Customer Database:** Store your customers' data locally (individuals and businesses) for quick access and effective communication.
-- **Digital Signature:** Capture the customer's signature directly on the screen for privacy acceptance and repair terms.
-- **Photo Documentation:** Take and attach photos of incoming devices to document their condition and any detected damage.
-- **WhatsApp & PDF:** Prepare pre-set WhatsApp messages for manual sending and generate order summary PDF files.
-- **Category Catalog:** Customize repair types (Smartphone, Notebook, Console, etc.) for precise categorization.
-- **Full Local Backup:** Create ZIP backups through Android's document picker and save them to local storage or an installed document provider.
+- **Order Management:** Track every repair with custom statuses (Open, Diagnosis, In Progress, Closed).
+- **Customer Database:** Secure local CRM to manage contacts, privacy consent, and repair history.
+- **Digital Signature:** Capture customer signatures directly on screen for terms of service acceptance.
+- **Photo Documentation:** Take and attach photos of incoming devices to document their condition.
+- **WhatsApp & PDF:** Generate ready-to-send WhatsApp messages and professional PDF reports.
+- **Backup & Export:** Create encrypted ZIP backups and export data to XLSX for your accounting.
 
-OnlyTechTake works locally: it does not require a proprietary backend and can be used without a constant internet connection.
+**Why choose OnlyTechTake:**
+1. **Total Privacy:** Data stays only on your device. No mandatory cloud storage.
+2. **Guided Workflow:** From intake to return, everything managed in one app.
+3. **Fast Communication:** Speed up customer contact with ready-to-use templates.
+4. **Security:** Encrypted local database (SQLCipher) for maximum data protection.
 
-Optimize your workflow, improve customer communication, and give a professional touch to your shop with OnlyTechTake!
-
-**5 Value Points:**
-1. Complete repair workflow management.
-2. Signature and photo capture for maximum legal protection.
-3. Fast communication via WhatsApp and PDF reports.
-4. Local-first operation for maximum data privacy.
-5. Manual ZIP/XLSX backups, with optional encryption where supported by the app.
+Optimize your lab and give a professional touch to your shop with OnlyTechTake!
 
 **ASO Keywords:**
 smartphone repair, shop management, technical assistance, pc repair, repair tracking, lab software, work orders, tablet assistance, console repair, digital signature.
 
 **Recommended Category:** Productivity / Business.
-**Target Users:** Owners of electronic repair shops, hardware technicians, computer stores.
-**Promotional Text:** Transform your lab with OnlyTechTake: the all-in-one app to manage repairs, customers, and documents with a professional touch.
+**Promotional Text:** Transform your lab with OnlyTechTake: the all-in-one app to manage repairs, customers, and documents with total privacy.

@@ -3,33 +3,28 @@
 **Nome app:** OnlyTechTake
 **Descrizione breve:** Gestione riparazioni professionale per smartphone, PC e tablet.
 **Descrizione completa:**
-OnlyTechTake è un gestionale Android locale per laboratori di riparazione. Progettata per tecnici e negozianti, l'app aiuta a seguire il ciclo di vita di una riparazione dal banco alla diagnosi, alla lavorazione e alla consegna.
+OnlyTechTake è il gestionale Android "local-first" per laboratori di riparazione. Progettata per tecnici e negozianti, l'app permette di tracciare il ciclo di vita di ogni riparazione: dall'accettazione alla diagnosi, fino alla consegna.
 
-Dimentica i fogli di carta e il disordine: con OnlyTechTake hai tutto sotto controllo sul tuo dispositivo Android.
+Dimentica i fogli di carta e il disordine: con OnlyTechTake hai tutto sotto controllo sul tuo dispositivo Android, senza bisogno di connessione internet costante.
 
 **Funzionalità principali:**
-- **Gestione Commesse:** Crea e segui ogni riparazione dallo stato di "Aperta" fino alla chiusura, passando per diagnosi e lavorazione.
-- **Anagrafica Clienti:** Archivia localmente i dati dei tuoi clienti (privati e aziende) per un rapido accesso e comunicazioni efficaci.
-- **Firma Digitale:** Acquisisci la firma del cliente direttamente sullo schermo per l'accettazione della privacy e delle condizioni di riparazione.
-- **Documentazione Fotografica:** Scatta e allega foto dei dispositivi in entrata per documentare lo stato estetico e i danni riscontrati.
-- **WhatsApp & PDF:** Prepara messaggi WhatsApp preimpostati per invio manuale e genera PDF di riepilogo della commessa.
-- **Catalogo Categorie:** Personalizza i tipi di riparazione (Smartphone, Notebook, Console, ecc.) per una catalogazione precisa.
-- **Backup Locale Completo:** Crea backup ZIP tramite il selettore documenti Android, salvandoli su memoria locale o su un provider documenti installato.
+- **Gestione Commesse:** Traccia ogni riparazione con stati personalizzati (Aperta, Diagnosi, In Lavorazione, Chiusa).
+- **Anagrafica Clienti:** Database locale sicuro per gestire contatti, privacy e storico riparazioni.
+- **Firma Digitale:** Acquisisci la firma del cliente direttamente sullo schermo per l'accettazione dei termini di servizio.
+- **Documentazione Fotografica:** Scatta e allega foto dei dispositivi in entrata per documentarne lo stato estetico.
+- **WhatsApp & PDF:** Genera messaggi WhatsApp pronti per l'invio manuale e report PDF professionali.
+- **Backup e Export:** Crea backup ZIP cifrati e esporta i dati in formato XLSX per la tua contabilità.
 
-OnlyTechTake funziona in modalità locale: non richiede un backend proprietario e può essere usata anche senza connessione internet costante.
+**Perché scegliere OnlyTechTake:**
+1. **Privacy Totale:** I dati risiedono solo sul tuo dispositivo. Nessun cloud obbligatorio.
+2. **Workflow Guidato:** Dalla presa in carico alla riconsegna, tutto in un'unica app.
+3. **Comunicazioni Rapide:** Velocizza il contatto con il cliente tramite template pronti.
+4. **Sicurezza:** Database locale cifrato (SQLCipher) per la massima tutela delle informazioni.
 
-Ottimizza il tuo flusso di lavoro, migliora la comunicazione con i clienti e dai un tocco professionale al tuo negozio con OnlyTechTake!
-
-**5 Punti di valore:**
-1. Gestione completa del workflow di riparazione.
-2. Acquisizione firma e foto per massima tutela legale.
-3. Comunicazioni veloci via WhatsApp e report PDF.
-4. Funzionamento locale per la massima privacy dei dati.
-5. Backup manuali ZIP/XLSX, con cifratura opzionale dove supportata dall'app.
+Ottimizza il tuo laboratorio e dai un tocco professionale al tuo negozio con OnlyTechTake!
 
 **Keyword ASO:**
 riparazione smartphone, gestione negozio, assistenza tecnica, riparazione pc, gestione riparazioni, software laboratorio, commesse lavoro, assistenza tablet, riparazione console, firma digitale.
 
-**Categoria consigliata:** Produttività / Business.
-**Target utenti:** Titolari di laboratori di riparazione elettronica, tecnici hardware, negozi di informatica.
-**Testo promozionale:** Trasforma il tuo laboratorio con OnlyTechTake: l'app all-in-one per gestire riparazioni, clienti e documenti con un tocco di professionalità.
+**Categoria:** Produttività / Business.
+**Testo promozionale:** Trasforma il tuo laboratorio con OnlyTechTake: l'app all-in-one per gestire riparazioni, clienti e documenti in totale privacy.

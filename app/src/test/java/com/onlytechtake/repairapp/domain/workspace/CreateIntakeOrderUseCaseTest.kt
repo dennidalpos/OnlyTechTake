@@ -51,6 +51,7 @@ class CreateIntakeOrderUseCaseTest {
         val orderRepository = mockk<OrderWorkflowRepository>()
         val orderMediaRepository = mockk<OrderMediaRepository>()
         val signatureRepository = mockk<SignatureRepository>()
+        coEvery { orderRepository.countAllOrders() } returns 0
         coEvery { customerRepository.save(actor, newCustomer) } returns Result.success(customer)
         coEvery {
             orderRepository.createOrder(

@@ -1,14 +1,11 @@
 # Informativa sulla Privacy (Bozza)
 
-**Ultimo aggiornamento:** [DATA]
+**Ultimo aggiornamento:** 17 Giugno 2026
 
-L\'applicazione **OnlyTechTake** (di seguito "l\'App") è progettata per essere utilizzata in modalità locale ("Local-first"). Questa Informativa sulla Privacy descrive come i dati vengono gestiti all\'interno dell\'App.
+L'applicazione **OnlyTechTake** (di seguito "l'App") è progettata per essere utilizzata in modalità locale ("Local-first"). Questa Informativa sulla Privacy descrive come i dati vengono gestiti all'interno dell'App.
 
 ## 1. Titolare del Trattamento
-Il trattamento dei dati avviene sotto la responsabilità dell\'utilizzatore dell\'App (il titolare del negozio o laboratorio di riparazioni).
-**[NOME AZIENDA / TITOLARE]**
-**[INDIRIZZO]**
-**[EMAIL DI CONTATTO]**
+Il trattamento dei dati avviene sotto la responsabilità dell'utilizzatore dell'App (il titolare del negozio o laboratorio di riparazioni). L'utente è tenuto a inserire i propri riferimenti legali all'interno della configurazione dell'app se richiesto per le stampe, e a rendere disponibile questa informativa ai propri clienti.
 
 ## 2. Tipologia di Dati Trattati
 L\'App permette l\'inserimento e la gestione dei seguenti dati:

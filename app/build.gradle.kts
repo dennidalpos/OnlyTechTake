@@ -114,7 +114,6 @@ android {
         compose = true
         resValues = true
     }
-
 }
 
 kotlin {
