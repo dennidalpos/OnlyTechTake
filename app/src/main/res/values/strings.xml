@@ -75,6 +75,10 @@
     <string name="dashboard_home">Home</string>
     <string name="dashboard_new">Nuova</string>
     <string name="dashboard_customers">Clienti</string>
+    <string name="dashboard_orders">Commesse</string>
+    <string name="dashboard_config">Setup</string>
+
+    <string name="logout">Esci</string>
 
     <string name="dashboard_role_admin">Admin</string>
     <string name="dashboard_role_operator">Operatore</string>
@@ -163,6 +167,7 @@
     <string name="customer_confirm_update_title">Aggiornare cliente?</string>
     <string name="customer_confirm_save_text">Salvare il cliente?</string>
     <string name="customer_confirm_update_text">Aggiornare i dati del cliente selezionato?</string>
+    <string name="customer_select">Seleziona cliente</string>
     <string name="confirm">Conferma</string>
     <string name="customer_select_detail_hint">Seleziona un cliente per vedere i dettagli</string>
     <string name="customer_detail_close">Chiudi</string>
@@ -219,6 +224,7 @@
 
 
     <string name="orders_filter_title">Filtri</string>
+    <string name="orders_title">Commesse</string>
     <string name="orders_empty_filter">Nessuna commessa per questo filtro.</string>
 
     <string name="orders_customer_unavailable">Cliente non disponibile</string>
