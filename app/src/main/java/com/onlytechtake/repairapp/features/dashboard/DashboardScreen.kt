@@ -1,5 +1,7 @@
 package com.onlytechtake.repairapp.features.dashboard
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,6 +43,11 @@ import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.domain.models.AppSummary
 import com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
+
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
+import com.onlytechtake.repairapp.BuildConfig
 
 @Composable
 fun DashboardRoute(
@@ -102,6 +109,26 @@ fun DashboardScreen(
     var pendingRoute by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf<String?>(null) }
     var showUnsavedChangesDialog by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(value = false) }
 
+    fun isTabSelected(itemRoute: String, currentRoute: String?): Boolean {
+        if (currentRoute == null) return false
+        val baseRoute = itemRoute.split("?")[0]
+        val baseCurrent = currentRoute.split("?")[0]
+        if (baseRoute == baseCurrent) return true
+        return when (baseRoute) {
+            DashboardRoutes.ORDERS.split("?")[0] -> baseCurrent == DashboardRoutes.ORDER_DETAIL.split("?")[0]
+            else -> false
+        }
+    }
+
+    BackHandler(enabled = currentDestination != DashboardRoutes.HOME) {
+        if (isFormDirty) {
+            pendingRoute = null // Pop back
+            showUnsavedChangesDialog = true
+        } else {
+            navController.popBackStack()
+        }
+    }
+
     fun performNavigation(route: String) {
         navController.navigate(route) {
             popUpTo(DashboardRoutes.HOME) { saveState = true }
@@ -122,6 +149,7 @@ fun DashboardScreen(
                         AppIconButton(
                             modifier = Modifier.testTag(RepairAppTestTags.ConfigBackButton),
                             imageVector = if (isCloseIcon) Icons.Default.Close else Icons.AutoMirrored.Filled.ArrowBack,
+                            tint = if (isCloseIcon) Color.Unspecified else MaterialTheme.colorScheme.primary,
                             contentDescription = stringResource(
                                 if (isCloseIcon) R.string.content_description_close else R.string.content_description_back,
                             ),
@@ -145,7 +173,9 @@ fun DashboardScreen(
                             ),
                             containerColor = if (isAdminUser) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer,
                             contentColor = if (isAdminUser) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer,
-                            modifier = Modifier.padding(end = RepairAppSpacing.compactGap)
+                            modifier = Modifier
+                                .padding(end = RepairAppSpacing.compactGap)
+                                .basicMarquee()
                         )
                     }
                     AppButton(
@@ -164,24 +194,35 @@ fun DashboardScreen(
                     modifier = Modifier.testTag(RepairAppTestTags.DashboardTabs)
                 ) {
                     items.forEach { item ->
-                        val selected = currentDestination == item.route
+                        val selected = isTabSelected(item.route, currentDestination)
                         NavigationBarItem(
                             modifier = Modifier.testTag(item.testTag),
-                            icon = { Icon(item.icon, contentDescription = null) },
+                            icon = { 
+                                Icon(
+                                    imageVector = item.icon, 
+                                    contentDescription = null,
+                                    tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                                ) 
+                            },
                             label = { 
                                 Text(
                                     text = stringResource(item.labelRes),
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
-                                    softWrap = false
+                                    softWrap = false,
+                                    color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                                 ) 
                             },
                             selected = selected,
                             onClick = {
-                                if (!selected) {
-                                    if (isFormDirty) {
-                                        pendingRoute = item.route
-                                        showUnsavedChangesDialog = true
+                                if (isFormDirty) {
+                                    pendingRoute = item.route
+                                    showUnsavedChangesDialog = true
+                                } else {
+                                    if (selected) {
+                                        if (currentDestination != item.route) {
+                                            performNavigation(item.route)
+                                        }
                                     } else {
                                         performNavigation(item.route)
                                     }
@@ -207,17 +248,32 @@ fun DashboardScreen(
                 ) {
                     Spacer(Modifier.weight(1f))
                     items.forEach { item ->
-                        val selected = currentDestination == item.route
+                        val selected = isTabSelected(item.route, currentDestination)
                         NavigationRailItem(
                             modifier = Modifier.testTag(item.testTag),
-                            icon = { Icon(item.icon, contentDescription = null) },
-                            label = { Text(stringResource(item.labelRes)) },
+                            icon = { 
+                                Icon(
+                                    imageVector = item.icon, 
+                                    contentDescription = null,
+                                    tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                                ) 
+                            },
+                            label = { 
+                                Text(
+                                    text = stringResource(item.labelRes),
+                                    color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                                ) 
+                            },
                             selected = selected,
                             onClick = {
-                                if (!selected) {
-                                    if (isFormDirty) {
-                                        pendingRoute = item.route
-                                        showUnsavedChangesDialog = true
+                                if (isFormDirty) {
+                                    pendingRoute = item.route
+                                    showUnsavedChangesDialog = true
+                                } else {
+                                    if (selected) {
+                                        if (currentDestination != item.route) {
+                                            performNavigation(item.route)
+                                        }
                                     } else {
                                         performNavigation(item.route)
                                     }
@@ -286,6 +342,23 @@ fun DashboardScreen(
                 )
             }
         )
+    }
+
+    if (BuildConfig.IS_DEMO_VERSION) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(0.08f),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = stringResource(R.string.demo_version_banner),
+                style = MaterialTheme.typography.displayLarge,
+                color = Color.Gray,
+                modifier = Modifier.rotate(-45f),
+                softWrap = false
+            )
+        }
     }
 }
 

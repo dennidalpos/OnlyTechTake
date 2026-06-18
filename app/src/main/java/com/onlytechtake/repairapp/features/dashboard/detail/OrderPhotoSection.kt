@@ -4,6 +4,12 @@ import android.graphics.Bitmap
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AttachFile
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.PhotoCamera
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -65,11 +71,11 @@ fun OrderPhotoSection(
                                 verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
                             ) {
                                 Text(media.fileName, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
-                                AppButton(
-                                    text = stringResource(R.string.content_description_delete),
-                                    variant = AppButtonVariant.Ghost,
-                                    size = AppButtonSize.Compact,
-                                    onClick = { deleteMedia = media }
+                                AppIconButton(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = stringResource(R.string.content_description_delete),
+                                    onClick = { deleteMedia = media },
+                                    tint = MaterialTheme.colorScheme.error
                                 )
                             }
                         }
@@ -78,20 +84,27 @@ fun OrderPhotoSection(
             }
         }
 
-        AppButton(
-            text = stringResource(R.string.intake_media_take_photo),
-            variant = AppButtonVariant.Secondary,
-            size = AppButtonSize.Compact,
-            onClick = { showCamera = true },
-            modifier = Modifier.fillMaxWidth()
-        )
-        AppButton(
-            text = stringResource(R.string.intake_media_attach_file),
-            variant = AppButtonVariant.Ghost,
-            size = AppButtonSize.Compact,
-            onClick = { attachmentLauncher.launch("*/*") },
-            modifier = Modifier.fillMaxWidth()
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.actionGap)
+        ) {
+            AppButton(
+                modifier = Modifier.weight(1f),
+                text = stringResource(R.string.intake_media_take_photo),
+                variant = AppButtonVariant.Secondary,
+                size = AppButtonSize.Compact,
+                leadingIcon = Icons.Default.PhotoCamera,
+                onClick = { showCamera = true },
+            )
+            AppButton(
+                modifier = Modifier.weight(1f),
+                text = stringResource(R.string.intake_media_attach_file),
+                variant = AppButtonVariant.Ghost,
+                size = AppButtonSize.Compact,
+                leadingIcon = Icons.Default.AttachFile,
+                onClick = { attachmentLauncher.launch("*/*") },
+            )
+        }
     }
 
     if (showCamera) {

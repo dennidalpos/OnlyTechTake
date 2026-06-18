@@ -203,6 +203,9 @@ interface UserDao {
 
     @Query("SELECT COUNT(*) FROM users WHERE role = :role AND active = 1")
     suspend fun countActiveByRole(role: UserRole): Int
+
+    @Query("DELETE FROM users WHERE id = :id")
+    suspend fun deleteById(id: String): Int
 }
 
 @Dao

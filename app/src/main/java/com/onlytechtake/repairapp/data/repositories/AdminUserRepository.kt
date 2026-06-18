@@ -136,6 +136,18 @@ class AdminUserRepository(
             audit(actor.id, AuditAction.USER_UPDATED, """{"userId":"$userId","active":$active}""", now)
         }
 
+    suspend fun deleteUser(actor: AuthenticatedUser, userId: String): Result<Unit> =
+        runCatching {
+            PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
+            val existing = requireNotNull(userDao.findById(userId)) { "Utente non trovato" }
+            if (existing.role == UserRole.ADMIN) {
+                throw IllegalStateException("L'account Admin non può essere eliminato")
+            }
+
+            userDao.deleteById(userId)
+            audit(actor.id, AuditAction.USER_UPDATED, """{"userId":"$userId","action":"deleted"}""", clockMillis())
+        }
+
     suspend fun setPermissions(actor: AuthenticatedUser, userId: String, permissions: Set<UserPermission>): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)

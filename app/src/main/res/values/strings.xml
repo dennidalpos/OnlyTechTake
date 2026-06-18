@@ -353,6 +353,8 @@
     <string name="admin_user_deactivate">Disattiva</string>
     <string name="admin_confirm_status_title">Cambiare stato utente?</string>
     <string name="admin_confirm_status_text">Lo stato di %s verra\' aggiornato.</string>
+    <string name="admin_confirm_delete_user_title">Eliminare operatore?</string>
+    <string name="admin_confirm_delete_user_text">L\'operatore %s verra\' rimosso permanentemente dal sistema. Non sara\' piu\' possibile recuperare le sue credenziali, ma le commesse da lui gestite resteranno in archivio.</string>
     <string name="admin_reset_password">Reset password</string>
     <string name="admin_confirm_reset_title">Resettare password?</string>
     <string name="admin_confirm_reset_text">La password temporanea inserita verra\' salvata per %s.</string>

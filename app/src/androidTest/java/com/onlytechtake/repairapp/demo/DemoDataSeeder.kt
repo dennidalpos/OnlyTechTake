@@ -5,24 +5,11 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
-import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
-import com.onlytechtake.repairapp.data.local.entities.CustomerType
-import com.onlytechtake.repairapp.data.local.entities.MessageChannel
-import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderPriority
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
-import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
-import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
-import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
-import com.onlytechtake.repairapp.data.local.entities.TimelineEventType
-import com.onlytechtake.repairapp.data.local.entities.UserEntity
-import com.onlytechtake.repairapp.data.local.entities.UserPermission
-import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.data.local.entities.*
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import java.io.File
 import java.io.FileOutputStream
@@ -63,26 +50,31 @@ object DemoDataSeeder {
                 updatedAt = now,
             ),
         )
-        database.userDao().upsert(
-            UserEntity(
-                id = DEMO_OPERATOR_ID,
-                displayName = "Operatore Banco",
-                username = DEMO_OPERATOR_USERNAME,
-                passwordHash = operatorHash.hash,
-                passwordSalt = operatorHash.salt,
-                role = UserRole.OPERATOR,
-                permissions = setOf(
-                    UserPermission.CREATE_ORDERS,
-                    UserPermission.EDIT_OWN_ORDERS,
-                    UserPermission.CLOSE_ORDERS,
-                    UserPermission.MANAGE_CUSTOMERS,
-                    UserPermission.MANAGE_PAYMENTS
+
+        // Only seed operator if NOT in demo version
+        if (!BuildConfig.IS_DEMO_VERSION) {
+            database.userDao().upsert(
+                UserEntity(
+                    id = DEMO_OPERATOR_ID,
+                    displayName = "Operatore Banco",
+                    username = DEMO_OPERATOR_USERNAME,
+                    passwordHash = operatorHash.hash,
+                    passwordSalt = operatorHash.salt,
+                    role = UserRole.OPERATOR,
+                    permissions = setOf(
+                        UserPermission.CREATE_ORDERS,
+                        UserPermission.EDIT_OWN_ORDERS,
+                        UserPermission.CLOSE_ORDERS,
+                        UserPermission.MANAGE_CUSTOMERS,
+                        UserPermission.MANAGE_PAYMENTS
+                    ),
+                    active = true,
+                    createdAt = now,
+                    updatedAt = now,
                 ),
-                active = true,
-                createdAt = now,
-                updatedAt = now,
-            ),
-        )
+            )
+        }
+
         database.orderCategoryDao().upsertAll(
             listOf(
                 OrderCategoryEntity(
@@ -160,6 +152,10 @@ object DemoDataSeeder {
                 updatedAt = now,
             ),
         )
+
+        // Assign to Admin in Demo version, otherwise to Operator
+        val assignedUserId = if (BuildConfig.IS_DEMO_VERSION) DEMO_ADMIN_ID else DEMO_OPERATOR_ID
+        
         database.repairOrderDao().upsert(
             RepairOrderEntity(
                 id = DEMO_ORDER_ID,
@@ -169,8 +165,8 @@ object DemoDataSeeder {
                 categoryId = "demo-cat-pavilion-15",
                 status = OrderStatus.OPEN,
                 priority = OrderPriority.NORMAL,
-                assignedToUserId = DEMO_OPERATOR_ID,
-                createdByUserId = DEMO_OPERATOR_ID,
+                assignedToUserId = assignedUserId,
+                createdByUserId = assignedUserId,
                 description = "Notebook ricevuto al banco: non si accende dopo caduta accidentale.",
                 internalNotes = "Controllare alimentatore, connettore di ricarica e scheda madre.",
                 estimateAmountCents = null,
@@ -199,7 +195,7 @@ object DemoDataSeeder {
                 sizeBytes = mediaPath.length(),
                 width = 1280,
                 height = 720,
-                createdByUserId = DEMO_OPERATOR_ID,
+                createdByUserId = assignedUserId,
                 capturedAt = now + 1_000L,
                 createdAt = now + 1_000L,
             ),
@@ -228,7 +224,7 @@ object DemoDataSeeder {
                 sizeBytes = signaturePath.length(),
                 width = 1280,
                 height = 720,
-                createdByUserId = DEMO_OPERATOR_ID,
+                createdByUserId = assignedUserId,
                 signedAt = now + 2_000L,
                 createdAt = now + 2_000L,
             ),
@@ -248,10 +244,11 @@ object DemoDataSeeder {
                 customerFeedback = null,
                 customerFeedbackNote = null,
                 customerFeedbackAt = null,
-                createdByUserId = DEMO_OPERATOR_ID,
+                createdByUserId = assignedUserId,
                 createdAt = now,
             ),
         )
+
 
         listOf(
             DemoTemplate("privacy_breve", "Informativa privacy", "Legale"),

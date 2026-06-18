@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
@@ -87,11 +88,19 @@ fun BackupSettings(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(stringResource(R.string.config_backup_reminder_enabled), style = MaterialTheme.typography.bodyMedium)
+                        Text(
+                            text = stringResource(R.string.config_backup_reminder_enabled),
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.weight(1f),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
                         Switch(
                             checked = backupReminderSettings.enabled,
                             onCheckedChange = viewModel::setBackupReminderEnabled,
-                            modifier = Modifier.testTag(RepairAppTestTags.ConfigBackupReminderSwitch),
+                            modifier = Modifier
+                                .padding(start = RepairAppSpacing.compactGap)
+                                .testTag(RepairAppTestTags.ConfigBackupReminderSwitch),
                         )
                     }
                     AppTextField(

@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -90,7 +90,7 @@ fun OrderDocumentSection(
                         }
                         Row {
                             AppIconButton(
-                                imageVector = Icons.Default.Info,
+                                imageVector = Icons.Default.Share,
                                 contentDescription = stringResource(R.string.order_share),
                                 onClick = { onShareDocument(doc.id) },
                                 tint = MaterialTheme.colorScheme.primary

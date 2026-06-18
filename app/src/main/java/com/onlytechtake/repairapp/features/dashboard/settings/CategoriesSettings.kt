@@ -1,25 +1,34 @@
 package com.onlytechtake.repairapp.features.dashboard.settings
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +46,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.RepairAppShapes
+import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
@@ -125,57 +136,75 @@ fun ColumnScope.CategoriesSettings(
             )
             
             Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
-                AppTextField(
-                    value = searchQuery,
-                    onValueChange = { searchQuery = it },
-                    label = stringResource(R.string.config_category_search_label),
-                    singleLine = true,
-                    trailingIcon = {
-                        if (searchQuery.isNotEmpty()) {
-                            AppIconButton(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = stringResource(R.string.content_description_clear),
-                                onClick = { searchQuery = "" }
-                            )
-                        }
-                    }
-                )
-
-                if (searchQuery.isBlank()) {
-                    CategoryBreadcrumb(categories, currentCategoryParentId)
-                    if (currentCategoryParentId != null) {
-                        ActionRow {
-                            AppButton(
-                                text = stringResource(R.string.config_category_root),
-                                variant = AppButtonVariant.Secondary,
-                                onClick = { openCategoryBranch(null) },
-                            )
-                            currentParent?.parentId?.let { parentId ->
-                                AppButton(
-                                    text = stringResource(R.string.config_category_up),
-                                    variant = AppButtonVariant.Secondary,
-                                    onClick = { openCategoryBranch(parentId) },
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+                ) {
+                    AppTextField(
+                        modifier = Modifier.weight(1f),
+                        value = searchQuery,
+                        onValueChange = { searchQuery = it },
+                        label = stringResource(R.string.config_category_search_label),
+                        singleLine = true,
+                        leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                        trailingIcon = {
+                            if (searchQuery.isNotEmpty()) {
+                                AppIconButton(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = stringResource(R.string.content_description_clear),
+                                    onClick = { searchQuery = "" }
                                 )
-                            } ?: run {
-                                AppButton(
-                                    text = stringResource(R.string.config_category_up),
-                                    variant = AppButtonVariant.Secondary,
-                                    onClick = { openCategoryBranch(null) },
+                            }
+                        }
+                    )
+
+                    if (!showEditCard && searchQuery.isBlank() && isAdmin) {
+                        Surface(
+                            onClick = ::loadNewCategory,
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = RepairAppShapes.button,
+                            modifier = Modifier
+                                .height(56.dp)
+                                .width(56.dp),
+                            tonalElevation = 2.dp
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription = stringResource(R.string.config_category_new_root),
+                                    tint = MaterialTheme.colorScheme.onPrimary
                                 )
                             }
                         }
                     }
                 }
-                
-                if (!showEditCard && searchQuery.isBlank()) {
-                    AppButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = if (currentCategoryParentId == null) stringResource(R.string.config_category_new_root) else stringResource(R.string.config_category_new_sub),
-                        leadingIcon = Icons.Default.Add,
-                        variant = AppButtonVariant.Primary,
-                        testTag = RepairAppTestTags.ConfigCategoryNewButton,
-                        onClick = ::loadNewCategory
-                    )
+
+                if (searchQuery.isBlank()) {
+                    CategoryBreadcrumb(categories, currentCategoryParentId)
+                    if (currentCategoryParentId != null) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+                        ) {
+                            AppButton(
+                                text = stringResource(R.string.config_category_root),
+                                leadingIcon = Icons.Default.Folder,
+                                variant = AppButtonVariant.Secondary,
+                                size = AppButtonSize.Compact,
+                                modifier = Modifier.weight(1f),
+                                onClick = { openCategoryBranch(null) },
+                            )
+                            AppButton(
+                                text = stringResource(R.string.config_category_up),
+                                leadingIcon = Icons.Default.ArrowUpward,
+                                variant = AppButtonVariant.Secondary,
+                                size = AppButtonSize.Compact,
+                                modifier = Modifier.weight(1f),
+                                onClick = { openCategoryBranch(currentParent?.parentId) },
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -371,5 +400,3 @@ fun ColumnScope.CategoriesSettings(
         }
     }
 }
-
-

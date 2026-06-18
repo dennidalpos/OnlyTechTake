@@ -28,6 +28,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.MainActivity
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
@@ -54,8 +55,9 @@ class SocialStoryDemoScreenshotTest {
             waitForTag(RepairAppTestTags.AuthUsernameField)
             capture(outputDir, "01-login.png")
 
-            loginDemo(DemoDataSeeder.DEMO_OPERATOR_USERNAME)
-            waitForText("Operatore")
+            val username = if (BuildConfig.IS_DEMO_VERSION) DemoDataSeeder.DEMO_ADMIN_USERNAME else DemoDataSeeder.DEMO_OPERATOR_USERNAME
+            loginDemo(username)
+            waitForText(if (BuildConfig.IS_DEMO_VERSION) "Admin" else "Operatore")
             capture(outputDir, "02-dashboard-home.png")
 
             clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)

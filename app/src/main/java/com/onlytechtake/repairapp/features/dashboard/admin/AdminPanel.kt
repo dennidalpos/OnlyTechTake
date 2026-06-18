@@ -4,6 +4,11 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material.icons.filled.Key
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -27,6 +32,7 @@ import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.features.dashboard.common.*
 
 @Composable
@@ -49,8 +55,11 @@ fun AdminPanel(
 
     val confirmCreateTitle = stringResource(R.string.admin_confirm_create_title)
     val confirmCreateText = stringResource(R.string.admin_confirm_create_text)
-    val confirmStatusTitle = stringResource(R.string.admin_confirm_status_title)
-    val confirmStatusTextTemplate = stringResource(R.string.admin_confirm_status_text)
+    val labelActivate = stringResource(R.string.admin_user_activate)
+    val labelDeactivate = stringResource(R.string.admin_user_deactivate)
+    val labelDelete = stringResource(R.string.content_description_delete)
+    val confirmDeleteTitle = stringResource(R.string.admin_confirm_delete_user_title)
+    val confirmDeleteTextTemplate = stringResource(R.string.admin_confirm_delete_user_text)
     val confirmResetTitle = stringResource(R.string.admin_confirm_reset_title)
     val confirmResetTextTemplate = stringResource(R.string.admin_confirm_reset_text)
     val confirmTotalResetTitle = stringResource(R.string.admin_confirm_total_reset_title)
@@ -226,22 +235,53 @@ fun AdminPanel(
                         }
                         
                         if (user.role != UserRole.ADMIN) {
-                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
-                                Text(
-                                    text = if (user.active) stringResource(R.string.admin_user_active) else stringResource(R.string.admin_user_inactive),
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = if (user.active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
-                                )
-                                Spacer(Modifier.weight(1f))
-                                AppButton(
-                                    text = if (user.active) stringResource(R.string.admin_user_deactivate) else stringResource(R.string.admin_user_activate),
-                                    variant = if (user.active) AppButtonVariant.Ghost else AppButtonVariant.Success,
-                                    size = AppButtonSize.Compact,
-                                    onClick = {
-                                        requestConfirm(confirmStatusTitle, confirmStatusTextTemplate.format(user.displayName)) {
-                                            viewModel.setUserActive(user.id, !user.active)
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = RepairAppSpacing.tinyGap),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+                            ) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = if (user.active) stringResource(R.string.admin_user_active) else stringResource(R.string.admin_user_inactive),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = if (user.active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
+                                    )
+                                    Text(
+                                        text = if (user.active) "L'operatore può accedere al sistema" else "L'operatore non può effettuare il login",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                Switch(
+                                    checked = user.active,
+                                    onCheckedChange = { checked ->
+                                        requestConfirm(
+                                            title = if (checked) "$labelActivate?" else "$labelDeactivate?",
+                                            text = if (checked) {
+                                                "Vuoi attivare l'operatore ${user.displayName}? Potrà riprendere a gestire le commesse."
+                                            } else {
+                                                "Vuoi disattivare l'operatore ${user.displayName}? Non potrà più accedere all'app finché non verrà riattivato."
+                                            }
+                                        ) {
+                                            viewModel.setUserActive(user.id, checked)
                                         }
                                     }
+                                )
+                                AppIconButton(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = labelDelete,
+                                    onClick = {
+                                        requestConfirm(
+                                            title = "$labelDelete?",
+                                            text = confirmDeleteTextTemplate.format(user.displayName)
+                                        ) {
+                                            viewModel.deleteUser(user.id)
+                                        }
+                                    },
+                                    tint = MaterialTheme.colorScheme.error
                                 )
                             }
                             
@@ -343,6 +383,7 @@ fun AdminPanel(
                             } else {
                                 resetPasswords[user.id]?.isNotBlank() == true
                             },
+                            leadingIcon = Icons.Default.Key,
                             variant = AppButtonVariant.Secondary,
                             size = AppButtonSize.Compact,
                             modifier = Modifier.align(Alignment.End),
@@ -428,6 +469,7 @@ fun AdminPanel(
                     text = stringResource(R.string.admin_delete_all_orders),
                     enabled = ordersResetConfirmation == "CANCELLA TUTTO",
                     variant = AppButtonVariant.Warning,
+                    leadingIcon = Icons.Default.Delete,
                     testTag = RepairAppTestTags.AdminDeleteAllOrdersButton,
                     onClick = {
                         requestConfirm(
@@ -460,6 +502,7 @@ fun AdminPanel(
                     text = stringResource(R.string.admin_total_reset),
                     enabled = resetConfirmation == "RESET",
                     variant = AppButtonVariant.Danger,
+                    leadingIcon = Icons.Default.DeleteForever,
                     testTag = RepairAppTestTags.AdminTotalResetButton,
                     onClick = {
                         requestConfirm(confirmTotalResetTitle, confirmTotalResetText) {

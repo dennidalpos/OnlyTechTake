@@ -8,12 +8,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.utils.formatFileSize
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 
@@ -46,7 +48,10 @@ fun StorageSettings(
                     
                     LinearProgressIndicator(
                         progress = { usedProgress.toFloat() },
-                        modifier = Modifier.fillMaxWidth().height(RepairAppSpacing.compactGap),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(RepairAppSpacing.tinyGap)
+                            .clip(RepairAppShapes.pill),
                         color = when {
                             freePercentage < 5 -> MaterialTheme.colorScheme.error
                             freePercentage < 15 -> MaterialTheme.colorScheme.tertiary

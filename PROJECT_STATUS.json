@@ -14,135 +14,110 @@
   },
   "todos": [
     {
-      "block_id": "B11",
-      "title": "Pubblicazione Google Play Pro e Demo",
+      "block_id": "B13",
+      "title": "Consolidamento UI/UX post-Audit",
       "priority": "P1",
-      "complexity": "medium",
-      "status": "open",
-      "recommended_batch_size": 1,
-      "identified_residual": "Mancano dati pubblici finali, privacy policy pubblicata, creazione app Play separate, upload AAB firmati e completamento questionari Play Console per Pro e Demo.",
-      "why_this_block": "La pubblicazione Play e' il gate principale prima della distribuzione esterna; richiede azioni manuali owner/Console e verifica su artefatti release firmati.",
+      "complexity": "low",
+      "status": "completed",
+      "identified_residual": "Refactoring UI allineato su tutte le varianti. Risolti problemi di allineamento verticale, rimozione dead space e consolidamento navigazione. Tutti i pulsanti 'Nuovo' accanto alle barre di ricerca sono stati convertiti in icone '+' (simboli) allineate perfettamente in altezza (56dp) tramite IntrinsicSize.Min. Rimosso pulsante duplicato dagli stati vuoti (AppEmptyState) nelle viste principali.",
+      "why_this_block": "Audit e allineamento completati per garantire coerenza visiva e logica operativa prima della produzione degli asset.",
       "plan": [
-        "Finalizzare privacy policy con dati reali del titolare e pubblicarla a URL HTTPS pubblico dedicato alla sola policy.",
-        "Preparare signing release locale senza tracciare segreti e generare AAB Full e Demo.",
-        "Creare due app Play separate con package Pro e Demo corretti e caricare gli AAB firmati in test track.",
-        "Completare App Access, Data Safety, Content Rating, target audience, pricing Pro e app content per entrambe le app.",
-        "Attendere Pre-launch Report e correggere o tracciare solo crash/errori realmente bloccanti."
+        "Rigenerare asset demo (B10) per riflettere la nuova UI consolidata.",
+        "Aggiornare i test strumentati (Kaspresso/Compose) che facevano riferimento a pulsanti con testo 'Nuovo cliente' ora diventati simboli."
       ],
       "items": [
         {
           "priority": "P1",
-          "summary": "Completare privacy policy con dati pubblici reali e URL HTTPS pubblico della sola policy, senza inserire sito sviluppatore.",
-          "refs": [
-            "docs/play-store/PRIVACY_POLICY_IT.md",
-            "docs/play-store/PLAY_CONSOLE_GUIDE_IT.md"
-          ],
-          "completion_criteria": "Privacy policy senza placeholder pubblicata a URL HTTPS reale e inserita in Play Console; campo website sviluppatore lasciato vuoto."
+          "summary": "Uniformità AppTextField (singleLine=true, ellipsis su label).",
+          "completion_criteria": "Tutti i campi dati su riga singola con gestione overflow corretta."
         },
         {
           "priority": "P1",
-          "summary": "Creare due app Play separate e caricare AAB firmati: Pro paid e Demo free.",
-          "refs": [
-            "docs/play-store/PUBLISH_PRO_IT.md",
-            "docs/play-store/PUBLISH_DEMO_IT.md",
-            "app/build.gradle.kts"
-          ],
-          "completion_criteria": "Play Console accetta `app-full-release.aab` per `com.onlytechtake.repairapp` e `app-demo-release.aab` per `com.onlytechtake.repairapp.demo`."
+          "summary": "Conversione pulsanti 'Nuovo' in simboli '+' accanto alla ricerca.",
+          "completion_criteria": "Pulsanti in CustomerPanel, OrdersPanel, CategoriesSettings e TemplatesSettings convertiti in icone allineate 56dp con IntrinsicSize.Min."
         },
         {
           "priority": "P1",
-          "summary": "Completare App content, Data Safety, App Access, Content Rating, pricing Pro a 19,99 EUR e test track richiesti dall'account personale.",
-          "refs": [
-            "docs/release/RELEASE_CHECKLIST.md",
-            "docs/play-store/PLAY_CONSOLE_GUIDE_IT.md"
-          ],
-          "completion_criteria": "App content completo per Pro e Demo, Pre-launch Report senza crash bloccanti e closed testing completato se richiesto da Google per account personale."
-        }
-      ]
-    },
-    {
-      "block_id": "B12",
-      "title": "Baseline runtime su device",
-      "priority": "P1",
-      "complexity": "medium",
-      "status": "open",
-      "recommended_batch_size": 1,
-      "identified_residual": "Mancano metriche runtime p50/p95 su device reale per cold/warm startup, operazioni I/O pesante e generazione PDF su dataset realistico.",
-      "why_this_block": "Prima della pubblicazione servono misure minime ripetibili per distinguere regressioni reali da percezioni soggettive su device.",
-      "plan": [
-        "Selezionare device fisico, build flavor, versione Android e dataset realistico da usare come baseline.",
-        "Misurare cold startup e warm startup con adb o profiler, registrando almeno p50 e p95.",
-        "Misurare operazioni I/O pesante: caricamento liste commesse, export/backup e accesso media su dataset realistico.",
-        "Misurare generazione PDF stato avanzamento con firma/media presenti.",
-        "Correggere regressioni bloccanti emerse oppure aggiungere un residuo prioritizzato con criterio di chiusura misurabile."
-      ],
-      "items": [
+          "summary": "Consolidamento navigazione e BackHandler.",
+          "completion_criteria": "Tasto indietro coerente; freccia TopBar Primary; conferma perdita dati su cambio tab e rinvio alla root della sezione."
+        },
         {
-          "priority": "P1",
-          "summary": "Misurare cold/warm startup, operazioni I/O pesante e generazione PDF su dataset realistico.",
-          "refs": [
-            "scripts\\windows\\check_project.ps1",
-            "scripts\\android\\gradle.ps1",
-            "docs\\release\\RELEASE_CHECKLIST.md"
-          ],
-          "completion_criteria": "Baseline p50/p95 registrata con device, build flavor e dataset usati; regressioni bloccanti corrette o tracciate."
+          "priority": "P2",
+          "summary": "Build e Unit Test di tutte le varianti (Full, Demo, Showcase).",
+          "completion_criteria": "Build Success e 100% Unit Test passati per tutte le varianti."
         }
       ]
     },
     {
       "block_id": "B10",
       "title": "Screenshot e video store Pro/Demo",
-      "priority": "P2",
+      "priority": "P1",
       "complexity": "medium",
       "status": "open",
       "recommended_batch_size": 1,
-      "identified_residual": "La generazione screenshot/video è ora flavor-aware, ma mancano ancora i limiti Demo reali (0 operatori, watermark) e la rigenerazione finale.",
-      "why_this_block": "Gli asset Play devono distinguere Pro e Demo; la Demo ha vincoli visibili e non deve essere presentata come app completa.",
+      "identified_residual": "La nuova UI a simboli, la rimozione dello spazio morto e i nuovi allineamenti invalidano gli asset correnti. Necessaria rigenerazione completa.",
+      "why_this_block": "Gli asset devono riflettere esattamente l'app con la UI consolidata.",
       "plan": [
-        "Aggiornare scenari o seed dove serve per mostrare i limiti Demo reali: 1 commessa, 0 operatori e watermark Demo.",
-        "Rigenerare screenshot e recording Pro/Demo con dati fittizi e senza sito sviluppatore.",
-        "Verificare dimensioni, leggibilita', coerenza dei limiti Demo e assenza di dati personali prima del caricamento Play."
+        "Eseguire scripts\\windows\\create_demo_assets.ps1 per rigenerare screenshot.",
+        "Eseguire scripts\\windows\\record_demo_device.ps1 per i nuovi video."
       ],
       "items": [
         {
-          "priority": "P2",
-          "summary": "Rigenerare screenshot e video Play per Pro e Demo con dati fittizi, senza sito, e con limiti Demo reali.",
+          "priority": "P1",
+          "summary": "Rigenerazione asset store con nuova UI e watermark Demo.",
           "refs": [
-            "reports\\demo-assets",
-            "media\\play-store",
             "docs\\DEMO_ASSET_WORKFLOW.md"
           ],
-          "completion_criteria": "Screenshot e recording Pro/Demo generati, verificati per dimensioni/leggibilita' e coerenti con 1 commessa, 0 operatori e watermark Demo."
+          "completion_criteria": "Asset store rigenerati e verificati con nuovi margini inferiori e icone simboliche."
         }
       ]
     },
     {
-      "block_id": "B09",
-      "title": "Schema Room bloccato",
-      "priority": "P3",
-      "complexity": "approval_required",
-      "status": "blocked_until_owner_order",
+      "block_id": "B11",
+      "title": "Pubblicazione Google Play Pro e Demo",
+      "priority": "P1",
+      "complexity": "medium",
+      "status": "open",
       "recommended_batch_size": 1,
-      "schema_guarded": true,
-      "identified_residual": "L'ordinamento `updatedAt DESC` nelle liste commesse non ha un indice dedicato; qualunque indice persistente richiede ordine esplicito owner perche' lo schema Room resta bloccato su v1.",
-      "why_this_block": "La proposta puo' migliorare query calde, ma e' subordinata alla governance schema e non va implementata senza approvazione esplicita.",
+      "identified_residual": "Mancano dati pubblici finali, privacy policy pubblicata e caricamento AAB firmati.",
+      "why_this_block": "Gate principale pre-distribuzione.",
       "plan": [
-        "Attendere ordine esplicito owner prima di modificare entita', DAO con impatto schema, indici persistenti, DATABASE_VERSION o migrazioni.",
-        "Dopo approvazione, misurare EXPLAIN QUERY PLAN e tempi su dataset grande prima di proporre indici.",
-        "Applicare solo indici con beneficio misurabile e aggiornare schema Room esportato.",
-        "Eseguire test Room, test fresh-install e verifiche query impattate.",
-        "Chiudere il blocco solo con schema aggiornato, test verdi e criterio di rollback chiaro."
+        "Finalizzare privacy policy con URL HTTPS pubblico.",
+        "Generare AAB release firmati per Full e Demo.",
+        "Caricare su Play Console e completare questionari."
       ],
       "items": [
         {
-          "priority": "P3",
-          "summary": "Performance Room/index proposal: valutare indici su query calde solo come proposta bloccata.",
+          "priority": "P1",
+          "summary": "Finalizzare privacy policy e caricare AAB firmati.",
           "refs": [
-            "app\\schemas",
-            "app\\src\\main\\java\\com\\onlytechtake\\repairapp\\data\\local",
-            "docs\\03_MODELLO_DATI_GENERICO.md"
+            "docs/play-store/PRIVACY_POLICY_IT.md"
           ],
-          "completion_criteria": "Ordine esplicito owner per cambiare schema Room e test Room verdi."
+          "completion_criteria": "AAB accettati da Play Console; closed testing avviato."
+        }
+      ]
+    },
+    {
+      "block_id": "B12",
+      "title": "Baseline runtime su device",
+      "priority": "P2",
+      "complexity": "medium",
+      "status": "open",
+      "recommended_batch_size": 1,
+      "identified_residual": "Mancano metriche runtime p50/p95 post-ottimizzazione UI, specialmente per export XLSX e PDF.",
+      "why_this_block": "Verificare che il refactoring non abbia introdotto jank o rallentamenti.",
+      "plan": [
+        "Misurare startup e operazioni I/O su device reale.",
+        "Registrare baseline prestazioni."
+      ],
+      "items": [
+        {
+          "priority": "P2",
+          "summary": "Misurare performance su device reale post-refactoring.",
+          "refs": [
+            "docs\\release\\RELEASE_CHECKLIST.md"
+          ],
+          "completion_criteria": "Nessuna regressione prestazionale rilevata."
         }
       ]
     }

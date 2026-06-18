@@ -87,7 +87,7 @@ object RepairAppSpacing {
     val actionGap = 16.dp
     val compactGap = 8.dp
     val tinyGap = 4.dp
-    val bottomContentPadding = 80.dp
+    val bottomContentPadding = 16.dp
     
     val maxContentWidthCompact = 600.dp
     val maxContentWidthMedium = 840.dp

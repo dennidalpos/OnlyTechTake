@@ -6,7 +6,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -22,6 +25,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label
@@ -302,12 +306,16 @@ private fun CustomerListContent(
 
     AppScreenContainer(scrollable = false) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
         ) {
             AppTextField(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
                 value = searchQuery,
                 onValueChange = viewModel::setSearchQuery,
                 label = stringResource(R.string.customer_search_label),
@@ -316,15 +324,27 @@ private fun CustomerListContent(
                 keyboardType = KeyboardType.Text,
                 capitalization = KeyboardCapitalization.Words,
                 keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                 testTag = RepairAppTestTags.CustomerSearchField,
             )
-            AppButton(
-                text = stringResource(R.string.customer_new),
+            Surface(
                 onClick = onNewCustomer,
-                variant = AppButtonVariant.Primary,
-                size = AppButtonSize.Compact,
-                testTag = RepairAppTestTags.CustomerNewButton
-            )
+                color = MaterialTheme.colorScheme.primary,
+                shape = RepairAppShapes.button,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(56.dp)
+                    .testTag(RepairAppTestTags.CustomerNewButton),
+                tonalElevation = 2.dp
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(R.string.customer_new),
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            }
         }
 
         if (searchQuery.isNotBlank()) {
@@ -344,7 +364,7 @@ private fun CustomerListContent(
             ) {
                 if (customers.isEmpty()) {
                     item {
-                        CustomerEmptyState(hasQuery = true, onNewCustomer = onNewCustomer)
+                        CustomerEmptyState(hasQuery = true)
                     }
                 } else {
                     items(customers, key = { it.id }) { customer ->
@@ -357,8 +377,8 @@ private fun CustomerListContent(
                 AppEmptyState(
                     title = stringResource(R.string.customer_search_empty_title),
                     body = stringResource(R.string.customer_search_empty_body),
-                    actionLabel = stringResource(R.string.customer_new),
-                    onAction = onNewCustomer,
+                    actionLabel = null,
+                    onAction = null
                 )
             }
         }
@@ -473,7 +493,7 @@ private fun CustomerDetailContent(
                 )
             }
             AppIconButton(
-                imageVector = Icons.Default.Info, // Placeholder for Edit if we want an icon
+                imageVector = Icons.Default.Edit,
                 contentDescription = stringResource(R.string.customer_detail_edit),
                 onClick = onEdit,
                 tint = MaterialTheme.colorScheme.primary
@@ -545,11 +565,9 @@ private fun CustomerCard(customer: CustomerEntity, onClick: () -> Unit) {
 }
 
 @Composable
-private fun CustomerEmptyState(hasQuery: Boolean, onNewCustomer: () -> Unit) {
+private fun CustomerEmptyState(hasQuery: Boolean) {
     AppEmptyState(
         title = if (hasQuery) stringResource(R.string.customer_no_results_title) else stringResource(R.string.customer_no_recent),
         body = if (hasQuery) stringResource(R.string.customer_no_results) else stringResource(R.string.customer_search_hint),
-        actionLabel = stringResource(R.string.customer_new).takeIf { hasQuery },
-        onAction = onNewCustomer.takeIf { hasQuery },
     )
 }

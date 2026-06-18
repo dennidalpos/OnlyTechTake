@@ -189,17 +189,24 @@ fun OrderActionCard(
             )
         }
 
-        AppDivider(modifier = Modifier.alpha(0.3f))
+        if (isPaid || status == OrderStatus.READY_FOR_PICKUP || status == OrderStatus.CLOSED) {
+            AppDivider(modifier = Modifier.alpha(0.3f))
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(role = Role.Checkbox, onClick = onTogglePayment),
-            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Checkbox(checked = isPaid, onCheckedChange = null)
-            Text(stringResource(R.string.order_paid_button), style = MaterialTheme.typography.bodyMedium)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(role = Role.Checkbox, onClick = onTogglePayment),
+                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Checkbox(checked = isPaid, onCheckedChange = null)
+                Text(
+                    text = stringResource(R.string.order_paid_button),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = if (isPaid) FontWeight.Bold else FontWeight.Normal,
+                    color = if (isPaid) MaterialTheme.repairColors.success else Color.Unspecified
+                )
+            }
         }
 
         AppDivider(modifier = Modifier.alpha(0.3f))

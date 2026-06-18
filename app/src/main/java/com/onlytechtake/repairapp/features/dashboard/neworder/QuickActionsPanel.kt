@@ -5,9 +5,11 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +32,8 @@ import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
 import com.onlytechtake.repairapp.domain.workspace.isReadyForSubmit
 import com.onlytechtake.repairapp.domain.workspace.validationErrors
 import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.RepairAppShapes
+import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.*
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
@@ -183,7 +187,9 @@ fun QuickActions(
                                 stringResource(R.string.intake_selected_customer, selectedCustomerDisplayName.orEmpty()),
                                 style = MaterialTheme.typography.bodyLarge,
                                 fontWeight = FontWeight.SemiBold,
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f),
+                                maxLines = 1,
+                                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                             )
                             AppButton(
                                 text = stringResource(R.string.intake_change_customer),
@@ -205,7 +211,7 @@ fun QuickActions(
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap)
+                            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
                         ) {
                             AppTextField(
                                 modifier = Modifier.weight(1f),
@@ -224,15 +230,21 @@ fun QuickActions(
                                 singleLine = true,
                                 imeAction = ImeAction.Search,
                                 keyboardActions = doneAction,
+                                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                                trailingIcon = if (customerSearchQuery.isNotEmpty()) {
+                                    {
+                                        AppIconButton(
+                                            imageVector = Icons.Default.Clear,
+                                            contentDescription = stringResource(R.string.content_description_clear),
+                                            onClick = { viewModel.setCustomerSearchQuery("") }
+                                        )
+                                    }
+                                } else null,
                                 testTag = RepairAppTestTags.NewOrderCustomerSearchField,
                             )
 
                             if (!draft.showNewCustomerForm) {
-                                AppButton(
-                                    text = stringResource(R.string.intake_insert_new_customer),
-                                    variant = AppButtonVariant.Primary,
-                                    size = AppButtonSize.Compact,
-                                    testTag = RepairAppTestTags.NewOrderInsertCustomerButton,
+                                Surface(
                                     onClick = {
                                         updateDraft {
                                             it.copy(
@@ -243,35 +255,49 @@ fun QuickActions(
                                         }
                                         viewModel.setCustomerSearchQuery("")
                                     },
-                                )
-                            }
-                        }
-                        
-                        if (!draft.showNewCustomerForm && customerSearchQuery.isNotBlank()) {
-                            if (customerSuggestions.isNotEmpty()) {
-                                customerSuggestions.take(3).forEach { customer ->
-                                    CustomerSuggestionCard(
-                                        customer = customer,
-                                        onClick = {
-                                            val label = customer.displayName(
-                                                unnamedPrivate = unnamedPrivate,
-                                                unnamedBusiness = unnamedBusiness
-                                            )
-                                            updateDraft {
-                                                it.copy(
-                                                    selectedCustomerId = customer.id,
-                                                    selectedCustomerLabel = label,
-                                                    showNewCustomerForm = false,
-                                                )
-                                            }
-                                            viewModel.setCustomerSearchQuery(label)
-                                        },
-                                    )
+                                    color = MaterialTheme.colorScheme.primary,
+                                    shape = RepairAppShapes.button,
+                                    modifier = Modifier
+                                        .size(56.dp)
+                                        .testTag(RepairAppTestTags.NewOrderInsertCustomerButton),
+                                    tonalElevation = 2.dp
+                                ) {
+                                    Box(contentAlignment = Alignment.Center) {
+                                        Icon(
+                                            imageVector = Icons.Default.Add,
+                                            contentDescription = stringResource(R.string.intake_insert_new_customer),
+                                            tint = MaterialTheme.colorScheme.onPrimary
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
-                    
+
+                    if (!draft.showNewCustomerForm && customerSearchQuery.isNotBlank()) {
+                        if (customerSuggestions.isNotEmpty()) {
+                            customerSuggestions.take(3).forEach { customer ->
+                                CustomerSuggestionCard(
+                                    customer = customer,
+                                    onClick = {
+                                        val label = customer.displayName(
+                                            unnamedPrivate = unnamedPrivate,
+                                            unnamedBusiness = unnamedBusiness
+                                        )
+                                        updateDraft {
+                                            it.copy(
+                                                selectedCustomerId = customer.id,
+                                                selectedCustomerLabel = label,
+                                                showNewCustomerForm = false,
+                                            )
+                                        }
+                                        viewModel.setCustomerSearchQuery(label)
+                                    },
+                                )
+                            }
+                        }
+                    }
+
                     if (draft.showNewCustomerForm && draft.selectedCustomerId == null) {
                         AppDivider(modifier = Modifier.padding(vertical = RepairAppSpacing.compactGap))
                         IntakeCustomerFields(

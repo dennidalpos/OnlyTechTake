@@ -2,6 +2,9 @@ package com.onlytechtake.repairapp.features.dashboard.neworder
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -162,11 +165,11 @@ private fun StagedMediaSummary(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        AppButton(
-            text = stringResource(R.string.intake_media_remove),
-            variant = AppButtonVariant.Ghost,
-            size = AppButtonSize.Compact,
+        AppIconButton(
+            imageVector = Icons.Default.Delete,
+            contentDescription = stringResource(R.string.intake_media_remove),
             onClick = { onRemoveMedia(media.localPath) },
+            tint = MaterialTheme.colorScheme.error
         )
     }
 }

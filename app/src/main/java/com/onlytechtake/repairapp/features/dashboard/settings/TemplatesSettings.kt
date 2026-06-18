@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.features.dashboard.settings
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,19 +12,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -42,6 +43,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
@@ -61,6 +63,7 @@ fun ColumnScope.TemplatesSettings(
     val anchorMappings by viewModel.anchorMappings.collectAsState()
     var editingTemplate by remember { mutableStateOf<MessageTemplateEntity?>(null) }
     var selectingAnchorForTemplate by remember { mutableStateOf<TemplateAnchor?>(null) }
+    var searchQuery by rememberSaveable { mutableStateOf("") }
 
     val confirmTitle = stringResource(R.string.config_template_confirm_save_title)
     val confirmRisky = stringResource(R.string.config_template_confirm_save_risky)
@@ -68,6 +71,14 @@ fun ColumnScope.TemplatesSettings(
     val resetTitle = stringResource(R.string.config_template_reset_confirm_title)
     val resetText = stringResource(R.string.config_template_reset_confirm_text)
     val usedTemplateCodes = remember(anchorMappings) { anchorMappings.values.toSet() }
+
+    val filteredTemplates = remember(templates, searchQuery) {
+        if (searchQuery.isBlank()) templates
+        else templates.filter { 
+            it.title.contains(searchQuery, ignoreCase = true) || 
+            it.code.contains(searchQuery, ignoreCase = true) 
+        }
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -83,6 +94,63 @@ fun ColumnScope.TemplatesSettings(
                 text = stringResource(R.string.config_hub_templates_title),
                 tooltip = stringResource(R.string.config_template_tooltip)
             )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+            ) {
+                AppTextField(
+                    modifier = Modifier.weight(1f),
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    label = stringResource(R.string.config_category_search_label), // Reuse search label
+                    singleLine = true,
+                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                    trailingIcon = if (searchQuery.isNotEmpty()) {
+                        {
+                            AppIconButton(
+                                imageVector = Icons.Default.Clear,
+                                contentDescription = stringResource(R.string.content_description_clear),
+                                onClick = { searchQuery = "" }
+                            )
+                        }
+                    } else null,
+                )
+
+                if (isAdmin) {
+                    Surface(
+                        onClick = {
+                            editingTemplate = MessageTemplateEntity(
+                                id = "",
+                                code = "",
+                                title = "",
+                                channel = MessageChannel.WHATSAPP,
+                                body = "",
+                                active = true,
+                                version = 1,
+                                updatedByUserId = null,
+                                updatedAt = 0L,
+                                step = null
+                            )
+                        },
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = RepairAppShapes.button,
+                        modifier = Modifier
+                            .height(56.dp)
+                            .width(56.dp),
+                        tonalElevation = 2.dp
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = stringResource(R.string.config_template_new),
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
+                    }
+                }
+            }
         }
 
         if (isAdmin) {
@@ -145,31 +213,9 @@ fun ColumnScope.TemplatesSettings(
                     }
                 )
             }
-
-            item {
-                AppButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.config_template_new),
-                    testTag = RepairAppTestTags.ConfigTemplateNewButton,
-                    onClick = {
-                        editingTemplate = MessageTemplateEntity(
-                            id = "",
-                            code = "",
-                            title = "",
-                            channel = MessageChannel.WHATSAPP,
-                            body = "",
-                            active = true,
-                            version = 1,
-                            updatedByUserId = null,
-                            updatedAt = 0L,
-                            step = null
-                        )
-                    }
-                )
-            }
         }
 
-        items(templates) { template ->
+        items(filteredTemplates) { template ->
             val isUsed = template.code in usedTemplateCodes
             StandardCard(
                 onClick = { editingTemplate = template },

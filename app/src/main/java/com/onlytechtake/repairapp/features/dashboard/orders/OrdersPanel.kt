@@ -16,9 +16,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
@@ -124,23 +126,14 @@ private fun OrdersListContent(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             SectionTitle(stringResource(R.string.orders_title))
-            Row(horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
-                AppButton(
-                    text = stringResource(R.string.home_new_order),
-                    onClick = onNewOrder,
-                    variant = AppButtonVariant.Primary,
-                    size = AppButtonSize.Compact,
-                    leadingIcon = Icons.Default.Add
-                )
-                AppButton(
-                    text = stringResource(R.string.orders_filter_title),
-                    onClick = { showFilterDialog = true },
-                    variant = if (orderFilter.hasActiveFilter()) AppButtonVariant.Info else AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact,
-                    leadingIcon = Icons.Default.FilterList,
-                    testTag = RepairAppTestTags.OrdersFilterButton
-                )
-            }
+            AppButton(
+                text = stringResource(R.string.orders_filter_title),
+                onClick = { showFilterDialog = true },
+                variant = if (orderFilter.hasActiveFilter()) AppButtonVariant.Info else AppButtonVariant.Secondary,
+                size = AppButtonSize.Compact,
+                leadingIcon = Icons.Default.FilterList,
+                testTag = RepairAppTestTags.OrdersFilterButton
+            )
         }
 
         Spacer(Modifier.height(RepairAppSpacing.cardGap))
@@ -154,24 +147,52 @@ private fun OrdersListContent(
             Spacer(Modifier.height(RepairAppSpacing.cardGap))
         }
 
-        AppTextField(
-            value = orderFilter.query,
-            onValueChange = { viewModel.setFilter(orderFilter.copy(query = it)) },
-            label = stringResource(R.string.orders_search_label),
-            modifier = Modifier.fillMaxWidth(),
-            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-            trailingIcon = if (orderFilter.query.isNotEmpty()) {
-                {
-                    AppIconButton(
-                        imageVector = Icons.Default.Clear,
-                        contentDescription = stringResource(R.string.content_description_clear),
-                        onClick = { viewModel.setFilter(orderFilter.copy(query = "")) }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap)
+        ) {
+            AppTextField(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
+                value = orderFilter.query,
+                onValueChange = { viewModel.setFilter(orderFilter.copy(query = it)) },
+                label = stringResource(R.string.orders_search_label),
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                trailingIcon = if (orderFilter.query.isNotEmpty()) {
+                    {
+                        AppIconButton(
+                            imageVector = Icons.Default.Clear,
+                            contentDescription = stringResource(R.string.content_description_clear),
+                            onClick = { viewModel.setFilter(orderFilter.copy(query = "")) }
+                        )
+                    }
+                } else null,
+                imeAction = ImeAction.Search,
+                singleLine = true
+            )
+            Surface(
+                onClick = onNewOrder,
+                color = MaterialTheme.colorScheme.primary,
+                shape = RepairAppShapes.button,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(56.dp)
+                    .testTag(RepairAppTestTags.HomeNewOrderButton),
+                tonalElevation = 2.dp
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(R.string.home_new_order),
+                        tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }
-            } else null,
-            imeAction = ImeAction.Search,
-            singleLine = true
-        )
+            }
+        }
 
         if (orderFilter.hasActiveFilter()) {
             Spacer(Modifier.height(RepairAppSpacing.tinyGap))
@@ -196,8 +217,6 @@ private fun OrdersListContent(
                     AppEmptyState(
                         title = stringResource(R.string.orders_empty_title),
                         body = stringResource(R.string.orders_empty_body),
-                        actionLabel = stringResource(R.string.home_new_order),
-                        onAction = onNewOrder,
                     )
                 }
             } else {
@@ -223,19 +242,26 @@ private fun OrdersListContent(
                                         text = stringResource(R.string.orders_order_reference, order.orderNumber, order.title),
                                         modifier = Modifier.testTag(RepairAppTestTags.orderCardOrderReference(order.id)),
                                         style = MaterialTheme.typography.titleMedium,
-                                        fontWeight = FontWeight.Bold
+                                        fontWeight = FontWeight.Bold,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                        softWrap = false
                                     )
                                     Text(
                                         text = stringResource(R.string.orders_customer_reference, customerName),
                                         modifier = Modifier.testTag(RepairAppTestTags.orderCardCustomerReference(order.id)),
                                         style = MaterialTheme.typography.bodyMedium,
-                                        color = MaterialTheme.colorScheme.secondary
+                                        color = MaterialTheme.colorScheme.secondary,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                        softWrap = false
                                     )
                                 }
                                 Text(
-                                    formatUiDateTime(order.updatedAt),
+                                    text = formatUiDateTime(order.updatedAt),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.outline,
+                                    modifier = Modifier.padding(start = RepairAppSpacing.compactGap)
                                 )
                             }
                             

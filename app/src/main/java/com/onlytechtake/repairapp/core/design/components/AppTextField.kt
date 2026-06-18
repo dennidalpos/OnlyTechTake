@@ -29,7 +29,7 @@ fun AppTextField(
     required: Boolean = false,
     showOptional: Boolean = false,
     showError: Boolean = false,
-    singleLine: Boolean = false,
+    singleLine: Boolean = true,
     imeAction: ImeAction = ImeAction.Default,
     keyboardType: KeyboardType = KeyboardType.Text,
     capitalization: KeyboardCapitalization = KeyboardCapitalization.Sentences,
@@ -38,6 +38,7 @@ fun AppTextField(
     leadingIcon: (@Composable () -> Unit)? = null,
     trailingIcon: (@Composable () -> Unit)? = null,
     testTag: String? = null,
+    fullWidth: Boolean = true,
 ) {
     val focusManager = LocalFocusManager.current
     val effectiveImeAction = if (imeAction == ImeAction.Default) ImeAction.Next else imeAction
@@ -54,12 +55,19 @@ fun AppTextField(
 
     OutlinedTextField(
         modifier = modifier
-            .fillMaxWidth()
+            .then(if (fullWidth) Modifier.fillMaxWidth() else Modifier)
             .then(testTag?.let { Modifier.testTag(it) } ?: Modifier),
         value = value,
         onValueChange = onValueChange,
-        label = { Text(labelText) },
+        label = { 
+            Text(
+                text = labelText,
+                maxLines = 1,
+                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+            ) 
+        },
         singleLine = singleLine,
+        maxLines = if (singleLine) 1 else Int.MAX_VALUE,
         isError = showError,
         shape = RepairAppShapes.field,
         colors = OutlinedTextFieldDefaults.colors(

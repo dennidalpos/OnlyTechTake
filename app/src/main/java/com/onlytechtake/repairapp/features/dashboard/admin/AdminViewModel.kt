@@ -57,6 +57,12 @@ class AdminViewModel(
         }
     }
 
+    fun deleteUser(userId: String) {
+        launchWithUser { actor ->
+            adminUserRepository.deleteUser(actor, userId)
+        }
+    }
+
     fun setUserPermissions(userId: String, permissions: Set<UserPermission>) {
         launchWithUser { actor ->
             adminUserRepository.setPermissions(actor, userId, permissions)

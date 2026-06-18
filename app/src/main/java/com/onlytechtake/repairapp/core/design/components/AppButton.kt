@@ -1,6 +1,5 @@
 package com.onlytechtake.repairapp.core.design.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -81,7 +80,8 @@ fun AppButton(
     }
     val visualHeight = if (compact) RepairAppSizes.buttonCompact else RepairAppSizes.buttonDefault
 
-    Box(
+    Surface(
+        onClick = onClick,
         modifier = modifier
             .then(widthModifier)
             .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
@@ -89,34 +89,29 @@ fun AppButton(
                 role = Role.Button
                 selected?.let { this.selected = it }
                 stateDescription?.let { this.stateDescription = it }
-            }
-            .defaultMinSize(
-                minWidth = if (compact) 60.dp else 100.dp,
-                minHeight = RepairAppSizes.touchTarget,
-            )
-            .clickable(
-                enabled = effectiveEnabled,
-                role = Role.Button,
-                onClick = onClick,
-            ),
-        contentAlignment = Alignment.Center,
+            },
+        enabled = effectiveEnabled,
+        shape = if (compact) RepairAppShapes.compactButton else RepairAppShapes.button,
+        color = containerColor,
+        contentColor = contentColor,
     ) {
-        Surface(
+        Box(
             modifier = Modifier
-                .then(if (size == AppButtonSize.FullWidth) Modifier.fillMaxWidth() else Modifier)
-                .height(visualHeight),
-            shape = if (compact) RepairAppShapes.compactButton else RepairAppShapes.button,
-            color = containerColor,
-            contentColor = contentColor,
+                .height(visualHeight)
+                .defaultMinSize(
+                    minWidth = if (compact) 60.dp else 100.dp,
+                    minHeight = if (compact) 0.dp else RepairAppSizes.touchTarget,
+                ),
+            contentAlignment = Alignment.Center,
         ) {
             Row(
-                modifier = Modifier.padding(horizontal = if (compact) 10.dp else 16.dp),
+                modifier = Modifier.padding(horizontal = if (compact) 12.dp else 16.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 if (loading) {
                     CircularProgressIndicator(
-                        modifier = Modifier.padding(end = 8.dp).size(if (compact) 14.dp else 18.dp),
+                        modifier = Modifier.padding(end = 8.dp).size(if (compact) 16.dp else 20.dp),
                         strokeWidth = 2.dp,
                         color = contentColor
                     )
@@ -125,7 +120,7 @@ fun AppButton(
                         Icon(
                             imageVector = icon,
                             contentDescription = null,
-                            modifier = Modifier.padding(end = 6.dp).size(if (compact) 16.dp else 18.dp),
+                            modifier = Modifier.padding(end = 8.dp).size(if (compact) 16.dp else 20.dp),
                         )
                     }
                 }

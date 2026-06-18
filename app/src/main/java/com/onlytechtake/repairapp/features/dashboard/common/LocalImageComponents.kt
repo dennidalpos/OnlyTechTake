@@ -19,7 +19,14 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.TrendingFlat
+import androidx.compose.material.icons.automirrored.filled.Undo
+import androidx.compose.material.icons.filled.Crop
+import androidx.compose.material.icons.filled.LayersClear
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -222,41 +229,41 @@ private fun EditableLocalImage(
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         ActionRow {
-            AppButton(
-                text = stringResource(R.string.image_edit_rotate),
+            AppIconButton(
+                imageVector = Icons.Default.Refresh,
+                contentDescription = stringResource(R.string.image_edit_rotate),
                 onClick = {
                     bitmap = bitmap?.rotateRight()
                     arrows = emptyList()
                     cropRect = null
                 },
-                variant = AppButtonVariant.Secondary,
-                size = AppButtonSize.Compact
+                tint = MaterialTheme.colorScheme.primary
             )
-            AppButton(
-                text = stringResource(R.string.image_edit_crop),
+            AppIconButton(
+                imageVector = Icons.Default.Crop,
+                contentDescription = stringResource(R.string.image_edit_crop),
                 onClick = { editMode = ImageEditMode.CROP },
-                variant = if (editMode == ImageEditMode.CROP) AppButtonVariant.Primary else AppButtonVariant.Secondary,
-                size = AppButtonSize.Compact
+                tint = if (editMode == ImageEditMode.CROP) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
             )
-            AppButton(
-                text = stringResource(R.string.image_edit_arrow),
+            AppIconButton(
+                imageVector = Icons.AutoMirrored.Filled.TrendingFlat,
+                contentDescription = stringResource(R.string.image_edit_arrow),
                 onClick = { editMode = ImageEditMode.ARROW },
-                variant = if (editMode == ImageEditMode.ARROW) AppButtonVariant.Primary else AppButtonVariant.Secondary,
-                size = AppButtonSize.Compact
+                tint = if (editMode == ImageEditMode.ARROW) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
             )
-            AppButton(
-                text = stringResource(R.string.image_edit_undo_arrow),
+            AppIconButton(
+                imageVector = Icons.AutoMirrored.Filled.Undo,
+                contentDescription = stringResource(R.string.image_edit_undo_arrow),
                 enabled = arrows.isNotEmpty(),
                 onClick = { arrows = arrows.dropLast(1) },
-                variant = AppButtonVariant.Secondary,
-                size = AppButtonSize.Compact
+                tint = if (arrows.isNotEmpty()) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
             )
-            AppButton(
-                text = stringResource(R.string.image_edit_clear_crop),
+            AppIconButton(
+                imageVector = Icons.Default.LayersClear,
+                contentDescription = stringResource(R.string.image_edit_clear_crop),
                 enabled = cropRect != null,
                 onClick = { cropRect = null },
-                variant = AppButtonVariant.Secondary,
-                size = AppButtonSize.Compact
+                tint = if (cropRect != null) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline
             )
         }
         ImageEditCanvas(
