@@ -138,7 +138,7 @@ fun ColumnScope.CategoriesSettings(
             Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
+                    verticalAlignment = Alignment.Bottom,
                     horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
                 ) {
                     AppTextField(
@@ -167,13 +167,14 @@ fun ColumnScope.CategoriesSettings(
                             modifier = Modifier
                                 .height(56.dp)
                                 .width(56.dp),
-                            tonalElevation = 2.dp
+                            tonalElevation = 0.dp
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
                                     imageVector = Icons.Default.Add,
                                     contentDescription = if (currentCategoryParentId == null) stringResource(R.string.config_category_new_root) else stringResource(R.string.config_category_new_sub),
-                                    tint = MaterialTheme.colorScheme.onPrimary
+                                    tint = MaterialTheme.colorScheme.onPrimary,
+                                    modifier = Modifier.size(32.dp)
                                 )
                             }
                         }

@@ -18,7 +18,7 @@ class OrderExportXlsxWriterTest {
     private val testLabels = OrderExportLabels(
         headers = listOf(
             "Numero commessa", "Titolo", "Stato", "Priorità", "Cliente", "Tipo cliente",
-            "Telefono", "Email", "Categoria", "Operatore", "Descrizione", "Note interne",
+            "Telefono", "Email", "Categoria", "Operatore", "Firmatario", "Descrizione", "Note interne",
             "Esito diagnosi", "Pagamento", "Importo preventivo", "Importo finale",
             "Creata", "Aggiornata", "Chiusa", "Motivo chiusura"
         ),
@@ -45,6 +45,7 @@ class OrderExportXlsxWriterTest {
             email = "mario@example.test",
             categoryName = "Smartphone",
             assignedUserName = "Operatore",
+            signerName = "Firmatario",
             description = "Display \"nero\"",
             internalNotes = "Nota con apostrofo '",
             diagnosisOutcome = DiagnosisOutcome.REPAIRABLE,

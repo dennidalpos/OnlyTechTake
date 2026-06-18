@@ -309,13 +309,13 @@ private fun CustomerListContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(IntrinsicSize.Min),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
         ) {
             AppTextField(
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight(),
+                    .height(56.dp),
                 value = searchQuery,
                 onValueChange = viewModel::setSearchQuery,
                 label = stringResource(R.string.customer_search_label),
@@ -332,16 +332,17 @@ private fun CustomerListContent(
                 color = MaterialTheme.colorScheme.primary,
                 shape = RepairAppShapes.button,
                 modifier = Modifier
-                    .fillMaxHeight()
+                    .height(56.dp)
                     .width(56.dp)
                     .testTag(RepairAppTestTags.CustomerNewButton),
-                tonalElevation = 2.dp
+                tonalElevation = 0.dp
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     Icon(
                         imageVector = Icons.Default.Add,
                         contentDescription = stringResource(R.string.customer_new),
-                        tint = MaterialTheme.colorScheme.onPrimary
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.size(32.dp)
                     )
                 }
             }

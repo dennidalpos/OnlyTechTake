@@ -239,6 +239,7 @@ class BackupRepository(
                     context.getString(R.string.export_xlsx_header_email),
                     context.getString(R.string.export_xlsx_header_category),
                     context.getString(R.string.export_xlsx_header_operator),
+                    context.getString(R.string.export_xlsx_header_signer),
                     context.getString(R.string.export_xlsx_header_description),
                     context.getString(R.string.export_xlsx_header_internal_notes),
                     context.getString(R.string.export_xlsx_header_diagnosis_outcome),

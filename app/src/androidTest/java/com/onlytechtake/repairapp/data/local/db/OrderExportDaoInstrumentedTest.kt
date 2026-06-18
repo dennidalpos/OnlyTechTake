@@ -14,6 +14,7 @@ import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventType
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
 import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -54,6 +55,63 @@ class OrderExportDaoInstrumentedTest {
         assertEquals(setOf("RIP-2026-000001", "RIP-2026-000002"), rowsByNumber.keys)
         assertTrue(rowsByNumber.getValue("RIP-2026-000002").isPaid)
         assertFalse(rowsByNumber.getValue("RIP-2026-000001").isPaid)
+    }
+
+    @Test
+    fun exportAllOrdersIncludesLatestSignerName() = runBlocking {
+        seedCoreData()
+        seedOrder(id = "order-signed", orderNumber = "RIP-2026-SIGNED")
+        
+        val now = 1_717_171_717_000L
+        database.signatureDao().upsert(
+            SignatureEntity(
+                id = "sig-1",
+                orderId = "order-signed",
+                signerName = "Old Signer",
+                privacyAccepted = true,
+                termsAccepted = true,
+                privacyTextSnapshot = "...",
+                privacyTemplateVersion = 1,
+                termsTextSnapshot = "...",
+                termsTemplateVersion = 1,
+                localPath = "/path/1",
+                fileName = "sig1.png",
+                mimeType = "image/png",
+                sizeBytes = 100,
+                width = 100,
+                height = 100,
+                createdByUserId = "admin-1",
+                signedAt = now,
+                createdAt = now
+            )
+        )
+        database.signatureDao().upsert(
+            SignatureEntity(
+                id = "sig-2",
+                orderId = "order-signed",
+                signerName = "Latest Signer",
+                privacyAccepted = true,
+                termsAccepted = true,
+                privacyTextSnapshot = "...",
+                privacyTemplateVersion = 1,
+                termsTextSnapshot = "...",
+                termsTemplateVersion = 1,
+                localPath = "/path/2",
+                fileName = "sig2.png",
+                mimeType = "image/png",
+                sizeBytes = 100,
+                width = 100,
+                height = 100,
+                createdByUserId = "admin-1",
+                signedAt = now + 1000,
+                createdAt = now + 1000
+            )
+        )
+
+        val rows = database.orderExportDao().exportAllOrders()
+        val signedRow = rows.find { it.orderNumber == "RIP-2026-SIGNED" }
+        
+        assertEquals("Latest Signer", signedRow?.signerName)
     }
 
     private suspend fun seedCoreData() {

@@ -210,7 +210,7 @@ fun QuickActions(
                     } else {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
+                            verticalAlignment = Alignment.Bottom,
                             horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
                         ) {
                             AppTextField(
@@ -258,15 +258,17 @@ fun QuickActions(
                                     color = MaterialTheme.colorScheme.primary,
                                     shape = RepairAppShapes.button,
                                     modifier = Modifier
-                                        .size(56.dp)
+                                        .height(56.dp)
+                                        .width(56.dp)
                                         .testTag(RepairAppTestTags.NewOrderInsertCustomerButton),
-                                    tonalElevation = 2.dp
+                                    tonalElevation = 0.dp
                                 ) {
                                     Box(contentAlignment = Alignment.Center) {
                                         Icon(
                                             imageVector = Icons.Default.Add,
                                             contentDescription = stringResource(R.string.intake_insert_new_customer),
-                                            tint = MaterialTheme.colorScheme.onPrimary
+                                            tint = MaterialTheme.colorScheme.onPrimary,
+                                            modifier = Modifier.size(32.dp)
                                         )
                                     }
                                 }

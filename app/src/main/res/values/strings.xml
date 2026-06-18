@@ -533,6 +533,7 @@
     <string name="export_xlsx_header_email">Email</string>
     <string name="export_xlsx_header_category">Categoria</string>
     <string name="export_xlsx_header_operator">Operatore</string>
+    <string name="export_xlsx_header_signer">Firmatario</string>
     <string name="export_xlsx_header_description">Descrizione</string>
     <string name="export_xlsx_header_internal_notes">Note interne</string>
     <string name="export_xlsx_header_diagnosis_outcome">Esito diagnosi</string>

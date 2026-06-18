@@ -97,7 +97,7 @@ fun ColumnScope.TemplatesSettings(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
             ) {
                 AppTextField(
@@ -139,13 +139,14 @@ fun ColumnScope.TemplatesSettings(
                         modifier = Modifier
                             .height(56.dp)
                             .width(56.dp),
-                        tonalElevation = 2.dp
+                        tonalElevation = 0.dp
                     ) {
                         Box(contentAlignment = Alignment.Center) {
                             Icon(
                                 imageVector = Icons.Default.Add,
                                 contentDescription = stringResource(R.string.config_template_new),
-                                tint = MaterialTheme.colorScheme.onPrimary
+                                tint = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier.size(32.dp)
                             )
                         }
                     }

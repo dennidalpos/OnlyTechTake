@@ -94,6 +94,7 @@ internal class OrderExportXlsxWriter(
             row.email.orEmpty(),
             row.categoryName.orEmpty(),
             row.assignedUserName.orEmpty(),
+            row.signerName.orEmpty(),
             row.description.orEmpty(),
             row.internalNotes.orEmpty(),
             labels.diagnosisOutcomeLabels[row.diagnosisOutcome] ?: row.diagnosisOutcome?.name ?: "",
