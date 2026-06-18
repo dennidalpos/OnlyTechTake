@@ -2,46 +2,52 @@
 
 ## OnlyTechTake Pro
 
-**App Name:** OnlyTechTake Pro
-**Short Description:** Professional repair management for smartphones, PCs, and tablets.
+**App Name:** OnlyTechTake: Repair Management Pro
+**Short Description:** The complete local-first management solution for smartphone and PC repair labs.
 **Full Description:**
-OnlyTechTake is a "local-first" Android repair management app for tech shops. Designed for technicians and shop owners, it helps you track the entire lifecycle of a repair: from intake to diagnosis and final delivery.
+🚀 **Optimize Your Repair Lab with OnlyTechTake Pro!**
 
-Forget paper forms and clutter: with OnlyTechTake, you have everything under control on your Android device, with no constant internet connection required.
+Are you a technician or a repair shop owner? OnlyTechTake is the ultimate "local-first" solution to manage the entire lifecycle of your orders directly from your Android device. Forget paper clutter and track every repair, from intake to final delivery.
 
-**Key Features:**
-- **Order Management:** Track every repair with custom statuses (Open, Diagnosis, In Progress, Closed).
-- **Customer Database:** Secure local CRM to manage contacts, privacy consent, and repair history.
-- **Digital Signature:** Capture customer signatures directly on screen for terms of service acceptance.
-- **Photo Documentation:** Take and attach photos of incoming devices to document their condition.
-- **WhatsApp & PDF:** Generate ready-to-send WhatsApp messages and professional PDF reports.
-- **Backup & Export:** Create encrypted ZIP backups and export data to XLSX for your accounting.
+🔒 **Total Privacy and Security**
+All your data stays exclusively on your device. With an SQLCipher encrypted database and an offline-first philosophy, your customers' information and your business data are protected and always accessible, even without an internet connection.
 
-**Why choose OnlyTechTake:**
-1. **Total Privacy:** Data stays only on your device. No mandatory cloud storage.
-2. **Guided Workflow:** From intake to return, everything managed in one app.
-3. **Fast Communication:** Speed up customer contact with ready-to-use templates.
-4. **Security:** Encrypted local database (SQLCipher) for maximum data protection.
+✨ **Key Features:**
+- 📋 **Advanced Order Tracking:** Manage every phase (Open, Diagnosis, In Progress, Ready, Closed) with ease.
+- 👥 **CRM Customer Database:** Manage contacts, privacy preferences, and repair history in a secure local database.
+- ✍️ **Integrated Digital Signature:** Capture signatures for terms and privacy acceptance directly on the screen.
+- 📸 **Photo Documentation:** Attach photos of device conditions to prevent disputes.
+- 💬 **WhatsApp Integration:** Generate ready-to-send messages to notify customers in one tap.
+- 📄 **Professional PDF Reports:** Create intake forms and PDF receipts with your own logo.
+- 📊 **XLSX Export & Backup:** Export data for accounting and create encrypted ZIP backups.
 
-Optimize your lab and give a professional touch to your shop with OnlyTechTake!
+**Why choose OnlyTechTake Pro:**
+1. **Operational Speed:** A guided workflow so you never miss a step.
+2. **No Cloud Subscription:** Pay once or use your license without hidden server costs.
+3. **Clear Communication:** Customizable message templates for every repair status.
+4. **Professional Look:** Give your shop a modern, organized image.
+
+Transform your workflow today with OnlyTechTake Pro!
 
 **ASO Keywords:**
-smartphone repair, shop management, technical assistance, pc repair, repair tracking, lab software, work orders, tablet assistance, console repair, digital signature.
+repair management, technical lab software, smartphone repair, pc assistance, work orders, local CRM, Android digital signature, repair log, shop management.
 
-**Recommended Category:** Productivity / Business.
-**Promotional Text:** Transform your lab with OnlyTechTake: the all-in-one app to manage repairs, customers, and documents with total privacy.
+**Category:** Productivity / Business.
+**Promotional Text:** The all-in-one app for repair professionals. Total privacy, guided workflow, and offline customer management.
 
 ## OnlyTechTake Demo
 
-**App Name:** OnlyTechTake Demo
-**Short Description:** Guided trial of the OnlyTechTake repair workflow.
+**App Name:** OnlyTechTake: Repair Trial
+**Short Description:** Free trial of the OnlyTechTake repair management workflow.
 **Full Description:**
-OnlyTechTake Demo lets repair shops evaluate the core Android workflow with local on-device data and no proprietary backend.
+Unlock your lab's potential with the **OnlyTechTake Demo**.
 
-Demo limitations:
-- maximum 1 total order;
-- no operator accounts: local admin only;
-- database export, ZIP backup, ZIP restore, and XLSX export are blocked;
-- generated PDFs include a `VERSIONE DEMO` watermark.
+This version allows you to test all the core features of our "local-first" management tool before upgrading to Pro. Discover how to manage an order from intake to technical diagnosis.
 
-For ongoing use without these limits, use OnlyTechTake Pro.
+⚠️ **Demo Version Limitations:**
+- Maximum 1 active order for workflow testing.
+- Operator Accounts disabled (Local Admin only).
+- Export functions (XLSX, ZIP Backup) blocked.
+- Generated PDFs include a "VERSIONE DEMO" watermark.
+
+Ideal for those who want to experience the speed and simplicity of OnlyTechTake before adopting it in their daily business.

@@ -1,41 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+
+    <!-- Brand Symbol -->
     <group
-        android:translateX="18.9"
-        android:translateY="10.8"
-        android:scaleX="0.65"
-        android:scaleY="0.65">
+        android:translateX="10"
+        android:translateY="24"
+        android:scaleX="0.55"
+        android:scaleY="0.55">
         <path
             android:fillColor="#F8FAFC"
-            android:pathData="M34,22h40c5,0 9,4 9,9v47c0,5 -4,9 -9,9H34c-5,0 -9,-4 -9,-9V31c0,-5 4,-9 9,-9z" />
+            android:pathData="M30,20 h35 l15,15 v50 c0,5 -4,9 -9,9 H30 c-5,0 -9,-4 -9,-9 V29 c0,-5 4,-9 9,-9z" />
+        <path
+            android:fillColor="#CBD5E1"
+            android:pathData="M65,20 v15 h15 z" />
         <path
             android:fillColor="#12B7A7"
-            android:pathData="M36,39h36v7H36z" />
+            android:pathData="M32,45 h30 v6 H32 z" />
         <path
-            android:fillColor="#102026"
-            android:pathData="M37,54h24v6H37zM37,66h17v6H37z" />
+            android:fillColor="#475569"
+            android:pathData="M32,58 h20 v5 H32 z M32,68 h25 v5 H32 z" />
         <path
             android:fillColor="#F59E0B"
-            android:pathData="M72,83l-17,-17l8,-8l9,9l25,-25l8,8z" />
+            android:pathData="M80,85 c0,8.3 -6.7,15 -15,15 s-15,-6.7 -15,-15 s6.7,-15 15,-15 s15,6.7 15,15z" />
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M72,81 l-9,9 l-4,-4 l-2,2 l6,6 l11,-11 z" />
     </group>
 
-    <path
-        android:fillColor="#EF4444"
-        android:pathData="M20,72 L88,72 L88,92 L20,92 Z" />
-
+    <!-- DEMO Badge -->
     <group
-        android:translateX="38"
-        android:translateY="77">
+        android:translateX="68"
+        android:translateY="20">
+        <path
+            android:fillColor="#EF4444"
+            android:pathData="M0,4 c0,-2.2 1.8,-4 4,-4 h12 c2.2,0 4,1.8 4,4 v56 c0,2.2 -1.8,4 -4,4 h-12 c-2.2,0 -4,-1.8 -4,-4 z" />
+
         <!-- D -->
-        <path android:fillColor="#FFFFFF" android:pathData="M0,0 L4,0 C5.5,0 7,1.5 7,3.5 C7,5.5 5.5,7 4,7 L0,7 Z M2,1.5 L2,5.5 L3.5,5.5 C4.5,5.5 5,5 5,3.5 C5,2 4.5,1.5 3.5,1.5 Z" />
+        <group android:translateX="6" android:translateY="6">
+            <path android:fillColor="#FFFFFF" android:pathData="M0,0 h3 c2.5,0 4.5,1.5 4.5,4.5 s-2,4.5 -4.5,4.5 h-3 z M2,1.5 v6 h1.5 c1.5,0 2.5,-0.8 2.5,-3 s-1,-3 -2.5,-3 z" />
+        </group>
         <!-- E -->
-        <path android:fillColor="#FFFFFF" android:pathData="M9,0 L14,0 L14,1.5 L11,1.5 L11,2.8 L13.5,2.8 L13.5,4.2 L11,4.2 L11,5.5 L14,5.5 L14,7 L9,7 Z" />
+        <group android:translateX="6.5" android:translateY="19">
+            <path android:fillColor="#FFFFFF" android:pathData="M0,0 h7 v1.5 h-5 v2 h4.5 v1.5 h-4.5 v2 h5 v1.5 h-7 z" />
+        </group>
         <!-- M -->
-        <path android:fillColor="#FFFFFF" android:pathData="M16,0 L18,0 L20,3.5 L22,0 L24,0 L24,7 L22.5,7 L22.5,2.5 L20,7 L20,7 L17.5,2.5 L17.5,7 L16,7 Z" />
+        <group android:translateX="6" android:translateY="32">
+            <path android:fillColor="#FFFFFF" android:pathData="M0,0 h1.8 l2.2,3.5 l2.2,-3.5 h1.8 v9 h-1.8 v-5.5 l-2.2,3.5 h-0.2 l-2.2,-3.5 v5.5 h-1.8 z" />
+        </group>
         <!-- O -->
-        <path android:fillColor="#FFFFFF" android:pathData="M26,3.5 C26,1.5 27.5,0 29.5,0 C31.5,0 33,1.5 33,3.5 C33,5.5 31.5,7 29.5,7 C27.5,7 26,5.5 26,3.5 Z M27.8,3.5 C27.8,4.8 28.5,5.5 29.5,5.5 C30.5,5.5 31.2,4.8 31.2,3.5 C31.2,2.2 30.5,1.5 29.5,1.5 C28.5,1.5 27.8,2.2 27.8,3.5 Z" />
+        <group android:translateX="6" android:translateY="45">
+            <path android:fillColor="#FFFFFF" android:pathData="M4,0 c2.5,0 4,1.5 4,4.5 s-1.5,4.5 -4,4.5 s-4,-1.5 -4,-4.5 s1.5,-4.5 4,-4.5 z M4,1.5 c-1.5,0 -2.2,0.8 -2.2,3 s0.7,3 2.2,3 s2.2,-0.8 2.2,-3 s-0.7,-3 -2.2,-3 z" />
+        </group>
     </group>
 </vector>

@@ -49,7 +49,7 @@ android {
         create("demo") {
             dimension = "version"
             applicationIdSuffix = ".demo"
-            resValue("string", "app_name", "OnlyTechTake Demo")
+            resValue("string", "app_name", "OTT Demo")
             buildConfigField("boolean", "IS_DEMO_VERSION", "true")
             buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "true")
             buildConfigField("boolean", "IS_SHOWCASE_MODE_ENABLED", "false")
@@ -58,7 +58,7 @@ android {
         create("showcase") {
             dimension = "version"
             applicationIdSuffix = ".showcase"
-            resValue("string", "app_name", "OnlyTechTake Showcase")
+            resValue("string", "app_name", "OTT Show")
             buildConfigField("boolean", "IS_DEMO_VERSION", "false")
             buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "false")
             buildConfigField("boolean", "IS_SHOWCASE_MODE_ENABLED", "true")

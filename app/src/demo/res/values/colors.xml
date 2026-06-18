@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Background for Demo: lighter than Full to distinguish at a glance -->
-    <color name="ic_launcher_background">#334155</color>
+    <!-- Slate/Dark Gray for Demo Version -->
+    <color name="ic_launcher_background">#1E293B</color>
 </resources>

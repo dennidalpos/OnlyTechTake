@@ -4,23 +4,38 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- Center of 108x108 is 54,54. Safe area is 72x72 centered (from 18 to 90) -->
+
+    <!-- Brand Symbol - Centered in Safe Zone -->
     <group
-        android:translateX="13.5"
-        android:translateY="13.5"
-        android:scaleX="0.75"
-        android:scaleY="0.75">
+        android:translateX="22"
+        android:translateY="22"
+        android:scaleX="0.6"
+        android:scaleY="0.6">
+
+        <!-- Document Body -->
         <path
             android:fillColor="#F8FAFC"
-            android:pathData="M34,22h40c5,0 9,4 9,9v47c0,5 -4,9 -9,9H34c-5,0 -9,-4 -9,-9V31c0,-5 4,-9 9,-9z" />
+            android:pathData="M30,20 h35 l15,15 v50 c0,5 -4,9 -9,9 H30 c-5,0 -9,-4 -9,-9 V29 c0,-5 4,-9 9,-9z" />
+
+        <!-- Folded Corner -->
+        <path
+            android:fillColor="#CBD5E1"
+            android:pathData="M65,20 v15 h15 z" />
+
+        <!-- Lines on document -->
         <path
             android:fillColor="#12B7A7"
-            android:pathData="M36,39h36v7H36z" />
+            android:pathData="M32,45 h30 v6 H32 z" />
         <path
-            android:fillColor="#102026"
-            android:pathData="M37,54h24v6H37zM37,66h17v6H37z" />
+            android:fillColor="#475569"
+            android:pathData="M32,58 h20 v5 H32 z M32,68 h25 v5 H32 z" />
+
+        <!-- Circular Checkmark Badge -->
         <path
             android:fillColor="#F59E0B"
-            android:pathData="M72,83l-17,-17l8,-8l9,9l25,-25l8,8z" />
+            android:pathData="M80,85 c0,8.3 -6.7,15 -15,15 s-15,-6.7 -15,-15 s6.7,-15 15,-15 s15,6.7 15,15z" />
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M72,81 l-9,9 l-4,-4 l-2,2 l6,6 l11,-11 z" />
     </group>
 </vector>
