@@ -15,6 +15,7 @@
 param(
     [string]$AvdName = "OnlyTechTakeDemo",
     [switch]$UseConnectedDevice,
+    [string]$Flavor = "Full",
     [switch]$SkipBuild,
     [switch]$SkipVideo,
     [string]$OutputRoot,
@@ -25,6 +26,13 @@ param(
 $ErrorActionPreference = "Stop"
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+
+$packageNameSuffix = switch ($Flavor) {
+    "Full" { "" }
+    "Demo" { ".demo" }
+    "Showcase" { ".showcase" }
+}
+$packageName = "com.onlytechtake.repairapp$($packageNameSuffix).debug"
 
 $environmentScript = Join-Path $PSScriptRoot "..\support\android_env.ps1"
 if (Test-Path $environmentScript) {
@@ -40,7 +48,7 @@ if (Test-Path $demoSupportScript) {
 }
 
 if (-not $OutputRoot) {
-    $OutputRoot = Join-Path $root "reports/demo-assets"
+    $OutputRoot = Join-Path $root "reports/demo-assets/$Flavor"
 } elseif (-not [System.IO.Path]::IsPathRooted($OutputRoot)) {
     $OutputRoot = Join-Path $root $OutputRoot
 }
@@ -50,7 +58,7 @@ $assetsConfig = @(
     [PSCustomObject]@{
         Id = "operator-intake"
         TestClass = "com.onlytechtake.repairapp.demo.OperatorIntakeDemoScreenshotTest"
-        DeviceDirectory = "/sdcard/Android/data/com.onlytechtake.repairapp.debug/files/demo-screenshots"
+        DeviceDirectory = "/sdcard/Android/data/$packageName/files/demo-screenshots"
         PulledDirectoryName = "demo-screenshots"
         StoryJson = "demo/video/operator-intake.story.json"
         Cases = @(
@@ -72,7 +80,7 @@ $assetsConfig = @(
     [PSCustomObject]@{
         Id = "social-stories"
         TestClass = "com.onlytechtake.repairapp.demo.SocialStoryDemoScreenshotTest"
-        DeviceDirectory = "/sdcard/Android/data/com.onlytechtake.repairapp.debug/files/demo-social-screenshots"
+        DeviceDirectory = "/sdcard/Android/data/$packageName/files/demo-social-screenshots"
         PulledDirectoryName = "demo-social-screenshots"
         StoryJson = $null
         Cases = @(
@@ -217,7 +225,7 @@ if (-not $AssetId) {
 }
 
 $serial = Resolve-DemoDeviceSerial -AndroidHome $env:ANDROID_HOME -AvdName $AvdName -UseConnectedDevice:$UseConnectedDevice
-Invoke-DemoApkBuildAndInstall -RootPath $root -Serial $serial -SkipBuild:$SkipBuild
+Invoke-DemoApkBuildAndInstall -RootPath $root -Serial $serial -Flavor $Flavor -SkipBuild:$SkipBuild
 
 foreach ($asset in $assetsConfig) {
     if ($AssetId -and $AssetId -ne $asset.Id) { continue }
@@ -250,7 +258,7 @@ foreach ($asset in $assetsConfig) {
         $testTargets = @($testTarget)
     }
     foreach ($target in $testTargets) {
-        Invoke-DemoScreenshotTest -Serial $serial -TestClass $target
+        Invoke-DemoScreenshotTest -Serial $serial -TestClass $target -Flavor $Flavor
     }
 
     # Recupero e Processamento Screenshot

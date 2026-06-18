@@ -181,7 +181,7 @@ fun BackupSettings(
                         AppMessageBanner(message = stringResource(R.string.config_backup_provider_unavailable), type = BannerType.Info)
                     }
 
-                    Spacer(Modifier.height(8.dp))
+                    Spacer(Modifier.height(RepairAppSpacing.compactGap))
                     
                     AppButton(
                         text = stringResource(R.string.backup_run_full_zip),

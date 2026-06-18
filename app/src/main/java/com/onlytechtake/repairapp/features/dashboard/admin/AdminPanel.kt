@@ -218,7 +218,7 @@ fun AdminPanel(
                                 Text(user.displayName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                                 Text(user.username, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
-                            AppStatusChip(
+                            AppStatusBadge(
                                 text = user.role.name,
                                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer
@@ -226,7 +226,7 @@ fun AdminPanel(
                         }
                         
                         if (user.role != UserRole.ADMIN) {
-                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
                                 Text(
                                     text = if (user.active) stringResource(R.string.admin_user_active) else stringResource(R.string.admin_user_inactive),
                                     style = MaterialTheme.typography.bodyMedium,
@@ -245,7 +245,7 @@ fun AdminPanel(
                                 )
                             }
                             
-                            HorizontalDivider(modifier = Modifier.alpha(0.3f))
+                            AppDivider(modifier = Modifier.alpha(0.3f))
                             Text(stringResource(R.string.admin_permissions_title), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
                             
                             val permissionGroups = listOf(
@@ -289,7 +289,7 @@ fun AdminPanel(
                                     )
                                 }
                             }
-                            HorizontalDivider(modifier = Modifier.alpha(0.3f))
+                            AppDivider(modifier = Modifier.alpha(0.3f))
                         }
 
                         if (user.role == UserRole.ADMIN) {

@@ -138,13 +138,14 @@ fun DashboardScreen(
                 },
                 actions = {
                     currentUser?.let { user ->
-                        Text(
+                        val isAdminUser = PermissionService.isAdmin(user)
+                        AppStatusBadge(
                             text = stringResource(
-                                if (PermissionService.isAdmin(user)) R.string.dashboard_role_admin else R.string.dashboard_role_operator,
+                                if (isAdminUser) R.string.dashboard_role_admin else R.string.dashboard_role_operator,
                             ),
-                            style = MaterialTheme.typography.labelSmall,
-                            modifier = Modifier.padding(end = 8.dp),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            containerColor = if (isAdminUser) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer,
+                            contentColor = if (isAdminUser) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer,
+                            modifier = Modifier.padding(end = RepairAppSpacing.compactGap)
                         )
                     }
                     AppButton(

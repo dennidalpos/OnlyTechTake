@@ -273,7 +273,7 @@ fun QuickActions(
                     }
                     
                     if (draft.showNewCustomerForm && draft.selectedCustomerId == null) {
-                        HorizontalDivider(modifier = Modifier.padding(vertical = RepairAppSpacing.compactGap))
+                        AppDivider(modifier = Modifier.padding(vertical = RepairAppSpacing.compactGap))
                         IntakeCustomerFields(
                             isBusiness = isBusiness,
                             onBusinessChange = { business ->

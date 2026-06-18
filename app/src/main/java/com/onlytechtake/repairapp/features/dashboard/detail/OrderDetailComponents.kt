@@ -62,14 +62,14 @@ fun OrderHeader(detail: OrderDetail, context: Context) {
                 verticalAlignment = Alignment.Top,
             ) {
                 Column(modifier = Modifier.weight(1f)) {
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
                         Text(
                             text = detail.order.orderNumber,
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold
                         )
-                        AppStatusChip(
+                        AppStatusBadge(
                             text = detail.order.status.label(context),
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -106,7 +106,7 @@ fun OrderHeader(detail: OrderDetail, context: Context) {
                 }
             }
             
-            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp).alpha(0.5f))
+            AppDivider(modifier = Modifier.padding(vertical = RepairAppSpacing.tinyGap).alpha(0.5f))
 
             OrderStatusStepper(
                 status = detail.order.status,
@@ -116,7 +116,7 @@ fun OrderHeader(detail: OrderDetail, context: Context) {
             
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap)
             ) {
                 InfoMetadata(label = stringResource(R.string.order_updated_label), value = formatUiDateTime(detail.order.updatedAt))
                 detail.order.assignedToUserId?.let { InfoMetadata(label = stringResource(R.string.order_operator_label), value = it) }
@@ -189,7 +189,7 @@ fun OrderActionCard(
             )
         }
 
-        HorizontalDivider(modifier = Modifier.alpha(0.3f))
+        AppDivider(modifier = Modifier.alpha(0.3f))
 
         Row(
             modifier = Modifier
@@ -202,7 +202,7 @@ fun OrderActionCard(
             Text(stringResource(R.string.order_paid_button), style = MaterialTheme.typography.bodyMedium)
         }
 
-        HorizontalDivider(modifier = Modifier.alpha(0.3f))
+        AppDivider(modifier = Modifier.alpha(0.3f))
 
         AppButton(
             text = stringResource(R.string.order_whatsapp_send),
@@ -327,9 +327,9 @@ fun QuoteDecisionRow(
                 if (checked) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else Color.Transparent,
                 RepairAppShapes.compactButton,
             )
-            .padding(horizontal = 8.dp, vertical = 8.dp),
+            .padding(horizontal = RepairAppSpacing.compactGap, vertical = RepairAppSpacing.compactGap),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
     ) {
         RadioButton(selected = checked, onClick = null)
         Text(text, style = MaterialTheme.typography.bodyMedium)

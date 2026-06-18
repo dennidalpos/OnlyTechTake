@@ -63,7 +63,7 @@ fun OrdersPanel(
                     onOpenBackupSettings = onOpenBackupSettings
                 )
             }
-            VerticalDivider()
+            AppVerticalDivider()
             Box(Modifier.weight(1.5f)) {
                 if (selectedOrderId != null) {
                     val container = LocalAppContainer.current
@@ -174,7 +174,7 @@ private fun OrdersListContent(
         )
 
         if (orderFilter.hasActiveFilter()) {
-            Spacer(Modifier.height(4.dp))
+            Spacer(Modifier.height(RepairAppSpacing.tinyGap))
             ActiveFilterInfo(orderFilter)
         }
 
@@ -291,7 +291,7 @@ private fun ActiveFilterInfo(filter: OrderFilter) {
     ).joinToString(", ")
     
     if (filterText.isNotBlank()) {
-        AppStatusChip(
+        AppStatusBadge(
             text = stringResource(R.string.orders_filter_active, filterText),
             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
             contentColor = MaterialTheme.colorScheme.onTertiaryContainer
@@ -319,7 +319,7 @@ private fun OrderFilterBar(
             onClick = { onFilter(filter.copy(showMineOnly = !filter.showMineOnly)) }
         )
         
-        HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp).alpha(0.3f))
+        AppDivider(modifier = Modifier.padding(vertical = RepairAppSpacing.tinyGap).alpha(0.3f))
         
         QuickStatusGroupFilter(stringResource(R.string.orders_filter_open), setOf(OrderStatus.OPEN), filter, onFilter)
         QuickStatusGroupFilter(stringResource(R.string.orders_filter_progress), setOf(OrderStatus.IN_PROGRESS, OrderStatus.DIAGNOSIS), filter, onFilter)

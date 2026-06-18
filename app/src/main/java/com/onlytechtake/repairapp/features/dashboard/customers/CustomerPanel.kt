@@ -30,6 +30,7 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.features.dashboard.common.*
 import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
@@ -128,7 +129,7 @@ fun CustomerPanel(
                             }
                         )
                     }
-                    VerticalDivider()
+                    AppVerticalDivider()
                     Box(Modifier.weight(1.5f)) {
                         if (showForm) {
                             CustomerForm(
@@ -465,7 +466,7 @@ private fun CustomerDetailContent(
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Top) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(text = customer.displayName(context), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-                AppStatusChip(
+                AppStatusBadge(
                     text = customer.type.label(context),
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
                     contentColor = MaterialTheme.colorScheme.onSecondaryContainer
@@ -518,13 +519,13 @@ fun AppKeyValueRow(label: String, value: String) {
 
 @Composable
 fun OrderSummaryRow(item: com.onlytechtake.repairapp.domain.workspace.OrderListItem, onOrderClick: (String) -> Unit) {
-    StandardCard(onClick = { onOrderClick(item.order.id) }, modifier = Modifier.padding(bottom = 4.dp)) {
+    StandardCard(onClick = { onOrderClick(item.order.id) }, modifier = Modifier.padding(bottom = RepairAppSpacing.tinyGap)) {
         Row(modifier = Modifier.padding(RepairAppSpacing.compactGap).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
             Column {
                 Text(text = "${item.order.orderNumber}: ${item.order.title}", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
                 Text(text = item.order.status.label(LocalContext.current), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
             }
-            Icon(Icons.Default.Info, contentDescription = null, modifier = Modifier.size(18.dp), tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f))
+            Icon(Icons.Default.Info, contentDescription = null, modifier = Modifier.size(RepairAppIconSizes.small), tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f))
         }
     }
 }

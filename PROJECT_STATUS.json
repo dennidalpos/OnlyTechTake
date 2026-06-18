@@ -96,26 +96,14 @@
       "complexity": "medium",
       "status": "open",
       "recommended_batch_size": 1,
-      "identified_residual": "Gli asset statici Play esistono, ma la generazione screenshot/video non produce ancora output separati e flavor-aware per Pro e Demo con limiti Demo reali.",
+      "identified_residual": "La generazione screenshot/video è ora flavor-aware, ma mancano ancora i limiti Demo reali (0 operatori, watermark) e la rigenerazione finale.",
       "why_this_block": "Gli asset Play devono distinguere Pro e Demo; la Demo ha vincoli visibili e non deve essere presentata come app completa.",
       "plan": [
-        "Aggiungere parametro flavor agli script pubblici di screenshot e recording, mantenendo default compatibile con Full.",
-        "Separare package, APK installati, directory output e naming file per Pro e Demo.",
         "Aggiornare scenari o seed dove serve per mostrare i limiti Demo reali: 1 commessa, 0 operatori e watermark Demo.",
         "Rigenerare screenshot e recording Pro/Demo con dati fittizi e senza sito sviluppatore.",
         "Verificare dimensioni, leggibilita', coerenza dei limiti Demo e assenza di dati personali prima del caricamento Play."
       ],
       "items": [
-        {
-          "priority": "P2",
-          "summary": "Rendere flavor-aware la generazione asset per produrre output separati Pro e Demo.",
-          "refs": [
-            "docs\\DEMO_ASSET_WORKFLOW.md",
-            "scripts\\windows\\create_demo_assets.ps1",
-            "scripts\\windows\\record_demo_device.ps1"
-          ],
-          "completion_criteria": "Gli script accettano il flavor e scrivono screenshot/video separati per Pro e Demo senza sovrascrivere output dell'altro flavor."
-        },
         {
           "priority": "P2",
           "summary": "Rigenerare screenshot e video Play per Pro e Demo con dati fittizi, senza sito, e con limiti Demo reali.",

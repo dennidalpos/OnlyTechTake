@@ -65,6 +65,7 @@ import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.core.design.components.AppTextField
 import com.onlytechtake.repairapp.core.design.components.AppIconButton
 import com.onlytechtake.repairapp.core.design.components.AppTopBar
+import com.onlytechtake.repairapp.core.design.components.AppErrorText
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.BuildConfig
@@ -490,11 +491,9 @@ private fun AuthForm(
             }
 
             formState.errorMessage?.let { errorMessage ->
-                Text(
-                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+                AppErrorText(
                     text = errorMessage,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }
                 )
             }
 

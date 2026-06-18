@@ -38,6 +38,7 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
@@ -83,7 +84,7 @@ fun SectionTitle(text: String, tooltip: String? = null) {
                     contentDescription = stringResource(R.string.content_description_info),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier
-                        .size(20.dp)
+                        .size(RepairAppIconSizes.small)
                         .clickable {
                             scope.launch { tooltipState.show() }
                         }
@@ -114,7 +115,7 @@ fun AppEmptyState(
                 imageVector = icon,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(32.dp),
+                modifier = Modifier.size(RepairAppIconSizes.medium),
             )
             Text(
                 text = title,
@@ -207,7 +208,7 @@ fun OperatorText(text: String, modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.secondaryContainer, RepairAppShapes.compactButton)
-            .padding(10.dp),
+            .padding(RepairAppSpacing.compactGap),
         text = text,
         color = MaterialTheme.colorScheme.onSecondaryContainer,
     )
@@ -253,8 +254,8 @@ fun CustomerTypeToggle(
         modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f), RepairAppShapes.pill)
-            .padding(4.dp),
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
+            .padding(RepairAppSpacing.tinyGap),
+        horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.tinyGap)
     ) {
         val privateSelected = !isBusiness
         val businessSelected = isBusiness
@@ -367,7 +368,7 @@ fun BackupReminderCard(
             onClick = onOpenSettings,
             imageVector = Icons.Default.Settings,
             contentDescription = stringResource(R.string.home_backup_reminder_settings),
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier.size(RepairAppIconSizes.standard),
             tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
         )
             }

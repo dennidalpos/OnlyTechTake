@@ -86,6 +86,7 @@ object RepairAppSpacing {
     val fieldGap = 12.dp
     val actionGap = 16.dp
     val compactGap = 8.dp
+    val tinyGap = 4.dp
     val bottomContentPadding = 80.dp
     
     val maxContentWidthCompact = 600.dp
@@ -101,6 +102,13 @@ object RepairAppSizes {
     val intakeStepperDot = 32.dp
     val orderStepperDot = 20.dp
     val metricCardHeight = 100.dp
+}
+
+object RepairAppIconSizes {
+    val small = 16.dp
+    val standard = 24.dp
+    val medium = 32.dp
+    val large = 48.dp
 }
 
 object RepairAppShapes {

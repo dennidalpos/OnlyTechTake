@@ -236,6 +236,7 @@ function Invoke-DemoApkBuildAndInstall {
     param(
         [Parameter(Mandatory = $true)][string]$RootPath,
         [Parameter(Mandatory = $true)][string]$Serial,
+        [string]$Flavor = "Full",
         [switch]$SkipBuild
     )
 
@@ -243,8 +244,9 @@ function Invoke-DemoApkBuildAndInstall {
         $gradle = Join-Path $RootPath "gradlew.bat"
         Push-Location $RootPath
         try {
-            # Removed --no-configuration-cache to speed up repeated builds
-            Invoke-Checked -FilePath $gradle -Arguments @(":app:assembleFullDebug", ":app:assembleFullDebugAndroidTest")
+            $task = ":app:assemble$($Flavor)Debug"
+            $testTask = ":app:assemble$($Flavor)DebugAndroidTest"
+            Invoke-Checked -FilePath $gradle -Arguments @($task, $testTask)
         } finally {
             Pop-Location
         }
@@ -252,13 +254,21 @@ function Invoke-DemoApkBuildAndInstall {
         Write-Host "Salto build APK (richiesto -SkipBuild)."
     }
 
-    $packageName = "com.onlytechtake.repairapp.debug"
-    $debugApk = Join-Path $RootPath "app\build\outputs\apk\full\debug\app-full-debug.apk"
-    $testApk = Join-Path $RootPath "app\build\outputs\apk\androidTest\full\debug\app-full-debug-androidTest.apk"
+    $packageNameSuffix = switch ($Flavor) {
+        "Full" { "" }
+        "Demo" { ".demo" }
+        "Showcase" { ".showcase" }
+    }
+    $packageName = "com.onlytechtake.repairapp$($packageNameSuffix).debug"
+
+    $flavorPath = $Flavor.ToLower()
+    $debugApk = Join-Path $RootPath "app\build\outputs\apk\$($flavorPath)\debug\app-$($flavorPath)-debug.apk"
+    $testApk = Join-Path $RootPath "app\build\outputs\apk\androidTest\$($flavorPath)\debug\app-$($flavorPath)-debug-androidTest.apk"
+
     if (-not (Test-Path $debugApk)) { throw "APK debug non trovato: $debugApk" }
     if (-not (Test-Path $testApk)) { throw "Test APK non trovato: $testApk" }
 
-    Write-Host "Installazione APK su $Serial..."
+    Write-Host "Installazione APK ($Flavor) su $Serial..."
     Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "install", "-r", "-d", $debugApk)
     Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "install", "-r", "-d", $testApk)
     Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "shell", "pm", "clear", $packageName)
@@ -268,11 +278,18 @@ function Invoke-DemoScreenshotTest {
     param(
         [Parameter(Mandatory = $true)][string]$Serial,
         [Parameter(Mandatory = $true)][string]$TestClass,
+        [string]$Flavor = "Full",
         [string]$FailureMessage = "Scenario strumentato demo fallito.",
         [hashtable]$InstrumentationExtras = @{}
     )
 
-    $runner = "com.onlytechtake.repairapp.debug.test/androidx.test.runner.AndroidJUnitRunner"
+    $packageNameSuffix = switch ($Flavor) {
+        "Full" { "" }
+        "Demo" { ".demo" }
+        "Showcase" { ".showcase" }
+    }
+    $runner = "com.onlytechtake.repairapp$($packageNameSuffix).debug.test/androidx.test.runner.AndroidJUnitRunner"
+
     $arguments = @(
         "-s",
         $Serial,

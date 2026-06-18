@@ -46,7 +46,7 @@ fun StorageSettings(
                     
                     LinearProgressIndicator(
                         progress = { usedProgress.toFloat() },
-                        modifier = Modifier.fillMaxWidth().height(8.dp),
+                        modifier = Modifier.fillMaxWidth().height(RepairAppSpacing.compactGap),
                         color = when {
                             freePercentage < 5 -> MaterialTheme.colorScheme.error
                             freePercentage < 15 -> MaterialTheme.colorScheme.tertiary
@@ -66,7 +66,7 @@ fun StorageSettings(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
 
-                        AppStatusChip(
+                        AppStatusBadge(
                             text = stringResource(
                                 when {
                                     freePercentage < 5 -> R.string.storage_status_critical
@@ -87,7 +87,7 @@ fun StorageSettings(
                         )
                     }
                     
-                    Spacer(Modifier.height(4.dp))
+                    Spacer(Modifier.height(RepairAppSpacing.tinyGap))
                     AppKeyValueRow(label = stringResource(R.string.storage_total_device), value = formatFileSize(stats.totalDeviceBytes))
                     AppKeyValueRow(label = stringResource(R.string.storage_app_used), value = formatFileSize(stats.appUsedBytes))
                 }
@@ -121,7 +121,7 @@ fun StorageSettings(
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    Spacer(Modifier.height(4.dp))
+                    Spacer(Modifier.height(RepairAppSpacing.tinyGap))
                     AppButton(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.storage_cleanup_orphans),

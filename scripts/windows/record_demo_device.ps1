@@ -1,7 +1,8 @@
 param(
     [string]$OutputRoot = "",
     [string]$OutputFile = "",
-    [string]$PackageName = "com.onlytechtake.repairapp.debug",
+    [string]$Flavor = "Full",
+    [string]$PackageName = "",
     [string]$AvdName = "OnlyTechTakeDemo",
     [switch]$UseConnectedDevice,
     [switch]$SkipBuild,
@@ -20,6 +21,15 @@ $ErrorActionPreference = "Stop"
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 
+if ([string]::IsNullOrWhiteSpace($PackageName)) {
+    $packageNameSuffix = switch ($Flavor) {
+        "Full" { "" }
+        "Demo" { ".demo" }
+        "Showcase" { ".showcase" }
+    }
+    $PackageName = "com.onlytechtake.repairapp$($packageNameSuffix).debug"
+}
+
 if ($MaxDurationSeconds -lt 1 -or $MaxDurationSeconds -gt 180) {
     throw "MaxDurationSeconds deve essere compreso tra 1 e 180, limite di adb screenrecord."
 }
@@ -28,7 +38,7 @@ if ($AutomaticTrimStartSeconds -lt 0 -or $AutomaticTrimEndSeconds -lt 0) {
 }
 
 if (-not $OutputRoot) {
-    $OutputRoot = Join-Path $root "reports/demo-assets/videos/device"
+    $OutputRoot = Join-Path $root "reports/demo-assets/$Flavor/videos/device"
 } elseif (-not [System.IO.Path]::IsPathRooted($OutputRoot)) {
     $OutputRoot = Join-Path $root $OutputRoot
 }
@@ -68,8 +78,8 @@ trap {
 $serial = Resolve-DemoDeviceSerial -AndroidHome $env:ANDROID_HOME -AvdName $AvdName -UseConnectedDevice:$UseConnectedDevice
 Write-Host "Uso device: $serial" -ForegroundColor Green
 
-Write-Host "Preparazione e installazione APK..." -ForegroundColor Gray
-Invoke-DemoApkBuildAndInstall -RootPath $root -Serial $serial -SkipBuild:$SkipBuild
+Write-Host "Preparazione e installazione APK ($Flavor)..." -ForegroundColor Gray
+Invoke-DemoApkBuildAndInstall -RootPath $root -Serial $serial -Flavor $Flavor -SkipBuild:$SkipBuild
 
 Write-Host "Pulizia dati app $PackageName..." -ForegroundColor Gray
 Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "shell", "pm", "clear", $PackageName)
@@ -136,8 +146,8 @@ adb -s $serial shell pm grant $PackageName android.permission.CAMERA
 adb -s $serial shell pm grant $PackageName android.permission.POST_NOTIFICATIONS 2>$null
 
 if ($SeedData) {
-    Write-Host "Seeding dati demo..." -ForegroundColor Yellow
-    Invoke-DemoScreenshotTest -Serial $serial -TestClass "com.onlytechtake.repairapp.demo.SeedDemoDataTest" -FailureMessage "Seed dei dati fallito."
+    Write-Host "Seeding dati demo ($Flavor)..." -ForegroundColor Yellow
+    Invoke-DemoScreenshotTest -Serial $serial -TestClass "com.onlytechtake.repairapp.demo.SeedDemoDataTest" -Flavor $Flavor -FailureMessage "Seed dei dati fallito."
 }
 
 if ($null -eq $selectedTestClass) {
@@ -170,6 +180,7 @@ if ($selectedTestClass) {
         Invoke-DemoScreenshotTest `
             -Serial $serial `
             -TestClass $selectedTestClass `
+            -Flavor $Flavor `
             -InstrumentationExtras @{ demoRecording = "true" }
         Write-Host "Scenario completato." -ForegroundColor Green
     }
