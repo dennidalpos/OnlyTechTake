@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
@@ -73,7 +72,7 @@ fun BackupSettings(
         if (!isAdmin) {
             AppMessageBanner(
                 message = stringResource(R.string.admin_only_section),
-                type = BannerType.Warning
+                type = BannerType.Warning,
             )
         } else {
             StandardCard {
@@ -88,7 +87,7 @@ fun BackupSettings(
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.weight(1f),
                             maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                            overflow = TextOverflow.Ellipsis,
                         )
                         Switch(
                             checked = backupReminderSettings.enabled,
@@ -121,7 +120,7 @@ fun BackupSettings(
                     Text(
                         text = stringResource(R.string.config_backup_security_title),
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -151,7 +150,7 @@ fun BackupSettings(
 
                     AppMessageBanner(
                         message = if (securitySettings.isBackupEncryptionEnabled) stringResource(R.string.config_backup_encrypted_success) else stringResource(R.string.config_backup_unencrypted_warning),
-                        type = if (securitySettings.isBackupEncryptionEnabled) BannerType.Success else BannerType.Warning
+                        type = if (securitySettings.isBackupEncryptionEnabled) BannerType.Success else BannerType.Warning,
                     )
                 }
             }

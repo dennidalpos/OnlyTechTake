@@ -40,7 +40,7 @@ fun DashboardNavHost(
     NavHost(
         navController = navController,
         startDestination = DashboardRoutes.HOME,
-        modifier = modifier
+        modifier = modifier,
     ) {
         composable(DashboardRoutes.HOME) {
             val homeViewModel: HomeViewModel = viewModel(
@@ -49,19 +49,17 @@ fun DashboardNavHost(
                     orderRepository = container.orderWorkflowRepository,
                     backupRepository = container.backupRepository,
                     backupReminderPreferences = container.backupReminderPreferences,
-                )
+                ),
             )
             HomePanel(
                 summary = summary,
                 viewModel = homeViewModel,
-                isAdmin = isAdmin,
                 onNewOrder = { navController.navigate(DashboardRoutes.NEW_ORDER) },
-                onSelectOrder = { orderId -> navController.navigate(DashboardRoutes.orderDetail(orderId)) },
                 onOpenQueue = { filter ->
                     val status = filter.status?.name ?: filter.statuses.firstOrNull()?.name
                     navController.navigate(DashboardRoutes.orders(status = status, customerId = filter.customerId))
                 },
-                onOpenBackupSettings = { navController.navigate(DashboardRoutes.settings("EXPORT")) }
+                onOpenBackupSettings = { navController.navigate(DashboardRoutes.settings("EXPORT")) },
             )
         }
         composable(DashboardRoutes.NEW_ORDER) {
@@ -73,13 +71,13 @@ fun DashboardNavHost(
                     orderMediaRepository = container.orderMediaRepository,
                     templateRepository = container.templateRepository,
                     createIntakeOrderUseCase = container.createIntakeOrderUseCase,
-                    onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) }
+                    onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) },
                 )
             )
             QuickActions(
                 viewModel = newOrderViewModel,
                 onOpenConfig = { navController.navigate(DashboardRoutes.settings("CATEGORIES", fromIntake = true)) },
-                onClose = { navController.popBackStack() }
+                onClose = { navController.popBackStack() },
             )
         }
         composable(DashboardRoutes.CUSTOMERS) {
@@ -88,12 +86,12 @@ fun DashboardNavHost(
                     authRepository = container.authRepository,
                     customerRepository = container.customerRepository,
                     orderWorkflowRepository = container.orderWorkflowRepository,
-                    onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) }
+                    onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) },
                 )
             )
             CustomerPanel(
                 viewModel = customersViewModel,
-                onOrderClick = { orderId -> navController.navigate(DashboardRoutes.orderDetail(orderId)) }
+                onOrderClick = { orderId -> navController.navigate(DashboardRoutes.orderDetail(orderId)) },
             )
         }
         composable(
@@ -113,15 +111,17 @@ fun DashboardNavHost(
                     orderRepository = container.orderWorkflowRepository,
                     backupRepository = container.backupRepository,
                     backupReminderPreferences = container.backupReminderPreferences,
-                )
+                ),
             )
             
             androidx.compose.runtime.LaunchedEffect(status, customerId) {
-                if (status != null || customerId != null) {
-                    ordersViewModel.setFilter(com.onlytechtake.repairapp.domain.workspace.OrderFilter(
-                        status = status,
-                        customerId = customerId
-                    ))
+                if ((status != null) || (customerId != null)) {
+                    ordersViewModel.setFilter(
+                        com.onlytechtake.repairapp.domain.workspace.OrderFilter(
+                            status = status,
+                            customerId = customerId,
+                        ),
+                    )
                 }
             }
 
@@ -134,7 +134,7 @@ fun DashboardNavHost(
                 onOpenBackupSettings = {
                     navController.navigate(DashboardRoutes.settings("EXPORT"))
                 },
-                onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) }
+                onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) },
             )
         }
         composable(
@@ -153,12 +153,12 @@ fun DashboardNavHost(
                     templateRepository = container.templateRepository,
                     generateOrderStatusPdfUseCase = container.generateOrderStatusPdfUseCase,
                     shareDocumentIntentFactory = container.shareDocumentIntentFactory,
-                    onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) }
+                    onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) },
                 )
             )
             OrderDetailWorkspace(
                 viewModel = orderDetailViewModel,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
             )
         }
         composable(
@@ -189,7 +189,7 @@ fun DashboardNavHost(
                     storageStatsService = container.storageStatsService,
                     orderFileCleanupService = container.orderFileCleanupService,
                     database = container.database,
-                    onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) }
+                    onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) },
                 )
             )
             SettingsPanel(
@@ -198,7 +198,7 @@ fun DashboardNavHost(
                 initialSection = section,
                 fromIntake = fromIntake,
                 onBackupRestored = onAppDataRestored,
-                onNavigate = { route -> navController.navigate(route) }
+                onNavigate = { route -> navController.navigate(route) },
             )
         }
         composable(DashboardRoutes.ADMIN) {
@@ -209,12 +209,12 @@ fun DashboardNavHost(
                     backupRepository = container.backupRepository,
                     dataResetRepository = container.dataResetRepository,
                     backupReminderPreferences = container.backupReminderPreferences,
-                )
+                ),
             )
             AdminPanel(
                 viewModel = adminViewModel,
                 isAdmin = isAdmin,
-                onResetComplete = onLogout
+                onResetComplete = onLogout,
             )
         }
     }

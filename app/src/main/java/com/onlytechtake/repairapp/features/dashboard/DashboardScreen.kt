@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -29,11 +28,7 @@ import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.LiveRegionMode
-import androidx.compose.ui.semantics.liveRegion
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -62,7 +57,7 @@ fun DashboardRoute(
     )
     val sharedViewModel: SharedWorkspaceViewModel = viewModel(
         key = "shared_workspace_$appInstanceKey",
-        factory = SharedWorkspaceViewModel.Factory()
+        factory = SharedWorkspaceViewModel.Factory(),
     )
     val summary by dashboardViewModel.summary.collectAsState()
 
@@ -144,8 +139,8 @@ fun DashboardScreen(
                 title = summary.title,
                 navigationIcon = {
                     if (currentDestination != DashboardRoutes.HOME) {
-                        val isCloseIcon = currentDestination == DashboardRoutes.NEW_ORDER || 
-                                         currentDestination.startsWith("order_detail/")
+                        val isCloseIcon = (currentDestination == DashboardRoutes.NEW_ORDER) || 
+                                         (currentDestination.startsWith("order_detail/"))
                         AppIconButton(
                             modifier = Modifier.testTag(RepairAppTestTags.ConfigBackButton),
                             imageVector = if (isCloseIcon) Icons.Default.Close else Icons.AutoMirrored.Filled.ArrowBack,
@@ -160,7 +155,7 @@ fun DashboardScreen(
                                 } else {
                                     navController.popBackStack()
                                 }
-                            }
+                            },
                         )
                     }
                 },
@@ -175,7 +170,7 @@ fun DashboardScreen(
                             contentColor = if (isAdminUser) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer,
                             modifier = Modifier
                                 .padding(end = RepairAppSpacing.compactGap)
-                                .basicMarquee()
+                                .basicMarquee(),
                         )
                     }
                     AppButton(
@@ -183,7 +178,7 @@ fun DashboardScreen(
                         onClick = onLogout,
                         variant = AppButtonVariant.Ghost,
                         size = AppButtonSize.Compact,
-                        testTag = RepairAppTestTags.LogoutButton
+                        testTag = RepairAppTestTags.LogoutButton,
                     )
                 },
             )
@@ -191,7 +186,7 @@ fun DashboardScreen(
         bottomBar = {
             if (!useNavRail) {
                 NavigationBar(
-                    modifier = Modifier.testTag(RepairAppTestTags.DashboardTabs)
+                    modifier = Modifier.testTag(RepairAppTestTags.DashboardTabs),
                 ) {
                     items.forEach { item ->
                         val selected = isTabSelected(item.route, currentDestination)
@@ -201,7 +196,7 @@ fun DashboardScreen(
                                 Icon(
                                     imageVector = item.icon, 
                                     contentDescription = null,
-                                    tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                                    tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                                 ) 
                             },
                             label = { 
@@ -210,7 +205,7 @@ fun DashboardScreen(
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
                                     softWrap = false,
-                                    color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                                    color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                                 ) 
                             },
                             selected = selected,
@@ -227,7 +222,7 @@ fun DashboardScreen(
                                         performNavigation(item.route)
                                     }
                                 }
-                            }
+                            },
                         )
                     }
                 }
@@ -255,13 +250,13 @@ fun DashboardScreen(
                                 Icon(
                                     imageVector = item.icon, 
                                     contentDescription = null,
-                                    tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                                    tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                                 ) 
                             },
                             label = { 
                                 Text(
                                     text = stringResource(item.labelRes),
-                                    color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                                    color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                                 ) 
                             },
                             selected = selected,
@@ -278,7 +273,7 @@ fun DashboardScreen(
                                         performNavigation(item.route)
                                     }
                                 }
-                            }
+                            },
                         )
                     }
                     Spacer(Modifier.weight(1f))
@@ -296,7 +291,7 @@ fun DashboardScreen(
                         message = message.text,
                         type = if (message.isError) BannerType.Error else BannerType.Info,
                         onDismiss = sharedViewModel::clearMessage,
-                        modifier = Modifier.padding(horizontal = RepairAppSpacing.screenHorizontal, vertical = RepairAppSpacing.compactGap)
+                        modifier = Modifier.padding(horizontal = RepairAppSpacing.screenHorizontal, vertical = RepairAppSpacing.compactGap),
                     )
                 }
 
@@ -307,7 +302,7 @@ fun DashboardScreen(
                     isAdmin = isAdmin,
                     onAppDataRestored = onAppDataRestored,
                     onLogout = onLogout,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
             }
         }
@@ -338,7 +333,7 @@ fun DashboardScreen(
                     text = stringResource(R.string.dashboard_unsaved_continue),
                     onClick = { showUnsavedChangesDialog = false },
                     variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
                 )
             }
         )
@@ -356,7 +351,7 @@ fun DashboardScreen(
                 style = MaterialTheme.typography.displayLarge,
                 color = Color.Gray,
                 modifier = Modifier.rotate(-45f),
-                softWrap = false
+                softWrap = false,
             )
         }
     }

@@ -25,9 +25,7 @@ import com.onlytechtake.repairapp.features.workspace.queueFilter
 fun HomePanel(
     summary: AppSummary,
     viewModel: HomeViewModel,
-    isAdmin: Boolean,
     onNewOrder: () -> Unit,
-    onSelectOrder: (String) -> Unit,
     onOpenQueue: (OrderFilter) -> Unit,
     onOpenBackupSettings: () -> Unit,
 ) {
@@ -39,7 +37,7 @@ fun HomePanel(
     }
 
     AppScreenContainer {
-        val showBanner = BuildConfig.IS_DEMO_VERSION || DemoMode.isEnabled
+        val showBanner = remember { if (BuildConfig.IS_DEMO_VERSION) true else DemoMode.isEnabled }
         if (showBanner) {
             val bannerText = if (DemoMode.isEnabled) {
                 stringResource(R.string.demo_mode_banner)
@@ -49,7 +47,7 @@ fun HomePanel(
             AppMessageBanner(
                 message = bannerText,
                 type = BannerType.Info,
-                modifier = Modifier.padding(bottom = RepairAppSpacing.cardGap)
+                modifier = Modifier.padding(bottom = RepairAppSpacing.cardGap),
             )
         }
 
@@ -62,17 +60,17 @@ fun HomePanel(
             AppMetricCard(
                 label = stringResource(R.string.home_metric_users),
                 value = summary.userCount.toString(),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
             AppMetricCard(
                 label = stringResource(R.string.home_metric_customers),
                 value = summary.customerCount.toString(),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
             AppMetricCard(
                 label = stringResource(R.string.home_metric_active),
                 value = summary.activeOrderCount.toString(),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
         }
 
@@ -84,7 +82,7 @@ fun HomePanel(
             variant = AppButtonVariant.Primary,
             size = AppButtonSize.FullWidth,
             leadingIcon = Icons.Default.Add,
-            testTag = RepairAppTestTags.HomeNewOrderButton
+            testTag = RepairAppTestTags.HomeNewOrderButton,
         )
 
         if (showBackupReminder) {
@@ -92,7 +90,7 @@ fun HomePanel(
             BackupReminderCard(
                 settings = backupReminderSettings,
                 onRunBackup = { exportZipLauncher.launch("onlytechtake-backup.zip") },
-                onOpenSettings = onOpenBackupSettings
+                onOpenSettings = onOpenBackupSettings,
             )
         }
 
@@ -113,7 +111,7 @@ fun HomePanel(
                     count = queue.orders.size,
                     lastElementTitle = queue.orders.firstOrNull()?.let { "${it.orderNumber} - ${it.title}" },
                     onOpenQueue = { onOpenQueue(queueFilter(queue)) },
-                    modifier = Modifier.padding(bottom = RepairAppSpacing.cardGap)
+                    modifier = Modifier.padding(bottom = RepairAppSpacing.cardGap),
                 )
             }
         }

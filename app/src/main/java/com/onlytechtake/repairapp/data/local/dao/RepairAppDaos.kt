@@ -333,13 +333,13 @@ interface RepairOrderDao {
             AND (:customerId IS NULL OR o.customerId = :customerId)
         ORDER BY o.updatedAt DESC
         LIMIT :limit
-        """
+        """,
     )
     fun observeOrderListProjection(
         assignedToUserId: String?,
         status: OrderStatus?,
         customerId: String?,
-        limit: Int = 100
+        limit: Int = 100,
     ): Flow<List<OrderListItemProjection>>
 
     @Query("DELETE FROM repair_orders WHERE id IN (:orderIds)")

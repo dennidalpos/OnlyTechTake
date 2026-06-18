@@ -60,15 +60,15 @@ class AuthGateViewModelTest {
             error("loginDemo is not expected in logoutResetsLoadingState")
         }
 
-        override suspend fun changePassword(username: String, currentPassword: CharArray, newPassword: CharArray): kotlin.Result<Unit> {
+        override suspend fun changePassword(username: String, currentPassword: CharArray, newPassword: CharArray): Result<Unit> {
             error("changePassword is not expected in logoutResetsLoadingState")
         }
 
-        override suspend fun getRecoveryKit(): kotlin.Result<String> {
+        override suspend fun getRecoveryKit(): Result<String> {
             error("getRecoveryKit is not expected in logoutResetsLoadingState")
         }
 
-        override suspend fun resetAdminWithRecoveryCode(code: String, newPassword: CharArray): kotlin.Result<Unit> {
+        override suspend fun resetAdminWithRecoveryCode(code: String, newPassword: CharArray): Result<Unit> {
             error("resetAdminWithRecoveryCode is not expected in logoutResetsLoadingState")
         }
 
