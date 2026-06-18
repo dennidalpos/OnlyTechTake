@@ -9,17 +9,21 @@ import java.io.File
 class ShareDocumentIntentFactory(
     private val context: Context,
 ) {
-    fun createPdfShareIntent(file: File, title: String): Intent {
+    fun createPdfShareIntent(
+        file: File,
+        title: String,
+    ): Intent {
         val sharedDir = File(context.cacheDir, "shared/${java.util.UUID.randomUUID()}")
         sharedDir.mkdirs()
         val sharedFile = File(sharedDir, file.name)
         file.copyTo(sharedFile, overwrite = true)
 
-        val uri = FileProvider.getUriForFile(
-            context,
-            "${context.packageName}.fileprovider",
-            sharedFile,
-        )
+        val uri =
+            FileProvider.getUriForFile(
+                context,
+                "${context.packageName}.fileprovider",
+                sharedFile,
+            )
 
         return Intent(Intent.ACTION_SEND).apply {
             type = "application/pdf"

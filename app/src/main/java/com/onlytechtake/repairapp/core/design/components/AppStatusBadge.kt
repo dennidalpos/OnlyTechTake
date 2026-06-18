@@ -21,19 +21,20 @@ fun AppStatusBadge(
     text: String,
     containerColor: Color,
     contentColor: Color,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .clip(RepairAppShapes.badge)
-            .background(containerColor)
-            .padding(horizontal = 8.dp, vertical = 2.dp)
+        modifier =
+            modifier
+                .clip(RepairAppShapes.badge)
+                .background(containerColor)
+                .padding(horizontal = 8.dp, vertical = 2.dp),
     ) {
         Text(
             text = text,
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
-            color = contentColor
+            color = contentColor,
         )
     }
 }

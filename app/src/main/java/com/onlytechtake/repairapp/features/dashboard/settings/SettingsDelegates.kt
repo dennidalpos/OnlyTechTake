@@ -18,14 +18,22 @@ import kotlinx.coroutines.launch
 
 internal class CatalogSettingsDelegate(
     private val catalogRepository: CatalogRepository,
-    private val actionRunner: AuthenticatedActionRunner
+    private val actionRunner: AuthenticatedActionRunner,
 ) {
-    fun saveCategory(id: String?, parentId: String?, name: String, description: String, active: Boolean, onSaved: (String) -> Unit = {}) {
+    fun saveCategory(
+        id: String?,
+        parentId: String?,
+        name: String,
+        description: String,
+        active: Boolean,
+        onSaved: (String) -> Unit = {},
+    ) {
         actionRunner.run(successMessage = "Operazione completata") { actor ->
-            catalogRepository.saveCategory(
-                actor,
-                CategoryInput(id, parentId, name, description, active)
-            ).onSuccess { onSaved(it) }
+            catalogRepository
+                .saveCategory(
+                    actor,
+                    CategoryInput(id, parentId, name, description, active),
+                ).onSuccess { onSaved(it) }
             Result.success(Unit)
         }
     }
@@ -39,15 +47,24 @@ internal class CatalogSettingsDelegate(
 
 internal class TemplateSettingsDelegate(
     private val templateRepository: TemplateRepository,
-    private val actionRunner: AuthenticatedActionRunner
+    private val actionRunner: AuthenticatedActionRunner,
 ) {
-    fun saveTemplate(code: String, title: String, body: String, active: Boolean, step: String? = null) {
+    fun saveTemplate(
+        code: String,
+        title: String,
+        body: String,
+        active: Boolean,
+        step: String? = null,
+    ) {
         actionRunner.run(successMessage = "Operazione completata") { actor ->
             templateRepository.saveTemplate(actor, code, title, body, active, step)
         }
     }
 
-    fun setTemplateForAnchor(anchor: TemplateAnchor, templateCode: String) {
+    fun setTemplateForAnchor(
+        anchor: TemplateAnchor,
+        templateCode: String,
+    ) {
         actionRunner.run(successMessage = "Associazione aggiornata") { actor ->
             templateRepository.setTemplateForAnchor(actor, anchor, templateCode)
         }
@@ -70,7 +87,7 @@ internal class BackupSettingsDelegate(
     private val backupRepository: BackupRepository,
     private val backupReminderPreferences: BackupReminderPreferences,
     private val actionRunner: AuthenticatedActionRunner,
-    private val scope: CoroutineScope
+    private val scope: CoroutineScope,
 ) {
     fun setBackupReminderEnabled(enabled: Boolean) {
         scope.launch {
@@ -108,7 +125,10 @@ internal class BackupSettingsDelegate(
         }
     }
 
-    fun restoreCompleteBackup(uri: Uri, onRestored: () -> Unit) {
+    fun restoreCompleteBackup(
+        uri: Uri,
+        onRestored: () -> Unit,
+    ) {
         actionRunner.run(onSuccess = onRestored) { actor ->
             backupRepository.restoreCompleteBackup(actor, uri)
         }
@@ -117,7 +137,7 @@ internal class BackupSettingsDelegate(
 
 internal class SecuritySettingsDelegate(
     private val securityPreferences: SecurityPreferences,
-    private val scope: CoroutineScope
+    private val scope: CoroutineScope,
 ) {
     fun setBackupEncryptionEnabled(enabled: Boolean) {
         scope.launch {
@@ -140,27 +160,40 @@ internal class SecuritySettingsDelegate(
 
 internal class AdminSettingsDelegate(
     private val adminUserRepository: AdminUserRepository,
-    private val actionRunner: AuthenticatedActionRunner
+    private val actionRunner: AuthenticatedActionRunner,
 ) {
-    fun createOperator(displayName: String, username: String, password: CharArray) {
+    fun createOperator(
+        displayName: String,
+        username: String,
+        password: CharArray,
+    ) {
         actionRunner.run { actor ->
             adminUserRepository.createOperator(actor, OperatorInput(displayName, username, password))
         }
     }
 
-    fun setUserActive(userId: String, active: Boolean) {
+    fun setUserActive(
+        userId: String,
+        active: Boolean,
+    ) {
         actionRunner.run { actor ->
             adminUserRepository.setActive(actor, userId, active)
         }
     }
 
-    fun setUserPermissions(userId: String, permissions: Set<UserPermission>) {
+    fun setUserPermissions(
+        userId: String,
+        permissions: Set<UserPermission>,
+    ) {
         actionRunner.run { actor ->
             adminUserRepository.setPermissions(actor, userId, permissions)
         }
     }
 
-    fun resetPassword(userId: String, password: CharArray) {
+    fun resetPassword(
+        userId: String,
+        password: CharArray,
+    ) {
         actionRunner.run { actor ->
             adminUserRepository.resetPassword(actor, userId, password)
         }
@@ -173,7 +206,7 @@ internal class StorageSettingsDelegate(
     private val database: RepairAppDatabase,
     private val actionRunner: AuthenticatedActionRunner,
     private val scope: CoroutineScope,
-    private val onRefreshStats: () -> Unit
+    private val onRefreshStats: () -> Unit,
 ) {
     fun cleanupCache() {
         scope.launch {

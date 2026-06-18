@@ -20,15 +20,16 @@ fun AppBadge(
     contentColor: Color = MaterialTheme.colorScheme.onPrimary,
 ) {
     Box(
-        modifier = modifier
-            .clip(RepairAppShapes.badge)
-            .background(containerColor)
-            .padding(horizontal = 6.dp, vertical = 2.dp)
+        modifier =
+            modifier
+                .clip(RepairAppShapes.badge)
+                .background(containerColor)
+                .padding(horizontal = 6.dp, vertical = 2.dp),
     ) {
         Text(
             text = text,
             style = MaterialTheme.typography.labelSmall,
-            color = contentColor
+            color = contentColor,
         )
     }
 }

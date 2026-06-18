@@ -17,15 +17,19 @@ fun CustomerEntity?.displayName(context: Context): String =
 
 fun CustomerEntity?.displayName(
     unnamedPrivate: String,
-    unnamedBusiness: String
-): String = if (this == null) {
-    ""
-} else {
-    when (type) {
-        CustomerType.PRIVATE -> listOfNotNull(firstName, lastName)
-            .joinToString(" ")
-            .ifBlank { unnamedPrivate }
-        CustomerType.BUSINESS -> companyName.orEmpty()
-            .ifBlank { unnamedBusiness }
+    unnamedBusiness: String,
+): String =
+    if (this == null) {
+        ""
+    } else {
+        when (type) {
+            CustomerType.PRIVATE ->
+                listOfNotNull(firstName, lastName)
+                    .joinToString(" ")
+                    .ifBlank { unnamedPrivate }
+            CustomerType.BUSINESS ->
+                companyName
+                    .orEmpty()
+                    .ifBlank { unnamedBusiness }
+        }
     }
-}

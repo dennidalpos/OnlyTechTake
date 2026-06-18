@@ -25,25 +25,25 @@ fun AppQueueCard(
     ) {
         Column(
             modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 AppBadge(
                     text = count.toString(),
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                 )
             }
-            
+
             if (count > 0 && lastElementTitle != null) {
                 Text(
                     text = lastElementTitle,
@@ -51,14 +51,14 @@ fun AppQueueCard(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(vertical = 4.dp)
+                    modifier = Modifier.padding(vertical = 4.dp),
                 )
             } else {
                 Text(
                     text = stringResource(R.string.home_empty_queue),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline,
-                    modifier = Modifier.padding(vertical = 4.dp)
+                    modifier = Modifier.padding(vertical = 4.dp),
                 )
             }
 
@@ -67,7 +67,7 @@ fun AppQueueCard(
                 onClick = onOpenQueue,
                 variant = AppButtonVariant.Secondary,
                 size = AppButtonSize.Compact,
-                modifier = Modifier.align(Alignment.End)
+                modifier = Modifier.align(Alignment.End),
             )
         }
     }

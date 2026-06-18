@@ -23,8 +23,6 @@ import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import java.io.File
-import java.util.UUID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -34,6 +32,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.io.File
+import java.util.UUID
 
 class GenerateOrderStatusPdfUseCaseDemoTest {
     private lateinit var testRoot: File
@@ -49,105 +49,115 @@ class GenerateOrderStatusPdfUseCaseDemoTest {
     }
 
     @Test
-    fun demoFlavorAddsWatermarkToGeneratedStatusPdfPayload() = runBlocking {
-        assertTrue(BuildConfig.IS_DEMO_VERSION)
+    fun demoFlavorAddsWatermarkToGeneratedStatusPdfPayload() =
+        runBlocking {
+            assertTrue(BuildConfig.IS_DEMO_VERSION)
 
-        val context = mockk<Context>()
-        every { context.filesDir } returns testRoot
-        every { context.getString(any()) } answers {
-            if (firstArg<Int>() == R.string.demo_version_banner) "VERSIONE DEMO" else "Aperta"
+            val context = mockk<Context>()
+            every { context.filesDir } returns testRoot
+            every { context.getString(any()) } answers {
+                if (firstArg<Int>() == R.string.demo_version_banner) "VERSIONE DEMO" else "Aperta"
+            }
+
+            val workflowRepository = mockk<OrderWorkflowRepository>()
+            every { workflowRepository.observeOrderDetail("order-1") } returns flowOf(orderDetail())
+
+            val catalogRepository = mockk<CatalogRepository>()
+            coEvery { catalogRepository.getCategoryPath("cat-1") } returns "Notebook"
+
+            val userDao = mockk<UserDao>()
+            coEvery { userDao.findById("operator-1") } returns user()
+
+            val documentRepository = FakeOrderDocumentRepository()
+            val pdfGenerator = CapturingPdfGenerator()
+            val useCase =
+                GenerateOrderStatusPdfUseCase(
+                    context = context,
+                    workflowRepository = workflowRepository,
+                    catalogRepository = catalogRepository,
+                    documentRepository = documentRepository,
+                    userDao = userDao,
+                    fileStorage = OrderDocumentFileStorage(MediaStorageProvider(context)),
+                    pdfGenerator = pdfGenerator,
+                    clockMillis = { 1_000L },
+                )
+
+            val document =
+                useCase(
+                    orderId = "order-1",
+                    userId = "operator-1",
+                    includeCustomerSignature = false,
+                ).getOrThrow()
+
+            assertEquals("VERSIONE DEMO", pdfGenerator.capturedPayload?.watermarkText)
+            assertEquals(document, documentRepository.saved.single())
+            assertTrue(File(document.localPath).exists())
         }
 
-        val workflowRepository = mockk<OrderWorkflowRepository>()
-        every { workflowRepository.observeOrderDetail("order-1") } returns flowOf(orderDetail())
-
-        val catalogRepository = mockk<CatalogRepository>()
-        coEvery { catalogRepository.getCategoryPath("cat-1") } returns "Notebook"
-
-        val userDao = mockk<UserDao>()
-        coEvery { userDao.findById("operator-1") } returns user()
-
-        val documentRepository = FakeOrderDocumentRepository()
-        val pdfGenerator = CapturingPdfGenerator()
-        val useCase = GenerateOrderStatusPdfUseCase(
-            context = context,
-            workflowRepository = workflowRepository,
-            catalogRepository = catalogRepository,
-            documentRepository = documentRepository,
-            userDao = userDao,
-            fileStorage = OrderDocumentFileStorage(MediaStorageProvider(context)),
-            pdfGenerator = pdfGenerator,
-            clockMillis = { 1_000L },
+    private fun orderDetail() =
+        OrderDetail(
+            order =
+                RepairOrderEntity(
+                    id = "order-1",
+                    orderNumber = "2026-0001",
+                    customerId = "customer-1",
+                    title = "Notebook lento",
+                    categoryId = "cat-1",
+                    status = OrderStatus.OPEN,
+                    priority = OrderPriority.NORMAL,
+                    assignedToUserId = "operator-1",
+                    createdByUserId = "operator-1",
+                    description = "Avvio lento",
+                    createdAt = 1L,
+                    updatedAt = 1L,
+                ),
+            customer =
+                CustomerEntity(
+                    id = "customer-1",
+                    type = CustomerType.PRIVATE,
+                    firstName = "Mario",
+                    lastName = "Rossi",
+                    companyName = null,
+                    vatNumber = null,
+                    taxCode = null,
+                    phone = "333",
+                    email = null,
+                    address = null,
+                    notes = null,
+                    createdAt = 1L,
+                    updatedAt = 1L,
+                ),
+            category = null,
+            assignedUser = null,
+            timeline = emptyList(),
+            messages = emptyList(),
+            media = emptyList(),
+            signatures = emptyList(),
         )
 
-        val document = useCase(
-            orderId = "order-1",
-            userId = "operator-1",
-            includeCustomerSignature = false,
-        ).getOrThrow()
-
-        assertEquals("VERSIONE DEMO", pdfGenerator.capturedPayload?.watermarkText)
-        assertEquals(document, documentRepository.saved.single())
-        assertTrue(File(document.localPath).exists())
-    }
-
-    private fun orderDetail() = OrderDetail(
-        order = RepairOrderEntity(
-            id = "order-1",
-            orderNumber = "2026-0001",
-            customerId = "customer-1",
-            title = "Notebook lento",
-            categoryId = "cat-1",
-            status = OrderStatus.OPEN,
-            priority = OrderPriority.NORMAL,
-            assignedToUserId = "operator-1",
-            createdByUserId = "operator-1",
-            description = "Avvio lento",
+    private fun user() =
+        UserEntity(
+            id = "operator-1",
+            displayName = "Operatore",
+            username = "operatore",
+            passwordHash = "hash",
+            passwordSalt = "salt",
+            role = UserRole.OPERATOR,
+            permissions = setOf(UserPermission.EDIT_OWN_ORDERS),
+            active = true,
+            forcePasswordChange = false,
             createdAt = 1L,
             updatedAt = 1L,
-        ),
-        customer = CustomerEntity(
-            id = "customer-1",
-            type = CustomerType.PRIVATE,
-            firstName = "Mario",
-            lastName = "Rossi",
-            companyName = null,
-            vatNumber = null,
-            taxCode = null,
-            phone = "333",
-            email = null,
-            address = null,
-            notes = null,
-            createdAt = 1L,
-            updatedAt = 1L,
-        ),
-        category = null,
-        assignedUser = null,
-        timeline = emptyList(),
-        messages = emptyList(),
-        media = emptyList(),
-        signatures = emptyList(),
-    )
-
-    private fun user() = UserEntity(
-        id = "operator-1",
-        displayName = "Operatore",
-        username = "operatore",
-        passwordHash = "hash",
-        passwordSalt = "salt",
-        role = UserRole.OPERATOR,
-        permissions = setOf(UserPermission.EDIT_OWN_ORDERS),
-        active = true,
-        forcePasswordChange = false,
-        createdAt = 1L,
-        updatedAt = 1L,
-    )
+        )
 
     private class CapturingPdfGenerator : OrderStatusPdfWriter {
         var capturedPayload: OrderStatusPdfPayload? = null
             private set
 
-        override fun generate(outputFile: File, payload: OrderStatusPdfPayload): File {
+        override fun generate(
+            outputFile: File,
+            payload: OrderStatusPdfPayload,
+        ): File {
             capturedPayload = payload
             outputFile.parentFile?.mkdirs()
             outputFile.writeBytes(byteArrayOf(1, 2, 3))
@@ -164,7 +174,10 @@ class GenerateOrderStatusPdfUseCaseDemoTest {
             documentsFlow.value = saved.toList()
         }
 
-        override suspend fun markShared(documentId: String, sharedAt: Long) = Unit
+        override suspend fun markShared(
+            documentId: String,
+            sharedAt: Long,
+        ) = Unit
 
         override suspend fun findById(id: String): OrderDocumentEntity? = saved.firstOrNull { it.id == id }
 

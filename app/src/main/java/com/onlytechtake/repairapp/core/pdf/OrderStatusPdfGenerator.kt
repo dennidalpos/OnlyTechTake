@@ -8,7 +8,6 @@ import android.graphics.pdf.PdfDocument
 import androidx.core.graphics.withRotation
 import com.onlytechtake.repairapp.core.media.decodeOrientedBitmap
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
@@ -33,45 +32,55 @@ data class OrderStatusPdfPayload(
 )
 
 interface OrderStatusPdfWriter {
-    fun generate(outputFile: File, payload: OrderStatusPdfPayload): File
+    fun generate(
+        outputFile: File,
+        payload: OrderStatusPdfPayload,
+    ): File
 }
 
 class OrderStatusPdfGenerator : OrderStatusPdfWriter {
+    private val titlePaint =
+        Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            textSize = 18f
+            typeface = Typeface.DEFAULT_BOLD
+            color = Color.BLACK
+        }
 
-    private val titlePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        textSize = 18f
-        typeface = Typeface.DEFAULT_BOLD
-        color = Color.BLACK
-    }
+    private val sectionPaint =
+        Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            textSize = 13f
+            typeface = Typeface.DEFAULT_BOLD
+            color = Color.BLACK
+        }
 
-    private val sectionPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        textSize = 13f
-        typeface = Typeface.DEFAULT_BOLD
-        color = Color.BLACK
-    }
+    private val textPaint =
+        Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            textSize = 10f
+            color = Color.BLACK
+        }
 
-    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        textSize = 10f
-        color = Color.BLACK
-    }
+    private val labelPaint =
+        Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            textSize = 10f
+            typeface = Typeface.DEFAULT_BOLD
+            color = Color.BLACK
+        }
 
-    private val labelPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        textSize = 10f
-        typeface = Typeface.DEFAULT_BOLD
-        color = Color.BLACK
-    }
-
-    private val watermarkPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        textSize = 56f
-        typeface = Typeface.DEFAULT_BOLD
-        color = Color.RED
-        alpha = 38
-        textAlign = Paint.Align.CENTER
-    }
+    private val watermarkPaint =
+        Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            textSize = 56f
+            typeface = Typeface.DEFAULT_BOLD
+            color = Color.RED
+            alpha = 38
+            textAlign = Paint.Align.CENTER
+        }
 
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
 
-    override fun generate(outputFile: File, payload: OrderStatusPdfPayload): File {
+    override fun generate(
+        outputFile: File,
+        payload: OrderStatusPdfPayload,
+    ): File {
         val document = PdfDocument()
         val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create() // A4
         var page = document.startPage(pageInfo)
@@ -112,7 +121,14 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         // Customer Section
         canvas.drawText("CLIENTE", margin, y, sectionPaint)
         y += 15f
-        val customerName = if (payload.customer.type.name == "BUSINESS") payload.customer.companyName else "${payload.customer.firstName} ${payload.customer.lastName}"
+        val customerName =
+            if (payload.customer.type.name ==
+                "BUSINESS"
+            ) {
+                payload.customer.companyName
+            } else {
+                "${payload.customer.firstName} ${payload.customer.lastName}"
+            }
         canvas.drawText("Nominativo:", margin, y, labelPaint)
         canvas.drawText(customerName ?: "", margin + 80f, y, textPaint)
         y += 15f
@@ -183,7 +199,7 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
                 val scale = Math.min(maxWidth / bitmap.width, maxHeight / bitmap.height)
                 val drawWidth = bitmap.width * scale
                 val drawHeight = bitmap.height * scale
-                
+
                 canvas.drawBitmap(bitmap, null, android.graphics.RectF(margin, y, margin + drawWidth, y + drawHeight), null)
                 y += drawHeight + 10f
                 bitmap.recycle()
@@ -196,14 +212,24 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         return outputFile
     }
 
-    private fun drawWatermark(canvas: Canvas, watermarkText: String?) {
+    private fun drawWatermark(
+        canvas: Canvas,
+        watermarkText: String?,
+    ) {
         if (watermarkText.isNullOrBlank()) return
         canvas.withRotation(-35f, PAGE_WIDTH / 2f, PAGE_HEIGHT / 2f) {
             drawText(watermarkText, PAGE_WIDTH / 2f, PAGE_HEIGHT / 2f, watermarkPaint)
         }
     }
 
-    private fun drawWrappedText(canvas: Canvas, text: String, x: Float, y: Float, maxWidth: Float, paint: Paint): Float {
+    private fun drawWrappedText(
+        canvas: Canvas,
+        text: String,
+        x: Float,
+        y: Float,
+        maxWidth: Float,
+        paint: Paint,
+    ): Float {
         var currentY = y
         val words = text.split(" ")
         var line = ""

@@ -8,7 +8,6 @@ class OrderFileCleanupService(
     private val context: Context,
     private val mediaStorageProvider: MediaStorageProvider,
 ) {
-
     /**
      * Deletes all files and directories associated with an order.
      */
@@ -78,6 +77,7 @@ class OrderFileCleanupService(
     }
 
     private fun getIntakeMediaDir(sessionId: String) = mediaStorageProvider.getIntakeMediaDir(sessionId)
+
     private fun getSharedCacheDir() = File(context.cacheDir, "shared")
 
     private fun deleteRecursively(file: File) {

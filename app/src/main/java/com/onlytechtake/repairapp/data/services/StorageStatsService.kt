@@ -23,7 +23,7 @@ class StorageStatsService(
         val stat = StatFs(context.filesDir.path)
         val freeBytes = stat.availableBytes
         val totalBytes = stat.totalBytes
-        
+
         val dbFile = context.getDatabasePath("repair_app.db")
         val dbBytes = if (dbFile.exists()) dbFile.length() else 0L
         val dbJournal = File(dbFile.path + "-journal")
@@ -31,14 +31,14 @@ class StorageStatsService(
         val totalDbBytes = dbBytes + (if (dbJournal.exists()) dbJournal.length() else 0L) + (if (dbWal.exists()) dbWal.length() else 0L)
 
         val baseMediaDir = mediaStorageProvider.getBaseMediaDir()
-        
+
         val mediaBytes = getDirectorySize(File(baseMediaDir, "order_media"))
         val signatureBytes = getDirectorySize(File(baseMediaDir, "signatures"))
         val documentBytes = getDirectorySize(File(baseMediaDir, "documents"))
         val intakeBytes = getDirectorySize(File(baseMediaDir, "intake_media"))
-        
+
         val cacheBytes = getDirectorySize(context.cacheDir)
-        
+
         val appUsedBytes = getDirectorySize(context.filesDir) + totalDbBytes + cacheBytes
 
         return StorageStats(
@@ -48,7 +48,7 @@ class StorageStatsService(
             databaseBytes = totalDbBytes,
             mediaBytes = mediaBytes + intakeBytes,
             documentsBytes = documentBytes + signatureBytes,
-            cacheBytes = cacheBytes
+            cacheBytes = cacheBytes,
         )
     }
 

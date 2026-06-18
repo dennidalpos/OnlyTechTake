@@ -18,9 +18,10 @@ class ShareDocumentIntentFactoryInstrumentedTest {
     @Test
     fun pdfShareIntentUsesFileProviderReadGrantAndCopiesToSharedCache() {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        val source = File(context.cacheDir, "source-status.pdf").apply {
-            writeBytes(byteArrayOf(37, 80, 68, 70))
-        }
+        val source =
+            File(context.cacheDir, "source-status.pdf").apply {
+                writeBytes(byteArrayOf(37, 80, 68, 70))
+            }
 
         val intent = ShareDocumentIntentFactory(context).createPdfShareIntent(source, "Stato avanzamento")
 

@@ -12,8 +12,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppTextField
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 
@@ -36,7 +36,7 @@ fun QuickIntakeProblemSection(
                 text = stringResource(R.string.intake_step_problem),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
             AppTextField(
                 value = problemSummary,

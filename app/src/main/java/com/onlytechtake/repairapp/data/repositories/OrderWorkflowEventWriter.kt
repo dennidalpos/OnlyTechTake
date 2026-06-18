@@ -20,7 +20,11 @@ internal class OrderWorkflowEventWriter(
     private val timelineEventDao: TimelineEventDao? = null,
     private val auditLogDao: AuditLogDao? = null,
 ) {
-    suspend fun orderCreated(orderId: String, actorUserId: String, now: Long) {
+    suspend fun orderCreated(
+        orderId: String,
+        actorUserId: String,
+        now: Long,
+    ) {
         writeTimeline(
             timelineEvent(
                 orderId = orderId,
@@ -43,11 +47,12 @@ internal class OrderWorkflowEventWriter(
         now: Long,
     ) {
         val readableTransition = "${oldStatus.label(context)} -> ${newStatus.label(context)}"
-        val details = listOfNotNull(
-            readableTransition,
-            note,
-            closureReason?.let { context.getString(R.string.closure_reason_prefix, it.label(context)) },
-        ).joinToString("\n")
+        val details =
+            listOfNotNull(
+                readableTransition,
+                note,
+                closureReason?.let { context.getString(R.string.closure_reason_prefix, it.label(context)) },
+            ).joinToString("\n")
         writeTimeline(
             timelineEvent(
                 orderId = orderId,
@@ -66,7 +71,12 @@ internal class OrderWorkflowEventWriter(
         audit(actorUserId, AuditAction.ORDER_STATUS_CHANGED, orderId, null, now)
     }
 
-    suspend fun orderReassigned(orderId: String, actorUserId: String, assignedToUserId: String?, now: Long) {
+    suspend fun orderReassigned(
+        orderId: String,
+        actorUserId: String,
+        assignedToUserId: String?,
+        now: Long,
+    ) {
         writeTimeline(
             timelineEvent(
                 orderId = orderId,
@@ -80,7 +90,12 @@ internal class OrderWorkflowEventWriter(
         audit(actorUserId, AuditAction.ORDER_REASSIGNED, orderId, null, now)
     }
 
-    suspend fun internalNoteAdded(orderId: String, actorUserId: String, note: String, now: Long) {
+    suspend fun internalNoteAdded(
+        orderId: String,
+        actorUserId: String,
+        note: String,
+        now: Long,
+    ) {
         writeTimeline(
             timelineEvent(
                 orderId = orderId,
@@ -93,7 +108,12 @@ internal class OrderWorkflowEventWriter(
         )
     }
 
-    suspend fun orderDeleted(orderId: String, actorUserId: String, reason: String?, now: Long) {
+    suspend fun orderDeleted(
+        orderId: String,
+        actorUserId: String,
+        reason: String?,
+        now: Long,
+    ) {
         writeTimeline(
             timelineEvent(
                 orderId = orderId,
@@ -150,7 +170,12 @@ internal class OrderWorkflowEventWriter(
         )
     }
 
-    suspend fun mediaRemoved(orderId: String, actorUserId: String, fileName: String, now: Long) {
+    suspend fun mediaRemoved(
+        orderId: String,
+        actorUserId: String,
+        fileName: String,
+        now: Long,
+    ) {
         writeTimeline(
             timelineEvent(
                 orderId = orderId,
@@ -163,7 +188,12 @@ internal class OrderWorkflowEventWriter(
         )
     }
 
-    suspend fun signatureCaptured(orderId: String, actorUserId: String, signerName: String, now: Long) {
+    suspend fun signatureCaptured(
+        orderId: String,
+        actorUserId: String,
+        signerName: String,
+        now: Long,
+    ) {
         writeTimeline(
             timelineEvent(
                 orderId = orderId,
@@ -177,7 +207,12 @@ internal class OrderWorkflowEventWriter(
         )
     }
 
-    suspend fun pdfShared(orderId: String, actorUserId: String, fileName: String, now: Long) {
+    suspend fun pdfShared(
+        orderId: String,
+        actorUserId: String,
+        fileName: String,
+        now: Long,
+    ) {
         writeTimeline(
             timelineEvent(
                 orderId = orderId,
@@ -191,28 +226,40 @@ internal class OrderWorkflowEventWriter(
         )
     }
 
-    suspend fun whatsappPrepared(orderId: String, actorUserId: String, body: String, now: Long): TimelineEventEntity {
-        val event = timelineEvent(
-            orderId = orderId,
-            type = TimelineEventType.WHATSAPP_PREPARED,
-            title = context.getString(R.string.order_wa_prepared_timeline_title),
-            description = body,
-            actorUserId = actorUserId,
-            createdAt = now,
-        )
+    suspend fun whatsappPrepared(
+        orderId: String,
+        actorUserId: String,
+        body: String,
+        now: Long,
+    ): TimelineEventEntity {
+        val event =
+            timelineEvent(
+                orderId = orderId,
+                type = TimelineEventType.WHATSAPP_PREPARED,
+                title = context.getString(R.string.order_wa_prepared_timeline_title),
+                description = body,
+                actorUserId = actorUserId,
+                createdAt = now,
+            )
         writeTimeline(event)
         return event
     }
 
-    suspend fun whatsappSent(orderId: String, actorUserId: String, body: String, now: Long): TimelineEventEntity {
-        val event = timelineEvent(
-            orderId = orderId,
-            type = TimelineEventType.WHATSAPP_SENT_CONFIRMED,
-            title = context.getString(R.string.order_wa_sent_timeline_title),
-            description = body,
-            actorUserId = actorUserId,
-            createdAt = now,
-        )
+    suspend fun whatsappSent(
+        orderId: String,
+        actorUserId: String,
+        body: String,
+        now: Long,
+    ): TimelineEventEntity {
+        val event =
+            timelineEvent(
+                orderId = orderId,
+                type = TimelineEventType.WHATSAPP_SENT_CONFIRMED,
+                title = context.getString(R.string.order_wa_sent_timeline_title),
+                description = body,
+                actorUserId = actorUserId,
+                createdAt = now,
+            )
         writeTimeline(event)
         return event
     }
@@ -236,7 +283,11 @@ internal class OrderWorkflowEventWriter(
         )
     }
 
-    suspend fun paymentReceived(orderId: String, actorUserId: String, now: Long) {
+    suspend fun paymentReceived(
+        orderId: String,
+        actorUserId: String,
+        now: Long,
+    ) {
         writeTimeline(
             timelineEvent(
                 orderId = orderId,
@@ -249,7 +300,11 @@ internal class OrderWorkflowEventWriter(
         )
     }
 
-    suspend fun paymentRemoved(orderId: String, actorUserId: String, now: Long) {
+    suspend fun paymentRemoved(
+        orderId: String,
+        actorUserId: String,
+        now: Long,
+    ) {
         writeTimeline(
             timelineEvent(
                 orderId = orderId,
@@ -262,22 +317,32 @@ internal class OrderWorkflowEventWriter(
         )
     }
 
-    suspend fun dataExported(actorUserId: String, now: Long) {
+    suspend fun dataExported(
+        actorUserId: String,
+        now: Long,
+    ) {
         audit(actorUserId, AuditAction.DATA_EXPORTED, null, null, now)
     }
 
-    suspend fun dataReset(actorUserId: String, now: Long) {
+    suspend fun dataReset(
+        actorUserId: String,
+        now: Long,
+    ) {
         audit(actorUserId, AuditAction.DATA_RESET, null, null, now)
     }
 
-    suspend fun orderCleanup(actorUserId: String, operation: String, now: Long) {
+    suspend fun orderCleanup(
+        actorUserId: String,
+        operation: String,
+        now: Long,
+    ) {
         audit(
             actorUserId = actorUserId,
             action = AuditAction.ORDER_CLEANUP,
             orderId = null,
             customerId = null,
             now = now,
-            details = """{"operation":"$operation"}"""
+            details = """{"operation":"$operation"}""",
         )
     }
 

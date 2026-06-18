@@ -1,7 +1,7 @@
 package com.onlytechtake.repairapp.features.workspace
 
-import android.graphics.Bitmap
 import android.content.Intent
+import android.graphics.Bitmap
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
 import com.onlytechtake.repairapp.data.services.StorageStats
@@ -72,8 +72,7 @@ fun QuickIntakeDraft.withCategoryCreatedFromIntake(categoryId: String): QuickInt
         returnToIntakeAfterCategorySave = false,
     )
 
-fun WorkspaceUiState.withoutPreparedMessage(): WorkspaceUiState =
-    copy(preparedMessage = null, preparedMessageBody = "")
+fun WorkspaceUiState.withoutPreparedMessage(): WorkspaceUiState = copy(preparedMessage = null, preparedMessageBody = "")
 
 enum class WorkspaceDestination {
     HOME,

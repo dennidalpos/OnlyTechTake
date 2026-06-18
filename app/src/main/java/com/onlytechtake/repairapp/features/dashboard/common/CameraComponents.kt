@@ -29,10 +29,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.onlytechtake.repairapp.core.design.components.AppButton
-import com.onlytechtake.repairapp.core.design.RepairAppSpacing
-import com.onlytechtake.repairapp.core.media.normalizeCameraTargetRotation
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.media.normalizeCameraTargetRotation
 import java.io.File
 
 @Composable
@@ -47,19 +47,21 @@ fun CameraCapturePreview(
     val lifecycleOwner = LocalLifecycleOwner.current
     val previewDescription = stringResource(R.string.camera_preview_description)
     val executor = remember(context) { ContextCompat.getMainExecutor(context) }
-    val previewView = remember(context, previewDescription) {
-        PreviewView(context).apply {
-            contentDescription = previewDescription
+    val previewView =
+        remember(context, previewDescription) {
+            PreviewView(context).apply {
+                contentDescription = previewDescription
+            }
         }
-    }
     val imageCapture = remember { ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY).build() }
     var hasCameraPermission by remember {
         mutableStateOf(ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
     }
-    val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-        hasCameraPermission = granted
-        if (!granted) onError("Permesso camera negato")
-    }
+    val permissionLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            hasCameraPermission = granted
+            if (!granted) onError("Permesso camera negato")
+        }
 
     if (!hasCameraPermission) {
         AppButton(text = "Concedi permesso camera", onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) })
@@ -72,14 +74,16 @@ fun CameraCapturePreview(
             {
                 runCatching {
                     val cameraProvider = cameraProviderFuture.get()
-                    val selector = when {
-                        cameraProvider.hasCamera(CameraSelector.DEFAULT_BACK_CAMERA) -> CameraSelector.DEFAULT_BACK_CAMERA
-                        cameraProvider.hasCamera(CameraSelector.DEFAULT_FRONT_CAMERA) -> CameraSelector.DEFAULT_FRONT_CAMERA
-                        else -> error("Camera non disponibile")
-                    }
-                    val preview = Preview.Builder().build().also {
-                        it.setSurfaceProvider(previewView.surfaceProvider)
-                    }
+                    val selector =
+                        when {
+                            cameraProvider.hasCamera(CameraSelector.DEFAULT_BACK_CAMERA) -> CameraSelector.DEFAULT_BACK_CAMERA
+                            cameraProvider.hasCamera(CameraSelector.DEFAULT_FRONT_CAMERA) -> CameraSelector.DEFAULT_FRONT_CAMERA
+                            else -> error("Camera non disponibile")
+                        }
+                    val preview =
+                        Preview.Builder().build().also {
+                            it.setSurfaceProvider(previewView.surfaceProvider)
+                        }
                     imageCapture.targetRotation = cameraTargetRotation(context, previewView)
                     cameraProvider.unbindAll()
                     cameraProvider.bindToLifecycle(lifecycleOwner, selector, preview, imageCapture)
@@ -101,9 +105,10 @@ fun CameraCapturePreview(
 
     Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
         AndroidView(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(280.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(280.dp),
             factory = { previewView },
         )
         AppButton(
@@ -137,10 +142,13 @@ fun CameraCapturePreview(
 }
 
 @Suppress("DEPRECATION")
-private fun cameraTargetRotation(context: Context, previewView: PreviewView): Int {
-    val windowRotation = (context.getSystemService(Context.WINDOW_SERVICE) as? WindowManager)
-        ?.defaultDisplay
-        ?.rotation
+private fun cameraTargetRotation(
+    context: Context,
+    previewView: PreviewView,
+): Int {
+    val windowRotation =
+        (context.getSystemService(Context.WINDOW_SERVICE) as? WindowManager)
+            ?.defaultDisplay
+            ?.rotation
     return normalizeCameraTargetRotation(previewView.display?.rotation ?: windowRotation)
 }
-

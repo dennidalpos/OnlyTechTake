@@ -11,7 +11,10 @@ class AttachmentImportPolicy(
         require(allowedMimeTypes.isNotEmpty()) { "Allowlist allegati vuota" }
     }
 
-    fun requireAllowed(rawMimeType: String?, declaredSizeBytes: Long?) {
+    fun requireAllowed(
+        rawMimeType: String?,
+        declaredSizeBytes: Long?,
+    ) {
         val mimeType = normalize(rawMimeType)
         require(mimeType.isNotBlank()) { "Tipo allegato non riconosciuto" }
         require(mimeType in allowedMimeTypes) { "Tipo allegato non consentito: $mimeType" }
@@ -30,26 +33,28 @@ class AttachmentImportPolicy(
             ?.lowercase(Locale.ROOT)
             .orEmpty()
 
-    fun isImage(rawMimeType: String?): Boolean =
-        normalize(rawMimeType) in IMAGE_MIME_TYPES
+    fun isImage(rawMimeType: String?): Boolean = normalize(rawMimeType) in IMAGE_MIME_TYPES
 
     companion object {
         const val DEFAULT_MAX_SIZE_BYTES = 25L * 1024L * 1024L
 
-        private val IMAGE_MIME_TYPES = setOf(
-            "image/jpeg",
-            "image/png",
-            "image/webp",
-        )
+        private val IMAGE_MIME_TYPES =
+            setOf(
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+            )
 
-        val DEFAULT_ALLOWED_MIME_TYPES: Set<String> = IMAGE_MIME_TYPES + setOf(
-            "application/pdf",
-            "text/plain",
-            "application/msword",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "application/vnd.ms-excel",
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        )
+        val DEFAULT_ALLOWED_MIME_TYPES: Set<String> =
+            IMAGE_MIME_TYPES +
+                setOf(
+                    "application/pdf",
+                    "text/plain",
+                    "application/msword",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    "application/vnd.ms-excel",
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                )
     }
 }
 

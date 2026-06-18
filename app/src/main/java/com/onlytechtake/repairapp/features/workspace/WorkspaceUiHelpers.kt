@@ -1,16 +1,5 @@
 package com.onlytechtake.repairapp.features.workspace
 
-import com.onlytechtake.repairapp.data.local.entities.ClosureReason
-import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
-import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
-import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
-import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
-import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
-import com.onlytechtake.repairapp.core.utils.parseEuroCentsOrNull
-import com.onlytechtake.repairapp.core.templates.TemplateAnchor
-import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
-import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,11 +15,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.core.design.repairColors
+import com.onlytechtake.repairapp.core.templates.TemplateAnchor
+import com.onlytechtake.repairapp.core.utils.parseEuroCentsOrNull
+import com.onlytechtake.repairapp.data.local.entities.ClosureReason
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
+import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
+import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
+import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
+import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 
 data class AttachmentCounts(
     val images: Int,
@@ -39,7 +38,10 @@ data class AttachmentCounts(
     val finalPhotos: Int = 0,
 )
 
-fun attachmentCounts(media: List<OrderMediaEntity>, signatures: List<SignatureEntity>): AttachmentCounts =
+fun attachmentCounts(
+    media: List<OrderMediaEntity>,
+    signatures: List<SignatureEntity>,
+): AttachmentCounts =
     AttachmentCounts(
         images = media.count { it.isImageAttachment() && !it.isFinalPhoto() },
         documents = media.count { !it.isImageAttachment() },
@@ -69,8 +71,7 @@ fun OrderMediaEntity.isImageAttachment(): Boolean =
         mediaType.equals("IMAGE", ignoreCase = true) ||
         mimeType.startsWith("image/", ignoreCase = true)
 
-fun OrderMediaEntity.isFinalPhoto(): Boolean =
-    mediaType.equals("FINAL_PHOTO", ignoreCase = true)
+fun OrderMediaEntity.isFinalPhoto(): Boolean = mediaType.equals("FINAL_PHOTO", ignoreCase = true)
 
 fun StagedOrderMedia.isImageAttachment(): Boolean =
     mediaType.equals("PHOTO", ignoreCase = true) ||
@@ -83,7 +84,10 @@ fun DiagnosisOutcome.diagnosisOutcomeLabel(): String =
         DiagnosisOutcome.NOT_REPAIRABLE -> "Non riparabile"
     }
 
-fun categoryPath(categories: List<OrderCategoryEntity>, categoryId: String?): String? {
+fun categoryPath(
+    categories: List<OrderCategoryEntity>,
+    categoryId: String?,
+): String? {
     if (categoryId == null) return null
     val byId = categories.associateBy { it.id }
     val names = mutableListOf<String>()
@@ -113,14 +117,15 @@ fun OrderStatusStepper(
     compact: Boolean = false,
     stepTestTag: ((Int) -> String)? = null,
 ) {
-    val steps = listOf(
-        OrderStatus.OPEN,
-        OrderStatus.DIAGNOSIS,
-        OrderStatus.RESULT,
-        OrderStatus.REPAIRING,
-        OrderStatus.READY_FOR_PICKUP,
-        OrderStatus.CLOSED
-    )
+    val steps =
+        listOf(
+            OrderStatus.OPEN,
+            OrderStatus.DIAGNOSIS,
+            OrderStatus.RESULT,
+            OrderStatus.REPAIRING,
+            OrderStatus.READY_FOR_PICKUP,
+            OrderStatus.CLOSED,
+        )
 
     val currentStepIndex = orderStatusStepNumber(status) - 1
 
@@ -130,7 +135,7 @@ fun OrderStatusStepper(
     Row(
         modifier = modifier.fillMaxWidth().padding(vertical = spacing),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         val completedColor = MaterialTheme.repairColors.stepCompleted
         val inactiveColor = MaterialTheme.repairColors.stepInactive
@@ -138,26 +143,29 @@ fun OrderStatusStepper(
         steps.forEachIndexed { index, _ ->
             val isCompleted = index < currentStepIndex
             val isCurrent = index == currentStepIndex
-            val color = when {
-                isCurrent -> MaterialTheme.colorScheme.primary
-                isCompleted -> completedColor
-                else -> inactiveColor
-            }
+            val color =
+                when {
+                    isCurrent -> MaterialTheme.colorScheme.primary
+                    isCompleted -> completedColor
+                    else -> inactiveColor
+                }
 
             Box(
-                modifier = Modifier
-                    .size(dotSize)
-                    .background(color = color, shape = CircleShape),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .size(dotSize)
+                        .background(color = color, shape = CircleShape),
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = (index + 1).toString(),
                     modifier = stepTestTag?.let { Modifier.testTag(it(index + 1)) } ?: Modifier,
-                    color = when {
-                        isCurrent -> MaterialTheme.colorScheme.onPrimary
-                        isCompleted -> MaterialTheme.repairColors.onSuccess
-                        else -> MaterialTheme.colorScheme.onSurfaceVariant
-                    },
+                    color =
+                        when {
+                            isCurrent -> MaterialTheme.colorScheme.onPrimary
+                            isCompleted -> MaterialTheme.repairColors.onSuccess
+                            else -> MaterialTheme.colorScheme.onSurfaceVariant
+                        },
                     style = MaterialTheme.typography.labelSmall,
                 )
             }

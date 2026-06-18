@@ -1,22 +1,23 @@
 package com.onlytechtake.repairapp.core.design
 
 import androidx.compose.ui.graphics.Color
-import kotlin.math.max
-import kotlin.math.min
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import kotlin.math.max
+import kotlin.math.min
 
 class DesignTokenContrastTest {
     @Test
     fun semanticActionColorsMeetTextContrast() {
-        val pairs = listOf(
-            ContrastPair("light success", LightSemanticColors.success, LightSemanticColors.onSuccess),
-            ContrastPair("light warning", LightSemanticColors.warning, LightSemanticColors.onWarning),
-            ContrastPair("light whatsapp", LightSemanticColors.whatsapp, LightSemanticColors.onWhatsapp),
-            ContrastPair("dark success", DarkSemanticColors.success, DarkSemanticColors.onSuccess),
-            ContrastPair("dark warning", DarkSemanticColors.warning, DarkSemanticColors.onWarning),
-            ContrastPair("dark whatsapp", DarkSemanticColors.whatsapp, DarkSemanticColors.onWhatsapp),
-        )
+        val pairs =
+            listOf(
+                ContrastPair("light success", LightSemanticColors.success, LightSemanticColors.onSuccess),
+                ContrastPair("light warning", LightSemanticColors.warning, LightSemanticColors.onWarning),
+                ContrastPair("light whatsapp", LightSemanticColors.whatsapp, LightSemanticColors.onWhatsapp),
+                ContrastPair("dark success", DarkSemanticColors.success, DarkSemanticColors.onSuccess),
+                ContrastPair("dark warning", DarkSemanticColors.warning, DarkSemanticColors.onWarning),
+                ContrastPair("dark whatsapp", DarkSemanticColors.whatsapp, DarkSemanticColors.onWhatsapp),
+            )
 
         pairs.forEach { pair ->
             assertTrue(
@@ -62,7 +63,10 @@ class DesignTokenContrastTest {
     }
 }
 
-private fun contrastRatio(first: Color, second: Color): Double {
+private fun contrastRatio(
+    first: Color,
+    second: Color,
+): Double {
     val firstLuminance = first.relativeLuminance()
     val secondLuminance = second.relativeLuminance()
     return (max(firstLuminance, secondLuminance) + 0.05) /

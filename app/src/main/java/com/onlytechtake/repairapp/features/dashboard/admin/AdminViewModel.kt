@@ -17,9 +17,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -30,7 +30,6 @@ class AdminViewModel(
     private val dataResetRepository: DataResetRepository,
     private val backupReminderPreferences: BackupReminderPreferences? = null,
 ) : ViewModel() {
-
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
 
@@ -40,18 +39,28 @@ class AdminViewModel(
     val currentUser = authRepository.currentUser
     val users = adminUserRepository.observeUsers().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    val isBackupReminderDue = backupReminderPreferences?.settings?.map { settings ->
-        BackupReminderPolicy.shouldShowReminder(settings, System.currentTimeMillis())
-    }?.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
-    ?: flowOf(false).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+    val isBackupReminderDue =
+        backupReminderPreferences
+            ?.settings
+            ?.map { settings ->
+                BackupReminderPolicy.shouldShowReminder(settings, System.currentTimeMillis())
+            }?.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+            ?: flowOf(false).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
-    fun createOperator(displayName: String, username: String, password: CharArray) {
+    fun createOperator(
+        displayName: String,
+        username: String,
+        password: CharArray,
+    ) {
         launchWithUser { actor ->
             adminUserRepository.createOperator(actor, OperatorInput(displayName, username, password))
         }
     }
 
-    fun setUserActive(userId: String, active: Boolean) {
+    fun setUserActive(
+        userId: String,
+        active: Boolean,
+    ) {
         launchWithUser { actor ->
             adminUserRepository.setActive(actor, userId, active)
         }
@@ -63,19 +72,29 @@ class AdminViewModel(
         }
     }
 
-    fun setUserPermissions(userId: String, permissions: Set<UserPermission>) {
+    fun setUserPermissions(
+        userId: String,
+        permissions: Set<UserPermission>,
+    ) {
         launchWithUser { actor ->
             adminUserRepository.setPermissions(actor, userId, permissions)
         }
     }
 
-    fun resetPassword(userId: String, password: CharArray) {
+    fun resetPassword(
+        userId: String,
+        password: CharArray,
+    ) {
         launchWithUser { actor ->
             adminUserRepository.resetPassword(actor, userId, password)
         }
     }
 
-    fun changePassword(username: String, currentPassword: CharArray, newPassword: CharArray) {
+    fun changePassword(
+        username: String,
+        currentPassword: CharArray,
+        newPassword: CharArray,
+    ) {
         launchWithUser { actor ->
             authRepository.changePassword(username, currentPassword, newPassword)
         }
@@ -93,13 +112,19 @@ class AdminViewModel(
         }
     }
 
-    fun resetAllData(confirmation: String, onReset: () -> Unit) {
+    fun resetAllData(
+        confirmation: String,
+        onReset: () -> Unit,
+    ) {
         launchWithUser(onSuccess = onReset) { actor ->
             dataResetRepository.resetAll(actor, confirmation)
         }
     }
 
-    fun resetOrders(confirmation: String, onReset: () -> Unit) {
+    fun resetOrders(
+        confirmation: String,
+        onReset: () -> Unit,
+    ) {
         launchWithUser(onSuccess = onReset) { actor ->
             dataResetRepository.resetOrders(actor, confirmation)
         }
@@ -107,11 +132,13 @@ class AdminViewModel(
 
     fun generateRecoveryKit() {
         viewModelScope.launch {
-            authRepository.getRecoveryKit().onSuccess { code ->
-                _recoveryCode.value = code
-            }.onFailure { error ->
-                _message.value = WorkspaceMessage(error.message ?: "Errore", true)
-            }
+            authRepository
+                .getRecoveryKit()
+                .onSuccess { code ->
+                    _recoveryCode.value = code
+                }.onFailure { error ->
+                    _message.value = WorkspaceMessage(error.message ?: "Errore", true)
+                }
         }
     }
 
@@ -125,14 +152,14 @@ class AdminViewModel(
 
     private fun launchWithUser(
         onSuccess: () -> Unit = {},
-        block: suspend (com.onlytechtake.repairapp.domain.auth.AuthenticatedUser) -> Result<*>
+        block: suspend (com.onlytechtake.repairapp.domain.auth.AuthenticatedUser) -> Result<*>,
     ) {
         val user = currentUser.value
         if (user != null) {
             viewModelScope.launch {
                 block(user).fold(
                     onSuccess = { onSuccess() },
-                    onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) }
+                    onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) },
                 )
             }
         }
@@ -146,8 +173,6 @@ class AdminViewModel(
         private val backupReminderPreferences: BackupReminderPreferences? = null,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return AdminViewModel(authRepository, adminUserRepository, backupRepository, dataResetRepository, backupReminderPreferences) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = AdminViewModel(authRepository, adminUserRepository, backupRepository, dataResetRepository, backupReminderPreferences) as T
     }
 }

@@ -16,85 +16,94 @@ class MediaOptimizer(
     private val maxDimension: Int = 1920,
     private val quality: Int = 85,
 ) {
-    fun optimize(file: File): Result<File> = runCatching {
-        if (!isImage(file)) return@runCatching file
+    fun optimize(file: File): Result<File> =
+        runCatching {
+            if (!isImage(file)) return@runCatching file
 
-        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-        BitmapFactory.decodeFile(file.absolutePath, bounds)
+            val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+            BitmapFactory.decodeFile(file.absolutePath, bounds)
 
-        val width = bounds.outWidth
-        val height = bounds.outHeight
+            val width = bounds.outWidth
+            val height = bounds.outHeight
 
-        if (width <= 0 || height <= 0) return@runCatching file
+            if (width <= 0 || height <= 0) return@runCatching file
 
-        // Ridimensionamento se necessario
-        val scale = if (max(width, height) > maxDimension) {
-            maxDimension.toFloat() / max(width, height)
-        } else {
-            1.0f
-        }
+            // Ridimensionamento se necessario
+            val scale =
+                if (max(width, height) > maxDimension) {
+                    maxDimension.toFloat() / max(width, height)
+                } else {
+                    1.0f
+                }
 
-        // Se l'immagine è già piccola e non vogliamo cambiare qualità, potremmo saltare.
-        // Ma qui applichiamo sempre per rimuovere EXIF e normalizzare la compressione.
+            // Se l'immagine è già piccola e non vogliamo cambiare qualità, potremmo saltare.
+            // Ma qui applichiamo sempre per rimuovere EXIF e normalizzare la compressione.
 
-        val orientation = try {
-            ExifInterface(file.absolutePath).getAttributeInt(
-                ExifInterface.TAG_ORIENTATION,
-                ExifInterface.ORIENTATION_NORMAL
-            )
-        } catch (e: Exception) {
-            ExifInterface.ORIENTATION_NORMAL
-        }
+            val orientation =
+                try {
+                    ExifInterface(file.absolutePath).getAttributeInt(
+                        ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_NORMAL,
+                    )
+                } catch (e: Exception) {
+                    ExifInterface.ORIENTATION_NORMAL
+                }
 
-        val decodeOptions = BitmapFactory.Options().apply {
-            inSampleSize = calculateBitmapSampleSize(width, height, maxDimension)
-        }
-        val original = BitmapFactory.decodeFile(file.absolutePath, decodeOptions) ?: return@runCatching file
+            val decodeOptions =
+                BitmapFactory.Options().apply {
+                    inSampleSize = calculateBitmapSampleSize(width, height, maxDimension)
+                }
+            val original = BitmapFactory.decodeFile(file.absolutePath, decodeOptions) ?: return@runCatching file
 
-        val targetWidth = width * scale
-        val targetHeight = height * scale
-        val matrix = Matrix().apply {
-            postScale(targetWidth / original.width.toFloat(), targetHeight / original.height.toFloat())
-        }
-        
-        applyExifRotation(matrix, orientation)
+            val targetWidth = width * scale
+            val targetHeight = height * scale
+            val matrix =
+                Matrix().apply {
+                    postScale(targetWidth / original.width.toFloat(), targetHeight / original.height.toFloat())
+                }
 
-        val optimized = try {
-            Bitmap.createBitmap(original, 0, 0, original.width, original.height, matrix, true)
-        } finally {
-            // original will be recycled later if it's different from optimized
-        }
+            applyExifRotation(matrix, orientation)
 
-        // Se createBitmap restituisce lo stesso oggetto (nessuna scala o rotazione), 
-        // e vogliamo forzare la compressione, procediamo comunque.
+            val optimized =
+                try {
+                    Bitmap.createBitmap(original, 0, 0, original.width, original.height, matrix, true)
+                } finally {
+                    // original will be recycled later if it's different from optimized
+                }
 
-        val tempFile = File(file.parent, "opt_${file.name}")
-        FileOutputStream(tempFile).use { out ->
-            optimized.compress(Bitmap.CompressFormat.JPEG, quality, out)
-        }
+            // Se createBitmap restituisce lo stesso oggetto (nessuna scala o rotazione),
+            // e vogliamo forzare la compressione, procediamo comunque.
 
-        if (optimized != original) optimized.recycle()
-        original.recycle()
-
-        // Sostituisci l'originale con l'ottimizzato
-        if (tempFile.exists()) {
-            if (file.delete()) {
-                tempFile.renameTo(file)
-            } else {
-                tempFile.delete()
-                return@runCatching file
+            val tempFile = File(file.parent, "opt_${file.name}")
+            FileOutputStream(tempFile).use { out ->
+                optimized.compress(Bitmap.CompressFormat.JPEG, quality, out)
             }
+
+            if (optimized != original) optimized.recycle()
+            original.recycle()
+
+            // Sostituisci l'originale con l'ottimizzato
+            if (tempFile.exists()) {
+                if (file.delete()) {
+                    tempFile.renameTo(file)
+                } else {
+                    tempFile.delete()
+                    return@runCatching file
+                }
+            }
+
+            file
         }
-        
-        file
-    }
 
     private fun isImage(file: File): Boolean {
         val name = file.name.lowercase()
         return name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png") || name.endsWith(".webp")
     }
 
-    private fun applyExifRotation(matrix: Matrix, orientation: Int) {
+    private fun applyExifRotation(
+        matrix: Matrix,
+        orientation: Int,
+    ) {
         when (orientation) {
             ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
             ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)

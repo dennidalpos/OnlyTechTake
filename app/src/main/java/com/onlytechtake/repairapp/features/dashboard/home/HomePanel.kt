@@ -11,11 +11,11 @@ import androidx.compose.ui.res.stringResource
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.demo.DemoMode
-import com.onlytechtake.repairapp.domain.models.AppSummary
-import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.domain.models.AppSummary
+import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
 import com.onlytechtake.repairapp.features.dashboard.common.BackupReminderCard
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
@@ -32,18 +32,20 @@ fun HomePanel(
     val queues by viewModel.operationalQueues.collectAsState()
     val backupReminderSettings by viewModel.backupReminderSettings.collectAsState()
     val showBackupReminder by viewModel.isBackupReminderDue.collectAsState()
-    val exportZipLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
-        uri?.let(viewModel::exportCompleteBackup)
-    }
+    val exportZipLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
+            uri?.let(viewModel::exportCompleteBackup)
+        }
 
     AppScreenContainer {
         val showBanner = remember { if (BuildConfig.IS_DEMO_VERSION) true else DemoMode.isEnabled }
         if (showBanner) {
-            val bannerText = if (DemoMode.isEnabled) {
-                stringResource(R.string.demo_mode_banner)
-            } else {
-                stringResource(R.string.demo_version_banner)
-            }
+            val bannerText =
+                if (DemoMode.isEnabled) {
+                    stringResource(R.string.demo_mode_banner)
+                } else {
+                    stringResource(R.string.demo_version_banner)
+                }
             AppMessageBanner(
                 message = bannerText,
                 type = BannerType.Info,
@@ -52,7 +54,7 @@ fun HomePanel(
         }
 
         SectionTitle(stringResource(R.string.home_title))
-        
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),

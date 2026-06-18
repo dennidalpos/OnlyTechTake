@@ -29,7 +29,6 @@ class CustomersViewModel(
     private val orderWorkflowRepository: OrderWorkflowRepository,
     private val onSetFormDirty: (Boolean) -> Unit,
 ) : ViewModel() {
-
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
 
@@ -41,13 +40,13 @@ class CustomersViewModel(
 
     val currentUser = authRepository.currentUser
 
-    val customerSuggestions = _searchQuery
-        .map { it.trim() }
-        .distinctUntilChanged()
-        .flatMapLatest { query ->
-            if (query.isBlank()) customerRepository.observeRecent() else customerRepository.search(query)
-        }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    val customerSuggestions =
+        _searchQuery
+            .map { it.trim() }
+            .distinctUntilChanged()
+            .flatMapLatest { query ->
+                if (query.isBlank()) customerRepository.observeRecent() else customerRepository.search(query)
+            }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     fun setFormDirty(dirty: Boolean) {
         _isFormDirty.value = dirty
@@ -62,30 +61,38 @@ class CustomersViewModel(
         _searchQuery.value = query
     }
 
-    fun saveCustomer(input: CustomerInput, onSaved: (CustomerEntity) -> Unit = {}) {
+    fun saveCustomer(
+        input: CustomerInput,
+        onSaved: (CustomerEntity) -> Unit = {},
+    ) {
         viewModelScope.launch {
             customerRepository.save(currentUser.value, input).fold(
-                onSuccess = { 
+                onSuccess = {
                     onSaved(it)
                     _searchQuery.value = ""
                     setFormDirty(false)
                 },
-                onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) }
+                onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) },
             )
         }
     }
 
-    fun observeOrdersForCustomer(customerId: String, openOnly: Boolean) =
-        currentUser.flatMapLatest { user ->
-            if (user == null) flowOf(emptyList())
-            else orderWorkflowRepository.observeOrderList(
+    fun observeOrdersForCustomer(
+        customerId: String,
+        openOnly: Boolean,
+    ) = currentUser.flatMapLatest { user ->
+        if (user == null) {
+            flowOf(emptyList())
+        } else {
+            orderWorkflowRepository.observeOrderList(
                 user,
                 OrderFilter(
                     customerId = customerId,
-                    statuses = if (openOnly) OrderStatus.values().filter { it != OrderStatus.CLOSED }.toSet() else emptySet()
-                )
+                    statuses = if (openOnly) OrderStatus.values().filter { it != OrderStatus.CLOSED }.toSet() else emptySet(),
+                ),
             )
         }
+    }
 
     class Factory(
         private val authRepository: AuthRepository,
@@ -94,8 +101,6 @@ class CustomersViewModel(
         private val onSetFormDirty: (Boolean) -> Unit,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return CustomersViewModel(authRepository, customerRepository, orderWorkflowRepository, onSetFormDirty) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = CustomersViewModel(authRepository, customerRepository, orderWorkflowRepository, onSetFormDirty) as T
     }
 }

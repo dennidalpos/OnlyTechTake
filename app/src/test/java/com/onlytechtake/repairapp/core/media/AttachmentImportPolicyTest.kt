@@ -18,27 +18,30 @@ class AttachmentImportPolicyTest {
 
     @Test
     fun rejectsUnknownMimeType() {
-        val error = assertThrows(IllegalArgumentException::class.java) {
-            policy.requireAllowed(null, 1L)
-        }
+        val error =
+            assertThrows(IllegalArgumentException::class.java) {
+                policy.requireAllowed(null, 1L)
+            }
 
         assertEquals("Tipo allegato non riconosciuto", error.message)
     }
 
     @Test
     fun rejectsMimeTypeOutsideAllowlist() {
-        val error = assertThrows(IllegalArgumentException::class.java) {
-            policy.requireAllowed("application/x-msdownload", 1L)
-        }
+        val error =
+            assertThrows(IllegalArgumentException::class.java) {
+                policy.requireAllowed("application/x-msdownload", 1L)
+            }
 
         assertEquals("Tipo allegato non consentito: application/x-msdownload", error.message)
     }
 
     @Test
     fun rejectsDeclaredSizeOverLimit() {
-        val error = assertThrows(IllegalArgumentException::class.java) {
-            policy.requireAllowed("application/pdf", 1025L)
-        }
+        val error =
+            assertThrows(IllegalArgumentException::class.java) {
+                policy.requireAllowed("application/pdf", 1025L)
+            }
 
         assertEquals("Allegato troppo grande: massimo 1024 bytes", error.message)
     }

@@ -23,13 +23,13 @@ fun AppIconButton(
     IconButton(
         onClick = onClick,
         modifier = modifier.size(RepairAppSizes.touchTarget),
-        enabled = enabled
+        enabled = enabled,
     ) {
         Icon(
             imageVector = imageVector,
             contentDescription = contentDescription,
             modifier = Modifier.size(24.dp),
-            tint = tint
+            tint = tint,
         )
     }
 }

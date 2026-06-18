@@ -24,13 +24,15 @@ class BackupReminderPreferences(
         context.backupReminderDataStore.data.map { preferences ->
             BackupReminderSettings(
                 enabled = preferences[ENABLED] ?: true,
-                intervalDays = BackupReminderPolicy.normalizeIntervalDays(
-                    preferences[INTERVAL_DAYS] ?: BackupReminderPolicy.DEFAULT_INTERVAL_DAYS,
-                ),
+                intervalDays =
+                    BackupReminderPolicy.normalizeIntervalDays(
+                        preferences[INTERVAL_DAYS] ?: BackupReminderPolicy.DEFAULT_INTERVAL_DAYS,
+                    ),
                 lastSuccessfulBackupAtMillis = preferences[LAST_SUCCESSFUL_BACKUP_AT],
-                lastBackupStatus = preferences[LAST_BACKUP_STATUS]
-                    ?.let { runCatching { BackupReminderStatus.valueOf(it) }.getOrNull() }
-                    ?: BackupReminderStatus.NEVER,
+                lastBackupStatus =
+                    preferences[LAST_BACKUP_STATUS]
+                        ?.let { runCatching { BackupReminderStatus.valueOf(it) }.getOrNull() }
+                        ?: BackupReminderStatus.NEVER,
                 lastBackupFileName = preferences[LAST_BACKUP_FILE_NAME],
             )
         }

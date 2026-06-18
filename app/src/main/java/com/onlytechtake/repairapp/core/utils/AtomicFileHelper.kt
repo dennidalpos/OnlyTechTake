@@ -6,11 +6,13 @@ import java.io.IOException
 import java.io.InputStream
 
 object AtomicFileHelper {
-
     /**
      * Writes an input stream to a destination file atomically using a temporary file.
      */
-    fun writeAtomically(destination: File, inputStream: InputStream) {
+    fun writeAtomically(
+        destination: File,
+        inputStream: InputStream,
+    ) {
         val parent = destination.parentFile ?: throw IOException("No parent directory for ${destination.path}")
         if (!parent.exists()) {
             if (!parent.mkdirs()) throw IOException("Could not create directory ${parent.path}")
@@ -21,11 +23,11 @@ object AtomicFileHelper {
             FileOutputStream(tempFile).use { output ->
                 inputStream.copyTo(output)
             }
-            
+
             if (destination.exists()) {
                 if (!destination.delete()) throw IOException("Could not delete existing file ${destination.path}")
             }
-            
+
             if (!tempFile.renameTo(destination)) {
                 throw IOException("Could not rename ${tempFile.path} to ${destination.path}")
             }
@@ -38,7 +40,10 @@ object AtomicFileHelper {
     /**
      * Executes a block that writes to a temporary file, then renames it to destination.
      */
-    fun writeAtomically(destination: File, block: (File) -> Unit) {
+    fun writeAtomically(
+        destination: File,
+        block: (File) -> Unit,
+    ) {
         val parent = destination.parentFile ?: throw IOException("No parent directory for ${destination.path}")
         if (!parent.exists()) {
             if (!parent.mkdirs()) throw IOException("Could not create directory ${parent.path}")
@@ -47,7 +52,7 @@ object AtomicFileHelper {
         val tempFile = File(parent, "${destination.name}.tmp_${System.currentTimeMillis()}")
         try {
             block(tempFile)
-            
+
             if (!tempFile.exists() || tempFile.length() == 0L) {
                 throw IOException("Write operation produced empty or missing file")
             }
@@ -55,7 +60,7 @@ object AtomicFileHelper {
             if (destination.exists()) {
                 if (!destination.delete()) throw IOException("Could not delete existing file ${destination.path}")
             }
-            
+
             if (!tempFile.renameTo(destination)) {
                 throw IOException("Could not rename ${tempFile.path} to ${destination.path}")
             }

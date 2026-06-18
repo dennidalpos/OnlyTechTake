@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
-import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
 import com.onlytechtake.repairapp.data.repositories.CustomerRepository
 import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
@@ -18,7 +17,6 @@ import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
-import java.io.File
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,6 +29,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class NewOrderViewModel(
@@ -42,7 +41,6 @@ class NewOrderViewModel(
     private val createIntakeOrderUseCase: CreateIntakeOrderUseCase,
     private val onSetFormDirty: (Boolean) -> Unit,
 ) : ViewModel() {
-
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
 
@@ -57,23 +55,29 @@ class NewOrderViewModel(
 
     val currentUser = authRepository.currentUser
 
-    val customerSuggestions = _customerSearchQuery
-        .map { it.trim() }
-        .distinctUntilChanged()
-        .debounce { query -> if (query.isBlank()) 0L else 300L }
-        .flatMapLatest { query ->
-            if (query.isBlank()) customerRepository.observeRecent() else customerRepository.search(query)
-        }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    val customerSuggestions =
+        _customerSearchQuery
+            .map { it.trim() }
+            .distinctUntilChanged()
+            .debounce { query -> if (query.isBlank()) 0L else 300L }
+            .flatMapLatest { query ->
+                if (query.isBlank()) customerRepository.observeRecent() else customerRepository.search(query)
+            }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    val categories = catalogRepository.observeActiveCategories()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    val categories =
+        catalogRepository
+            .observeActiveCategories()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    val templates = templateRepository.observeTemplates()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    val templates =
+        templateRepository
+            .observeTemplates()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    val anchorMappings = templateRepository.observeAnchorMappings()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyMap())
+    val anchorMappings =
+        templateRepository
+            .observeAnchorMappings()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyMap())
 
     fun setFormDirty(dirty: Boolean) {
         _isFormDirty.value = dirty
@@ -99,20 +103,27 @@ class NewOrderViewModel(
         _customerSearchQuery.value = ""
     }
 
-    fun saveCustomer(input: CustomerInput, onSaved: (CustomerEntity) -> Unit) {
+    fun saveCustomer(
+        input: CustomerInput,
+        onSaved: (CustomerEntity) -> Unit,
+    ) {
         viewModelScope.launch {
             customerRepository.save(currentUser.value, input).fold(
                 onSuccess = { onSaved(it) },
-                onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) }
+                onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) },
             )
         }
     }
 
-    fun importIntakeAttachment(sessionId: String, uri: Uri, onStaged: (StagedOrderMedia) -> Unit) {
+    fun importIntakeAttachment(
+        sessionId: String,
+        uri: Uri,
+        onStaged: (StagedOrderMedia) -> Unit,
+    ) {
         viewModelScope.launch {
             orderMediaRepository.importIntakeAttachment(sessionId, uri).fold(
                 onSuccess = { onStaged(it) },
-                onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) }
+                onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) },
             )
         }
     }
@@ -123,24 +134,29 @@ class NewOrderViewModel(
         }
     }
 
-    fun replaceStagedImage(staged: StagedOrderMedia, bitmap: Bitmap, onReplaced: (StagedOrderMedia) -> Unit) {
+    fun replaceStagedImage(
+        staged: StagedOrderMedia,
+        bitmap: Bitmap,
+        onReplaced: (StagedOrderMedia) -> Unit,
+    ) {
         viewModelScope.launch {
             orderMediaRepository.replaceStagedImage(staged, bitmap).fold(
                 onSuccess = { onReplaced(it) },
-                onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) }
+                onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) },
             )
         }
     }
 
-    fun createIntakePhotoFile(sessionId: String): Result<File> {
-        return runCatching { orderMediaRepository.createIntakePhotoFile(sessionId) }
-    }
+    fun createIntakePhotoFile(sessionId: String): Result<File> = runCatching { orderMediaRepository.createIntakePhotoFile(sessionId) }
 
-    fun stageCapturedIntakePhoto(file: File, onStaged: (StagedOrderMedia) -> Unit) {
+    fun stageCapturedIntakePhoto(
+        file: File,
+        onStaged: (StagedOrderMedia) -> Unit,
+    ) {
         viewModelScope.launch {
             orderMediaRepository.stageCapturedIntakePhoto(file).fold(
                 onSuccess = { onStaged(it) },
-                onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) }
+                onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) },
             )
         }
     }
@@ -160,18 +176,19 @@ class NewOrderViewModel(
     ) {
         val actor = currentUser.value ?: return
         viewModelScope.launch {
-            createIntakeOrderUseCase.execute(
-                actor = actor,
-                input = input,
-                stagedMedia = stagedMedia,
-                signerName = signerName,
-                privacyAccepted = privacyAccepted,
-                termsAccepted = termsAccepted,
-                signatureBitmap = signatureBitmap,
-            ).fold(
-                onSuccess = { onCreated() },
-                onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) }
-            )
+            createIntakeOrderUseCase
+                .execute(
+                    actor = actor,
+                    input = input,
+                    stagedMedia = stagedMedia,
+                    signerName = signerName,
+                    privacyAccepted = privacyAccepted,
+                    termsAccepted = termsAccepted,
+                    signatureBitmap = signatureBitmap,
+                ).fold(
+                    onSuccess = { onCreated() },
+                    onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) },
+                )
         }
     }
 
@@ -185,12 +202,15 @@ class NewOrderViewModel(
         private val onSetFormDirty: (Boolean) -> Unit,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return NewOrderViewModel(
-                authRepository, customerRepository, catalogRepository,
-                orderMediaRepository, templateRepository, createIntakeOrderUseCase,
-                onSetFormDirty
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            NewOrderViewModel(
+                authRepository,
+                customerRepository,
+                catalogRepository,
+                orderMediaRepository,
+                templateRepository,
+                createIntakeOrderUseCase,
+                onSetFormDirty,
             ) as T
-        }
     }
 }

@@ -8,12 +8,11 @@ import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
-import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.design.components.AppStepper
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.features.dashboard.common.CustomerTypeToggle
 import com.onlytechtake.repairapp.features.dashboard.neworder.LAST_INTAKE_STEP
@@ -40,7 +39,8 @@ class DesignComponentsTest {
             }
         }
 
-        composeRule.onNodeWithTag("compact_button")
+        composeRule
+            .onNodeWithTag("compact_button")
             .assertHeightIsAtLeast(RepairAppSizes.touchTarget)
     }
 
@@ -54,10 +54,11 @@ class DesignComponentsTest {
             }
         }
 
-        composeRule.onNode(
-            SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Button),
-            useUnmergedTree = true,
-        ).assertExists()
+        composeRule
+            .onNode(
+                SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Button),
+                useUnmergedTree = true,
+            ).assertExists()
     }
 
     @Test
@@ -68,7 +69,8 @@ class DesignComponentsTest {
             }
         }
 
-        composeRule.onNodeWithTag(RepairAppTestTags.CustomerBusinessToggle)
+        composeRule
+            .onNodeWithTag(RepairAppTestTags.CustomerBusinessToggle)
             .assertIsSelected()
     }
 
@@ -81,14 +83,16 @@ class DesignComponentsTest {
                     totalSteps = LAST_INTAKE_STEP,
                     completedStep = 0,
                     onStepClick = {},
-                    stepTestTag = { RepairAppTestTags.intakeStepperStep(it) }
+                    stepTestTag = { RepairAppTestTags.intakeStepperStep(it) },
                 )
             }
         }
 
-        composeRule.onNodeWithTag(RepairAppTestTags.intakeStepperStep(1))
+        composeRule
+            .onNodeWithTag(RepairAppTestTags.intakeStepperStep(1))
             .assertHeightIsAtLeast(RepairAppSizes.touchTarget)
-        composeRule.onNodeWithTag(RepairAppTestTags.intakeStepperStep(LAST_INTAKE_STEP))
+        composeRule
+            .onNodeWithTag(RepairAppTestTags.intakeStepperStep(LAST_INTAKE_STEP))
             .assertHeightIsAtLeast(RepairAppSizes.touchTarget)
     }
 
@@ -105,7 +109,8 @@ class DesignComponentsTest {
         }
 
         (1..6).forEach { step ->
-            composeRule.onNodeWithTag(RepairAppTestTags.orderStatusStepperStep(step))
+            composeRule
+                .onNodeWithTag(RepairAppTestTags.orderStatusStepperStep(step))
                 .assertTextContains(step.toString())
         }
     }

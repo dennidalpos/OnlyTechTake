@@ -7,7 +7,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.IntSize
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.math.roundToInt
 
 enum class ImageEditMode {
     CROP,
@@ -26,7 +25,10 @@ data class ImagePlacement(
     val height: Float,
 )
 
-fun imagePlacement(imageSize: Size, canvasSize: Size): ImagePlacement {
+fun imagePlacement(
+    imageSize: Size,
+    canvasSize: Size,
+): ImagePlacement {
     val scale = min(canvasSize.width / imageSize.width, canvasSize.height / imageSize.height)
     val width = imageSize.width * scale
     val height = imageSize.height * scale
@@ -38,24 +40,34 @@ fun imagePlacement(imageSize: Size, canvasSize: Size): ImagePlacement {
     )
 }
 
-fun Offset.toCanvasOffset(placement: ImagePlacement, bitmap: Bitmap): Offset =
+fun Offset.toCanvasOffset(
+    placement: ImagePlacement,
+    bitmap: Bitmap,
+): Offset =
     Offset(
         x = placement.left + (x / bitmap.width.toFloat()) * placement.width,
         y = placement.top + (y / bitmap.height.toFloat()) * placement.height,
     )
 
-fun Size.toCanvasSize(placement: ImagePlacement, bitmap: Bitmap): Size =
+fun Size.toCanvasSize(
+    placement: ImagePlacement,
+    bitmap: Bitmap,
+): Size =
     Size(
         width = (width / bitmap.width.toFloat()) * placement.width,
         height = (height / bitmap.height.toFloat()) * placement.height,
     )
 
-fun Offset.toBitmapOffset(canvasSize: IntSize, bitmap: Bitmap): Offset? {
+fun Offset.toBitmapOffset(
+    canvasSize: IntSize,
+    bitmap: Bitmap,
+): Offset? {
     if (canvasSize.width <= 0 || canvasSize.height <= 0) return null
-    val placement = imagePlacement(
-        imageSize = Size(bitmap.width.toFloat(), bitmap.height.toFloat()),
-        canvasSize = Size(canvasSize.width.toFloat(), canvasSize.height.toFloat()),
-    )
+    val placement =
+        imagePlacement(
+            imageSize = Size(bitmap.width.toFloat(), bitmap.height.toFloat()),
+            canvasSize = Size(canvasSize.width.toFloat(), canvasSize.height.toFloat()),
+        )
     if (x < placement.left || x > placement.left + placement.width) return null
     if (y < placement.top || y > placement.top + placement.height) return null
     return Offset(
@@ -64,7 +76,11 @@ fun Offset.toBitmapOffset(canvasSize: IntSize, bitmap: Bitmap): Offset? {
     )
 }
 
-fun normalizeBitmapRect(start: Offset, end: Offset, bitmap: Bitmap?): Rect? {
+fun normalizeBitmapRect(
+    start: Offset,
+    end: Offset,
+    bitmap: Bitmap?,
+): Rect? {
     bitmap ?: return null
     val left = min(start.x, end.x).coerceIn(0f, bitmap.width.toFloat())
     val top = min(start.y, end.y).coerceIn(0f, bitmap.height.toFloat())

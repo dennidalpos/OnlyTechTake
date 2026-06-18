@@ -10,7 +10,7 @@ enum class TemplateAnchor(
     val stepNumber: Int,
     val stepName: String,
     val label: String,
-    val description: String
+    val description: String,
 ) {
     WHATSAPP_INTAKE(
         settingKey = "anchor_wa_intake",
@@ -18,7 +18,7 @@ enum class TemplateAnchor(
         stepNumber = 1,
         stepName = "Ingresso",
         label = "WA: Presa in carico",
-        description = "Inviato quando una nuova commessa viene aperta."
+        description = "Inviato quando una nuova commessa viene aperta.",
     ),
     WHATSAPP_UPDATE(
         settingKey = "anchor_wa_update",
@@ -26,7 +26,7 @@ enum class TemplateAnchor(
         stepNumber = 2,
         stepName = "Aggiornamento",
         label = "WA: Aggiornamento",
-        description = "Inviato per comunicare cambi di stato generici."
+        description = "Inviato per comunicare cambi di stato generici.",
     ),
     WHATSAPP_DIAGNOSIS(
         settingKey = "anchor_wa_diagnosis",
@@ -34,7 +34,7 @@ enum class TemplateAnchor(
         stepNumber = 3,
         stepName = "Diagnosi",
         label = "WA: Diagnosi in corso",
-        description = "Inviato quando l'oggetto entra in fase di diagnosi."
+        description = "Inviato quando l'oggetto entra in fase di diagnosi.",
     ),
     WHATSAPP_QUOTE(
         settingKey = "anchor_wa_quote",
@@ -42,7 +42,7 @@ enum class TemplateAnchor(
         stepNumber = 4,
         stepName = "Preventivo",
         label = "WA: Preventivo pronto",
-        description = "Inviato quando il preventivo è pronto per l'accettazione."
+        description = "Inviato quando il preventivo è pronto per l'accettazione.",
     ),
     WHATSAPP_NOT_REPAIRABLE(
         settingKey = "anchor_wa_not_repairable",
@@ -50,7 +50,7 @@ enum class TemplateAnchor(
         stepNumber = 4,
         stepName = "Esito",
         label = "WA: Non riparabile",
-        description = "Inviato quando l'oggetto non risulta riparabile."
+        description = "Inviato quando l'oggetto non risulta riparabile.",
     ),
     WHATSAPP_REPAIRING(
         settingKey = "anchor_wa_repairing",
@@ -58,7 +58,7 @@ enum class TemplateAnchor(
         stepNumber = 5,
         stepName = "Riparazione",
         label = "WA: In riparazione",
-        description = "Inviato quando inizia l'intervento tecnico."
+        description = "Inviato quando inizia l'intervento tecnico.",
     ),
     WHATSAPP_READY(
         settingKey = "anchor_wa_ready",
@@ -66,7 +66,7 @@ enum class TemplateAnchor(
         stepNumber = 6,
         stepName = "Ritiro",
         label = "WA: Pronto ritiro",
-        description = "Inviato quando il dispositivo può essere ritirato."
+        description = "Inviato quando il dispositivo può essere ritirato.",
     ),
     WHATSAPP_PDF_STATUS(
         settingKey = "anchor_wa_pdf_status",
@@ -74,7 +74,7 @@ enum class TemplateAnchor(
         stepNumber = 6,
         stepName = "Documenti",
         label = "WA: Invio PDF Stato",
-        description = "Accompagna l'invio del documento PDF dello stato avanzamento."
+        description = "Accompagna l'invio del documento PDF dello stato avanzamento.",
     ),
     PRIVACY_TEXT(
         settingKey = "anchor_privacy_text",
@@ -82,7 +82,7 @@ enum class TemplateAnchor(
         stepNumber = 0,
         stepName = "Legale",
         label = "Legale: Privacy",
-        description = "Testo dell'informativa privacy mostrato in fase di accettazione."
+        description = "Testo dell'informativa privacy mostrato in fase di accettazione.",
     ),
     TERMS_TEXT(
         settingKey = "anchor_terms_text",
@@ -90,8 +90,9 @@ enum class TemplateAnchor(
         stepNumber = 0,
         stepName = "Legale",
         label = "Legale: Termini e Condizioni",
-        description = "Condizioni di presa in carico mostrate in fase di accettazione."
-    );
+        description = "Condizioni di presa in carico mostrate in fase di accettazione.",
+    ),
+    ;
 
     companion object {
         fun fromSettingKey(key: String): TemplateAnchor? = entries.find { it.settingKey == key }

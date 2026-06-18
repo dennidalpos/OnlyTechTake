@@ -20,11 +20,12 @@ class DiagnosisResultInputTest {
 
     @Test
     fun notRepairableClearsAnyIncoherentEstimate() {
-        val input = DiagnosisResultInput(
-            summary = "Ricambio non disponibile",
-            diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE,
-            estimateAmountCents = 12_300L,
-        )
+        val input =
+            DiagnosisResultInput(
+                summary = "Ricambio non disponibile",
+                diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE,
+                estimateAmountCents = 12_300L,
+            )
 
         assertTrue(input.validationErrors().isEmpty())
         assertEquals(null, input.normalizedEstimateAmountCents())

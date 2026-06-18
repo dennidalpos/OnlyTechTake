@@ -21,12 +21,11 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
-import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.workspace.categoryPath
 
 @Composable
@@ -51,13 +50,13 @@ fun QuickIntakeCategorySection(
                 text = stringResource(R.string.intake_step_category),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
-            
+
             if (activeCategories.isEmpty()) {
                 AppMessageBanner(
                     message = stringResource(R.string.intake_no_active_categories),
-                    type = BannerType.Error
+                    type = BannerType.Error,
                 )
                 AppButton(
                     modifier = Modifier.fillMaxWidth(),
@@ -68,7 +67,7 @@ fun QuickIntakeCategorySection(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     if (currentParentId != null) {
                         AppButton(
@@ -81,16 +80,16 @@ fun QuickIntakeCategorySection(
                             currentParent?.name.orEmpty(),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier.weight(1f).padding(start = 8.dp)
+                            modifier = Modifier.weight(1f).padding(start = 8.dp),
                         )
                     } else {
                         Text(
                             stringResource(R.string.config_category_root),
                             style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
                         )
                     }
-                    
+
                     AppButton(
                         text = stringResource(R.string.intake_add_missing_category),
                         variant = AppButtonVariant.Ghost,
@@ -109,18 +108,20 @@ fun QuickIntakeCategorySection(
                     visibleCategories.forEach { category ->
                         val hasChildren = activeCategories.any { child -> child.parentId == category.id }
                         val isSelected = category.id == selectedCategoryId
-                        val categoryState = when {
-                            hasChildren -> stringResource(R.string.intake_category_branch_state)
-                            isSelected -> stringResource(R.string.intake_category_selected_state)
-                            else -> stringResource(R.string.intake_category_not_selected_state)
-                        }
+                        val categoryState =
+                            when {
+                                hasChildren -> stringResource(R.string.intake_category_branch_state)
+                                isSelected -> stringResource(R.string.intake_category_selected_state)
+                                else -> stringResource(R.string.intake_category_not_selected_state)
+                            }
                         StandardCard(
-                            modifier = Modifier
-                                .testTag(RepairAppTestTags.categoryButton(category.id))
-                                .semantics {
-                                    selected = isSelected
-                                    stateDescription = categoryState
-                                },
+                            modifier =
+                                Modifier
+                                    .testTag(RepairAppTestTags.categoryButton(category.id))
+                                    .semantics {
+                                        selected = isSelected
+                                        stateDescription = categoryState
+                                    },
                             onClick = {
                                 if (hasChildren) {
                                     currentParentId = category.id
@@ -132,11 +133,12 @@ fun QuickIntakeCategorySection(
                             role = Role.RadioButton,
                         ) {
                             Row(
-                                modifier = Modifier
-                                    .padding(horizontal = 12.dp, vertical = 12.dp)
-                                    .fillMaxWidth(),
+                                modifier =
+                                    Modifier
+                                        .padding(horizontal = 12.dp, vertical = 12.dp)
+                                        .fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(category.name, style = MaterialTheme.typography.bodyLarge)
@@ -144,7 +146,7 @@ fun QuickIntakeCategorySection(
                                         Text(
                                             text = stringResource(R.string.intake_category_step_hint),
                                             style = MaterialTheme.typography.labelSmall,
-                                            color = MaterialTheme.colorScheme.primary
+                                            color = MaterialTheme.colorScheme.primary,
                                         )
                                     }
                                 }

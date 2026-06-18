@@ -68,40 +68,44 @@ fun AppButton(
     val widthModifier = if (size == AppButtonSize.FullWidth) Modifier.fillMaxWidth() else Modifier
     val effectiveEnabled = enabled && !loading
 
-    val containerColor = if (effectiveEnabled || loading) {
-        colors.container
-    } else {
-        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.38f)
-    }
-    val contentColor = if (effectiveEnabled || loading) {
-        colors.content
-    } else {
-        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f)
-    }
+    val containerColor =
+        if (effectiveEnabled || loading) {
+            colors.container
+        } else {
+            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.38f)
+        }
+    val contentColor =
+        if (effectiveEnabled || loading) {
+            colors.content
+        } else {
+            MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f)
+        }
     val visualHeight = if (compact) RepairAppSizes.buttonCompact else RepairAppSizes.buttonDefault
 
     Surface(
         onClick = onClick,
-        modifier = modifier
-            .then(widthModifier)
-            .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
-            .semantics {
-                role = Role.Button
-                selected?.let { this.selected = it }
-                stateDescription?.let { this.stateDescription = it }
-            },
+        modifier =
+            modifier
+                .then(widthModifier)
+                .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
+                .semantics {
+                    role = Role.Button
+                    selected?.let { this.selected = it }
+                    stateDescription?.let { this.stateDescription = it }
+                },
         enabled = effectiveEnabled,
         shape = if (compact) RepairAppShapes.compactButton else RepairAppShapes.button,
         color = containerColor,
         contentColor = contentColor,
     ) {
         Box(
-            modifier = Modifier
-                .height(visualHeight)
-                .defaultMinSize(
-                    minWidth = if (compact) 60.dp else 100.dp,
-                    minHeight = if (compact) 0.dp else RepairAppSizes.touchTarget,
-                ),
+            modifier =
+                Modifier
+                    .height(visualHeight)
+                    .defaultMinSize(
+                        minWidth = if (compact) 60.dp else 100.dp,
+                        minHeight = if (compact) 0.dp else RepairAppSizes.touchTarget,
+                    ),
             contentAlignment = Alignment.Center,
         ) {
             Row(
@@ -113,7 +117,7 @@ fun AppButton(
                     CircularProgressIndicator(
                         modifier = Modifier.padding(end = 8.dp).size(if (compact) 16.dp else 20.dp),
                         strokeWidth = 2.dp,
-                        color = contentColor
+                        color = contentColor,
                     )
                 } else {
                     leadingIcon?.let { icon ->
@@ -137,7 +141,10 @@ fun AppButton(
     }
 }
 
-private data class AppButtonColors(val container: Color, val content: Color)
+private data class AppButtonColors(
+    val container: Color,
+    val content: Color,
+)
 
 @Composable
 private fun AppButtonVariant.colors(): AppButtonColors =

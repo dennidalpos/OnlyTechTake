@@ -50,16 +50,17 @@ class IntakeStepperTest {
 
     @Test
     fun categoryPathSupportsArbitraryDepth() {
-        val categories = (0..5).map { level ->
-            OrderCategoryEntity(
-                id = "level-$level",
-                parentId = "level-${level - 1}".takeIf { level > 0 },
-                level = level,
-                name = "L$level",
-                description = null,
-                active = true,
-            )
-        }
+        val categories =
+            (0..5).map { level ->
+                OrderCategoryEntity(
+                    id = "level-$level",
+                    parentId = "level-${level - 1}".takeIf { level > 0 },
+                    level = level,
+                    name = "L$level",
+                    description = null,
+                    active = true,
+                )
+            }
 
         assertEquals("L0 > L1 > L2 > L3 > L4 > L5", categoryPath(categories, "level-5"))
     }
@@ -71,17 +72,24 @@ class IntakeStepperTest {
 
         assertTrue(calculateIsDirty(draft.copy(problemSummary = "Broken screen")))
         assertTrue(calculateIsDirty(draft.copy(selectedCategoryId = "display")))
-        assertTrue(calculateIsDirty(draft.copy(stagedMedia = listOf(
-            StagedOrderMedia(
-                localPath = "p",
-                fileName = "p.jpg",
-                mimeType = "image/jpeg",
-                mediaType = "PHOTO",
-                sizeBytes = 1024,
-                width = 800,
-                height = 600
-            )
-        ))))
+        assertTrue(
+            calculateIsDirty(
+                draft.copy(
+                    stagedMedia =
+                        listOf(
+                            StagedOrderMedia(
+                                localPath = "p",
+                                fileName = "p.jpg",
+                                mimeType = "image/jpeg",
+                                mediaType = "PHOTO",
+                                sizeBytes = 1024,
+                                width = 800,
+                                height = 600,
+                            ),
+                        ),
+                ),
+            ),
+        )
     }
 
     @Test

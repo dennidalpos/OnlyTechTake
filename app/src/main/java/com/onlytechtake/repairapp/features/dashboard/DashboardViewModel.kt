@@ -12,17 +12,20 @@ import kotlinx.coroutines.flow.stateIn
 class DashboardViewModel(
     repository: RepairAppRepository,
 ) : ViewModel() {
-    val summary: StateFlow<AppSummary> = repository.observeSummary()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = AppSummary(
-                title = "OnlyTechTake",
-                userCount = 0,
-                customerCount = 0,
-                activeOrderCount = 0,
-            ),
-        )
+    val summary: StateFlow<AppSummary> =
+        repository
+            .observeSummary()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue =
+                    AppSummary(
+                        title = "OnlyTechTake",
+                        userCount = 0,
+                        customerCount = 0,
+                        activeOrderCount = 0,
+                    ),
+            )
 
     class Factory(
         private val repository: RepairAppRepository,

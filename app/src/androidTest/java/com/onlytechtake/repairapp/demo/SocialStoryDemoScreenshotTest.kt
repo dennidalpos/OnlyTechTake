@@ -4,12 +4,14 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.click
+import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToIndex
@@ -17,27 +19,22 @@ import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
-import androidx.compose.ui.test.swipeLeft
-import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.test.swipeUp
-import androidx.compose.ui.test.isRoot
-import androidx.compose.ui.test.onFirst
-import androidx.compose.ui.test.click
-import androidx.test.espresso.Espresso
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.MainActivity
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
-import java.io.File
-import java.io.FileOutputStream
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.io.File
+import java.io.FileOutputStream
 
 @RunWith(AndroidJUnit4::class)
 class SocialStoryDemoScreenshotTest {
@@ -62,7 +59,7 @@ class SocialStoryDemoScreenshotTest {
 
             clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
             waitForTag("quick_actions_screen")
-            
+
             var formOpened = false
             repeat(3) {
                 if (!formOpened) {
@@ -73,9 +70,9 @@ class SocialStoryDemoScreenshotTest {
                     formOpened = isTagPresent(RepairAppTestTags.NewOrderFirstNameField)
                 }
             }
-            
+
             waitForTagExists(RepairAppTestTags.NewOrderFirstNameField)
-            
+
             typeTag(RepairAppTestTags.NewOrderFirstNameField, "Giulia", scroll = true)
             typeTag(RepairAppTestTags.NewOrderLastNameField, "Bianchi", scroll = true)
             typeTag(RepairAppTestTags.NewOrderPhoneField, "+39 333 010 2020", scroll = true)
@@ -107,7 +104,7 @@ class SocialStoryDemoScreenshotTest {
             waitForTag(RepairAppTestTags.orderCardCustomerReference(DemoDataSeeder.DEMO_ORDER_ID), scroll = true, useUnmergedTree = true)
             waitForTag(RepairAppTestTags.orderCardStatusStep(DemoDataSeeder.DEMO_ORDER_ID, 1), scroll = true, useUnmergedTree = true)
             clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID))
-            
+
             waitForTag(RepairAppTestTags.OrderStatusLabel)
             waitForTag(RepairAppTestTags.OrderDetailOrderReference, useUnmergedTree = true)
             waitForTag(RepairAppTestTags.OrderDetailCustomerReference, useUnmergedTree = true)
@@ -233,10 +230,10 @@ class SocialStoryDemoScreenshotTest {
         withDemoApp {
             waitForTag(RepairAppTestTags.AuthUsernameField)
             loginDemo(DemoDataSeeder.DEMO_ADMIN_USERNAME)
-            
+
             clickDashboardTab("SETTINGS")
             waitForText("Setup")
-            
+
             clickTag(RepairAppTestTags.ConfigHubStorageButton, scroll = true)
             waitForText("Archiviazione")
             capture(outputDir, "01-gestione-memoria.png")
@@ -245,7 +242,7 @@ class SocialStoryDemoScreenshotTest {
             clickTag(RepairAppTestTags.ConfigHubBackupButton, scroll = true)
             waitForText("Backup")
             capture(outputDir, "02-backup-dati.png")
-            
+
             clickText("Esportazione Commesse", scroll = true)
             waitForText("Esportazione")
             capture(outputDir, "03-export-excel.png")
@@ -261,7 +258,10 @@ class SocialStoryDemoScreenshotTest {
         }
     }
 
-    private fun applySimpleStatus(action: OrderStatusAction, nextAction: OrderStatusAction) {
+    private fun applySimpleStatus(
+        action: OrderStatusAction,
+        nextAction: OrderStatusAction,
+    ) {
         waitForTag(RepairAppTestTags.OrderActionSection, scroll = true)
         pauseForDemo()
         clickTag(RepairAppTestTags.statusAction(action.name), scroll = true)
@@ -332,8 +332,7 @@ class SocialStoryDemoScreenshotTest {
         Thread.sleep(2000)
     }
 
-    private fun isTextDisplayed(text: String): Boolean =
-        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+    private fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
     private fun loginDemo(username: String) {
         repeat(LOGIN_ATTEMPTS) { attempt ->
@@ -355,7 +354,11 @@ class SocialStoryDemoScreenshotTest {
         }
     }
 
-    private fun typeTag(tag: String, text: String, scroll: Boolean = false) {
+    private fun typeTag(
+        tag: String,
+        text: String,
+        scroll: Boolean = false,
+    ) {
         waitForTagExists(tag, scrollIfNotFound = scroll)
         val node = composeRule.onNodeWithTag(tag)
         node.performClick()
@@ -368,10 +371,14 @@ class SocialStoryDemoScreenshotTest {
         pauseForDemo()
     }
 
-    private fun clickTag(tag: String, scroll: Boolean = false, useUnmergedTree: Boolean = false) {
+    private fun clickTag(
+        tag: String,
+        scroll: Boolean = false,
+        useUnmergedTree: Boolean = false,
+    ) {
         waitForTag(tag, scroll = scroll, useUnmergedTree = useUnmergedTree)
         val node = composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
-        
+
         // Ensure the node is enabled before clicking
         try {
             composeRule.waitUntil(timeoutMillis = 5_000) {
@@ -395,10 +402,13 @@ class SocialStoryDemoScreenshotTest {
         pauseForDemo()
     }
 
-    private fun clickText(text: String, scroll: Boolean = false) {
+    private fun clickText(
+        text: String,
+        scroll: Boolean = false,
+    ) {
         waitForText(text, scrollIfNotFound = scroll)
         val node = composeRule.onNodeWithText(text, substring = true)
-        
+
         try {
             node.performClick()
         } catch (e: Throwable) {
@@ -414,7 +424,8 @@ class SocialStoryDemoScreenshotTest {
     }
 
     private fun performSafeSwipeUp() {
-        val listTags = listOf(RepairAppTestTags.OrderDetailLazyColumn, "categories_list", "templates_list", "customer_list", "customer_form")
+        val listTags =
+            listOf(RepairAppTestTags.OrderDetailLazyColumn, "categories_list", "templates_list", "customer_list", "customer_form")
         for (tag in listTags) {
             try {
                 composeRule.onNodeWithTag(tag).performTouchInput {
@@ -422,18 +433,21 @@ class SocialStoryDemoScreenshotTest {
                 }
                 composeRule.waitForIdle()
                 return
-            } catch (e: Throwable) {}
+            } catch (e: Throwable) {
+            }
         }
         try {
-            composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { 
+            composeRule.onAllNodes(isRoot()).onFirst().performTouchInput {
                 swipeUp(startY = bottom * 0.8f, endY = top + 30f)
             }
-        } catch (e: Throwable) {}
+        } catch (e: Throwable) {
+        }
         composeRule.waitForIdle()
     }
 
     private fun performSafeSwipeDown() {
-        val listTags = listOf(RepairAppTestTags.OrderDetailLazyColumn, "categories_list", "templates_list", "customer_list", "customer_form")
+        val listTags =
+            listOf(RepairAppTestTags.OrderDetailLazyColumn, "categories_list", "templates_list", "customer_list", "customer_form")
         for (tag in listTags) {
             try {
                 composeRule.onNodeWithTag(tag).performTouchInput {
@@ -441,31 +455,37 @@ class SocialStoryDemoScreenshotTest {
                 }
                 composeRule.waitForIdle()
                 return
-            } catch (e: Throwable) {}
+            } catch (e: Throwable) {
+            }
         }
         try {
-            composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { 
+            composeRule.onAllNodes(isRoot()).onFirst().performTouchInput {
                 swipeDown(startY = top + 30f, endY = bottom * 0.8f)
             }
-        } catch (e: Throwable) {}
+        } catch (e: Throwable) {
+        }
         composeRule.waitForIdle()
     }
 
-
-    private fun waitForTag(tag: String, scroll: Boolean = false, useUnmergedTree: Boolean = false) {
+    private fun waitForTag(
+        tag: String,
+        scroll: Boolean = false,
+        useUnmergedTree: Boolean = false,
+    ) {
         waitForTagExists(tag, scrollIfNotFound = scroll, useUnmergedTree = useUnmergedTree)
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
         while (System.currentTimeMillis() < deadline) {
-            val displayed = runCatching {
-                val node = composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
-                if (scroll) {
-                    runCatching { node.performScrollTo() }
-                    composeRule.waitForIdle()
-                }
-                node.assertIsDisplayed()
-                true
-            }.getOrDefault(false)
+            val displayed =
+                runCatching {
+                    val node = composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
+                    if (scroll) {
+                        runCatching { node.performScrollTo() }
+                        composeRule.waitForIdle()
+                    }
+                    node.assertIsDisplayed()
+                    true
+                }.getOrDefault(false)
             if (displayed) return
 
             if (scroll) {
@@ -481,7 +501,11 @@ class SocialStoryDemoScreenshotTest {
         composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).assertIsDisplayed()
     }
 
-    private fun waitForTagExists(tag: String, scrollIfNotFound: Boolean = false, useUnmergedTree: Boolean = false) {
+    private fun waitForTagExists(
+        tag: String,
+        scrollIfNotFound: Boolean = false,
+        useUnmergedTree: Boolean = false,
+    ) {
         var found = false
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
@@ -501,7 +525,7 @@ class SocialStoryDemoScreenshotTest {
                         }
                     } catch (e: Throwable) {
                         if (attempts % 15 < 10) {
-                            performSafeSwipeUp()   // Scroll DOWN (reveal items below)
+                            performSafeSwipeUp() // Scroll DOWN (reveal items below)
                         } else {
                             performSafeSwipeDown() // Scroll UP (reveal items above)
                         }
@@ -518,7 +542,10 @@ class SocialStoryDemoScreenshotTest {
         }
     }
 
-    private fun waitForTagIfPresent(tag: String, timeoutMillis: Long): Boolean {
+    private fun waitForTagIfPresent(
+        tag: String,
+        timeoutMillis: Long,
+    ): Boolean {
         val deadline = System.currentTimeMillis() + timeoutMillis
         do {
             if (isTagPresent(tag)) {
@@ -530,15 +557,20 @@ class SocialStoryDemoScreenshotTest {
         return false
     }
 
-    private fun isTagPresent(tag: String, useUnmergedTree: Boolean = false): Boolean =
-        composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).fetchSemanticsNodes().isNotEmpty()
+    private fun isTagPresent(
+        tag: String,
+        useUnmergedTree: Boolean = false,
+    ): Boolean = composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).fetchSemanticsNodes().isNotEmpty()
 
     private fun isTagDisplayed(tag: String): Boolean =
         runCatching {
             composeRule.onNodeWithTag(tag).assertIsDisplayed()
         }.isSuccess
 
-    private fun waitForText(text: String, scrollIfNotFound: Boolean = false) {
+    private fun waitForText(
+        text: String,
+        scrollIfNotFound: Boolean = false,
+    ) {
         var found = false
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
@@ -558,7 +590,7 @@ class SocialStoryDemoScreenshotTest {
                         }
                     } catch (e: Throwable) {
                         if (attempts % 15 < 10) {
-                            performSafeSwipeUp()   // Scroll DOWN (reveal items below)
+                            performSafeSwipeUp() // Scroll DOWN (reveal items below)
                         } else {
                             performSafeSwipeDown() // Scroll UP (reveal items above)
                         }
@@ -575,7 +607,10 @@ class SocialStoryDemoScreenshotTest {
         }
     }
 
-    private fun capture(outputDir: File, fileName: String) {
+    private fun capture(
+        outputDir: File,
+        fileName: String,
+    ) {
         composeRule.waitForIdle()
         InstrumentationRegistry.getInstrumentation().waitForIdleSync()
         pauseForScreenshot()
@@ -602,8 +637,7 @@ class SocialStoryDemoScreenshotTest {
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    private fun isRecordingDemo(): Boolean =
-        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     private companion object {
         const val CASE_ORDER = "01-commessa-nuovo-cliente-chiusura"

@@ -8,7 +8,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class PermissionServiceTest {
-
     @Test
     fun adminHasAllPermissions() {
         val admin = AuthenticatedUser("1", "Admin", "admin", UserRole.ADMIN, emptySet())
@@ -18,11 +17,15 @@ class PermissionServiceTest {
 
     @Test
     fun operatorOnlyHasAssignedPermissions() {
-        val operator = AuthenticatedUser(
-            "2", "Op", "op", UserRole.OPERATOR,
-            setOf(UserPermission.CREATE_ORDERS, UserPermission.EDIT_OWN_ORDERS)
-        )
-        
+        val operator =
+            AuthenticatedUser(
+                "2",
+                "Op",
+                "op",
+                UserRole.OPERATOR,
+                setOf(UserPermission.CREATE_ORDERS, UserPermission.EDIT_OWN_ORDERS),
+            )
+
         assertTrue(PermissionService.hasPermission(operator, UserPermission.CREATE_ORDERS))
         assertTrue(PermissionService.hasPermission(operator, UserPermission.EDIT_OWN_ORDERS))
         assertFalse(PermissionService.hasPermission(operator, UserPermission.DELETE_DATA))

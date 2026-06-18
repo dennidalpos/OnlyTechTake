@@ -20,9 +20,17 @@ data class AuthState(
 )
 
 sealed interface LoginResult {
-    data class Success(val user: AuthenticatedUser) : LoginResult
-    data class PasswordChangeRequired(val user: AuthenticatedUser) : LoginResult
+    data class Success(
+        val user: AuthenticatedUser,
+    ) : LoginResult
+
+    data class PasswordChangeRequired(
+        val user: AuthenticatedUser,
+    ) : LoginResult
+
     data object InvalidCredentials : LoginResult
+
     data object InactiveUser : LoginResult
+
     data object LockedOut : LoginResult
 }

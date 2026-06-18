@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.navigation
 
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -7,7 +8,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -24,9 +24,10 @@ fun RepairAppNavHost(windowSizeClass: WindowSizeClass) {
     val navController = rememberNavController()
     val context = LocalContext.current
     var appInstanceKey by remember { mutableIntStateOf(0) }
-    val appContainer = remember(context, appInstanceKey) {
-        AppContainer(context.applicationContext)
-    }
+    val appContainer =
+        remember(context, appInstanceKey) {
+            AppContainer(context.applicationContext)
+        }
     val recreateAppContainer = {
         appContainer.close()
         appInstanceKey += 1
@@ -34,7 +35,7 @@ fun RepairAppNavHost(windowSizeClass: WindowSizeClass) {
 
     CompositionLocalProvider(
         LocalAppContainer provides appContainer,
-        LocalWindowSizeClass provides windowSizeClass
+        LocalWindowSizeClass provides windowSizeClass,
     ) {
         NavHost(
             navController = navController,
@@ -50,6 +51,7 @@ fun RepairAppNavHost(windowSizeClass: WindowSizeClass) {
     }
 }
 
-val LocalWindowSizeClass = androidx.compose.runtime.staticCompositionLocalOf<WindowSizeClass> {
-    error("No WindowSizeClass provided")
-}
+val LocalWindowSizeClass =
+    androidx.compose.runtime.staticCompositionLocalOf<WindowSizeClass> {
+        error("No WindowSizeClass provided")
+    }

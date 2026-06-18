@@ -1,8 +1,8 @@
 package com.onlytechtake.repairapp.core.orders
 
-import java.time.ZoneId
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.time.ZoneId
 
 class OrderNumberGeneratorTest {
     private val generator = OrderNumberGenerator(ZoneId.of("UTC"))

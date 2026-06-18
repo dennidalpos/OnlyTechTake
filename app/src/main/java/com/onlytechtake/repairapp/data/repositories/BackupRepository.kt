@@ -7,11 +7,12 @@ import android.provider.OpenableColumns
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
+import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.dao.*
-import com.onlytechtake.repairapp.data.local.entities.*
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
+import com.onlytechtake.repairapp.data.local.entities.*
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
@@ -20,13 +21,12 @@ import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.storage.StoragePolicy
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
-import com.onlytechtake.repairapp.core.permissions.PermissionService
-import net.lingala.zip4j.io.outputstream.ZipOutputStream
-import java.io.File
-import java.io.IOException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import net.lingala.zip4j.io.outputstream.ZipOutputStream
+import java.io.File
+import java.io.IOException
 
 class BackupRepository(
     private val context: Context,
@@ -45,11 +45,14 @@ class BackupRepository(
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
     private val eventWriter = OrderWorkflowEventWriter(context, auditLogDao = auditLogDao)
-    
+
     private val metadataService = BackupMetadataService(categoryDao, templateDao, settingDao, clockMillis)
     private val dbBackupService = DatabaseBackupFileService(context)
 
-    suspend fun exportConfiguration(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
+    suspend fun exportConfiguration(
+        actor: AuthenticatedUser,
+        uri: Uri,
+    ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.EXPORT_DATA)
             withContext(Dispatchers.IO) {
@@ -58,7 +61,10 @@ class BackupRepository(
             eventWriter.dataExported(actor.id, clockMillis())
         }
 
-    suspend fun exportDatabase(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
+    suspend fun exportDatabase(
+        actor: AuthenticatedUser,
+        uri: Uri,
+    ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.EXPORT_DATA)
             if (BuildConfig.IS_DEMO_VERSION) {
@@ -74,7 +80,10 @@ class BackupRepository(
             eventWriter.dataExported(actor.id, clockMillis())
         }
 
-    suspend fun exportCompleteBackup(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
+    suspend fun exportCompleteBackup(
+        actor: AuthenticatedUser,
+        uri: Uri,
+    ): Result<Unit> =
         runCatching {
             StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
             PermissionService.requirePermission(actor, UserPermission.BACKUP_RESTORE)
@@ -93,15 +102,16 @@ class BackupRepository(
                         dbBackupService.addDatabaseFiles(zip, password)
                         BackupArchive.addDirectory(
                             zip = zip,
-                            directory = mediaStorageProvider?.getBaseMediaDir()
-                                ?: File(context.filesDir, BackupArchive.CANONICAL_MEDIA_DIRECTORY),
+                            directory =
+                                mediaStorageProvider?.getBaseMediaDir()
+                                    ?: File(context.filesDir, BackupArchive.CANONICAL_MEDIA_DIRECTORY),
                             entryDirectory = "files/${BackupArchive.CANONICAL_MEDIA_DIRECTORY}",
                             password = password,
                         )
                     }
                 } ?: throw IOException("Destinazione non disponibile")
             }
-            
+
             val fileName = displayName(uri)
             backupReminderPreferences?.recordSuccessfulFullBackup(fileName)
             eventWriter.dataExported(actor.id, clockMillis())
@@ -109,51 +119,60 @@ class BackupRepository(
             backupReminderPreferences?.recordFailedFullBackup()
         }
 
-    suspend fun restoreCompleteBackup(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
+    suspend fun restoreCompleteBackup(
+        actor: AuthenticatedUser,
+        uri: Uri,
+    ): Result<Unit> =
         runCatching {
             StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
             PermissionService.requirePermission(actor, UserPermission.BACKUP_RESTORE)
             if (BuildConfig.IS_DEMO_VERSION) {
                 throw IllegalStateException("Funzione disponibile nella versione Full")
             }
-            
+
             val securitySettings = securityPreferences?.settings?.first()
             val password = securitySettings?.backupEncryptionPassword?.takeIf { it.isNotBlank() }
 
             withContext(Dispatchers.IO) {
-                val stagingDir = File(context.cacheDir, RESTORE_WORK_DIR).also {
-                    it.deleteRecursively()
-                    check(it.mkdirs()) { "Area ripristino non disponibile" }
-                }
+                val stagingDir =
+                    File(context.cacheDir, RESTORE_WORK_DIR).also {
+                        it.deleteRecursively()
+                        check(it.mkdirs()) { "Area ripristino non disponibile" }
+                    }
                 try {
-                    val extracted = context.contentResolver.openInputStream(uri)?.use { input ->
-                        BackupArchive.extract(input, stagingDir, password?.toCharArray())
-                    } ?: throw IOException("Backup non disponibile")
+                    val extracted =
+                        context.contentResolver.openInputStream(uri)?.use { input ->
+                            BackupArchive.extract(input, stagingDir, password?.toCharArray())
+                        } ?: throw IOException("Backup non disponibile")
                     require(extracted.metadataText.contains("\"databaseVersion\": ${RepairAppDatabase.DATABASE_VERSION}")) {
                         "Versione backup non compatibile"
                     }
-                    val backupDbFile = extracted.databaseFiles[RepairAppDatabase.DATABASE_NAME]
-                        ?: throw IOException("Database mancante nel backup")
+                    val backupDbFile =
+                        extracted.databaseFiles[RepairAppDatabase.DATABASE_NAME]
+                            ?: throw IOException("Database mancante nel backup")
                     dbBackupService.validateDatabase(backupDbFile)
-                    
+
                     // Atomic replacement: close, move current to backup, move new to current, delete backup
                     database?.close()
                     RepairAppDatabase.closeInstance()
-                    
+
                     val currentDbFile = dbBackupService.databaseFile()
-                    val oldDbBackupDir = File(context.cacheDir, "db_backup_pre_restore").also {
-                        it.deleteRecursively()
-                        it.mkdirs()
-                    }
-                    
+                    val oldDbBackupDir =
+                        File(context.cacheDir, "db_backup_pre_restore").also {
+                            it.deleteRecursively()
+                            it.mkdirs()
+                        }
+
                     // Snapshot current DB files
-                    currentDbFile.parentFile?.listFiles { file -> 
-                        (file.name == currentDbFile.name) || file.name.startsWith("${currentDbFile.name}-") 
-                    }?.forEach { it.copyTo(File(oldDbBackupDir, it.name)) }
+                    currentDbFile.parentFile
+                        ?.listFiles { file ->
+                            (file.name == currentDbFile.name) || file.name.startsWith("${currentDbFile.name}-")
+                        }?.forEach { it.copyTo(File(oldDbBackupDir, it.name)) }
 
                     // Snapshot current media for rollback
-                    val mediaDir = mediaStorageProvider?.getBaseMediaDir()
-                        ?: File(context.filesDir, BackupArchive.CANONICAL_MEDIA_DIRECTORY)
+                    val mediaDir =
+                        mediaStorageProvider?.getBaseMediaDir()
+                            ?: File(context.filesDir, BackupArchive.CANONICAL_MEDIA_DIRECTORY)
                     val oldMediaBackupDir = File(context.cacheDir, "media_backup_pre_restore")
                     oldMediaBackupDir.deleteRecursively()
                     if (mediaDir.exists()) {
@@ -165,7 +184,7 @@ class BackupRepository(
                     try {
                         dbBackupService.replaceDatabaseFiles(extracted.databaseFiles)
                         replacePrivateFiles(stagingDir)
-                        
+
                         authPreferences?.clear()
                         sessionStore?.clear()
 
@@ -178,7 +197,10 @@ class BackupRepository(
 
                             restoredDatabase.auditLogDao().upsert(
                                 com.onlytechtake.repairapp.data.local.entities.AuditLogEntity(
-                                    id = java.util.UUID.randomUUID().toString(),
+                                    id =
+                                        java.util.UUID
+                                            .randomUUID()
+                                            .toString(),
                                     action = com.onlytechtake.repairapp.data.local.entities.AuditAction.DATA_RESET,
                                     actorUserId = finalActorId,
                                     orderId = null,
@@ -195,7 +217,7 @@ class BackupRepository(
                         }
                     } catch (e: Exception) {
                         // Rollback DB
-                        oldDbBackupDir.listFiles()?.forEach { 
+                        oldDbBackupDir.listFiles()?.forEach {
                             it.copyTo(File(currentDbFile.parentFile, it.name), overwrite = true)
                         }
                         // Rollback Media
@@ -216,63 +238,70 @@ class BackupRepository(
             }
         }
 
-    suspend fun exportOrdersXlsx(actor: AuthenticatedUser, uri: Uri): Result<Unit> =
+    suspend fun exportOrdersXlsx(
+        actor: AuthenticatedUser,
+        uri: Uri,
+    ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.EXPORT_DATA)
             if (BuildConfig.IS_DEMO_VERSION) {
                 throw IllegalStateException("Funzione disponibile nella versione Full")
             }
-            
+
             val securitySettings = securityPreferences?.settings?.first()
             val password = securitySettings?.backupEncryptionPassword?.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
 
             val exportDao = requireNotNull(orderExportDao) { "Export commesse non configurato" }
-            val labels = OrderExportLabels(
-                headers = listOf(
-                    context.getString(R.string.export_xlsx_header_order_number),
-                    context.getString(R.string.export_xlsx_header_title),
-                    context.getString(R.string.export_xlsx_header_status),
-                    context.getString(R.string.export_xlsx_header_priority),
-                    context.getString(R.string.export_xlsx_header_customer),
-                    context.getString(R.string.export_xlsx_header_customer_type),
-                    context.getString(R.string.export_xlsx_header_phone),
-                    context.getString(R.string.export_xlsx_header_email),
-                    context.getString(R.string.export_xlsx_header_category),
-                    context.getString(R.string.export_xlsx_header_operator),
-                    context.getString(R.string.export_xlsx_header_signer),
-                    context.getString(R.string.export_xlsx_header_description),
-                    context.getString(R.string.export_xlsx_header_internal_notes),
-                    context.getString(R.string.export_xlsx_header_diagnosis_outcome),
-                    context.getString(R.string.export_xlsx_header_payment),
-                    context.getString(R.string.export_xlsx_header_estimate_amount),
-                    context.getString(R.string.export_xlsx_header_final_amount),
-                    context.getString(R.string.export_xlsx_header_created_at),
-                    context.getString(R.string.export_xlsx_header_updated_at),
-                    context.getString(R.string.export_xlsx_header_closed_at),
-                    context.getString(R.string.export_xlsx_header_closure_reason),
-                ),
-                statusLabels = OrderStatus.entries.associateWith { it.label(context) },
-                priorityLabels = OrderPriority.entries.associateWith { it.label(context) },
-                customerTypeLabels = CustomerType.entries.associateWith { it.label(context) },
-                diagnosisOutcomeLabels = DiagnosisOutcome.entries.associateWith { it.label(context) },
-                closureReasonLabels = ClosureReason.entries.associateWith { it.label(context) },
-                paidLabel = context.getString(R.string.export_xlsx_value_paid),
-                notPaidLabel = context.getString(R.string.export_xlsx_value_not_paid)
-            )
+            val labels =
+                OrderExportLabels(
+                    headers =
+                        listOf(
+                            context.getString(R.string.export_xlsx_header_order_number),
+                            context.getString(R.string.export_xlsx_header_title),
+                            context.getString(R.string.export_xlsx_header_status),
+                            context.getString(R.string.export_xlsx_header_priority),
+                            context.getString(R.string.export_xlsx_header_customer),
+                            context.getString(R.string.export_xlsx_header_customer_type),
+                            context.getString(R.string.export_xlsx_header_phone),
+                            context.getString(R.string.export_xlsx_header_email),
+                            context.getString(R.string.export_xlsx_header_category),
+                            context.getString(R.string.export_xlsx_header_operator),
+                            context.getString(R.string.export_xlsx_header_signer),
+                            context.getString(R.string.export_xlsx_header_description),
+                            context.getString(R.string.export_xlsx_header_internal_notes),
+                            context.getString(R.string.export_xlsx_header_diagnosis_outcome),
+                            context.getString(R.string.export_xlsx_header_payment),
+                            context.getString(R.string.export_xlsx_header_estimate_amount),
+                            context.getString(R.string.export_xlsx_header_final_amount),
+                            context.getString(R.string.export_xlsx_header_created_at),
+                            context.getString(R.string.export_xlsx_header_updated_at),
+                            context.getString(R.string.export_xlsx_header_closed_at),
+                            context.getString(R.string.export_xlsx_header_closure_reason),
+                        ),
+                    statusLabels = OrderStatus.entries.associateWith { it.label(context) },
+                    priorityLabels = OrderPriority.entries.associateWith { it.label(context) },
+                    customerTypeLabels = CustomerType.entries.associateWith { it.label(context) },
+                    diagnosisOutcomeLabels = DiagnosisOutcome.entries.associateWith { it.label(context) },
+                    closureReasonLabels = ClosureReason.entries.associateWith { it.label(context) },
+                    paidLabel = context.getString(R.string.export_xlsx_value_paid),
+                    notPaidLabel = context.getString(R.string.export_xlsx_value_not_paid),
+                )
 
             withContext(Dispatchers.IO) {
-                val rowSequence = sequence {
-                    var offset = 0
-                    val limit = 100
-                    while (true) {
-                        val batch = kotlinx.coroutines.runBlocking {
-                            exportDao.exportOrdersPaged(limit, offset)
+                val rowSequence =
+                    sequence {
+                        var offset = 0
+                        val limit = 100
+                        while (true) {
+                            val batch =
+                                kotlinx.coroutines.runBlocking {
+                                    exportDao.exportOrdersPaged(limit, offset)
+                                }
+                            if (batch.isEmpty()) break
+                            yieldAll(batch)
+                            offset += limit
                         }
-                        if (batch.isEmpty()) break
-                        yieldAll(batch)
-                        offset += limit
                     }
-                }
                 context.contentResolver.openOutputStream(uri)?.use { output ->
                     OrderExportXlsxWriter(labels).write(rowSequence.asIterable(), output, password)
                 } ?: throw IOException("Destinazione non disponibile")
@@ -345,24 +374,28 @@ class BackupRepository(
 
     fun displayName(uri: Uri): String? =
         runCatching {
-            context.contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)
+            context.contentResolver
+                .query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)
                 ?.use { cursor ->
                     if (cursor.moveToFirst()) {
                         cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME))
                     } else {
                         null
                     }
-                }
-                ?.takeIf { it.isNotBlank() }
+                }?.takeIf { it.isNotBlank() }
         }.getOrNull()
 
     private fun replacePrivateFiles(restoreRoot: File) {
-        val destination = mediaStorageProvider?.getBaseMediaDir()
-            ?: File(context.filesDir, BackupArchive.CANONICAL_MEDIA_DIRECTORY)
+        val destination =
+            mediaStorageProvider?.getBaseMediaDir()
+                ?: File(context.filesDir, BackupArchive.CANONICAL_MEDIA_DIRECTORY)
         BackupArchive.restoreAppMedia(File(restoreRoot, "files"), destination)
     }
 
-    private fun writeText(uri: Uri, text: String) {
+    private fun writeText(
+        uri: Uri,
+        text: String,
+    ) {
         context.contentResolver.openOutputStream(uri)?.use { output ->
             output.write(text.toByteArray(Charsets.UTF_8))
         } ?: throw IOException("Destinazione non disponibile")
@@ -371,11 +404,16 @@ class BackupRepository(
     private companion object {
         const val RESTORE_WORK_DIR = "onlytechtake_restore"
     }
-
 }
 
-private fun ZipOutputStream.putTextEntry(name: String, text: String, password: String?) {
-    val params = net.lingala.zip4j.model.ZipParameters()
+private fun ZipOutputStream.putTextEntry(
+    name: String,
+    text: String,
+    password: String?,
+) {
+    val params =
+        net.lingala.zip4j.model
+            .ZipParameters()
     params.fileNameInZip = name
     if (password != null) {
         params.isEncryptFiles = true
@@ -387,18 +425,18 @@ private fun ZipOutputStream.putTextEntry(name: String, text: String, password: S
     closeEntry()
 }
 
-
 private fun formatTimelineEvent(event: TimelineEventEntity): String {
-    val parts = buildList {
-        add("${formatTime(event.createdAt)} - ${event.title}")
-        event.description?.takeIf { it.isNotBlank() }?.let { add(it) }
-        if (!event.oldStatus.isNullOrBlank() || !event.newStatus.isNullOrBlank()) {
-            add("Cambio stato: ${event.oldStatus.orEmpty().ifBlank { "-" }} -> ${event.newStatus.orEmpty().ifBlank { "-" }}")
+    val parts =
+        buildList {
+            add("${formatTime(event.createdAt)} - ${event.title}")
+            event.description?.takeIf { it.isNotBlank() }?.let { add(it) }
+            if (!event.oldStatus.isNullOrBlank() || !event.newStatus.isNullOrBlank()) {
+                add("Cambio stato: ${event.oldStatus.orEmpty().ifBlank { "-" }} -> ${event.newStatus.orEmpty().ifBlank { "-" }}")
+            }
+            event.expectedFeedbackType?.let { add("Feedback atteso: ${it.name}") }
+            event.customerFeedback?.let { add("Feedback cliente: ${it.name}") }
+            event.customerFeedbackNote?.takeIf { it.isNotBlank() }?.let { add("Nota feedback: $it") }
+            event.customerFeedbackAt?.let { add("Feedback registrato: ${formatTime(it)}") }
         }
-        event.expectedFeedbackType?.let { add("Feedback atteso: ${it.name}") }
-        event.customerFeedback?.let { add("Feedback cliente: ${it.name}") }
-        event.customerFeedbackNote?.takeIf { it.isNotBlank() }?.let { add("Nota feedback: $it") }
-        event.customerFeedbackAt?.let { add("Feedback registrato: ${formatTime(it)}") }
-    }
     return parts.joinToString(" | ")
 }

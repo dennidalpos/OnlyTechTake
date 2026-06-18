@@ -37,21 +37,23 @@ class OrderClosurePermissionPolicyTest {
     @Test
     fun adminCanCloseWithoutExplicitPermissionSet() {
         OrderClosurePermissionPolicy.requireClosePermissionIfNeeded(
-            actor = AuthenticatedUser(
-                id = "admin-1",
-                displayName = "Admin",
-                username = "admin",
-                role = UserRole.ADMIN,
-            ),
+            actor =
+                AuthenticatedUser(
+                    id = "admin-1",
+                    displayName = "Admin",
+                    username = "admin",
+                    role = UserRole.ADMIN,
+                ),
             targetStatus = OrderStatus.CLOSED,
         )
     }
 
-    private fun operator(permissions: Set<UserPermission>) = AuthenticatedUser(
-        id = "operator-1",
-        displayName = "Operatore",
-        username = "operatore",
-        role = UserRole.OPERATOR,
-        permissions = permissions,
-    )
+    private fun operator(permissions: Set<UserPermission>) =
+        AuthenticatedUser(
+            id = "operator-1",
+            displayName = "Operatore",
+            username = "operatore",
+            role = UserRole.OPERATOR,
+            permissions = permissions,
+        )
 }

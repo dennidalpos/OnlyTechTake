@@ -23,26 +23,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.*
-import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.domain.models.AppSummary
 import com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
-
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
-import com.onlytechtake.repairapp.BuildConfig
 
 @Composable
 fun DashboardRoute(
@@ -51,14 +50,16 @@ fun DashboardRoute(
     onAppDataRestored: () -> Unit,
 ) {
     val container = LocalAppContainer.current
-    val dashboardViewModel: DashboardViewModel = viewModel(
-        key = "dashboard_$appInstanceKey",
-        factory = DashboardViewModel.Factory(container.repairAppRepository),
-    )
-    val sharedViewModel: SharedWorkspaceViewModel = viewModel(
-        key = "shared_workspace_$appInstanceKey",
-        factory = SharedWorkspaceViewModel.Factory(),
-    )
+    val dashboardViewModel: DashboardViewModel =
+        viewModel(
+            key = "dashboard_$appInstanceKey",
+            factory = DashboardViewModel.Factory(container.repairAppRepository),
+        )
+    val sharedViewModel: SharedWorkspaceViewModel =
+        viewModel(
+            key = "shared_workspace_$appInstanceKey",
+            factory = SharedWorkspaceViewModel.Factory(),
+        )
     val summary by dashboardViewModel.summary.collectAsState()
 
     DashboardScreen(
@@ -91,20 +92,24 @@ fun DashboardScreen(
     val windowSizeClass = LocalWindowSizeClass.current
     val useNavRail = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Medium
 
-    val items = androidx.compose.runtime.remember {
-        listOf(
-            NavigationItem(DashboardRoutes.HOME, Icons.Default.Home, R.string.dashboard_home, RepairAppTestTags.dashboardTab("HOME")),
-            NavigationItem(DashboardRoutes.NEW_ORDER, Icons.Default.Add, R.string.dashboard_new, RepairAppTestTags.dashboardTab("NEW_ORDER")),
-            NavigationItem(DashboardRoutes.CUSTOMERS, Icons.Default.Person, R.string.dashboard_customers, RepairAppTestTags.dashboardTab("CUSTOMERS")),
-            NavigationItem(DashboardRoutes.orders(), Icons.AutoMirrored.Filled.List, R.string.dashboard_orders, RepairAppTestTags.dashboardTab("ORDERS")),
-            NavigationItem(DashboardRoutes.settings(), Icons.Default.Settings, R.string.dashboard_config, RepairAppTestTags.dashboardTab("SETTINGS")),
-        )
-    }
+    val items =
+        androidx.compose.runtime.remember {
+            listOf(
+                NavigationItem(DashboardRoutes.HOME, Icons.Default.Home, R.string.dashboard_home, RepairAppTestTags.dashboardTab("HOME")),
+                NavigationItem(DashboardRoutes.NEW_ORDER, Icons.Default.Add, R.string.dashboard_new, RepairAppTestTags.dashboardTab("NEW_ORDER")),
+                NavigationItem(DashboardRoutes.CUSTOMERS, Icons.Default.Person, R.string.dashboard_customers, RepairAppTestTags.dashboardTab("CUSTOMERS")),
+                NavigationItem(DashboardRoutes.orders(), Icons.AutoMirrored.Filled.List, R.string.dashboard_orders, RepairAppTestTags.dashboardTab("ORDERS")),
+                NavigationItem(DashboardRoutes.settings(), Icons.Default.Settings, R.string.dashboard_config, RepairAppTestTags.dashboardTab("SETTINGS")),
+            )
+        }
 
     var pendingRoute by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf<String?>(null) }
     var showUnsavedChangesDialog by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(value = false) }
 
-    fun isTabSelected(itemRoute: String, currentRoute: String?): Boolean {
+    fun isTabSelected(
+        itemRoute: String,
+        currentRoute: String?,
+    ): Boolean {
         if (currentRoute == null) return false
         val baseRoute = itemRoute.split("?")[0]
         val baseCurrent = currentRoute.split("?")[0]
@@ -139,15 +144,17 @@ fun DashboardScreen(
                 title = summary.title,
                 navigationIcon = {
                     if (currentDestination != DashboardRoutes.HOME) {
-                        val isCloseIcon = (currentDestination == DashboardRoutes.NEW_ORDER) || 
-                                         (currentDestination.startsWith("order_detail/"))
+                        val isCloseIcon =
+                            (currentDestination == DashboardRoutes.NEW_ORDER) ||
+                                (currentDestination.startsWith("order_detail/"))
                         AppIconButton(
                             modifier = Modifier.testTag(RepairAppTestTags.ConfigBackButton),
                             imageVector = if (isCloseIcon) Icons.Default.Close else Icons.AutoMirrored.Filled.ArrowBack,
                             tint = if (isCloseIcon) Color.Unspecified else MaterialTheme.colorScheme.primary,
-                            contentDescription = stringResource(
-                                if (isCloseIcon) R.string.content_description_close else R.string.content_description_back,
-                            ),
+                            contentDescription =
+                                stringResource(
+                                    if (isCloseIcon) R.string.content_description_close else R.string.content_description_back,
+                                ),
                             onClick = {
                                 if (isFormDirty) {
                                     pendingRoute = null // Pop back
@@ -163,14 +170,16 @@ fun DashboardScreen(
                     currentUser?.let { user ->
                         val isAdminUser = PermissionService.isAdmin(user)
                         AppStatusBadge(
-                            text = stringResource(
-                                if (isAdminUser) R.string.dashboard_role_admin else R.string.dashboard_role_operator,
-                            ),
+                            text =
+                                stringResource(
+                                    if (isAdminUser) R.string.dashboard_role_admin else R.string.dashboard_role_operator,
+                                ),
                             containerColor = if (isAdminUser) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer,
                             contentColor = if (isAdminUser) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer,
-                            modifier = Modifier
-                                .padding(end = RepairAppSpacing.compactGap)
-                                .basicMarquee(),
+                            modifier =
+                                Modifier
+                                    .padding(end = RepairAppSpacing.compactGap)
+                                    .basicMarquee(),
                         )
                     }
                     AppButton(
@@ -192,21 +201,21 @@ fun DashboardScreen(
                         val selected = isTabSelected(item.route, currentDestination)
                         NavigationBarItem(
                             modifier = Modifier.testTag(item.testTag),
-                            icon = { 
+                            icon = {
                                 Icon(
-                                    imageVector = item.icon, 
+                                    imageVector = item.icon,
                                     contentDescription = null,
                                     tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                                ) 
+                                )
                             },
-                            label = { 
+                            label = {
                                 Text(
                                     text = stringResource(item.labelRes),
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
                                     softWrap = false,
                                     color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                                ) 
+                                )
                             },
                             selected = selected,
                             onClick = {
@@ -227,37 +236,39 @@ fun DashboardScreen(
                     }
                 }
             }
-        }
+        },
     ) { paddingValues ->
         Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .consumeWindowInsets(paddingValues)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .consumeWindowInsets(paddingValues),
         ) {
             if (useNavRail) {
                 NavigationRail(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .testTag(RepairAppTestTags.DashboardTabs),
+                    modifier =
+                        Modifier
+                            .fillMaxHeight()
+                            .testTag(RepairAppTestTags.DashboardTabs),
                 ) {
                     Spacer(Modifier.weight(1f))
                     items.forEach { item ->
                         val selected = isTabSelected(item.route, currentDestination)
                         NavigationRailItem(
                             modifier = Modifier.testTag(item.testTag),
-                            icon = { 
+                            icon = {
                                 Icon(
-                                    imageVector = item.icon, 
+                                    imageVector = item.icon,
                                     contentDescription = null,
                                     tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                                ) 
+                                )
                             },
-                            label = { 
+                            label = {
                                 Text(
                                     text = stringResource(item.labelRes),
                                     color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                                ) 
+                                )
                             },
                             selected = selected,
                             onClick = {
@@ -281,10 +292,11 @@ fun DashboardScreen(
             }
 
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .imePadding()
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .imePadding(),
             ) {
                 globalMessage?.let { message ->
                     DismissibleAppMessageBanner(
@@ -325,7 +337,7 @@ fun DashboardScreen(
                     },
                     variant = AppButtonVariant.Danger,
                     size = AppButtonSize.Compact,
-                    testTag = RepairAppTestTags.DashboardDiscardChangesButton
+                    testTag = RepairAppTestTags.DashboardDiscardChangesButton,
                 )
             },
             dismissButton = {
@@ -335,16 +347,17 @@ fun DashboardScreen(
                     variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact,
                 )
-            }
+            },
         )
     }
 
     if (BuildConfig.IS_DEMO_VERSION) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .alpha(0.08f),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .alpha(0.08f),
+            contentAlignment = Alignment.Center,
         ) {
             Text(
                 text = stringResource(R.string.demo_version_banner),

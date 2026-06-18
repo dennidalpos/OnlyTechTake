@@ -29,25 +29,34 @@ class PasswordHasher(
         )
     }
 
-    fun verify(password: CharArray, expectedHash: String, salt: String): Boolean {
+    fun verify(
+        password: CharArray,
+        expectedHash: String,
+        salt: String,
+    ): Boolean {
         if (password.isEmpty() || expectedHash.isBlank() || salt.isBlank()) return false
 
-        val saltBytes = runCatching {
-            Base64.getDecoder().decode(salt)
-        }.getOrElse {
-            return false
-        }
-        val expectedHashBytes = runCatching {
-            Base64.getDecoder().decode(expectedHash)
-        }.getOrElse {
-            return false
-        }
+        val saltBytes =
+            runCatching {
+                Base64.getDecoder().decode(salt)
+            }.getOrElse {
+                return false
+            }
+        val expectedHashBytes =
+            runCatching {
+                Base64.getDecoder().decode(expectedHash)
+            }.getOrElse {
+                return false
+            }
         val actualHashBytes = deriveHash(password, saltBytes)
 
         return constantTimeEquals(expectedHashBytes, actualHashBytes)
     }
 
-    private fun deriveHash(password: CharArray, salt: ByteArray): ByteArray {
+    private fun deriveHash(
+        password: CharArray,
+        salt: ByteArray,
+    ): ByteArray {
         val spec = PBEKeySpec(password, salt, iterations, keyLengthBits)
         return try {
             SecretKeyFactory.getInstance(ALGORITHM).generateSecret(spec).encoded
@@ -56,7 +65,10 @@ class PasswordHasher(
         }
     }
 
-    private fun constantTimeEquals(left: ByteArray, right: ByteArray): Boolean {
+    private fun constantTimeEquals(
+        left: ByteArray,
+        right: ByteArray,
+    ): Boolean {
         if (left.size != right.size) return false
 
         var diff = 0

@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 
@@ -18,25 +17,26 @@ fun AppMetricCard(
     modifier: Modifier = Modifier,
 ) {
     StandardCard(
-        modifier = modifier.height(RepairAppSizes.metricCardHeight)
+        modifier = modifier.height(RepairAppSizes.metricCardHeight),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(RepairAppSpacing.cardPadding),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(RepairAppSpacing.cardPadding),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 text = value,
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.primary,
             )
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }

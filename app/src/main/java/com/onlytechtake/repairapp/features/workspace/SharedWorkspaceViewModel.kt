@@ -12,7 +12,10 @@ class SharedWorkspaceViewModel : ViewModel() {
     private val _isFormDirty = MutableStateFlow(false)
     val isFormDirty = _isFormDirty.asStateFlow()
 
-    fun showMessage(text: String, isError: Boolean = false) {
+    fun showMessage(
+        text: String,
+        isError: Boolean = false,
+    ) {
         _message.value = WorkspaceMessage(text, isError)
     }
 
@@ -26,8 +29,6 @@ class SharedWorkspaceViewModel : ViewModel() {
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SharedWorkspaceViewModel() as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = SharedWorkspaceViewModel() as T
     }
 }

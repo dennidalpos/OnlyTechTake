@@ -11,12 +11,16 @@ class OrderNumberGenerator(
         return "$PREFIX-$year-"
     }
 
-    fun next(yearPrefix: String, latestOrderNumber: String?): String {
-        val latestSequence = latestOrderNumber
-            ?.takeIf { it.startsWith(yearPrefix) }
-            ?.substringAfterLast("-")
-            ?.toIntOrNull()
-            ?: 0
+    fun next(
+        yearPrefix: String,
+        latestOrderNumber: String?,
+    ): String {
+        val latestSequence =
+            latestOrderNumber
+                ?.takeIf { it.startsWith(yearPrefix) }
+                ?.substringAfterLast("-")
+                ?.toIntOrNull()
+                ?: 0
 
         return yearPrefix + (latestSequence + 1).toString().padStart(SEQUENCE_WIDTH, '0')
     }

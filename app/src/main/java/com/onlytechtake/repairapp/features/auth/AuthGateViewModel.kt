@@ -1,25 +1,20 @@
 package com.onlytechtake.repairapp.features.auth
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.onlytechtake.repairapp.domain.auth.AuthRepository
+import com.onlytechtake.repairapp.demo.ShowcaseDataSeeder
 import com.onlytechtake.repairapp.domain.auth.AuthPolicy
+import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.auth.AuthState
 import com.onlytechtake.repairapp.domain.auth.LoginResult
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.MutableStateFlow
-
-import com.onlytechtake.repairapp.demo.ShowcaseDataSeeder
-import android.content.Context
-
-import kotlinx.coroutines.delay
-
-import kotlin.time.Duration.Companion.milliseconds
 
 data class AuthFormState(
     val displayName: String = "",
@@ -38,20 +33,25 @@ data class AuthFormState(
 class AuthGateViewModel(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
-    val authState: StateFlow<AuthState> = authRepository.observeAuthState()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = AuthState(),
-        )
+    val authState: StateFlow<AuthState> =
+        authRepository
+            .observeAuthState()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = AuthState(),
+            )
 
     private val mutableFormState = MutableStateFlow(AuthFormState())
     val formState: StateFlow<AuthFormState> = mutableFormState
 
-    fun seedShowcaseData(context: Context, onDone: () -> Unit) {
+    fun seedShowcaseData(
+        context: Context,
+        onDone: () -> Unit,
+    ) {
         viewModelScope.launch {
             if (mutableFormState.value.seeding) return@launch
-            
+
             mutableFormState.update { it.copy(seeding = true, loading = true, errorMessage = null) }
             runCatching {
                 ShowcaseDataSeeder.seedShowcaseData(context)
@@ -59,7 +59,13 @@ class AuthGateViewModel(
                 onDone()
             }.onFailure { e ->
                 android.util.Log.e("AuthGateViewModel", "Seed failed!", e)
-                mutableFormState.update { it.copy(seeding = false, loading = false, errorMessage = "Errore durante l'inizializzazione: ${e.message}") }
+                mutableFormState.update {
+                    it.copy(
+                        seeding = false,
+                        loading = false,
+                        errorMessage = "Errore durante l'inizializzazione: ${e.message}",
+                    )
+                }
             }
         }
     }
@@ -74,9 +80,13 @@ class AuthGateViewModel(
     }
 
     fun updateDisplayName(value: String) = updateForm { copy(displayName = value, errorMessage = null) }
+
     fun updateUsername(value: String) = updateForm { copy(username = value, errorMessage = null) }
+
     fun updatePassword(value: String) = updateForm { copy(password = value, errorMessage = null) }
+
     fun updateConfirmPassword(value: String) = updateForm { copy(confirmPassword = value, errorMessage = null) }
+
     fun updateRecoveryCode(value: String) = updateForm { copy(recoveryCode = value, errorMessage = null) }
 
     fun createFirstAdmin() {
@@ -119,25 +129,29 @@ class AuthGateViewModel(
                 is LoginResult.Success -> {
                     // Success will trigger AuthState change, no need to clear form here
                 }
-                is LoginResult.PasswordChangeRequired -> mutableFormState.update {
-                    it.copy(
-                        loading = false,
-                        passwordChangeRequired = true,
-                        errorMessage = null,
-                        currentPassword = it.password,
-                        password = "",
-                        confirmPassword = ""
-                    )
-                }
-                LoginResult.InactiveUser -> mutableFormState.update {
-                    it.copy(loading = false, errorMessage = "Utente disattivato")
-                }
-                LoginResult.InvalidCredentials -> mutableFormState.update {
-                    it.copy(loading = false, errorMessage = "Credenziali non valide")
-                }
-                LoginResult.LockedOut -> mutableFormState.update {
-                    it.copy(loading = false, errorMessage = "Troppi tentativi: riprova piu' tardi")
-                }
+                is LoginResult.PasswordChangeRequired ->
+                    mutableFormState.update {
+                        it.copy(
+                            loading = false,
+                            passwordChangeRequired = true,
+                            errorMessage = null,
+                            currentPassword = it.password,
+                            password = "",
+                            confirmPassword = "",
+                        )
+                    }
+                LoginResult.InactiveUser ->
+                    mutableFormState.update {
+                        it.copy(loading = false, errorMessage = "Utente disattivato")
+                    }
+                LoginResult.InvalidCredentials ->
+                    mutableFormState.update {
+                        it.copy(loading = false, errorMessage = "Credenziali non valide")
+                    }
+                LoginResult.LockedOut ->
+                    mutableFormState.update {
+                        it.copy(loading = false, errorMessage = "Troppi tentativi: riprova piu' tardi")
+                    }
             }
         }
     }
@@ -174,20 +188,20 @@ class AuthGateViewModel(
 
         viewModelScope.launch {
             mutableFormState.update { it.copy(loading = true, errorMessage = null) }
-            authRepository.resetAdminWithRecoveryCode(form.recoveryCode, form.password.toCharArray())
+            authRepository
+                .resetAdminWithRecoveryCode(form.recoveryCode, form.password.toCharArray())
                 .onSuccess {
-                    mutableFormState.update { 
+                    mutableFormState.update {
                         it.copy(
-                            loading = false, 
-                            recoveryMode = false, 
+                            loading = false,
+                            recoveryMode = false,
                             errorMessage = "Password resettata con successo. Effettua il login.",
                             password = "",
                             confirmPassword = "",
-                            recoveryCode = ""
-                        ) 
+                            recoveryCode = "",
+                        )
                     }
-                }
-                .onFailure { e ->
+                }.onFailure { e ->
                     mutableFormState.update { it.copy(loading = false, errorMessage = e.message ?: "Errore durante il recupero") }
                 }
         }
@@ -203,7 +217,7 @@ class AuthGateViewModel(
                     currentPassword = "",
                     passwordChangeRequired = false,
                     loading = false,
-                    errorMessage = null
+                    errorMessage = null,
                 )
             }
         }
@@ -216,7 +230,7 @@ class AuthGateViewModel(
                 password = "",
                 confirmPassword = "",
                 currentPassword = "",
-                errorMessage = null
+                errorMessage = null,
             )
         }
     }
@@ -234,42 +248,43 @@ class AuthGateViewModel(
 
         viewModelScope.launch {
             mutableFormState.update { it.copy(loading = true, errorMessage = null) }
-            authRepository.changePassword(
-                username = form.username,
-                currentPassword = form.currentPassword.toCharArray(),
-                newPassword = form.password.toCharArray()
-            ).onSuccess {
-                // After password change, we can try to login again automatically
-                // or just go back to login screen. 
-                // Let's try to login automatically.
-                val loginResult = authRepository.login(form.username, form.password.toCharArray())
-                if (loginResult is LoginResult.Success) {
-                    mutableFormState.update { 
-                        it.copy(
-                            loading = false, 
-                            passwordChangeRequired = false,
-                            password = "",
-                            confirmPassword = "",
-                            currentPassword = ""
-                        ) 
+            authRepository
+                .changePassword(
+                    username = form.username,
+                    currentPassword = form.currentPassword.toCharArray(),
+                    newPassword = form.password.toCharArray(),
+                ).onSuccess {
+                    // After password change, we can try to login again automatically
+                    // or just go back to login screen.
+                    // Let's try to login automatically.
+                    val loginResult = authRepository.login(form.username, form.password.toCharArray())
+                    if (loginResult is LoginResult.Success) {
+                        mutableFormState.update {
+                            it.copy(
+                                loading = false,
+                                passwordChangeRequired = false,
+                                password = "",
+                                confirmPassword = "",
+                                currentPassword = "",
+                            )
+                        }
+                    } else {
+                        mutableFormState.update {
+                            it.copy(
+                                loading = false,
+                                passwordChangeRequired = false,
+                                errorMessage = "Password cambiata, effettua il login",
+                                password = "",
+                                confirmPassword = "",
+                                currentPassword = "",
+                            )
+                        }
                     }
-                } else {
-                    mutableFormState.update { 
-                        it.copy(
-                            loading = false, 
-                            passwordChangeRequired = false,
-                            errorMessage = "Password cambiata, effettua il login",
-                            password = "",
-                            confirmPassword = "",
-                            currentPassword = ""
-                        ) 
+                }.onFailure { e ->
+                    mutableFormState.update {
+                        it.copy(loading = false, errorMessage = e.message ?: "Errore durante il cambio password")
                     }
                 }
-            }.onFailure { e ->
-                mutableFormState.update {
-                    it.copy(loading = false, errorMessage = e.message ?: "Errore durante il cambio password")
-                }
-            }
         }
     }
 
@@ -301,5 +316,4 @@ class AuthGateViewModel(
             return AuthGateViewModel(authRepository) as T
         }
     }
-
 }

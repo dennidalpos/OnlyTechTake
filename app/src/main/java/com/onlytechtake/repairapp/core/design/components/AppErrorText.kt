@@ -20,6 +20,6 @@ fun AppErrorText(
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.error,
         modifier = modifier,
-        textAlign = textAlign
+        textAlign = textAlign,
     )
 }

@@ -113,7 +113,10 @@ object RepairAppTestTags {
 
     fun orderStatusStepperStep(step: Int) = "order_status_stepper_step_$step"
 
-    fun orderCardStatusStep(orderId: String, step: Int) = "order_card_status_step_${orderId}_$step"
+    fun orderCardStatusStep(
+        orderId: String,
+        step: Int,
+    ) = "order_card_status_step_${orderId}_$step"
 
     fun orderDetailStatusStep(step: Int) = "order_detail_status_step_$step"
 

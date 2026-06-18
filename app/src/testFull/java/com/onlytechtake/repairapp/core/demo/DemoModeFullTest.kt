@@ -15,9 +15,10 @@ class DemoModeFullTest {
 
     @Test
     fun fullFlavorDoesNotExposeDemoEntities() {
-        val error = assertThrows(IllegalStateException::class.java) {
-            DemoMode.demoOrder
-        }
+        val error =
+            assertThrows(IllegalStateException::class.java) {
+                DemoMode.demoOrder
+            }
 
         assertFalse(DemoMode.canEnable())
         org.junit.Assert.assertEquals("DemoMode non disponibile", error.message)

@@ -1,8 +1,5 @@
 package com.onlytechtake.repairapp.features.dashboard.common
 
-import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
-import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
-import com.onlytechtake.repairapp.domain.backup.BackupReminderStatus
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,36 +22,41 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import kotlinx.coroutines.launch
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.graphics.vector.ImageVector
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
-import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
-import com.onlytechtake.repairapp.core.design.components.StandardCard
-import com.onlytechtake.repairapp.core.design.components.AppTextField
-import com.onlytechtake.repairapp.core.design.components.AppIconButton
 import com.onlytechtake.repairapp.core.design.components.AppDialog
+import com.onlytechtake.repairapp.core.design.components.AppIconButton
+import com.onlytechtake.repairapp.core.design.components.AppTextField
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.design.components.StandardCardVariant
+import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
+import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
+import com.onlytechtake.repairapp.domain.backup.BackupReminderStatus
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SectionTitle(text: String, tooltip: String? = null) {
+fun SectionTitle(
+    text: String,
+    tooltip: String? = null,
+) {
     Row(
         modifier = Modifier.padding(bottom = RepairAppSpacing.compactGap),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+        horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
     ) {
         Text(
             text = text,
@@ -65,29 +67,32 @@ fun SectionTitle(text: String, tooltip: String? = null) {
             val scope = rememberCoroutineScope()
             val tooltipState = rememberTooltipState(isPersistent = true)
             TooltipBox(
-                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                    positioning = TooltipAnchorPosition.Above
-                ),
+                positionProvider =
+                    TooltipDefaults.rememberTooltipPositionProvider(
+                        positioning = TooltipAnchorPosition.Above,
+                    ),
                 tooltip = {
                     PlainTooltip(
-                        modifier = Modifier.clickable {
-                            scope.launch { tooltipState.dismiss() }
-                        }
+                        modifier =
+                            Modifier.clickable {
+                                scope.launch { tooltipState.dismiss() }
+                            },
                     ) {
                         Text(tooltip)
                     }
                 },
-                state = tooltipState
+                state = tooltipState,
             ) {
                 Icon(
                     imageVector = Icons.Default.Info,
                     contentDescription = stringResource(R.string.content_description_info),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier
-                        .size(RepairAppIconSizes.small)
-                        .clickable {
-                            scope.launch { tooltipState.show() }
-                        }
+                    modifier =
+                        Modifier
+                            .size(RepairAppIconSizes.small)
+                            .clickable {
+                                scope.launch { tooltipState.show() }
+                            },
                 )
             }
         }
@@ -105,9 +110,10 @@ fun AppEmptyState(
 ) {
     StandardCard(variant = StandardCardVariant.Filled) {
         Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(RepairAppSpacing.cardPadding),
+            modifier =
+                modifier
+                    .fillMaxWidth()
+                    .padding(RepairAppSpacing.cardPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
         ) {
@@ -162,10 +168,11 @@ fun WizardNavigationBar(
     onCancel: (() -> Unit)? = null,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = RepairAppSpacing.cardGap),
-        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = RepairAppSpacing.cardGap),
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -196,19 +203,23 @@ fun WizardNavigationBar(
                 text = stringResource(R.string.nav_cancel_and_close),
                 variant = AppButtonVariant.Ghost,
                 size = AppButtonSize.Compact,
-                onClick = onCancel
+                onClick = onCancel,
             )
         }
     }
 }
 
 @Composable
-fun OperatorText(text: String, modifier: Modifier = Modifier) {
+fun OperatorText(
+    text: String,
+    modifier: Modifier = Modifier,
+) {
     Text(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.secondaryContainer, RepairAppShapes.compactButton)
-            .padding(RepairAppSpacing.compactGap),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.secondaryContainer, RepairAppShapes.compactButton)
+                .padding(RepairAppSpacing.compactGap),
         text = text,
         color = MaterialTheme.colorScheme.onSecondaryContainer,
     )
@@ -225,10 +236,11 @@ fun CompactExpandableRow(
     val expandedState = if (expanded) stringResource(R.string.state_expanded) else stringResource(R.string.state_collapsed)
 
     StandardCard(
-        modifier = modifier
-            .semantics {
-                stateDescription = expandedState
-            },
+        modifier =
+            modifier
+                .semantics {
+                    stateDescription = expandedState
+                },
         onClick = { expanded = !expanded },
     ) {
         Column(
@@ -251,11 +263,12 @@ fun CustomerTypeToggle(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f), RepairAppShapes.pill)
-            .padding(RepairAppSpacing.tinyGap),
-        horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.tinyGap)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f), RepairAppShapes.pill)
+                .padding(RepairAppSpacing.tinyGap),
+        horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.tinyGap),
     ) {
         val privateSelected = !isBusiness
         val businessSelected = isBusiness
@@ -328,7 +341,7 @@ fun NoteFieldWithDialog(
                         showDialog = false
                     },
                     variant = AppButtonVariant.Primary,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
                 )
             },
             dismissButton = {
@@ -336,7 +349,7 @@ fun NoteFieldWithDialog(
                     text = stringResource(R.string.customer_cancel),
                     onClick = { showDialog = false },
                     variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
                 )
             },
         )
@@ -357,7 +370,7 @@ fun BackupReminderCard(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = stringResource(R.string.home_backup_reminder_title),
@@ -365,12 +378,12 @@ fun BackupReminderCard(
                     color = MaterialTheme.colorScheme.primary,
                 )
                 AppIconButton(
-            onClick = onOpenSettings,
-            imageVector = Icons.Default.Settings,
-            contentDescription = stringResource(R.string.home_backup_reminder_settings),
-            modifier = Modifier.size(RepairAppIconSizes.standard),
-            tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
-        )
+                    onClick = onOpenSettings,
+                    imageVector = Icons.Default.Settings,
+                    contentDescription = stringResource(R.string.home_backup_reminder_settings),
+                    modifier = Modifier.size(RepairAppIconSizes.standard),
+                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
+                )
             }
             Text(
                 text = backupStatusLabel(settings),

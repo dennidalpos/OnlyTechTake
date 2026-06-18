@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.*
 
 @Composable
@@ -31,16 +31,16 @@ fun QuickIntakeSubmitSection(
                 text = stringResource(R.string.intake_submit_title),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
-            
+
             if (missingRequirements.isNotEmpty()) {
                 AppMessageBanner(
                     message = stringResource(R.string.intake_submit_missing, missingRequirements.joinToString(", ")),
-                    type = BannerType.Warning
+                    type = BannerType.Warning,
                 )
             }
-            
+
             AppButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.intake_submit_create),

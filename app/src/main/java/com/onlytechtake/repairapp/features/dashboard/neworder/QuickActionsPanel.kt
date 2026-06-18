@@ -22,20 +22,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
+import com.onlytechtake.repairapp.core.design.RepairAppShapes
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.templates.LegalTemplateFallbacks
-import com.onlytechtake.repairapp.core.templates.TemplateAnchor
+import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
-import com.onlytechtake.repairapp.domain.workspace.CustomerInput
-import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
 import com.onlytechtake.repairapp.domain.workspace.isReadyForSubmit
 import com.onlytechtake.repairapp.domain.workspace.validationErrors
-import com.onlytechtake.repairapp.core.design.components.*
-import com.onlytechtake.repairapp.core.design.RepairAppShapes
-import com.onlytechtake.repairapp.core.design.RepairAppSizes
-import com.onlytechtake.repairapp.core.design.RepairAppSpacing
-import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.features.dashboard.common.*
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeSignatureDraft
@@ -71,35 +66,39 @@ fun QuickActions(
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val nextAction = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) })
-    val doneAction = KeyboardActions(
-        onDone = {
-            keyboardController?.hide()
-            focusManager.clearFocus()
-        },
-    )
-    val stepperState = remember(draft, categories, templates, anchorMappings, currentUser) {
-        IntakeStepperState(draft, categories, templates, anchorMappings, currentUser)
-    }
+    val doneAction =
+        KeyboardActions(
+            onDone = {
+                keyboardController?.hide()
+                focusManager.clearFocus()
+            },
+        )
+    val stepperState =
+        remember(draft, categories, templates, anchorMappings, currentUser) {
+            IntakeStepperState(draft, categories, templates, anchorMappings, currentUser)
+        }
 
     val selectedCustomer = draft.selectedCustomerId?.let { id -> customerSuggestions.firstOrNull { it.id == id } }
-    val selectedCustomerDisplayName = selectedCustomer?.displayName(
-        unnamedPrivate = unnamedPrivate,
-        unnamedBusiness = unnamedBusiness,
-    ) ?: draft.selectedCustomerLabel
-    
+    val selectedCustomerDisplayName =
+        selectedCustomer?.displayName(
+            unnamedPrivate = unnamedPrivate,
+            unnamedBusiness = unnamedBusiness,
+        ) ?: draft.selectedCustomerLabel
+
     val missingRequirements = remember(stepperState.intakeInput) { stepperState.intakeInput.validationErrors() }
 
     LaunchedEffect(stepperState.isDirty) {
         viewModel.setFormDirty(stepperState.isDirty)
     }
 
-    val attachmentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let {
-            viewModel.importIntakeAttachment(draft.intakeSessionId, it) { staged ->
-                updateDraft { current -> current.copy(stagedMedia = current.stagedMedia + staged) }
+    val attachmentLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let {
+                viewModel.importIntakeAttachment(draft.intakeSessionId, it) { staged ->
+                    updateDraft { current -> current.copy(stagedMedia = current.stagedMedia + staged) }
+                }
             }
         }
-    }
 
     fun resetForm() {
         viewModel.resetQuickIntakeDraft()
@@ -162,7 +161,7 @@ fun QuickActions(
                 }
             },
             modifier = Modifier.padding(vertical = RepairAppSpacing.cardGap),
-            stepTestTag = { RepairAppTestTags.intakeStepperStep(it) }
+            stepTestTag = { RepairAppTestTags.intakeStepperStep(it) },
         )
 
         if (draft.currentStep == 1) {
@@ -175,14 +174,14 @@ fun QuickActions(
                         text = stringResource(R.string.intake_step_customer),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
-                    
+
                     if (draft.selectedCustomerId != null) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 stringResource(R.string.intake_selected_customer, selectedCustomerDisplayName.orEmpty()),
@@ -190,7 +189,7 @@ fun QuickActions(
                                 fontWeight = FontWeight.SemiBold,
                                 modifier = Modifier.weight(1f),
                                 maxLines = 1,
-                                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                             )
                             AppButton(
                                 text = stringResource(R.string.intake_change_customer),
@@ -210,16 +209,18 @@ fun QuickActions(
                         }
                     } else {
                         Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(IntrinsicSize.Min),
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .height(IntrinsicSize.Min),
                             verticalAlignment = Alignment.Bottom,
-                            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+                            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                         ) {
                             AppTextField(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(56.dp),
+                                modifier =
+                                    Modifier
+                                        .weight(1f)
+                                        .height(56.dp),
                                 value = customerSearchQuery,
                                 onValueChange = { query ->
                                     updateDraft { draftState ->
@@ -236,15 +237,18 @@ fun QuickActions(
                                 imeAction = ImeAction.Search,
                                 keyboardActions = doneAction,
                                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                                trailingIcon = if (customerSearchQuery.isNotEmpty()) {
-                                    {
-                                        AppIconButton(
-                                            imageVector = Icons.Default.Clear,
-                                            contentDescription = stringResource(R.string.content_description_clear),
-                                            onClick = { viewModel.setCustomerSearchQuery("") }
-                                        )
-                                    }
-                                } else null,
+                                trailingIcon =
+                                    if (customerSearchQuery.isNotEmpty()) {
+                                        {
+                                            AppIconButton(
+                                                imageVector = Icons.Default.Clear,
+                                                contentDescription = stringResource(R.string.content_description_clear),
+                                                onClick = { viewModel.setCustomerSearchQuery("") },
+                                            )
+                                        }
+                                    } else {
+                                        null
+                                    },
                                 testTag = RepairAppTestTags.NewOrderCustomerSearchField,
                             )
 
@@ -262,18 +266,19 @@ fun QuickActions(
                                     },
                                     color = MaterialTheme.colorScheme.primary,
                                     shape = RepairAppShapes.button,
-                                    modifier = Modifier
-                                        .height(56.dp)
-                                        .width(56.dp)
-                                        .testTag(RepairAppTestTags.NewOrderInsertCustomerButton),
-                                    tonalElevation = 0.dp
+                                    modifier =
+                                        Modifier
+                                            .height(56.dp)
+                                            .width(56.dp)
+                                            .testTag(RepairAppTestTags.NewOrderInsertCustomerButton),
+                                    tonalElevation = 0.dp,
                                 ) {
                                     Box(contentAlignment = Alignment.Center) {
                                         Icon(
                                             imageVector = Icons.Default.Add,
                                             contentDescription = stringResource(R.string.intake_insert_new_customer),
                                             tint = MaterialTheme.colorScheme.onPrimary,
-                                            modifier = Modifier.size(RepairAppIconSizes.medium)
+                                            modifier = Modifier.size(RepairAppIconSizes.medium),
                                         )
                                     }
                                 }
@@ -287,10 +292,11 @@ fun QuickActions(
                                 CustomerSuggestionCard(
                                     customer = customer,
                                     onClick = {
-                                        val label = customer.displayName(
-                                            unnamedPrivate = unnamedPrivate,
-                                            unnamedBusiness = unnamedBusiness
-                                        )
+                                        val label =
+                                            customer.displayName(
+                                                unnamedPrivate = unnamedPrivate,
+                                                unnamedBusiness = unnamedBusiness,
+                                            )
                                         updateDraft {
                                             it.copy(
                                                 selectedCustomerId = customer.id,
@@ -343,10 +349,11 @@ fun QuickActions(
                             testTag = RepairAppTestTags.NewOrderSaveCustomerButton,
                             onClick = {
                                 viewModel.saveCustomer(stepperState.newCustomerInput) { customer ->
-                                    val label = customer.displayName(
-                                        unnamedPrivate = unnamedPrivate,
-                                        unnamedBusiness = unnamedBusiness
-                                    )
+                                    val label =
+                                        customer.displayName(
+                                            unnamedPrivate = unnamedPrivate,
+                                            unnamedBusiness = unnamedBusiness,
+                                        )
                                     updateDraft {
                                         it.copy(
                                             selectedCustomerId = customer.id,
@@ -427,9 +434,10 @@ fun QuickActions(
                     viewModel.replaceStagedImage(media, bitmap) { replaced ->
                         updateDraft {
                             it.copy(
-                                stagedMedia = it.stagedMedia.map { current ->
-                                    if (current.localPath == replaced.localPath) replaced else current
-                                },
+                                stagedMedia =
+                                    it.stagedMedia.map { current ->
+                                        if (current.localPath == replaced.localPath) replaced else current
+                                    },
                             )
                         }
                     }
@@ -464,15 +472,16 @@ fun QuickActions(
                             if (capture != null || draft.signatureCapture == null) {
                                 updateDraft {
                                     it.copy(
-                                        signatureCapture = capture?.let { result ->
-                                            QuickIntakeSignatureDraft(
-                                                signerName = result.signerName,
-                                                businessSignerName = result.businessSignerName,
-                                                privacyAccepted = result.privacyAccepted,
-                                                termsAccepted = result.termsAccepted,
-                                                bitmap = result.bitmap,
-                                            )
-                                        },
+                                        signatureCapture =
+                                            capture?.let { result ->
+                                                QuickIntakeSignatureDraft(
+                                                    signerName = result.signerName,
+                                                    businessSignerName = result.businessSignerName,
+                                                    privacyAccepted = result.privacyAccepted,
+                                                    termsAccepted = result.termsAccepted,
+                                                    bitmap = result.bitmap,
+                                                )
+                                            },
                                     )
                                 }
                             }
@@ -491,21 +500,24 @@ fun QuickActions(
         if (draft.currentStep == SUBMIT_INTAKE_STEP || isIntakeSubmitUnlocked(draft.completedStep)) {
             QuickIntakeSubmitSection(
                 stepNumber = 6,
-                missingRequirements = if (isIntakeSubmitUnlocked(draft.completedStep)) {
-                    missingRequirements
-                } else {
-                    listOf(stringResource(R.string.intake_confirm_all_steps))
-                },
-                enabled = isIntakeSubmitUnlocked(draft.completedStep) &&
-                    stepperState.activeCategories.isNotEmpty() &&
-                    stepperState.intakeInput.isReadyForSubmit(),
+                missingRequirements =
+                    if (isIntakeSubmitUnlocked(draft.completedStep)) {
+                        missingRequirements
+                    } else {
+                        listOf(stringResource(R.string.intake_confirm_all_steps))
+                    },
+                enabled =
+                    isIntakeSubmitUnlocked(draft.completedStep) &&
+                        stepperState.activeCategories.isNotEmpty() &&
+                        stepperState.intakeInput.isReadyForSubmit(),
                 onSubmit = {
                     draft.signatureCapture?.let { capture ->
-                        val resolvedSignerName = if (stepperState.isBusiness) {
-                            capture.businessSignerName?.takeIf { it.isNotBlank() } ?: selectedCustomerDisplayName ?: unnamedBusiness
-                        } else {
-                            selectedCustomerDisplayName ?: unnamedPrivate
-                        }
+                        val resolvedSignerName =
+                            if (stepperState.isBusiness) {
+                                capture.businessSignerName?.takeIf { it.isNotBlank() } ?: selectedCustomerDisplayName ?: unnamedBusiness
+                            } else {
+                                selectedCustomerDisplayName ?: unnamedPrivate
+                            }
 
                         viewModel.createIntakeOrder(
                             input = stepperState.intakeInput,

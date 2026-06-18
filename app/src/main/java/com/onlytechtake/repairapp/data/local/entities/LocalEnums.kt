@@ -33,7 +33,7 @@ enum class CustomerActionStatus {
     REJECTED,
     ASKED_INFO,
     CALL_REQUESTED,
-    NOTIFIED
+    NOTIFIED,
 }
 
 enum class ClosureReason {

@@ -3,16 +3,16 @@ package com.onlytechtake.repairapp.data.repositories
 import android.content.Context
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.demo.DemoMode
+import com.onlytechtake.repairapp.core.permissions.PermissionService
+import com.onlytechtake.repairapp.core.utils.capitalizeFirst
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
-import com.onlytechtake.repairapp.core.utils.capitalizeFirst
-import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
-import java.util.UUID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import java.util.UUID
 
 class CatalogRepository(
     private val context: Context,
@@ -38,17 +38,21 @@ class CatalogRepository(
         var currentId: String? = id
         while (currentId != null) {
             val category = all.find { it.id == currentId }
-            currentId = if (category != null) {
-                path.add(0, category.name)
-                category.parentId
-            } else {
-                null
-            }
+            currentId =
+                if (category != null) {
+                    path.add(0, category.name)
+                    category.parentId
+                } else {
+                    null
+                }
         }
         return path.joinToString(context.getString(R.string.catalog_path_separator))
     }
 
-    suspend fun saveCategory(actor: AuthenticatedUser, input: CategoryInput): Result<String> =
+    suspend fun saveCategory(
+        actor: AuthenticatedUser,
+        input: CategoryInput,
+    ): Result<String> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_CATEGORIES)
             require(input.name.isNotBlank()) {
@@ -63,10 +67,11 @@ class CatalogRepository(
             categoryDao.upsertAll(
                 normalizeCategoryTree(
                     existing = categoryDao.findAll(),
-                    input = input.copy(
-                        name = normalizedName,
-                        description = input.description.trim().capitalizeFirst(),
-                    ),
+                    input =
+                        input.copy(
+                            name = normalizedName,
+                            description = input.description.trim().capitalizeFirst(),
+                        ),
                     generatedId = categoryId,
                     errorCycle = context.getString(R.string.catalog_error_cycle_detected),
                     errorNotFound = context.getString(R.string.catalog_error_not_found),
@@ -78,18 +83,22 @@ class CatalogRepository(
             categoryId
         }
 
-    suspend fun deleteCategory(actor: AuthenticatedUser, categoryId: String): Result<Unit> =
+    suspend fun deleteCategory(
+        actor: AuthenticatedUser,
+        categoryId: String,
+    ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_CATEGORIES)
             val categories = categoryDao.findAll()
             require(categories.any { it.id == categoryId }) {
                 context.getString(R.string.catalog_error_not_found)
             }
-            val branch = categoryBranch(
-                categories = categories,
-                rootId = categoryId,
-                errorCycle = context.getString(R.string.catalog_error_cycle_detected),
-            )
+            val branch =
+                categoryBranch(
+                    categories = categories,
+                    rootId = categoryId,
+                    errorCycle = context.getString(R.string.catalog_error_cycle_detected),
+                )
             require(categoryDao.countOrdersForCategories(branch.map { it.id }) == 0) {
                 context.getString(R.string.catalog_error_used_by_order)
             }
@@ -135,14 +144,15 @@ internal fun normalizeCategoryTree(
     require(input.parentId != categoryId) { errorSelfParent }
 
     val categories = existing.associateBy { it.id }.toMutableMap()
-    categories[categoryId] = OrderCategoryEntity(
-        id = categoryId,
-        parentId = input.parentId,
-        level = 0,
-        name = input.name.trim(),
-        description = input.description.trim().ifBlank { null },
-        active = input.active,
-    )
+    categories[categoryId] =
+        OrderCategoryEntity(
+            id = categoryId,
+            parentId = input.parentId,
+            level = 0,
+            name = input.name.trim(),
+            description = input.description.trim().ifBlank { null },
+            active = input.active,
+        )
 
     val resolvedLevels = mutableMapOf<String, Int>()
     val resolving = mutableSetOf<String>()
@@ -151,22 +161,23 @@ internal fun normalizeCategoryTree(
         resolvedLevels[id]?.let { return it }
         require(resolving.add(id)) { errorCycle }
         val category = requireNotNull(categories[id]) { errorNotFound }
-        val level = category.parentId?.let { parentId ->
-            require(categories.containsKey(parentId)) { errorParentNotFound }
-            resolveLevel(parentId) + 1
-        } ?: 0
+        val level =
+            category.parentId?.let { parentId ->
+                require(categories.containsKey(parentId)) { errorParentNotFound }
+                resolveLevel(parentId) + 1
+            } ?: 0
         require(level < 4) { errorDepthLimit }
         resolving.remove(id)
         resolvedLevels[id] = level
         return level
     }
 
-    return categories.values.asSequence()
+    return categories.values
+        .asSequence()
         .map { category -> category.copy(level = resolveLevel(category.id)) }
         .sortedWith(
             compareBy<OrderCategoryEntity> { it.level }
                 .thenBy(String.CASE_INSENSITIVE_ORDER) { it.name }
                 .thenBy { it.id },
-        )
-        .toList()
+        ).toList()
 }

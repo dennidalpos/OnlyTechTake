@@ -27,80 +27,88 @@ class IntakeOrderInputTest {
 
     @Test
     fun validationAcceptsExistingCustomerWithProblemMediaAndSignature() {
-        val input = IntakeOrderInput(
-            existingCustomerId = "customer-1",
-            problemSummary = "Schermo rotto",
-            categoryId = "phone",
-            stagedMediaCount = 1,
-            hasPrivacySignature = true,
-        )
+        val input =
+            IntakeOrderInput(
+                existingCustomerId = "customer-1",
+                problemSummary = "Schermo rotto",
+                categoryId = "phone",
+                stagedMediaCount = 1,
+                hasPrivacySignature = true,
+            )
 
         assertTrue(input.isReadyForSubmit())
     }
 
     @Test
     fun validationAcceptsValidNewBusinessCustomer() {
-        val input = IntakeOrderInput(
-            newCustomer = CustomerInput(
-                type = CustomerType.BUSINESS,
-                companyName = "Only Tech",
-                phone = "3331234567",
-            ),
-            problemSummary = "Notebook non si avvia",
-            categoryId = "notebook",
-            stagedMediaCount = 2,
-            hasPrivacySignature = true,
-        )
+        val input =
+            IntakeOrderInput(
+                newCustomer =
+                    CustomerInput(
+                        type = CustomerType.BUSINESS,
+                        companyName = "Only Tech",
+                        phone = "3331234567",
+                    ),
+                problemSummary = "Notebook non si avvia",
+                categoryId = "notebook",
+                stagedMediaCount = 2,
+                hasPrivacySignature = true,
+            )
 
         assertTrue(input.validationErrors().isEmpty())
     }
 
     @Test
     fun validationRejectsBlankExistingCustomerAndIncompleteNewCustomer() {
-        val input = IntakeOrderInput(
-            existingCustomerId = "   ",
-            newCustomer = CustomerInput(
-                type = CustomerType.PRIVATE,
-                firstName = "Mario",
-                lastName = "Rossi",
-                phone = "   ",
-                email = "",
-            ),
-            problemSummary = "Display rotto",
-            categoryId = "phone",
-            stagedMediaCount = 1,
-            hasPrivacySignature = true,
-        )
+        val input =
+            IntakeOrderInput(
+                existingCustomerId = "   ",
+                newCustomer =
+                    CustomerInput(
+                        type = CustomerType.PRIVATE,
+                        firstName = "Mario",
+                        lastName = "Rossi",
+                        phone = "   ",
+                        email = "",
+                    ),
+                problemSummary = "Display rotto",
+                categoryId = "phone",
+                stagedMediaCount = 1,
+                hasPrivacySignature = true,
+            )
 
         assertEquals(listOf("Cliente obbligatorio"), input.validationErrors())
     }
 
     @Test
     fun validationRejectsBusinessCustomerWithoutCompanyName() {
-        val input = IntakeOrderInput(
-            newCustomer = CustomerInput(
-                type = CustomerType.BUSINESS,
-                companyName = " ",
-                email = "azienda@example.test",
-            ),
-            problemSummary = "Notebook non si avvia",
-            categoryId = "notebook",
-            stagedMediaCount = 1,
-            hasPrivacySignature = true,
-        )
+        val input =
+            IntakeOrderInput(
+                newCustomer =
+                    CustomerInput(
+                        type = CustomerType.BUSINESS,
+                        companyName = " ",
+                        email = "azienda@example.test",
+                    ),
+                problemSummary = "Notebook non si avvia",
+                categoryId = "notebook",
+                stagedMediaCount = 1,
+                hasPrivacySignature = true,
+            )
 
         assertEquals(listOf("Cliente obbligatorio"), input.validationErrors())
     }
 
     @Test
     fun validationAcceptsCategoryWithoutDynamicFields() {
-        val input = IntakeOrderInput(
-            existingCustomerId = "customer-1",
-            problemSummary = "Batteria gonfia",
-            categoryId = "phone",
-            stagedMediaCount = 1,
-            hasPrivacySignature = true,
-        )
+        val input =
+            IntakeOrderInput(
+                existingCustomerId = "customer-1",
+                problemSummary = "Batteria gonfia",
+                categoryId = "phone",
+                stagedMediaCount = 1,
+                hasPrivacySignature = true,
+            )
 
         assertTrue(input.isReadyForSubmit())
     }

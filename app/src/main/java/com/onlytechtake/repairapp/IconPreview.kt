@@ -21,13 +21,13 @@ import androidx.compose.ui.unit.dp
 fun IconsPreview() {
     Column(
         modifier = Modifier.padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text("Pro Icon")
         IconBox(R.drawable.ic_launcher_foreground, Color(0xFF064E3B))
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         Text("Demo Icon")
         // Note: these rely on the resources being available in the build variant
         // Since we are in 'main', we might only see the 'main' version if not careful
@@ -36,17 +36,21 @@ fun IconsPreview() {
 }
 
 @Composable
-fun IconBox(resId: Int, bgColor: Color) {
+fun IconBox(
+    resId: Int,
+    bgColor: Color,
+) {
     Box(
-        modifier = Modifier
-            .size(108.dp)
-            .background(bgColor),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .size(108.dp)
+                .background(bgColor),
+        contentAlignment = Alignment.Center,
     ) {
         Image(
             painter = painterResource(id = resId),
             contentDescription = null,
-            modifier = Modifier.size(108.dp)
+            modifier = Modifier.size(108.dp),
         )
     }
 }

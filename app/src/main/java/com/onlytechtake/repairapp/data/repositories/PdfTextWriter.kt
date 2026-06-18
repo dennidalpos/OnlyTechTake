@@ -5,26 +5,32 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 
-internal class PdfTextWriter(private val document: PdfDocument) {
-    private val regularPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.BLACK
-        textSize = 11f
-    }
-    private val titlePaint = Paint(regularPaint).apply {
-        textSize = 18f
-        typeface = Typeface.DEFAULT_BOLD
-    }
-    private val sectionPaint = Paint(regularPaint).apply {
-        textSize = 13f
-        typeface = Typeface.DEFAULT_BOLD
-    }
-    private val watermarkPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.LTGRAY
-        alpha = 80
-        textSize = 48f
-        typeface = Typeface.DEFAULT_BOLD
-        textAlign = Paint.Align.CENTER
-    }
+internal class PdfTextWriter(
+    private val document: PdfDocument,
+) {
+    private val regularPaint =
+        Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = Color.BLACK
+            textSize = 11f
+        }
+    private val titlePaint =
+        Paint(regularPaint).apply {
+            textSize = 18f
+            typeface = Typeface.DEFAULT_BOLD
+        }
+    private val sectionPaint =
+        Paint(regularPaint).apply {
+            textSize = 13f
+            typeface = Typeface.DEFAULT_BOLD
+        }
+    private val watermarkPaint =
+        Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = Color.LTGRAY
+            alpha = 80
+            textSize = 48f
+            typeface = Typeface.DEFAULT_BOLD
+            textAlign = Paint.Align.CENTER
+        }
     private var pageNumber = 0
     private var page = newPage()
     private var y = TOP_MARGIN
@@ -53,8 +59,13 @@ internal class PdfTextWriter(private val document: PdfDocument) {
         document.finishPage(page)
     }
 
-    private fun drawWrapped(text: String, paint: Paint, maxChars: Int) {
-        text.replace('\n', ' ')
+    private fun drawWrapped(
+        text: String,
+        paint: Paint,
+        maxChars: Int,
+    ) {
+        text
+            .replace('\n', ' ')
             .chunked(maxChars)
             .ifEmpty { listOf("") }
             .forEach { part ->

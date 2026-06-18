@@ -61,13 +61,14 @@ object DemoDataSeeder {
                     passwordHash = operatorHash.hash,
                     passwordSalt = operatorHash.salt,
                     role = UserRole.OPERATOR,
-                    permissions = setOf(
-                        UserPermission.CREATE_ORDERS,
-                        UserPermission.EDIT_OWN_ORDERS,
-                        UserPermission.CLOSE_ORDERS,
-                        UserPermission.MANAGE_CUSTOMERS,
-                        UserPermission.MANAGE_PAYMENTS
-                    ),
+                    permissions =
+                        setOf(
+                            UserPermission.CREATE_ORDERS,
+                            UserPermission.EDIT_OWN_ORDERS,
+                            UserPermission.CLOSE_ORDERS,
+                            UserPermission.MANAGE_CUSTOMERS,
+                            UserPermission.MANAGE_PAYMENTS,
+                        ),
                     active = true,
                     createdAt = now,
                     updatedAt = now,
@@ -108,8 +109,8 @@ object DemoDataSeeder {
                     name = "Asus ROG Strix",
                     description = "Pulizia interna e pasta termica",
                     active = true,
-                )
-            )
+                ),
+            ),
         )
         database.customerDao().upsert(
             CustomerEntity(
@@ -131,7 +132,7 @@ object DemoDataSeeder {
 
         // Assign to Admin in Demo version, otherwise to Operator
         val assignedUserId = if (BuildConfig.IS_DEMO_VERSION) DEMO_ADMIN_ID else DEMO_OPERATOR_ID
-        
+
         database.repairOrderDao().upsert(
             RepairOrderEntity(
                 id = DEMO_ORDER_ID,
@@ -154,12 +155,13 @@ object DemoDataSeeder {
             ),
         )
 
-        val mediaPath = writeDemoBitmap(
-            directory = mediaStorageProvider.getOrderMediaDir(DEMO_ORDER_ID),
-            fileName = "demo-oggetto.png",
-            label = "Foto oggetto",
-            backgroundColor = Color.rgb(229, 241, 255),
-        )
+        val mediaPath =
+            writeDemoBitmap(
+                directory = mediaStorageProvider.getOrderMediaDir(DEMO_ORDER_ID),
+                fileName = "demo-oggetto.png",
+                label = "Foto oggetto",
+                backgroundColor = Color.rgb(229, 241, 255),
+            )
         database.orderMediaDao().upsert(
             OrderMediaEntity(
                 id = "demo-media-intake",
@@ -177,12 +179,13 @@ object DemoDataSeeder {
             ),
         )
 
-        val signaturePath = writeDemoBitmap(
-            directory = mediaStorageProvider.getOrderSignaturesDir(DEMO_ORDER_ID),
-            fileName = "demo-firma.png",
-            label = "Firma cliente",
-            backgroundColor = Color.WHITE,
-        )
+        val signaturePath =
+            writeDemoBitmap(
+                directory = mediaStorageProvider.getOrderSignaturesDir(DEMO_ORDER_ID),
+                fileName = "demo-firma.png",
+                label = "Firma cliente",
+                backgroundColor = Color.WHITE,
+            )
         database.signatureDao().upsert(
             SignatureEntity(
                 id = "demo-signature-intake",
@@ -225,7 +228,6 @@ object DemoDataSeeder {
             ),
         )
 
-
         listOf(
             DemoTemplate("privacy_breve", "Informativa privacy", "Legale"),
             DemoTemplate("condizioni_presa_in_carico", "Condizioni presa in carico", "Legale"),
@@ -263,7 +265,12 @@ object DemoDataSeeder {
         val step: String,
     )
 
-    private fun writeDemoBitmap(directory: File, fileName: String, label: String, backgroundColor: Int): File {
+    private fun writeDemoBitmap(
+        directory: File,
+        fileName: String,
+        label: String,
+        backgroundColor: Int,
+    ): File {
         directory.mkdirs()
         val file = File(directory, fileName)
         val bitmap = Bitmap.createBitmap(1280, 720, Bitmap.Config.ARGB_8888)

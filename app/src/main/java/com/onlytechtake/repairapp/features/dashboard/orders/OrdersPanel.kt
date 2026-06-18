@@ -5,6 +5,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
@@ -16,31 +21,26 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.design.RepairAppShapes
-import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
-import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.core.utils.displayName
+import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
 import com.onlytechtake.repairapp.features.dashboard.common.*
-import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspace
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.FilterList
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.ui.text.input.ImeAction
+import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspace
 import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 
@@ -63,27 +63,29 @@ fun OrdersPanel(
                     viewModel = viewModel,
                     onOrderClick = { selectedOrderId = it },
                     onNewOrder = onNewOrder,
-                    onOpenBackupSettings = onOpenBackupSettings
+                    onOpenBackupSettings = onOpenBackupSettings,
                 )
             }
             AppVerticalDivider()
             Box(Modifier.weight(1.5f)) {
                 if (selectedOrderId != null) {
                     val container = LocalAppContainer.current
-                    val detailViewModel: OrderDetailViewModel = viewModel(
-                        key = "order_detail_$selectedOrderId",
-                        factory = OrderDetailViewModel.Factory(
-                            orderId = selectedOrderId!!,
-                            authRepository = container.authRepository,
-                            orderRepository = container.orderWorkflowRepository,
-                            orderMediaRepository = container.orderMediaRepository,
-                            orderDocumentRepository = container.orderDocumentRepository,
-                            templateRepository = container.templateRepository,
-                            generateOrderStatusPdfUseCase = container.generateOrderStatusPdfUseCase,
-                            shareDocumentIntentFactory = container.shareDocumentIntentFactory,
-                            onSetFormDirty = onSetFormDirty
-                        ),
-                    )
+                    val detailViewModel: OrderDetailViewModel =
+                        viewModel(
+                            key = "order_detail_$selectedOrderId",
+                            factory =
+                                OrderDetailViewModel.Factory(
+                                    orderId = selectedOrderId!!,
+                                    authRepository = container.authRepository,
+                                    orderRepository = container.orderWorkflowRepository,
+                                    orderMediaRepository = container.orderMediaRepository,
+                                    orderDocumentRepository = container.orderDocumentRepository,
+                                    templateRepository = container.templateRepository,
+                                    generateOrderStatusPdfUseCase = container.generateOrderStatusPdfUseCase,
+                                    shareDocumentIntentFactory = container.shareDocumentIntentFactory,
+                                    onSetFormDirty = onSetFormDirty,
+                                ),
+                        )
                     OrderDetailWorkspace(
                         viewModel = detailViewModel,
                     ) { selectedOrderId = null }
@@ -116,9 +118,10 @@ private fun OrdersListContent(
     val context = LocalContext.current
     var showFilterDialog by rememberSaveable { mutableStateOf(value = false) }
 
-    val exportZipLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
-        uri?.let(viewModel::exportCompleteBackup)
-    }
+    val exportZipLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
+            uri?.let(viewModel::exportCompleteBackup)
+        }
 
     AppScreenContainer(scrollable = false) {
         Row(
@@ -133,7 +136,7 @@ private fun OrdersListContent(
                 variant = if (orderFilter.hasActiveFilter()) AppButtonVariant.Info else AppButtonVariant.Secondary,
                 size = AppButtonSize.Compact,
                 leadingIcon = Icons.Default.FilterList,
-                testTag = RepairAppTestTags.OrdersFilterButton
+                testTag = RepairAppTestTags.OrdersFilterButton,
             )
         }
 
@@ -143,54 +146,60 @@ private fun OrdersListContent(
             BackupReminderCard(
                 settings = backupReminderSettings,
                 onRunBackup = { exportZipLauncher.launch("onlytechtake-backup.zip") },
-                onOpenSettings = onOpenBackupSettings
+                onOpenSettings = onOpenBackupSettings,
             )
             Spacer(Modifier.height(RepairAppSpacing.cardGap))
         }
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Min),
             verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
         ) {
             AppTextField(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(56.dp),
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .height(56.dp),
                 value = orderFilter.query,
                 onValueChange = { viewModel.setFilter(orderFilter.copy(query = it)) },
                 label = stringResource(R.string.orders_search_label),
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                trailingIcon = if (orderFilter.query.isNotEmpty()) {
-                    {
-                        AppIconButton(
-                            imageVector = Icons.Default.Clear,
-                            contentDescription = stringResource(R.string.content_description_clear),
-                            onClick = { viewModel.setFilter(orderFilter.copy(query = "")) }
-                        )
-                    }
-                } else null,
+                trailingIcon =
+                    if (orderFilter.query.isNotEmpty()) {
+                        {
+                            AppIconButton(
+                                imageVector = Icons.Default.Clear,
+                                contentDescription = stringResource(R.string.content_description_clear),
+                                onClick = { viewModel.setFilter(orderFilter.copy(query = "")) },
+                            )
+                        }
+                    } else {
+                        null
+                    },
                 imeAction = ImeAction.Search,
-                singleLine = true
+                singleLine = true,
             )
             Surface(
                 onClick = onNewOrder,
                 color = MaterialTheme.colorScheme.primary,
                 shape = RepairAppShapes.button,
-                modifier = Modifier
-                    .height(56.dp)
-                    .width(56.dp)
-                    .testTag(RepairAppTestTags.HomeNewOrderButton),
-                tonalElevation = 0.dp
+                modifier =
+                    Modifier
+                        .height(56.dp)
+                        .width(56.dp)
+                        .testTag(RepairAppTestTags.HomeNewOrderButton),
+                tonalElevation = 0.dp,
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     Icon(
                         imageVector = Icons.Default.Add,
                         contentDescription = stringResource(R.string.home_new_order),
                         tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(RepairAppIconSizes.medium)
+                        modifier = Modifier.size(RepairAppIconSizes.medium),
                     )
                 }
             }
@@ -204,15 +213,17 @@ private fun OrdersListContent(
         Spacer(Modifier.height(RepairAppSpacing.sectionGap))
 
         LazyColumn(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .imePadding(),
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .imePadding(),
             verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
-            contentPadding = PaddingValues(
-                top = RepairAppSpacing.compactGap,
-                bottom = RepairAppSpacing.bottomContentPadding,
-            )
+            contentPadding =
+                PaddingValues(
+                    top = RepairAppSpacing.compactGap,
+                    bottom = RepairAppSpacing.bottomContentPadding,
+                ),
         ) {
             if (orderListItems.isEmpty()) {
                 item {
@@ -224,8 +235,9 @@ private fun OrdersListContent(
             } else {
                 items(orderListItems, key = { it.order.id }) { item ->
                     val order = item.order
-                    val customerName = item.customer?.displayName(context)
-                        ?: stringResource(R.string.orders_customer_unavailable)
+                    val customerName =
+                        item.customer?.displayName(context)
+                            ?: stringResource(R.string.orders_customer_unavailable)
                     StandardCard(
                         modifier = Modifier.testTag(RepairAppTestTags.orderCard(order.id)),
                         onClick = { onOrderClick(order.id) },
@@ -247,7 +259,7 @@ private fun OrdersListContent(
                                         fontWeight = FontWeight.Bold,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
-                                        softWrap = false
+                                        softWrap = false,
                                     )
                                     Text(
                                         text = stringResource(R.string.orders_customer_reference, customerName),
@@ -256,29 +268,29 @@ private fun OrdersListContent(
                                         color = MaterialTheme.colorScheme.secondary,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
-                                        softWrap = false
+                                        softWrap = false,
                                     )
                                 }
                                 Text(
                                     text = formatUiDateTime(order.updatedAt),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.outline,
-                                    modifier = Modifier.padding(start = RepairAppSpacing.compactGap)
+                                    modifier = Modifier.padding(start = RepairAppSpacing.compactGap),
                                 )
                             }
-                            
+
                             OrderStatusStepper(
                                 status = order.status,
                                 compact = true,
                                 modifier = Modifier.testTag(RepairAppTestTags.orderCardStatusStepper(order.id)),
                                 stepTestTag = { step -> RepairAppTestTags.orderCardStatusStep(order.id, step) },
                             )
-                            
+
                             Text(
                                 text = stringResource(R.string.orders_next_action_label, nextActionLabel(order)),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.primary,
-                                fontWeight = FontWeight.Medium
+                                fontWeight = FontWeight.Medium,
                             )
                         }
                     }
@@ -302,7 +314,7 @@ private fun OrdersListContent(
                     text = stringResource(R.string.confirm),
                     onClick = { showFilterDialog = false },
                     variant = AppButtonVariant.Primary,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
                 )
             },
         )
@@ -312,17 +324,18 @@ private fun OrdersListContent(
 @Composable
 private fun ActiveFilterInfo(filter: OrderFilter) {
     val context = LocalContext.current
-    val filterText = listOfNotNull(
-        stringResource(R.string.orders_filter_mine).lowercase().takeIf { filter.showMineOnly },
-        filter.status?.label(context),
-        filter.statuses.takeIf { it.isNotEmpty() }?.joinToString(" / ") { it.label(context) },
-    ).joinToString(", ")
-    
+    val filterText =
+        listOfNotNull(
+            stringResource(R.string.orders_filter_mine).lowercase().takeIf { filter.showMineOnly },
+            filter.status?.label(context),
+            filter.statuses.takeIf { it.isNotEmpty() }?.joinToString(" / ") { it.label(context) },
+        ).joinToString(", ")
+
     if (filterText.isNotBlank()) {
         AppStatusBadge(
             text = stringResource(R.string.orders_filter_active, filterText),
             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+            contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
         )
     }
 }
@@ -334,21 +347,21 @@ private fun OrderFilterBar(
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
         val allSelected = !filter.hasActiveFilter()
-        
+
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_all),
             selected = allSelected,
-            onClick = { onFilter(OrderFilter()) }
+            onClick = { onFilter(OrderFilter()) },
         )
-        
+
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_mine),
             selected = filter.showMineOnly,
-            onClick = { onFilter(filter.copy(showMineOnly = !filter.showMineOnly)) }
+            onClick = { onFilter(filter.copy(showMineOnly = !filter.showMineOnly)) },
         )
-        
+
         AppDivider(modifier = Modifier.padding(vertical = RepairAppSpacing.tinyGap).alpha(0.3f))
-        
+
         QuickStatusGroupFilter(stringResource(R.string.orders_filter_open), setOf(OrderStatus.OPEN), filter, onFilter)
         QuickStatusGroupFilter(stringResource(R.string.orders_filter_progress), setOf(OrderStatus.IN_PROGRESS, OrderStatus.DIAGNOSIS), filter, onFilter)
         QuickStatusGroupFilter(stringResource(R.string.orders_filter_result), setOf(OrderStatus.RESULT, OrderStatus.REPAIRING), filter, onFilter)
@@ -360,7 +373,7 @@ private fun OrderFilterBar(
 private fun FilterToggleButton(
     text: String,
     selected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     AppButton(
         text = text,
@@ -368,7 +381,7 @@ private fun FilterToggleButton(
         variant = if (selected) AppButtonVariant.Primary else AppButtonVariant.Ghost,
         size = AppButtonSize.Compact,
         modifier = Modifier.fillMaxWidth(),
-        selected = selected
+        selected = selected,
     )
 }
 
@@ -394,5 +407,4 @@ private fun QuickStatusGroupFilter(
     )
 }
 
-private fun OrderFilter.hasActiveFilter(): Boolean =
-    showMineOnly || (status != null) || statuses.isNotEmpty() || query.isNotBlank()
+private fun OrderFilter.hasActiveFilter(): Boolean = showMineOnly || (status != null) || statuses.isNotEmpty() || query.isNotBlank()

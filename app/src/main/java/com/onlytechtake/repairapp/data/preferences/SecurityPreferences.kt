@@ -19,15 +19,17 @@ data class SecuritySettings(
     val backupEncryptionPassword: String = "",
 )
 
-class SecurityPreferences(private val context: Context) {
-
-    val settings: Flow<SecuritySettings> = context.securityDataStore.data.map { preferences ->
-        SecuritySettings(
-            isBackupEncryptionEnabled = preferences[BACKUP_ENCRYPTION_ENABLED] ?: false,
-            isDatabaseEncryptionEnabled = preferences[DATABASE_ENCRYPTION_ENABLED] ?: false,
-            backupEncryptionPassword = preferences[BACKUP_ENCRYPTION_PASSWORD] ?: ""
-        )
-    }
+class SecurityPreferences(
+    private val context: Context,
+) {
+    val settings: Flow<SecuritySettings> =
+        context.securityDataStore.data.map { preferences ->
+            SecuritySettings(
+                isBackupEncryptionEnabled = preferences[BACKUP_ENCRYPTION_ENABLED] ?: false,
+                isDatabaseEncryptionEnabled = preferences[DATABASE_ENCRYPTION_ENABLED] ?: false,
+                backupEncryptionPassword = preferences[BACKUP_ENCRYPTION_PASSWORD] ?: "",
+            )
+        }
 
     suspend fun setBackupEncryptionEnabled(enabled: Boolean) {
         context.securityDataStore.edit { preferences ->

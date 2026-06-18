@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.data.repositories
 import android.content.Context
 import android.graphics.Bitmap
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
+import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.templates.LegalTemplateFallbacks
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
@@ -12,7 +13,6 @@ import com.onlytechtake.repairapp.data.local.dao.SignatureDao
 import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
-import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import java.io.File
 import java.io.FileOutputStream
@@ -54,7 +54,7 @@ class SignatureRepository(
             val now = clockMillis()
             val privacyCode = settingDao.findByKey(TemplateAnchor.PRIVACY_TEXT.settingKey)?.value ?: TemplateAnchor.PRIVACY_TEXT.defaultCode
             val termsCode = settingDao.findByKey(TemplateAnchor.TERMS_TEXT.settingKey)?.value ?: TemplateAnchor.TERMS_TEXT.defaultCode
-            
+
             val privacyTemplate = templateDao.findActiveByCode(privacyCode)
             val termsTemplate = templateDao.findActiveByCode(termsCode)
             val directory = mediaStorageProvider.getOrderSignaturesDir(orderId)
@@ -64,26 +64,27 @@ class SignatureRepository(
                 check(bitmap.compress(Bitmap.CompressFormat.PNG, PNG_QUALITY, output)) { "Salvataggio firma non riuscito" }
             }
 
-            val signature = SignatureEntity(
-                id = UUID.randomUUID().toString(),
-                orderId = orderId,
-                signerName = signerName.trim().ifBlank { DEFAULT_SIGNER_NAME },
-                privacyAccepted = privacyAccepted,
-                termsAccepted = termsAccepted,
-                privacyTextSnapshot = privacyTemplate?.body ?: LegalTemplateFallbacks.PrivacyText,
-                privacyTemplateVersion = privacyTemplate?.version ?: 0,
-                termsTextSnapshot = termsTemplate?.body ?: LegalTemplateFallbacks.TermsText,
-                termsTemplateVersion = termsTemplate?.version ?: 0,
-                localPath = file.absolutePath,
-                fileName = file.name,
-                mimeType = MIME_TYPE_PNG,
-                sizeBytes = file.length(),
-                width = bitmap.width,
-                height = bitmap.height,
-                createdByUserId = actor.id,
-                signedAt = now,
-                createdAt = now,
-            )
+            val signature =
+                SignatureEntity(
+                    id = UUID.randomUUID().toString(),
+                    orderId = orderId,
+                    signerName = signerName.trim().ifBlank { DEFAULT_SIGNER_NAME },
+                    privacyAccepted = privacyAccepted,
+                    termsAccepted = termsAccepted,
+                    privacyTextSnapshot = privacyTemplate?.body ?: LegalTemplateFallbacks.PrivacyText,
+                    privacyTemplateVersion = privacyTemplate?.version ?: 0,
+                    termsTextSnapshot = termsTemplate?.body ?: LegalTemplateFallbacks.TermsText,
+                    termsTemplateVersion = termsTemplate?.version ?: 0,
+                    localPath = file.absolutePath,
+                    fileName = file.name,
+                    mimeType = MIME_TYPE_PNG,
+                    sizeBytes = file.length(),
+                    width = bitmap.width,
+                    height = bitmap.height,
+                    createdByUserId = actor.id,
+                    signedAt = now,
+                    createdAt = now,
+                )
 
             signatureDao.upsert(signature)
             eventWriter.signatureCaptured(orderId, actor.id, signature.signerName, now)

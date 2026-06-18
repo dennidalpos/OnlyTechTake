@@ -18,8 +18,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import java.io.File
-import java.util.UUID
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -40,6 +38,8 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.io.File
+import java.util.UUID
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class OrderDetailViewModelTest {
@@ -59,58 +59,66 @@ class OrderDetailViewModelTest {
     }
 
     @Test
-    fun pdfSentConfirmationMarksDocumentSharedAndRecordsTimeline() = runTest {
-        val actor = AuthenticatedUser(
-            id = "operator-1",
-            displayName = "Operatore",
-            username = "operatore",
-            role = UserRole.OPERATOR,
-        )
-        val pdf = File(testRoot, "stato.pdf").absoluteFile.apply { writeBytes(byteArrayOf(1, 2, 3)) }
-        val documentRepository = FakeOrderDocumentRepository(
-            document(
-                id = "document-1",
-                localPath = pdf.absolutePath,
-                fileName = pdf.name,
-            ),
-        )
-        val orderRepository = mockk<OrderWorkflowRepository>()
-        every { orderRepository.observeOrderDetail("order-1") } returns flowOf(null)
-        coEvery { orderRepository.recordPdfShared(actor, "order-1", "stato.pdf") } returns Result.success(Unit)
+    fun pdfSentConfirmationMarksDocumentSharedAndRecordsTimeline() =
+        runTest {
+            val actor =
+                AuthenticatedUser(
+                    id = "operator-1",
+                    displayName = "Operatore",
+                    username = "operatore",
+                    role = UserRole.OPERATOR,
+                )
+            val pdf = File(testRoot, "stato.pdf").absoluteFile.apply { writeBytes(byteArrayOf(1, 2, 3)) }
+            val documentRepository =
+                FakeOrderDocumentRepository(
+                    document(
+                        id = "document-1",
+                        localPath = pdf.absolutePath,
+                        fileName = pdf.name,
+                    ),
+                )
+            val orderRepository = mockk<OrderWorkflowRepository>()
+            every { orderRepository.observeOrderDetail("order-1") } returns flowOf(null)
+            coEvery { orderRepository.recordPdfShared(actor, "order-1", "stato.pdf") } returns Result.success(Unit)
 
-        val shareFactory = mockk<ShareDocumentIntentFactory>()
-        every { shareFactory.createPdfShareIntent(pdf, "Documento stato.pdf") } returns mockk<Intent>(relaxed = true)
+            val shareFactory = mockk<ShareDocumentIntentFactory>()
+            every { shareFactory.createPdfShareIntent(pdf, "Documento stato.pdf") } returns mockk<Intent>(relaxed = true)
 
-        val viewModel = OrderDetailViewModel(
-            orderId = "order-1",
-            authRepository = FakeAuthRepository(actor),
-            orderRepository = orderRepository,
-            orderMediaRepository = mockk<OrderMediaRepository>(relaxed = true),
-            orderDocumentRepository = documentRepository,
-            templateRepository = mockk<TemplateRepository>(relaxed = true),
-            generateOrderStatusPdfUseCase = mockk<GenerateOrderStatusPdfUseCase>(relaxed = true),
-            shareDocumentIntentFactory = shareFactory,
-            onSetFormDirty = {},
-        )
+            val viewModel =
+                OrderDetailViewModel(
+                    orderId = "order-1",
+                    authRepository = FakeAuthRepository(actor),
+                    orderRepository = orderRepository,
+                    orderMediaRepository = mockk<OrderMediaRepository>(relaxed = true),
+                    orderDocumentRepository = documentRepository,
+                    templateRepository = mockk<TemplateRepository>(relaxed = true),
+                    generateOrderStatusPdfUseCase = mockk<GenerateOrderStatusPdfUseCase>(relaxed = true),
+                    shareDocumentIntentFactory = shareFactory,
+                    onSetFormDirty = {},
+                )
 
-        viewModel.onShareDocumentClicked("document-1")
-        advanceUntilIdle()
+            viewModel.onShareDocumentClicked("document-1")
+            advanceUntilIdle()
 
-        assertTrue(viewModel.showPdfSentConfirmation.value)
-        assertEquals("document-1", viewModel.lastGeneratedDocumentId.value)
-        assertNotNull(viewModel.pendingShareIntent.value)
+            assertTrue(viewModel.showPdfSentConfirmation.value)
+            assertEquals("document-1", viewModel.lastGeneratedDocumentId.value)
+            assertNotNull(viewModel.pendingShareIntent.value)
 
-        viewModel.onPdfSentConfirmed()
-        advanceUntilIdle()
+            viewModel.onPdfSentConfirmed()
+            advanceUntilIdle()
 
-        assertFalse(viewModel.showPdfSentConfirmation.value)
-        assertNull(viewModel.lastGeneratedDocumentId.value)
-        assertEquals("document-1", documentRepository.markedDocumentId)
-        assertNotNull(documentRepository.findById("document-1")?.sharedAt)
-        coVerify(exactly = 1) { orderRepository.recordPdfShared(actor, "order-1", "stato.pdf") }
-    }
+            assertFalse(viewModel.showPdfSentConfirmation.value)
+            assertNull(viewModel.lastGeneratedDocumentId.value)
+            assertEquals("document-1", documentRepository.markedDocumentId)
+            assertNotNull(documentRepository.findById("document-1")?.sharedAt)
+            coVerify(exactly = 1) { orderRepository.recordPdfShared(actor, "order-1", "stato.pdf") }
+        }
 
-    private fun document(id: String, localPath: String, fileName: String): OrderDocumentEntity =
+    private fun document(
+        id: String,
+        localPath: String,
+        fileName: String,
+    ): OrderDocumentEntity =
         OrderDocumentEntity(
             id = id,
             orderId = "order-1",
@@ -138,7 +146,10 @@ class OrderDetailViewModelTest {
             documentsFlow.value = documents.values.toList()
         }
 
-        override suspend fun markShared(documentId: String, sharedAt: Long) {
+        override suspend fun markShared(
+            documentId: String,
+            sharedAt: Long,
+        ) {
             markedDocumentId = documentId
             documents[documentId] = documents.getValue(documentId).copy(sharedAt = sharedAt)
             documentsFlow.value = documents.values.toList()
@@ -148,13 +159,16 @@ class OrderDetailViewModelTest {
 
         override fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>> = documentsFlow
 
-        override suspend fun delete(documentId: String): Result<Unit> = runCatching {
-            documents.remove(documentId) ?: error("Documento non trovato")
-            documentsFlow.value = documents.values.toList()
-        }
+        override suspend fun delete(documentId: String): Result<Unit> =
+            runCatching {
+                documents.remove(documentId) ?: error("Documento non trovato")
+                documentsFlow.value = documents.values.toList()
+            }
     }
 
-    private class FakeAuthRepository(user: AuthenticatedUser) : AuthRepository {
+    private class FakeAuthRepository(
+        user: AuthenticatedUser,
+    ) : AuthRepository {
         override val currentUser: StateFlow<AuthenticatedUser?> = MutableStateFlow(user)
 
         override fun observeAuthState(): Flow<AuthState> = emptyFlow()
@@ -165,8 +179,10 @@ class OrderDetailViewModelTest {
             password: CharArray,
         ): AuthenticatedUser = error("createFirstAdmin is not expected")
 
-        override suspend fun login(username: String, password: CharArray): LoginResult =
-            error("login is not expected")
+        override suspend fun login(
+            username: String,
+            password: CharArray,
+        ): LoginResult = error("login is not expected")
 
         override suspend fun loginDemo(): LoginResult = error("loginDemo is not expected")
 
@@ -178,8 +194,10 @@ class OrderDetailViewModelTest {
 
         override suspend fun getRecoveryKit(): Result<String> = error("getRecoveryKit is not expected")
 
-        override suspend fun resetAdminWithRecoveryCode(code: String, newPassword: CharArray): Result<Unit> =
-            error("resetAdminWithRecoveryCode is not expected")
+        override suspend fun resetAdminWithRecoveryCode(
+            code: String,
+            newPassword: CharArray,
+        ): Result<Unit> = error("resetAdminWithRecoveryCode is not expected")
 
         override fun touchSession() = Unit
 

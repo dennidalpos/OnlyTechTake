@@ -175,7 +175,10 @@ interface OrderExportDao {
         LIMIT :limit OFFSET :offset
         """,
     )
-    suspend fun exportOrdersPaged(limit: Int, offset: Int): List<OrderExportRow>
+    suspend fun exportOrdersPaged(
+        limit: Int,
+        offset: Int,
+    ): List<OrderExportRow>
 }
 
 @Dao
@@ -274,7 +277,10 @@ interface OrderCategoryDao {
         LIMIT 1
         """,
     )
-    suspend fun findByParentAndName(parentId: String?, name: String): OrderCategoryEntity?
+    suspend fun findByParentAndName(
+        parentId: String?,
+        name: String,
+    ): OrderCategoryEntity?
 }
 
 @Dao
@@ -370,14 +376,14 @@ interface RepairOrderDao {
            AND (:customerId IS NULL OR o.customerId = :customerId)
         ORDER BY o.updatedAt DESC
         LIMIT :limit
-        """
+        """,
     )
     fun search(
         query: String,
         assignedToUserId: String? = null,
         status: OrderStatus? = null,
         customerId: String? = null,
-        limit: Int = 100
+        limit: Int = 100,
     ): Flow<List<OrderListItemProjection>>
 }
 
@@ -514,7 +520,10 @@ interface LoginAttemptDao {
     suspend fun upsert(attempt: LoginAttemptEntity)
 
     @Query("SELECT COUNT(*) FROM login_attempts WHERE username = :username AND successful = 0 AND attemptAt > :since")
-    suspend fun countFailedAttempts(username: String, since: Long): Int
+    suspend fun countFailedAttempts(
+        username: String,
+        since: Long,
+    ): Int
 
     @Query("DELETE FROM login_attempts WHERE username = :username")
     suspend fun clearAttempts(username: String)
@@ -541,7 +550,10 @@ interface OrderDocumentDao {
     suspend fun getById(id: String): OrderDocumentEntity?
 
     @Query("UPDATE order_documents SET sharedAt = :sharedAt WHERE id = :id")
-    suspend fun markShared(id: String, sharedAt: Long)
+    suspend fun markShared(
+        id: String,
+        sharedAt: Long,
+    )
 
     @Query("DELETE FROM order_documents WHERE id = :id")
     suspend fun deleteById(id: String)

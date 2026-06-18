@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
-import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.data.repositories.CustomerRepository
 import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
@@ -33,10 +32,11 @@ class CreateIntakeOrderUseCase(
         signatureBitmap: Bitmap,
     ): Result<IntakeOrderCreationResult> =
         runCatching {
-            val normalizedInput = input.copy(
-                stagedMediaCount = stagedMedia.size,
-                hasPrivacySignature = privacyAccepted && termsAccepted,
-            )
+            val normalizedInput =
+                input.copy(
+                    stagedMediaCount = stagedMedia.size,
+                    hasPrivacySignature = privacyAccepted && termsAccepted,
+                )
             val errors = normalizedInput.validationErrors()
             require(errors.isEmpty()) { errors.joinToString("\n") }
 
@@ -52,30 +52,37 @@ class CreateIntakeOrderUseCase(
 
             try {
                 runAtomically {
-                    val customerId = normalizedInput.existingCustomerId?.takeIf { it.isNotBlank() }
-                        ?: customerRepository.save(actor, requireNotNull(normalizedInput.newCustomer) { "Cliente obbligatorio" })
-                            .getOrThrow()
-                            .id
+                    val customerId =
+                        normalizedInput.existingCustomerId?.takeIf { it.isNotBlank() }
+                            ?: customerRepository
+                                .save(actor, requireNotNull(normalizedInput.newCustomer) { "Cliente obbligatorio" })
+                                .getOrThrow()
+                                .id
 
-                    val order = orderRepository.createOrder(
-                        actor = actor,
-                        input = RepairOrderInput(
-                            customerId = customerId,
-                            title = normalizedInput.problemSummary,
-                            categoryId = requireNotNull(normalizedInput.categoryId) { "Categoria obbligatoria" },
-                            description = normalizedInput.problemDetails.trim(),
-                            assignedToUserId = normalizedInput.assignedToUserId,
-                        ),
-                    ).getOrThrow()
+                    val order =
+                        orderRepository
+                            .createOrder(
+                                actor = actor,
+                                input =
+                                    RepairOrderInput(
+                                        customerId = customerId,
+                                        title = normalizedInput.problemSummary,
+                                        categoryId = requireNotNull(normalizedInput.categoryId) { "Categoria obbligatoria" },
+                                        description = normalizedInput.problemDetails.trim(),
+                                        assignedToUserId = normalizedInput.assignedToUserId,
+                                    ),
+                            ).getOrThrow()
 
-                    signatureRepository.saveSignature(
-                        actor = actor,
-                        orderId = order.id,
-                        signerName = signerName,
-                        privacyAccepted = privacyAccepted,
-                        termsAccepted = termsAccepted,
-                        bitmap = signatureBitmap,
-                    ).getOrThrow().also { savedSignature = it }
+                    signatureRepository
+                        .saveSignature(
+                            actor = actor,
+                            orderId = order.id,
+                            signerName = signerName,
+                            privacyAccepted = privacyAccepted,
+                            termsAccepted = termsAccepted,
+                            bitmap = signatureBitmap,
+                        ).getOrThrow()
+                        .also { savedSignature = it }
 
                     attachedMedia = orderMediaRepository.attachStagedMedia(actor, order.id, stagedMedia).getOrThrow()
 

@@ -42,47 +42,52 @@ fun AppTextField(
 ) {
     val focusManager = LocalFocusManager.current
     val effectiveImeAction = if (imeAction == ImeAction.Default) ImeAction.Next else imeAction
-    val effectiveKeyboardActions = keyboardActions ?: KeyboardActions(
-        onNext = { focusManager.moveFocus(FocusDirection.Down) },
-        onDone = { focusManager.clearFocus() },
-    )
+    val effectiveKeyboardActions =
+        keyboardActions ?: KeyboardActions(
+            onNext = { focusManager.moveFocus(FocusDirection.Down) },
+            onDone = { focusManager.clearFocus() },
+        )
 
-    val labelText = when {
-        required -> "$label *"
-        showOptional -> "$label (${stringResource(R.string.label_optional)})"
-        else -> label
-    }
+    val labelText =
+        when {
+            required -> "$label *"
+            showOptional -> "$label (${stringResource(R.string.label_optional)})"
+            else -> label
+        }
 
     OutlinedTextField(
-        modifier = modifier
-            .then(if (fullWidth) Modifier.fillMaxWidth() else Modifier)
-            .then(testTag?.let { Modifier.testTag(it) } ?: Modifier),
+        modifier =
+            modifier
+                .then(if (fullWidth) Modifier.fillMaxWidth() else Modifier)
+                .then(testTag?.let { Modifier.testTag(it) } ?: Modifier),
         value = value,
         onValueChange = onValueChange,
-        label = { 
+        label = {
             Text(
                 text = labelText,
                 maxLines = 1,
-                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
-            ) 
+                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+            )
         },
         singleLine = singleLine,
         maxLines = if (singleLine) 1 else Int.MAX_VALUE,
         isError = showError,
         shape = RepairAppShapes.field,
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-        ),
-        keyboardOptions = KeyboardOptions(
-            keyboardType = keyboardType,
-            imeAction = effectiveImeAction,
-            capitalization = capitalization
-        ),
+        colors =
+            OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+            ),
+        keyboardOptions =
+            KeyboardOptions(
+                keyboardType = keyboardType,
+                imeAction = effectiveImeAction,
+                capitalization = capitalization,
+            ),
         visualTransformation = visualTransformation,
         keyboardActions = effectiveKeyboardActions,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
-        textStyle = MaterialTheme.typography.bodyLarge
+        textStyle = MaterialTheme.typography.bodyLarge,
     )
 }

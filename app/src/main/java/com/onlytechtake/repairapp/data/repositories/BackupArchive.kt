@@ -7,7 +7,6 @@ import net.lingala.zip4j.model.ZipParameters
 import net.lingala.zip4j.model.enums.AesKeyStrength
 import net.lingala.zip4j.model.enums.EncryptionMethod
 import java.io.File
-import java.io.IOException
 import java.io.InputStream
 
 internal data class ExtractedBackup(
@@ -21,7 +20,11 @@ internal object BackupArchive {
     const val FILES_ENTRY_PREFIX = "files/"
     const val CANONICAL_MEDIA_DIRECTORY = "app_media"
 
-    fun extract(input: InputStream, restoreRoot: File, password: CharArray? = null): ExtractedBackup {
+    fun extract(
+        input: InputStream,
+        restoreRoot: File,
+        password: CharArray? = null,
+    ): ExtractedBackup {
         val metadata = StringBuilder()
         val databaseFiles = mutableMapOf<String, File>()
         var hasMetadata = false
@@ -72,7 +75,10 @@ internal object BackupArchive {
         return ExtractedBackup(metadata.toString(), databaseFiles)
     }
 
-    fun restoreAppMedia(stagedFilesRoot: File, destination: File) {
+    fun restoreAppMedia(
+        stagedFilesRoot: File,
+        destination: File,
+    ) {
         destination.deleteRecursively()
         destination.mkdirs()
 
@@ -82,9 +88,15 @@ internal object BackupArchive {
         }
     }
 
-    fun addDirectory(zip: ZipOutputStream, directory: File, entryDirectory: String, password: String? = null) {
+    fun addDirectory(
+        zip: ZipOutputStream,
+        directory: File,
+        entryDirectory: String,
+        password: String? = null,
+    ) {
         if (!directory.exists()) return
-        directory.walkTopDown()
+        directory
+            .walkTopDown()
             .filter(File::isFile)
             .forEach { file ->
                 val relativePath = file.relativeTo(directory).invariantSeparatorsPath
@@ -92,8 +104,7 @@ internal object BackupArchive {
             }
     }
 
-    private fun isSupportedAppFile(relativePath: String): Boolean =
-        relativePath.startsWith("$CANONICAL_MEDIA_DIRECTORY/")
+    private fun isSupportedAppFile(relativePath: String): Boolean = relativePath.startsWith("$CANONICAL_MEDIA_DIRECTORY/")
 
     private fun requireSafeEntry(name: String) {
         require(name.isNotBlank()) { "Backup ZIP non valido" }
@@ -104,7 +115,10 @@ internal object BackupArchive {
         require(parts.none { it == ".." || it.isBlank() }) { "Percorso backup non valido" }
     }
 
-    private fun safeChild(root: File, relativePath: String): File {
+    private fun safeChild(
+        root: File,
+        relativePath: String,
+    ): File {
         val destination = File(root, relativePath)
         val rootPath = root.canonicalPath + File.separator
         val destinationPath = destination.canonicalPath
@@ -113,7 +127,11 @@ internal object BackupArchive {
     }
 }
 
-internal fun ZipOutputStream.putFileEntry(file: File, entryName: String, password: String? = null) {
+internal fun ZipOutputStream.putFileEntry(
+    file: File,
+    entryName: String,
+    password: String? = null,
+) {
     val params = ZipParameters()
     params.fileNameInZip = entryName
     if (password != null) {

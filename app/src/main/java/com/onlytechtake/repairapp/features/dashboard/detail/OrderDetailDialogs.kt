@@ -16,7 +16,6 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.*
-import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.core.utils.parseEuroCentsOrNull
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
@@ -24,14 +23,14 @@ import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.domain.workspace.canConfirmDiagnosisResult
+import com.onlytechtake.repairapp.domain.workspace.requiresConfirmation
 import com.onlytechtake.repairapp.domain.workspace.shouldShowDiagnosisEstimate
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
-import com.onlytechtake.repairapp.domain.workspace.requiresConfirmation
 
 @Composable
 fun OrderConfirmDialog(
-    state: OrderDetailWorkspaceState
+    state: OrderDetailWorkspaceState,
 ) {
     state.confirmTitle?.let { title ->
         AppDialog(
@@ -78,7 +77,7 @@ fun OrderStatusActionDialog(
             content = {
                 Column(
                     modifier = Modifier.verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                 ) {
                     Text(stringResource(R.string.order_confirm_status_update))
                     if (isResultStep) {
@@ -153,15 +152,17 @@ fun OrderStatusActionDialog(
             confirmButton = {
                 AppButton(
                     text = stringResource(R.string.confirm),
-                    enabled = when {
-                        isResultStep -> canConfirmDiagnosisResult(
-                            summary = state.resultSummary,
-                            outcome = state.diagnosisOutcome,
-                            estimateAmountCents = parseEuroCentsOrNull(state.resultAmount),
-                        )
-                        isClosure -> (state.closureReason != null) && ((state.closureReason != ClosureReason.OTHER) || state.statusNote.isNotBlank())
-                        else -> true
-                    },
+                    enabled =
+                        when {
+                            isResultStep ->
+                                canConfirmDiagnosisResult(
+                                    summary = state.resultSummary,
+                                    outcome = state.diagnosisOutcome,
+                                    estimateAmountCents = parseEuroCentsOrNull(state.resultAmount),
+                                )
+                            isClosure -> (state.closureReason != null) && ((state.closureReason != ClosureReason.OTHER) || state.statusNote.isNotBlank())
+                            else -> true
+                        },
                     onClick = {
                         if (action == OrderStatusAction.RECORD_RESULT) {
                             val outcome = state.diagnosisOutcome ?: return@AppButton
@@ -175,7 +176,7 @@ fun OrderStatusActionDialog(
                     },
                     variant = AppButtonVariant.Primary,
                     size = AppButtonSize.Compact,
-                    testTag = RepairAppTestTags.StatusDialogConfirmButton
+                    testTag = RepairAppTestTags.StatusDialogConfirmButton,
                 )
             },
             dismissButton = {
@@ -183,7 +184,7 @@ fun OrderStatusActionDialog(
                     text = stringResource(R.string.customer_cancel),
                     variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact,
-                    onClick = { state.dismissStatusAction() }
+                    onClick = { state.dismissStatusAction() },
                 )
             },
         )
@@ -203,7 +204,7 @@ fun InternalNoteDialog(
             content = {
                 Column(
                     modifier = Modifier.verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                 ) {
                     currentInternalNotes?.takeIf { it.isNotBlank() }?.let {
                         OperatorText(it)
@@ -235,7 +236,7 @@ fun InternalNoteDialog(
                     text = stringResource(R.string.customer_cancel),
                     onClick = { state.dismissInternalNote() },
                     variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
                 )
             },
         )
@@ -267,9 +268,9 @@ fun OrderPdfSentConfirmationDialog(
                     text = stringResource(R.string.no_cancel),
                     onClick = onDismiss,
                     variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
                 )
-            }
+            },
         )
     }
 }

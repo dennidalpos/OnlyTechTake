@@ -15,14 +15,15 @@ class SmokeTest {
         val isDebug = appId.endsWith(".debug")
 
         val base = "com.onlytechtake.repairapp"
-        val expected = when {
-            isDemo && isDebug -> "$base.demo.debug"
-            isDemo -> "$base.demo"
-            isShowcase && isDebug -> "$base.showcase.debug"
-            isShowcase -> "$base.showcase"
-            isDebug -> "$base.debug"
-            else -> base
-        }
+        val expected =
+            when {
+                isDemo && isDebug -> "$base.demo.debug"
+                isDemo -> "$base.demo"
+                isShowcase && isDebug -> "$base.showcase.debug"
+                isShowcase -> "$base.showcase"
+                isDebug -> "$base.debug"
+                else -> base
+            }
         assertEquals("APPLICATION_ID non corrisponde alla configurazione attesa", expected, appId)
     }
 

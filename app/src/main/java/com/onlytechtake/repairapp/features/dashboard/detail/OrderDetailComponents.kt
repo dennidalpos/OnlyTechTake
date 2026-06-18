@@ -3,12 +3,11 @@ package com.onlytechtake.repairapp.features.dashboard.detail
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Message
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -18,24 +17,21 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
-import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.design.repairColors
+import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.core.utils.label
-import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
-import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
@@ -43,14 +39,17 @@ import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
 import com.onlytechtake.repairapp.domain.workspace.availableOrderStatusActions
 import com.onlytechtake.repairapp.domain.workspace.requiresConfirmation
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
+import com.onlytechtake.repairapp.features.dashboard.common.CompactExpandableRow
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
-import com.onlytechtake.repairapp.features.dashboard.common.CompactExpandableRow
 import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
 
 @Composable
-fun OrderHeader(detail: OrderDetail, context: Context) {
+fun OrderHeader(
+    detail: OrderDetail,
+    context: Context,
+) {
     StandardCard {
         Column(
             modifier = Modifier.padding(RepairAppSpacing.cardPadding),
@@ -67,26 +66,27 @@ fun OrderHeader(detail: OrderDetail, context: Context) {
                             text = detail.order.orderNumber,
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
                         )
                         AppStatusBadge(
                             text = detail.order.status.label(context),
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            modifier = Modifier.testTag(RepairAppTestTags.OrderStatusLabel)
+                            modifier = Modifier.testTag(RepairAppTestTags.OrderStatusLabel),
                         )
                     }
                     Text(
                         text = stringResource(R.string.orders_order_reference, detail.order.orderNumber, detail.order.title),
                         modifier = Modifier.testTag(RepairAppTestTags.OrderDetailOrderReference),
                         style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                     Text(
-                        text = stringResource(
-                            R.string.orders_customer_reference,
-                            detail.customer?.displayName(context) ?: stringResource(R.string.orders_customer_unavailable),
-                        ),
+                        text =
+                            stringResource(
+                                R.string.orders_customer_reference,
+                                detail.customer?.displayName(context) ?: stringResource(R.string.orders_customer_unavailable),
+                            ),
                         modifier = Modifier.testTag(RepairAppTestTags.OrderDetailCustomerReference),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.secondary,
@@ -105,7 +105,7 @@ fun OrderHeader(detail: OrderDetail, context: Context) {
                     )
                 }
             }
-            
+
             AppDivider(modifier = Modifier.padding(vertical = RepairAppSpacing.tinyGap).alpha(0.5f))
 
             OrderStatusStepper(
@@ -113,10 +113,10 @@ fun OrderHeader(detail: OrderDetail, context: Context) {
                 modifier = Modifier.testTag(RepairAppTestTags.OrderDetailStatusStepper),
                 stepTestTag = RepairAppTestTags::orderDetailStatusStep,
             )
-            
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap)
+                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
             ) {
                 InfoMetadata(label = stringResource(R.string.order_updated_label), value = formatUiDateTime(detail.order.updatedAt))
                 detail.order.assignedToUserId?.let { InfoMetadata(label = stringResource(R.string.order_operator_label), value = it) }
@@ -126,7 +126,10 @@ fun OrderHeader(detail: OrderDetail, context: Context) {
 }
 
 @Composable
-private fun InfoMetadata(label: String, value: String) {
+private fun InfoMetadata(
+    label: String,
+    value: String,
+) {
     Column {
         Text(text = label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.outline)
         Text(text = value, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
@@ -148,7 +151,7 @@ fun OrderActionCard(
 
     AppActionPanel(
         title = stringResource(R.string.order_actions_title),
-        modifier = Modifier.testTag(RepairAppTestTags.OrderActionSection)
+        modifier = Modifier.testTag(RepairAppTestTags.OrderActionSection),
     ) {
         Text(stringResource(R.string.order_next_action_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
 
@@ -158,7 +161,7 @@ fun OrderActionCard(
                 onClick = { onActionClick(primaryAction) },
                 variant = if (primaryAction.requiresConfirmation()) AppButtonVariant.Warning else AppButtonVariant.Primary,
                 size = AppButtonSize.FullWidth,
-                testTag = RepairAppTestTags.statusAction(primaryAction.name)
+                testTag = RepairAppTestTags.statusAction(primaryAction.name),
             )
         }
 
@@ -175,7 +178,7 @@ fun OrderActionCard(
                         onClick = { onActionClick(action) },
                         variant = if (action.requiresConfirmation()) AppButtonVariant.Warning else AppButtonVariant.Secondary,
                         size = AppButtonSize.Compact,
-                        testTag = RepairAppTestTags.statusAction(action.name)
+                        testTag = RepairAppTestTags.statusAction(action.name),
                     )
                 }
             }
@@ -193,9 +196,10 @@ fun OrderActionCard(
             AppDivider(modifier = Modifier.alpha(0.3f))
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(role = Role.Checkbox, onClick = onTogglePayment),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable(role = Role.Checkbox, onClick = onTogglePayment),
                 horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -204,7 +208,7 @@ fun OrderActionCard(
                     text = stringResource(R.string.order_paid_button),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = if (isPaid) FontWeight.Bold else FontWeight.Normal,
-                    color = if (isPaid) MaterialTheme.repairColors.success else Color.Unspecified
+                    color = if (isPaid) MaterialTheme.repairColors.success else Color.Unspecified,
                 )
             }
         }
@@ -217,7 +221,7 @@ fun OrderActionCard(
             onClick = { onSendWhatsApp(whatsAppAnchor) },
             size = AppButtonSize.Compact,
             leadingIcon = Icons.AutoMirrored.Filled.Message,
-            modifier = Modifier.fillMaxWidth().testTag(RepairAppTestTags.OrderWhatsAppButton)
+            modifier = Modifier.fillMaxWidth().testTag(RepairAppTestTags.OrderWhatsAppButton),
         )
     }
 }
@@ -226,12 +230,12 @@ fun OrderActionCard(
 fun AppActionPanel(
     title: String,
     modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     StandardCard(modifier = modifier) {
         Column(
             modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
         ) {
             content()
         }
@@ -252,14 +256,14 @@ fun QuoteDecisionPanel(
             verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
         ) {
             Text(stringResource(R.string.order_quote_outcome), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            
+
             Row(horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap)) {
                 QuoteDecisionButton(
                     text = stringResource(R.string.order_quote_accepted),
                     selected = quoteDecision == QuoteDecision.ACCEPTED,
                     modifier = Modifier.weight(1f),
                     testTag = RepairAppTestTags.QuoteAcceptedToggle,
-                    onClick = { onQuoteDecisionChange(QuoteDecision.ACCEPTED) }
+                    onClick = { onQuoteDecisionChange(QuoteDecision.ACCEPTED) },
                 )
 
                 QuoteDecisionButton(
@@ -267,7 +271,7 @@ fun QuoteDecisionPanel(
                     selected = quoteDecision == QuoteDecision.REJECTED,
                     modifier = Modifier.weight(1f),
                     testTag = RepairAppTestTags.QuoteRejectedToggle,
-                    onClick = { onQuoteDecisionChange(QuoteDecision.REJECTED) }
+                    onClick = { onQuoteDecisionChange(QuoteDecision.REJECTED) },
                 )
             }
 
@@ -313,7 +317,7 @@ private fun QuoteDecisionButton(
         size = AppButtonSize.Compact,
         modifier = modifier,
         selected = selected,
-        testTag = testTag
+        testTag = testTag,
     )
 }
 
@@ -326,15 +330,15 @@ fun QuoteDecisionRow(
     onSelect: () -> Unit,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
-            .selectable(selected = checked, onClick = onSelect, role = Role.RadioButton)
-            .background(
-                if (checked) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else Color.Transparent,
-                RepairAppShapes.compactButton,
-            )
-            .padding(horizontal = RepairAppSpacing.compactGap, vertical = RepairAppSpacing.compactGap),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
+                .selectable(selected = checked, onClick = onSelect, role = Role.RadioButton)
+                .background(
+                    if (checked) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else Color.Transparent,
+                    RepairAppShapes.compactButton,
+                ).padding(horizontal = RepairAppSpacing.compactGap, vertical = RepairAppSpacing.compactGap),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
     ) {
@@ -362,7 +366,7 @@ fun InternalNotesPanel(
                 variant = AppButtonVariant.Ghost,
                 onClick = onAddNoteClick,
                 size = AppButtonSize.Compact,
-                modifier = Modifier.align(Alignment.End)
+                modifier = Modifier.align(Alignment.End),
             )
         }
     }
@@ -388,25 +392,25 @@ fun WhatsAppPreviewPanel(
                     imageVector = Icons.Default.Close,
                     contentDescription = stringResource(R.string.order_wa_close_preview),
                     onClick = onClose,
-                    modifier = Modifier.testTag(RepairAppTestTags.OrderWhatsAppClosePreviewButton)
+                    modifier = Modifier.testTag(RepairAppTestTags.OrderWhatsAppClosePreviewButton),
                 )
             }
-            
+
             AppMessageBanner(
                 message = stringResource(R.string.order_wa_sending_to, prepared.phone),
-                type = BannerType.Info
+                type = BannerType.Info,
             )
-            
+
             AppTextField(
                 value = body,
                 onValueChange = onBodyChange,
                 label = stringResource(R.string.order_wa_message_label),
                 modifier = Modifier.fillMaxWidth(),
             )
-            
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.actionGap)
+                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.actionGap),
             ) {
                 AppButton(
                     modifier = Modifier.weight(1f),
@@ -427,7 +431,6 @@ fun WhatsAppPreviewPanel(
     }
 }
 
-
 @Composable
 fun OrderTimelineSection(
     timeline: List<TimelineEventEntity>,
@@ -435,7 +438,7 @@ fun OrderTimelineSection(
     Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
         SectionTitle(
             text = stringResource(R.string.order_timeline),
-            tooltip = stringResource(R.string.order_timeline_tooltip)
+            tooltip = stringResource(R.string.order_timeline_tooltip),
         )
         timeline.forEachIndexed { index, event ->
             val eventNumber = timeline.size - index

@@ -1,15 +1,12 @@
 package com.onlytechtake.repairapp.features.dashboard.detail
 
-import android.graphics.Bitmap
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.PhotoCamera
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -18,14 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.features.dashboard.common.*
 import com.onlytechtake.repairapp.features.workspace.isFinalPhoto
 import com.onlytechtake.repairapp.features.workspace.isImageAttachment
-import java.io.File
 
 @Composable
 fun OrderPhotoSection(
@@ -35,15 +31,16 @@ fun OrderPhotoSection(
     var showCamera by rememberSaveable { mutableStateOf(false) }
     var selectedImageId by rememberSaveable { mutableStateOf<String?>(null) }
     var deleteMedia by remember { mutableStateOf<OrderMediaEntity?>(null) }
-    val attachmentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        uri?.let { viewModel.importAttachment(detail.order.id, it) }
-    }
+    val attachmentLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            uri?.let { viewModel.importAttachment(detail.order.id, it) }
+        }
     val images = detail.media.filter { it.isImageAttachment() && !it.isFinalPhoto() }
     val documents = detail.media.filterNot { it.isImageAttachment() }
 
     Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
         SectionTitle(stringResource(R.string.intake_step_media))
-        
+
         if (images.isEmpty() && documents.isEmpty()) {
             Text(stringResource(R.string.intake_media_empty), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
         } else {
@@ -68,14 +65,14 @@ fun OrderPhotoSection(
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
                             ) {
                                 Text(media.fileName, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
                                 AppIconButton(
                                     imageVector = Icons.Default.Delete,
                                     contentDescription = stringResource(R.string.content_description_delete),
                                     onClick = { deleteMedia = media },
-                                    tint = MaterialTheme.colorScheme.error
+                                    tint = MaterialTheme.colorScheme.error,
                                 )
                             }
                         }
@@ -86,7 +83,7 @@ fun OrderPhotoSection(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.actionGap)
+            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.actionGap),
         ) {
             AppButton(
                 modifier = Modifier.weight(1f),
@@ -126,7 +123,7 @@ fun OrderPhotoSection(
             confirmButton = {},
             dismissButton = {
                 AppButton(text = stringResource(R.string.customer_detail_close), onClick = { showCamera = false }, variant = AppButtonVariant.Secondary, size = AppButtonSize.Compact)
-            }
+            },
         )
     }
 
@@ -157,7 +154,7 @@ fun OrderPhotoSection(
                         deleteMedia = null
                     },
                     variant = AppButtonVariant.Danger,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
                 )
             },
             dismissButton = {
@@ -165,9 +162,9 @@ fun OrderPhotoSection(
                     text = stringResource(R.string.customer_cancel),
                     onClick = { deleteMedia = null },
                     variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
                 )
-            }
+            },
         )
     }
 }

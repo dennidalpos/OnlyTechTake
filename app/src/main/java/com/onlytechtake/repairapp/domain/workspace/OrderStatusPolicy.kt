@@ -8,36 +8,46 @@ object OrderStatusPolicy {
 
     fun allowedTargets(from: OrderStatus): Set<OrderStatus> =
         when (from) {
-            OrderStatus.OPEN -> setOf(
-                OrderStatus.IN_PROGRESS,
-                OrderStatus.CLOSED,
-            )
-            OrderStatus.IN_PROGRESS -> setOf(
-                OrderStatus.DIAGNOSIS,
-                OrderStatus.CLOSED,
-            )
-            OrderStatus.DIAGNOSIS -> setOf(
-                OrderStatus.RESULT,
-                OrderStatus.CLOSED,
-            )
-            OrderStatus.RESULT -> setOf(
-                OrderStatus.REPAIRING,
-                OrderStatus.READY_FOR_PICKUP,
-                OrderStatus.CLOSED,
-            )
-            OrderStatus.REPAIRING -> setOf(
-                OrderStatus.READY_FOR_PICKUP,
-                OrderStatus.CLOSED,
-            )
-            OrderStatus.READY_FOR_PICKUP -> setOf(
-                OrderStatus.CLOSED,
-            )
+            OrderStatus.OPEN ->
+                setOf(
+                    OrderStatus.IN_PROGRESS,
+                    OrderStatus.CLOSED,
+                )
+            OrderStatus.IN_PROGRESS ->
+                setOf(
+                    OrderStatus.DIAGNOSIS,
+                    OrderStatus.CLOSED,
+                )
+            OrderStatus.DIAGNOSIS ->
+                setOf(
+                    OrderStatus.RESULT,
+                    OrderStatus.CLOSED,
+                )
+            OrderStatus.RESULT ->
+                setOf(
+                    OrderStatus.REPAIRING,
+                    OrderStatus.READY_FOR_PICKUP,
+                    OrderStatus.CLOSED,
+                )
+            OrderStatus.REPAIRING ->
+                setOf(
+                    OrderStatus.READY_FOR_PICKUP,
+                    OrderStatus.CLOSED,
+                )
+            OrderStatus.READY_FOR_PICKUP ->
+                setOf(
+                    OrderStatus.CLOSED,
+                )
             OrderStatus.CLOSED -> emptySet()
         }
 
     fun requiresClosureReason(to: OrderStatus): Boolean = to == OrderStatus.CLOSED
 
-    fun requireAllowed(from: OrderStatus, to: OrderStatus, closureReason: ClosureReason? = null) {
+    fun requireAllowed(
+        from: OrderStatus,
+        to: OrderStatus,
+        closureReason: ClosureReason? = null,
+    ) {
         require(to in allowedTargets(from)) {
             "Transizione stato non valida: ${from.name} -> ${to.name}"
         }

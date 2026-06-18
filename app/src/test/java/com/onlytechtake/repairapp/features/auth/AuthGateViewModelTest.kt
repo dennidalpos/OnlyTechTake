@@ -22,7 +22,6 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AuthGateViewModelTest {
-
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
@@ -36,31 +35,47 @@ class AuthGateViewModelTest {
     }
 
     @Test
-    fun logoutResetsLoadingState() = runTest {
-        val fakeRepo = FakeAuthRepository()
-        val viewModel = AuthGateViewModel(fakeRepo)
+    fun logoutResetsLoadingState() =
+        runTest {
+            val fakeRepo = FakeAuthRepository()
+            val viewModel = AuthGateViewModel(fakeRepo)
 
-        // Logout resets the form state including loading
-        viewModel.logout()
-        advanceUntilIdle()
+            // Logout resets the form state including loading
+            viewModel.logout()
+            advanceUntilIdle()
 
-        assertFalse(viewModel.formState.value.loading)
-    }
+            assertFalse(viewModel.formState.value.loading)
+        }
 
     private class FakeAuthRepository : AuthRepository {
         override val currentUser: StateFlow<AuthenticatedUser?> = MutableStateFlow(null)
+
         override fun observeAuthState(): Flow<AuthState> = emptyFlow()
-        override suspend fun createFirstAdmin(displayName: String, username: String, password: CharArray): AuthenticatedUser {
+
+        override suspend fun createFirstAdmin(
+            displayName: String,
+            username: String,
+            password: CharArray,
+        ): AuthenticatedUser {
             error("createFirstAdmin is not expected in logoutResetsLoadingState")
         }
-        override suspend fun login(username: String, password: CharArray): LoginResult {
+
+        override suspend fun login(
+            username: String,
+            password: CharArray,
+        ): LoginResult {
             error("login is not expected in logoutResetsLoadingState")
         }
+
         override suspend fun loginDemo(): LoginResult {
             error("loginDemo is not expected in logoutResetsLoadingState")
         }
 
-        override suspend fun changePassword(username: String, currentPassword: CharArray, newPassword: CharArray): Result<Unit> {
+        override suspend fun changePassword(
+            username: String,
+            currentPassword: CharArray,
+            newPassword: CharArray,
+        ): Result<Unit> {
             error("changePassword is not expected in logoutResetsLoadingState")
         }
 
@@ -68,11 +83,15 @@ class AuthGateViewModelTest {
             error("getRecoveryKit is not expected in logoutResetsLoadingState")
         }
 
-        override suspend fun resetAdminWithRecoveryCode(code: String, newPassword: CharArray): Result<Unit> {
+        override suspend fun resetAdminWithRecoveryCode(
+            code: String,
+            newPassword: CharArray,
+        ): Result<Unit> {
             error("resetAdminWithRecoveryCode is not expected in logoutResetsLoadingState")
         }
 
         override fun touchSession() {}
+
         override suspend fun logout() {}
     }
 }

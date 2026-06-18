@@ -6,7 +6,10 @@ import android.graphics.Matrix
 import androidx.exifinterface.media.ExifInterface
 import kotlin.math.max
 
-fun decodeOrientedBitmap(path: String, maxDimension: Int = Int.MAX_VALUE): Bitmap? {
+fun decodeOrientedBitmap(
+    path: String,
+    maxDimension: Int = Int.MAX_VALUE,
+): Bitmap? {
     val options = BitmapFactory.Options()
     if (maxDimension != Int.MAX_VALUE) {
         val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
@@ -14,21 +17,24 @@ fun decodeOrientedBitmap(path: String, maxDimension: Int = Int.MAX_VALUE): Bitma
         options.inSampleSize = calculateBitmapSampleSize(bounds.outWidth, bounds.outHeight, maxDimension)
     }
     val source = BitmapFactory.decodeFile(path, options) ?: return null
-    val orientation = runCatching {
-        ExifInterface(path).getAttributeInt(
-            ExifInterface.TAG_ORIENTATION,
-            ExifInterface.ORIENTATION_NORMAL,
-        )
-    }.getOrDefault(ExifInterface.ORIENTATION_NORMAL)
+    val orientation =
+        runCatching {
+            ExifInterface(path).getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL,
+            )
+        }.getOrDefault(ExifInterface.ORIENTATION_NORMAL)
     val transform = exifOrientationTransform(orientation)
     if (transform == ExifOrientationTransform()) return source
 
-    val matrix = Matrix().apply {
-        if (transform.flipHorizontal) postScale(-1f, 1f)
-        if (transform.flipVertical) postScale(1f, -1f)
-        if (transform.rotationDegrees != 0f) postRotate(transform.rotationDegrees)
-    }
-    return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
+    val matrix =
+        Matrix().apply {
+            if (transform.flipHorizontal) postScale(-1f, 1f)
+            if (transform.flipVertical) postScale(1f, -1f)
+            if (transform.rotationDegrees != 0f) postRotate(transform.rotationDegrees)
+        }
+    return Bitmap
+        .createBitmap(source, 0, 0, source.width, source.height, matrix, true)
         .also { oriented ->
             if (oriented !== source) source.recycle()
         }
@@ -52,7 +58,11 @@ fun exifOrientationTransform(orientation: Int): ExifOrientationTransform =
         else -> ExifOrientationTransform()
     }
 
-fun calculateBitmapSampleSize(width: Int, height: Int, maxDimension: Int): Int {
+fun calculateBitmapSampleSize(
+    width: Int,
+    height: Int,
+    maxDimension: Int,
+): Int {
     if (width <= 0 || height <= 0 || maxDimension <= 0) return 1
     var sampleSize = 1
     val largestDimension = max(width, height)

@@ -1,7 +1,6 @@
 package com.onlytechtake.repairapp.features.dashboard.common
 
 import android.graphics.Bitmap
-import android.graphics.Canvas as AndroidCanvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
@@ -30,27 +29,27 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Path as ComposePath
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
-import com.onlytechtake.repairapp.R
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.createBitmap
-import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.*
-import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
-import com.onlytechtake.repairapp.features.workspace.ButtonTone
 import com.onlytechtake.repairapp.core.utils.formatFileSize
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
+import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
+import android.graphics.Canvas as AndroidCanvas
+import androidx.compose.ui.graphics.Path as ComposePath
 
 data class SignatureCaptureResult(
     val signerName: String,
@@ -82,17 +81,18 @@ fun SignatureCaptureForm(
     var currentStroke by remember { mutableStateOf<SignatureStroke?>(null) }
     val hasSignature = strokes.any { it.points.size > 1 }
     val defaultSignerName = stringResource(R.string.signature_default_signer)
-    val capture = if (privacyAccepted && termsAccepted && hasSignature) {
-        SignatureCaptureResult(
-            signerName = defaultSignerName,
-            businessSignerName = businessSignerName.takeIf { isBusiness && it.isNotBlank() },
-            privacyAccepted = privacyAccepted,
-            termsAccepted = termsAccepted,
-            bitmap = renderSignatureBitmap(strokes),
-        )
-    } else {
-        null
-    }
+    val capture =
+        if (privacyAccepted && termsAccepted && hasSignature) {
+            SignatureCaptureResult(
+                signerName = defaultSignerName,
+                businessSignerName = businessSignerName.takeIf { isBusiness && it.isNotBlank() },
+                privacyAccepted = privacyAccepted,
+                termsAccepted = termsAccepted,
+                bitmap = renderSignatureBitmap(strokes),
+            )
+        } else {
+            null
+        }
 
     LaunchedEffect(privacyAccepted, termsAccepted, strokes, businessSignerName) {
         onCaptureChanged(capture)
@@ -100,7 +100,7 @@ fun SignatureCaptureForm(
 
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
         SectionTitle(title)
-        
+
         if (isBusiness) {
             AppTextField(
                 value = businessSignerName,
@@ -134,33 +134,36 @@ fun SignatureCaptureForm(
         }
 
         Text(
-            modifier = Modifier.clickable(
-                onClickLabel = stringResource(R.string.signature_read_privacy),
-                role = Role.Button,
-                onClick = { textDialog = SignatureTextDialog.PRIVACY },
-            ),
+            modifier =
+                Modifier.clickable(
+                    onClickLabel = stringResource(R.string.signature_read_privacy),
+                    role = Role.Button,
+                    onClick = { textDialog = SignatureTextDialog.PRIVACY },
+                ),
             text = stringResource(R.string.signature_read_privacy),
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.bodySmall,
         )
         Text(
-            modifier = Modifier.clickable(
-                onClickLabel = stringResource(R.string.signature_read_terms),
-                role = Role.Button,
-                onClick = { textDialog = SignatureTextDialog.TERMS },
-            ),
+            modifier =
+                Modifier.clickable(
+                    onClickLabel = stringResource(R.string.signature_read_terms),
+                    role = Role.Button,
+                    onClick = { textDialog = SignatureTextDialog.TERMS },
+                ),
             text = stringResource(R.string.signature_read_terms),
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.bodySmall,
         )
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .toggleable(
-                    value = privacyAccepted,
-                    role = Role.Checkbox,
-                    onValueChange = { privacyAccepted = it },
-                ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .toggleable(
+                        value = privacyAccepted,
+                        role = Role.Checkbox,
+                        onValueChange = { privacyAccepted = it },
+                    ),
             horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -168,13 +171,14 @@ fun SignatureCaptureForm(
             Text(stringResource(R.string.signature_accept_privacy))
         }
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .toggleable(
-                    value = termsAccepted,
-                    role = Role.Checkbox,
-                    onValueChange = { termsAccepted = it },
-                ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .toggleable(
+                        value = termsAccepted,
+                        role = Role.Checkbox,
+                        onValueChange = { termsAccepted = it },
+                    ),
             horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -187,12 +191,13 @@ fun SignatureCaptureForm(
             currentStroke = currentStroke,
             onStart = { point -> currentStroke = SignatureStroke(listOf(point)) },
             onTap = { point ->
-                strokes = strokes + SignatureStroke(
-                    listOf(
-                        point,
-                        point.copy(x = (point.x + SIGNATURE_DOT_DELTA).coerceAtMost(1f)),
-                    ),
-                )
+                strokes = strokes +
+                    SignatureStroke(
+                        listOf(
+                            point,
+                            point.copy(x = (point.x + SIGNATURE_DOT_DELTA).coerceAtMost(1f)),
+                        ),
+                    )
             },
             onDrag = { point ->
                 currentStroke = currentStroke?.let { it.copy(points = it.points + point) }
@@ -211,7 +216,7 @@ fun SignatureCaptureForm(
                     currentStroke = null
                 },
                 variant = AppButtonVariant.Secondary,
-                size = AppButtonSize.Compact
+                size = AppButtonSize.Compact,
             )
             if (submitText != null) {
                 AppButton(
@@ -219,7 +224,7 @@ fun SignatureCaptureForm(
                     enabled = capture != null,
                     onClick = { capture?.let(onSubmit) },
                     variant = AppButtonVariant.Primary,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
                 )
             }
         }
@@ -236,20 +241,22 @@ fun SignatureCaptureForm(
     textDialog?.let { dialog ->
         AppDialog(
             onDismissRequest = { textDialog = null },
-            title = when (dialog) {
-                SignatureTextDialog.PRIVACY -> stringResource(R.string.signature_privacy_title)
-                SignatureTextDialog.TERMS -> stringResource(R.string.signature_terms_title)
-            },
-            text = when (dialog) {
-                SignatureTextDialog.PRIVACY -> privacyText
-                SignatureTextDialog.TERMS -> termsText
-            },
+            title =
+                when (dialog) {
+                    SignatureTextDialog.PRIVACY -> stringResource(R.string.signature_privacy_title)
+                    SignatureTextDialog.TERMS -> stringResource(R.string.signature_terms_title)
+                },
+            text =
+                when (dialog) {
+                    SignatureTextDialog.PRIVACY -> privacyText
+                    SignatureTextDialog.TERMS -> termsText
+                },
             confirmButton = {
                 AppButton(
                     text = stringResource(R.string.content_description_close),
                     onClick = { textDialog = null },
                     variant = AppButtonVariant.Primary,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
                 )
             },
         )
@@ -267,33 +274,32 @@ private fun SignatureCanvas(
 ) {
     val canvasDescription = stringResource(R.string.signature_canvas_description)
     Canvas(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(180.dp)
-            .testTag(RepairAppTestTags.SignatureCanvas)
-            .background(androidx.compose.ui.graphics.Color.White)
-            .border(1.dp, MaterialTheme.colorScheme.outline)
-            .semantics {
-                contentDescription = canvasDescription
-            }
-            .pointerInput(Unit) {
-                detectTapGestures { offset ->
-                    onTap(offset.toSignaturePoint(size.width, size.height))
-                }
-            }
-            .pointerInput(Unit) {
-                detectDragGestures(
-                    onDragStart = { offset ->
-                        onStart(offset.toSignaturePoint(size.width, size.height))
-                    },
-                    onDrag = { change, _ ->
-                        change.consume()
-                        onDrag(change.position.toSignaturePoint(size.width, size.height))
-                    },
-                    onDragEnd = onEnd,
-                    onDragCancel = onEnd,
-                )
-            },
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(180.dp)
+                .testTag(RepairAppTestTags.SignatureCanvas)
+                .background(androidx.compose.ui.graphics.Color.White)
+                .border(1.dp, MaterialTheme.colorScheme.outline)
+                .semantics {
+                    contentDescription = canvasDescription
+                }.pointerInput(Unit) {
+                    detectTapGestures { offset ->
+                        onTap(offset.toSignaturePoint(size.width, size.height))
+                    }
+                }.pointerInput(Unit) {
+                    detectDragGestures(
+                        onDragStart = { offset ->
+                            onStart(offset.toSignaturePoint(size.width, size.height))
+                        },
+                        onDrag = { change, _ ->
+                            change.consume()
+                            onDrag(change.position.toSignaturePoint(size.width, size.height))
+                        },
+                        onDragEnd = onEnd,
+                        onDragCancel = onEnd,
+                    )
+                },
     ) {
         (strokes + listOfNotNull(currentStroke)).forEach { stroke ->
             drawPath(
@@ -309,13 +315,14 @@ private fun renderSignatureBitmap(strokes: List<SignatureStroke>) =
     createBitmap(BITMAP_WIDTH, BITMAP_HEIGHT).also { bitmap ->
         val canvas = AndroidCanvas(bitmap)
         canvas.drawColor(Color.WHITE)
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = Color.BLACK
-            style = Paint.Style.STROKE
-            strokeCap = Paint.Cap.ROUND
-            strokeJoin = Paint.Join.ROUND
-            strokeWidth = BITMAP_STROKE_WIDTH
-        }
+        val paint =
+            Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = Color.BLACK
+                style = Paint.Style.STROKE
+                strokeCap = Paint.Cap.ROUND
+                strokeJoin = Paint.Join.ROUND
+                strokeWidth = BITMAP_STROKE_WIDTH
+            }
         strokes.forEach { stroke ->
             canvas.drawPath(stroke.toAndroidPath(BITMAP_WIDTH.toFloat(), BITMAP_HEIGHT.toFloat()), paint)
         }
@@ -335,13 +342,19 @@ private enum class SignatureTextDialog {
     TERMS,
 }
 
-private fun Offset.toSignaturePoint(width: Int, height: Int): SignaturePoint =
+private fun Offset.toSignaturePoint(
+    width: Int,
+    height: Int,
+): SignaturePoint =
     SignaturePoint(
         x = (x / width.coerceAtLeast(1)).coerceIn(0f, 1f),
         y = (y / height.coerceAtLeast(1)).coerceIn(0f, 1f),
     )
 
-private fun SignatureStroke.toComposePath(width: Float, height: Float): ComposePath =
+private fun SignatureStroke.toComposePath(
+    width: Float,
+    height: Float,
+): ComposePath =
     ComposePath().also { path ->
         points.firstOrNull()?.let { first ->
             path.moveTo(first.x * width, first.y * height)
@@ -349,7 +362,10 @@ private fun SignatureStroke.toComposePath(width: Float, height: Float): ComposeP
         }
     }
 
-private fun SignatureStroke.toAndroidPath(width: Float, height: Float): Path =
+private fun SignatureStroke.toAndroidPath(
+    width: Float,
+    height: Float,
+): Path =
     Path().also { path ->
         points.firstOrNull()?.let { first ->
             path.moveTo(first.x * width, first.y * height)
@@ -362,4 +378,3 @@ private const val BITMAP_HEIGHT = 400
 private const val BITMAP_STROKE_WIDTH = 8f
 private const val SIGNATURE_DOT_DELTA = 0.001f
 private const val DEFAULT_SIGNER_NAME = "Cliente"
-

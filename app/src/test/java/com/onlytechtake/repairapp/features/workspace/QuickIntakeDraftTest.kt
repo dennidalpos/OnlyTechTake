@@ -9,17 +9,18 @@ import org.junit.Test
 class QuickIntakeDraftTest {
     @Test
     fun draftKeepsEnteredCustomerProblemAndCategoryFields() {
-        val draft = QuickIntakeDraft().copy(
-            selectedCustomerId = "customer-1",
-            selectedCustomerLabel = "Mario Rossi",
-            selectedCategoryId = "category-1",
-            customerType = CustomerType.BUSINESS,
-            companyName = "Only Tech",
-            problemSummary = "Display rotto",
-            problemDetails = "Vetro crepato",
-            currentStep = 3,
-            completedStep = 2,
-        )
+        val draft =
+            QuickIntakeDraft().copy(
+                selectedCustomerId = "customer-1",
+                selectedCustomerLabel = "Mario Rossi",
+                selectedCategoryId = "category-1",
+                customerType = CustomerType.BUSINESS,
+                companyName = "Only Tech",
+                problemSummary = "Display rotto",
+                problemDetails = "Vetro crepato",
+                currentStep = 3,
+                completedStep = 2,
+            )
 
         assertEquals("customer-1", draft.selectedCustomerId)
         assertEquals("Mario Rossi", draft.selectedCustomerLabel)
@@ -47,13 +48,14 @@ class QuickIntakeDraftTest {
 
     @Test
     fun categoryCreatedFromIntakeSelectsCategoryAndInvalidatesFollowingSteps() {
-        val draft = QuickIntakeDraft(
-            selectedCustomerId = "customer-1",
-            problemSummary = "Display rotto",
-            currentStep = 5,
-            completedStep = 5,
-            returnToIntakeAfterCategorySave = true,
-        ).withCategoryCreatedFromIntake("category-new")
+        val draft =
+            QuickIntakeDraft(
+                selectedCustomerId = "customer-1",
+                problemSummary = "Display rotto",
+                currentStep = 5,
+                completedStep = 5,
+                returnToIntakeAfterCategorySave = true,
+            ).withCategoryCreatedFromIntake("category-new")
 
         assertEquals("category-new", draft.selectedCategoryId)
         assertEquals("customer-1", draft.selectedCustomerId)

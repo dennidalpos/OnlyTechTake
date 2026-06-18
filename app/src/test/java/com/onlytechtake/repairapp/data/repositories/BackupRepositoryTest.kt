@@ -1,10 +1,6 @@
 package com.onlytechtake.repairapp.data.repositories
 
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.util.UUID
 import net.lingala.zip4j.io.inputstream.ZipInputStream
 import net.lingala.zip4j.io.outputstream.ZipOutputStream
 import net.lingala.zip4j.model.ZipParameters
@@ -15,6 +11,10 @@ import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.util.UUID
 
 class BackupRepositoryTest {
     private lateinit var testRoot: File
@@ -50,12 +50,13 @@ class BackupRepositoryTest {
 
     @Test
     fun restoreAcceptsCanonicalAppMedia() {
-        val extracted = extract(
-            mapOf(
-                "files/app_media/order_media/order-1/photo.jpg" to "photo",
-                "files/app_media/signatures/order-1/signature.png" to "signature",
-            ),
-        )
+        val extracted =
+            extract(
+                mapOf(
+                    "files/app_media/order_media/order-1/photo.jpg" to "photo",
+                    "files/app_media/signatures/order-1/signature.png" to "signature",
+                ),
+            )
         val destination = File(testRoot, "restored")
 
         BackupArchive.restoreAppMedia(File(extracted, "files"), destination)
@@ -72,38 +73,41 @@ class BackupRepositoryTest {
             "files/app_media/../../outside.txt",
             "files\\app_media\\photo.jpg",
         ).forEach { unsafePath ->
-            val error = assertThrows(IllegalArgumentException::class.java) {
-                BackupArchive.extract(
-                    ByteArrayInputStream(backupZip(mapOf(unsafePath to "unsafe"))),
-                    File(testRoot, "unsafe-${unsafePath.hashCode()}"),
-                )
-            }
+            val error =
+                assertThrows(IllegalArgumentException::class.java) {
+                    BackupArchive.extract(
+                        ByteArrayInputStream(backupZip(mapOf(unsafePath to "unsafe"))),
+                        File(testRoot, "unsafe-${unsafePath.hashCode()}"),
+                    )
+                }
             assertEquals("Percorso backup non valido", error.message)
         }
     }
 
     @Test
     fun extractionRequiresMetadataAndMainDatabase() {
-        val missingMetadata = assertThrows(IllegalArgumentException::class.java) {
-            BackupArchive.extract(
-                ByteArrayInputStream(
-                    rawZip(
-                        mapOf("${BackupArchive.DATABASE_ENTRY_PREFIX}${RepairAppDatabase.DATABASE_NAME}" to "database"),
+        val missingMetadata =
+            assertThrows(IllegalArgumentException::class.java) {
+                BackupArchive.extract(
+                    ByteArrayInputStream(
+                        rawZip(
+                            mapOf("${BackupArchive.DATABASE_ENTRY_PREFIX}${RepairAppDatabase.DATABASE_NAME}" to "database"),
+                        ),
                     ),
-                ),
-                File(testRoot, "missing-metadata"),
-            )
-        }
+                    File(testRoot, "missing-metadata"),
+                )
+            }
         assertEquals("Metadata backup mancanti", missingMetadata.message)
 
-        val missingDatabase = assertThrows(IllegalArgumentException::class.java) {
-            BackupArchive.extract(
-                ByteArrayInputStream(
-                    rawZip(mapOf(BackupArchive.METADATA_ENTRY to """{"databaseVersion": ${RepairAppDatabase.DATABASE_VERSION}}""")),
-                ),
-                File(testRoot, "missing-database"),
-            )
-        }
+        val missingDatabase =
+            assertThrows(IllegalArgumentException::class.java) {
+                BackupArchive.extract(
+                    ByteArrayInputStream(
+                        rawZip(mapOf(BackupArchive.METADATA_ENTRY to """{"databaseVersion": ${RepairAppDatabase.DATABASE_VERSION}}""")),
+                    ),
+                    File(testRoot, "missing-database"),
+                )
+            }
         assertEquals("Database backup mancante", missingDatabase.message)
     }
 
@@ -114,12 +118,13 @@ class BackupRepositoryTest {
             "files/shared_prefs/database_security_prefs.xml",
             "files/cache/shared/document.pdf",
         ).forEach { unsupportedPath ->
-            val error = assertThrows(IllegalArgumentException::class.java) {
-                BackupArchive.extract(
-                    ByteArrayInputStream(backupZip(mapOf(unsupportedPath to "data"))),
-                    File(testRoot, "unsupported-${unsupportedPath.hashCode()}"),
-                )
-            }
+            val error =
+                assertThrows(IllegalArgumentException::class.java) {
+                    BackupArchive.extract(
+                        ByteArrayInputStream(backupZip(mapOf(unsupportedPath to "data"))),
+                        File(testRoot, "unsupported-${unsupportedPath.hashCode()}"),
+                    )
+                }
             assertEquals("Backup contiene file app non supportati", error.message)
         }
     }
@@ -145,15 +150,14 @@ class BackupRepositoryTest {
         return destination
     }
 
-    private fun backupZip(files: Map<String, String>): ByteArray {
-        return rawZip(
+    private fun backupZip(files: Map<String, String>): ByteArray =
+        rawZip(
             linkedMapOf(
                 BackupArchive.METADATA_ENTRY to
                     """{"databaseVersion": ${RepairAppDatabase.DATABASE_VERSION}}""",
                 "${BackupArchive.DATABASE_ENTRY_PREFIX}${RepairAppDatabase.DATABASE_NAME}" to "database",
             ) + files,
         )
-    }
 
     private fun rawZip(files: Map<String, String>): ByteArray {
         val output = ByteArrayOutputStream()

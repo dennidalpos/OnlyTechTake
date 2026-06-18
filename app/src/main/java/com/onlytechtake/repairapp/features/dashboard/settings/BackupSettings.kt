@@ -17,8 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
@@ -40,18 +40,22 @@ fun BackupSettings(
     var backupIntervalDays by rememberSaveable { mutableStateOf(backupReminderSettings.intervalDays.toString()) }
     var backupPassword by rememberSaveable { mutableStateOf(securitySettings.backupEncryptionPassword) }
 
-    val exportZipLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
-        uri?.let(viewModel::exportCompleteBackup)
-    }
-    val restoreZipLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        uri?.let { viewModel.restoreCompleteBackup(it, onBackupRestored) }
-    }
-    val exportOrdersXlsxLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) { uri ->
-        uri?.let(viewModel::exportOrdersXlsx)
-    }
-    val exportConfigLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
-        uri?.let(viewModel::exportConfiguration)
-    }
+    val exportZipLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
+            uri?.let(viewModel::exportCompleteBackup)
+        }
+    val restoreZipLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            uri?.let { viewModel.restoreCompleteBackup(it, onBackupRestored) }
+        }
+    val exportOrdersXlsxLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) { uri ->
+            uri?.let(viewModel::exportOrdersXlsx)
+        }
+    val exportConfigLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+            uri?.let(viewModel::exportConfiguration)
+        }
 
     // Pre-fetch strings for callbacks
     val confirmExportZipTitle = stringResource(R.string.config_backup_confirm_export_zip_title)
@@ -92,9 +96,10 @@ fun BackupSettings(
                         Switch(
                             checked = backupReminderSettings.enabled,
                             onCheckedChange = viewModel::setBackupReminderEnabled,
-                            modifier = Modifier
-                                .padding(start = RepairAppSpacing.compactGap)
-                                .testTag(RepairAppTestTags.ConfigBackupReminderSwitch),
+                            modifier =
+                                Modifier
+                                    .padding(start = RepairAppSpacing.compactGap)
+                                    .testTag(RepairAppTestTags.ConfigBackupReminderSwitch),
                         )
                     }
                     AppTextField(
@@ -136,14 +141,16 @@ fun BackupSettings(
                     if (securitySettings.isBackupEncryptionEnabled) {
                         AppTextField(
                             value = backupPassword,
-                            onValueChange = { 
+                            onValueChange = {
                                 backupPassword = it
                                 viewModel.setBackupEncryptionPassword(it)
                             },
                             label = stringResource(R.string.config_backup_password_label),
                             required = true,
                             showError = backupPassword.isBlank(),
-                            visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
+                            visualTransformation =
+                                androidx.compose.ui.text.input
+                                    .PasswordVisualTransformation(),
                             keyboardType = KeyboardType.Password,
                         )
                     }
@@ -171,7 +178,7 @@ fun BackupSettings(
                             }
                         },
                     )
-                    
+
                     AppButton(
                         text = stringResource(R.string.config_backup_restore_zip),
                         variant = AppButtonVariant.Warning,
@@ -193,7 +200,7 @@ fun BackupSettings(
                 text = stringResource(R.string.config_backup_orders_export_title),
                 tooltip = stringResource(R.string.config_backup_orders_tooltip),
             )
-            
+
             AppButton(
                 text = stringResource(R.string.config_backup_export_xlsx),
                 size = AppButtonSize.Default,
@@ -237,30 +244,34 @@ fun BackupSettings(
 @Composable
 private fun backupReminderInfo(settings: BackupReminderSettings): String {
     val resources = LocalResources.current
-    val status = when {
-        settings.lastBackupStatus == BackupReminderStatus.FAILED ->
-            stringResource(R.string.backup_status_failed)
-        settings.lastSuccessfulBackupAtMillis == null ->
-            stringResource(R.string.backup_status_never)
-        else -> {
-            val days = BackupReminderPolicy.daysSinceLastSuccessfulBackup(settings, System.currentTimeMillis()) ?: 0L
-            resources.getQuantityString(
-                R.plurals.backup_status_days_ago,
-                days.toInt(),
-                days,
-            )
+    val status =
+        when {
+            settings.lastBackupStatus == BackupReminderStatus.FAILED ->
+                stringResource(R.string.backup_status_failed)
+            settings.lastSuccessfulBackupAtMillis == null ->
+                stringResource(R.string.backup_status_never)
+            else -> {
+                val days = BackupReminderPolicy.daysSinceLastSuccessfulBackup(settings, System.currentTimeMillis()) ?: 0L
+                resources.getQuantityString(
+                    R.plurals.backup_status_days_ago,
+                    days.toInt(),
+                    days,
+                )
+            }
         }
-    }
-    val interval = resources.getQuantityString(
-        R.plurals.config_backup_reminder_interval,
-        settings.intervalDays,
-        settings.intervalDays,
-    )
-    val lastSuccessful = settings.lastSuccessfulBackupAtMillis
-        ?.let { formatUiDateTime(it) }
-        ?: stringResource(R.string.config_backup_last_success_none)
-    val fileName = settings.lastBackupFileName
-        ?: stringResource(R.string.config_backup_last_file_none)
+    val interval =
+        resources.getQuantityString(
+            R.plurals.config_backup_reminder_interval,
+            settings.intervalDays,
+            settings.intervalDays,
+        )
+    val lastSuccessful =
+        settings.lastSuccessfulBackupAtMillis
+            ?.let { formatUiDateTime(it) }
+            ?: stringResource(R.string.config_backup_last_success_none)
+    val fileName =
+        settings.lastBackupFileName
+            ?: stringResource(R.string.config_backup_last_file_none)
     return stringResource(
         R.string.config_backup_reminder_info,
         status,

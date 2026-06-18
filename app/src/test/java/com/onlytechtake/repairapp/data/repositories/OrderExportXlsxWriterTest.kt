@@ -6,57 +6,77 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
-import java.io.ByteArrayOutputStream
-import java.time.ZoneId
-import java.util.zip.ZipInputStream
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.io.ByteArrayOutputStream
+import java.time.ZoneId
+import java.util.zip.ZipInputStream
 
 class OrderExportXlsxWriterTest {
-    private val testLabels = OrderExportLabels(
-        headers = listOf(
-            "Numero commessa", "Titolo", "Stato", "Priorità", "Cliente", "Tipo cliente",
-            "Telefono", "Email", "Categoria", "Operatore", "Firmatario", "Descrizione", "Note interne",
-            "Esito diagnosi", "Pagamento", "Importo preventivo", "Importo finale",
-            "Creata", "Aggiornata", "Chiusa", "Motivo chiusura"
-        ),
-        statusLabels = OrderStatus.entries.associateWith { it.name },
-        priorityLabels = OrderPriority.entries.associateWith { it.name },
-        customerTypeLabels = CustomerType.entries.associateWith { it.name },
-        diagnosisOutcomeLabels = DiagnosisOutcome.entries.associateWith { it.name },
-        closureReasonLabels = ClosureReason.entries.associateWith { it.name },
-        paidLabel = "Pagato",
-        notPaidLabel = "Non pagato"
-    )
+    private val testLabels =
+        OrderExportLabels(
+            headers =
+                listOf(
+                    "Numero commessa",
+                    "Titolo",
+                    "Stato",
+                    "Priorità",
+                    "Cliente",
+                    "Tipo cliente",
+                    "Telefono",
+                    "Email",
+                    "Categoria",
+                    "Operatore",
+                    "Firmatario",
+                    "Descrizione",
+                    "Note interne",
+                    "Esito diagnosi",
+                    "Pagamento",
+                    "Importo preventivo",
+                    "Importo finale",
+                    "Creata",
+                    "Aggiornata",
+                    "Chiusa",
+                    "Motivo chiusura",
+                ),
+            statusLabels = OrderStatus.entries.associateWith { it.name },
+            priorityLabels = OrderPriority.entries.associateWith { it.name },
+            customerTypeLabels = CustomerType.entries.associateWith { it.name },
+            diagnosisOutcomeLabels = DiagnosisOutcome.entries.associateWith { it.name },
+            closureReasonLabels = ClosureReason.entries.associateWith { it.name },
+            paidLabel = "Pagato",
+            notPaidLabel = "Non pagato",
+        )
 
     @Test
     fun writesValidXlsxEntriesAndEscapesCellText() {
         val output = ByteArrayOutputStream()
-        val row = OrderExportRow(
-            orderNumber = "2026-0001",
-            title = "Schermo & vetro <rotto>",
-            status = OrderStatus.OPEN,
-            priority = OrderPriority.HIGH,
-            customerName = "Mario Rossi",
-            customerType = CustomerType.PRIVATE,
-            phone = "3330000000",
-            email = "mario@example.test",
-            categoryName = "Smartphone",
-            assignedUserName = "Operatore",
-            signerName = "Firmatario",
-            description = "Display \"nero\"",
-            internalNotes = "Nota con apostrofo '",
-            diagnosisOutcome = DiagnosisOutcome.REPAIRABLE,
-            isPaid = true,
-            estimateAmountCents = 12345,
-            finalAmountCents = null,
-            createdAt = 1_717_171_717_000L,
-            updatedAt = 1_717_171_717_000L,
-            closedAt = null,
-            closureReason = null,
-        )
+        val row =
+            OrderExportRow(
+                orderNumber = "2026-0001",
+                title = "Schermo & vetro <rotto>",
+                status = OrderStatus.OPEN,
+                priority = OrderPriority.HIGH,
+                customerName = "Mario Rossi",
+                customerType = CustomerType.PRIVATE,
+                phone = "3330000000",
+                email = "mario@example.test",
+                categoryName = "Smartphone",
+                assignedUserName = "Operatore",
+                signerName = "Firmatario",
+                description = "Display \"nero\"",
+                internalNotes = "Nota con apostrofo '",
+                diagnosisOutcome = DiagnosisOutcome.REPAIRABLE,
+                isPaid = true,
+                estimateAmountCents = 12345,
+                finalAmountCents = null,
+                createdAt = 1_717_171_717_000L,
+                updatedAt = 1_717_171_717_000L,
+                closedAt = null,
+                closureReason = null,
+            )
 
         OrderExportXlsxWriter(testLabels, ZoneId.of("UTC")).write(listOf(row), output)
 

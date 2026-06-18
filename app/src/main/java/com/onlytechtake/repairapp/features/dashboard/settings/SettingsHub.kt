@@ -21,11 +21,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.*
-import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.DashboardRoutes
+import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 
 @Composable
 fun SettingsHub(
@@ -34,7 +34,7 @@ fun SettingsHub(
 ) {
     AppScreenContainer {
         SectionTitle(stringResource(R.string.dashboard_config))
-        
+
         Spacer(Modifier.height(RepairAppSpacing.cardGap))
 
         Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap)) {
@@ -46,7 +46,7 @@ fun SettingsHub(
             ) {
                 onNavigate(DashboardRoutes.settings("CATEGORIES"))
             }
-            
+
             SettingsHubCard(
                 title = stringResource(R.string.config_hub_templates_title),
                 subtitle = if (isAdmin) stringResource(R.string.config_hub_templates_subtitle_admin) else stringResource(R.string.config_hub_templates_subtitle_user),
@@ -56,7 +56,7 @@ fun SettingsHub(
             ) {
                 onNavigate(DashboardRoutes.settings("TEMPLATES"))
             }
-            
+
             SettingsHubCard(
                 title = stringResource(R.string.config_hub_whatsapp_title),
                 subtitle = stringResource(R.string.config_hub_whatsapp_subtitle),
@@ -65,7 +65,7 @@ fun SettingsHub(
             ) {
                 onNavigate(DashboardRoutes.settings("WHATSAPP"))
             }
-            
+
             SettingsHubCard(
                 title = stringResource(R.string.storage_title),
                 subtitle = stringResource(R.string.config_hub_storage_subtitle),
@@ -74,7 +74,7 @@ fun SettingsHub(
             ) {
                 onNavigate(DashboardRoutes.settings("STORAGE"))
             }
-            
+
             SettingsHubCard(
                 title = stringResource(R.string.config_hub_admin_title),
                 subtitle = stringResource(R.string.config_hub_admin_subtitle),
@@ -83,7 +83,7 @@ fun SettingsHub(
             ) {
                 onNavigate(DashboardRoutes.ADMIN)
             }
-            
+
             if (isAdmin) {
                 SettingsHubCard(
                     title = stringResource(R.string.config_hub_backup_title),
@@ -94,7 +94,7 @@ fun SettingsHub(
                     onNavigate(DashboardRoutes.settings("EXPORT"))
                 }
             }
-            
+
             SettingsHubCard(
                 title = stringResource(R.string.config_hub_about_title),
                 subtitle = stringResource(R.string.config_hub_about_subtitle),
@@ -124,27 +124,27 @@ internal fun SettingsHubCard(
         Row(
             modifier = Modifier.padding(RepairAppSpacing.cardPadding),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)
+            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(24.dp),
             )
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.outline
+                    color = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.outline,
                 )
                 Text(
                     text = subtitle,
                     style = MaterialTheme.typography.bodySmall,
                     color = if (enabled) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.outline,
                     maxLines = 2,
-                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                 )
             }
         }

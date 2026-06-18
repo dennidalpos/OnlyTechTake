@@ -1,8 +1,8 @@
 package com.onlytechtake.repairapp.core.design.components
 
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,7 +21,7 @@ fun AppDivider(
     HorizontalDivider(
         modifier = modifier,
         thickness = thickness,
-        color = color
+        color = color,
     )
 }
 
@@ -37,6 +37,6 @@ fun AppVerticalDivider(
     VerticalDivider(
         modifier = modifier,
         thickness = thickness,
-        color = color
+        color = color,
     )
 }

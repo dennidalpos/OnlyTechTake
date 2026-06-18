@@ -4,12 +4,14 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.click
+import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToIndex
@@ -17,27 +19,22 @@ import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
-import androidx.compose.ui.test.swipeLeft
-import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.test.swipeUp
-import androidx.compose.ui.test.isRoot
-import androidx.compose.ui.test.onFirst
-import androidx.compose.ui.test.click
-import androidx.test.espresso.Espresso
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.MainActivity
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
-import java.io.File
-import java.io.FileOutputStream
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.io.File
+import java.io.FileOutputStream
 
 @RunWith(AndroidJUnit4::class)
 class OperatorIntakeDemoScreenshotTest {
@@ -51,7 +48,7 @@ class OperatorIntakeDemoScreenshotTest {
         runBlocking { DemoDataSeeder.seedDemoProfile(context) }
         val outputDir = prepareScreenshotDirectory()
 
-         ActivityScenario.launch(MainActivity::class.java).use {
+        ActivityScenario.launch(MainActivity::class.java).use {
             waitForTag(RepairAppTestTags.AuthUsernameField)
             capture(outputDir, "01-login.png")
 
@@ -59,9 +56,9 @@ class OperatorIntakeDemoScreenshotTest {
             capture(outputDir, "02-home.png")
 
             clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
-            pauseForDemo() 
+            pauseForDemo()
             waitForTag("quick_actions_screen")
-            
+
             var formOpened = false
             repeat(3) {
                 if (!formOpened) {
@@ -72,7 +69,7 @@ class OperatorIntakeDemoScreenshotTest {
                     formOpened = isTagPresent(RepairAppTestTags.NewOrderFirstNameField)
                 }
             }
-            
+
             typeTag(RepairAppTestTags.NewOrderFirstNameField, "Giulia", scroll = true)
             typeTag(RepairAppTestTags.NewOrderLastNameField, "Bianchi", scroll = true)
             typeTag(RepairAppTestTags.NewOrderPhoneField, "+39 333 010 2020", scroll = true)
@@ -82,7 +79,7 @@ class OperatorIntakeDemoScreenshotTest {
             clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
             waitForText("Cliente selezionato")
             clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
-            
+
             clickTag(RepairAppTestTags.categoryButton("demo-cat-pc"), scroll = true)
             clickTag(RepairAppTestTags.categoryButton(DemoDataSeeder.DEMO_CATEGORY_ID), scroll = true)
             clickTag(RepairAppTestTags.categoryButton("demo-cat-gaming"), scroll = true)
@@ -104,7 +101,7 @@ class OperatorIntakeDemoScreenshotTest {
             waitForTag(RepairAppTestTags.orderCardCustomerReference(DemoDataSeeder.DEMO_ORDER_ID), scroll = true, useUnmergedTree = true)
             waitForTag(RepairAppTestTags.orderCardStatusStep(DemoDataSeeder.DEMO_ORDER_ID, 1), scroll = true, useUnmergedTree = true)
             clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID))
-            
+
             waitForTag(RepairAppTestTags.OrderStatusLabel)
             waitForTag(RepairAppTestTags.OrderDetailOrderReference, useUnmergedTree = true)
             waitForTag(RepairAppTestTags.OrderDetailCustomerReference, useUnmergedTree = true)
@@ -142,7 +139,10 @@ class OperatorIntakeDemoScreenshotTest {
         }
     }
 
-    private fun applySimpleStatus(action: OrderStatusAction, nextAction: OrderStatusAction) {
+    private fun applySimpleStatus(
+        action: OrderStatusAction,
+        nextAction: OrderStatusAction,
+    ) {
         scrollOrderDetailToTop()
         waitForTag(RepairAppTestTags.OrderActionSection, scroll = true)
         pauseForDemo()
@@ -203,7 +203,7 @@ class OperatorIntakeDemoScreenshotTest {
     private fun clickDashboardTab(destination: String) {
         val tabTag = RepairAppTestTags.dashboardTab(destination)
         waitForTagExists(tabTag)
-        
+
         composeRule.onNodeWithTag(tabTag).performClick()
         composeRule.waitForIdle()
 
@@ -215,8 +215,7 @@ class OperatorIntakeDemoScreenshotTest {
         Thread.sleep(2000)
     }
 
-    private fun isTextDisplayed(text: String): Boolean =
-        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+    private fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
     private fun loginOperatorDemo() {
         val username = if (BuildConfig.IS_DEMO_VERSION) DemoDataSeeder.DEMO_ADMIN_USERNAME else DemoDataSeeder.DEMO_OPERATOR_USERNAME
@@ -239,7 +238,11 @@ class OperatorIntakeDemoScreenshotTest {
         }
     }
 
-    private fun typeTag(tag: String, text: String, scroll: Boolean = false) {
+    private fun typeTag(
+        tag: String,
+        text: String,
+        scroll: Boolean = false,
+    ) {
         waitForTagExists(tag, scroll = scroll)
         val node = composeRule.onNodeWithTag(tag)
         node.performClick()
@@ -252,10 +255,14 @@ class OperatorIntakeDemoScreenshotTest {
         pauseForDemo()
     }
 
-    private fun clickTag(tag: String, scroll: Boolean = false, useUnmergedTree: Boolean = false) {
+    private fun clickTag(
+        tag: String,
+        scroll: Boolean = false,
+        useUnmergedTree: Boolean = false,
+    ) {
         waitForTag(tag, scroll = scroll, useUnmergedTree = useUnmergedTree)
         val node = composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
-        
+
         // Ensure the node is enabled before clicking
         try {
             composeRule.waitUntil(timeoutMillis = 5_000) {
@@ -274,15 +281,18 @@ class OperatorIntakeDemoScreenshotTest {
                 node.performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
             }
         }
-        
+
         composeRule.waitForIdle()
         pauseForDemo()
     }
 
-    private fun clickText(text: String, scroll: Boolean = false) {
+    private fun clickText(
+        text: String,
+        scroll: Boolean = false,
+    ) {
         waitForText(text, scroll = scroll)
         val node = composeRule.onNodeWithText(text, substring = true)
-        
+
         try {
             node.performClick()
         } catch (e: Throwable) {
@@ -298,7 +308,8 @@ class OperatorIntakeDemoScreenshotTest {
     }
 
     private fun performSafeSwipeUp() {
-        val listTags = listOf(RepairAppTestTags.OrderDetailLazyColumn, "categories_list", "templates_list", "customer_list", "customer_form")
+        val listTags =
+            listOf(RepairAppTestTags.OrderDetailLazyColumn, "categories_list", "templates_list", "customer_list", "customer_form")
         for (tag in listTags) {
             try {
                 composeRule.onNodeWithTag(tag).performTouchInput {
@@ -306,18 +317,21 @@ class OperatorIntakeDemoScreenshotTest {
                 }
                 composeRule.waitForIdle()
                 return
-            } catch (e: Throwable) {}
+            } catch (e: Throwable) {
+            }
         }
         try {
-            composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { 
+            composeRule.onAllNodes(isRoot()).onFirst().performTouchInput {
                 swipeUp(startY = bottom * 0.8f, endY = top + 30f)
             }
-        } catch (e: Throwable) {}
+        } catch (e: Throwable) {
+        }
         composeRule.waitForIdle()
     }
 
     private fun performSafeSwipeDown() {
-        val listTags = listOf(RepairAppTestTags.OrderDetailLazyColumn, "categories_list", "templates_list", "customer_list", "customer_form")
+        val listTags =
+            listOf(RepairAppTestTags.OrderDetailLazyColumn, "categories_list", "templates_list", "customer_list", "customer_form")
         for (tag in listTags) {
             try {
                 composeRule.onNodeWithTag(tag).performTouchInput {
@@ -325,13 +339,15 @@ class OperatorIntakeDemoScreenshotTest {
                 }
                 composeRule.waitForIdle()
                 return
-            } catch (e: Throwable) {}
+            } catch (e: Throwable) {
+            }
         }
         try {
-            composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { 
+            composeRule.onAllNodes(isRoot()).onFirst().performTouchInput {
                 swipeDown(startY = top + 30f, endY = bottom * 0.8f)
             }
-        } catch (e: Throwable) {}
+        } catch (e: Throwable) {
+        }
         composeRule.waitForIdle()
     }
 
@@ -343,20 +359,25 @@ class OperatorIntakeDemoScreenshotTest {
         pauseForDemo()
     }
 
-    private fun waitForTag(tag: String, scroll: Boolean = false, useUnmergedTree: Boolean = false) {
+    private fun waitForTag(
+        tag: String,
+        scroll: Boolean = false,
+        useUnmergedTree: Boolean = false,
+    ) {
         waitForTagExists(tag, scroll = scroll, useUnmergedTree = useUnmergedTree)
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
         while (System.currentTimeMillis() < deadline) {
-            val displayed = runCatching {
-                val node = composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
-                if (scroll) {
-                    runCatching { node.performScrollTo() }
-                    composeRule.waitForIdle()
-                }
-                node.assertIsDisplayed()
-                true
-            }.getOrDefault(false)
+            val displayed =
+                runCatching {
+                    val node = composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
+                    if (scroll) {
+                        runCatching { node.performScrollTo() }
+                        composeRule.waitForIdle()
+                    }
+                    node.assertIsDisplayed()
+                    true
+                }.getOrDefault(false)
             if (displayed) return
 
             if (scroll) {
@@ -372,11 +393,15 @@ class OperatorIntakeDemoScreenshotTest {
         composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).assertIsDisplayed()
     }
 
-    private fun waitForTagExists(tag: String, scroll: Boolean = false, useUnmergedTree: Boolean = false) {
+    private fun waitForTagExists(
+        tag: String,
+        scroll: Boolean = false,
+        useUnmergedTree: Boolean = false,
+    ) {
         var found = false
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
-        
+
         while (!found && System.currentTimeMillis() < deadline) {
             found = isTagPresent(tag, useUnmergedTree)
             if (found) break
@@ -393,7 +418,7 @@ class OperatorIntakeDemoScreenshotTest {
                     } catch (e: Throwable) {
                         // Scan logic: try DOWN a lot (reveal below), then UP a bit (reveal above)
                         if (attempts % 15 < 10) {
-                            performSafeSwipeUp()   // Scroll DOWN
+                            performSafeSwipeUp() // Scroll DOWN
                         } else {
                             performSafeSwipeDown() // Scroll UP
                         }
@@ -410,7 +435,10 @@ class OperatorIntakeDemoScreenshotTest {
         }
     }
 
-    private fun waitForTagIfPresent(tag: String, timeoutMillis: Long): Boolean {
+    private fun waitForTagIfPresent(
+        tag: String,
+        timeoutMillis: Long,
+    ): Boolean {
         val deadline = System.currentTimeMillis() + timeoutMillis
         do {
             if (isTagPresent(tag)) {
@@ -422,10 +450,15 @@ class OperatorIntakeDemoScreenshotTest {
         return false
     }
 
-    private fun isTagPresent(tag: String, useUnmergedTree: Boolean = false): Boolean =
-        composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).fetchSemanticsNodes().isNotEmpty()
+    private fun isTagPresent(
+        tag: String,
+        useUnmergedTree: Boolean = false,
+    ): Boolean = composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).fetchSemanticsNodes().isNotEmpty()
 
-    private fun waitForText(text: String, scroll: Boolean = false) {
+    private fun waitForText(
+        text: String,
+        scroll: Boolean = false,
+    ) {
         var found = false
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
@@ -447,7 +480,7 @@ class OperatorIntakeDemoScreenshotTest {
                         if (attempts % 15 < 10) {
                             performSafeSwipeDown() // Scroll UP
                         } else {
-                            performSafeSwipeUp()   // Scroll DOWN
+                            performSafeSwipeUp() // Scroll DOWN
                         }
                     }
                 }
@@ -462,7 +495,10 @@ class OperatorIntakeDemoScreenshotTest {
         }
     }
 
-    private fun capture(outputDir: File, fileName: String) {
+    private fun capture(
+        outputDir: File,
+        fileName: String,
+    ) {
         composeRule.waitForIdle()
         InstrumentationRegistry.getInstrumentation().waitForIdleSync()
         pauseForScreenshot()
@@ -481,8 +517,7 @@ class OperatorIntakeDemoScreenshotTest {
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    private fun isRecordingDemo(): Boolean =
-        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     private fun prepareScreenshotDirectory(): File {
         val directory = File(requireNotNull(context.getExternalFilesDir(null)), SCREENSHOT_DIR_NAME)

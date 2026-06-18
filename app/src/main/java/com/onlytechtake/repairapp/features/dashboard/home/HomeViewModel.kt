@@ -30,25 +30,26 @@ class HomeViewModel(
     private val backupRepository: BackupRepository,
     private val backupReminderPreferences: BackupReminderPreferences,
 ) : ViewModel() {
-
     val currentUser = authRepository.currentUser
 
-    val operationalQueues = currentUser
-        .flatMapLatest { user ->
-            if (user == null) flowOf(emptyList()) else orderRepository.observeOrders(user, OrderFilter())
-        }
-        .map(::buildOperationalQueues)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    val operationalQueues =
+        currentUser
+            .flatMapLatest { user ->
+                if (user == null) flowOf(emptyList()) else orderRepository.observeOrders(user, OrderFilter())
+            }.map(::buildOperationalQueues)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    val backupReminderSettings: StateFlow<BackupReminderSettings> = backupReminderPreferences.settings
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), BackupReminderSettings())
+    val backupReminderSettings: StateFlow<BackupReminderSettings> =
+        backupReminderPreferences.settings
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), BackupReminderSettings())
 
-    val isBackupReminderDue: StateFlow<Boolean> = combine(
-        currentUser,
-        backupReminderSettings
-    ) { user, settings ->
-        PermissionService.isAdmin(user) && BackupReminderPolicy.shouldShowReminder(settings, System.currentTimeMillis())
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+    val isBackupReminderDue: StateFlow<Boolean> =
+        combine(
+            currentUser,
+            backupReminderSettings,
+        ) { user, settings ->
+            PermissionService.isAdmin(user) && BackupReminderPolicy.shouldShowReminder(settings, System.currentTimeMillis())
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     fun exportCompleteBackup(uri: Uri) {
         val user = currentUser.value ?: return
@@ -64,8 +65,6 @@ class HomeViewModel(
         private val backupReminderPreferences: BackupReminderPreferences,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return HomeViewModel(authRepository, orderRepository, backupRepository, backupReminderPreferences) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = HomeViewModel(authRepository, orderRepository, backupRepository, backupReminderPreferences) as T
     }
 }

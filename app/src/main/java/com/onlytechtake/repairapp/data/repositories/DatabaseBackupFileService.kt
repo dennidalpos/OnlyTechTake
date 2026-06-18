@@ -12,13 +12,17 @@ internal class DatabaseBackupFileService(
 ) {
     fun databaseFile(): File = context.getDatabasePath(RepairAppDatabase.DATABASE_NAME)
 
-    fun addDatabaseFiles(zip: ZipOutputStream, password: String?) {
+    fun addDatabaseFiles(
+        zip: ZipOutputStream,
+        password: String?,
+    ) {
         val dbFile = databaseFile()
         require(dbFile.exists()) { "Database non ancora creato" }
-        val databaseFiles = dbFile.parentFile
-            ?.listFiles { file -> (file.name == dbFile.name) || file.name.startsWith("${dbFile.name}-") }
-            ?.sortedBy { it.name }
-            .orEmpty()
+        val databaseFiles =
+            dbFile.parentFile
+                ?.listFiles { file -> (file.name == dbFile.name) || file.name.startsWith("${dbFile.name}-") }
+                ?.sortedBy { it.name }
+                .orEmpty()
         databaseFiles.forEach { file ->
             zip.putFileEntry(file, "database/${file.name}", password)
         }
@@ -29,14 +33,15 @@ internal class DatabaseBackupFileService(
 
         val key = DatabaseKeyManager(context).getDatabaseKey()
         try {
-            val db = net.zetetic.database.sqlcipher.SQLiteDatabase.openDatabase(
-                file.absolutePath,
-                key,
-                null,
-                net.zetetic.database.sqlcipher.SQLiteDatabase.OPEN_READONLY,
-                null,
-                null
-            )
+            val db =
+                net.zetetic.database.sqlcipher.SQLiteDatabase.openDatabase(
+                    file.absolutePath,
+                    key,
+                    null,
+                    net.zetetic.database.sqlcipher.SQLiteDatabase.OPEN_READONLY,
+                    null,
+                    null,
+                )
             try {
                 db.rawQuery("PRAGMA integrity_check", null).use { cursor ->
                     if (cursor.moveToFirst()) {

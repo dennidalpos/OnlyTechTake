@@ -1,10 +1,10 @@
 package com.onlytechtake.repairapp.core.security
 
 import android.content.Context
-import androidx.core.content.edit
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
+import androidx.core.content.edit
 import java.security.KeyStore
 import java.security.SecureRandom
 import javax.crypto.Cipher
@@ -17,8 +17,9 @@ import javax.crypto.spec.GCMParameterSpec
  * Utilizza Android KeyStore per proteggere una chiave AES-256 "master" locale,
  * che a sua volta cifra la chiave reale utilizzata da SQLCipher.
  */
-class DatabaseKeyManager(private val context: Context) {
-
+class DatabaseKeyManager(
+    private val context: Context,
+) {
     fun getDatabaseKey(): String {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val encryptedKeyBase64 = prefs.getString(KEY_ENCRYPTED_DB_PASSWORD, null)
@@ -51,14 +52,15 @@ class DatabaseKeyManager(private val context: Context) {
         keyStore.getKey(MASTER_KEY_ALIAS, null)?.let { return it as SecretKey }
 
         val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
-        val spec = KeyGenParameterSpec.Builder(
-            MASTER_KEY_ALIAS,
-            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
-        )
-            .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-            .setKeySize(256)
-            .build()
+        val spec =
+            KeyGenParameterSpec
+                .Builder(
+                    MASTER_KEY_ALIAS,
+                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT,
+                ).setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                .setKeySize(256)
+                .build()
 
         keyGenerator.init(spec)
         return keyGenerator.generateKey()
@@ -69,10 +71,13 @@ class DatabaseKeyManager(private val context: Context) {
         cipher.init(Cipher.ENCRYPT_MODE, getOrCreateMasterKey())
         val encryptedBytes = cipher.doFinal(rawKey.toByteArray(Charsets.UTF_8))
         return Base64.encodeToString(encryptedBytes, Base64.NO_WRAP) to
-                Base64.encodeToString(cipher.iv, Base64.NO_WRAP)
+            Base64.encodeToString(cipher.iv, Base64.NO_WRAP)
     }
 
-    private fun decryptKey(encryptedKeyBase64: String, ivBase64: String): String {
+    private fun decryptKey(
+        encryptedKeyBase64: String,
+        ivBase64: String,
+    ): String {
         val encryptedBytes = Base64.decode(encryptedKeyBase64, Base64.NO_WRAP)
         val iv = Base64.decode(ivBase64, Base64.NO_WRAP)
         val cipher = Cipher.getInstance(AES_GCM_TRANSFORMATION)

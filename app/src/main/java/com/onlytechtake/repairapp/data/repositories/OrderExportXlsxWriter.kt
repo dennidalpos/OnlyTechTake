@@ -35,14 +35,18 @@ internal class OrderExportXlsxWriter(
     /**
      * Scrive l'export in formato XLSX in modo streaming per gestire dataset di grandi dimensioni.
      */
-    fun write(rows: Iterable<OrderExportRow>, output: OutputStream, password: String? = null) {
+    fun write(
+        rows: Iterable<OrderExportRow>,
+        output: OutputStream,
+        password: String? = null,
+    ) {
         ZipOutputStream(output, password?.toCharArray()).use { zip ->
             zip.putTextEntry("[Content_Types].xml", contentTypesXml, password)
             zip.putTextEntry("_rels/.rels", rootRelationshipsXml, password)
             zip.putTextEntry("xl/workbook.xml", workbookXml, password)
             zip.putTextEntry("xl/_rels/workbook.xml.rels", workbookRelationshipsXml, password)
             zip.putTextEntry("xl/styles.xml", stylesXml, password)
-            
+
             val sheetParams = createZipParameters("xl/worksheets/sheet1.xml", password)
             zip.putNextEntry(sheetParams)
             writeWorksheet(rows, zip)
@@ -50,28 +54,35 @@ internal class OrderExportXlsxWriter(
         }
     }
 
-    private fun writeWorksheet(rows: Iterable<OrderExportRow>, zip: ZipOutputStream) {
+    private fun writeWorksheet(
+        rows: Iterable<OrderExportRow>,
+        zip: ZipOutputStream,
+    ) {
         val writer = zip.writer()
         writer.write("""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>""")
         writer.write("""<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">""")
         writer.write("<sheetViews><sheetView workbookViewId=\"0\"/></sheetViews>")
         writer.write("<sheetFormatPr defaultRowHeight=\"15\"/>")
         writer.write("<sheetData>")
-        
+
         // Intestazioni (Riga 1)
         writeRow(writer, 1, labels.headers)
-        
+
         // Dati (Righe 2+)
         rows.forEachIndexed { index, row ->
             writeRow(writer, index + 2, rowValues(row))
         }
-        
+
         writer.write("</sheetData>")
         writer.write("</worksheet>")
         writer.flush()
     }
 
-    private fun writeRow(writer: Writer, rowNumber: Int, values: List<String>) {
+    private fun writeRow(
+        writer: Writer,
+        rowNumber: Int,
+        values: List<String>,
+    ) {
         writer.write("""<row r="$rowNumber">""")
         values.forEachIndexed { columnIndex, value ->
             val colName = columnName(columnIndex + 1)
@@ -108,9 +119,10 @@ internal class OrderExportXlsxWriter(
         )
 
     private fun Long?.formatTime(): String =
-        this?.let {
-            DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(Instant.ofEpochMilli(it).atZone(zoneId))
-        }.orEmpty()
+        this
+            ?.let {
+                DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(Instant.ofEpochMilli(it).atZone(zoneId))
+            }.orEmpty()
 
     private fun columnName(index: Int): String {
         var remaining = index
@@ -131,14 +143,21 @@ internal class OrderExportXlsxWriter(
             .replace("'", "&apos;")
 }
 
-private fun ZipOutputStream.putTextEntry(name: String, text: String, password: String?) {
+private fun ZipOutputStream.putTextEntry(
+    name: String,
+    text: String,
+    password: String?,
+) {
     val params = createZipParameters(name, password)
     putNextEntry(params)
     write(text.trimIndent().toByteArray(Charsets.UTF_8))
     closeEntry()
 }
 
-private fun createZipParameters(fileName: String, password: String?): ZipParameters {
+private fun createZipParameters(
+    fileName: String,
+    password: String?,
+): ZipParameters {
     val params = ZipParameters()
     params.fileNameInZip = fileName
     if (password != null) {
@@ -149,8 +168,7 @@ private fun createZipParameters(fileName: String, password: String?): ZipParamet
     return params
 }
 
-private fun ZipOutputStream.writer(): Writer =
-    java.io.OutputStreamWriter(this, Charsets.UTF_8)
+private fun ZipOutputStream.writer(): Writer = java.io.OutputStreamWriter(this, Charsets.UTF_8)
 
 private const val contentTypesXml = """
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>

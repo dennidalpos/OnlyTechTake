@@ -45,7 +45,7 @@ fun OrderDocumentSection(
             verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
         ) {
             Text(stringResource(R.string.order_customer_documents), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            
+
             AppButton(
                 text = stringResource(R.string.order_generate_status_pdf),
                 variant = AppButtonVariant.Secondary,
@@ -55,7 +55,7 @@ fun OrderDocumentSection(
                     if (!hasSignatures) {
                         requestConfirm(
                             missingSignatureTitle,
-                            missingSignatureText
+                            missingSignatureText,
                         ) {
                             onGeneratePdf(false)
                         }
@@ -64,7 +64,7 @@ fun OrderDocumentSection(
                     }
                 },
             )
-            
+
             if (isGeneratingPdf) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
@@ -93,7 +93,7 @@ fun OrderDocumentSection(
                                 imageVector = Icons.Default.Share,
                                 contentDescription = stringResource(R.string.order_share),
                                 onClick = { onShareDocument(doc.id) },
-                                tint = MaterialTheme.colorScheme.primary
+                                tint = MaterialTheme.colorScheme.primary,
                             )
                             AppIconButton(
                                 imageVector = Icons.Default.Delete,
@@ -102,11 +102,11 @@ fun OrderDocumentSection(
                                 onClick = {
                                     requestConfirm(
                                         deleteDocumentConfirmTitle,
-                                        deleteDocumentConfirmText
+                                        deleteDocumentConfirmText,
                                     ) {
                                         onDeleteDocument(doc.id)
                                     }
-                                }
+                                },
                             )
                         }
                     }

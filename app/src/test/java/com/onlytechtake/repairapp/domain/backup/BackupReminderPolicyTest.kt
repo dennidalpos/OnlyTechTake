@@ -1,10 +1,10 @@
 package com.onlytechtake.repairapp.domain.backup
 
-import java.util.concurrent.TimeUnit
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.util.concurrent.TimeUnit
 
 class BackupReminderPolicyTest {
     @Test
@@ -23,11 +23,12 @@ class BackupReminderPolicyTest {
 
     @Test
     fun customIntervalControlsExpiry() {
-        val settings = BackupReminderPolicy.recordSuccess(
-            BackupReminderSettings(intervalDays = 3),
-            NOW,
-            null,
-        )
+        val settings =
+            BackupReminderPolicy.recordSuccess(
+                BackupReminderSettings(intervalDays = 3),
+                NOW,
+                null,
+            )
 
         assertFalse(BackupReminderPolicy.shouldShowReminder(settings, NOW + TimeUnit.DAYS.toMillis(2)))
         assertTrue(BackupReminderPolicy.shouldShowReminder(settings, NOW + TimeUnit.DAYS.toMillis(3)))

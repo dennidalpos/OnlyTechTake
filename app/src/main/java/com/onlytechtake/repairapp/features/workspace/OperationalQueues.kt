@@ -19,12 +19,12 @@ fun buildOperationalQueues(orders: List<RepairOrderEntity>): List<OperationalQue
         )
     }
 
-fun queueFilter(queue: OperationalQueue): OrderFilter =
-    OrderFilter(statuses = queue.statuses)
+fun queueFilter(queue: OperationalQueue): OrderFilter = OrderFilter(statuses = queue.statuses)
 
-private val queueDefinitions = listOf(
-    "Aperte" to setOf(OrderStatus.OPEN),
-    "In lavorazione / diagnosi" to setOf(OrderStatus.IN_PROGRESS, OrderStatus.DIAGNOSIS),
-    "Risultato / riparazione" to setOf(OrderStatus.RESULT, OrderStatus.REPAIRING),
-    "Pronte" to setOf(OrderStatus.READY_FOR_PICKUP),
-)
+private val queueDefinitions =
+    listOf(
+        "Aperte" to setOf(OrderStatus.OPEN),
+        "In lavorazione / diagnosi" to setOf(OrderStatus.IN_PROGRESS, OrderStatus.DIAGNOSIS),
+        "Risultato / riparazione" to setOf(OrderStatus.RESULT, OrderStatus.REPAIRING),
+        "Pronte" to setOf(OrderStatus.READY_FOR_PICKUP),
+    )

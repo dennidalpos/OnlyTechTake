@@ -38,5 +38,5 @@ data class OrderDocumentEntity(
     val includesCustomerSignature: Boolean,
     val createdByUserId: String,
     val createdAt: Long,
-    val sharedAt: Long?
+    val sharedAt: Long?,
 )

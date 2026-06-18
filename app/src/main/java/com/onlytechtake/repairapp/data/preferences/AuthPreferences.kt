@@ -30,7 +30,10 @@ class AuthPreferences(
         }
     }
 
-    suspend fun recordLogin(userId: String, loginAt: Long) {
+    suspend fun recordLogin(
+        userId: String,
+        loginAt: Long,
+    ) {
         context.authDataStore.edit { preferences ->
             preferences[LAST_USER_ID] = userId
             preferences[LAST_LOGIN_AT] = loginAt

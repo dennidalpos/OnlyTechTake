@@ -6,12 +6,20 @@ import org.junit.Test
 
 class WhatsAppSendersTest {
     @Test
-    fun manualSenderRejectsEmptyMessage() = runBlocking {
-        val result = ManualWhatsAppSender().prepare(
-            WhatsAppOutgoingMessage(phone = "+39123456789", body = ""),
-        )
+    fun manualSenderRejectsEmptyMessage() =
+        runBlocking {
+            val result =
+                ManualWhatsAppSender().prepare(
+                    WhatsAppOutgoingMessage(phone = "+39123456789", body = ""),
+                )
 
-        assertTrue(result.isFailure)
-        assertTrue(result.exceptionOrNull()?.message.orEmpty().contains("Messaggio vuoto"))
-    }
+            assertTrue(result.isFailure)
+            assertTrue(
+                result
+                    .exceptionOrNull()
+                    ?.message
+                    .orEmpty()
+                    .contains("Messaggio vuoto"),
+            )
+        }
 }

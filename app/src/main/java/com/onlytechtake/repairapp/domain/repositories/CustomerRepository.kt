@@ -7,8 +7,15 @@ import kotlinx.coroutines.flow.Flow
 
 interface CustomerRepository {
     fun observeRecent(): Flow<List<CustomerEntity>>
+
     fun search(query: String): Flow<List<CustomerEntity>>
+
     suspend fun findById(id: String): CustomerEntity?
-    suspend fun save(actor: AuthenticatedUser?, input: CustomerInput): Result<CustomerEntity>
+
+    suspend fun save(
+        actor: AuthenticatedUser?,
+        input: CustomerInput,
+    ): Result<CustomerEntity>
+
     fun isValid(input: CustomerInput): Boolean
 }

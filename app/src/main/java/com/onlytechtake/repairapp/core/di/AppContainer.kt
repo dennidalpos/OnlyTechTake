@@ -2,10 +2,12 @@ package com.onlytechtake.repairapp.core.di
 
 import android.content.Context
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.onlytechtake.repairapp.domain.repositories.RepairAppRepository
 import com.onlytechtake.repairapp.data.repositories.DefaultRepairAppRepository
+import com.onlytechtake.repairapp.domain.repositories.RepairAppRepository
 
-class AppContainer(context: Context) {
+class AppContainer(
+    context: Context,
+) {
     private val dataContainer = DataContainer(context)
     private val authContainer by lazy { AuthContainer(context, dataContainer) }
     private val mediaContainer by lazy { MediaContainer(context, dataContainer) }
@@ -21,7 +23,7 @@ class AppContainer(context: Context) {
     val authRepository get() = authContainer.authRepository
     val adminUserRepository get() = authContainer.adminUserRepository
     val database get() = dataContainer.database
-    
+
     val customerRepository get() = orderContainer.customerRepository
     val catalogRepository get() = orderContainer.catalogRepository
     val orderWorkflowRepository get() = orderContainer.orderWorkflowRepository
@@ -45,6 +47,7 @@ class AppContainer(context: Context) {
     }
 }
 
-val LocalAppContainer = staticCompositionLocalOf<AppContainer> {
-    error("AppContainer is not available")
-}
+val LocalAppContainer =
+    staticCompositionLocalOf<AppContainer> {
+        error("AppContainer is not available")
+    }

@@ -2,9 +2,9 @@ package com.onlytechtake.repairapp.features.dashboard.neworder
 
 import com.onlytechtake.repairapp.core.templates.LegalTemplateFallbacks
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
-import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
@@ -18,37 +18,41 @@ data class IntakeStepperState(
     val currentUser: AuthenticatedUser?,
 ) {
     val activeCategories = categories.filter { it.active }
-    
+
     val isBusiness = draft.customerType == CustomerType.BUSINESS
-    
-    val canSaveNewCustomer = (draft.phone.isNotBlank() || draft.email.isNotBlank()) &&
-        if (isBusiness) draft.companyName.isNotBlank() else draft.firstName.isNotBlank() && draft.lastName.isNotBlank()
 
-    val newCustomerInput = CustomerInput(
-        type = draft.customerType,
-        firstName = draft.firstName,
-        lastName = draft.lastName,
-        companyName = draft.companyName,
-        phone = draft.phone,
-        email = draft.email,
-        vatNumber = draft.vatNumber,
-        taxCode = draft.taxCode,
-        address = draft.address,
-        notes = draft.notes,
-    )
+    val canSaveNewCustomer =
+        (draft.phone.isNotBlank() || draft.email.isNotBlank()) &&
+            if (isBusiness) draft.companyName.isNotBlank() else draft.firstName.isNotBlank() && draft.lastName.isNotBlank()
 
-    val intakeInput = IntakeOrderInput(
-        existingCustomerId = draft.selectedCustomerId,
-        newCustomer = null,
-        problemSummary = draft.problemSummary,
-        problemDetails = draft.problemDetails,
-        categoryId = draft.selectedCategoryId,
-        assignedToUserId = currentUser?.id,
-        stagedMediaCount = draft.stagedMedia.size,
-        hasPrivacySignature = draft.signatureCapture != null,
-    )
+    val newCustomerInput =
+        CustomerInput(
+            type = draft.customerType,
+            firstName = draft.firstName,
+            lastName = draft.lastName,
+            companyName = draft.companyName,
+            phone = draft.phone,
+            email = draft.email,
+            vatNumber = draft.vatNumber,
+            taxCode = draft.taxCode,
+            address = draft.address,
+            notes = draft.notes,
+        )
 
-    val isDirty: Boolean = draft.selectedCustomerId != null ||
+    val intakeInput =
+        IntakeOrderInput(
+            existingCustomerId = draft.selectedCustomerId,
+            newCustomer = null,
+            problemSummary = draft.problemSummary,
+            problemDetails = draft.problemDetails,
+            categoryId = draft.selectedCategoryId,
+            assignedToUserId = currentUser?.id,
+            stagedMediaCount = draft.stagedMedia.size,
+            hasPrivacySignature = draft.signatureCapture != null,
+        )
+
+    val isDirty: Boolean =
+        draft.selectedCustomerId != null ||
             draft.selectedCategoryId != null ||
             draft.problemSummary.isNotBlank() ||
             draft.problemDetails.isNotBlank() ||

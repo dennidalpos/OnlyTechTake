@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.features.dashboard.settings
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +18,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -26,7 +26,6 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -38,19 +37,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.activity.compose.BackHandler
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
-import com.onlytechtake.repairapp.core.design.RepairAppSizes
-import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
-import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.features.dashboard.common.*
 
 @Composable
@@ -97,7 +94,7 @@ fun ColumnScope.CategoriesSettings(
     }
 
     val currentParent = currentCategoryParentId?.let { id -> categories.firstOrNull { it.id == id } }
-    
+
     BackHandler(enabled = currentCategoryParentId != null || showEditCard || searchQuery.isNotEmpty()) {
         when {
             showEditCard -> {
@@ -109,37 +106,40 @@ fun ColumnScope.CategoriesSettings(
         }
     }
 
-    val visibleCategories = remember(categories, currentCategoryParentId, searchQuery) {
-        if (searchQuery.isNotBlank()) {
-            categories.filter { it.name.contains(searchQuery, ignoreCase = true) }
-        } else {
-            categories.filter { it.parentId == currentCategoryParentId }
+    val visibleCategories =
+        remember(categories, currentCategoryParentId, searchQuery) {
+            if (searchQuery.isNotBlank()) {
+                categories.filter { it.name.contains(searchQuery, ignoreCase = true) }
+            } else {
+                categories.filter { it.parentId == currentCategoryParentId }
+            }
         }
-    }
 
     LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f)
-            .widthIn(max = RepairAppSpacing.maxContentWidthMedium)
-            .testTag("categories_list"),
-        contentPadding = PaddingValues(
-            horizontal = RepairAppSpacing.screenHorizontal,
-            vertical = RepairAppSpacing.screenHorizontal
-        ),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .widthIn(max = RepairAppSpacing.maxContentWidthMedium)
+                .testTag("categories_list"),
+        contentPadding =
+            PaddingValues(
+                horizontal = RepairAppSpacing.screenHorizontal,
+                vertical = RepairAppSpacing.screenHorizontal,
+            ),
         verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
     ) {
         item {
             SectionTitle(
                 text = stringResource(R.string.config_hub_categories_title),
-                tooltip = stringResource(R.string.config_category_tooltip)
+                tooltip = stringResource(R.string.config_category_tooltip),
             )
-            
+
             Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.Bottom,
-                    horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+                    horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                 ) {
                     AppTextField(
                         modifier = Modifier.weight(1f),
@@ -153,10 +153,10 @@ fun ColumnScope.CategoriesSettings(
                                 AppIconButton(
                                     imageVector = Icons.Default.Close,
                                     contentDescription = stringResource(R.string.content_description_clear),
-                                    onClick = { searchQuery = "" }
+                                    onClick = { searchQuery = "" },
                                 )
                             }
-                        }
+                        },
                     )
 
                     if (!showEditCard && searchQuery.isBlank() && isAdmin && (currentParent?.level ?: -1) < 3) {
@@ -164,17 +164,18 @@ fun ColumnScope.CategoriesSettings(
                             onClick = ::loadNewCategory,
                             color = MaterialTheme.colorScheme.primary,
                             shape = RepairAppShapes.button,
-                            modifier = Modifier
-                                .height(56.dp)
-                                .width(56.dp),
-                            tonalElevation = 0.dp
+                            modifier =
+                                Modifier
+                                    .height(56.dp)
+                                    .width(56.dp),
+                            tonalElevation = 0.dp,
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
                                     imageVector = Icons.Default.Add,
                                     contentDescription = if (currentCategoryParentId == null) stringResource(R.string.config_category_new_root) else stringResource(R.string.config_category_new_sub),
                                     tint = MaterialTheme.colorScheme.onPrimary,
-                                    modifier = Modifier.size(32.dp)
+                                    modifier = Modifier.size(32.dp),
                                 )
                             }
                         }
@@ -186,7 +187,7 @@ fun ColumnScope.CategoriesSettings(
                     if (currentCategoryParentId != null) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+                            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                         ) {
                             AppButton(
                                 text = stringResource(R.string.config_category_root),
@@ -223,41 +224,41 @@ fun ColumnScope.CategoriesSettings(
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 text = if (categoryId == null) stringResource(R.string.config_category_dialog_title_new) else stringResource(R.string.config_category_dialog_title_edit),
                                 style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.onSurface
+                                color = MaterialTheme.colorScheme.onSurface,
                             )
                             AppIconButton(
                                 imageVector = Icons.Default.Close,
                                 contentDescription = stringResource(R.string.content_description_close),
-                                onClick = { 
+                                onClick = {
                                     showEditCard = false
                                     viewModel.setFormDirty(false)
-                                }
+                                },
                             )
                         }
-                        
+
                         AppTextField(
                             categoryName,
-                            { 
+                            {
                                 categoryName = it
                                 viewModel.setFormDirty(true)
                             },
                             stringResource(R.string.config_category_name_label),
-                            testTag = RepairAppTestTags.ConfigCategoryNameField
+                            testTag = RepairAppTestTags.ConfigCategoryNameField,
                         )
                         AppTextField(
                             categoryDescription,
-                            { 
+                            {
                                 categoryDescription = it
                                 viewModel.setFormDirty(true)
                             },
                             stringResource(R.string.config_category_description_label),
                             showOptional = true,
-                            testTag = RepairAppTestTags.ConfigCategoryDescriptionField
+                            testTag = RepairAppTestTags.ConfigCategoryDescriptionField,
                         )
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -268,7 +269,7 @@ fun ColumnScope.CategoriesSettings(
                             Switch(
                                 checked = categoryActive,
                                 enabled = isAdmin,
-                                onCheckedChange = { 
+                                onCheckedChange = {
                                     categoryActive = it
                                     viewModel.setFormDirty(true)
                                 },
@@ -278,10 +279,10 @@ fun ColumnScope.CategoriesSettings(
                             AppButton(
                                 text = stringResource(R.string.customer_cancel),
                                 variant = AppButtonVariant.Secondary,
-                                onClick = { 
+                                onClick = {
                                     showEditCard = false
                                     viewModel.setFormDirty(false)
-                                }
+                                },
                             )
                             if ((categoryId == null) || isAdmin) {
                                 val confirmTitle = stringResource(R.string.config_category_confirm_save_title)
@@ -323,7 +324,7 @@ fun ColumnScope.CategoriesSettings(
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap), verticalAlignment = Alignment.CenterVertically) {
                             StatusDot(category.active)
@@ -334,13 +335,13 @@ fun ColumnScope.CategoriesSettings(
                                 AppIconButton(
                                     imageVector = Icons.Default.Edit,
                                     contentDescription = stringResource(R.string.content_description_edit),
-                                    onClick = { selectCategoryForEdit(category) }
+                                    onClick = { selectCategoryForEdit(category) },
                                 )
                             }
                             AppIconButton(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                                 contentDescription = stringResource(R.string.content_description_open),
-                                onClick = { openCategoryBranch(category.id) }
+                                onClick = { openCategoryBranch(category.id) },
                             )
                             if (isAdmin) {
                                 AppIconButton(
@@ -350,22 +351,22 @@ fun ColumnScope.CategoriesSettings(
                                     onClick = {
                                         onRequestConfirm(
                                             confirmTitle,
-                                            confirmText
+                                            confirmText,
                                         ) {
                                             viewModel.deleteCategory(category.id)
                                             loadNewCategory()
                                         }
-                                    }
+                                    },
                                 )
                             }
                         }
                     }
-                    category.description?.takeIf { it.isNotBlank() }?.let { 
+                    category.description?.takeIf { it.isNotBlank() }?.let {
                         Text(
-                            text = it, 
+                            text = it,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        ) 
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
                     }
                 }
             }
@@ -387,14 +388,14 @@ fun ColumnScope.CategoriesSettings(
                     modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
                     text = stringResource(R.string.config_category_close),
                     variant = AppButtonVariant.Secondary,
-                    onClick = onBack
+                    onClick = onBack,
                 )
                 if (fromIntake) {
                     AppButton(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.config_category_return_to_intake),
                         variant = AppButtonVariant.Primary,
-                        onClick = onBack
+                        onClick = onBack,
                     )
                 }
             }

@@ -21,7 +21,10 @@ internal class OrderWorkflowQueries(
     private val signatureDao: SignatureDao,
     private val messageLogDao: MessageLogDao,
 ) {
-    fun observeOrders(actor: AuthenticatedUser, filter: OrderFilter): Flow<List<RepairOrderEntity>> {
+    fun observeOrders(
+        actor: AuthenticatedUser,
+        filter: OrderFilter,
+    ): Flow<List<RepairOrderEntity>> {
         val assignedToUserId = actor.id.takeIf { filter.showMineOnly }
         return repairOrderDao.observeFiltered(
             assignedToUserId = assignedToUserId,
@@ -32,49 +35,59 @@ internal class OrderWorkflowQueries(
 
     suspend fun countAllOrders(): Int = repairOrderDao.countAll()
 
-    fun searchOrders(actor: AuthenticatedUser, filter: OrderFilter): Flow<List<OrderListItem>> {
+    fun searchOrders(
+        actor: AuthenticatedUser,
+        filter: OrderFilter,
+    ): Flow<List<OrderListItem>> {
         val assignedToUserId = actor.id.takeIf { filter.showMineOnly }
-        return repairOrderDao.search(
-            query = filter.query,
-            assignedToUserId = assignedToUserId,
-            status = filter.status,
-            customerId = filter.customerId,
-        ).map { list ->
-            list.map { projection ->
-                OrderListItem(
-                    order = projection.order,
-                    customer = projection.customer,
-                    attachments = OrderAttachmentCounts(
-                        images = projection.imagesCount,
-                        documents = projection.documentsCount,
-                        signatures = projection.signaturesCount,
-                        finalPhotos = projection.finalPhotosCount,
-                    ),
-                )
+        return repairOrderDao
+            .search(
+                query = filter.query,
+                assignedToUserId = assignedToUserId,
+                status = filter.status,
+                customerId = filter.customerId,
+            ).map { list ->
+                list.map { projection ->
+                    OrderListItem(
+                        order = projection.order,
+                        customer = projection.customer,
+                        attachments =
+                            OrderAttachmentCounts(
+                                images = projection.imagesCount,
+                                documents = projection.documentsCount,
+                                signatures = projection.signaturesCount,
+                                finalPhotos = projection.finalPhotosCount,
+                            ),
+                    )
+                }
             }
-        }
     }
 
-    fun observeOrderList(actor: AuthenticatedUser, filter: OrderFilter): Flow<List<OrderListItem>> {
+    fun observeOrderList(
+        actor: AuthenticatedUser,
+        filter: OrderFilter,
+    ): Flow<List<OrderListItem>> {
         val assignedToUserId = actor.id.takeIf { filter.showMineOnly }
-        return repairOrderDao.observeOrderListProjection(
-            assignedToUserId = assignedToUserId,
-            status = filter.status,
-            customerId = filter.customerId,
-        ).map { list ->
-            list.map { projection ->
-                OrderListItem(
-                    order = projection.order,
-                    customer = projection.customer,
-                    attachments = OrderAttachmentCounts(
-                        images = projection.imagesCount,
-                        documents = projection.documentsCount,
-                        signatures = projection.signaturesCount,
-                        finalPhotos = projection.finalPhotosCount,
-                    ),
-                )
+        return repairOrderDao
+            .observeOrderListProjection(
+                assignedToUserId = assignedToUserId,
+                status = filter.status,
+                customerId = filter.customerId,
+            ).map { list ->
+                list.map { projection ->
+                    OrderListItem(
+                        order = projection.order,
+                        customer = projection.customer,
+                        attachments =
+                            OrderAttachmentCounts(
+                                images = projection.imagesCount,
+                                documents = projection.documentsCount,
+                                signatures = projection.signaturesCount,
+                                finalPhotos = projection.finalPhotosCount,
+                            ),
+                    )
+                }
             }
-        }
     }
 
     fun observeOrderDetail(orderId: String): Flow<OrderDetail?> {
@@ -92,8 +105,8 @@ internal class OrderWorkflowQueries(
             signaturesFlow,
         ) { order, timeline, messages, media, signatures ->
             order?.let {
-                val customer = it.customerId?.let { id -> customerDao.findById(id) }
-                val category = it.categoryId?.let { id -> categoryDao.findById(id) }
+                val customer = it.customerId.let { id -> customerDao.findById(id) }
+                val category = it.categoryId.let { id -> categoryDao.findById(id) }
                 val assignedUser = it.assignedToUserId?.let { id -> userDao.findById(id) }
 
                 OrderDetail(

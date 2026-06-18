@@ -1,13 +1,10 @@
 package com.onlytechtake.repairapp.features.dashboard.neworder
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,30 +14,30 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppTextField
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
-import com.onlytechtake.repairapp.core.design.components.AppTextField
-import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.common.CustomerTypeToggle
-import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.NoteFieldWithDialog
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
-import com.onlytechtake.repairapp.core.design.components.AppButton
-import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
-import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 
 @Composable
-fun CustomerSuggestionCard(customer: CustomerEntity, onClick: () -> Unit) {
+fun CustomerSuggestionCard(
+    customer: CustomerEntity,
+    onClick: () -> Unit,
+) {
     val context = LocalContext.current
     var expanded by rememberSaveable(customer.id) { mutableStateOf(value = false) }
     StandardCard(
@@ -52,20 +49,21 @@ fun CustomerSuggestionCard(customer: CustomerEntity, onClick: () -> Unit) {
         ) {
             Text(
                 customer.displayName(context),
-                style = MaterialTheme.typography.titleSmall
+                style = MaterialTheme.typography.titleSmall,
             )
             Text(
                 text = listOfNotNull(customer.type.label(context), customer.phone).joinToString(" - "),
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
             )
             if (expanded) {
-                val details = listOfNotNull(
-                    customer.email?.let { "${stringResource(R.string.customer_field_email)}: $it" },
-                    customer.address?.let { "${stringResource(R.string.customer_field_address)}: $it" },
-                    customer.vatNumber?.let { "${stringResource(R.string.customer_field_vat_number)}: $it" },
-                    customer.taxCode?.let { "${stringResource(R.string.customer_field_tax_code)}: $it" },
-                    customer.notes?.let { "${stringResource(R.string.customer_field_notes)}: $it" },
-                ).joinToString("\n")
+                val details =
+                    listOfNotNull(
+                        customer.email?.let { "${stringResource(R.string.customer_field_email)}: $it" },
+                        customer.address?.let { "${stringResource(R.string.customer_field_address)}: $it" },
+                        customer.vatNumber?.let { "${stringResource(R.string.customer_field_vat_number)}: $it" },
+                        customer.taxCode?.let { "${stringResource(R.string.customer_field_tax_code)}: $it" },
+                        customer.notes?.let { "${stringResource(R.string.customer_field_notes)}: $it" },
+                    ).joinToString("\n")
                 if (details.isNotBlank()) OperatorText(details)
             }
             AppButton(
@@ -124,4 +122,3 @@ fun IntakeCustomerFields(
         NoteFieldWithDialog(notes, onNotesChange, testTag = RepairAppTestTags.NewOrderNotesField)
     }
 }
-

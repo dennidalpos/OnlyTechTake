@@ -1,9 +1,12 @@
 package com.onlytechtake.repairapp.core.media
 
 class OrderMediaFileNamer {
-    fun photoFileName(orderNumber: String, timestampMillis: Long): String {
+    fun photoFileName(
+        orderNumber: String,
+        timestampMillis: Long,
+    ): String {
         val safeOrderNumber = sanitize(orderNumber).ifBlank { "commessa" }
-        return "${safeOrderNumber}_${timestampMillis}.jpg"
+        return "${safeOrderNumber}_$timestampMillis.jpg"
     }
 
     fun sanitize(value: String): String =

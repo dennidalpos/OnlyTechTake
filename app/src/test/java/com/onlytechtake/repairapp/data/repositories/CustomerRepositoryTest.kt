@@ -14,76 +14,92 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class CustomerRepositoryTest {
-    private val stubDao = object : CustomerDao {
-        var lastUpserted: CustomerEntity? = null
-        override fun observeRecent(): Flow<List<CustomerEntity>> = emptyFlow()
-        override fun observeAll(): Flow<List<CustomerEntity>> = emptyFlow()
-        override fun search(query: String): Flow<List<CustomerEntity>> = emptyFlow()
-        override suspend fun findById(id: String): CustomerEntity? = null
-        override suspend fun upsert(customer: CustomerEntity) { lastUpserted = customer }
-        override suspend fun upsertAll(customers: List<CustomerEntity>) { /* stub */ }
-    }
+    private val stubDao =
+        object : CustomerDao {
+            var lastUpserted: CustomerEntity? = null
+
+            override fun observeRecent(): Flow<List<CustomerEntity>> = emptyFlow()
+
+            override fun observeAll(): Flow<List<CustomerEntity>> = emptyFlow()
+
+            override fun search(query: String): Flow<List<CustomerEntity>> = emptyFlow()
+
+            override suspend fun findById(id: String): CustomerEntity? = null
+
+            override suspend fun upsert(customer: CustomerEntity) {
+                lastUpserted = customer
+            }
+
+            override suspend fun upsertAll(customers: List<CustomerEntity>) { /* stub */ }
+        }
 
     private val repository = CustomerRepository(stubDao)
-    private val manager = AuthenticatedUser(
-        id = "manager",
-        displayName = "Manager",
-        username = "manager",
-        role = UserRole.OPERATOR,
-        permissions = setOf(UserPermission.MANAGE_CUSTOMERS),
-    )
-    private val operator = AuthenticatedUser(
-        id = "operator",
-        displayName = "Operator",
-        username = "operator",
-        role = UserRole.OPERATOR,
-        permissions = emptySet(),
-    )
-
-    @Test
-    fun normalizesFieldsOnSave() = runBlocking {
-        val input = CustomerInput(
-            firstName = " mario ",
-            lastName = " rossi ",
-            email = " MARIO.ROSSI@EXAMPLE.COM ",
-            vatNumber = " it12345678901 ",
-            taxCode = " rssmra80a01h501z ",
-            address = " via roma 1 ",
-            notes = " alcune note "
+    private val manager =
+        AuthenticatedUser(
+            id = "manager",
+            displayName = "Manager",
+            username = "manager",
+            role = UserRole.OPERATOR,
+            permissions = setOf(UserPermission.MANAGE_CUSTOMERS),
+        )
+    private val operator =
+        AuthenticatedUser(
+            id = "operator",
+            displayName = "Operator",
+            username = "operator",
+            role = UserRole.OPERATOR,
+            permissions = emptySet(),
         )
 
-        repository.save(manager, input)
+    @Test
+    fun normalizesFieldsOnSave() =
+        runBlocking {
+            val input =
+                CustomerInput(
+                    firstName = " mario ",
+                    lastName = " rossi ",
+                    email = " MARIO.ROSSI@EXAMPLE.COM ",
+                    vatNumber = " it12345678901 ",
+                    taxCode = " rssmra80a01h501z ",
+                    address = " via roma 1 ",
+                    notes = " alcune note ",
+                )
 
-        val saved = stubDao.lastUpserted!!
-        assertEquals("Mario", saved.firstName)
-        assertEquals("Rossi", saved.lastName)
-        assertEquals("mario.rossi@example.com", saved.email)
-        assertEquals("IT12345678901", saved.vatNumber)
-        assertEquals("RSSMRA80A01H501Z", saved.taxCode)
-        assertEquals("Via roma 1", saved.address)
-        assertEquals("Alcune note", saved.notes)
-    }
+            repository.save(manager, input)
+
+            val saved = stubDao.lastUpserted!!
+            assertEquals("Mario", saved.firstName)
+            assertEquals("Rossi", saved.lastName)
+            assertEquals("mario.rossi@example.com", saved.email)
+            assertEquals("IT12345678901", saved.vatNumber)
+            assertEquals("RSSMRA80A01H501Z", saved.taxCode)
+            assertEquals("Via roma 1", saved.address)
+            assertEquals("Alcune note", saved.notes)
+        }
 
     @Test
-    fun saveFailsWithoutManageCustomersPermission() = runBlocking {
-        val result = repository.save(operator, validCustomerInput())
+    fun saveFailsWithoutManageCustomersPermission() =
+        runBlocking {
+            val result = repository.save(operator, validCustomerInput())
 
-        assertTrue(result.isFailure)
-        assertTrue(result.exceptionOrNull() is SecurityException)
-        assertEquals(null, stubDao.lastUpserted)
-    }
+            assertTrue(result.isFailure)
+            assertTrue(result.exceptionOrNull() is SecurityException)
+            assertEquals(null, stubDao.lastUpserted)
+        }
 
     @Test
-    fun saveSucceedsWithManageCustomersPermission() = runBlocking {
-        val result = repository.save(manager, validCustomerInput())
+    fun saveSucceedsWithManageCustomersPermission() =
+        runBlocking {
+            val result = repository.save(manager, validCustomerInput())
 
-        assertTrue(result.isSuccess)
-        assertEquals("Mario", stubDao.lastUpserted?.firstName)
-    }
+            assertTrue(result.isSuccess)
+            assertEquals("Mario", stubDao.lastUpserted?.firstName)
+        }
 
-    private fun validCustomerInput() = CustomerInput(
-        firstName = "Mario",
-        lastName = "Rossi",
-        phone = "+39123456789",
-    )
+    private fun validCustomerInput() =
+        CustomerInput(
+            firstName = "Mario",
+            lastName = "Rossi",
+            phone = "+39123456789",
+        )
 }

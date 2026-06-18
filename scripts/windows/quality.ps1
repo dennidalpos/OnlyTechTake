@@ -14,14 +14,11 @@
 
 .DESCRIPTION
   Lo script usa Spotless/ktlint per Kotlin e file testuali, piu' Android Lint
-  sul flavor scelto. Senza -Apply non modifica file; se Spotless fallisce in
-  modalita' interattiva propone di eseguire l'autofix.
+  su tutte le varianti debug e release. Senza -Apply non modifica file; se
+  Spotless fallisce in modalita' interattiva propone di eseguire l'autofix.
 #>
 
 param(
-    [ValidateSet("Full", "Demo", "Showcase")]
-    [string]$Flavor = "Full",
-
     [switch]$Apply,
     [switch]$NoPrompt,
     [switch]$SkipLint
@@ -58,7 +55,7 @@ function Invoke-GradleTask {
 
     $gradleArguments = @("--no-configuration-cache") + $Tasks
     Write-Host "Eseguo: .\gradlew.bat $($gradleArguments -join ' ')"
-    & $script:gradlew @gradleArguments
+    & $script:gradlew @gradleArguments | Out-Host
     $exitCode = $LASTEXITCODE
 
     if ($exitCode -ne 0 -and -not $AllowFailure) {
@@ -87,8 +84,8 @@ Push-Location $root
 try {
     Write-Section "Formatting"
     if ($Apply) {
-        Invoke-GradleTask @("spotlessApply")
-        Invoke-GradleTask @("spotlessCheck")
+        $null = Invoke-GradleTask @("spotlessApply")
+        $null = Invoke-GradleTask @("spotlessCheck")
     } else {
         $spotlessExitCode = Invoke-GradleTask @("spotlessCheck") -AllowFailure
         if ($spotlessExitCode -ne 0) {
@@ -97,8 +94,8 @@ try {
             }
 
             if (Read-YesNo "spotlessCheck ha trovato file da formattare. Vuoi eseguire spotlessApply ora?") {
-                Invoke-GradleTask @("spotlessApply")
-                Invoke-GradleTask @("spotlessCheck")
+                $null = Invoke-GradleTask @("spotlessApply")
+                $null = Invoke-GradleTask @("spotlessCheck")
             } else {
                 throw "spotlessCheck fallito e autofix non eseguito."
             }
@@ -107,8 +104,15 @@ try {
 
     if (-not $SkipLint) {
         Write-Section "Android Lint"
-        $debugVariant = "$Flavor" + "Debug"
-        Invoke-GradleTask @(":app:lint$debugVariant")
+        $lintTasks = @(
+            ":app:lintFullDebug",
+            ":app:lintFullRelease",
+            ":app:lintDemoDebug",
+            ":app:lintDemoRelease",
+            ":app:lintShowcaseDebug",
+            ":app:lintShowcaseRelease"
+        )
+        $null = Invoke-GradleTask $lintTasks
     }
 
     Write-Section "Completato"

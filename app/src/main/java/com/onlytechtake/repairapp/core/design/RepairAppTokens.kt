@@ -25,57 +25,62 @@ data class RepairAppSemanticColors(
     val stepInactive: Color,
 )
 
-internal val LightSemanticColors = RepairAppSemanticColors(
-    success = Color(0xFF237A3B),
-    onSuccess = Color.White,
-    successContainer = Color(0xFFD8F8DE),
-    onSuccessContainer = Color(0xFF002108),
-    warning = Color(0xFFE8A600),
-    onWarning = Color(0xFF2A2100),
-    warningContainer = Color(0xFFFFE08A),
-    onWarningContainer = Color(0xFF241A00),
-    whatsapp = Color(0xFF0F7D42),
-    onWhatsapp = Color.White,
-    paid = Color(0xFF237A3B),
-    paidContainer = Color(0xFFE8F5E9),
-    categoryLevels = listOf(
-        Color(0xFF1565C0),
-        Color(0xFF2E7D32),
-        Color(0xFFBF360C),
-        Color(0xFF7B1FA2),
-        Color(0xFF616161),
-    ),
-    stepCompleted = Color(0xFF237A3B),
-    stepInactive = Color(0xFFBFC9C8),
-)
+internal val LightSemanticColors =
+    RepairAppSemanticColors(
+        success = Color(0xFF237A3B),
+        onSuccess = Color.White,
+        successContainer = Color(0xFFD8F8DE),
+        onSuccessContainer = Color(0xFF002108),
+        warning = Color(0xFFE8A600),
+        onWarning = Color(0xFF2A2100),
+        warningContainer = Color(0xFFFFE08A),
+        onWarningContainer = Color(0xFF241A00),
+        whatsapp = Color(0xFF0F7D42),
+        onWhatsapp = Color.White,
+        paid = Color(0xFF237A3B),
+        paidContainer = Color(0xFFE8F5E9),
+        categoryLevels =
+            listOf(
+                Color(0xFF1565C0),
+                Color(0xFF2E7D32),
+                Color(0xFFBF360C),
+                Color(0xFF7B1FA2),
+                Color(0xFF616161),
+            ),
+        stepCompleted = Color(0xFF237A3B),
+        stepInactive = Color(0xFFBFC9C8),
+    )
 
-internal val DarkSemanticColors = RepairAppSemanticColors(
-    success = Color(0xFF83DA91),
-    onSuccess = Color(0xFF003913),
-    successContainer = Color(0xFF075224),
-    onSuccessContainer = Color(0xFF9CF7AA),
-    warning = Color(0xFFFFC53D),
-    onWarning = Color(0xFF432F00),
-    warningContainer = Color(0xFF604500),
-    onWarningContainer = Color(0xFFFFDF8B),
-    whatsapp = Color(0xFF69DD91),
-    onWhatsapp = Color(0xFF00391D),
-    paid = Color(0xFF83DA91),
-    paidContainer = Color(0xFF075224),
-    categoryLevels = listOf(
-        Color(0xFF8FC7FF),
-        Color(0xFF83DA91),
-        Color(0xFFFFB77B),
-        Color(0xFFE5B5F4),
-        Color(0xFFCACACA),
-    ),
-    stepCompleted = Color(0xFF83DA91),
-    stepInactive = Color(0xFF3F4948),
-)
+internal val DarkSemanticColors =
+    RepairAppSemanticColors(
+        success = Color(0xFF83DA91),
+        onSuccess = Color(0xFF003913),
+        successContainer = Color(0xFF075224),
+        onSuccessContainer = Color(0xFF9CF7AA),
+        warning = Color(0xFFFFC53D),
+        onWarning = Color(0xFF432F00),
+        warningContainer = Color(0xFF604500),
+        onWarningContainer = Color(0xFFFFDF8B),
+        whatsapp = Color(0xFF69DD91),
+        onWhatsapp = Color(0xFF00391D),
+        paid = Color(0xFF83DA91),
+        paidContainer = Color(0xFF075224),
+        categoryLevels =
+            listOf(
+                Color(0xFF8FC7FF),
+                Color(0xFF83DA91),
+                Color(0xFFFFB77B),
+                Color(0xFFE5B5F4),
+                Color(0xFFCACACA),
+            ),
+        stepCompleted = Color(0xFF83DA91),
+        stepInactive = Color(0xFF3F4948),
+    )
 
-internal val LocalRepairAppSemanticColors = staticCompositionLocalOf {
-    LightSemanticColors
-}
+internal val LocalRepairAppSemanticColors =
+    staticCompositionLocalOf {
+        LightSemanticColors
+    }
 
 object RepairAppSpacing {
     val screenHorizontal = 16.dp
@@ -88,7 +93,7 @@ object RepairAppSpacing {
     val compactGap = 8.dp
     val tinyGap = 4.dp
     val bottomContentPadding = 16.dp
-    
+
     val maxContentWidthCompact = 600.dp
     val maxContentWidthMedium = 840.dp
     val maxContentWidthExpanded = 1200.dp

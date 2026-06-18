@@ -84,11 +84,12 @@ fun OnlyTechTakeMark(
             cornerRadius = CornerRadius(w * 0.01f, w * 0.01f),
         )
 
-        val check = Path().apply {
-            moveTo(w * 0.61f, h * 0.76f)
-            lineTo(w * 0.72f, h * 0.86f)
-            lineTo(w * 0.96f, h * 0.55f)
-        }
+        val check =
+            Path().apply {
+                moveTo(w * 0.61f, h * 0.76f)
+                lineTo(w * 0.72f, h * 0.86f)
+                lineTo(w * 0.96f, h * 0.55f)
+            }
         drawPath(
             path = check,
             color = accentColor,
@@ -108,7 +109,7 @@ fun LoadingBrandIndicator(
     val progress by animateFloatAsState(
         targetValue = targetProgress,
         animationSpec = tween(durationMillis = 1500, easing = LinearEasing),
-        label = "onlytechtake-loading-progress"
+        label = "onlytechtake-loading-progress",
     )
 
     LaunchedEffect(Unit) {
@@ -116,12 +117,13 @@ fun LoadingBrandIndicator(
     }
 
     val percentage = (progress * 100).roundToInt()
-    
+
     Column(
-        modifier = modifier.semantics {
-            this.contentDescription = "$contentDescription $percentage%"
-            liveRegion = LiveRegionMode.Polite
-        },
+        modifier =
+            modifier.semantics {
+                this.contentDescription = "$contentDescription $percentage%"
+                liveRegion = LiveRegionMode.Polite
+            },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(contentAlignment = Alignment.Center) {
@@ -131,25 +133,26 @@ fun LoadingBrandIndicator(
                 color = MaterialTheme.colorScheme.primary,
                 trackColor = MaterialTheme.colorScheme.surfaceVariant,
                 strokeCap = StrokeCap.Round,
-                strokeWidth = 6.dp
+                strokeWidth = 6.dp,
             )
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 OnlyTechTakeMark(modifier = Modifier.size(size * 0.4f))
                 Text(
                     text = "$percentage%",
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.primary,
                 )
             }
         }
         Spacer(modifier = Modifier.size(24.dp))
         Text(
-            text = when {
-                progress < 0.3f -> "Avvio database locale..."
-                progress < 0.6f -> "Verifica credenziali sessione..."
-                progress < 0.9f -> "Caricamento ambiente di lavoro..."
-                else -> "Sistema pronto!"
-            },
+            text =
+                when {
+                    progress < 0.3f -> "Avvio database locale..."
+                    progress < 0.6f -> "Verifica credenziali sessione..."
+                    progress < 0.9f -> "Caricamento ambiente di lavoro..."
+                    else -> "Sistema pronto!"
+                },
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurface,

@@ -1,34 +1,26 @@
 package com.onlytechtake.repairapp.features.auth
 
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.layout.Box
+import android.app.Activity
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -40,11 +32,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.LocalContext
-import android.app.Activity
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
@@ -53,25 +45,23 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.onlytechtake.repairapp.BuildConfig
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.design.LoadingBrandIndicator
 import com.onlytechtake.repairapp.core.design.PasswordVisibilityButton
-import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
-import com.onlytechtake.repairapp.core.design.components.AppTextField
-import com.onlytechtake.repairapp.core.design.components.AppIconButton
-import com.onlytechtake.repairapp.core.design.components.AppTopBar
 import com.onlytechtake.repairapp.core.design.components.AppErrorText
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.onlytechtake.repairapp.core.design.components.AppIconButton
+import com.onlytechtake.repairapp.core.design.components.AppTextField
+import com.onlytechtake.repairapp.core.design.components.AppTopBar
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
-import com.onlytechtake.repairapp.BuildConfig
-import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.features.dashboard.DashboardRoute
-import androidx.compose.ui.res.stringResource
 
 private var showcaseSeedRequested = false
 
@@ -81,10 +71,11 @@ fun AuthGateRoute(
     onAppDataRestored: () -> Unit,
 ) {
     val container = LocalAppContainer.current
-    val viewModel: AuthGateViewModel = viewModel(
-        key = "auth_gate_$appInstanceKey",
-        factory = AuthGateViewModel.Factory(container.authRepository),
-    )
+    val viewModel: AuthGateViewModel =
+        viewModel(
+            key = "auth_gate_$appInstanceKey",
+            factory = AuthGateViewModel.Factory(container.authRepository),
+        )
     val authState by viewModel.authState.collectAsState()
     val formState by viewModel.formState.collectAsState()
     val context = LocalContext.current
@@ -114,51 +105,58 @@ fun AuthGateRoute(
     }
 
     when {
-        !authState.initialized || (BuildConfig.IS_SHOWCASE_MODE_ENABLED && !authState.configured) || formState.seeding -> AuthLoadingScreen(
-            text = when {
-                formState.seeding -> stringResource(R.string.auth_showcase_initializing)
-                BuildConfig.IS_SHOWCASE_MODE_ENABLED && !authState.configured -> stringResource(R.string.auth_showcase_preparing)
-                else -> stringResource(R.string.auth_system_ready)
-            }
-        )
-        authState.currentUser != null -> DashboardRoute(
-            appInstanceKey = appInstanceKey,
-            onLogout = viewModel::logout,
-            onAppDataRestored = onAppDataRestored,
-        )
-        formState.passwordChangeRequired -> MandatoryPasswordChangeScreen(
-            formState = formState,
-            onPasswordChange = viewModel::updatePassword,
-            onConfirmPasswordChange = viewModel::updateConfirmPassword,
-            onSubmit = viewModel::changePassword,
-            onCancel = viewModel::cancelPasswordChange,
-        )
-        formState.recoveryMode -> AdminRecoveryScreen(
-            formState = formState,
-            onRecoveryCodeChange = viewModel::updateRecoveryCode,
-            onPasswordChange = viewModel::updatePassword,
-            onConfirmPasswordChange = viewModel::updateConfirmPassword,
-            onSubmit = viewModel::recoverAdmin,
-            onCancel = viewModel::cancelRecovery,
-        )
-        !authState.configured -> FirstSetupScreen(
-            formState = formState,
-            onDisplayNameChange = viewModel::updateDisplayName,
-            onUsernameChange = viewModel::updateUsername,
-            onPasswordChange = viewModel::updatePassword,
-            onConfirmPasswordChange = viewModel::updateConfirmPassword,
-            onSubmit = viewModel::createFirstAdmin,
-            onBack = { (context as? Activity)?.finish() },
-        )
-        else -> LoginScreen(
-            formState = formState,
-            onUsernameChange = viewModel::updateUsername,
-            onPasswordChange = viewModel::updatePassword,
-            onSubmit = viewModel::login,
-            onDemoLogin = viewModel::loginDemo,
-            onRecovery = viewModel::startRecovery,
-            onBack = { (context as? Activity)?.finish() },
-        )
+        !authState.initialized || (BuildConfig.IS_SHOWCASE_MODE_ENABLED && !authState.configured) || formState.seeding ->
+            AuthLoadingScreen(
+                text =
+                    when {
+                        formState.seeding -> stringResource(R.string.auth_showcase_initializing)
+                        BuildConfig.IS_SHOWCASE_MODE_ENABLED && !authState.configured -> stringResource(R.string.auth_showcase_preparing)
+                        else -> stringResource(R.string.auth_system_ready)
+                    },
+            )
+        authState.currentUser != null ->
+            DashboardRoute(
+                appInstanceKey = appInstanceKey,
+                onLogout = viewModel::logout,
+                onAppDataRestored = onAppDataRestored,
+            )
+        formState.passwordChangeRequired ->
+            MandatoryPasswordChangeScreen(
+                formState = formState,
+                onPasswordChange = viewModel::updatePassword,
+                onConfirmPasswordChange = viewModel::updateConfirmPassword,
+                onSubmit = viewModel::changePassword,
+                onCancel = viewModel::cancelPasswordChange,
+            )
+        formState.recoveryMode ->
+            AdminRecoveryScreen(
+                formState = formState,
+                onRecoveryCodeChange = viewModel::updateRecoveryCode,
+                onPasswordChange = viewModel::updatePassword,
+                onConfirmPasswordChange = viewModel::updateConfirmPassword,
+                onSubmit = viewModel::recoverAdmin,
+                onCancel = viewModel::cancelRecovery,
+            )
+        !authState.configured ->
+            FirstSetupScreen(
+                formState = formState,
+                onDisplayNameChange = viewModel::updateDisplayName,
+                onUsernameChange = viewModel::updateUsername,
+                onPasswordChange = viewModel::updatePassword,
+                onConfirmPasswordChange = viewModel::updateConfirmPassword,
+                onSubmit = viewModel::createFirstAdmin,
+                onBack = { (context as? Activity)?.finish() },
+            )
+        else ->
+            LoginScreen(
+                formState = formState,
+                onUsernameChange = viewModel::updateUsername,
+                onPasswordChange = viewModel::updatePassword,
+                onSubmit = viewModel::login,
+                onDemoLogin = viewModel::loginDemo,
+                onRecovery = viewModel::startRecovery,
+                onBack = { (context as? Activity)?.finish() },
+            )
     }
 }
 
@@ -179,9 +177,9 @@ private fun MandatoryPasswordChangeScreen(
                     AppIconButton(
                         onClick = onCancel,
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.customer_cancel)
+                        contentDescription = stringResource(R.string.customer_cancel),
                     )
-                }
+                },
             )
         },
     ) { paddingValues ->
@@ -221,9 +219,9 @@ private fun AdminRecoveryScreen(
                     AppIconButton(
                         onClick = onCancel,
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.content_description_back)
+                        contentDescription = stringResource(R.string.content_description_back),
                     )
-                }
+                },
             )
         },
     ) { paddingValues ->
@@ -251,9 +249,10 @@ private fun AdminRecoveryScreen(
 private fun AuthLoadingScreen(text: String) {
     Scaffold { paddingValues ->
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
             contentAlignment = Alignment.Center,
         ) {
             LoadingBrandIndicator(
@@ -283,9 +282,9 @@ private fun FirstSetupScreen(
                     AppIconButton(
                         onClick = onBack,
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.content_description_back)
+                        contentDescription = stringResource(R.string.content_description_back),
                     )
-                }
+                },
             )
         },
     ) { paddingValues ->
@@ -325,9 +324,9 @@ private fun LoginScreen(
                     AppIconButton(
                         onClick = onBack,
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.auth_close_app)
+                        contentDescription = stringResource(R.string.auth_close_app),
                     )
-                }
+                },
             )
         },
     ) { paddingValues ->
@@ -349,7 +348,6 @@ private fun LoginScreen(
         )
     }
 }
-
 
 @Composable
 private fun AuthForm(
@@ -383,27 +381,29 @@ private fun AuthForm(
     }
 
     BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
         contentAlignment = Alignment.TopCenter,
     ) {
         val compactHeight = maxHeight < 420.dp
 
         Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth()
-                .widthIn(max = RepairAppSpacing.maxContentWidthMedium)
-                .verticalScroll(rememberScrollState())
-                .imePadding()
-                .padding(horizontal = RepairAppSpacing.screenHorizontal, vertical = if (compactHeight) RepairAppSpacing.compactGap else RepairAppSpacing.screenHorizontal),
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .widthIn(max = RepairAppSpacing.maxContentWidthMedium)
+                    .verticalScroll(rememberScrollState())
+                    .imePadding()
+                    .padding(horizontal = RepairAppSpacing.screenHorizontal, vertical = if (compactHeight) RepairAppSpacing.compactGap else RepairAppSpacing.screenHorizontal),
             verticalArrangement = Arrangement.spacedBy(if (compactHeight) RepairAppSpacing.compactGap else RepairAppSpacing.fieldGap),
         ) {
             Text(
                 text = title,
                 style = if (compactHeight) MaterialTheme.typography.titleLarge else MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
             subtitle?.let { Text(text = it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
 
@@ -428,7 +428,7 @@ private fun AuthForm(
                     capitalization = KeyboardCapitalization.None,
                     imeAction = ImeAction.Next,
                     keyboardActions = nextAction,
-                    testTag = RepairAppTestTags.AuthUsernameField
+                    testTag = RepairAppTestTags.AuthUsernameField,
                 )
             }
 
@@ -452,22 +452,23 @@ private fun AuthForm(
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardType = KeyboardType.Password,
                 imeAction = if (showConfirmPassword) ImeAction.Next else ImeAction.Done,
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) },
-                    onDone = {
-                        if (!showConfirmPassword) {
-                            submitAction()
-                        }
-                    },
-                ),
+                keyboardActions =
+                    KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) },
+                        onDone = {
+                            if (!showConfirmPassword) {
+                                submitAction()
+                            }
+                        },
+                    ),
                 trailingIcon = {
                     PasswordVisibilityButton(
                         visible = passwordVisible,
                         onVisibleChange = { passwordVisible = it },
-                        modifier = Modifier.focusProperties { canFocus = false }
+                        modifier = Modifier.focusProperties { canFocus = false },
                     )
                 },
-                testTag = RepairAppTestTags.AuthPasswordField
+                testTag = RepairAppTestTags.AuthPasswordField,
             )
 
             if (showConfirmPassword) {
@@ -484,7 +485,7 @@ private fun AuthForm(
                         PasswordVisibilityButton(
                             visible = confirmPasswordVisible,
                             onVisibleChange = { confirmPasswordVisible = it },
-                            modifier = Modifier.focusProperties { canFocus = false }
+                            modifier = Modifier.focusProperties { canFocus = false },
                         )
                     },
                 )
@@ -493,7 +494,7 @@ private fun AuthForm(
             formState.errorMessage?.let { errorMessage ->
                 AppErrorText(
                     text = errorMessage,
-                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
                 )
             }
 
@@ -503,7 +504,7 @@ private fun AuthForm(
                 enabled = !formState.loading,
                 loading = formState.loading,
                 modifier = Modifier.fillMaxWidth(),
-                testTag = RepairAppTestTags.AuthSubmitButton
+                testTag = RepairAppTestTags.AuthSubmitButton,
             )
 
             if (onRecovery != null) {
@@ -512,7 +513,7 @@ private fun AuthForm(
                     onClick = onRecovery,
                     enabled = !formState.loading,
                     variant = AppButtonVariant.Secondary,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
 
@@ -522,10 +523,9 @@ private fun AuthForm(
                     onClick = onDemoLogin,
                     enabled = !formState.loading,
                     variant = AppButtonVariant.Secondary,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         }
     }
 }
-

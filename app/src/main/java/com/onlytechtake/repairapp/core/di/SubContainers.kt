@@ -1,6 +1,8 @@
 package com.onlytechtake.repairapp.core.di
 
 import android.content.Context
+import androidx.room.withTransaction
+import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
@@ -13,15 +15,18 @@ import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
 import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
-import com.onlytechtake.repairapp.core.media.MediaStorageProvider
-import androidx.room.withTransaction
 
-class DataContainer(context: Context) {
+class DataContainer(
+    context: Context,
+) {
     val database by lazy { RepairAppDatabase.getInstance(context) }
     val clockMillis: () -> Long = System::currentTimeMillis
 }
 
-class AuthContainer(context: Context, dataContainer: DataContainer) {
+class AuthContainer(
+    context: Context,
+    dataContainer: DataContainer,
+) {
     val sessionStore by lazy { InMemorySessionStore() }
     val authPreferences by lazy { AuthPreferences(context) }
     private val passwordHasher by lazy { PasswordHasher() }
@@ -48,10 +53,16 @@ class AuthContainer(context: Context, dataContainer: DataContainer) {
     }
 }
 
-class MediaContainer(context: Context, dataContainer: DataContainer) {
+class MediaContainer(
+    context: Context,
+    dataContainer: DataContainer,
+) {
     val mediaStorageProvider by lazy { MediaStorageProvider(context.applicationContext) }
     val orderFileCleanupService by lazy { OrderFileCleanupService(context.applicationContext, mediaStorageProvider) }
-    private val mediaOptimizer by lazy { com.onlytechtake.repairapp.core.media.MediaOptimizer() }
+    private val mediaOptimizer by lazy {
+        com.onlytechtake.repairapp.core.media
+            .MediaOptimizer()
+    }
 
     val orderMediaRepository by lazy {
         OrderMediaRepository(
@@ -78,7 +89,11 @@ class MediaContainer(context: Context, dataContainer: DataContainer) {
     val shareDocumentIntentFactory by lazy { ShareDocumentIntentFactory(context) }
 }
 
-class OrderContainer(context: Context, dataContainer: DataContainer, mediaContainer: MediaContainer) {
+class OrderContainer(
+    context: Context,
+    dataContainer: DataContainer,
+    mediaContainer: MediaContainer,
+) {
     val orderWorkflowRepository by lazy {
         OrderWorkflowRepository(
             context = context.applicationContext,
@@ -143,7 +158,12 @@ class OrderContainer(context: Context, dataContainer: DataContainer, mediaContai
     }
 }
 
-class SettingsContainer(context: Context, dataContainer: DataContainer, authContainer: AuthContainer, mediaContainer: MediaContainer) {
+class SettingsContainer(
+    context: Context,
+    dataContainer: DataContainer,
+    authContainer: AuthContainer,
+    mediaContainer: MediaContainer,
+) {
     val backupReminderPreferences by lazy { BackupReminderPreferences(context.applicationContext) }
     val securityPreferences by lazy { SecurityPreferences(context.applicationContext) }
     val storageStatsService by lazy { StorageStatsService(context.applicationContext, mediaContainer.mediaStorageProvider) }

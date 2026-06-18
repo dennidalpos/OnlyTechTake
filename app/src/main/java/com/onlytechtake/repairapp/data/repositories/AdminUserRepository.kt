@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.data.repositories
 import android.content.Context
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.UserDao
@@ -11,11 +12,10 @@ import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
-import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.OperatorInput
-import java.util.UUID
 import kotlinx.coroutines.flow.Flow
+import java.util.UUID
 
 class AdminUserRepository(
     private val context: Context,
@@ -28,7 +28,10 @@ class AdminUserRepository(
 
     fun observeActiveUsers(): Flow<List<UserEntity>> = userDao.observeActiveUsers()
 
-    suspend fun createOperator(actor: AuthenticatedUser, input: OperatorInput): Result<Unit> =
+    suspend fun createOperator(
+        actor: AuthenticatedUser,
+        input: OperatorInput,
+    ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
             require(input.displayName.isNotBlank()) { "Nome obbligatorio" }
@@ -53,34 +56,42 @@ class AdminUserRepository(
             }
 
             val now = clockMillis()
-            val passwordHash = try {
-                passwordHasher.hash(input.password)
-            } finally {
-                input.password.fill('\u0000')
-            }
-            val user = UserEntity(
-                id = UUID.randomUUID().toString(),
-                displayName = input.displayName.trim(),
-                username = input.username.trim(),
-                passwordHash = passwordHash.hash,
-                passwordSalt = passwordHash.salt,
-                role = UserRole.OPERATOR,
-                permissions = setOf(
-                    UserPermission.CREATE_ORDERS,
-                    UserPermission.EDIT_OWN_ORDERS,
-                    UserPermission.MANAGE_CUSTOMERS,
-                ),
-                active = true,
-                forcePasswordChange = true,
-                createdAt = now,
-                updatedAt = now,
-            )
+            val passwordHash =
+                try {
+                    passwordHasher.hash(input.password)
+                } finally {
+                    input.password.fill('\u0000')
+                }
+            val user =
+                UserEntity(
+                    id = UUID.randomUUID().toString(),
+                    displayName = input.displayName.trim(),
+                    username = input.username.trim(),
+                    passwordHash = passwordHash.hash,
+                    passwordSalt = passwordHash.salt,
+                    role = UserRole.OPERATOR,
+                    permissions =
+                        setOf(
+                            UserPermission.CREATE_ORDERS,
+                            UserPermission.EDIT_OWN_ORDERS,
+                            UserPermission.MANAGE_CUSTOMERS,
+                        ),
+                    active = true,
+                    forcePasswordChange = true,
+                    createdAt = now,
+                    updatedAt = now,
+                )
 
             userDao.upsert(user)
             audit(actor.id, AuditAction.USER_CREATED, """{"userId":"${user.id}"}""", now)
         }
 
-    suspend fun updateUser(actor: AuthenticatedUser, userId: String, displayName: String, username: String): Result<Unit> =
+    suspend fun updateUser(
+        actor: AuthenticatedUser,
+        userId: String,
+        displayName: String,
+        username: String,
+    ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
             val existing = requireNotNull(userDao.findById(userId)) { "Utente non trovato" }
@@ -101,16 +112,21 @@ class AdminUserRepository(
             audit(actor.id, AuditAction.USER_UPDATED, """{"userId":"$userId"}""", now)
         }
 
-    suspend fun resetPassword(actor: AuthenticatedUser, userId: String, password: CharArray): Result<Unit> =
+    suspend fun resetPassword(
+        actor: AuthenticatedUser,
+        userId: String,
+        password: CharArray,
+    ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
             require(password.size >= MIN_PASSWORD_LENGTH) { "Password troppo corta" }
             val existing = requireNotNull(userDao.findById(userId)) { "Utente non trovato" }
-            val hash = try {
-                passwordHasher.hash(password)
-            } finally {
-                password.fill('\u0000')
-            }
+            val hash =
+                try {
+                    passwordHasher.hash(password)
+                } finally {
+                    password.fill('\u0000')
+                }
             val now = clockMillis()
             userDao.upsert(
                 existing.copy(
@@ -123,7 +139,11 @@ class AdminUserRepository(
             audit(actor.id, AuditAction.PASSWORD_RESET, """{"userId":"$userId"}""", now)
         }
 
-    suspend fun setActive(actor: AuthenticatedUser, userId: String, active: Boolean): Result<Unit> =
+    suspend fun setActive(
+        actor: AuthenticatedUser,
+        userId: String,
+        active: Boolean,
+    ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
             val existing = requireNotNull(userDao.findById(userId)) { "Utente non trovato" }
@@ -136,7 +156,10 @@ class AdminUserRepository(
             audit(actor.id, AuditAction.USER_UPDATED, """{"userId":"$userId","active":$active}""", now)
         }
 
-    suspend fun deleteUser(actor: AuthenticatedUser, userId: String): Result<Unit> =
+    suspend fun deleteUser(
+        actor: AuthenticatedUser,
+        userId: String,
+    ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
             val existing = requireNotNull(userDao.findById(userId)) { "Utente non trovato" }
@@ -148,7 +171,11 @@ class AdminUserRepository(
             audit(actor.id, AuditAction.USER_UPDATED, """{"userId":"$userId","action":"deleted"}""", clockMillis())
         }
 
-    suspend fun setPermissions(actor: AuthenticatedUser, userId: String, permissions: Set<UserPermission>): Result<Unit> =
+    suspend fun setPermissions(
+        actor: AuthenticatedUser,
+        userId: String,
+        permissions: Set<UserPermission>,
+    ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
             val existing = requireNotNull(userDao.findById(userId)) { "Utente non trovato" }
@@ -159,7 +186,12 @@ class AdminUserRepository(
             audit(actor.id, AuditAction.USER_UPDATED, """{"userId":"$userId","permissions":${permissions.map { it.name }}}""", now)
         }
 
-    private suspend fun audit(actorUserId: String, action: AuditAction, detailsJson: String, now: Long) {
+    private suspend fun audit(
+        actorUserId: String,
+        action: AuditAction,
+        detailsJson: String,
+        now: Long,
+    ) {
         auditLogDao.upsert(
             AuditLogEntity(
                 id = UUID.randomUUID().toString(),

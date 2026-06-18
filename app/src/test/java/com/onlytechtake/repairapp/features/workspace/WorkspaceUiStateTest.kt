@@ -8,10 +8,11 @@ import org.junit.Test
 class WorkspaceUiStateTest {
     @Test
     fun clearingPreviewRemovesMessageAndEditedBody() {
-        val state = WorkspaceUiState(
-            preparedMessage = PreparedMessage("order", "customer", "333", "Originale"),
-            preparedMessageBody = "Modificato",
-        ).withoutPreparedMessage()
+        val state =
+            WorkspaceUiState(
+                preparedMessage = PreparedMessage("order", "customer", "333", "Originale"),
+                preparedMessageBody = "Modificato",
+            ).withoutPreparedMessage()
 
         assertNull(state.preparedMessage)
         assertEquals("", state.preparedMessageBody)

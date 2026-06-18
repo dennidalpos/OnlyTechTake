@@ -13,7 +13,9 @@ data class WhatsAppOutgoingMessage(
 )
 
 sealed interface WhatsAppSendAction {
-    data class OpenIntent(val uri: Uri) : WhatsAppSendAction
+    data class OpenIntent(
+        val uri: Uri,
+    ) : WhatsAppSendAction
 }
 
 class ManualWhatsAppSender : WhatsAppSender {

@@ -1,19 +1,19 @@
 package com.onlytechtake.repairapp.features.workspace
 
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderPriority
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
-import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
+import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
 import com.onlytechtake.repairapp.domain.workspace.availableOrderStatusActions
 import com.onlytechtake.repairapp.domain.workspace.requiresConfirmation
 import com.onlytechtake.repairapp.domain.workspace.statusTemplateAnchor
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Assert.assertThrows
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class StatusWorkflowTest {
@@ -69,7 +69,10 @@ class StatusWorkflowTest {
             TemplateAnchor.WHATSAPP_NOT_REPAIRABLE,
             statusTemplateAnchor(order(OrderStatus.RESULT, diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE)),
         )
-        assertEquals(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE, statusTemplateAnchor(order(OrderStatus.CLOSED, closureReason = ClosureReason.NOT_REPAIRABLE)))
+        assertEquals(
+            TemplateAnchor.WHATSAPP_NOT_REPAIRABLE,
+            statusTemplateAnchor(order(OrderStatus.CLOSED, closureReason = ClosureReason.NOT_REPAIRABLE)),
+        )
         assertEquals(TemplateAnchor.WHATSAPP_DIAGNOSIS, statusTemplateAnchor(order(OrderStatus.DIAGNOSIS)))
     }
 

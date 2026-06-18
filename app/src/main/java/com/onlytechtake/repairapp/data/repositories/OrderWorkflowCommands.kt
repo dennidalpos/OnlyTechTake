@@ -2,8 +2,8 @@ package com.onlytechtake.repairapp.data.repositories
 
 import android.content.Context
 import androidx.room.withTransaction
-import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.orders.OrderNumberGenerator
+import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.utils.capitalizeFirst
 import com.onlytechtake.repairapp.core.utils.formatEuroCents
 import com.onlytechtake.repairapp.core.utils.label
@@ -23,9 +23,12 @@ internal class OrderWorkflowCommands(
     private val database: RepairAppDatabase?,
     private val orderNumberGenerator: OrderNumberGenerator,
     private val clockMillis: () -> Long,
-    private val eventWriter: OrderWorkflowEventWriter
+    private val eventWriter: OrderWorkflowEventWriter,
 ) {
-    suspend fun createOrder(actor: AuthenticatedUser, input: RepairOrderInput): Result<RepairOrderEntity> =
+    suspend fun createOrder(
+        actor: AuthenticatedUser,
+        input: RepairOrderInput,
+    ): Result<RepairOrderEntity> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.CREATE_ORDERS)
             inTransaction {
@@ -38,27 +41,28 @@ internal class OrderWorkflowCommands(
                 val now = clockMillis()
                 val prefix = orderNumberGenerator.yearPrefix(now)
                 val categoryPathSnapshot = buildCategoryPathSnapshot(input.categoryId)
-                val order = RepairOrderEntity(
-                    id = UUID.randomUUID().toString(),
-                    orderNumber = orderNumberGenerator.next(prefix, repairOrderDao.findLatestOrderNumberForYear(prefix)),
-                    customerId = input.customerId,
-                    title = input.title.capitalizeFirst(),
-                    categoryId = input.categoryId,
-                    categoryPathSnapshot = categoryPathSnapshot,
-                    status = OrderStatus.OPEN,
-                    priority = input.priority,
-                    assignedToUserId = input.assignedToUserId ?: actor.id,
-                    createdByUserId = actor.id,
-                    description = input.description.capitalizeFirst().ifBlank { null },
-                    internalNotes = null,
-                    diagnosisOutcome = null,
-                    estimateAmountCents = null,
-                    finalAmountCents = null,
-                    createdAt = now,
-                    updatedAt = now,
-                    closedAt = null,
-                    closureReason = null,
-                )
+                val order =
+                    RepairOrderEntity(
+                        id = UUID.randomUUID().toString(),
+                        orderNumber = orderNumberGenerator.next(prefix, repairOrderDao.findLatestOrderNumberForYear(prefix)),
+                        customerId = input.customerId,
+                        title = input.title.capitalizeFirst(),
+                        categoryId = input.categoryId,
+                        categoryPathSnapshot = categoryPathSnapshot,
+                        status = OrderStatus.OPEN,
+                        priority = input.priority,
+                        assignedToUserId = input.assignedToUserId ?: actor.id,
+                        createdByUserId = actor.id,
+                        description = input.description.capitalizeFirst().ifBlank { null },
+                        internalNotes = null,
+                        diagnosisOutcome = null,
+                        estimateAmountCents = null,
+                        finalAmountCents = null,
+                        createdAt = now,
+                        updatedAt = now,
+                        closedAt = null,
+                        closureReason = null,
+                    )
 
                 repairOrderDao.upsert(order)
                 eventWriter.orderCreated(order.id, actor.id, now)
@@ -132,16 +136,18 @@ internal class OrderWorkflowCommands(
 
                 val now = clockMillis()
                 val estimateAmountCents = input.normalizedEstimateAmountCents()
-                val details = listOfNotNull(
-                    "Sintesi risultato: ${input.summary.capitalizeFirst()}",
-                    "Esito diagnosi: ${input.diagnosisOutcome.label(context)}",
-                    estimateAmountCents?.let { "Importo riparazione: ${it.formatEuroCents()}" },
-                ).joinToString("\n")
+                val details =
+                    listOfNotNull(
+                        "Sintesi risultato: ${input.summary.capitalizeFirst()}",
+                        "Esito diagnosi: ${input.diagnosisOutcome.label(context)}",
+                        estimateAmountCents?.let { "Importo riparazione: ${it.formatEuroCents()}" },
+                    ).joinToString("\n")
 
-                val customerActionStatus = when (input.diagnosisOutcome) {
-                    DiagnosisOutcome.REPAIRABLE -> CustomerActionStatus.WAITING_ACCEPTANCE
-                    DiagnosisOutcome.NOT_REPAIRABLE -> CustomerActionStatus.TO_NOTIFY
-                }
+                val customerActionStatus =
+                    when (input.diagnosisOutcome) {
+                        DiagnosisOutcome.REPAIRABLE -> CustomerActionStatus.WAITING_ACCEPTANCE
+                        DiagnosisOutcome.NOT_REPAIRABLE -> CustomerActionStatus.TO_NOTIFY
+                    }
 
                 repairOrderDao.upsert(
                     order.copy(
@@ -165,7 +171,11 @@ internal class OrderWorkflowCommands(
             }
         }
 
-    suspend fun reassign(actor: AuthenticatedUser, orderId: String, assignedToUserId: String?): Result<Unit> =
+    suspend fun reassign(
+        actor: AuthenticatedUser,
+        orderId: String,
+        assignedToUserId: String?,
+    ): Result<Unit> =
         runCatching {
             inTransaction {
                 val order = requireWritableOrder(actor, orderId)
@@ -179,7 +189,11 @@ internal class OrderWorkflowCommands(
             }
         }
 
-    suspend fun addInternalNote(actor: AuthenticatedUser, orderId: String, note: String): Result<Unit> =
+    suspend fun addInternalNote(
+        actor: AuthenticatedUser,
+        orderId: String,
+        note: String,
+    ): Result<Unit> =
         runCatching {
             inTransaction {
                 require(note.isNotBlank()) { "Nota vuota" }
@@ -192,7 +206,11 @@ internal class OrderWorkflowCommands(
             }
         }
 
-    suspend fun recordFeedback(actor: AuthenticatedUser, orderId: String, input: FeedbackInput): Result<Unit> =
+    suspend fun recordFeedback(
+        actor: AuthenticatedUser,
+        orderId: String,
+        input: FeedbackInput,
+    ): Result<Unit> =
         runCatching {
             inTransaction {
                 val errors = input.validationErrors()
@@ -204,28 +222,32 @@ internal class OrderWorkflowCommands(
                 when (input.feedback) {
                     CustomerFeedbackType.ACCEPT,
                     CustomerFeedbackType.REJECT,
-                    -> require(order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
-                        "Accettazione o rifiuto sono disponibili solo per una diagnosi riparabile"
-                    }
+                    ->
+                        require(order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
+                            "Accettazione o rifiuto sono disponibili solo per una diagnosi riparabile"
+                        }
                     else -> Unit
                 }
                 val now = clockMillis()
-                val targetStatus = when (input.feedback) {
-                    CustomerFeedbackType.ACCEPT -> OrderStatus.REPAIRING
-                    CustomerFeedbackType.REJECT -> OrderStatus.CLOSED
-                    else -> order.status
-                }
-                val customerActionStatus = when (input.feedback) {
-                    CustomerFeedbackType.ACCEPT -> CustomerActionStatus.ACCEPTED
-                    CustomerFeedbackType.REJECT -> CustomerActionStatus.REJECTED
-                    CustomerFeedbackType.READ -> CustomerActionStatus.NOTIFIED
-                    CustomerFeedbackType.ASK_INFO -> CustomerActionStatus.ASKED_INFO
-                    CustomerFeedbackType.CALL_ME -> CustomerActionStatus.CALL_REQUESTED
-                }
-                val closureReason = input.closureReason ?: when (targetStatus) {
-                    OrderStatus.CLOSED -> ClosureReason.CUSTOMER_DECLINED
-                    else -> null
-                }
+                val targetStatus =
+                    when (input.feedback) {
+                        CustomerFeedbackType.ACCEPT -> OrderStatus.REPAIRING
+                        CustomerFeedbackType.REJECT -> OrderStatus.CLOSED
+                        else -> order.status
+                    }
+                val customerActionStatus =
+                    when (input.feedback) {
+                        CustomerFeedbackType.ACCEPT -> CustomerActionStatus.ACCEPTED
+                        CustomerFeedbackType.REJECT -> CustomerActionStatus.REJECTED
+                        CustomerFeedbackType.READ -> CustomerActionStatus.NOTIFIED
+                        CustomerFeedbackType.ASK_INFO -> CustomerActionStatus.ASKED_INFO
+                        CustomerFeedbackType.CALL_ME -> CustomerActionStatus.CALL_REQUESTED
+                    }
+                val closureReason =
+                    input.closureReason ?: when (targetStatus) {
+                        OrderStatus.CLOSED -> ClosureReason.CUSTOMER_DECLINED
+                        else -> null
+                    }
                 if (targetStatus != order.status) {
                     OrderStatusPolicy.requireAllowed(order.status, targetStatus, closureReason)
                     OrderClosurePermissionPolicy.requireClosePermissionIfNeeded(actor, targetStatus)
@@ -263,7 +285,11 @@ internal class OrderWorkflowCommands(
             }
         }
 
-    suspend fun recordPdfShared(actor: AuthenticatedUser, orderId: String, fileName: String): Result<Unit> =
+    suspend fun recordPdfShared(
+        actor: AuthenticatedUser,
+        orderId: String,
+        fileName: String,
+    ): Result<Unit> =
         runCatching {
             inTransaction {
                 requireWritableOrder(actor, orderId)
@@ -272,7 +298,11 @@ internal class OrderWorkflowCommands(
             }
         }
 
-    suspend fun recordMediaRemoved(actor: AuthenticatedUser, orderId: String, fileName: String): Result<Unit> =
+    suspend fun recordMediaRemoved(
+        actor: AuthenticatedUser,
+        orderId: String,
+        fileName: String,
+    ): Result<Unit> =
         runCatching {
             inTransaction {
                 requireWritableOrder(actor, orderId)
@@ -281,7 +311,11 @@ internal class OrderWorkflowCommands(
             }
         }
 
-    suspend fun togglePaymentStatus(actor: AuthenticatedUser, orderId: String, isPaid: Boolean): Result<Unit> =
+    suspend fun togglePaymentStatus(
+        actor: AuthenticatedUser,
+        orderId: String,
+        isPaid: Boolean,
+    ): Result<Unit> =
         runCatching {
             inTransaction {
                 requireWritableOrder(actor, orderId)
@@ -294,7 +328,10 @@ internal class OrderWorkflowCommands(
             }
         }
 
-    private suspend fun requireWritableOrder(actor: AuthenticatedUser, orderId: String): RepairOrderEntity {
+    private suspend fun requireWritableOrder(
+        actor: AuthenticatedUser,
+        orderId: String,
+    ): RepairOrderEntity {
         val order = requireNotNull(repairOrderDao.findById(orderId)) { "Commessa non trovata" }
         if (order.assignedToUserId != actor.id) {
             PermissionService.requirePermission(actor, UserPermission.EDIT_ALL_ORDERS)
@@ -304,8 +341,7 @@ internal class OrderWorkflowCommands(
         return order
     }
 
-    private suspend fun <T> inTransaction(block: suspend () -> T): T =
-        database?.withTransaction { block() } ?: block()
+    private suspend fun <T> inTransaction(block: suspend () -> T): T = database?.withTransaction { block() } ?: block()
 
     private suspend fun buildCategoryPathSnapshot(categoryId: String): String? {
         val path = mutableListOf<String>()

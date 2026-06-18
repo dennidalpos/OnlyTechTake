@@ -1,10 +1,10 @@
 package com.onlytechtake.repairapp.domain.workspace
 
+import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
-import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.MessageLogEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
@@ -38,7 +38,6 @@ data class OperatorInput(
         return result
     }
 }
-
 
 data class CustomerInput(
     val id: String? = null,
@@ -105,10 +104,11 @@ fun IntakeOrderInput.isReadyForSubmit(): Boolean = validationErrors().isEmpty()
 
 private fun CustomerInput.isValidForIntake(): Boolean {
     val hasContact = phone.isNotBlank() || email.isNotBlank()
-    val hasName = when (type) {
-        CustomerType.PRIVATE -> firstName.isNotBlank() && lastName.isNotBlank()
-        CustomerType.BUSINESS -> companyName.isNotBlank()
-    }
+    val hasName =
+        when (type) {
+            CustomerType.PRIVATE -> firstName.isNotBlank() && lastName.isNotBlank()
+            CustomerType.BUSINESS -> companyName.isNotBlank()
+        }
     return hasContact && hasName
 }
 
@@ -144,9 +144,11 @@ data class OrderDetail(
     val signatures: List<SignatureEntity>,
 ) {
     val isPaid: Boolean
-        get() = timeline
-            .filter { it.type == TimelineEventType.PAYMENT_RECEIVED || it.type == TimelineEventType.PAYMENT_REMOVED }
-            .maxByOrNull { it.createdAt }?.type == TimelineEventType.PAYMENT_RECEIVED
+        get() =
+            timeline
+                .filter { it.type == TimelineEventType.PAYMENT_RECEIVED || it.type == TimelineEventType.PAYMENT_REMOVED }
+                .maxByOrNull { it.createdAt }
+                ?.type == TimelineEventType.PAYMENT_RECEIVED
 }
 
 data class PreparedMessage(
@@ -183,5 +185,4 @@ fun DiagnosisResultInput.validationErrors(): List<String> =
         }
     }
 
-fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? =
-    estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }
+fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? = estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }

@@ -8,9 +8,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.*
-import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 
@@ -34,17 +34,24 @@ fun SettingsPanel(
     var confirmText by remember { mutableStateOf("") }
     var confirmAction by remember { mutableStateOf<(() -> Unit)?>(null) }
 
-    fun requestConfirm(title: String, text: String, action: () -> Unit) {
+    fun requestConfirm(
+        title: String,
+        text: String,
+        action: () -> Unit,
+    ) {
         confirmTitle = title
         confirmText = text
         confirmAction = action
     }
 
-    val onBackToHub = { 
+    val onBackToHub = {
         if (isWide) {
             currentSection = null
         } else {
-            onNavigate(com.onlytechtake.repairapp.features.dashboard.DashboardRoutes.settings())
+            onNavigate(
+                com.onlytechtake.repairapp.features.dashboard.DashboardRoutes
+                    .settings(),
+            )
         }
     }
 
@@ -54,17 +61,18 @@ fun SettingsPanel(
                 SettingsHub(
                     isAdmin = isAdmin,
                     onNavigate = { route ->
-                        val section = if (route.contains("section=")) {
-                            route.substringAfter("section=")
-                        } else {
-                            null
-                        }
+                        val section =
+                            if (route.contains("section=")) {
+                                route.substringAfter("section=")
+                            } else {
+                                null
+                            }
                         if (section != null) {
                             currentSection = section
                         } else {
                             onNavigate(route)
                         }
-                    }
+                    },
                 )
             }
             VerticalDivider()
@@ -77,7 +85,7 @@ fun SettingsPanel(
                     onBackupRestored = onBackupRestored,
                     requestConfirm = ::requestConfirm,
                     onNavigate = onNavigate,
-                    onBack = onBackToHub
+                    onBack = onBackToHub,
                 )
             }
         }
@@ -94,7 +102,7 @@ fun SettingsPanel(
                 onBackupRestored = onBackupRestored,
                 requestConfirm = ::requestConfirm,
                 onNavigate = onNavigate,
-                onBack = onBackToHub
+                onBack = onBackToHub,
             )
         }
     }
@@ -144,14 +152,15 @@ private fun SettingsSectionContent(
     onBackupRestored: () -> Unit,
     requestConfirm: (String, String, () -> Unit) -> Unit,
     onNavigate: (String) -> Unit = {},
-    onBack: () -> Unit = {}
+    onBack: () -> Unit = {},
 ) {
     val message by viewModel.message.collectAsState()
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = RepairAppSpacing.bottomContentPadding)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(bottom = RepairAppSpacing.bottomContentPadding),
     ) {
         message?.let {
             DismissibleAppMessageBanner(
@@ -168,14 +177,17 @@ private fun SettingsSectionContent(
             "EXPORT" -> BackupSettings(viewModel, isAdmin, onBackupRestored, requestConfirm, onBack = onBack)
             "STORAGE" -> StorageSettings(viewModel, onBack = onBack)
             "ABOUT" -> AboutSettings(onBack = onBack)
-            else -> if (section == null) SettingsHub(isAdmin, onNavigate) else {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    AppEmptyState(
-                        title = stringResource(R.string.settings_select_section_title),
-                        body = stringResource(R.string.settings_select_section_body),
-                    )
+            else ->
+                if (section == null) {
+                    SettingsHub(isAdmin, onNavigate)
+                } else {
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        AppEmptyState(
+                            title = stringResource(R.string.settings_select_section_title),
+                            body = stringResource(R.string.settings_select_section_body),
+                        )
+                    }
                 }
-            }
         }
     }
 }

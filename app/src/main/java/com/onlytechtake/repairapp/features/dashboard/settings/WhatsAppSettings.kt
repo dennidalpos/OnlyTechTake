@@ -14,13 +14,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
-import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.StandardCard
+import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 
@@ -33,10 +32,11 @@ fun ColumnScope.WhatsAppSettings(
     val messageMode by viewModel.messageMode.collectAsState()
 
     LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f)
-            .widthIn(max = RepairAppSpacing.maxContentWidthMedium),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .widthIn(max = RepairAppSpacing.maxContentWidthMedium),
         contentPadding = PaddingValues(RepairAppSpacing.screenHorizontal),
         verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
     ) {
@@ -69,10 +69,8 @@ fun ColumnScope.WhatsAppSettings(
                 modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
                 text = stringResource(R.string.config_whatsapp_close),
                 variant = AppButtonVariant.Secondary,
-                onClick = onBack
+                onClick = onBack,
             )
         }
     }
 }
-
-

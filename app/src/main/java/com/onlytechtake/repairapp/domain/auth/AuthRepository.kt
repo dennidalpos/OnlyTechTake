@@ -14,7 +14,10 @@ interface AuthRepository {
         password: CharArray,
     ): AuthenticatedUser
 
-    suspend fun login(username: String, password: CharArray): LoginResult
+    suspend fun login(
+        username: String,
+        password: CharArray,
+    ): LoginResult
 
     suspend fun loginDemo(): LoginResult
 
@@ -25,7 +28,11 @@ interface AuthRepository {
     ): Result<Unit>
 
     suspend fun getRecoveryKit(): Result<String>
-    suspend fun resetAdminWithRecoveryCode(code: String, newPassword: CharArray): Result<Unit>
+
+    suspend fun resetAdminWithRecoveryCode(
+        code: String,
+        newPassword: CharArray,
+    ): Result<Unit>
 
     fun touchSession()
 

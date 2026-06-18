@@ -1,10 +1,6 @@
 package com.onlytechtake.repairapp.features.dashboard.common
 
 import android.graphics.Bitmap
-import android.graphics.Canvas as AndroidCanvas
-import android.graphics.Color as AndroidColor
-import android.graphics.Matrix
-import android.graphics.Paint as AndroidPaint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -25,11 +21,8 @@ import androidx.compose.material.icons.automirrored.filled.Undo
 import androidx.compose.material.icons.filled.Crop
 import androidx.compose.material.icons.filled.LayersClear
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
@@ -61,9 +54,9 @@ import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.media.*
-import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.File
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.roundToInt
@@ -78,16 +71,17 @@ fun LocalImagePreview(
 ) {
     val bitmap by rememberDecodedLocalBitmap(path, PREVIEW_MAX_DIMENSION)
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(160.dp)
-            .then(
-                if (onClick != null) {
-                    Modifier.clickable(role = Role.Button, onClick = onClick)
-                } else {
-                    Modifier
-                },
-            ),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(160.dp)
+                .then(
+                    if (onClick != null) {
+                        Modifier.clickable(role = Role.Button, onClick = onClick)
+                    } else {
+                        Modifier
+                    },
+                ),
         contentAlignment = Alignment.Center,
     ) {
         val previewBitmap = bitmap
@@ -122,19 +116,21 @@ fun LocalImageViewer(
                 ZoomableLocalImage(
                     path = path,
                     description = title,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(360.dp)
-                        .padding(top = 8.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(360.dp)
+                            .padding(top = 8.dp),
                 )
             } else {
                 EditableLocalImage(
                     path = path,
                     description = title,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(420.dp)
-                        .padding(top = 8.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(420.dp)
+                            .padding(top = 8.dp),
                     onBuildEditedBitmapChange = { buildEditedBitmap = it },
                 )
             }
@@ -149,7 +145,7 @@ fun LocalImageViewer(
                             onDismiss()
                         },
                         variant = AppButtonVariant.Danger,
-                        size = AppButtonSize.Compact
+                        size = AppButtonSize.Compact,
                     )
                 }
                 if (onSaveEdited != null) {
@@ -159,14 +155,14 @@ fun LocalImageViewer(
                             editedBitmapToConfirm = buildEditedBitmap?.invoke()
                         },
                         variant = AppButtonVariant.Primary,
-                        size = AppButtonSize.Compact
+                        size = AppButtonSize.Compact,
                     )
                 }
                 AppButton(
                     text = stringResource(R.string.content_description_close),
                     onClick = onDismiss,
                     variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
                 )
             }
         },
@@ -186,7 +182,7 @@ fun LocalImageViewer(
                         onDismiss()
                     },
                     variant = AppButtonVariant.Primary,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
                 )
             },
             dismissButton = {
@@ -194,7 +190,7 @@ fun LocalImageViewer(
                     text = stringResource(R.string.customer_cancel),
                     onClick = { editedBitmapToConfirm = null },
                     variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
                 )
             },
         )
@@ -237,33 +233,33 @@ private fun EditableLocalImage(
                     arrows = emptyList()
                     cropRect = null
                 },
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.primary,
             )
             AppIconButton(
                 imageVector = Icons.Default.Crop,
                 contentDescription = stringResource(R.string.image_edit_crop),
                 onClick = { editMode = ImageEditMode.CROP },
-                tint = if (editMode == ImageEditMode.CROP) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                tint = if (editMode == ImageEditMode.CROP) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
             )
             AppIconButton(
                 imageVector = Icons.AutoMirrored.Filled.TrendingFlat,
                 contentDescription = stringResource(R.string.image_edit_arrow),
                 onClick = { editMode = ImageEditMode.ARROW },
-                tint = if (editMode == ImageEditMode.ARROW) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                tint = if (editMode == ImageEditMode.ARROW) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
             )
             AppIconButton(
                 imageVector = Icons.AutoMirrored.Filled.Undo,
                 contentDescription = stringResource(R.string.image_edit_undo_arrow),
                 enabled = arrows.isNotEmpty(),
                 onClick = { arrows = arrows.dropLast(1) },
-                tint = if (arrows.isNotEmpty()) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+                tint = if (arrows.isNotEmpty()) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
             )
             AppIconButton(
                 imageVector = Icons.Default.LayersClear,
                 contentDescription = stringResource(R.string.image_edit_clear_crop),
                 enabled = cropRect != null,
                 onClick = { cropRect = null },
-                tint = if (cropRect != null) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline
+                tint = if (cropRect != null) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline,
             )
         }
         ImageEditCanvas(
@@ -331,18 +327,19 @@ private fun ImageEditCanvas(
         } else {
             val imageBitmap = remember(bitmap) { bitmap.asImageBitmap() }
             Canvas(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(420.dp)
-                    .onSizeChanged(onCanvasSizeChange)
-                    .pointerInput(editMode, bitmap, canvasSize) {
-                        detectDragGestures(
-                            onDragStart = onDragStart,
-                            onDrag = { change, _ -> onDrag(change.position) },
-                            onDragEnd = onDragEnd,
-                            onDragCancel = onDragEnd,
-                        )
-                    },
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(420.dp)
+                        .onSizeChanged(onCanvasSizeChange)
+                        .pointerInput(editMode, bitmap, canvasSize) {
+                            detectDragGestures(
+                                onDragStart = onDragStart,
+                                onDrag = { change, _ -> onDrag(change.position) },
+                                onDragEnd = onDragEnd,
+                                onDragCancel = onDragEnd,
+                            )
+                        },
             ) {
                 val placement = imagePlacement(Size(bitmap.width.toFloat(), bitmap.height.toFloat()), size)
                 drawImage(
@@ -363,19 +360,21 @@ private fun ImageEditCanvas(
                 }
                 if (dragStart != null && dragCurrent != null) {
                     when (editMode) {
-                        ImageEditMode.ARROW -> drawBitmapArrow(
-                            dragStart.toCanvasOffset(placement, bitmap),
-                            dragCurrent.toCanvasOffset(placement, bitmap),
-                            color = Color.Yellow,
-                        )
-                        ImageEditMode.CROP -> normalizeBitmapRect(dragStart, dragCurrent, bitmap)?.let { rect ->
-                            drawRect(
+                        ImageEditMode.ARROW ->
+                            drawBitmapArrow(
+                                dragStart.toCanvasOffset(placement, bitmap),
+                                dragCurrent.toCanvasOffset(placement, bitmap),
                                 color = Color.Yellow,
-                                topLeft = rect.topLeft.toCanvasOffset(placement, bitmap),
-                                size = rect.size.toCanvasSize(placement, bitmap),
-                                style = Stroke(width = 3.dp.toPx()),
                             )
-                        }
+                        ImageEditMode.CROP ->
+                            normalizeBitmapRect(dragStart, dragCurrent, bitmap)?.let { rect ->
+                                drawRect(
+                                    color = Color.Yellow,
+                                    topLeft = rect.topLeft.toCanvasOffset(placement, bitmap),
+                                    size = rect.size.toCanvasSize(placement, bitmap),
+                                    style = Stroke(width = 3.dp.toPx()),
+                                )
+                            }
                     }
                 }
             }
@@ -392,15 +391,17 @@ private fun ZoomableLocalImage(
     val bitmap by rememberDecodedLocalBitmap(path, VIEWER_MAX_DIMENSION)
     var scale by remember(path) { mutableFloatStateOf(1f) }
     var offset by remember(path) { mutableStateOf(Offset.Zero) }
-    val transformState = rememberTransformableState { _, zoomChange, panChange, _ ->
-        val nextScale = (scale * zoomChange).coerceIn(1f, 5f)
-        scale = nextScale
-        offset = if (nextScale == 1f) Offset.Zero else offset + panChange
-    }
+    val transformState =
+        rememberTransformableState { _, zoomChange, panChange, _ ->
+            val nextScale = (scale * zoomChange).coerceIn(1f, 5f)
+            scale = nextScale
+            offset = if (nextScale == 1f) Offset.Zero else offset + panChange
+        }
 
     Box(
-        modifier = modifier
-            .clipToBounds(),
+        modifier =
+            modifier
+                .clipToBounds(),
         contentAlignment = Alignment.Center,
     ) {
         val viewerBitmap = bitmap
@@ -410,16 +411,16 @@ private fun ZoomableLocalImage(
             Image(
                 bitmap = viewerBitmap.asImageBitmap(),
                 contentDescription = description,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(viewerBitmap.width.toFloat() / viewerBitmap.height.coerceAtLeast(1).toFloat())
-                    .graphicsLayer {
-                        scaleX = scale
-                        scaleY = scale
-                        translationX = offset.x
-                        translationY = offset.y
-                    }
-                    .transformable(transformState),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(viewerBitmap.width.toFloat() / viewerBitmap.height.coerceAtLeast(1).toFloat())
+                        .graphicsLayer {
+                            scaleX = scale
+                            scaleY = scale
+                            translationX = offset.x
+                            translationY = offset.y
+                        }.transformable(transformState),
                 contentScale = ContentScale.Fit,
             )
         }
@@ -427,15 +428,17 @@ private fun ZoomableLocalImage(
 }
 
 @Composable
-private fun rememberDecodedLocalBitmap(path: String, maxDimension: Int) =
-    produceState<Bitmap?>(initialValue = null, path, maxDimension, fileVersion(path)) {
-        value = withContext(Dispatchers.IO) {
+private fun rememberDecodedLocalBitmap(
+    path: String,
+    maxDimension: Int,
+) = produceState<Bitmap?>(initialValue = null, path, maxDimension, fileVersion(path)) {
+    value =
+        withContext(Dispatchers.IO) {
             decodeOrientedBitmap(path, maxDimension)
         }
-    }
+}
 
-private fun fileVersion(path: String): Pair<Long, Long> =
-    File(path).let { file -> file.lastModified() to file.length() }
+private fun fileVersion(path: String): Pair<Long, Long> = File(path).let { file -> file.lastModified() to file.length() }
 
 private fun DrawScope.drawBitmapArrow(
     start: Offset,
@@ -446,14 +449,16 @@ private fun DrawScope.drawBitmapArrow(
     drawLine(color = color, start = start, end = end, strokeWidth = strokeWidth)
     val angle = atan2(end.y - start.y, end.x - start.x)
     val headLength = 22.dp.toPx()
-    val left = Offset(
-        x = end.x - headLength * cos(angle - ARROW_HEAD_ANGLE),
-        y = end.y - headLength * sin(angle - ARROW_HEAD_ANGLE),
-    )
-    val right = Offset(
-        x = end.x - headLength * cos(angle + ARROW_HEAD_ANGLE),
-        y = end.y - headLength * sin(angle + ARROW_HEAD_ANGLE),
-    )
+    val left =
+        Offset(
+            x = end.x - headLength * cos(angle - ARROW_HEAD_ANGLE),
+            y = end.y - headLength * sin(angle - ARROW_HEAD_ANGLE),
+        )
+    val right =
+        Offset(
+            x = end.x - headLength * cos(angle + ARROW_HEAD_ANGLE),
+            y = end.y - headLength * sin(angle + ARROW_HEAD_ANGLE),
+        )
     drawLine(color = color, start = end, end = left, strokeWidth = strokeWidth)
     drawLine(color = color, start = end, end = right, strokeWidth = strokeWidth)
 }

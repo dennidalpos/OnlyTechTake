@@ -2,15 +2,14 @@ package com.onlytechtake.repairapp.features.dashboard.detail
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,37 +18,25 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.activity.compose.BackHandler
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.core.net.toUri
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.LoadingBrandIndicator
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
-import com.onlytechtake.repairapp.core.utils.label
-import com.onlytechtake.repairapp.core.utils.parseEuroCentsOrNull
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
-import com.onlytechtake.repairapp.core.design.LoadingBrandIndicator
-import com.onlytechtake.repairapp.core.design.components.*
-import com.onlytechtake.repairapp.core.design.RepairAppSpacing
-import com.onlytechtake.repairapp.features.dashboard.common.*
-import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
-import com.onlytechtake.repairapp.domain.workspace.canConfirmDiagnosisResult
-import com.onlytechtake.repairapp.domain.workspace.requiresConfirmation
-import com.onlytechtake.repairapp.domain.workspace.shouldShowDiagnosisEstimate
 import com.onlytechtake.repairapp.domain.workspace.statusTemplateAnchor
+import com.onlytechtake.repairapp.features.dashboard.common.*
 
 @Composable
 fun OrderDetailWorkspace(
@@ -130,15 +117,17 @@ fun OrderDetailWorkspace(
 
         AppScreenContainer(scrollable = false) {
             LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .testTag(RepairAppTestTags.OrderDetailLazyColumn)
-                    .imePadding(),
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .testTag(RepairAppTestTags.OrderDetailLazyColumn)
+                        .imePadding(),
                 verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
-                contentPadding = PaddingValues(
-                    top = RepairAppSpacing.compactGap,
-                    bottom = RepairAppSpacing.bottomContentPadding,
-                )
+                contentPadding =
+                    PaddingValues(
+                        top = RepairAppSpacing.compactGap,
+                        bottom = RepairAppSpacing.bottomContentPadding,
+                    ),
             ) {
                 item(key = "header", contentType = "header") {
                     OrderHeader(selected, context)
@@ -218,28 +207,29 @@ fun OrderDetailWorkspace(
                 preparedMessage
                     ?.takeIf { it.orderId == selected.order.id }
                     ?.let { prepared ->
-                    item(key = "wa_preview", contentType = "whatsapp") {
-                        WhatsAppPreviewPanel(
-                            prepared = prepared,
-                            body = preparedMessageBody,
-                            onBodyChange = viewModel::updatePreparedMessageBody,
-                            onOpenWhatsApp = {
-                                workspaceState.requestConfirm(waOpenConfirmTitle, waOpenConfirmText) {
-                                    viewModel.recordPreparedMessage()
-                                    val intent = Intent(
-                                        Intent.ACTION_VIEW,
-                                        "https://wa.me/${prepared.phone}?text=${Uri.encode(preparedMessageBody)}".toUri(),
-                                    )
-                                    context.startActivity(intent)
-                                }
-                            },
-                            onConfirmSent = {
-                                workspaceState.requestConfirm(waSentConfirmTitle, waSentConfirmText) { viewModel.confirmSentMessage() }
-                            },
-                            onClose = viewModel::clearPreparedMessage,
-                        )
+                        item(key = "wa_preview", contentType = "whatsapp") {
+                            WhatsAppPreviewPanel(
+                                prepared = prepared,
+                                body = preparedMessageBody,
+                                onBodyChange = viewModel::updatePreparedMessageBody,
+                                onOpenWhatsApp = {
+                                    workspaceState.requestConfirm(waOpenConfirmTitle, waOpenConfirmText) {
+                                        viewModel.recordPreparedMessage()
+                                        val intent =
+                                            Intent(
+                                                Intent.ACTION_VIEW,
+                                                "https://wa.me/${prepared.phone}?text=${Uri.encode(preparedMessageBody)}".toUri(),
+                                            )
+                                        context.startActivity(intent)
+                                    }
+                                },
+                                onConfirmSent = {
+                                    workspaceState.requestConfirm(waSentConfirmTitle, waSentConfirmText) { viewModel.confirmSentMessage() }
+                                },
+                                onClose = viewModel::clearPreparedMessage,
+                            )
+                        }
                     }
-                }
 
                 item(key = "notes", contentType = "notes") {
                     InternalNotesPanel(
@@ -271,14 +261,14 @@ fun OrderDetailWorkspace(
                         onDeleteDocument = { docId ->
                             workspaceState.requestConfirm(
                                 deleteDocumentConfirmTitle,
-                                deleteDocumentConfirmText
+                                deleteDocumentConfirmText,
                             ) {
                                 viewModel.onDeleteDocumentClicked(docId)
                             }
                         },
                         requestConfirm = { title, text, action ->
                             workspaceState.requestConfirm(title, text, action)
-                        }
+                        },
                     )
                 }
 
@@ -291,7 +281,7 @@ fun OrderDetailWorkspace(
                         modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
                         text = "Chiudi ed esci",
                         variant = AppButtonVariant.Secondary,
-                        onClick = onBack
+                        onClick = onBack,
                     )
                 }
             }
@@ -332,18 +322,18 @@ fun OrderDetailWorkspace(
                     onBack()
                 }
             }
-        }
+        },
     )
 
     InternalNoteDialog(
         state = workspaceState,
         currentInternalNotes = selected.order.internalNotes,
-        onAddNote = viewModel::addNote
+        onAddNote = viewModel::addNote,
     )
 
     OrderPdfSentConfirmationDialog(
         show = showPdfSentConfirmation,
         onDismiss = viewModel::onPdfSentDismissed,
-        onConfirm = viewModel::onPdfSentConfirmed
+        onConfirm = viewModel::onPdfSentConfirmed,
     )
 }

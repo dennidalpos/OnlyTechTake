@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.features.dashboard.detail
 
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -21,14 +22,13 @@ import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
 import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
 import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
-import java.io.File
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import android.graphics.Bitmap
+import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class OrderDetailViewModel(
@@ -42,16 +42,16 @@ class OrderDetailViewModel(
     private val shareDocumentIntentFactory: ShareDocumentIntentFactory,
     private val onSetFormDirty: (Boolean) -> Unit,
 ) : ViewModel() {
-
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
 
-    private val actionRunner = AuthenticatedActionRunner(
-        authRepository = authRepository,
-        currentUser = authRepository.currentUser,
-        scope = viewModelScope,
-        showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) }
-    )
+    private val actionRunner =
+        AuthenticatedActionRunner(
+            authRepository = authRepository,
+            currentUser = authRepository.currentUser,
+            scope = viewModelScope,
+            showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) },
+        )
 
     private val _isGeneratingStatusPdf = MutableStateFlow(false)
     val isGeneratingStatusPdf = _isGeneratingStatusPdf.asStateFlow()
@@ -76,11 +76,15 @@ class OrderDetailViewModel(
 
     val currentUser = authRepository.currentUser
 
-    val orderDetail = orderRepository.observeOrderDetail(orderId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+    val orderDetail =
+        orderRepository
+            .observeOrderDetail(orderId)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
-    val documents = orderDocumentRepository.observeByOrder(orderId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    val documents =
+        orderDocumentRepository
+            .observeByOrder(orderId)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     fun setFormDirty(dirty: Boolean) {
         onSetFormDirty(dirty)
@@ -90,7 +94,12 @@ class OrderDetailViewModel(
         _message.value = null
     }
 
-    fun changeStatus(status: OrderStatus, note: String = "", closureReason: ClosureReason? = null, onSuccess: () -> Unit = {}) {
+    fun changeStatus(
+        status: OrderStatus,
+        note: String = "",
+        closureReason: ClosureReason? = null,
+        onSuccess: () -> Unit = {},
+    ) {
         actionRunner.run(onSuccess = {
             clearPreparedMessage()
             onSuccess()
@@ -99,7 +108,12 @@ class OrderDetailViewModel(
         }
     }
 
-    fun recordResult(summary: String, diagnosisOutcome: DiagnosisOutcome, estimateAmountCents: Long?, onSuccess: () -> Unit = {}) {
+    fun recordResult(
+        summary: String,
+        diagnosisOutcome: DiagnosisOutcome,
+        estimateAmountCents: Long?,
+        onSuccess: () -> Unit = {},
+    ) {
         actionRunner.run(onSuccess = {
             clearPreparedMessage()
             onSuccess()
@@ -124,7 +138,10 @@ class OrderDetailViewModel(
 
     fun togglePaymentStatus(isPaid: Boolean) {
         actionRunner.run { actor ->
-            com.onlytechtake.repairapp.core.permissions.PermissionService.requirePermission(actor, com.onlytechtake.repairapp.data.local.entities.UserPermission.MANAGE_PAYMENTS)
+            com.onlytechtake.repairapp.core.permissions.PermissionService.requirePermission(
+                actor,
+                com.onlytechtake.repairapp.data.local.entities.UserPermission.MANAGE_PAYMENTS,
+            )
             orderRepository.togglePaymentStatus(actor, orderId, isPaid)
         }
     }
@@ -135,22 +152,33 @@ class OrderDetailViewModel(
         }
     }
 
-    fun createPhotoFile(id: String, orderNumber: String): Result<File> =
-        runCatching { orderMediaRepository.createPhotoFile(id, orderNumber) }
+    fun createPhotoFile(
+        id: String,
+        orderNumber: String,
+    ): Result<File> = runCatching { orderMediaRepository.createPhotoFile(id, orderNumber) }
 
-    fun registerCapturedPhoto(id: String, file: File) {
+    fun registerCapturedPhoto(
+        id: String,
+        file: File,
+    ) {
         actionRunner.run { actor ->
             orderMediaRepository.registerCapturedPhoto(actor, id, file)
         }
     }
 
-    fun registerCapturedFinalPhoto(id: String, file: File) {
+    fun registerCapturedFinalPhoto(
+        id: String,
+        file: File,
+    ) {
         actionRunner.run { actor ->
             orderMediaRepository.registerCapturedFinalPhoto(actor, id, file)
         }
     }
 
-    fun importAttachment(id: String, uri: Uri) {
+    fun importAttachment(
+        id: String,
+        uri: Uri,
+    ) {
         actionRunner.run { actor ->
             orderMediaRepository.importAttachment(actor, id, uri)
         }
@@ -162,7 +190,10 @@ class OrderDetailViewModel(
         }
     }
 
-    fun replaceImage(mediaId: String, bitmap: Bitmap) {
+    fun replaceImage(
+        mediaId: String,
+        bitmap: Bitmap,
+    ) {
         actionRunner.run { actor ->
             orderMediaRepository.replaceImage(actor, mediaId, bitmap)
         }
@@ -228,8 +259,7 @@ class OrderDetailViewModel(
                     _lastGeneratedDocumentId.value = document.id
                     triggerShare(document.localPath, "Stato avanzamento ${document.fileName}")
                     _showPdfSentConfirmation.value = true
-                }
-                .onFailure { error ->
+                }.onFailure { error ->
                     _isGeneratingStatusPdf.value = false
                     _statusPdfError.value = error.message
                 }
@@ -258,7 +288,7 @@ class OrderDetailViewModel(
                     onSuccess = {
                         orderRepository.recordMediaRemoved(actor, orderId, document.fileName)
                     },
-                    onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) }
+                    onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) },
                 )
             }
         }
@@ -283,7 +313,10 @@ class OrderDetailViewModel(
         _showPdfSentConfirmation.value = false
     }
 
-    private fun triggerShare(localPath: String, title: String) {
+    private fun triggerShare(
+        localPath: String,
+        title: String,
+    ) {
         val file = File(localPath)
         if (file.exists()) {
             _pendingShareIntent.value = shareDocumentIntentFactory.createPdfShareIntent(file, title)
@@ -293,7 +326,6 @@ class OrderDetailViewModel(
     fun clearPendingShareIntent() {
         _pendingShareIntent.value = null
     }
-
 
     class Factory(
         private val orderId: String,
@@ -307,12 +339,17 @@ class OrderDetailViewModel(
         private val onSetFormDirty: (Boolean) -> Unit,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return OrderDetailViewModel(
-                orderId, authRepository, orderRepository, orderMediaRepository,
-                orderDocumentRepository, templateRepository, generateOrderStatusPdfUseCase,
-                shareDocumentIntentFactory, onSetFormDirty
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            OrderDetailViewModel(
+                orderId,
+                authRepository,
+                orderRepository,
+                orderMediaRepository,
+                orderDocumentRepository,
+                templateRepository,
+                generateOrderStatusPdfUseCase,
+                shareDocumentIntentFactory,
+                onSetFormDirty,
             ) as T
-        }
     }
 }

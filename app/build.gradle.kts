@@ -2,16 +2,18 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
-val keystoreProperties = Properties().apply {
-    if (keystorePropertiesFile.exists()) {
-        keystorePropertiesFile.inputStream().use(::load)
+val keystoreProperties =
+    Properties().apply {
+        if (keystorePropertiesFile.exists()) {
+            keystorePropertiesFile.inputStream().use(::load)
+        }
     }
-}
 
 gradle.taskGraph.whenReady {
-    val requiresReleaseSigning = allTasks.any { task ->
-        task.path.startsWith(":app:") && task.name.contains("Release", ignoreCase = true)
-    }
+    val requiresReleaseSigning =
+        allTasks.any { task ->
+            task.path.startsWith(":app:") && task.name.contains("Release", ignoreCase = true)
+        }
     val isExplicitReleaseRequest = gradle.startParameter.taskNames.any { it.contains("Release", ignoreCase = true) }
 
     if (requiresReleaseSigning && isExplicitReleaseRequest && !keystorePropertiesFile.exists()) {

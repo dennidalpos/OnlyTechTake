@@ -11,12 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.utils.formatFileSize
-import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.utils.formatFileSize
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 
 @Composable
@@ -42,21 +41,23 @@ fun StorageSettings(
                     verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                 ) {
                     Text(stringResource(R.string.storage_free_device), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                    
+
                     val freePercentage = ((stats.freeDeviceBytes.toDouble() / stats.totalDeviceBytes.toDouble()) * 100).toInt()
                     val usedProgress = (stats.totalDeviceBytes - stats.freeDeviceBytes).toDouble() / stats.totalDeviceBytes.toDouble()
-                    
+
                     LinearProgressIndicator(
                         progress = { usedProgress.toFloat() },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(RepairAppSpacing.tinyGap)
-                            .clip(RepairAppShapes.pill),
-                        color = when {
-                            freePercentage < 5 -> MaterialTheme.colorScheme.error
-                            freePercentage < 15 -> MaterialTheme.colorScheme.tertiary
-                            else -> MaterialTheme.colorScheme.primary
-                        },
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .height(RepairAppSpacing.tinyGap)
+                                .clip(RepairAppShapes.pill),
+                        color =
+                            when {
+                                freePercentage < 5 -> MaterialTheme.colorScheme.error
+                                freePercentage < 15 -> MaterialTheme.colorScheme.tertiary
+                                else -> MaterialTheme.colorScheme.primary
+                            },
                         trackColor = MaterialTheme.colorScheme.surfaceVariant,
                     )
 
@@ -68,30 +69,33 @@ fun StorageSettings(
                         Text(
                             text = stringResource(R.string.storage_free_percentage, freePercentage, formatFileSize(stats.freeDeviceBytes)),
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
 
                         AppStatusBadge(
-                            text = stringResource(
+                            text =
+                                stringResource(
+                                    when {
+                                        freePercentage < 5 -> R.string.storage_status_critical
+                                        freePercentage < 15 -> R.string.storage_status_warning
+                                        else -> R.string.storage_status_ok
+                                    },
+                                ),
+                            containerColor =
                                 when {
-                                    freePercentage < 5 -> R.string.storage_status_critical
-                                    freePercentage < 15 -> R.string.storage_status_warning
-                                    else -> R.string.storage_status_ok
+                                    freePercentage < 5 -> MaterialTheme.colorScheme.errorContainer
+                                    freePercentage < 15 -> MaterialTheme.colorScheme.tertiaryContainer
+                                    else -> MaterialTheme.colorScheme.primaryContainer
                                 },
-                            ),
-                            containerColor = when {
-                                freePercentage < 5 -> MaterialTheme.colorScheme.errorContainer
-                                freePercentage < 15 -> MaterialTheme.colorScheme.tertiaryContainer
-                                else -> MaterialTheme.colorScheme.primaryContainer
-                            },
-                            contentColor = when {
-                                freePercentage < 5 -> MaterialTheme.colorScheme.onErrorContainer
-                                freePercentage < 15 -> MaterialTheme.colorScheme.onTertiaryContainer
-                                else -> MaterialTheme.colorScheme.onPrimaryContainer
-                            }
+                            contentColor =
+                                when {
+                                    freePercentage < 5 -> MaterialTheme.colorScheme.onErrorContainer
+                                    freePercentage < 15 -> MaterialTheme.colorScheme.onTertiaryContainer
+                                    else -> MaterialTheme.colorScheme.onPrimaryContainer
+                                },
                         )
                     }
-                    
+
                     Spacer(Modifier.height(RepairAppSpacing.tinyGap))
                     AppKeyValueRow(label = stringResource(R.string.storage_total_device), value = formatFileSize(stats.totalDeviceBytes))
                     AppKeyValueRow(label = stringResource(R.string.storage_app_used), value = formatFileSize(stats.appUsedBytes))
@@ -124,7 +128,7 @@ fun StorageSettings(
                     Text(
                         text = stringResource(R.string.storage_cleanup_orphans_tooltip),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     Spacer(Modifier.height(RepairAppSpacing.tinyGap))
                     AppButton(
@@ -132,7 +136,7 @@ fun StorageSettings(
                         text = stringResource(R.string.storage_cleanup_orphans),
                         variant = AppButtonVariant.Secondary,
                         size = AppButtonSize.Compact,
-                        onClick = viewModel::cleanupOrphanedFiles
+                        onClick = viewModel::cleanupOrphanedFiles,
                     )
                 }
             }
@@ -141,21 +145,21 @@ fun StorageSettings(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.actionGap)
+                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.actionGap),
             ) {
                 AppButton(
                     modifier = Modifier.weight(1f),
                     text = stringResource(R.string.storage_cleanup_cache),
                     variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact,
-                    onClick = viewModel::cleanupCache
+                    onClick = viewModel::cleanupCache,
                 )
                 AppButton(
                     modifier = Modifier.weight(1f),
                     text = stringResource(R.string.storage_refresh),
                     variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact,
-                    onClick = viewModel::refreshStorageStats
+                    onClick = viewModel::refreshStorageStats,
                 )
             }
         }
@@ -166,7 +170,7 @@ fun StorageSettings(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(R.string.storage_close),
             variant = AppButtonVariant.Ghost,
-            onClick = onBack
+            onClick = onBack,
         )
     }
 }

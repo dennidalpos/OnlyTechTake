@@ -38,16 +38,18 @@ fun StandardCard(
     role: Role = Role.Button,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val effectiveBorder = border ?: when (variant) {
-        StandardCardVariant.Highlight -> BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.8f))
-        StandardCardVariant.Outlined -> BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f))
-        StandardCardVariant.Filled -> null
-    }
+    val effectiveBorder =
+        border ?: when (variant) {
+            StandardCardVariant.Highlight -> BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.8f))
+            StandardCardVariant.Outlined -> BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f))
+            StandardCardVariant.Filled -> null
+        }
     val cardModifier = modifier.fillMaxWidth()
-    val effectiveContainerColor = when (variant) {
-        StandardCardVariant.Filled -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.18f)
-        else -> containerColor
-    }
+    val effectiveContainerColor =
+        when (variant) {
+            StandardCardVariant.Filled -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.18f)
+            else -> containerColor
+        }
     val contentModifier = Modifier
     val cardContent: @Composable ColumnScope.() -> Unit = {
         androidx.compose.foundation.layout.Column(modifier = contentModifier) {

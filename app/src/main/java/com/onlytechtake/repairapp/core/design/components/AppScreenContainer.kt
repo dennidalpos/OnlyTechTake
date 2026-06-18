@@ -19,27 +19,29 @@ fun AppScreenContainer(
     maxWidth: Dp = RepairAppSpacing.maxContentWidthMedium,
     horizontalPadding: Dp = RepairAppSpacing.screenHorizontal,
     verticalArrangement: Arrangement.Vertical = Arrangement.Top,
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     val scrollState = rememberScrollState()
-    
+
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .then(if (scrollable) Modifier.verticalScroll(scrollState) else Modifier),
-        contentAlignment = Alignment.TopCenter
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .then(if (scrollable) Modifier.verticalScroll(scrollState) else Modifier),
+        contentAlignment = Alignment.TopCenter,
     ) {
         val bottomPadding = if (scrollable) RepairAppSpacing.bottomContentPadding else 0.dp
         Column(
-            modifier = Modifier
-                .widthIn(max = maxWidth)
-                .fillMaxWidth()
-                .then(if (!scrollable) Modifier.fillMaxHeight() else Modifier)
-                .padding(horizontal = horizontalPadding)
-                .padding(top = RepairAppSpacing.screenVertical, bottom = bottomPadding),
+            modifier =
+                Modifier
+                    .widthIn(max = maxWidth)
+                    .fillMaxWidth()
+                    .then(if (!scrollable) Modifier.fillMaxHeight() else Modifier)
+                    .padding(horizontal = horizontalPadding)
+                    .padding(top = RepairAppSpacing.screenVertical, bottom = bottomPadding),
             verticalArrangement = verticalArrangement,
-            content = content
+            content = content,
         )
     }
 }

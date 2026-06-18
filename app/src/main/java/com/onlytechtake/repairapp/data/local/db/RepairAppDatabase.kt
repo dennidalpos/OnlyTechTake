@@ -5,15 +5,18 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.sqlite.db.SupportSQLiteOpenHelper
+import com.onlytechtake.repairapp.core.security.DatabaseKeyManager
 import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.CustomerDao
 import com.onlytechtake.repairapp.data.local.dao.DashboardDao
 import com.onlytechtake.repairapp.data.local.dao.MessageLogDao
 import com.onlytechtake.repairapp.data.local.dao.MessageTemplateDao
-import com.onlytechtake.repairapp.data.local.dao.OrderExportDao
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
 import com.onlytechtake.repairapp.data.local.dao.OrderDocumentDao
+import com.onlytechtake.repairapp.data.local.dao.OrderExportDao
 import com.onlytechtake.repairapp.data.local.dao.OrderMediaDao
 import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
 import com.onlytechtake.repairapp.data.local.dao.SignatureDao
@@ -34,11 +37,7 @@ import com.onlytechtake.repairapp.data.local.entities.RepairOrderFtsEntity
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
-
-import com.onlytechtake.repairapp.core.security.DatabaseKeyManager
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
-import androidx.sqlite.db.SupportSQLiteDatabase
-import androidx.sqlite.db.SupportSQLiteOpenHelper
 
 @Database(
     entities = [
@@ -64,19 +63,33 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper
 @TypeConverters(RoomConverters::class)
 abstract class RepairAppDatabase : RoomDatabase() {
     abstract fun dashboardDao(): DashboardDao
+
     abstract fun userDao(): UserDao
+
     abstract fun customerDao(): CustomerDao
+
     abstract fun orderCategoryDao(): OrderCategoryDao
+
     abstract fun repairOrderDao(): RepairOrderDao
+
     abstract fun timelineEventDao(): TimelineEventDao
+
     abstract fun orderMediaDao(): OrderMediaDao
+
     abstract fun signatureDao(): SignatureDao
+
     abstract fun messageTemplateDao(): MessageTemplateDao
+
     abstract fun messageLogDao(): MessageLogDao
+
     abstract fun appSettingDao(): AppSettingDao
+
     abstract fun auditLogDao(): AuditLogDao
+
     abstract fun orderExportDao(): OrderExportDao
+
     abstract fun orderDocumentDao(): OrderDocumentDao
+
     abstract fun loginAttemptDao(): com.onlytechtake.repairapp.data.local.dao.LoginAttemptDao
 
     companion object {
@@ -99,13 +112,21 @@ abstract class RepairAppDatabase : RoomDatabase() {
                     // Verify if the database can be opened with the current key to handle Keystore resets
                     val dbFile = context.getDatabasePath(DATABASE_NAME)
                     if (dbFile.exists()) {
-                        val config = SupportSQLiteOpenHelper.Configuration.builder(context)
-                            .name(DATABASE_NAME)
-                            .callback(object : SupportSQLiteOpenHelper.Callback(DATABASE_VERSION) {
-                                override fun onCreate(db: SupportSQLiteDatabase) {}
-                                override fun onUpgrade(db: SupportSQLiteDatabase, oldVersion: Int, newVersion: Int) {}
-                            })
-                            .build()
+                        val config =
+                            SupportSQLiteOpenHelper.Configuration
+                                .builder(context)
+                                .name(DATABASE_NAME)
+                                .callback(
+                                    object : SupportSQLiteOpenHelper.Callback(DATABASE_VERSION) {
+                                        override fun onCreate(db: SupportSQLiteDatabase) {}
+
+                                        override fun onUpgrade(
+                                            db: SupportSQLiteDatabase,
+                                            oldVersion: Int,
+                                            newVersion: Int,
+                                        ) {}
+                                    },
+                                ).build()
                         val helper = factory.create(config)
                         try {
                             // Raw SQLCipher open check - bypasses Room's main thread check
@@ -113,8 +134,9 @@ abstract class RepairAppDatabase : RoomDatabase() {
                             helper.close()
                         } catch (e: Exception) {
                             val message = e.message?.lowercase() ?: ""
-                            if (message.contains("file is not a database") || 
-                                e is net.zetetic.database.sqlcipher.SQLiteNotADatabaseException) {
+                            if (message.contains("file is not a database") ||
+                                e is net.zetetic.database.sqlcipher.SQLiteNotADatabaseException
+                            ) {
                                 android.util.Log.e("RepairAppDatabase", "Database corruption or wrong key detected. Wiping database.", e)
                                 helper.close()
                                 context.deleteDatabase(DATABASE_NAME)
@@ -127,12 +149,12 @@ abstract class RepairAppDatabase : RoomDatabase() {
                         }
                     }
 
-                    Room.databaseBuilder(
-                        context.applicationContext,
-                        RepairAppDatabase::class.java,
-                        DATABASE_NAME,
-                    )
-                        .openHelperFactory(factory)
+                    Room
+                        .databaseBuilder(
+                            context.applicationContext,
+                            RepairAppDatabase::class.java,
+                            DATABASE_NAME,
+                        ).openHelperFactory(factory)
                         .fallbackToDestructiveMigration(dropAllTables = true)
                         .build()
                         .also { instance = it }

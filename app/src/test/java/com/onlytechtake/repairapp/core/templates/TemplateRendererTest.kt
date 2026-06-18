@@ -9,10 +9,11 @@ class TemplateRendererTest {
 
     @Test
     fun renderReplacesKnownVariables() {
-        val result = renderer.render(
-            template = "Commessa {{ numero_commessa }} per {{cliente}}",
-            variables = mapOf("numero_commessa" to "RIP-2026-000001", "cliente" to "Mario"),
-        )
+        val result =
+            renderer.render(
+                template = "Commessa {{ numero_commessa }} per {{cliente}}",
+                variables = mapOf("numero_commessa" to "RIP-2026-000001", "cliente" to "Mario"),
+            )
 
         assertEquals("Commessa RIP-2026-000001 per Mario", result)
     }

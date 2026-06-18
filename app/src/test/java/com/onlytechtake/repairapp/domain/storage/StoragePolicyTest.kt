@@ -6,12 +6,11 @@ import org.junit.Test
 import java.io.File
 
 class StoragePolicyTest {
-
     @Test
     fun requireSpaceForHeavyWriteSucceedsWhenEnoughSpace() {
         val file = mockk<File>()
         every { file.freeSpace } returns StoragePolicy.MIN_FREE_BYTES_FOR_HEAVY_WRITE + 1
-        
+
         StoragePolicy.requireSpaceForHeavyWrite(file)
     }
 
@@ -19,7 +18,7 @@ class StoragePolicyTest {
     fun requireSpaceForHeavyWriteThrowsWhenNotEnoughSpace() {
         val file = mockk<File>()
         every { file.freeSpace } returns StoragePolicy.MIN_FREE_BYTES_FOR_HEAVY_WRITE - 1
-        
+
         StoragePolicy.requireSpaceForHeavyWrite(file)
     }
 }
