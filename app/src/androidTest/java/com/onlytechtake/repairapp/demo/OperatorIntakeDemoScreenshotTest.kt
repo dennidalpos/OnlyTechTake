@@ -83,10 +83,10 @@ class OperatorIntakeDemoScreenshotTest {
             waitForText("Cliente selezionato")
             clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
             
+            clickTag(RepairAppTestTags.categoryButton("demo-cat-pc"), scroll = true)
             clickTag(RepairAppTestTags.categoryButton(DemoDataSeeder.DEMO_CATEGORY_ID), scroll = true)
-            clickTag(RepairAppTestTags.categoryButton("demo-cat-hp"), scroll = true)
-            clickTag(RepairAppTestTags.categoryButton("demo-cat-pavilion"), scroll = true)
-            clickTag(RepairAppTestTags.categoryButton("demo-cat-pavilion-15"), scroll = true)
+            clickTag(RepairAppTestTags.categoryButton("demo-cat-gaming"), scroll = true)
+            clickTag(RepairAppTestTags.categoryButton("demo-cat-rog-strix"), scroll = true)
 
             clickTag(RepairAppTestTags.NewOrderStep2NextButton, scroll = true)
             typeTag(RepairAppTestTags.NewOrderProblemSummaryField, "Notebook non si accende", scroll = true)
@@ -109,7 +109,7 @@ class OperatorIntakeDemoScreenshotTest {
             waitForTag(RepairAppTestTags.OrderDetailOrderReference, useUnmergedTree = true)
             waitForTag(RepairAppTestTags.OrderDetailCustomerReference, useUnmergedTree = true)
             waitForTag(RepairAppTestTags.orderDetailStatusStep(1), useUnmergedTree = true)
-            waitForText("Notebook HP")
+            waitForText("Asus ROG Strix")
             capture(outputDir, "06-order-created.png")
 
             waitForTag(RepairAppTestTags.OrderWhatsAppButton, scroll = true)

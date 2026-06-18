@@ -440,7 +440,7 @@
 
     <string name="config_category_level_main">Categoria principale</string>
     <string name="config_category_level_sub">Sottocategoria livello %1$d</string>
-    <string name="config_category_root">Radice</string>
+    <string name="config_category_root">Tutte</string>
     <string name="config_category_up">Su</string>
     <string name="config_category_name_label">Nome categoria</string>
     <string name="config_category_description_label">Descrizione</string>
