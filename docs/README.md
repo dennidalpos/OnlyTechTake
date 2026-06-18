@@ -22,6 +22,7 @@ Indice canonico della documentazione tracciata. Il README della root resta il pu
 - [`release/RELEASE_CHECKLIST.md`](release/RELEASE_CHECKLIST.md): checklist prima del rilascio.
 - [`release/release-notes-0.1.0.md`](release/release-notes-0.1.0.md): note della release 0.1.0.
 - [`DEMO_ASSET_WORKFLOW.md`](DEMO_ASSET_WORKFLOW.md): pipeline tecnica screenshot/video.
+- [`DESIGN_SYSTEM_ICONS.md`](DESIGN_SYSTEM_ICONS.md): guida all'uso delle icone nel design system.
 - [`marketing/README.md`](marketing/README.md): regole sintetiche per asset marketing.
 - [`play-store/PLAY_CONSOLE_GUIDE_IT.md`](play-store/PLAY_CONSOLE_GUIDE_IT.md): risposte operative Play Console.
 - [`play-store/PUBLISH_PRO_IT.md`](play-store/PUBLISH_PRO_IT.md): flusso pubblicazione Google Play per OnlyTechTake Pro.

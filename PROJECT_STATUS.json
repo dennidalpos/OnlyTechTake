@@ -14,33 +14,6 @@
   },
   "todos": [
     {
-      "block_id": "B14",
-      "title": "Allineamento Test e Validazione Build",
-      "priority": "P1",
-      "complexity": "medium",
-      "status": "open",
-      "recommended_batch_size": 1,
-      "identified_residual": "Necessaria verifica approfondita dei test strumentati post-rifinitura UI (Categorie, Export, Firme). Allineamento completo delle varianti Full/Demo/Showcase.",
-      "why_this_block": "Garantire che le recenti modifiche UI/UX non abbiano rotto i flussi automatizzati e che tutte le varianti siano coerenti.",
-      "plan": [
-        "Eseguire test strumentati su device reale/emulatore.",
-        "Correggere eventuali test case falliti causa cambio tag o flussi (es. export delegato a SAF).",
-        "Validare la generazione dei report PDF e XLSX con i nuovi parametri."
-      ],
-      "items": [
-        {
-          "priority": "P1",
-          "summary": "Esecuzione e correzione test strumentati (Kaspresso/Compose).",
-          "completion_criteria": "Tutti i test in androidTest passano su almeno una variante."
-        },
-        {
-          "priority": "P1",
-          "summary": "Validazione export XLSX/PDF e ripristino backup.",
-          "completion_criteria": "Flusso export/import funzionante via SAF senza errori di permessi."
-        }
-      ]
-    },
-    {
       "block_id": "B10",
       "title": "Screenshot e video store Pro/Demo",
       "priority": "P1",

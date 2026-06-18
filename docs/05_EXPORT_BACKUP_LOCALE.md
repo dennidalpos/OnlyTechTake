@@ -23,7 +23,7 @@ Visibile solo ad admin.
 Output: `configuration.json`.
 
 Contiene categorie, template WhatsApp e impostazioni applicative esportate in JSON.
-La funzione esiste nel repository, ma non ha un pulsante dedicato nella schermata Backup corrente.
+Disponibile tramite pulsante dedicato nella schermata Config > Backup.
 
 ### Database
 

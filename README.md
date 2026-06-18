@@ -26,6 +26,7 @@ App Android locale per tracciare commesse clienti dal banco alla diagnosi, alla 
 - [Schema flusso commesse (Draw.io)](docs/07_SCHEMA_FLUSSO_COMMESSE.drawio)
 - [Privacy, WhatsApp e feedback](docs/04_PRIVACY_WHATSAPP_FEEDBACK.md)
 - [Export e backup locale](docs/05_EXPORT_BACKUP_LOCALE.md)
+- [Design System e Icone](docs/DESIGN_SYSTEM_ICONS.md)
 - [Build, installazione e verifica](docs/06_BUILD_INSTALLER_ANDROID.md)
 - [Checklist di Release](docs/release/RELEASE_CHECKLIST.md)
 - [Demo, Showcase, Full e manuale operativo](docs/08_LICENZA_DEMO_FULL_E_MANUALE_USO.md)

@@ -93,7 +93,8 @@ This register lists only active demo-asset residuals. Do not keep completed rows
 | Change | Affected flow/assets | Required updates | Validation | Residual |
 |---|---|---|---|---|
 | Pro/Demo store asset split | Pro listing screenshots, Demo listing screenshots/video | Add flavor-aware screenshot/video generation; keep output paths separated by flavor; regenerate Pro and Demo assets with demo-only limits visible where relevant | limits and watermark implemented | Tracked in `PROJECT_STATUS.json` block `B10` |
-| Design System Consolidation | All screenshots and videos | All assets reflect new tokens, AppStatusBadge, and improved spacing; some test tags might need verification if hierarchy changed. | not run | Tracked in `PROJECT_STATUS.json` block `B13` |
+| Design System Consolidation | All screenshots and videos | All assets reflect new tokens, AppStatusBadge, and improved spacing; some test tags might need verification if hierarchy changed. | compile only | Tracked in `PROJECT_STATUS.json` block `B13` |
+| Variant alignment and Build | All variants | Alignment of DemoMode across Full/Demo/Showcase and project-wide build/test validation. | check_project.ps1 passed | None |
 
 Use concise validation values such as `not run`, `compile only`, `screenshots verified`, or `screenshots and recording verified`. Do not mark a device flow verified unless it actually ran.
 
