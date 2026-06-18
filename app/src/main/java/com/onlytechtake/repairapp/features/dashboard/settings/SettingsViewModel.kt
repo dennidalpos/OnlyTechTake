@@ -77,12 +77,6 @@ class SettingsViewModel(
     private val _storageStats = MutableStateFlow<com.onlytechtake.repairapp.data.services.StorageStats?>(null)
     val storageStats = _storageStats.asStateFlow()
 
-    private val _exportDestination = MutableStateFlow(com.onlytechtake.repairapp.data.local.entities.ExportDestination.LOCAL)
-    val exportDestination = _exportDestination.asStateFlow()
-
-    private val _isCloudAvailable = MutableStateFlow(value = false)
-    val isCloudAvailable = _isCloudAvailable.asStateFlow()
-
     val currentUser = authRepository.currentUser
     val users = adminUserRepository.observeUsers().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     val categories = catalogRepository.observeCategories().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
@@ -94,12 +88,6 @@ class SettingsViewModel(
 
     init {
         refreshStorageStats()
-        viewModelScope.launch {
-            _isCloudAvailable.value = backupRepository.isCloudProviderAvailable()
-            if (_isCloudAvailable.value) {
-                _exportDestination.value = com.onlytechtake.repairapp.data.local.entities.ExportDestination.CLOUD
-            }
-        }
     }
 
     fun refreshStorageStats() {
@@ -131,10 +119,6 @@ class SettingsViewModel(
     fun resetTemplatesToDefaults() = templateDelegate.resetTemplatesToDefaults()
 
     fun setMessageMode(mode: MessageMode) = templateDelegate.setMessageMode(mode)
-
-    fun setExportDestination(destination: com.onlytechtake.repairapp.data.local.entities.ExportDestination) {
-        _exportDestination.value = destination
-    }
 
     fun setBackupReminderEnabled(enabled: Boolean) = backupDelegate.setBackupReminderEnabled(enabled)
 

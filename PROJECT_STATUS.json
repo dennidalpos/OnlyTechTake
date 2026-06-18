@@ -14,37 +14,29 @@
   },
   "todos": [
     {
-      "block_id": "B13",
-      "title": "Consolidamento UI/UX post-Audit",
+      "block_id": "B14",
+      "title": "Allineamento Test e Validazione Build",
       "priority": "P1",
-      "complexity": "low",
-      "status": "completed",
-      "identified_residual": "Refactoring UI allineato su tutte le varianti. Risolti problemi di allineamento verticale, rimozione dead space e consolidamento navigazione. Tutti i pulsanti 'Nuovo' accanto alle barre di ricerca sono stati convertiti in icone '+' (simboli) allineate perfettamente in altezza (56dp) tramite IntrinsicSize.Min. Rimosso pulsante duplicato dagli stati vuoti (AppEmptyState) nelle viste principali.",
-      "why_this_block": "Audit e allineamento completati per garantire coerenza visiva e logica operativa prima della produzione degli asset.",
+      "complexity": "medium",
+      "status": "open",
+      "recommended_batch_size": 1,
+      "identified_residual": "Necessaria verifica approfondita dei test strumentati post-rifinitura UI (Categorie, Export, Firme). Allineamento completo delle varianti Full/Demo/Showcase.",
+      "why_this_block": "Garantire che le recenti modifiche UI/UX non abbiano rotto i flussi automatizzati e che tutte le varianti siano coerenti.",
       "plan": [
-        "Rigenerare asset demo (B10) per riflettere la nuova UI consolidata.",
-        "Aggiornare i test strumentati (Kaspresso/Compose) che facevano riferimento a pulsanti con testo 'Nuovo cliente' ora diventati simboli."
+        "Eseguire test strumentati su device reale/emulatore.",
+        "Correggere eventuali test case falliti causa cambio tag o flussi (es. export delegato a SAF).",
+        "Validare la generazione dei report PDF e XLSX con i nuovi parametri."
       ],
       "items": [
         {
           "priority": "P1",
-          "summary": "Uniformità AppTextField (singleLine=true, ellipsis su label).",
-          "completion_criteria": "Tutti i campi dati su riga singola con gestione overflow corretta."
+          "summary": "Esecuzione e correzione test strumentati (Kaspresso/Compose).",
+          "completion_criteria": "Tutti i test in androidTest passano su almeno una variante."
         },
         {
           "priority": "P1",
-          "summary": "Conversione pulsanti 'Nuovo' in simboli '+' accanto alla ricerca.",
-          "completion_criteria": "Pulsanti in CustomerPanel, OrdersPanel, CategoriesSettings e TemplatesSettings convertiti in icone allineate 56dp con IntrinsicSize.Min."
-        },
-        {
-          "priority": "P1",
-          "summary": "Consolidamento navigazione e BackHandler.",
-          "completion_criteria": "Tasto indietro coerente; freccia TopBar Primary; conferma perdita dati su cambio tab e rinvio alla root della sezione."
-        },
-        {
-          "priority": "P2",
-          "summary": "Build e Unit Test di tutte le varianti (Full, Demo, Showcase).",
-          "completion_criteria": "Build Success e 100% Unit Test passati per tutte le varianti."
+          "summary": "Validazione export XLSX/PDF e ripristino backup.",
+          "completion_criteria": "Flusso export/import funzionante via SAF senza errori di permessi."
         }
       ]
     },
@@ -55,7 +47,7 @@
       "complexity": "medium",
       "status": "open",
       "recommended_batch_size": 1,
-      "identified_residual": "La nuova UI a simboli, la rimozione dello spazio morto e i nuovi allineamenti invalidano gli asset correnti. Necessaria rigenerazione completa.",
+      "identified_residual": "La nuova UI compatta e i nuovi flussi (export, firme business) invalidano gli asset correnti. Necessaria rigenerazione completa.",
       "why_this_block": "Gli asset devono riflettere esattamente l'app con la UI consolidata.",
       "plan": [
         "Eseguire scripts\\windows\\create_demo_assets.ps1 per rigenerare screenshot.",
@@ -68,7 +60,7 @@
           "refs": [
             "docs\\DEMO_ASSET_WORKFLOW.md"
           ],
-          "completion_criteria": "Asset store rigenerati e verificati con nuovi margini inferiori e icone simboliche."
+          "completion_criteria": "Asset store rigenerati e verificati con nuovi layout categorie e firme."
         }
       ]
     },

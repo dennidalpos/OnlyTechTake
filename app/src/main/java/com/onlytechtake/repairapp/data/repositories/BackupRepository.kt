@@ -355,24 +355,6 @@ class BackupRepository(
                 ?.takeIf { it.isNotBlank() }
         }.getOrNull()
 
-    fun isCloudProviderAvailable(): Boolean {
-        val cloudPackages = listOf(
-            "com.google.android.apps.docs", // Drive
-            "com.microsoft.skydrive",      // OneDrive
-            "com.dropbox.android",         // Dropbox
-            "com.box.android",             // Box
-        )
-        val pm = context.packageManager
-        return cloudPackages.any { pkg ->
-            try {
-                pm.getPackageInfo(pkg, 0)
-                true
-            } catch (e: Exception) {
-                false
-            }
-        }
-    }
-
     private fun replacePrivateFiles(restoreRoot: File) {
         val destination = mediaStorageProvider?.getBaseMediaDir()
             ?: File(context.filesDir, BackupArchive.CANONICAL_MEDIA_DIRECTORY)

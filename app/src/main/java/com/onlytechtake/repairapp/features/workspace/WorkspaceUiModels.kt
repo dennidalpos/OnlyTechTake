@@ -32,6 +32,7 @@ data class WorkspaceUiState(
 
 data class QuickIntakeSignatureDraft(
     val signerName: String,
+    val businessSignerName: String? = null,
     val privacyAccepted: Boolean,
     val termsAccepted: Boolean,
     val bitmap: Bitmap,

@@ -22,7 +22,6 @@ import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
-import com.onlytechtake.repairapp.data.local.entities.ExportDestination
 import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import com.onlytechtake.repairapp.domain.backup.BackupReminderStatus
@@ -37,8 +36,6 @@ fun BackupSettings(
     onRequestConfirm: (String, String, () -> Unit) -> Unit,
     onBack: () -> Unit,
 ) {
-    val exportDestination by viewModel.exportDestination.collectAsState()
-    val isCloudAvailable by viewModel.isCloudAvailable.collectAsState()
     val backupReminderSettings by viewModel.backupReminderSettings.collectAsState()
     val securitySettings by viewModel.securitySettings.collectAsState()
     var backupIntervalDays by rememberSaveable { mutableStateOf(backupReminderSettings.intervalDays.toString()) }
@@ -58,8 +55,6 @@ fun BackupSettings(
     }
 
     // Pre-fetch strings for callbacks
-    val destMsgLocal = stringResource(R.string.order_export_local)
-    val destMsgCloud = stringResource(R.string.order_export_cloud)
     val confirmExportZipTitle = stringResource(R.string.config_backup_confirm_export_zip_title)
     val confirmExportZipText = stringResource(R.string.config_backup_confirm_export_zip_text)
     val confirmRestoreZipTitle = stringResource(R.string.config_backup_confirm_restore_zip_title)
@@ -165,33 +160,6 @@ fun BackupSettings(
 
             StandardCard {
                 Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)) {
-                    Text(stringResource(R.string.config_backup_destination_label), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                    
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
-                        AppButton(
-                            modifier = Modifier.weight(1f),
-                            text = stringResource(R.string.config_backup_destination_local),
-                            variant = if (exportDestination == ExportDestination.LOCAL) AppButtonVariant.Primary else AppButtonVariant.Ghost,
-                            size = AppButtonSize.Compact,
-                            onClick = { viewModel.setExportDestination(ExportDestination.LOCAL) },
-                            selected = exportDestination == ExportDestination.LOCAL
-                        )
-                        AppButton(
-                            modifier = Modifier.weight(1f),
-                            text = stringResource(R.string.config_backup_destination_cloud),
-                            variant = if (exportDestination == ExportDestination.CLOUD) AppButtonVariant.Primary else AppButtonVariant.Ghost,
-                            size = AppButtonSize.Compact,
-                            onClick = { viewModel.setExportDestination(ExportDestination.CLOUD) },
-                            selected = exportDestination == ExportDestination.CLOUD
-                        )
-                    }
-                    
-                    if (!isCloudAvailable && exportDestination == ExportDestination.CLOUD) {
-                        AppMessageBanner(message = stringResource(R.string.config_backup_provider_unavailable), type = BannerType.Info)
-                    }
-
-                    Spacer(Modifier.height(RepairAppSpacing.compactGap))
-                    
                     AppButton(
                         text = stringResource(R.string.backup_run_full_zip),
                         size = AppButtonSize.Default,
@@ -199,8 +167,7 @@ fun BackupSettings(
                         modifier = Modifier.fillMaxWidth(),
                         testTag = RepairAppTestTags.ConfigBackupRunZipButton,
                         onClick = {
-                            val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
-                            onRequestConfirm(confirmExportZipTitle, confirmExportZipText.format(destMsg)) {
+                            onRequestConfirm(confirmExportZipTitle, confirmExportZipText) {
                                 exportZipLauncher.launch("onlytechtake-backup.zip")
                             }
                         },
@@ -234,8 +201,7 @@ fun BackupSettings(
                 variant = AppButtonVariant.Secondary,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
-                    onRequestConfirm(confirmExportXlsxTitle, confirmExportXlsxText.format(destMsg)) {
+                    onRequestConfirm(confirmExportXlsxTitle, confirmExportXlsxText) {
                         exportOrdersXlsxLauncher.launch("onlytechtake-commesse.xlsx")
                     }
                 },
@@ -249,8 +215,7 @@ fun BackupSettings(
                 variant = AppButtonVariant.Ghost,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    val destMsg = if (exportDestination == ExportDestination.LOCAL) destMsgLocal else destMsgCloud
-                    onRequestConfirm(confirmExportConfigTitle, confirmExportConfigText.format(destMsg)) {
+                    onRequestConfirm(confirmExportConfigTitle, confirmExportConfigText) {
                         exportConfigLauncher.launch("onlytechtake-config.json")
                     }
                 },

@@ -54,6 +54,7 @@ import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 
 data class SignatureCaptureResult(
     val signerName: String,
+    val businessSignerName: String? = null,
     val privacyAccepted: Boolean,
     val termsAccepted: Boolean,
     val bitmap: Bitmap,
@@ -65,11 +66,13 @@ fun SignatureCaptureForm(
     termsText: String,
     modifier: Modifier = Modifier,
     title: String = stringResource(R.string.signature_form_title),
+    isBusiness: Boolean = false,
     existingSignatures: List<SignatureEntity> = emptyList(),
     submitText: String? = null,
     onSubmit: (SignatureCaptureResult) -> Unit = {},
     onCaptureChanged: (SignatureCaptureResult?) -> Unit = {},
 ) {
+    var businessSignerName by rememberSaveable { mutableStateOf("") }
     var privacyAccepted by rememberSaveable { mutableStateOf(false) }
     var termsAccepted by rememberSaveable { mutableStateOf(false) }
     var textDialog by rememberSaveable { mutableStateOf<SignatureTextDialog?>(null) }
@@ -82,6 +85,7 @@ fun SignatureCaptureForm(
     val capture = if (privacyAccepted && termsAccepted && hasSignature) {
         SignatureCaptureResult(
             signerName = defaultSignerName,
+            businessSignerName = businessSignerName.takeIf { isBusiness && it.isNotBlank() },
             privacyAccepted = privacyAccepted,
             termsAccepted = termsAccepted,
             bitmap = renderSignatureBitmap(strokes),
@@ -90,12 +94,21 @@ fun SignatureCaptureForm(
         null
     }
 
-    LaunchedEffect(privacyAccepted, termsAccepted, strokes) {
+    LaunchedEffect(privacyAccepted, termsAccepted, strokes, businessSignerName) {
         onCaptureChanged(capture)
     }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
         SectionTitle(title)
+        
+        if (isBusiness) {
+            AppTextField(
+                value = businessSignerName,
+                onValueChange = { businessSignerName = it },
+                label = stringResource(R.string.signature_business_signer_label),
+                singleLine = true,
+            )
+        }
         existingSignatures.forEach { signature ->
             val desc = stringResource(R.string.signature_signer_label, signature.signerName)
             StandardCard(modifier = Modifier.fillMaxWidth()) {

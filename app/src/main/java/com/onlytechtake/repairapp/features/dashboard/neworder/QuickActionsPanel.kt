@@ -452,6 +452,7 @@ fun QuickActions(
                         title = stringResource(R.string.intake_step_privacy),
                         privacyText = stepperState.privacyText,
                         termsText = stepperState.termsText,
+                        isBusiness = stepperState.isBusiness,
                         onCaptureChanged = { capture ->
                             if (capture != null || draft.signatureCapture == null) {
                                 updateDraft {
@@ -459,6 +460,7 @@ fun QuickActions(
                                         signatureCapture = capture?.let { result ->
                                             QuickIntakeSignatureDraft(
                                                 signerName = result.signerName,
+                                                businessSignerName = result.businessSignerName,
                                                 privacyAccepted = result.privacyAccepted,
                                                 termsAccepted = result.termsAccepted,
                                                 bitmap = result.bitmap,
@@ -492,10 +494,16 @@ fun QuickActions(
                     stepperState.intakeInput.isReadyForSubmit(),
                 onSubmit = {
                     draft.signatureCapture?.let { capture ->
+                        val resolvedSignerName = if (stepperState.isBusiness) {
+                            capture.businessSignerName?.takeIf { it.isNotBlank() } ?: selectedCustomerDisplayName ?: unnamedBusiness
+                        } else {
+                            selectedCustomerDisplayName ?: unnamedPrivate
+                        }
+
                         viewModel.createIntakeOrder(
                             input = stepperState.intakeInput,
                             stagedMedia = draft.stagedMedia,
-                            signerName = capture.signerName,
+                            signerName = resolvedSignerName,
                             privacyAccepted = capture.privacyAccepted,
                             termsAccepted = capture.termsAccepted,
                             signatureBitmap = capture.bitmap,

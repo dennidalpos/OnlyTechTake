@@ -94,11 +94,6 @@ enum class OrderDocumentType {
     STATUS_PROGRESS_PDF,
 }
 
-enum class ExportDestination {
-    LOCAL,
-    CLOUD,
-}
-
 enum class AuditAction {
     ADMIN_LOGIN,
     LOGIN_FAILED,

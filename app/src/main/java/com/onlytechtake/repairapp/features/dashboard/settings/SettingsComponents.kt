@@ -33,6 +33,19 @@ internal fun LevelDot(level: Int) {
 }
 
 @Composable
+internal fun StatusDot(active: Boolean) {
+    Box(
+        modifier = Modifier
+            .size(8.dp)
+            .background(
+                if (active) MaterialTheme.colorScheme.primary
+                else MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
+                CircleShape
+            )
+    )
+}
+
+@Composable
 internal fun colorForLevel(level: Int): Color =
     MaterialTheme.repairColors.categoryLevels.getOrElse(level) {
         MaterialTheme.repairColors.categoryLevels.last()
@@ -40,6 +53,7 @@ internal fun colorForLevel(level: Int): Color =
 
 @Composable
 internal fun CategoryBreadcrumb(categories: List<OrderCategoryEntity>, parentId: String?) {
+    if (parentId == null) return
     val byId = categories.associateBy { it.id }
     val nodes = mutableListOf<OrderCategoryEntity>()
     var current = parentId?.let(byId::get)

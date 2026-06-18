@@ -70,7 +70,6 @@ fun AdminPanel(
     val confirmExportDatabaseText = stringResource(R.string.admin_confirm_export_database_text)
     val confirmExportXlsxTitle = stringResource(R.string.config_backup_confirm_export_xlsx_title)
     val confirmExportXlsxText = stringResource(R.string.config_backup_confirm_export_xlsx_text)
-    val destMsgLocal = stringResource(R.string.order_export_local)
 
     var displayName by rememberSaveable { mutableStateOf("") }
     var username by rememberSaveable { mutableStateOf("") }
@@ -429,7 +428,7 @@ fun AdminPanel(
                     variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact,
                     onClick = {
-                        requestConfirm(confirmExportDatabaseTitle, confirmExportDatabaseText.format(destMsgLocal)) {
+                        requestConfirm(confirmExportDatabaseTitle, confirmExportDatabaseText) {
                             exportDatabaseLauncher.launch("repairapp-export.db")
                         }
                     }
@@ -440,7 +439,7 @@ fun AdminPanel(
                     variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact,
                     onClick = {
-                        requestConfirm(confirmExportXlsxTitle, confirmExportXlsxText.format(destMsgLocal)) {
+                        requestConfirm(confirmExportXlsxTitle, confirmExportXlsxText) {
                             exportOrdersXlsxLauncher.launch("repairapp-commesse.xlsx")
                         }
                     }

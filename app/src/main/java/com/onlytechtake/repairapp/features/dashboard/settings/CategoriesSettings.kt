@@ -159,7 +159,7 @@ fun ColumnScope.CategoriesSettings(
                         }
                     )
 
-                    if (!showEditCard && searchQuery.isBlank() && isAdmin) {
+                    if (!showEditCard && searchQuery.isBlank() && isAdmin && (currentParent?.level ?: -1) < 3) {
                         Surface(
                             onClick = ::loadNewCategory,
                             color = MaterialTheme.colorScheme.primary,
@@ -172,7 +172,7 @@ fun ColumnScope.CategoriesSettings(
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
                                     imageVector = Icons.Default.Add,
-                                    contentDescription = stringResource(R.string.config_category_new_root),
+                                    contentDescription = if (currentCategoryParentId == null) stringResource(R.string.config_category_new_root) else stringResource(R.string.config_category_new_sub),
                                     tint = MaterialTheme.colorScheme.onPrimary
                                 )
                             }
@@ -317,22 +317,16 @@ fun ColumnScope.CategoriesSettings(
             ) {
                 Column(
                     modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.tinyGap),
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
-                            LevelDot(category.level)
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text(category.name, style = MaterialTheme.typography.titleMedium)
-                                Text(
-                                    text = (if (category.level == 0) stringResource(R.string.config_category_level_main) else stringResource(R.string.config_category_level_sub, category.level)) + " - " + (if (category.active) stringResource(R.string.config_category_active) else stringResource(R.string.config_category_archived)),
-                                    style = MaterialTheme.typography.bodySmall
-                                )
-                            }
+                        Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap), verticalAlignment = Alignment.CenterVertically) {
+                            StatusDot(category.active)
+                            Text(category.name, style = MaterialTheme.typography.titleMedium)
                         }
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             if (isAdmin) {
@@ -365,7 +359,13 @@ fun ColumnScope.CategoriesSettings(
                             }
                         }
                     }
-                    category.description?.takeIf { it.isNotBlank() }?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
+                    category.description?.takeIf { it.isNotBlank() }?.let { 
+                        Text(
+                            text = it, 
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        ) 
+                    }
                 }
             }
         }
@@ -374,8 +374,8 @@ fun ColumnScope.CategoriesSettings(
                 AppEmptyState(
                     title = stringResource(R.string.config_category_empty_title),
                     body = stringResource(R.string.config_category_empty_branch),
-                    actionLabel = stringResource(R.string.config_category_new_sub).takeIf { isAdmin && !showEditCard },
-                    onAction = ::loadNewCategory.takeIf { isAdmin && !showEditCard },
+                    actionLabel = stringResource(R.string.config_category_new_sub).takeIf { isAdmin && !showEditCard && (currentParent?.level ?: -1) < 3 },
+                    onAction = ::loadNewCategory.takeIf { isAdmin && !showEditCard && (currentParent?.level ?: -1) < 3 },
                 )
             }
         }
