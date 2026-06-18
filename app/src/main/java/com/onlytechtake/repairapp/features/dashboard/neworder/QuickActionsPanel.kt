@@ -35,6 +35,7 @@ import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.features.dashboard.common.*
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeSignatureDraft
@@ -209,12 +210,16 @@ fun QuickActions(
                         }
                     } else {
                         Row(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(IntrinsicSize.Min),
                             verticalAlignment = Alignment.Bottom,
                             horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
                         ) {
                             AppTextField(
-                                modifier = Modifier.weight(1f),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(56.dp),
                                 value = customerSearchQuery,
                                 onValueChange = { query ->
                                     updateDraft { draftState ->
@@ -268,7 +273,7 @@ fun QuickActions(
                                             imageVector = Icons.Default.Add,
                                             contentDescription = stringResource(R.string.intake_insert_new_customer),
                                             tint = MaterialTheme.colorScheme.onPrimary,
-                                            modifier = Modifier.size(32.dp)
+                                            modifier = Modifier.size(RepairAppIconSizes.medium)
                                         )
                                     }
                                 }

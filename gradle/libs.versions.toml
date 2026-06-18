@@ -2,6 +2,7 @@
 agp = "9.2.1"
 kotlin = "2.4.0"
 ksp = "2.3.9"
+spotless = "8.7.0"
 coreKtx = "1.19.0"
 activityCompose = "1.13.0"
 composeBom = "2026.05.01"
@@ -63,3 +64,4 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

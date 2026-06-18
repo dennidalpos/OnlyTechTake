@@ -169,7 +169,7 @@
     <string name="customer_unnamed_business">Azienda senza nome</string>
 
     <string name="customer_title">Clienti</string>
-    <string name="customer_search_label">Cerca cliente o commessa</string>
+    <string name="customer_search_label">Cerca cliente</string>
     <string name="customer_new">Nuovo cliente</string>
     <string name="customer_edit">Modifica cliente</string>
     <string name="customer_recent">Clienti recenti</string>
@@ -218,7 +218,7 @@
     <string name="intake_step_privacy">Privacy e firma</string>
 
 
-    <string name="intake_search_customer">Cerca cliente esistente</string>
+    <string name="intake_search_customer">Cerca cliente</string>
     <string name="intake_selected_customer">Cliente selezionato: %s</string>
     <string name="intake_change_customer">Cambia cliente</string>
     <string name="intake_insert_new_customer">Inserisci nuovo cliente</string>
@@ -265,7 +265,7 @@
     <string name="orders_filter_progress">Lav./diagnosi</string>
     <string name="orders_filter_result">Ris./rip.</string>
     <string name="orders_filter_ready">Pronte</string>
-    <string name="orders_search_label">Cerca per cliente, telefono, email o commessa</string>
+    <string name="orders_search_label">Cerca cliente</string>
     <string name="orders_select_detail_hint">Seleziona una commessa per vedere i dettagli</string>
     <string name="orders_select_detail_title">Nessuna commessa selezionata</string>
     <string name="orders_category_unavailable">Categoria non disponibile</string>

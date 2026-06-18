@@ -22,6 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.core.design.components.*
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
@@ -152,7 +153,7 @@ private fun OrdersListContent(
                 .fillMaxWidth()
                 .height(IntrinsicSize.Min),
             verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap)
+            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
         ) {
             AppTextField(
                 modifier = Modifier
@@ -189,7 +190,7 @@ private fun OrdersListContent(
                         imageVector = Icons.Default.Add,
                         contentDescription = stringResource(R.string.home_new_order),
                         tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(RepairAppIconSizes.medium)
                     )
                 }
             }

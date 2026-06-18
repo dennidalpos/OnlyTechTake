@@ -10,6 +10,8 @@ Gli script calcolano automaticamente la root del progetto dal proprio percorso, 
 | Gradle wrapper Android | `scripts\android\gradle.ps1` | Esegue `gradlew.bat` con JDK/SDK risolti dallo script. | Usare `--` prima degli argomenti Gradle. |
 | Build installer Android | `scripts\android\build_installer.ps1` | Produce APK o AAB tramite Gradle Wrapper e opzionalmente installa APK via adb. | Supporta `-Flavor Full|Demo|Showcase`, `-BuildType`, `-OutputType`, `-Clean`, `-RerunTasks`, `-Install`; blocca release senza signing locale. |
 | Start app Android | `scripts\android\start_app.ps1` | Installa l'APK selezionato e avvia `MainActivity` via adb. | Supporta `-Flavor Full|Demo|Showcase`, `-NoInstall`, `-ApkPath` e `-CleanInstall` per reinstallazione pulita. |
+| Clean repository | `scripts\windows\clean_repo.ps1` | Rimuove output temporanei, cache e artifact generati dentro il repository. | Supporta `-DryRun`, `-StopGradle` e `-IncludeIde`; preserva `reports\demo-assets` e non tocca cache globali, SDK, keystore o configurazioni locali. |
+| Quality check | `scripts\windows\quality.ps1` | Esegue Spotless/ktlint e Android Lint per linting, formatting e beautification. | Default check-only con prompt per autofix; supporta `-Apply`, `-NoPrompt`, `-SkipLint` e `-Flavor Full|Demo|Showcase`. |
 | Check progetto | `scripts\windows\check_project.ps1` | Esegue lint, compile Kotlin debug, test unitari, build APK debug e, senza `-SkipReleaseBuild`, build APK release firmata. | Supporta `-Flavor Full|Demo|Showcase`; `-AndroidTests` esegue il connected test del flavor selezionato. |
 | Audit vulnerabilita' dipendenze | `scripts\windows\check_dependency_vulnerabilities.ps1` | Interroga OSV sulle coordinate Maven presenti nei lockfile Gradle. | Separato dai check offline; non invia codice sorgente, solo group/artifact/version. |
 | Asset demo unificati | `scripts\windows\create_demo_assets.ps1` | Genera screenshot verticali e video MP4 montati dagli scenari strumentati. | Richiede ffmpeg per i video; usa AVD `OnlyTechTakeDemo` o device fisico. Mappa completa in `docs\DEMO_ASSET_WORKFLOW.md`. |
@@ -20,6 +22,10 @@ Gli script calcolano automaticamente la root del progetto dal proprio percorso, 
 | Obiettivo | Comando |
 |---|---|
 | setup / env | `powershell -ExecutionPolicy Bypass -File scripts\android\check_env.ps1` |
+| clean repo (anteprima) | `powershell -ExecutionPolicy Bypass -File scripts\windows\clean_repo.ps1 -DryRun` |
+| clean repo | `powershell -ExecutionPolicy Bypass -File scripts\windows\clean_repo.ps1` |
+| quality check | `powershell -ExecutionPolicy Bypass -File scripts\windows\quality.ps1` |
+| quality autofix | `powershell -ExecutionPolicy Bypass -File scripts\windows\quality.ps1 -Apply` |
 | asset demo (screen + video) | `powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_assets.ps1` |
 | asset demo su device USB | `powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_assets.ps1 -UseConnectedDevice` |
 | registrazione demo USB guidata | `powershell -ExecutionPolicy Bypass -File scripts\windows\record_demo_device.ps1` |

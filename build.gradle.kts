@@ -2,6 +2,44 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.spotless)
+}
+
+spotless {
+    val generatedTargets = arrayOf(
+        "**/build/**",
+        ".gradle/**",
+        ".kotlin/**",
+        "app/schemas/**",
+        "reports/**",
+        "demo/**",
+    )
+
+    kotlin {
+        target("**/*.kt")
+        targetExclude(*generatedTargets)
+        ktlint("1.5.0")
+    }
+
+    kotlinGradle {
+        target("**/*.gradle.kts")
+        targetExclude(*generatedTargets)
+        ktlint("1.5.0")
+    }
+
+    format("misc") {
+        target(
+            "**/*.md",
+            "**/*.json",
+            "**/*.xml",
+            "**/*.yml",
+            "**/*.yaml",
+            "**/*.properties",
+        )
+        targetExclude(*generatedTargets)
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
 }
 
 allprojects {

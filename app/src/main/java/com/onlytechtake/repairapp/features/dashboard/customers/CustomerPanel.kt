@@ -310,7 +310,7 @@ private fun CustomerListContent(
                 .fillMaxWidth()
                 .height(IntrinsicSize.Min),
             verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
+            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
         ) {
             AppTextField(
                 modifier = Modifier
@@ -342,7 +342,7 @@ private fun CustomerListContent(
                         imageVector = Icons.Default.Add,
                         contentDescription = stringResource(R.string.customer_new),
                         tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(RepairAppIconSizes.medium)
                     )
                 }
             }

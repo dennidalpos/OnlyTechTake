@@ -67,7 +67,7 @@ android {
         create("full") {
             isDefault = true
             dimension = "version"
-            resValue("string", "app_name", "OnlyTechTake")
+            resValue("string", "app_name", "OTT Pro")
             buildConfigField("boolean", "IS_DEMO_VERSION", "false")
             buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "false")
             buildConfigField("boolean", "IS_SHOWCASE_MODE_ENABLED", "false")
