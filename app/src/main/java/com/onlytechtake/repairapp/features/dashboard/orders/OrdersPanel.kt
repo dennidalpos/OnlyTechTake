@@ -18,11 +18,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.FilterList
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -39,7 +39,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -59,7 +58,6 @@ import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.core.design.components.AppDialog
-import com.onlytechtake.repairapp.core.design.components.AppDivider
 import com.onlytechtake.repairapp.core.design.components.AppIconButton
 import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
 import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
@@ -70,7 +68,6 @@ import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.core.utils.label
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
@@ -80,6 +77,7 @@ import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspace
 import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
+import kotlinx.coroutines.launch
 
 @Composable
 fun OrdersPanel(
@@ -258,16 +256,16 @@ private fun OrdersListContent(
             LazyColumn(
                 state = listState,
                 modifier =
-                Modifier
-                    .fillMaxSize()
-                    .testTag("orders_list")
-                    .imePadding(),
+                    Modifier
+                        .fillMaxSize()
+                        .testTag("orders_list")
+                        .imePadding(),
                 verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
                 contentPadding =
-                PaddingValues(
-                    top = RepairAppSpacing.compactGap,
-                    bottom = RepairAppSpacing.bottomContentPadding,
-                ),
+                    PaddingValues(
+                        top = RepairAppSpacing.compactGap,
+                        bottom = RepairAppSpacing.bottomContentPadding,
+                    ),
             ) {
                 if (orderListItems.isEmpty()) {
                     item {
@@ -297,16 +295,18 @@ private fun OrdersListContent(
                                 ) {
                                     Column(modifier = Modifier.weight(1f)) {
                                         Text(
-                                            text = stringResource(
-                                                R.string.orders_order_reference,
-                                                order.orderNumber,
-                                                order.title,
-                                            ),
-                                            modifier = Modifier.testTag(
-                                                RepairAppTestTags.orderCardOrderReference(
-                                                    order.id
-                                                )
-                                            ),
+                                            text =
+                                                stringResource(
+                                                    R.string.orders_order_reference,
+                                                    order.orderNumber,
+                                                    order.title,
+                                                ),
+                                            modifier =
+                                                Modifier.testTag(
+                                                    RepairAppTestTags.orderCardOrderReference(
+                                                        order.id,
+                                                    ),
+                                                ),
                                             style = MaterialTheme.typography.titleMedium,
                                             fontWeight = FontWeight.Bold,
                                             maxLines = 1,
@@ -314,15 +314,17 @@ private fun OrdersListContent(
                                             softWrap = false,
                                         )
                                         Text(
-                                            text = stringResource(
-                                                R.string.orders_customer_reference,
-                                                customerName
-                                            ),
-                                            modifier = Modifier.testTag(
-                                                RepairAppTestTags.orderCardCustomerReference(
-                                                    order.id
-                                                )
-                                            ),
+                                            text =
+                                                stringResource(
+                                                    R.string.orders_customer_reference,
+                                                    customerName,
+                                                ),
+                                            modifier =
+                                                Modifier.testTag(
+                                                    RepairAppTestTags.orderCardCustomerReference(
+                                                        order.id,
+                                                    ),
+                                                ),
                                             style = MaterialTheme.typography.bodyMedium,
                                             color = MaterialTheme.colorScheme.secondary,
                                             maxLines = 1,
@@ -341,23 +343,25 @@ private fun OrdersListContent(
                                 OrderStatusStepper(
                                     status = order.status,
                                     compact = true,
-                                    modifier = Modifier.testTag(
-                                        RepairAppTestTags.orderCardStatusStepper(
-                                            order.id
-                                        )
-                                    ),
+                                    modifier =
+                                        Modifier.testTag(
+                                            RepairAppTestTags.orderCardStatusStepper(
+                                                order.id,
+                                            ),
+                                        ),
                                 ) { step ->
                                     RepairAppTestTags.orderCardStatusStep(
                                         order.id,
-                                        step
+                                        step,
                                     )
                                 }
 
                                 Text(
-                                    text = stringResource(
-                                        R.string.orders_next_action_label,
-                                        nextActionLabel(order)
-                                    ),
+                                    text =
+                                        stringResource(
+                                            R.string.orders_next_action_label,
+                                            nextActionLabel(order),
+                                        ),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.primary,
                                     fontWeight = FontWeight.Medium,
@@ -372,15 +376,16 @@ private fun OrdersListContent(
                 AppButton(
                     text = "Torna su",
                     leadingIcon = Icons.Default.KeyboardArrowUp,
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = RepairAppSpacing.screenVertical)
-                        .testTag(RepairAppTestTags.ScrollToTopButton),
+                    modifier =
+                        Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(bottom = RepairAppSpacing.screenVertical)
+                            .testTag(RepairAppTestTags.ScrollToTopButton),
                     onClick = {
                         scope.launch { listState.animateScrollToItem(0) }
                     },
                     variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
                 )
             }
         }
@@ -411,13 +416,14 @@ private fun OrdersListContent(
 @Composable
 private fun ActiveFilterInfo(filter: OrderFilter) {
     val context = LocalContext.current
-    val modeText = when (filter.mode) {
-        com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL -> null
-        com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.MINE -> stringResource(R.string.orders_filter_mine)
-        com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED -> stringResource(R.string.orders_filter_open_unassigned)
-        com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> stringResource(R.string.orders_filter_closed_discarded)
-        com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS -> stringResource(R.string.orders_filter_in_progress_assigned)
-    }
+    val modeText =
+        when (filter.mode) {
+            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL -> null
+            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.MINE -> stringResource(R.string.orders_filter_mine)
+            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED -> stringResource(R.string.orders_filter_open_unassigned)
+            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> stringResource(R.string.orders_filter_closed_discarded)
+            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS -> stringResource(R.string.orders_filter_in_progress_assigned)
+        }
 
     val filterText =
         listOfNotNull(
@@ -489,5 +495,4 @@ private fun FilterToggleButton(
     )
 }
 
-private fun OrderFilter.hasActiveFilter(): Boolean =
-    (mode != com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL || query.isNotBlank())
+private fun OrderFilter.hasActiveFilter(): Boolean = (mode != com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL || query.isNotBlank())

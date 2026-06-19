@@ -74,7 +74,7 @@ class CreateIntakeOrderUseCaseTest {
                 orderMediaRepository.attachStagedMedia(
                     actor,
                     order.id,
-                    stagedMedia
+                    stagedMedia,
                 )
             } returns Result.success(emptyList())
 
@@ -114,14 +114,14 @@ class CreateIntakeOrderUseCaseTest {
                     "Mario Rossi",
                     true,
                     true,
-                    any()
+                    any(),
                 )
             }
             coVerify(exactly = 1) {
                 orderMediaRepository.attachStagedMedia(
                     actor,
                     order.id,
-                    stagedMedia
+                    stagedMedia,
                 )
             }
         }

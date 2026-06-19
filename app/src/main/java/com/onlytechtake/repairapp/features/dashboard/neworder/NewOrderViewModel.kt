@@ -59,9 +59,13 @@ class NewOrderViewModel(
             .distinctUntilChanged()
             .debounce { query -> if (query.isBlank()) 0L else 300L }
             .flatMapLatest { query ->
-                if (query.isBlank()) customerRepository.observeRecent() else customerRepository.search(
-                    query,
-                )
+                if (query.isBlank()) {
+                    customerRepository.observeRecent()
+                } else {
+                    customerRepository.search(
+                        query,
+                    )
+                }
             }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     val categories =
@@ -88,10 +92,11 @@ class NewOrderViewModel(
             viewModelScope.launch {
                 val totalOrders = createIntakeOrderUseCase.countAllOrders()
                 if (totalOrders >= BuildConfig.MAX_ORDERS) {
-                    _message.value = WorkspaceMessage(
-                        createIntakeOrderUseCase.getDemoLimitErrorMessage(),
-                        isError = true
-                    )
+                    _message.value =
+                        WorkspaceMessage(
+                            createIntakeOrderUseCase.getDemoLimitErrorMessage(),
+                            isError = true,
+                        )
                 }
             }
         }
@@ -168,8 +173,7 @@ class NewOrderViewModel(
         }
     }
 
-    fun createIntakePhotoFile(sessionId: String): Result<File> =
-        runCatching { orderMediaRepository.createIntakePhotoFile(sessionId) }
+    fun createIntakePhotoFile(sessionId: String): Result<File> = runCatching { orderMediaRepository.createIntakePhotoFile(sessionId) }
 
     fun stageCapturedIntakePhoto(
         file: File,

@@ -1,13 +1,14 @@
 param(
     [string]$OutputRoot = "",
     [string]$OutputFile = "",
+    [ValidateSet("Full", "Demo")]
     [string]$Flavor = "Full",
     [string]$PackageName = "",
     [string]$AvdName = "OnlyTechTakeDemo",
     [switch]$UseConnectedDevice,
     [switch]$SkipBuild,
     [switch]$SeedData,
-    [ValidateSet("", "manual", "full-workflow", "social-stories", "config", "customers", "maintenance")]
+    [ValidateSet("", "manual", "full-workflow", "social-stories", "config", "customers", "maintenance", "demo-limit")]
     [string]$ScenarioId = "",
     [switch]$StartImmediately,
     [int]$MaxDurationSeconds = 180,
@@ -56,7 +57,8 @@ if (Test-Path $demoSupportScript) {
 }
 
 if ($OutputFile -eq "") {
-    $OutputFile = "onlytechtake-demo-workflow-completo.mp4"
+    $scenarioName = if ([string]::IsNullOrWhiteSpace($ScenarioId)) { "manual" } else { $ScenarioId }
+    $OutputFile = "onlytechtake-$($Flavor.ToLowerInvariant())-$scenarioName.mp4"
 }
 
 Assert-PathInsideRoot -Path $OutputRoot -RootPath $root
@@ -110,6 +112,12 @@ $recordingsConfig = @(
         Id = "maintenance"
         Description = "Manutenzione (Storage, Backup, Export Excel)"
         TestClass = "com.onlytechtake.repairapp.demo.SocialStoryDemoScreenshotTest#capturesMaintenanceStories"
+    },
+    [PSCustomObject]@{
+        Id = "demo-limit"
+        Description = "Limite commesse Demo"
+        TestClass = "com.onlytechtake.repairapp.demo.SocialStoryDemoScreenshotTest#capturesDemoLimitStory"
+        RequiredFlavor = "Demo"
     }
 )
 
@@ -120,6 +128,9 @@ if ($ScenarioId) {
         $selectedFlow = $recordingsConfig | Where-Object { $_.Id -eq $ScenarioId } | Select-Object -First 1
         if ($null -eq $selectedFlow) {
             throw "ScenarioId non valido: $ScenarioId"
+        }
+        if ($selectedFlow.RequiredFlavor -and $selectedFlow.RequiredFlavor -ne $Flavor) {
+            throw "Lo scenario '$ScenarioId' richiede il flavor $($selectedFlow.RequiredFlavor)."
         }
         $selectedTestClass = $selectedFlow.TestClass
         Write-Host "Verrà eseguito lo scenario: $($selectedFlow.Description)" -ForegroundColor Green

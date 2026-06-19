@@ -58,7 +58,7 @@ class AdminUserRepositoryTest {
             assertTrue(result.isFailure)
             assertEquals(
                 "L'account Admin non può essere disattivato",
-                result.exceptionOrNull()?.message
+                result.exceptionOrNull()?.message,
             )
         }
 

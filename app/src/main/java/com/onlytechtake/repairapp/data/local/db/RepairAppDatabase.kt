@@ -141,7 +141,7 @@ abstract class RepairAppDatabase : RoomDatabase() {
                                 android.util.Log.e(
                                     "RepairAppDatabase",
                                     "Database corruption or wrong key detected. Wiping database.",
-                                    e
+                                    e,
                                 )
                                 helper.close()
                                 context.deleteDatabase(DATABASE_NAME)

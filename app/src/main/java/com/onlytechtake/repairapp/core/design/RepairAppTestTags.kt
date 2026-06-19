@@ -52,6 +52,7 @@ object RepairAppTestTags {
     const val OrderWhatsAppOpenButton = "order_whatsapp_open_button"
     const val OrderWhatsAppSentButton = "order_whatsapp_sent_button"
     const val OrderWhatsAppClosePreviewButton = "order_whatsapp_close_preview_button"
+    const val OrderSignaturesCard = "order_signatures_card"
     const val OrderSignatureSection = "order_signature_section"
 
     const val CustomerNewButton = "customer_new_button"
@@ -89,6 +90,7 @@ object RepairAppTestTags {
     const val ConfigTemplateCodeField = "config_template_code_field"
     const val ConfigTemplateTitleField = "config_template_title_field"
     const val ConfigTemplateBodyField = "config_template_body_field"
+    const val ConfigTemplateVariablesTooltip = "config_template_variables_tooltip"
     const val ConfigTemplateNewButton = "config_template_new_button"
     const val ConfigTemplateSaveButton = "config_template_save_button"
     const val ConfigBackupReminderSwitch = "config_backup_reminder_switch"

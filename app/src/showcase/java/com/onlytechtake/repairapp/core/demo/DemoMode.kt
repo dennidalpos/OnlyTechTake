@@ -24,7 +24,7 @@ object DemoMode {
                 0,
                 "Smartphone",
                 "Riparazione telefoni cellulari",
-                true
+                true,
             ),
             OrderCategoryEntity("cat-apple", "cat-smartphone", 1, "Apple", "Dispositivi iOS", true),
             OrderCategoryEntity(
@@ -33,7 +33,7 @@ object DemoMode {
                 2,
                 "iPhone",
                 "Tutti i modelli iPhone",
-                true
+                true,
             ),
             OrderCategoryEntity(
                 "cat-iphone-14-pro",
@@ -41,7 +41,7 @@ object DemoMode {
                 3,
                 "iPhone 14 Pro",
                 "Riparazione display",
-                true
+                true,
             ),
             OrderCategoryEntity(
                 "cat-pc",
@@ -49,7 +49,7 @@ object DemoMode {
                 0,
                 "Computer & Laptop",
                 "Riparazioni hardware e software PC",
-                true
+                true,
             ),
             OrderCategoryEntity(
                 "cat-notebook",
@@ -57,7 +57,7 @@ object DemoMode {
                 1,
                 "Notebook",
                 "Portatili e Ultrabook",
-                true
+                true,
             ),
             OrderCategoryEntity(
                 "cat-windows-laptop",
@@ -65,7 +65,7 @@ object DemoMode {
                 2,
                 "Windows Laptop",
                 "Asus, HP, Dell",
-                true
+                true,
             ),
             OrderCategoryEntity(
                 "cat-asus-zenbook",
@@ -73,7 +73,7 @@ object DemoMode {
                 3,
                 "Asus Zenbook OLED",
                 "Riparazione hardware",
-                true
+                true,
             ),
         )
 }

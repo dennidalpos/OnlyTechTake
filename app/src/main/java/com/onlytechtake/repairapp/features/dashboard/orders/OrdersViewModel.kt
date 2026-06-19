@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.core.permissions.PermissionService
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
@@ -12,7 +11,6 @@ import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
-import com.onlytechtake.repairapp.features.workspace.buildOperationalQueues
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -20,7 +18,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -89,11 +86,12 @@ class OrdersViewModel(
         private val backupReminderPreferences: BackupReminderPreferences? = null,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T = OrdersViewModel(
-            authRepository,
-            orderRepository,
-            backupRepository,
-            backupReminderPreferences
-        ) as T
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            OrdersViewModel(
+                authRepository,
+                orderRepository,
+                backupRepository,
+                backupReminderPreferences,
+            ) as T
     }
 }

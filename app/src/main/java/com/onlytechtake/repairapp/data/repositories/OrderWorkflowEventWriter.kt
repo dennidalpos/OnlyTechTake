@@ -54,7 +54,7 @@ internal class OrderWorkflowEventWriter(
                 closureReason?.let {
                     context.getString(
                         R.string.closure_reason_prefix,
-                        it.label(context)
+                        it.label(context),
                     )
                 },
             ).joinToString("\n")
@@ -353,7 +353,7 @@ internal class OrderWorkflowEventWriter(
 
     private suspend fun writeTimeline(event: TimelineEventEntity) {
         requireNotNull(timelineEventDao) { context.getString(R.string.timeline_writer_not_configured) }.upsert(
-            event
+            event,
         )
     }
 

@@ -74,7 +74,7 @@ class MediaContainer(
     val orderFileCleanupService by lazy {
         OrderFileCleanupService(
             context.applicationContext,
-            mediaStorageProvider
+            mediaStorageProvider,
         )
     }
     private val mediaOptimizer by lazy {
@@ -187,7 +187,7 @@ class SettingsContainer(
     val storageStatsService by lazy {
         StorageStatsService(
             context.applicationContext,
-            mediaContainer.mediaStorageProvider
+            mediaContainer.mediaStorageProvider,
         )
     }
 

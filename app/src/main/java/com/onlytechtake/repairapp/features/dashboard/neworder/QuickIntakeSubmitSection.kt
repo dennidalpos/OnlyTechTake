@@ -41,10 +41,11 @@ fun QuickIntakeSubmitSection(
 
             if (missingRequirements.isNotEmpty()) {
                 AppMessageBanner(
-                    message = stringResource(
-                        R.string.intake_submit_missing,
-                        missingRequirements.joinToString(", "),
-                    ),
+                    message =
+                        stringResource(
+                            R.string.intake_submit_missing,
+                            missingRequirements.joinToString(", "),
+                        ),
                     type = BannerType.Warning,
                 )
             }

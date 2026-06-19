@@ -58,7 +58,7 @@ fun StorageSettings(
                     Text(
                         stringResource(R.string.storage_free_device),
                         style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
 
                     val freePercentage =
@@ -88,11 +88,12 @@ fun StorageSettings(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = stringResource(
-                                R.string.storage_free_percentage,
-                                freePercentage,
-                                formatFileSize(stats.freeDeviceBytes)
-                            ),
+                            text =
+                                stringResource(
+                                    R.string.storage_free_percentage,
+                                    freePercentage,
+                                    formatFileSize(stats.freeDeviceBytes),
+                                ),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -124,11 +125,11 @@ fun StorageSettings(
                     Spacer(Modifier.height(RepairAppSpacing.tinyGap))
                     AppKeyValueRow(
                         label = stringResource(R.string.storage_total_device),
-                        value = formatFileSize(stats.totalDeviceBytes)
+                        value = formatFileSize(stats.totalDeviceBytes),
                     )
                     AppKeyValueRow(
                         label = stringResource(R.string.storage_app_used),
-                        value = formatFileSize(stats.appUsedBytes)
+                        value = formatFileSize(stats.appUsedBytes),
                     )
                 }
             }
@@ -143,23 +144,23 @@ fun StorageSettings(
                     Text(
                         stringResource(R.string.storage_app_detail_title),
                         style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                     AppKeyValueRow(
                         label = stringResource(R.string.storage_db_size),
-                        value = formatFileSize(stats.databaseBytes)
+                        value = formatFileSize(stats.databaseBytes),
                     )
                     AppKeyValueRow(
                         label = stringResource(R.string.storage_media_size),
-                        value = formatFileSize(stats.mediaBytes)
+                        value = formatFileSize(stats.mediaBytes),
                     )
                     AppKeyValueRow(
                         label = stringResource(R.string.storage_docs_size),
-                        value = formatFileSize(stats.documentsBytes)
+                        value = formatFileSize(stats.documentsBytes),
                     )
                     AppKeyValueRow(
                         label = stringResource(R.string.storage_cache_size),
-                        value = formatFileSize(stats.cacheBytes)
+                        value = formatFileSize(stats.cacheBytes),
                     )
                 }
             }
@@ -174,7 +175,7 @@ fun StorageSettings(
                     Text(
                         stringResource(R.string.storage_deep_maintenance),
                         style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                     Text(
                         text = stringResource(R.string.storage_cleanup_orphans_tooltip),

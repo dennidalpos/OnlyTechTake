@@ -51,7 +51,7 @@ internal class BackupMetadataService(
                         )
                     }, \"active\": ${template.active}, \"version\": ${template.version}, \"body\": ${
                         jsonString(
-                            template.body
+                            template.body,
                         )
                     }}"
                 },

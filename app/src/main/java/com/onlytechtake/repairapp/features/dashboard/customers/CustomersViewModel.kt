@@ -105,8 +105,15 @@ class CustomersViewModel(
                 user,
                 OrderFilter(
                     customerId = customerId,
-                    statuses = if (openOnly) OrderStatus.values()
-                        .filter { it != OrderStatus.CLOSED }.toSet() else emptySet(),
+                    statuses =
+                        if (openOnly) {
+                            OrderStatus
+                                .values()
+                                .filter { it != OrderStatus.CLOSED }
+                                .toSet()
+                        } else {
+                            emptySet()
+                        },
                 ),
             )
         }
@@ -119,11 +126,12 @@ class CustomersViewModel(
         private val onSetFormDirty: (Boolean) -> Unit,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T = CustomersViewModel(
-            authRepository,
-            customerRepository,
-            orderWorkflowRepository,
-            onSetFormDirty
-        ) as T
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            CustomersViewModel(
+                authRepository,
+                customerRepository,
+                orderWorkflowRepository,
+                onSetFormDirty,
+            ) as T
     }
 }

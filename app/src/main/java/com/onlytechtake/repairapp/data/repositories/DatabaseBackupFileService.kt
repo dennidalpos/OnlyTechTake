@@ -59,7 +59,7 @@ internal class DatabaseBackupFileService(
         } catch (e: Exception) {
             throw IOException(
                 "Validazione database fallita (chiave errata o file corrotto): ${e.message}",
-                e
+                e,
             )
         }
     }

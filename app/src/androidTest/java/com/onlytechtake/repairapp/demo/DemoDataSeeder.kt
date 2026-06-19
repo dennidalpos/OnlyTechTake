@@ -143,7 +143,7 @@ object DemoDataSeeder {
                     createdAt = now - (i * 1000L),
                     updatedAt = now - (i * 1000L),
                 )
-            }
+            },
         )
 
         // Assign to Admin in Demo version, otherwise to Operator
@@ -170,7 +170,7 @@ object DemoDataSeeder {
                     closedAt = null,
                     closureReason = null,
                 )
-            }
+            },
         )
 
         val mediaPath =

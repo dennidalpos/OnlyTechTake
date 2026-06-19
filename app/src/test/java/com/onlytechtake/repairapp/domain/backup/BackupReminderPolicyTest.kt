@@ -14,23 +14,24 @@ class BackupReminderPolicyTest {
 
     @Test
     fun successfulBackupHidesReminderUntilIntervalExpires() {
-        val settings = BackupReminderPolicy.recordSuccess(
-            BackupReminderSettings(),
-            NOW,
-            "onlytechtake-backup.zip"
-        )
+        val settings =
+            BackupReminderPolicy.recordSuccess(
+                BackupReminderSettings(),
+                NOW,
+                "onlytechtake-backup.zip",
+            )
 
         assertFalse(
             BackupReminderPolicy.shouldShowReminder(
                 settings,
-                NOW + TimeUnit.DAYS.toMillis(6)
-            )
+                NOW + TimeUnit.DAYS.toMillis(6),
+            ),
         )
         assertTrue(
             BackupReminderPolicy.shouldShowReminder(
                 settings,
-                NOW + TimeUnit.DAYS.toMillis(7)
-            )
+                NOW + TimeUnit.DAYS.toMillis(7),
+            ),
         )
         assertEquals("onlytechtake-backup.zip", settings.lastBackupFileName)
     }
@@ -47,14 +48,14 @@ class BackupReminderPolicyTest {
         assertFalse(
             BackupReminderPolicy.shouldShowReminder(
                 settings,
-                NOW + TimeUnit.DAYS.toMillis(2)
-            )
+                NOW + TimeUnit.DAYS.toMillis(2),
+            ),
         )
         assertTrue(
             BackupReminderPolicy.shouldShowReminder(
                 settings,
-                NOW + TimeUnit.DAYS.toMillis(3)
-            )
+                NOW + TimeUnit.DAYS.toMillis(3),
+            ),
         )
     }
 

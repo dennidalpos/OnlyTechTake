@@ -40,14 +40,15 @@ internal class OrderWorkflowQueries(
             filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED
         val assignedOnly =
             filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS
-        val isClosed = when (filter.mode) {
-            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> true
-            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
-            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
+        val isClosed =
+            when (filter.mode) {
+                com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> true
+                com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
+                com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
                 -> false
 
-            else -> null
-        }
+                else -> null
+            }
 
         return repairOrderDao.observeFiltered(
             assignedToUserId = assignedToUserId,
@@ -71,14 +72,15 @@ internal class OrderWorkflowQueries(
             filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED
         val assignedOnly =
             filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS
-        val isClosed = when (filter.mode) {
-            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> true
-            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
-            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
+        val isClosed =
+            when (filter.mode) {
+                com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> true
+                com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
+                com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
                 -> false
 
-            else -> null
-        }
+                else -> null
+            }
 
         return repairOrderDao
             .search(
@@ -116,14 +118,15 @@ internal class OrderWorkflowQueries(
             filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED
         val assignedOnly =
             filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS
-        val isClosed = when (filter.mode) {
-            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> true
-            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
-            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
+        val isClosed =
+            when (filter.mode) {
+                com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> true
+                com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
+                com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
                 -> false
 
-            else -> null
-        }
+                else -> null
+            }
 
         return repairOrderDao
             .observeOrderListProjection(

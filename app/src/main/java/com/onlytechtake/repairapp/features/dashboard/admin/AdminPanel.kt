@@ -147,19 +147,19 @@ fun AdminPanel(
                 Text(
                     stringResource(R.string.admin_create_operator),
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 AppTextField(
                     displayName,
                     { displayName = it },
                     stringResource(R.string.customer_field_first_name),
-                    required = true
+                    required = true,
                 )
                 AppTextField(
                     username,
                     { username = it },
                     stringResource(R.string.auth_username),
-                    required = true
+                    required = true,
                 )
                 AppTextField(
                     value = password,
@@ -222,9 +222,10 @@ fun AdminPanel(
                         type = BannerType.Warning,
                     )
                     StandardCard(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(
-                            alpha = 0.3f
-                        )
+                        containerColor =
+                            MaterialTheme.colorScheme.surfaceVariant.copy(
+                                alpha = 0.3f,
+                            ),
                     ) {
                         Column(
                             modifier = Modifier.padding(RepairAppSpacing.cardPadding),
@@ -233,7 +234,7 @@ fun AdminPanel(
                         ) {
                             Text(
                                 stringResource(R.string.admin_recovery_master_code),
-                                style = MaterialTheme.typography.labelSmall
+                                style = MaterialTheme.typography.labelSmall,
                             )
                             Text(
                                 text = recoveryCode!!,
@@ -275,18 +276,18 @@ fun AdminPanel(
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(
                                     user.displayName,
                                     style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold
+                                    fontWeight = FontWeight.Bold,
                                 )
                                 Text(
                                     user.username,
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             }
                             AppStatusBadge(
@@ -307,9 +308,14 @@ fun AdminPanel(
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(
-                                        text = if (user.active) stringResource(R.string.admin_user_active) else stringResource(
-                                            R.string.admin_user_inactive
-                                        ),
+                                        text =
+                                            if (user.active) {
+                                                stringResource(R.string.admin_user_active)
+                                            } else {
+                                                stringResource(
+                                                    R.string.admin_user_inactive,
+                                                )
+                                            },
                                         style = MaterialTheme.typography.bodyMedium,
                                         fontWeight = FontWeight.SemiBold,
                                         color = if (user.active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
@@ -355,50 +361,50 @@ fun AdminPanel(
                             Text(
                                 stringResource(R.string.admin_permissions_title),
                                 style = MaterialTheme.typography.labelLarge,
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
                             )
 
                             val permissionGroups =
                                 listOf(
                                     PermissionUIItem(
                                         UserPermission.CREATE_ORDERS,
-                                        stringResource(R.string.admin_permission_create_orders)
+                                        stringResource(R.string.admin_permission_create_orders),
                                     ),
                                     PermissionUIItem(
                                         UserPermission.EDIT_OWN_ORDERS,
-                                        stringResource(R.string.admin_permission_edit_own_orders)
+                                        stringResource(R.string.admin_permission_edit_own_orders),
                                     ),
                                     PermissionUIItem(
                                         UserPermission.EDIT_ALL_ORDERS,
-                                        stringResource(R.string.admin_permission_edit_all_orders)
+                                        stringResource(R.string.admin_permission_edit_all_orders),
                                     ),
                                     PermissionUIItem(
                                         UserPermission.CLOSE_ORDERS,
-                                        stringResource(R.string.admin_permission_close_orders)
+                                        stringResource(R.string.admin_permission_close_orders),
                                     ),
                                     PermissionUIItem(
                                         UserPermission.MANAGE_CUSTOMERS,
-                                        stringResource(R.string.admin_permission_manage_customers)
+                                        stringResource(R.string.admin_permission_manage_customers),
                                     ),
                                     PermissionUIItem(
                                         UserPermission.MANAGE_CATEGORIES,
-                                        stringResource(R.string.admin_permission_manage_categories)
+                                        stringResource(R.string.admin_permission_manage_categories),
                                     ),
                                     PermissionUIItem(
                                         UserPermission.MANAGE_TEMPLATES,
-                                        stringResource(R.string.admin_permission_manage_templates)
+                                        stringResource(R.string.admin_permission_manage_templates),
                                     ),
                                     PermissionUIItem(
                                         UserPermission.MANAGE_PAYMENTS,
-                                        stringResource(R.string.admin_permission_manage_payments)
+                                        stringResource(R.string.admin_permission_manage_payments),
                                     ),
                                     PermissionUIItem(
                                         UserPermission.EXPORT_DATA,
-                                        stringResource(R.string.admin_permission_export_data)
+                                        stringResource(R.string.admin_permission_export_data),
                                     ),
                                     PermissionUIItem(
                                         UserPermission.MANAGE_STORAGE,
-                                        stringResource(R.string.admin_permission_manage_storage)
+                                        stringResource(R.string.admin_permission_manage_storage),
                                     ),
                                 )
 
@@ -420,7 +426,7 @@ fun AdminPanel(
                                                     }
                                                 viewModel.setUserPermissions(
                                                     user.id,
-                                                    newPermissions
+                                                    newPermissions,
                                                 )
                                             },
                                     verticalAlignment = Alignment.CenterVertically,
@@ -501,18 +507,18 @@ fun AdminPanel(
                                     viewModel.changePassword(
                                         user.username,
                                         currentPassword.toCharArray(),
-                                        resetPassword.toCharArray()
+                                        resetPassword.toCharArray(),
                                     )
                                     currentPassword = ""
                                     resetPasswords -= user.id
                                 } else {
                                     requestConfirm(
                                         confirmResetTitle,
-                                        confirmResetTextTemplate.format(user.displayName)
+                                        confirmResetTextTemplate.format(user.displayName),
                                     ) {
                                         viewModel.resetPassword(
                                             user.id,
-                                            resetPassword.toCharArray()
+                                            resetPassword.toCharArray(),
                                         )
                                         resetPasswords -= user.id
                                     }
@@ -528,7 +534,7 @@ fun AdminPanel(
             AppMessageBanner(
                 message = "${stringResource(R.string.admin_backup_overdue_title)}: ${
                     stringResource(
-                        R.string.admin_backup_overdue_text
+                        R.string.admin_backup_overdue_text,
                     )
                 }",
                 type = BannerType.Error,
@@ -621,7 +627,7 @@ fun AdminPanel(
                 AppTextField(
                     resetConfirmation,
                     { resetConfirmation = it },
-                    stringResource(R.string.admin_total_reset_field)
+                    stringResource(R.string.admin_total_reset_field),
                 )
                 AppButton(
                     modifier = Modifier.fillMaxWidth(),

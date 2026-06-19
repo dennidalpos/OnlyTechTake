@@ -117,7 +117,7 @@ enum class OrderFilterMode {
     MINE,
     OPEN_UNASSIGNED,
     CLOSED,
-    IN_PROGRESS
+    IN_PROGRESS,
 }
 
 data class OrderFilter(
@@ -195,5 +195,4 @@ fun DiagnosisResultInput.validationErrors(): List<String> =
         }
     }
 
-fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? =
-    estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }
+fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? = estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }

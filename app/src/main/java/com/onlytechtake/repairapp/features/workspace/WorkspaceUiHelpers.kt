@@ -4,36 +4,32 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.Column
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
-import com.onlytechtake.repairapp.core.utils.label
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
 import com.onlytechtake.repairapp.core.design.repairColors
-import com.onlytechtake.repairapp.core.utils.parseEuroCentsOrNull
-import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
+import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
 import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
-import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 
 data class AttachmentCounts(
     val images: Int,
@@ -131,26 +127,30 @@ fun OrderStatusStepper(
     val dotSize = if (compact) RepairAppSizes.orderStepperDot else 24.dp
 
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = if (compact) 4.dp else 12.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = if (compact) 4.dp else 12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
-            modifier = Modifier
-                .padding(bottom = if (compact) 4.dp else 8.dp),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .padding(bottom = if (compact) 4.dp else 8.dp),
+            contentAlignment = Alignment.Center,
         ) {
-            val containerColor = when (status) {
-                OrderStatus.CLOSED -> MaterialTheme.colorScheme.errorContainer
-                OrderStatus.OPEN -> MaterialTheme.colorScheme.secondaryContainer
-                else -> MaterialTheme.repairColors.warningContainer
-            }
-            val contentColor = when (status) {
-                OrderStatus.CLOSED -> MaterialTheme.colorScheme.onErrorContainer
-                OrderStatus.OPEN -> MaterialTheme.colorScheme.onSecondaryContainer
-                else -> MaterialTheme.repairColors.onWarningContainer
-            }
+            val containerColor =
+                when (status) {
+                    OrderStatus.CLOSED -> MaterialTheme.colorScheme.errorContainer
+                    OrderStatus.OPEN -> MaterialTheme.colorScheme.secondaryContainer
+                    else -> MaterialTheme.repairColors.warningContainer
+                }
+            val contentColor =
+                when (status) {
+                    OrderStatus.CLOSED -> MaterialTheme.colorScheme.onErrorContainer
+                    OrderStatus.OPEN -> MaterialTheme.colorScheme.onSecondaryContainer
+                    else -> MaterialTheme.repairColors.onWarningContainer
+                }
 
             AppStatusBadge(
                 text = status.label(context),
@@ -182,20 +182,20 @@ fun OrderStatusStepper(
                 ) {
                     Box(
                         modifier =
-                        Modifier
-                            .size(dotSize)
-                            .background(color = color, shape = CircleShape),
+                            Modifier
+                                .size(dotSize)
+                                .background(color = color, shape = CircleShape),
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
                             text = (index + 1).toString(),
                             modifier = stepTestTag?.let { Modifier.testTag(it(index + 1)) } ?: Modifier,
                             color =
-                            when {
-                                isCurrent -> MaterialTheme.colorScheme.onPrimary
-                                index < currentStepIndex -> MaterialTheme.repairColors.onSuccess
-                                else -> MaterialTheme.colorScheme.onSurfaceVariant
-                            },
+                                when {
+                                    isCurrent -> MaterialTheme.colorScheme.onPrimary
+                                    index < currentStepIndex -> MaterialTheme.repairColors.onSuccess
+                                    else -> MaterialTheme.colorScheme.onSurfaceVariant
+                                },
                             style = if (compact) MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp) else MaterialTheme.typography.labelSmall,
                         )
                     }
@@ -203,10 +203,11 @@ fun OrderStatusStepper(
 
                 if (index < steps.size - 1) {
                     Canvas(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(if (compact) 2.dp else 4.dp)
-                            .padding(horizontal = 2.dp)
+                        modifier =
+                            Modifier
+                                .weight(1f)
+                                .height(if (compact) 2.dp else 4.dp)
+                                .padding(horizontal = 2.dp),
                     ) {
                         drawRect(color = if (index < currentStepIndex) completedColor else inactiveColor)
                     }

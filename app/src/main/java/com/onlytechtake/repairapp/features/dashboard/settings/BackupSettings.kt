@@ -58,10 +58,12 @@ fun BackupSettings(
     var backupIntervalDays by rememberSaveable { mutableStateOf(backupReminderSettings.intervalDays.toString()) }
     var backupPassword by rememberSaveable { mutableStateOf(securitySettings.backupEncryptionPassword) }
 
-    val timestamp = remember {
-        java.text.SimpleDateFormat("yyyyMMdd_HHmm", java.util.Locale.getDefault())
-            .format(java.util.Date())
-    }
+    val timestamp =
+        remember {
+            java.text
+                .SimpleDateFormat("yyyyMMdd_HHmm", java.util.Locale.getDefault())
+                .format(java.util.Date())
+        }
 
     val exportZipLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
@@ -157,7 +159,7 @@ fun BackupSettings(
                     ) {
                         Text(
                             stringResource(R.string.config_backup_encrypt_label),
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.bodyMedium,
                         )
                         Switch(
                             checked = securitySettings.isBackupEncryptionEnabled,
@@ -182,9 +184,14 @@ fun BackupSettings(
                     }
 
                     AppMessageBanner(
-                        message = if (securitySettings.isBackupEncryptionEnabled) stringResource(R.string.config_backup_encrypted_success) else stringResource(
-                            R.string.config_backup_unencrypted_warning
-                        ),
+                        message =
+                            if (securitySettings.isBackupEncryptionEnabled) {
+                                stringResource(R.string.config_backup_encrypted_success)
+                            } else {
+                                stringResource(
+                                    R.string.config_backup_unencrypted_warning,
+                                )
+                            },
                         type = if (securitySettings.isBackupEncryptionEnabled) BannerType.Success else BannerType.Warning,
                     )
                 }
@@ -222,8 +229,8 @@ fun BackupSettings(
                                     arrayOf(
                                         "application/zip",
                                         "application/octet-stream",
-                                        "*/*"
-                                    )
+                                        "*/*",
+                                    ),
                                 )
                             }
                         },
@@ -276,10 +283,11 @@ private fun backupReminderInfo(settings: BackupReminderSettings): String {
                 stringResource(R.string.backup_status_never)
 
             else -> {
-                val days = BackupReminderPolicy.daysSinceLastSuccessfulBackup(
-                    settings,
-                    System.currentTimeMillis()
-                ) ?: 0L
+                val days =
+                    BackupReminderPolicy.daysSinceLastSuccessfulBackup(
+                        settings,
+                        System.currentTimeMillis(),
+                    ) ?: 0L
                 resources.getQuantityString(
                     R.plurals.backup_status_days_ago,
                     days.toInt(),

@@ -189,12 +189,13 @@ fun ColumnScope.TemplatesSettings(
                 ) {
                     Column(
                         modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+                        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                     ) {
                         Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
                             AppBadge(
-                                text = template.step
-                                    ?: stringResource(R.string.config_template_general),
+                                text =
+                                    template.step
+                                        ?: stringResource(R.string.config_template_general),
                                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                             )
@@ -249,16 +250,17 @@ fun ColumnScope.TemplatesSettings(
             item {
                 Text(
                     stringResource(R.string.config_template_empty),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
                 )
             }
         }
 
         item {
             AppButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = RepairAppSpacing.screenHorizontal),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = RepairAppSpacing.screenHorizontal),
                 text = stringResource(R.string.config_template_close),
                 variant = AppButtonVariant.Secondary,
                 size = AppButtonSize.Compact,
@@ -286,11 +288,13 @@ fun ColumnScope.TemplatesSettings(
                 viewModel.setFormDirty(false)
             },
             onSave = { code, title, body, active, step ->
-                val riskyTemplateChange = isRiskyTemplateChange(
-                    template.code,
-                    code,
-                    active,
-                ) || (assignedAnchors.isNotEmpty() && !active)
+                val riskyTemplateChange =
+                    isRiskyTemplateChange(
+                        template.code,
+                        code,
+                        active,
+                    ) ||
+                        (assignedAnchors.isNotEmpty() && !active)
 
                 val warningText =
                     if (assignedAnchors.isNotEmpty() && !active) {
@@ -416,6 +420,7 @@ fun TemplateEditDialog(
                     SectionTitle(
                         text = stringResource(R.string.config_template_variables),
                         tooltip = stringResource(R.string.config_template_variables_tooltip),
+                        tooltipTestTag = RepairAppTestTags.ConfigTemplateVariablesTooltip,
                     )
 
                     Row(
@@ -424,9 +429,13 @@ fun TemplateEditDialog(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            if (active) stringResource(R.string.config_template_active) else stringResource(
-                                R.string.config_template_archived
-                            )
+                            if (active) {
+                                stringResource(R.string.config_template_active)
+                            } else {
+                                stringResource(
+                                    R.string.config_template_archived,
+                                )
+                            },
                         )
                         Switch(
                             checked = active,
@@ -461,7 +470,8 @@ fun TemplateEditDialog(
                                 title,
                                 body,
                                 active,
-                                step.ifBlank { null })
+                                step.ifBlank { null },
+                            )
                         },
                         variant = AppButtonVariant.Primary,
                         size = AppButtonSize.Compact,
@@ -494,5 +504,4 @@ private fun isRiskyTemplateChange(
     loadedCode: String?,
     currentCode: String,
     active: Boolean,
-): Boolean =
-    (loadedCode != null && loadedCode != currentCode) || (currentCode in systemTemplateCodes && !active)
+): Boolean = (loadedCode != null && loadedCode != currentCode) || (currentCode in systemTemplateCodes && !active)

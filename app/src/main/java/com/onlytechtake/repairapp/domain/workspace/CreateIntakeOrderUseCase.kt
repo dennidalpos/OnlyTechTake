@@ -24,8 +24,7 @@ class CreateIntakeOrderUseCase(
 ) {
     suspend fun countAllOrders(): Int = orderRepository.countAllOrders()
 
-    fun getDemoLimitErrorMessage(): String =
-        context.getString(R.string.demo_error_order_limit, BuildConfig.MAX_ORDERS)
+    fun getDemoLimitErrorMessage(): String = context.getString(R.string.demo_error_order_limit, BuildConfig.MAX_ORDERS)
 
     suspend fun execute(
         actor: AuthenticatedUser,
@@ -51,8 +50,8 @@ class CreateIntakeOrderUseCase(
                     throw IllegalStateException(
                         context.getString(
                             R.string.demo_error_order_limit,
-                            BuildConfig.MAX_ORDERS
-                        )
+                            BuildConfig.MAX_ORDERS,
+                        ),
                     )
                 }
             }
@@ -67,8 +66,8 @@ class CreateIntakeOrderUseCase(
                             ?: customerRepository
                                 .save(
                                     actor,
-                                    requireNotNull(normalizedInput.newCustomer) { "Cliente obbligatorio" })
-                                .getOrThrow()
+                                    requireNotNull(normalizedInput.newCustomer) { "Cliente obbligatorio" },
+                                ).getOrThrow()
                                 .id
 
                     val order =
@@ -97,7 +96,8 @@ class CreateIntakeOrderUseCase(
                         .also { savedSignature = it }
 
                     attachedMedia =
-                        orderMediaRepository.attachStagedMedia(actor, order.id, stagedMedia)
+                        orderMediaRepository
+                            .attachStagedMedia(actor, order.id, stagedMedia)
                             .getOrThrow()
 
                     Complete(order)

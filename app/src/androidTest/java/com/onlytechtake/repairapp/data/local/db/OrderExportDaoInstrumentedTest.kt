@@ -155,7 +155,8 @@ class OrderExportDaoInstrumentedTest {
                 updatedAt = now,
             ),
         )
-        database.orderCategoryDao()
+        database
+            .orderCategoryDao()
             .upsert(OrderCategoryEntity("cat-1", null, 0, "Smartphone", null, active = true))
         database.customerDao().upsert(
             CustomerEntity(

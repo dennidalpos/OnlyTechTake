@@ -31,7 +31,6 @@ fun ColumnScope.WhatsAppSettings(
     // messageMode is currently unused but might be needed for future config
     // val messageMode by viewModel.messageMode.collectAsState()
 
-
     LazyColumn(
         modifier =
             Modifier
@@ -54,8 +53,8 @@ fun ColumnScope.WhatsAppSettings(
                     Text(
                         stringResource(
                             R.string.config_whatsapp_mode,
-                            stringResource(R.string.config_whatsapp_manual)
-                        )
+                            stringResource(R.string.config_whatsapp_manual),
+                        ),
                     )
                     ActionRow {
                         val confirmTitle =
@@ -77,9 +76,10 @@ fun ColumnScope.WhatsAppSettings(
 
         item {
             AppButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = RepairAppSpacing.screenHorizontal),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = RepairAppSpacing.screenHorizontal),
                 text = stringResource(R.string.config_whatsapp_close),
                 variant = AppButtonVariant.Secondary,
                 onClick = onBack,

@@ -176,11 +176,12 @@ private fun StagedMediaSummary(
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = stringResource(
-                    R.string.intake_media_summary,
-                    media.mediaType,
-                    media.sizeBytes / 1024
-                ),
+                text =
+                    stringResource(
+                        R.string.intake_media_summary,
+                        media.mediaType,
+                        media.sizeBytes / 1024,
+                    ),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

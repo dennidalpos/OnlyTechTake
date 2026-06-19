@@ -53,8 +53,9 @@ class MediaOptimizer(
                 BitmapFactory.Options().apply {
                     inSampleSize = calculateBitmapSampleSize(width, height, maxDimension)
                 }
-            val original = BitmapFactory.decodeFile(file.absolutePath, decodeOptions)
-                ?: return@runCatching file
+            val original =
+                BitmapFactory.decodeFile(file.absolutePath, decodeOptions)
+                    ?: return@runCatching file
 
             val targetWidth = width * scale
             val targetHeight = height * scale
@@ -62,7 +63,7 @@ class MediaOptimizer(
                 Matrix().apply {
                     postScale(
                         targetWidth / original.width.toFloat(),
-                        targetHeight / original.height.toFloat()
+                        targetHeight / original.height.toFloat(),
                     )
                 }
 
@@ -77,7 +78,7 @@ class MediaOptimizer(
                         original.width,
                         original.height,
                         matrix,
-                        true
+                        true,
                     )
                 } finally {
                     // original will be recycled later if it's different from optimized
@@ -109,9 +110,12 @@ class MediaOptimizer(
 
     private fun isImage(file: File): Boolean {
         val name = file.name.lowercase()
-        return name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png") || name.endsWith(
-            ".webp"
-        )
+        return name.endsWith(".jpg") ||
+            name.endsWith(".jpeg") ||
+            name.endsWith(".png") ||
+            name.endsWith(
+                ".webp",
+            )
     }
 
     private fun applyExifRotation(

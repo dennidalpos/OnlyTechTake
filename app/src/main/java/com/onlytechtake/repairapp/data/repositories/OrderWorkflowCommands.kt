@@ -59,10 +59,11 @@ internal class OrderWorkflowCommands(
                 val order =
                     RepairOrderEntity(
                         id = UUID.randomUUID().toString(),
-                        orderNumber = orderNumberGenerator.next(
-                            prefix,
-                            repairOrderDao.findLatestOrderNumberForYear(prefix)
-                        ),
+                        orderNumber =
+                            orderNumberGenerator.next(
+                                prefix,
+                                repairOrderDao.findLatestOrderNumberForYear(prefix),
+                            ),
                         customerId = input.customerId,
                         title = input.title.capitalizeFirst(),
                         categoryId = input.categoryId,
@@ -120,8 +121,14 @@ internal class OrderWorkflowCommands(
                         closedAt = if (status in OrderStatusPolicy.closedStatuses) now else order.closedAt,
                         closureReason = if (status in OrderStatusPolicy.closedStatuses) closureReason else null,
                         closedByUserId = if (status in OrderStatusPolicy.closedStatuses) actor.id else order.closedByUserId,
-                        closeNote = if (status in OrderStatusPolicy.closedStatuses) note.capitalizeFirst()
-                            .ifBlank { null } else order.closeNote,
+                        closeNote =
+                            if (status in OrderStatusPolicy.closedStatuses) {
+                                note
+                                    .capitalizeFirst()
+                                    .ifBlank { null }
+                            } else {
+                                order.closeNote
+                            },
                     ),
                 )
                 eventWriter.statusChanged(
@@ -190,7 +197,7 @@ internal class OrderWorkflowCommands(
                     orderId,
                     actor.id,
                     customerActionStatus,
-                    now
+                    now,
                 )
             }
         }
@@ -211,8 +218,8 @@ internal class OrderWorkflowCommands(
                 repairOrderDao.upsert(
                     order.copy(
                         assignedToUserId = assignedToUserId,
-                        updatedAt = now
-                    )
+                        updatedAt = now,
+                    ),
                 )
                 eventWriter.orderReassigned(orderId, actor.id, assignedToUserId, now)
             }
@@ -252,7 +259,7 @@ internal class OrderWorkflowCommands(
                 when (input.feedback) {
                     CustomerFeedbackType.ACCEPT,
                     CustomerFeedbackType.REJECT,
-                        ->
+                    ->
                         require(order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
                             "Accettazione o rifiuto sono disponibili solo per una diagnosi riparabile"
                         }
@@ -307,7 +314,7 @@ internal class OrderWorkflowCommands(
                         orderId,
                         actor.id,
                         customerActionStatus,
-                        now
+                        now,
                     )
                 }
                 messageLogDao.findLatestForOrder(orderId)?.let { latest ->
@@ -420,8 +427,7 @@ internal class OrderWorkflowCommands(
         return order
     }
 
-    private suspend fun <T> inTransaction(block: suspend () -> T): T =
-        database?.withTransaction { block() } ?: block()
+    private suspend fun <T> inTransaction(block: suspend () -> T): T = database?.withTransaction { block() } ?: block()
 
     private suspend fun buildCategoryPathSnapshot(categoryId: String): String? {
         val path = mutableListOf<String>()

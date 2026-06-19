@@ -36,11 +36,7 @@ import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.core.design.components.AppDivider
-import com.onlytechtake.repairapp.core.design.components.AppIconButton
-import com.onlytechtake.repairapp.core.design.components.AppMessageBanner
-import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
 import com.onlytechtake.repairapp.core.design.components.AppTextField
-import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
@@ -53,7 +49,6 @@ import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
-import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
 import com.onlytechtake.repairapp.domain.workspace.availableOrderStatusActions
 import com.onlytechtake.repairapp.domain.workspace.requiresConfirmation
 import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
@@ -101,24 +96,30 @@ fun OrderHeader(
                     fontWeight = FontWeight.Bold,
                 )
                 Text(
-                    text = detail.customer?.displayName(context)
-                        ?: stringResource(R.string.orders_customer_unavailable),
+                    text =
+                        detail.customer?.displayName(context)
+                            ?: stringResource(R.string.orders_customer_unavailable),
                     modifier = Modifier.testTag(RepairAppTestTags.OrderDetailCustomerReference),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
-                    text = detail.category?.name ?: detail.order.categoryPathSnapshot?.split(">")?.lastOrNull()?.trim()
-                    ?: stringResource(R.string.orders_category_unavailable),
+                    text =
+                        detail.category?.name ?: detail.order.categoryPathSnapshot
+                            ?.split(">")
+                            ?.lastOrNull()
+                            ?.trim()
+                            ?: stringResource(R.string.orders_category_unavailable),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.outline,
                 )
             }
 
             AppDivider(
-                modifier = Modifier
-                    .padding(vertical = RepairAppSpacing.tinyGap)
-                    .alpha(0.5f),
+                modifier =
+                    Modifier
+                        .padding(vertical = RepairAppSpacing.tinyGap)
+                        .alpha(0.5f),
             )
 
             OrderStatusStepper(
@@ -134,13 +135,13 @@ fun OrderHeader(
             ) {
                 InfoMetadata(
                     label = stringResource(R.string.order_updated_label),
-                    value = formatUiDateTime(detail.order.updatedAt)
+                    value = formatUiDateTime(detail.order.updatedAt),
                 )
                 detail.order.assignedToUserId?.let {
                     InfoMetadata(
                         label = stringResource(R.string.order_operator_label),
                         value = it,
-                        alignment = Alignment.End
+                        alignment = Alignment.End,
                     )
                 }
             }
@@ -158,12 +159,12 @@ private fun InfoMetadata(
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.outline
+            color = MaterialTheme.colorScheme.outline,
         )
         Text(
             text = value,
             style = MaterialTheme.typography.bodySmall,
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.Medium,
         )
     }
 }
@@ -189,7 +190,7 @@ fun OrderActionCard(
         Text(
             stringResource(R.string.order_next_action_title),
             style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
 
         primaryAction?.let {
@@ -305,7 +306,7 @@ fun QuoteDecisionPanel(
             Text(
                 stringResource(R.string.order_quote_outcome),
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
 
             Row(horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap)) {
@@ -347,7 +348,7 @@ fun QuoteDecisionPanel(
                             onConfirm(
                                 CustomerFeedbackType.REJECT,
                                 quoteRejectNote,
-                                ClosureReason.CUSTOMER_DECLINED
+                                ClosureReason.CUSTOMER_DECLINED,
                             )
                         }
                     },
@@ -370,16 +371,19 @@ private fun QuoteDecisionButton(
         onClick = onClick,
         variant = if (selected) AppButtonVariant.Primary else AppButtonVariant.Ghost,
         size = AppButtonSize.Compact,
-        modifier = modifier
-            .then(
-                if (!selected) {
-                    Modifier.border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
-                        shape = RepairAppShapes.button
-                    )
-                } else Modifier
-            ),
+        modifier =
+            modifier
+                .then(
+                    if (!selected) {
+                        Modifier.border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
+                            shape = RepairAppShapes.button,
+                        )
+                    } else {
+                        Modifier
+                    },
+                ),
         selected = selected,
         testTag = testTag,
     )
@@ -402,10 +406,9 @@ fun QuoteDecisionRow(
                 .background(
                     if (checked) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else Color.Transparent,
                     RepairAppShapes.compactButton,
-                )
-                .padding(
+                ).padding(
                     horizontal = RepairAppSpacing.compactGap,
-                    vertical = RepairAppSpacing.compactGap
+                    vertical = RepairAppSpacing.compactGap,
                 ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
@@ -428,7 +431,7 @@ fun InternalNotesPanel(
             Text(
                 stringResource(R.string.order_internal_notes),
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             notes?.takeIf { it.isNotBlank() }?.let {
                 OperatorText(it)
@@ -444,14 +447,13 @@ fun InternalNotesPanel(
     }
 }
 
-
 @Composable
 fun OrderTimelineSection(
     timeline: List<TimelineEventEntity>,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
     ) {
         SectionTitle(
             text = stringResource(R.string.order_timeline),

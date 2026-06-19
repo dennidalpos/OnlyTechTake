@@ -144,11 +144,12 @@ fun QuickIntakeCategorySection(
                                     onCategorySelected(category.id)
                                 }
                             },
-                            containerColor = if (isSelected) {
-                                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
-                            } else {
-                                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.1f)
-                            },
+                            containerColor =
+                                if (isSelected) {
+                                    MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                                } else {
+                                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.1f)
+                                },
                             role = Role.RadioButton,
                         ) {
                             Row(
@@ -173,14 +174,14 @@ fun QuickIntakeCategorySection(
                                     Icon(
                                         Icons.AutoMirrored.Filled.ArrowForward,
                                         contentDescription = stringResource(R.string.intake_category_open),
-                                        modifier = Modifier.size(20.dp)
+                                        modifier = Modifier.size(20.dp),
                                     )
                                 } else if (isSelected) {
                                     Icon(
                                         Icons.Default.Check,
                                         contentDescription = stringResource(R.string.intake_category_selected_icon),
                                         tint = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier.size(20.dp)
+                                        modifier = Modifier.size(20.dp),
                                     )
                                 }
                             }
@@ -191,7 +192,7 @@ fun QuickIntakeCategorySection(
                     Text(
                         stringResource(R.string.config_category_empty_branch),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.outline
+                        color = MaterialTheme.colorScheme.outline,
                     )
                 }
             }

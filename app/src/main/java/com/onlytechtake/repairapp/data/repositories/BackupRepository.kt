@@ -110,12 +110,12 @@ class BackupRepository(
                         zip.putTextEntry(
                             "metadata/backup.json",
                             metadataService.buildBackupMetadataJson(),
-                            password
+                            password,
                         )
                         zip.putTextEntry(
                             "config/configuration.json",
                             metadataService.buildConfigurationJson(),
-                            password
+                            password,
                         )
                         dbBackupService.addDatabaseFiles(zip, password)
                         BackupArchive.addDirectory(
@@ -124,7 +124,7 @@ class BackupRepository(
                                 mediaStorageProvider?.getBaseMediaDir()
                                     ?: File(
                                         context.filesDir,
-                                        BackupArchive.CANONICAL_MEDIA_DIRECTORY
+                                        BackupArchive.CANONICAL_MEDIA_DIRECTORY,
                                     ),
                             entryDirectory = "files/${BackupArchive.CANONICAL_MEDIA_DIRECTORY}",
                             password = password,
@@ -228,7 +228,7 @@ class BackupRepository(
                                     customerId = null,
                                     detailsJson = """{"operation":"backup_restored","at":"${
                                         formatTime(
-                                            now
+                                            now,
                                         )
                                     }"}""",
                                     createdAt = now,
@@ -239,7 +239,7 @@ class BackupRepository(
                             android.util.Log.e(
                                 "BackupRepository",
                                 "Failed to write audit log after restore",
-                                auditError
+                                auditError,
                             )
                         } finally {
                             RepairAppDatabase.closeInstance()
@@ -311,11 +311,12 @@ class BackupRepository(
                     statusLabels = OrderStatus.entries.associateWith { it.label(context) },
                     priorityLabels = OrderPriority.entries.associateWith { it.label(context) },
                     customerTypeLabels = CustomerType.entries.associateWith { it.label(context) },
-                    diagnosisOutcomeLabels = DiagnosisOutcome.entries.associateWith {
-                        it.label(
-                            context
-                        )
-                    },
+                    diagnosisOutcomeLabels =
+                        DiagnosisOutcome.entries.associateWith {
+                            it.label(
+                                context,
+                            )
+                        },
                     closureReasonLabels = ClosureReason.entries.associateWith { it.label(context) },
                     paidLabel = context.getString(R.string.export_xlsx_value_paid),
                     notPaidLabel = context.getString(R.string.export_xlsx_value_not_paid),
@@ -368,18 +369,18 @@ class BackupRepository(
                     writer.line(
                         "Categoria: ${
                             detail.category?.name.orEmpty().ifBlank { "Nessuna" }
-                        }"
+                        }",
                     )
                     writer.line(
                         "Operatore: ${
                             detail.assignedUser?.displayName.orEmpty().ifBlank { "Non assegnato" }
-                        }"
+                        }",
                     )
                     writer.line("Data creazione: ${formatTime(detail.order.createdAt)}")
                     writer.line(
                         "Descrizione: ${
                             detail.order.description.orEmpty().ifBlank { "Nessuna" }
-                        }"
+                        }",
                     )
                     writer.section("Timeline")
                     if (detail.timeline.isEmpty()) {
@@ -480,12 +481,13 @@ private fun formatTimelineEvent(event: TimelineEventEntity): String {
                 add(
                     "Cambio stato: ${
                         event.oldStatus.orEmpty().ifBlank { "-" }
-                    } -> ${event.newStatus.orEmpty().ifBlank { "-" }}"
+                    } -> ${event.newStatus.orEmpty().ifBlank { "-" }}",
                 )
             }
             event.expectedFeedbackType?.let { add("Feedback atteso: ${it.name}") }
             event.customerFeedback?.let { add("Feedback cliente: ${it.name}") }
-            event.customerFeedbackNote?.takeIf { it.isNotBlank() }
+            event.customerFeedbackNote
+                ?.takeIf { it.isNotBlank() }
                 ?.let { add("Nota feedback: $it") }
             event.customerFeedbackAt?.let { add("Feedback registrato: ${formatTime(it)}") }
         }

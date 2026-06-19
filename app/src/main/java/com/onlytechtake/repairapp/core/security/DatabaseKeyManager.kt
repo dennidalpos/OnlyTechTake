@@ -32,7 +32,7 @@ class DatabaseKeyManager(
                 android.util.Log.e(
                     "DatabaseKeyManager",
                     "Failed to decrypt database key, generating new one",
-                    e
+                    e,
                 )
                 generateAndSaveNewKey(prefs)
             }

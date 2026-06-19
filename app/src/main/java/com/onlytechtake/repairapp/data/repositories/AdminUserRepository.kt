@@ -157,7 +157,7 @@ class AdminUserRepository(
                 actor.id,
                 AuditAction.USER_UPDATED,
                 """{"userId":"$userId","active":$active}""",
-                now
+                now,
             )
         }
 
@@ -177,7 +177,7 @@ class AdminUserRepository(
                 actor.id,
                 AuditAction.USER_UPDATED,
                 """{"userId":"$userId","action":"deleted"}""",
-                clockMillis()
+                clockMillis(),
             )
         }
 
@@ -197,7 +197,7 @@ class AdminUserRepository(
                 actor.id,
                 AuditAction.USER_UPDATED,
                 """{"userId":"$userId","permissions":${permissions.map { it.name }}}""",
-                now
+                now,
             )
         }
 

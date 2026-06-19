@@ -30,7 +30,7 @@ class CustomerRepositoryTest {
                 lastUpserted = customer
             }
 
-            override suspend fun upsertAll(customers: List<CustomerEntity>) { /* stub */
+            override suspend fun upsertAll(customers: List<CustomerEntity>) { // stub
             }
         }
 

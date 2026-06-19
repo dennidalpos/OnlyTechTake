@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -61,6 +62,7 @@ import kotlinx.coroutines.launch
 fun SectionTitle(
     text: String,
     tooltip: String? = null,
+    tooltipTestTag: String? = null,
 ) {
     Row(
         modifier = Modifier.padding(bottom = RepairAppSpacing.compactGap),
@@ -99,6 +101,7 @@ fun SectionTitle(
                     modifier =
                         Modifier
                             .size(RepairAppIconSizes.small)
+                            .then(tooltipTestTag?.let { Modifier.testTag(it) } ?: Modifier)
                             .clickable {
                                 scope.launch { tooltipState.show() }
                             },
@@ -230,8 +233,7 @@ fun OperatorText(
                 .background(
                     MaterialTheme.colorScheme.secondaryContainer,
                     RepairAppShapes.compactButton,
-                )
-                .padding(horizontal = 12.dp, vertical = 8.dp),
+                ).padding(horizontal = 12.dp, vertical = 8.dp),
         text = text,
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -265,13 +267,13 @@ fun CompactExpandableRow(
                 title,
                 style = MaterialTheme.typography.titleSmall,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
             Text(
                 subtitle,
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
             if (detail.isNotBlank() && expanded) {
                 OperatorText(detail)
@@ -292,9 +294,8 @@ fun CustomerTypeToggle(
                 .fillMaxWidth()
                 .background(
                     MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                    RepairAppShapes.pill
-                )
-                .padding(RepairAppSpacing.tinyGap),
+                    RepairAppShapes.pill,
+                ).padding(RepairAppSpacing.tinyGap),
         horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.tinyGap),
     ) {
         val privateSelected = !isBusiness
@@ -333,7 +334,7 @@ fun NoteFieldWithDialog(
 
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
     ) {
         if (note.isNotBlank()) {
             OperatorText(note)
@@ -439,10 +440,11 @@ fun backupStatusLabel(settings: BackupReminderSettings): String =
             stringResource(R.string.backup_status_never)
 
         else -> {
-            val days = BackupReminderPolicy.daysSinceLastSuccessfulBackup(
-                settings,
-                System.currentTimeMillis()
-            ) ?: 0L
+            val days =
+                BackupReminderPolicy.daysSinceLastSuccessfulBackup(
+                    settings,
+                    System.currentTimeMillis(),
+                ) ?: 0L
             LocalResources.current.getQuantityString(
                 R.plurals.backup_status_days_ago,
                 days.toInt(),

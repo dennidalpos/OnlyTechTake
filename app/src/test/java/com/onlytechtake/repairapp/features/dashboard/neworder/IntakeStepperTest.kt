@@ -40,15 +40,15 @@ class IntakeStepperTest {
     fun categoryClickTogglesCurrentSelection() {
         assertEquals(
             "phone",
-            selectedCategoryAfterClick(currentCategoryId = null, clickedCategoryId = "phone")
+            selectedCategoryAfterClick(currentCategoryId = null, clickedCategoryId = "phone"),
         )
         assertEquals(
             "tablet",
-            selectedCategoryAfterClick(currentCategoryId = "phone", clickedCategoryId = "tablet")
+            selectedCategoryAfterClick(currentCategoryId = "phone", clickedCategoryId = "tablet"),
         )
         assertEquals(
             null,
-            selectedCategoryAfterClick(currentCategoryId = "phone", clickedCategoryId = "phone")
+            selectedCategoryAfterClick(currentCategoryId = "phone", clickedCategoryId = "phone"),
         )
     }
 
@@ -115,8 +115,8 @@ class IntakeStepperTest {
                 "Doe",
                 "",
                 "",
-                "john@example.com"
-            )
+                "john@example.com",
+            ),
         )
 
         // Business requires Company Name and Phone or Email
@@ -128,8 +128,8 @@ class IntakeStepperTest {
                 "",
                 "Acme Corp",
                 "123",
-                ""
-            )
+                "",
+            ),
         )
     }
 }

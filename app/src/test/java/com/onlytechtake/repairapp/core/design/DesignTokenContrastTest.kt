@@ -14,32 +14,32 @@ class DesignTokenContrastTest {
                 ContrastPair(
                     "light success",
                     LightSemanticColors.success,
-                    LightSemanticColors.onSuccess
+                    LightSemanticColors.onSuccess,
                 ),
                 ContrastPair(
                     "light warning",
                     LightSemanticColors.warning,
-                    LightSemanticColors.onWarning
+                    LightSemanticColors.onWarning,
                 ),
                 ContrastPair(
                     "light whatsapp",
                     LightSemanticColors.whatsapp,
-                    LightSemanticColors.onWhatsapp
+                    LightSemanticColors.onWhatsapp,
                 ),
                 ContrastPair(
                     "dark success",
                     DarkSemanticColors.success,
-                    DarkSemanticColors.onSuccess
+                    DarkSemanticColors.onSuccess,
                 ),
                 ContrastPair(
                     "dark warning",
                     DarkSemanticColors.warning,
-                    DarkSemanticColors.onWarning
+                    DarkSemanticColors.onWarning,
                 ),
                 ContrastPair(
                     "dark whatsapp",
                     DarkSemanticColors.whatsapp,
-                    DarkSemanticColors.onWhatsapp
+                    DarkSemanticColors.onWhatsapp,
                 ),
             )
 

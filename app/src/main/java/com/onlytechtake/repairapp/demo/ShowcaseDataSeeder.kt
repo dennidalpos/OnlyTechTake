@@ -144,7 +144,7 @@ object ShowcaseDataSeeder {
                         0,
                         "Smartphone",
                         "Riparazione telefoni cellulari",
-                        true
+                        true,
                     ),
                     OrderCategoryEntity(
                         "cat-apple",
@@ -152,7 +152,7 @@ object ShowcaseDataSeeder {
                         1,
                         "Apple",
                         "Dispositivi iOS",
-                        true
+                        true,
                     ),
                     OrderCategoryEntity(
                         "cat-iphone",
@@ -160,7 +160,7 @@ object ShowcaseDataSeeder {
                         2,
                         "iPhone",
                         "Tutti i modelli iPhone",
-                        true
+                        true,
                     ),
                     OrderCategoryEntity(
                         "cat-iphone-14-pro",
@@ -168,7 +168,7 @@ object ShowcaseDataSeeder {
                         3,
                         "iPhone 14 Pro",
                         "Riparazione display e vetro posteriore",
-                        true
+                        true,
                     ),
                     OrderCategoryEntity(
                         "cat-iphone-13",
@@ -176,7 +176,7 @@ object ShowcaseDataSeeder {
                         3,
                         "iPhone 13",
                         "Sostituzione batteria e connettore",
-                        true
+                        true,
                     ),
                     OrderCategoryEntity(
                         "cat-samsung",
@@ -184,7 +184,7 @@ object ShowcaseDataSeeder {
                         1,
                         "Samsung",
                         "Dispositivi Android Galaxy",
-                        true
+                        true,
                     ),
                     OrderCategoryEntity(
                         "cat-galaxy-s",
@@ -192,7 +192,7 @@ object ShowcaseDataSeeder {
                         2,
                         "Serie Galaxy S",
                         "Fascia alta Samsung",
-                        true
+                        true,
                     ),
                     OrderCategoryEntity(
                         "cat-s23-ultra",
@@ -200,7 +200,7 @@ object ShowcaseDataSeeder {
                         3,
                         "S23 Ultra",
                         "Riparazione schermo curvo e S-Pen",
-                        true
+                        true,
                     ),
                     // Computer branch (4 levels)
                     OrderCategoryEntity(
@@ -209,7 +209,7 @@ object ShowcaseDataSeeder {
                         0,
                         "Computer & Laptop",
                         "Riparazioni hardware e software PC",
-                        true
+                        true,
                     ),
                     OrderCategoryEntity(
                         "cat-notebook",
@@ -217,7 +217,7 @@ object ShowcaseDataSeeder {
                         1,
                         "Notebook",
                         "Portatili e Ultrabook",
-                        true
+                        true,
                     ),
                     OrderCategoryEntity(
                         "cat-gaming-laptop",
@@ -225,7 +225,7 @@ object ShowcaseDataSeeder {
                         2,
                         "Gaming Laptop",
                         "MSI, ROG, Alienware, Legion",
-                        true
+                        true,
                     ),
                     OrderCategoryEntity(
                         "cat-rog-strix",
@@ -233,7 +233,7 @@ object ShowcaseDataSeeder {
                         3,
                         "Asus ROG Strix",
                         "Pulizia interna e pasta termica",
-                        true
+                        true,
                     ),
                     OrderCategoryEntity(
                         "cat-windows-laptop",
@@ -241,7 +241,7 @@ object ShowcaseDataSeeder {
                         2,
                         "Windows Laptop",
                         "Asus, HP, Lenovo, Dell",
-                        true
+                        true,
                     ),
                     OrderCategoryEntity(
                         "cat-asus-zenbook",
@@ -249,7 +249,7 @@ object ShowcaseDataSeeder {
                         3,
                         "Asus Zenbook OLED",
                         "Riparazione cerniere e display",
-                        true
+                        true,
                     ),
                     // Console branch (4 levels)
                     OrderCategoryEntity(
@@ -258,7 +258,7 @@ object ShowcaseDataSeeder {
                         0,
                         "Console Game",
                         "Riparazioni PlayStation, Xbox, Switch",
-                        true
+                        true,
                     ),
                     OrderCategoryEntity(
                         "cat-sony",
@@ -266,7 +266,7 @@ object ShowcaseDataSeeder {
                         1,
                         "Sony",
                         "Ecosistema PlayStation",
-                        true
+                        true,
                     ),
                     OrderCategoryEntity(
                         "cat-ps5",
@@ -274,7 +274,7 @@ object ShowcaseDataSeeder {
                         2,
                         "PlayStation 5",
                         "Revisione e riparazione PS5",
-                        true
+                        true,
                     ),
                     OrderCategoryEntity(
                         "cat-ps5-hdmi",
@@ -282,7 +282,7 @@ object ShowcaseDataSeeder {
                         3,
                         "Sostituzione Porta HDMI",
                         "Sostituzione connettore video 4K",
-                        true
+                        true,
                     ),
                     OrderCategoryEntity(
                         "cat-dualsense",
@@ -290,7 +290,7 @@ object ShowcaseDataSeeder {
                         3,
                         "DualSense Controller",
                         "Riparazione Analogico Drift e Tasti",
-                        true
+                        true,
                     ),
                     OrderCategoryEntity(
                         "cat-tablet",
@@ -298,7 +298,7 @@ object ShowcaseDataSeeder {
                         0,
                         "Tablet",
                         "Riparazioni iPad e Android",
-                        true
+                        true,
                     ),
                     OrderCategoryEntity("cat-ipad", "cat-tablet", 1, "iPad", "Tablet Apple", true),
                     OrderCategoryEntity(
@@ -307,7 +307,7 @@ object ShowcaseDataSeeder {
                         2,
                         "iPad Pro",
                         "Modelli 11\" e 12.9\"",
-                        true
+                        true,
                     ),
                     OrderCategoryEntity(
                         "cat-ipad-glass",
@@ -315,7 +315,7 @@ object ShowcaseDataSeeder {
                         3,
                         "Sostituzione Vetro/LCD",
                         "Riparazione pannello touch",
-                        true
+                        true,
                     ),
                 )
             db.orderCategoryDao().upsertAll(categories)
@@ -326,13 +326,14 @@ object ShowcaseDataSeeder {
                     CustomerEntity(
                         id = "cust-p-$i",
                         type = CustomerType.PRIVATE,
-                        firstName = listOf(
-                            "Mario",
-                            "Luigi",
-                            "Giovanna",
-                            "Francesca",
-                            "Roberto"
-                        )[i - 1],
+                        firstName =
+                            listOf(
+                                "Mario",
+                                "Luigi",
+                                "Giovanna",
+                                "Francesca",
+                                "Roberto",
+                            )[i - 1],
                         lastName = listOf("Rossi", "Bianchi", "Verdi", "Neri", "Gialli")[i - 1],
                         companyName = null,
                         vatNumber = null,
@@ -355,13 +356,14 @@ object ShowcaseDataSeeder {
                         type = CustomerType.BUSINESS,
                         firstName = null,
                         lastName = null,
-                        companyName = listOf(
-                            "Tech Solutions Srl",
-                            "Global Food SpA",
-                            "Studio Legale Rossi",
-                            "Officina Meccanica",
-                            "Bar Centrale"
-                        )[i - 1],
+                        companyName =
+                            listOf(
+                                "Tech Solutions Srl",
+                                "Global Food SpA",
+                                "Studio Legale Rossi",
+                                "Officina Meccanica",
+                                "Bar Centrale",
+                            )[i - 1],
                         vatNumber = "0123456789$i",
                         taxCode = "BCN${UUID.randomUUID().toString().take(13)}",
                         phone = "+39 02 555 666$i",
@@ -404,7 +406,7 @@ object ShowcaseDataSeeder {
                                     "PC",
                                     "Smartphone",
                                     "Tablet",
-                                    "Console"
+                                    "Console",
                                 )[orderCount % 4]
                             } - Modello $j",
                             categoryId = categoryId,

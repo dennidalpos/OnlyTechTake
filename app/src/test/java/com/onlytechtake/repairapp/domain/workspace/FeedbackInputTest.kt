@@ -21,8 +21,8 @@ class FeedbackInputTest {
         assertTrue(
             FeedbackInput(
                 CustomerFeedbackType.REJECT,
-                note = "Troppo caro"
-            ).validationErrors().isEmpty()
+                note = "Troppo caro",
+            ).validationErrors().isEmpty(),
         )
     }
 }

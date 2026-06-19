@@ -86,7 +86,7 @@ fun OrderDocumentSection(
                 Text(
                     stringResource(R.string.order_document_history),
                     style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.outline
+                    color = MaterialTheme.colorScheme.outline,
                 )
                 documents.forEach { doc ->
                     Row(
@@ -95,9 +95,10 @@ fun OrderDocumentSection(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Column(
-                            modifier = Modifier
-                                .weight(1f)
-                                .clickable { onShareDocument(doc.id) },
+                            modifier =
+                                Modifier
+                                    .weight(1f)
+                                    .clickable { onShareDocument(doc.id) },
                         ) {
                             Text(
                                 doc.fileName,
@@ -105,10 +106,11 @@ fun OrderDocumentSection(
                                 fontWeight = FontWeight.Medium,
                             )
                             Text(
-                                text = stringResource(
-                                    R.string.order_document_generated,
-                                    formatUiDateTime(doc.createdAt)
-                                ) + (if (doc.sharedAt != null) " (${stringResource(R.string.order_wa_sent)})" else ""),
+                                text =
+                                    stringResource(
+                                        R.string.order_document_generated,
+                                        formatUiDateTime(doc.createdAt),
+                                    ) + (if (doc.sharedAt != null) " (${stringResource(R.string.order_wa_sent)})" else ""),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.secondary,
                             )

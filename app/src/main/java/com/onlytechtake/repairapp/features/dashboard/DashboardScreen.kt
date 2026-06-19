@@ -125,37 +125,37 @@ fun DashboardScreen(
                     DashboardRoutes.NEW_ORDER,
                     Icons.Default.Add,
                     R.string.dashboard_new,
-                    RepairAppTestTags.dashboardTab("NEW_ORDER")
+                    RepairAppTestTags.dashboardTab("NEW_ORDER"),
                 ),
                 NavigationItem(
                     DashboardRoutes.CUSTOMERS,
                     Icons.Default.Person,
                     R.string.dashboard_customers,
-                    RepairAppTestTags.dashboardTab("CUSTOMERS")
+                    RepairAppTestTags.dashboardTab("CUSTOMERS"),
                 ),
                 NavigationItem(
                     DashboardRoutes.orders(),
                     Icons.AutoMirrored.Filled.List,
                     R.string.dashboard_orders,
-                    RepairAppTestTags.dashboardTab("ORDERS")
+                    RepairAppTestTags.dashboardTab("ORDERS"),
                 ),
                 NavigationItem(
                     DashboardRoutes.settings(),
                     Icons.Default.Settings,
                     R.string.dashboard_config,
-                    RepairAppTestTags.dashboardTab("SETTINGS")
+                    RepairAppTestTags.dashboardTab("SETTINGS"),
                 ),
             )
         }
 
     var pendingRoute by androidx.compose.runtime.remember {
         androidx.compose.runtime.mutableStateOf<String?>(
-            null
+            null,
         )
     }
     var showUnsavedChangesDialog by androidx.compose.runtime.remember {
         androidx.compose.runtime.mutableStateOf(
-            value = false
+            value = false,
         )
     }
 
@@ -168,9 +168,11 @@ fun DashboardScreen(
         val baseCurrent = currentRoute.split("?")[0]
         if (baseRoute == baseCurrent) return true
         return when (baseRoute) {
-            DashboardRoutes.ORDERS.split("?")[0] -> baseCurrent == DashboardRoutes.ORDER_DETAIL.split(
-                "?"
-            )[0]
+            DashboardRoutes.ORDERS.split("?")[0] ->
+                baseCurrent ==
+                    DashboardRoutes.ORDER_DETAIL.split(
+                        "?",
+                    )[0]
 
             else -> false
         }
@@ -359,10 +361,11 @@ fun DashboardScreen(
                         message = message.text,
                         type = if (message.isError) BannerType.Error else BannerType.Info,
                         onDismiss = sharedViewModel::clearMessage,
-                        modifier = Modifier.padding(
-                            horizontal = RepairAppSpacing.screenHorizontal,
-                            vertical = RepairAppSpacing.compactGap
-                        ),
+                        modifier =
+                            Modifier.padding(
+                                horizontal = RepairAppSpacing.screenHorizontal,
+                                vertical = RepairAppSpacing.compactGap,
+                            ),
                     )
                 }
 

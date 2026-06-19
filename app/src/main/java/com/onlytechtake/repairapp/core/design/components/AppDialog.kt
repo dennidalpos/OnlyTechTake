@@ -25,14 +25,15 @@ fun AppDialog(
         dismissButton = dismissButton,
         icon = icon,
         title = title?.let { { Text(text = it, style = MaterialTheme.typography.headlineSmall) } },
-        text = content ?: text?.let {
-            {
-                Text(
-                    text = it,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-        },
+        text =
+            content ?: text?.let {
+                {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
+            },
         shape = RepairAppShapes.dialog,
         containerColor = MaterialTheme.colorScheme.surface,
         titleContentColor = MaterialTheme.colorScheme.onSurface,

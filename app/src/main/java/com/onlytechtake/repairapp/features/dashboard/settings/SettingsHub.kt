@@ -56,9 +56,14 @@ fun SettingsHub(
 
             SettingsHubCard(
                 title = stringResource(R.string.config_hub_templates_title),
-                subtitle = if (isAdmin) stringResource(R.string.config_hub_templates_subtitle_admin) else stringResource(
-                    R.string.config_hub_templates_subtitle_user,
-                ),
+                subtitle =
+                    if (isAdmin) {
+                        stringResource(R.string.config_hub_templates_subtitle_admin)
+                    } else {
+                        stringResource(
+                            R.string.config_hub_templates_subtitle_user,
+                        )
+                    },
                 icon = Icons.Default.Description,
                 enabled = isAdmin,
                 testTag = RepairAppTestTags.ConfigHubTemplatesButton,

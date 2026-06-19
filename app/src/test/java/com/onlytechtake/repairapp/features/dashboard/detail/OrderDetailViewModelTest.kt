@@ -84,7 +84,7 @@ class OrderDetailViewModelTest {
                 orderRepository.recordPdfShared(
                     actor,
                     "order-1",
-                    "stato.pdf"
+                    "stato.pdf",
                 )
             } returns Result.success(Unit)
 
@@ -92,7 +92,7 @@ class OrderDetailViewModelTest {
             every {
                 shareFactory.createPdfShareIntent(
                     pdf,
-                    "Documento stato.pdf"
+                    "Documento stato.pdf",
                 )
             } returns mockk<Intent>(relaxed = true)
 
@@ -169,8 +169,7 @@ class OrderDetailViewModelTest {
 
         override suspend fun findById(id: String): OrderDocumentEntity? = documents[id]
 
-        override fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>> =
-            documentsFlow
+        override fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>> = documentsFlow
 
         override suspend fun delete(documentId: String): Result<Unit> =
             runCatching {
@@ -205,8 +204,7 @@ class OrderDetailViewModelTest {
             newPassword: CharArray,
         ): Result<Unit> = error("changePassword is not expected")
 
-        override suspend fun getRecoveryKit(): Result<String> =
-            error("getRecoveryKit is not expected")
+        override suspend fun getRecoveryKit(): Result<String> = error("getRecoveryKit is not expected")
 
         override suspend fun resetAdminWithRecoveryCode(
             code: String,

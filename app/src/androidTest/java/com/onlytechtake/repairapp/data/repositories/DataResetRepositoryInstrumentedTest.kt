@@ -86,7 +86,7 @@ class DataResetRepositoryInstrumentedTest {
             val result = repository.resetAll(actor, "RESET")
             assertTrue(
                 "Reset should be successful: ${result.exceptionOrNull()?.message}",
-                result.isSuccess
+                result.isSuccess,
             )
 
             // Users should be gone (resetAll deletes all tables)
@@ -197,8 +197,8 @@ class DataResetRepositoryInstrumentedTest {
                 null,
                 null,
                 now,
-                now
-            )
+                now,
+            ),
         )
         database.repairOrderDao().upsert(
             RepairOrderEntity(

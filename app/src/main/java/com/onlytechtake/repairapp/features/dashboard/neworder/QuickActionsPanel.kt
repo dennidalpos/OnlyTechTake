@@ -274,7 +274,7 @@ fun QuickActions(
                                 leadingIcon = {
                                     Icon(
                                         Icons.Default.Search,
-                                        contentDescription = null
+                                        contentDescription = null,
                                     )
                                 },
                                 trailingIcon =
@@ -425,10 +425,11 @@ fun QuickActions(
                 onCategorySelected = { categoryId ->
                     updateDraft {
                         it.copy(
-                            selectedCategoryId = selectedCategoryAfterClick(
-                                it.selectedCategoryId,
-                                categoryId
-                            ),
+                            selectedCategoryId =
+                                selectedCategoryAfterClick(
+                                    it.selectedCategoryId,
+                                    categoryId,
+                                ),
                             completedStep = completedStepAfterCategorySelection(it.completedStep),
                         )
                     }

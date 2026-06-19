@@ -87,8 +87,8 @@ fun DashboardNavHost(
                     navController.navigate(
                         DashboardRoutes.settings(
                             "CATEGORIES",
-                            fromIntake = true
-                        )
+                            fromIntake = true,
+                        ),
                     )
                 },
                 onClose = { navController.popBackStack() },
@@ -110,8 +110,8 @@ fun DashboardNavHost(
                 onOrderClick = { orderId ->
                     navController.navigate(
                         DashboardRoutes.orderDetail(
-                            orderId
-                        )
+                            orderId,
+                        ),
                     )
                 },
             )
@@ -178,11 +178,12 @@ fun DashboardNavHost(
         }
         composable(
             route = DashboardRoutes.ORDER_DETAIL,
-            arguments = listOf(
-                navArgument("orderId") {
-                    type = androidx.navigation.NavType.StringType
-                },
-            ),
+            arguments =
+                listOf(
+                    navArgument("orderId") {
+                        type = androidx.navigation.NavType.StringType
+                    },
+                ),
         ) { backStackEntry ->
             val orderId = backStackEntry.arguments?.getString("orderId") ?: ""
             val orderDetailViewModel: OrderDetailViewModel =

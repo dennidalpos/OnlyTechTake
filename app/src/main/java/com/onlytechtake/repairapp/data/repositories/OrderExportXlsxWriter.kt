@@ -122,7 +122,7 @@ internal class OrderExportXlsxWriter(
         this
             ?.let {
                 DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(
-                    Instant.ofEpochMilli(it).atZone(zoneId)
+                    Instant.ofEpochMilli(it).atZone(zoneId),
                 )
             }.orEmpty()
 

@@ -15,6 +15,7 @@
 param(
     [string]$AvdName = "OnlyTechTakeDemo",
     [switch]$UseConnectedDevice,
+    [ValidateSet("Full", "Demo")]
     [string]$Flavor = "Full",
     [switch]$SkipBuild,
     [switch]$SkipVideo,
@@ -57,6 +58,7 @@ if (-not $OutputRoot) {
 $assetsConfig = @(
     [PSCustomObject]@{
         Id = "operator-intake"
+        Flavors = @("Full", "Demo")
         TestClass = "com.onlytechtake.repairapp.demo.OperatorIntakeDemoScreenshotTest"
         DeviceDirectory = "/sdcard/Android/data/$packageName/files/demo-screenshots"
         PulledDirectoryName = "demo-screenshots"
@@ -64,12 +66,13 @@ $assetsConfig = @(
         Cases = @(
             [PSCustomObject]@{
                 Id = "full"
+                Flavors = @("Full", "Demo")
                 SourceDirectory = "."
                 TargetDirectory = "screenshots/01-operatore-banco"
                 ExpectedFiles = @(
                     "01-login.png", "02-home.png", "03-new-customer.png",
                     "04-category-problem.png", "05-signature-capture.png",
-                    "06-order-created.png", "06b-back-to-top-customers.png",
+                    "06-order-created.png", "06b-back-to-top-orders.png",
                     "07-whatsapp-preview.png", "08-in-progress.png",
                     "09-diagnosis-result.png", "10-pdf-documents.png",
                     "11-ready-for-pickup.png", "12-closed-timeline.png"
@@ -86,37 +89,71 @@ $assetsConfig = @(
         Cases = @(
             [PSCustomObject]@{
                 Id = "order-intake"
+                Flavors = @("Full", "Demo")
                 TestMethod = "capturesOrderIntakeToClosureStories"
                 SourceDirectory = "01-commessa-nuovo-cliente-chiusura"
                 TargetDirectory = "screenshots/02-commessa-nuovo-cliente-chiusura"
+                ExpectedFiles = @(
+                    "01-login.png", "02-dashboard-home.png", "03-nuovo-cliente.png",
+                    "04-categoria-problema.png", "05-commessa-aperta.png",
+                    "06-presa-in-carico.png", "07-diagnosi-risultato.png",
+                    "08-riparazione.png", "09-pronta-ritiro.png", "10-chiusura-timeline.png"
+                )
             },
             [PSCustomObject]@{
                 Id = "config"
+                Flavors = @("Full", "Demo")
                 TestMethod = "capturesCategoryAndTemplateStories"
                 SourceDirectory = "02-categorie-template"
                 TargetDirectory = "screenshots/03-categorie-template"
+                ExpectedFiles = @(
+                    "01-dashboard-admin.png", "02-config-hub.png",
+                    "03-creazione-categoria.png", "04-categoria-salvata.png",
+                    "05-template-associazioni.png", "05a-template-tooltip.png",
+                    "05b-creazione-template.png", "06-template-salvato.png"
+                )
             },
             [PSCustomObject]@{
                 Id = "customers"
+                Flavors = @("Full", "Demo")
                 TestMethod = "capturesPrivateAndBusinessCustomerStories"
                 SourceDirectory = "03-clienti-privato-azienda"
                 TargetDirectory = "screenshots/04-clienti-privato-azienda"
+                ExpectedFiles = @(
+                    "01-archivio-clienti.png", "02-cliente-privato.png",
+                    "03-privato-salvato.png", "04-cliente-azienda.png",
+                    "05-azienda-salvata.png"
+                )
             },
             [PSCustomObject]@{
                 Id = "maintenance"
+                Flavors = @("Full", "Demo")
                 TestMethod = "capturesMaintenanceStories"
                 SourceDirectory = "05-manutenzione-backup"
                 TargetDirectory = "screenshots/05-manutenzione-backup"
+                ExpectedFiles = @(
+                    "01-gestione-memoria.png", "02-backup-dati.png", "03-export-excel.png"
+                )
             },
             [PSCustomObject]@{
                 Id = "demo-limit"
+                Flavors = @("Demo")
                 TestMethod = "capturesDemoLimitStory"
                 SourceDirectory = "06-demo-limit"
                 TargetDirectory = "screenshots/06-demo-limit"
+                ExpectedFiles = @("01-demo-limit-error.png")
             }
         )
     }
 )
+
+if ($CaseId -and -not $AssetId) {
+    $matchingAssets = @($assetsConfig | Where-Object { $_.Cases.Id -contains $CaseId })
+    if ($matchingAssets.Count -ne 1) {
+        throw "CaseId non valido o ambiguo: $CaseId"
+    }
+    $AssetId = $matchingAssets[0].Id
+}
 
 # Selezione interattiva se non specificato AssetId o CaseId
 if (-not $AssetId -and -not $CaseId) {
@@ -126,7 +163,7 @@ if (-not $AssetId -and -not $CaseId) {
     $menuItems = @()
     foreach ($asset in $assetsConfig) {
         if ($asset.Id -eq "social-stories") {
-            foreach ($case in $asset.Cases) {
+            foreach ($case in $asset.Cases | Where-Object { $_.Flavors -contains $Flavor }) {
                 Write-Host "$i. Social: $($case.Id) ($($case.TestMethod))"
                 $menuItems += [PSCustomObject]@{ Asset = $asset; Case = $case }
                 $i++
@@ -212,6 +249,24 @@ function Reset-ManagedAssetDirectory {
     New-Item -ItemType Directory -Path $Path -Force | Out-Null
 }
 
+function Assert-GeneratedCaseAssets {
+    param(
+        [Parameter(Mandatory = $true)][string]$Path,
+        [Parameter(Mandatory = $true)][string[]]$ExpectedFiles
+    )
+
+    $actualFiles = @(Get-ChildItem -LiteralPath $Path -Filter "*.png" -File | Select-Object -ExpandProperty Name)
+    $missingFiles = @($ExpectedFiles | Where-Object { $_ -notin $actualFiles })
+    $unexpectedFiles = @($actualFiles | Where-Object { $_ -notin $ExpectedFiles })
+    if ($missingFiles.Count -gt 0 -or $unexpectedFiles.Count -gt 0) {
+        throw "Asset non allineati in ${Path}. Mancanti: $($missingFiles -join ', '); inattesi: $($unexpectedFiles -join ', ')."
+    }
+
+    foreach ($fileName in $ExpectedFiles) {
+        Assert-PngDimensions -Path (Join-Path $Path $fileName) -Width 1080 -Height 1920
+    }
+}
+
 trap {
     Restore-DeviceGlobalSettings
     throw $_
@@ -239,16 +294,25 @@ foreach ($asset in $assetsConfig) {
     Write-Host "`n--- Elaborazione Asset: $($asset.Id) ---" -ForegroundColor Cyan
 
     $testTarget = $asset.TestClass
-    $activeCases = $asset.Cases
+    $activeCases = @($asset.Cases | Where-Object { $_.Flavors -contains $Flavor })
 
     if ($CaseId) {
         $case = $asset.Cases | Where-Object { $_.Id -eq $CaseId }
+        if (-not $case) {
+            throw "CaseId '$CaseId' non valido per l'asset '$($asset.Id)'."
+        }
+        if ($case -and $case.Flavors -notcontains $Flavor) {
+            throw "Il caso '$CaseId' non e' disponibile per il flavor $Flavor. Flavor supportati: $($case.Flavors -join ', ')."
+        }
         if ($case) {
             if ($case.TestMethod) {
                 $testTarget = "$($asset.TestClass)#$($case.TestMethod)"
             }
             $activeCases = @($case)
         }
+    }
+    if ($activeCases.Count -eq 0) {
+        throw "Nessun caso asset disponibile per $($asset.Id) sul flavor $Flavor."
     }
 
     # Esecuzione Test
@@ -283,8 +347,9 @@ foreach ($asset in $assetsConfig) {
                     Convert-ToStoryPng -SourcePath $_.FullName -TargetPath $targetPath
                 }
             } else {
-                Write-Warning "Cartella sorgente non trovata: $sourceCase"
+                throw "Cartella sorgente non trovata: $sourceCase"
             }
+            Assert-GeneratedCaseAssets -Path $targetCase -ExpectedFiles $case.ExpectedFiles
         }
 
         # Generazione Video se previsto

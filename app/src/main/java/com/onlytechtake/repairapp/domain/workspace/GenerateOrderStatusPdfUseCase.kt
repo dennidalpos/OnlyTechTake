@@ -59,8 +59,9 @@ class GenerateOrderStatusPdfUseCase(
             val payload =
                 OrderStatusPdfPayload(
                     order = detail.order,
-                    customer = detail.customer
-                        ?: throw IllegalStateException("Cliente non trovato"),
+                    customer =
+                        detail.customer
+                            ?: throw IllegalStateException("Cliente non trovato"),
                     categoryPath = categoryPath,
                     statusLabel = detail.order.status.label(context),
                     estimateAmountLabel = detail.order.estimateAmountCents?.formatEuroCents(),

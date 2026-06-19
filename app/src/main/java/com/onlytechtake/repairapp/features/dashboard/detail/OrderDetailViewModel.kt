@@ -122,7 +122,7 @@ class OrderDetailViewModel(
             orderRepository.recordResult(
                 actor,
                 orderId,
-                DiagnosisResultInput(summary, diagnosisOutcome, estimateAmountCents)
+                DiagnosisResultInput(summary, diagnosisOutcome, estimateAmountCents),
             )
         }
     }
@@ -140,7 +140,7 @@ class OrderDetailViewModel(
             orderRepository.recordFeedback(
                 actor,
                 orderId,
-                FeedbackInput(feedback, note, closureReason)
+                FeedbackInput(feedback, note, closureReason),
             )
         }
     }

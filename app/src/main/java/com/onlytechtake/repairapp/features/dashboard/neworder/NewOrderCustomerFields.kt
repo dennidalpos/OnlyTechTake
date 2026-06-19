@@ -52,10 +52,11 @@ fun CustomerSuggestionCard(
                 style = MaterialTheme.typography.titleSmall,
             )
             Text(
-                text = listOfNotNull(
-                    customer.type.label(context),
-                    customer.phone
-                ).joinToString(" - "),
+                text =
+                    listOfNotNull(
+                        customer.type.label(context),
+                        customer.phone,
+                    ).joinToString(" - "),
                 style = MaterialTheme.typography.bodySmall,
             )
             if (expanded) {
@@ -121,7 +122,7 @@ fun IntakeCustomerFields(
                 singleLine = true,
                 imeAction = ImeAction.Next,
                 keyboardActions = nextAction,
-                capitalization = KeyboardCapitalization.Words
+                capitalization = KeyboardCapitalization.Words,
             )
             AppTextField(
                 vatNumber,
@@ -131,7 +132,7 @@ fun IntakeCustomerFields(
                 singleLine = true,
                 imeAction = ImeAction.Next,
                 keyboardActions = nextAction,
-                capitalization = KeyboardCapitalization.Characters
+                capitalization = KeyboardCapitalization.Characters,
             )
         } else {
             AppTextField(
@@ -144,7 +145,7 @@ fun IntakeCustomerFields(
                 imeAction = ImeAction.Next,
                 keyboardActions = nextAction,
                 capitalization = KeyboardCapitalization.Words,
-                testTag = RepairAppTestTags.NewOrderFirstNameField
+                testTag = RepairAppTestTags.NewOrderFirstNameField,
             )
             AppTextField(
                 lastName,
@@ -156,7 +157,7 @@ fun IntakeCustomerFields(
                 imeAction = ImeAction.Next,
                 keyboardActions = nextAction,
                 capitalization = KeyboardCapitalization.Words,
-                testTag = RepairAppTestTags.NewOrderLastNameField
+                testTag = RepairAppTestTags.NewOrderLastNameField,
             )
         }
         AppTextField(
@@ -167,7 +168,7 @@ fun IntakeCustomerFields(
             singleLine = true,
             imeAction = ImeAction.Next,
             keyboardActions = nextAction,
-            capitalization = KeyboardCapitalization.Characters
+            capitalization = KeyboardCapitalization.Characters,
         )
         AppTextField(
             phone,
@@ -179,7 +180,7 @@ fun IntakeCustomerFields(
             imeAction = ImeAction.Next,
             keyboardActions = nextAction,
             keyboardType = KeyboardType.Phone,
-            testTag = RepairAppTestTags.NewOrderPhoneField
+            testTag = RepairAppTestTags.NewOrderPhoneField,
         )
         AppTextField(
             email,
@@ -192,7 +193,7 @@ fun IntakeCustomerFields(
             keyboardActions = nextAction,
             keyboardType = KeyboardType.Email,
             capitalization = KeyboardCapitalization.None,
-            testTag = RepairAppTestTags.NewOrderEmailField
+            testTag = RepairAppTestTags.NewOrderEmailField,
         )
         AppTextField(
             address,
@@ -202,7 +203,7 @@ fun IntakeCustomerFields(
             singleLine = true,
             imeAction = ImeAction.Done,
             keyboardActions = doneAction,
-            capitalization = KeyboardCapitalization.Words
+            capitalization = KeyboardCapitalization.Words,
         )
         NoteFieldWithDialog(notes, onNotesChange, testTag = RepairAppTestTags.NewOrderNotesField)
     }

@@ -185,24 +185,26 @@ private fun SettingsSectionContent(
             )
         }
         when (section) {
-            "CATEGORIES" -> CategoriesSettings(
-                viewModel,
-                isAdmin,
-                fromIntake,
-                requestConfirm,
-                onBack = onBack,
-            )
+            "CATEGORIES" ->
+                CategoriesSettings(
+                    viewModel,
+                    isAdmin,
+                    fromIntake,
+                    requestConfirm,
+                    onBack = onBack,
+                )
 
             "TEMPLATES" -> TemplatesSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)
             "TEMPLATE_MAPPING" -> TemplateMappingSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)
             "WHATSAPP" -> WhatsAppSettings(viewModel, requestConfirm, onBack = onBack)
-            "EXPORT" -> BackupSettings(
-                viewModel,
-                isAdmin,
-                onBackupRestored,
-                requestConfirm,
-                onBack = onBack,
-            )
+            "EXPORT" ->
+                BackupSettings(
+                    viewModel,
+                    isAdmin,
+                    onBackupRestored,
+                    requestConfirm,
+                    onBack = onBack,
+                )
 
             "STORAGE" -> StorageSettings(viewModel, onBack = onBack)
             "ABOUT" -> AboutSettings(onBack = onBack)

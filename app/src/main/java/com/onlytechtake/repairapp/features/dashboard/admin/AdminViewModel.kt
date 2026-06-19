@@ -37,8 +37,10 @@ class AdminViewModel(
     val recoveryCode = _recoveryCode.asStateFlow()
 
     val currentUser = authRepository.currentUser
-    val users = adminUserRepository.observeUsers()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    val users =
+        adminUserRepository
+            .observeUsers()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     val isBackupReminderDue =
         backupReminderPreferences
@@ -49,7 +51,7 @@ class AdminViewModel(
             ?: flowOf(false).stateIn(
                 viewModelScope,
                 SharingStarted.WhileSubscribed(5_000),
-                initialValue = false
+                initialValue = false,
             )
 
     fun createOperator(
@@ -182,12 +184,13 @@ class AdminViewModel(
         private val backupReminderPreferences: BackupReminderPreferences? = null,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T = AdminViewModel(
-            authRepository,
-            adminUserRepository,
-            backupRepository,
-            dataResetRepository,
-            backupReminderPreferences
-        ) as T
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            AdminViewModel(
+                authRepository,
+                adminUserRepository,
+                backupRepository,
+                dataResetRepository,
+                backupReminderPreferences,
+            ) as T
     }
 }

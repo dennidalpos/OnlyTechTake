@@ -48,14 +48,15 @@ fun AboutSettings(onBack: () -> Unit) {
                 ) {
                     Text(
                         stringResource(R.string.about_app_name),
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.titleLarge,
                     )
                     Text(
-                        text = stringResource(
-                            R.string.about_version,
-                            BuildConfig.VERSION_NAME,
-                            BuildConfig.VERSION_CODE
-                        ),
+                        text =
+                            stringResource(
+                                R.string.about_version,
+                                BuildConfig.VERSION_NAME,
+                                BuildConfig.VERSION_CODE,
+                            ),
                         style = MaterialTheme.typography.bodyMedium,
                     )
                     Text(
@@ -75,7 +76,7 @@ fun AboutSettings(onBack: () -> Unit) {
                 ) {
                     Text(
                         stringResource(R.string.about_description_title),
-                        style = MaterialTheme.typography.titleSmall
+                        style = MaterialTheme.typography.titleSmall,
                     )
                     Text(
                         text = stringResource(R.string.about_description_text),
@@ -93,11 +94,11 @@ fun AboutSettings(onBack: () -> Unit) {
                 ) {
                     Text(
                         stringResource(R.string.about_development),
-                        style = MaterialTheme.typography.titleSmall
+                        style = MaterialTheme.typography.titleSmall,
                     )
                     Text(
                         stringResource(R.string.about_copyright),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
                     )
 
                     AppButton(
@@ -111,9 +112,10 @@ fun AboutSettings(onBack: () -> Unit) {
 
         item {
             AppButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = RepairAppSpacing.screenHorizontal),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = RepairAppSpacing.screenHorizontal),
                 text = stringResource(R.string.about_close),
                 variant = AppButtonVariant.Secondary,
                 onClick = onBack,

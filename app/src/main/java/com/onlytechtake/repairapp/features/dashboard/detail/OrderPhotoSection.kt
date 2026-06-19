@@ -61,7 +61,7 @@ fun OrderPhotoSection(
             Text(
                 stringResource(R.string.intake_media_empty),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.outline
+                color = MaterialTheme.colorScheme.outline,
             )
         } else {
             if (images.isNotEmpty()) {
@@ -88,10 +88,11 @@ fun OrderPhotoSection(
                                 verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
                             ) {
                                 Text(
-                                    com.onlytechtake.repairapp.core.utils.formatUiDateTime(media.capturedAt),
+                                    com.onlytechtake.repairapp.core.utils
+                                        .formatUiDateTime(media.capturedAt),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.outline,
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier.weight(1f),
                                 )
                                 AppIconButton(
                                     imageVector = Icons.Default.Delete,
@@ -151,7 +152,7 @@ fun OrderPhotoSection(
                     text = stringResource(R.string.customer_detail_close),
                     onClick = { showCamera = false },
                     variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
                 )
             },
         )

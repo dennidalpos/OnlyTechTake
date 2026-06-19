@@ -43,13 +43,14 @@ class CatalogRepositoryTest {
     private val repository = CatalogRepository(context, stubDao)
     private val admin =
         AuthenticatedUser("1", "admin", "Admin", UserRole.ADMIN, UserPermission.entries.toSet())
-    private val operator = AuthenticatedUser(
-        "2",
-        "operator",
-        "Operator",
-        UserRole.OPERATOR,
-        setOf(UserPermission.MANAGE_CATEGORIES)
-    )
+    private val operator =
+        AuthenticatedUser(
+            "2",
+            "operator",
+            "Operator",
+            UserRole.OPERATOR,
+            setOf(UserPermission.MANAGE_CATEGORIES),
+        )
     private val restrictedOperator =
         AuthenticatedUser("3", "restricted", "Restricted", UserRole.OPERATOR, emptySet())
 

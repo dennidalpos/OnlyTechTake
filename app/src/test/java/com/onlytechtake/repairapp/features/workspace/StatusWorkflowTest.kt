@@ -66,8 +66,8 @@ class StatusWorkflowTest {
             statusTemplateAnchor(
                 order(
                     OrderStatus.RESULT,
-                    diagnosisOutcome = DiagnosisOutcome.REPAIRABLE
-                )
+                    diagnosisOutcome = DiagnosisOutcome.REPAIRABLE,
+                ),
             ),
         )
         assertEquals(
@@ -75,8 +75,8 @@ class StatusWorkflowTest {
             statusTemplateAnchor(
                 order(
                     OrderStatus.RESULT,
-                    diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE
-                )
+                    diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE,
+                ),
             ),
         )
         assertEquals(
@@ -84,13 +84,13 @@ class StatusWorkflowTest {
             statusTemplateAnchor(
                 order(
                     OrderStatus.CLOSED,
-                    closureReason = ClosureReason.NOT_REPAIRABLE
-                )
+                    closureReason = ClosureReason.NOT_REPAIRABLE,
+                ),
             ),
         )
         assertEquals(
             TemplateAnchor.WHATSAPP_DIAGNOSIS,
-            statusTemplateAnchor(order(OrderStatus.DIAGNOSIS))
+            statusTemplateAnchor(order(OrderStatus.DIAGNOSIS)),
         )
     }
 

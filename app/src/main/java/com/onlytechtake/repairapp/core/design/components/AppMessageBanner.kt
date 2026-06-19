@@ -22,12 +22,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.platform.testTag
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
@@ -136,7 +136,7 @@ fun DismissibleAppMessageBanner(
                 contentDescription = stringResource(R.string.content_description_close),
                 onClick = onDismiss,
                 tint = LocalContentColor.current,
-                modifier = Modifier.testTag(RepairAppTestTags.MessageBannerCloseButton)
+                modifier = Modifier.testTag(RepairAppTestTags.MessageBannerCloseButton),
             )
         },
     )

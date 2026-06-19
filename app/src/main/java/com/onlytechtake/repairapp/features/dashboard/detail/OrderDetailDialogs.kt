@@ -1,23 +1,23 @@
 package com.onlytechtake.repairapp.features.dashboard.detail
 
 import android.content.Context
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.platform.testTag
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
@@ -99,7 +99,7 @@ fun OrderStatusActionDialog(
                         )
                         Text(
                             stringResource(R.string.order_not_repairable_title),
-                            style = MaterialTheme.typography.titleSmall
+                            style = MaterialTheme.typography.titleSmall,
                         )
                         QuoteDecisionRow(
                             text = stringResource(R.string.order_diagnosis_repairable),
@@ -143,7 +143,7 @@ fun OrderStatusActionDialog(
                     if (isClosure) {
                         Text(
                             stringResource(R.string.order_closure_reason_title),
-                            style = MaterialTheme.typography.titleSmall
+                            style = MaterialTheme.typography.titleSmall,
                         )
                         ActionRow {
                             ClosureReason.entries.forEach { reason ->
@@ -152,9 +152,14 @@ fun OrderStatusActionDialog(
                                     text = reason.label(context),
                                     variant = if (selectedReason) AppButtonVariant.Success else AppButtonVariant.Secondary,
                                     selected = selectedReason,
-                                    stateDescription = if (selectedReason) stringResource(R.string.state_selected) else stringResource(
-                                        R.string.state_not_selected
-                                    ),
+                                    stateDescription =
+                                        if (selectedReason) {
+                                            stringResource(R.string.state_selected)
+                                        } else {
+                                            stringResource(
+                                                R.string.state_not_selected,
+                                            )
+                                        },
                                     testTag = RepairAppTestTags.closureReason(reason.name),
                                     onClick = { state.closureReason = reason },
                                     size = AppButtonSize.Compact,
@@ -306,15 +311,16 @@ fun WhatsAppPreviewDialog(
             title = stringResource(R.string.order_wa_preview_title),
             content = {
                 Column(
-                    modifier = Modifier
-                        .verticalScroll(rememberScrollState())
-                        .testTag(RepairAppTestTags.OrderWhatsAppPreviewPanel),
+                    modifier =
+                        Modifier
+                            .verticalScroll(rememberScrollState())
+                            .testTag(RepairAppTestTags.OrderWhatsAppPreviewPanel),
                     verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
                 ) {
                     Text(
                         text = "Template: ${prepared.templateName}",
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.outline
+                        color = MaterialTheme.colorScheme.outline,
                     )
 
                     com.onlytechtake.repairapp.core.design.components.AppMessageBanner(

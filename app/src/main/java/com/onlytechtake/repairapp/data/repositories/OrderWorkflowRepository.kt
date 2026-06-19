@@ -89,8 +89,7 @@ class OrderWorkflowRepository(
         filter: OrderFilter,
     ): Flow<List<OrderListItem>> = queries.observeOrderList(actor, filter)
 
-    override fun observeOrderDetail(orderId: String): Flow<OrderDetail?> =
-        queries.observeOrderDetail(orderId)
+    override fun observeOrderDetail(orderId: String): Flow<OrderDetail?> = queries.observeOrderDetail(orderId)
 
     override suspend fun createOrder(
         actor: AuthenticatedUser,
@@ -157,13 +156,16 @@ class OrderWorkflowRepository(
             timelineEventDao = timelineEventDao,
             orderMediaDao = orderMediaDao,
             signatureDao = signatureDao,
-            orderDocumentDao = database?.orderDocumentDao()
-                ?: error("OrderDocumentDao unavailable"),
+            orderDocumentDao =
+                database?.orderDocumentDao()
+                    ?: error("OrderDocumentDao unavailable"),
             auditLogDao = auditLogDao,
-            fileCleanupService = OrderFileCleanupService(
-                context,
-                com.onlytechtake.repairapp.core.media.MediaStorageProvider(context)
-            ),
+            fileCleanupService =
+                OrderFileCleanupService(
+                    context,
+                    com.onlytechtake.repairapp.core.media
+                        .MediaStorageProvider(context),
+                ),
         )
 
     override suspend fun deleteSignature(
@@ -176,13 +178,14 @@ class OrderWorkflowRepository(
             if (sig.createdByUserId != actor.id) {
                 com.onlytechtake.repairapp.core.permissions.PermissionService.requirePermission(
                     actor,
-                    com.onlytechtake.repairapp.data.local.entities.UserPermission.EDIT_ALL_ORDERS
+                    com.onlytechtake.repairapp.data.local.entities.UserPermission.EDIT_ALL_ORDERS,
                 )
             }
             signatureDao.deleteById(signatureId)
             OrderFileCleanupService(
                 context,
-                com.onlytechtake.repairapp.core.media.MediaStorageProvider(context)
+                com.onlytechtake.repairapp.core.media
+                    .MediaStorageProvider(context),
             ).deleteSpecificFile(sig.localPath)
             commands.recordMediaRemoved(actor, sig.orderId, sig.fileName)
             Unit

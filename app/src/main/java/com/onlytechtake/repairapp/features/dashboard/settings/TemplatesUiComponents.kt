@@ -90,10 +90,11 @@ fun AnchorSelectionDialog(
                             highlight = (currentMapping == null || currentMapping == anchor.defaultCode),
                         ) {
                             Text(
-                                text = stringResource(
-                                    R.string.config_template_default_label,
-                                    anchor.defaultCode
-                                ),
+                                text =
+                                    stringResource(
+                                        R.string.config_template_default_label,
+                                        anchor.defaultCode,
+                                    ),
                                 modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                                 style = MaterialTheme.typography.bodyMedium,
                             )
@@ -110,7 +111,7 @@ fun AnchorSelectionDialog(
                                 Text(
                                     template.code,
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.outline
+                                    color = MaterialTheme.colorScheme.outline,
                                 )
                             }
                         }

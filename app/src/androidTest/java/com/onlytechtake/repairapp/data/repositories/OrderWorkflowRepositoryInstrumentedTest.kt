@@ -115,7 +115,7 @@ class OrderWorkflowRepositoryInstrumentedTest {
             seedCoreData(
                 userId = actor.id,
                 role = UserRole.OPERATOR,
-                permissions = actor.permissions
+                permissions = actor.permissions,
             )
             val order = createTestOrder(assignedToUserId = actor.id)
 
@@ -136,16 +136,18 @@ class OrderWorkflowRepositoryInstrumentedTest {
     @Test
     fun changeStatusToClosedSucceedsWithCloseOrdersPermission() =
         runBlocking {
-            val actor = mockOperator(
-                permissions = setOf(
-                    UserPermission.EDIT_OWN_ORDERS,
-                    UserPermission.CLOSE_ORDERS
+            val actor =
+                mockOperator(
+                    permissions =
+                        setOf(
+                            UserPermission.EDIT_OWN_ORDERS,
+                            UserPermission.CLOSE_ORDERS,
+                        ),
                 )
-            )
             seedCoreData(
                 userId = actor.id,
                 role = UserRole.OPERATOR,
-                permissions = actor.permissions
+                permissions = actor.permissions,
             )
             val order = createTestOrder(assignedToUserId = actor.id)
 
@@ -171,7 +173,7 @@ class OrderWorkflowRepositoryInstrumentedTest {
             seedCoreData(
                 userId = actor.id,
                 role = UserRole.OPERATOR,
-                permissions = actor.permissions
+                permissions = actor.permissions,
             )
             val order =
                 createTestOrder(
@@ -197,16 +199,18 @@ class OrderWorkflowRepositoryInstrumentedTest {
     @Test
     fun recordFeedbackRejectSucceedsWithCloseOrdersPermission() =
         runBlocking {
-            val actor = mockOperator(
-                permissions = setOf(
-                    UserPermission.EDIT_OWN_ORDERS,
-                    UserPermission.CLOSE_ORDERS
+            val actor =
+                mockOperator(
+                    permissions =
+                        setOf(
+                            UserPermission.EDIT_OWN_ORDERS,
+                            UserPermission.CLOSE_ORDERS,
+                        ),
                 )
-            )
             seedCoreData(
                 userId = actor.id,
                 role = UserRole.OPERATOR,
-                permissions = actor.permissions
+                permissions = actor.permissions,
             )
             val order =
                 createTestOrder(
@@ -285,8 +289,8 @@ class OrderWorkflowRepositoryInstrumentedTest {
                 null,
                 null,
                 now,
-                now
-            )
+                now,
+            ),
         )
     }
 

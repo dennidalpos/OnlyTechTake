@@ -174,7 +174,7 @@ internal class AdminSettingsDelegate(
         actionRunner.run { actor ->
             adminUserRepository.createOperator(
                 actor,
-                OperatorInput(displayName, username, password)
+                OperatorInput(displayName, username, password),
             )
         }
     }

@@ -48,10 +48,13 @@ class DefaultAuthRepository(
             inactivityTicker(),
         ) { adminCount, session, lastUserId, now ->
             val activeUser =
-                if ((session.user != null) && (sessionStore.isExpired(
-                        now,
-                        AuthPolicy.INACTIVITY_TIMEOUT_MILLIS,
-                    ))
+                if ((session.user != null) &&
+                    (
+                        sessionStore.isExpired(
+                            now,
+                            AuthPolicy.INACTIVITY_TIMEOUT_MILLIS,
+                        )
+                    )
                 ) {
                     sessionStore.clear()
                     null
@@ -158,8 +161,8 @@ class DefaultAuthRepository(
                 LoginAttemptEntity(
                     username = normalizedUsername,
                     successful = true,
-                    attemptAt = now
-                )
+                    attemptAt = now,
+                ),
             )
 
             if (user.role == UserRole.ADMIN) {
@@ -260,11 +263,11 @@ class DefaultAuthRepository(
         runCatching {
             val hashSetting =
                 appSettingDao.findByKey("master_recovery_code_hash") ?: throw IllegalStateException(
-                    "Recovery Kit non configurato"
+                    "Recovery Kit non configurato",
                 )
             val saltSetting =
                 appSettingDao.findByKey("master_recovery_code_salt") ?: throw IllegalStateException(
-                    "Recovery Kit non configurato"
+                    "Recovery Kit non configurato",
                 )
 
             val matches =
@@ -298,7 +301,7 @@ class DefaultAuthRepository(
                 AuditAction.PASSWORD_RESET,
                 "SYSTEM_RECOVERY",
                 """{"resetAdmins":${admins.size}}""",
-                now
+                now,
             )
         }.also {
             newPassword.fill('\u0000')
@@ -367,8 +370,8 @@ class DefaultAuthRepository(
             LoginAttemptEntity(
                 username = username,
                 successful = false,
-                attemptAt = now
-            )
+                attemptAt = now,
+            ),
         )
     }
 

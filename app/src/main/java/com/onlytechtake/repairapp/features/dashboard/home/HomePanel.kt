@@ -126,8 +126,10 @@ fun HomePanel(
                 AppQueueCard(
                     title = queue.title,
                     count = queue.orders.size,
-                    lastElementTitle = queue.orders.firstOrNull()
-                        ?.let { "${it.orderNumber} - ${it.title}" },
+                    lastElementTitle =
+                        queue.orders
+                            .firstOrNull()
+                            ?.let { "${it.orderNumber} - ${it.title}" },
                     onOpenQueue = { onOpenQueue(queueFilter(queue)) },
                     modifier = Modifier.padding(bottom = RepairAppSpacing.cardGap),
                 )

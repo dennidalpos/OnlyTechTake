@@ -114,9 +114,10 @@ fun AuthGateRoute(
                 text =
                     when {
                         formState.seeding -> stringResource(R.string.auth_showcase_initializing)
-                        isShowcasePreparing -> stringResource(
-                            R.string.auth_showcase_preparing,
-                        )
+                        isShowcasePreparing ->
+                            stringResource(
+                                R.string.auth_showcase_preparing,
+                            )
 
                         else -> stringResource(R.string.auth_system_ready)
                     },

@@ -97,13 +97,15 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         fun checkNewPage(neededHeight: Float) {
             if (y + neededHeight > 842f - margin) {
                 finishCurrentPage()
-                page = document.startPage(
-                    PdfDocument.PageInfo.Builder(
-                        595,
-                        842,
-                        pageInfo.pageNumber + 1
-                    ).create()
-                )
+                page =
+                    document.startPage(
+                        PdfDocument.PageInfo
+                            .Builder(
+                                595,
+                                842,
+                                pageInfo.pageNumber + 1,
+                            ).create(),
+                    )
                 canvas = page.canvas
                 y = margin
             }
@@ -143,7 +145,7 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
             "${payload.customer.phone ?: ""} / ${payload.customer.email ?: ""}",
             margin + 80f,
             y,
-            textPaint
+            textPaint,
         )
         y += 25f
 
@@ -157,14 +159,15 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         canvas.drawText(payload.order.title, margin + 80f, y, textPaint)
         y += 15f
         canvas.drawText("Problema:", margin, y, labelPaint)
-        y = drawWrappedText(
-            canvas,
-            payload.order.description ?: "Nessuna descrizione",
-            margin + 80f,
-            y,
-            contentWidth - 80f,
-            textPaint
-        )
+        y =
+            drawWrappedText(
+                canvas,
+                payload.order.description ?: "Nessuna descrizione",
+                margin + 80f,
+                y,
+                contentWidth - 80f,
+                textPaint,
+            )
         y += 10f
 
         // Status
@@ -190,14 +193,15 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
             canvas.drawText(event.title, margin + 90f, y, textPaint)
             y += 12f
             if (!event.description.isNullOrBlank()) {
-                y = drawWrappedText(
-                    canvas,
-                    event.description,
-                    margin + 90f,
-                    y,
-                    contentWidth - 90f,
-                    textPaint
-                )
+                y =
+                    drawWrappedText(
+                        canvas,
+                        event.description,
+                        margin + 90f,
+                        y,
+                        contentWidth - 90f,
+                        textPaint,
+                    )
             }
             y += 5f
         }
@@ -214,21 +218,21 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
                 "Data firma: ${dateFormat.format(Date(payload.signature.signedAt))}",
                 margin,
                 y,
-                textPaint
+                textPaint,
             )
             y += 12f
             canvas.drawText(
                 "Privacy: Accettata (v${payload.signature.privacyTemplateVersion})",
                 margin,
                 y,
-                textPaint
+                textPaint,
             )
             y += 12f
             canvas.drawText(
                 "Condizioni: Accettate (v${payload.signature.termsTemplateVersion})",
                 margin,
                 y,
-                textPaint
+                textPaint,
             )
             y += 10f
 
@@ -245,7 +249,7 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
                     bitmap,
                     null,
                     android.graphics.RectF(margin, y, margin + drawWidth, y + drawHeight),
-                    null
+                    null,
                 )
                 y += drawHeight + 10f
                 bitmap.recycle()

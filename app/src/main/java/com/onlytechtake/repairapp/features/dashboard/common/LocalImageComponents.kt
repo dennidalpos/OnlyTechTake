@@ -343,7 +343,7 @@ private fun ImageEditCanvas(
         if (bitmap == null) {
             Text(
                 stringResource(R.string.image_preview_unavailable),
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
             )
         } else {
             val imageBitmap = remember(bitmap) { bitmap.asImageBitmap() }
@@ -372,7 +372,7 @@ private fun ImageEditCanvas(
                 arrows.forEach { arrow ->
                     drawBitmapArrow(
                         arrow.start.toCanvasOffset(placement, bitmap),
-                        arrow.end.toCanvasOffset(placement, bitmap)
+                        arrow.end.toCanvasOffset(placement, bitmap),
                     )
                 }
                 cropRect?.let { rect ->
@@ -434,7 +434,7 @@ private fun ZoomableLocalImage(
         if (viewerBitmap == null) {
             Text(
                 stringResource(R.string.image_preview_unavailable),
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
             )
         } else {
             Image(
@@ -444,17 +444,17 @@ private fun ZoomableLocalImage(
                     Modifier
                         .fillMaxWidth()
                         .aspectRatio(
-                            viewerBitmap.width.toFloat() / viewerBitmap.height.coerceAtLeast(
-                                1
-                            ).toFloat()
-                        )
-                        .graphicsLayer {
+                            viewerBitmap.width.toFloat() /
+                                viewerBitmap.height
+                                    .coerceAtLeast(
+                                        1,
+                                    ).toFloat(),
+                        ).graphicsLayer {
                             scaleX = scale
                             scaleY = scale
                             translationX = offset.x
                             translationY = offset.y
-                        }
-                        .transformable(transformState),
+                        }.transformable(transformState),
                 contentScale = ContentScale.Fit,
             )
         }
@@ -472,8 +472,7 @@ private fun rememberDecodedLocalBitmap(
         }
 }
 
-private fun fileVersion(path: String): Pair<Long, Long> =
-    File(path).let { file -> file.lastModified() to file.length() }
+private fun fileVersion(path: String): Pair<Long, Long> = File(path).let { file -> file.lastModified() to file.length() }
 
 private fun DrawScope.drawBitmapArrow(
     start: Offset,

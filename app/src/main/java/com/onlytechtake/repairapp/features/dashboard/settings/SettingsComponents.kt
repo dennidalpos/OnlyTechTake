@@ -81,7 +81,7 @@ internal fun CategoryBreadcrumb(
         )
         Text(
             stringResource(R.string.config_category_root),
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
         )
         nodes.forEach { node ->
             Text(">", style = MaterialTheme.typography.bodySmall)

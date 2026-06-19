@@ -13,8 +13,9 @@ object AtomicFileHelper {
         destination: File,
         inputStream: InputStream,
     ) {
-        val parent = destination.parentFile
-            ?: throw IOException("No parent directory for ${destination.path}")
+        val parent =
+            destination.parentFile
+                ?: throw IOException("No parent directory for ${destination.path}")
         if (!parent.exists()) {
             if (!parent.mkdirs()) throw IOException("Could not create directory ${parent.path}")
         }
@@ -45,8 +46,9 @@ object AtomicFileHelper {
         destination: File,
         block: (File) -> Unit,
     ) {
-        val parent = destination.parentFile
-            ?: throw IOException("No parent directory for ${destination.path}")
+        val parent =
+            destination.parentFile
+                ?: throw IOException("No parent directory for ${destination.path}")
         if (!parent.exists()) {
             if (!parent.mkdirs()) throw IOException("Could not create directory ${parent.path}")
         }

@@ -1,7 +1,7 @@
 {
   "agent_execution_directives": {
     "status": "active",
-    "updated_at": "2026-06-18",
+    "updated_at": "2026-06-19",
     "purpose": "Backlog residuo attivo in ordine di priorita'. Non usare come changelog.",
     "rules": [
       "Quando l'utente chiede di risolvere PROJECT_STATUS.json, scegliere un solo blocco open per volta e dichiararlo prima di iniziare.",
@@ -13,31 +13,6 @@
     ]
   },
   "todos": [
-    {
-      "block_id": "B10",
-      "title": "Screenshot e video store Pro/Demo",
-      "priority": "P1",
-      "complexity": "medium",
-      "status": "completed",
-      "recommended_batch_size": 1,
-      "identified_residual": "Script di generazione allineati con il flusso dei test (Back to Top, Tooltip, Limite Demo). Test strumentati e build verificati localmente.",
-      "why_this_block": "Gli asset devono riflettere esattamente l'app con la UI consolidata post-refactoring.",
-      "plan": [
-        "Eseguire scripts\\windows\\create_demo_assets.ps1 per rigenerare screenshot.",
-        "Eseguire scripts\\windows\\record_demo_device.ps1 per i nuovi video."
-      ],
-      "items": [
-        {
-          "priority": "P1",
-          "summary": "Script di generazione asset allineati e testati (build success).",
-          "refs": [
-            "docs\\DEMO_ASSET_WORKFLOW.md",
-            "scripts\\windows\\create_demo_assets.ps1"
-          ],
-          "completion_criteria": "Script pronti per l'esecuzione su device fisico."
-        }
-      ]
-    },
     {
       "block_id": "B11",
       "title": "Pubblicazione Google Play Pro e Demo",

@@ -16,11 +16,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -29,9 +33,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -44,15 +50,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.launch
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
@@ -81,6 +79,7 @@ import com.onlytechtake.repairapp.features.dashboard.common.NoteFieldWithDialog
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
+import kotlinx.coroutines.launch
 
 @Composable
 fun CustomerPanel(
@@ -368,12 +367,22 @@ fun CustomerPanel(
     if (confirmSave) {
         AppDialog(
             onDismissRequest = { confirmSave = false },
-            title = if (editingCustomerId == null) stringResource(R.string.customer_confirm_save_title) else stringResource(
-                R.string.customer_confirm_update_title
-            ),
-            text = if (editingCustomerId == null) stringResource(R.string.customer_confirm_save_text) else stringResource(
-                R.string.customer_confirm_update_text
-            ),
+            title =
+                if (editingCustomerId == null) {
+                    stringResource(R.string.customer_confirm_save_title)
+                } else {
+                    stringResource(
+                        R.string.customer_confirm_update_title,
+                    )
+                },
+            text =
+                if (editingCustomerId == null) {
+                    stringResource(R.string.customer_confirm_save_text)
+                } else {
+                    stringResource(
+                        R.string.customer_confirm_update_text,
+                    )
+                },
             confirmButton = {
                 AppButton(
                     text = stringResource(R.string.confirm),
@@ -473,18 +482,18 @@ private fun CustomerListContent(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = if (showAll) stringResource(R.string.customer_title) else stringResource(R.string.customer_recent),
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 AppButton(
                     text = if (showAll) stringResource(R.string.customer_recent) else stringResource(R.string.customer_show_all),
                     onClick = { viewModel.setShowAll(!showAll) },
                     variant = AppButtonVariant.Ghost,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
                 )
             }
         } else {
@@ -495,16 +504,16 @@ private fun CustomerListContent(
             LazyColumn(
                 state = listState,
                 modifier =
-                Modifier
-                    .fillMaxSize()
-                    .testTag("customer_list")
-                    .imePadding(),
+                    Modifier
+                        .fillMaxSize()
+                        .testTag("customer_list")
+                        .imePadding(),
                 verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
                 contentPadding =
-                PaddingValues(
-                    top = RepairAppSpacing.compactGap,
-                    bottom = RepairAppSpacing.bottomContentPadding,
-                ),
+                    PaddingValues(
+                        top = RepairAppSpacing.compactGap,
+                        bottom = RepairAppSpacing.bottomContentPadding,
+                    ),
             ) {
                 if (customers.isEmpty()) {
                     item {
@@ -521,15 +530,16 @@ private fun CustomerListContent(
                 AppButton(
                     text = "Torna su",
                     leadingIcon = Icons.Default.KeyboardArrowUp,
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = RepairAppSpacing.screenVertical)
-                        .testTag(RepairAppTestTags.ScrollToTopButton),
+                    modifier =
+                        Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(bottom = RepairAppSpacing.screenVertical)
+                            .testTag(RepairAppTestTags.ScrollToTopButton),
                     onClick = {
                         scope.launch { listState.animateScrollToItem(0) }
                     },
                     variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact
+                    size = AppButtonSize.Compact,
                 )
             }
         }
@@ -587,14 +597,14 @@ private fun CustomerForm(
                     onCompanyNameChange,
                     stringResource(R.string.customer_field_company_name),
                     required = true,
-                    testTag = RepairAppTestTags.CustomerCompanyNameField
+                    testTag = RepairAppTestTags.CustomerCompanyNameField,
                 )
                 AppTextField(
                     vatNumber,
                     onVatNumberChange,
                     stringResource(R.string.customer_field_vat_number),
                     showOptional = true,
-                    testTag = RepairAppTestTags.CustomerVatNumberField
+                    testTag = RepairAppTestTags.CustomerVatNumberField,
                 )
             } else {
                 AppTextField(
@@ -602,14 +612,14 @@ private fun CustomerForm(
                     onFirstNameChange,
                     stringResource(R.string.customer_field_first_name),
                     required = true,
-                    testTag = RepairAppTestTags.CustomerFirstNameField
+                    testTag = RepairAppTestTags.CustomerFirstNameField,
                 )
                 AppTextField(
                     lastName,
                     onLastNameChange,
                     stringResource(R.string.customer_field_last_name),
                     required = true,
-                    testTag = RepairAppTestTags.CustomerLastNameField
+                    testTag = RepairAppTestTags.CustomerLastNameField,
                 )
             }
             AppTextField(
@@ -617,7 +627,7 @@ private fun CustomerForm(
                 onTaxCodeChange,
                 stringResource(R.string.customer_field_tax_code),
                 showOptional = true,
-                testTag = RepairAppTestTags.CustomerTaxCodeField
+                testTag = RepairAppTestTags.CustomerTaxCodeField,
             )
             AppTextField(
                 phone,
@@ -625,7 +635,7 @@ private fun CustomerForm(
                 stringResource(R.string.customer_field_phone),
                 required = true,
                 keyboardType = KeyboardType.Phone,
-                testTag = RepairAppTestTags.CustomerPhoneField
+                testTag = RepairAppTestTags.CustomerPhoneField,
             )
             AppTextField(
                 email,
@@ -633,14 +643,14 @@ private fun CustomerForm(
                 stringResource(R.string.customer_field_email),
                 required = true,
                 keyboardType = KeyboardType.Email,
-                testTag = RepairAppTestTags.CustomerEmailField
+                testTag = RepairAppTestTags.CustomerEmailField,
             )
             AppTextField(
                 address,
                 onAddressChange,
                 stringResource(R.string.customer_field_address),
                 showOptional = true,
-                testTag = RepairAppTestTags.CustomerAddressField
+                testTag = RepairAppTestTags.CustomerAddressField,
             )
 
             Spacer(Modifier.height(RepairAppSpacing.compactGap))
@@ -648,7 +658,7 @@ private fun CustomerForm(
             NoteFieldWithDialog(
                 notes,
                 onNotesChange,
-                testTag = RepairAppTestTags.CustomerNotesField
+                testTag = RepairAppTestTags.CustomerNotesField,
             )
         }
 
@@ -680,30 +690,33 @@ private fun CustomerDetailContent(
     onOrderClick: (String) -> Unit,
     onClose: () -> Unit,
 ) {
-    val openOrders by viewModel.observeOrdersForCustomer(customer.id, openOnly = true)
+    val openOrders by viewModel
+        .observeOrdersForCustomer(customer.id, openOnly = true)
         .collectAsState(emptyList())
-    val allOrders by viewModel.observeOrdersForCustomer(customer.id, openOnly = false)
+    val allOrders by viewModel
+        .observeOrdersForCustomer(customer.id, openOnly = false)
         .collectAsState(emptyList())
     val closedOrders =
         allOrders.filter { it.order.status == com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED }
     val context = LocalContext.current
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState()),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.Top,
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = customer.displayName(context),
                     style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 AppStatusBadge(
                     text = customer.type.label(context),
@@ -722,24 +735,24 @@ private fun CustomerDetailContent(
         StandardCard {
             Column(
                 modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
             ) {
                 customer.phone?.let {
                     AppKeyValueRow(
                         label = stringResource(R.string.customer_field_phone),
-                        value = it
+                        value = it,
                     )
                 }
                 customer.email?.let {
                     AppKeyValueRow(
                         label = stringResource(R.string.customer_field_email),
-                        value = it
+                        value = it,
                     )
                 }
                 customer.address?.let {
                     AppKeyValueRow(
                         label = stringResource(R.string.customer_field_address),
-                        value = it
+                        value = it,
                     )
                 }
             }
@@ -755,7 +768,7 @@ private fun CustomerDetailContent(
             Text(
                 stringResource(R.string.customer_no_open_orders),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.outline
+                color = MaterialTheme.colorScheme.outline,
             )
         } else {
             openOrders.forEach { item -> OrderSummaryRow(item, onOrderClick) }
@@ -766,7 +779,7 @@ private fun CustomerDetailContent(
             Text(
                 stringResource(R.string.customer_no_closed_orders),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.outline
+                color = MaterialTheme.colorScheme.outline,
             )
         } else {
             closedOrders.forEach { item -> OrderSummaryRow(item, onOrderClick) }
@@ -783,12 +796,12 @@ fun AppKeyValueRow(
         Text(
             text = label,
             style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Text(
             text = value,
             style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.Medium,
         )
     }
 }
@@ -800,32 +813,33 @@ fun OrderSummaryRow(
 ) {
     StandardCard(
         onClick = { onOrderClick(item.order.id) },
-        modifier = Modifier.padding(bottom = RepairAppSpacing.tinyGap)
+        modifier = Modifier.padding(bottom = RepairAppSpacing.tinyGap),
     ) {
         Row(
-            modifier = Modifier
-                .padding(RepairAppSpacing.compactGap)
-                .fillMaxWidth(),
+            modifier =
+                Modifier
+                    .padding(RepairAppSpacing.compactGap)
+                    .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Column {
                 Text(
                     text = "${item.order.orderNumber}: ${item.order.title}",
                     style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
                 )
                 Text(
                     text = item.order.status.label(LocalContext.current),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.primary,
                 )
             }
             Icon(
                 Icons.Default.Info,
                 contentDescription = null,
                 modifier = Modifier.size(RepairAppIconSizes.small),
-                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
+                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
             )
         }
     }
@@ -838,32 +852,34 @@ private fun CustomerCard(
 ) {
     StandardCard(onClick = onClick) {
         Row(
-            modifier = Modifier
-                .padding(RepairAppSpacing.cardPadding)
-                .fillMaxWidth(),
+            modifier =
+                Modifier
+                    .padding(RepairAppSpacing.cardPadding)
+                    .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Column {
                 val context = LocalContext.current
                 Text(
                     customer.displayName(context),
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
-                    text = listOfNotNull(
-                        customer.type.label(context),
-                        customer.phone
-                    ).joinToString(" - "),
+                    text =
+                        listOfNotNull(
+                            customer.type.label(context),
+                            customer.phone,
+                        ).joinToString(" - "),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
             Icon(
                 Icons.Default.Info,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)
+                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
             )
         }
     }
@@ -872,9 +888,14 @@ private fun CustomerCard(
 @Composable
 private fun CustomerEmptyState(hasQuery: Boolean) {
     AppEmptyState(
-        title = if (hasQuery) stringResource(R.string.customer_no_results_title) else stringResource(
-            R.string.customer_search_empty_title
-        ),
+        title =
+            if (hasQuery) {
+                stringResource(R.string.customer_no_results_title)
+            } else {
+                stringResource(
+                    R.string.customer_search_empty_title,
+                )
+            },
         body = if (hasQuery) stringResource(R.string.customer_no_results) else stringResource(R.string.customer_search_hint),
     )
 }
