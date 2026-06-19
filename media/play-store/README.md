@@ -15,4 +15,4 @@ Asset statici generati per Google Play e presentazioni commerciali.
 - Pro e Demo sono asset per due app Google Play distinte.
 - Showcase resta asset commerciale fuori store.
 - Non inserire sito web o URL pubblico inventato negli asset.
-- Gli screenshot e i video applicativi restano output generati sotto `reports/demo-assets`.
+- Gli screenshot e i video applicativi restano output generati e ignorati da Git sotto `reports/demo-assets/Full` e `reports/demo-assets/Demo`.

@@ -20,20 +20,24 @@ Pro e Demo sono per Google Play; Showcase resta per presentazioni commerciali fu
 Gli output locali di screenshot e video sono ignorati da Git e vengono scritti sotto:
 
 ```text
-reports/demo-assets/screenshots
-reports/demo-assets/videos
+reports/demo-assets/Full/screenshots
+reports/demo-assets/Full/videos
+reports/demo-assets/Demo/screenshots
+reports/demo-assets/Demo/videos
 ```
 
 Comando principale:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_assets.ps1
+powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_assets.ps1 -Flavor Demo
 ```
 
 Registrazione device:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\windows\record_demo_device.ps1 -ScenarioId full-workflow -StartImmediately
+powershell -ExecutionPolicy Bypass -File scripts\windows\record_demo_device.ps1 -Flavor Demo -ScenarioId demo-limit -StartImmediately
 ```
 
 ## Regole contenuto

@@ -1,8 +1,8 @@
 # Script PowerShell
 
-Gli script ufficiali Android sono in `scripts\android`; `scripts\support` contiene le funzioni condivise. I vecchi script in `scripts\windows` restano wrapper compatibili o script Windows specifici per demo/check.
+Gli script Android di ambiente, Gradle, build e avvio sono in `scripts\android`; `scripts\support` contiene le funzioni condivise. `scripts\windows` contiene check di progetto, qualita', pulizia e pipeline demo.
 
-Gli script calcolano automaticamente la root del progetto dal proprio percorso, quindi funzionano anche se il terminale non e' aperto nella root. Il rilevamento JDK accetta Android Studio JBR o JDK 17/21 e ignora Java 26 nel `PATH`.
+Gli script calcolano automaticamente la root del progetto dal proprio percorso, quindi funzionano anche se il terminale non e' aperto nella root. Il rilevamento accetta JDK/JBR 17 o 21 e ignora Java 26; la compilazione usa il toolchain Java 21 configurato da Gradle.
 
 | script | path | purpose | notes |
 |---|---|---|---|
@@ -14,8 +14,8 @@ Gli script calcolano automaticamente la root del progetto dal proprio percorso, 
 | Quality check | `scripts\windows\quality.ps1` | Esegue Spotless/ktlint su tutti i sorgenti configurati e Android Lint su tutte le varianti debug/release. | Default check-only con prompt per autofix; supporta `-Apply`, `-NoPrompt` e `-SkipLint`; le varianti release richiedono signing locale configurato. |
 | Check progetto | `scripts\windows\check_project.ps1` | Esegue lint, compile Kotlin debug, test unitari, build APK debug e, senza `-SkipReleaseBuild`, build APK release firmata. | Supporta `-Flavor Full|Demo|Showcase`; `-AndroidTests` esegue il connected test del flavor selezionato. |
 | Audit vulnerabilita' dipendenze | `scripts\windows\check_dependency_vulnerabilities.ps1` | Interroga OSV sulle coordinate Maven presenti nei lockfile Gradle. | Separato dai check offline; non invia codice sorgente, solo group/artifact/version. |
-| Asset demo unificati | `scripts\windows\create_demo_assets.ps1` | Genera screenshot verticali e video MP4 montati dagli scenari strumentati. | Richiede ffmpeg per i video; usa AVD `OnlyTechTakeDemo` o device fisico. Mappa completa in `docs\DEMO_ASSET_WORKFLOW.md`. |
-| Registrazione demo device | `scripts\windows\record_demo_device.ps1` | Registra video MP4 manuali o automatici tramite `adb screenrecord`. | Supporta emulatore o device fisico, pulisce i dati app e riusa gli scenari strumentati mappati in `docs\DEMO_ASSET_WORKFLOW.md`. |
+| Asset demo unificati | `scripts\windows\create_demo_assets.ps1` | Genera screenshot verticali e video MP4 montati dagli scenari strumentati. | Supporta `-Flavor Full|Demo`; richiede ffmpeg per i video e usa AVD `OnlyTechTakeDemo` o device fisico. Output sotto `reports\demo-assets\<Flavor>`. |
+| Registrazione demo device | `scripts\windows\record_demo_device.ps1` | Registra video MP4 manuali o automatici tramite `adb screenrecord`. | Supporta `-Flavor Full|Demo`, emulatore o device fisico; output sotto `reports\demo-assets\<Flavor>\videos\device`. |
 
 ## Comandi per obiettivo
 
@@ -27,6 +27,7 @@ Gli script calcolano automaticamente la root del progetto dal proprio percorso, 
 | quality check | `powershell -ExecutionPolicy Bypass -File scripts\windows\quality.ps1` |
 | quality autofix | `powershell -ExecutionPolicy Bypass -File scripts\windows\quality.ps1 -Apply` |
 | asset demo (screen + video) | `powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_assets.ps1` |
+| asset Demo separati | `powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_assets.ps1 -Flavor Demo` |
 | asset demo su device USB | `powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_assets.ps1 -UseConnectedDevice` |
 | registrazione demo USB guidata | `powershell -ExecutionPolicy Bypass -File scripts\windows\record_demo_device.ps1` |
 

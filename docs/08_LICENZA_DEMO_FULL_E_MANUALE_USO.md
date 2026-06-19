@@ -11,7 +11,7 @@ Il modulo `app` definisce tre product flavor:
 | Flavor Gradle | `demo` | `showcase` | `full` |
 | App release ID | `com.onlytechtake.repairapp.demo` | `com.onlytechtake.repairapp.showcase` | `com.onlytechtake.repairapp` |
 | App debug ID | `com.onlytechtake.repairapp.demo.debug` | `com.onlytechtake.repairapp.showcase.debug` | `com.onlytechtake.repairapp.debug` |
-| Nome app | `OnlyTechTake Demo` | `OnlyTechTake Showcase` | `OnlyTechTake` |
+| Nome launcher | `OTT Demo` | `OTT Show` | `OTT Pro` |
 | `IS_DEMO_VERSION` | `true` | `false` | `false` |
 | `IS_DEMO_MODE_ENABLED` | `true` | `false` | `false` |
 | `MAX_ORDERS` | `1` | `-1` | `-1` |

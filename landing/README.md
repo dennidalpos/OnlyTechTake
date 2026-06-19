@@ -19,8 +19,8 @@ Aprire `landing/index.html` nel browser. Non serve avviare un dev server.
 
 Per sostituire i placeholder:
 
-1. Generare screenshot reali con `scripts\windows\create_demo_assets.ps1` oppure da device reale.
-2. Salvare immagini tracciabili sotto `landing\assets\screenshots\`.
+1. Generare screenshot reali con `scripts\windows\create_demo_assets.ps1 -Flavor Full` oppure da device reale. Gli output locali sono in `reports\demo-assets\Full\screenshots`.
+2. Copiare intenzionalmente le sole immagini approvate sotto `landing\assets\screenshots\`.
 3. Aggiornare `index.html` sostituendo i blocchi `screenshot-placeholder` con tag `img`.
 4. Aggiungere un video locale o un embed solo quando il file/link e' reale e approvato.
 

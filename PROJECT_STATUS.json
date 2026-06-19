@@ -17,24 +17,59 @@
       "block_id": "B11",
       "title": "Pubblicazione Google Play Pro e Demo",
       "priority": "P1",
-      "complexity": "medium",
+      "complexity": "high",
       "status": "in_progress",
       "recommended_batch_size": 1,
-      "identified_residual": "Versione incrementata a 0.2.0 (v2). Mancano dati pubblici finali (privacy policy pubblicata su URL reale) e caricamento AAB firmati su Play Console.",
-      "why_this_block": "Gate principale pre-distribuzione.",
+      "identified_residual": "La release 0.2.0 non e' ancora distribuibile: la privacy policy contiene placeholder e non ha un URL HTTPS pubblico; screenshot Full/Demo non sono stati generati e approvati; gli AAB firmati non risultano caricati; App Content, Data Safety, listing, testing e Pre-launch Report non risultano completati in Play Console.",
+      "why_this_block": "E' il gate esterno principale per distribuire Pro e Demo senza dichiarazioni, asset o pacchetti non verificati.",
       "plan": [
-        "Finalizzare privacy policy con URL HTTPS pubblico.",
-        "Generare AAB release firmati per Full e Demo.",
-        "Caricare su Play Console e completare questionari."
+        "Completare titolare, contatti, data e testo della privacy policy; ottenere la revisione necessaria e pubblicarla su un URL HTTPS reale.",
+        "Generare screenshot separati con create_demo_assets.ps1 per Full e Demo; verificare dati fittizi, limiti Demo, leggibilita' e dimensioni prima dell'uso pubblico.",
+        "Finalizzare listing IT/EN e release notes 0.2.0 usando solo funzioni implementate e limiti documentati.",
+        "Creare o completare le due app Play, configurare Play App Signing e caricare gli AAB nei canali di test previsti.",
+        "Completare App Access, Data Safety, Ads, Content Rating, Target Audience, permessi e gli altri moduli App Content in coerenza con manifest, privacy policy e comportamento local-only.",
+        "Caricare icone, feature graphic, screenshot e testi approvati per Pro e Demo; non pubblicare Showcase nello store.",
+        "Avviare closed testing, installare entrambe le varianti dal Play Store e completare uno smoke test reale.",
+        "Esaminare Pre-launch Report e feedback tester; correggere o registrare solo residui concreti prima della produzione."
       ],
       "items": [
         {
           "priority": "P1",
-          "summary": "Finalizzare privacy policy e caricare AAB firmati.",
+          "summary": "Pubblicare la privacy policy definitiva su HTTPS.",
           "refs": [
-            "docs/play-store/PRIVACY_POLICY_IT.md"
+            "docs/play-store/PRIVACY_POLICY_IT.md",
+            "docs/play-store/PLAY_CONSOLE_GUIDE_IT.md"
           ],
-          "completion_criteria": "AAB accettati da Play Console; closed testing avviato."
+          "completion_criteria": "Documento senza placeholder, revisionato, pubblicato a URL HTTPS stabile e inserito in Play Console."
+        },
+        {
+          "priority": "P1",
+          "summary": "Generare e approvare gli asset store separati per Pro e Demo.",
+          "refs": [
+            "docs/DEMO_ASSET_WORKFLOW.md",
+            "docs/marketing/README.md",
+            "media/play-store/README.md"
+          ],
+          "completion_criteria": "Icone e feature graphic verificate; almeno quattro screenshot approvati per ciascuna app, separati per flavor e coerenti con l'UI corrente."
+        },
+        {
+          "priority": "P1",
+          "summary": "Completare configurazione, dichiarazioni e listing Play Console.",
+          "refs": [
+            "docs/play-store/PLAY_CONSOLE_GUIDE_IT.md",
+            "docs/play-store/STORE_LISTING_IT.md",
+            "docs/play-store/STORE_LISTING_EN.md",
+            "docs/release/release-notes-0.2.0.md"
+          ],
+          "completion_criteria": "Pro e Demo configurate con App Content, Data Safety, listing, asset e note release completi e coerenti; nessun warning bloccante."
+        },
+        {
+          "priority": "P1",
+          "summary": "Eseguire closed testing e chiudere i gate pre-produzione.",
+          "refs": [
+            "docs/release/RELEASE_CHECKLIST.md"
+          ],
+          "completion_criteria": "AAB accettati, closed testing avviato, installazione Play verificata, smoke test completato e Pre-launch Report senza crash o errori bloccanti."
         }
       ]
     },
@@ -45,17 +80,26 @@
       "complexity": "medium",
       "status": "open",
       "recommended_batch_size": 1,
-      "identified_residual": "Sebbene i test siano stati allineati nel codice, è necessaria un'esecuzione completa su device fisico per confermare che le interazioni di scroll (Back to Top) non interferiscano con gli automatismi.",
-      "why_this_block": "Assicurare stabilità totale prima del rilascio.",
+      "identified_residual": "La suite Full strumentata non e' stata eseguita integralmente su un device fisico dopo l'introduzione del controllo dinamico 'Torna su'; mancano evidenza di esito, verifica delle interazioni di scroll e conferma di assenza flakiness.",
+      "why_this_block": "La CI su emulatore non sostituisce la validazione delle interazioni UI dinamiche e dei flussi Android reali prima del rilascio.",
       "plan": [
-        "Eseguire suite completa test strumentati su device fisico.",
-        "Validare il comportamento del pulsante 'Torna su' durante i test automatici."
+        "Collegare un device fisico autorizzato e verificare che adb lo esponga come device disponibile.",
+        "Eseguire check_project.ps1 -Flavor Full -SkipReleaseBuild -AndroidTests senza modificare dati o configurazioni non necessari.",
+        "Verificare in particolare comparsa, scomparsa e azione del controllo 'Torna su' durante gli scroll automatizzati.",
+        "Esaminare report connected test e logcat per failure, crash, timeout o retry anomali.",
+        "Ripetere i casi UI dinamici se emerge flakiness; correggere test o implementazione solo con evidenza riproducibile.",
+        "Rimuovere B12 quando la suite completa passa sul device fisico senza flakiness; registrare eventuali nuovi residui concreti come blocchi separati."
       ],
       "items": [
         {
           "priority": "P2",
           "summary": "Validazione interazioni UI dinamiche su device fisico.",
-          "completion_criteria": "Esecuzione passata al 100% senza flakiness."
+          "refs": [
+            "app/src/androidTest",
+            "docs/DEMO_ASSET_WORKFLOW.md",
+            "scripts/windows/check_project.ps1"
+          ],
+          "completion_criteria": "Suite connectedFullDebugAndroidTest passata integralmente su device fisico; controllo 'Torna su' verificato; nessun crash, timeout o flakiness riproducibile nei report."
         }
       ]
     }

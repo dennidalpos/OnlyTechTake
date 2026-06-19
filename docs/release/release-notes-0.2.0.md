@@ -12,7 +12,7 @@
 ## Miglioramenti
 - Incremento `versionCode` a 2 e `versionName` a 0.2.0.
 - Aggiornamento della documentazione di release e delle checklist operative.
-- Verifica del sistema di signing locale per la generazione di AAB (Android App Bundle).
+- Configurazione del gate di signing locale per la generazione di AAB (Android App Bundle).
 
 ## Note per il collaudo
 - Verificare la corretta generazione degli AAB per entrambi i flavor (Full e Demo).

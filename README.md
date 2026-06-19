@@ -31,20 +31,19 @@ App Android locale per tracciare commesse clienti dal banco alla diagnosi, alla 
 - [Checklist di Release](docs/release/RELEASE_CHECKLIST.md)
 - [Demo, Showcase, Full e manuale operativo](docs/08_LICENZA_DEMO_FULL_E_MANUALE_USO.md)
 - [Marketing e asset demo](docs/marketing/README.md)
-- [Handoff futuro backend](docs/09_BACKEND_AGENT_TRACKER.md)
 - [Script PowerShell](scripts/README.md)
 
 ## Prerequisiti
 
 - PowerShell.
 - Android Studio recente.
-- JDK 17/21 oppure JBR incluso in Android Studio.
+- JDK/JBR 21 consigliato. Gli script accettano anche JDK 17 come JVM di avvio; in quel caso Gradle deve poter risolvere il toolchain Java 21 configurato dal progetto.
 - Android SDK Platform `android-37`.
 - Android SDK Build Tools.
 - Android Platform Tools per `adb`, se servono installazione, start o instrumentation test su device.
 - Debug USB abilitato e PC autorizzato sul device per i comandi via `adb`.
 
-Gli script ufficiali in `scripts\android` rilevano automaticamente Android Studio JBR, Android SDK e platform-tools nei percorsi standard. I vecchi comandi in `scripts\windows` restano wrapper compatibili. Se l'autodetect non basta, impostare nel processo PowerShell:
+Gli script in `scripts\android` gestiscono ambiente, Gradle, build e avvio. Gli script in `scripts\windows` coprono check di progetto, qualita', pulizia e pipeline demo. Tutti rilevano automaticamente Android Studio JBR, Android SDK e platform-tools nei percorsi standard. Se l'autodetect non basta, impostare nel processo PowerShell:
 
 ```powershell
 $env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
@@ -75,7 +74,7 @@ Al primo avvio, se non esiste un admin locale, l'app mostra il setup admin. Dopo
 
 ## Comandi Ufficiali
 
-Gli script PowerShell calcolano la root del progetto dal proprio percorso, quindi possono essere eseguiti anche da una sottocartella. Il comando diretto `.\gradlew.bat` va invece lanciato dalla root e usa la JVM gia' configurata nel processo PowerShell; se il processo punta a Java 8 o Java 26, usare gli script o impostare `JAVA_HOME` su JDK/JBR 17/21.
+Gli script PowerShell calcolano la root del progetto dal proprio percorso, quindi possono essere eseguiti anche da una sottocartella. Il comando diretto `.\gradlew.bat` va invece lanciato dalla root e usa la JVM gia' configurata nel processo PowerShell; usare JDK/JBR 21 per evitare il download del toolchain configurato dal progetto.
 
 `scripts\android\build_installer.ps1` e `scripts\android\start_app.ps1` accettano `-Flavor Full|Demo|Showcase`; se omesso usano `Full`. I package reali sono:
 
@@ -108,8 +107,9 @@ Prima di consegnare il repository:
 
 1. Controllare lo stato con `git status --short` e distinguere modifiche tracciate da file non tracciati.
 2. Leggere `PROJECT_STATUS.json`: contiene solo todo incompleti correnti, ordinati per priorita', con `identified_residual` e `plan` per ogni blocco.
-3. Eseguire almeno `check_env.ps1`, `check_project.ps1 -Flavor Full -SkipReleaseBuild` e una build/install debug se serve validare su device. Per il gate strumentato usare la workflow `Android Instrumented Tests` o `check_project.ps1 -Flavor Full -SkipReleaseBuild -AndroidTests` con device disponibile.
-4. Usare `start_app.ps1 -CleanInstall` quando lo schema Room locale e' incompatibile con dati gia' installati; il codice corrente e' Room v1 senza migrazioni conservative.
+3. Eseguire almeno `check_env.ps1` e `check_project.ps1 -Flavor Full -SkipReleaseBuild`; aggiungere build/install debug e test strumentati quando il perimetro richiede un device.
+4. Per asset store usare `create_demo_assets.ps1 -Flavor Full` e `-Flavor Demo`: gli output separati sono sotto `reports\demo-assets\Full` e `reports\demo-assets\Demo` e non sono tracciati.
+5. Usare `start_app.ps1 -CleanInstall` quando lo schema Room locale e' incompatibile con dati gia' installati; il codice corrente e' Room v1 senza migrazioni conservative.
 
 Nota: file non tracciati sotto `docs\` non fanno parte della documentazione ufficiale del repository finche' non vengono revisionati e aggiunti intenzionalmente.
 
@@ -193,9 +193,9 @@ Regole:
 ## Troubleshooting
 
 - `gradlew.bat non trovato`: eseguire i comandi Gradle dalla root o usare gli script in `scripts\android`.
-- `Java non trovato` o `javac non trovato`: installare JDK 17/21 o usare Android Studio JBR, poi rieseguire `check_env.ps1`.
-- Java 26 nel `PATH`: gli script lo ignorano e preferiscono Android Studio JBR o un JDK 17/21 supportato.
-- `Dependency requires at least JVM runtime version 11` con `.\gradlew.bat`: il processo sta usando una JVM troppo vecchia; usare gli script PowerShell ufficiali o impostare `JAVA_HOME` su JDK/JBR 17/21 nello stesso terminale.
+- `Java non trovato` o `javac non trovato`: installare JDK/JBR 21, poi rieseguire `check_env.ps1`.
+- Java 26 nel `PATH`: gli script lo ignorano e preferiscono Android Studio JBR o un JDK 17/21 supportato; il progetto compila con toolchain Java 21.
+- Errore di risoluzione toolchain con JDK 17: consentire a Gradle di scaricare Java 21 oppure impostare `JAVA_HOME` su un JDK/JBR 21 locale.
 - `Platform android-37 non trovata`: installare Android SDK Platform 37 da Android Studio SDK Manager.
 - `Android SDK Build Tools non trovati`: installare Android SDK Build Tools da Android Studio SDK Manager.
 - `adb non trovato`: installare Android Platform Tools o aggiungere `platform-tools` al `PATH`.

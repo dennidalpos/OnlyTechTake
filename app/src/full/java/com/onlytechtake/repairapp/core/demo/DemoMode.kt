@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.core.demo
 
-import com.onlytechtake.repairapp.data.local.entities.*
+import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 
 object DemoMode {
     const val isEnabled: Boolean = false
@@ -12,7 +13,5 @@ object DemoMode {
     }
 
     val demoCustomer: CustomerEntity get() = throw IllegalStateException("DemoMode non disponibile")
-    val demoCategory: OrderCategoryEntity get() = throw IllegalStateException("DemoMode non disponibile")
-    val demoOrder: RepairOrderEntity get() = throw IllegalStateException("DemoMode non disponibile")
     val demoCategories: List<OrderCategoryEntity> get() = throw IllegalStateException("DemoMode non disponibile")
 }

@@ -15,12 +15,17 @@ class DemoModeFullTest {
 
     @Test
     fun fullFlavorDoesNotExposeDemoEntities() {
-        val error =
+        val customerError =
             assertThrows(IllegalStateException::class.java) {
-                DemoMode.demoOrder
+                DemoMode.demoCustomer
+            }
+        val categoriesError =
+            assertThrows(IllegalStateException::class.java) {
+                DemoMode.demoCategories
             }
 
         assertFalse(DemoMode.canEnable())
-        org.junit.Assert.assertEquals("DemoMode non disponibile", error.message)
+        org.junit.Assert.assertEquals("DemoMode non disponibile", customerError.message)
+        org.junit.Assert.assertEquals("DemoMode non disponibile", categoriesError.message)
     }
 }

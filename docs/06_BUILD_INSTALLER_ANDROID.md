@@ -4,14 +4,14 @@ Guida operativa supportata per Windows + PowerShell. Gli script ufficiali in
 `scripts\android` calcolano la root del progetto dal proprio percorso; i wrapper
 in `scripts\windows` restano compatibili con i comandi storici. Il
 comando diretto `.\gradlew.bat` va invece eseguito dalla root e usa la JVM gia'
-configurata nel processo PowerShell. Se il terminale punta a Java 8 o Java 26,
-usare gli script ufficiali o impostare `JAVA_HOME` su JDK/JBR 17/21 nello stesso terminale.
+configurata nel processo PowerShell. Il progetto compila con toolchain Java 21;
+usare JDK/JBR 21 evita che Gradle debba risolverlo durante la prima build.
 
 ## Prerequisiti
 
 - PowerShell.
 - Android Studio recente.
-- JDK 17/21 o Android Studio JBR.
+- JDK/JBR 21 consigliato. JDK 17 e' accettato dagli script come JVM di avvio solo se Gradle puo' risolvere il toolchain Java 21.
 - Android SDK Platform `android-37`.
 - Android SDK Build Tools.
 - Android Platform Tools per `adb`.
@@ -202,9 +202,9 @@ Per il flavor Demo usare `-Flavor Demo`; per il flavor Showcase usare `-Flavor S
 ## Troubleshooting
 
 - `gradlew.bat non trovato`: eseguire dalla root del progetto.
-- `Java non trovato` o `javac non trovato`: configurare JDK 17/21 o Android Studio JBR.
-- Java 26 nel `PATH`: gli script lo ignorano e preferiscono Android Studio JBR o un JDK 17/21 supportato.
-- `Dependency requires at least JVM runtime version 11` con `.\gradlew.bat`: il processo sta usando una JVM troppo vecchia; usare gli script PowerShell ufficiali o impostare `JAVA_HOME` su JDK/JBR 17/21.
+- `Java non trovato` o `javac non trovato`: configurare JDK/JBR 21.
+- Java 26 nel `PATH`: gli script lo ignorano e preferiscono Android Studio JBR o un JDK 17/21 supportato; la compilazione usa Java 21.
+- Errore di risoluzione toolchain con JDK 17: consentire a Gradle di scaricare Java 21 oppure impostare `JAVA_HOME` su un JDK/JBR 21 locale.
 - `Platform android-37 non trovata`: installare Android SDK Platform 37 da Android Studio SDK Manager.
 - `Android SDK Build Tools non trovati`: installare Android SDK Build Tools da Android Studio SDK Manager.
 - `adb non trovato`: installare Android Platform Tools o aggiungere `platform-tools` al `PATH`.

@@ -11,8 +11,8 @@ Both public scripts:
 1. Resolve the repository root and Android environment.
 2. Load `scripts/windows/support/android_demo.ps1`.
 3. Select the `OnlyTechTakeDemo` emulator or one connected physical device.
-4. Build and install `app-full-debug.apk` and `app-full-debug-androidTest.apk` unless `-SkipBuild` is used.
-5. Clear `com.onlytechtake.repairapp.debug` before running the selected scenario.
+4. Build and install the selected `Full` or `Demo` debug APK and matching Android-test APK unless `-SkipBuild` is used.
+5. Clear the selected debug package (`com.onlytechtake.repairapp.debug` or `com.onlytechtake.repairapp.demo.debug`) before running the scenario.
 6. Execute Android instrumentation through `AndroidJUnitRunner`.
 
 The shared helper owns device discovery, temporary verifier settings, APK installation, instrumentation execution, screenshot pulling, PNG conversion, and captioned slide creation.
@@ -23,6 +23,7 @@ Command:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_assets.ps1
+powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_assets.ps1 -Flavor Demo
 ```
 
 Flow:
@@ -32,7 +33,7 @@ Flow:
 3. The script pulls those directories with `adb`.
 4. Raw screenshots are converted to 1080x1920 story PNG files.
 5. For configurations with a story JSON, captioned slides are assembled into MP4 with `ffmpeg`.
-6. Managed output is written below `reports/demo-assets`.
+6. Managed output is written below `reports/demo-assets/Full` or `reports/demo-assets/Demo`.
 
 | Asset | Instrumented scenario | Device source | Repository output |
 |---|---|---|---|
@@ -42,6 +43,7 @@ Flow:
 | Template Anchors | Manual verification recommended (Settings -> Templates) | N/A | N/A |
 | Customers | `SocialStoryDemoScreenshotTest#capturesPrivateAndBusinessCustomerStories` | `demo-social-screenshots/03-clienti-privato-azienda` | `screenshots/04-clienti-privato-azienda` |
 | Maintenance and backup | `SocialStoryDemoScreenshotTest#capturesMaintenanceStories` | `demo-social-screenshots/05-manutenzione-backup` | `screenshots/05-manutenzione-backup` |
+| Demo order limit | `SocialStoryDemoScreenshotTest#capturesDemoLimitStory` | `demo-social-screenshots/06-demo-limit` | `screenshots/06-demo-limit` (Demo only) |
 
 `demo/video/operator-intake.story.json` defines the assembled operator video. Any changed filename, order, caption, duration, resolution, or output name must be synchronized with the test and script configuration.
 
@@ -52,6 +54,7 @@ Command:
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\windows\record_demo_device.ps1
 powershell -ExecutionPolicy Bypass -File scripts\windows\record_demo_device.ps1 -UseConnectedDevice -ScenarioId full-workflow -StartImmediately
+powershell -ExecutionPolicy Bypass -File scripts\windows\record_demo_device.ps1 -Flavor Demo -ScenarioId demo-limit -StartImmediately
 ```
 
 Flow:
@@ -60,7 +63,7 @@ Flow:
 2. It grants the required runtime permissions and optionally seeds demo data.
 3. For automated flows, it starts `adb screenrecord` and launches the selected instrumented test with `demoRecording=true`.
 4. The tests use shorter recording pauses while following the same navigation paths used for screenshots.
-5. The script stops recording, pulls the MP4 into `reports/demo-assets/videos/device`, and normalizes it with `ffmpeg` when available.
+5. The script stops recording, pulls the MP4 into `reports/demo-assets/<Flavor>/videos/device`, and normalizes it with `ffmpeg` when available.
 6. Re-running one recording replaces only the selected output file, preserving other MP4 files already present in the device-video output directory.
 
 | Recording choice | Instrumented scenario |
@@ -70,6 +73,7 @@ Flow:
 | Config | `SocialStoryDemoScreenshotTest#capturesCategoryAndTemplateStories` |
 | Customers | `SocialStoryDemoScreenshotTest#capturesPrivateAndBusinessCustomerStories` |
 | Maintenance | `SocialStoryDemoScreenshotTest#capturesMaintenanceStories` |
+| Demo order limit | `SocialStoryDemoScreenshotTest#capturesDemoLimitStory` (Demo only) |
 
 ## Change Impact Checklist
 
@@ -92,9 +96,7 @@ This register lists only active demo-asset residuals. Do not keep completed rows
 
 | Change | Affected flow/assets | Required updates | Validation | Residual |
 |---|---|---|---|---|
-| Pro/Demo store asset split | Pro listing screenshots, Demo listing screenshots/video | Add flavor-aware screenshot/video generation; keep output paths separated by flavor; regenerate Pro and Demo assets with demo-only limits visible where relevant | limits and watermark implemented | Tracked in `PROJECT_STATUS.json` block `B10` |
-| Design System Consolidation | All screenshots and videos | All assets reflect new tokens, AppStatusBadge, and improved spacing; some test tags might need verification if hierarchy changed. | scripts updated | Tracked in `PROJECT_STATUS.json` block `B13` |
-| Variant alignment and Build | All variants | Alignment of DemoMode across Full/Demo/Showcase and project-wide build/test validation. | check_project.ps1 passed | None |
+| Back-to-top interaction | Operator intake screenshots and automated recording | Run the complete instrumented flow on a physical device and confirm dynamic scrolling does not make the scenario flaky | not run on physical device | Tracked in `PROJECT_STATUS.json` block `B12` |
 
 Use concise validation values such as `not run`, `compile only`, `screenshots verified`, or `screenshots and recording verified`. Do not mark a device flow verified unless it actually ran.
 

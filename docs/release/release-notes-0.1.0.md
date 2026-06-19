@@ -23,9 +23,3 @@
 - Testare il ripristino da ZIP su un'installazione pulita.
 - Verificare la corretta rotazione delle foto scattate in-app.
 - Controllare che i PDF generati contengano tutti gli eventi della timeline.
-
-## Prossimi passi (Roadmap)
-- [ ] Integrazione screenshot reali nella landing page.
-- [ ] Produzione video demo per il Play Store.
-- [ ] Ottimizzazione performance per laboratori con oltre 1000 commesse attive.
-- [ ] Supporto per stampa diretta su stampanti termiche Bluetooth (opzionale).
