@@ -94,9 +94,7 @@ For every relevant repository change:
 
 This register lists only active demo-asset residuals. Do not keep completed rows here as history; completed evidence belongs in command output or release notes when explicitly needed, not in this workflow file.
 
-| Change | Affected flow/assets | Required updates | Validation | Residual |
-|---|---|---|---|---|
-| Back-to-top interaction | Operator intake screenshots and automated recording | Run the complete instrumented flow on a physical device and confirm dynamic scrolling does not make the scenario flaky | not run on physical device | Tracked in `PROJECT_STATUS.json` block `B12` |
+Nessun residuo demo-asset attivo.
 
 Use concise validation values such as `not run`, `compile only`, `screenshots verified`, or `screenshots and recording verified`. Do not mark a device flow verified unless it actually ran.
 

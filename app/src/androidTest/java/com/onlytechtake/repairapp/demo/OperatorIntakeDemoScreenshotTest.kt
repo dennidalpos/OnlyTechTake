@@ -138,7 +138,11 @@ class OperatorIntakeDemoScreenshotTest {
             composeRule.waitForIdle()
 
             pauseForDemo()
-            waitForTag(RepairAppTestTags.OrderSignatureSection, scroll = true)
+            waitForTag(
+                RepairAppTestTags.OrderSignatureSection,
+                scroll = true,
+                useUnmergedTree = true,
+            )
             capture(outputDir, "05-signature-capture.png")
 
             applySimpleStatus(

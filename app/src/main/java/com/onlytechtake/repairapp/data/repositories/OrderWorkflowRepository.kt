@@ -189,6 +189,5 @@ class OrderWorkflowRepository(
                     .MediaStorageProvider(context),
             ).deleteSpecificFile(sig.localPath)
             commands.recordMediaRemoved(actor, sig.orderId, sig.fileName)
-            Unit
         }
 }
