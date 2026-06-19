@@ -83,8 +83,7 @@ class DesignComponentsTest {
                     totalSteps = LAST_INTAKE_STEP,
                     completedStep = 0,
                     onStepClick = {},
-                    stepTestTag = { RepairAppTestTags.intakeStepperStep(it) },
-                )
+                ) { RepairAppTestTags.intakeStepperStep(it) }
             }
         }
 

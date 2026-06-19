@@ -132,13 +132,11 @@ class OperatorIntakeDemoScreenshotTest {
             waitForTag(RepairAppTestTags.OrderWhatsAppPreviewPanel, scroll = true)
             capture(outputDir, "07-whatsapp-preview.png")
             clickTag(RepairAppTestTags.OrderWhatsAppClosePreviewButton, scroll = true)
+            pauseForDemo()
 
-            // Scroll to signatures item
-            composeRule.onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn).performScrollToIndex(4)
+            // Click specific expand button inside signatures card
+            clickTag("signatures_expand_button", scroll = true)
             composeRule.waitForIdle()
-
-            // Click the card to expand
-            clickTag("signatures_card", scroll = false, useUnmergedTree = true)
 
             pauseForDemo()
             waitForTag(RepairAppTestTags.OrderSignatureSection, scroll = true)

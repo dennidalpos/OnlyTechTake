@@ -54,24 +54,24 @@ class OrderExportDaoInstrumentedTest {
                     "payment-old",
                     "order-paid",
                     TimelineEventType.PAYMENT_REMOVED,
-                    100L
-                )
+                    100L,
+                ),
             )
             database.timelineEventDao().upsert(
                 paymentEvent(
                     "payment-new",
                     "order-paid",
                     TimelineEventType.PAYMENT_RECEIVED,
-                    200L
-                )
+                    200L,
+                ),
             )
             database.timelineEventDao().upsert(
                 paymentEvent(
                     "payment-removed",
                     "order-unpaid",
                     TimelineEventType.PAYMENT_REMOVED,
-                    300L
-                )
+                    300L,
+                ),
             )
 
             val rowsByNumber =
@@ -156,7 +156,7 @@ class OrderExportDaoInstrumentedTest {
             ),
         )
         database.orderCategoryDao()
-            .upsert(OrderCategoryEntity("cat-1", null, 0, "Smartphone", null, true))
+            .upsert(OrderCategoryEntity("cat-1", null, 0, "Smartphone", null, active = true))
         database.customerDao().upsert(
             CustomerEntity(
                 id = "customer-1",

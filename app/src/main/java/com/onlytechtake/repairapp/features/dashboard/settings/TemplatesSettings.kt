@@ -156,7 +156,8 @@ fun ColumnScope.TemplatesSettings(
                         modifier =
                             Modifier
                                 .height(56.dp)
-                                .width(56.dp),
+                                .width(56.dp)
+                                .testTag(RepairAppTestTags.ConfigTemplateNewButton),
                         tonalElevation = 0.dp,
                     ) {
                         Box(contentAlignment = Alignment.Center) {

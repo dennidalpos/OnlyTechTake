@@ -29,7 +29,7 @@ class ShareDocumentIntentFactoryInstrumentedTest {
         assertEquals(Intent.ACTION_SEND, intent.action)
         assertEquals("application/pdf", intent.type)
         assertEquals("Stato avanzamento", intent.getStringExtra(Intent.EXTRA_SUBJECT))
-        assertTrue(intent.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION != 0)
+        assertTrue((intent.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION) != 0)
 
         @Suppress("DEPRECATION")
         val streamUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)

@@ -100,14 +100,14 @@ fun AuthGateRoute(
     }
 
     if (BuildConfig.IS_SHOWCASE_MODE_ENABLED) {
-        if (authState.initialized && authState.configured && authState.currentUser == null) {
+        if (authState.initialized && authState.configured && (authState.currentUser == null)) {
             LaunchedEffect(Unit) {
                 viewModel.loginShowcaseAdmin()
             }
         }
     }
 
-    val isShowcasePreparing = BuildConfig.IS_SHOWCASE_MODE_ENABLED && !authState.configured
+    val isShowcasePreparing = if (BuildConfig.IS_SHOWCASE_MODE_ENABLED) !authState.configured else false
     when {
         !authState.initialized || isShowcasePreparing || formState.seeding ->
             AuthLoadingScreen(
@@ -536,7 +536,7 @@ private fun AuthForm(
                 )
             }
 
-            if (onDemoLogin != null && (DemoMode.canEnable())) {
+            if ((onDemoLogin != null) && DemoMode.canEnable()) {
                 AppButton(
                     text = stringResource(R.string.auth_demo_action),
                     onClick = onDemoLogin,

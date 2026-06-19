@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -49,6 +51,7 @@ enum class AppButtonSize {
     FullWidth,
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppButton(
     text: String,
@@ -87,6 +90,7 @@ fun AppButton(
         modifier =
             modifier
                 .then(widthModifier)
+                .heightIn(min = RepairAppSizes.touchTarget)
                 .then(testTag?.let { Modifier.testTag(it) } ?: Modifier)
                 .semantics {
                     role = Role.Button

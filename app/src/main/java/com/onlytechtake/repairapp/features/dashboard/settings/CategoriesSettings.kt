@@ -178,7 +178,8 @@ fun ColumnScope.CategoriesSettings(
                             modifier =
                                 Modifier
                                     .height(56.dp)
-                                    .width(56.dp),
+                                    .width(56.dp)
+                                    .testTag(RepairAppTestTags.ConfigCategoryNewButton),
                             tonalElevation = 0.dp,
                         ) {
                             Box(contentAlignment = Alignment.Center) {

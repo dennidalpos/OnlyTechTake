@@ -105,11 +105,11 @@ class RepairAppDatabaseInstrumentedTest {
             assertNotNull(database.customerDao().findById(customer.id))
             assertEquals(
                 order.orderNumber,
-                database.repairOrderDao().findById(order.id)?.orderNumber
+                database.repairOrderDao().findById(order.id)?.orderNumber,
             )
             assertEquals(
                 DiagnosisOutcome.REPAIRABLE,
-                database.repairOrderDao().findById(order.id)?.diagnosisOutcome
+                database.repairOrderDao().findById(order.id)?.diagnosisOutcome,
             )
         }
 
@@ -167,7 +167,7 @@ class RepairAppDatabaseInstrumentedTest {
                     orderNumber = "RIP-2026-000777",
                     customerId = privateCustomer.id,
                     title = "Riparazione search",
-                    categoryId = "category-1",
+                    categoryId = "category-search",
                     status = OrderStatus.OPEN,
                     priority = OrderPriority.NORMAL,
                     assignedToUserId = user.id,
@@ -183,7 +183,7 @@ class RepairAppDatabaseInstrumentedTest {
                 )
 
             database.userDao().upsert(user)
-            database.orderCategoryDao().upsert(testCategory("category-1"))
+            database.orderCategoryDao().upsert(testCategory("category-search"))
             database.customerDao().upsert(privateCustomer)
             database.customerDao().upsert(businessCustomer)
             database.repairOrderDao().upsert(order)

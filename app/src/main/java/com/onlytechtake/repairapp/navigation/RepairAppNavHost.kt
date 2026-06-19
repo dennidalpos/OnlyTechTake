@@ -16,7 +16,7 @@ import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.features.auth.AuthGateRoute
 
 private object Routes {
-    const val AuthGate = "auth_gate"
+    const val AUTH_GATE = "auth_gate"
 }
 
 @Composable
@@ -39,9 +39,9 @@ fun RepairAppNavHost(windowSizeClass: WindowSizeClass) {
     ) {
         NavHost(
             navController = navController,
-            startDestination = Routes.AuthGate,
+            startDestination = Routes.AUTH_GATE,
         ) {
-            composable(Routes.AuthGate) {
+            composable(Routes.AUTH_GATE) {
                 AuthGateRoute(
                     appInstanceKey = appInstanceKey,
                     onAppDataRestored = recreateAppContainer,

@@ -272,7 +272,8 @@ fun OrderDetailWorkspace(
                                 Text(
                                     if (signaturesExpanded) "Chiudi" else "Apri",
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.primary
+                                    color = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.testTag("signatures_expand_button")
                                 )
                             }
                             if (signaturesExpanded) {
