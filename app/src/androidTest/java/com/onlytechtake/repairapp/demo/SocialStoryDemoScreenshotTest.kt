@@ -203,6 +203,12 @@ class SocialStoryDemoScreenshotTest {
             clickTag(RepairAppTestTags.ConfigHubTemplatesButton, scroll = true)
             waitForText("Gestione Template")
             clickTag(RepairAppTestTags.ConfigTemplateNewButton, scroll = true)
+
+            // Capture Tooltip for variables
+            clickTag(RepairAppTestTags.ConfigTemplateBodyField)
+            pauseForDemo()
+            capture(outputDir, "05a-template-tooltip.png")
+
             typeTag(
                 RepairAppTestTags.ConfigTemplateCodeField,
                 "whatsapp_demo_social",
@@ -218,7 +224,7 @@ class SocialStoryDemoScreenshotTest {
                 "Ciao {{cliente}}, la commessa {{numero_commessa}} e' ora in stato {{stato_commessa}}.",
                 scroll = true,
             )
-            capture(outputDir, "05-creazione-template.png")
+            capture(outputDir, "05b-creazione-template.png")
             clickTag(RepairAppTestTags.ConfigTemplateSaveButton, scroll = true)
             waitForTag(RepairAppTestTags.GenericConfirmButton)
             clickTag(RepairAppTestTags.GenericConfirmButton)
@@ -302,6 +308,32 @@ class SocialStoryDemoScreenshotTest {
             clickText("Esportazione Commesse", scroll = true)
             waitForText("Esportazione")
             capture(outputDir, "03-export-excel.png")
+        }
+    }
+
+    @Test
+    fun capturesDemoLimitStory() {
+        if (!BuildConfig.IS_DEMO_VERSION) return
+
+        runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        val outputDir = prepareCaseDirectory(CASE_DEMO_LIMIT)
+
+        withDemoApp {
+            waitForTag(RepairAppTestTags.AuthUsernameField)
+            loginDemo(DemoDataSeeder.DEMO_ADMIN_USERNAME)
+
+            // We already have 1 order from seeder
+            clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
+            waitForTag("quick_actions_screen")
+
+            // Try to create another one
+            clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
+            pauseForDemo()
+
+            // Error dialog should appear
+            waitForText(context.getString(com.onlytechtake.repairapp.R.string.demo_error_order_limit).substring(0, 10))
+            capture(outputDir, "01-demo-limit-error.png")
+            clickTag(RepairAppTestTags.MessageBannerCloseButton)
         }
     }
 
@@ -734,6 +766,7 @@ class SocialStoryDemoScreenshotTest {
         const val CASE_CONFIG = "02-categorie-template"
         const val CASE_CUSTOMERS = "03-clienti-privato-azienda"
         const val CASE_MAINTENANCE = "05-manutenzione-backup"
+        const val CASE_DEMO_LIMIT = "06-demo-limit"
         const val SCREENSHOT_ROOT_DIR_NAME = "demo-social-screenshots"
         const val WAIT_TIMEOUT_MILLIS = 30_000L
         const val LOGIN_ATTEMPTS = 2

@@ -260,6 +260,7 @@ private fun OrdersListContent(
                 modifier =
                 Modifier
                     .fillMaxSize()
+                    .testTag("orders_list")
                     .imePadding(),
                 verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
                 contentPadding =
@@ -373,7 +374,8 @@ private fun OrdersListContent(
                     leadingIcon = Icons.Default.KeyboardArrowUp,
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
-                        .padding(bottom = RepairAppSpacing.screenVertical),
+                        .padding(bottom = RepairAppSpacing.screenVertical)
+                        .testTag(RepairAppTestTags.ScrollToTopButton),
                     onClick = {
                         scope.launch { listState.animateScrollToItem(0) }
                     },

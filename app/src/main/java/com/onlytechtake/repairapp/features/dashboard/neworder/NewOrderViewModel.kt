@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
 import com.onlytechtake.repairapp.data.repositories.CustomerRepository
@@ -77,6 +78,24 @@ class NewOrderViewModel(
         templateRepository
             .observeAnchorMappings()
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyMap())
+
+    init {
+        checkDemoLimit()
+    }
+
+    private fun checkDemoLimit() {
+        if (BuildConfig.IS_DEMO_VERSION && BuildConfig.MAX_ORDERS > 0) {
+            viewModelScope.launch {
+                val totalOrders = createIntakeOrderUseCase.countAllOrders()
+                if (totalOrders >= BuildConfig.MAX_ORDERS) {
+                    _message.value = WorkspaceMessage(
+                        createIntakeOrderUseCase.getDemoLimitErrorMessage(),
+                        isError = true
+                    )
+                }
+            }
+        }
+    }
 
     fun setFormDirty(dirty: Boolean) {
         onSetFormDirty(dirty)

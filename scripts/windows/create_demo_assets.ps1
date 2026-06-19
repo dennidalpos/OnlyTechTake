@@ -69,10 +69,10 @@ $assetsConfig = @(
                 ExpectedFiles = @(
                     "01-login.png", "02-home.png", "03-new-customer.png",
                     "04-category-problem.png", "05-signature-capture.png",
-                    "06-order-created.png", "07-whatsapp-preview.png",
-                    "08-in-progress.png", "09-diagnosis-result.png",
-                    "10-pdf-documents.png", "11-ready-for-pickup.png",
-                    "12-closed-timeline.png"
+                    "06-order-created.png", "06b-back-to-top-customers.png",
+                    "07-whatsapp-preview.png", "08-in-progress.png",
+                    "09-diagnosis-result.png", "10-pdf-documents.png",
+                    "11-ready-for-pickup.png", "12-closed-timeline.png"
                 )
             }
         )
@@ -107,6 +107,12 @@ $assetsConfig = @(
                 TestMethod = "capturesMaintenanceStories"
                 SourceDirectory = "05-manutenzione-backup"
                 TargetDirectory = "screenshots/05-manutenzione-backup"
+            },
+            [PSCustomObject]@{
+                Id = "demo-limit"
+                TestMethod = "capturesDemoLimitStory"
+                SourceDirectory = "06-demo-limit"
+                TargetDirectory = "screenshots/06-demo-limit"
             }
         )
     }

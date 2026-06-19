@@ -126,47 +126,51 @@ object DemoDataSeeder {
                 ),
             ),
         )
-        database.customerDao().upsert(
-            CustomerEntity(
-                id = DEMO_CUSTOMER_ID,
-                type = CustomerType.PRIVATE,
-                firstName = "Marco",
-                lastName = "Verdi",
-                companyName = null,
-                vatNumber = null,
-                taxCode = "VRDMRC80A01H501U",
-                phone = "+39 333 000 1122",
-                email = "marco.verdi@example.invalid",
-                address = "Via Demo 12, Milano",
-                notes = "Cliente demo per presentazioni.",
-                createdAt = now,
-                updatedAt = now,
-            ),
+        database.customerDao().upsertAll(
+            (1..12).map { i ->
+                CustomerEntity(
+                    id = if (i == 1) DEMO_CUSTOMER_ID else "demo-customer-$i",
+                    type = if (i % 3 == 0) CustomerType.BUSINESS else CustomerType.PRIVATE,
+                    firstName = if (i % 3 == 0) null else "Cliente $i",
+                    lastName = if (i % 3 == 0) null else "Demo",
+                    companyName = if (i % 3 == 0) "Azienda $i Srl" else null,
+                    vatNumber = if (i % 3 == 0) "IT${10000000000L + i}" else null,
+                    taxCode = if (i % 3 == 0) null else "CF${1000000000000000L + i}",
+                    phone = "+39 333 000 ${1000 + i}",
+                    email = "cliente$i@example.invalid",
+                    address = "Via Demo $i, Milano",
+                    notes = "Cliente demo $i per presentazioni.",
+                    createdAt = now - (i * 1000L),
+                    updatedAt = now - (i * 1000L),
+                )
+            }
         )
 
         // Assign to Admin in Demo version, otherwise to Operator
         val assignedUserId = if (BuildConfig.IS_DEMO_VERSION) DEMO_ADMIN_ID else DEMO_OPERATOR_ID
 
-        database.repairOrderDao().upsert(
-            RepairOrderEntity(
-                id = DEMO_ORDER_ID,
-                orderNumber = "2026-0001",
-                customerId = DEMO_CUSTOMER_ID,
-                title = "Asus ROG Strix - Pulizia e Pasta",
-                categoryId = "demo-cat-rog-strix",
-                status = OrderStatus.OPEN,
-                priority = OrderPriority.NORMAL,
-                assignedToUserId = assignedUserId,
-                createdByUserId = assignedUserId,
-                description = "Notebook ricevuto al banco: non si accende dopo caduta accidentale.",
-                internalNotes = "Controllare alimentatore, connettore di ricarica e scheda madre.",
-                estimateAmountCents = null,
-                finalAmountCents = null,
-                createdAt = now,
-                updatedAt = now,
-                closedAt = null,
-                closureReason = null,
-            ),
+        database.repairOrderDao().upsertAll(
+            (1..8).map { i ->
+                RepairOrderEntity(
+                    id = if (i == 1) DEMO_ORDER_ID else "demo-order-$i",
+                    orderNumber = "2026-${1000 + i}",
+                    customerId = DEMO_CUSTOMER_ID,
+                    title = if (i == 1) "Asus ROG Strix - Pulizia e Pasta" else "Riparazione $i",
+                    categoryId = "demo-cat-rog-strix",
+                    status = if (i % 2 == 0) OrderStatus.IN_PROGRESS else OrderStatus.OPEN,
+                    priority = OrderPriority.NORMAL,
+                    assignedToUserId = assignedUserId,
+                    createdByUserId = assignedUserId,
+                    description = "Descrizione commessa demo $i.",
+                    internalNotes = "Note interne demo $i.",
+                    estimateAmountCents = null,
+                    finalAmountCents = null,
+                    createdAt = now - (i * 3600000L),
+                    updatedAt = now - (i * 3600000L),
+                    closedAt = null,
+                    closureReason = null,
+                )
+            }
         )
 
         val mediaPath =

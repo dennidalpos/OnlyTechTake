@@ -123,7 +123,7 @@ fun OrderHeader(
 
             OrderStatusStepper(
                 status = detail.order.status,
-                modifier = Modifier.testTag(RepairAppTestTags.OrderDetailStatusStepper),
+                modifier = Modifier.testTag(RepairAppTestTags.OrderStatusLabel),
                 stepTestTag = RepairAppTestTags::orderDetailStatusStep,
             )
 

@@ -27,8 +27,10 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.testTag
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.repairColors
 import kotlinx.coroutines.delay
 
@@ -134,6 +136,7 @@ fun DismissibleAppMessageBanner(
                 contentDescription = stringResource(R.string.content_description_close),
                 onClick = onDismiss,
                 tint = LocalContentColor.current,
+                modifier = Modifier.testTag(RepairAppTestTags.MessageBannerCloseButton)
             )
         },
     )

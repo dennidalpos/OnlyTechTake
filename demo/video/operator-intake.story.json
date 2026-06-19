@@ -26,9 +26,9 @@
       "durationSeconds": 4.0
     },
     {
-      "file": "05-signature-capture.png",
-      "caption": "Firma digitale del cliente per privacy e consensi",
-      "durationSeconds": 4.0
+      "file": "06b-back-to-top-customers.png",
+      "caption": "Navigazione rapida anche con molti dati",
+      "durationSeconds": 3.0
     },
     {
       "file": "06-order-created.png",
@@ -38,6 +38,11 @@
     {
       "file": "07-whatsapp-preview.png",
       "caption": "Comunicazione professionale via WhatsApp",
+      "durationSeconds": 4.0
+    },
+    {
+      "file": "05-signature-capture.png",
+      "caption": "Firme digitali e consensi sempre a portata di mano",
       "durationSeconds": 4.0
     },
     {
@@ -62,7 +67,7 @@
     },
     {
       "file": "12-closed-timeline.png",
-      "caption": "Chiusura commessa e timeline finale consultabile",
+      "caption": "Chiusura commessa e cronologia finale consultabile",
       "durationSeconds": 5.0
     }
   ]

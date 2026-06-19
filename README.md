@@ -8,7 +8,7 @@ App Android locale per tracciare commesse clienti dal banco alla diagnosi, alla 
 
 - Sistema di sviluppo supportato: Windows + PowerShell.
 - Runtime app: Android, package `com.onlytechtake.repairapp`.
-- Versione app: `0.1.0`, `versionCode` 1.
+- Versione app: `0.2.0`, `versionCode` 2.
 - Flavor Gradle: `full`, `demo` e `showcase`; gli script usano `Full` come default.
 - SDK Android: compile/target SDK 37, min SDK 26.
 - Stack: Kotlin, Jetpack Compose, Material 3, Navigation Compose, Room, SQLCipher, DataStore, CameraX, Coroutines/Flow.

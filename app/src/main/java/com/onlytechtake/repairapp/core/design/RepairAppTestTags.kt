@@ -99,6 +99,8 @@ object RepairAppTestTags {
     const val AdminCreateOperatorButton = "admin_create_operator_button"
     const val AdminDeleteAllOrdersButton = "admin_delete_all_orders_button"
     const val AdminTotalResetButton = "admin_total_reset_button"
+    const val ScrollToTopButton = "scroll_to_top_button"
+    const val MessageBannerCloseButton = "message_banner_close_button"
 
     fun dashboardTab(destination: String) = "dashboard_tab_${destination.lowercase()}"
 

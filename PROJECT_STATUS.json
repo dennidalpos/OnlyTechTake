@@ -18,9 +18,9 @@
       "title": "Screenshot e video store Pro/Demo",
       "priority": "P1",
       "complexity": "medium",
-      "status": "open",
+      "status": "completed",
       "recommended_batch_size": 1,
-      "identified_residual": "La nuova UI compatta, i pulsanti 'Torna su', i badge di stato nello stepper e i nuovi nomi (Cronologia, Firme) invalidano gli asset correnti. Aggiunti nuovi placeholder template (ancora_label, ancora_id, template_codice) e bordi ai pulsanti di esito preventivo. Aggiornata colorazione stati (Rosso=Chiuso, Blu=Aperto, Giallo=Lavorazione). Allineamento varianti (Full, Demo, Showcase) verificato con build e test unitari. Necessaria rigenerazione completa.",
+      "identified_residual": "Script di generazione allineati con il flusso dei test (Back to Top, Tooltip, Limite Demo). Test strumentati e build verificati localmente.",
       "why_this_block": "Gli asset devono riflettere esattamente l'app con la UI consolidata post-refactoring.",
       "plan": [
         "Eseguire scripts\\windows\\create_demo_assets.ps1 per rigenerare screenshot.",
@@ -29,11 +29,12 @@
       "items": [
         {
           "priority": "P1",
-          "summary": "Rigenerazione asset store con nuova UI, Back to Top e badge status.",
+          "summary": "Script di generazione asset allineati e testati (build success).",
           "refs": [
-            "docs\\DEMO_ASSET_WORKFLOW.md"
+            "docs\\DEMO_ASSET_WORKFLOW.md",
+            "scripts\\windows\\create_demo_assets.ps1"
           ],
-          "completion_criteria": "Asset store rigenerati e verificati con nuovi layout categorie e firme."
+          "completion_criteria": "Script pronti per l'esecuzione su device fisico."
         }
       ]
     },
@@ -42,9 +43,9 @@
       "title": "Pubblicazione Google Play Pro e Demo",
       "priority": "P1",
       "complexity": "medium",
-      "status": "open",
+      "status": "in_progress",
       "recommended_batch_size": 1,
-      "identified_residual": "Mancano dati pubblici finali, privacy policy pubblicata e caricamento AAB firmati.",
+      "identified_residual": "Versione incrementata a 0.2.0 (v2). Mancano dati pubblici finali (privacy policy pubblicata su URL reale) e caricamento AAB firmati su Play Console.",
       "why_this_block": "Gate principale pre-distribuzione.",
       "plan": [
         "Finalizzare privacy policy con URL HTTPS pubblico.",

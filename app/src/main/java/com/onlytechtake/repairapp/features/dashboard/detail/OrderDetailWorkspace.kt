@@ -254,7 +254,8 @@ fun OrderDetailWorkspace(
                 item(key = "signatures", contentType = "signatures") {
                     StandardCard(
                         onClick = { signaturesExpanded = !signaturesExpanded },
-                        highlight = signaturesExpanded
+                        highlight = signaturesExpanded,
+                        modifier = Modifier.testTag("signatures_card")
                     ) {
                         Column(modifier = Modifier.padding(RepairAppSpacing.compactGap)) {
                             Row(

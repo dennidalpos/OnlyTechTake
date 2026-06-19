@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.features.dashboard.detail
 
 import android.content.Context
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,9 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.platform.testTag
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
@@ -304,7 +306,9 @@ fun WhatsAppPreviewDialog(
             title = stringResource(R.string.order_wa_preview_title),
             content = {
                 Column(
-                    modifier = Modifier.verticalScroll(rememberScrollState()),
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState())
+                        .testTag(RepairAppTestTags.OrderWhatsAppPreviewPanel),
                     verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
                 ) {
                     Text(
@@ -328,12 +332,21 @@ fun WhatsAppPreviewDialog(
                 }
             },
             confirmButton = {
-                AppButton(
-                    text = stringResource(R.string.order_wa_sent),
-                    variant = AppButtonVariant.Success,
-                    onClick = onConfirmSent,
-                    size = AppButtonSize.Compact,
-                )
+                Row(horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+                    AppButton(
+                        text = stringResource(R.string.order_wa_close_preview),
+                        variant = AppButtonVariant.Ghost,
+                        onClick = onClose,
+                        size = AppButtonSize.Compact,
+                        testTag = RepairAppTestTags.OrderWhatsAppClosePreviewButton,
+                    )
+                    AppButton(
+                        text = stringResource(R.string.order_wa_sent),
+                        variant = AppButtonVariant.Success,
+                        onClick = onConfirmSent,
+                        size = AppButtonSize.Compact,
+                    )
+                }
             },
             dismissButton = {
                 AppButton(

@@ -20,6 +20,7 @@ Indice canonico della documentazione tracciata. Il README della root resta il pu
 ## Release e asset
 
 - [`release/RELEASE_CHECKLIST.md`](release/RELEASE_CHECKLIST.md): checklist prima del rilascio.
+- [`release/release-notes-0.2.0.md`](release/release-notes-0.2.0.md): note della release 0.2.0 (RC).
 - [`release/release-notes-0.1.0.md`](release/release-notes-0.1.0.md): note della release 0.1.0.
 - [`DEMO_ASSET_WORKFLOW.md`](DEMO_ASSET_WORKFLOW.md): pipeline tecnica screenshot/video.
 - [`DESIGN_SYSTEM_ICONS.md`](DESIGN_SYSTEM_ICONS.md): guida all'uso delle icone nel design system.

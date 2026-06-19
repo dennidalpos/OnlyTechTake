@@ -93,7 +93,7 @@ $recordingsConfig = @(
     },
     [PSCustomObject]@{
         Id = "social-stories"
-        Description = "Social Stories (Wizard, Configurazione, Clienti)"
+        Description = "Social Stories (Wizard, Configurazione, Clienti, Limite Demo)"
         TestClass = "com.onlytechtake.repairapp.demo.SocialStoryDemoScreenshotTest"
     },
     [PSCustomObject]@{

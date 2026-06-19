@@ -107,23 +107,18 @@ class OperatorIntakeDemoScreenshotTest {
 
             clickDashboardTab("ORDERS")
             waitForText("Commesse")
+
+            // Show Back to Top in Orders
+            composeRule.onNodeWithTag("orders_list").performTouchInput { swipeUp() }
+            pauseForDemo()
+            if (isTagPresent(RepairAppTestTags.ScrollToTopButton)) {
+                capture(outputDir, "06b-back-to-top-customers.png") // Keep name for script compatibility
+                clickTag(RepairAppTestTags.ScrollToTopButton)
+                pauseForDemo()
+            }
+
             waitForTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
-            waitForTag(
-                RepairAppTestTags.orderCardOrderReference(DemoDataSeeder.DEMO_ORDER_ID),
-                scroll = true,
-                useUnmergedTree = true
-            )
-            waitForTag(
-                RepairAppTestTags.orderCardCustomerReference(DemoDataSeeder.DEMO_ORDER_ID),
-                scroll = true,
-                useUnmergedTree = true
-            )
-            waitForTag(
-                RepairAppTestTags.orderCardStatusStep(DemoDataSeeder.DEMO_ORDER_ID, 1),
-                scroll = true,
-                useUnmergedTree = true
-            )
-            clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID))
+            clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
 
             waitForTag(RepairAppTestTags.OrderStatusLabel)
             waitForTag(RepairAppTestTags.OrderDetailOrderReference, useUnmergedTree = true)
@@ -138,6 +133,14 @@ class OperatorIntakeDemoScreenshotTest {
             capture(outputDir, "07-whatsapp-preview.png")
             clickTag(RepairAppTestTags.OrderWhatsAppClosePreviewButton, scroll = true)
 
+            // Scroll to signatures item
+            composeRule.onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn).performScrollToIndex(4)
+            composeRule.waitForIdle()
+
+            // Click the card to expand
+            clickTag("signatures_card", scroll = false, useUnmergedTree = true)
+
+            pauseForDemo()
             waitForTag(RepairAppTestTags.OrderSignatureSection, scroll = true)
             capture(outputDir, "05-signature-capture.png")
 
