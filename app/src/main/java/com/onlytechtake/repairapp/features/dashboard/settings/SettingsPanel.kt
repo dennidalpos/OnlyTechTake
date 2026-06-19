@@ -195,7 +195,13 @@ private fun SettingsSectionContent(
                 )
 
             "TEMPLATES" -> TemplatesSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)
-            "TEMPLATE_MAPPING" -> TemplateMappingSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)
+            "TEMPLATE_MAPPING" -> TemplateMappingSettings(
+                viewModel,
+                isAdmin,
+                requestConfirm,
+                onBack = onBack
+            )
+
             "WHATSAPP" -> WhatsAppSettings(viewModel, requestConfirm, onBack = onBack)
             "EXPORT" ->
                 BackupSettings(

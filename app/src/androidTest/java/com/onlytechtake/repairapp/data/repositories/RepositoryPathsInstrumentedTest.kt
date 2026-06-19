@@ -1113,7 +1113,8 @@ class RepositoryPathsInstrumentedTest {
         }
     }
 
-    private fun File.walkFiles(): Sequence<File> = if (exists()) walkTopDown().filter { it.isFile } else emptySequence()
+    private fun File.walkFiles(): Sequence<File> =
+        if (exists()) walkTopDown().filter { it.isFile } else emptySequence()
 
     private fun File.unzipTextEntries(): Map<String, String> {
         val entries = mutableMapOf<String, String>()

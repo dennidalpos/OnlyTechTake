@@ -460,7 +460,8 @@ class OrderMediaRepository(
         }
     }
 
-    private suspend fun <T> inTransaction(block: suspend () -> T): T = database?.withTransaction { block() } ?: block()
+    private suspend fun <T> inTransaction(block: suspend () -> T): T =
+        database?.withTransaction { block() } ?: block()
 
     private fun copyToWithLimit(
         input: InputStream,

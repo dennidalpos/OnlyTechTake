@@ -66,7 +66,8 @@ fun OrderDetailWorkspace(
     val shareStatusChooserTitle = stringResource(R.string.order_share_status_chooser)
 
     val actor by viewModel.currentUser.collectAsState()
-    val canDeleteOrder = actor?.permissions?.contains(com.onlytechtake.repairapp.data.local.entities.UserPermission.EDIT_ALL_ORDERS) == true
+    val canDeleteOrder =
+        actor?.permissions?.contains(com.onlytechtake.repairapp.data.local.entities.UserPermission.EDIT_ALL_ORDERS) == true
 
     val exitConfirmTitle = stringResource(R.string.order_exit_confirm_title)
     val exitConfirmText = stringResource(R.string.order_exit_confirm_text)

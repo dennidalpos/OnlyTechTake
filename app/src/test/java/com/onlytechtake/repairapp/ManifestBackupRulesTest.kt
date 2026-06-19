@@ -23,8 +23,14 @@ class ManifestBackupRulesTest {
 
         listOf("file", "database", "sharedpref").forEach { domain ->
             val pattern = """domain="$domain"\s+path="\."""".toRegex()
-            assertTrue("Missing exclude for $domain in data_extraction_rules", pattern.containsMatchIn(dataExtractionRules))
-            assertTrue("Missing exclude for $domain in backup_rules", pattern.containsMatchIn(fullBackupContent))
+            assertTrue(
+                "Missing exclude for $domain in data_extraction_rules",
+                pattern.containsMatchIn(dataExtractionRules)
+            )
+            assertTrue(
+                "Missing exclude for $domain in backup_rules",
+                pattern.containsMatchIn(fullBackupContent)
+            )
         }
     }
 

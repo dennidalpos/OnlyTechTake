@@ -107,7 +107,8 @@ fun AuthGateRoute(
         }
     }
 
-    val isShowcasePreparing = if (BuildConfig.IS_SHOWCASE_MODE_ENABLED) !authState.configured else false
+    val isShowcasePreparing =
+        if (BuildConfig.IS_SHOWCASE_MODE_ENABLED) !authState.configured else false
     when {
         !authState.initialized || isShowcasePreparing || formState.seeding ->
             AuthLoadingScreen(

@@ -420,9 +420,14 @@ private fun ActiveFilterInfo(filter: OrderFilter) {
         when (filter.mode) {
             com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL -> null
             com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.MINE -> stringResource(R.string.orders_filter_mine)
-            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED -> stringResource(R.string.orders_filter_open_unassigned)
+            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED -> stringResource(
+                R.string.orders_filter_open_unassigned
+            )
+
             com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> stringResource(R.string.orders_filter_closed_discarded)
-            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS -> stringResource(R.string.orders_filter_in_progress_assigned)
+            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS -> stringResource(
+                R.string.orders_filter_in_progress_assigned
+            )
         }
 
     val filterText =
@@ -495,4 +500,5 @@ private fun FilterToggleButton(
     )
 }
 
-private fun OrderFilter.hasActiveFilter(): Boolean = (mode != com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL || query.isNotBlank())
+private fun OrderFilter.hasActiveFilter(): Boolean =
+    (mode != com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL || query.isNotBlank())

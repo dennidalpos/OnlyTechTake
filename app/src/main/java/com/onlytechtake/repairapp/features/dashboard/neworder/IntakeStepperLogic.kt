@@ -25,7 +25,8 @@ fun selectedCategoryAfterClick(
     clickedCategoryId: String,
 ): String? = if (currentCategoryId == clickedCategoryId) null else clickedCategoryId
 
-fun completedStepAfterCategorySelection(completedStep: Int): Int = completedStepAfterEdit(completedStep, 2)
+fun completedStepAfterCategorySelection(completedStep: Int): Int =
+    completedStepAfterEdit(completedStep, 2)
 
 fun calculateIsDirty(draft: QuickIntakeDraft): Boolean =
     draft.selectedCustomerId != null ||
