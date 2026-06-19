@@ -35,6 +35,9 @@ class CustomersViewModel(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
+    private val _showAll = MutableStateFlow(false)
+    val showAll = _showAll.asStateFlow()
+
     private val _isFormDirty = MutableStateFlow(false)
     val isFormDirty = _isFormDirty.asStateFlow()
 
@@ -45,10 +48,20 @@ class CustomersViewModel(
             .map { it.trim() }
             .distinctUntilChanged()
             .flatMapLatest { query ->
-                if (query.isBlank()) customerRepository.observeRecent() else customerRepository.search(
-                    query
-                )
+                when {
+                    query.isNotBlank() -> customerRepository.search(query)
+                    _showAll.value -> customerRepository.observeAll()
+                    else -> customerRepository.observeRecent()
+                }
             }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    fun setShowAll(show: Boolean) {
+        _showAll.value = show
+        // Trigger a refresh of customerSuggestions if query is blank
+        if (_searchQuery.value.isBlank()) {
+            _searchQuery.value = _searchQuery.value
+        }
+    }
 
     fun setFormDirty(dirty: Boolean) {
         _isFormDirty.value = dirty

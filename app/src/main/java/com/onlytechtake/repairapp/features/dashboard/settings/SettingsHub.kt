@@ -67,6 +67,16 @@ fun SettingsHub(
             }
 
             SettingsHubCard(
+                title = stringResource(R.string.config_hub_template_mapping_title),
+                subtitle = stringResource(R.string.config_hub_template_mapping_subtitle),
+                icon = Icons.Default.Lock, // Need a better icon
+                enabled = isAdmin,
+                testTag = RepairAppTestTags.ConfigHubTemplateMappingButton,
+            ) {
+                onNavigate(DashboardRoutes.settings("TEMPLATE_MAPPING"))
+            }
+
+            SettingsHubCard(
                 title = stringResource(R.string.config_hub_whatsapp_title),
                 subtitle = stringResource(R.string.config_hub_whatsapp_subtitle),
                 icon = Icons.AutoMirrored.Filled.Send,

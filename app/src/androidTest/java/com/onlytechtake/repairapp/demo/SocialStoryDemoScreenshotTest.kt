@@ -196,9 +196,12 @@ class SocialStoryDemoScreenshotTest {
             capture(outputDir, "04-categoria-salvata.png")
 
             clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
-            clickTag(RepairAppTestTags.ConfigHubTemplatesButton, scroll = true)
+            clickTag(RepairAppTestTags.ConfigHubTemplateMappingButton, scroll = true)
             waitForText("Associazione Template")
             capture(outputDir, "05-template-associazioni.png")
+            clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
+            clickTag(RepairAppTestTags.ConfigHubTemplatesButton, scroll = true)
+            waitForText("Gestione Template")
             clickTag(RepairAppTestTags.ConfigTemplateNewButton, scroll = true)
             typeTag(
                 RepairAppTestTags.ConfigTemplateCodeField,

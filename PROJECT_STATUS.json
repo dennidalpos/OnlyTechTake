@@ -20,8 +20,8 @@
       "complexity": "medium",
       "status": "open",
       "recommended_batch_size": 1,
-      "identified_residual": "La nuova UI compatta e i nuovi flussi (export, firme business) invalidano gli asset correnti. Necessaria rigenerazione completa.",
-      "why_this_block": "Gli asset devono riflettere esattamente l'app con la UI consolidata.",
+      "identified_residual": "La nuova UI compatta, i pulsanti 'Torna su', i badge di stato nello stepper e i nuovi nomi (Cronologia, Firme) invalidano gli asset correnti. Aggiunti nuovi placeholder template (ancora_label, ancora_id, template_codice) e bordi ai pulsanti di esito preventivo. Aggiornata colorazione stati (Rosso=Chiuso, Blu=Aperto, Giallo=Lavorazione). Allineamento varianti (Full, Demo, Showcase) verificato con build e test unitari. Necessaria rigenerazione completa.",
+      "why_this_block": "Gli asset devono riflettere esattamente l'app con la UI consolidata post-refactoring.",
       "plan": [
         "Eseguire scripts\\windows\\create_demo_assets.ps1 per rigenerare screenshot.",
         "Eseguire scripts\\windows\\record_demo_device.ps1 per i nuovi video."
@@ -29,7 +29,7 @@
       "items": [
         {
           "priority": "P1",
-          "summary": "Rigenerazione asset store con nuova UI e watermark Demo.",
+          "summary": "Rigenerazione asset store con nuova UI, Back to Top e badge status.",
           "refs": [
             "docs\\DEMO_ASSET_WORKFLOW.md"
           ],
@@ -64,25 +64,22 @@
     },
     {
       "block_id": "B12",
-      "title": "Baseline runtime su device",
+      "title": "Verifica Test Strumentati su Device Reale",
       "priority": "P2",
       "complexity": "medium",
       "status": "open",
       "recommended_batch_size": 1,
-      "identified_residual": "Mancano metriche runtime p50/p95 post-ottimizzazione UI, specialmente per export XLSX e PDF.",
-      "why_this_block": "Verificare che il refactoring non abbia introdotto jank o rallentamenti.",
+      "identified_residual": "Sebbene i test siano stati allineati nel codice, è necessaria un'esecuzione completa su device fisico per confermare che le interazioni di scroll (Back to Top) non interferiscano con gli automatismi.",
+      "why_this_block": "Assicurare stabilità totale prima del rilascio.",
       "plan": [
-        "Misurare startup e operazioni I/O su device reale.",
-        "Registrare baseline prestazioni."
+        "Eseguire suite completa test strumentati su device fisico.",
+        "Validare il comportamento del pulsante 'Torna su' durante i test automatici."
       ],
       "items": [
         {
           "priority": "P2",
-          "summary": "Misurare performance su device reale post-refactoring.",
-          "refs": [
-            "docs\\release\\RELEASE_CHECKLIST.md"
-          ],
-          "completion_criteria": "Nessuna regressione prestazionale rilevata."
+          "summary": "Validazione interazioni UI dinamiche su device fisico.",
+          "completion_criteria": "Esecuzione passata al 100% senza flakiness."
         }
       ]
     }

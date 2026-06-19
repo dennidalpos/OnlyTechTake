@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -57,6 +58,11 @@ fun BackupSettings(
     var backupIntervalDays by rememberSaveable { mutableStateOf(backupReminderSettings.intervalDays.toString()) }
     var backupPassword by rememberSaveable { mutableStateOf(securitySettings.backupEncryptionPassword) }
 
+    val timestamp = remember {
+        java.text.SimpleDateFormat("yyyyMMdd_HHmm", java.util.Locale.getDefault())
+            .format(java.util.Date())
+    }
+
     val exportZipLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
             uri?.let(viewModel::exportCompleteBackup)
@@ -69,10 +75,6 @@ fun BackupSettings(
         rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) { uri ->
             uri?.let(viewModel::exportOrdersXlsx)
         }
-    val exportConfigLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
-            uri?.let(viewModel::exportConfiguration)
-        }
 
     // Pre-fetch strings for callbacks
     val confirmExportZipTitle = stringResource(R.string.config_backup_confirm_export_zip_title)
@@ -81,9 +83,6 @@ fun BackupSettings(
     val confirmRestoreZipText = stringResource(R.string.config_backup_confirm_restore_zip_text)
     val confirmExportXlsxTitle = stringResource(R.string.config_backup_confirm_export_xlsx_title)
     val confirmExportXlsxText = stringResource(R.string.config_backup_confirm_export_xlsx_text)
-    val confirmExportConfigTitle =
-        stringResource(R.string.config_backup_confirm_export_config_title)
-    val confirmExportConfigText = stringResource(R.string.config_backup_confirm_export_config_text)
 
     AppScreenContainer {
         SectionTitle(
@@ -206,7 +205,7 @@ fun BackupSettings(
                         testTag = RepairAppTestTags.ConfigBackupRunZipButton,
                         onClick = {
                             onRequestConfirm(confirmExportZipTitle, confirmExportZipText) {
-                                exportZipLauncher.launch("onlytechtake-backup.zip")
+                                exportZipLauncher.launch("onlytechtake_backup_$timestamp.zip")
                             }
                         },
                     )
@@ -246,21 +245,7 @@ fun BackupSettings(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     onRequestConfirm(confirmExportXlsxTitle, confirmExportXlsxText) {
-                        exportOrdersXlsxLauncher.launch("onlytechtake-commesse.xlsx")
-                    }
-                },
-            )
-
-            Spacer(Modifier.height(RepairAppSpacing.cardGap))
-
-            AppButton(
-                text = stringResource(R.string.config_backup_export_config),
-                size = AppButtonSize.Compact,
-                variant = AppButtonVariant.Ghost,
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    onRequestConfirm(confirmExportConfigTitle, confirmExportConfigText) {
-                        exportConfigLauncher.launch("onlytechtake-config.json")
+                        exportOrdersXlsxLauncher.launch("onlytechtake_commesse_$timestamp.xlsx")
                     }
                 },
             )

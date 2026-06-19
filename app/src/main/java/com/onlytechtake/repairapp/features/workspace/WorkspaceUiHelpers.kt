@@ -21,7 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.onlytechtake.repairapp.core.design.RepairAppSizes
+import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
 import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.core.utils.parseEuroCentsOrNull
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
@@ -132,14 +134,38 @@ fun OrderStatusStepper(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = if (compact) 4.dp else 12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Box(
+            modifier = Modifier
+                .padding(bottom = if (compact) 4.dp else 8.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            val containerColor = when (status) {
+                OrderStatus.CLOSED -> MaterialTheme.colorScheme.errorContainer
+                OrderStatus.OPEN -> MaterialTheme.colorScheme.secondaryContainer
+                else -> MaterialTheme.repairColors.warningContainer
+            }
+            val contentColor = when (status) {
+                OrderStatus.CLOSED -> MaterialTheme.colorScheme.onErrorContainer
+                OrderStatus.OPEN -> MaterialTheme.colorScheme.onSecondaryContainer
+                else -> MaterialTheme.repairColors.onWarningContainer
+            }
+
+            AppStatusBadge(
+                text = status.label(context),
+                containerColor = containerColor,
+                contentColor = contentColor,
+            )
+        }
+
         val completedColor = MaterialTheme.repairColors.stepCompleted
         val inactiveColor = MaterialTheme.repairColors.stepInactive
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Bottom,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             steps.forEachIndexed { index, step ->
                 val isCurrent = index == currentStepIndex
@@ -154,16 +180,6 @@ fun OrderStatusStepper(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.weight(1f, fill = false),
                 ) {
-                    if (!compact) {
-                        Text(
-                            text = if (isCurrent) step.label(context) else "",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = color,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(bottom = 4.dp),
-                            maxLines = 1
-                        )
-                    }
                     Box(
                         modifier =
                         Modifier
@@ -180,7 +196,7 @@ fun OrderStatusStepper(
                                 index < currentStepIndex -> MaterialTheme.repairColors.onSuccess
                                 else -> MaterialTheme.colorScheme.onSurfaceVariant
                             },
-                            style = MaterialTheme.typography.labelSmall,
+                            style = if (compact) MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp) else MaterialTheme.typography.labelSmall,
                         )
                     }
                 }
@@ -191,7 +207,6 @@ fun OrderStatusStepper(
                             .weight(1f)
                             .height(if (compact) 2.dp else 4.dp)
                             .padding(horizontal = 2.dp)
-                            .padding(bottom = dotSize / 2 - (if (compact) 1.dp else 2.dp))
                     ) {
                         drawRect(color = if (index < currentStepIndex) completedColor else inactiveColor)
                     }

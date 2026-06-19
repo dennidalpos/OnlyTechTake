@@ -195,7 +195,7 @@ class TemplateRepository(
         anchor: TemplateAnchor,
     ): Result<PreparedMessage> {
         val templateCode = resolveAnchor(anchor)
-        return prepareMessage(actor, orderId, templateCode)
+        return prepareMessage(actor, orderId, templateCode, anchor)
     }
 
     private suspend fun resolveAnchor(anchor: TemplateAnchor): String =
@@ -205,6 +205,7 @@ class TemplateRepository(
         actor: AuthenticatedUser,
         orderId: String,
         templateCode: String,
+        anchor: TemplateAnchor? = null,
     ): Result<PreparedMessage> =
         runCatching {
             val order = requireNotNull(orderDao.findById(orderId)) { "Commessa non trovata" }
@@ -248,6 +249,9 @@ class TemplateRepository(
                                 else -> ""
                             },
                         "categoria_percorso" to categoryPath,
+                        "ancora_label" to (anchor?.label ?: ""),
+                        "ancora_id" to (anchor?.settingKey ?: ""),
+                        "template_codice" to template.code,
                     ),
                 )
             PreparedMessage(order.id, customer.id, phone, body, template.title)
@@ -325,6 +329,9 @@ class TemplateRepository(
                 "prossima_azione",
                 "motivo_chiusura",
                 "categoria_percorso",
+                "ancora_label",
+                "ancora_id",
+                "template_codice",
             )
 
         val defaultTemplates =

@@ -22,6 +22,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,10 +32,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -148,6 +154,11 @@ private fun OrdersListContent(
     val showBackupReminder by viewModel.isBackupReminderDue.collectAsState()
     val context = LocalContext.current
     var showFilterDialog by rememberSaveable { mutableStateOf(value = false) }
+    val listState = rememberLazyListState()
+    val showScrollToTop by remember {
+        derivedStateOf { listState.firstVisibleItemIndex > 3 }
+    }
+    val scope = rememberCoroutineScope()
 
     val exportZipLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
@@ -243,115 +254,132 @@ private fun OrdersListContent(
 
         Spacer(Modifier.height(RepairAppSpacing.sectionGap))
 
-        LazyColumn(
-            modifier =
+        Box(modifier = Modifier.weight(1f)) {
+            LazyColumn(
+                state = listState,
+                modifier =
                 Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .imePadding(),
-            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
-            contentPadding =
+                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
+                contentPadding =
                 PaddingValues(
                     top = RepairAppSpacing.compactGap,
                     bottom = RepairAppSpacing.bottomContentPadding,
                 ),
-        ) {
-            if (orderListItems.isEmpty()) {
-                item {
-                    AppEmptyState(
-                        title = stringResource(R.string.orders_empty_title),
-                        body = stringResource(R.string.orders_empty_body),
-                    )
-                }
-            } else {
-                items(orderListItems, key = { it.order.id }) { item ->
-                    val order = item.order
-                    val customerName =
-                        item.customer?.displayName(context)
-                            ?: stringResource(R.string.orders_customer_unavailable)
-                    StandardCard(
-                        modifier = Modifier.testTag(RepairAppTestTags.orderCard(order.id)),
-                        onClick = { onOrderClick(order.id) },
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-                            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+            ) {
+                if (orderListItems.isEmpty()) {
+                    item {
+                        AppEmptyState(
+                            title = stringResource(R.string.orders_empty_title),
+                            body = stringResource(R.string.orders_empty_body),
+                        )
+                    }
+                } else {
+                    items(orderListItems, key = { it.order.id }) { item ->
+                        val order = item.order
+                        val customerName =
+                            item.customer?.displayName(context)
+                                ?: stringResource(R.string.orders_customer_unavailable)
+                        StandardCard(
+                            modifier = Modifier.testTag(RepairAppTestTags.orderCard(order.id)),
+                            onClick = { onOrderClick(order.id) },
                         ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.Top,
+                            Column(
+                                modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                             ) {
-                                Column(modifier = Modifier.weight(1f)) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.Top,
+                                ) {
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        Text(
+                                            text = stringResource(
+                                                R.string.orders_order_reference,
+                                                order.orderNumber,
+                                                order.title,
+                                            ),
+                                            modifier = Modifier.testTag(
+                                                RepairAppTestTags.orderCardOrderReference(
+                                                    order.id
+                                                )
+                                            ),
+                                            style = MaterialTheme.typography.titleMedium,
+                                            fontWeight = FontWeight.Bold,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis,
+                                            softWrap = false,
+                                        )
+                                        Text(
+                                            text = stringResource(
+                                                R.string.orders_customer_reference,
+                                                customerName
+                                            ),
+                                            modifier = Modifier.testTag(
+                                                RepairAppTestTags.orderCardCustomerReference(
+                                                    order.id
+                                                )
+                                            ),
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = MaterialTheme.colorScheme.secondary,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis,
+                                            softWrap = false,
+                                        )
+                                    }
                                     Text(
-                                        text = stringResource(
-                                            R.string.orders_order_reference,
-                                            order.orderNumber,
-                                            order.title,
-                                        ),
-                                        modifier = Modifier.testTag(
-                                            RepairAppTestTags.orderCardOrderReference(
-                                                order.id
-                                            )
-                                        ),
-                                        style = MaterialTheme.typography.titleMedium,
-                                        fontWeight = FontWeight.Bold,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis,
-                                        softWrap = false,
-                                    )
-                                    Text(
-                                        text = stringResource(
-                                            R.string.orders_customer_reference,
-                                            customerName
-                                        ),
-                                        modifier = Modifier.testTag(
-                                            RepairAppTestTags.orderCardCustomerReference(
-                                                order.id
-                                            )
-                                        ),
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = MaterialTheme.colorScheme.secondary,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis,
-                                        softWrap = false,
+                                        text = formatUiDateTime(order.updatedAt),
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.outline,
+                                        modifier = Modifier.padding(start = RepairAppSpacing.compactGap),
                                     )
                                 }
-                                Text(
-                                    text = formatUiDateTime(order.updatedAt),
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.outline,
-                                    modifier = Modifier.padding(start = RepairAppSpacing.compactGap),
-                                )
-                            }
 
-                            OrderStatusStepper(
-                                status = order.status,
-                                compact = true,
-                                modifier = Modifier.testTag(
-                                    RepairAppTestTags.orderCardStatusStepper(
-                                        order.id
+                                OrderStatusStepper(
+                                    status = order.status,
+                                    compact = true,
+                                    modifier = Modifier.testTag(
+                                        RepairAppTestTags.orderCardStatusStepper(
+                                            order.id
+                                        )
+                                    ),
+                                ) { step ->
+                                    RepairAppTestTags.orderCardStatusStep(
+                                        order.id,
+                                        step
                                     )
-                                ),
-                            ) { step ->
-                                RepairAppTestTags.orderCardStatusStep(
-                                    order.id,
-                                    step
+                                }
+
+                                Text(
+                                    text = stringResource(
+                                        R.string.orders_next_action_label,
+                                        nextActionLabel(order)
+                                    ),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontWeight = FontWeight.Medium,
                                 )
                             }
-
-                            Text(
-                                text = stringResource(
-                                    R.string.orders_next_action_label,
-                                    nextActionLabel(order)
-                                ),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.primary,
-                                fontWeight = FontWeight.Medium,
-                            )
                         }
                     }
                 }
+            }
+
+            if (showScrollToTop) {
+                AppButton(
+                    text = "Torna su",
+                    leadingIcon = Icons.Default.KeyboardArrowUp,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = RepairAppSpacing.screenVertical),
+                    onClick = {
+                        scope.launch { listState.animateScrollToItem(0) }
+                    },
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact
+                )
             }
         }
     }

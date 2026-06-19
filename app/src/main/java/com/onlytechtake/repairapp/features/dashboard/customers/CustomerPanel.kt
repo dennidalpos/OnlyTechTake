@@ -44,7 +44,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
@@ -401,7 +409,13 @@ private fun CustomerListContent(
 ) {
     val customers by viewModel.customerSuggestions.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
+    val showAll by viewModel.showAll.collectAsState()
     val focusManager = LocalFocusManager.current
+    val listState = rememberLazyListState()
+    val showScrollToTop by remember {
+        derivedStateOf { listState.firstVisibleItemIndex > 3 }
+    }
+    val scope = rememberCoroutineScope()
 
     AppScreenContainer(scrollable = false) {
         Row(
@@ -418,7 +432,10 @@ private fun CustomerListContent(
                         .weight(1f)
                         .height(56.dp),
                 value = searchQuery,
-                onValueChange = viewModel::setSearchQuery,
+                onValueChange = {
+                    viewModel.setSearchQuery(it)
+                    if (it.isNotBlank()) viewModel.setShowAll(false)
+                },
                 label = stringResource(R.string.customer_search_label),
                 singleLine = true,
                 imeAction = ImeAction.Search,
@@ -450,26 +467,48 @@ private fun CustomerListContent(
             }
         }
 
-        if (searchQuery.isNotBlank()) {
-            Spacer(Modifier.height(RepairAppSpacing.sectionGap))
-            SectionTitle(stringResource(R.string.customer_search_results))
+        Spacer(Modifier.height(RepairAppSpacing.compactGap))
 
+        if (searchQuery.isBlank()) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = if (showAll) stringResource(R.string.customer_title) else stringResource(R.string.customer_recent),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                AppButton(
+                    text = if (showAll) stringResource(R.string.customer_recent) else stringResource(R.string.customer_show_all),
+                    onClick = { viewModel.setShowAll(!showAll) },
+                    variant = AppButtonVariant.Ghost,
+                    size = AppButtonSize.Compact
+                )
+            }
+        } else {
+            SectionTitle(stringResource(R.string.customer_search_results))
+        }
+
+        Box(modifier = Modifier.weight(1f)) {
             LazyColumn(
+                state = listState,
                 modifier =
-                    Modifier
-                        .weight(1f)
-                        .testTag("customer_list")
-                        .imePadding(),
+                Modifier
+                    .fillMaxSize()
+                    .testTag("customer_list")
+                    .imePadding(),
                 verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
                 contentPadding =
-                    PaddingValues(
-                        top = RepairAppSpacing.compactGap,
-                        bottom = RepairAppSpacing.bottomContentPadding,
-                    ),
+                PaddingValues(
+                    top = RepairAppSpacing.compactGap,
+                    bottom = RepairAppSpacing.bottomContentPadding,
+                ),
             ) {
                 if (customers.isEmpty()) {
                     item {
-                        CustomerEmptyState(hasQuery = true)
+                        CustomerEmptyState(hasQuery = searchQuery.isNotBlank())
                     }
                 } else {
                     items(customers, key = { it.id }) { customer ->
@@ -477,13 +516,19 @@ private fun CustomerListContent(
                     }
                 }
             }
-        } else {
-            Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                AppEmptyState(
-                    title = stringResource(R.string.customer_search_empty_title),
-                    body = stringResource(R.string.customer_search_empty_body),
-                    actionLabel = null,
-                    onAction = null,
+
+            if (showScrollToTop) {
+                AppButton(
+                    text = "Torna su",
+                    leadingIcon = Icons.Default.KeyboardArrowUp,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = RepairAppSpacing.screenVertical),
+                    onClick = {
+                        scope.launch { listState.animateScrollToItem(0) }
+                    },
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact
                 )
             }
         }
@@ -643,7 +688,9 @@ private fun CustomerDetailContent(
     val context = LocalContext.current
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
     ) {
         Row(
@@ -825,7 +872,7 @@ private fun CustomerCard(
 private fun CustomerEmptyState(hasQuery: Boolean) {
     AppEmptyState(
         title = if (hasQuery) stringResource(R.string.customer_no_results_title) else stringResource(
-            R.string.customer_no_recent
+            R.string.customer_search_empty_title
         ),
         body = if (hasQuery) stringResource(R.string.customer_no_results) else stringResource(R.string.customer_search_hint),
     )

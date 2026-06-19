@@ -74,6 +74,7 @@ object RepairAppTestTags {
 
     const val ConfigHubCategoriesButton = "config_hub_categories_button"
     const val ConfigHubTemplatesButton = "config_hub_templates_button"
+    const val ConfigHubTemplateMappingButton = "config_hub_template_mapping_button"
     const val ConfigHubWhatsappButton = "config_hub_whatsapp_button"
     const val ConfigHubStorageButton = "config_hub_storage_button"
     const val ConfigHubBackupButton = "config_hub_backup_button"

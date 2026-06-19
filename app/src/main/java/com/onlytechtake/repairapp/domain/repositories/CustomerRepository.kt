@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.Flow
 interface CustomerRepository {
     fun observeRecent(): Flow<List<CustomerEntity>>
 
+    fun observeAll(): Flow<List<CustomerEntity>>
+
     fun search(query: String): Flow<List<CustomerEntity>>
 
     suspend fun findById(id: String): CustomerEntity?

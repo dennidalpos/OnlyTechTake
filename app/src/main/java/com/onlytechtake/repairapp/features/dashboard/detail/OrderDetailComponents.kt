@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.features.dashboard.detail
 
 import android.content.Context
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
@@ -368,7 +370,16 @@ private fun QuoteDecisionButton(
         onClick = onClick,
         variant = if (selected) AppButtonVariant.Primary else AppButtonVariant.Ghost,
         size = AppButtonSize.Compact,
-        modifier = modifier,
+        modifier = modifier
+            .then(
+                if (!selected) {
+                    Modifier.border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
+                        shape = RepairAppShapes.button
+                    )
+                } else Modifier
+            ),
         selected = selected,
         testTag = testTag,
     )

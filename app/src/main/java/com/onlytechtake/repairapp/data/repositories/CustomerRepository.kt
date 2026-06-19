@@ -25,6 +25,13 @@ class CustomerRepository(
         return customerDao.observeRecent()
     }
 
+    override fun observeAll(): Flow<List<CustomerEntity>> {
+        if (DemoMode.isEnabled) {
+            return flowOf(listOf(DemoMode.demoCustomer))
+        }
+        return customerDao.observeAll()
+    }
+
     override fun search(query: String): Flow<List<CustomerEntity>> {
         if (DemoMode.isEnabled) {
             val q = query.trim().lowercase()

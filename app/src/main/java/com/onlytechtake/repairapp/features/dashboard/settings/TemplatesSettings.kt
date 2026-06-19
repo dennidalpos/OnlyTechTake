@@ -73,14 +73,11 @@ fun ColumnScope.TemplatesSettings(
     val templates by viewModel.templates.collectAsState()
     val anchorMappings by viewModel.anchorMappings.collectAsState()
     var editingTemplate by remember { mutableStateOf<MessageTemplateEntity?>(null) }
-    var selectingAnchorForTemplate by remember { mutableStateOf<TemplateAnchor?>(null) }
     var searchQuery by rememberSaveable { mutableStateOf("") }
 
     val confirmTitle = stringResource(R.string.config_template_confirm_save_title)
     val confirmRisky = stringResource(R.string.config_template_confirm_save_risky)
     val confirmNewVersion = stringResource(R.string.config_template_confirm_save_new_version)
-    val resetTitle = stringResource(R.string.config_template_reset_confirm_title)
-    val resetText = stringResource(R.string.config_template_reset_confirm_text)
     val usedTemplateCodes = remember(anchorMappings) { anchorMappings.values.toSet() }
 
     val filteredTemplates =
@@ -172,81 +169,6 @@ fun ColumnScope.TemplatesSettings(
                         }
                     }
                 }
-            }
-        }
-
-        if (isAdmin) {
-            item {
-                SectionTitle(
-                    text = stringResource(R.string.config_template_association_title),
-                    tooltip = stringResource(R.string.config_template_association_tooltip),
-                )
-            }
-
-            items(TemplateAnchor.entries) { anchor ->
-                val assignedCode = anchorMappings[anchor]
-                val assignedTemplate = templates.find { it.code == assignedCode }
-
-                StandardCard(
-                    onClick = { selectingAnchorForTemplate = anchor },
-                    highlight = assignedTemplate?.active == true,
-                ) {
-                    Row(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(RepairAppSpacing.cardPadding),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Column(modifier = Modifier.weight(1f)) {
-                            AnchorStepHeader(anchor)
-                            Spacer(modifier = Modifier.height(RepairAppSpacing.compactGap))
-                            Text(anchor.label, style = MaterialTheme.typography.titleSmall)
-                            Text(
-                                anchor.description,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.outline,
-                            )
-                            Spacer(modifier = Modifier.height(RepairAppSpacing.compactGap))
-                            Text(
-                                text =
-                                    stringResource(
-                                        R.string.config_template_assigned_template,
-                                        assignedTemplate?.title ?: stringResource(
-                                            R.string.config_template_default_label,
-                                            anchor.defaultCode
-                                        ),
-                                    ),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.primary,
-                                fontWeight = FontWeight.Bold,
-                            )
-                        }
-                        Icon(
-                            Icons.Default.Edit,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                }
-            }
-
-            item {
-                HorizontalDivider(modifier = Modifier.padding(vertical = RepairAppSpacing.screenHorizontal))
-            }
-
-            item {
-                AppButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.config_template_reset_defaults),
-                    variant = AppButtonVariant.Secondary,
-                    onClick = {
-                        onRequestConfirm(resetTitle, resetText) {
-                            viewModel.resetTemplatesToDefaults()
-                        }
-                    },
-                )
             }
         }
 
@@ -387,120 +309,6 @@ fun ColumnScope.TemplatesSettings(
                 }
             },
         ) { viewModel.setFormDirty(it) }
-    }
-
-    selectingAnchorForTemplate?.let { anchor ->
-        AnchorSelectionDialog(
-            anchor = anchor,
-            templates = templates.filter { it.active },
-            currentMapping = anchorMappings[anchor],
-            onDismiss = { selectingAnchorForTemplate = null },
-            onSelect = { templateCode ->
-                viewModel.setTemplateForAnchor(anchor, templateCode)
-                selectingAnchorForTemplate = null
-            },
-        )
-    }
-}
-
-@Composable
-private fun AnchorStepHeader(anchor: TemplateAnchor) {
-    val stepLabel =
-        if (anchor.stepNumber == 0) {
-            stringResource(R.string.config_template_legal_step)
-        } else {
-            stringResource(R.string.config_template_step_prefix, anchor.stepNumber)
-        }
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        AppBadge(
-            text = stepLabel,
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-        )
-        Text(
-            text = anchor.stepName,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-    }
-}
-
-@Composable
-fun AnchorSelectionDialog(
-    anchor: TemplateAnchor,
-    templates: List<MessageTemplateEntity>,
-    currentMapping: String?,
-    onDismiss: () -> Unit,
-    onSelect: (String) -> Unit,
-) {
-    Dialog(onDismissRequest = onDismiss) {
-        Surface(
-            shape = MaterialTheme.shapes.extraLarge,
-            color = MaterialTheme.colorScheme.surface,
-            tonalElevation = 6.dp,
-        ) {
-            Column(
-                modifier =
-                    Modifier
-                        .padding(RepairAppSpacing.screenHorizontal)
-                        .fillMaxWidth(),
-            ) {
-                Text(
-                    text = stringResource(R.string.config_template_associate_with, anchor.label),
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                )
-                Spacer(modifier = Modifier.height(RepairAppSpacing.cardGap))
-
-                LazyColumn(
-                    modifier = Modifier.weight(1f, fill = false),
-                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
-                ) {
-                    item {
-                        StandardCard(
-                            onClick = { onSelect(anchor.defaultCode) },
-                            highlight = (currentMapping == null || currentMapping == anchor.defaultCode),
-                        ) {
-                            Text(
-                                text = stringResource(
-                                    R.string.config_template_default_label,
-                                    anchor.defaultCode
-                                ),
-                                modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
-                        }
-                    }
-
-                    items(templates) { template ->
-                        StandardCard(
-                            onClick = { onSelect(template.code) },
-                            highlight = currentMapping == template.code,
-                        ) {
-                            Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding)) {
-                                Text(template.title, style = MaterialTheme.typography.bodyMedium)
-                                Text(
-                                    template.code,
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.outline
-                                )
-                            }
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(RepairAppSpacing.cardGap))
-                AppButton(
-                    text = stringResource(R.string.customer_cancel),
-                    onClick = onDismiss,
-                    variant = AppButtonVariant.Secondary,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            }
-        }
     }
 }
 

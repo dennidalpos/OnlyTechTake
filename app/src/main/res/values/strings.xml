@@ -134,7 +134,7 @@
     <string name="signature_form_title">Privacy e firma</string>
     <string name="signature_signer_label">Firma %s</string>
     <string name="signature_empty">Nessuna firma acquisita.</string>
-    <string name="signature_section_title">Firme privacy</string>
+    <string name="signature_section_title">Firme</string>
     <string name="signature_image_description">Firma %s</string>
     <string name="signature_signer_value">Firmatario: %s</string>
     <string name="signature_privacy_accepted">Privacy accettata</string>
@@ -179,7 +179,7 @@
     <string name="customer_search_results">Risultati ricerca</string>
     <string name="customer_search_hint">Inizia a digitare per cercare un cliente…</string>
     <string name="customer_search_empty_title">Cerca nell\'archivio clienti</string>
-    <string name="customer_search_empty_body">Trova un cliente, una commessa o crea una nuova anagrafica prima di aprire una scheda.</string>
+    <string name="customer_search_empty_body">Trova un cliente, una commessa o visualizza l\'intero archivio.</string>
     <string name="customer_no_results">Nessun cliente trovato per questa ricerca.</string>
     <string name="customer_no_results_title">Nessun risultato</string>
     <string name="customer_save">Salva cliente</string>
@@ -199,7 +199,7 @@
     <string name="customer_closed_orders">Storico chiuse (%1$d)</string>
     <string name="customer_no_open_orders">Nessuna commessa aperta</string>
     <string name="customer_no_closed_orders">Nessuna commessa chiusa</string>
-    <string name="customer_no_recent">Nessun cliente recente</string>
+    <string name="customer_show_all">Mostra tutti i clienti</string>
 
     <string name="customer_field_company_name">Ragione sociale</string>
     <string name="customer_field_vat_number">P.IVA</string>
@@ -256,8 +256,8 @@
     <string name="orders_empty_body">Modifica ricerca o filtri, oppure crea una nuova commessa dal banco.</string>
 
     <string name="orders_customer_unavailable">Cliente non disponibile</string>
-    <string name="orders_order_reference">Commessa %1$s - %2$s</string>
-    <string name="orders_customer_reference">Cliente: %1$s</string>
+    <string name="orders_order_reference">%1$s - %2$s</string>
+    <string name="orders_customer_reference">%1$s</string>
 
     <string name="orders_next_action_label">Prossima azione: %s</string>
 
@@ -302,7 +302,7 @@
     <string name="order_wa_sent_confirm_title">Invio confermato?</string>
     <string name="order_wa_sent_confirm_text">Registrare che l\'operatore ha inviato manualmente il messaggio al cliente?</string>
     <string name="order_wa_close_preview">Chiudi anteprima</string>
-    <string name="order_timeline">Timeline</string>
+    <string name="order_timeline">Cronologia</string>
     <string name="order_confirm_status_update">Aggiornare lo stato della commessa?</string>
     <string name="order_result_summary">Sintesi risultato</string>
     <string name="order_loading_detail">Caricamento commessa...</string>
@@ -398,8 +398,10 @@
 
     <string name="config_hub_categories_title">Categorie</string>
     <string name="config_hub_categories_subtitle">Catalogo commesse</string>
-    <string name="config_hub_templates_title">Template</string>
-    <string name="config_hub_templates_subtitle_admin">Messaggi e documenti</string>
+    <string name="config_hub_templates_title">Gestione Template</string>
+    <string name="config_hub_templates_subtitle_admin">Testi e messaggi</string>
+    <string name="config_hub_template_mapping_title">Associazione Template</string>
+    <string name="config_hub_template_mapping_subtitle">Attivatori e placeholder</string>
     <string name="config_template_tooltip">Personalizza i messaggi predefiniti per ogni fase della lavorazione e le informative legali.</string>
     <string name="config_template_association_title">Associazione Template</string>
     <string name="config_template_association_tooltip">Collega i template ai momenti chiave dell\'app (es. apertura commessa, preventivo).</string>
@@ -419,7 +421,7 @@
     <string name="config_template_edit_title">Modifica Template</string>
     <string name="config_template_code_value">Codice: %s</string>
     <string name="config_template_step_label">Step associato</string>
-    <string name="config_template_variables_tooltip">{{numero_commessa}}, {{stato_commessa}}, {{categoria_percorso}}, {{cliente}}, {{esito_diagnosi}}, {{importo_preventivo}}</string>
+    <string name="config_template_variables_tooltip">{{numero_commessa}}, {{stato_commessa}}, {{categoria_percorso}}, {{cliente}}, {{esito_diagnosi}}, {{importo_preventivo}}, {{ancora_label}}, {{ancora_id}}, {{template_codice}}</string>
 
     <string name="config_hub_templates_subtitle_user">Area admin</string>
     <string name="config_hub_whatsapp_title">WhatsApp</string>
