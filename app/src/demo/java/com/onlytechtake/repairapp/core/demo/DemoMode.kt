@@ -99,26 +99,4 @@ object DemoMode {
                 active = true,
             ),
         )
-
-    val demoCategory = demoCategories.last()
-
-    val demoOrder =
-        RepairOrderEntity(
-            id = "demo-order-1",
-            orderNumber = "OTT-2026-001",
-            customerId = demoCustomer.id,
-            title = "iPhone 13",
-            categoryId = "cat-iphone-13",
-            status = OrderStatus.RESULT,
-            priority = OrderPriority.NORMAL,
-            assignedToUserId = "admin",
-            createdByUserId = "admin",
-            description = "Schermo rotto, touch parzialmente funzionante",
-            diagnosisOutcome = DiagnosisOutcome.REPAIRABLE,
-            estimateAmountCents = 8900L,
-            customerActionStatus = CustomerActionStatus.WAITING_ACCEPTANCE,
-            internalNotes = "Display da sostituire, preventivo approvato",
-            createdAt = 1767225600000L, // 2026-01-01
-            updatedAt = 1767225600000L,
-        )
 }

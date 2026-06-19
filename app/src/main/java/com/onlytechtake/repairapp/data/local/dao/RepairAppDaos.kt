@@ -234,7 +234,7 @@ interface CustomerDao {
     @Query(
         """
         SELECT * FROM customers
-        WHERE :query = '' 
+        WHERE :query = ''
            OR rowid IN (SELECT rowid FROM customers_fts WHERE customers_fts MATCH :query || '*')
            OR id IN (SELECT customerId FROM repair_orders WHERE rowid IN (SELECT rowid FROM repair_orders_fts WHERE repair_orders_fts MATCH :query || '*'))
         ORDER BY updatedAt DESC
@@ -300,20 +300,29 @@ interface RepairOrderDao {
     @Query("SELECT * FROM repair_orders WHERE id = :id LIMIT 1")
     fun observeById(id: String): Flow<RepairOrderEntity?>
 
+    @Query("DELETE FROM repair_orders WHERE id = :id")
+    suspend fun deleteById(id: String)
+
     @Query(
         """
         SELECT * FROM repair_orders
         WHERE (:assignedToUserId IS NULL OR assignedToUserId = :assignedToUserId)
             AND (:status IS NULL OR status = :status)
             AND (:customerId IS NULL OR customerId = :customerId)
+            AND (:unassignedOnly = 0 OR assignedToUserId IS NULL)
+            AND (:assignedOnly = 0 OR assignedToUserId IS NOT NULL)
+            AND (:isClosed IS NULL OR (:isClosed = 1 AND status = 'CLOSED') OR (:isClosed = 0 AND status != 'CLOSED'))
         ORDER BY updatedAt DESC
         LIMIT :limit
         """,
     )
     fun observeFiltered(
-        assignedToUserId: String?,
-        status: OrderStatus?,
-        customerId: String?,
+        assignedToUserId: String? = null,
+        status: OrderStatus? = null,
+        customerId: String? = null,
+        unassignedOnly: Boolean = false,
+        assignedOnly: Boolean = false,
+        isClosed: Boolean? = null,
         limit: Int = 100,
     ): Flow<List<RepairOrderEntity>>
 
@@ -325,10 +334,10 @@ interface RepairOrderDao {
 
     @Query(
         """
-        SELECT 
+        SELECT
             o.*,
-            c.id AS cust_id, c.type AS cust_type, c.firstName AS cust_firstName, c.lastName AS cust_lastName, 
-            c.companyName AS cust_companyName, c.vatNumber AS cust_vatNumber, c.taxCode AS cust_taxCode, 
+            c.id AS cust_id, c.type AS cust_type, c.firstName AS cust_firstName, c.lastName AS cust_lastName,
+            c.companyName AS cust_companyName, c.vatNumber AS cust_vatNumber, c.taxCode AS cust_taxCode,
             c.phone AS cust_phone, c.email AS cust_email, c.address AS cust_address, c.notes AS cust_notes,
             c.createdAt AS cust_createdAt, c.updatedAt AS cust_updatedAt,
             (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND (UPPER(m.mediaType) IN ('PHOTO', 'IMAGE') OR (m.mimeType LIKE 'image/%' AND UPPER(m.mediaType) != 'FINAL_PHOTO'))) AS imagesCount,
@@ -340,14 +349,20 @@ interface RepairOrderDao {
         WHERE (:assignedToUserId IS NULL OR o.assignedToUserId = :assignedToUserId)
             AND (:status IS NULL OR o.status = :status)
             AND (:customerId IS NULL OR o.customerId = :customerId)
+            AND (:unassignedOnly = 0 OR o.assignedToUserId IS NULL)
+            AND (:assignedOnly = 0 OR o.assignedToUserId IS NOT NULL)
+            AND (:isClosed IS NULL OR (:isClosed = 1 AND o.status = 'CLOSED') OR (:isClosed = 0 AND o.status != 'CLOSED'))
         ORDER BY o.updatedAt DESC
         LIMIT :limit
         """,
     )
     fun observeOrderListProjection(
-        assignedToUserId: String?,
-        status: OrderStatus?,
-        customerId: String?,
+        assignedToUserId: String? = null,
+        status: OrderStatus? = null,
+        customerId: String? = null,
+        unassignedOnly: Boolean = false,
+        assignedOnly: Boolean = false,
+        isClosed: Boolean? = null,
         limit: Int = 100,
     ): Flow<List<OrderListItemProjection>>
 
@@ -356,10 +371,10 @@ interface RepairOrderDao {
 
     @Query(
         """
-        SELECT 
+        SELECT
             o.*,
-            c.id AS cust_id, c.type AS cust_type, c.firstName AS cust_firstName, c.lastName AS cust_lastName, 
-            c.companyName AS cust_companyName, c.vatNumber AS cust_vatNumber, c.taxCode AS cust_taxCode, 
+            c.id AS cust_id, c.type AS cust_type, c.firstName AS cust_firstName, c.lastName AS cust_lastName,
+            c.companyName AS cust_companyName, c.vatNumber AS cust_vatNumber, c.taxCode AS cust_taxCode,
             c.phone AS cust_phone, c.email AS cust_email, c.address AS cust_address, c.notes AS cust_notes,
             c.createdAt AS cust_createdAt, c.updatedAt AS cust_updatedAt,
             (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND (UPPER(m.mediaType) IN ('PHOTO', 'IMAGE') OR (m.mimeType LIKE 'image/%' AND UPPER(m.mediaType) != 'FINAL_PHOTO'))) AS imagesCount,
@@ -374,6 +389,9 @@ interface RepairOrderDao {
            AND (:assignedToUserId IS NULL OR o.assignedToUserId = :assignedToUserId)
            AND (:status IS NULL OR o.status = :status)
            AND (:customerId IS NULL OR o.customerId = :customerId)
+           AND (:unassignedOnly = 0 OR o.assignedToUserId IS NULL)
+           AND (:assignedOnly = 0 OR o.assignedToUserId IS NOT NULL)
+           AND (:isClosed IS NULL OR (:isClosed = 1 AND o.status = 'CLOSED') OR (:isClosed = 0 AND o.status != 'CLOSED'))
         ORDER BY o.updatedAt DESC
         LIMIT :limit
         """,
@@ -383,6 +401,9 @@ interface RepairOrderDao {
         assignedToUserId: String? = null,
         status: OrderStatus? = null,
         customerId: String? = null,
+        unassignedOnly: Boolean = false,
+        assignedOnly: Boolean = false,
+        isClosed: Boolean? = null,
         limit: Int = 100,
     ): Flow<List<OrderListItemProjection>>
 }
@@ -397,6 +418,9 @@ interface TimelineEventDao {
 
     @Query("SELECT * FROM timeline_events WHERE orderId = :orderId ORDER BY createdAt DESC")
     fun observeForOrder(orderId: String): Flow<List<TimelineEventEntity>>
+
+    @Query("DELETE FROM timeline_events WHERE orderId = :orderId")
+    suspend fun deleteByOrderId(orderId: String)
 }
 
 @Dao
@@ -450,6 +474,9 @@ interface OrderMediaDao {
     @Query("DELETE FROM order_media WHERE id = :id")
     suspend fun deleteById(id: String): Int
 
+    @Query("DELETE FROM order_media WHERE orderId = :orderId")
+    suspend fun deleteByOrderId(orderId: String)
+
     @Query("SELECT localPath FROM order_media")
     suspend fun getAllPaths(): List<String>
 }
@@ -465,6 +492,9 @@ interface SignatureDao {
     @Query("SELECT * FROM signatures WHERE orderId = :orderId ORDER BY signedAt DESC")
     fun observeForOrder(orderId: String): Flow<List<SignatureEntity>>
 
+    @Query("SELECT * FROM signatures WHERE id = :id LIMIT 1")
+    suspend fun findById(id: String): SignatureEntity?
+
     @Query("SELECT * FROM signatures WHERE orderId IN (:orderIds)")
     suspend fun findForOrders(orderIds: List<String>): List<SignatureEntity>
 
@@ -473,6 +503,12 @@ interface SignatureDao {
 
     @Query("SELECT orderId, COUNT(*) AS signatures FROM signatures GROUP BY orderId")
     fun observeAggregates(): Flow<List<SignatureAggregate>>
+
+    @Query("DELETE FROM signatures WHERE id = :id")
+    suspend fun deleteById(id: String): Int
+
+    @Query("DELETE FROM signatures WHERE orderId = :orderId")
+    suspend fun deleteByOrderId(orderId: String)
 
     @Query("SELECT localPath FROM signatures")
     suspend fun getAllPaths(): List<String>
@@ -488,6 +524,9 @@ interface MessageLogDao {
 
     @Query("SELECT * FROM message_logs WHERE orderId = :orderId ORDER BY createdAt DESC LIMIT 1")
     suspend fun findLatestForOrder(orderId: String): MessageLogEntity?
+
+    @Query("DELETE FROM message_logs WHERE orderId = :orderId")
+    suspend fun deleteByOrderId(orderId: String)
 }
 
 @Dao
@@ -557,6 +596,9 @@ interface OrderDocumentDao {
 
     @Query("DELETE FROM order_documents WHERE id = :id")
     suspend fun deleteById(id: String)
+
+    @Query("DELETE FROM order_documents WHERE orderId = :orderId")
+    suspend fun deleteByOrderId(orderId: String)
 
     @Query("SELECT localPath FROM order_documents")
     suspend fun getAllPaths(): List<String>

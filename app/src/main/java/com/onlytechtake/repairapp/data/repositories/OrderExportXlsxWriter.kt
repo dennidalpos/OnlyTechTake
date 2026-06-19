@@ -121,7 +121,9 @@ internal class OrderExportXlsxWriter(
     private fun Long?.formatTime(): String =
         this
             ?.let {
-                DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(Instant.ofEpochMilli(it).atZone(zoneId))
+                DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(
+                    Instant.ofEpochMilli(it).atZone(zoneId)
+                )
             }.orEmpty()
 
     private fun columnName(index: Int): String {

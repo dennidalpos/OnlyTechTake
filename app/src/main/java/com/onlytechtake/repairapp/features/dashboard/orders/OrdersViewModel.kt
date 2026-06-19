@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.core.permissions.PermissionService
-import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
@@ -27,7 +26,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class OrdersViewModel(
-    private val authRepository: AuthRepository,
+    authRepository: AuthRepository,
     private val orderRepository: OrderWorkflowRepository,
     private val backupRepository: BackupRepository? = null,
     private val backupReminderPreferences: BackupReminderPreferences? = null,
@@ -40,10 +39,18 @@ class OrdersViewModel(
     val backupReminderSettings =
         backupReminderPreferences
             ?.settings
-            ?.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), BackupReminderSettings())
+            ?.stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5_000),
+                BackupReminderSettings(),
+            )
             ?: flowOf(
                 BackupReminderSettings(enabled = false),
-            ).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), BackupReminderSettings(enabled = false))
+            ).stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5_000),
+                BackupReminderSettings(enabled = false),
+            )
 
     val isBackupReminderDue =
         combine(
@@ -52,7 +59,7 @@ class OrdersViewModel(
         ) { user, settings ->
             PermissionService.isAdmin(user) &&
                 BackupReminderPolicy.shouldShowReminder(settings, System.currentTimeMillis())
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = false)
 
     val orderListItems =
         combine(currentUser, _orderFilter) { user, filter -> user to filter }
@@ -64,41 +71,14 @@ class OrdersViewModel(
                 }
             }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    val operationalQueues =
-        currentUser
-            .flatMapLatest { user ->
-                if (user == null) flowOf(emptyList()) else orderRepository.observeOrders(user, OrderFilter())
-            }.map(::buildOperationalQueues)
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), buildOperationalQueues(emptyList()))
-
     fun setFilter(filter: OrderFilter) {
         _orderFilter.value = filter
-    }
-
-    fun changeStatus(
-        orderId: String,
-        status: OrderStatus,
-        note: String = "",
-        closureReason: ClosureReason? = null,
-    ) {
-        launchWithUser { actor ->
-            orderRepository.changeStatus(actor, orderId, status, note, closureReason)
-        }
     }
 
     fun exportCompleteBackup(uri: android.net.Uri) {
         val user = currentUser.value ?: return
         viewModelScope.launch {
             backupRepository?.exportCompleteBackup(user, uri)
-        }
-    }
-
-    private fun launchWithUser(block: suspend (com.onlytechtake.repairapp.domain.auth.AuthenticatedUser) -> Result<*>) {
-        val user = currentUser.value
-        if (user != null) {
-            viewModelScope.launch {
-                block(user)
-            }
         }
     }
 
@@ -109,6 +89,11 @@ class OrdersViewModel(
         private val backupReminderPreferences: BackupReminderPreferences? = null,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T = OrdersViewModel(authRepository, orderRepository, backupRepository, backupReminderPreferences) as T
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = OrdersViewModel(
+            authRepository,
+            orderRepository,
+            backupRepository,
+            backupReminderPreferences
+        ) as T
     }
 }

@@ -18,61 +18,94 @@ import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 
 class RoomConverters {
-    @TypeConverter fun toCustomerType(value: String?): CustomerType? = enumValueOrNull<CustomerType>(value)
+    @TypeConverter
+    fun toCustomerType(value: String?): CustomerType? = enumValueOrNull<CustomerType>(value)
 
-    @TypeConverter fun fromCustomerType(value: CustomerType?): String? = value?.name
+    @TypeConverter
+    fun fromCustomerType(value: CustomerType?): String? = value?.name
 
-    @TypeConverter fun toUserRole(value: String?): UserRole? = enumValueOrNull<UserRole>(value)
+    @TypeConverter
+    fun toUserRole(value: String?): UserRole? = enumValueOrNull<UserRole>(value)
 
-    @TypeConverter fun fromUserRole(value: UserRole?): String? = value?.name
+    @TypeConverter
+    fun fromUserRole(value: UserRole?): String? = value?.name
 
-    @TypeConverter fun toOrderStatus(value: String?): OrderStatus? = enumValueOrNull<OrderStatus>(value)
+    @TypeConverter
+    fun toOrderStatus(value: String?): OrderStatus? = enumValueOrNull<OrderStatus>(value)
 
-    @TypeConverter fun fromOrderStatus(value: OrderStatus?): String? = value?.name
+    @TypeConverter
+    fun fromOrderStatus(value: OrderStatus?): String? = value?.name
 
-    @TypeConverter fun toDiagnosisOutcome(value: String?): DiagnosisOutcome? = enumValueOrNull<DiagnosisOutcome>(value)
+    @TypeConverter
+    fun toDiagnosisOutcome(value: String?): DiagnosisOutcome? =
+        enumValueOrNull<DiagnosisOutcome>(value)
 
-    @TypeConverter fun fromDiagnosisOutcome(value: DiagnosisOutcome?): String? = value?.name
+    @TypeConverter
+    fun fromDiagnosisOutcome(value: DiagnosisOutcome?): String? = value?.name
 
-    @TypeConverter fun toClosureReason(value: String?): ClosureReason? = enumValueOrNull<ClosureReason>(value)
+    @TypeConverter
+    fun toClosureReason(value: String?): ClosureReason? = enumValueOrNull<ClosureReason>(value)
 
-    @TypeConverter fun fromClosureReason(value: ClosureReason?): String? = value?.name
+    @TypeConverter
+    fun fromClosureReason(value: ClosureReason?): String? = value?.name
 
-    @TypeConverter fun toCustomerActionStatus(value: String?): CustomerActionStatus? = enumValueOrNull<CustomerActionStatus>(value)
+    @TypeConverter
+    fun toCustomerActionStatus(value: String?): CustomerActionStatus? =
+        enumValueOrNull<CustomerActionStatus>(value)
 
-    @TypeConverter fun fromCustomerActionStatus(value: CustomerActionStatus?): String? = value?.name
+    @TypeConverter
+    fun fromCustomerActionStatus(value: CustomerActionStatus?): String? = value?.name
 
-    @TypeConverter fun toOrderDocumentType(value: String?): OrderDocumentType? = enumValueOrNull<OrderDocumentType>(value)
+    @TypeConverter
+    fun toOrderDocumentType(value: String?): OrderDocumentType? =
+        enumValueOrNull<OrderDocumentType>(value)
 
-    @TypeConverter fun fromOrderDocumentType(value: OrderDocumentType?): String? = value?.name
+    @TypeConverter
+    fun fromOrderDocumentType(value: OrderDocumentType?): String? = value?.name
 
-    @TypeConverter fun toOrderPriority(value: String?): OrderPriority? = enumValueOrNull<OrderPriority>(value)
+    @TypeConverter
+    fun toOrderPriority(value: String?): OrderPriority? = enumValueOrNull<OrderPriority>(value)
 
-    @TypeConverter fun fromOrderPriority(value: OrderPriority?): String? = value?.name
+    @TypeConverter
+    fun fromOrderPriority(value: OrderPriority?): String? = value?.name
 
-    @TypeConverter fun toTimelineEventType(value: String?): TimelineEventType? = enumValueOrNull<TimelineEventType>(value)
+    @TypeConverter
+    fun toTimelineEventType(value: String?): TimelineEventType? =
+        enumValueOrNull<TimelineEventType>(value)
 
-    @TypeConverter fun fromTimelineEventType(value: TimelineEventType?): String? = value?.name
+    @TypeConverter
+    fun fromTimelineEventType(value: TimelineEventType?): String? = value?.name
 
-    @TypeConverter fun toCustomerFeedbackType(value: String?): CustomerFeedbackType? = enumValueOrNull<CustomerFeedbackType>(value)
+    @TypeConverter
+    fun toCustomerFeedbackType(value: String?): CustomerFeedbackType? =
+        enumValueOrNull<CustomerFeedbackType>(value)
 
-    @TypeConverter fun fromCustomerFeedbackType(value: CustomerFeedbackType?): String? = value?.name
+    @TypeConverter
+    fun fromCustomerFeedbackType(value: CustomerFeedbackType?): String? = value?.name
 
-    @TypeConverter fun toMessageChannel(value: String?): MessageChannel? = enumValueOrNull<MessageChannel>(value)
+    @TypeConverter
+    fun toMessageChannel(value: String?): MessageChannel? = enumValueOrNull<MessageChannel>(value)
 
-    @TypeConverter fun fromMessageChannel(value: MessageChannel?): String? = value?.name
+    @TypeConverter
+    fun fromMessageChannel(value: MessageChannel?): String? = value?.name
 
-    @TypeConverter fun toMessageMode(value: String?): MessageMode? = enumValueOrNull<MessageMode>(value)
+    @TypeConverter
+    fun toMessageMode(value: String?): MessageMode? = enumValueOrNull<MessageMode>(value)
 
-    @TypeConverter fun fromMessageMode(value: MessageMode?): String? = value?.name
+    @TypeConverter
+    fun fromMessageMode(value: MessageMode?): String? = value?.name
 
-    @TypeConverter fun toMessageStatus(value: String?): MessageStatus? = enumValueOrNull<MessageStatus>(value)
+    @TypeConverter
+    fun toMessageStatus(value: String?): MessageStatus? = enumValueOrNull<MessageStatus>(value)
 
-    @TypeConverter fun fromMessageStatus(value: MessageStatus?): String? = value?.name
+    @TypeConverter
+    fun fromMessageStatus(value: MessageStatus?): String? = value?.name
 
-    @TypeConverter fun toAuditAction(value: String?): AuditAction? = enumValueOrNull<AuditAction>(value)
+    @TypeConverter
+    fun toAuditAction(value: String?): AuditAction? = enumValueOrNull<AuditAction>(value)
 
-    @TypeConverter fun fromAuditAction(value: AuditAction?): String? = value?.name
+    @TypeConverter
+    fun fromAuditAction(value: AuditAction?): String? = value?.name
 
     @TypeConverter
     fun toPermissionSet(value: String?): Set<UserPermission> =
@@ -83,7 +116,9 @@ class RoomConverters {
             ?.toSet() ?: emptySet()
 
     @TypeConverter
-    fun fromPermissionSet(value: Set<UserPermission>?): String? = value?.joinToString(",") { it.name }
+    fun fromPermissionSet(value: Set<UserPermission>?): String? =
+        value?.joinToString(",") { it.name }
 
-    private inline fun <reified T : Enum<T>> enumValueOrNull(value: String?): T? = value?.let { enumValueOf<T>(it) }
+    private inline fun <reified T : Enum<T>> enumValueOrNull(value: String?): T? =
+        value?.let { enumValueOf<T>(it) }
 }

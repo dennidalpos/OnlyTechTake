@@ -48,7 +48,11 @@ class DefaultAuthRepository(
             inactivityTicker(),
         ) { adminCount, session, lastUserId, now ->
             val activeUser =
-                if ((session.user != null) && (sessionStore.isExpired(now, AuthPolicy.INACTIVITY_TIMEOUT_MILLIS))) {
+                if ((session.user != null) && (sessionStore.isExpired(
+                        now,
+                        AuthPolicy.INACTIVITY_TIMEOUT_MILLIS,
+                    ))
+                ) {
                     sessionStore.clear()
                     null
                 } else {
@@ -62,7 +66,7 @@ class DefaultAuthRepository(
             )
         }.onStart {
             // Artificial delay to allow the brand animation to complete at least one cycle (1500ms)
-            delay(1500)
+            delay(1500.milliseconds)
         }
 
     override suspend fun createFirstAdmin(
@@ -150,7 +154,13 @@ class DefaultAuthRepository(
 
             sessionStore.setCurrentUser(authenticatedUser, now)
             authPreferences.recordLogin(user.id, now)
-            loginAttemptDao.upsert(LoginAttemptEntity(username = normalizedUsername, successful = true, attemptAt = now))
+            loginAttemptDao.upsert(
+                LoginAttemptEntity(
+                    username = normalizedUsername,
+                    successful = true,
+                    attemptAt = now
+                )
+            )
 
             if (user.role == UserRole.ADMIN) {
                 writeAudit(AuditAction.ADMIN_LOGIN, user.id, null, now)
@@ -188,7 +198,8 @@ class DefaultAuthRepository(
     ): Result<Unit> =
         runCatching {
             val user = requireNotNull(userDao.findByUsername(username)) { "Utente non trovato" }
-            val matches = passwordHasher.verify(currentPassword, user.passwordHash, user.passwordSalt)
+            val matches =
+                passwordHasher.verify(currentPassword, user.passwordHash, user.passwordSalt)
             require(matches) { "Password attuale non corretta" }
             require(newPassword.size >= AuthPolicy.MIN_PASSWORD_LENGTH) { "Nuova password troppo corta" }
 
@@ -213,7 +224,7 @@ class DefaultAuthRepository(
             // Only existing admins or the flow of first admin creation should call this
             // Generate a random 12-character code
             val code =
-                java.util.UUID
+                UUID
                     .randomUUID()
                     .toString()
                     .replace("-", "")
@@ -248,11 +259,16 @@ class DefaultAuthRepository(
     ): Result<Unit> =
         runCatching {
             val hashSetting =
-                appSettingDao.findByKey("master_recovery_code_hash") ?: throw IllegalStateException("Recovery Kit non configurato")
+                appSettingDao.findByKey("master_recovery_code_hash") ?: throw IllegalStateException(
+                    "Recovery Kit non configurato"
+                )
             val saltSetting =
-                appSettingDao.findByKey("master_recovery_code_salt") ?: throw IllegalStateException("Recovery Kit non configurato")
+                appSettingDao.findByKey("master_recovery_code_salt") ?: throw IllegalStateException(
+                    "Recovery Kit non configurato"
+                )
 
-            val matches = passwordHasher.verify(code.toCharArray(), hashSetting.value, saltSetting.value)
+            val matches =
+                passwordHasher.verify(code.toCharArray(), hashSetting.value, saltSetting.value)
             require(matches) { "Codice di recupero non valido" }
             require(newPassword.size >= AuthPolicy.MIN_PASSWORD_LENGTH) { "Nuova password troppo corta" }
 
@@ -278,7 +294,12 @@ class DefaultAuthRepository(
             // appSettingDao.deleteByKey("master_recovery_code_hash") // We don't have deleteByKey yet, let's just empty it
             appSettingDao.upsert(hashSetting.copy(value = "", updatedAt = now))
 
-            writeAudit(AuditAction.PASSWORD_RESET, "SYSTEM_RECOVERY", """{"resetAdmins":${admins.size}}""", now)
+            writeAudit(
+                AuditAction.PASSWORD_RESET,
+                "SYSTEM_RECOVERY",
+                """{"resetAdmins":${admins.size}}""",
+                now
+            )
         }.also {
             newPassword.fill('\u0000')
         }
@@ -342,7 +363,13 @@ class DefaultAuthRepository(
         username: String,
         now: Long,
     ) {
-        loginAttemptDao.upsert(LoginAttemptEntity(username = username, successful = false, attemptAt = now))
+        loginAttemptDao.upsert(
+            LoginAttemptEntity(
+                username = username,
+                successful = false,
+                attemptAt = now
+            )
+        )
     }
 
     private companion object {

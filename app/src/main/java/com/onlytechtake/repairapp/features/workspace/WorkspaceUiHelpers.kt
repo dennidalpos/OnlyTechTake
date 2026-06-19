@@ -9,6 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.Column
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import com.onlytechtake.repairapp.core.utils.label
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,9 +23,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.core.design.repairColors
-import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.core.utils.parseEuroCentsOrNull
-import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
@@ -50,20 +52,20 @@ fun attachmentCounts(
     )
 
 fun AttachmentCounts.label(): String =
-    listOf(
-        "Foto $images",
-        "Documenti $documents",
-        "Firme $signatures",
-        "Lavoro finito $finalPhotos".takeIf { finalPhotos > 0 },
-    ).filterNotNull().joinToString(" - ")
+    buildList {
+        add("Foto $images")
+        add("Documenti $documents")
+        add("Firme $signatures")
+        if (finalPhotos > 0) add("Lavoro finito $finalPhotos")
+    }.joinToString(" - ")
 
 fun OrderAttachmentCounts.label(): String =
-    listOf(
-        "Foto $images",
-        "Documenti $documents",
-        "Firme $signatures",
-        "Lavoro finito $finalPhotos".takeIf { finalPhotos > 0 },
-    ).filterNotNull().joinToString(" - ")
+    buildList {
+        add("Foto $images")
+        add("Documenti $documents")
+        add("Firme $signatures")
+        if (finalPhotos > 0) add("Lavoro finito $finalPhotos")
+    }.joinToString(" - ")
 
 fun OrderMediaEntity.isImageAttachment(): Boolean =
     mediaType.equals("PHOTO", ignoreCase = true) ||
@@ -78,12 +80,6 @@ fun StagedOrderMedia.isImageAttachment(): Boolean =
         mediaType.equals("IMAGE", ignoreCase = true) ||
         mimeType.startsWith("image/", ignoreCase = true)
 
-fun DiagnosisOutcome.diagnosisOutcomeLabel(): String =
-    when (this) {
-        DiagnosisOutcome.REPAIRABLE -> "Riparabile"
-        DiagnosisOutcome.NOT_REPAIRABLE -> "Non riparabile"
-    }
-
 fun categoryPath(
     categories: List<OrderCategoryEntity>,
     categoryId: String?,
@@ -93,7 +89,7 @@ fun categoryPath(
     val names = mutableListOf<String>()
     val visited = mutableSetOf<String>()
     var current = byId[categoryId]
-    while (current != null && visited.add(current.id)) {
+    while (current != null && (visited.add(current.id))) {
         names += current.name
         current = current.parentId?.let(byId::get)
     }
@@ -117,6 +113,7 @@ fun OrderStatusStepper(
     compact: Boolean = false,
     stepTestTag: ((Int) -> String)? = null,
 ) {
+    val context = LocalContext.current
     val steps =
         listOf(
             OrderStatus.OPEN,
@@ -130,95 +127,76 @@ fun OrderStatusStepper(
     val currentStepIndex = orderStatusStepNumber(status) - 1
 
     val dotSize = if (compact) RepairAppSizes.orderStepperDot else 24.dp
-    val spacing = if (compact) 4.dp else 12.dp
 
-    Row(
-        modifier = modifier.fillMaxWidth().padding(vertical = spacing),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = if (compact) 4.dp else 12.dp),
     ) {
         val completedColor = MaterialTheme.repairColors.stepCompleted
         val inactiveColor = MaterialTheme.repairColors.stepInactive
 
-        steps.forEachIndexed { index, _ ->
-            val isCompleted = index < currentStepIndex
-            val isCurrent = index == currentStepIndex
-            val color =
-                when {
-                    isCurrent -> MaterialTheme.colorScheme.primary
-                    isCompleted -> completedColor
-                    else -> inactiveColor
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Bottom,
+        ) {
+            steps.forEachIndexed { index, step ->
+                val isCurrent = index == currentStepIndex
+                val color =
+                    when {
+                        isCurrent -> MaterialTheme.colorScheme.primary
+                        index < currentStepIndex -> completedColor
+                        else -> inactiveColor
+                    }
+
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.weight(1f, fill = false),
+                ) {
+                    if (!compact) {
+                        Text(
+                            text = if (isCurrent) step.label(context) else "",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = color,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(bottom = 4.dp),
+                            maxLines = 1
+                        )
+                    }
+                    Box(
+                        modifier =
+                        Modifier
+                            .size(dotSize)
+                            .background(color = color, shape = CircleShape),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            text = (index + 1).toString(),
+                            modifier = stepTestTag?.let { Modifier.testTag(it(index + 1)) } ?: Modifier,
+                            color =
+                            when {
+                                isCurrent -> MaterialTheme.colorScheme.onPrimary
+                                index < currentStepIndex -> MaterialTheme.repairColors.onSuccess
+                                else -> MaterialTheme.colorScheme.onSurfaceVariant
+                            },
+                            style = MaterialTheme.typography.labelSmall,
+                        )
+                    }
                 }
 
-            Box(
-                modifier =
-                    Modifier
-                        .size(dotSize)
-                        .background(color = color, shape = CircleShape),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = (index + 1).toString(),
-                    modifier = stepTestTag?.let { Modifier.testTag(it(index + 1)) } ?: Modifier,
-                    color =
-                        when {
-                            isCurrent -> MaterialTheme.colorScheme.onPrimary
-                            isCompleted -> MaterialTheme.repairColors.onSuccess
-                            else -> MaterialTheme.colorScheme.onSurfaceVariant
-                        },
-                    style = MaterialTheme.typography.labelSmall,
-                )
-            }
-
-            if (index < steps.size - 1) {
-                Canvas(modifier = Modifier.weight(1f).height(if (compact) 2.dp else 4.dp).padding(horizontal = 2.dp)) {
-                    drawRect(color = if (index < currentStepIndex) completedColor else inactiveColor)
+                if (index < steps.size - 1) {
+                    Canvas(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(if (compact) 2.dp else 4.dp)
+                            .padding(horizontal = 2.dp)
+                            .padding(bottom = dotSize / 2 - (if (compact) 1.dp else 2.dp))
+                    ) {
+                        drawRect(color = if (index < currentStepIndex) completedColor else inactiveColor)
+                    }
                 }
             }
         }
     }
-}
-
-fun applyStatusAction(
-    action: OrderStatusAction,
-    orderId: String,
-    viewModel: com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel,
-    note: String,
-    closureReason: ClosureReason?,
-    resultSummary: String,
-    resultAmount: String,
-    diagnosisOutcome: DiagnosisOutcome?,
-) {
-    if (action == OrderStatusAction.RECORD_RESULT) {
-        val outcome = diagnosisOutcome ?: return
-        val estimateAmountCents = parseEuroCentsOrNull(resultAmount)
-        viewModel.recordResult(
-            summary = resultSummary,
-            diagnosisOutcome = outcome,
-            estimateAmountCents = estimateAmountCents,
-            onSuccess = {
-                viewModel.prepareMessage(
-                    if (outcome == DiagnosisOutcome.REPAIRABLE) {
-                        TemplateAnchor.WHATSAPP_QUOTE
-                    } else {
-                        TemplateAnchor.WHATSAPP_NOT_REPAIRABLE
-                    },
-                )
-            },
-        )
-        return
-    }
-    val targetStatus = action.targetStatus ?: return
-    viewModel.changeStatus(
-        status = targetStatus,
-        note = note,
-        closureReason = closureReason,
-        onSuccess = {
-            if (targetStatus == OrderStatus.CLOSED && closureReason == ClosureReason.NOT_REPAIRABLE) {
-                viewModel.prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
-            } else if (targetStatus == OrderStatus.READY_FOR_PICKUP) {
-                viewModel.prepareMessage(TemplateAnchor.WHATSAPP_READY)
-            }
-        },
-    )
 }

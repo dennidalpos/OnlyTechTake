@@ -14,7 +14,8 @@ fun decodeOrientedBitmap(
     if (maxDimension != Int.MAX_VALUE) {
         val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
         BitmapFactory.decodeFile(path, bounds)
-        options.inSampleSize = calculateBitmapSampleSize(bounds.outWidth, bounds.outHeight, maxDimension)
+        options.inSampleSize =
+            calculateBitmapSampleSize(bounds.outWidth, bounds.outHeight, maxDimension)
     }
     val source = BitmapFactory.decodeFile(path, options) ?: return null
     val orientation =

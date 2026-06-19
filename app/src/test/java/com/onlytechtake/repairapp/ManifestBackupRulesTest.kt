@@ -17,12 +17,14 @@ class ManifestBackupRulesTest {
 
     @Test
     fun backupRulesExcludeFilesDatabasesAndSharedPreferences() {
-        val dataExtractionRules = projectFile("src/main/res/xml/data_extraction_rules.xml").readText()
+        val dataExtractionRules =
+            projectFile("src/main/res/xml/data_extraction_rules.xml").readText()
         val fullBackupContent = projectFile("src/main/res/xml/backup_rules.xml").readText()
 
         listOf("file", "database", "sharedpref").forEach { domain ->
-            assertTrue(dataExtractionRules.contains("""<exclude domain="$domain" path="." />"""))
-            assertTrue(fullBackupContent.contains("""<exclude domain="$domain" path="." />"""))
+            val pattern = """domain="$domain"\s+path="\."""".toRegex()
+            assertTrue("Missing exclude for $domain in data_extraction_rules", pattern.containsMatchIn(dataExtractionRules))
+            assertTrue("Missing exclude for $domain in backup_rules", pattern.containsMatchIn(fullBackupContent))
         }
     }
 

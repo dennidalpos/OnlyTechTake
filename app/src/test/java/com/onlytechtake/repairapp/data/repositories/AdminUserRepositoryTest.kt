@@ -56,7 +56,10 @@ class AdminUserRepositoryTest {
             val result = repository.setActive(actor, "admin-1", false)
 
             assertTrue(result.isFailure)
-            assertEquals("L'account Admin non può essere disattivato", result.exceptionOrNull()?.message)
+            assertEquals(
+                "L'account Admin non può essere disattivato",
+                result.exceptionOrNull()?.message
+            )
         }
 
     @Test

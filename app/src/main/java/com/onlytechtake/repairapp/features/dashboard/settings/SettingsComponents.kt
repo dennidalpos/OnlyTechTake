@@ -79,7 +79,10 @@ internal fun CategoryBreadcrumb(
             modifier = Modifier.size(16.dp),
             tint = MaterialTheme.colorScheme.primary,
         )
-        Text(stringResource(R.string.config_category_root), style = MaterialTheme.typography.bodySmall)
+        Text(
+            stringResource(R.string.config_category_root),
+            style = MaterialTheme.typography.bodySmall
+        )
         nodes.forEach { node ->
             Text(">", style = MaterialTheme.typography.bodySmall)
             LevelDot(node.level)

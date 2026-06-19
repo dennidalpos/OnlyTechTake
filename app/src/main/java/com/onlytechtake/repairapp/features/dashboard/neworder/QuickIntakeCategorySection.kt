@@ -1,10 +1,17 @@
 package com.onlytechtake.repairapp.features.dashboard.neworder
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,14 +30,19 @@ import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppMessageBanner
+import com.onlytechtake.repairapp.core.design.components.BannerType
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.workspace.categoryPath
 
 @Composable
 fun QuickIntakeCategorySection(
-    stepNumber: Int,
+    @Suppress("UNUSED_PARAMETER") stepNumber: Int,
     activeCategories: List<OrderCategoryEntity>,
     selectedCategoryId: String?,
     onCategorySelected: (String) -> Unit,
@@ -66,13 +78,13 @@ fun QuickIntakeCategorySection(
             } else {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     if (currentParentId != null) {
                         AppButton(
                             text = stringResource(R.string.nav_back),
-                            variant = AppButtonVariant.Ghost,
+                            variant = AppButtonVariant.Secondary,
                             size = AppButtonSize.Compact,
                             onClick = { currentParentId = currentParent?.parentId },
                         )
@@ -80,7 +92,9 @@ fun QuickIntakeCategorySection(
                             currentParent?.name.orEmpty(),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier.weight(1f).padding(start = 8.dp),
+                            modifier = Modifier.weight(1f),
+                            maxLines = 1,
+                            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                         )
                     } else {
                         Text(
@@ -92,7 +106,7 @@ fun QuickIntakeCategorySection(
 
                     AppButton(
                         text = stringResource(R.string.intake_add_missing_category),
-                        variant = AppButtonVariant.Ghost,
+                        variant = AppButtonVariant.Secondary,
                         size = AppButtonSize.Compact,
                         onClick = onOpenConfig,
                     )
@@ -104,9 +118,10 @@ fun QuickIntakeCategorySection(
                     OperatorText(stringResource(R.string.intake_category_selected, selectedPath))
                 }
 
-                Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+                Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.tinyGap)) {
                     visibleCategories.forEach { category ->
-                        val hasChildren = activeCategories.any { child -> child.parentId == category.id }
+                        val hasChildren =
+                            activeCategories.any { child -> child.parentId == category.id }
                         val isSelected = category.id == selectedCategoryId
                         val categoryState =
                             when {
@@ -129,13 +144,17 @@ fun QuickIntakeCategorySection(
                                     onCategorySelected(category.id)
                                 }
                             },
-                            containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.1f),
+                            containerColor = if (isSelected) {
+                                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                            } else {
+                                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.1f)
+                            },
                             role = Role.RadioButton,
                         ) {
                             Row(
                                 modifier =
                                     Modifier
-                                        .padding(horizontal = 12.dp, vertical = 12.dp)
+                                        .padding(horizontal = 12.dp, vertical = 8.dp)
                                         .fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically,
@@ -151,16 +170,29 @@ fun QuickIntakeCategorySection(
                                     }
                                 }
                                 if (hasChildren) {
-                                    Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = stringResource(R.string.intake_category_open), modifier = Modifier.size(20.dp))
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.ArrowForward,
+                                        contentDescription = stringResource(R.string.intake_category_open),
+                                        modifier = Modifier.size(20.dp)
+                                    )
                                 } else if (isSelected) {
-                                    Icon(Icons.Default.Check, contentDescription = stringResource(R.string.intake_category_selected_icon), tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
+                                    Icon(
+                                        Icons.Default.Check,
+                                        contentDescription = stringResource(R.string.intake_category_selected_icon),
+                                        tint = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.size(20.dp)
+                                    )
                                 }
                             }
                         }
                     }
                 }
                 if (visibleCategories.isEmpty()) {
-                    Text(stringResource(R.string.config_category_empty_branch), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
+                    Text(
+                        stringResource(R.string.config_category_empty_branch),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.outline
+                    )
                 }
             }
         }

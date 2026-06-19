@@ -60,12 +60,16 @@ data class IntakeStepperState(
             draft.signatureCapture != null
 
     val privacyText: String by lazy {
-        val code = anchorMappings[TemplateAnchor.PRIVACY_TEXT] ?: TemplateAnchor.PRIVACY_TEXT.defaultCode
-        templates.firstOrNull { (it.code == code) && it.active }?.body ?: LegalTemplateFallbacks.PrivacyText
+        val code =
+            anchorMappings[TemplateAnchor.PRIVACY_TEXT] ?: TemplateAnchor.PRIVACY_TEXT.defaultCode
+        templates.firstOrNull { (it.code == code) && it.active }?.body
+            ?: LegalTemplateFallbacks.PrivacyText
     }
 
     val termsText: String by lazy {
-        val code = anchorMappings[TemplateAnchor.TERMS_TEXT] ?: TemplateAnchor.TERMS_TEXT.defaultCode
-        templates.firstOrNull { (it.code == code) && it.active }?.body ?: LegalTemplateFallbacks.TermsText
+        val code =
+            anchorMappings[TemplateAnchor.TERMS_TEXT] ?: TemplateAnchor.TERMS_TEXT.defaultCode
+        templates.firstOrNull { (it.code == code) && it.active }?.body
+            ?: LegalTemplateFallbacks.TermsText
     }
 }

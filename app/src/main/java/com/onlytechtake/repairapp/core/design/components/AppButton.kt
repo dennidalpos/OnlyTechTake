@@ -115,7 +115,9 @@ fun AppButton(
             ) {
                 if (loading) {
                     CircularProgressIndicator(
-                        modifier = Modifier.padding(end = 8.dp).size(if (compact) 16.dp else 20.dp),
+                        modifier = Modifier
+                            .padding(end = 8.dp)
+                            .size(if (compact) 16.dp else 20.dp),
                         strokeWidth = 2.dp,
                         color = contentColor,
                     )
@@ -124,7 +126,9 @@ fun AppButton(
                         Icon(
                             imageVector = icon,
                             contentDescription = null,
-                            modifier = Modifier.padding(end = 8.dp).size(if (compact) 16.dp else 20.dp),
+                            modifier = Modifier
+                                .padding(end = 8.dp)
+                                .size(if (compact) 16.dp else 20.dp),
                         )
                     }
                 }
@@ -133,7 +137,9 @@ fun AppButton(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center,
-                    style = (if (compact) MaterialTheme.typography.labelMedium else MaterialTheme.typography.labelLarge).copy(fontWeight = FontWeight.Bold),
+                    style = (if (compact) MaterialTheme.typography.labelMedium else MaterialTheme.typography.labelLarge).copy(
+                        fontWeight = FontWeight.Bold
+                    ),
                     softWrap = false,
                 )
             }
@@ -151,18 +157,40 @@ private fun AppButtonVariant.colors(): AppButtonColors =
     when (this) {
         AppButtonVariant.Primary ->
             AppButtonColors(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)
+
         AppButtonVariant.Secondary ->
-            AppButtonColors(MaterialTheme.colorScheme.secondaryContainer, MaterialTheme.colorScheme.onSecondaryContainer)
+            AppButtonColors(
+                MaterialTheme.colorScheme.secondaryContainer,
+                MaterialTheme.colorScheme.onSecondaryContainer
+            )
+
         AppButtonVariant.Success ->
-            AppButtonColors(MaterialTheme.repairColors.success, MaterialTheme.repairColors.onSuccess)
+            AppButtonColors(
+                MaterialTheme.repairColors.success,
+                MaterialTheme.repairColors.onSuccess
+            )
+
         AppButtonVariant.Info ->
-            AppButtonColors(MaterialTheme.colorScheme.tertiary, MaterialTheme.colorScheme.onTertiary)
+            AppButtonColors(
+                MaterialTheme.colorScheme.tertiary,
+                MaterialTheme.colorScheme.onTertiary
+            )
+
         AppButtonVariant.Warning ->
-            AppButtonColors(MaterialTheme.repairColors.warning, MaterialTheme.repairColors.onWarning)
+            AppButtonColors(
+                MaterialTheme.repairColors.warning,
+                MaterialTheme.repairColors.onWarning
+            )
+
         AppButtonVariant.Danger ->
             AppButtonColors(MaterialTheme.colorScheme.error, MaterialTheme.colorScheme.onError)
+
         AppButtonVariant.WhatsApp ->
-            AppButtonColors(MaterialTheme.repairColors.whatsapp, MaterialTheme.repairColors.onWhatsapp)
+            AppButtonColors(
+                MaterialTheme.repairColors.whatsapp,
+                MaterialTheme.repairColors.onWhatsapp
+            )
+
         AppButtonVariant.Ghost ->
             AppButtonColors(Color.Transparent, MaterialTheme.colorScheme.primary)
     }

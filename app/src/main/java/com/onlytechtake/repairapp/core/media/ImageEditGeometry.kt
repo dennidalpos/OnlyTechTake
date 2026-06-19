@@ -71,8 +71,14 @@ fun Offset.toBitmapOffset(
     if (x < placement.left || x > placement.left + placement.width) return null
     if (y < placement.top || y > placement.top + placement.height) return null
     return Offset(
-        x = ((x - placement.left) / placement.width * bitmap.width).coerceIn(0f, bitmap.width.toFloat()),
-        y = ((y - placement.top) / placement.height * bitmap.height).coerceIn(0f, bitmap.height.toFloat()),
+        x = ((x - placement.left) / placement.width * bitmap.width).coerceIn(
+            0f,
+            bitmap.width.toFloat()
+        ),
+        y = ((y - placement.top) / placement.height * bitmap.height).coerceIn(
+            0f,
+            bitmap.height.toFloat()
+        ),
     )
 }
 

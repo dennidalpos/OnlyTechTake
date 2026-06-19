@@ -52,7 +52,8 @@ class SocialStoryDemoScreenshotTest {
             waitForTag(RepairAppTestTags.AuthUsernameField)
             capture(outputDir, "01-login.png")
 
-            val username = if (BuildConfig.IS_DEMO_VERSION) DemoDataSeeder.DEMO_ADMIN_USERNAME else DemoDataSeeder.DEMO_OPERATOR_USERNAME
+            val username =
+                if (BuildConfig.IS_DEMO_VERSION) DemoDataSeeder.DEMO_ADMIN_USERNAME else DemoDataSeeder.DEMO_OPERATOR_USERNAME
             loginDemo(username)
             waitForText(if (BuildConfig.IS_DEMO_VERSION) "Admin" else "Operatore")
             capture(outputDir, "02-dashboard-home.png")
@@ -76,7 +77,11 @@ class SocialStoryDemoScreenshotTest {
             typeTag(RepairAppTestTags.NewOrderFirstNameField, "Giulia", scroll = true)
             typeTag(RepairAppTestTags.NewOrderLastNameField, "Bianchi", scroll = true)
             typeTag(RepairAppTestTags.NewOrderPhoneField, "+39 333 010 2020", scroll = true)
-            typeTag(RepairAppTestTags.NewOrderEmailField, "giulia.bianchi@example.invalid", scroll = true)
+            typeTag(
+                RepairAppTestTags.NewOrderEmailField,
+                "giulia.bianchi@example.invalid",
+                scroll = true
+            )
             capture(outputDir, "03-nuovo-cliente.png")
 
             clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
@@ -84,12 +89,19 @@ class SocialStoryDemoScreenshotTest {
             clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
 
             clickTag(RepairAppTestTags.categoryButton("demo-cat-pc"), scroll = true)
-            clickTag(RepairAppTestTags.categoryButton(DemoDataSeeder.DEMO_CATEGORY_ID), scroll = true)
+            clickTag(
+                RepairAppTestTags.categoryButton(DemoDataSeeder.DEMO_CATEGORY_ID),
+                scroll = true
+            )
             clickTag(RepairAppTestTags.categoryButton("demo-cat-gaming"), scroll = true)
             clickTag(RepairAppTestTags.categoryButton("demo-cat-rog-strix"), scroll = true)
 
             clickTag(RepairAppTestTags.NewOrderStep2NextButton, scroll = true)
-            typeTag(RepairAppTestTags.NewOrderProblemSummaryField, "Notebook non si accende", scroll = true)
+            typeTag(
+                RepairAppTestTags.NewOrderProblemSummaryField,
+                "Notebook non si accende",
+                scroll = true
+            )
             typeTag(
                 RepairAppTestTags.NewOrderProblemDetailsField,
                 "Il cliente segnala spegnimento improvviso dopo caduta accidentale.",
@@ -100,9 +112,21 @@ class SocialStoryDemoScreenshotTest {
             clickDashboardTab("ORDERS")
             waitForText("Commesse")
             waitForTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
-            waitForTag(RepairAppTestTags.orderCardOrderReference(DemoDataSeeder.DEMO_ORDER_ID), scroll = true, useUnmergedTree = true)
-            waitForTag(RepairAppTestTags.orderCardCustomerReference(DemoDataSeeder.DEMO_ORDER_ID), scroll = true, useUnmergedTree = true)
-            waitForTag(RepairAppTestTags.orderCardStatusStep(DemoDataSeeder.DEMO_ORDER_ID, 1), scroll = true, useUnmergedTree = true)
+            waitForTag(
+                RepairAppTestTags.orderCardOrderReference(DemoDataSeeder.DEMO_ORDER_ID),
+                scroll = true,
+                useUnmergedTree = true
+            )
+            waitForTag(
+                RepairAppTestTags.orderCardCustomerReference(DemoDataSeeder.DEMO_ORDER_ID),
+                scroll = true,
+                useUnmergedTree = true
+            )
+            waitForTag(
+                RepairAppTestTags.orderCardStatusStep(DemoDataSeeder.DEMO_ORDER_ID, 1),
+                scroll = true,
+                useUnmergedTree = true
+            )
             clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID))
 
             waitForTag(RepairAppTestTags.OrderStatusLabel)
@@ -112,17 +136,26 @@ class SocialStoryDemoScreenshotTest {
             waitForText("Asus ROG Strix")
             capture(outputDir, "05-commessa-aperta.png")
 
-            applySimpleStatus(OrderStatusAction.START_PROGRESS, nextAction = OrderStatusAction.START_DIAGNOSIS)
+            applySimpleStatus(
+                OrderStatusAction.START_PROGRESS,
+                nextAction = OrderStatusAction.START_DIAGNOSIS
+            )
             capture(outputDir, "06-presa-in-carico.png")
 
-            applySimpleStatus(OrderStatusAction.START_DIAGNOSIS, nextAction = OrderStatusAction.RECORD_RESULT)
+            applySimpleStatus(
+                OrderStatusAction.START_DIAGNOSIS,
+                nextAction = OrderStatusAction.RECORD_RESULT
+            )
             applyResultStatus()
             capture(outputDir, "07-diagnosi-risultato.png")
 
             acceptQuote()
             capture(outputDir, "08-riparazione.png")
 
-            applySimpleStatus(OrderStatusAction.READY_FOR_PICKUP, nextAction = OrderStatusAction.CLOSE_ORDER)
+            applySimpleStatus(
+                OrderStatusAction.READY_FOR_PICKUP,
+                nextAction = OrderStatusAction.CLOSE_ORDER
+            )
             capture(outputDir, "09-pronta-ritiro.png")
 
             closeOrder()
@@ -150,7 +183,11 @@ class SocialStoryDemoScreenshotTest {
             clickTag(RepairAppTestTags.ConfigHubCategoriesButton, scroll = true)
             clickTag(RepairAppTestTags.ConfigCategoryNewButton, scroll = true)
             typeTag(RepairAppTestTags.ConfigCategoryNameField, "Console portatile", scroll = true)
-            typeTag(RepairAppTestTags.ConfigCategoryDescriptionField, "Riparazioni console portatili, display e batterie.", scroll = true)
+            typeTag(
+                RepairAppTestTags.ConfigCategoryDescriptionField,
+                "Riparazioni console portatili, display e batterie.",
+                scroll = true
+            )
             capture(outputDir, "03-creazione-categoria.png")
             clickTag(RepairAppTestTags.ConfigCategorySaveButton, scroll = true)
             waitForTag(RepairAppTestTags.GenericConfirmButton)
@@ -163,8 +200,16 @@ class SocialStoryDemoScreenshotTest {
             waitForText("Associazione Template")
             capture(outputDir, "05-template-associazioni.png")
             clickTag(RepairAppTestTags.ConfigTemplateNewButton, scroll = true)
-            typeTag(RepairAppTestTags.ConfigTemplateCodeField, "whatsapp_demo_social", scroll = true)
-            typeTag(RepairAppTestTags.ConfigTemplateTitleField, "Aggiornamento social demo", scroll = true)
+            typeTag(
+                RepairAppTestTags.ConfigTemplateCodeField,
+                "whatsapp_demo_social",
+                scroll = true
+            )
+            typeTag(
+                RepairAppTestTags.ConfigTemplateTitleField,
+                "Aggiornamento social demo",
+                scroll = true
+            )
             typeTag(
                 RepairAppTestTags.ConfigTemplateBodyField,
                 "Ciao {{cliente}}, la commessa {{numero_commessa}} e' ora in stato {{stato_commessa}}.",
@@ -196,7 +241,11 @@ class SocialStoryDemoScreenshotTest {
             typeTag(RepairAppTestTags.CustomerLastNameField, "Rossi", scroll = true)
             typeTag(RepairAppTestTags.CustomerTaxCodeField, "RSSLCU90A01F205X", scroll = true)
             typeTag(RepairAppTestTags.CustomerPhoneField, "+39 333 010 3030", scroll = true)
-            typeTag(RepairAppTestTags.CustomerEmailField, "luca.rossi@example.invalid", scroll = true)
+            typeTag(
+                RepairAppTestTags.CustomerEmailField,
+                "luca.rossi@example.invalid",
+                scroll = true
+            )
             capture(outputDir, "02-cliente-privato.png")
             clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
             waitForTag(RepairAppTestTags.CustomerConfirmSaveButton, useUnmergedTree = true)
@@ -210,7 +259,11 @@ class SocialStoryDemoScreenshotTest {
             typeTag(RepairAppTestTags.CustomerCompanyNameField, "Demo Lab Srl", scroll = true)
             typeTag(RepairAppTestTags.CustomerVatNumberField, "IT12345678901", scroll = true)
             typeTag(RepairAppTestTags.CustomerPhoneField, "+39 02 010 4040", scroll = true)
-            typeTag(RepairAppTestTags.CustomerEmailField, "amministrazione@example.invalid", scroll = true)
+            typeTag(
+                RepairAppTestTags.CustomerEmailField,
+                "amministrazione@example.invalid",
+                scroll = true
+            )
             typeTag(RepairAppTestTags.CustomerAddressField, "Via Demo 24, Milano", scroll = true)
             capture(outputDir, "04-cliente-azienda.png")
             clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
@@ -276,10 +329,17 @@ class SocialStoryDemoScreenshotTest {
     private fun applyResultStatus() {
         waitForTag(RepairAppTestTags.OrderActionSection, scroll = true)
         pauseForDemo()
-        clickTag(RepairAppTestTags.statusAction(OrderStatusAction.RECORD_RESULT.name), scroll = true)
+        clickTag(
+            RepairAppTestTags.statusAction(OrderStatusAction.RECORD_RESULT.name),
+            scroll = true
+        )
         pauseForDemo()
         waitForTag(RepairAppTestTags.StatusResultSummaryField)
-        typeTag(RepairAppTestTags.StatusResultSummaryField, "Connettore di alimentazione danneggiato.", scroll = false)
+        typeTag(
+            RepairAppTestTags.StatusResultSummaryField,
+            "Connettore di alimentazione danneggiato.",
+            scroll = false
+        )
         clickTag(RepairAppTestTags.DiagnosisRepairableToggle)
         typeTag(RepairAppTestTags.DiagnosisEstimateField, "149,00", scroll = false)
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
@@ -300,7 +360,10 @@ class SocialStoryDemoScreenshotTest {
         clickTag(RepairAppTestTags.QuoteConfirmButton, scroll = true)
         composeRule.waitForIdle()
         pauseForDemo()
-        waitForTag(RepairAppTestTags.statusAction(OrderStatusAction.READY_FOR_PICKUP.name), scroll = true)
+        waitForTag(
+            RepairAppTestTags.statusAction(OrderStatusAction.READY_FOR_PICKUP.name),
+            scroll = true
+        )
     }
 
     private fun closeOrder() {
@@ -309,7 +372,10 @@ class SocialStoryDemoScreenshotTest {
         clickTag(RepairAppTestTags.statusAction(OrderStatusAction.CLOSE_ORDER.name), scroll = true)
         pauseForDemo()
         waitForTag(RepairAppTestTags.StatusNoteField)
-        typeTag(RepairAppTestTags.StatusNoteField, "Riparazione completata e consegnata al cliente.")
+        typeTag(
+            RepairAppTestTags.StatusNoteField,
+            "Riparazione completata e consegnata al cliente."
+        )
         clickTag(RepairAppTestTags.closureReason("COMPLETED"), scroll = true)
         pauseForDemo()
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
@@ -332,7 +398,8 @@ class SocialStoryDemoScreenshotTest {
         Thread.sleep(2000)
     }
 
-    private fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+    private fun isTextDisplayed(text: String): Boolean =
+        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
     private fun loginDemo(username: String) {
         repeat(LOGIN_ATTEMPTS) { attempt ->
@@ -343,7 +410,11 @@ class SocialStoryDemoScreenshotTest {
             pauseForDemo()
             clickTag(RepairAppTestTags.AuthSubmitButton)
 
-            if (waitForTagIfPresent(RepairAppTestTags.dashboardTab("HOME"), LOGIN_ATTEMPT_TIMEOUT_MILLIS)) {
+            if (waitForTagIfPresent(
+                    RepairAppTestTags.dashboardTab("HOME"),
+                    LOGIN_ATTEMPT_TIMEOUT_MILLIS
+                )
+            ) {
                 return
             }
 
@@ -425,7 +496,13 @@ class SocialStoryDemoScreenshotTest {
 
     private fun performSafeSwipeUp() {
         val listTags =
-            listOf(RepairAppTestTags.OrderDetailLazyColumn, "categories_list", "templates_list", "customer_list", "customer_form")
+            listOf(
+                RepairAppTestTags.OrderDetailLazyColumn,
+                "categories_list",
+                "templates_list",
+                "customer_list",
+                "customer_form"
+            )
         for (tag in listTags) {
             try {
                 composeRule.onNodeWithTag(tag).performTouchInput {
@@ -447,7 +524,13 @@ class SocialStoryDemoScreenshotTest {
 
     private fun performSafeSwipeDown() {
         val listTags =
-            listOf(RepairAppTestTags.OrderDetailLazyColumn, "categories_list", "templates_list", "customer_list", "customer_form")
+            listOf(
+                RepairAppTestTags.OrderDetailLazyColumn,
+                "categories_list",
+                "templates_list",
+                "customer_list",
+                "customer_form"
+            )
         for (tag in listTags) {
             try {
                 composeRule.onNodeWithTag(tag).performTouchInput {
@@ -517,7 +600,8 @@ class SocialStoryDemoScreenshotTest {
             if (scrollIfNotFound) {
                 if (attempts % 2 == 0) {
                     try {
-                        composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).performScrollTo()
+                        composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
+                            .performScrollTo()
                         composeRule.waitForIdle()
                         if (isTagPresent(tag, useUnmergedTree)) {
                             found = true
@@ -560,7 +644,9 @@ class SocialStoryDemoScreenshotTest {
     private fun isTagPresent(
         tag: String,
         useUnmergedTree: Boolean = false,
-    ): Boolean = composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).fetchSemanticsNodes().isNotEmpty()
+    ): Boolean =
+        composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).fetchSemanticsNodes()
+            .isNotEmpty()
 
     private fun isTagDisplayed(tag: String): Boolean =
         runCatching {
@@ -637,7 +723,8 @@ class SocialStoryDemoScreenshotTest {
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean =
+        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     private companion object {
         const val CASE_ORDER = "01-commessa-nuovo-cliente-chiusura"

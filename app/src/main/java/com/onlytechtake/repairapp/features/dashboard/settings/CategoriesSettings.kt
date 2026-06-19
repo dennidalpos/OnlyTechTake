@@ -46,9 +46,16 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppIconButton
+import com.onlytechtake.repairapp.core.design.components.AppTextField
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
-import com.onlytechtake.repairapp.features.dashboard.common.*
+import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
+import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
+import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 
 @Composable
 fun ColumnScope.CategoriesSettings(
@@ -61,7 +68,7 @@ fun ColumnScope.CategoriesSettings(
     val categories by viewModel.categories.collectAsState()
 
     var searchQuery by rememberSaveable { mutableStateOf("") }
-    var showEditCard by rememberSaveable { mutableStateOf(false) }
+    var showEditCard by rememberSaveable { mutableStateOf(value = false) }
     var categoryId by rememberSaveable { mutableStateOf<String?>(null) }
     var categoryParentId by rememberSaveable { mutableStateOf<String?>(null) }
     var currentCategoryParentId by rememberSaveable { mutableStateOf<String?>(null) }
@@ -93,14 +100,16 @@ fun ColumnScope.CategoriesSettings(
         searchQuery = ""
     }
 
-    val currentParent = currentCategoryParentId?.let { id -> categories.firstOrNull { it.id == id } }
+    val currentParent =
+        currentCategoryParentId?.let { id -> categories.firstOrNull { it.id == id } }
 
-    BackHandler(enabled = currentCategoryParentId != null || showEditCard || searchQuery.isNotEmpty()) {
+    BackHandler(enabled = (currentCategoryParentId != null || showEditCard || searchQuery.isNotEmpty())) {
         when {
             showEditCard -> {
                 showEditCard = false
                 viewModel.setFormDirty(false)
             }
+
             searchQuery.isNotEmpty() -> searchQuery = ""
             currentCategoryParentId != null -> currentCategoryParentId = currentParent?.parentId
         }
@@ -127,7 +136,7 @@ fun ColumnScope.CategoriesSettings(
                 horizontal = RepairAppSpacing.screenHorizontal,
                 vertical = RepairAppSpacing.screenHorizontal,
             ),
-        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
     ) {
         item {
             SectionTitle(
@@ -159,7 +168,9 @@ fun ColumnScope.CategoriesSettings(
                         },
                     )
 
-                    if (!showEditCard && searchQuery.isBlank() && isAdmin && (currentParent?.level ?: -1) < 3) {
+                    if (!showEditCard && searchQuery.isBlank() && isAdmin && (currentParent?.level
+                            ?: -1) < 3
+                    ) {
                         Surface(
                             onClick = ::loadNewCategory,
                             color = MaterialTheme.colorScheme.primary,
@@ -173,7 +184,11 @@ fun ColumnScope.CategoriesSettings(
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
                                     imageVector = Icons.Default.Add,
-                                    contentDescription = if (currentCategoryParentId == null) stringResource(R.string.config_category_new_root) else stringResource(R.string.config_category_new_sub),
+                                    contentDescription = if (currentCategoryParentId == null) {
+                                        stringResource(R.string.config_category_new_root)
+                                    } else {
+                                        stringResource(R.string.config_category_new_sub)
+                                    },
                                     tint = MaterialTheme.colorScheme.onPrimary,
                                     modifier = Modifier.size(32.dp),
                                 )
@@ -227,7 +242,9 @@ fun ColumnScope.CategoriesSettings(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
-                                text = if (categoryId == null) stringResource(R.string.config_category_dialog_title_new) else stringResource(R.string.config_category_dialog_title_edit),
+                                text = if (categoryId == null) stringResource(R.string.config_category_dialog_title_new) else stringResource(
+                                    R.string.config_category_dialog_title_edit
+                                ),
                                 style = MaterialTheme.typography.titleMedium,
                                 color = MaterialTheme.colorScheme.onSurface,
                             )
@@ -265,7 +282,11 @@ fun ColumnScope.CategoriesSettings(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Text(if (categoryActive) stringResource(R.string.config_category_active) else stringResource(R.string.config_category_archived))
+                            Text(
+                                if (categoryActive) stringResource(R.string.config_category_active) else stringResource(
+                                    R.string.config_category_archived
+                                )
+                            )
                             Switch(
                                 checked = categoryActive,
                                 enabled = isAdmin,
@@ -285,8 +306,10 @@ fun ColumnScope.CategoriesSettings(
                                 },
                             )
                             if ((categoryId == null) || isAdmin) {
-                                val confirmTitle = stringResource(R.string.config_category_confirm_save_title)
-                                val confirmText = stringResource(R.string.config_category_confirm_save_text)
+                                val confirmTitle =
+                                    stringResource(R.string.config_category_confirm_save_title)
+                                val confirmText =
+                                    stringResource(R.string.config_category_confirm_save_text)
                                 AppButton(
                                     text = stringResource(R.string.config_category_save),
                                     leadingIcon = Icons.Default.Check,
@@ -313,20 +336,27 @@ fun ColumnScope.CategoriesSettings(
 
         items(visibleCategories) { category ->
             val confirmTitle = stringResource(R.string.config_category_confirm_delete_title)
-            val confirmText = stringResource(R.string.config_category_confirm_delete_specific_text).format(category.name)
+            val confirmText =
+                stringResource(R.string.config_category_confirm_delete_specific_text).format(
+                    category.name
+                )
             StandardCard(
                 onClick = { openCategoryBranch(category.id) },
             ) {
                 Column(
-                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.tinyGap),
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap), verticalAlignment = Alignment.CenterVertically) {
+                        Row(
+                            modifier = Modifier.weight(1f),
+                            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             StatusDot(category.active)
                             Text(category.name, style = MaterialTheme.typography.titleMedium)
                         }
@@ -376,8 +406,12 @@ fun ColumnScope.CategoriesSettings(
                 AppEmptyState(
                     title = stringResource(R.string.config_category_empty_title),
                     body = stringResource(R.string.config_category_empty_branch),
-                    actionLabel = stringResource(R.string.config_category_new_sub).takeIf { isAdmin && !showEditCard && (currentParent?.level ?: -1) < 3 },
-                    onAction = ::loadNewCategory.takeIf { isAdmin && !showEditCard && (currentParent?.level ?: -1) < 3 },
+                    actionLabel = stringResource(R.string.config_category_new_sub).takeIf {
+                        isAdmin && !showEditCard && (currentParent?.level ?: -1) < 3
+                    },
+                    onAction = ::loadNewCategory.takeIf {
+                        isAdmin && !showEditCard && (currentParent?.level ?: -1) < 3
+                    },
                 )
             }
         }
@@ -385,7 +419,9 @@ fun ColumnScope.CategoriesSettings(
         item {
             Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
                 AppButton(
-                    modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = RepairAppSpacing.screenHorizontal),
                     text = stringResource(R.string.config_category_close),
                     variant = AppButtonVariant.Secondary,
                     onClick = onBack,

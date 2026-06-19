@@ -21,11 +21,6 @@ enum class StandardCardVariant {
     Highlight,
 }
 
-enum class StandardCardDensity {
-    Comfortable,
-    Compact,
-}
-
 @Composable
 fun StandardCard(
     modifier: Modifier = Modifier,
@@ -33,15 +28,22 @@ fun StandardCard(
     containerColor: Color = MaterialTheme.colorScheme.surface,
     highlight: Boolean = false,
     variant: StandardCardVariant = if (highlight) StandardCardVariant.Highlight else StandardCardVariant.Outlined,
-    density: StandardCardDensity = StandardCardDensity.Comfortable,
     border: BorderStroke? = null,
     role: Role = Role.Button,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val effectiveBorder =
         border ?: when (variant) {
-            StandardCardVariant.Highlight -> BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.8f))
-            StandardCardVariant.Outlined -> BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f))
+            StandardCardVariant.Highlight -> BorderStroke(
+                1.dp,
+                MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
+            )
+
+            StandardCardVariant.Outlined -> BorderStroke(
+                1.dp,
+                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)
+            )
+
             StandardCardVariant.Filled -> null
         }
     val cardModifier = modifier.fillMaxWidth()

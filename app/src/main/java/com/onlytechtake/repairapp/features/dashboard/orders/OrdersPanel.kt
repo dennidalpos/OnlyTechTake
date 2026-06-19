@@ -2,7 +2,20 @@ package com.onlytechtake.repairapp.features.dashboard.orders
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -10,13 +23,19 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -30,7 +49,17 @@ import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppDialog
+import com.onlytechtake.repairapp.core.design.components.AppDivider
+import com.onlytechtake.repairapp.core.design.components.AppIconButton
+import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
+import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
+import com.onlytechtake.repairapp.core.design.components.AppTextField
+import com.onlytechtake.repairapp.core.design.components.AppVerticalDivider
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
@@ -38,7 +67,9 @@ import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
-import com.onlytechtake.repairapp.features.dashboard.common.*
+import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
+import com.onlytechtake.repairapp.features.dashboard.common.BackupReminderCard
+import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspace
 import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
@@ -253,8 +284,16 @@ private fun OrdersListContent(
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(
-                                        text = stringResource(R.string.orders_order_reference, order.orderNumber, order.title),
-                                        modifier = Modifier.testTag(RepairAppTestTags.orderCardOrderReference(order.id)),
+                                        text = stringResource(
+                                            R.string.orders_order_reference,
+                                            order.orderNumber,
+                                            order.title,
+                                        ),
+                                        modifier = Modifier.testTag(
+                                            RepairAppTestTags.orderCardOrderReference(
+                                                order.id
+                                            )
+                                        ),
                                         style = MaterialTheme.typography.titleMedium,
                                         fontWeight = FontWeight.Bold,
                                         maxLines = 1,
@@ -262,8 +301,15 @@ private fun OrdersListContent(
                                         softWrap = false,
                                     )
                                     Text(
-                                        text = stringResource(R.string.orders_customer_reference, customerName),
-                                        modifier = Modifier.testTag(RepairAppTestTags.orderCardCustomerReference(order.id)),
+                                        text = stringResource(
+                                            R.string.orders_customer_reference,
+                                            customerName
+                                        ),
+                                        modifier = Modifier.testTag(
+                                            RepairAppTestTags.orderCardCustomerReference(
+                                                order.id
+                                            )
+                                        ),
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.secondary,
                                         maxLines = 1,
@@ -282,12 +328,23 @@ private fun OrdersListContent(
                             OrderStatusStepper(
                                 status = order.status,
                                 compact = true,
-                                modifier = Modifier.testTag(RepairAppTestTags.orderCardStatusStepper(order.id)),
-                                stepTestTag = { step -> RepairAppTestTags.orderCardStatusStep(order.id, step) },
-                            )
+                                modifier = Modifier.testTag(
+                                    RepairAppTestTags.orderCardStatusStepper(
+                                        order.id
+                                    )
+                                ),
+                            ) { step ->
+                                RepairAppTestTags.orderCardStatusStep(
+                                    order.id,
+                                    step
+                                )
+                            }
 
                             Text(
-                                text = stringResource(R.string.orders_next_action_label, nextActionLabel(order)),
+                                text = stringResource(
+                                    R.string.orders_next_action_label,
+                                    nextActionLabel(order)
+                                ),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.primary,
                                 fontWeight = FontWeight.Medium,
@@ -324,9 +381,17 @@ private fun OrdersListContent(
 @Composable
 private fun ActiveFilterInfo(filter: OrderFilter) {
     val context = LocalContext.current
+    val modeText = when (filter.mode) {
+        com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL -> null
+        com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.MINE -> stringResource(R.string.orders_filter_mine)
+        com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED -> stringResource(R.string.orders_filter_open_unassigned)
+        com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> stringResource(R.string.orders_filter_closed_discarded)
+        com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS -> stringResource(R.string.orders_filter_in_progress_assigned)
+    }
+
     val filterText =
         listOfNotNull(
-            stringResource(R.string.orders_filter_mine).lowercase().takeIf { filter.showMineOnly },
+            modeText?.lowercase(),
             filter.status?.label(context),
             filter.statuses.takeIf { it.isNotEmpty() }?.joinToString(" / ") { it.label(context) },
         ).joinToString(", ")
@@ -346,26 +411,35 @@ private fun OrderFilterBar(
     onFilter: (OrderFilter) -> Unit,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
-        val allSelected = !filter.hasActiveFilter()
-
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_all),
-            selected = allSelected,
-            onClick = { onFilter(OrderFilter()) },
+            selected = filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL,
+            onClick = { onFilter(OrderFilter(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL)) },
         )
 
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_mine),
-            selected = filter.showMineOnly,
-            onClick = { onFilter(filter.copy(showMineOnly = !filter.showMineOnly)) },
+            selected = filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.MINE,
+            onClick = { onFilter(filter.copy(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.MINE)) },
         )
 
-        AppDivider(modifier = Modifier.padding(vertical = RepairAppSpacing.tinyGap).alpha(0.3f))
+        FilterToggleButton(
+            text = stringResource(R.string.orders_filter_open_unassigned),
+            selected = filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
+            onClick = { onFilter(filter.copy(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED)) },
+        )
 
-        QuickStatusGroupFilter(stringResource(R.string.orders_filter_open), setOf(OrderStatus.OPEN), filter, onFilter)
-        QuickStatusGroupFilter(stringResource(R.string.orders_filter_progress), setOf(OrderStatus.IN_PROGRESS, OrderStatus.DIAGNOSIS), filter, onFilter)
-        QuickStatusGroupFilter(stringResource(R.string.orders_filter_result), setOf(OrderStatus.RESULT, OrderStatus.REPAIRING), filter, onFilter)
-        QuickStatusGroupFilter(stringResource(R.string.orders_filter_ready), setOf(OrderStatus.READY_FOR_PICKUP), filter, onFilter)
+        FilterToggleButton(
+            text = stringResource(R.string.orders_filter_in_progress_assigned),
+            selected = filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
+            onClick = { onFilter(filter.copy(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS)) },
+        )
+
+        FilterToggleButton(
+            text = stringResource(R.string.orders_filter_closed_discarded),
+            selected = filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED,
+            onClick = { onFilter(filter.copy(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED)) },
+        )
     }
 }
 
@@ -385,26 +459,5 @@ private fun FilterToggleButton(
     )
 }
 
-@Composable
-private fun QuickStatusGroupFilter(
-    label: String,
-    statuses: Set<OrderStatus>,
-    filter: OrderFilter,
-    onFilter: (OrderFilter) -> Unit,
-) {
-    val isSelected = filter.statuses == statuses
-    FilterToggleButton(
-        text = label,
-        selected = isSelected,
-        onClick = {
-            onFilter(
-                filter.copy(
-                    status = null,
-                    statuses = statuses.takeUnless { isSelected } ?: emptySet(),
-                ),
-            )
-        },
-    )
-}
-
-private fun OrderFilter.hasActiveFilter(): Boolean = showMineOnly || (status != null) || statuses.isNotEmpty() || query.isNotBlank()
+private fun OrderFilter.hasActiveFilter(): Boolean =
+    (mode != com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL || query.isNotBlank())

@@ -52,8 +52,23 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.design.components.*
-import com.onlytechtake.repairapp.core.media.*
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppDialog
+import com.onlytechtake.repairapp.core.design.components.AppIconButton
+import com.onlytechtake.repairapp.core.media.ARROW_HEAD_ANGLE
+import com.onlytechtake.repairapp.core.media.ImageEditArrow
+import com.onlytechtake.repairapp.core.media.ImageEditMode
+import com.onlytechtake.repairapp.core.media.MIN_DRAG_DISTANCE
+import com.onlytechtake.repairapp.core.media.buildEditedBitmap
+import com.onlytechtake.repairapp.core.media.decodeOrientedBitmap
+import com.onlytechtake.repairapp.core.media.imagePlacement
+import com.onlytechtake.repairapp.core.media.normalizeBitmapRect
+import com.onlytechtake.repairapp.core.media.rotateRight
+import com.onlytechtake.repairapp.core.media.toBitmapOffset
+import com.onlytechtake.repairapp.core.media.toCanvasOffset
+import com.onlytechtake.repairapp.core.media.toCanvasSize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -86,7 +101,10 @@ fun LocalImagePreview(
     ) {
         val previewBitmap = bitmap
         if (previewBitmap == null) {
-            Text(stringResource(R.string.image_preview_unavailable), style = MaterialTheme.typography.bodySmall)
+            Text(
+                stringResource(R.string.image_preview_unavailable),
+                style = MaterialTheme.typography.bodySmall,
+            )
         } else {
             Image(
                 bitmap = previewBitmap.asImageBitmap(),
@@ -131,8 +149,7 @@ fun LocalImageViewer(
                             .fillMaxWidth()
                             .height(420.dp)
                             .padding(top = 8.dp),
-                    onBuildEditedBitmapChange = { buildEditedBitmap = it },
-                )
+                ) { buildEditedBitmap = it }
             }
         },
         confirmButton = {
@@ -285,13 +302,14 @@ private fun EditableLocalImage(
             onDragEnd = {
                 val start = dragStart
                 val end = dragCurrent
-                if (start != null && end != null) {
+                if ((start != null && end != null)) {
                     when (editMode) {
                         ImageEditMode.ARROW -> {
                             if ((start - end).getDistance() >= MIN_DRAG_DISTANCE) {
-                                arrows = arrows + ImageEditArrow(start, end)
+                                arrows += ImageEditArrow(start, end)
                             }
                         }
+
                         ImageEditMode.CROP -> {
                             normalizeBitmapRect(start, end, bitmap)?.let { cropRect = it }
                         }
@@ -308,7 +326,7 @@ private fun EditableLocalImage(
 @Composable
 private fun ImageEditCanvas(
     bitmap: Bitmap?,
-    description: String,
+    @Suppress("UNUSED_PARAMETER") description: String,
     arrows: List<ImageEditArrow>,
     cropRect: Rect?,
     dragStart: Offset?,
@@ -323,7 +341,10 @@ private fun ImageEditCanvas(
 ) {
     Box(modifier = modifier.clipToBounds(), contentAlignment = Alignment.Center) {
         if (bitmap == null) {
-            Text(stringResource(R.string.image_preview_unavailable), style = MaterialTheme.typography.bodySmall)
+            Text(
+                stringResource(R.string.image_preview_unavailable),
+                style = MaterialTheme.typography.bodySmall
+            )
         } else {
             val imageBitmap = remember(bitmap) { bitmap.asImageBitmap() }
             Canvas(
@@ -341,14 +362,18 @@ private fun ImageEditCanvas(
                             )
                         },
             ) {
-                val placement = imagePlacement(Size(bitmap.width.toFloat(), bitmap.height.toFloat()), size)
+                val placement =
+                    imagePlacement(Size(bitmap.width.toFloat(), bitmap.height.toFloat()), size)
                 drawImage(
                     image = imageBitmap,
                     dstOffset = IntOffset(placement.left.roundToInt(), placement.top.roundToInt()),
                     dstSize = IntSize(placement.width.roundToInt(), placement.height.roundToInt()),
                 )
                 arrows.forEach { arrow ->
-                    drawBitmapArrow(arrow.start.toCanvasOffset(placement, bitmap), arrow.end.toCanvasOffset(placement, bitmap))
+                    drawBitmapArrow(
+                        arrow.start.toCanvasOffset(placement, bitmap),
+                        arrow.end.toCanvasOffset(placement, bitmap)
+                    )
                 }
                 cropRect?.let { rect ->
                     drawRect(
@@ -366,6 +391,7 @@ private fun ImageEditCanvas(
                                 dragCurrent.toCanvasOffset(placement, bitmap),
                                 color = Color.Yellow,
                             )
+
                         ImageEditMode.CROP ->
                             normalizeBitmapRect(dragStart, dragCurrent, bitmap)?.let { rect ->
                                 drawRect(
@@ -406,7 +432,10 @@ private fun ZoomableLocalImage(
     ) {
         val viewerBitmap = bitmap
         if (viewerBitmap == null) {
-            Text(stringResource(R.string.image_preview_unavailable), style = MaterialTheme.typography.bodySmall)
+            Text(
+                stringResource(R.string.image_preview_unavailable),
+                style = MaterialTheme.typography.bodySmall
+            )
         } else {
             Image(
                 bitmap = viewerBitmap.asImageBitmap(),
@@ -414,13 +443,18 @@ private fun ZoomableLocalImage(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .aspectRatio(viewerBitmap.width.toFloat() / viewerBitmap.height.coerceAtLeast(1).toFloat())
+                        .aspectRatio(
+                            viewerBitmap.width.toFloat() / viewerBitmap.height.coerceAtLeast(
+                                1
+                            ).toFloat()
+                        )
                         .graphicsLayer {
                             scaleX = scale
                             scaleY = scale
                             translationX = offset.x
                             translationY = offset.y
-                        }.transformable(transformState),
+                        }
+                        .transformable(transformState),
                 contentScale = ContentScale.Fit,
             )
         }
@@ -438,7 +472,8 @@ private fun rememberDecodedLocalBitmap(
         }
 }
 
-private fun fileVersion(path: String): Pair<Long, Long> = File(path).let { file -> file.lastModified() to file.length() }
+private fun fileVersion(path: String): Pair<Long, Long> =
+    File(path).let { file -> file.lastModified() to file.length() }
 
 private fun DrawScope.drawBitmapArrow(
     start: Offset,

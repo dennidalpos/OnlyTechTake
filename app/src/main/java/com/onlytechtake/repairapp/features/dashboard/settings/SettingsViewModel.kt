@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalCoroutinesApi::class)
 class SettingsViewModel(
     private val authRepository: AuthRepository,
-    private val adminUserRepository: AdminUserRepository,
+    adminUserRepository: AdminUserRepository,
     private val catalogRepository: CatalogRepository,
     private val templateRepository: TemplateRepository,
     private val backupRepository: BackupRepository,
@@ -48,16 +48,27 @@ class SettingsViewModel(
             authRepository = authRepository,
             currentUser = authRepository.currentUser,
             scope = viewModelScope,
-            showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) },
-        )
+        ) { text, isError -> _message.value = WorkspaceMessage(text, isError) }
 
     private val catalogDelegate = CatalogSettingsDelegate(catalogRepository, actionRunner)
     private val templateDelegate = TemplateSettingsDelegate(templateRepository, actionRunner)
-    private val backupDelegate = BackupSettingsDelegate(backupRepository, backupReminderPreferences, actionRunner, viewModelScope)
+    private val backupDelegate = BackupSettingsDelegate(
+        backupRepository,
+        backupReminderPreferences,
+        actionRunner,
+        viewModelScope,
+    )
     private val securityDelegate = SecuritySettingsDelegate(securityPreferences, viewModelScope)
     private val adminDelegate = AdminSettingsDelegate(adminUserRepository, actionRunner)
     private val storageDelegate =
-        StorageSettingsDelegate(storageStatsService, orderFileCleanupService, database, actionRunner, viewModelScope, ::refreshStorageStats)
+        StorageSettingsDelegate(
+            storageStatsService,
+            orderFileCleanupService,
+            database,
+            actionRunner,
+            viewModelScope,
+            ::refreshStorageStats
+        )
 
     fun initializeTemplatesIfNeeded() {
         viewModelScope.launch {
@@ -74,13 +85,17 @@ class SettingsViewModel(
         onSetFormDirty(dirty)
     }
 
-    private val _storageStats = MutableStateFlow<com.onlytechtake.repairapp.data.services.StorageStats?>(null)
+    private val _storageStats =
+        MutableStateFlow<com.onlytechtake.repairapp.data.services.StorageStats?>(null)
     val storageStats = _storageStats.asStateFlow()
 
     val currentUser = authRepository.currentUser
-    val users = adminUserRepository.observeUsers().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
-    val categories = catalogRepository.observeCategories().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
-    val templates = templateRepository.observeTemplates().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    val users = adminUserRepository.observeUsers()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    val categories = catalogRepository.observeCategories()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    val templates = templateRepository.observeTemplates()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     val anchorMappings =
         templateRepository.observeAnchorMappings().stateIn(
             viewModelScope,
@@ -129,7 +144,7 @@ class SettingsViewModel(
         active: Boolean,
         onSaved: (String) -> Unit = {},
     ) = catalogDelegate.saveCategory(id, parentId, name, description, active) {
-        setFormDirty(false)
+        setFormDirty(dirty = false)
         onSaved(it)
     }
 
@@ -154,15 +169,20 @@ class SettingsViewModel(
 
     fun setMessageMode(mode: MessageMode) = templateDelegate.setMessageMode(mode)
 
-    fun setBackupReminderEnabled(enabled: Boolean) = backupDelegate.setBackupReminderEnabled(enabled)
+    fun setBackupReminderEnabled(enabled: Boolean) =
+        backupDelegate.setBackupReminderEnabled(enabled)
 
-    fun setBackupReminderIntervalDays(days: Int) = backupDelegate.setBackupReminderIntervalDays(days)
+    fun setBackupReminderIntervalDays(days: Int) =
+        backupDelegate.setBackupReminderIntervalDays(days)
 
-    fun setBackupEncryptionEnabled(enabled: Boolean) = securityDelegate.setBackupEncryptionEnabled(enabled)
+    fun setBackupEncryptionEnabled(enabled: Boolean) =
+        securityDelegate.setBackupEncryptionEnabled(enabled)
 
-    fun setBackupEncryptionPassword(password: String) = securityDelegate.setBackupEncryptionPassword(password)
+    fun setBackupEncryptionPassword(password: String) =
+        securityDelegate.setBackupEncryptionPassword(password)
 
-    fun setDatabaseEncryptionEnabled(enabled: Boolean) = securityDelegate.setDatabaseEncryptionEnabled(enabled)
+    fun setDatabaseEncryptionEnabled(enabled: Boolean) =
+        securityDelegate.setDatabaseEncryptionEnabled(enabled)
 
     fun createOperator(
         displayName: String,

@@ -1,12 +1,20 @@
 package com.onlytechtake.repairapp.features.dashboard.neworder
 
 import android.graphics.Bitmap
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -15,15 +23,22 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppDialog
+import com.onlytechtake.repairapp.core.design.components.AppIconButton
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
-import com.onlytechtake.repairapp.features.dashboard.common.*
+import com.onlytechtake.repairapp.features.dashboard.common.CameraCapturePreview
+import com.onlytechtake.repairapp.features.dashboard.common.LocalImagePreview
+import com.onlytechtake.repairapp.features.dashboard.common.LocalImageViewer
 import com.onlytechtake.repairapp.features.workspace.isImageAttachment
 import java.io.File
 
 @Composable
 fun QuickIntakeMediaSection(
-    stepNumber: Int,
+    @Suppress("UNUSED_PARAMETER") stepNumber: Int,
     intakeSessionId: String,
     stagedMedia: List<StagedOrderMedia>,
     showCamera: Boolean,
@@ -50,7 +65,11 @@ fun QuickIntakeMediaSection(
             )
 
             if (stagedMedia.isEmpty()) {
-                Text(stringResource(R.string.intake_media_empty), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
+                Text(
+                    stringResource(R.string.intake_media_empty),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.outline,
+                )
             } else {
                 stagedMedia.forEach { media ->
                     StandardCard(
@@ -64,8 +83,7 @@ fun QuickIntakeMediaSection(
                                 LocalImagePreview(
                                     path = media.localPath,
                                     description = media.fileName,
-                                    onClick = { selectedImagePath = media.localPath },
-                                )
+                                ) { selectedImagePath = media.localPath }
                             }
                             StagedMediaSummary(media = media, onRemoveMedia = onRemoveMedia)
                         }
@@ -158,7 +176,11 @@ private fun StagedMediaSummary(
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = stringResource(R.string.intake_media_summary, media.mediaType, media.sizeBytes / 1024),
+                text = stringResource(
+                    R.string.intake_media_summary,
+                    media.mediaType,
+                    media.sizeBytes / 1024
+                ),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

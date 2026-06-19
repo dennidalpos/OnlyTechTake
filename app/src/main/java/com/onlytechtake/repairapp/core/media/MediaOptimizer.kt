@@ -53,20 +53,32 @@ class MediaOptimizer(
                 BitmapFactory.Options().apply {
                     inSampleSize = calculateBitmapSampleSize(width, height, maxDimension)
                 }
-            val original = BitmapFactory.decodeFile(file.absolutePath, decodeOptions) ?: return@runCatching file
+            val original = BitmapFactory.decodeFile(file.absolutePath, decodeOptions)
+                ?: return@runCatching file
 
             val targetWidth = width * scale
             val targetHeight = height * scale
             val matrix =
                 Matrix().apply {
-                    postScale(targetWidth / original.width.toFloat(), targetHeight / original.height.toFloat())
+                    postScale(
+                        targetWidth / original.width.toFloat(),
+                        targetHeight / original.height.toFloat()
+                    )
                 }
 
             applyExifRotation(matrix, orientation)
 
             val optimized =
                 try {
-                    Bitmap.createBitmap(original, 0, 0, original.width, original.height, matrix, true)
+                    Bitmap.createBitmap(
+                        original,
+                        0,
+                        0,
+                        original.width,
+                        original.height,
+                        matrix,
+                        true
+                    )
                 } finally {
                     // original will be recycled later if it's different from optimized
                 }
@@ -97,7 +109,9 @@ class MediaOptimizer(
 
     private fun isImage(file: File): Boolean {
         val name = file.name.lowercase()
-        return name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png") || name.endsWith(".webp")
+        return name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png") || name.endsWith(
+            ".webp"
+        )
     }
 
     private fun applyExifRotation(
@@ -114,6 +128,7 @@ class MediaOptimizer(
                 matrix.postRotate(90f)
                 matrix.postScale(-1f, 1f)
             }
+
             ExifInterface.ORIENTATION_TRANSVERSE -> {
                 matrix.postRotate(270f)
                 matrix.postScale(-1f, 1f)

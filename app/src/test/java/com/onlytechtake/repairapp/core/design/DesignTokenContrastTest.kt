@@ -11,12 +11,36 @@ class DesignTokenContrastTest {
     fun semanticActionColorsMeetTextContrast() {
         val pairs =
             listOf(
-                ContrastPair("light success", LightSemanticColors.success, LightSemanticColors.onSuccess),
-                ContrastPair("light warning", LightSemanticColors.warning, LightSemanticColors.onWarning),
-                ContrastPair("light whatsapp", LightSemanticColors.whatsapp, LightSemanticColors.onWhatsapp),
-                ContrastPair("dark success", DarkSemanticColors.success, DarkSemanticColors.onSuccess),
-                ContrastPair("dark warning", DarkSemanticColors.warning, DarkSemanticColors.onWarning),
-                ContrastPair("dark whatsapp", DarkSemanticColors.whatsapp, DarkSemanticColors.onWhatsapp),
+                ContrastPair(
+                    "light success",
+                    LightSemanticColors.success,
+                    LightSemanticColors.onSuccess
+                ),
+                ContrastPair(
+                    "light warning",
+                    LightSemanticColors.warning,
+                    LightSemanticColors.onWarning
+                ),
+                ContrastPair(
+                    "light whatsapp",
+                    LightSemanticColors.whatsapp,
+                    LightSemanticColors.onWhatsapp
+                ),
+                ContrastPair(
+                    "dark success",
+                    DarkSemanticColors.success,
+                    DarkSemanticColors.onSuccess
+                ),
+                ContrastPair(
+                    "dark warning",
+                    DarkSemanticColors.warning,
+                    DarkSemanticColors.onWarning
+                ),
+                ContrastPair(
+                    "dark whatsapp",
+                    DarkSemanticColors.whatsapp,
+                    DarkSemanticColors.onWhatsapp
+                ),
             )
 
         pairs.forEach { pair ->

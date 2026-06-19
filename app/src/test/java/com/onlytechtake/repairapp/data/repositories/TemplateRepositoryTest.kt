@@ -66,7 +66,10 @@ class TemplateRepositoryTest {
             assertEquals(8, restoredIntake.version)
             assertEquals("admin", restoredIntake.updatedByUserId)
             assertEquals(42L, restoredIntake.updatedAt)
-            assertEquals(TemplateAnchor.entries.map { it.settingKey }.toSet(), deletedKeys.captured.toSet())
+            assertEquals(
+                TemplateAnchor.entries.map { it.settingKey }.toSet(),
+                deletedKeys.captured.toSet()
+            )
             assertTrue(
                 audit.captured.detailsJson
                     .orEmpty()
@@ -88,10 +91,16 @@ class TemplateRepositoryTest {
     fun setTemplateForAnchorPersistsMappingForExistingTemplate() =
         runBlocking {
             val setting = slot<AppSettingEntity>()
-            coEvery { templateDao.findByCode("custom_code") } returns existingInactiveTemplate().copy(code = "custom_code")
+            coEvery { templateDao.findByCode("custom_code") } returns existingInactiveTemplate().copy(
+                code = "custom_code"
+            )
             coEvery { settingDao.upsert(capture(setting)) } returns Unit
 
-            val result = repository.setTemplateForAnchor(admin(), TemplateAnchor.WHATSAPP_QUOTE, "custom_code")
+            val result = repository.setTemplateForAnchor(
+                admin(),
+                TemplateAnchor.WHATSAPP_QUOTE,
+                "custom_code"
+            )
 
             assertTrue(result.isSuccess)
             assertEquals(TemplateAnchor.WHATSAPP_QUOTE.settingKey, setting.captured.key)

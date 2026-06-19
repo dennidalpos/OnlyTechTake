@@ -98,21 +98,23 @@ class OrderDetailWorkspaceState(
                         it.closureReason?.name,
                     )
                 },
-                restore = {
-                    OrderDetailWorkspaceState(
-                        initialNote = it[0] as String,
-                        initialShowInternalNoteDialog = it[1] as Boolean,
-                        initialStatusNote = it[2] as String,
-                        initialResultSummary = it[3] as String,
-                        initialResultAmount = it[4] as String,
-                        initialQuoteRejectNote = it[5] as String,
-                    ).apply {
-                        diagnosisOutcome = (it[6] as? String)?.let { name -> DiagnosisOutcome.valueOf(name) }
-                        quoteDecision = (it[7] as? String)?.let { name -> QuoteDecision.valueOf(name) }
-                        closureReason = (it[8] as? String)?.let { name -> ClosureReason.valueOf(name) }
-                    }
-                },
-            )
+            ) { list ->
+                OrderDetailWorkspaceState(
+                    initialNote = list[0] as String,
+                    initialShowInternalNoteDialog = list[1] as Boolean,
+                    initialStatusNote = list[2] as String,
+                    initialResultSummary = list[3] as String,
+                    initialResultAmount = list[4] as String,
+                    initialQuoteRejectNote = list[5] as String,
+                ).apply {
+                    diagnosisOutcome =
+                        (list[6] as? String)?.let { name -> DiagnosisOutcome.valueOf(name) }
+                    quoteDecision =
+                        (list[7] as? String)?.let { name -> QuoteDecision.valueOf(name) }
+                    closureReason =
+                        (list[8] as? String)?.let { name -> ClosureReason.valueOf(name) }
+                }
+            }
     }
 }
 

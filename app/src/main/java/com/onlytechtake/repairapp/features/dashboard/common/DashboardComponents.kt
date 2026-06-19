@@ -14,7 +14,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Inbox
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
@@ -134,7 +143,7 @@ fun AppEmptyState(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center,
             )
-            if (actionLabel != null && onAction != null) {
+            if ((actionLabel != null && onAction != null)) {
                 AppButton(
                     text = actionLabel,
                     onClick = onAction,
@@ -178,17 +187,17 @@ fun WizardNavigationBar(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.actionGap),
         ) {
-            if (onBack != null) {
+            onBack?.let {
                 AppButton(
                     modifier = Modifier.weight(1f),
                     text = stringResource(R.string.nav_back),
-                    variant = AppButtonVariant.Ghost,
+                    variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Default,
-                    onClick = onBack,
+                    onClick = it,
                 )
             }
             AppButton(
-                modifier = Modifier.weight(if (onBack != null) 1.5f else 1f),
+                modifier = Modifier.weight(1f),
                 text = nextLabel,
                 enabled = nextEnabled,
                 variant = AppButtonVariant.Primary,
@@ -218,9 +227,13 @@ fun OperatorText(
         modifier =
             modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.secondaryContainer, RepairAppShapes.compactButton)
-                .padding(RepairAppSpacing.compactGap),
+                .background(
+                    MaterialTheme.colorScheme.secondaryContainer,
+                    RepairAppShapes.compactButton,
+                )
+                .padding(horizontal = 12.dp, vertical = 8.dp),
         text = text,
+        style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onSecondaryContainer,
     )
 }
@@ -233,7 +246,8 @@ fun CompactExpandableRow(
     modifier: Modifier = Modifier,
 ) {
     var expanded by rememberSaveable { mutableStateOf(value = false) }
-    val expandedState = if (expanded) stringResource(R.string.state_expanded) else stringResource(R.string.state_collapsed)
+    val expandedState =
+        if (expanded) stringResource(R.string.state_expanded) else stringResource(R.string.state_collapsed)
 
     StandardCard(
         modifier =
@@ -247,8 +261,18 @@ fun CompactExpandableRow(
             modifier = Modifier.padding(RepairAppSpacing.compactGap),
             verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
         ) {
-            Text(title, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            Text(subtitle, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(
+                title,
+                style = MaterialTheme.typography.titleSmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                subtitle,
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
             if (detail.isNotBlank() && expanded) {
                 OperatorText(detail)
             }
@@ -266,12 +290,14 @@ fun CustomerTypeToggle(
         modifier =
             modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f), RepairAppShapes.pill)
+                .background(
+                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                    RepairAppShapes.pill
+                )
                 .padding(RepairAppSpacing.tinyGap),
         horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.tinyGap),
     ) {
         val privateSelected = !isBusiness
-        val businessSelected = isBusiness
 
         AppButton(
             text = stringResource(R.string.customer_type_private),
@@ -286,9 +312,9 @@ fun CustomerTypeToggle(
             text = stringResource(R.string.customer_type_business),
             onClick = { onBusinessChange(true) },
             modifier = Modifier.weight(1f),
-            variant = if (businessSelected) AppButtonVariant.Primary else AppButtonVariant.Ghost,
+            variant = if (isBusiness) AppButtonVariant.Primary else AppButtonVariant.Ghost,
             size = AppButtonSize.Compact,
-            selected = businessSelected,
+            selected = isBusiness,
             testTag = RepairAppTestTags.CustomerBusinessToggle,
         )
     }
@@ -305,7 +331,10 @@ fun NoteFieldWithDialog(
     var showDialog by rememberSaveable { mutableStateOf(value = false) }
     var tempNote by rememberSaveable { mutableStateOf(note) }
 
-    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+    ) {
         if (note.isNotBlank()) {
             OperatorText(note)
         }
@@ -405,10 +434,15 @@ fun backupStatusLabel(settings: BackupReminderSettings): String =
     when {
         settings.lastBackupStatus == BackupReminderStatus.FAILED ->
             stringResource(R.string.backup_status_failed)
+
         settings.lastSuccessfulBackupAtMillis == null ->
             stringResource(R.string.backup_status_never)
+
         else -> {
-            val days = BackupReminderPolicy.daysSinceLastSuccessfulBackup(settings, System.currentTimeMillis()) ?: 0L
+            val days = BackupReminderPolicy.daysSinceLastSuccessfulBackup(
+                settings,
+                System.currentTimeMillis()
+            ) ?: 0L
             LocalResources.current.getQuantityString(
                 R.plurals.backup_status_days_ago,
                 days.toInt(),

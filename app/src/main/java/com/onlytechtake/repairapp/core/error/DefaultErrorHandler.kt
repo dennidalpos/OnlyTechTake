@@ -10,5 +10,6 @@ class DefaultErrorHandler : ErrorHandler {
         Log.e(context ?: "ErrorHandler", "Error: ${error.message}", error)
     }
 
-    override fun getErrorMessage(error: Throwable): String = error.message ?: "Si è verificato un errore"
+    override fun getErrorMessage(error: Throwable): String =
+        error.message ?: "Si è verificato un errore"
 }

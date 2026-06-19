@@ -2,14 +2,27 @@ package com.onlytechtake.repairapp.data.repositories
 
 import android.content.Context
 import com.onlytechtake.repairapp.core.orders.OrderNumberGenerator
-import com.onlytechtake.repairapp.data.local.dao.*
+import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
+import com.onlytechtake.repairapp.data.local.dao.CustomerDao
+import com.onlytechtake.repairapp.data.local.dao.MessageLogDao
+import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
+import com.onlytechtake.repairapp.data.local.dao.OrderMediaDao
+import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
+import com.onlytechtake.repairapp.data.local.dao.SignatureDao
+import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
+import com.onlytechtake.repairapp.data.local.dao.UserDao
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.repositories.OrderRepository
-import com.onlytechtake.repairapp.domain.workspace.*
+import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
+import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
+import com.onlytechtake.repairapp.domain.workspace.OrderDetail
+import com.onlytechtake.repairapp.domain.workspace.OrderFilter
+import com.onlytechtake.repairapp.domain.workspace.OrderListItem
+import com.onlytechtake.repairapp.domain.workspace.RepairOrderInput
 import kotlinx.coroutines.flow.Flow
 
 class OrderWorkflowRepository(
@@ -76,7 +89,8 @@ class OrderWorkflowRepository(
         filter: OrderFilter,
     ): Flow<List<OrderListItem>> = queries.observeOrderList(actor, filter)
 
-    override fun observeOrderDetail(orderId: String): Flow<OrderDetail?> = queries.observeOrderDetail(orderId)
+    override fun observeOrderDetail(orderId: String): Flow<OrderDetail?> =
+        queries.observeOrderDetail(orderId)
 
     override suspend fun createOrder(
         actor: AuthenticatedUser,
@@ -132,4 +146,45 @@ class OrderWorkflowRepository(
         orderId: String,
         isPaid: Boolean,
     ): Result<Unit> = commands.togglePaymentStatus(actor, orderId, isPaid)
+
+    override suspend fun deleteOrder(
+        actor: AuthenticatedUser,
+        orderId: String,
+    ): Result<Unit> =
+        commands.deleteOrder(
+            actor = actor,
+            orderId = orderId,
+            timelineEventDao = timelineEventDao,
+            orderMediaDao = orderMediaDao,
+            signatureDao = signatureDao,
+            orderDocumentDao = database?.orderDocumentDao()
+                ?: error("OrderDocumentDao unavailable"),
+            auditLogDao = auditLogDao,
+            fileCleanupService = OrderFileCleanupService(
+                context,
+                com.onlytechtake.repairapp.core.media.MediaStorageProvider(context)
+            ),
+        )
+
+    override suspend fun deleteSignature(
+        actor: AuthenticatedUser,
+        signatureId: String,
+    ): Result<Unit> =
+        runCatching {
+            val sig =
+                requireNotNull(signatureDao.findById(signatureId)) { "Firma non trovata" }
+            if (sig.createdByUserId != actor.id) {
+                com.onlytechtake.repairapp.core.permissions.PermissionService.requirePermission(
+                    actor,
+                    com.onlytechtake.repairapp.data.local.entities.UserPermission.EDIT_ALL_ORDERS
+                )
+            }
+            signatureDao.deleteById(signatureId)
+            OrderFileCleanupService(
+                context,
+                com.onlytechtake.repairapp.core.media.MediaStorageProvider(context)
+            ).deleteSpecificFile(sig.localPath)
+            commands.recordMediaRemoved(actor, sig.orderId, sig.fileName)
+            Unit
+        }
 }

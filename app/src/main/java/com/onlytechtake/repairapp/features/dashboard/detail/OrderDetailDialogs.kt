@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.features.dashboard.detail
 
 import android.content.Context
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.rememberScrollState
@@ -15,7 +16,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppDialog
+import com.onlytechtake.repairapp.core.design.components.AppTextField
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.core.utils.parseEuroCentsOrNull
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
@@ -90,7 +95,10 @@ fun OrderStatusActionDialog(
                             imeAction = ImeAction.Next,
                             testTag = RepairAppTestTags.StatusResultSummaryField,
                         )
-                        Text(stringResource(R.string.order_not_repairable_title), style = MaterialTheme.typography.titleSmall)
+                        Text(
+                            stringResource(R.string.order_not_repairable_title),
+                            style = MaterialTheme.typography.titleSmall
+                        )
                         QuoteDecisionRow(
                             text = stringResource(R.string.order_diagnosis_repairable),
                             checked = state.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE,
@@ -131,7 +139,10 @@ fun OrderStatusActionDialog(
                         )
                     }
                     if (isClosure) {
-                        Text(stringResource(R.string.order_closure_reason_title), style = MaterialTheme.typography.titleSmall)
+                        Text(
+                            stringResource(R.string.order_closure_reason_title),
+                            style = MaterialTheme.typography.titleSmall
+                        )
                         ActionRow {
                             ClosureReason.entries.forEach { reason ->
                                 val selectedReason = state.closureReason == reason
@@ -139,7 +150,9 @@ fun OrderStatusActionDialog(
                                     text = reason.label(context),
                                     variant = if (selectedReason) AppButtonVariant.Success else AppButtonVariant.Secondary,
                                     selected = selectedReason,
-                                    stateDescription = if (selectedReason) stringResource(R.string.state_selected) else stringResource(R.string.state_not_selected),
+                                    stateDescription = if (selectedReason) stringResource(R.string.state_selected) else stringResource(
+                                        R.string.state_not_selected
+                                    ),
                                     testTag = RepairAppTestTags.closureReason(reason.name),
                                     onClick = { state.closureReason = reason },
                                     size = AppButtonSize.Compact,
@@ -160,6 +173,7 @@ fun OrderStatusActionDialog(
                                     outcome = state.diagnosisOutcome,
                                     estimateAmountCents = parseEuroCentsOrNull(state.resultAmount),
                                 )
+
                             isClosure -> (state.closureReason != null) && ((state.closureReason != ClosureReason.OTHER) || state.statusNote.isNotBlank())
                             else -> true
                         },
@@ -268,6 +282,64 @@ fun OrderPdfSentConfirmationDialog(
                     text = stringResource(R.string.no_cancel),
                     onClick = onDismiss,
                     variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact,
+                )
+            },
+        )
+    }
+}
+
+@Composable
+fun WhatsAppPreviewDialog(
+    prepared: com.onlytechtake.repairapp.domain.workspace.PreparedMessage?,
+    body: String,
+    onBodyChange: (String) -> Unit,
+    onOpenWhatsApp: () -> Unit,
+    onConfirmSent: () -> Unit,
+    onClose: () -> Unit,
+) {
+    if (prepared != null) {
+        AppDialog(
+            onDismissRequest = onClose,
+            title = stringResource(R.string.order_wa_preview_title),
+            content = {
+                Column(
+                    modifier = Modifier.verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
+                ) {
+                    Text(
+                        text = "Template: ${prepared.templateName}",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+
+                    com.onlytechtake.repairapp.core.design.components.AppMessageBanner(
+                        message = stringResource(R.string.order_wa_sending_to, prepared.phone),
+                        type = com.onlytechtake.repairapp.core.design.components.BannerType.Info,
+                    )
+
+                    AppTextField(
+                        value = body,
+                        onValueChange = onBodyChange,
+                        label = stringResource(R.string.order_wa_message_label),
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = false,
+                    )
+                }
+            },
+            confirmButton = {
+                AppButton(
+                    text = stringResource(R.string.order_wa_sent),
+                    variant = AppButtonVariant.Success,
+                    onClick = onConfirmSent,
+                    size = AppButtonSize.Compact,
+                )
+            },
+            dismissButton = {
+                AppButton(
+                    text = stringResource(R.string.order_wa_open),
+                    variant = AppButtonVariant.WhatsApp,
+                    onClick = onOpenWhatsApp,
                     size = AppButtonSize.Compact,
                 )
             },

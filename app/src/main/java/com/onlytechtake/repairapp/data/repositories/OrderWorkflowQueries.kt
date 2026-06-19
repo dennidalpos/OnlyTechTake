@@ -1,6 +1,13 @@
 package com.onlytechtake.repairapp.data.repositories
 
-import com.onlytechtake.repairapp.data.local.dao.*
+import com.onlytechtake.repairapp.data.local.dao.CustomerDao
+import com.onlytechtake.repairapp.data.local.dao.MessageLogDao
+import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
+import com.onlytechtake.repairapp.data.local.dao.OrderMediaDao
+import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
+import com.onlytechtake.repairapp.data.local.dao.SignatureDao
+import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
+import com.onlytechtake.repairapp.data.local.dao.UserDao
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
@@ -8,7 +15,9 @@ import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.domain.workspace.OrderListItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class OrderWorkflowQueries(
@@ -25,11 +34,28 @@ internal class OrderWorkflowQueries(
         actor: AuthenticatedUser,
         filter: OrderFilter,
     ): Flow<List<RepairOrderEntity>> {
-        val assignedToUserId = actor.id.takeIf { filter.showMineOnly }
+        val assignedToUserId =
+            if (filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.MINE || filter.showMineOnly) actor.id else null
+        val unassignedOnly =
+            filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED
+        val assignedOnly =
+            filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS
+        val isClosed = when (filter.mode) {
+            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> true
+            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
+            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
+                -> false
+
+            else -> null
+        }
+
         return repairOrderDao.observeFiltered(
             assignedToUserId = assignedToUserId,
             status = filter.status,
             customerId = filter.customerId,
+            unassignedOnly = unassignedOnly,
+            assignedOnly = assignedOnly,
+            isClosed = isClosed,
         )
     }
 
@@ -39,13 +65,30 @@ internal class OrderWorkflowQueries(
         actor: AuthenticatedUser,
         filter: OrderFilter,
     ): Flow<List<OrderListItem>> {
-        val assignedToUserId = actor.id.takeIf { filter.showMineOnly }
+        val assignedToUserId =
+            if (filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.MINE || filter.showMineOnly) actor.id else null
+        val unassignedOnly =
+            filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED
+        val assignedOnly =
+            filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS
+        val isClosed = when (filter.mode) {
+            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> true
+            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
+            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
+                -> false
+
+            else -> null
+        }
+
         return repairOrderDao
             .search(
                 query = filter.query,
                 assignedToUserId = assignedToUserId,
                 status = filter.status,
                 customerId = filter.customerId,
+                unassignedOnly = unassignedOnly,
+                assignedOnly = assignedOnly,
+                isClosed = isClosed,
             ).map { list ->
                 list.map { projection ->
                     OrderListItem(
@@ -67,12 +110,29 @@ internal class OrderWorkflowQueries(
         actor: AuthenticatedUser,
         filter: OrderFilter,
     ): Flow<List<OrderListItem>> {
-        val assignedToUserId = actor.id.takeIf { filter.showMineOnly }
+        val assignedToUserId =
+            if (filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.MINE || filter.showMineOnly) actor.id else null
+        val unassignedOnly =
+            filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED
+        val assignedOnly =
+            filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS
+        val isClosed = when (filter.mode) {
+            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> true
+            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
+            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
+                -> false
+
+            else -> null
+        }
+
         return repairOrderDao
             .observeOrderListProjection(
                 assignedToUserId = assignedToUserId,
                 status = filter.status,
                 customerId = filter.customerId,
+                unassignedOnly = unassignedOnly,
+                assignedOnly = assignedOnly,
+                isClosed = isClosed,
             ).map { list ->
                 list.map { projection ->
                     OrderListItem(

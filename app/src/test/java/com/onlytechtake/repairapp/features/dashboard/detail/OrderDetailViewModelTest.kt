@@ -68,7 +68,8 @@ class OrderDetailViewModelTest {
                     username = "operatore",
                     role = UserRole.OPERATOR,
                 )
-            val pdf = File(testRoot, "stato.pdf").absoluteFile.apply { writeBytes(byteArrayOf(1, 2, 3)) }
+            val pdf =
+                File(testRoot, "stato.pdf").absoluteFile.apply { writeBytes(byteArrayOf(1, 2, 3)) }
             val documentRepository =
                 FakeOrderDocumentRepository(
                     document(
@@ -79,10 +80,21 @@ class OrderDetailViewModelTest {
                 )
             val orderRepository = mockk<OrderWorkflowRepository>()
             every { orderRepository.observeOrderDetail("order-1") } returns flowOf(null)
-            coEvery { orderRepository.recordPdfShared(actor, "order-1", "stato.pdf") } returns Result.success(Unit)
+            coEvery {
+                orderRepository.recordPdfShared(
+                    actor,
+                    "order-1",
+                    "stato.pdf"
+                )
+            } returns Result.success(Unit)
 
             val shareFactory = mockk<ShareDocumentIntentFactory>()
-            every { shareFactory.createPdfShareIntent(pdf, "Documento stato.pdf") } returns mockk<Intent>(relaxed = true)
+            every {
+                shareFactory.createPdfShareIntent(
+                    pdf,
+                    "Documento stato.pdf"
+                )
+            } returns mockk<Intent>(relaxed = true)
 
             val viewModel =
                 OrderDetailViewModel(
@@ -157,7 +169,8 @@ class OrderDetailViewModelTest {
 
         override suspend fun findById(id: String): OrderDocumentEntity? = documents[id]
 
-        override fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>> = documentsFlow
+        override fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>> =
+            documentsFlow
 
         override suspend fun delete(documentId: String): Result<Unit> =
             runCatching {
@@ -192,7 +205,8 @@ class OrderDetailViewModelTest {
             newPassword: CharArray,
         ): Result<Unit> = error("changePassword is not expected")
 
-        override suspend fun getRecoveryKit(): Result<String> = error("getRecoveryKit is not expected")
+        override suspend fun getRecoveryKit(): Result<String> =
+            error("getRecoveryKit is not expected")
 
         override suspend fun resetAdminWithRecoveryCode(
             code: String,

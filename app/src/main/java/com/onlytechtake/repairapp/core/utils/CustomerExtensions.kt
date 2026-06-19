@@ -27,6 +27,7 @@ fun CustomerEntity?.displayName(
                 listOfNotNull(firstName, lastName)
                     .joinToString(" ")
                     .ifBlank { unnamedPrivate }
+
             CustomerType.BUSINESS ->
                 companyName
                     .orEmpty()

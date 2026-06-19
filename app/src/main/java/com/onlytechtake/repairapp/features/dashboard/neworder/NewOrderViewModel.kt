@@ -33,7 +33,7 @@ import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class NewOrderViewModel(
-    private val authRepository: AuthRepository,
+    authRepository: AuthRepository,
     private val customerRepository: CustomerRepository,
     private val catalogRepository: CatalogRepository,
     private val orderMediaRepository: OrderMediaRepository,
@@ -50,9 +50,6 @@ class NewOrderViewModel(
     private val _customerSearchQuery = MutableStateFlow("")
     val customerSearchQuery = _customerSearchQuery.asStateFlow()
 
-    private val _isFormDirty = MutableStateFlow(false)
-    val isFormDirty = _isFormDirty.asStateFlow()
-
     val currentUser = authRepository.currentUser
 
     val customerSuggestions =
@@ -61,7 +58,9 @@ class NewOrderViewModel(
             .distinctUntilChanged()
             .debounce { query -> if (query.isBlank()) 0L else 300L }
             .flatMapLatest { query ->
-                if (query.isBlank()) customerRepository.observeRecent() else customerRepository.search(query)
+                if (query.isBlank()) customerRepository.observeRecent() else customerRepository.search(
+                    query,
+                )
             }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     val categories =
@@ -80,7 +79,6 @@ class NewOrderViewModel(
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyMap())
 
     fun setFormDirty(dirty: Boolean) {
-        _isFormDirty.value = dirty
         onSetFormDirty(dirty)
     }
 
@@ -98,7 +96,6 @@ class NewOrderViewModel(
 
     fun resetQuickIntakeDraft() {
         _quickIntakeDraft.value = QuickIntakeDraft()
-        _isFormDirty.value = false
         onSetFormDirty(false)
         _customerSearchQuery.value = ""
     }
@@ -110,8 +107,9 @@ class NewOrderViewModel(
         viewModelScope.launch {
             customerRepository.save(currentUser.value, input).fold(
                 onSuccess = { onSaved(it) },
-                onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) },
-            )
+            ) { error ->
+                _message.value = WorkspaceMessage(error.message ?: "Errore", true)
+            }
         }
     }
 
@@ -123,7 +121,9 @@ class NewOrderViewModel(
         viewModelScope.launch {
             orderMediaRepository.importIntakeAttachment(sessionId, uri).fold(
                 onSuccess = { onStaged(it) },
-                onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) },
+                onFailure = { error ->
+                    _message.value = WorkspaceMessage(error.message ?: "Errore", true)
+                },
             )
         }
     }
@@ -142,12 +142,15 @@ class NewOrderViewModel(
         viewModelScope.launch {
             orderMediaRepository.replaceStagedImage(staged, bitmap).fold(
                 onSuccess = { onReplaced(it) },
-                onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) },
+                onFailure = { error ->
+                    _message.value = WorkspaceMessage(error.message ?: "Errore", true)
+                },
             )
         }
     }
 
-    fun createIntakePhotoFile(sessionId: String): Result<File> = runCatching { orderMediaRepository.createIntakePhotoFile(sessionId) }
+    fun createIntakePhotoFile(sessionId: String): Result<File> =
+        runCatching { orderMediaRepository.createIntakePhotoFile(sessionId) }
 
     fun stageCapturedIntakePhoto(
         file: File,
@@ -156,7 +159,9 @@ class NewOrderViewModel(
         viewModelScope.launch {
             orderMediaRepository.stageCapturedIntakePhoto(file).fold(
                 onSuccess = { onStaged(it) },
-                onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) },
+                onFailure = { error ->
+                    _message.value = WorkspaceMessage(error.message ?: "Errore", true)
+                },
             )
         }
     }
@@ -187,7 +192,9 @@ class NewOrderViewModel(
                     signatureBitmap = signatureBitmap,
                 ).fold(
                     onSuccess = { onCreated() },
-                    onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) },
+                    onFailure = { error ->
+                        _message.value = WorkspaceMessage(error.message ?: "Errore", true)
+                    },
                 )
         }
     }

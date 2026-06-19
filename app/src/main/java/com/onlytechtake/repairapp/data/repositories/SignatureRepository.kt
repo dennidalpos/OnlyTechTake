@@ -52,8 +52,10 @@ class SignatureRepository(
             require(bitmap.width > 0 && bitmap.height > 0) { "Firma non valida" }
 
             val now = clockMillis()
-            val privacyCode = settingDao.findByKey(TemplateAnchor.PRIVACY_TEXT.settingKey)?.value ?: TemplateAnchor.PRIVACY_TEXT.defaultCode
-            val termsCode = settingDao.findByKey(TemplateAnchor.TERMS_TEXT.settingKey)?.value ?: TemplateAnchor.TERMS_TEXT.defaultCode
+            val privacyCode = settingDao.findByKey(TemplateAnchor.PRIVACY_TEXT.settingKey)?.value
+                ?: TemplateAnchor.PRIVACY_TEXT.defaultCode
+            val termsCode = settingDao.findByKey(TemplateAnchor.TERMS_TEXT.settingKey)?.value
+                ?: TemplateAnchor.TERMS_TEXT.defaultCode
 
             val privacyTemplate = templateDao.findActiveByCode(privacyCode)
             val termsTemplate = templateDao.findActiveByCode(termsCode)
@@ -61,7 +63,13 @@ class SignatureRepository(
             val file = File(directory, "signature_$now.png")
 
             FileOutputStream(file).use { output ->
-                check(bitmap.compress(Bitmap.CompressFormat.PNG, PNG_QUALITY, output)) { "Salvataggio firma non riuscito" }
+                check(
+                    bitmap.compress(
+                        Bitmap.CompressFormat.PNG,
+                        PNG_QUALITY,
+                        output
+                    )
+                ) { "Salvataggio firma non riuscito" }
             }
 
             val signature =
@@ -71,7 +79,8 @@ class SignatureRepository(
                     signerName = signerName.trim().ifBlank { DEFAULT_SIGNER_NAME },
                     privacyAccepted = privacyAccepted,
                     termsAccepted = termsAccepted,
-                    privacyTextSnapshot = privacyTemplate?.body ?: LegalTemplateFallbacks.PrivacyText,
+                    privacyTextSnapshot = privacyTemplate?.body
+                        ?: LegalTemplateFallbacks.PrivacyText,
                     privacyTemplateVersion = privacyTemplate?.version ?: 0,
                     termsTextSnapshot = termsTemplate?.body ?: LegalTemplateFallbacks.TermsText,
                     termsTemplateVersion = termsTemplate?.version ?: 0,

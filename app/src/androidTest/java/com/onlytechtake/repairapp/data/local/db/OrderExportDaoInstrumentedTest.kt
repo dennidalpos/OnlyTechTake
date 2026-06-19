@@ -49,11 +49,33 @@ class OrderExportDaoInstrumentedTest {
             seedCoreData()
             seedOrder(id = "order-paid", orderNumber = "RIP-2026-000002")
             seedOrder(id = "order-unpaid", orderNumber = "RIP-2026-000001")
-            database.timelineEventDao().upsert(paymentEvent("payment-old", "order-paid", TimelineEventType.PAYMENT_REMOVED, 100L))
-            database.timelineEventDao().upsert(paymentEvent("payment-new", "order-paid", TimelineEventType.PAYMENT_RECEIVED, 200L))
-            database.timelineEventDao().upsert(paymentEvent("payment-removed", "order-unpaid", TimelineEventType.PAYMENT_REMOVED, 300L))
+            database.timelineEventDao().upsert(
+                paymentEvent(
+                    "payment-old",
+                    "order-paid",
+                    TimelineEventType.PAYMENT_REMOVED,
+                    100L
+                )
+            )
+            database.timelineEventDao().upsert(
+                paymentEvent(
+                    "payment-new",
+                    "order-paid",
+                    TimelineEventType.PAYMENT_RECEIVED,
+                    200L
+                )
+            )
+            database.timelineEventDao().upsert(
+                paymentEvent(
+                    "payment-removed",
+                    "order-unpaid",
+                    TimelineEventType.PAYMENT_REMOVED,
+                    300L
+                )
+            )
 
-            val rowsByNumber = database.orderExportDao().exportAllOrders().associateBy { it.orderNumber }
+            val rowsByNumber =
+                database.orderExportDao().exportAllOrders().associateBy { it.orderNumber }
 
             assertEquals(setOf("RIP-2026-000001", "RIP-2026-000002"), rowsByNumber.keys)
             assertTrue(rowsByNumber.getValue("RIP-2026-000002").isPaid)
@@ -133,7 +155,8 @@ class OrderExportDaoInstrumentedTest {
                 updatedAt = now,
             ),
         )
-        database.orderCategoryDao().upsert(OrderCategoryEntity("cat-1", null, 0, "Smartphone", null, true))
+        database.orderCategoryDao()
+            .upsert(OrderCategoryEntity("cat-1", null, 0, "Smartphone", null, true))
         database.customerDao().upsert(
             CustomerEntity(
                 id = "customer-1",

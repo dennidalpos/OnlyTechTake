@@ -124,7 +124,8 @@ abstract class RepairAppDatabase : RoomDatabase() {
                                             db: SupportSQLiteDatabase,
                                             oldVersion: Int,
                                             newVersion: Int,
-                                        ) {}
+                                        ) {
+                                        }
                                     },
                                 ).build()
                         val helper = factory.create(config)
@@ -137,7 +138,11 @@ abstract class RepairAppDatabase : RoomDatabase() {
                             if (message.contains("file is not a database") ||
                                 e is net.zetetic.database.sqlcipher.SQLiteNotADatabaseException
                             ) {
-                                android.util.Log.e("RepairAppDatabase", "Database corruption or wrong key detected. Wiping database.", e)
+                                android.util.Log.e(
+                                    "RepairAppDatabase",
+                                    "Database corruption or wrong key detected. Wiping database.",
+                                    e
+                                )
                                 helper.close()
                                 context.deleteDatabase(DATABASE_NAME)
                                 context.deleteDatabase("$DATABASE_NAME-wal")

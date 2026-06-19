@@ -112,7 +112,16 @@ private fun CustomerInput.isValidForIntake(): Boolean {
     return hasContact && hasName
 }
 
+enum class OrderFilterMode {
+    ALL,
+    MINE,
+    OPEN_UNASSIGNED,
+    CLOSED,
+    IN_PROGRESS
+}
+
 data class OrderFilter(
+    val mode: OrderFilterMode = OrderFilterMode.ALL,
     val showMineOnly: Boolean = false,
     val status: OrderStatus? = null,
     val statuses: Set<OrderStatus> = emptySet(),
@@ -156,6 +165,7 @@ data class PreparedMessage(
     val customerId: String,
     val phone: String,
     val body: String,
+    val templateName: String,
 )
 
 data class FeedbackInput(
@@ -185,4 +195,5 @@ fun DiagnosisResultInput.validationErrors(): List<String> =
         }
     }
 
-fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? = estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }
+fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? =
+    estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }

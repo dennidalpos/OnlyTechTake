@@ -5,13 +5,28 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
-import com.onlytechtake.repairapp.data.local.entities.*
+import com.onlytechtake.repairapp.data.local.entities.ClosureReason
+import com.onlytechtake.repairapp.data.local.entities.CustomerActionStatus
+import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
+import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
+import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
+import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderPriority
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
+import com.onlytechtake.repairapp.data.local.entities.TimelineEventType
+import com.onlytechtake.repairapp.data.local.entities.UserEntity
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
+import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -97,7 +112,11 @@ class OrderWorkflowRepositoryInstrumentedTest {
     fun changeStatusToClosedRequiresCloseOrdersPermission() =
         runBlocking {
             val actor = mockOperator(permissions = setOf(UserPermission.EDIT_OWN_ORDERS))
-            seedCoreData(userId = actor.id, role = UserRole.OPERATOR, permissions = actor.permissions)
+            seedCoreData(
+                userId = actor.id,
+                role = UserRole.OPERATOR,
+                permissions = actor.permissions
+            )
             val order = createTestOrder(assignedToUserId = actor.id)
 
             val result =
@@ -117,8 +136,17 @@ class OrderWorkflowRepositoryInstrumentedTest {
     @Test
     fun changeStatusToClosedSucceedsWithCloseOrdersPermission() =
         runBlocking {
-            val actor = mockOperator(permissions = setOf(UserPermission.EDIT_OWN_ORDERS, UserPermission.CLOSE_ORDERS))
-            seedCoreData(userId = actor.id, role = UserRole.OPERATOR, permissions = actor.permissions)
+            val actor = mockOperator(
+                permissions = setOf(
+                    UserPermission.EDIT_OWN_ORDERS,
+                    UserPermission.CLOSE_ORDERS
+                )
+            )
+            seedCoreData(
+                userId = actor.id,
+                role = UserRole.OPERATOR,
+                permissions = actor.permissions
+            )
             val order = createTestOrder(assignedToUserId = actor.id)
 
             val result =
@@ -140,7 +168,11 @@ class OrderWorkflowRepositoryInstrumentedTest {
     fun recordFeedbackRejectRequiresCloseOrdersPermission() =
         runBlocking {
             val actor = mockOperator(permissions = setOf(UserPermission.EDIT_OWN_ORDERS))
-            seedCoreData(userId = actor.id, role = UserRole.OPERATOR, permissions = actor.permissions)
+            seedCoreData(
+                userId = actor.id,
+                role = UserRole.OPERATOR,
+                permissions = actor.permissions
+            )
             val order =
                 createTestOrder(
                     assignedToUserId = actor.id,
@@ -165,8 +197,17 @@ class OrderWorkflowRepositoryInstrumentedTest {
     @Test
     fun recordFeedbackRejectSucceedsWithCloseOrdersPermission() =
         runBlocking {
-            val actor = mockOperator(permissions = setOf(UserPermission.EDIT_OWN_ORDERS, UserPermission.CLOSE_ORDERS))
-            seedCoreData(userId = actor.id, role = UserRole.OPERATOR, permissions = actor.permissions)
+            val actor = mockOperator(
+                permissions = setOf(
+                    UserPermission.EDIT_OWN_ORDERS,
+                    UserPermission.CLOSE_ORDERS
+                )
+            )
+            seedCoreData(
+                userId = actor.id,
+                role = UserRole.OPERATOR,
+                permissions = actor.permissions
+            )
             val order =
                 createTestOrder(
                     assignedToUserId = actor.id,
@@ -230,7 +271,23 @@ class OrderWorkflowRepositoryInstrumentedTest {
             ),
         )
         database.orderCategoryDao().upsert(OrderCategoryEntity("cat-1", null, 0, "Cat", null, true))
-        database.customerDao().upsert(CustomerEntity("cust-1", CustomerType.PRIVATE, "M", "R", null, null, null, "1", null, null, null, now, now))
+        database.customerDao().upsert(
+            CustomerEntity(
+                "cust-1",
+                CustomerType.PRIVATE,
+                "M",
+                "R",
+                null,
+                null,
+                null,
+                "1",
+                null,
+                null,
+                null,
+                now,
+                now
+            )
+        )
     }
 
     private suspend fun createTestOrder(

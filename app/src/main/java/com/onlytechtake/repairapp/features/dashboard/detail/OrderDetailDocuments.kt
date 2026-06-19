@@ -19,7 +19,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppIconButton
+import com.onlytechtake.repairapp.core.design.components.AppMessageBanner
+import com.onlytechtake.repairapp.core.design.components.BannerType
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
 
@@ -44,7 +50,11 @@ fun OrderDocumentSection(
             modifier = Modifier.padding(RepairAppSpacing.cardPadding),
             verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
         ) {
-            Text(stringResource(R.string.order_customer_documents), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(
+                stringResource(R.string.order_customer_documents),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+            )
 
             AppButton(
                 text = stringResource(R.string.order_generate_status_pdf),
@@ -73,17 +83,32 @@ fun OrderDocumentSection(
             }
 
             if (documents.isNotEmpty()) {
-                Text(stringResource(R.string.order_document_history), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.outline)
+                Text(
+                    stringResource(R.string.order_document_history),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.outline
+                )
                 documents.forEach { doc ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Column(modifier = Modifier.weight(1f).clickable { onShareDocument(doc.id) }) {
-                            Text(doc.fileName, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .clickable { onShareDocument(doc.id) },
+                        ) {
                             Text(
-                                text = stringResource(R.string.order_document_generated, formatUiDateTime(doc.createdAt)) + (if (doc.sharedAt != null) " (${stringResource(R.string.order_wa_sent)})" else ""),
+                                doc.fileName,
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Medium,
+                            )
+                            Text(
+                                text = stringResource(
+                                    R.string.order_document_generated,
+                                    formatUiDateTime(doc.createdAt)
+                                ) + (if (doc.sharedAt != null) " (${stringResource(R.string.order_wa_sent)})" else ""),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.secondary,
                             )

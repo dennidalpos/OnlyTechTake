@@ -2,10 +2,18 @@ package com.onlytechtake.repairapp.features.dashboard.home
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.onlytechtake.repairapp.BuildConfig
@@ -13,7 +21,14 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppMessageBanner
+import com.onlytechtake.repairapp.core.design.components.AppMetricCard
+import com.onlytechtake.repairapp.core.design.components.AppQueueCard
+import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
+import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.domain.models.AppSummary
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
@@ -111,7 +126,8 @@ fun HomePanel(
                 AppQueueCard(
                     title = queue.title,
                     count = queue.orders.size,
-                    lastElementTitle = queue.orders.firstOrNull()?.let { "${it.orderNumber} - ${it.title}" },
+                    lastElementTitle = queue.orders.firstOrNull()
+                        ?.let { "${it.orderNumber} - ${it.title}" },
                     onOpenQueue = { onOpenQueue(queueFilter(queue)) },
                     modifier = Modifier.padding(bottom = RepairAppSpacing.cardGap),
                 )

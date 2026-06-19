@@ -70,7 +70,13 @@ class CreateIntakeOrderUseCaseTest {
             coEvery {
                 signatureRepository.saveSignature(actor, order.id, "Mario Rossi", true, true, any())
             } returns Result.success(signature(order.id))
-            coEvery { orderMediaRepository.attachStagedMedia(actor, order.id, stagedMedia) } returns Result.success(emptyList())
+            coEvery {
+                orderMediaRepository.attachStagedMedia(
+                    actor,
+                    order.id,
+                    stagedMedia
+                )
+            } returns Result.success(emptyList())
 
             val useCase =
                 CreateIntakeOrderUseCase(
@@ -101,8 +107,23 @@ class CreateIntakeOrderUseCaseTest {
             assertEquals(IntakeOrderCreationResult.Complete(order), result.getOrThrow())
             coVerify(exactly = 1) { customerRepository.save(actor, newCustomer) }
             coVerify(exactly = 1) { orderRepository.createOrder(actor, any()) }
-            coVerify(exactly = 1) { signatureRepository.saveSignature(actor, order.id, "Mario Rossi", true, true, any()) }
-            coVerify(exactly = 1) { orderMediaRepository.attachStagedMedia(actor, order.id, stagedMedia) }
+            coVerify(exactly = 1) {
+                signatureRepository.saveSignature(
+                    actor,
+                    order.id,
+                    "Mario Rossi",
+                    true,
+                    true,
+                    any()
+                )
+            }
+            coVerify(exactly = 1) {
+                orderMediaRepository.attachStagedMedia(
+                    actor,
+                    order.id,
+                    stagedMedia
+                )
+            }
         }
 
     private fun customer() =

@@ -6,14 +6,26 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
-import com.onlytechtake.repairapp.data.local.entities.*
+import com.onlytechtake.repairapp.data.local.entities.CustomerActionStatus
+import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
+import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
+import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderPriority
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
+import com.onlytechtake.repairapp.data.local.entities.UserEntity
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
+import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -72,7 +84,10 @@ class DataResetRepositoryInstrumentedTest {
             orderFile.writeText("test")
 
             val result = repository.resetAll(actor, "RESET")
-            assertTrue("Reset should be successful: ${result.exceptionOrNull()?.message}", result.isSuccess)
+            assertTrue(
+                "Reset should be successful: ${result.exceptionOrNull()?.message}",
+                result.isSuccess
+            )
 
             // Users should be gone (resetAll deletes all tables)
             val users = database.userDao().observeAll().first()
@@ -168,7 +183,23 @@ class DataResetRepositoryInstrumentedTest {
             ),
         )
         database.orderCategoryDao().upsert(OrderCategoryEntity("cat-1", null, 0, "Cat", null, true))
-        database.customerDao().upsert(CustomerEntity("cust-1", CustomerType.PRIVATE, "M", "R", null, null, null, "1", null, null, null, now, now))
+        database.customerDao().upsert(
+            CustomerEntity(
+                "cust-1",
+                CustomerType.PRIVATE,
+                "M",
+                "R",
+                null,
+                null,
+                null,
+                "1",
+                null,
+                null,
+                null,
+                now,
+                now
+            )
+        )
         database.repairOrderDao().upsert(
             RepairOrderEntity(
                 id = "order-1",

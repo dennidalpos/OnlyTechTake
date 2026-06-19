@@ -63,17 +63,35 @@ class StatusWorkflowTest {
     fun statusMessageTemplateUsesSpecialCases() {
         assertEquals(
             TemplateAnchor.WHATSAPP_QUOTE,
-            statusTemplateAnchor(order(OrderStatus.RESULT, diagnosisOutcome = DiagnosisOutcome.REPAIRABLE)),
+            statusTemplateAnchor(
+                order(
+                    OrderStatus.RESULT,
+                    diagnosisOutcome = DiagnosisOutcome.REPAIRABLE
+                )
+            ),
         )
         assertEquals(
             TemplateAnchor.WHATSAPP_NOT_REPAIRABLE,
-            statusTemplateAnchor(order(OrderStatus.RESULT, diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE)),
+            statusTemplateAnchor(
+                order(
+                    OrderStatus.RESULT,
+                    diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE
+                )
+            ),
         )
         assertEquals(
             TemplateAnchor.WHATSAPP_NOT_REPAIRABLE,
-            statusTemplateAnchor(order(OrderStatus.CLOSED, closureReason = ClosureReason.NOT_REPAIRABLE)),
+            statusTemplateAnchor(
+                order(
+                    OrderStatus.CLOSED,
+                    closureReason = ClosureReason.NOT_REPAIRABLE
+                )
+            ),
         )
-        assertEquals(TemplateAnchor.WHATSAPP_DIAGNOSIS, statusTemplateAnchor(order(OrderStatus.DIAGNOSIS)))
+        assertEquals(
+            TemplateAnchor.WHATSAPP_DIAGNOSIS,
+            statusTemplateAnchor(order(OrderStatus.DIAGNOSIS))
+        )
     }
 
     private fun order(

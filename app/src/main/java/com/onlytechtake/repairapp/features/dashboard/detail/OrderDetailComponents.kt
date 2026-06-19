@@ -3,13 +3,19 @@ package com.onlytechtake.repairapp.features.dashboard.detail
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Message
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.*
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,7 +29,17 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppBadge
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppDivider
+import com.onlytechtake.repairapp.core.design.components.AppIconButton
+import com.onlytechtake.repairapp.core.design.components.AppMessageBanner
+import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
+import com.onlytechtake.repairapp.core.design.components.AppTextField
+import com.onlytechtake.repairapp.core.design.components.BannerType
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.core.utils.displayName
@@ -58,45 +74,14 @@ fun OrderHeader(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Top,
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
-                        Text(
-                            text = detail.order.orderNumber,
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.Bold,
-                        )
-                        AppStatusBadge(
-                            text = detail.order.status.label(context),
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            modifier = Modifier.testTag(RepairAppTestTags.OrderStatusLabel),
-                        )
-                    }
-                    Text(
-                        text = stringResource(R.string.orders_order_reference, detail.order.orderNumber, detail.order.title),
-                        modifier = Modifier.testTag(RepairAppTestTags.OrderDetailOrderReference),
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                    )
-                    Text(
-                        text =
-                            stringResource(
-                                R.string.orders_customer_reference,
-                                detail.customer?.displayName(context) ?: stringResource(R.string.orders_customer_unavailable),
-                            ),
-                        modifier = Modifier.testTag(RepairAppTestTags.OrderDetailCustomerReference),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.secondary,
-                    )
-                    Text(
-                        text = detail.order.categoryPathSnapshot ?: detail.category?.name ?: stringResource(R.string.orders_category_unavailable),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.outline,
-                    )
-                }
+                Text(
+                    text = detail.order.orderNumber,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold,
+                )
                 if (detail.isPaid) {
                     AppBadge(
                         text = stringResource(R.string.order_paid_badge),
@@ -106,7 +91,33 @@ fun OrderHeader(
                 }
             }
 
-            AppDivider(modifier = Modifier.padding(vertical = RepairAppSpacing.tinyGap).alpha(0.5f))
+            Column {
+                Text(
+                    text = detail.order.title,
+                    modifier = Modifier.testTag(RepairAppTestTags.OrderDetailOrderReference),
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(
+                    text = detail.customer?.displayName(context)
+                        ?: stringResource(R.string.orders_customer_unavailable),
+                    modifier = Modifier.testTag(RepairAppTestTags.OrderDetailCustomerReference),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                Text(
+                    text = detail.category?.name ?: detail.order.categoryPathSnapshot?.split(">")?.lastOrNull()?.trim()
+                    ?: stringResource(R.string.orders_category_unavailable),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.outline,
+                )
+            }
+
+            AppDivider(
+                modifier = Modifier
+                    .padding(vertical = RepairAppSpacing.tinyGap)
+                    .alpha(0.5f),
+            )
 
             OrderStatusStepper(
                 status = detail.order.status,
@@ -116,10 +127,20 @@ fun OrderHeader(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Bottom,
             ) {
-                InfoMetadata(label = stringResource(R.string.order_updated_label), value = formatUiDateTime(detail.order.updatedAt))
-                detail.order.assignedToUserId?.let { InfoMetadata(label = stringResource(R.string.order_operator_label), value = it) }
+                InfoMetadata(
+                    label = stringResource(R.string.order_updated_label),
+                    value = formatUiDateTime(detail.order.updatedAt)
+                )
+                detail.order.assignedToUserId?.let {
+                    InfoMetadata(
+                        label = stringResource(R.string.order_operator_label),
+                        value = it,
+                        alignment = Alignment.End
+                    )
+                }
             }
         }
     }
@@ -129,10 +150,19 @@ fun OrderHeader(
 private fun InfoMetadata(
     label: String,
     value: String,
+    alignment: Alignment.Horizontal = Alignment.Start,
 ) {
-    Column {
-        Text(text = label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.outline)
-        Text(text = value, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+    Column(horizontalAlignment = alignment) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.outline
+        )
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodySmall,
+            fontWeight = FontWeight.Medium
+        )
     }
 }
 
@@ -144,6 +174,7 @@ fun OrderActionCard(
     onActionClick: (OrderStatusAction) -> Unit,
     onTogglePayment: () -> Unit,
     onSendWhatsApp: (TemplateAnchor) -> Unit,
+    onDeleteOrder: (() -> Unit)? = null,
 ) {
     val actions = availableOrderStatusActions(status)
     val primaryAction = actions.firstOrNull { !it.requiresConfirmation() } ?: actions.firstOrNull()
@@ -153,22 +184,47 @@ fun OrderActionCard(
         title = stringResource(R.string.order_actions_title),
         modifier = Modifier.testTag(RepairAppTestTags.OrderActionSection),
     ) {
-        Text(stringResource(R.string.order_next_action_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Text(
+            stringResource(R.string.order_next_action_title),
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold
+        )
 
-        if (primaryAction != null) {
+        primaryAction?.let {
             AppButton(
-                text = primaryAction.label,
-                onClick = { onActionClick(primaryAction) },
-                variant = if (primaryAction.requiresConfirmation()) AppButtonVariant.Warning else AppButtonVariant.Primary,
+                text = it.label,
+                onClick = { onActionClick(it) },
+                variant = if (it.requiresConfirmation()) AppButtonVariant.Warning else AppButtonVariant.Primary,
                 size = AppButtonSize.FullWidth,
-                testTag = RepairAppTestTags.statusAction(primaryAction.name),
+                testTag = RepairAppTestTags.statusAction(it.name),
+            )
+        }
+
+        AppButton(
+            text = stringResource(R.string.order_whatsapp_send),
+            variant = AppButtonVariant.WhatsApp,
+            onClick = { onSendWhatsApp(whatsAppAnchor) },
+            size = AppButtonSize.FullWidth,
+            leadingIcon = Icons.AutoMirrored.Filled.Message,
+            modifier = Modifier.testTag(RepairAppTestTags.OrderWhatsAppButton),
+        )
+
+        if (onDeleteOrder != null) {
+            AppButton(
+                text = stringResource(R.string.content_description_delete_order),
+                variant = AppButtonVariant.Danger,
+                onClick = onDeleteOrder,
+                size = AppButtonSize.Compact,
+                modifier = Modifier.align(Alignment.End),
             )
         }
 
         if (secondaryActions.isNotEmpty()) {
+            AppDivider(modifier = Modifier.alpha(0.3f))
             Text(
                 stringResource(R.string.order_secondary_actions_title),
-                style = MaterialTheme.typography.labelLarge,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             ActionRow {
@@ -192,7 +248,7 @@ fun OrderActionCard(
             )
         }
 
-        if (isPaid || status == OrderStatus.READY_FOR_PICKUP || status == OrderStatus.CLOSED) {
+        if ((isPaid || status == OrderStatus.READY_FOR_PICKUP || status == OrderStatus.CLOSED)) {
             AppDivider(modifier = Modifier.alpha(0.3f))
 
             Row(
@@ -212,23 +268,12 @@ fun OrderActionCard(
                 )
             }
         }
-
-        AppDivider(modifier = Modifier.alpha(0.3f))
-
-        AppButton(
-            text = stringResource(R.string.order_whatsapp_send),
-            variant = AppButtonVariant.WhatsApp,
-            onClick = { onSendWhatsApp(whatsAppAnchor) },
-            size = AppButtonSize.Compact,
-            leadingIcon = Icons.AutoMirrored.Filled.Message,
-            modifier = Modifier.fillMaxWidth().testTag(RepairAppTestTags.OrderWhatsAppButton),
-        )
     }
 }
 
 @Composable
 fun AppActionPanel(
-    title: String,
+    @Suppress("UNUSED_PARAMETER") title: String,
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {
@@ -255,7 +300,11 @@ fun QuoteDecisionPanel(
             modifier = Modifier.padding(RepairAppSpacing.cardPadding),
             verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
         ) {
-            Text(stringResource(R.string.order_quote_outcome), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(
+                stringResource(R.string.order_quote_outcome),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
 
             Row(horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap)) {
                 QuoteDecisionButton(
@@ -293,7 +342,11 @@ fun QuoteDecisionPanel(
                         if (quoteDecision == QuoteDecision.ACCEPTED) {
                             onConfirm(CustomerFeedbackType.ACCEPT, "Preventivo accettato", null)
                         } else {
-                            onConfirm(CustomerFeedbackType.REJECT, quoteRejectNote, ClosureReason.CUSTOMER_DECLINED)
+                            onConfirm(
+                                CustomerFeedbackType.REJECT,
+                                quoteRejectNote,
+                                ClosureReason.CUSTOMER_DECLINED
+                            )
                         }
                     },
                 )
@@ -338,7 +391,11 @@ fun QuoteDecisionRow(
                 .background(
                     if (checked) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else Color.Transparent,
                     RepairAppShapes.compactButton,
-                ).padding(horizontal = RepairAppSpacing.compactGap, vertical = RepairAppSpacing.compactGap),
+                )
+                .padding(
+                    horizontal = RepairAppSpacing.compactGap,
+                    vertical = RepairAppSpacing.compactGap
+                ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
     ) {
@@ -357,7 +414,11 @@ fun InternalNotesPanel(
             modifier = Modifier.padding(RepairAppSpacing.cardPadding),
             verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
         ) {
-            Text(stringResource(R.string.order_internal_notes), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(
+                stringResource(R.string.order_internal_notes),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
             notes?.takeIf { it.isNotBlank() }?.let {
                 OperatorText(it)
             }
@@ -372,70 +433,15 @@ fun InternalNotesPanel(
     }
 }
 
-@Composable
-fun WhatsAppPreviewPanel(
-    prepared: PreparedMessage,
-    body: String,
-    onBodyChange: (String) -> Unit,
-    onOpenWhatsApp: () -> Unit,
-    onConfirmSent: () -> Unit,
-    onClose: () -> Unit,
-) {
-    StandardCard(modifier = Modifier.testTag(RepairAppTestTags.OrderWhatsAppPreviewPanel)) {
-        Column(
-            modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
-        ) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(R.string.order_wa_preview_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                AppIconButton(
-                    imageVector = Icons.Default.Close,
-                    contentDescription = stringResource(R.string.order_wa_close_preview),
-                    onClick = onClose,
-                    modifier = Modifier.testTag(RepairAppTestTags.OrderWhatsAppClosePreviewButton),
-                )
-            }
-
-            AppMessageBanner(
-                message = stringResource(R.string.order_wa_sending_to, prepared.phone),
-                type = BannerType.Info,
-            )
-
-            AppTextField(
-                value = body,
-                onValueChange = onBodyChange,
-                label = stringResource(R.string.order_wa_message_label),
-                modifier = Modifier.fillMaxWidth(),
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.actionGap),
-            ) {
-                AppButton(
-                    modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.order_wa_open),
-                    variant = AppButtonVariant.WhatsApp,
-                    onClick = onOpenWhatsApp,
-                    size = AppButtonSize.Compact,
-                )
-                AppButton(
-                    modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.order_wa_sent),
-                    variant = AppButtonVariant.Success,
-                    onClick = onConfirmSent,
-                    size = AppButtonSize.Compact,
-                )
-            }
-        }
-    }
-}
 
 @Composable
 fun OrderTimelineSection(
     timeline: List<TimelineEventEntity>,
 ) {
-    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+    ) {
         SectionTitle(
             text = stringResource(R.string.order_timeline),
             tooltip = stringResource(R.string.order_timeline_tooltip),

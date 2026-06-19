@@ -44,7 +44,12 @@ import androidx.core.graphics.createBitmap
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppDialog
+import com.onlytechtake.repairapp.core.design.components.AppTextField
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.utils.formatFileSize
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
@@ -72,8 +77,8 @@ fun SignatureCaptureForm(
     onCaptureChanged: (SignatureCaptureResult?) -> Unit = {},
 ) {
     var businessSignerName by rememberSaveable { mutableStateOf("") }
-    var privacyAccepted by rememberSaveable { mutableStateOf(false) }
-    var termsAccepted by rememberSaveable { mutableStateOf(false) }
+    var privacyAccepted by rememberSaveable { mutableStateOf(value = false) }
+    var termsAccepted by rememberSaveable { mutableStateOf(value = false) }
     var textDialog by rememberSaveable { mutableStateOf<SignatureTextDialog?>(null) }
     var selectedSignaturePath by rememberSaveable { mutableStateOf<String?>(null) }
     var selectedSignatureTitle by rememberSaveable { mutableStateOf("") }
@@ -98,7 +103,10 @@ fun SignatureCaptureForm(
         onCaptureChanged(capture)
     }
 
-    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+    ) {
         SectionTitle(title)
 
         if (isBusiness) {
@@ -119,17 +127,16 @@ fun SignatureCaptureForm(
                     LocalImagePreview(
                         path = signature.localPath,
                         description = desc,
-                        onClick = {
-                            selectedSignaturePath = signature.localPath
-                            selectedSignatureTitle = desc
-                        },
-                    )
+                    ) {
+                        selectedSignaturePath = signature.localPath
+                        selectedSignatureTitle = desc
+                    }
                     Text("${signature.signerName} - ${formatUiDateTime(signature.signedAt)}")
                     Text("${signature.fileName} - ${formatFileSize(signature.sizeBytes)} - privacy v${signature.privacyTemplateVersion}")
                 }
             }
         }
-        if (existingSignatures.isEmpty() && submitText != null) {
+        if ((existingSignatures.isEmpty() && submitText != null)) {
             Text(stringResource(R.string.signature_empty))
         }
 
@@ -191,7 +198,7 @@ fun SignatureCaptureForm(
             currentStroke = currentStroke,
             onStart = { point -> currentStroke = SignatureStroke(listOf(point)) },
             onTap = { point ->
-                strokes = strokes +
+                strokes +=
                     SignatureStroke(
                         listOf(
                             point,
@@ -203,7 +210,7 @@ fun SignatureCaptureForm(
                 currentStroke = currentStroke?.let { it.copy(points = it.points + point) }
             },
             onEnd = {
-                currentStroke?.takeIf { it.points.size > 1 }?.let { strokes = strokes + it }
+                currentStroke?.takeIf { it.points.size > 1 }?.let { strokes += it }
                 currentStroke = null
             },
         )
@@ -218,9 +225,9 @@ fun SignatureCaptureForm(
                 variant = AppButtonVariant.Secondary,
                 size = AppButtonSize.Compact,
             )
-            if (submitText != null) {
+            submitText?.let {
                 AppButton(
-                    text = submitText,
+                    text = it,
                     enabled = capture != null,
                     onClick = { capture?.let(onSubmit) },
                     variant = AppButtonVariant.Primary,
@@ -283,11 +290,13 @@ private fun SignatureCanvas(
                 .border(1.dp, MaterialTheme.colorScheme.outline)
                 .semantics {
                     contentDescription = canvasDescription
-                }.pointerInput(Unit) {
+                }
+                .pointerInput(Unit) {
                     detectTapGestures { offset ->
                         onTap(offset.toSignaturePoint(size.width, size.height))
                     }
-                }.pointerInput(Unit) {
+                }
+                .pointerInput(Unit) {
                     detectDragGestures(
                         onDragStart = { offset ->
                             onStart(offset.toSignaturePoint(size.width, size.height))
@@ -324,7 +333,10 @@ private fun renderSignatureBitmap(strokes: List<SignatureStroke>) =
                 strokeWidth = BITMAP_STROKE_WIDTH
             }
         strokes.forEach { stroke ->
-            canvas.drawPath(stroke.toAndroidPath(BITMAP_WIDTH.toFloat(), BITMAP_HEIGHT.toFloat()), paint)
+            canvas.drawPath(
+                stroke.toAndroidPath(BITMAP_WIDTH.toFloat(), BITMAP_HEIGHT.toFloat()),
+                paint
+            )
         }
     }
 
@@ -377,4 +389,3 @@ private const val BITMAP_WIDTH = 1200
 private const val BITMAP_HEIGHT = 400
 private const val BITMAP_STROKE_WIDTH = 8f
 private const val SIGNATURE_DOT_DELTA = 0.001f
-private const val DEFAULT_SIGNER_NAME = "Cliente"

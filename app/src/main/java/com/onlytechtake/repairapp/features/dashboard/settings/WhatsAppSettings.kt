@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,7 +28,9 @@ fun ColumnScope.WhatsAppSettings(
     onRequestConfirm: (String, String, () -> Unit) -> Unit,
     onBack: () -> Unit,
 ) {
-    val messageMode by viewModel.messageMode.collectAsState()
+    // messageMode is currently unused but might be needed for future config
+    // val messageMode by viewModel.messageMode.collectAsState()
+
 
     LazyColumn(
         modifier =
@@ -42,15 +43,25 @@ fun ColumnScope.WhatsAppSettings(
     ) {
         item {
             StandardCard(highlight = true) {
-                Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)) {
+                Column(
+                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
+                ) {
                     SectionTitle(
                         text = stringResource(R.string.config_hub_whatsapp_title),
                         tooltip = stringResource(R.string.config_whatsapp_tooltip),
                     )
-                    Text(stringResource(R.string.config_whatsapp_mode, stringResource(R.string.config_whatsapp_manual)))
+                    Text(
+                        stringResource(
+                            R.string.config_whatsapp_mode,
+                            stringResource(R.string.config_whatsapp_manual)
+                        )
+                    )
                     ActionRow {
-                        val confirmTitle = stringResource(R.string.config_whatsapp_confirm_manual_title)
-                        val confirmText = stringResource(R.string.config_whatsapp_confirm_manual_text)
+                        val confirmTitle =
+                            stringResource(R.string.config_whatsapp_confirm_manual_title)
+                        val confirmText =
+                            stringResource(R.string.config_whatsapp_confirm_manual_text)
                         AppButton(
                             text = stringResource(R.string.config_whatsapp_manual),
                             onClick = {
@@ -66,7 +77,9 @@ fun ColumnScope.WhatsAppSettings(
 
         item {
             AppButton(
-                modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = RepairAppSpacing.screenHorizontal),
                 text = stringResource(R.string.config_whatsapp_close),
                 variant = AppButtonVariant.Secondary,
                 onClick = onBack,

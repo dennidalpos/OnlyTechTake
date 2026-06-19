@@ -51,7 +51,12 @@ internal class OrderWorkflowEventWriter(
             listOfNotNull(
                 readableTransition,
                 note,
-                closureReason?.let { context.getString(R.string.closure_reason_prefix, it.label(context)) },
+                closureReason?.let {
+                    context.getString(
+                        R.string.closure_reason_prefix,
+                        it.label(context)
+                    )
+                },
             ).joinToString("\n")
         writeTimeline(
             timelineEvent(
@@ -347,7 +352,9 @@ internal class OrderWorkflowEventWriter(
     }
 
     private suspend fun writeTimeline(event: TimelineEventEntity) {
-        requireNotNull(timelineEventDao) { context.getString(R.string.timeline_writer_not_configured) }.upsert(event)
+        requireNotNull(timelineEventDao) { context.getString(R.string.timeline_writer_not_configured) }.upsert(
+            event
+        )
     }
 
     private fun timelineEvent(

@@ -35,17 +35,20 @@ fun statusTemplateAnchor(status: OrderStatus): TemplateAnchor =
         OrderStatus.REPAIRING -> TemplateAnchor.WHATSAPP_REPAIRING
         OrderStatus.READY_FOR_PICKUP,
         OrderStatus.CLOSED,
-        -> TemplateAnchor.WHATSAPP_READY
+            -> TemplateAnchor.WHATSAPP_READY
     }
 
 fun statusTemplateAnchor(order: RepairOrderEntity): TemplateAnchor =
     when {
         order.status == OrderStatus.RESULT && order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE ->
             TemplateAnchor.WHATSAPP_QUOTE
+
         order.status == OrderStatus.RESULT && order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE ->
             TemplateAnchor.WHATSAPP_NOT_REPAIRABLE
+
         order.status == OrderStatus.CLOSED && order.closureReason == ClosureReason.NOT_REPAIRABLE ->
             TemplateAnchor.WHATSAPP_NOT_REPAIRABLE
+
         else -> statusTemplateAnchor(order.status)
     }
 
@@ -60,12 +63,15 @@ fun nextActionLabel(order: RepairOrderEntity): String =
     when {
         order.status == OrderStatus.RESULT && order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE ->
             "Attendere accettazione o rifiuto preventivo"
+
         order.status == OrderStatus.RESULT && order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE ->
             "Avvisare il cliente e preparare il ritiro"
+
         else -> nextActionLabel(order.status)
     }
 
-fun shouldShowDiagnosisEstimate(outcome: DiagnosisOutcome?): Boolean = outcome == DiagnosisOutcome.REPAIRABLE
+fun shouldShowDiagnosisEstimate(outcome: DiagnosisOutcome?): Boolean =
+    outcome == DiagnosisOutcome.REPAIRABLE
 
 fun canConfirmDiagnosisResult(
     summary: String,

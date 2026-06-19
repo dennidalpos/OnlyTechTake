@@ -1,6 +1,12 @@
 package com.onlytechtake.repairapp.features.dashboard.settings
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.automirrored.filled.Send
@@ -23,7 +29,8 @@ import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.features.dashboard.DashboardRoutes
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 
@@ -49,7 +56,9 @@ fun SettingsHub(
 
             SettingsHubCard(
                 title = stringResource(R.string.config_hub_templates_title),
-                subtitle = if (isAdmin) stringResource(R.string.config_hub_templates_subtitle_admin) else stringResource(R.string.config_hub_templates_subtitle_user),
+                subtitle = if (isAdmin) stringResource(R.string.config_hub_templates_subtitle_admin) else stringResource(
+                    R.string.config_hub_templates_subtitle_user,
+                ),
                 icon = Icons.Default.Description,
                 enabled = isAdmin,
                 testTag = RepairAppTestTags.ConfigHubTemplatesButton,
@@ -119,7 +128,6 @@ internal fun SettingsHubCard(
     StandardCard(
         modifier = testTag?.let { Modifier.testTag(it) } ?: Modifier,
         onClick = if (enabled) onClick else null,
-        density = StandardCardDensity.Compact,
     ) {
         Row(
             modifier = Modifier.padding(RepairAppSpacing.cardPadding),

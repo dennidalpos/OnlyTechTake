@@ -38,9 +38,18 @@ class IntakeStepperTest {
 
     @Test
     fun categoryClickTogglesCurrentSelection() {
-        assertEquals("phone", selectedCategoryAfterClick(currentCategoryId = null, clickedCategoryId = "phone"))
-        assertEquals("tablet", selectedCategoryAfterClick(currentCategoryId = "phone", clickedCategoryId = "tablet"))
-        assertEquals(null, selectedCategoryAfterClick(currentCategoryId = "phone", clickedCategoryId = "phone"))
+        assertEquals(
+            "phone",
+            selectedCategoryAfterClick(currentCategoryId = null, clickedCategoryId = "phone")
+        )
+        assertEquals(
+            "tablet",
+            selectedCategoryAfterClick(currentCategoryId = "phone", clickedCategoryId = "tablet")
+        )
+        assertEquals(
+            null,
+            selectedCategoryAfterClick(currentCategoryId = "phone", clickedCategoryId = "phone")
+        )
     }
 
     @Test
@@ -99,10 +108,28 @@ class IntakeStepperTest {
         // Private requires First Name, Last Name and Phone or Email
         assertFalse(calculateCanSaveNewCustomer(CustomerType.PRIVATE, "John", "", "", "123", ""))
         assertTrue(calculateCanSaveNewCustomer(CustomerType.PRIVATE, "John", "Doe", "", "123", ""))
-        assertTrue(calculateCanSaveNewCustomer(CustomerType.PRIVATE, "John", "Doe", "", "", "john@example.com"))
+        assertTrue(
+            calculateCanSaveNewCustomer(
+                CustomerType.PRIVATE,
+                "John",
+                "Doe",
+                "",
+                "",
+                "john@example.com"
+            )
+        )
 
         // Business requires Company Name and Phone or Email
         assertFalse(calculateCanSaveNewCustomer(CustomerType.BUSINESS, "", "", "Acme Corp", "", ""))
-        assertTrue(calculateCanSaveNewCustomer(CustomerType.BUSINESS, "", "", "Acme Corp", "123", ""))
+        assertTrue(
+            calculateCanSaveNewCustomer(
+                CustomerType.BUSINESS,
+                "",
+                "",
+                "Acme Corp",
+                "123",
+                ""
+            )
+        )
     }
 }

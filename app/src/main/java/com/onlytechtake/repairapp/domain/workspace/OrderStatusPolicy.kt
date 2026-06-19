@@ -13,31 +13,37 @@ object OrderStatusPolicy {
                     OrderStatus.IN_PROGRESS,
                     OrderStatus.CLOSED,
                 )
+
             OrderStatus.IN_PROGRESS ->
                 setOf(
                     OrderStatus.DIAGNOSIS,
                     OrderStatus.CLOSED,
                 )
+
             OrderStatus.DIAGNOSIS ->
                 setOf(
                     OrderStatus.RESULT,
                     OrderStatus.CLOSED,
                 )
+
             OrderStatus.RESULT ->
                 setOf(
                     OrderStatus.REPAIRING,
                     OrderStatus.READY_FOR_PICKUP,
                     OrderStatus.CLOSED,
                 )
+
             OrderStatus.REPAIRING ->
                 setOf(
                     OrderStatus.READY_FOR_PICKUP,
                     OrderStatus.CLOSED,
                 )
+
             OrderStatus.READY_FOR_PICKUP ->
                 setOf(
                     OrderStatus.CLOSED,
                 )
+
             OrderStatus.CLOSED -> emptySet()
         }
 

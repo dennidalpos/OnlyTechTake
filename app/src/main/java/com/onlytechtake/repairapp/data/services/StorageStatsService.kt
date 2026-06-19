@@ -28,7 +28,8 @@ class StorageStatsService(
         val dbBytes = if (dbFile.exists()) dbFile.length() else 0L
         val dbJournal = File(dbFile.path + "-journal")
         val dbWal = File(dbFile.path + "-wal")
-        val totalDbBytes = dbBytes + (if (dbJournal.exists()) dbJournal.length() else 0L) + (if (dbWal.exists()) dbWal.length() else 0L)
+        val totalDbBytes =
+            dbBytes + (if (dbJournal.exists()) dbJournal.length() else 0L) + (if (dbWal.exists()) dbWal.length() else 0L)
 
         val baseMediaDir = mediaStorageProvider.getBaseMediaDir()
 

@@ -22,33 +22,49 @@ internal class BackupMetadataService(
             appendLine("  \"categories\": [")
             appendLine(
                 categories.joinToString(",\n") { category ->
-                    "    {\"id\": ${jsonString(
-                        category.id,
-                    )}, \"parentId\": ${jsonString(
-                        category.parentId,
-                    )}, \"level\": ${category.level}, \"name\": ${jsonString(category.name)}, \"active\": ${category.active}}"
+                    "    {\"id\": ${
+                        jsonString(
+                            category.id,
+                        )
+                    }, \"parentId\": ${
+                        jsonString(
+                            category.parentId,
+                        )
+                    }, \"level\": ${category.level}, \"name\": ${jsonString(category.name)}, \"active\": ${category.active}}"
                 },
             )
             appendLine("  ],")
             appendLine("  \"templates\": [")
             appendLine(
                 templates.joinToString(",\n") { template ->
-                    "    {\"code\": ${jsonString(
-                        template.code,
-                    )}, \"title\": ${jsonString(
-                        template.title,
-                    )}, \"channel\": ${jsonString(
-                        template.channel.name,
-                    )}, \"active\": ${template.active}, \"version\": ${template.version}, \"body\": ${jsonString(template.body)}}"
+                    "    {\"code\": ${
+                        jsonString(
+                            template.code,
+                        )
+                    }, \"title\": ${
+                        jsonString(
+                            template.title,
+                        )
+                    }, \"channel\": ${
+                        jsonString(
+                            template.channel.name,
+                        )
+                    }, \"active\": ${template.active}, \"version\": ${template.version}, \"body\": ${
+                        jsonString(
+                            template.body
+                        )
+                    }}"
                 },
             )
             appendLine("  ],")
             appendLine("  \"settings\": [")
             appendLine(
                 settings.joinToString(",\n") { setting ->
-                    "    {\"key\": ${jsonString(
-                        setting.key,
-                    )}, \"value\": ${jsonString(setting.value)}, \"updatedAt\": ${setting.updatedAt}}"
+                    "    {\"key\": ${
+                        jsonString(
+                            setting.key,
+                        )
+                    }, \"value\": ${jsonString(setting.value)}, \"updatedAt\": ${setting.updatedAt}}"
                 },
             )
             appendLine("  ]")

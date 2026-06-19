@@ -103,8 +103,14 @@ class RepairAppDatabaseInstrumentedTest {
 
             assertNotNull(database.userDao().findById(user.id))
             assertNotNull(database.customerDao().findById(customer.id))
-            assertEquals(order.orderNumber, database.repairOrderDao().findById(order.id)?.orderNumber)
-            assertEquals(DiagnosisOutcome.REPAIRABLE, database.repairOrderDao().findById(order.id)?.diagnosisOutcome)
+            assertEquals(
+                order.orderNumber,
+                database.repairOrderDao().findById(order.id)?.orderNumber
+            )
+            assertEquals(
+                DiagnosisOutcome.REPAIRABLE,
+                database.repairOrderDao().findById(order.id)?.diagnosisOutcome
+            )
         }
 
     @Test

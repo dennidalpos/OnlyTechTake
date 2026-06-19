@@ -79,15 +79,18 @@ class AuthGateViewModel(
         }
     }
 
-    fun updateDisplayName(value: String) = updateForm { copy(displayName = value, errorMessage = null) }
+    fun updateDisplayName(value: String) =
+        updateForm { copy(displayName = value, errorMessage = null) }
 
     fun updateUsername(value: String) = updateForm { copy(username = value, errorMessage = null) }
 
     fun updatePassword(value: String) = updateForm { copy(password = value, errorMessage = null) }
 
-    fun updateConfirmPassword(value: String) = updateForm { copy(confirmPassword = value, errorMessage = null) }
+    fun updateConfirmPassword(value: String) =
+        updateForm { copy(confirmPassword = value, errorMessage = null) }
 
-    fun updateRecoveryCode(value: String) = updateForm { copy(recoveryCode = value, errorMessage = null) }
+    fun updateRecoveryCode(value: String) =
+        updateForm { copy(recoveryCode = value, errorMessage = null) }
 
     fun createFirstAdmin() {
         val form = formState.value
@@ -125,10 +128,11 @@ class AuthGateViewModel(
 
         viewModelScope.launch {
             mutableFormState.update { it.copy(loading = true, errorMessage = null) }
-            when (val result = authRepository.login(form.username, form.password.toCharArray())) {
+            when (authRepository.login(form.username, form.password.toCharArray())) {
                 is LoginResult.Success -> {
                     // Success will trigger AuthState change, no need to clear form here
                 }
+
                 is LoginResult.PasswordChangeRequired ->
                     mutableFormState.update {
                         it.copy(
@@ -140,17 +144,23 @@ class AuthGateViewModel(
                             confirmPassword = "",
                         )
                     }
+
                 LoginResult.InactiveUser ->
                     mutableFormState.update {
                         it.copy(loading = false, errorMessage = "Utente disattivato")
                     }
+
                 LoginResult.InvalidCredentials ->
                     mutableFormState.update {
                         it.copy(loading = false, errorMessage = "Credenziali non valide")
                     }
+
                 LoginResult.LockedOut ->
                     mutableFormState.update {
-                        it.copy(loading = false, errorMessage = "Troppi tentativi: riprova piu' tardi")
+                        it.copy(
+                            loading = false,
+                            errorMessage = "Troppi tentativi: riprova piu' tardi",
+                        )
                     }
             }
         }
@@ -164,11 +174,26 @@ class AuthGateViewModel(
     }
 
     fun startRecovery() {
-        updateForm { copy(recoveryMode = true, errorMessage = null, password = "", confirmPassword = "", recoveryCode = "") }
+        updateForm {
+            copy(
+                recoveryMode = true,
+                errorMessage = null,
+                password = "",
+                confirmPassword = "",
+                recoveryCode = ""
+            )
+        }
     }
 
     fun cancelRecovery() {
-        updateForm { copy(recoveryMode = false, errorMessage = null, password = "", confirmPassword = "") }
+        updateForm {
+            copy(
+                recoveryMode = false,
+                errorMessage = null,
+                password = "",
+                confirmPassword = ""
+            )
+        }
     }
 
     fun recoverAdmin() {
@@ -202,7 +227,12 @@ class AuthGateViewModel(
                         )
                     }
                 }.onFailure { e ->
-                    mutableFormState.update { it.copy(loading = false, errorMessage = e.message ?: "Errore durante il recupero") }
+                    mutableFormState.update {
+                        it.copy(
+                            loading = false,
+                            errorMessage = e.message ?: "Errore durante il recupero"
+                        )
+                    }
                 }
         }
     }
@@ -257,7 +287,8 @@ class AuthGateViewModel(
                     // After password change, we can try to login again automatically
                     // or just go back to login screen.
                     // Let's try to login automatically.
-                    val loginResult = authRepository.login(form.username, form.password.toCharArray())
+                    val loginResult =
+                        authRepository.login(form.username, form.password.toCharArray())
                     if (loginResult is LoginResult.Success) {
                         mutableFormState.update {
                             it.copy(
@@ -282,7 +313,10 @@ class AuthGateViewModel(
                     }
                 }.onFailure { e ->
                     mutableFormState.update {
-                        it.copy(loading = false, errorMessage = e.message ?: "Errore durante il cambio password")
+                        it.copy(
+                            loading = false,
+                            errorMessage = e.message ?: "Errore durante il cambio password"
+                        )
                     }
                 }
         }

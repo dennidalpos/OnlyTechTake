@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -23,12 +24,12 @@ fun IconsPreview() {
         modifier = Modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text("Pro Icon")
+        Text(stringResource(R.string.preview_pro_icon))
         IconBox(R.drawable.ic_launcher_foreground, Color(0xFF064E3B))
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text("Demo Icon")
+        Text(stringResource(R.string.preview_demo_icon))
         // Note: these rely on the resources being available in the build variant
         // Since we are in 'main', we might only see the 'main' version if not careful
         // But for previewing the XML we just edited, this works if we use the right res ID

@@ -4,7 +4,12 @@ import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
-import com.onlytechtake.repairapp.domain.workspace.*
+import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
+import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
+import com.onlytechtake.repairapp.domain.workspace.OrderDetail
+import com.onlytechtake.repairapp.domain.workspace.OrderFilter
+import com.onlytechtake.repairapp.domain.workspace.OrderListItem
+import com.onlytechtake.repairapp.domain.workspace.RepairOrderInput
 import kotlinx.coroutines.flow.Flow
 
 interface OrderRepository {
@@ -80,5 +85,15 @@ interface OrderRepository {
         actor: AuthenticatedUser,
         orderId: String,
         isPaid: Boolean,
+    ): Result<Unit>
+
+    suspend fun deleteOrder(
+        actor: AuthenticatedUser,
+        orderId: String,
+    ): Result<Unit>
+
+    suspend fun deleteSignature(
+        actor: AuthenticatedUser,
+        signatureId: String,
     ): Result<Unit>
 }

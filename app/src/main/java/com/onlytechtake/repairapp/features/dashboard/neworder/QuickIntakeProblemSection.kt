@@ -19,7 +19,7 @@ import com.onlytechtake.repairapp.core.design.components.StandardCard
 
 @Composable
 fun QuickIntakeProblemSection(
-    stepNumber: Int,
+    @Suppress("UNUSED_PARAMETER") stepNumber: Int,
     problemSummary: String,
     onProblemSummaryChange: (String) -> Unit,
     problemDetails: String,

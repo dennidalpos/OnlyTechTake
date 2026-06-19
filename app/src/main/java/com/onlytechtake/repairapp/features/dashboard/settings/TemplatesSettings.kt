@@ -24,7 +24,12 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.*
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -45,7 +50,13 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppBadge
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppIconButton
+import com.onlytechtake.repairapp.core.design.components.AppTextField
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.entities.MessageChannel
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
@@ -192,20 +203,31 @@ fun ColumnScope.TemplatesSettings(
                             AnchorStepHeader(anchor)
                             Spacer(modifier = Modifier.height(RepairAppSpacing.compactGap))
                             Text(anchor.label, style = MaterialTheme.typography.titleSmall)
-                            Text(anchor.description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
+                            Text(
+                                anchor.description,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.outline,
+                            )
                             Spacer(modifier = Modifier.height(RepairAppSpacing.compactGap))
                             Text(
                                 text =
                                     stringResource(
                                         R.string.config_template_assigned_template,
-                                        assignedTemplate?.title ?: stringResource(R.string.config_template_default_label, anchor.defaultCode),
+                                        assignedTemplate?.title ?: stringResource(
+                                            R.string.config_template_default_label,
+                                            anchor.defaultCode
+                                        ),
                                     ),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.primary,
                                 fontWeight = FontWeight.Bold,
                             )
                         }
-                        Icon(Icons.Default.Edit, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        Icon(
+                            Icons.Default.Edit,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
                     }
                 }
             }
@@ -242,10 +264,14 @@ fun ColumnScope.TemplatesSettings(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+                    ) {
                         Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
                             AppBadge(
-                                text = template.step ?: stringResource(R.string.config_template_general),
+                                text = template.step
+                                    ?: stringResource(R.string.config_template_general),
                                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                             )
@@ -298,13 +324,18 @@ fun ColumnScope.TemplatesSettings(
 
         if (templates.isEmpty()) {
             item {
-                Text(stringResource(R.string.config_template_empty), style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    stringResource(R.string.config_template_empty),
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         }
 
         item {
             AppButton(
-                modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = RepairAppSpacing.screenHorizontal),
                 text = stringResource(R.string.config_template_close),
                 variant = AppButtonVariant.Secondary,
                 size = AppButtonSize.Compact,
@@ -317,7 +348,10 @@ fun ColumnScope.TemplatesSettings(
         val assignedAnchors = TemplateAnchor.entries.filter { anchorMappings[it] == template.code }
         val associatedWarning =
             if (assignedAnchors.isNotEmpty()) {
-                stringResource(R.string.config_template_associated_warning, assignedAnchors.joinToString { it.label })
+                stringResource(
+                    R.string.config_template_associated_warning,
+                    assignedAnchors.joinToString { it.label },
+                )
             } else {
                 ""
             }
@@ -329,7 +363,11 @@ fun ColumnScope.TemplatesSettings(
                 viewModel.setFormDirty(false)
             },
             onSave = { code, title, body, active, step ->
-                val riskyTemplateChange = isRiskyTemplateChange(template.code, code, active) || (assignedAnchors.isNotEmpty() && !active)
+                val riskyTemplateChange = isRiskyTemplateChange(
+                    template.code,
+                    code,
+                    active,
+                ) || (assignedAnchors.isNotEmpty() && !active)
 
                 val warningText =
                     if (assignedAnchors.isNotEmpty() && !active) {
@@ -348,8 +386,7 @@ fun ColumnScope.TemplatesSettings(
                     editingTemplate = null
                 }
             },
-            onSetDirty = { viewModel.setFormDirty(it) },
-        )
+        ) { viewModel.setFormDirty(it) }
     }
 
     selectingAnchorForTemplate?.let { anchor ->
@@ -425,10 +462,13 @@ fun AnchorSelectionDialog(
                     item {
                         StandardCard(
                             onClick = { onSelect(anchor.defaultCode) },
-                            highlight = currentMapping == null || currentMapping == anchor.defaultCode,
+                            highlight = (currentMapping == null || currentMapping == anchor.defaultCode),
                         ) {
                             Text(
-                                text = stringResource(R.string.config_template_default_label, anchor.defaultCode),
+                                text = stringResource(
+                                    R.string.config_template_default_label,
+                                    anchor.defaultCode
+                                ),
                                 modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                                 style = MaterialTheme.typography.bodyMedium,
                             )
@@ -442,7 +482,11 @@ fun AnchorSelectionDialog(
                         ) {
                             Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding)) {
                                 Text(template.title, style = MaterialTheme.typography.bodyMedium)
-                                Text(template.code, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.outline)
+                                Text(
+                                    template.code,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.outline
+                                )
                             }
                         }
                     }
@@ -570,7 +614,11 @@ fun TemplateEditDialog(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(if (active) stringResource(R.string.config_template_active) else stringResource(R.string.config_template_archived))
+                        Text(
+                            if (active) stringResource(R.string.config_template_active) else stringResource(
+                                R.string.config_template_archived
+                            )
+                        )
                         Switch(
                             checked = active,
                             onCheckedChange = {
@@ -599,7 +647,12 @@ fun TemplateEditDialog(
                         text = stringResource(R.string.config_template_save),
                         enabled = title.isNotBlank() && body.isNotBlank() && (!isNew || code.isNotBlank()),
                         onClick = {
-                            onSave(if (isNew) code else template.code, title, body, active, step.ifBlank { null })
+                            onSave(
+                                if (isNew) code else template.code,
+                                title,
+                                body,
+                                active,
+                                step.ifBlank { null })
                         },
                         variant = AppButtonVariant.Primary,
                         size = AppButtonSize.Compact,
@@ -632,4 +685,5 @@ private fun isRiskyTemplateChange(
     loadedCode: String?,
     currentCode: String,
     active: Boolean,
-): Boolean = (loadedCode != null && loadedCode != currentCode) || (currentCode in systemTemplateCodes && !active)
+): Boolean =
+    (loadedCode != null && loadedCode != currentCode) || (currentCode in systemTemplateCodes && !active)

@@ -198,7 +198,8 @@ class TemplateRepository(
         return prepareMessage(actor, orderId, templateCode)
     }
 
-    private suspend fun resolveAnchor(anchor: TemplateAnchor): String = settingDao.findByKey(anchor.settingKey)?.value ?: anchor.defaultCode
+    private suspend fun resolveAnchor(anchor: TemplateAnchor): String =
+        settingDao.findByKey(anchor.settingKey)?.value ?: anchor.defaultCode
 
     suspend fun prepareMessage(
         actor: AuthenticatedUser,
@@ -212,8 +213,10 @@ class TemplateRepository(
             } else {
                 PermissionService.requirePermission(actor, UserPermission.EDIT_OWN_ORDERS)
             }
-            val customer = requireNotNull(customerDao.findById(order.customerId)) { "Cliente non trovato" }
-            val template = requireNotNull(templateDao.findActiveByCode(templateCode)) { "Template non trovato" }
+            val customer =
+                requireNotNull(customerDao.findById(order.customerId)) { "Cliente non trovato" }
+            val template =
+                requireNotNull(templateDao.findActiveByCode(templateCode)) { "Template non trovato" }
             val categoryPath = categoryPath(order.categoryId)
             val phone = customer.phone?.filter { it.isDigit() || (it == '+') }.orEmpty()
             require(phone.isNotBlank()) { "Telefono cliente mancante" }
@@ -226,7 +229,11 @@ class TemplateRepository(
                         "titolo_commessa" to order.title,
                         "stato_commessa" to order.status.label(context),
                         "cliente" to
-                            listOfNotNull(customer.companyName, customer.firstName, customer.lastName)
+                            listOfNotNull(
+                                customer.companyName,
+                                customer.firstName,
+                                customer.lastName
+                            )
                                 .joinToString(" ")
                                 .ifBlank { "Cliente" },
                         "esito_diagnosi" to order.diagnosisOutcome?.label(context).orEmpty(),
@@ -237,12 +244,13 @@ class TemplateRepository(
                                 order.closureReason != null -> order.closureReason.label(context)
                                 order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE ->
                                     context.getString(com.onlytechtake.repairapp.R.string.template_diagnosis_not_repairable_reason)
+
                                 else -> ""
                             },
                         "categoria_percorso" to categoryPath,
                     ),
                 )
-            PreparedMessage(order.id, customer.id, phone, body)
+            PreparedMessage(order.id, customer.id, phone, body, template.title)
         }
 
     suspend fun recordPrepared(
@@ -255,7 +263,8 @@ class TemplateRepository(
         actor: AuthenticatedUser,
         prepared: PreparedMessage,
         body: String,
-    ): Result<Unit> = writeMessage(actor, prepared, body, MessageStatus.SENT_CONFIRMED, clockMillis())
+    ): Result<Unit> =
+        writeMessage(actor, prepared, body, MessageStatus.SENT_CONFIRMED, clockMillis())
 
     private suspend fun writeMessage(
         actor: AuthenticatedUser,

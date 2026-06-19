@@ -3,14 +3,31 @@ package com.onlytechtake.repairapp.features.dashboard.neworder
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -26,12 +43,24 @@ import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppDivider
+import com.onlytechtake.repairapp.core.design.components.AppIconButton
+import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
+import com.onlytechtake.repairapp.core.design.components.AppStepper
+import com.onlytechtake.repairapp.core.design.components.AppTextField
+import com.onlytechtake.repairapp.core.design.components.BannerType
+import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.domain.workspace.isReadyForSubmit
 import com.onlytechtake.repairapp.domain.workspace.validationErrors
-import com.onlytechtake.repairapp.features.dashboard.common.*
+import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
+import com.onlytechtake.repairapp.features.dashboard.common.SignatureCaptureForm
+import com.onlytechtake.repairapp.features.dashboard.common.WizardNavigationBar
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeSignatureDraft
 
@@ -78,14 +107,16 @@ fun QuickActions(
             IntakeStepperState(draft, categories, templates, anchorMappings, currentUser)
         }
 
-    val selectedCustomer = draft.selectedCustomerId?.let { id -> customerSuggestions.firstOrNull { it.id == id } }
+    val selectedCustomer =
+        draft.selectedCustomerId?.let { id -> customerSuggestions.firstOrNull { it.id == id } }
     val selectedCustomerDisplayName =
         selectedCustomer?.displayName(
             unnamedPrivate = unnamedPrivate,
             unnamedBusiness = unnamedBusiness,
         ) ?: draft.selectedCustomerLabel
 
-    val missingRequirements = remember(stepperState.intakeInput) { stepperState.intakeInput.validationErrors() }
+    val missingRequirements =
+        remember(stepperState.intakeInput) { stepperState.intakeInput.validationErrors() }
 
     LaunchedEffect(stepperState.isDirty) {
         viewModel.setFormDirty(stepperState.isDirty)
@@ -125,7 +156,9 @@ fun QuickActions(
     val canSaveNewCustomer = stepperState.canSaveNewCustomer
 
     fun editStep(step: Int) {
-        updateDraft { it.copy(currentStep = step, completedStep = completedStepAfterEdit(it.completedStep, step)) }
+        updateDraft {
+            it.copy(currentStep = step)
+        }
     }
 
     fun completeStep(step: Int) {
@@ -156,13 +189,12 @@ fun QuickActions(
             totalSteps = LAST_INTAKE_STEP,
             completedStep = draft.completedStep,
             onStepClick = { step ->
-                if (step <= draft.completedStep + 1) {
+                if ((step <= draft.completedStep + 1)) {
                     editStep(step)
                 }
             },
             modifier = Modifier.padding(vertical = RepairAppSpacing.cardGap),
-            stepTestTag = { RepairAppTestTags.intakeStepperStep(it) },
-        )
+        ) { RepairAppTestTags.intakeStepperStep(it) }
 
         if (draft.currentStep == 1) {
             StandardCard {
@@ -184,7 +216,10 @@ fun QuickActions(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
-                                stringResource(R.string.intake_selected_customer, selectedCustomerDisplayName.orEmpty()),
+                                stringResource(
+                                    R.string.intake_selected_customer,
+                                    selectedCustomerDisplayName.orEmpty(),
+                                ),
                                 style = MaterialTheme.typography.bodyLarge,
                                 fontWeight = FontWeight.SemiBold,
                                 modifier = Modifier.weight(1f),
@@ -236,7 +271,12 @@ fun QuickActions(
                                 singleLine = true,
                                 imeAction = ImeAction.Search,
                                 keyboardActions = doneAction,
-                                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                                leadingIcon = {
+                                    Icon(
+                                        Icons.Default.Search,
+                                        contentDescription = null
+                                    )
+                                },
                                 trailingIcon =
                                     if (customerSearchQuery.isNotEmpty()) {
                                         {
@@ -385,7 +425,10 @@ fun QuickActions(
                 onCategorySelected = { categoryId ->
                     updateDraft {
                         it.copy(
-                            selectedCategoryId = selectedCategoryAfterClick(it.selectedCategoryId, categoryId),
+                            selectedCategoryId = selectedCategoryAfterClick(
+                                it.selectedCategoryId,
+                                categoryId
+                            ),
                             completedStep = completedStepAfterCategorySelection(it.completedStep),
                         )
                     }
@@ -514,7 +557,8 @@ fun QuickActions(
                     draft.signatureCapture?.let { capture ->
                         val resolvedSignerName =
                             if (stepperState.isBusiness) {
-                                capture.businessSignerName?.takeIf { it.isNotBlank() } ?: selectedCustomerDisplayName ?: unnamedBusiness
+                                capture.businessSignerName?.takeIf { it.isNotBlank() }
+                                    ?: selectedCustomerDisplayName ?: unnamedBusiness
                             } else {
                                 selectedCustomerDisplayName ?: unnamedPrivate
                             }

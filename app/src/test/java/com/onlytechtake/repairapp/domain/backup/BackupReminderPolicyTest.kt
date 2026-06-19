@@ -14,10 +14,24 @@ class BackupReminderPolicyTest {
 
     @Test
     fun successfulBackupHidesReminderUntilIntervalExpires() {
-        val settings = BackupReminderPolicy.recordSuccess(BackupReminderSettings(), NOW, "onlytechtake-backup.zip")
+        val settings = BackupReminderPolicy.recordSuccess(
+            BackupReminderSettings(),
+            NOW,
+            "onlytechtake-backup.zip"
+        )
 
-        assertFalse(BackupReminderPolicy.shouldShowReminder(settings, NOW + TimeUnit.DAYS.toMillis(6)))
-        assertTrue(BackupReminderPolicy.shouldShowReminder(settings, NOW + TimeUnit.DAYS.toMillis(7)))
+        assertFalse(
+            BackupReminderPolicy.shouldShowReminder(
+                settings,
+                NOW + TimeUnit.DAYS.toMillis(6)
+            )
+        )
+        assertTrue(
+            BackupReminderPolicy.shouldShowReminder(
+                settings,
+                NOW + TimeUnit.DAYS.toMillis(7)
+            )
+        )
         assertEquals("onlytechtake-backup.zip", settings.lastBackupFileName)
     }
 
@@ -30,8 +44,18 @@ class BackupReminderPolicyTest {
                 null,
             )
 
-        assertFalse(BackupReminderPolicy.shouldShowReminder(settings, NOW + TimeUnit.DAYS.toMillis(2)))
-        assertTrue(BackupReminderPolicy.shouldShowReminder(settings, NOW + TimeUnit.DAYS.toMillis(3)))
+        assertFalse(
+            BackupReminderPolicy.shouldShowReminder(
+                settings,
+                NOW + TimeUnit.DAYS.toMillis(2)
+            )
+        )
+        assertTrue(
+            BackupReminderPolicy.shouldShowReminder(
+                settings,
+                NOW + TimeUnit.DAYS.toMillis(3)
+            )
+        )
     }
 
     @Test
@@ -43,7 +67,8 @@ class BackupReminderPolicyTest {
 
     @Test
     fun failedBackupDoesNotChangeLastSuccessfulTimestamp() {
-        val successful = BackupReminderPolicy.recordSuccess(BackupReminderSettings(), NOW, "backup.zip")
+        val successful =
+            BackupReminderPolicy.recordSuccess(BackupReminderSettings(), NOW, "backup.zip")
         val failed = BackupReminderPolicy.recordFailure(successful)
 
         assertEquals(NOW, failed.lastSuccessfulBackupAtMillis)

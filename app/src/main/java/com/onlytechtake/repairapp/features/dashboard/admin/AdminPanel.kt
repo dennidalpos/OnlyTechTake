@@ -2,15 +2,28 @@ package com.onlytechtake.repairapp.features.dashboard.admin
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Key
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -26,10 +39,23 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.PasswordVisibilityButton
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppDialog
+import com.onlytechtake.repairapp.core.design.components.AppDivider
+import com.onlytechtake.repairapp.core.design.components.AppIconButton
+import com.onlytechtake.repairapp.core.design.components.AppMessageBanner
+import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
+import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
+import com.onlytechtake.repairapp.core.design.components.AppTextField
+import com.onlytechtake.repairapp.core.design.components.BannerType
+import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
-import com.onlytechtake.repairapp.features.dashboard.common.*
+import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
+import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 
 @Composable
 fun AdminPanel(
@@ -56,7 +82,6 @@ fun AdminPanel(
     val labelActivate = stringResource(R.string.admin_user_activate)
     val labelDeactivate = stringResource(R.string.admin_user_deactivate)
     val labelDelete = stringResource(R.string.content_description_delete)
-    val confirmDeleteTitle = stringResource(R.string.admin_confirm_delete_user_title)
     val confirmDeleteTextTemplate = stringResource(R.string.admin_confirm_delete_user_text)
     val confirmResetTitle = stringResource(R.string.admin_confirm_reset_title)
     val confirmResetTextTemplate = stringResource(R.string.admin_confirm_reset_text)
@@ -72,7 +97,7 @@ fun AdminPanel(
     var displayName by rememberSaveable { mutableStateOf("") }
     var username by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
-    var passwordVisible by rememberSaveable { mutableStateOf(false) }
+    var passwordVisible by rememberSaveable { mutableStateOf(value = false) }
 
     var resetPasswords by remember { mutableStateOf(emptyMap<String, String>()) }
 
@@ -95,7 +120,10 @@ fun AdminPanel(
 
     if (!isAdmin) {
         AppScreenContainer {
-            AppMessageBanner(message = stringResource(R.string.admin_only_section), type = BannerType.Warning)
+            AppMessageBanner(
+                message = stringResource(R.string.admin_only_section),
+                type = BannerType.Warning,
+            )
         }
         return
     }
@@ -116,9 +144,23 @@ fun AdminPanel(
                 modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                 verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
             ) {
-                Text(stringResource(R.string.admin_create_operator), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                AppTextField(displayName, { displayName = it }, stringResource(R.string.customer_field_first_name), required = true)
-                AppTextField(username, { username = it }, stringResource(R.string.auth_username), required = true)
+                Text(
+                    stringResource(R.string.admin_create_operator),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                AppTextField(
+                    displayName,
+                    { displayName = it },
+                    stringResource(R.string.customer_field_first_name),
+                    required = true
+                )
+                AppTextField(
+                    username,
+                    { username = it },
+                    stringResource(R.string.auth_username),
+                    required = true
+                )
                 AppTextField(
                     value = password,
                     onValueChange = { password = it },
@@ -179,13 +221,20 @@ fun AdminPanel(
                         message = stringResource(R.string.admin_recovery_offline_warning),
                         type = BannerType.Warning,
                     )
-                    StandardCard(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)) {
+                    StandardCard(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(
+                            alpha = 0.3f
+                        )
+                    ) {
                         Column(
                             modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                         ) {
-                            Text(stringResource(R.string.admin_recovery_master_code), style = MaterialTheme.typography.labelSmall)
+                            Text(
+                                stringResource(R.string.admin_recovery_master_code),
+                                style = MaterialTheme.typography.labelSmall
+                            )
                             Text(
                                 text = recoveryCode!!,
                                 style = MaterialTheme.typography.headlineMedium,
@@ -223,10 +272,22 @@ fun AdminPanel(
                         modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                         verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
                     ) {
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             Column(modifier = Modifier.weight(1f)) {
-                                Text(user.displayName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                                Text(user.username, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(
+                                    user.displayName,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    user.username,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
                             }
                             AppStatusBadge(
                                 text = user.role.name,
@@ -246,7 +307,9 @@ fun AdminPanel(
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(
-                                        text = if (user.active) stringResource(R.string.admin_user_active) else stringResource(R.string.admin_user_inactive),
+                                        text = if (user.active) stringResource(R.string.admin_user_active) else stringResource(
+                                            R.string.admin_user_inactive
+                                        ),
                                         style = MaterialTheme.typography.bodyMedium,
                                         fontWeight = FontWeight.SemiBold,
                                         color = if (user.active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
@@ -289,20 +352,54 @@ fun AdminPanel(
                             }
 
                             AppDivider(modifier = Modifier.alpha(0.3f))
-                            Text(stringResource(R.string.admin_permissions_title), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                            Text(
+                                stringResource(R.string.admin_permissions_title),
+                                style = MaterialTheme.typography.labelLarge,
+                                fontWeight = FontWeight.Bold
+                            )
 
                             val permissionGroups =
                                 listOf(
-                                    PermissionUIItem(UserPermission.CREATE_ORDERS, stringResource(R.string.admin_permission_create_orders)),
-                                    PermissionUIItem(UserPermission.EDIT_OWN_ORDERS, stringResource(R.string.admin_permission_edit_own_orders)),
-                                    PermissionUIItem(UserPermission.EDIT_ALL_ORDERS, stringResource(R.string.admin_permission_edit_all_orders)),
-                                    PermissionUIItem(UserPermission.CLOSE_ORDERS, stringResource(R.string.admin_permission_close_orders)),
-                                    PermissionUIItem(UserPermission.MANAGE_CUSTOMERS, stringResource(R.string.admin_permission_manage_customers)),
-                                    PermissionUIItem(UserPermission.MANAGE_CATEGORIES, stringResource(R.string.admin_permission_manage_categories)),
-                                    PermissionUIItem(UserPermission.MANAGE_TEMPLATES, stringResource(R.string.admin_permission_manage_templates)),
-                                    PermissionUIItem(UserPermission.MANAGE_PAYMENTS, stringResource(R.string.admin_permission_manage_payments)),
-                                    PermissionUIItem(UserPermission.EXPORT_DATA, stringResource(R.string.admin_permission_export_data)),
-                                    PermissionUIItem(UserPermission.MANAGE_STORAGE, stringResource(R.string.admin_permission_manage_storage)),
+                                    PermissionUIItem(
+                                        UserPermission.CREATE_ORDERS,
+                                        stringResource(R.string.admin_permission_create_orders)
+                                    ),
+                                    PermissionUIItem(
+                                        UserPermission.EDIT_OWN_ORDERS,
+                                        stringResource(R.string.admin_permission_edit_own_orders)
+                                    ),
+                                    PermissionUIItem(
+                                        UserPermission.EDIT_ALL_ORDERS,
+                                        stringResource(R.string.admin_permission_edit_all_orders)
+                                    ),
+                                    PermissionUIItem(
+                                        UserPermission.CLOSE_ORDERS,
+                                        stringResource(R.string.admin_permission_close_orders)
+                                    ),
+                                    PermissionUIItem(
+                                        UserPermission.MANAGE_CUSTOMERS,
+                                        stringResource(R.string.admin_permission_manage_customers)
+                                    ),
+                                    PermissionUIItem(
+                                        UserPermission.MANAGE_CATEGORIES,
+                                        stringResource(R.string.admin_permission_manage_categories)
+                                    ),
+                                    PermissionUIItem(
+                                        UserPermission.MANAGE_TEMPLATES,
+                                        stringResource(R.string.admin_permission_manage_templates)
+                                    ),
+                                    PermissionUIItem(
+                                        UserPermission.MANAGE_PAYMENTS,
+                                        stringResource(R.string.admin_permission_manage_payments)
+                                    ),
+                                    PermissionUIItem(
+                                        UserPermission.EXPORT_DATA,
+                                        stringResource(R.string.admin_permission_export_data)
+                                    ),
+                                    PermissionUIItem(
+                                        UserPermission.MANAGE_STORAGE,
+                                        stringResource(R.string.admin_permission_manage_storage)
+                                    ),
                                 )
 
                             permissionGroups.forEach { item ->
@@ -314,16 +411,18 @@ fun AdminPanel(
                                             .toggleable(
                                                 value = hasPermission,
                                                 role = Role.Switch,
-                                                onValueChange = { checked ->
-                                                    val newPermissions =
-                                                        if (checked) {
-                                                            user.permissions + item.permission
-                                                        } else {
-                                                            user.permissions - item.permission
-                                                        }
-                                                    viewModel.setUserPermissions(user.id, newPermissions)
-                                                },
-                                            ),
+                                            ) { checked ->
+                                                val newPermissions =
+                                                    if (checked) {
+                                                        user.permissions + item.permission
+                                                    } else {
+                                                        user.permissions - item.permission
+                                                    }
+                                                viewModel.setUserPermissions(
+                                                    user.id,
+                                                    newPermissions
+                                                )
+                                            },
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                 ) {
@@ -388,7 +487,7 @@ fun AdminPanel(
                                 },
                             enabled =
                                 if (user.role == UserRole.ADMIN) {
-                                    currentPassword.isNotBlank() && resetPasswords[user.id]?.isNotBlank() == true
+                                    (currentPassword.isNotBlank() && resetPasswords[user.id]?.isNotBlank() == true)
                                 } else {
                                     resetPasswords[user.id]?.isNotBlank() == true
                                 },
@@ -399,12 +498,22 @@ fun AdminPanel(
                             onClick = {
                                 val resetPassword = resetPasswords[user.id].orEmpty()
                                 if (user.role == UserRole.ADMIN) {
-                                    viewModel.changePassword(user.username, currentPassword.toCharArray(), resetPassword.toCharArray())
+                                    viewModel.changePassword(
+                                        user.username,
+                                        currentPassword.toCharArray(),
+                                        resetPassword.toCharArray()
+                                    )
                                     currentPassword = ""
                                     resetPasswords -= user.id
                                 } else {
-                                    requestConfirm(confirmResetTitle, confirmResetTextTemplate.format(user.displayName)) {
-                                        viewModel.resetPassword(user.id, resetPassword.toCharArray())
+                                    requestConfirm(
+                                        confirmResetTitle,
+                                        confirmResetTextTemplate.format(user.displayName)
+                                    ) {
+                                        viewModel.resetPassword(
+                                            user.id,
+                                            resetPassword.toCharArray()
+                                        )
                                         resetPasswords -= user.id
                                     }
                                 }
@@ -417,7 +526,11 @@ fun AdminPanel(
 
         if (isBackupReminderDue) {
             AppMessageBanner(
-                message = "${stringResource(R.string.admin_backup_overdue_title)}: ${stringResource(R.string.admin_backup_overdue_text)}",
+                message = "${stringResource(R.string.admin_backup_overdue_title)}: ${
+                    stringResource(
+                        R.string.admin_backup_overdue_text
+                    )
+                }",
                 type = BannerType.Error,
             )
             Spacer(Modifier.height(RepairAppSpacing.cardGap))
@@ -505,7 +618,11 @@ fun AdminPanel(
                     text = stringResource(R.string.admin_total_reset),
                     tooltip = stringResource(R.string.admin_total_reset_tooltip),
                 )
-                AppTextField(resetConfirmation, { resetConfirmation = it }, stringResource(R.string.admin_total_reset_field))
+                AppTextField(
+                    resetConfirmation,
+                    { resetConfirmation = it },
+                    stringResource(R.string.admin_total_reset_field)
+                )
                 AppButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.admin_total_reset),

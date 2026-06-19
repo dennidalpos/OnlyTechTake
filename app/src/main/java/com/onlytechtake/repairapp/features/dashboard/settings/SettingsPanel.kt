@@ -1,16 +1,31 @@
 package com.onlytechtake.repairapp.features.dashboard.settings
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppDialog
+import com.onlytechtake.repairapp.core.design.components.BannerType
+import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 
@@ -60,20 +75,19 @@ fun SettingsPanel(
             Box(Modifier.weight(1f)) {
                 SettingsHub(
                     isAdmin = isAdmin,
-                    onNavigate = { route ->
-                        val section =
-                            if (route.contains("section=")) {
-                                route.substringAfter("section=")
-                            } else {
-                                null
-                            }
-                        if (section != null) {
-                            currentSection = section
+                ) { route ->
+                    val section =
+                        if (route.contains("section=")) {
+                            route.substringAfter("section=")
                         } else {
-                            onNavigate(route)
+                            null
                         }
-                    },
-                )
+                    if (section != null) {
+                        currentSection = section
+                    } else {
+                        onNavigate(route)
+                    }
+                }
             }
             VerticalDivider()
             Box(Modifier.weight(2f)) {
@@ -171,10 +185,24 @@ private fun SettingsSectionContent(
             )
         }
         when (section) {
-            "CATEGORIES" -> CategoriesSettings(viewModel, isAdmin, fromIntake, requestConfirm, onBack = onBack)
+            "CATEGORIES" -> CategoriesSettings(
+                viewModel,
+                isAdmin,
+                fromIntake,
+                requestConfirm,
+                onBack = onBack,
+            )
+
             "TEMPLATES" -> TemplatesSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)
             "WHATSAPP" -> WhatsAppSettings(viewModel, requestConfirm, onBack = onBack)
-            "EXPORT" -> BackupSettings(viewModel, isAdmin, onBackupRestored, requestConfirm, onBack = onBack)
+            "EXPORT" -> BackupSettings(
+                viewModel,
+                isAdmin,
+                onBackupRestored,
+                requestConfirm,
+                onBack = onBack,
+            )
+
             "STORAGE" -> StorageSettings(viewModel, onBack = onBack)
             "ABOUT" -> AboutSettings(onBack = onBack)
             else ->

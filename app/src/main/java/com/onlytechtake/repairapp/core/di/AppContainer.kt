@@ -12,7 +12,14 @@ class AppContainer(
     private val authContainer by lazy { AuthContainer(context, dataContainer) }
     private val mediaContainer by lazy { MediaContainer(context, dataContainer) }
     private val orderContainer by lazy { OrderContainer(context, dataContainer, mediaContainer) }
-    private val settingsContainer by lazy { SettingsContainer(context, dataContainer, authContainer, mediaContainer) }
+    private val settingsContainer by lazy {
+        SettingsContainer(
+            context,
+            dataContainer,
+            authContainer,
+            mediaContainer,
+        )
+    }
 
     val repairAppRepository: RepairAppRepository by lazy {
         DefaultRepairAppRepository(

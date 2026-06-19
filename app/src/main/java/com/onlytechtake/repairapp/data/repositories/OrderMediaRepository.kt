@@ -52,12 +52,18 @@ class OrderMediaRepository(
         orderNumber: String,
     ): File {
         StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
-        return File(mediaStorageProvider.getOrderMediaDir(orderId), fileNamer.photoFileName(orderNumber, clockMillis()))
+        return File(
+            mediaStorageProvider.getOrderMediaDir(orderId),
+            fileNamer.photoFileName(orderNumber, clockMillis())
+        )
     }
 
     fun createIntakePhotoFile(sessionId: String): File {
         StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
-        return File(mediaStorageProvider.getIntakeMediaDir(sessionId), fileNamer.photoFileName("presa_in_carico", clockMillis()))
+        return File(
+            mediaStorageProvider.getIntakeMediaDir(sessionId),
+            fileNamer.photoFileName("presa_in_carico", clockMillis())
+        )
     }
 
     suspend fun stageCapturedIntakePhoto(file: File): Result<StagedOrderMedia> =
@@ -105,7 +111,11 @@ class OrderMediaRepository(
                 require(file.exists() && file.length() > 0L) { "Allegato vuoto o non salvato" }
 
                 mediaOptimizer.optimize(file)
-                val bounds = if (attachmentPolicy.isImage(mimeType)) readImageBounds(file) else ImageBounds(null, null)
+                val bounds =
+                    if (attachmentPolicy.isImage(mimeType)) readImageBounds(file) else ImageBounds(
+                        null,
+                        null
+                    )
                 StagedOrderMedia(
                     localPath = file.absolutePath,
                     fileName = file.name,
@@ -214,7 +224,11 @@ class OrderMediaRepository(
                 require(file.exists() && file.length() > 0L) { "Allegato vuoto o non salvato" }
 
                 mediaOptimizer.optimize(file)
-                val bounds = if (attachmentPolicy.isImage(mimeType)) readImageBounds(file) else ImageBounds(null, null)
+                val bounds =
+                    if (attachmentPolicy.isImage(mimeType)) readImageBounds(file) else ImageBounds(
+                        null,
+                        null
+                    )
                 val media =
                     OrderMediaEntity(
                         id = UUID.randomUUID().toString(),
@@ -234,7 +248,13 @@ class OrderMediaRepository(
                 try {
                     inTransaction {
                         orderMediaDao.upsert(media)
-                        eventWriter.mediaAdded(orderId, actor.id, "Allegato aggiunto", file.name, now)
+                        eventWriter.mediaAdded(
+                            orderId,
+                            actor.id,
+                            "Allegato aggiunto",
+                            file.name,
+                            now
+                        )
                     }
                 } catch (error: Exception) {
                     file.delete()
@@ -272,7 +292,12 @@ class OrderMediaRepository(
             runCatching {
                 val media = requireNotNull(orderMediaDao.findById(mediaId)) { "Media non trovato" }
                 requireWritableOrder(actor, media.orderId)
-                require(media.mimeType.startsWith("image/", ignoreCase = true)) { "Il media selezionato non e' un'immagine" }
+                require(
+                    media.mimeType.startsWith(
+                        "image/",
+                        ignoreCase = true
+                    )
+                ) { "Il media selezionato non e' un'immagine" }
 
                 val file = File(media.localPath)
                 val savedMimeType = writeBitmapReplacing(file, bitmap, media.mimeType)
@@ -287,7 +312,13 @@ class OrderMediaRepository(
 
                 inTransaction {
                     orderMediaDao.upsert(updated)
-                    eventWriter.mediaAdded(media.orderId, actor.id, "Immagine modificata", media.fileName, clockMillis())
+                    eventWriter.mediaAdded(
+                        media.orderId,
+                        actor.id,
+                        "Immagine modificata",
+                        media.fileName,
+                        clockMillis()
+                    )
                 }
                 updated
             }
@@ -331,7 +362,13 @@ class OrderMediaRepository(
                     inTransaction {
                         entities.forEach { media ->
                             orderMediaDao.upsert(media)
-                            eventWriter.mediaAdded(orderId, actor.id, "Media presa in carico", media.fileName, media.createdAt)
+                            eventWriter.mediaAdded(
+                                orderId,
+                                actor.id,
+                                "Media presa in carico",
+                                media.fileName,
+                                media.createdAt
+                            )
                         }
                     }
                 } catch (error: Exception) {
@@ -361,7 +398,12 @@ class OrderMediaRepository(
     ): Result<StagedOrderMedia> =
         withContext(Dispatchers.IO) {
             runCatching {
-                require(staged.mimeType.startsWith("image/", ignoreCase = true)) { "Il media selezionato non e' un'immagine" }
+                require(
+                    staged.mimeType.startsWith(
+                        "image/",
+                        ignoreCase = true
+                    )
+                ) { "Il media selezionato non e' un'immagine" }
                 val file = File(staged.localPath)
                 val savedMimeType = writeBitmapReplacing(file, bitmap, staged.mimeType)
                 val bounds = readImageBounds(file)
@@ -410,7 +452,8 @@ class OrderMediaRepository(
         }
     }
 
-    private suspend fun <T> inTransaction(block: suspend () -> T): T = database?.withTransaction { block() } ?: block()
+    private suspend fun <T> inTransaction(block: suspend () -> T): T =
+        database?.withTransaction { block() } ?: block()
 
     private fun copyToWithLimit(
         input: InputStream,
@@ -467,7 +510,8 @@ class OrderMediaRepository(
             } else {
                 mediaStorageProvider.getOrderAttachmentsDir(orderId)
             }
-        val destination = File(directory, uniqueAttachmentName(staged.fileName, staged.mimeType, now))
+        val destination =
+            File(directory, uniqueAttachmentName(staged.fileName, staged.mimeType, now))
         return try {
             source.inputStream().use { input ->
                 FileOutputStream(destination).use { output -> input.copyTo(output) }
@@ -490,7 +534,13 @@ class OrderMediaRepository(
         val (format, mimeType) = compressFormatFor(sourceMimeType)
         AtomicFileHelper.writeAtomically(file) { tempFile ->
             FileOutputStream(tempFile).use { output ->
-                require(bitmap.compress(format, IMAGE_SAVE_QUALITY, output)) { "Salvataggio immagine non riuscito" }
+                require(
+                    bitmap.compress(
+                        format,
+                        IMAGE_SAVE_QUALITY,
+                        output
+                    )
+                ) { "Salvataggio immagine non riuscito" }
             }
         }
         return mimeType
@@ -499,8 +549,16 @@ class OrderMediaRepository(
     @Suppress("DEPRECATION")
     private fun compressFormatFor(mimeType: String): Pair<Bitmap.CompressFormat, String> =
         when {
-            mimeType.equals("image/png", ignoreCase = true) -> Bitmap.CompressFormat.PNG to "image/png"
-            mimeType.equals("image/webp", ignoreCase = true) -> Bitmap.CompressFormat.WEBP to "image/webp"
+            mimeType.equals(
+                "image/png",
+                ignoreCase = true
+            ) -> Bitmap.CompressFormat.PNG to "image/png"
+
+            mimeType.equals(
+                "image/webp",
+                ignoreCase = true
+            ) -> Bitmap.CompressFormat.WEBP to "image/webp"
+
             else -> Bitmap.CompressFormat.JPEG to MIME_TYPE_JPEG
         }
 

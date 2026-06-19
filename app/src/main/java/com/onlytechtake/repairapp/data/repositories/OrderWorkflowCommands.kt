@@ -7,12 +7,27 @@ import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.utils.capitalizeFirst
 import com.onlytechtake.repairapp.core.utils.formatEuroCents
 import com.onlytechtake.repairapp.core.utils.label
-import com.onlytechtake.repairapp.data.local.dao.*
+import com.onlytechtake.repairapp.data.local.dao.CustomerDao
+import com.onlytechtake.repairapp.data.local.dao.MessageLogDao
+import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
+import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
-import com.onlytechtake.repairapp.data.local.entities.*
+import com.onlytechtake.repairapp.data.local.entities.ClosureReason
+import com.onlytechtake.repairapp.data.local.entities.CustomerActionStatus
+import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
-import com.onlytechtake.repairapp.domain.workspace.*
-import java.util.*
+import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
+import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
+import com.onlytechtake.repairapp.domain.workspace.OrderClosurePermissionPolicy
+import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
+import com.onlytechtake.repairapp.domain.workspace.RepairOrderInput
+import com.onlytechtake.repairapp.domain.workspace.normalizedEstimateAmountCents
+import com.onlytechtake.repairapp.domain.workspace.validationErrors
+import java.util.UUID
 
 internal class OrderWorkflowCommands(
     private val context: Context,
@@ -44,7 +59,10 @@ internal class OrderWorkflowCommands(
                 val order =
                     RepairOrderEntity(
                         id = UUID.randomUUID().toString(),
-                        orderNumber = orderNumberGenerator.next(prefix, repairOrderDao.findLatestOrderNumberForYear(prefix)),
+                        orderNumber = orderNumberGenerator.next(
+                            prefix,
+                            repairOrderDao.findLatestOrderNumberForYear(prefix)
+                        ),
                         customerId = input.customerId,
                         title = input.title.capitalizeFirst(),
                         categoryId = input.categoryId,
@@ -102,7 +120,8 @@ internal class OrderWorkflowCommands(
                         closedAt = if (status in OrderStatusPolicy.closedStatuses) now else order.closedAt,
                         closureReason = if (status in OrderStatusPolicy.closedStatuses) closureReason else null,
                         closedByUserId = if (status in OrderStatusPolicy.closedStatuses) actor.id else order.closedByUserId,
-                        closeNote = if (status in OrderStatusPolicy.closedStatuses) note.capitalizeFirst().ifBlank { null } else order.closeNote,
+                        closeNote = if (status in OrderStatusPolicy.closedStatuses) note.capitalizeFirst()
+                            .ifBlank { null } else order.closeNote,
                     ),
                 )
                 eventWriter.statusChanged(
@@ -167,7 +186,12 @@ internal class OrderWorkflowCommands(
                     closureReason = null,
                     now = now,
                 )
-                eventWriter.customerActionStatusChanged(orderId, actor.id, customerActionStatus, now)
+                eventWriter.customerActionStatusChanged(
+                    orderId,
+                    actor.id,
+                    customerActionStatus,
+                    now
+                )
             }
         }
 
@@ -184,7 +208,12 @@ internal class OrderWorkflowCommands(
                 }
 
                 val now = clockMillis()
-                repairOrderDao.upsert(order.copy(assignedToUserId = assignedToUserId, updatedAt = now))
+                repairOrderDao.upsert(
+                    order.copy(
+                        assignedToUserId = assignedToUserId,
+                        updatedAt = now
+                    )
+                )
                 eventWriter.orderReassigned(orderId, actor.id, assignedToUserId, now)
             }
         }
@@ -200,7 +229,8 @@ internal class OrderWorkflowCommands(
                 val order = requireWritableOrder(actor, orderId)
                 val now = clockMillis()
                 val normalizedNote = note.capitalizeFirst()
-                val mergedNotes = listOfNotNull(order.internalNotes, normalizedNote).joinToString("\n\n")
+                val mergedNotes =
+                    listOfNotNull(order.internalNotes, normalizedNote).joinToString("\n\n")
                 repairOrderDao.upsert(order.copy(internalNotes = mergedNotes, updatedAt = now))
                 eventWriter.internalNoteAdded(orderId, actor.id, normalizedNote, now)
             }
@@ -222,10 +252,11 @@ internal class OrderWorkflowCommands(
                 when (input.feedback) {
                     CustomerFeedbackType.ACCEPT,
                     CustomerFeedbackType.REJECT,
-                    ->
+                        ->
                         require(order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
                             "Accettazione o rifiuto sono disponibili solo per una diagnosi riparabile"
                         }
+
                     else -> Unit
                 }
                 val now = clockMillis()
@@ -272,7 +303,12 @@ internal class OrderWorkflowCommands(
                     now = now,
                 )
                 if (customerActionStatus != order.customerActionStatus) {
-                    eventWriter.customerActionStatusChanged(orderId, actor.id, customerActionStatus, now)
+                    eventWriter.customerActionStatusChanged(
+                        orderId,
+                        actor.id,
+                        customerActionStatus,
+                        now
+                    )
                 }
                 messageLogDao.findLatestForOrder(orderId)?.let { latest ->
                     messageLogDao.upsert(
@@ -328,6 +364,49 @@ internal class OrderWorkflowCommands(
             }
         }
 
+    suspend fun deleteOrder(
+        actor: AuthenticatedUser,
+        orderId: String,
+        timelineEventDao: com.onlytechtake.repairapp.data.local.dao.TimelineEventDao,
+        orderMediaDao: com.onlytechtake.repairapp.data.local.dao.OrderMediaDao,
+        signatureDao: com.onlytechtake.repairapp.data.local.dao.SignatureDao,
+        orderDocumentDao: com.onlytechtake.repairapp.data.local.dao.OrderDocumentDao,
+        auditLogDao: com.onlytechtake.repairapp.data.local.dao.AuditLogDao,
+        fileCleanupService: OrderFileCleanupService,
+    ): Result<Unit> =
+        runCatching {
+            PermissionService.requirePermission(actor, UserPermission.EDIT_ALL_ORDERS)
+            inTransaction {
+                val order =
+                    requireNotNull(repairOrderDao.findById(orderId)) { "Commessa non trovata" }
+                val now = clockMillis()
+
+                // 1. Delete actual files
+                fileCleanupService.deleteOrderFiles(orderId)
+
+                // 2. Delete database records
+                timelineEventDao.deleteByOrderId(orderId)
+                orderMediaDao.deleteByOrderId(orderId)
+                signatureDao.deleteByOrderId(orderId)
+                messageLogDao.deleteByOrderId(orderId)
+                orderDocumentDao.deleteByOrderId(orderId)
+                repairOrderDao.deleteById(orderId)
+
+                // 3. Audit log
+                auditLogDao.upsert(
+                    com.onlytechtake.repairapp.data.local.entities.AuditLogEntity(
+                        id = UUID.randomUUID().toString(),
+                        action = com.onlytechtake.repairapp.data.local.entities.AuditAction.ORDER_DELETED,
+                        actorUserId = actor.id,
+                        orderId = orderId,
+                        customerId = order.customerId,
+                        detailsJson = """{"orderNumber":"${order.orderNumber}","title":"${order.title}"}""",
+                        createdAt = now,
+                    ),
+                )
+            }
+        }
+
     private suspend fun requireWritableOrder(
         actor: AuthenticatedUser,
         orderId: String,
@@ -341,7 +420,8 @@ internal class OrderWorkflowCommands(
         return order
     }
 
-    private suspend fun <T> inTransaction(block: suspend () -> T): T = database?.withTransaction { block() } ?: block()
+    private suspend fun <T> inTransaction(block: suspend () -> T): T =
+        database?.withTransaction { block() } ?: block()
 
     private suspend fun buildCategoryPathSnapshot(categoryId: String): String? {
         val path = mutableListOf<String>()

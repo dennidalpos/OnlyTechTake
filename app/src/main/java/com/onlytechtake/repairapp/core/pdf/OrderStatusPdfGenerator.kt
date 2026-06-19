@@ -97,7 +97,13 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         fun checkNewPage(neededHeight: Float) {
             if (y + neededHeight > 842f - margin) {
                 finishCurrentPage()
-                page = document.startPage(PdfDocument.PageInfo.Builder(595, 842, pageInfo.pageNumber + 1).create())
+                page = document.startPage(
+                    PdfDocument.PageInfo.Builder(
+                        595,
+                        842,
+                        pageInfo.pageNumber + 1
+                    ).create()
+                )
                 canvas = page.canvas
                 y = margin
             }
@@ -133,7 +139,12 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         canvas.drawText(customerName ?: "", margin + 80f, y, textPaint)
         y += 15f
         canvas.drawText("Contatto:", margin, y, labelPaint)
-        canvas.drawText("${payload.customer.phone ?: ""} / ${payload.customer.email ?: ""}", margin + 80f, y, textPaint)
+        canvas.drawText(
+            "${payload.customer.phone ?: ""} / ${payload.customer.email ?: ""}",
+            margin + 80f,
+            y,
+            textPaint
+        )
         y += 25f
 
         // Order Details
@@ -146,7 +157,14 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         canvas.drawText(payload.order.title, margin + 80f, y, textPaint)
         y += 15f
         canvas.drawText("Problema:", margin, y, labelPaint)
-        y = drawWrappedText(canvas, payload.order.description ?: "Nessuna descrizione", margin + 80f, y, contentWidth - 80f, textPaint)
+        y = drawWrappedText(
+            canvas,
+            payload.order.description ?: "Nessuna descrizione",
+            margin + 80f,
+            y,
+            contentWidth - 80f,
+            textPaint
+        )
         y += 10f
 
         // Status
@@ -172,7 +190,14 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
             canvas.drawText(event.title, margin + 90f, y, textPaint)
             y += 12f
             if (!event.description.isNullOrBlank()) {
-                y = drawWrappedText(canvas, event.description, margin + 90f, y, contentWidth - 90f, textPaint)
+                y = drawWrappedText(
+                    canvas,
+                    event.description,
+                    margin + 90f,
+                    y,
+                    contentWidth - 90f,
+                    textPaint
+                )
             }
             y += 5f
         }
@@ -185,14 +210,30 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
             y += 15f
             canvas.drawText("Firmatario: ${payload.signature.signerName}", margin, y, textPaint)
             y += 12f
-            canvas.drawText("Data firma: ${dateFormat.format(Date(payload.signature.signedAt))}", margin, y, textPaint)
+            canvas.drawText(
+                "Data firma: ${dateFormat.format(Date(payload.signature.signedAt))}",
+                margin,
+                y,
+                textPaint
+            )
             y += 12f
-            canvas.drawText("Privacy: Accettata (v${payload.signature.privacyTemplateVersion})", margin, y, textPaint)
+            canvas.drawText(
+                "Privacy: Accettata (v${payload.signature.privacyTemplateVersion})",
+                margin,
+                y,
+                textPaint
+            )
             y += 12f
-            canvas.drawText("Condizioni: Accettate (v${payload.signature.termsTemplateVersion})", margin, y, textPaint)
+            canvas.drawText(
+                "Condizioni: Accettate (v${payload.signature.termsTemplateVersion})",
+                margin,
+                y,
+                textPaint
+            )
             y += 10f
 
-            val bitmap = decodeOrientedBitmap(payload.signature.localPath, SIGNATURE_MAX_DECODE_DIMENSION)
+            val bitmap =
+                decodeOrientedBitmap(payload.signature.localPath, SIGNATURE_MAX_DECODE_DIMENSION)
             if (bitmap != null) {
                 val maxWidth = 220f
                 val maxHeight = 90f
@@ -200,7 +241,12 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
                 val drawWidth = bitmap.width * scale
                 val drawHeight = bitmap.height * scale
 
-                canvas.drawBitmap(bitmap, null, android.graphics.RectF(margin, y, margin + drawWidth, y + drawHeight), null)
+                canvas.drawBitmap(
+                    bitmap,
+                    null,
+                    android.graphics.RectF(margin, y, margin + drawWidth, y + drawHeight),
+                    null
+                )
                 y += drawHeight + 10f
                 bitmap.recycle()
             }

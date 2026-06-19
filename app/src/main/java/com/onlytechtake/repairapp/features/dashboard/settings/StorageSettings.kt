@@ -1,6 +1,12 @@
 package com.onlytechtake.repairapp.features.dashboard.settings
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -14,7 +20,13 @@ import androidx.compose.ui.text.font.FontWeight
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppKeyValueRow
+import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
+import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.utils.formatFileSize
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 
@@ -33,17 +45,26 @@ fun StorageSettings(
         )
 
         if (stats == null) {
-            Text(stringResource(R.string.storage_loading), style = MaterialTheme.typography.bodyMedium)
+            Text(
+                stringResource(R.string.storage_loading),
+                style = MaterialTheme.typography.bodyMedium,
+            )
         } else {
             StandardCard {
                 Column(
                     modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                 ) {
-                    Text(stringResource(R.string.storage_free_device), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                    Text(
+                        stringResource(R.string.storage_free_device),
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold
+                    )
 
-                    val freePercentage = ((stats.freeDeviceBytes.toDouble() / stats.totalDeviceBytes.toDouble()) * 100).toInt()
-                    val usedProgress = (stats.totalDeviceBytes - stats.freeDeviceBytes).toDouble() / stats.totalDeviceBytes.toDouble()
+                    val freePercentage =
+                        ((stats.freeDeviceBytes.toDouble() / stats.totalDeviceBytes.toDouble()) * 100).toInt()
+                    val usedProgress =
+                        (stats.totalDeviceBytes - stats.freeDeviceBytes).toDouble() / stats.totalDeviceBytes.toDouble()
 
                     LinearProgressIndicator(
                         progress = { usedProgress.toFloat() },
@@ -67,7 +88,11 @@ fun StorageSettings(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = stringResource(R.string.storage_free_percentage, freePercentage, formatFileSize(stats.freeDeviceBytes)),
+                            text = stringResource(
+                                R.string.storage_free_percentage,
+                                freePercentage,
+                                formatFileSize(stats.freeDeviceBytes)
+                            ),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -97,8 +122,14 @@ fun StorageSettings(
                     }
 
                     Spacer(Modifier.height(RepairAppSpacing.tinyGap))
-                    AppKeyValueRow(label = stringResource(R.string.storage_total_device), value = formatFileSize(stats.totalDeviceBytes))
-                    AppKeyValueRow(label = stringResource(R.string.storage_app_used), value = formatFileSize(stats.appUsedBytes))
+                    AppKeyValueRow(
+                        label = stringResource(R.string.storage_total_device),
+                        value = formatFileSize(stats.totalDeviceBytes)
+                    )
+                    AppKeyValueRow(
+                        label = stringResource(R.string.storage_app_used),
+                        value = formatFileSize(stats.appUsedBytes)
+                    )
                 }
             }
 
@@ -109,11 +140,27 @@ fun StorageSettings(
                     modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                 ) {
-                    Text(stringResource(R.string.storage_app_detail_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                    AppKeyValueRow(label = stringResource(R.string.storage_db_size), value = formatFileSize(stats.databaseBytes))
-                    AppKeyValueRow(label = stringResource(R.string.storage_media_size), value = formatFileSize(stats.mediaBytes))
-                    AppKeyValueRow(label = stringResource(R.string.storage_docs_size), value = formatFileSize(stats.documentsBytes))
-                    AppKeyValueRow(label = stringResource(R.string.storage_cache_size), value = formatFileSize(stats.cacheBytes))
+                    Text(
+                        stringResource(R.string.storage_app_detail_title),
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                    AppKeyValueRow(
+                        label = stringResource(R.string.storage_db_size),
+                        value = formatFileSize(stats.databaseBytes)
+                    )
+                    AppKeyValueRow(
+                        label = stringResource(R.string.storage_media_size),
+                        value = formatFileSize(stats.mediaBytes)
+                    )
+                    AppKeyValueRow(
+                        label = stringResource(R.string.storage_docs_size),
+                        value = formatFileSize(stats.documentsBytes)
+                    )
+                    AppKeyValueRow(
+                        label = stringResource(R.string.storage_cache_size),
+                        value = formatFileSize(stats.cacheBytes)
+                    )
                 }
             }
 
@@ -124,7 +171,11 @@ fun StorageSettings(
                     modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                 ) {
-                    Text(stringResource(R.string.storage_deep_maintenance), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                    Text(
+                        stringResource(R.string.storage_deep_maintenance),
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold
+                    )
                     Text(
                         text = stringResource(R.string.storage_cleanup_orphans_tooltip),
                         style = MaterialTheme.typography.bodySmall,

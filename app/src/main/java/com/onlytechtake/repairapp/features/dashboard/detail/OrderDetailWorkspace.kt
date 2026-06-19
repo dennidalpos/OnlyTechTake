@@ -3,6 +3,8 @@ package com.onlytechtake.repairapp.features.dashboard.detail
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Row
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,6 +20,9 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,14 +34,19 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.LoadingBrandIndicator
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
+import com.onlytechtake.repairapp.core.design.components.BannerType
+import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.statusTemplateAnchor
-import com.onlytechtake.repairapp.features.dashboard.common.*
+import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 
 @Composable
 fun OrderDetailWorkspace(
@@ -56,21 +66,27 @@ fun OrderDetailWorkspace(
     val workspaceState = rememberOrderDetailWorkspaceState()
     val shareStatusChooserTitle = stringResource(R.string.order_share_status_chooser)
 
+    val actor by viewModel.currentUser.collectAsState()
+    val canDeleteOrder = actor?.permissions?.contains(com.onlytechtake.repairapp.data.local.entities.UserPermission.EDIT_ALL_ORDERS) == true
+
     val exitConfirmTitle = stringResource(R.string.order_exit_confirm_title)
     val exitConfirmText = stringResource(R.string.order_exit_confirm_text)
     val waOpenConfirmTitle = stringResource(R.string.order_wa_open_confirm_title)
     val waOpenConfirmText = stringResource(R.string.order_wa_open_confirm_text)
     val waSentConfirmTitle = stringResource(R.string.order_wa_sent_confirm_title)
     val waSentConfirmText = stringResource(R.string.order_wa_sent_confirm_text)
-    val diagnosisOutcomeConfirmTitle = stringResource(R.string.order_confirm_diagnosis_outcome_title)
+    val diagnosisOutcomeConfirmTitle =
+        stringResource(R.string.order_confirm_diagnosis_outcome_title)
     val diagnosisOutcomeConfirmText = stringResource(R.string.order_confirm_diagnosis_outcome_text)
-    val deleteDocumentConfirmTitle = stringResource(R.string.order_confirm_delete_document_title)
-    val deleteDocumentConfirmText = stringResource(R.string.order_confirm_delete_document_text)
+    val deleteOrderConfirmTitle = stringResource(R.string.order_confirm_delete_title)
+    val deleteOrderConfirmText = stringResource(R.string.order_confirm_delete_text)
 
     val selected = detail
     if (selected == null) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(RepairAppSpacing.screenHorizontal),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(RepairAppSpacing.screenHorizontal),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -104,6 +120,9 @@ fun OrderDetailWorkspace(
             onBack()
         }
     }
+
+    var timelineExpanded by rememberSaveable { mutableStateOf(false) }
+    var signaturesExpanded by rememberSaveable { mutableStateOf(false) }
 
     Column(Modifier.fillMaxSize()) {
         message?.let {
@@ -143,6 +162,16 @@ fun OrderDetailWorkspace(
                         },
                         onTogglePayment = { viewModel.togglePaymentStatus(!selected.isPaid) },
                         onSendWhatsApp = viewModel::prepareMessage,
+                        onDeleteOrder = if (canDeleteOrder) {
+                            {
+                                workspaceState.requestConfirm(
+                                    deleteOrderConfirmTitle,
+                                    deleteOrderConfirmText,
+                                ) {
+                                    viewModel.deleteOrder { onBack() }
+                                }
+                            }
+                        } else null,
                     )
                 }
 
@@ -159,7 +188,11 @@ fun OrderDetailWorkspace(
                                 if (feedback == CustomerFeedbackType.ACCEPT) {
                                     viewModel.recordFeedback(feedback, note)
                                 } else {
-                                    viewModel.recordFeedback(feedback, note, closureReason) { onBack() }
+                                    viewModel.recordFeedback(
+                                        feedback,
+                                        note,
+                                        closureReason
+                                    ) { onBack() }
                                 }
                             },
                         )
@@ -204,32 +237,6 @@ fun OrderDetailWorkspace(
                     }
                 }
 
-                preparedMessage
-                    ?.takeIf { it.orderId == selected.order.id }
-                    ?.let { prepared ->
-                        item(key = "wa_preview", contentType = "whatsapp") {
-                            WhatsAppPreviewPanel(
-                                prepared = prepared,
-                                body = preparedMessageBody,
-                                onBodyChange = viewModel::updatePreparedMessageBody,
-                                onOpenWhatsApp = {
-                                    workspaceState.requestConfirm(waOpenConfirmTitle, waOpenConfirmText) {
-                                        viewModel.recordPreparedMessage()
-                                        val intent =
-                                            Intent(
-                                                Intent.ACTION_VIEW,
-                                                "https://wa.me/${prepared.phone}?text=${Uri.encode(preparedMessageBody)}".toUri(),
-                                            )
-                                        context.startActivity(intent)
-                                    }
-                                },
-                                onConfirmSent = {
-                                    workspaceState.requestConfirm(waSentConfirmTitle, waSentConfirmText) { viewModel.confirmSentMessage() }
-                                },
-                                onClose = viewModel::clearPreparedMessage,
-                            )
-                        }
-                    }
 
                 item(key = "notes", contentType = "notes") {
                     InternalNotesPanel(
@@ -245,7 +252,36 @@ fun OrderDetailWorkspace(
                 }
 
                 item(key = "signatures", contentType = "signatures") {
-                    OrderSignatureSection(selected)
+                    StandardCard(
+                        onClick = { signaturesExpanded = !signaturesExpanded },
+                        highlight = signaturesExpanded
+                    ) {
+                        Column(modifier = Modifier.padding(RepairAppSpacing.compactGap)) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    stringResource(R.string.signature_section_title),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.padding(RepairAppSpacing.tinyGap)
+                                )
+                                Text(
+                                    if (signaturesExpanded) "Chiudi" else "Apri",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                            if (signaturesExpanded) {
+                                OrderSignatureSection(
+                                    detail = selected,
+                                    onDeleteSignature = viewModel::deleteSignature
+                                )
+                            }
+                        }
+                    }
                 }
 
                 item(key = "documents", contentType = "documents") {
@@ -259,12 +295,7 @@ fun OrderDetailWorkspace(
                         },
                         onShareDocument = { viewModel.onShareDocumentClicked(it) },
                         onDeleteDocument = { docId ->
-                            workspaceState.requestConfirm(
-                                deleteDocumentConfirmTitle,
-                                deleteDocumentConfirmText,
-                            ) {
-                                viewModel.onDeleteDocumentClicked(docId)
-                            }
+                            viewModel.onDeleteDocumentClicked(docId)
                         },
                         requestConfirm = { title, text, action ->
                             workspaceState.requestConfirm(title, text, action)
@@ -273,12 +304,40 @@ fun OrderDetailWorkspace(
                 }
 
                 item(key = "timeline", contentType = "timeline") {
-                    OrderTimelineSection(timeline = selected.timeline)
+                    StandardCard(
+                        onClick = { timelineExpanded = !timelineExpanded },
+                        highlight = timelineExpanded
+                    ) {
+                        Column(modifier = Modifier.padding(RepairAppSpacing.compactGap)) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    stringResource(R.string.order_timeline),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.padding(RepairAppSpacing.tinyGap)
+                                )
+                                Text(
+                                    if (timelineExpanded) "Chiudi" else "Apri",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                            if (timelineExpanded) {
+                                OrderTimelineSection(timeline = selected.timeline)
+                            }
+                        }
+                    }
                 }
 
                 item(key = "footer", contentType = "actions") {
                     AppButton(
-                        modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = RepairAppSpacing.screenHorizontal),
                         text = "Chiudi ed esci",
                         variant = AppButtonVariant.Secondary,
                         onClick = onBack,
@@ -335,5 +394,36 @@ fun OrderDetailWorkspace(
         show = showPdfSentConfirmation,
         onDismiss = viewModel::onPdfSentDismissed,
         onConfirm = viewModel::onPdfSentConfirmed,
+    )
+
+    WhatsAppPreviewDialog(
+        prepared = preparedMessage?.takeIf { it.orderId == selected.order.id },
+        body = preparedMessageBody,
+        onBodyChange = viewModel::updatePreparedMessageBody,
+        onOpenWhatsApp = {
+            workspaceState.requestConfirm(
+                waOpenConfirmTitle,
+                waOpenConfirmText
+            ) {
+                viewModel.recordPreparedMessage()
+                val intent =
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        "https://wa.me/${preparedMessage?.phone}?text=${
+                            Uri.encode(
+                                preparedMessageBody
+                            )
+                        }".toUri(),
+                    )
+                context.startActivity(intent)
+            }
+        },
+        onConfirmSent = {
+            workspaceState.requestConfirm(
+                waSentConfirmTitle,
+                waSentConfirmText
+            ) { viewModel.confirmSentMessage() }
+        },
+        onClose = viewModel::clearPreparedMessage,
     )
 }

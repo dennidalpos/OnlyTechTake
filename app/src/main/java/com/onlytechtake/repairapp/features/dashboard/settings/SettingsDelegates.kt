@@ -8,7 +8,11 @@ import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
-import com.onlytechtake.repairapp.data.repositories.*
+import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
+import com.onlytechtake.repairapp.data.repositories.BackupRepository
+import com.onlytechtake.repairapp.data.repositories.CatalogRepository
+import com.onlytechtake.repairapp.data.repositories.OrderFileCleanupService
+import com.onlytechtake.repairapp.data.repositories.TemplateRepository
 import com.onlytechtake.repairapp.data.services.StorageStatsService
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import com.onlytechtake.repairapp.domain.workspace.OperatorInput
@@ -168,7 +172,10 @@ internal class AdminSettingsDelegate(
         password: CharArray,
     ) {
         actionRunner.run { actor ->
-            adminUserRepository.createOperator(actor, OperatorInput(displayName, username, password))
+            adminUserRepository.createOperator(
+                actor,
+                OperatorInput(displayName, username, password)
+            )
         }
     }
 

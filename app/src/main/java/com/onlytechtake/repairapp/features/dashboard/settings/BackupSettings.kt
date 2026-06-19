@@ -2,12 +2,22 @@ package com.onlytechtake.repairapp.features.dashboard.settings
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalResources
@@ -19,7 +29,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppMessageBanner
+import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
+import com.onlytechtake.repairapp.core.design.components.AppTextField
+import com.onlytechtake.repairapp.core.design.components.BannerType
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
@@ -64,7 +81,8 @@ fun BackupSettings(
     val confirmRestoreZipText = stringResource(R.string.config_backup_confirm_restore_zip_text)
     val confirmExportXlsxTitle = stringResource(R.string.config_backup_confirm_export_xlsx_title)
     val confirmExportXlsxText = stringResource(R.string.config_backup_confirm_export_xlsx_text)
-    val confirmExportConfigTitle = stringResource(R.string.config_backup_confirm_export_config_title)
+    val confirmExportConfigTitle =
+        stringResource(R.string.config_backup_confirm_export_config_title)
     val confirmExportConfigText = stringResource(R.string.config_backup_confirm_export_config_text)
 
     AppScreenContainer {
@@ -80,7 +98,10 @@ fun BackupSettings(
             )
         } else {
             StandardCard {
-                Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)) {
+                Column(
+                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
+                ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -121,7 +142,10 @@ fun BackupSettings(
             Spacer(Modifier.height(RepairAppSpacing.cardGap))
 
             StandardCard {
-                Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)) {
+                Column(
+                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
+                ) {
                     Text(
                         text = stringResource(R.string.config_backup_security_title),
                         style = MaterialTheme.typography.titleMedium,
@@ -132,7 +156,10 @@ fun BackupSettings(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(stringResource(R.string.config_backup_encrypt_label), style = MaterialTheme.typography.bodyMedium)
+                        Text(
+                            stringResource(R.string.config_backup_encrypt_label),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                         Switch(
                             checked = securitySettings.isBackupEncryptionEnabled,
                             onCheckedChange = viewModel::setBackupEncryptionEnabled,
@@ -156,7 +183,9 @@ fun BackupSettings(
                     }
 
                     AppMessageBanner(
-                        message = if (securitySettings.isBackupEncryptionEnabled) stringResource(R.string.config_backup_encrypted_success) else stringResource(R.string.config_backup_unencrypted_warning),
+                        message = if (securitySettings.isBackupEncryptionEnabled) stringResource(R.string.config_backup_encrypted_success) else stringResource(
+                            R.string.config_backup_unencrypted_warning
+                        ),
                         type = if (securitySettings.isBackupEncryptionEnabled) BannerType.Success else BannerType.Warning,
                     )
                 }
@@ -165,7 +194,10 @@ fun BackupSettings(
             Spacer(Modifier.height(RepairAppSpacing.cardGap))
 
             StandardCard {
-                Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding), verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)) {
+                Column(
+                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
+                ) {
                     AppButton(
                         text = stringResource(R.string.backup_run_full_zip),
                         size = AppButtonSize.Default,
@@ -187,7 +219,13 @@ fun BackupSettings(
                         testTag = RepairAppTestTags.BackupRestoreZipButton,
                         onClick = {
                             onRequestConfirm(confirmRestoreZipTitle, confirmRestoreZipText) {
-                                restoreZipLauncher.launch(arrayOf("application/zip", "application/octet-stream", "*/*"))
+                                restoreZipLauncher.launch(
+                                    arrayOf(
+                                        "application/zip",
+                                        "application/octet-stream",
+                                        "*/*"
+                                    )
+                                )
                             }
                         },
                     )
@@ -248,10 +286,15 @@ private fun backupReminderInfo(settings: BackupReminderSettings): String {
         when {
             settings.lastBackupStatus == BackupReminderStatus.FAILED ->
                 stringResource(R.string.backup_status_failed)
+
             settings.lastSuccessfulBackupAtMillis == null ->
                 stringResource(R.string.backup_status_never)
+
             else -> {
-                val days = BackupReminderPolicy.daysSinceLastSuccessfulBackup(settings, System.currentTimeMillis()) ?: 0L
+                val days = BackupReminderPolicy.daysSinceLastSuccessfulBackup(
+                    settings,
+                    System.currentTimeMillis()
+                ) ?: 0L
                 resources.getQuantityString(
                     R.plurals.backup_status_days_ago,
                     days.toInt(),

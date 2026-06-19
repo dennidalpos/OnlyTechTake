@@ -28,7 +28,8 @@ object BackupReminderPolicy {
     ): Boolean {
         if (!settings.enabled) return false
         val lastSuccessfulBackup = settings.lastSuccessfulBackupAtMillis ?: return true
-        val intervalMillis = TimeUnit.DAYS.toMillis(normalizeIntervalDays(settings.intervalDays).toLong())
+        val intervalMillis =
+            TimeUnit.DAYS.toMillis(normalizeIntervalDays(settings.intervalDays).toLong())
         return nowMillis - lastSuccessfulBackup >= intervalMillis
     }
 
@@ -51,5 +52,6 @@ object BackupReminderPolicy {
             lastBackupFileName = fileName?.takeIf { it.isNotBlank() },
         )
 
-    fun recordFailure(settings: BackupReminderSettings): BackupReminderSettings = settings.copy(lastBackupStatus = BackupReminderStatus.FAILED)
+    fun recordFailure(settings: BackupReminderSettings): BackupReminderSettings =
+        settings.copy(lastBackupStatus = BackupReminderStatus.FAILED)
 }

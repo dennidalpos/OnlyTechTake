@@ -41,9 +41,17 @@ class CatalogRepositoryTest {
 
     private val context = mockk<Context>(relaxed = true)
     private val repository = CatalogRepository(context, stubDao)
-    private val admin = AuthenticatedUser("1", "admin", "Admin", UserRole.ADMIN, UserPermission.entries.toSet())
-    private val operator = AuthenticatedUser("2", "operator", "Operator", UserRole.OPERATOR, setOf(UserPermission.MANAGE_CATEGORIES))
-    private val restrictedOperator = AuthenticatedUser("3", "restricted", "Restricted", UserRole.OPERATOR, emptySet())
+    private val admin =
+        AuthenticatedUser("1", "admin", "Admin", UserRole.ADMIN, UserPermission.entries.toSet())
+    private val operator = AuthenticatedUser(
+        "2",
+        "operator",
+        "Operator",
+        UserRole.OPERATOR,
+        setOf(UserPermission.MANAGE_CATEGORIES)
+    )
+    private val restrictedOperator =
+        AuthenticatedUser("3", "restricted", "Restricted", UserRole.OPERATOR, emptySet())
 
     @Test
     fun operatorCanCreateNewCategoryIfHasPermission() =

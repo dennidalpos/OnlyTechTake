@@ -13,11 +13,16 @@ import androidx.compose.ui.text.font.FontWeight
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppMessageBanner
+import com.onlytechtake.repairapp.core.design.components.BannerType
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 
 @Composable
 fun QuickIntakeSubmitSection(
-    stepNumber: Int,
+    @Suppress("UNUSED_PARAMETER") stepNumber: Int,
     missingRequirements: List<String>,
     enabled: Boolean,
     onSubmit: () -> Unit,
@@ -36,7 +41,10 @@ fun QuickIntakeSubmitSection(
 
             if (missingRequirements.isNotEmpty()) {
                 AppMessageBanner(
-                    message = stringResource(R.string.intake_submit_missing, missingRequirements.joinToString(", ")),
+                    message = stringResource(
+                        R.string.intake_submit_missing,
+                        missingRequirements.joinToString(", "),
+                    ),
                     type = BannerType.Warning,
                 )
             }

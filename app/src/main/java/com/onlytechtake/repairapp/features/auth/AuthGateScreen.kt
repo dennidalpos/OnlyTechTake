@@ -35,7 +35,6 @@ import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
@@ -86,40 +85,50 @@ fun AuthGateRoute(
         }
     }
 
-    if (BuildConfig.IS_SHOWCASE_MODE_ENABLED && authState.initialized && !authState.configured) {
-        val appCtx = context.applicationContext
-        LaunchedEffect(authState.initialized, authState.configured, onAppDataRestored, viewModel) {
-            if (!showcaseSeedRequested) {
-                showcaseSeedRequested = true
-                viewModel.seedShowcaseData(appCtx) {
-                    onAppDataRestored()
+    if (BuildConfig.IS_SHOWCASE_MODE_ENABLED) {
+        if (authState.initialized && !authState.configured) {
+            val appCtx = context.applicationContext
+            LaunchedEffect(onAppDataRestored, viewModel) {
+                if (!showcaseSeedRequested) {
+                    showcaseSeedRequested = true
+                    viewModel.seedShowcaseData(appCtx) {
+                        onAppDataRestored()
+                    }
                 }
             }
         }
     }
 
-    if (BuildConfig.IS_SHOWCASE_MODE_ENABLED && authState.initialized && authState.configured && authState.currentUser == null) {
-        LaunchedEffect(Unit) {
-            viewModel.loginShowcaseAdmin()
+    if (BuildConfig.IS_SHOWCASE_MODE_ENABLED) {
+        if (authState.initialized && authState.configured && authState.currentUser == null) {
+            LaunchedEffect(Unit) {
+                viewModel.loginShowcaseAdmin()
+            }
         }
     }
 
+    val isShowcasePreparing = BuildConfig.IS_SHOWCASE_MODE_ENABLED && !authState.configured
     when {
-        !authState.initialized || (BuildConfig.IS_SHOWCASE_MODE_ENABLED && !authState.configured) || formState.seeding ->
+        !authState.initialized || isShowcasePreparing || formState.seeding ->
             AuthLoadingScreen(
                 text =
                     when {
                         formState.seeding -> stringResource(R.string.auth_showcase_initializing)
-                        BuildConfig.IS_SHOWCASE_MODE_ENABLED && !authState.configured -> stringResource(R.string.auth_showcase_preparing)
+                        isShowcasePreparing -> stringResource(
+                            R.string.auth_showcase_preparing,
+                        )
+
                         else -> stringResource(R.string.auth_system_ready)
                     },
             )
+
         authState.currentUser != null ->
             DashboardRoute(
                 appInstanceKey = appInstanceKey,
                 onLogout = viewModel::logout,
                 onAppDataRestored = onAppDataRestored,
             )
+
         formState.passwordChangeRequired ->
             MandatoryPasswordChangeScreen(
                 formState = formState,
@@ -128,6 +137,7 @@ fun AuthGateRoute(
                 onSubmit = viewModel::changePassword,
                 onCancel = viewModel::cancelPasswordChange,
             )
+
         formState.recoveryMode ->
             AdminRecoveryScreen(
                 formState = formState,
@@ -137,6 +147,7 @@ fun AuthGateRoute(
                 onSubmit = viewModel::recoverAdmin,
                 onCancel = viewModel::cancelRecovery,
             )
+
         !authState.configured ->
             FirstSetupScreen(
                 formState = formState,
@@ -145,8 +156,8 @@ fun AuthGateRoute(
                 onPasswordChange = viewModel::updatePassword,
                 onConfirmPasswordChange = viewModel::updateConfirmPassword,
                 onSubmit = viewModel::createFirstAdmin,
-                onBack = { (context as? Activity)?.finish() },
-            )
+            ) { (context as? Activity)?.finish() }
+
         else ->
             LoginScreen(
                 formState = formState,
@@ -155,8 +166,7 @@ fun AuthGateRoute(
                 onSubmit = viewModel::login,
                 onDemoLogin = viewModel::loginDemo,
                 onRecovery = viewModel::startRecovery,
-                onBack = { (context as? Activity)?.finish() },
-            )
+            ) { (context as? Activity)?.finish() }
     }
 }
 
@@ -370,7 +380,7 @@ private fun AuthForm(
     showRecoveryCode: Boolean = false,
 ) {
     var passwordVisible by rememberSaveable { mutableStateOf(value = false) }
-    var confirmPasswordVisible by rememberSaveable { mutableStateOf(false) }
+    var confirmPasswordVisible by rememberSaveable { mutableStateOf(value = false) }
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val nextAction = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) })
@@ -397,7 +407,10 @@ private fun AuthForm(
                     .widthIn(max = RepairAppSpacing.maxContentWidthMedium)
                     .verticalScroll(rememberScrollState())
                     .imePadding()
-                    .padding(horizontal = RepairAppSpacing.screenHorizontal, vertical = if (compactHeight) RepairAppSpacing.compactGap else RepairAppSpacing.screenHorizontal),
+                    .padding(
+                        horizontal = RepairAppSpacing.screenHorizontal,
+                        vertical = if (compactHeight) RepairAppSpacing.compactGap else RepairAppSpacing.screenHorizontal,
+                    ),
             verticalArrangement = Arrangement.spacedBy(if (compactHeight) RepairAppSpacing.compactGap else RepairAppSpacing.fieldGap),
         ) {
             Text(
@@ -405,7 +418,13 @@ private fun AuthForm(
                 style = if (compactHeight) MaterialTheme.typography.titleLarge else MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface,
             )
-            subtitle?.let { Text(text = it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+            subtitle?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
 
             if (showDisplayName) {
                 AppTextField(
@@ -507,10 +526,10 @@ private fun AuthForm(
                 testTag = RepairAppTestTags.AuthSubmitButton,
             )
 
-            if (onRecovery != null) {
+            onRecovery?.let {
                 AppButton(
                     text = stringResource(R.string.auth_recovery_action),
-                    onClick = onRecovery,
+                    onClick = it,
                     enabled = !formState.loading,
                     variant = AppButtonVariant.Secondary,
                     modifier = Modifier.fillMaxWidth(),

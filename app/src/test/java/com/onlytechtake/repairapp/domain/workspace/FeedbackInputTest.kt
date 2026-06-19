@@ -18,6 +18,11 @@ class FeedbackInputTest {
         val errors = FeedbackInput(CustomerFeedbackType.REJECT).validationErrors()
 
         assertEquals(listOf("Motivo rifiuto obbligatorio"), errors)
-        assertTrue(FeedbackInput(CustomerFeedbackType.REJECT, note = "Troppo caro").validationErrors().isEmpty())
+        assertTrue(
+            FeedbackInput(
+                CustomerFeedbackType.REJECT,
+                note = "Troppo caro"
+            ).validationErrors().isEmpty()
+        )
     }
 }

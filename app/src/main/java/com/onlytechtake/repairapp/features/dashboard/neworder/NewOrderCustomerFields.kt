@@ -52,7 +52,10 @@ fun CustomerSuggestionCard(
                 style = MaterialTheme.typography.titleSmall,
             )
             Text(
-                text = listOfNotNull(customer.type.label(context), customer.phone).joinToString(" - "),
+                text = listOfNotNull(
+                    customer.type.label(context),
+                    customer.phone
+                ).joinToString(" - "),
                 style = MaterialTheme.typography.bodySmall,
             )
             if (expanded) {
@@ -109,16 +112,98 @@ fun IntakeCustomerFields(
     Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)) {
         CustomerTypeToggle(isBusiness = isBusiness, onBusinessChange = onBusinessChange)
         if (isBusiness) {
-            AppTextField(companyName, onCompanyNameChange, stringResource(R.string.customer_field_company_name), required = true, showError = companyName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, capitalization = KeyboardCapitalization.Words)
-            AppTextField(vatNumber, onVatNumberChange, stringResource(R.string.customer_field_vat_number), showOptional = true, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, capitalization = KeyboardCapitalization.Characters)
+            AppTextField(
+                companyName,
+                onCompanyNameChange,
+                stringResource(R.string.customer_field_company_name),
+                required = true,
+                showError = companyName.isBlank(),
+                singleLine = true,
+                imeAction = ImeAction.Next,
+                keyboardActions = nextAction,
+                capitalization = KeyboardCapitalization.Words
+            )
+            AppTextField(
+                vatNumber,
+                onVatNumberChange,
+                stringResource(R.string.customer_field_vat_number),
+                showOptional = true,
+                singleLine = true,
+                imeAction = ImeAction.Next,
+                keyboardActions = nextAction,
+                capitalization = KeyboardCapitalization.Characters
+            )
         } else {
-            AppTextField(firstName, onFirstNameChange, stringResource(R.string.customer_field_first_name), required = true, showError = firstName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, capitalization = KeyboardCapitalization.Words, testTag = RepairAppTestTags.NewOrderFirstNameField)
-            AppTextField(lastName, onLastNameChange, stringResource(R.string.customer_field_last_name), required = true, showError = lastName.isBlank(), singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, capitalization = KeyboardCapitalization.Words, testTag = RepairAppTestTags.NewOrderLastNameField)
+            AppTextField(
+                firstName,
+                onFirstNameChange,
+                stringResource(R.string.customer_field_first_name),
+                required = true,
+                showError = firstName.isBlank(),
+                singleLine = true,
+                imeAction = ImeAction.Next,
+                keyboardActions = nextAction,
+                capitalization = KeyboardCapitalization.Words,
+                testTag = RepairAppTestTags.NewOrderFirstNameField
+            )
+            AppTextField(
+                lastName,
+                onLastNameChange,
+                stringResource(R.string.customer_field_last_name),
+                required = true,
+                showError = lastName.isBlank(),
+                singleLine = true,
+                imeAction = ImeAction.Next,
+                keyboardActions = nextAction,
+                capitalization = KeyboardCapitalization.Words,
+                testTag = RepairAppTestTags.NewOrderLastNameField
+            )
         }
-        AppTextField(taxCode, onTaxCodeChange, stringResource(R.string.customer_field_tax_code), showOptional = true, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, capitalization = KeyboardCapitalization.Characters)
-        AppTextField(phone, onPhoneChange, stringResource(R.string.customer_field_phone), required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, keyboardType = KeyboardType.Phone, testTag = RepairAppTestTags.NewOrderPhoneField)
-        AppTextField(email, onEmailChange, stringResource(R.string.customer_field_email), required = true, showError = contactMissing, singleLine = true, imeAction = ImeAction.Next, keyboardActions = nextAction, keyboardType = KeyboardType.Email, capitalization = KeyboardCapitalization.None, testTag = RepairAppTestTags.NewOrderEmailField)
-        AppTextField(address, onAddressChange, stringResource(R.string.customer_field_address), showOptional = true, singleLine = true, imeAction = ImeAction.Done, keyboardActions = doneAction, capitalization = KeyboardCapitalization.Words)
+        AppTextField(
+            taxCode,
+            onTaxCodeChange,
+            stringResource(R.string.customer_field_tax_code),
+            showOptional = true,
+            singleLine = true,
+            imeAction = ImeAction.Next,
+            keyboardActions = nextAction,
+            capitalization = KeyboardCapitalization.Characters
+        )
+        AppTextField(
+            phone,
+            onPhoneChange,
+            stringResource(R.string.customer_field_phone),
+            required = true,
+            showError = contactMissing,
+            singleLine = true,
+            imeAction = ImeAction.Next,
+            keyboardActions = nextAction,
+            keyboardType = KeyboardType.Phone,
+            testTag = RepairAppTestTags.NewOrderPhoneField
+        )
+        AppTextField(
+            email,
+            onEmailChange,
+            stringResource(R.string.customer_field_email),
+            required = true,
+            showError = contactMissing,
+            singleLine = true,
+            imeAction = ImeAction.Next,
+            keyboardActions = nextAction,
+            keyboardType = KeyboardType.Email,
+            capitalization = KeyboardCapitalization.None,
+            testTag = RepairAppTestTags.NewOrderEmailField
+        )
+        AppTextField(
+            address,
+            onAddressChange,
+            stringResource(R.string.customer_field_address),
+            showOptional = true,
+            singleLine = true,
+            imeAction = ImeAction.Done,
+            keyboardActions = doneAction,
+            capitalization = KeyboardCapitalization.Words
+        )
         NoteFieldWithDialog(notes, onNotesChange, testTag = RepairAppTestTags.NewOrderNotesField)
     }
 }

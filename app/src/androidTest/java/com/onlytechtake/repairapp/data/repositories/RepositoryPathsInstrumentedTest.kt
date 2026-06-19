@@ -27,7 +27,6 @@ import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
-import com.onlytechtake.repairapp.data.repositories.OrderFileCleanupService
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthPolicy
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
@@ -92,15 +91,29 @@ class RepositoryPathsInstrumentedTest {
             firstRepository.logout()
 
             repeat(AuthPolicy.MAX_FAILED_LOGIN_ATTEMPTS) {
-                assertEquals(LoginResult.InvalidCredentials, firstRepository.login("admin", "wrong-password".toCharArray()))
+                assertEquals(
+                    LoginResult.InvalidCredentials,
+                    firstRepository.login("admin", "wrong-password".toCharArray())
+                )
             }
-            assertEquals(LoginResult.LockedOut, firstRepository.login("admin", "correct-password".toCharArray()))
+            assertEquals(
+                LoginResult.LockedOut,
+                firstRepository.login("admin", "correct-password".toCharArray())
+            )
 
             val restartedRepository = authRepository { now }
-            assertEquals(LoginResult.LockedOut, restartedRepository.login("admin", "correct-password".toCharArray()))
+            assertEquals(
+                LoginResult.LockedOut,
+                restartedRepository.login("admin", "correct-password".toCharArray())
+            )
 
             now += AuthPolicy.LOGIN_LOCKOUT_MILLIS + 1L
-            assertTrue(restartedRepository.login("admin", "correct-password".toCharArray()) is LoginResult.Success)
+            assertTrue(
+                restartedRepository.login(
+                    "admin",
+                    "correct-password".toCharArray()
+                ) is LoginResult.Success
+            )
         }
 
     @Test
@@ -148,7 +161,12 @@ class RepositoryPathsInstrumentedTest {
             authRepository.createFirstAdmin("Admin", "admin", "correct-password".toCharArray())
             authRepository.logout()
 
-            assertTrue(authRepository.login("admin", "correct-password".toCharArray()) is LoginResult.Success)
+            assertTrue(
+                authRepository.login(
+                    "admin",
+                    "correct-password".toCharArray()
+                ) is LoginResult.Success
+            )
 
             val state = authRepository.observeAuthState().first { it.currentUser != null }
             assertEquals("admin", state.currentUser?.username)
@@ -196,12 +214,18 @@ class RepositoryPathsInstrumentedTest {
                 .recordResult(
                     actor,
                     acceptedOrder.id,
-                    DiagnosisResultInput("Display sostituibile", DiagnosisOutcome.REPAIRABLE, 12_300L),
+                    DiagnosisResultInput(
+                        "Display sostituibile",
+                        DiagnosisOutcome.REPAIRABLE,
+                        12_300L
+                    ),
                 ).getOrThrow()
             val acceptedResult = database.repairOrderDao().findById(acceptedOrder.id)
             assertEquals(DiagnosisOutcome.REPAIRABLE, acceptedResult?.diagnosisOutcome)
             assertEquals(12_300L, acceptedResult?.estimateAmountCents)
-            val quote = templates.prepareMessage(actor, acceptedOrder.id, TemplateAnchor.WHATSAPP_QUOTE).getOrThrow()
+            val quote =
+                templates.prepareMessage(actor, acceptedOrder.id, TemplateAnchor.WHATSAPP_QUOTE)
+                    .getOrThrow()
             assertTrue(quote.body.contains("EUR 123,00"))
             templates.recordPrepared(actor, quote, quote.body).getOrThrow()
             workflow
@@ -210,15 +234,25 @@ class RepositoryPathsInstrumentedTest {
                     acceptedOrder.id,
                     FeedbackInput(CustomerFeedbackType.ACCEPT, "Preventivo accettato"),
                 ).getOrThrow()
-            assertEquals(OrderStatus.REPAIRING, database.repairOrderDao().findById(acceptedOrder.id)?.status)
-            assertEquals(CustomerFeedbackType.ACCEPT, database.messageLogDao().findLatestForOrder(acceptedOrder.id)?.actualReply)
+            assertEquals(
+                OrderStatus.REPAIRING,
+                database.repairOrderDao().findById(acceptedOrder.id)?.status
+            )
+            assertEquals(
+                CustomerFeedbackType.ACCEPT,
+                database.messageLogDao().findLatestForOrder(acceptedOrder.id)?.actualReply
+            )
 
             val rejectedOrder = createDiagnosisOrder(workflow, actor, "Rifiutata")
             workflow
                 .recordResult(
                     actor,
                     rejectedOrder.id,
-                    DiagnosisResultInput("Riparazione possibile", DiagnosisOutcome.REPAIRABLE, 9_900L),
+                    DiagnosisResultInput(
+                        "Riparazione possibile",
+                        DiagnosisOutcome.REPAIRABLE,
+                        9_900L
+                    ),
                 ).getOrThrow()
             workflow
                 .recordFeedback(
@@ -235,12 +269,20 @@ class RepositoryPathsInstrumentedTest {
                 .recordResult(
                     actor,
                     notRepairableOrder.id,
-                    DiagnosisResultInput("Scheda irreparabile", DiagnosisOutcome.NOT_REPAIRABLE, 50_000L),
+                    DiagnosisResultInput(
+                        "Scheda irreparabile",
+                        DiagnosisOutcome.NOT_REPAIRABLE,
+                        50_000L
+                    ),
                 ).getOrThrow()
             val notRepairable = database.repairOrderDao().findById(notRepairableOrder.id)
             assertEquals(DiagnosisOutcome.NOT_REPAIRABLE, notRepairable?.diagnosisOutcome)
             assertEquals(null, notRepairable?.estimateAmountCents)
-            val message = templates.prepareMessage(actor, notRepairableOrder.id, TemplateAnchor.WHATSAPP_NOT_REPAIRABLE).getOrThrow()
+            val message = templates.prepareMessage(
+                actor,
+                notRepairableOrder.id,
+                TemplateAnchor.WHATSAPP_NOT_REPAIRABLE
+            ).getOrThrow()
             assertTrue(message.body.contains("non riparabile"))
             assertFalse(message.body.contains("Motivo: ."))
             workflow
@@ -258,7 +300,10 @@ class RepositoryPathsInstrumentedTest {
                     "Dispositivo ritirato",
                     ClosureReason.NOT_REPAIRABLE,
                 ).getOrThrow()
-            assertEquals(OrderStatus.CLOSED, database.repairOrderDao().findById(notRepairableOrder.id)?.status)
+            assertEquals(
+                OrderStatus.CLOSED,
+                database.repairOrderDao().findById(notRepairableOrder.id)?.status
+            )
         }
 
     @Test
@@ -284,7 +329,8 @@ class RepositoryPathsInstrumentedTest {
                         actor,
                         RepairOrderInput(CUSTOMER_ID, "Riparabile", CATEGORY_ID),
                     ).getOrThrow()
-            database.repairOrderDao().upsert(repairable.copy(diagnosisOutcome = DiagnosisOutcome.REPAIRABLE))
+            database.repairOrderDao()
+                .upsert(repairable.copy(diagnosisOutcome = DiagnosisOutcome.REPAIRABLE))
 
             val notRepairable =
                 workflow
@@ -292,7 +338,8 @@ class RepositoryPathsInstrumentedTest {
                         actor,
                         RepairOrderInput(CUSTOMER_ID, "Non riparabile", CATEGORY_ID),
                     ).getOrThrow()
-            database.repairOrderDao().upsert(notRepairable.copy(diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE))
+            database.repairOrderDao()
+                .upsert(notRepairable.copy(diagnosisOutcome = DiagnosisOutcome.NOT_REPAIRABLE))
 
             val missing =
                 workflow
@@ -303,15 +350,18 @@ class RepositoryPathsInstrumentedTest {
 
             assertEquals(
                 "Esito: Riparabile",
-                templates.prepareMessage(actor, repairable.id, "diagnosis_outcome_test").getOrThrow().body,
+                templates.prepareMessage(actor, repairable.id, "diagnosis_outcome_test")
+                    .getOrThrow().body,
             )
             assertEquals(
                 "Esito: Non riparabile",
-                templates.prepareMessage(actor, notRepairable.id, "diagnosis_outcome_test").getOrThrow().body,
+                templates.prepareMessage(actor, notRepairable.id, "diagnosis_outcome_test")
+                    .getOrThrow().body,
             )
             assertEquals(
                 "Esito: ",
-                templates.prepareMessage(actor, missing.id, "diagnosis_outcome_test").getOrThrow().body,
+                templates.prepareMessage(actor, missing.id, "diagnosis_outcome_test")
+                    .getOrThrow().body,
             )
         }
 
@@ -517,10 +567,16 @@ class RepositoryPathsInstrumentedTest {
                 repository.exportCompleteBackup(actor, Uri.fromFile(output)).getOrThrow()
 
                 val entries = output.unzipTextEntries()
-                assertTrue(entries.getValue("metadata/backup.json").contains("\"databaseVersion\": ${RepairAppDatabase.DATABASE_VERSION}"))
+                assertTrue(
+                    entries.getValue("metadata/backup.json")
+                        .contains("\"databaseVersion\": ${RepairAppDatabase.DATABASE_VERSION}")
+                )
                 assertTrue(entries.getValue("config/configuration.json").contains("Smartphone"))
                 assertTrue(entries.containsKey("database/$databaseName"))
-                assertTrue(entries.getValue("files/app_media/signatures/order-1/signature.png").contains("signature"))
+                assertTrue(
+                    entries.getValue("files/app_media/signatures/order-1/signature.png")
+                        .contains("signature")
+                )
                 assertTrue(entries.containsKey("files/app_media/order_media/order-1/photo.jpg"))
                 assertEquals(
                     1,
@@ -610,7 +666,10 @@ class RepositoryPathsInstrumentedTest {
                         active = true,
                     ),
                 )
-                File(context.filesDir, "app_media/order_media/order-1/photo.jpg").writeText("changed")
+                File(
+                    context.filesDir,
+                    "app_media/order_media/order-1/photo.jpg"
+                ).writeText("changed")
 
                 repository.restoreCompleteBackup(actor, Uri.fromFile(output)).getOrThrow()
 
@@ -621,8 +680,16 @@ class RepositoryPathsInstrumentedTest {
                         .allowMainThreadQueries()
                         .build()
                 try {
-                    assertEquals("Smartphone", restoredDatabase.orderCategoryDao().findById(CATEGORY_ID)?.name)
-                    assertTrue(File(context.filesDir, "app_media/order_media/order-1/photo.jpg").readBytes().contentEquals(byteArrayOf(1, 2, 3, 4)))
+                    assertEquals(
+                        "Smartphone",
+                        restoredDatabase.orderCategoryDao().findById(CATEGORY_ID)?.name
+                    )
+                    assertTrue(
+                        File(
+                            context.filesDir,
+                            "app_media/order_media/order-1/photo.jpg"
+                        ).readBytes().contentEquals(byteArrayOf(1, 2, 3, 4))
+                    )
                     assertEquals(null, sessionStore.currentUser.value)
                 } finally {
                     restoredDatabase.close()
@@ -1033,7 +1100,8 @@ class RepositoryPathsInstrumentedTest {
         }
     }
 
-    private fun File.walkFiles(): Sequence<File> = if (exists()) walkTopDown().filter { it.isFile } else emptySequence()
+    private fun File.walkFiles(): Sequence<File> =
+        if (exists()) walkTopDown().filter { it.isFile } else emptySequence()
 
     private fun File.unzipTextEntries(): Map<String, String> {
         val entries = mutableMapOf<String, String>()

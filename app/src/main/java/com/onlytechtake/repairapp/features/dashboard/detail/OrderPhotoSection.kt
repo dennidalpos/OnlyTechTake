@@ -2,24 +2,40 @@ package com.onlytechtake.repairapp.features.dashboard.detail
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppDialog
+import com.onlytechtake.repairapp.core.design.components.AppIconButton
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
-import com.onlytechtake.repairapp.features.dashboard.common.*
+import com.onlytechtake.repairapp.features.dashboard.common.CameraCapturePreview
+import com.onlytechtake.repairapp.features.dashboard.common.LocalImagePreview
+import com.onlytechtake.repairapp.features.dashboard.common.LocalImageViewer
+import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.workspace.isFinalPhoto
 import com.onlytechtake.repairapp.features.workspace.isImageAttachment
 
@@ -42,7 +58,11 @@ fun OrderPhotoSection(
         SectionTitle(stringResource(R.string.intake_step_media))
 
         if (images.isEmpty() && documents.isEmpty()) {
-            Text(stringResource(R.string.intake_media_empty), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
+            Text(
+                stringResource(R.string.intake_media_empty),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.outline
+            )
         } else {
             if (images.isNotEmpty()) {
                 Text(
@@ -67,7 +87,12 @@ fun OrderPhotoSection(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
                             ) {
-                                Text(media.fileName, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
+                                Text(
+                                    com.onlytechtake.repairapp.core.utils.formatUiDateTime(media.capturedAt),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.outline,
+                                    modifier = Modifier.weight(1f)
+                                )
                                 AppIconButton(
                                     imageVector = Icons.Default.Delete,
                                     contentDescription = stringResource(R.string.content_description_delete),
@@ -122,7 +147,12 @@ fun OrderPhotoSection(
             },
             confirmButton = {},
             dismissButton = {
-                AppButton(text = stringResource(R.string.customer_detail_close), onClick = { showCamera = false }, variant = AppButtonVariant.Secondary, size = AppButtonSize.Compact)
+                AppButton(
+                    text = stringResource(R.string.customer_detail_close),
+                    onClick = { showCamera = false },
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact
+                )
             },
         )
     }

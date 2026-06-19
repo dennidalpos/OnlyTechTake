@@ -23,7 +23,8 @@ class ShareDocumentIntentFactoryInstrumentedTest {
                 writeBytes(byteArrayOf(37, 80, 68, 70))
             }
 
-        val intent = ShareDocumentIntentFactory(context).createPdfShareIntent(source, "Stato avanzamento")
+        val intent =
+            ShareDocumentIntentFactory(context).createPdfShareIntent(source, "Stato avanzamento")
 
         assertEquals(Intent.ACTION_SEND, intent.action)
         assertEquals("application/pdf", intent.type)

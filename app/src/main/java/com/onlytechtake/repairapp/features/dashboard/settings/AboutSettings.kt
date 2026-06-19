@@ -46,9 +46,16 @@ fun AboutSettings(onBack: () -> Unit) {
                     modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                 ) {
-                    Text(stringResource(R.string.about_app_name), style = MaterialTheme.typography.titleLarge)
                     Text(
-                        text = stringResource(R.string.about_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE),
+                        stringResource(R.string.about_app_name),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Text(
+                        text = stringResource(
+                            R.string.about_version,
+                            BuildConfig.VERSION_NAME,
+                            BuildConfig.VERSION_CODE
+                        ),
                         style = MaterialTheme.typography.bodyMedium,
                     )
                     Text(
@@ -66,7 +73,10 @@ fun AboutSettings(onBack: () -> Unit) {
                     modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                 ) {
-                    Text(stringResource(R.string.about_description_title), style = MaterialTheme.typography.titleSmall)
+                    Text(
+                        stringResource(R.string.about_description_title),
+                        style = MaterialTheme.typography.titleSmall
+                    )
                     Text(
                         text = stringResource(R.string.about_description_text),
                         style = MaterialTheme.typography.bodyMedium,
@@ -81,8 +91,14 @@ fun AboutSettings(onBack: () -> Unit) {
                     modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                 ) {
-                    Text(stringResource(R.string.about_development), style = MaterialTheme.typography.titleSmall)
-                    Text(stringResource(R.string.about_copyright), style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        stringResource(R.string.about_development),
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                    Text(
+                        stringResource(R.string.about_copyright),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
 
                     AppButton(
                         text = stringResource(R.string.about_github),
@@ -95,7 +111,9 @@ fun AboutSettings(onBack: () -> Unit) {
 
         item {
             AppButton(
-                modifier = Modifier.fillMaxWidth().padding(top = RepairAppSpacing.screenHorizontal),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = RepairAppSpacing.screenHorizontal),
                 text = stringResource(R.string.about_close),
                 variant = AppButtonVariant.Secondary,
                 onClick = onBack,

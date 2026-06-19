@@ -25,7 +25,8 @@ fun selectedCategoryAfterClick(
     clickedCategoryId: String,
 ): String? = if (currentCategoryId == clickedCategoryId) null else clickedCategoryId
 
-fun completedStepAfterCategorySelection(completedStep: Int): Int = completedStepAfterEdit(completedStep, 2)
+fun completedStepAfterCategorySelection(completedStep: Int): Int =
+    completedStepAfterEdit(completedStep, 2)
 
 fun calculateIsDirty(draft: QuickIntakeDraft): Boolean =
     draft.selectedCustomerId != null ||
@@ -45,6 +46,7 @@ fun calculateCanSaveNewCustomer(
 ): Boolean {
     val isBusiness = customerType == CustomerType.BUSINESS
     val hasContact = phone.isNotBlank() || email.isNotBlank()
-    val hasName = if (isBusiness) companyName.isNotBlank() else firstName.isNotBlank() && lastName.isNotBlank()
+    val hasName =
+        if (isBusiness) companyName.isNotBlank() else firstName.isNotBlank() && lastName.isNotBlank()
     return hasContact && hasName
 }

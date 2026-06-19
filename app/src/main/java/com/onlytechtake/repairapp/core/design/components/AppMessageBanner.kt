@@ -1,13 +1,22 @@
 package com.onlytechtake.repairapp.core.design.components
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -44,16 +53,19 @@ fun AppMessageBanner(
                     containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                     contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
                 )
+
             BannerType.Success ->
                 CardDefaults.cardColors(
                     containerColor = MaterialTheme.repairColors.successContainer,
                     contentColor = MaterialTheme.repairColors.onSuccessContainer,
                 )
+
             BannerType.Warning ->
                 CardDefaults.cardColors(
                     containerColor = MaterialTheme.repairColors.warningContainer,
                     contentColor = MaterialTheme.repairColors.onWarningContainer,
                 )
+
             BannerType.Error ->
                 CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.errorContainer,

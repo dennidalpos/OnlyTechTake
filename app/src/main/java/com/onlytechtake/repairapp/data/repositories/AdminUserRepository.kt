@@ -153,7 +153,12 @@ class AdminUserRepository(
 
             val now = clockMillis()
             userDao.upsert(existing.copy(active = active, updatedAt = now))
-            audit(actor.id, AuditAction.USER_UPDATED, """{"userId":"$userId","active":$active}""", now)
+            audit(
+                actor.id,
+                AuditAction.USER_UPDATED,
+                """{"userId":"$userId","active":$active}""",
+                now
+            )
         }
 
     suspend fun deleteUser(
@@ -168,7 +173,12 @@ class AdminUserRepository(
             }
 
             userDao.deleteById(userId)
-            audit(actor.id, AuditAction.USER_UPDATED, """{"userId":"$userId","action":"deleted"}""", clockMillis())
+            audit(
+                actor.id,
+                AuditAction.USER_UPDATED,
+                """{"userId":"$userId","action":"deleted"}""",
+                clockMillis()
+            )
         }
 
     suspend fun setPermissions(
@@ -183,7 +193,12 @@ class AdminUserRepository(
 
             val now = clockMillis()
             userDao.upsert(existing.copy(permissions = permissions, updatedAt = now))
-            audit(actor.id, AuditAction.USER_UPDATED, """{"userId":"$userId","permissions":${permissions.map { it.name }}}""", now)
+            audit(
+                actor.id,
+                AuditAction.USER_UPDATED,
+                """{"userId":"$userId","permissions":${permissions.map { it.name }}}""",
+                now
+            )
         }
 
     private suspend fun audit(

@@ -29,7 +29,12 @@ class OrderClosurePermissionPolicyTest {
     @Test
     fun closingTargetAllowsExplicitCloseOrdersPermission() {
         OrderClosurePermissionPolicy.requireClosePermissionIfNeeded(
-            actor = operator(permissions = setOf(UserPermission.EDIT_OWN_ORDERS, UserPermission.CLOSE_ORDERS)),
+            actor = operator(
+                permissions = setOf(
+                    UserPermission.EDIT_OWN_ORDERS,
+                    UserPermission.CLOSE_ORDERS
+                )
+            ),
             targetStatus = OrderStatus.CLOSED,
         )
     }

@@ -10,7 +10,7 @@ class WorkspaceUiStateTest {
     fun clearingPreviewRemovesMessageAndEditedBody() {
         val state =
             WorkspaceUiState(
-                preparedMessage = PreparedMessage("order", "customer", "333", "Originale"),
+                preparedMessage = PreparedMessage("order", "customer", "333", "Originale", "Template 1"),
                 preparedMessageBody = "Modificato",
             ).withoutPreparedMessage()
 

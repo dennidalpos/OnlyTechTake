@@ -29,7 +29,11 @@ class DatabaseKeyManager(
             try {
                 decryptKey(encryptedKeyBase64, ivBase64)
             } catch (e: Exception) {
-                android.util.Log.e("DatabaseKeyManager", "Failed to decrypt database key, generating new one", e)
+                android.util.Log.e(
+                    "DatabaseKeyManager",
+                    "Failed to decrypt database key, generating new one",
+                    e
+                )
                 generateAndSaveNewKey(prefs)
             }
         } else {
@@ -51,7 +55,8 @@ class DatabaseKeyManager(
         val keyStore = KeyStore.getInstance(ANDROID_KEY_STORE).apply { load(null) }
         keyStore.getKey(MASTER_KEY_ALIAS, null)?.let { return it as SecretKey }
 
-        val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
+        val keyGenerator =
+            KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
         val spec =
             KeyGenParameterSpec
                 .Builder(

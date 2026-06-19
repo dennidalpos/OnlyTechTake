@@ -43,7 +43,12 @@ class CreateIntakeOrderUseCase(
             if (BuildConfig.IS_DEMO_VERSION && BuildConfig.MAX_ORDERS > 0) {
                 val totalOrders = orderRepository.countAllOrders()
                 if (totalOrders >= BuildConfig.MAX_ORDERS) {
-                    throw IllegalStateException(context.getString(R.string.demo_error_order_limit, BuildConfig.MAX_ORDERS))
+                    throw IllegalStateException(
+                        context.getString(
+                            R.string.demo_error_order_limit,
+                            BuildConfig.MAX_ORDERS
+                        )
+                    )
                 }
             }
 
@@ -55,7 +60,9 @@ class CreateIntakeOrderUseCase(
                     val customerId =
                         normalizedInput.existingCustomerId?.takeIf { it.isNotBlank() }
                             ?: customerRepository
-                                .save(actor, requireNotNull(normalizedInput.newCustomer) { "Cliente obbligatorio" })
+                                .save(
+                                    actor,
+                                    requireNotNull(normalizedInput.newCustomer) { "Cliente obbligatorio" })
                                 .getOrThrow()
                                 .id
 
@@ -84,7 +91,9 @@ class CreateIntakeOrderUseCase(
                         ).getOrThrow()
                         .also { savedSignature = it }
 
-                    attachedMedia = orderMediaRepository.attachStagedMedia(actor, order.id, stagedMedia).getOrThrow()
+                    attachedMedia =
+                        orderMediaRepository.attachStagedMedia(actor, order.id, stagedMedia)
+                            .getOrThrow()
 
                     Complete(order)
                 }

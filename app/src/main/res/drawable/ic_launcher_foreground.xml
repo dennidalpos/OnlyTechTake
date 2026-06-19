@@ -7,10 +7,10 @@
 
     <!-- Brand Symbol - Centered in Safe Zone -->
     <group
-        android:translateX="22"
-        android:translateY="22"
         android:scaleX="0.6"
-        android:scaleY="0.6">
+        android:scaleY="0.6"
+        android:translateX="22"
+        android:translateY="22">
 
         <!-- Document Body -->
         <path

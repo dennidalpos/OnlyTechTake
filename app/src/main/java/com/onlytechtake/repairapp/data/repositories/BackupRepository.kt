@@ -10,9 +10,17 @@ import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label
-import com.onlytechtake.repairapp.data.local.dao.*
+import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
+import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
+import com.onlytechtake.repairapp.data.local.dao.MessageTemplateDao
+import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
+import com.onlytechtake.repairapp.data.local.dao.OrderExportDao
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
-import com.onlytechtake.repairapp.data.local.entities.*
+import com.onlytechtake.repairapp.data.local.entities.ClosureReason
+import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
+import com.onlytechtake.repairapp.data.local.entities.OrderPriority
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
@@ -46,7 +54,8 @@ class BackupRepository(
 ) {
     private val eventWriter = OrderWorkflowEventWriter(context, auditLogDao = auditLogDao)
 
-    private val metadataService = BackupMetadataService(categoryDao, templateDao, settingDao, clockMillis)
+    private val metadataService =
+        BackupMetadataService(categoryDao, templateDao, settingDao, clockMillis)
     private val dbBackupService = DatabaseBackupFileService(context)
 
     suspend fun exportConfiguration(
@@ -92,19 +101,31 @@ class BackupRepository(
             }
 
             val securitySettings = securityPreferences?.settings?.first()
-            val password = securitySettings?.backupEncryptionPassword?.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
+            val password =
+                securitySettings?.backupEncryptionPassword?.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
 
             withContext(Dispatchers.IO) {
                 context.contentResolver.openOutputStream(uri)?.use { output ->
                     ZipOutputStream(output, password?.toCharArray()).use { zip ->
-                        zip.putTextEntry("metadata/backup.json", metadataService.buildBackupMetadataJson(), password)
-                        zip.putTextEntry("config/configuration.json", metadataService.buildConfigurationJson(), password)
+                        zip.putTextEntry(
+                            "metadata/backup.json",
+                            metadataService.buildBackupMetadataJson(),
+                            password
+                        )
+                        zip.putTextEntry(
+                            "config/configuration.json",
+                            metadataService.buildConfigurationJson(),
+                            password
+                        )
                         dbBackupService.addDatabaseFiles(zip, password)
                         BackupArchive.addDirectory(
                             zip = zip,
                             directory =
                                 mediaStorageProvider?.getBaseMediaDir()
-                                    ?: File(context.filesDir, BackupArchive.CANONICAL_MEDIA_DIRECTORY),
+                                    ?: File(
+                                        context.filesDir,
+                                        BackupArchive.CANONICAL_MEDIA_DIRECTORY
+                                    ),
                             entryDirectory = "files/${BackupArchive.CANONICAL_MEDIA_DIRECTORY}",
                             password = password,
                         )
@@ -205,13 +226,21 @@ class BackupRepository(
                                     actorUserId = finalActorId,
                                     orderId = null,
                                     customerId = null,
-                                    detailsJson = """{"operation":"backup_restored","at":"${formatTime(now)}"}""",
+                                    detailsJson = """{"operation":"backup_restored","at":"${
+                                        formatTime(
+                                            now
+                                        )
+                                    }"}""",
                                     createdAt = now,
                                 ),
                             )
                         } catch (auditError: Exception) {
                             // Don't let audit log failure invalidate a successful restore
-                            android.util.Log.e("BackupRepository", "Failed to write audit log after restore", auditError)
+                            android.util.Log.e(
+                                "BackupRepository",
+                                "Failed to write audit log after restore",
+                                auditError
+                            )
                         } finally {
                             RepairAppDatabase.closeInstance()
                         }
@@ -249,7 +278,8 @@ class BackupRepository(
             }
 
             val securitySettings = securityPreferences?.settings?.first()
-            val password = securitySettings?.backupEncryptionPassword?.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
+            val password =
+                securitySettings?.backupEncryptionPassword?.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
 
             val exportDao = requireNotNull(orderExportDao) { "Export commesse non configurato" }
             val labels =
@@ -281,7 +311,11 @@ class BackupRepository(
                     statusLabels = OrderStatus.entries.associateWith { it.label(context) },
                     priorityLabels = OrderPriority.entries.associateWith { it.label(context) },
                     customerTypeLabels = CustomerType.entries.associateWith { it.label(context) },
-                    diagnosisOutcomeLabels = DiagnosisOutcome.entries.associateWith { it.label(context) },
+                    diagnosisOutcomeLabels = DiagnosisOutcome.entries.associateWith {
+                        it.label(
+                            context
+                        )
+                    },
                     closureReasonLabels = ClosureReason.entries.associateWith { it.label(context) },
                     paidLabel = context.getString(R.string.export_xlsx_value_paid),
                     notPaidLabel = context.getString(R.string.export_xlsx_value_not_paid),
@@ -331,10 +365,22 @@ class BackupRepository(
                         writer.line("Motivo chiusura: ${reason.label(context)}")
                     }
                     writer.line("Cliente: ${detail.customer?.displayName(context) ?: ""}")
-                    writer.line("Categoria: ${detail.category?.name.orEmpty().ifBlank { "Nessuna" }}")
-                    writer.line("Operatore: ${detail.assignedUser?.displayName.orEmpty().ifBlank { "Non assegnato" }}")
+                    writer.line(
+                        "Categoria: ${
+                            detail.category?.name.orEmpty().ifBlank { "Nessuna" }
+                        }"
+                    )
+                    writer.line(
+                        "Operatore: ${
+                            detail.assignedUser?.displayName.orEmpty().ifBlank { "Non assegnato" }
+                        }"
+                    )
                     writer.line("Data creazione: ${formatTime(detail.order.createdAt)}")
-                    writer.line("Descrizione: ${detail.order.description.orEmpty().ifBlank { "Nessuna" }}")
+                    writer.line(
+                        "Descrizione: ${
+                            detail.order.description.orEmpty().ifBlank { "Nessuna" }
+                        }"
+                    )
                     writer.section("Timeline")
                     if (detail.timeline.isEmpty()) {
                         writer.line("Nessun evento registrato.")
@@ -431,11 +477,16 @@ private fun formatTimelineEvent(event: TimelineEventEntity): String {
             add("${formatTime(event.createdAt)} - ${event.title}")
             event.description?.takeIf { it.isNotBlank() }?.let { add(it) }
             if (!event.oldStatus.isNullOrBlank() || !event.newStatus.isNullOrBlank()) {
-                add("Cambio stato: ${event.oldStatus.orEmpty().ifBlank { "-" }} -> ${event.newStatus.orEmpty().ifBlank { "-" }}")
+                add(
+                    "Cambio stato: ${
+                        event.oldStatus.orEmpty().ifBlank { "-" }
+                    } -> ${event.newStatus.orEmpty().ifBlank { "-" }}"
+                )
             }
             event.expectedFeedbackType?.let { add("Feedback atteso: ${it.name}") }
             event.customerFeedback?.let { add("Feedback cliente: ${it.name}") }
-            event.customerFeedbackNote?.takeIf { it.isNotBlank() }?.let { add("Nota feedback: $it") }
+            event.customerFeedbackNote?.takeIf { it.isNotBlank() }
+                ?.let { add("Nota feedback: $it") }
             event.customerFeedbackAt?.let { add("Feedback registrato: ${formatTime(it)}") }
         }
     return parts.joinToString(" | ")

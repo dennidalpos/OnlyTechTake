@@ -9,7 +9,20 @@ import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
-import com.onlytechtake.repairapp.data.repositories.*
+import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
+import com.onlytechtake.repairapp.data.repositories.BackupRepository
+import com.onlytechtake.repairapp.data.repositories.CatalogRepository
+import com.onlytechtake.repairapp.data.repositories.CustomerRepository
+import com.onlytechtake.repairapp.data.repositories.DataResetRepository
+import com.onlytechtake.repairapp.data.repositories.DefaultAuthRepository
+import com.onlytechtake.repairapp.data.repositories.DefaultOrderDocumentRepository
+import com.onlytechtake.repairapp.data.repositories.OrderDocumentFileStorage
+import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
+import com.onlytechtake.repairapp.data.repositories.OrderFileCleanupService
+import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
+import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
+import com.onlytechtake.repairapp.data.repositories.SignatureRepository
+import com.onlytechtake.repairapp.data.repositories.TemplateRepository
 import com.onlytechtake.repairapp.data.services.StorageStatsService
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
@@ -58,7 +71,12 @@ class MediaContainer(
     dataContainer: DataContainer,
 ) {
     val mediaStorageProvider by lazy { MediaStorageProvider(context.applicationContext) }
-    val orderFileCleanupService by lazy { OrderFileCleanupService(context.applicationContext, mediaStorageProvider) }
+    val orderFileCleanupService by lazy {
+        OrderFileCleanupService(
+            context.applicationContext,
+            mediaStorageProvider
+        )
+    }
     private val mediaOptimizer by lazy {
         com.onlytechtake.repairapp.core.media
             .MediaOptimizer()
@@ -166,7 +184,12 @@ class SettingsContainer(
 ) {
     val backupReminderPreferences by lazy { BackupReminderPreferences(context.applicationContext) }
     val securityPreferences by lazy { SecurityPreferences(context.applicationContext) }
-    val storageStatsService by lazy { StorageStatsService(context.applicationContext, mediaContainer.mediaStorageProvider) }
+    val storageStatsService by lazy {
+        StorageStatsService(
+            context.applicationContext,
+            mediaContainer.mediaStorageProvider
+        )
+    }
 
     val templateRepository by lazy {
         TemplateRepository(

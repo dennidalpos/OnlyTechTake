@@ -28,27 +28,13 @@ internal class AuthenticatedActionRunner(
             authRepository.touchSession()
             block(actor).fold(
                 onSuccess = { result ->
-                    (result as? String ?: successMessage)?.let { showMessage(it, false) }
+                    ((result as? String) ?: successMessage)?.let { showMessage(it, false) }
                     onSuccess()
                 },
                 onFailure = { error ->
                     showMessage(error.message ?: "Errore", true)
                 },
             )
-        }
-    }
-
-    fun runCustom(block: suspend (AuthenticatedUser) -> Unit) {
-        scope.launch {
-            val actor = currentUser.value
-            if (actor == null) {
-                authRepository.logout()
-                showMessage(SESSION_EXPIRED_MESSAGE, true)
-                return@launch
-            }
-
-            authRepository.touchSession()
-            block(actor)
         }
     }
 

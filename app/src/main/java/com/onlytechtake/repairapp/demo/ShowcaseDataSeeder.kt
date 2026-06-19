@@ -10,7 +10,23 @@ import androidx.room.withTransaction
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
-import com.onlytechtake.repairapp.data.local.entities.*
+import com.onlytechtake.repairapp.data.local.entities.ClosureReason
+import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
+import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
+import com.onlytechtake.repairapp.data.local.entities.MessageChannel
+import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderPriority
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
+import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
+import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
+import com.onlytechtake.repairapp.data.local.entities.TimelineEventType
+import com.onlytechtake.repairapp.data.local.entities.UserEntity
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
+import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import java.io.File
 import java.io.FileOutputStream
@@ -122,31 +138,185 @@ object ShowcaseDataSeeder {
             val categories =
                 listOf(
                     // Smartphone branch (4 levels)
-                    OrderCategoryEntity("cat-smartphone", null, 0, "Smartphone", "Riparazione telefoni cellulari", true),
-                    OrderCategoryEntity("cat-apple", "cat-smartphone", 1, "Apple", "Dispositivi iOS", true),
-                    OrderCategoryEntity("cat-iphone", "cat-apple", 2, "iPhone", "Tutti i modelli iPhone", true),
-                    OrderCategoryEntity("cat-iphone-14-pro", "cat-iphone", 3, "iPhone 14 Pro", "Riparazione display e vetro posteriore", true),
-                    OrderCategoryEntity("cat-iphone-13", "cat-iphone", 3, "iPhone 13", "Sostituzione batteria e connettore", true),
-                    OrderCategoryEntity("cat-samsung", "cat-smartphone", 1, "Samsung", "Dispositivi Android Galaxy", true),
-                    OrderCategoryEntity("cat-galaxy-s", "cat-samsung", 2, "Serie Galaxy S", "Fascia alta Samsung", true),
-                    OrderCategoryEntity("cat-s23-ultra", "cat-galaxy-s", 3, "S23 Ultra", "Riparazione schermo curvo e S-Pen", true),
+                    OrderCategoryEntity(
+                        "cat-smartphone",
+                        null,
+                        0,
+                        "Smartphone",
+                        "Riparazione telefoni cellulari",
+                        true
+                    ),
+                    OrderCategoryEntity(
+                        "cat-apple",
+                        "cat-smartphone",
+                        1,
+                        "Apple",
+                        "Dispositivi iOS",
+                        true
+                    ),
+                    OrderCategoryEntity(
+                        "cat-iphone",
+                        "cat-apple",
+                        2,
+                        "iPhone",
+                        "Tutti i modelli iPhone",
+                        true
+                    ),
+                    OrderCategoryEntity(
+                        "cat-iphone-14-pro",
+                        "cat-iphone",
+                        3,
+                        "iPhone 14 Pro",
+                        "Riparazione display e vetro posteriore",
+                        true
+                    ),
+                    OrderCategoryEntity(
+                        "cat-iphone-13",
+                        "cat-iphone",
+                        3,
+                        "iPhone 13",
+                        "Sostituzione batteria e connettore",
+                        true
+                    ),
+                    OrderCategoryEntity(
+                        "cat-samsung",
+                        "cat-smartphone",
+                        1,
+                        "Samsung",
+                        "Dispositivi Android Galaxy",
+                        true
+                    ),
+                    OrderCategoryEntity(
+                        "cat-galaxy-s",
+                        "cat-samsung",
+                        2,
+                        "Serie Galaxy S",
+                        "Fascia alta Samsung",
+                        true
+                    ),
+                    OrderCategoryEntity(
+                        "cat-s23-ultra",
+                        "cat-galaxy-s",
+                        3,
+                        "S23 Ultra",
+                        "Riparazione schermo curvo e S-Pen",
+                        true
+                    ),
                     // Computer branch (4 levels)
-                    OrderCategoryEntity("cat-pc", null, 0, "Computer & Laptop", "Riparazioni hardware e software PC", true),
-                    OrderCategoryEntity("cat-notebook", "cat-pc", 1, "Notebook", "Portatili e Ultrabook", true),
-                    OrderCategoryEntity("cat-gaming-laptop", "cat-notebook", 2, "Gaming Laptop", "MSI, ROG, Alienware, Legion", true),
-                    OrderCategoryEntity("cat-rog-strix", "cat-gaming-laptop", 3, "Asus ROG Strix", "Pulizia interna e pasta termica", true),
-                    OrderCategoryEntity("cat-windows-laptop", "cat-notebook", 2, "Windows Laptop", "Asus, HP, Lenovo, Dell", true),
-                    OrderCategoryEntity("cat-asus-zenbook", "cat-windows-laptop", 3, "Asus Zenbook OLED", "Riparazione cerniere e display", true),
+                    OrderCategoryEntity(
+                        "cat-pc",
+                        null,
+                        0,
+                        "Computer & Laptop",
+                        "Riparazioni hardware e software PC",
+                        true
+                    ),
+                    OrderCategoryEntity(
+                        "cat-notebook",
+                        "cat-pc",
+                        1,
+                        "Notebook",
+                        "Portatili e Ultrabook",
+                        true
+                    ),
+                    OrderCategoryEntity(
+                        "cat-gaming-laptop",
+                        "cat-notebook",
+                        2,
+                        "Gaming Laptop",
+                        "MSI, ROG, Alienware, Legion",
+                        true
+                    ),
+                    OrderCategoryEntity(
+                        "cat-rog-strix",
+                        "cat-gaming-laptop",
+                        3,
+                        "Asus ROG Strix",
+                        "Pulizia interna e pasta termica",
+                        true
+                    ),
+                    OrderCategoryEntity(
+                        "cat-windows-laptop",
+                        "cat-notebook",
+                        2,
+                        "Windows Laptop",
+                        "Asus, HP, Lenovo, Dell",
+                        true
+                    ),
+                    OrderCategoryEntity(
+                        "cat-asus-zenbook",
+                        "cat-windows-laptop",
+                        3,
+                        "Asus Zenbook OLED",
+                        "Riparazione cerniere e display",
+                        true
+                    ),
                     // Console branch (4 levels)
-                    OrderCategoryEntity("cat-console", null, 0, "Console Game", "Riparazioni PlayStation, Xbox, Switch", true),
-                    OrderCategoryEntity("cat-sony", "cat-console", 1, "Sony", "Ecosistema PlayStation", true),
-                    OrderCategoryEntity("cat-ps5", "cat-sony", 2, "PlayStation 5", "Revisione e riparazione PS5", true),
-                    OrderCategoryEntity("cat-ps5-hdmi", "cat-ps5", 3, "Sostituzione Porta HDMI", "Sostituzione connettore video 4K", true),
-                    OrderCategoryEntity("cat-dualsense", "cat-ps5", 3, "DualSense Controller", "Riparazione Analogico Drift e Tasti", true),
-                    OrderCategoryEntity("cat-tablet", null, 0, "Tablet", "Riparazioni iPad e Android", true),
+                    OrderCategoryEntity(
+                        "cat-console",
+                        null,
+                        0,
+                        "Console Game",
+                        "Riparazioni PlayStation, Xbox, Switch",
+                        true
+                    ),
+                    OrderCategoryEntity(
+                        "cat-sony",
+                        "cat-console",
+                        1,
+                        "Sony",
+                        "Ecosistema PlayStation",
+                        true
+                    ),
+                    OrderCategoryEntity(
+                        "cat-ps5",
+                        "cat-sony",
+                        2,
+                        "PlayStation 5",
+                        "Revisione e riparazione PS5",
+                        true
+                    ),
+                    OrderCategoryEntity(
+                        "cat-ps5-hdmi",
+                        "cat-ps5",
+                        3,
+                        "Sostituzione Porta HDMI",
+                        "Sostituzione connettore video 4K",
+                        true
+                    ),
+                    OrderCategoryEntity(
+                        "cat-dualsense",
+                        "cat-ps5",
+                        3,
+                        "DualSense Controller",
+                        "Riparazione Analogico Drift e Tasti",
+                        true
+                    ),
+                    OrderCategoryEntity(
+                        "cat-tablet",
+                        null,
+                        0,
+                        "Tablet",
+                        "Riparazioni iPad e Android",
+                        true
+                    ),
                     OrderCategoryEntity("cat-ipad", "cat-tablet", 1, "iPad", "Tablet Apple", true),
-                    OrderCategoryEntity("cat-ipad-pro", "cat-ipad", 2, "iPad Pro", "Modelli 11\" e 12.9\"", true),
-                    OrderCategoryEntity("cat-ipad-glass", "cat-ipad-pro", 3, "Sostituzione Vetro/LCD", "Riparazione pannello touch", true),
+                    OrderCategoryEntity(
+                        "cat-ipad-pro",
+                        "cat-ipad",
+                        2,
+                        "iPad Pro",
+                        "Modelli 11\" e 12.9\"",
+                        true
+                    ),
+                    OrderCategoryEntity(
+                        "cat-ipad-glass",
+                        "cat-ipad-pro",
+                        3,
+                        "Sostituzione Vetro/LCD",
+                        "Riparazione pannello touch",
+                        true
+                    ),
                 )
             db.orderCategoryDao().upsertAll(categories)
 
@@ -156,7 +326,13 @@ object ShowcaseDataSeeder {
                     CustomerEntity(
                         id = "cust-p-$i",
                         type = CustomerType.PRIVATE,
-                        firstName = listOf("Mario", "Luigi", "Giovanna", "Francesca", "Roberto")[i - 1],
+                        firstName = listOf(
+                            "Mario",
+                            "Luigi",
+                            "Giovanna",
+                            "Francesca",
+                            "Roberto"
+                        )[i - 1],
                         lastName = listOf("Rossi", "Bianchi", "Verdi", "Neri", "Gialli")[i - 1],
                         companyName = null,
                         vatNumber = null,
@@ -179,7 +355,13 @@ object ShowcaseDataSeeder {
                         type = CustomerType.BUSINESS,
                         firstName = null,
                         lastName = null,
-                        companyName = listOf("Tech Solutions Srl", "Global Food SpA", "Studio Legale Rossi", "Officina Meccanica", "Bar Centrale")[i - 1],
+                        companyName = listOf(
+                            "Tech Solutions Srl",
+                            "Global Food SpA",
+                            "Studio Legale Rossi",
+                            "Officina Meccanica",
+                            "Bar Centrale"
+                        )[i - 1],
                         vatNumber = "0123456789$i",
                         taxCode = "BCN${UUID.randomUUID().toString().take(13)}",
                         phone = "+39 02 555 666$i",
@@ -197,7 +379,8 @@ object ShowcaseDataSeeder {
             val statuses = OrderStatus.entries.toTypedArray()
 
             // Select leaf categories for orders
-            val selectableCategories = categories.filter { cat -> categories.none { it.parentId == cat.id } }
+            val selectableCategories =
+                categories.filter { cat -> categories.none { it.parentId == cat.id } }
 
             var orderCount = 1
             allCustomers.forEach { customer ->
@@ -205,8 +388,10 @@ object ShowcaseDataSeeder {
                 repeat(3) { j ->
                     val orderId = "order-$orderCount"
                     val isClosed = (j == 2)
-                    val status = if (isClosed) OrderStatus.CLOSED else statuses[(orderCount % (statuses.size - 1))]
-                    val categoryId = selectableCategories[(orderCount % selectableCategories.size)].id
+                    val status =
+                        if (isClosed) OrderStatus.CLOSED else statuses[(orderCount % (statuses.size - 1))]
+                    val categoryId =
+                        selectableCategories[(orderCount % selectableCategories.size)].id
                     val operatorId = operators[(orderCount % 3)].id
 
                     val order =
@@ -214,7 +399,14 @@ object ShowcaseDataSeeder {
                             id = orderId,
                             orderNumber = "2026-${orderCount.toString().padStart(4, '0')}",
                             customerId = customer.id,
-                            title = "Riparazione ${listOf("PC", "Smartphone", "Tablet", "Console")[orderCount % 4]} - Modello $j",
+                            title = "Riparazione ${
+                                listOf(
+                                    "PC",
+                                    "Smartphone",
+                                    "Tablet",
+                                    "Console"
+                                )[orderCount % 4]
+                            } - Modello $j",
                             categoryId = categoryId,
                             status = status,
                             priority = OrderPriority.NORMAL,

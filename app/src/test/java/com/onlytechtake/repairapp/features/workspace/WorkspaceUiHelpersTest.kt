@@ -37,7 +37,10 @@ class WorkspaceUiHelpersTest {
                 signatures = listOf(signature()),
             )
 
-        assertEquals(AttachmentCounts(images = 1, documents = 1, signatures = 1, finalPhotos = 1), counts)
+        assertEquals(
+            AttachmentCounts(images = 1, documents = 1, signatures = 1, finalPhotos = 1),
+            counts
+        )
         assertEquals("Foto 1 - Documenti 1 - Firme 1 - Lavoro finito 1", counts.label())
         assertEquals("Foto 2 - Documenti 3 - Firme 1", OrderAttachmentCounts(2, 3, 1).label())
     }
@@ -64,8 +67,14 @@ class WorkspaceUiHelpersTest {
         assertEquals("Registra risultato", nextActionLabel(OrderStatus.DIAGNOSIS))
         assertEquals("Registra esito preventivo", nextActionLabel(OrderStatus.RESULT))
         assertEquals("Nessuna azione", nextActionLabel(OrderStatus.CLOSED))
-        assertEquals("Attendere accettazione o rifiuto preventivo", nextActionLabel(order(DiagnosisOutcome.REPAIRABLE)))
-        assertEquals("Avvisare il cliente e preparare il ritiro", nextActionLabel(order(DiagnosisOutcome.NOT_REPAIRABLE)))
+        assertEquals(
+            "Attendere accettazione o rifiuto preventivo",
+            nextActionLabel(order(DiagnosisOutcome.REPAIRABLE))
+        )
+        assertEquals(
+            "Avvisare il cliente e preparare il ritiro",
+            nextActionLabel(order(DiagnosisOutcome.NOT_REPAIRABLE))
+        )
     }
 
     @Test

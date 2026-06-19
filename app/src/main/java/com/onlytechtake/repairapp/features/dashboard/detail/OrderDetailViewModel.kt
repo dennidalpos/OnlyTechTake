@@ -50,10 +50,9 @@ class OrderDetailViewModel(
             authRepository = authRepository,
             currentUser = authRepository.currentUser,
             scope = viewModelScope,
-            showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) },
-        )
+        ) { text, isError -> _message.value = WorkspaceMessage(text, isError) }
 
-    private val _isGeneratingStatusPdf = MutableStateFlow(false)
+    private val _isGeneratingStatusPdf = MutableStateFlow(value = false)
     val isGeneratingStatusPdf = _isGeneratingStatusPdf.asStateFlow()
 
     private val _statusPdfError = MutableStateFlow<String?>(null)
@@ -100,10 +99,12 @@ class OrderDetailViewModel(
         closureReason: ClosureReason? = null,
         onSuccess: () -> Unit = {},
     ) {
-        actionRunner.run(onSuccess = {
-            clearPreparedMessage()
-            onSuccess()
-        }) { actor ->
+        actionRunner.run(
+            onSuccess = {
+                clearPreparedMessage()
+                onSuccess()
+            },
+        ) { actor ->
             orderRepository.changeStatus(actor, orderId, status, note, closureReason)
         }
     }
@@ -118,7 +119,11 @@ class OrderDetailViewModel(
             clearPreparedMessage()
             onSuccess()
         }) { actor ->
-            orderRepository.recordResult(actor, orderId, DiagnosisResultInput(summary, diagnosisOutcome, estimateAmountCents))
+            orderRepository.recordResult(
+                actor,
+                orderId,
+                DiagnosisResultInput(summary, diagnosisOutcome, estimateAmountCents)
+            )
         }
     }
 
@@ -132,7 +137,11 @@ class OrderDetailViewModel(
             clearPreparedMessage()
             onSuccess()
         }) { actor ->
-            orderRepository.recordFeedback(actor, orderId, FeedbackInput(feedback, note, closureReason))
+            orderRepository.recordFeedback(
+                actor,
+                orderId,
+                FeedbackInput(feedback, note, closureReason)
+            )
         }
     }
 
@@ -166,15 +175,6 @@ class OrderDetailViewModel(
         }
     }
 
-    fun registerCapturedFinalPhoto(
-        id: String,
-        file: File,
-    ) {
-        actionRunner.run { actor ->
-            orderMediaRepository.registerCapturedFinalPhoto(actor, id, file)
-        }
-    }
-
     fun importAttachment(
         id: String,
         uri: Uri,
@@ -187,6 +187,18 @@ class OrderDetailViewModel(
     fun deleteMedia(mediaId: String) {
         actionRunner.run { actor ->
             orderMediaRepository.deleteMedia(actor, mediaId)
+        }
+    }
+
+    fun deleteSignature(signatureId: String) {
+        actionRunner.run { actor ->
+            orderRepository.deleteSignature(actor, signatureId)
+        }
+    }
+
+    fun deleteOrder(onSuccess: () -> Unit) {
+        actionRunner.run(onSuccess = onSuccess) { actor ->
+            orderRepository.deleteOrder(actor, orderId)
         }
     }
 
@@ -206,16 +218,6 @@ class OrderDetailViewModel(
     fun prepareMessage(anchor: TemplateAnchor) {
         actionRunner.run { actor ->
             templateRepository.prepareMessage(actor, orderId, anchor).onSuccess { prepared ->
-                _preparedMessage.value = prepared
-                _preparedMessageBody.value = prepared.body
-                setFormDirty(true)
-            }
-        }
-    }
-
-    fun prepareMessage(templateCode: String) {
-        actionRunner.run { actor ->
-            templateRepository.prepareMessage(actor, orderId, templateCode).onSuccess { prepared ->
                 _preparedMessage.value = prepared
                 _preparedMessageBody.value = prepared.body
                 setFormDirty(true)
@@ -288,7 +290,9 @@ class OrderDetailViewModel(
                     onSuccess = {
                         orderRepository.recordMediaRemoved(actor, orderId, document.fileName)
                     },
-                    onFailure = { error -> _message.value = WorkspaceMessage(error.message ?: "Errore", true) },
+                    onFailure = { error ->
+                        _message.value = WorkspaceMessage(error.message ?: "Errore", true)
+                    },
                 )
             }
         }

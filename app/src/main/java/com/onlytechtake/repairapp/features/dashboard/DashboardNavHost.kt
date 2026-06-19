@@ -59,10 +59,14 @@ fun DashboardNavHost(
                 onNewOrder = { navController.navigate(DashboardRoutes.NEW_ORDER) },
                 onOpenQueue = { filter ->
                     val status = filter.status?.name ?: filter.statuses.firstOrNull()?.name
-                    navController.navigate(DashboardRoutes.orders(status = status, customerId = filter.customerId))
+                    navController.navigate(
+                        DashboardRoutes.orders(
+                            status = status,
+                            customerId = filter.customerId,
+                        ),
+                    )
                 },
-                onOpenBackupSettings = { navController.navigate(DashboardRoutes.settings("EXPORT")) },
-            )
+            ) { navController.navigate(DashboardRoutes.settings("EXPORT")) }
         }
         composable(DashboardRoutes.NEW_ORDER) {
             val newOrderViewModel: NewOrderViewModel =
@@ -75,12 +79,18 @@ fun DashboardNavHost(
                             orderMediaRepository = container.orderMediaRepository,
                             templateRepository = container.templateRepository,
                             createIntakeOrderUseCase = container.createIntakeOrderUseCase,
-                            onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) },
-                        ),
+                        ) { dirty -> sharedViewModel.setFormDirty(dirty) },
                 )
             QuickActions(
                 viewModel = newOrderViewModel,
-                onOpenConfig = { navController.navigate(DashboardRoutes.settings("CATEGORIES", fromIntake = true)) },
+                onOpenConfig = {
+                    navController.navigate(
+                        DashboardRoutes.settings(
+                            "CATEGORIES",
+                            fromIntake = true
+                        )
+                    )
+                },
                 onClose = { navController.popBackStack() },
             )
         }
@@ -97,7 +107,13 @@ fun DashboardNavHost(
                 )
             CustomerPanel(
                 viewModel = customersViewModel,
-                onOrderClick = { orderId -> navController.navigate(DashboardRoutes.orderDetail(orderId)) },
+                onOrderClick = { orderId ->
+                    navController.navigate(
+                        DashboardRoutes.orderDetail(
+                            orderId
+                        )
+                    )
+                },
             )
         }
         composable(
@@ -162,7 +178,11 @@ fun DashboardNavHost(
         }
         composable(
             route = DashboardRoutes.ORDER_DETAIL,
-            arguments = listOf(navArgument("orderId") { type = androidx.navigation.NavType.StringType }),
+            arguments = listOf(
+                navArgument("orderId") {
+                    type = androidx.navigation.NavType.StringType
+                },
+            ),
         ) { backStackEntry ->
             val orderId = backStackEntry.arguments?.getString("orderId") ?: ""
             val orderDetailViewModel: OrderDetailViewModel =

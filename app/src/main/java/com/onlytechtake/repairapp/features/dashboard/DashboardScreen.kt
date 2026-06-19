@@ -14,8 +14,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -36,7 +48,15 @@ import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
-import com.onlytechtake.repairapp.core.design.components.*
+import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
+import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppDialog
+import com.onlytechtake.repairapp.core.design.components.AppIconButton
+import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
+import com.onlytechtake.repairapp.core.design.components.AppTopBar
+import com.onlytechtake.repairapp.core.design.components.BannerType
+import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.domain.models.AppSummary
@@ -95,16 +115,49 @@ fun DashboardScreen(
     val items =
         androidx.compose.runtime.remember {
             listOf(
-                NavigationItem(DashboardRoutes.HOME, Icons.Default.Home, R.string.dashboard_home, RepairAppTestTags.dashboardTab("HOME")),
-                NavigationItem(DashboardRoutes.NEW_ORDER, Icons.Default.Add, R.string.dashboard_new, RepairAppTestTags.dashboardTab("NEW_ORDER")),
-                NavigationItem(DashboardRoutes.CUSTOMERS, Icons.Default.Person, R.string.dashboard_customers, RepairAppTestTags.dashboardTab("CUSTOMERS")),
-                NavigationItem(DashboardRoutes.orders(), Icons.AutoMirrored.Filled.List, R.string.dashboard_orders, RepairAppTestTags.dashboardTab("ORDERS")),
-                NavigationItem(DashboardRoutes.settings(), Icons.Default.Settings, R.string.dashboard_config, RepairAppTestTags.dashboardTab("SETTINGS")),
+                NavigationItem(
+                    DashboardRoutes.HOME,
+                    Icons.Default.Home,
+                    R.string.dashboard_home,
+                    RepairAppTestTags.dashboardTab("HOME"),
+                ),
+                NavigationItem(
+                    DashboardRoutes.NEW_ORDER,
+                    Icons.Default.Add,
+                    R.string.dashboard_new,
+                    RepairAppTestTags.dashboardTab("NEW_ORDER")
+                ),
+                NavigationItem(
+                    DashboardRoutes.CUSTOMERS,
+                    Icons.Default.Person,
+                    R.string.dashboard_customers,
+                    RepairAppTestTags.dashboardTab("CUSTOMERS")
+                ),
+                NavigationItem(
+                    DashboardRoutes.orders(),
+                    Icons.AutoMirrored.Filled.List,
+                    R.string.dashboard_orders,
+                    RepairAppTestTags.dashboardTab("ORDERS")
+                ),
+                NavigationItem(
+                    DashboardRoutes.settings(),
+                    Icons.Default.Settings,
+                    R.string.dashboard_config,
+                    RepairAppTestTags.dashboardTab("SETTINGS")
+                ),
             )
         }
 
-    var pendingRoute by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf<String?>(null) }
-    var showUnsavedChangesDialog by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(value = false) }
+    var pendingRoute by androidx.compose.runtime.remember {
+        androidx.compose.runtime.mutableStateOf<String?>(
+            null
+        )
+    }
+    var showUnsavedChangesDialog by androidx.compose.runtime.remember {
+        androidx.compose.runtime.mutableStateOf(
+            value = false
+        )
+    }
 
     fun isTabSelected(
         itemRoute: String,
@@ -115,7 +168,10 @@ fun DashboardScreen(
         val baseCurrent = currentRoute.split("?")[0]
         if (baseRoute == baseCurrent) return true
         return when (baseRoute) {
-            DashboardRoutes.ORDERS.split("?")[0] -> baseCurrent == DashboardRoutes.ORDER_DETAIL.split("?")[0]
+            DashboardRoutes.ORDERS.split("?")[0] -> baseCurrent == DashboardRoutes.ORDER_DETAIL.split(
+                "?"
+            )[0]
+
             else -> false
         }
     }
@@ -303,7 +359,10 @@ fun DashboardScreen(
                         message = message.text,
                         type = if (message.isError) BannerType.Error else BannerType.Info,
                         onDismiss = sharedViewModel::clearMessage,
-                        modifier = Modifier.padding(horizontal = RepairAppSpacing.screenHorizontal, vertical = RepairAppSpacing.compactGap),
+                        modifier = Modifier.padding(
+                            horizontal = RepairAppSpacing.screenHorizontal,
+                            vertical = RepairAppSpacing.compactGap
+                        ),
                     )
                 }
 
