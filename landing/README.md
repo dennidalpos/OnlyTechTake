@@ -7,7 +7,10 @@ La cartella `landing/` contiene una bozza HTML/CSS/JS statica. Non richiede buil
 - `index.html`: pagina statica.
 - `styles.css`: stili della landing.
 - `script.js`: smooth scroll e validazione base del form.
-- `assets/`: logo, mark, favicon, cover e social preview duplicati da `media/brand` per pubblicazione statica.
+- `assets/brand/`: logo e marchio duplicati da `media/brand/identity`.
+- `assets/icons/`: favicon e anteprima icona duplicate da `media/brand/icons`.
+- `assets/social/`: cover e social preview duplicate da `media/brand/social`.
+- `assets/screenshots/`: soli screenshot applicativi approvati per la pubblicazione.
 
 La landing non pubblica APK, non contiene link Play Store reali e non contiene video. Prima della pubblicazione vanno verificati contatti, link, privacy policy e canale di distribuzione.
 

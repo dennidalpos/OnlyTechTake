@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="OnlyTechTake favicon">
-  <rect width="64" height="64" rx="14" fill="#102026"/>
-  <path d="M19 14h26c3 0 6 3 6 6v28c0 3-3 6-6 6H19c-3 0-6-3-6-6V20c0-3 3-6 6-6Z" fill="#F8FAFC"/>
-  <path d="M18 21h28v5H18z" fill="#12B7A7"/>
-  <path d="M20 32h17v4H20zM20 40h13v4H20z" fill="#102026"/>
-  <path d="M41 47l-8-8 4-4 4 4 13-13 4 4-17 17Z" fill="#F59E0B"/>
-</svg>

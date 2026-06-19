@@ -1,7 +1,0 @@
-<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="128" height="128" rx="24" fill="#006A6A"/>
-  <!-- Simplified Icon Mark -->
-  <path d="M64 20L102.105 42V86L64 108L25.8949 86V42L64 20Z" fill="#6FF6F6" fill-opacity="0.2"/>
-  <path d="M54 48H74V54H67V80H61V54H54V48Z" fill="white"/>
-  <circle cx="64" cy="64" r="40" stroke="white" stroke-width="4" stroke-dasharray="8 4"/>
-</svg>

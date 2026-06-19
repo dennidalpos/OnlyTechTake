@@ -12,33 +12,5 @@
       "Ogni blocco deve mantenere identified_residual e plan aggiornati finche' resta aperto."
     ]
   },
-  "todos": [
-    {
-      "block_id": "B13",
-      "title": "Refactoring Vetrina e Cleanup Legacy",
-      "priority": "P1",
-      "complexity": "medium",
-      "status": "in_progress",
-      "recommended_batch_size": 3,
-      "identified_residual": "Il progetto contiene ancora naming generici. La vetrina GitHub richiede asset visuali di alta qualita' e messaggistica evocativa.",
-      "why_this_block": "Allinea il progetto alla nuova visione 'Un'app per ogni problema!' e migliora la manutenibilita' rimuovendo il debito tecnico legacy.",
-      "plan": [
-        "Aggiornare i nomi dei flavor con branding completo (OnlyTechTake Pro/Demo/Showcase).",
-        "Implementare asset SVG ricchi per logo e cover GitHub.",
-        "Migliorare la robustezza dei Room TypeConverters con gestione errori.",
-        "Aggiornare la documentazione README in ottica showcase."
-      ],
-      "items": [
-        {
-          "priority": "P1",
-          "summary": "Finalizzazione asset visuali vetrina.",
-          "refs": [
-            "media/brand/onlytechtake-logo.svg",
-            "media/brand/github-cover.svg"
-          ],
-          "completion_criteria": "Asset SVG creati e referenziati nel README; motto 'Un'app per ogni problema!' integrato."
-        }
-      ]
-    }
-  ]
+  "todos": []
 }

@@ -4,6 +4,15 @@ Questa cartella contiene solo indicazioni operative per produrre asset marketing
 
 ## Asset generati
 
+La struttura canonica separa gli asset per destinazione:
+
+```text
+media/brand/identity/   logo e marchio vettoriali
+media/brand/icons/      favicon e anteprima icona
+media/brand/social/     cover GitHub e social preview
+media/play-store/       asset Pro, Demo e Showcase
+```
+
 Gli asset statici Play tracciati sono in:
 
 ```text
@@ -14,6 +23,16 @@ media/play-store/demo/feature-graphic-1024x500.png
 media/play-store/showcase/icon-512.png
 media/play-store/showcase/feature-graphic-1024x500.png
 ```
+
+Logo, favicon, cover e asset Play sono rigenerabili dalla palette Material 3 e
+dagli screenshot reali dell'app:
+
+```powershell
+& "<python-con-Pillow>" scripts\windows\generate_media_assets.py
+```
+
+Il comando richiede gli screenshot Full e Demo sotto `reports\demo-assets`,
+aggiorna `media` e sincronizza le copie pubblicate in `landing\assets`.
 
 Pro e Demo sono per Google Play; Showcase resta per presentazioni commerciali fuori store.
 

@@ -9,7 +9,7 @@ Benvenuti in **OnlyTechTake**, la soluzione definitiva per la gestione delle com
 
 > **"Un'app per ogni problema!"** — Dalla presa in carico alla consegna, OnlyTechTake è al tuo fianco.
 
-![OnlyTechTake Showcase](media/brand/github-cover.svg)
+![OnlyTechTake Showcase](media/brand/social/github-cover.svg)
 
 ## ✨ Perché scegliere OnlyTechTake?
 

@@ -1,0 +1,20 @@
+<svg width="1280" height="640" viewBox="0 0 1280 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1280" y2="640" gradientUnits="userSpaceOnUse"><stop stop-color="#062629"/><stop offset="1" stop-color="#0D4A4D"/></linearGradient><pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" stroke="#6FF6F6" stroke-opacity=".08"/></pattern></defs>
+  <rect width="1280" height="640" rx="36" fill="url(#bg)"/><rect width="1280" height="640" rx="36" fill="url(#grid)"/>
+  <g transform="translate(70 66) scale(.34)">
+  <rect x="18" y="18" width="220" height="220" rx="54" fill="#062629"/>
+  <rect x="67" y="49" width="122" height="166" rx="19" fill="#F4FBFA" stroke="#B8C7C7" stroke-width="5"/>
+  <rect x="87" y="90" width="82" height="15" rx="4" fill="#1BB8AE"/>
+  <rect x="89" y="131" width="55" height="13" rx="3" fill="#102326"/>
+  <rect x="89" y="159" width="39" height="13" rx="3" fill="#102326"/>
+  <path d="M151 180L176 202L230 132" stroke="#FF9F0A" stroke-width="21" stroke-linecap="square" stroke-linejoin="round"/>
+</g>
+  <text x="176" y="126" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700" fill="#F4FBFA">OnlyTechTake</text>
+  <text x="70" y="252" font-family="Segoe UI, Arial, sans-serif" font-size="68" font-weight="700" fill="#FFFFFF">Riparazioni,</text>
+  <text x="70" y="326" font-family="Segoe UI, Arial, sans-serif" font-size="68" font-weight="700" fill="#6FF6F6">senza caos.</text>
+  <text x="70" y="386" font-family="Segoe UI, Arial, sans-serif" font-size="28" fill="#DAE5E4">Commesse, clienti e documenti.</text>
+  <text x="70" y="426" font-family="Segoe UI, Arial, sans-serif" font-size="28" fill="#DAE5E4">Tutto locale. Tutto sotto controllo.</text>
+  <rect x="70" y="486" width="236" height="52" rx="26" fill="#006A6A"/><text x="99" y="521" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="white">PRIVACY LOCALE</text>
+  <rect x="322" y="486" width="256" height="52" rx="26" fill="#7D5800"/><text x="350" y="521" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="white">FLUSSO COMPLETO</text>
+  <g transform="translate(790 104)"><rect width="388" height="460" rx="34" fill="#191C1D" stroke="#4DDADA" stroke-width="3"/><text x="36" y="62" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" fill="#F4FBFA">Banco riparazioni</text><g font-family="Segoe UI, Arial, sans-serif" text-anchor="middle"><rect x="35" y="94" width="92" height="92" rx="20" fill="#1E3536"/><text x="81" y="143" font-size="30" font-weight="700" fill="#4DDADA">2</text><text x="81" y="170" font-size="14" fill="#DAE5E4">Utenti</text><rect x="148" y="94" width="92" height="92" rx="20" fill="#1E3536"/><text x="194" y="143" font-size="30" font-weight="700" fill="#4DDADA">12</text><text x="194" y="170" font-size="14" fill="#DAE5E4">Clienti</text><rect x="261" y="94" width="92" height="92" rx="20" fill="#1E3536"/><text x="307" y="143" font-size="30" font-weight="700" fill="#4DDADA">8</text><text x="307" y="170" font-size="14" fill="#DAE5E4">Attive</text></g><rect x="35" y="215" width="318" height="66" rx="22" fill="#4DDADA"/><text x="112" y="257" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" fill="#062629">+  Nuova commessa</text><rect x="35" y="312" width="318" height="105" rx="22" fill="#202A2B"/><text x="60" y="350" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="#F4FBFA">In lavorazione</text><text x="60" y="384" font-family="Segoe UI, Arial, sans-serif" font-size="17" fill="#BFC9C8">4 commesse in coda</text><circle cx="326" cy="365" r="11" fill="#FFBA28"/></g>
+</svg>
