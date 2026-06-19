@@ -6,29 +6,25 @@
     android:viewportHeight="108">
 
     <group
-        android:scaleX="0.65"
-        android:scaleY="0.65"
+        android:scaleX="0.9"
+        android:scaleY="0.9"
         android:translateX="18"
         android:translateY="18">
 
-        <!-- Document Body -->
+        <!-- Outer Hexagon Frame -->
+        <path
+            android:fillColor="#000000"
+            android:pathData="M40,0L74.64,20V60L40,80L5.36,60V20L40,0Z" />
+
+        <!-- Stylized 'T' -->
         <path
             android:fillColor="#FFFFFF"
-            android:pathData="M30,20 h35 l15,15 v50 c0,5 -4,9 -9,9 H30 c-5,0 -9,-4 -9,-9 V29 c0,-5 4,-9 9,-9z" />
+            android:pathData="M30,25H50V32H43V60H37V32H30V25Z" />
 
-        <!-- Folded Corner -->
+        <!-- Accent Area -->
         <path
             android:fillAlpha="0.3"
-            android:fillColor="#000000"
-            android:pathData="M65,20 v15 h15 z" />
-
-        <!-- Checkmark Badge Area -->
-        <path
-            android:fillAlpha="0.6"
-            android:fillColor="#000000"
-            android:pathData="M80,85 c0,8.3 -6.7,15 -15,15 s-15,-6.7 -15,-15 s6.7,-15 15,-15 s15,6.7 15,15z" />
-        <path
             android:fillColor="#FFFFFF"
-            android:pathData="M72,81 l-9,9 l-4,-4 l-2,2 l6,6 l11,-11 z" />
+            android:pathData="M40,12c-5.52,0 -10,4.48 -10,10h4c0,-3.31 2.69,-6 6,-6s6,2.69 6,6h4c0,-5.52 -4.48,-10 -10,-10z" />
     </group>
 </vector>

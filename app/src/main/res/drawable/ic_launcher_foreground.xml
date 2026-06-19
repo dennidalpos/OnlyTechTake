@@ -5,37 +5,41 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Brand Symbol - Centered in Safe Zone -->
+    <!-- Background Glow -->
+    <path
+        android:fillAlpha="0.1"
+        android:fillColor="#006A6A"
+        android:pathData="M54,10C30,10 10,30 10,54S30,98 54,98 98,78 98,54 78,10 54,10Z" />
+
+    <!-- Main Icon Group -->
     <group
-        android:scaleX="0.6"
-        android:scaleY="0.6"
-        android:translateX="22"
-        android:translateY="22">
+        android:translateX="14"
+        android:translateY="14">
 
-        <!-- Document Body -->
+        <!-- Outer Hexagon Frame -->
         <path
-            android:fillColor="#F8FAFC"
-            android:pathData="M30,20 h35 l15,15 v50 c0,5 -4,9 -9,9 H30 c-5,0 -9,-4 -9,-9 V29 c0,-5 4,-9 9,-9z" />
+            android:fillColor="#006A6A"
+            android:pathData="M40,0L74.64,20V60L40,80L5.36,60V20L40,0Z" />
 
-        <!-- Folded Corner -->
+        <!-- Highlight Inner -->
         <path
-            android:fillColor="#CBD5E1"
-            android:pathData="M65,20 v15 h15 z" />
+            android:fillAlpha="0.3"
+            android:fillColor="#6FF6F6"
+            android:pathData="M40,5L70.31,22.5V57.5L40,75L9.69,57.5V22.5L40,5Z" />
 
-        <!-- Lines on document -->
-        <path
-            android:fillColor="#12B7A7"
-            android:pathData="M32,45 h30 v6 H32 z" />
-        <path
-            android:fillColor="#475569"
-            android:pathData="M32,58 h20 v5 H32 z M32,68 h25 v5 H32 z" />
-
-        <!-- Circular Checkmark Badge -->
-        <path
-            android:fillColor="#F59E0B"
-            android:pathData="M80,85 c0,8.3 -6.7,15 -15,15 s-15,-6.7 -15,-15 s6.7,-15 15,-15 s15,6.7 15,15z" />
+        <!-- Stylized 'T' (Technical/Take) -->
         <path
             android:fillColor="#FFFFFF"
-            android:pathData="M72,81 l-9,9 l-4,-4 l-2,2 l6,6 l11,-11 z" />
+            android:pathData="M30,25H50V32H43V60H37V32H30V25Z" />
+
+        <!-- Tool/Wrench Stylized Element -->
+        <path
+            android:fillColor="#FFBA28"
+            android:pathData="M40,12c-5.52,0 -10,4.48 -10,10h4c0,-3.31 2.69,-6 6,-6s6,2.69 6,6h4c0,-5.52 -4.48,-10 -10,-10z" />
+
+        <!-- Bottom Action Dot (as Path) -->
+        <path
+            android:fillColor="#6FF6F6"
+            android:pathData="M40,64c-2.21,0 -4,1.79 -4,4s1.79,4 4,4s4,-1.79 4,-4s-1.79,-4 -4,-4z" />
     </group>
 </vector>

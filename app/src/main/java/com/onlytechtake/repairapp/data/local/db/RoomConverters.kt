@@ -120,5 +120,7 @@ class RoomConverters {
         value?.joinToString(",") { it.name }
 
     private inline fun <reified T : Enum<T>> enumValueOrNull(value: String?): T? =
-        value?.let { enumValueOf<T>(it) }
+        value?.let {
+            runCatching { enumValueOf<T>(it) }.getOrNull()
+        }
 }

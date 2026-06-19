@@ -1,205 +1,56 @@
-# OnlyTechTake Repair App
+# OnlyTechTake: Un'app per ogni problema! 🛠️
 
-![OnlyTechTake Repair App](media/brand/github-cover-repair-flow.png)
+[![Android](https://img.shields.io/badge/Platform-Android-green.svg)](https://developer.android.com)
+[![Kotlin](https://img.shields.io/badge/Language-Kotlin-orange.svg)](https://kotlinlang.org)
+[![Compose](https://img.shields.io/badge/UI-Jetpack%20Compose-blue.svg)](https://developer.android.com/jetpack/compose)
+[![SQLCipher](https://img.shields.io/badge/Security-SQLCipher-red.svg)](https://www.zetetic.net/sqlcipher/)
 
-App Android locale per tracciare commesse clienti dal banco alla diagnosi, alla riparazione e alla consegna su un singolo device. L'app prepara gli aggiornamenti WhatsApp di avanzamento, lasciando all'operatore il controllo dell'invio manuale al cliente.
+Benvenuti in **OnlyTechTake**, la soluzione definitiva per la gestione delle commesse di riparazione. Nata per trasformare il caos dei fogli di carta in un flusso di lavoro digitale, sicuro e orientato al cliente.
 
-## Stato Reale
+> **"Un'app per ogni problema!"** — Dalla presa in carico alla consegna, OnlyTechTake è al tuo fianco.
 
-- Sistema di sviluppo supportato: Windows + PowerShell.
-- Runtime app: Android, package `com.onlytechtake.repairapp`.
-- Versione app: `0.2.0`, `versionCode` 2.
-- Flavor Gradle: `full`, `demo` e `showcase`; gli script usano `Full` come default.
-- SDK Android: compile/target SDK 37, min SDK 26.
-- Stack: Kotlin, Jetpack Compose, Material 3, Navigation Compose, Room, SQLCipher, DataStore, CameraX, Coroutines/Flow.
-- Dati: Room locale cifrato con SQLCipher, DataStore/preferenze locali, file privati app, export tramite Storage Access Framework.
-- Schema Room corrente: `DATABASE_VERSION = 1`; e' tracciato solo l'export `1.json`, rigenerato come baseline fresh con lo schema attuale. Lo schema e' bloccato fino a ordine esplicito dell'owner.
-- Backend: assente. WhatsApp e' solo manuale.
-- CI: `.github/workflows/android.yml` verifica lint/compile/test Full e compile/test Demo/Showcase; `.github/workflows/android-instrumented.yml` esegue `:app:connectedFullDebugAndroidTest` su emulatore quando attivata o sui PR che toccano app/test/build.
+![OnlyTechTake Showcase](media/brand/github-cover.svg)
 
-## Documentazione
+## ✨ Perché scegliere OnlyTechTake?
 
-- [Indice documentazione](docs/README.md)
-- [Guida funzionale](docs/01_GUIDA_FUNZIONALE.md)
-- [Specifica tecnica](docs/02_SPECIFICA_TECNICA.md)
-- [Modello dati](docs/03_MODELLO_DATI_GENERICO.md)
-- [Schema flusso commesse (Draw.io)](docs/07_SCHEMA_FLUSSO_COMMESSE.drawio)
-- [Privacy, WhatsApp e feedback](docs/04_PRIVACY_WHATSAPP_FEEDBACK.md)
-- [Export e backup locale](docs/05_EXPORT_BACKUP_LOCALE.md)
-- [Design System e Icone](docs/DESIGN_SYSTEM_ICONS.md)
-- [Build, installazione e verifica](docs/06_BUILD_INSTALLER_ANDROID.md)
-- [Checklist di Release](docs/release/RELEASE_CHECKLIST.md)
-- [Demo, Showcase, Full e manuale operativo](docs/08_LICENZA_DEMO_FULL_E_MANUALE_USO.md)
-- [Marketing e asset demo](docs/marketing/README.md)
-- [Script PowerShell](scripts/README.md)
+OnlyTechTake non è solo un software di gestione; è la tua vetrina operativa. Progettata per laboratori tecnici e centri riparazione che vogliono offrire trasparenza e professionalità.
 
-## Prerequisiti
+*   **🔒 Local-First & Privacy-By-Design**: I tuoi dati (e quelli dei tuoi clienti) non lasciano mai il dispositivo. Database cifrato con **SQLCipher** per la massima sicurezza.
+*   **📱 Integrazione WhatsApp**: Comunica istantaneamente l'avanzamento della riparazione. L'app prepara il messaggio, tu premi invio.
+*   **📸 Documentazione Multimediale**: Scatta foto prima e dopo la riparazione, cattura firme digitali e allega documenti tecnici.
+*   **🧩 Versatile e Modulare**:
+    *   **Pro**: L'esperienza completa senza limiti.
+    *   **Demo**: Per provare le potenzialità con una sola commessa.
+    *   **Showcase**: La nostra vetrina interattiva con dati pre-caricati per dimostrazioni veloci.
 
-- PowerShell.
-- Android Studio recente.
-- JDK/JBR 21 consigliato. Gli script accettano anche JDK 17 come JVM di avvio; in quel caso Gradle deve poter risolvere il toolchain Java 21 configurato dal progetto.
-- Android SDK Platform `android-37`.
-- Android SDK Build Tools.
-- Android Platform Tools per `adb`, se servono installazione, start o instrumentation test su device.
-- Debug USB abilitato e PC autorizzato sul device per i comandi via `adb`.
+## 🚀 Funzionalità Chiave
 
-Gli script in `scripts\android` gestiscono ambiente, Gradle, build e avvio. Gli script in `scripts\windows` coprono check di progetto, qualita', pulizia e pipeline demo. Tutti rilevano automaticamente Android Studio JBR, Android SDK e platform-tools nei percorsi standard. Se l'autodetect non basta, impostare nel processo PowerShell:
+*   **Workflow Guidato**: Un percorso a step che ti porta dalla diagnosi al preventivo, fino alla chiusura della commessa.
+*   **Gestione Clienti Evoluta**: Database anagrafico completo per privati e aziende.
+*   **Backup & Sicurezza**: Esporta i tuoi dati in formato ZIP cifrato o XLSX per la tua contabilità.
+*   **Dashboard Operativa**: Tieni d'occhio le code: banco, diagnosi, riparazione e pronte per la consegna.
 
+---
+
+## 🛠️ Note Tecniche per lo Sviluppo
+
+### Ambiente
+*   **OS**: Windows 11 + PowerShell.
+*   **Stack**: Kotlin, Compose, Material 3, Room, CameraX, Coroutines.
+*   **SDK**: Target 37, Min 26.
+
+### Setup Rapido
 ```powershell
-$env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
-$env:ANDROID_HOME = "$env:LOCALAPPDATA\Android\Sdk"
-$env:ANDROID_SDK_ROOT = $env:ANDROID_HOME
-$env:Path = "$env:ANDROID_HOME\platform-tools;$env:JAVA_HOME\bin;$env:Path"
-```
-
-## Setup Fresh-Install
-
-Da una copia pulita del repository o dopo modifiche incompatibili allo schema locale:
-
-```powershell
+# Verifica ambiente
 powershell -ExecutionPolicy Bypass -File scripts\android\check_env.ps1
-powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -Flavor Full -SkipReleaseBuild
-powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk
+
+# Build e avvio (Flavor Full Debug)
 powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -CleanInstall
 ```
 
-Per provare l'app senza cancellare dati locali esistenti:
+## 📖 Documentazione Completa
+Consulta la nostra [Wiki interna](docs/README.md) per guide dettagliate su architettura, modelli dati e workflow di rilascio.
 
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk -Install
-powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1
-```
+---
 
-Al primo avvio, se non esiste un admin locale, l'app mostra il setup admin. Dopo la creazione dell'admin mostra la dashboard; dagli avvii successivi mostra il login.
-
-## Comandi Ufficiali
-
-Gli script PowerShell calcolano la root del progetto dal proprio percorso, quindi possono essere eseguiti anche da una sottocartella. Il comando diretto `.\gradlew.bat` va invece lanciato dalla root e usa la JVM gia' configurata nel processo PowerShell; usare JDK/JBR 21 per evitare il download del toolchain configurato dal progetto.
-
-`scripts\android\build_installer.ps1` e `scripts\android\start_app.ps1` accettano `-Flavor Full|Demo|Showcase`; se omesso usano `Full`. I package reali sono:
-
-- `Full Debug`: `com.onlytechtake.repairapp.debug`
-- `Full Release`: `com.onlytechtake.repairapp`
-- `Demo Debug`: `com.onlytechtake.repairapp.demo.debug`
-- `Demo Release`: `com.onlytechtake.repairapp.demo`
-- `Showcase Debug`: `com.onlytechtake.repairapp.showcase.debug`
-- `Showcase Release`: `com.onlytechtake.repairapp.showcase`
-
-| Obiettivo | Comando |
-|---|---|
-| Setup / env check | `powershell -ExecutionPolicy Bypass -File scripts\android\check_env.ps1` |
-| Check locale standard senza signing | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -Flavor Full -SkipReleaseBuild` |
-| Check locale standard + instrumentation test | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -Flavor Full -SkipReleaseBuild -AndroidTests` |
-| Check completo con release firmata | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -Flavor Full` |
-| Audit vulnerabilita' dipendenze | `powershell -ExecutionPolicy Bypass -File scripts\windows\check_dependency_vulnerabilities.ps1` |
-| Test unitari Full debug | `powershell -ExecutionPolicy Bypass -File scripts\android\gradle.ps1 -- --no-configuration-cache :app:testFullDebugUnitTest` |
-| Build APK debug Full | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk` |
-| Build APK debug Demo | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Demo -BuildType Debug -OutputType Apk` |
-| Build APK debug Showcase | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Showcase -BuildType Debug -OutputType Apk` |
-| Build APK release Full | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Apk` |
-| Build AAB release Full | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Aab` |
-| Dev smoke su device | `powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk -Install` |
-| Installazione pulita e start su device | `powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -CleanInstall` |
-
-## Handoff Operativo
-
-Prima di consegnare il repository:
-
-1. Controllare lo stato con `git status --short` e distinguere modifiche tracciate da file non tracciati.
-2. Leggere `PROJECT_STATUS.json`: contiene solo todo incompleti correnti, ordinati per priorita', con `identified_residual` e `plan` per ogni blocco.
-3. Eseguire almeno `check_env.ps1` e `check_project.ps1 -Flavor Full -SkipReleaseBuild`; aggiungere build/install debug e test strumentati quando il perimetro richiede un device.
-4. Per asset store usare `create_demo_assets.ps1 -Flavor Full` e `-Flavor Demo`: gli output separati sono sotto `reports\demo-assets\Full` e `reports\demo-assets\Demo` e non sono tracciati.
-5. Usare `start_app.ps1 -CleanInstall` quando lo schema Room locale e' incompatibile con dati gia' installati; il codice corrente e' Room v1 senza migrazioni conservative.
-
-Nota: file non tracciati sotto `docs\` non fanno parte della documentazione ufficiale del repository finche' non vengono revisionati e aggiunti intenzionalmente.
-
-## Output Build
-
-- APK Full Debug: `app\build\outputs\apk\full\debug\app-full-debug.apk`
-- APK Demo Debug: `app\build\outputs\apk\demo\debug\app-demo-debug.apk`
-- APK Showcase Debug: `app\build\outputs\apk\showcase\debug\app-showcase-debug.apk`
-- APK Full Release: `app\build\outputs\apk\full\release\app-full-release.apk`
-- APK Demo Release: `app\build\outputs\apk\demo\release\app-demo-release.apk`
-- APK Showcase Release: `app\build\outputs\apk\showcase\release\app-showcase-release.apk`
-- AAB Full Release: `app\build\outputs\bundle\fullRelease\app-full-release.aab`
-- AAB Demo Release: `app\build\outputs\bundle\demoRelease\app-demo-release.aab`
-- AAB Showcase Release: `app\build\outputs\bundle\showcaseRelease\app-showcase-release.aab`
-
-## Release Signing
-
-`app\build.gradle.kts` legge `keystore.properties` dalla root solo se il file esiste. Gli script `check_project.ps1` e `scripts\android\build_installer.ps1` bloccano APK/AAB release quando il signing locale non e' configurato. Il file e il keystore sono locali e ignorati da `.gitignore`.
-
-Schema richiesto (copiare da `keystore.properties.example` e rinominare in `keystore.properties`):
-
-```properties
-storeFile=C:\Percorso\locale\repair-app-release.jks
-storePassword=CAMBIA_QUESTA_PASSWORD
-keyAlias=repairapp
-keyPassword=CAMBIA_QUESTA_PASSWORD
-```
-
-Regole:
-
-- non inserire password, token, keystore o percorsi personali nei file tracciati;
-- non committare `keystore.properties`;
-- non committare file `.jks` o `.keystore`;
-- senza `keystore.properties`, ogni build release fallisce prima della compilazione release.
-
-## Funzioni Implementate
-
-- Setup primo admin, login admin/operatore, logout, lockout dopo 5 tentativi falliti e scadenza sessione dopo 30 minuti di inattivita'.
-- **Modalità Showcase**: variante con popolamento automatico di 30 commesse (incluse chiuse), 10 clienti (5 privati, 5 business), 3 operatori e auto-login come admin al primo avvio.
-- Dashboard con tab Home, Nuova, Clienti, Commesse/Commessa, Config e Admin.
-- Home con metriche e quattro code operative che seguono il flusso banco, diagnosi, preventivo/riparazione e consegna.
-- Creazione commessa a step con cliente esistente o nuovo, categoria ad albero obbligatoria, problema, almeno un media/allegato, privacy e firma.
-- Workspace commessa con esito diagnosi esplicito `REPAIRABLE`/`NOT_REPAIRABLE`, preventivo obbligatorio solo nel ramo riparabile, azioni post-diagnosi guidate, note, media, firma, timeline, WhatsApp manuale locale, stato pagamento e condivisione PDF.
-- Le anteprime immagini locali rispettano l'orientamento EXIF; CameraX usa la rotazione reale del display prima del bind e dello scatto.
-- Admin: utenti, reset password, cancellazione di tutte le commesse e dei relativi media con conferma `CANCELLA TUTTO`, e reset totale dati con conferma `RESET`.
-- Config admin: categorie multilivello, template privacy/condizioni/WhatsApp, modalita WhatsApp manuale, backup ZIP, ripristino ZIP, export XLSX e cifratura opzionale ZIP/XLSX con password.
-- Import allegati tramite SAF per JPEG/PNG/WebP, PDF, TXT, DOC/DOCX e XLS/XLSX fino a 25 MiB.
-- Storage privato canonico: tutti i media applicativi vivono sotto `filesDir/app_media`.
-- Export admin: ZIP completo e XLSX da Config > Backup; database e XLSX pre-cleanup dalla sezione Admin; configurazione JSON dalla sezione Backup. Ripristino ZIP completo tramite SAF per admin. Condivisione PDF della singola commessa dal dettaglio.
-- Promemoria backup admin: attivo di default ogni 7 giorni, basato sull'ultimo ZIP completo riuscito; non blocca l'uso normale dell'app.
-- Demo release: massimo 1 commessa, nessun operatore oltre all'admin locale, export database/ZIP/XLSX e restore ZIP bloccati, PDF con watermark `VERSIONE DEMO`.
-- Il selettore documenti Android consente all'utente di scegliere memoria locale o un provider documenti installato; non esiste integrazione cloud proprietaria.
-
-## Limiti Noti
-
-- Nessun backend e nessuna API WhatsApp.
-- Il database locale e' cifrato con SQLCipher. ZIP e XLSX possono essere cifrati con password da Config > Backup; PDF, configurazione JSON e altri documenti condivisi singolarmente non sono cifrati dall'app.
-- Il ripristino ZIP sostituisce database e media, ma nello stato corrente non esporta/importa la chiave SQLCipher protetta da Android Keystore; non va trattato come migrazione affidabile verso una nuova installazione o un nuovo telefono finche' il flusso chiave non viene progettato.
-- La CI principale non esegue test strumentati; esiste una workflow dedicata per `connectedFullDebugAndroidTest`, mentre le verifiche su device fisico restano manuali/locali.
-- La build release richiede signing locale non tracciato.
-- Il codice sorgente usa Room v1 come baseline fresh. Ogni ulteriore cambio schema resta bloccato dalle regole repository finche' non viene autorizzato esplicitamente.
-- Le verifiche manuali residue sono elencate in `PROJECT_STATUS.json`; il file non deve contenere storico dei task completati.
-
-## Struttura
-
-- `app\`: modulo Android.
-- `app\src\main\java\com\onlytechtake\repairapp\core\`: design, DI, media, ordini, permessi, sicurezza, template.
-- `app\src\main\java\com\onlytechtake\repairapp\data\`: Room, DataStore, repository, sessione.
-- `app\src\main\java\com\onlytechtake\repairapp\domain\`: modelli, policy e contratti.
-- `app\src\main\java\com\onlytechtake\repairapp\features\`: UI Compose e ViewModel.
-- `app\src\test\`: test unitari JVM.
-- `app\src\androidTest\`: test strumentali su device/emulatore.
-- `app\src\showcase\`: risorse e configurazioni specifiche per la variante Showcase.
-- `app\schemas\`: schema Room esportato; e' presente solo `1.json`, coerente con `DATABASE_VERSION = 1`.
-- `docs\`: documentazione operativa e funzionale.
-- `media\brand\`: logo, favicon, anteprime e cover README per GitHub.
-- `scripts\android\`: script PowerShell ufficiali per ambiente, Gradle, build/install e start app.
-- `scripts\support\`: funzioni condivise per rilevamento Android/JDK.
-- `scripts\windows\`: wrapper compatibili e script Windows specifici.
-
-## Troubleshooting
-
-- `gradlew.bat non trovato`: eseguire i comandi Gradle dalla root o usare gli script in `scripts\android`.
-- `Java non trovato` o `javac non trovato`: installare JDK/JBR 21, poi rieseguire `check_env.ps1`.
-- Java 26 nel `PATH`: gli script lo ignorano e preferiscono Android Studio JBR o un JDK 17/21 supportato; il progetto compila con toolchain Java 21.
-- Errore di risoluzione toolchain con JDK 17: consentire a Gradle di scaricare Java 21 oppure impostare `JAVA_HOME` su un JDK/JBR 21 locale.
-- `Platform android-37 non trovata`: installare Android SDK Platform 37 da Android Studio SDK Manager.
-- `Android SDK Build Tools non trovati`: installare Android SDK Build Tools da Android Studio SDK Manager.
-- `adb non trovato`: installare Android Platform Tools o aggiungere `platform-tools` al `PATH`.
-- Nessun device in `adb devices`: abilitare debug USB e autorizzare il computer sul device.
-- `Activity class ... does not exist`: installare prima l'APK con `start_app.ps1` senza `-NoInstall`.
-- File lock Gradle/Kotlin su Windows: chiudere Android Studio se sta compilando, eseguire `.\gradlew.bat --stop` e rilanciare uno script alla volta.
-- Build release bloccata per signing: manca `keystore.properties` locale o il file non punta a un keystore valido.
+*OnlyTechTake è un prodotto local-only. Nessun cloud, nessuna dipendenza esterna, solo pura efficienza sul tuo dispositivo.*

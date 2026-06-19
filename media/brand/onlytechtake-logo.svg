@@ -1,16 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="320" viewBox="0 0 1280 320" role="img" aria-labelledby="title desc">
-  <title id="title">OnlyTechTake Repair App</title>
-  <desc id="desc">OnlyTechTake wordmark with repair workflow icon.</desc>
-  <rect width="1280" height="320" rx="48" fill="#F8FAFC"/>
-  <g transform="translate(72 48)">
-    <rect width="224" height="224" rx="52" fill="#102026"/>
-    <path d="M68 48h88c13 0 23 10 23 23v101c0 13-10 23-23 23H68c-13 0-23-10-23-23V71c0-13 10-23 23-23Z" fill="#F8FAFC"/>
-    <path d="M66 74h92v18H66z" fill="#12B7A7"/>
-    <path d="M72 113h60v13H72zM72 139h45v13H72z" fill="#102026" opacity=".9"/>
-    <path d="M144 166l-22-22 13-13 9 9 35-35 13 13-48 48Z" fill="#F59E0B"/>
+<svg width="600" height="200" viewBox="0 0 600 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="600" height="200" rx="16" fill="white"/>
+
+  <!-- Icon Mark -->
+  <g transform="translate(40, 40)">
+    <!-- Outer Hexagon -->
+    <path d="M60 0L111.962 30V90L60 120L8.03848 90V30L60 0Z" fill="#006A6A"/>
+    <!-- Inner stylized 'T' -->
+    <path d="M45 35H75V45H65V85H55V45H45V35Z" fill="white"/>
+    <!-- Stylized Wrench Head inside -->
+    <path d="M60 15C51.7157 15 45 21.7157 45 30H50C50 24.4772 54.4772 20 60 20C65.5228 20 70 24.4772 70 30H75C75 21.7157 68.2843 15 60 15Z" fill="#6FF6F6"/>
   </g>
-  <text x="344" y="145" fill="#102026" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="74" font-weight="800">OnlyTechTake</text>
-  <text x="348" y="210" fill="#334155" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="36" font-weight="600">Repair App</text>
-  <path d="M348 238h270" stroke="#12B7A7" stroke-width="12" stroke-linecap="round"/>
-  <path d="M638 238h72" stroke="#F59E0B" stroke-width="12" stroke-linecap="round"/>
+
+  <!-- Text: Brand Name -->
+  <text x="180" y="90" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#191C1D">
+    OnlyTechTake
+  </text>
+
+  <!-- Text: Motto -->
+  <text x="180" y="130" font-family="Arial, sans-serif" font-size="20" font-style="italic" fill="#006A6A">
+    Un&apos;app per ogni problema!
+  </text>
+
+  <!-- Decorative bar -->
+  <rect x="180" y="145" width="380" height="4" rx="2" fill="#7D5800"/>
 </svg>

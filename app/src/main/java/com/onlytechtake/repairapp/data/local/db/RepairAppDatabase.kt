@@ -12,6 +12,7 @@ import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.CustomerDao
 import com.onlytechtake.repairapp.data.local.dao.DashboardDao
+import com.onlytechtake.repairapp.data.local.dao.LoginAttemptDao
 import com.onlytechtake.repairapp.data.local.dao.MessageLogDao
 import com.onlytechtake.repairapp.data.local.dao.MessageTemplateDao
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
@@ -90,7 +91,7 @@ abstract class RepairAppDatabase : RoomDatabase() {
 
     abstract fun orderDocumentDao(): OrderDocumentDao
 
-    abstract fun loginAttemptDao(): com.onlytechtake.repairapp.data.local.dao.LoginAttemptDao
+    abstract fun loginAttemptDao(): LoginAttemptDao
 
     companion object {
         init {

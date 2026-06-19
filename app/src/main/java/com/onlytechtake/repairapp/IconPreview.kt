@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,15 +26,30 @@ fun IconsPreview() {
         modifier = Modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(stringResource(R.string.preview_pro_icon))
-        IconBox(R.drawable.ic_launcher_foreground, Color(0xFF064E3B))
+        Text(
+            text = stringResource(R.string.preview_pro_icon),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        IconBox(R.drawable.ic_launcher_foreground, Color(0xFF006A6A))
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(
+            text = stringResource(R.string.preview_demo_icon),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.secondary
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        IconBox(R.drawable.ic_launcher_foreground, Color(0xFF006A6A))
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        Text(stringResource(R.string.preview_demo_icon))
-        // Note: these rely on the resources being available in the build variant
-        // Since we are in 'main', we might only see the 'main' version if not careful
-        // But for previewing the XML we just edited, this works if we use the right res ID
+        Text(
+            text = stringResource(R.string.app_motto),
+            style = MaterialTheme.typography.bodySmall,
+            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+        )
     }
 }
 
@@ -54,9 +71,4 @@ fun IconBox(
             modifier = Modifier.size(108.dp),
         )
     }
-}
-
-@Composable
-fun Text(text: String) {
-    androidx.compose.material3.Text(text = text)
 }

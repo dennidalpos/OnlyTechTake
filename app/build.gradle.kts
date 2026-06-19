@@ -52,7 +52,7 @@ android {
         create("demo") {
             dimension = "version"
             applicationIdSuffix = ".demo"
-            resValue("string", "app_name", "OTT Demo")
+            resValue("string", "app_name", "OnlyTechTake Demo")
             buildConfigField("boolean", "IS_DEMO_VERSION", "true")
             buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "true")
             buildConfigField("boolean", "IS_SHOWCASE_MODE_ENABLED", "false")
@@ -61,7 +61,7 @@ android {
         create("showcase") {
             dimension = "version"
             applicationIdSuffix = ".showcase"
-            resValue("string", "app_name", "OTT Show")
+            resValue("string", "app_name", "OnlyTechTake Showcase")
             buildConfigField("boolean", "IS_DEMO_VERSION", "false")
             buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "false")
             buildConfigField("boolean", "IS_SHOWCASE_MODE_ENABLED", "true")
@@ -70,7 +70,7 @@ android {
         create("full") {
             isDefault = true
             dimension = "version"
-            resValue("string", "app_name", "OTT Pro")
+            resValue("string", "app_name", "OnlyTechTake Pro")
             buildConfigField("boolean", "IS_DEMO_VERSION", "false")
             buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "false")
             buildConfigField("boolean", "IS_SHOWCASE_MODE_ENABLED", "false")

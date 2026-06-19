@@ -19,6 +19,8 @@
     <string name="timeline_writer_not_configured">Timeline writer non configurato</string>
     <string name="audit_writer_not_configured">Audit writer non configurato</string>
 
+    <string name="app_motto">Un\'app per ogni problema!</string>
+
     <string name="status_open">Aperta</string>
     <string name="status_in_progress">In lavorazione</string>
     <string name="status_diagnosis">Diagnosi</string>

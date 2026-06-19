@@ -1,7 +1,7 @@
 {
   "agent_execution_directives": {
     "status": "active",
-    "updated_at": "2026-06-19",
+    "updated_at": "2026-06-20",
     "purpose": "Backlog residuo attivo in ordine di priorita'. Non usare come changelog.",
     "rules": [
       "Quando l'utente chiede di risolvere PROJECT_STATUS.json, scegliere un solo blocco open per volta e dichiararlo prima di iniziare.",
@@ -14,51 +14,38 @@
   },
   "todos": [
     {
-      "block_id": "B11",
-      "title": "Pubblicazione Google Play Pro e Demo",
+      "block_id": "B13",
+      "title": "Refactoring Vetrina e Cleanup Legacy",
       "priority": "P1",
-      "complexity": "high",
+      "complexity": "medium",
       "status": "in_progress",
-      "recommended_batch_size": 1,
-      "identified_residual": "La release 0.2.0 non e' ancora distribuibile: la privacy policy contiene placeholder e non ha un URL HTTPS pubblico; gli AAB firmati non risultano caricati; App Content, Data Safety, listing, testing e Pre-launch Report non risultano completati in Play Console.",
-      "why_this_block": "E' il gate esterno principale per distribuire Pro e Demo senza dichiarazioni, asset o pacchetti non verificati.",
+      "recommended_batch_size": 3,
+      "identified_residual": "Il progetto contiene ancora strutture monolitiche (es. RepairAppDaos.kt) e naming generici. La vetrina GitHub richiede asset visuali di alta qualita' e messaggistica evocativa.",
+      "why_this_block": "Allinea il progetto alla nuova visione 'Un'app per ogni problema!' e migliora la manutenibilita' rimuovendo il debito tecnico legacy.",
       "plan": [
-        "Completare titolare, contatti, data e testo della privacy policy; ottenere la revisione necessaria e pubblicarla su un URL HTTPS reale.",
-        "Finalizzare listing IT/EN e release notes 0.2.0 usando solo funzioni implementate e limiti documentati.",
-        "Creare o completare le due app Play, configurare Play App Signing e caricare gli AAB nei canali di test previsti.",
-        "Completare App Access, Data Safety, Ads, Content Rating, Target Audience, permessi e gli altri moduli App Content in coerenza con manifest, privacy policy e comportamento local-only.",
-        "Caricare icone, feature graphic, screenshot e testi approvati per Pro e Demo; non pubblicare Showcase nello store.",
-        "Avviare closed testing, installare entrambe le varianti dal Play Store e completare uno smoke test reale.",
-        "Esaminare Pre-launch Report e feedback tester; correggere o registrare solo residui concreti prima della produzione."
+        "Scomporre RepairAppDaos.kt in file individuali per ogni DAO.",
+        "Aggiornare i nomi dei flavor con branding completo (OnlyTechTake Pro/Demo/Showcase).",
+        "Implementare asset SVG ricchi per logo e cover GitHub.",
+        "Migliorare la robustezza dei Room TypeConverters con gestione errori.",
+        "Aggiornare la documentazione README in ottica showcase."
       ],
       "items": [
         {
           "priority": "P1",
-          "summary": "Pubblicare la privacy policy definitiva su HTTPS.",
+          "summary": "Scomposizione DAOs monolitici.",
           "refs": [
-            "docs/play-store/PRIVACY_POLICY_IT.md",
-            "docs/play-store/PLAY_CONSOLE_GUIDE_IT.md"
+            "app/src/main/java/com/onlytechtake/repairapp/data/local/dao/RepairAppDaos.kt"
           ],
-          "completion_criteria": "Documento senza placeholder, revisionato, pubblicato a URL HTTPS stabile e inserito in Play Console."
+          "completion_criteria": "Ogni interfaccia DAO vive nel proprio file dedicato; RepairAppDatabase aggiornato."
         },
         {
           "priority": "P1",
-          "summary": "Completare configurazione, dichiarazioni e listing Play Console.",
+          "summary": "Finalizzazione asset visuali vetrina.",
           "refs": [
-            "docs/play-store/PLAY_CONSOLE_GUIDE_IT.md",
-            "docs/play-store/STORE_LISTING_IT.md",
-            "docs/play-store/STORE_LISTING_EN.md",
-            "docs/release/release-notes-0.2.0.md"
+            "media/brand/onlytechtake-logo.svg",
+            "media/brand/github-cover.svg"
           ],
-          "completion_criteria": "Pro e Demo configurate con App Content, Data Safety, listing, asset e note release completi e coerenti; nessun warning bloccante."
-        },
-        {
-          "priority": "P1",
-          "summary": "Eseguire closed testing e chiudere i gate pre-produzione.",
-          "refs": [
-            "docs/release/RELEASE_CHECKLIST.md"
-          ],
-          "completion_criteria": "AAB accettati, closed testing avviato, installazione Play verificata, smoke test completato e Pre-launch Report senza crash o errori bloccanti."
+          "completion_criteria": "Asset SVG creati e referenziati nel README; motto 'Un'app per ogni problema!' integrato."
         }
       ]
     }

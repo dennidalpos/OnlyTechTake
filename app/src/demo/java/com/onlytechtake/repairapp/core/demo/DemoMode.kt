@@ -1,7 +1,9 @@
 package com.onlytechtake.repairapp.core.demo
 
 import com.onlytechtake.repairapp.BuildConfig
-import com.onlytechtake.repairapp.data.local.entities.*
+import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
+import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 
 object DemoMode {
     var isEnabled: Boolean = false
