@@ -104,8 +104,7 @@ internal object BackupArchive {
             }
     }
 
-    private fun isSupportedAppFile(relativePath: String): Boolean =
-        relativePath.startsWith("$CANONICAL_MEDIA_DIRECTORY/")
+    private fun isSupportedAppFile(relativePath: String): Boolean = relativePath.startsWith("$CANONICAL_MEDIA_DIRECTORY/")
 
     private fun requireSafeEntry(name: String) {
         require(name.isNotBlank()) { "Backup ZIP non valido" }

@@ -55,7 +55,9 @@ fun CameraCapturePreview(
         }
     val imageCapture =
         remember {
-            ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+            ImageCapture
+                .Builder()
+                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
                 .build()
         }
     var hasCameraPermission by remember {

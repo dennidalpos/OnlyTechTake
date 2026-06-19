@@ -485,16 +485,26 @@ private fun CustomerListContent(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = if (showAll) stringResource(R.string.customer_title) else stringResource(
-                        R.string.customer_recent
-                    ),
+                    text =
+                        if (showAll) {
+                            stringResource(R.string.customer_title)
+                        } else {
+                            stringResource(
+                                R.string.customer_recent,
+                            )
+                        },
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                 )
                 AppButton(
-                    text = if (showAll) stringResource(R.string.customer_recent) else stringResource(
-                        R.string.customer_show_all
-                    ),
+                    text =
+                        if (showAll) {
+                            stringResource(R.string.customer_recent)
+                        } else {
+                            stringResource(
+                                R.string.customer_show_all,
+                            )
+                        },
                     onClick = { viewModel.setShowAll(!showAll) },
                     variant = AppButtonVariant.Ghost,
                     size = AppButtonSize.Compact,

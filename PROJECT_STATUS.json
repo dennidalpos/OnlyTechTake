@@ -20,24 +20,15 @@
       "complexity": "medium",
       "status": "in_progress",
       "recommended_batch_size": 3,
-      "identified_residual": "Il progetto contiene ancora strutture monolitiche (es. RepairAppDaos.kt) e naming generici. La vetrina GitHub richiede asset visuali di alta qualita' e messaggistica evocativa.",
+      "identified_residual": "Il progetto contiene ancora naming generici. La vetrina GitHub richiede asset visuali di alta qualita' e messaggistica evocativa.",
       "why_this_block": "Allinea il progetto alla nuova visione 'Un'app per ogni problema!' e migliora la manutenibilita' rimuovendo il debito tecnico legacy.",
       "plan": [
-        "Scomporre RepairAppDaos.kt in file individuali per ogni DAO.",
         "Aggiornare i nomi dei flavor con branding completo (OnlyTechTake Pro/Demo/Showcase).",
         "Implementare asset SVG ricchi per logo e cover GitHub.",
         "Migliorare la robustezza dei Room TypeConverters con gestione errori.",
         "Aggiornare la documentazione README in ottica showcase."
       ],
       "items": [
-        {
-          "priority": "P1",
-          "summary": "Scomposizione DAOs monolitici.",
-          "refs": [
-            "app/src/main/java/com/onlytechtake/repairapp/data/local/dao/RepairAppDaos.kt"
-          ],
-          "completion_criteria": "Ogni interfaccia DAO vive nel proprio file dedicato; RepairAppDatabase aggiornato."
-        },
         {
           "priority": "P1",
           "summary": "Finalizzazione asset visuali vetrina.",

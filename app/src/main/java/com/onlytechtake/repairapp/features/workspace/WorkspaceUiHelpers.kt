@@ -189,8 +189,9 @@ fun OrderStatusStepper(
                     ) {
                         Text(
                             text = (index + 1).toString(),
-                            modifier = stepTestTag?.let { Modifier.testTag(it(index + 1)) }
-                                ?: Modifier,
+                            modifier =
+                                stepTestTag?.let { Modifier.testTag(it(index + 1)) }
+                                    ?: Modifier,
                             color =
                                 when {
                                     isCurrent -> MaterialTheme.colorScheme.onPrimary

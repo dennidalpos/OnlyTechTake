@@ -29,7 +29,7 @@ fun IconsPreview() {
         Text(
             text = stringResource(R.string.preview_pro_icon),
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.primary,
         )
         Spacer(modifier = Modifier.height(8.dp))
         IconBox(R.drawable.ic_launcher_foreground, Color(0xFF006A6A))
@@ -39,7 +39,7 @@ fun IconsPreview() {
         Text(
             text = stringResource(R.string.preview_demo_icon),
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.secondary
+            color = MaterialTheme.colorScheme.secondary,
         )
         Spacer(modifier = Modifier.height(8.dp))
         IconBox(R.drawable.ic_launcher_foreground, Color(0xFF006A6A))
@@ -48,7 +48,7 @@ fun IconsPreview() {
         Text(
             text = stringResource(R.string.app_motto),
             style = MaterialTheme.typography.bodySmall,
-            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
         )
     }
 }

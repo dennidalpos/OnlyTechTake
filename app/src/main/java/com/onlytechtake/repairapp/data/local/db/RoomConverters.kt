@@ -37,8 +37,7 @@ class RoomConverters {
     fun fromOrderStatus(value: OrderStatus?): String? = value?.name
 
     @TypeConverter
-    fun toDiagnosisOutcome(value: String?): DiagnosisOutcome? =
-        enumValueOrNull<DiagnosisOutcome>(value)
+    fun toDiagnosisOutcome(value: String?): DiagnosisOutcome? = enumValueOrNull<DiagnosisOutcome>(value)
 
     @TypeConverter
     fun fromDiagnosisOutcome(value: DiagnosisOutcome?): String? = value?.name
@@ -50,15 +49,13 @@ class RoomConverters {
     fun fromClosureReason(value: ClosureReason?): String? = value?.name
 
     @TypeConverter
-    fun toCustomerActionStatus(value: String?): CustomerActionStatus? =
-        enumValueOrNull<CustomerActionStatus>(value)
+    fun toCustomerActionStatus(value: String?): CustomerActionStatus? = enumValueOrNull<CustomerActionStatus>(value)
 
     @TypeConverter
     fun fromCustomerActionStatus(value: CustomerActionStatus?): String? = value?.name
 
     @TypeConverter
-    fun toOrderDocumentType(value: String?): OrderDocumentType? =
-        enumValueOrNull<OrderDocumentType>(value)
+    fun toOrderDocumentType(value: String?): OrderDocumentType? = enumValueOrNull<OrderDocumentType>(value)
 
     @TypeConverter
     fun fromOrderDocumentType(value: OrderDocumentType?): String? = value?.name
@@ -70,15 +67,13 @@ class RoomConverters {
     fun fromOrderPriority(value: OrderPriority?): String? = value?.name
 
     @TypeConverter
-    fun toTimelineEventType(value: String?): TimelineEventType? =
-        enumValueOrNull<TimelineEventType>(value)
+    fun toTimelineEventType(value: String?): TimelineEventType? = enumValueOrNull<TimelineEventType>(value)
 
     @TypeConverter
     fun fromTimelineEventType(value: TimelineEventType?): String? = value?.name
 
     @TypeConverter
-    fun toCustomerFeedbackType(value: String?): CustomerFeedbackType? =
-        enumValueOrNull<CustomerFeedbackType>(value)
+    fun toCustomerFeedbackType(value: String?): CustomerFeedbackType? = enumValueOrNull<CustomerFeedbackType>(value)
 
     @TypeConverter
     fun fromCustomerFeedbackType(value: CustomerFeedbackType?): String? = value?.name
@@ -116,8 +111,7 @@ class RoomConverters {
             ?.toSet() ?: emptySet()
 
     @TypeConverter
-    fun fromPermissionSet(value: Set<UserPermission>?): String? =
-        value?.joinToString(",") { it.name }
+    fun fromPermissionSet(value: Set<UserPermission>?): String? = value?.joinToString(",") { it.name }
 
     private inline fun <reified T : Enum<T>> enumValueOrNull(value: String?): T? =
         value?.let {
