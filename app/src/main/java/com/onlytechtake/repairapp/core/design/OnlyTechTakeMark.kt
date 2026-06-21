@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
@@ -33,6 +34,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.R
 import kotlin.math.roundToInt
 
 @Composable
@@ -101,7 +103,7 @@ fun OnlyTechTakeMark(
 @Composable
 fun LoadingBrandIndicator(
     modifier: Modifier = Modifier,
-    text: String = "Inizializzazione sistema",
+    text: String = stringResource(R.string.auth_system_ready),
     contentDescription: String = text,
     size: Dp = 140.dp,
 ) {
@@ -148,10 +150,10 @@ fun LoadingBrandIndicator(
         Text(
             text =
                 when {
-                    progress < 0.3f -> "Avvio database locale..."
-                    progress < 0.6f -> "Verifica credenziali sessione..."
-                    progress < 0.9f -> "Caricamento ambiente di lavoro..."
-                    else -> "Sistema pronto!"
+                    progress < 0.3f -> stringResource(R.string.loading_init_db)
+                    progress < 0.6f -> stringResource(R.string.loading_verify_session)
+                    progress < 0.9f -> stringResource(R.string.loading_load_workspace)
+                    else -> stringResource(R.string.loading_system_ready)
                 },
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,

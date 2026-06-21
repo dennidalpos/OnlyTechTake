@@ -351,6 +351,7 @@ fun WhatsAppPreviewDialog(
                         variant = AppButtonVariant.Success,
                         onClick = onConfirmSent,
                         size = AppButtonSize.Compact,
+                        testTag = RepairAppTestTags.OrderWhatsAppSentButton,
                     )
                 }
             },
@@ -360,6 +361,7 @@ fun WhatsAppPreviewDialog(
                     variant = AppButtonVariant.WhatsApp,
                     onClick = onOpenWhatsApp,
                     size = AppButtonSize.Compact,
+                    testTag = RepairAppTestTags.OrderWhatsAppOpenButton,
                 )
             },
         )

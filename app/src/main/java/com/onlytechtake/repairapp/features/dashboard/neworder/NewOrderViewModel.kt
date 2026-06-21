@@ -36,7 +36,7 @@ import java.io.File
 class NewOrderViewModel(
     authRepository: AuthRepository,
     private val customerRepository: CustomerRepository,
-    private val catalogRepository: CatalogRepository,
+    catalogRepository: CatalogRepository,
     private val orderMediaRepository: OrderMediaRepository,
     private val templateRepository: TemplateRepository,
     private val createIntakeOrderUseCase: CreateIntakeOrderUseCase,
@@ -88,7 +88,7 @@ class NewOrderViewModel(
     }
 
     private fun checkDemoLimit() {
-        if (BuildConfig.IS_DEMO_VERSION && BuildConfig.MAX_ORDERS > 0) {
+        if ((BuildConfig.IS_DEMO_VERSION) && (BuildConfig.MAX_ORDERS > 0)) {
             viewModelScope.launch {
                 val totalOrders = createIntakeOrderUseCase.countAllOrders()
                 if (totalOrders >= BuildConfig.MAX_ORDERS) {
@@ -132,7 +132,7 @@ class NewOrderViewModel(
             customerRepository.save(currentUser.value, input).fold(
                 onSuccess = { onSaved(it) },
             ) { error ->
-                _message.value = WorkspaceMessage(error.message ?: "Errore", true)
+                _message.value = WorkspaceMessage(error.message ?: "Errore", isError = true)
             }
         }
     }
@@ -145,10 +145,9 @@ class NewOrderViewModel(
         viewModelScope.launch {
             orderMediaRepository.importIntakeAttachment(sessionId, uri).fold(
                 onSuccess = { onStaged(it) },
-                onFailure = { error ->
-                    _message.value = WorkspaceMessage(error.message ?: "Errore", true)
-                },
-            )
+            ) { error ->
+                _message.value = WorkspaceMessage(error.message ?: "Errore", isError = true)
+            }
         }
     }
 
@@ -166,14 +165,14 @@ class NewOrderViewModel(
         viewModelScope.launch {
             orderMediaRepository.replaceStagedImage(staged, bitmap).fold(
                 onSuccess = { onReplaced(it) },
-                onFailure = { error ->
-                    _message.value = WorkspaceMessage(error.message ?: "Errore", true)
-                },
-            )
+            ) { error ->
+                _message.value = WorkspaceMessage(error.message ?: "Errore", isError = true)
+            }
         }
     }
 
-    fun createIntakePhotoFile(sessionId: String): Result<File> = runCatching { orderMediaRepository.createIntakePhotoFile(sessionId) }
+    fun createIntakePhotoFile(sessionId: String): Result<File> =
+        runCatching { orderMediaRepository.createIntakePhotoFile(sessionId) }
 
     fun stageCapturedIntakePhoto(
         file: File,
@@ -182,15 +181,14 @@ class NewOrderViewModel(
         viewModelScope.launch {
             orderMediaRepository.stageCapturedIntakePhoto(file).fold(
                 onSuccess = { onStaged(it) },
-                onFailure = { error ->
-                    _message.value = WorkspaceMessage(error.message ?: "Errore", true)
-                },
-            )
+            ) { error ->
+                _message.value = WorkspaceMessage(error.message ?: "Errore", isError = true)
+            }
         }
     }
 
     fun reportCameraError(message: String) {
-        _message.value = WorkspaceMessage(message, true)
+        _message.value = WorkspaceMessage(message, isError = true)
     }
 
     fun createIntakeOrder(
@@ -215,10 +213,9 @@ class NewOrderViewModel(
                     signatureBitmap = signatureBitmap,
                 ).fold(
                     onSuccess = { onCreated() },
-                    onFailure = { error ->
-                        _message.value = WorkspaceMessage(error.message ?: "Errore", true)
-                    },
-                )
+                ) { error ->
+                    _message.value = WorkspaceMessage(error.message ?: "Errore", isError = true)
+                }
         }
     }
 

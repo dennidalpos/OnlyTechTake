@@ -477,16 +477,7 @@ class RepositoryPathsInstrumentedTest {
                         ),
                 ).getOrThrow()
             val output = File(context.cacheDir, "orders-export-test.xlsx")
-            val repository =
-                BackupRepository(
-                    context = context,
-                    categoryDao = database.orderCategoryDao(),
-                    templateDao = database.messageTemplateDao(),
-                    settingDao = database.appSettingDao(),
-                    auditLogDao = database.auditLogDao(),
-                    orderExportDao = database.orderExportDao(),
-                    clockMillis = { NOW },
-                )
+            val repository = backupRepository()
 
             repository.exportOrdersXlsx(actor, Uri.fromFile(output)).getOrThrow()
 
@@ -572,6 +563,14 @@ class RepositoryPathsInstrumentedTest {
                         templateDao = fileBackedDatabase.messageTemplateDao(),
                         settingDao = fileBackedDatabase.appSettingDao(),
                         auditLogDao = fileBackedDatabase.auditLogDao(),
+                        backupReminderPreferences = com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences(context),
+                        securityPreferences = com.onlytechtake.repairapp.data.preferences.SecurityPreferences(context),
+                        orderExportDao = fileBackedDatabase.orderExportDao(),
+                        database = fileBackedDatabase,
+                        authPreferences = authPreferences,
+                        sessionStore = com.onlytechtake.repairapp.data.session.InMemorySessionStore(),
+                        storageStatsService = com.onlytechtake.repairapp.data.services.StorageStatsService(context, MediaStorageProvider(context)),
+                        mediaStorageProvider = MediaStorageProvider(context),
                         clockMillis = { NOW },
                     )
 
@@ -662,9 +661,14 @@ class RepositoryPathsInstrumentedTest {
                         templateDao = fileBackedDatabase.messageTemplateDao(),
                         settingDao = fileBackedDatabase.appSettingDao(),
                         auditLogDao = fileBackedDatabase.auditLogDao(),
+                        backupReminderPreferences = com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences(context),
+                        securityPreferences = com.onlytechtake.repairapp.data.preferences.SecurityPreferences(context),
+                        orderExportDao = fileBackedDatabase.orderExportDao(),
                         database = fileBackedDatabase,
                         authPreferences = authPreferences,
                         sessionStore = sessionStore,
+                        storageStatsService = com.onlytechtake.repairapp.data.services.StorageStatsService(context, MediaStorageProvider(context)),
+                        mediaStorageProvider = MediaStorageProvider(context),
                         clockMillis = { NOW },
                     )
 
@@ -966,8 +970,9 @@ class RepositoryPathsInstrumentedTest {
             clockMillis = clockMillis,
         )
 
-    private fun orderWorkflowRepository(): OrderWorkflowRepository =
-        OrderWorkflowRepository(
+    private fun orderWorkflowRepository(): OrderWorkflowRepository {
+        val mediaProvider = MediaStorageProvider(context)
+        return OrderWorkflowRepository(
             context = context,
             repairOrderDao = database.repairOrderDao(),
             customerDao = database.customerDao(),
@@ -979,8 +984,10 @@ class RepositoryPathsInstrumentedTest {
             messageLogDao = database.messageLogDao(),
             auditLogDao = database.auditLogDao(),
             database = database,
+            fileCleanupService = OrderFileCleanupService(context, mediaProvider),
             clockMillis = { NOW },
         )
+    }
 
     private fun orderMediaRepository(): OrderMediaRepository {
         val mediaProvider = MediaStorageProvider(context)
@@ -1032,6 +1039,13 @@ class RepositoryPathsInstrumentedTest {
             templateDao = database.messageTemplateDao(),
             settingDao = database.appSettingDao(),
             auditLogDao = database.auditLogDao(),
+            backupReminderPreferences = com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences(context),
+            securityPreferences = com.onlytechtake.repairapp.data.preferences.SecurityPreferences(context),
+            orderExportDao = database.orderExportDao(),
+            database = database,
+            authPreferences = authPreferences,
+            sessionStore = com.onlytechtake.repairapp.data.session.InMemorySessionStore(),
+            storageStatsService = com.onlytechtake.repairapp.data.services.StorageStatsService(context, MediaStorageProvider(context)),
             mediaStorageProvider = MediaStorageProvider(context),
             clockMillis = { NOW },
         )
@@ -1113,7 +1127,8 @@ class RepositoryPathsInstrumentedTest {
         }
     }
 
-    private fun File.walkFiles(): Sequence<File> = if (exists()) walkTopDown().filter { it.isFile } else emptySequence()
+    private fun File.walkFiles(): Sequence<File> =
+        if (exists()) walkTopDown().filter { it.isFile } else emptySequence()
 
     private fun File.unzipTextEntries(): Map<String, String> {
         val entries = mutableMapOf<String, String>()

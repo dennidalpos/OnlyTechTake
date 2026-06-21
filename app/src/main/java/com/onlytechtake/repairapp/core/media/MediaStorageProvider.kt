@@ -15,32 +15,38 @@ class MediaStorageProvider(
     /**
      * Cartella per i media (foto e allegati) di una commessa specifica.
      */
-    fun getOrderMediaDir(orderId: String): File = File(baseDir, "order_media/$orderId").apply { ensureDirectory() }
+    fun getOrderMediaDir(orderId: String): File =
+        File(baseDir, "order_media/$orderId").apply { ensureDirectory() }
 
     /**
      * Cartella per gli allegati (non foto dirette) di una commessa.
      */
-    fun getOrderAttachmentsDir(orderId: String): File = File(baseDir, "order_media/$orderId/attachments").apply { ensureDirectory() }
+    fun getOrderAttachmentsDir(orderId: String): File =
+        File(baseDir, "order_media/$orderId/attachments").apply { ensureDirectory() }
 
     /**
      * Cartella per le firme di una commessa.
      */
-    fun getOrderSignaturesDir(orderId: String): File = File(baseDir, "signatures/$orderId").apply { ensureDirectory() }
+    fun getOrderSignaturesDir(orderId: String): File =
+        File(baseDir, "signatures/$orderId").apply { ensureDirectory() }
 
     /**
      * Cartella per i documenti PDF generati per una commessa.
      */
-    fun getOrderDocumentsDir(orderId: String): File = File(baseDir, "documents/$orderId").apply { ensureDirectory() }
+    fun getOrderDocumentsDir(orderId: String): File =
+        File(baseDir, "documents/$orderId").apply { ensureDirectory() }
 
     /**
      * Cartella temporanea per i media acquisiti durante il wizard di presa in carico.
      */
-    fun getIntakeMediaDir(sessionId: String): File = File(baseDir, "intake_media/$sessionId").apply { ensureDirectory() }
+    fun getIntakeMediaDir(sessionId: String): File =
+        File(baseDir, "intake_media/$sessionId").apply { ensureDirectory() }
 
     /**
      * Cartella per gli allegati durante il wizard di presa in carico.
      */
-    fun getIntakeAttachmentsDir(sessionId: String): File = File(baseDir, "intake_media/$sessionId/attachments").apply { ensureDirectory() }
+    fun getIntakeAttachmentsDir(sessionId: String): File =
+        File(baseDir, "intake_media/$sessionId/attachments").apply { ensureDirectory() }
 
     /**
      * Restituisce la cartella base di tutti i media.

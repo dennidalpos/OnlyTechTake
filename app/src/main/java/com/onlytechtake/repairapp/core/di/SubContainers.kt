@@ -125,6 +125,7 @@ class OrderContainer(
             messageLogDao = dataContainer.database.messageLogDao(),
             auditLogDao = dataContainer.database.auditLogDao(),
             database = dataContainer.database,
+            fileCleanupService = mediaContainer.orderFileCleanupService,
         )
     }
 

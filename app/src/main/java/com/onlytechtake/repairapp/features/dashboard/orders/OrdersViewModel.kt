@@ -24,9 +24,9 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalCoroutinesApi::class)
 class OrdersViewModel(
     authRepository: AuthRepository,
-    private val orderRepository: OrderWorkflowRepository,
+    orderRepository: OrderWorkflowRepository,
     private val backupRepository: BackupRepository? = null,
-    private val backupReminderPreferences: BackupReminderPreferences? = null,
+    backupReminderPreferences: BackupReminderPreferences? = null,
 ) : ViewModel() {
     private val _orderFilter = MutableStateFlow(OrderFilter())
     val orderFilter = _orderFilter.asStateFlow()

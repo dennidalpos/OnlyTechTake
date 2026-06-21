@@ -129,9 +129,9 @@ class OperatorIntakeDemoScreenshotTest {
 
             waitForTag(RepairAppTestTags.OrderWhatsAppButton, scroll = true)
             clickTag(RepairAppTestTags.OrderWhatsAppButton)
-            waitForTag(RepairAppTestTags.OrderWhatsAppPreviewPanel, scroll = true)
+            waitForTag(RepairAppTestTags.OrderWhatsAppPreviewPanel)
             capture(outputDir, "07-whatsapp-preview.png")
-            clickTag(RepairAppTestTags.OrderWhatsAppClosePreviewButton, scroll = true)
+            dismissWhatsAppPreviewIfPresent()
             pauseForDemo()
 
             clickTag(RepairAppTestTags.OrderSignaturesCard, scroll = true)
@@ -144,6 +144,10 @@ class OperatorIntakeDemoScreenshotTest {
                 useUnmergedTree = true,
             )
             capture(outputDir, "05-signature-capture.png")
+
+            // Collapse signatures card to keep UI clean and test the toggle
+            clickTag(RepairAppTestTags.OrderSignaturesCard)
+            pauseForDemo()
 
             applySimpleStatus(
                 OrderStatusAction.START_PROGRESS,
@@ -186,8 +190,13 @@ class OperatorIntakeDemoScreenshotTest {
         pauseForDemo()
         waitForTag(RepairAppTestTags.StatusDialogConfirmButton)
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
+        waitForTagGone(RepairAppTestTags.StatusDialogConfirmButton)
         composeRule.waitForIdle()
         pauseForDemo()
+
+        // Handle auto-opened WhatsApp preview after status change
+        dismissWhatsAppPreviewIfPresent()
+
         waitForTag(RepairAppTestTags.statusAction(nextAction.name), scroll = true)
     }
 
@@ -208,8 +217,13 @@ class OperatorIntakeDemoScreenshotTest {
         clickTag(RepairAppTestTags.DiagnosisRepairableToggle)
         typeTag(RepairAppTestTags.DiagnosisEstimateField, "149,00", scroll = false)
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
+        waitForTagGone(RepairAppTestTags.StatusDialogConfirmButton)
         composeRule.waitForIdle()
         pauseForDemo()
+
+        // Handle auto-opened WhatsApp preview after recording result
+        dismissWhatsAppPreviewIfPresent()
+
         waitForTag(RepairAppTestTags.QuoteAcceptedToggle, scroll = true)
     }
 
@@ -241,9 +255,10 @@ class OperatorIntakeDemoScreenshotTest {
             RepairAppTestTags.StatusNoteField,
             "Riparazione completata e consegnata al cliente.",
         )
-        clickTag(RepairAppTestTags.closureReason("COMPLETED"), scroll = true)
+        clickTag(RepairAppTestTags.closureReason("COMPLETED"))
         pauseForDemo()
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
+        waitForTagGone(RepairAppTestTags.StatusDialogConfirmButton)
         composeRule.waitForIdle()
         pauseForDemo()
         waitForText("Commesse")
@@ -264,7 +279,8 @@ class OperatorIntakeDemoScreenshotTest {
         Thread.sleep(2000)
     }
 
-    private fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+    private fun isTextDisplayed(text: String): Boolean =
+        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
     private fun loginOperatorDemo() {
         val username =
@@ -503,19 +519,64 @@ class OperatorIntakeDemoScreenshotTest {
         }
     }
 
+    private fun dismissWhatsAppPreviewIfPresent() {
+        if (waitForTagIfPresent(RepairAppTestTags.OrderWhatsAppPreviewPanel, 5000, useUnmergedTree = true)) {
+            // Try to click the close button. If it's still there, retry.
+            repeat(5) {
+                if (isTagPresent(RepairAppTestTags.OrderWhatsAppPreviewPanel, useUnmergedTree = true)) {
+                    try {
+                        composeRule
+                            .onNodeWithTag(
+                                RepairAppTestTags.OrderWhatsAppClosePreviewButton,
+                                useUnmergedTree = true,
+                            ).performClick()
+                        composeRule.waitForIdle()
+                        Thread.sleep(1000)
+                    } catch (e: Throwable) {
+                    }
+                }
+            }
+            if (isTagPresent(RepairAppTestTags.OrderWhatsAppPreviewPanel, useUnmergedTree = true)) {
+                // If still there, try back button as fallback for the dialog
+                try {
+                    androidx.test.espresso.Espresso.pressBackUnconditionally()
+                    composeRule.waitForIdle()
+                    Thread.sleep(500)
+                } catch (e: Throwable) {
+                }
+            }
+            waitForTagGone(
+                RepairAppTestTags.OrderWhatsAppPreviewPanel,
+                useUnmergedTree = true,
+                timeoutMillis = 3000,
+            )
+        }
+    }
+
     private fun waitForTagIfPresent(
         tag: String,
         timeoutMillis: Long,
+        useUnmergedTree: Boolean = false,
     ): Boolean {
         val deadline = System.currentTimeMillis() + timeoutMillis
         do {
-            if (isTagPresent(tag)) {
-                composeRule.onNodeWithTag(tag).assertIsDisplayed()
+            if (isTagPresent(tag, useUnmergedTree)) {
                 return true
             }
             Thread.sleep(TAG_POLL_MILLIS)
         } while (System.currentTimeMillis() < deadline)
         return false
+    }
+
+    private fun waitForTagGone(
+        tag: String,
+        useUnmergedTree: Boolean = false,
+        timeoutMillis: Long = WAIT_TIMEOUT_MILLIS,
+    ) {
+        composeRule.waitUntil(timeoutMillis = timeoutMillis) {
+            composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).fetchSemanticsNodes().isEmpty()
+        }
+        composeRule.waitForIdle()
     }
 
     private fun isTagPresent(
@@ -589,7 +650,8 @@ class OperatorIntakeDemoScreenshotTest {
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean =
+        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     private fun prepareScreenshotDirectory(): File {
         val directory = File(requireNotNull(context.getExternalFilesDir(null)), SCREENSHOT_DIR_NAME)

@@ -28,7 +28,7 @@ class AdminViewModel(
     private val adminUserRepository: AdminUserRepository,
     private val backupRepository: BackupRepository,
     private val dataResetRepository: DataResetRepository,
-    private val backupReminderPreferences: BackupReminderPreferences? = null,
+    backupReminderPreferences: BackupReminderPreferences? = null,
 ) : ViewModel() {
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
@@ -48,7 +48,7 @@ class AdminViewModel(
             ?.map { settings ->
                 BackupReminderPolicy.shouldShowReminder(settings, System.currentTimeMillis())
             }?.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = false)
-            ?: flowOf(false).stateIn(
+            ?: flowOf(value = false).stateIn(
                 viewModelScope,
                 SharingStarted.WhileSubscribed(5_000),
                 initialValue = false,
@@ -147,7 +147,7 @@ class AdminViewModel(
                 .onSuccess { code ->
                     _recoveryCode.value = code
                 }.onFailure { error ->
-                    _message.value = WorkspaceMessage(error.message ?: "Errore", true)
+                    _message.value = WorkspaceMessage(error.message ?: "Errore", isError = true)
                 }
         }
     }
@@ -170,7 +170,7 @@ class AdminViewModel(
                 block(user).fold(
                     onSuccess = { onSuccess() },
                 ) { error ->
-                    _message.value = WorkspaceMessage(error.message ?: "Errore", true)
+                    _message.value = WorkspaceMessage(error.message ?: "Errore", isError = true)
                 }
             }
         }

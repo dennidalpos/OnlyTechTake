@@ -136,8 +136,8 @@ abstract class RepairAppDatabase : RoomDatabase() {
                             helper.close()
                         } catch (e: Exception) {
                             val message = e.message?.lowercase() ?: ""
-                            if (message.contains("file is not a database") ||
-                                e is net.zetetic.database.sqlcipher.SQLiteNotADatabaseException
+                            if ((message.contains("file is not a database")) ||
+                                (e is net.zetetic.database.sqlcipher.SQLiteNotADatabaseException)
                             ) {
                                 android.util.Log.e(
                                     "RepairAppDatabase",

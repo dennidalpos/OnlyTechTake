@@ -25,10 +25,10 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel(
-    private val authRepository: AuthRepository,
-    private val orderRepository: OrderWorkflowRepository,
+    authRepository: AuthRepository,
+    orderRepository: OrderWorkflowRepository,
     private val backupRepository: BackupRepository,
-    private val backupReminderPreferences: BackupReminderPreferences,
+    backupReminderPreferences: BackupReminderPreferences,
 ) : ViewModel() {
     val currentUser = authRepository.currentUser
 

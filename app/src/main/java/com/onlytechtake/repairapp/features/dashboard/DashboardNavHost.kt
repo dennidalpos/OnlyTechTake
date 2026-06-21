@@ -91,8 +91,7 @@ fun DashboardNavHost(
                         ),
                     )
                 },
-                onClose = { navController.popBackStack() },
-            )
+            ) { navController.popBackStack() }
         }
         composable(DashboardRoutes.CUSTOMERS) {
             val customersViewModel: CustomersViewModel =

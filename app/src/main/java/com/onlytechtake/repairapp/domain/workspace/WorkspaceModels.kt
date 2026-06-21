@@ -195,4 +195,5 @@ fun DiagnosisResultInput.validationErrors(): List<String> =
         }
     }
 
-fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? = estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }
+fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? =
+    estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }

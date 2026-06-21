@@ -70,19 +70,15 @@ class MediaOptimizer(
             applyExifRotation(matrix, orientation)
 
             val optimized =
-                try {
-                    Bitmap.createBitmap(
-                        original,
-                        0,
-                        0,
-                        original.width,
-                        original.height,
-                        matrix,
-                        true,
-                    )
-                } finally {
-                    // original will be recycled later if it's different from optimized
-                }
+                Bitmap.createBitmap(
+                    original,
+                    0,
+                    0,
+                    original.width,
+                    original.height,
+                    matrix,
+                    true,
+                )
 
             // Se createBitmap restituisce lo stesso oggetto (nessuna scala o rotazione),
             // e vogliamo forzare la compressione, procediamo comunque.
@@ -92,7 +88,9 @@ class MediaOptimizer(
                 optimized.compress(Bitmap.CompressFormat.JPEG, quality, out)
             }
 
-            if (optimized != original) optimized.recycle()
+            if (optimized != original) {
+                optimized.recycle()
+            }
             original.recycle()
 
             // Sostituisci l'originale con l'ottimizzato
@@ -122,21 +120,9 @@ class MediaOptimizer(
         matrix: Matrix,
         orientation: Int,
     ) {
-        when (orientation) {
-            ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
-            ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
-            ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
-            ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> matrix.postScale(-1f, 1f)
-            ExifInterface.ORIENTATION_FLIP_VERTICAL -> matrix.postScale(1f, -1f)
-            ExifInterface.ORIENTATION_TRANSPOSE -> {
-                matrix.postRotate(90f)
-                matrix.postScale(-1f, 1f)
-            }
-
-            ExifInterface.ORIENTATION_TRANSVERSE -> {
-                matrix.postRotate(270f)
-                matrix.postScale(-1f, 1f)
-            }
-        }
+        val transform = exifOrientationTransform(orientation)
+        if (transform.flipHorizontal) matrix.postScale(-1f, 1f)
+        if (transform.flipVertical) matrix.postScale(1f, -1f)
+        if (transform.rotationDegrees != 0f) matrix.postRotate(transform.rotationDegrees)
     }
 }

@@ -42,14 +42,14 @@ class BackupRepository(
     private val templateDao: MessageTemplateDao,
     private val settingDao: AppSettingDao,
     private val auditLogDao: AuditLogDao,
-    private val backupReminderPreferences: com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences? = null,
-    private val securityPreferences: SecurityPreferences? = null,
-    private val orderExportDao: OrderExportDao? = null,
-    private val database: RepairAppDatabase? = null,
-    private val authPreferences: AuthPreferences? = null,
-    private val sessionStore: InMemorySessionStore? = null,
-    private val storageStatsService: com.onlytechtake.repairapp.data.services.StorageStatsService? = null,
-    private val mediaStorageProvider: MediaStorageProvider? = null,
+    private val backupReminderPreferences: com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences,
+    private val securityPreferences: SecurityPreferences,
+    private val orderExportDao: OrderExportDao,
+    private val database: RepairAppDatabase,
+    private val authPreferences: AuthPreferences,
+    private val sessionStore: InMemorySessionStore,
+    private val storageStatsService: com.onlytechtake.repairapp.data.services.StorageStatsService,
+    private val mediaStorageProvider: MediaStorageProvider,
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
     private val eventWriter = OrderWorkflowEventWriter(context, auditLogDao = auditLogDao)
@@ -100,9 +100,9 @@ class BackupRepository(
                 throw IllegalStateException("Funzione disponibile nella versione Full")
             }
 
-            val securitySettings = securityPreferences?.settings?.first()
+            val securitySettings = securityPreferences.settings.first()
             val password =
-                securitySettings?.backupEncryptionPassword?.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
+                securitySettings.backupEncryptionPassword.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
 
             withContext(Dispatchers.IO) {
                 context.contentResolver.openOutputStream(uri)?.use { output ->
@@ -120,12 +120,7 @@ class BackupRepository(
                         dbBackupService.addDatabaseFiles(zip, password)
                         BackupArchive.addDirectory(
                             zip = zip,
-                            directory =
-                                mediaStorageProvider?.getBaseMediaDir()
-                                    ?: File(
-                                        context.filesDir,
-                                        BackupArchive.CANONICAL_MEDIA_DIRECTORY,
-                                    ),
+                            directory = mediaStorageProvider.getBaseMediaDir(),
                             entryDirectory = "files/${BackupArchive.CANONICAL_MEDIA_DIRECTORY}",
                             password = password,
                         )
@@ -134,10 +129,10 @@ class BackupRepository(
             }
 
             val fileName = displayName(uri)
-            backupReminderPreferences?.recordSuccessfulFullBackup(fileName)
+            backupReminderPreferences.recordSuccessfulFullBackup(fileName)
             eventWriter.dataExported(actor.id, clockMillis())
         }.onFailure {
-            backupReminderPreferences?.recordFailedFullBackup()
+            backupReminderPreferences.recordFailedFullBackup()
         }
 
     suspend fun restoreCompleteBackup(
@@ -151,8 +146,8 @@ class BackupRepository(
                 throw IllegalStateException("Funzione disponibile nella versione Full")
             }
 
-            val securitySettings = securityPreferences?.settings?.first()
-            val password = securitySettings?.backupEncryptionPassword?.takeIf { it.isNotBlank() }
+            val securitySettings = securityPreferences.settings.first()
+            val password = securitySettings.backupEncryptionPassword.takeIf { it.isNotBlank() }
 
             withContext(Dispatchers.IO) {
                 val stagingDir =
@@ -174,7 +169,7 @@ class BackupRepository(
                     dbBackupService.validateDatabase(backupDbFile)
 
                     // Atomic replacement: close, move current to backup, move new to current, delete backup
-                    database?.close()
+                    database.close()
                     RepairAppDatabase.closeInstance()
 
                     val currentDbFile = dbBackupService.databaseFile()
@@ -191,9 +186,7 @@ class BackupRepository(
                         }?.forEach { it.copyTo(File(oldDbBackupDir, it.name)) }
 
                     // Snapshot current media for rollback
-                    val mediaDir =
-                        mediaStorageProvider?.getBaseMediaDir()
-                            ?: File(context.filesDir, BackupArchive.CANONICAL_MEDIA_DIRECTORY)
+                    val mediaDir = mediaStorageProvider.getBaseMediaDir()
                     val oldMediaBackupDir = File(context.cacheDir, "media_backup_pre_restore")
                     oldMediaBackupDir.deleteRecursively()
                     if (mediaDir.exists()) {
@@ -206,8 +199,8 @@ class BackupRepository(
                         dbBackupService.replaceDatabaseFiles(extracted.databaseFiles)
                         replacePrivateFiles(stagingDir)
 
-                        authPreferences?.clear()
-                        sessionStore?.clear()
+                        authPreferences.clear()
+                        sessionStore.clear()
 
                         val now = clockMillis()
                         val restoredDatabase = RepairAppDatabase.getInstance(context)
@@ -277,11 +270,11 @@ class BackupRepository(
                 throw IllegalStateException("Funzione disponibile nella versione Full")
             }
 
-            val securitySettings = securityPreferences?.settings?.first()
+            val securitySettings = securityPreferences.settings.first()
             val password =
-                securitySettings?.backupEncryptionPassword?.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
+                securitySettings.backupEncryptionPassword.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
 
-            val exportDao = requireNotNull(orderExportDao) { "Export commesse non configurato" }
+            val exportDao = orderExportDao
             val labels =
                 OrderExportLabels(
                     headers =
@@ -433,9 +426,7 @@ class BackupRepository(
         }.getOrNull()
 
     private fun replacePrivateFiles(restoreRoot: File) {
-        val destination =
-            mediaStorageProvider?.getBaseMediaDir()
-                ?: File(context.filesDir, BackupArchive.CANONICAL_MEDIA_DIRECTORY)
+        val destination = mediaStorageProvider.getBaseMediaDir()
         BackupArchive.restoreAppMedia(File(restoreRoot, "files"), destination)
     }
 

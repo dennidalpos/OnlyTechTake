@@ -12,5 +12,18 @@
       "Ogni blocco deve mantenere identified_residual e plan aggiornati finche' resta aperto."
     ]
   },
-  "todos": []
+  "todos": [
+    {
+      "id": "T01",
+      "priority": "normal",
+      "description": "Aggiornare asset demo (screenshot e video) dopo modifica stringhe caricamento",
+      "context": "Residual R01 in DEMO_ASSET_WORKFLOW.md",
+      "plan": [
+        "Eseguire scripts\\windows\\create_demo_assets.ps1",
+        "Eseguire scripts\\windows\\record_demo_device.ps1 per il workflow completo",
+        "Verificare che il dialogo Anteprima WhatsApp venga chiuso correttamente (Fix applicato)",
+        "Verificare la coerenza delle nuove stringhe nei file generati"
+      ]
+    }
+  ]
 }

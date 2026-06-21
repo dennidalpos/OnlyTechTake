@@ -36,7 +36,8 @@ class OrderWorkflowRepository(
     private val signatureDao: SignatureDao,
     private val messageLogDao: MessageLogDao,
     private val auditLogDao: AuditLogDao,
-    private val database: RepairAppDatabase?,
+    private val database: RepairAppDatabase,
+    private val fileCleanupService: OrderFileCleanupService,
     private val orderNumberGenerator: OrderNumberGenerator = OrderNumberGenerator(),
     private val clockMillis: () -> Long = { System.currentTimeMillis() },
 ) : OrderRepository {
@@ -89,7 +90,8 @@ class OrderWorkflowRepository(
         filter: OrderFilter,
     ): Flow<List<OrderListItem>> = queries.observeOrderList(actor, filter)
 
-    override fun observeOrderDetail(orderId: String): Flow<OrderDetail?> = queries.observeOrderDetail(orderId)
+    override fun observeOrderDetail(orderId: String): Flow<OrderDetail?> =
+        queries.observeOrderDetail(orderId)
 
     override suspend fun createOrder(
         actor: AuthenticatedUser,
@@ -156,16 +158,9 @@ class OrderWorkflowRepository(
             timelineEventDao = timelineEventDao,
             orderMediaDao = orderMediaDao,
             signatureDao = signatureDao,
-            orderDocumentDao =
-                database?.orderDocumentDao()
-                    ?: error("OrderDocumentDao unavailable"),
+            orderDocumentDao = database.orderDocumentDao(),
             auditLogDao = auditLogDao,
-            fileCleanupService =
-                OrderFileCleanupService(
-                    context,
-                    com.onlytechtake.repairapp.core.media
-                        .MediaStorageProvider(context),
-                ),
+            fileCleanupService = fileCleanupService,
         )
 
     override suspend fun deleteSignature(
@@ -182,11 +177,7 @@ class OrderWorkflowRepository(
                 )
             }
             signatureDao.deleteById(signatureId)
-            OrderFileCleanupService(
-                context,
-                com.onlytechtake.repairapp.core.media
-                    .MediaStorageProvider(context),
-            ).deleteSpecificFile(sig.localPath)
+            fileCleanupService.deleteSpecificFile(sig.localPath)
             commands.recordMediaRemoved(actor, sig.orderId, sig.fileName)
         }
 }

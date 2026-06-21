@@ -59,6 +59,11 @@ class OrderWorkflowRepositoryInstrumentedTest {
                 messageLogDao = database.messageLogDao(),
                 auditLogDao = database.auditLogDao(),
                 database = database,
+                fileCleanupService =
+                    OrderFileCleanupService(
+                        context,
+                        com.onlytechtake.repairapp.core.media.MediaStorageProvider(context),
+                    ),
             )
     }
 

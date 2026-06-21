@@ -31,10 +31,9 @@ internal class AuthenticatedActionRunner(
                     ((result as? String) ?: successMessage)?.let { showMessage(it, false) }
                     onSuccess()
                 },
-                onFailure = { error ->
-                    showMessage(error.message ?: "Errore", true)
-                },
-            )
+            ) { error ->
+                showMessage(error.message ?: "Errore", true)
+            }
         }
     }
 

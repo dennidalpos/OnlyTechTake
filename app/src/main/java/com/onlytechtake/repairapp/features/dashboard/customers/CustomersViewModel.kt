@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class CustomersViewModel(
-    private val authRepository: AuthRepository,
+    authRepository: AuthRepository,
     private val customerRepository: CustomerRepository,
     private val orderWorkflowRepository: OrderWorkflowRepository,
     private val onSetFormDirty: (Boolean) -> Unit,
@@ -35,10 +35,12 @@ class CustomersViewModel(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
-    private val _showAll = MutableStateFlow(false)
+    private val _showAll = MutableStateFlow(value = false)
     val showAll = _showAll.asStateFlow()
 
-    private val _isFormDirty = MutableStateFlow(false)
+    private val _isFormDirty = MutableStateFlow(value = false)
+
+    @Suppress("unused")
     val isFormDirty = _isFormDirty.asStateFlow()
 
     val currentUser = authRepository.currentUser
@@ -85,12 +87,11 @@ class CustomersViewModel(
                 onSuccess = {
                     onSaved(it)
                     _searchQuery.value = ""
-                    setFormDirty(false)
+                    setFormDirty(dirty = false)
                 },
-                onFailure = { error ->
-                    _message.value = WorkspaceMessage(error.message ?: "Errore", true)
-                },
-            )
+            ) { error ->
+                _message.value = WorkspaceMessage(error.message ?: "Errore", isError = true)
+            }
         }
     }
 
@@ -107,8 +108,7 @@ class CustomersViewModel(
                     customerId = customerId,
                     statuses =
                         if (openOnly) {
-                            OrderStatus
-                                .values()
+                            OrderStatus.entries
                                 .filter { it != OrderStatus.CLOSED }
                                 .toSet()
                         } else {

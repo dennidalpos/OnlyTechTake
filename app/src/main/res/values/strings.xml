@@ -19,6 +19,11 @@
     <string name="timeline_writer_not_configured">Timeline writer non configurato</string>
     <string name="audit_writer_not_configured">Audit writer non configurato</string>
 
+    <string name="loading_init_db">Avvio database locale…</string>
+    <string name="loading_verify_session">Verifica credenziali sessione…</string>
+    <string name="loading_load_workspace">Caricamento ambiente di lavoro…</string>
+    <string name="loading_system_ready">Sistema pronto!</string>
+
     <string name="app_motto">Un\'app per ogni problema!</string>
 
     <string name="status_open">Aperta</string>

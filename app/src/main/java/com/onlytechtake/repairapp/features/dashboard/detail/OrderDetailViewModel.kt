@@ -58,7 +58,7 @@ class OrderDetailViewModel(
     private val _statusPdfError = MutableStateFlow<String?>(null)
     val statusPdfError = _statusPdfError.asStateFlow()
 
-    private val _showPdfSentConfirmation = MutableStateFlow(false)
+    private val _showPdfSentConfirmation = MutableStateFlow(value = false)
     val showPdfSentConfirmation = _showPdfSentConfirmation.asStateFlow()
 
     private val _lastGeneratedDocumentId = MutableStateFlow<String?>(null)
@@ -212,7 +212,7 @@ class OrderDetailViewModel(
     }
 
     fun reportCameraError(message: String) {
-        _message.value = WorkspaceMessage(message, true)
+        _message.value = WorkspaceMessage(message, isError = true)
     }
 
     fun prepareMessage(anchor: TemplateAnchor) {
@@ -290,10 +290,9 @@ class OrderDetailViewModel(
                     onSuccess = {
                         orderRepository.recordMediaRemoved(actor, orderId, document.fileName)
                     },
-                    onFailure = { error ->
-                        _message.value = WorkspaceMessage(error.message ?: "Errore", true)
-                    },
-                )
+                ) { error ->
+                    _message.value = WorkspaceMessage(error.message ?: "Errore", isError = true)
+                }
             }
         }
     }

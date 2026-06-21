@@ -12,9 +12,9 @@ import com.onlytechtake.repairapp.core.media.MediaOptimizer
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.media.OrderMediaFileNamer
 import com.onlytechtake.repairapp.core.media.exifOrientationTransform
+import androidx.core.util.AtomicFile
 import com.onlytechtake.repairapp.core.media.toMiBLabel
 import com.onlytechtake.repairapp.core.permissions.PermissionService
-import com.onlytechtake.repairapp.core.utils.AtomicFileHelper
 import com.onlytechtake.repairapp.data.local.dao.OrderMediaDao
 import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
 import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
@@ -460,7 +460,8 @@ class OrderMediaRepository(
         }
     }
 
-    private suspend fun <T> inTransaction(block: suspend () -> T): T = database?.withTransaction { block() } ?: block()
+    private suspend fun <T> inTransaction(block: suspend () -> T): T =
+        database?.withTransaction { block() } ?: block()
 
     private fun copyToWithLimit(
         input: InputStream,
@@ -539,16 +540,21 @@ class OrderMediaRepository(
     ): String {
         require(bitmap.width > 0 && bitmap.height > 0) { "Immagine modificata non valida" }
         val (format, mimeType) = compressFormatFor(sourceMimeType)
-        AtomicFileHelper.writeAtomically(file) { tempFile ->
-            FileOutputStream(tempFile).use { output ->
-                require(
-                    bitmap.compress(
-                        format,
-                        IMAGE_SAVE_QUALITY,
-                        output,
-                    ),
-                ) { "Salvataggio immagine non riuscito" }
-            }
+        val atomicFile = AtomicFile(file)
+        var stream: FileOutputStream? = null
+        try {
+            stream = atomicFile.startWrite()
+            require(
+                bitmap.compress(
+                    format,
+                    IMAGE_SAVE_QUALITY,
+                    stream,
+                ),
+            ) { "Salvataggio immagine non riuscito" }
+            atomicFile.finishWrite(stream)
+        } catch (e: Exception) {
+            atomicFile.failWrite(stream)
+            throw e
         }
         return mimeType
     }

@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 class SettingsViewModel(
     private val authRepository: AuthRepository,
     adminUserRepository: AdminUserRepository,
-    private val catalogRepository: CatalogRepository,
+    catalogRepository: CatalogRepository,
     private val templateRepository: TemplateRepository,
     private val backupRepository: BackupRepository,
     private val backupReminderPreferences: BackupReminderPreferences,
@@ -164,7 +164,7 @@ class SettingsViewModel(
         active: Boolean,
         step: String? = null,
     ) = templateDelegate.saveTemplate(code, title, body, active, step).also {
-        setFormDirty(false)
+        setFormDirty(dirty = false)
     }
 
     fun setTemplateForAnchor(
@@ -176,15 +176,20 @@ class SettingsViewModel(
 
     fun setMessageMode(mode: MessageMode) = templateDelegate.setMessageMode(mode)
 
-    fun setBackupReminderEnabled(enabled: Boolean) = backupDelegate.setBackupReminderEnabled(enabled)
+    fun setBackupReminderEnabled(enabled: Boolean) =
+        backupDelegate.setBackupReminderEnabled(enabled)
 
-    fun setBackupReminderIntervalDays(days: Int) = backupDelegate.setBackupReminderIntervalDays(days)
+    fun setBackupReminderIntervalDays(days: Int) =
+        backupDelegate.setBackupReminderIntervalDays(days)
 
-    fun setBackupEncryptionEnabled(enabled: Boolean) = securityDelegate.setBackupEncryptionEnabled(enabled)
+    fun setBackupEncryptionEnabled(enabled: Boolean) =
+        securityDelegate.setBackupEncryptionEnabled(enabled)
 
-    fun setBackupEncryptionPassword(password: String) = securityDelegate.setBackupEncryptionPassword(password)
+    fun setBackupEncryptionPassword(password: String) =
+        securityDelegate.setBackupEncryptionPassword(password)
 
-    fun setDatabaseEncryptionEnabled(enabled: Boolean) = securityDelegate.setDatabaseEncryptionEnabled(enabled)
+    fun setDatabaseEncryptionEnabled(enabled: Boolean) =
+        securityDelegate.setDatabaseEncryptionEnabled(enabled)
 
     fun createOperator(
         displayName: String,

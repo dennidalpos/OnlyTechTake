@@ -94,7 +94,9 @@ For every relevant repository change:
 
 This register lists only active demo-asset residuals. Do not keep completed rows here as history; completed evidence belongs in command output or release notes when explicitly needed, not in this workflow file.
 
-Nessun residuo demo-asset attivo.
+| ID | Description | Impacted assets | Status |
+|---|---|---|---|
+| R01 | Cambio stringhe caricamento e sistema pronto | Tutti (caricamento visibile nei video) | not run |
 
 Use concise validation values such as `not run`, `compile only`, `screenshots verified`, or `screenshots and recording verified`. Do not mark a device flow verified unless it actually ran.
 
