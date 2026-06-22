@@ -2,6 +2,16 @@
 
 This document is the source of truth for OnlyTechTake screenshot and video generation. Update it whenever repository changes affect captured UI, navigation, copy, test tags, permissions, seed data, scenario timing, expected files, or output paths.
 
+## Product Roles
+
+Asset generation is flavor-aware and profile-driven. Flavor and commercial role must not be treated as synonyms:
+
+- `Full` is the **Pro** product. It supports `store-pro` and `social-pro` profiles.
+- `Demo` is a limited trial. It supports `store-demo` and `social-demo` profiles.
+- `Showcase` is a guided presentation build. It supports the `showcase-representanza` profile.
+
+WhatsApp must always be represented as a manual handoff: the app prepares the message, then the operator reviews and sends it in WhatsApp. Do not describe backend sync, proprietary cloud, WhatsApp Business API, automatic replies, or automatic sending unless they are actually implemented.
+
 ## Pipeline Map
 
 ### Shared preparation
@@ -11,99 +21,84 @@ Both public scripts:
 1. Resolve the repository root and Android environment.
 2. Load `scripts/powershell/support/android_demo.ps1`.
 3. Select the `OnlyTechTakeDemo` emulator or one connected physical device.
-4. Build and install the selected `Full` or `Demo` debug APK and matching Android-test APK unless `-SkipBuild` is used.
-5. Clear the selected debug package (`com.onlytechtake.repairapp.debug` or `com.onlytechtake.repairapp.demo.debug`) before running the scenario.
+4. Build and install the selected `Full`, `Demo`, or `Showcase` debug APK and matching Android-test APK unless `-SkipBuild` is used.
+5. Clear the selected debug package before running the scenario.
 6. Execute Android instrumentation through `AndroidJUnitRunner`.
 
-The shared helper owns device discovery, temporary verifier settings, APK installation, instrumentation execution, screenshot pulling, PNG conversion, and captioned slide creation.
+### Asset Profiles (Manifests)
+
+Asset generation is now driven by JSON manifests in `demo/assets/profiles/*.asset.json`. Each profile defines:
+- `id`: Unique identifier (e.g., `store-pro`).
+- `flavor`: Required product flavor (Full, Demo, Showcase).
+- `testClass`: Instrumented test to execute.
+- `cases`: Specific scenarios with expected files and output mappings.
+- `outputs`: List of target platforms (instagram, facebook, whatsapp, play-store, linkedin) and variants (vertical, square, landscape).
 
 ### Screenshot and assembled-video flow
 
 Command:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\create_demo_assets.ps1
-powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\create_demo_assets.ps1 -Flavor Demo
+# Generate Play Store assets for Pro
+powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\create_demo_assets.ps1 -AssetProfile store-pro -Flavor Full
+
+# Generate Social assets for Demo
+powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\create_demo_assets.ps1 -AssetProfile social-demo -Flavor Demo
 ```
 
 Flow:
 
-1. `create_demo_assets.ps1` selects all assets or a requested `-AssetId` / `-CaseId`.
+1. `create_demo_assets.ps1` loads the requested `-AssetProfile` manifest.
 2. Instrumented tests write raw PNG files under the app external files directory.
-3. The script pulls those directories with `adb`.
-4. Raw screenshots are converted to 1080x1920 story PNG files.
-5. For configurations with a story JSON, captioned slides are assembled into MP4 with `ffmpeg`.
-6. Managed output is written below `reports/generated-assets/Full` or `reports/generated-assets/Demo`.
+3. The script pulls those directories and processes images according to the defined `outputs`.
+4. Output is written to `reports/generated-assets/<AssetProfile>/<Platform>/<Variant>/`.
 
-| Asset | Instrumented scenario | Device source | Repository output |
+| Profile | Target Flavor | Primary Test Class | Purpose |
 |---|---|---|---|
-| **Social Campaign** | `SocialCampaignScreenshotTest` | `social-campaign` | `social/vertical`, `social/square` |
-| **Operator Intake** | `OperatorIntakeDemoScreenshotTest` | `demo-screenshots` | `demo/screenshots/01-operatore-banco` |
-| **Order Lifecycle** | `SocialStoryDemoScreenshotTest#capturesOrderIntakeToClosureStories` | `demo-social-screenshots/01-commessa-nuovo-cliente-chiusura` | `demo/screenshots/02-commessa-nuovo-cliente-chiusura` |
-| **Categories and templates** | `SocialStoryDemoScreenshotTest#capturesCategoryAndTemplateStories` | `demo-social-screenshots/02-categorie-template` | `demo/screenshots/03-categorie-template` |
-| **Customers** | `SocialStoryDemoScreenshotTest#capturesPrivateAndBusinessCustomerStories` | `demo-social-screenshots/03-clienti-privato-azienda` | `demo/screenshots/04-clienti-privato-azienda` |
-| **Maintenance and backup** | `SocialStoryDemoScreenshotTest#capturesMaintenanceStories` | `demo-social-screenshots/05-manutenzione-backup` | `demo/screenshots/05-manutenzione-backup` |
-| **Demo order limit** | `SocialStoryDemoScreenshotTest#capturesDemoLimitStory` | `demo-social-screenshots/06-demo-limit` | `demo/screenshots/06-demo-limit` (Demo only) |
-
-`demo/video/operator-intake.story.json` defines the assembled operator video. Any changed filename, order, caption, duration, resolution, or output name must be synchronized with the test and script configuration.
+| **store-pro** | Full | `StoreProScreenshotTest` | Play Store Pro screenshots and video. |
+| **store-demo** | Demo | `StoreDemoScreenshotTest` | Play Store Demo screenshots. |
+| **social-pro** | Full | `SocialProAssetTest` | Multichannel social assets (IG, FB, WA, LI). |
+| **social-demo** | Demo | `SocialDemoAssetTest` | Limited social assets for trial version. |
+| **showcase-representanza** | Showcase | `ShowcaseRepresentanzaScreenshotTest` | Presentation highlights and demo clips. |
 
 ### Direct device-recording flow
 
 Command:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\record_demo_device.ps1
-powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\record_demo_device.ps1 -UseConnectedDevice -ScenarioId full-workflow -StartImmediately
-powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\record_demo_device.ps1 -Flavor Demo -ScenarioId demo-limit -StartImmediately
+powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\record_demo_device.ps1 -AssetProfile store-pro
 ```
 
 Flow:
 
-1. The script offers manual recording or an automated scenario.
-2. It grants the required runtime permissions and optionally seeds demo data.
-3. For automated flows, it starts `adb screenrecord` and launches the selected instrumented test with `demoRecording=true`.
-4. The tests use shorter recording pauses while following the same navigation paths used for screenshots.
-5. The script stops recording, pulls the MP4 into `reports/generated-assets/<Flavor>/demo/videos/device`, and normalizes it with `ffmpeg` when available.
-6. Re-running one recording replaces only the selected output file, preserving other MP4 files already present in the device-video output directory.
-
-| Recording choice | Instrumented scenario |
-|---|---|
-| Full workflow | `OperatorIntakeDemoScreenshotTest` |
-| Social stories | `SocialStoryDemoScreenshotTest` |
-| Config | `SocialStoryDemoScreenshotTest#capturesCategoryAndTemplateStories` |
-| Customers | `SocialStoryDemoScreenshotTest#capturesPrivateAndBusinessCustomerStories` |
-| Maintenance | `SocialStoryDemoScreenshotTest#capturesMaintenanceStories` |
-| Demo order limit | `SocialStoryDemoScreenshotTest#capturesDemoLimitStory` (Demo only) |
+1. The script offers manual recording or an automated scenario based on the selected profile.
+2. For automated flows, it starts `adb screenrecord` and launches the profile's test class with `demoRecording=true`.
+3. The script stops recording and pulls the MP4 into `reports/generated-assets/<AssetProfile>/device/raw/`.
 
 ## Change Impact Checklist
 
 For every relevant repository change:
 
-- Map each changed screen or workflow to the scenario table above.
-- Treat generated asset directories as fully managed output: before recreating screenshots or videos, the script must delete and recreate the whole target directory instead of overwriting files in place.
+- Map each changed screen or workflow to the relevant test class and asset profile.
+- Update profile manifests in `demo/assets/profiles/` if expected files or output paths change.
 - Update action lookup to stable `RepairAppTestTags`; keep text assertions only when validating user-visible copy.
-- Synchronize expected screenshot filenames and device directories in `create_demo_assets.ps1`.
-- Synchronize recording menu entries and test selectors in `record_demo_device.ps1`.
-- Update shared build, package, runner, device, pull, or image-processing behavior in `android_demo.ps1` when applicable.
 - Update story JSON captions, ordering, durations, and output names when captured content changes.
-- Run the smallest affected case first, then the complete flow when shared navigation or helpers changed.
+- Run the smallest affected case first, then the complete profile when shared navigation or helpers changed.
 - Confirm generated PNG/MP4 files exist, are readable, have expected dimensions, and show the intended final state.
 - Keep generated output under ignored paths and remove temporary artifacts.
 
 ## Asset Impact Register
 
-This register lists only active demo-asset residuals. Do not keep completed rows here as history; completed evidence belongs in command output or release notes when explicitly needed, not in this workflow file.
+This register lists only active demo-asset residuals.
 
 | ID | Description | Impacted assets | Status |
 |---|---|---|---|
-| R01 | Cambio stringhe caricamento e sistema pronto | Tutti (caricamento visibile nei video) | not run |
+| R02 | Nuova Home Pro/Demo/Showcase | Tutti | not run |
+| R03 | AssetProfile e directory dinamiche | Tutti | not run |
 
-Use concise validation values such as `not run`, `compile only`, `screenshots verified`, or `screenshots and recording verified`. Do not mark a device flow verified unless it actually ran.
+Use concise validation values such as `not run`, `compile only`, `screenshots verified`, or `screenshots and recording verified`.
 
 ## Residual Sync
 
-After updating the register:
-
-1. Convert every unresolved, actionable residual into one prioritized todo in `PROJECT_STATUS.json`.
-2. Do not copy completed history, dates, evidence, or check results into this document or the JSON file.
-3. Remove the todo when the register records successful verification and no work remains.
+1. Convert unresolved residuals into todos in `PROJECT_STATUS.json`.
+2. Remove the todo when the register records successful verification and no work remains.

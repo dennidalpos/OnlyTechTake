@@ -2,6 +2,14 @@
 
 Indice canonico della documentazione tracciata. Il README della root resta il punto di ingresso rapido; questa pagina ordina i documenti per uso operativo.
 
+## Regola prodotto e asset
+
+- **Full / Pro**: prodotto completo. E' la fonte ufficiale per Play Store principale, video promozionali, social e materiali vendita.
+- **Demo**: prova limitata. Mostra il flusso base, dichiara i limiti reali e non deve presentare come disponibili funzioni Pro bloccate.
+- **Showcase**: vetrina guidata. Usa dati seed e login automatico per walkthrough, presentazioni e registrazioni controllate; non e' la variante primaria Play Store.
+
+Tutti i copy devono restare coerenti con l'app local-first: nessun backend proprietario, nessun cloud proprietario e nessun invio WhatsApp automatico.
+
 ## Operativo
 
 - [`../PROJECT_STATUS.json`](../PROJECT_STATUS.json): backlog residuo attivo, ordinato per priorità, senza storico dei task completati.

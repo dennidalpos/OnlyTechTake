@@ -458,6 +458,7 @@ fun QuickActions(
             WizardNavigationBar(
                 onBack = { editStep(2) },
                 nextEnabled = draft.problemSummary.isNotBlank(),
+                nextTestTag = RepairAppTestTags.NewOrderStep3NextButton,
                 onNext = { completeStep(3) },
                 onCancel = onClose,
             )
@@ -498,6 +499,7 @@ fun QuickActions(
             WizardNavigationBar(
                 onBack = { editStep(3) },
                 nextEnabled = draft.stagedMedia.isNotEmpty(),
+                nextTestTag = RepairAppTestTags.NewOrderStep4NextButton,
                 onNext = { completeStep(4) },
                 onCancel = onClose,
             )
@@ -536,6 +538,7 @@ fun QuickActions(
             WizardNavigationBar(
                 onBack = { editStep(4) },
                 nextEnabled = draft.signatureCapture != null,
+                nextTestTag = RepairAppTestTags.NewOrderStep5NextButton,
                 onNext = { completeStep(5) },
                 onCancel = onClose,
             )

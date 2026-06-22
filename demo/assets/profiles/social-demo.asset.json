@@ -1,0 +1,22 @@
+{
+  "id": "social-demo",
+  "flavor": "Demo",
+  "testClass": "com.onlytechtake.repairapp.demo.SocialDemoAssetTest",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/social-demo",
+  "pulledDirectoryName": "social-demo",
+  "cases": [
+    {
+      "id": "campaign",
+      "sourceDirectory": ".",
+      "outputs": [
+        { "platform": "instagram", "variant": "vertical", "subDir": "stories" },
+        { "platform": "facebook", "variant": "vertical", "subDir": "stories" },
+        { "platform": "whatsapp", "variant": "vertical", "subDir": "status" }
+      ],
+      "expectedFiles": [
+        "01-stories-demo-intro.png",
+        "02-reel-demo-limit.png"
+      ]
+    }
+  ]
+}

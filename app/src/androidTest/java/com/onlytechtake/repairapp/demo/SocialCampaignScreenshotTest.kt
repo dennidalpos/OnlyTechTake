@@ -19,16 +19,20 @@ import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
+import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.test.swipeUp
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.GrantPermissionRule
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.MainActivity
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
@@ -40,6 +44,10 @@ import java.io.FileOutputStream
 class SocialCampaignScreenshotTest {
     @get:Rule
     val composeRule = createEmptyComposeRule()
+
+    @get:Rule
+    val cameraPermissionRule: GrantPermissionRule =
+        GrantPermissionRule.grant(android.Manifest.permission.CAMERA)
 
     private val context: Context = ApplicationProvider.getApplicationContext()
 
@@ -104,24 +112,33 @@ class SocialCampaignScreenshotTest {
             )
             capture(outputDir, "03-diagnosi.png")
 
-            // Proseguiamo per mostrare lo stepper che avanza (Step 4: Media)
-            clickText("Avanti", scroll = true)
+            // 4. Wizard: media, privacy e firma reale nell'intake.
+            clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
             waitForText("Foto e allegati")
-            pauseForDemo()
-
-            // Usciamo dal wizard per andare all'ordine reale (già pronto con media e firma nel seeder)
-            clickDashboardTab("ORDERS")
-            waitForTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
-            clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
-
-            // 4. FIRMA (Mostriamo la firma nel dettaglio ordine)
-            waitForTag(RepairAppTestTags.OrderStatusLabel)
-            clickTag(RepairAppTestTags.OrderSignaturesCard, scroll = true)
-            composeRule.waitForIdle()
-            pauseForDemo()
+            clickTag(RepairAppTestTags.IntakeMediaTakePhotoButton, scroll = true)
+            waitForTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
+            clickTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
+            waitForText("PHOTO", scroll = true)
+            clickTag(RepairAppTestTags.NewOrderStep4NextButton, scroll = true)
+            waitForText("Privacy e firma")
+            clickText("Accetta informativa privacy", scroll = true)
+            clickText("Accetta condizioni di presa in carico", scroll = true)
+            waitForTag(RepairAppTestTags.SignatureCanvas, scroll = true)
+            composeRule.onNodeWithTag(RepairAppTestTags.SignatureCanvas).performTouchInput {
+                swipeRight()
+            }
+            waitForTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
             capture(outputDir, "04-firma.png")
-            clickTag(RepairAppTestTags.OrderSignaturesCard)
-            pauseForDemo()
+
+            clickTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
+            waitForTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
+            clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
+            val createdOrderId = waitForCreatedOrderId()
+
+            clickDashboardTab("ORDERS")
+            waitForTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
+            clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
+            waitForTag(RepairAppTestTags.OrderStatusLabel)
 
             // Workflow di lavorazione
             applySimpleStatus(
@@ -151,11 +168,32 @@ class SocialCampaignScreenshotTest {
             // 6. SUCCESSO (Timeline chiusura)
             closeOrder()
             clickDashboardTab("ORDERS")
-            waitForTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
-            clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
+            waitForTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
+            clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
             waitForText("Chiusa")
             capture(outputDir, "06-successo.png")
         }
+    }
+
+    private fun waitForCreatedOrderId(): String {
+        val database = RepairAppDatabase.getInstance(context)
+        val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
+        while (System.currentTimeMillis() < deadline) {
+            val order =
+                runBlocking {
+                    database
+                        .repairOrderDao()
+                        .observeRecentActiveOrders(limit = 20)
+                        .first()
+                        .firstOrNull {
+                            it.id != DemoDataSeeder.DEMO_ORDER_ID &&
+                                it.title == "Asus ROG - Surriscaldamento"
+                        }
+                }
+            if (order != null) return order.id
+            Thread.sleep(TAG_POLL_MILLIS)
+        }
+        error("Ordine creato dal wizard non trovato")
     }
 
     private fun applySimpleStatus(

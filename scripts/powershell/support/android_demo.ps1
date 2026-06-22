@@ -432,6 +432,42 @@ function Convert-ToSquarePng {
     }
 }
 
+function Convert-ToLandscapePng {
+    param(
+        [Parameter(Mandatory = $true)][string]$SourcePath,
+        [Parameter(Mandatory = $true)][string]$TargetPath
+    )
+
+    $source = [System.Drawing.Bitmap]::FromFile($SourcePath)
+    $landscape = New-Object System.Drawing.Bitmap(1920, 1080)
+    $graphics = [System.Drawing.Graphics]::FromImage($landscape)
+    try {
+        $graphics.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::HighQuality
+        $graphics.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
+        $graphics.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
+        $graphics.Clear([System.Drawing.Color]::FromArgb(246, 247, 249))
+
+        $maxWidth = 1800
+        $maxHeight = 1000
+        $scale = [Math]::Min($maxWidth / $source.Width, $maxHeight / $source.Height)
+        $drawWidth = [int]($source.Width * $scale)
+        $drawHeight = [int]($source.Height * $scale)
+        $drawX = [int]((1920 - $drawWidth) / 2)
+        $drawY = [int]((1080 - $drawHeight) / 2)
+
+        $shadowBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(28, 0, 0, 0))
+        $graphics.FillRectangle($shadowBrush, $drawX + 10, $drawY + 10, $drawWidth, $drawHeight)
+        $shadowBrush.Dispose()
+        $graphics.DrawImage($source, $drawX, $drawY, $drawWidth, $drawHeight)
+
+        $landscape.Save($TargetPath, [System.Drawing.Imaging.ImageFormat]::Png)
+    } finally {
+        $graphics.Dispose()
+        $landscape.Dispose()
+        $source.Dispose()
+    }
+}
+
 function Assert-PngDimensions {
     param(
         [Parameter(Mandatory = $true)][string]$Path,

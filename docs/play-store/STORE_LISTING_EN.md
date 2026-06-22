@@ -17,7 +17,7 @@ All your data stays exclusively on your device. With an SQLCipher encrypted data
 - 👥 **CRM Customer Database:** Manage contacts, privacy preferences, and repair history in a secure local database.
 - ✍️ **Integrated Digital Signature:** Capture signatures for terms and privacy acceptance directly on the screen.
 - 📸 **Photo Documentation:** Attach photos of device conditions to prevent disputes.
-- 💬 **WhatsApp Integration:** Generate ready-to-send messages to notify customers in one tap.
+- 💬 **Manual WhatsApp handoff:** Prepare customer messages that the operator reviews and sends manually.
 - 📄 **Professional PDF Reports:** Create intake forms and PDF receipts with your own logo.
 - 📊 **XLSX Export & Backup:** Export data for accounting and create encrypted ZIP backups.
 
@@ -42,7 +42,7 @@ repair management, technical lab software, smartphone repair, pc assistance, wor
 **Full Description:**
 Unlock your lab's potential with the **OnlyTechTake Demo**.
 
-This version allows you to test all the core features of our "local-first" management tool before upgrading to Pro. Discover how to manage an order from intake to technical diagnosis.
+This version allows you to test the base flow of our "local-first" management tool before upgrading to Pro. Discover how to manage one demo order from intake to technical diagnosis.
 
 ⚠️ **Demo Version Limitations:**
 - Maximum 1 active order for workflow testing.

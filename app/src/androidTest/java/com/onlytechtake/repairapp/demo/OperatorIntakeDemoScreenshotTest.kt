@@ -19,16 +19,20 @@ import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
+import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.test.swipeUp
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.GrantPermissionRule
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.MainActivity
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
@@ -40,6 +44,10 @@ import java.io.FileOutputStream
 class OperatorIntakeDemoScreenshotTest {
     @get:Rule
     val composeRule = createEmptyComposeRule()
+
+    @get:Rule
+    val cameraPermissionRule: GrantPermissionRule =
+        GrantPermissionRule.grant(android.Manifest.permission.CAMERA)
 
     private val context: Context = ApplicationProvider.getApplicationContext()
 
@@ -105,6 +113,30 @@ class OperatorIntakeDemoScreenshotTest {
             )
             capture(outputDir, "04-category-problem.png")
 
+            clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
+            waitForText("Foto e allegati")
+            clickTag(RepairAppTestTags.IntakeMediaTakePhotoButton, scroll = true)
+            waitForTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
+            clickTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
+            waitForText("PHOTO", scroll = true)
+            clickTag(RepairAppTestTags.NewOrderStep4NextButton, scroll = true)
+
+            waitForText("Privacy e firma")
+            clickText("Accetta informativa privacy", scroll = true)
+            clickText("Accetta condizioni di presa in carico", scroll = true)
+            waitForTag(RepairAppTestTags.SignatureCanvas, scroll = true)
+            composeRule.onNodeWithTag(RepairAppTestTags.SignatureCanvas).performTouchInput {
+                swipeRight()
+            }
+            waitForTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
+            capture(outputDir, "05-signature-capture.png")
+
+            clickTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
+            waitForTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
+            capture(outputDir, "06-summary-submit.png")
+            clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
+
+            val createdOrderId = waitForCreatedOrderId()
             clickDashboardTab("ORDERS")
             waitForText("Commesse")
 
@@ -117,20 +149,20 @@ class OperatorIntakeDemoScreenshotTest {
                 pauseForDemo()
             }
 
-            waitForTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
-            clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
+            waitForTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
+            clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
 
             waitForTag(RepairAppTestTags.OrderStatusLabel)
             waitForTag(RepairAppTestTags.OrderDetailOrderReference, useUnmergedTree = true)
             waitForTag(RepairAppTestTags.OrderDetailCustomerReference, useUnmergedTree = true)
             waitForTag(RepairAppTestTags.orderDetailStatusStep(1), useUnmergedTree = true)
             waitForText("Asus ROG Strix")
-            capture(outputDir, "06-order-created.png")
+            capture(outputDir, "07-order-created.png")
 
             waitForTag(RepairAppTestTags.OrderWhatsAppButton, scroll = true)
             clickTag(RepairAppTestTags.OrderWhatsAppButton)
             waitForTag(RepairAppTestTags.OrderWhatsAppPreviewPanel)
-            capture(outputDir, "07-whatsapp-preview.png")
+            capture(outputDir, "08-whatsapp-preview.png")
             dismissWhatsAppPreviewIfPresent()
             pauseForDemo()
 
@@ -143,7 +175,7 @@ class OperatorIntakeDemoScreenshotTest {
                 scroll = true,
                 useUnmergedTree = true,
             )
-            capture(outputDir, "05-signature-capture.png")
+            capture(outputDir, "09-signature-detail.png")
 
             // Collapse signatures card to keep UI clean and test the toggle
             clickTag(RepairAppTestTags.OrderSignaturesCard)
@@ -153,30 +185,51 @@ class OperatorIntakeDemoScreenshotTest {
                 OrderStatusAction.START_PROGRESS,
                 nextAction = OrderStatusAction.START_DIAGNOSIS,
             )
-            capture(outputDir, "08-in-progress.png")
+            capture(outputDir, "10-in-progress.png")
 
             applySimpleStatus(
                 OrderStatusAction.START_DIAGNOSIS,
                 nextAction = OrderStatusAction.RECORD_RESULT,
             )
             applyResultStatus()
-            capture(outputDir, "09-diagnosis-result.png")
+            capture(outputDir, "11-diagnosis-result.png")
 
             waitForText("Documenti cliente", scroll = true)
-            capture(outputDir, "10-pdf-documents.png")
+            capture(outputDir, "12-pdf-documents.png")
 
             acceptQuote()
             applySimpleStatus(
                 OrderStatusAction.READY_FOR_PICKUP,
                 nextAction = OrderStatusAction.CLOSE_ORDER,
             )
-            capture(outputDir, "11-ready-for-pickup.png")
+            capture(outputDir, "13-ready-for-pickup.png")
 
             closeOrder()
-            clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
+            clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
             waitForText("Chiusa")
-            capture(outputDir, "12-closed-timeline.png")
+            capture(outputDir, "14-closed-timeline.png")
         }
+    }
+
+    private fun waitForCreatedOrderId(): String {
+        val database = RepairAppDatabase.getInstance(context)
+        val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
+        while (System.currentTimeMillis() < deadline) {
+            val order =
+                runBlocking {
+                    database
+                        .repairOrderDao()
+                        .observeRecentActiveOrders(limit = 20)
+                        .first()
+                        .firstOrNull {
+                            it.id != DemoDataSeeder.DEMO_ORDER_ID &&
+                                it.title == "Notebook non si accende"
+                        }
+                }
+            if (order != null) return order.id
+            Thread.sleep(TAG_POLL_MILLIS)
+        }
+        error("Ordine creato dal wizard non trovato")
     }
 
     private fun applySimpleStatus(

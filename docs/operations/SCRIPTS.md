@@ -16,8 +16,8 @@ Gli script calcolano automaticamente la root del progetto dal proprio percorso, 
 | Quality check | `scripts\powershell\project\quality.ps1` | Esegue Spotless/ktlint su tutti i sorgenti configurati e Android Lint su tutte le varianti debug/release. | Default interattivo con prompt per autofix; supporta `-Apply`, `-NonInteractive` e `-SkipLint`. |
 | Check progetto | `scripts\powershell\project\check_project.ps1` | Esegue lint, compile Kotlin debug, test unitari, build APK debug e, senza `-SkipReleaseBuild`, build APK release firmata. | Menu interattivo per Flavor e opzioni test/release. |
 | Audit vulnerabilità dipendenze | `scripts\powershell\project\check_dependency_vulnerabilities.ps1` | Interroga OSV sulle coordinate Maven presenti nei lockfile Gradle. | Chiede conferma prima di avviare la scansione online. |
-| Asset unificati | `scripts\powershell\assets\create_demo_assets.ps1` | Genera screenshot (storie/feed) e video MP4 montati. Centralizza demo e social. | Menu per selezione asset/caso specifico se non indicati. |
-| Registrazione demo device | `scripts\powershell\assets\record_demo_device.ps1` | Registra video MP4 manuali o automatici tramite `adb screenrecord`. | Menu per selezione scenario demo se non indicato. |
+| Asset unificati | `scripts\powershell\assets\create_demo_assets.ps1` | Genera screenshot e video montati basati su profili JSON in `demo/assets/profiles/`. | Parametri: `-AssetProfile`, `-Flavor`, `-Platform`, `-Variant`. |
+| Registrazione demo device | `scripts\powershell\assets\record_demo_device.ps1` | Registra video MP4 manuali o automatici basati su profili asset. | Parametri: `-AssetProfile`, `-Flavor`. |
 
 ## Comandi per obiettivo
 

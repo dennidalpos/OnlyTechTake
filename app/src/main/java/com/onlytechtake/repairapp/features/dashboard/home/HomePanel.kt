@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.features.dashboard.home
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,17 +11,24 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.components.AppBadge
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
@@ -29,6 +37,8 @@ import com.onlytechtake.repairapp.core.design.components.AppMetricCard
 import com.onlytechtake.repairapp.core.design.components.AppQueueCard
 import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
 import com.onlytechtake.repairapp.core.design.components.BannerType
+import com.onlytechtake.repairapp.core.design.components.StandardCard
+import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.domain.models.AppSummary
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
@@ -53,62 +63,24 @@ fun HomePanel(
         }
 
     AppScreenContainer {
-        val showBanner = remember { if (BuildConfig.IS_DEMO_VERSION) true else DemoMode.isEnabled }
-        if (showBanner) {
-            val bannerText =
-                if (DemoMode.isEnabled) {
-                    stringResource(R.string.demo_mode_banner)
-                } else {
-                    stringResource(R.string.demo_version_banner)
-                }
-            AppMessageBanner(
-                message = bannerText,
-                type = BannerType.Info,
-                modifier = Modifier.padding(bottom = RepairAppSpacing.cardGap),
-            )
-        }
-
-        SectionTitle(stringResource(R.string.home_title))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
-        ) {
-            AppMetricCard(
-                label = stringResource(R.string.home_metric_users),
-                value = summary.userCount.toString(),
-                modifier = Modifier.weight(1f),
-            )
-            AppMetricCard(
-                label = stringResource(R.string.home_metric_customers),
-                value = summary.customerCount.toString(),
-                modifier = Modifier.weight(1f),
-            )
-            AppMetricCard(
-                label = stringResource(R.string.home_metric_active),
-                value = summary.activeOrderCount.toString(),
-                modifier = Modifier.weight(1f),
-            )
-        }
+        HomeHeader(onNewOrder)
 
         Spacer(Modifier.height(RepairAppSpacing.cardGap))
 
-        AppButton(
-            text = stringResource(R.string.home_new_order),
-            onClick = onNewOrder,
-            variant = AppButtonVariant.Primary,
-            size = AppButtonSize.FullWidth,
-            leadingIcon = Icons.Default.Add,
-            testTag = RepairAppTestTags.HomeNewOrderButton,
-        )
+        HomeMetrics(summary)
 
-        if (showBackupReminder) {
+        if (showBackupReminder && !BuildConfig.IS_DEMO_VERSION && !BuildConfig.IS_SHOWCASE_MODE_ENABLED) {
             Spacer(Modifier.height(RepairAppSpacing.cardGap))
             BackupReminderCard(
                 settings = backupReminderSettings,
                 onRunBackup = { exportZipLauncher.launch("onlytechtake-backup.zip") },
                 onOpenSettings = onOpenBackupSettings,
             )
+        }
+
+        if (BuildConfig.IS_DEMO_VERSION) {
+            Spacer(Modifier.height(RepairAppSpacing.cardGap))
+            DemoInfoCard()
         }
 
         Spacer(Modifier.height(RepairAppSpacing.sectionGap))
@@ -134,6 +106,110 @@ fun HomePanel(
                     modifier = Modifier.padding(bottom = RepairAppSpacing.cardGap),
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun HomeHeader(onNewOrder: () -> Unit) {
+    val isDemo = BuildConfig.IS_DEMO_VERSION || DemoMode.isEnabled
+    val isShowcase = BuildConfig.IS_SHOWCASE_MODE_ENABLED
+
+    Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            SectionTitle(stringResource(R.string.home_title))
+            when {
+                isShowcase ->
+                    AppBadge(
+                        text = stringResource(R.string.home_showcase_scenario),
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                    )
+
+                isDemo ->
+                    AppBadge(
+                        text = stringResource(R.string.demo_version_banner),
+                        containerColor = MaterialTheme.colorScheme.errorContainer,
+                        contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                    )
+
+                else ->
+                    AppBadge(
+                        text = stringResource(R.string.home_pro_status_operational),
+                        containerColor = MaterialTheme.repairColors.successContainer,
+                        contentColor = MaterialTheme.repairColors.onSuccessContainer,
+                    )
+            }
+        }
+
+        AppButton(
+            text =
+                when {
+                    isDemo -> stringResource(R.string.home_demo_cta_try)
+                    isShowcase -> stringResource(R.string.home_showcase_walkthrough)
+                    else -> stringResource(R.string.home_pro_cta_new)
+                },
+            onClick = onNewOrder,
+            variant = AppButtonVariant.Primary,
+            size = AppButtonSize.FullWidth,
+            leadingIcon = if (isShowcase) Icons.Default.PlayArrow else Icons.Default.Add,
+            testTag = RepairAppTestTags.HomeNewOrderButton,
+        )
+    }
+}
+
+@Composable
+private fun HomeMetrics(summary: AppSummary) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
+    ) {
+        AppMetricCard(
+            label = stringResource(R.string.home_metric_users),
+            value = summary.userCount.toString(),
+            modifier = Modifier.weight(1f),
+        )
+        AppMetricCard(
+            label = stringResource(R.string.home_metric_customers),
+            value = summary.customerCount.toString(),
+            modifier = Modifier.weight(1f),
+        )
+        AppMetricCard(
+            label = stringResource(R.string.home_metric_active),
+            value = summary.activeOrderCount.toString(),
+            modifier = Modifier.weight(1f),
+        )
+    }
+}
+
+@Composable
+private fun DemoInfoCard() {
+    StandardCard {
+        Column(
+            modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                androidx.compose.material3.Icon(
+                    Icons.Default.Star,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(end = RepairAppSpacing.compactGap),
+                )
+                Text(
+                    text = stringResource(R.string.home_demo_pro_features),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+            Text(
+                text = "Backup ZIP, Export Excel, Gestione Operatori e Commesse illimitate sono disponibili nella versione Pro.",
+                style = MaterialTheme.typography.bodySmall,
+            )
         }
     }
 }

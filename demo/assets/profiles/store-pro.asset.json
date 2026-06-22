@@ -1,0 +1,27 @@
+{
+  "id": "store-pro",
+  "flavor": "Full",
+  "testClass": "com.onlytechtake.repairapp.demo.StoreProScreenshotTest",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/store-pro",
+  "pulledDirectoryName": "store-pro",
+  "storyJson": "demo/video/store-pro.story.json",
+  "cases": [
+    {
+      "id": "play-store",
+      "sourceDirectory": ".",
+      "outputs": [
+        { "platform": "play-store", "variant": "vertical", "subDir": "screenshots" }
+      ],
+      "expectedFiles": [
+        "01-dashboard-pro.png",
+        "02-nuova-commessa-pro.png",
+        "03-foto-firma-pro.png",
+        "04-diagnosi-preventivo-pro.png",
+        "05-whatsapp-pdf-pro.png",
+        "06-timeline-chiusura-pro.png",
+        "07-clienti-pro.png",
+        "08-configurazione-pro.png"
+      ]
+    }
+  ]
+}

@@ -104,6 +104,12 @@
 
     <string name="home_queues_title">Code operative</string>
     <string name="home_title">Banco riparazioni</string>
+    <string name="home_pro_cta_new">NUOVA COMMESSA</string>
+    <string name="home_pro_status_operational">BANCO OPERATIVO</string>
+    <string name="home_demo_cta_try">PROVA COMMESSA</string>
+    <string name="home_demo_pro_features">Scopri i vantaggi della versione Pro</string>
+    <string name="home_showcase_scenario">SCENARIO DIMOSTRATIVO</string>
+    <string name="home_showcase_walkthrough">Avvia Walkthrough</string>
     <string name="home_metric_users">Utenti</string>
     <string name="home_metric_customers">Clienti</string>
     <string name="home_metric_active">Attive</string>

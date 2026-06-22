@@ -1,0 +1,29 @@
+{
+  "title": "OnlyTechTake - Demo Version",
+  "outputFile": "onlytechtake-demo-preview.mp4",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "scenes": [
+    {
+      "file": "01-dashboard-demo.png",
+      "caption": "Prova il flusso base di OnlyTechTake",
+      "durationSeconds": 4.0
+    },
+    {
+      "file": "02-nuova-commessa-demo.png",
+      "caption": "Semplice e immediato per il tuo banco",
+      "durationSeconds": 4.0
+    },
+    {
+      "file": "03-limite-demo.png",
+      "caption": "Versione di prova con limiti chiari",
+      "durationSeconds": 4.0
+    },
+    {
+      "file": "04-passa-a-pro-demo.png",
+      "caption": "Sblocca tutto il potenziale con la Pro",
+      "durationSeconds": 4.0
+    }
+  ]
+}

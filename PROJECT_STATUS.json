@@ -3,35 +3,76 @@
     "status": "active",
     "updated_at": "2026-06-22",
     "purpose": "Backlog residuo attivo in ordine di priorita'. Non usare come changelog.",
+    "priority_scale": {
+      "P0": "Bloccante per posizionamento Play Store, coerenza asset o promessa prodotto.",
+      "P1": "Fondazione tecnica necessaria per generazione asset affidabile e ripetibile.",
+      "P2": "Miglioramento di UI, varianti media e qualita' dimostrativa.",
+      "P3": "Pulizia finale di copy e documentazione dopo l'allineamento tecnico."
+    },
     "rules": [
       "Quando l'utente chiede di risolvere PROJECT_STATUS.json, scegliere un solo blocco open per volta e dichiararlo prima di iniziare.",
       "Non risolvere task fuori dal blocco scelto, salvo dipendenza esplicita.",
       "Dentro un blocco rispettare recommended_batch_size.",
       "I blocchi con schema_guarded=true richiedono ordine esplicito owner per modifiche Room/DATABASE_VERSION, entita', DAO con impatto schema, indici persistenti o migrazioni.",
       "Aggiornare questo file rimuovendo i residui chiusi dopo ogni sessione.",
-      "Ogni blocco deve mantenere identified_residual e plan aggiornati finche' resta aperto."
+      "Ogni blocco deve mantenere identified_residual e plan aggiornati finche' resta aperto.",
+      "Non introdurre backend, cloud, analytics, WhatsApp automatico o telemetria senza richiesta esplicita."
+    ],
+    "global_guardrails": [
+      "Full/Pro = prodotto completo da vendere e mostrare.",
+      "Demo = prodotto limitato da provare su Play Store.",
+      "Showcase = vetrina guidata con dati seed e login automatico.",
+      "Gli asset Play Store e social principali devono partire da Flavor Full.",
+      "La Demo deve mostrare solo flusso base e limiti chiari.",
+      "Showcase deve essere usata per rappresentanza, walkthrough e registrazioni controllate.",
+      "Non modificare schema Room, DATABASE_VERSION, entita', DAO persistenti, indici persistenti o migrazioni senza ordine esplicito owner."
     ]
   },
   "todos": [
     {
-      "id": "T01",
-      "title": "Allineamento Workflow Demo a Codice Sorgente Reale",
+      "id": "B11",
+      "title": "Pubblicazione Google Play (Pro e Demo)",
+      "priority": "P0",
       "status": "open",
-      "priority": "high",
-      "recommended_batch_size": 2,
+      "recommended_batch_size": 1,
       "identified_residual": [
-        "Incoerenza lineare: la firma viene acquisita nel wizard (Step 5) ma mostrata come consultazione post-creazione nel video.",
-        "Anacronismo: WhatsApp e PDF vengono generati prima di mostrare l'acquisizione della firma nel video.",
-        "Aspect ratio errato: il video 'operator-intake' e' 1920x1080 (Landscape) invece di 1080x1920 (Vertical).",
-        "Screenshot mancante: lo Step 6 (Riepilogo finale wizard) non viene catturato.",
-        "Possibile bypass firma anche in SocialCampaignScreenshotTest.kt."
+        "Signing release con keystore.properties reale (locale).",
+        "Generazione AAB Full e Demo.",
+        "Privacy Policy definitiva e URL pubblico.",
+        "Data Safety form in Play Console.",
+        "Internal Testing e Pre-launch Report."
       ],
       "plan": [
-        "Rifattorizzare 'OperatorIntakeDemoScreenshotTest.kt' per includere interazione con Step 5 (Canvas firma) e Step 6 (Submit wizard).",
-        "Riordinare sequenza in 'operator-intake.story.json': Login -> Home -> Step 1-3 -> Step 5 (Firma) -> Step 6 (Conferma) -> Dettaglio (07-12).",
-        "Aggiornare risoluzione video a 1080x1920 in 'operator-intake.story.json'.",
-        "Allineare 'SocialCampaignScreenshotTest.kt' per mostrare l'acquisizione reale della firma durante l'intake.",
-        "Eseguire 'create_demo_assets.ps1 -NonInteractive' per rigenerare e validare i percorsi di output."
+        "Verificare build release locale con keystore placeholder.",
+        "Preparazione asset grafici finali (screenshot).",
+        "Configurazione App Access e Content Rating in Play Console."
+      ]
+    },
+    {
+      "id": "B12",
+      "title": "Test strumentali e verifica 'Torna su'",
+      "priority": "P1",
+      "status": "active",
+      "recommended_batch_size": 2,
+      "identified_residual": [
+        "Verifica flusso dinamico pulsante 'Torna su' in OrdersPanel e CustomerPanel (Test implementato in ScrollToTopTest.kt).",
+        "Esecuzione test strumentali Full su device fisico o emulatore."
+      ],
+      "plan": [
+        "Eseguire check_project.ps1 con -AndroidTests."
+      ]
+    },
+    {
+      "id": "R02",
+      "title": "Nuova Home Pro/Demo/Showcase (Asset generation)",
+      "priority": "P2",
+      "status": "open",
+      "recommended_batch_size": 3,
+      "identified_residual": [
+        "Rigenerazione screenshot per la nuova Home in tutti i flavor."
+      ],
+      "plan": [
+        "Eseguire create_demo_assets.ps1 per Full e Demo."
       ]
     }
   ]

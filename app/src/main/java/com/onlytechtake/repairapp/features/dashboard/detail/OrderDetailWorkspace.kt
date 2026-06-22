@@ -311,6 +311,7 @@ fun OrderDetailWorkspace(
                     StandardCard(
                         onClick = { timelineExpanded = !timelineExpanded },
                         highlight = timelineExpanded,
+                        modifier = Modifier.testTag(RepairAppTestTags.OrderTimelineSection),
                     ) {
                         Column(modifier = Modifier.padding(RepairAppSpacing.compactGap)) {
                             Row(

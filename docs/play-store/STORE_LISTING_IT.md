@@ -17,7 +17,7 @@ Tutti i tuoi dati risiedono esclusivamente sul tuo dispositivo. Grazie al databa
 - 👥 **Anagrafica Clienti CRM:** Gestisci contatti, preferenze privacy e storico riparazioni in un database sicuro.
 - ✍️ **Firma Digitale Integrata:** Acquisisci la firma per l'accettazione e la privacy direttamente sullo schermo.
 - 📸 **Documentazione Fotografica:** Allega foto dello stato estetico dei dispositivi per evitare contestazioni.
-- 💬 **Integrazione WhatsApp:** Genera messaggi pronti per avvisare i clienti in un tocco.
+- 💬 **WhatsApp manuale:** Prepara messaggi pronti da controllare e inviare manualmente ai clienti.
 - 📄 **Report PDF Professionali:** Crea schede di accettazione e ricevute PDF con il tuo logo.
 - 📊 **Export XLSX e Backup:** Esporta i dati per la tua contabilità e crea backup ZIP cifrati.
 
@@ -42,7 +42,7 @@ gestione riparazioni, software laboratorio tecnico, riparazione smartphone, assi
 **Descrizione completa:**
 Scatena il potenziale del tuo laboratorio con la versione **Demo di OnlyTechTake**.
 
-Questa versione ti permette di testare tutte le funzionalità principali del nostro gestionale "local-first" prima di passare alla versione Pro. Scopri come gestire una commessa dall'accettazione alla diagnosi tecnica.
+Questa versione ti permette di testare il flusso base del gestionale "local-first" prima di passare alla versione Pro. Scopri come gestire una commessa dimostrativa dall'accettazione alla diagnosi tecnica.
 
 ⚠️ **Limiti della Versione Demo:**
 - Massimo 1 commessa attiva per testare il flusso.

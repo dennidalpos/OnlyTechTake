@@ -15,11 +15,17 @@ Le copie necessarie alla landing sono pubblicate sotto `landing/assets` con la s
 
 ## Play Store Assets
 
-Gli asset usano il marchio `OnlyTechTakeMark`, la palette Material 3 dell'app e screenshot reali generati dalla pipeline demo salvati in `reports/generated-assets/`.
+Gli asset usano il marchio `OnlyTechTakeMark`, la palette Material 3 dell'app e screenshot reali generati dalla pipeline asset salvati in `reports/generated-assets/`.
 
-Prima di aggiornare gli asset devono esistere gli screenshot Full e Demo sotto `reports/generated-assets/`.
+Prima di aggiornare gli asset devono esistere gli screenshot Full/Pro e, solo per la pubblicazione Demo, gli screenshot Demo sotto `reports/generated-assets/`.
 
 Gli asset generali non destinati allo store sono separati sotto `media/brand/identity`, `media/brand/icons` e `media/brand/social`.
+
+## Ruoli ufficiali
+
+- **Full / Pro**: fonte degli asset principali Play Store, social, video promozionali e materiali vendita. I dati visualizzati devono essere realistici ma neutri.
+- **Demo**: fonte di pochi asset secondari per la prova limitata. Deve mostrare limiti reali e funzioni Pro non disponibili.
+- **Showcase**: fonte per presentazioni guidate, walkthrough e registrazioni controllate fuori dallo store principale.
 
 ### Screenshot & Video (Generati)
 
@@ -47,8 +53,8 @@ Gli screenshot e i video applicativi sono generati automaticamente e salvati sot
 
 ### Note Operative
 
-- Pro e Demo sono asset per due app Google Play distinte.
-- Showcase resta asset commerciale fuori store.
+- Pro e Demo sono asset per due app Google Play distinte; gli asset principali commerciali partono da Full/Pro.
+- Showcase resta asset di rappresentanza fuori store e non va presentato come prodotto Play finale.
 - Non inserire sito web o URL pubblico inventato negli asset.
-- Gli screenshot e i video applicativi restano output generati e ignorati da Git sotto `reports/generated-assets/Full` e `reports/generated-assets/Demo`.
+- Gli screenshot e i video applicativi restano output generati e ignorati da Git sotto `reports/generated-assets/<Flavor>`.
 - Le feature graphic mostrano solo UI reale; non sostituirla con mockup che promettono funzioni non presenti.

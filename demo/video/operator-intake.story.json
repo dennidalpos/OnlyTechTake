@@ -1,8 +1,8 @@
 {
   "title": "OnlyTechTake - demo operatore banco",
   "outputFile": "onlytechtake-demo-operatore-banco.mp4",
-  "width": 1920,
-  "height": 1080,
+  "width": 1080,
+  "height": 1920,
   "fps": 30,
   "scenes": [
     {
@@ -26,47 +26,52 @@
       "durationSeconds": 4.0
     },
     {
-      "file": "06b-back-to-top-orders.png",
-      "caption": "Navigazione rapida anche con molti dati",
+      "file": "05-signature-capture.png",
+      "caption": "Privacy e firma acquisite durante la presa in carico",
+      "durationSeconds": 4.0
+    },
+    {
+      "file": "06-summary-submit.png",
+      "caption": "Riepilogo finale prima di creare la commessa",
       "durationSeconds": 3.0
     },
     {
-      "file": "06-order-created.png",
+      "file": "07-order-created.png",
       "caption": "Commessa creata con foto, allegati e firma",
       "durationSeconds": 4.0
     },
     {
-      "file": "07-whatsapp-preview.png",
-      "caption": "Comunicazione professionale via WhatsApp",
+      "file": "08-whatsapp-preview.png",
+      "caption": "Messaggio WhatsApp preparato per invio manuale",
       "durationSeconds": 4.0
     },
     {
-      "file": "05-signature-capture.png",
-      "caption": "Firme digitali e consensi sempre a portata di mano",
-      "durationSeconds": 4.0
+      "file": "09-signature-detail.png",
+      "caption": "Consultazione rapida delle firme acquisite",
+      "durationSeconds": 3.0
     },
     {
-      "file": "08-in-progress.png",
+      "file": "10-in-progress.png",
       "caption": "Presa in carico e avanzamento stato tracciati",
       "durationSeconds": 3.0
     },
     {
-      "file": "09-diagnosis-result.png",
+      "file": "11-diagnosis-result.png",
       "caption": "Diagnosi, risultato e preventivo registrati",
       "durationSeconds": 4.0
     },
     {
-      "file": "10-pdf-documents.png",
+      "file": "12-pdf-documents.png",
       "caption": "Generazione report PDF professionali",
       "durationSeconds": 4.0
     },
     {
-      "file": "11-ready-for-pickup.png",
+      "file": "13-ready-for-pickup.png",
       "caption": "Commessa pronta al ritiro con storico completo",
       "durationSeconds": 3.0
     },
     {
-      "file": "12-closed-timeline.png",
+      "file": "14-closed-timeline.png",
       "caption": "Chiusura commessa e cronologia finale consultabile",
       "durationSeconds": 5.0
     }

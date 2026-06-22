@@ -1,0 +1,39 @@
+{
+  "title": "OnlyTechTake - Pro Edition",
+  "outputFile": "onlytechtake-pro-playstore.mp4",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "scenes": [
+    {
+      "file": "01-dashboard-pro.png",
+      "caption": "Gestione professionale delle commesse",
+      "durationSeconds": 3.0
+    },
+    {
+      "file": "02-nuova-commessa-pro.png",
+      "caption": "Accoglienza clienti rapida e profilata",
+      "durationSeconds": 3.0
+    },
+    {
+      "file": "03-foto-firma-pro.png",
+      "caption": "Trasparenza con foto e firma digitale",
+      "durationSeconds": 3.0
+    },
+    {
+      "file": "04-diagnosi-preventivo-pro.png",
+      "caption": "Diagnosi accurata e preventivi chiari",
+      "durationSeconds": 3.0
+    },
+    {
+      "file": "05-whatsapp-pdf-pro.png",
+      "caption": "Comunicazione WhatsApp e report professionali",
+      "durationSeconds": 3.0
+    },
+    {
+      "file": "06-timeline-chiusura-pro.png",
+      "caption": "Storico completo fino alla consegna",
+      "durationSeconds": 3.0
+    }
+  ]
+}

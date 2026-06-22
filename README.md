@@ -16,12 +16,12 @@ Benvenuti in **OnlyTechTake**, la soluzione definitiva per la gestione delle com
 OnlyTechTake non è solo un software di gestione; è la tua vetrina operativa. Progettata per laboratori tecnici e centri riparazione che vogliono offrire trasparenza e professionalità.
 
 *   **🔒 Local-First & Privacy-By-Design**: I tuoi dati (e quelli dei tuoi clienti) non lasciano mai il dispositivo. Database cifrato con **SQLCipher** per la massima sicurezza.
-*   **📱 Integrazione WhatsApp**: Comunica istantaneamente l'avanzamento della riparazione. L'app prepara il messaggio, tu premi invio.
+*   **📱 Integrazione WhatsApp manuale**: L'app prepara il messaggio di avanzamento, l'operatore lo controlla e lo invia da WhatsApp.
 *   **📸 Documentazione Multimediale**: Scatta foto prima e dopo la riparazione, cattura firme digitali e allega documenti tecnici.
-*   **🧩 Versatile e Modulare**:
-    *   **Pro**: L'esperienza completa senza limiti.
-    *   **Demo**: Per provare le potenzialità con una sola commessa.
-    *   **Showcase**: La nostra vetrina interattiva con dati pre-caricati per dimostrazioni veloci.
+*   **🧩 Varianti chiare**:
+    *   **Pro / Full**: prodotto completo per vendita, Play Store principale, social e materiali commerciali.
+    *   **Demo**: prova limitata e trasparente del flusso base, con una sola commessa e funzioni Pro bloccate.
+    *   **Showcase**: vetrina guidata con dati pre-caricati per presentazioni e registrazioni controllate, non listing Play principale.
 
 ## 🚀 Funzionalità Chiave
 
