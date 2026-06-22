@@ -100,7 +100,7 @@ Questo repository, allo stato corrente, e' Android-only:
 - Database: Room `DATABASE_VERSION = 1`, schema esportato solo `1.json`.
 - Persistenza: database locale cifrato SQLCipher, file privati in `filesDir/app_media`, export/import tramite SAF.
 - Governance schema: schema Room bloccato su v1 fino a ordine esplicito dell'owner; non cambiare entita' Room, DAO con impatto schema, indici persistenti, `DATABASE_VERSION` o migrazioni Room senza approvazione.
-- Script canonici: `scripts\android`; `scripts\windows` contiene wrapper compatibili e pipeline demo/check.
+- Script canonici: `scripts\powershell\android`; `scripts\powershell\project` contiene wrapper compatibili e pipeline demo/check.
 
 ---
 
@@ -128,9 +128,9 @@ Questo repository, allo stato corrente, e' Android-only:
 
 Per questo repository:
 
-- Usare `scripts\android\check_env.ps1` per validare ambiente Android.
-- Usare `scripts\android\gradle.ps1 -- <task>` quando serve Gradle con JDK/SDK risolti dallo script.
-- Usare `scripts\windows\check_project.ps1 -Flavor Full -SkipReleaseBuild` come check locale standard senza signing release.
+- Usare `scripts\powershell\android\check_env.ps1` per validare ambiente Android.
+- Usare `scripts\powershell\android\gradle.ps1 -- <task>` quando serve Gradle con JDK/SDK risolti dallo script.
+- Usare `scripts\powershell\project\check_project.ps1 -Flavor Full -SkipReleaseBuild` come check locale standard senza signing release.
 - Usare `docs\DEMO_ASSET_WORKFLOW.md` come fonte di verita' per screenshot/video demo, aggiornare il workflow se viene cambiato.
 
 *Nota CI: In GitHub Actions è attiva la variabile `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true` per garantire la compatibilità con i futuri runtime.*
@@ -142,9 +142,9 @@ Per questo repository:
 - Se cambia comportamento, aggiungere o aggiornare test usando il framework esistente.
 - Eseguire il set minimo utile di lint, typecheck, unit test, build o test strumentati per il perimetro toccato.
 - Per modifiche Android in questo repository, preferire:
-  - `powershell -ExecutionPolicy Bypass -File scripts\android\check_env.ps1`
-  - `powershell -ExecutionPolicy Bypass -File scripts\windows\check_project.ps1 -Flavor Full -SkipReleaseBuild`
-  - test unitari mirati, per esempio `scripts\android\gradle.ps1 -- --no-configuration-cache :app:testFullDebugUnitTest`
+  - `powershell -ExecutionPolicy Bypass -File scripts\powershell\android\check_env.ps1`
+  - `powershell -ExecutionPolicy Bypass -File scripts\powershell\project\check_project.ps1 -Flavor Full -SkipReleaseBuild`
+  - test unitari mirati, per esempio `scripts\powershell\android\gradle.ps1 -- --no-configuration-cache :app:testFullDebugUnitTest`
 - Eseguire test strumentati solo quando il cambio tocca UI, storage Android, permessi, SAF, CameraX, Room reale o flussi device.
 - Per sole modifiche documentali, non serve build Gradle; verificare diff e formattazione.
 - Se un check non puo' essere eseguito, indicare il motivo senza dichiararlo passato.

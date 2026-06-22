@@ -1,6 +1,6 @@
 # Pubblicazione Google Play - OnlyTechTake Demo
 
-## Identita'
+## Identità
 
 - Flavor Gradle: `demo`
 - Package: `com.onlytechtake.repairapp.demo`
@@ -22,8 +22,8 @@
 ## Build
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\android\check_env.ps1
-powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Demo -BuildType Release -OutputType Aab
+powershell -ExecutionPolicy Bypass -File scripts\powershell\android\check_env.ps1
+powershell -ExecutionPolicy Bypass -File scripts\powershell\android\build_installer.ps1 -Flavor Demo -BuildType Release -OutputType Aab
 ```
 
 Output atteso:
@@ -36,10 +36,10 @@ app\build\outputs\bundle\demoRelease\app-demo-release.aab
 
 1. Creare un'app Play separata gratuita.
 2. Configurare Play App Signing e caricare l'AAB Demo firmato.
-3. Completare App Access: il revisore puo' creare un admin locale o usare `Avvia modalità demo`; indicare chiaramente che il flavor Demo e' admin-only.
+3. Completare App Access: il revisore può creare un admin locale o usare `Avvia modalità demo`; indicare chiaramente che il flavor Demo è admin-only.
 4. Compilare Ads: no annunci.
 5. Compilare Data Safety come app local-only, senza raccolta server proprietaria.
-6. Compilare Content Rating come app gestionale/produttivita', comunicazione solo tramite WhatsApp manuale.
+6. Compilare Content Rating come app gestionale/produttività, comunicazione solo tramite WhatsApp manuale.
 7. Caricare listing, icona 512x512, feature graphic 1024x500 e screenshot Demo che mostrino i limiti reali.
 8. Eseguire Internal testing e attendere Pre-launch Report senza crash bloccanti.
 
@@ -52,5 +52,4 @@ app\build\outputs\bundle\demoRelease\app-demo-release.aab
 
 ## Asset statici
 
-- Icona Play: `media/play-store/demo/icon-512.png`
-- Feature graphic: `media/play-store/demo/feature-graphic-1024x500.png`
+Vedi [`../marketing/ASSETS.md`](../marketing/ASSETS.md).

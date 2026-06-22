@@ -218,7 +218,7 @@
                     <h2>Build locali</h2>
                 </div>
                 <p>La landing non pubblica APK e non punta a Play Store. Generare gli installer dal repository con gli script PowerShell documentati.</p>
-                <pre style="text-align: left; white-space: pre-wrap; background: white; padding: 1rem; border-radius: 8px;">powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk</pre>
+                <pre style="text-align: left; white-space: pre-wrap; background: white; padding: 1rem; border-radius: 8px;">powershell -ExecutionPolicy Bypass -File scripts\powershell\android\build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk</pre>
                 <p style="margin-top: 2rem; font-size: 0.9rem;">
                     <strong>Nota:</strong> le build release richiedono `keystore.properties` locale non tracciato.
                 </p>

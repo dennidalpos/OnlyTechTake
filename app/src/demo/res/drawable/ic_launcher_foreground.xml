@@ -7,10 +7,10 @@
 
     <!-- Rich Icon Base -->
     <group
-        android:scaleX="0.9"
-        android:scaleY="0.9"
-        android:translateX="18"
-        android:translateY="18">
+        android:scaleX="0.75"
+        android:scaleY="0.75"
+        android:translateX="24"
+        android:translateY="24">
 
         <!-- Outer Hexagon Frame -->
         <path
@@ -34,29 +34,25 @@
             android:pathData="M40,12c-5.52,0 -10,4.48 -10,10h4c0,-3.31 2.69,-6 6,-6s6,2.69 6,6h4c0,-5.52 -4.48,-10 -10,-10z" />
     </group>
 
-    <!-- DEMO Badge -->
+    <!-- DMO Badge -->
     <group
-        android:translateX="75"
-        android:translateY="15">
+        android:translateX="66"
+        android:translateY="24">
         <path
             android:fillColor="#DAE5E4"
-            android:pathData="M0,4c0,-2.2 1.8,-4 4,-4h12c2.2,0 4,1.8 4,4v65c0,2.2 -1.8,4 -4,4h-12c-2.2,0 -4,-1.8 -4,-4z" />
+            android:pathData="M0,4c0,-2.2 1.8,-4 4,-4h12c2.2,0 4,1.8 4,4v50c0,2.2 -1.8,4 -4,4h-12c-2.2,0 -4,-1.8 -4,-4z" />
 
         <!-- D -->
         <path
             android:fillColor="#3F4948"
-            android:pathData="M6,10h3c2.5,0 4,1.5 4,4s-1.5,4 -4,4h-3z M8,11.5v5h1c1.5,0 2.2,-0.8 2.2,-2.5s-0.7,-2.5 -2.2,-2.5z" />
-        <!-- E -->
-        <path
-            android:fillColor="#3F4948"
-            android:pathData="M6,22h7v1.5h-5v2h4v1.5h-4v2h5v1.5h-7z" />
+            android:pathData="M6,12h3c2.5,0 4,1.5 4,4s-1.5,4 -4,4h-3z M8,13.5v5h1c1.5,0 2.2,-0.8 2.2,-2.5s-0.7,-2.5 -2.2,-2.5z" />
         <!-- M -->
         <path
             android:fillColor="#3F4948"
-            android:pathData="M6,34h2l2,4l2,-4h2v9h-2v-6l-2,4l-2,-4v6h-2z" />
+            android:pathData="M6,24h2l2,4l2,-4h2v9h-2v-6l-2,4l-2,-4v6h-2z" />
         <!-- O -->
         <path
             android:fillColor="#3F4948"
-            android:pathData="M10,48c2.5,0 4,1.5 4,4.5s-1.5,4.5 -4,4.5s-4,-1.5 -4,-4.5s1.5,-4.5 4,-4.5z M10,49.5c-1.5,0 -2.2,0.8 -2.2,3s0.7,3 2.2,3s2.2,-0.8 2.2,-3s-0.7,-3 -2.2,-3z" />
+            android:pathData="M10,36c2.5,0 4,1.5 4,4.5s-1.5,4.5 -4,4.5s-4,-1.5 -4,-4.5s1.5,-4.5 4,-4.5z M10,37.5c-1.5,0 -2.2,0.8 -2.2,3s0.7,3 2.2,3s2.2,-0.8 2.2,-3s-0.7,-3 -2.2,-3z" />
     </group>
 </vector>

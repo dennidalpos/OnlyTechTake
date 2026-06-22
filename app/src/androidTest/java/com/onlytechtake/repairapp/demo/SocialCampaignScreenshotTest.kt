@@ -138,7 +138,10 @@ class SocialCampaignScreenshotTest {
         }
     }
 
-    private fun applySimpleStatus(action: OrderStatusAction, nextAction: OrderStatusAction) {
+    private fun applySimpleStatus(
+        action: OrderStatusAction,
+        nextAction: OrderStatusAction,
+    ) {
         scrollOrderDetailToTop()
         waitForTag(RepairAppTestTags.OrderActionSection, scroll = true)
         pauseForDemo()
@@ -228,7 +231,11 @@ class SocialCampaignScreenshotTest {
         Thread.sleep(2000)
     }
 
-    private fun typeTag(tag: String, text: String, scroll: Boolean = false) {
+    private fun typeTag(
+        tag: String,
+        text: String,
+        scroll: Boolean = false,
+    ) {
         waitForTagExists(tag, scroll = scroll)
         val node = composeRule.onNodeWithTag(tag)
         node.performClick()
@@ -241,14 +248,20 @@ class SocialCampaignScreenshotTest {
         pauseForDemo()
     }
 
-    private fun clickTag(tag: String, scroll: Boolean = false, useUnmergedTree: Boolean = false) {
+    private fun clickTag(
+        tag: String,
+        scroll: Boolean = false,
+        useUnmergedTree: Boolean = false,
+    ) {
         waitForTag(tag, scroll = scroll, useUnmergedTree = useUnmergedTree)
         val node = composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
         try {
             composeRule.waitUntil(timeoutMillis = 5_000) {
                 runCatching { node.assertIsEnabled() }.isSuccess
             }
-        } catch (e: Throwable) { node.assertIsEnabled() }
+        } catch (e: Throwable) {
+            node.assertIsEnabled()
+        }
 
         try {
             node.performClick()
@@ -263,7 +276,10 @@ class SocialCampaignScreenshotTest {
         pauseForDemo()
     }
 
-    private fun clickText(text: String, scroll: Boolean = false) {
+    private fun clickText(
+        text: String,
+        scroll: Boolean = false,
+    ) {
         waitForText(text, scroll = scroll)
         val node = composeRule.onNodeWithText(text, substring = true)
         try {
@@ -286,11 +302,13 @@ class SocialCampaignScreenshotTest {
                 composeRule.onNodeWithTag(tag).performTouchInput { swipeUp(startY = bottom * 0.8f, endY = top + 30f) }
                 composeRule.waitForIdle()
                 return
-            } catch (e: Throwable) {}
+            } catch (e: Throwable) {
+            }
         }
         try {
             composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { swipeUp(startY = bottom * 0.8f, endY = top + 30f) }
-        } catch (e: Throwable) {}
+        } catch (e: Throwable) {
+        }
         composeRule.waitForIdle()
     }
 
@@ -301,11 +319,13 @@ class SocialCampaignScreenshotTest {
                 composeRule.onNodeWithTag(tag).performTouchInput { swipeDown(startY = top + 30f, endY = bottom * 0.8f) }
                 composeRule.waitForIdle()
                 return
-            } catch (e: Throwable) {}
+            } catch (e: Throwable) {
+            }
         }
         try {
             composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { swipeDown(startY = top + 30f, endY = bottom * 0.8f) }
-        } catch (e: Throwable) {}
+        } catch (e: Throwable) {
+        }
         composeRule.waitForIdle()
     }
 
@@ -315,17 +335,25 @@ class SocialCampaignScreenshotTest {
         pauseForDemo()
     }
 
-    private fun waitForTag(tag: String, scroll: Boolean = false, useUnmergedTree: Boolean = false) {
+    private fun waitForTag(
+        tag: String,
+        scroll: Boolean = false,
+        useUnmergedTree: Boolean = false,
+    ) {
         waitForTagExists(tag, scroll = scroll, useUnmergedTree = useUnmergedTree)
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
         while (System.currentTimeMillis() < deadline) {
-            val displayed = runCatching {
-                val node = composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
-                if (scroll) { runCatching { node.performScrollTo() }; composeRule.waitForIdle() }
-                node.assertIsDisplayed()
-                true
-            }.getOrDefault(false)
+            val displayed =
+                runCatching {
+                    val node = composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
+                    if (scroll) {
+                        runCatching { node.performScrollTo() }
+                        composeRule.waitForIdle()
+                    }
+                    node.assertIsDisplayed()
+                    true
+                }.getOrDefault(false)
             if (displayed) return
             if (scroll) {
                 if (attempts % 15 < 10) performSafeSwipeUp() else performSafeSwipeDown()
@@ -336,7 +364,11 @@ class SocialCampaignScreenshotTest {
         composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).assertIsDisplayed()
     }
 
-    private fun waitForTagExists(tag: String, scroll: Boolean = false, useUnmergedTree: Boolean = false) {
+    private fun waitForTagExists(
+        tag: String,
+        scroll: Boolean = false,
+        useUnmergedTree: Boolean = false,
+    ) {
         var found = false
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
@@ -348,13 +380,19 @@ class SocialCampaignScreenshotTest {
                     try {
                         composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).performScrollTo()
                         composeRule.waitForIdle()
-                        if (isTagPresent(tag, useUnmergedTree)) { found = true; break }
+                        if (isTagPresent(tag, useUnmergedTree)) {
+                            found = true
+                            break
+                        }
                     } catch (e: Throwable) {
                         if (attempts % 15 < 10) performSafeSwipeUp() else performSafeSwipeDown()
                     }
                 }
             }
-            if (!found) { Thread.sleep(TAG_POLL_MILLIS); attempts++ }
+            if (!found) {
+                Thread.sleep(TAG_POLL_MILLIS)
+                attempts++
+            }
         }
         if (!found) composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).assertExists()
     }
@@ -367,17 +405,26 @@ class SocialCampaignScreenshotTest {
                         composeRule.onNodeWithTag(RepairAppTestTags.OrderWhatsAppClosePreviewButton, useUnmergedTree = true).performClick()
                         composeRule.waitForIdle()
                         Thread.sleep(1000)
-                    } catch (e: Throwable) {}
+                    } catch (e: Throwable) {
+                    }
                 }
             }
             if (isTagPresent(RepairAppTestTags.OrderWhatsAppPreviewPanel, useUnmergedTree = true)) {
-                try { Espresso.pressBackUnconditionally(); composeRule.waitForIdle() } catch (e: Throwable) {}
+                try {
+                    Espresso.pressBackUnconditionally()
+                    composeRule.waitForIdle()
+                } catch (e: Throwable) {
+                }
             }
             waitForTagGone(RepairAppTestTags.OrderWhatsAppPreviewPanel, useUnmergedTree = true, timeoutMillis = 3000)
         }
     }
 
-    private fun waitForTagIfPresent(tag: String, timeoutMillis: Long, useUnmergedTree: Boolean = false): Boolean {
+    private fun waitForTagIfPresent(
+        tag: String,
+        timeoutMillis: Long,
+        useUnmergedTree: Boolean = false,
+    ): Boolean {
         val deadline = System.currentTimeMillis() + timeoutMillis
         do {
             if (isTagPresent(tag, useUnmergedTree)) return true
@@ -386,20 +433,28 @@ class SocialCampaignScreenshotTest {
         return false
     }
 
-    private fun waitForTagGone(tag: String, useUnmergedTree: Boolean = false, timeoutMillis: Long = WAIT_TIMEOUT_MILLIS) {
+    private fun waitForTagGone(
+        tag: String,
+        useUnmergedTree: Boolean = false,
+        timeoutMillis: Long = WAIT_TIMEOUT_MILLIS,
+    ) {
         composeRule.waitUntil(timeoutMillis = timeoutMillis) {
             composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).fetchSemanticsNodes().isEmpty()
         }
         composeRule.waitForIdle()
     }
 
-    private fun isTagPresent(tag: String, useUnmergedTree: Boolean = false): Boolean =
-        composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).fetchSemanticsNodes().isNotEmpty()
+    private fun isTagPresent(
+        tag: String,
+        useUnmergedTree: Boolean = false,
+    ): Boolean = composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).fetchSemanticsNodes().isNotEmpty()
 
-    private fun isTextDisplayed(text: String): Boolean =
-        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+    private fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
-    private fun waitForText(text: String, scroll: Boolean = false) {
+    private fun waitForText(
+        text: String,
+        scroll: Boolean = false,
+    ) {
         var found = false
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
@@ -411,18 +466,27 @@ class SocialCampaignScreenshotTest {
                     try {
                         composeRule.onNodeWithText(text, substring = true).performScrollTo()
                         composeRule.waitForIdle()
-                        if (isTextDisplayed(text)) { found = true; break }
+                        if (isTextDisplayed(text)) {
+                            found = true
+                            break
+                        }
                     } catch (e: Throwable) {
                         if (attempts % 15 < 10) performSafeSwipeUp() else performSafeSwipeDown()
                     }
                 }
             }
-            if (!found) { Thread.sleep(TAG_POLL_MILLIS); attempts++ }
+            if (!found) {
+                Thread.sleep(TAG_POLL_MILLIS)
+                attempts++
+            }
         }
         if (!found) composeRule.onNodeWithText(text, substring = true).assertExists()
     }
 
-    private fun capture(outputDir: File, fileName: String) {
+    private fun capture(
+        outputDir: File,
+        fileName: String,
+    ) {
         composeRule.waitForIdle()
         InstrumentationRegistry.getInstrumentation().waitForIdleSync()
         pauseForScreenshot()

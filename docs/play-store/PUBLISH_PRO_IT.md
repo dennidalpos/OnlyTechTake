@@ -1,6 +1,6 @@
 # Pubblicazione Google Play - OnlyTechTake Pro
 
-## Identita'
+## Identità
 
 - Flavor Gradle: `full`
 - Package: `com.onlytechtake.repairapp`
@@ -12,8 +12,8 @@
 ## Build
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\android\check_env.ps1
-powershell -ExecutionPolicy Bypass -File scripts\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Aab
+powershell -ExecutionPolicy Bypass -File scripts\powershell\android\check_env.ps1
+powershell -ExecutionPolicy Bypass -File scripts\powershell\android\build_installer.ps1 -Flavor Full -BuildType Release -OutputType Aab
 ```
 
 Output atteso:
@@ -29,7 +29,7 @@ app\build\outputs\bundle\fullRelease\app-full-release.aab
 3. Completare App Access: su installazione pulita il revisore crea un admin locale e accede con quelle credenziali.
 4. Compilare Ads: no annunci.
 5. Compilare Data Safety come app local-only, senza raccolta server proprietaria.
-6. Compilare Content Rating come app gestionale/produttivita', comunicazione solo tramite WhatsApp manuale.
+6. Compilare Content Rating come app gestionale/produttività, comunicazione solo tramite WhatsApp manuale.
 7. Caricare listing, icona 512x512, feature graphic 1024x500 e screenshot Pro.
 8. Eseguire Internal testing e attendere Pre-launch Report senza crash bloccanti.
 
@@ -42,5 +42,4 @@ app\build\outputs\bundle\fullRelease\app-full-release.aab
 
 ## Asset statici
 
-- Icona Play: `media/play-store/pro/icon-512.png`
-- Feature graphic: `media/play-store/pro/feature-graphic-1024x500.png`
+Vedi [`../marketing/ASSETS.md`](../marketing/ASSETS.md).

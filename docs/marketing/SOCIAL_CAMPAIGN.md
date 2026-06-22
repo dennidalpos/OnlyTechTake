@@ -17,11 +17,11 @@ Questo documento definisce lo storyboard e il copy per la campagna social multi-
 
 ### LinkedIn (Post Analitico)
 **Titolo: Digitalizzare il Laboratorio: dall'accoglienza alla consegna in 5 step.**
-L'efficienza di un centro assistenza non si misura solo nella qualità della saldatura, ma nella gestione del flusso informativo. Con OnlyTechTake, abbiamo ridotto il tempo di "intake" del 40%, eliminando la carta e automatizzando la comunicazione con il cliente via WhatsApp.
-✅ Firma digitale legale su dispositivo.
-✅ Preventivi trasparenti inviati in un click.
+L'efficienza di un centro assistenza non si misura solo nella qualità della riparazione, ma nella gestione del flusso informativo. Con OnlyTechTake, abbiamo semplificato l'accettazione eliminando la carta e rendendo immediata la comunicazione con il cliente via WhatsApp.
+✅ Firma digitale su dispositivo.
+✅ Preventivi trasparenti condivisi in un click.
 ✅ Timeline di riparazione sempre aggiornata.
-La tecnologia al servizio degli artigiani digitali. 🛠️
+La tecnologia al servizio dei laboratori tecnici. 🛠️
 #RepairBusiness #CustomerExperience #DigitalTransformation #AndroidDev
 
 ### Instagram (Carousel Caption)

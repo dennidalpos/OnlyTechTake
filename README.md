@@ -42,10 +42,10 @@ OnlyTechTake non è solo un software di gestione; è la tua vetrina operativa. P
 ### Setup Rapido
 ```powershell
 # Verifica ambiente
-powershell -ExecutionPolicy Bypass -File scripts\android\check_env.ps1
+powershell -ExecutionPolicy Bypass -File scripts\powershell\android\check_env.ps1
 
 # Build e avvio (Flavor Full Debug)
-powershell -ExecutionPolicy Bypass -File scripts\android\start_app.ps1 -CleanInstall
+powershell -ExecutionPolicy Bypass -File scripts\powershell\android\start_app.ps1 -CleanInstall
 ```
 
 ## 📖 Documentazione Completa
