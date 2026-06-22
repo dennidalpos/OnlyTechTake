@@ -49,23 +49,27 @@ class SocialProAssetTest {
             robot.clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
             robot.waitForTag("quick_actions_screen")
             robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderFirstNameField, "Luca", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderLastNameField, "Ferri", scroll = true)
+            robot.typeTag(RepairAppTestTags.NewOrderFirstNameField, "Marco", scroll = true)
+            robot.typeTag(RepairAppTestTags.NewOrderLastNameField, "Bianchi", scroll = true)
+            robot.typeTag(RepairAppTestTags.NewOrderPhoneField, "+39 347 123 4567", scroll = true)
+            robot.typeTag(RepairAppTestTags.NewOrderEmailField, "m.bianchi@example.invalid", scroll = true)
             robot.capture(outputDir, "02-reel-intake.png")
 
             robot.clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
             robot.clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
 
-            // 03-carousel-category (Highlighting versatility: MacBook)
+            // 03-carousel-category (Highlighting versatility)
             robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-pc"), scroll = true)
-            robot.clickTag(RepairAppTestTags.categoryButton(DemoDataSeeder.DEMO_CATEGORY_ID), scroll = true)
+            robot.pauseForDemo()
+            robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-gaming"), scroll = true)
+            robot.pauseForDemo()
+            robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-rog-strix"), scroll = true)
+            robot.pauseForDemo()
             robot.capture(outputDir, "03-carousel-category.png")
-
-            robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-macbook"), scroll = true)
             robot.clickTag(RepairAppTestTags.NewOrderStep2NextButton, scroll = true)
 
-            robot.typeTag(RepairAppTestTags.NewOrderProblemSummaryField, "MacBook Pro M2 - Kernel Panic", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderProblemDetailsField, "Riavvi improvvisi sotto carico.", scroll = true)
+            robot.typeTag(RepairAppTestTags.NewOrderProblemSummaryField, "Gaming Laptop - Overheating", scroll = true)
+            robot.typeTag(RepairAppTestTags.NewOrderProblemDetailsField, "Spegnimenti improvvisi durante sessioni di gioco.", scroll = true)
             robot.clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
 
             // Skip photo for social assets if not strictly needed or capture generic photo screen
@@ -86,7 +90,7 @@ class SocialProAssetTest {
             robot.waitForTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
             robot.clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
 
-            val createdOrderId = waitForCreatedOrderId("MacBook Pro M2 - Kernel Panic")
+            val createdOrderId = waitForCreatedOrderId("Gaming Laptop - Overheating")
             robot.clickDashboardTab("ORDERS")
             robot.waitForTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
             robot.clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)

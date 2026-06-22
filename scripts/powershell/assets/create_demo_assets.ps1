@@ -160,13 +160,19 @@ try {
             Write-Host "Generazione in: $(Get-RepoRelativePath -FullPath $dest -RootPath $root)" -ForegroundColor Gray
             if (-not (Test-Path $dest)) { New-Item -ItemType Directory -Path $dest -Force | Out-Null }
 
-            Get-ChildItem -Path $src -Filter "*.png" | ForEach-Object {
-                $targetFile = Join-Path $dest $_.Name
-                switch ($out.variant) {
-                    "vertical" { Convert-ToStoryPng -SourcePath $_.FullName -TargetPath $targetFile }
-                    "square"   { Convert-ToSquarePng -SourcePath $_.FullName -TargetPath $targetFile }
-                    "landscape" { Convert-ToLandscapePng -SourcePath $_.FullName -TargetPath $targetFile }
-                    default { Copy-Item -Path $_.FullName -Destination $targetFile -Force }
+            $items = Get-ChildItem -Path $src -Filter "*.png"
+            foreach ($item in $items) {
+                $p = $item.FullName
+                $n = $item.Name
+                $targetFile = Join-Path $dest $n
+                if ($out.variant -eq "vertical") {
+                    Convert-ToStoryPng -SourcePath $p -TargetPath $targetFile
+                } elseif ($out.variant -eq "square") {
+                    Convert-ToSquarePng -SourcePath $p -TargetPath $targetFile
+                } elseif ($out.variant -eq "landscape") {
+                    Convert-ToLandscapePng -SourcePath $p -TargetPath $targetFile
+                } else {
+                    Copy-Item -Path $p -Destination $targetFile -Force
                 }
             }
         }

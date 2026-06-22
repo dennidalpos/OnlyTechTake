@@ -44,35 +44,37 @@
       ],
       "plan": [
         "Verificare build release locale con keystore placeholder.",
-        "Preparazione asset grafici finali (screenshot).",
-        "Configurazione App Access e Content Rating in Play Console."
+        "Validazione App Access e Content Rating in Play Console."
       ]
     },
     {
       "id": "B12",
-      "title": "Test strumentali e verifica 'Torna su'",
+      "title": "Verifica stabilità Test Strumentali",
       "priority": "P1",
       "status": "active",
       "recommended_batch_size": 2,
       "identified_residual": [
-        "Verifica flusso dinamico pulsante 'Torna su' in OrdersPanel e CustomerPanel (Test implementato in ScrollToTopTest.kt).",
-        "Esecuzione test strumentali Full su device fisico o emulatore."
+        "Risolvere ComposeTimeoutException in ScrollToTopTest.kt (Login non rilevata su device fisico).",
+        "Esecuzione regression test su suite completa flavor Full."
       ],
       "plan": [
-        "Eseguire check_project.ps1 con -AndroidTests."
+        "Debug stato iniziale Activity in ScrollToTopTest.",
+        "Eseguire check_project.ps1 -AndroidTests."
       ]
     },
     {
       "id": "R02",
-      "title": "Nuova Home Pro/Demo/Showcase (Asset generation)",
+      "title": "Completamento Asset Generation (Social Pro)",
       "priority": "P2",
-      "status": "open",
-      "recommended_batch_size": 3,
+      "status": "active",
+      "recommended_batch_size": 2,
       "identified_residual": [
-        "Rigenerazione screenshot per la nuova Home in tutti i flavor."
+        "Fallimento wizard in SocialProAssetTest (Step 2: tasto Avanti disabilitato nonostante selezione categoria).",
+        "Generazione profili social secondari: social-campaign, operator-intake, social-stories."
       ],
       "plan": [
-        "Eseguire create_demo_assets.ps1 per Full e Demo."
+        "Investigare logica canSaveNewCustomer/abilitazione tasti in QuickActionsPanel durante il test social-pro.",
+        "Eseguire create_demo_assets.ps1 per i profili social residui."
       ]
     }
   ]

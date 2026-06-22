@@ -47,6 +47,12 @@ if ($arguments.Count -eq 0 -and -not $NonInteractive) {
 }
 
 $supportScript = Join-Path $PSScriptRoot "..\support\android_env.ps1"
+if (Test-Path $supportScript) {
+    . $supportScript
+    Set-AndroidCliEnvironment | Out-Null
+}
+
+$gradlew = Join-Path $root "gradlew.bat"
 
 Push-Location $root
 try {

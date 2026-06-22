@@ -27,12 +27,18 @@ class ScrollToTopTest {
 
     @Test
     fun ordersList_showsScrollToTop_afterScrollingDown() {
-        // 1. Login
+        // 1. Wait for Login and Perform it
+        composeRule.waitUntil(10_000) {
+            composeRule.onAllNodesWithTag(RepairAppTestTags.AuthUsernameField).fetchSemanticsNodes().isNotEmpty()
+        }
         composeRule.onNodeWithTag(RepairAppTestTags.AuthUsernameField).performTextReplacement(DemoDataSeeder.DEMO_ADMIN_USERNAME)
         composeRule.onNodeWithTag(RepairAppTestTags.AuthPasswordField).performTextReplacement(DemoDataSeeder.DEMO_PASSWORD)
         composeRule.onNodeWithTag(RepairAppTestTags.AuthSubmitButton).performClick()
 
-        // 2. Go to Orders tab
+        // 2. Wait for Dashboard and Go to Orders tab
+        composeRule.waitUntil(10_000) {
+            composeRule.onAllNodesWithTag(RepairAppTestTags.dashboardTab("HOME")).fetchSemanticsNodes().isNotEmpty()
+        }
         composeRule.onNodeWithTag(RepairAppTestTags.dashboardTab("ORDERS")).performClick()
         composeRule.waitForIdle()
 

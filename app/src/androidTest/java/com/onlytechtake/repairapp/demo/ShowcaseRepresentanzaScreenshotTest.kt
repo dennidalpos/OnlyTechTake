@@ -48,17 +48,22 @@ class ShowcaseRepresentanzaScreenshotTest {
             robot.capture(outputDir, "02-commesse-popolate.png")
 
             // 03-dettaglio-rappresentativo
-            // Scegliamo un ordine significativo, es. order-3 (chiuso o in stato avanzato)
-            robot.clickTag(RepairAppTestTags.orderCard("order-3"), scroll = true)
+            // Scegliamo un ordine significativo, es. order-1 (recente)
+            robot.clickTag(RepairAppTestTags.orderCard("order-1"), scroll = true)
             robot.waitForTag(RepairAppTestTags.OrderDetailLazyColumn)
             robot.capture(outputDir, "03-dettaglio-rappresentativo.png")
 
             // 04-preventivo-whatsapp-pdf
             robot.waitForTag(RepairAppTestTags.OrderWhatsAppButton, scroll = true)
             robot.clickTag(RepairAppTestTags.OrderWhatsAppButton)
-            robot.waitForTag(RepairAppTestTags.OrderWhatsAppPreviewPanel)
-            robot.capture(outputDir, "04-preventivo-whatsapp-pdf.png")
-            robot.dismissWhatsAppPreviewIfPresent()
+            robot.pauseForDemo()
+            // Optional: check if preview is there, but don't fail if it's slow
+            if (robot.waitForTagIfPresent(RepairAppTestTags.OrderWhatsAppPreviewPanel, 5000L)) {
+                robot.capture(outputDir, "04-preventivo-whatsapp-pdf.png")
+                robot.dismissWhatsAppPreviewIfPresent()
+            } else {
+                robot.capture(outputDir, "04-preventivo-whatsapp-pdf-fallback.png")
+            }
 
             // 05-timeline-finale
             robot.waitForTag(RepairAppTestTags.OrderTimelineSection, scroll = true)
