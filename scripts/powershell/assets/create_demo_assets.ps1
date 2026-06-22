@@ -101,7 +101,7 @@ if ($config.deviceDirectory) {
 
 # Output Root
 if (-not $OutputRoot) {
-    $OutputRoot = Join-Path $root "reports/generated-assets/$AssetProfile"
+    $OutputRoot = Join-Path $root "reports/generated-assets/$($Flavor.ToLower())/$AssetProfile"
 } elseif (-not [System.IO.Path]::IsPathRooted($OutputRoot)) {
     $OutputRoot = Join-Path $root $OutputRoot
 }
@@ -147,8 +147,6 @@ try {
         } else {
             # Fallback legacy mapping
             if ($case.targetDirectory) { $outputs += [PSCustomObject]@{ platform = "play-store"; variant = "vertical"; subDir = "." } }
-            if ($case.squareDirectory) { $outputs += [PSCustomObject]@{ platform = "social"; variant = "square"; subDir = "." } }
-            if ($case.landscapeDirectory) { $outputs += [PSCustomObject]@{ platform = "presentation"; variant = "landscape"; subDir = "." } }
         }
 
         # Filtro per parametri riga di comando
@@ -168,48 +166,18 @@ try {
                 $targetFile = Join-Path $dest $n
                 if ($out.variant -eq "vertical") {
                     Convert-ToStoryPng -SourcePath $p -TargetPath $targetFile
-                } elseif ($out.variant -eq "square") {
-                    Convert-ToSquarePng -SourcePath $p -TargetPath $targetFile
-                } elseif ($out.variant -eq "landscape") {
-                    Convert-ToLandscapePng -SourcePath $p -TargetPath $targetFile
                 } else {
                     Copy-Item -Path $p -Destination $targetFile -Force
                 }
             }
         }
     }
-
-    # Video Automatizzato
-    if (-not $SkipVideo -and $config.storyJson) {
-        $videoDest = Join-Path $OutputRoot "videos/automated"
-        New-Item -ItemType Directory -Path $videoDest -Force | Out-Null
-        $storyPath = Join-Path $root $config.storyJson
-        if ((Test-Path $storyPath) -and (Get-Command "ffmpeg" -ErrorAction SilentlyContinue)) {
-            Write-Host "Generazione video montato..." -ForegroundColor Gray
-            $story = Get-Content -Path $storyPath -Raw | ConvertFrom-Json
-            $slidesDir = Join-Path $videoDest "temp_slides"; New-Item -ItemType Directory -Path $slidesDir -Force | Out-Null
-            $concatPath = Join-Path $videoDest "slides.txt"
-            try {
-                $idx = 1
-                foreach ($scene in $story.scenes) {
-                    $sImg = Join-Path $pulledRoot $scene.file
-                    if (-not (Test-Path $sImg)) { continue }
-                    $slide = Join-Path $slidesDir ("slide_{0:D2}.png" -f $idx)
-                    New-CaptionedSlide -SourcePath $sImg -Caption $scene.caption -TargetPath $slide -Width $story.width -Height $story.height
-                    Add-Content -Path $concatPath -Value ("file '{0}'" -f (Convert-ToConcatPath $slide))
-                    Add-Content -Path $concatPath -Value ("duration {0}" -f ([string]$scene.durationSeconds).Replace(",", "."))
-                    $idx++
-                }
-                Add-Content -Path $concatPath -Value ("file '{0}'" -f (Convert-ToConcatPath (Join-Path $slidesDir ("slide_{0:D2}.png" -f ($idx - 1)))))
-                Invoke-Checked -FilePath "ffmpeg" -Arguments @("-y", "-f", "concat", "-safe", "0", "-i", $concatPath, "-vcodec", "libx264", "-pix_fmt", "yuv420p", "-movflags", "+faststart", (Join-Path $videoDest $story.outputFile))
-            } finally {
-                Remove-Item $slidesDir -Recurse -Force; Remove-Item $concatPath -Force
-            }
-        }
-    }
 } finally {
     if (Test-Path $pulledRoot) { Remove-Item $pulledRoot -Recurse -Force }
 }
+
+Restore-DeviceGlobalSettings
+Write-Host "`nAsset completati in: $OutputRoot" -ForegroundColor Green
 
 Restore-DeviceGlobalSettings
 Write-Host "`nAsset completati in: $OutputRoot" -ForegroundColor Green

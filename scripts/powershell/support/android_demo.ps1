@@ -145,11 +145,18 @@ function Resolve-DemoDeviceSerial {
 
     Assert-Command "adb"
 
-    if ($UseConnectedDevice) {
-        $serial = Get-ConnectedDeviceSerial
+    # Priorità al device fisico collegato se presente o richiesto
+    $connectedDevices = adb devices | Select-Object -Skip 1 |
+        ForEach-Object { $_.Trim() } |
+        Where-Object { $_ -match "^\S+\s+device$" } |
+        ForEach-Object { ($_ -split "\s+")[0] } |
+        Where-Object { -not $_.StartsWith("emulator-") }
+
+    if ($UseConnectedDevice -or (@($connectedDevices).Count -gt 0)) {
+        $serial = if ($UseConnectedDevice) { Get-ConnectedDeviceSerial } else { @($connectedDevices)[0] }
         Wait-ForBoot -Serial $serial
-        Write-Host "Uso device fisico $serial. I dati dell'app demo verranno puliti su questo device."
-        Write-Host "Disattivo temporaneamente la verifica APK/Play Protect per installazioni adb su questo device."
+        Write-Host "Uso device fisico $serial. I dati dell'app verranno puliti su questo device."
+        Write-Host "Disattivo temporaneamente la verifica APK/Play Protect."
         Set-DeviceGlobalSettingTemporary -Serial $serial -Name "package_verifier_enable" -Value "0"
         Set-DeviceGlobalSettingTemporary -Serial $serial -Name "verifier_verify_adb_installs" -Value "0"
         Set-DeviceGlobalSettingTemporary -Serial $serial -Name "upload_apk_enable" -Value "0"
@@ -372,26 +379,18 @@ function Convert-ToStoryPng {
         $graphics.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::HighQuality
         $graphics.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
         $graphics.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
-        $graphics.Clear([System.Drawing.Color]::FromArgb(246, 247, 249))
+        $graphics.Clear([System.Drawing.Color]::Black)
 
-        $maxWidth = 1000
-        $maxHeight = 1840
-        $scale = [Math]::Min($maxWidth / $source.Width, $maxHeight / $source.Height)
+        $scale = [Math]::Max(1080 / $source.Width, 1920 / $source.Height)
         $drawWidth = [int]($source.Width * $scale)
         $drawHeight = [int]($source.Height * $scale)
         $drawX = [int]((1080 - $drawWidth) / 2)
         $drawY = [int]((1920 - $drawHeight) / 2)
 
-        $shadowBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(28, 0, 0, 0))
-        $graphics.FillRectangle($shadowBrush, $drawX + 10, $drawY + 10, $drawWidth, $drawHeight)
-        $shadowBrush.Dispose()
         $graphics.DrawImage($source, $drawX, $drawY, $drawWidth, $drawHeight)
-
         $story.Save($TargetPath, [System.Drawing.Imaging.ImageFormat]::Png)
     } finally {
-        $graphics.Dispose()
-        $story.Dispose()
-        $source.Dispose()
+        $graphics.Dispose(); $story.Dispose(); $source.Dispose()
     }
 }
 

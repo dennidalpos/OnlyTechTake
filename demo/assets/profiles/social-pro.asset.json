@@ -6,24 +6,16 @@
   "pulledDirectoryName": "social-pro",
   "cases": [
     {
-      "id": "campaign",
+      "id": "multichannel",
       "sourceDirectory": ".",
       "outputs": [
-        { "platform": "instagram", "variant": "vertical", "subDir": "stories" },
-        { "platform": "instagram", "variant": "square", "subDir": "feed" },
-        { "platform": "facebook", "variant": "vertical", "subDir": "stories" },
-        { "platform": "facebook", "variant": "square", "subDir": "feed" },
-        { "platform": "whatsapp", "variant": "vertical", "subDir": "status" },
-        { "platform": "linkedin", "variant": "square", "subDir": "feed" },
-        { "platform": "linkedin", "variant": "landscape", "subDir": "presentation" }
+        { "platform": "whatsapp", "variant": "vertical", "subDir": "highlights" }
       ],
       "expectedFiles": [
-        "01-stories-dashboard.png",
-        "02-reel-intake.png",
-        "03-carousel-category.png",
-        "04-stories-signature.png",
-        "05-carousel-status.png",
-        "06-reel-pdf.png"
+        "01-dashboard.png",
+        "02-order-details.png",
+        "03-customer-list.png",
+        "04-pdf-preview.png"
       ]
     }
   ]

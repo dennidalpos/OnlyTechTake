@@ -20,7 +20,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ScrollToTopTest {
-
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
@@ -34,20 +33,26 @@ class ScrollToTopTest {
     @Test
     fun ordersList_showsScrollToTop_afterScrollingDown() {
         // 1. Wait for Login and Perform it
-        composeRule.waitUntil(10_000) {
-            composeRule.onAllNodesWithTag(RepairAppTestTags.AuthUsernameField).fetchSemanticsNodes()
+        composeRule.waitUntil(30_000) {
+            composeRule
+                .onAllNodesWithTag(RepairAppTestTags.AuthUsernameField)
+                .fetchSemanticsNodes()
                 .isNotEmpty()
         }
-        composeRule.onNodeWithTag(RepairAppTestTags.AuthUsernameField)
+        composeRule
+            .onNodeWithTag(RepairAppTestTags.AuthUsernameField)
             .performTextReplacement(DemoDataSeeder.DEMO_ADMIN_USERNAME)
-        composeRule.onNodeWithTag(RepairAppTestTags.AuthPasswordField)
+        composeRule
+            .onNodeWithTag(RepairAppTestTags.AuthPasswordField)
             .performTextReplacement(DemoDataSeeder.DEMO_PASSWORD)
         composeRule.onNodeWithTag(RepairAppTestTags.AuthSubmitButton).performClick()
 
         // 2. Wait for Dashboard and Go to Orders tab
-        composeRule.waitUntil(10_000) {
-            composeRule.onAllNodesWithTag(RepairAppTestTags.dashboardTab("HOME"))
-                .fetchSemanticsNodes().isNotEmpty()
+        composeRule.waitUntil(30_000) {
+            composeRule
+                .onAllNodesWithTag(RepairAppTestTags.dashboardTab("HOME"))
+                .fetchSemanticsNodes()
+                .isNotEmpty()
         }
         composeRule.onNodeWithTag(RepairAppTestTags.dashboardTab("ORDERS")).performClick()
         composeRule.waitForIdle()

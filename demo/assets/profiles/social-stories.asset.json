@@ -4,76 +4,26 @@
   "testClass": "com.onlytechtake.repairapp.demo.SocialStoryDemoScreenshotTest",
   "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/social-stories",
   "pulledDirectoryName": "social-stories",
-  "storyJson": "demo/video/social-stories.story.json",
   "cases": [
     {
-      "id": "order-workflow",
-      "testMethod": "capturesOrderIntakeToClosureStories",
-      "sourceDirectory": "01-commessa-nuovo-cliente-chiusura",
+      "id": "operational-stories",
+      "sourceDirectory": ".",
       "outputs": [
-        { "platform": "instagram", "variant": "vertical", "subDir": "order-workflow" },
-        { "platform": "whatsapp", "variant": "vertical", "subDir": "order-workflow" }
+        { "platform": "whatsapp", "variant": "vertical", "subDir": "stories" }
       ],
       "expectedFiles": [
-        "01-login.png",
-        "02-dashboard-home.png",
-        "03-nuovo-cliente.png",
-        "04-categoria-problema.png",
-        "05-commessa-aperta.png",
-        "06-presa-in-carico.png",
-        "07-diagnosi-risultato.png",
-        "08-riparazione.png",
-        "09-pronta-ritiro.png",
-        "10-chiusura-timeline.png"
-      ]
-    },
-    {
-      "id": "configuration",
-      "testMethod": "capturesCategoryAndTemplateStories",
-      "sourceDirectory": "02-categorie-template",
-      "outputs": [
-        { "platform": "instagram", "variant": "vertical", "subDir": "configuration" },
-        { "platform": "linkedin", "variant": "landscape", "subDir": "configuration" }
-      ],
-      "expectedFiles": [
-        "01-dashboard-admin.png",
-        "02-config-hub.png",
-        "03-creazione-categoria.png",
-        "04-categoria-salvata.png",
-        "05-template-associazioni.png",
-        "05a-template-tooltip.png",
-        "05b-creazione-template.png",
-        "06-template-salvato.png"
-      ]
-    },
-    {
-      "id": "customers",
-      "testMethod": "capturesPrivateAndBusinessCustomerStories",
-      "sourceDirectory": "03-clienti-privato-azienda",
-      "outputs": [
-        { "platform": "instagram", "variant": "vertical", "subDir": "customers" },
-        { "platform": "linkedin", "variant": "landscape", "subDir": "customers" }
-      ],
-      "expectedFiles": [
-        "01-archivio-clienti.png",
-        "02-cliente-privato.png",
-        "03-privato-salvato.png",
-        "04-cliente-azienda.png",
-        "05-azienda-salvata.png"
-      ]
-    },
-    {
-      "id": "maintenance",
-      "testMethod": "capturesMaintenanceStories",
-      "sourceDirectory": "05-manutenzione-backup",
-      "outputs": [
-        { "platform": "instagram", "variant": "vertical", "subDir": "maintenance" },
-        { "platform": "linkedin", "variant": "landscape", "subDir": "maintenance" }
-      ],
-      "expectedFiles": [
-        "01-gestione-memoria.png",
-        "02-backup-dati.png",
-        "03-export-excel.png"
+        "story-01-dashboard.png",
+        "story-02-new-order.png",
+        "story-03-customer.png",
+        "story-04-category.png",
+        "story-05-problem.png",
+        "story-06-media.png",
+        "story-07-signature.png",
+        "story-08-summary.png",
+        "story-09-orders-list.png",
+        "story-10-order-detail.png",
+        "story-11-diagnosis.png",
+        "story-12-closed.png"
       ]
     }
   ]

@@ -55,7 +55,7 @@ class SocialProAssetTest {
             robot.typeTag(
                 RepairAppTestTags.NewOrderEmailField,
                 "m.bianchi@example.invalid",
-                scroll = true
+                scroll = true,
             )
             robot.capture(outputDir, "02-reel-intake.png")
 
@@ -67,7 +67,7 @@ class SocialProAssetTest {
             robot.pauseForDemo()
             robot.clickTag(
                 RepairAppTestTags.categoryButton(DemoDataSeeder.DEMO_CATEGORY_ID),
-                scroll = true
+                scroll = true,
             )
             robot.pauseForDemo()
             robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-gaming"), scroll = true)
@@ -80,12 +80,12 @@ class SocialProAssetTest {
             robot.typeTag(
                 RepairAppTestTags.NewOrderProblemSummaryField,
                 "Gaming Laptop - Overheating",
-                scroll = true
+                scroll = true,
             )
             robot.typeTag(
                 RepairAppTestTags.NewOrderProblemDetailsField,
                 "Spegnimenti improvvisi durante sessioni di gioco.",
-                scroll = true
+                scroll = true,
             )
             robot.clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
 
@@ -119,14 +119,14 @@ class SocialProAssetTest {
             // 05-carousel-status (Highlighting progress tracking)
             robot.applySimpleStatus(
                 OrderStatusAction.START_PROGRESS,
-                OrderStatusAction.START_DIAGNOSIS
+                OrderStatusAction.START_DIAGNOSIS,
             )
             robot.capture(outputDir, "05-carousel-status.png")
 
             // 06-reel-pdf (Highlighting professionalism)
             robot.applySimpleStatus(
                 OrderStatusAction.START_DIAGNOSIS,
-                OrderStatusAction.RECORD_RESULT
+                OrderStatusAction.RECORD_RESULT,
             )
             robot.applyResultStatus("Problema risolto con ripristino OS e pulizia.", "89,00")
             robot.waitForText("Documenti cliente", scroll = true)
@@ -138,10 +138,14 @@ class SocialProAssetTest {
         val database = RepairAppDatabase.getInstance(context)
         val deadline = System.currentTimeMillis() + 30_000L
         while (System.currentTimeMillis() < deadline) {
-            val order = runBlocking {
-                database.repairOrderDao().observeRecentActiveOrders(limit = 20).first()
-                    .firstOrNull { it.id != DemoDataSeeder.DEMO_ORDER_ID && it.title == summary }
-            }
+            val order =
+                runBlocking {
+                    database
+                        .repairOrderDao()
+                        .observeRecentActiveOrders(limit = 20)
+                        .first()
+                        .firstOrNull { it.id != DemoDataSeeder.DEMO_ORDER_ID && it.title == summary }
+                }
             if (order != null) return order.id
             Thread.sleep(250)
         }

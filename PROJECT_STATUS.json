@@ -21,14 +21,29 @@
     "global_guardrails": [
       "Full/Pro = prodotto completo da vendere e mostrare.",
       "Demo = prodotto limitato da provare su Play Store.",
-      "Showcase = vetrina guidata interna con dati seed e login automatico.",
-      "Gli asset Play Store Pro, social e video pubblici devono partire da Flavor Full.",
-      "La Demo deve generare solo gli asset necessari alla gestione Play Store e mostrare limiti chiari.",
-      "Showcase deve essere usata solo internamente per rappresentanza, walkthrough e registrazioni controllate.",
+      "Hardware collegato > Emulatore per acquisizione asset.",
+      "Gli asset pubblici devono essere organizzati in cartelle 'full' e 'demo'.",
+      "Il formato screenshot prioritario e' WhatsApp (Verticale 9:16) senza padding decorativo.",
       "Non modificare schema Room, DATABASE_VERSION, entita', DAO persistenti, indici persistenti o migrazioni senza ordine esplicito owner."
     ]
   },
   "todos": [
+    {
+      "id": "A01",
+      "title": "Generazione Video Fluidi (Screen Recording)",
+      "priority": "P0",
+      "status": "open",
+      "recommended_batch_size": 1,
+      "identified_residual": [
+        "Debito Tecnico: Esecuzione screen recording automatizzato per tutti i profili Full e Demo.",
+        "Validazione fluidità registrazioni su device fisico reale.",
+        "Normalizzazione automatica (trim) dei video generati tramite record_demo_device.ps1."
+      ],
+      "plan": [
+        "Configurazione ambiente adb su device fisico prioritario.",
+        "Esecuzione batch record_demo_device.ps1 -ScenarioId all."
+      ]
+    },
     {
       "id": "B11",
       "title": "Pubblicazione Google Play (Pro e Demo)",
@@ -37,10 +52,10 @@
       "recommended_batch_size": 1,
       "identified_residual": [
         "Signing release con keystore.properties reale (locale).",
+        "Allineamento versioning release v1 (DONE).",
         "Generazione AAB Full e Demo.",
         "Privacy Policy definitiva e URL pubblico.",
-        "Data Safety form in Play Console.",
-        "Internal Testing e Pre-launch Report."
+        "Data Safety form in Play Console."
       ],
       "plan": [
         "Verificare build release locale con keystore placeholder.",
@@ -52,7 +67,7 @@
       "title": "Verifica stabilità Test Strumentali",
       "priority": "P1",
       "status": "active",
-      "recommended_batch_size": 2,
+      "recommended_batch_size": 1,
       "identified_residual": [
         "Risolvere ComposeTimeoutException in ScrollToTopTest.kt (Login non rilevata su device fisico).",
         "Esecuzione regression test su suite completa flavor Full."

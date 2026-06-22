@@ -35,7 +35,7 @@ fun statusTemplateAnchor(status: OrderStatus): TemplateAnchor =
         OrderStatus.REPAIRING -> TemplateAnchor.WHATSAPP_REPAIRING
         OrderStatus.READY_FOR_PICKUP,
         OrderStatus.CLOSED,
-            -> TemplateAnchor.WHATSAPP_READY
+        -> TemplateAnchor.WHATSAPP_READY
     }
 
 fun statusTemplateAnchor(order: RepairOrderEntity): TemplateAnchor =
@@ -70,8 +70,7 @@ fun nextActionLabel(order: RepairOrderEntity): String =
         else -> nextActionLabel(order.status)
     }
 
-fun shouldShowDiagnosisEstimate(outcome: DiagnosisOutcome?): Boolean =
-    outcome == DiagnosisOutcome.REPAIRABLE
+fun shouldShowDiagnosisEstimate(outcome: DiagnosisOutcome?): Boolean = outcome == DiagnosisOutcome.REPAIRABLE
 
 fun canConfirmDiagnosisResult(
     summary: String,

@@ -86,7 +86,7 @@ class OperatorIntakeDemoScreenshotTest {
                 "giulia.bianchi@example.invalid",
                 scroll = true,
             )
-            capture(outputDir, "03-new-customer.png")
+            capture(outputDir, "03-step1-customer.png")
 
             clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
             waitForText("Cliente selezionato")
@@ -111,7 +111,7 @@ class OperatorIntakeDemoScreenshotTest {
                 "Il cliente segnala spegnimento improvviso dopo caduta accidentale.",
                 scroll = true,
             )
-            capture(outputDir, "04-category-problem.png")
+            capture(outputDir, "04-step2-problem.png")
 
             clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
             waitForText("Foto e allegati")
@@ -119,6 +119,7 @@ class OperatorIntakeDemoScreenshotTest {
             waitForTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
             clickTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
             waitForText("PHOTO", scroll = true)
+            capture(outputDir, "05-step3-media.png")
             clickTag(RepairAppTestTags.NewOrderStep4NextButton, scroll = true)
 
             waitForText("Privacy e firma")
@@ -129,11 +130,11 @@ class OperatorIntakeDemoScreenshotTest {
                 swipeRight()
             }
             waitForTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
-            capture(outputDir, "05-signature-capture.png")
+            capture(outputDir, "06-step4-signature.png")
 
             clickTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
             waitForTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
-            capture(outputDir, "06-summary-submit.png")
+            capture(outputDir, "07-step5-summary.png")
             clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
 
             val createdOrderId = waitForCreatedOrderId()
@@ -144,7 +145,7 @@ class OperatorIntakeDemoScreenshotTest {
             composeRule.onNodeWithTag("orders_list").performTouchInput { swipeUp() }
             pauseForDemo()
             if (isTagPresent(RepairAppTestTags.ScrollToTopButton)) {
-                capture(outputDir, "06b-back-to-top-orders.png")
+                capture(outputDir, "08-orders-list-scroll.png")
                 clickTag(RepairAppTestTags.ScrollToTopButton)
                 pauseForDemo()
             }
@@ -157,12 +158,12 @@ class OperatorIntakeDemoScreenshotTest {
             waitForTag(RepairAppTestTags.OrderDetailCustomerReference, useUnmergedTree = true)
             waitForTag(RepairAppTestTags.orderDetailStatusStep(1), useUnmergedTree = true)
             waitForText("Asus ROG Strix")
-            capture(outputDir, "07-order-created.png")
+            capture(outputDir, "09-order-detail-intake.png")
 
             waitForTag(RepairAppTestTags.OrderWhatsAppButton, scroll = true)
             clickTag(RepairAppTestTags.OrderWhatsAppButton)
             waitForTag(RepairAppTestTags.OrderWhatsAppPreviewPanel)
-            capture(outputDir, "08-whatsapp-preview.png")
+            capture(outputDir, "10-whatsapp-preview.png")
             dismissWhatsAppPreviewIfPresent()
             pauseForDemo()
 
@@ -175,7 +176,7 @@ class OperatorIntakeDemoScreenshotTest {
                 scroll = true,
                 useUnmergedTree = true,
             )
-            capture(outputDir, "09-signature-detail.png")
+            capture(outputDir, "11-signature-detail.png")
 
             // Collapse signatures card to keep UI clean and test the toggle
             clickTag(RepairAppTestTags.OrderSignaturesCard)
@@ -185,29 +186,29 @@ class OperatorIntakeDemoScreenshotTest {
                 OrderStatusAction.START_PROGRESS,
                 nextAction = OrderStatusAction.START_DIAGNOSIS,
             )
-            capture(outputDir, "10-in-progress.png")
+            capture(outputDir, "12-in-progress.png")
 
             applySimpleStatus(
                 OrderStatusAction.START_DIAGNOSIS,
                 nextAction = OrderStatusAction.RECORD_RESULT,
             )
             applyResultStatus()
-            capture(outputDir, "11-diagnosis-result.png")
+            capture(outputDir, "13-diagnosis-result.png")
 
             waitForText("Documenti cliente", scroll = true)
-            capture(outputDir, "12-pdf-documents.png")
+            capture(outputDir, "14-pdf-documents.png")
 
             acceptQuote()
             applySimpleStatus(
                 OrderStatusAction.READY_FOR_PICKUP,
                 nextAction = OrderStatusAction.CLOSE_ORDER,
             )
-            capture(outputDir, "13-ready-for-pickup.png")
+            capture(outputDir, "15-ready-for-pickup.png")
 
             closeOrder()
             clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
             waitForText("Chiusa")
-            capture(outputDir, "14-closed-timeline.png")
+            capture(outputDir, "16-closed-timeline.png")
         }
     }
 
@@ -332,8 +333,7 @@ class OperatorIntakeDemoScreenshotTest {
         Thread.sleep(2000)
     }
 
-    private fun isTextDisplayed(text: String): Boolean =
-        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+    private fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
     private fun loginOperatorDemo() {
         val username =
@@ -716,8 +716,7 @@ class OperatorIntakeDemoScreenshotTest {
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    private fun isRecordingDemo(): Boolean =
-        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     private fun prepareScreenshotDirectory(): File {
         val directory = File(requireNotNull(context.getExternalFilesDir(null)), SCREENSHOT_DIR_NAME)

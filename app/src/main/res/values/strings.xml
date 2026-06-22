@@ -318,7 +318,7 @@
     <string name="order_timeline">Cronologia</string>
     <string name="order_confirm_status_update">Aggiornare lo stato della commessa?</string>
     <string name="order_result_summary">Sintesi risultato</string>
-    <string name="order_loading_detail">Caricamento commessa...</string>
+    <string name="order_loading_detail">Caricamento commessa…</string>
     <string name="order_share_status_chooser">Invia stato avanzamento</string>
     <string name="order_diagnosis_repairable">Riparabile</string>
     <string name="order_diagnosis_not_repairable">Non riparabile</string>

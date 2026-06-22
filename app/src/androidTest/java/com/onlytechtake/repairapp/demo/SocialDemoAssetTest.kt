@@ -48,8 +48,9 @@ class SocialDemoAssetTest {
             robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
             robot.pauseForDemo()
             robot.waitForText(
-                context.getString(com.onlytechtake.repairapp.R.string.demo_error_order_limit)
-                    .substring(0, 10)
+                context
+                    .getString(com.onlytechtake.repairapp.R.string.demo_error_order_limit)
+                    .substring(0, 10),
             )
             robot.capture(outputDir, "02-reel-demo-limit.png")
         }

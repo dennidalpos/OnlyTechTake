@@ -26,6 +26,7 @@ import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.core.design.components.AppDialog
 import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
+import com.onlytechtake.repairapp.features.dashboard.admin.AdminPanel
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 
@@ -34,6 +35,7 @@ fun SettingsPanel(
     viewModel: SettingsViewModel,
     isAdmin: Boolean,
     onBackupRestored: () -> Unit,
+    onLogout: () -> Unit = {},
     onNavigate: (String) -> Unit,
     initialSection: String? = null,
     fromIntake: Boolean = false,
@@ -97,6 +99,7 @@ fun SettingsPanel(
                     isAdmin = isAdmin,
                     fromIntake = fromIntake,
                     onBackupRestored = onBackupRestored,
+                    onLogout = onLogout,
                     requestConfirm = ::requestConfirm,
                     onNavigate = onNavigate,
                     onBack = onBackToHub,
@@ -114,6 +117,7 @@ fun SettingsPanel(
                 isAdmin = isAdmin,
                 fromIntake = fromIntake,
                 onBackupRestored = onBackupRestored,
+                onLogout = onLogout,
                 requestConfirm = ::requestConfirm,
                 onNavigate = onNavigate,
                 onBack = onBackToHub,
@@ -164,10 +168,13 @@ private fun SettingsSectionContent(
     isAdmin: Boolean,
     fromIntake: Boolean,
     onBackupRestored: () -> Unit,
+    onLogout: () -> Unit,
     requestConfirm: (String, String, () -> Unit) -> Unit,
     onNavigate: (String) -> Unit = {},
     onBack: () -> Unit = {},
 ) {
+    val windowSizeClass = LocalWindowSizeClass.current
+    val isWide = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Medium
     val message by viewModel.message.collectAsState()
 
     Column(
@@ -214,9 +221,17 @@ private fun SettingsSectionContent(
                 )
 
             "STORAGE" -> StorageSettings(viewModel, onBack = onBack)
+            "ADMIN" ->
+                AdminPanel(
+                    viewModel = viewModel,
+                    isAdmin = isAdmin,
+                    onResetComplete = onLogout,
+                    onBack = onBack,
+                )
+
             "ABOUT" -> AboutSettings(onBack = onBack)
             else ->
-                if (section == null) {
+                if (section == null && !isWide) {
                     SettingsHub(isAdmin, onNavigate)
                 } else {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

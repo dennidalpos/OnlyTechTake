@@ -329,38 +329,40 @@ fun CustomerPanel(
             }
         }
 
-        selectedCustomer?.let { customer ->
-            AppDialog(
-                onDismissRequest = { selectedCustomer = null },
-                confirmButton = {
-                    AppButton(
-                        text = stringResource(R.string.customer_detail_edit),
-                        onClick = {
-                            editCustomer(customer)
-                            selectedCustomer = null
-                        },
-                        variant = AppButtonVariant.Primary,
-                        size = AppButtonSize.Compact,
-                    )
-                },
-                dismissButton = {
-                    AppButton(
-                        text = stringResource(R.string.customer_detail_close),
-                        onClick = { selectedCustomer = null },
-                        variant = AppButtonVariant.Secondary,
-                        size = AppButtonSize.Compact,
-                    )
-                },
-                content = {
-                    CustomerDetailContent(
-                        customer = customer,
-                        viewModel = viewModel,
-                        onEdit = {}, // Handled by dialog button
-                        onOrderClick = onOrderClick,
-                        onClose = { selectedCustomer = null },
-                    )
-                },
-            )
+        if (!isWide) {
+            selectedCustomer?.let { customer ->
+                AppDialog(
+                    onDismissRequest = { selectedCustomer = null },
+                    confirmButton = {
+                        AppButton(
+                            text = stringResource(R.string.customer_detail_edit),
+                            onClick = {
+                                editCustomer(customer)
+                                selectedCustomer = null
+                            },
+                            variant = AppButtonVariant.Primary,
+                            size = AppButtonSize.Compact,
+                        )
+                    },
+                    dismissButton = {
+                        AppButton(
+                            text = stringResource(R.string.customer_detail_close),
+                            onClick = { selectedCustomer = null },
+                            variant = AppButtonVariant.Secondary,
+                            size = AppButtonSize.Compact,
+                        )
+                    },
+                    content = {
+                        CustomerDetailContent(
+                            customer = customer,
+                            viewModel = viewModel,
+                            onEdit = {}, // Handled by dialog button
+                            onOrderClick = onOrderClick,
+                            onClose = { selectedCustomer = null },
+                        )
+                    },
+                )
+            }
         }
     }
 

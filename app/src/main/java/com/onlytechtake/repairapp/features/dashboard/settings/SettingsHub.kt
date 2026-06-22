@@ -105,7 +105,7 @@ fun SettingsHub(
                 icon = Icons.Default.Lock,
                 testTag = RepairAppTestTags.ConfigHubAdminButton,
             ) {
-                onNavigate(DashboardRoutes.ADMIN)
+                onNavigate(DashboardRoutes.settings("ADMIN"))
             }
 
             if (isAdmin) {

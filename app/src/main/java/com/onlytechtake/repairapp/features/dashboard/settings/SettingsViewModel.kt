@@ -12,10 +12,12 @@ import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
+import com.onlytechtake.repairapp.data.repositories.DataResetRepository
 import com.onlytechtake.repairapp.data.repositories.OrderFileCleanupService
 import com.onlytechtake.repairapp.data.repositories.TemplateRepository
 import com.onlytechtake.repairapp.data.services.StorageStatsService
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
+import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
@@ -23,16 +25,18 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SettingsViewModel(
     private val authRepository: AuthRepository,
-    adminUserRepository: AdminUserRepository,
-    catalogRepository: CatalogRepository,
+    private val adminUserRepository: AdminUserRepository,
+    private val catalogRepository: CatalogRepository,
     private val templateRepository: TemplateRepository,
     private val backupRepository: BackupRepository,
+    private val dataResetRepository: DataResetRepository,
     private val backupReminderPreferences: BackupReminderPreferences,
     private val securityPreferences: SecurityPreferences,
     private val storageStatsService: StorageStatsService,
@@ -42,6 +46,9 @@ class SettingsViewModel(
 ) : ViewModel() {
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
+
+    private val _recoveryCode = MutableStateFlow<String?>(null)
+    val recoveryCode = _recoveryCode.asStateFlow()
 
     private val actionRunner =
         AuthenticatedActionRunner(
@@ -129,6 +136,12 @@ class SettingsViewModel(
                 .SecuritySettings(),
         )
 
+    val isBackupReminderDue =
+        backupReminderPreferences.settings
+            .map { settings ->
+                BackupReminderPolicy.shouldShowReminder(settings, System.currentTimeMillis())
+            }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = false)
+
     init {
         refreshStorageStats()
     }
@@ -176,20 +189,15 @@ class SettingsViewModel(
 
     fun setMessageMode(mode: MessageMode) = templateDelegate.setMessageMode(mode)
 
-    fun setBackupReminderEnabled(enabled: Boolean) =
-        backupDelegate.setBackupReminderEnabled(enabled)
+    fun setBackupReminderEnabled(enabled: Boolean) = backupDelegate.setBackupReminderEnabled(enabled)
 
-    fun setBackupReminderIntervalDays(days: Int) =
-        backupDelegate.setBackupReminderIntervalDays(days)
+    fun setBackupReminderIntervalDays(days: Int) = backupDelegate.setBackupReminderIntervalDays(days)
 
-    fun setBackupEncryptionEnabled(enabled: Boolean) =
-        securityDelegate.setBackupEncryptionEnabled(enabled)
+    fun setBackupEncryptionEnabled(enabled: Boolean) = securityDelegate.setBackupEncryptionEnabled(enabled)
 
-    fun setBackupEncryptionPassword(password: String) =
-        securityDelegate.setBackupEncryptionPassword(password)
+    fun setBackupEncryptionPassword(password: String) = securityDelegate.setBackupEncryptionPassword(password)
 
-    fun setDatabaseEncryptionEnabled(enabled: Boolean) =
-        securityDelegate.setDatabaseEncryptionEnabled(enabled)
+    fun setDatabaseEncryptionEnabled(enabled: Boolean) = securityDelegate.setDatabaseEncryptionEnabled(enabled)
 
     fun createOperator(
         displayName: String,
@@ -207,10 +215,53 @@ class SettingsViewModel(
         permissions: Set<UserPermission>,
     ) = adminDelegate.setUserPermissions(userId, permissions)
 
+    fun deleteUser(userId: String) =
+        actionRunner.run { actor ->
+            adminUserRepository.deleteUser(actor, userId)
+        }
+
+    fun changePassword(
+        username: String,
+        currentPassword: CharArray,
+        newPassword: CharArray,
+    ) = actionRunner.run {
+        authRepository.changePassword(username, currentPassword, newPassword)
+    }
+
     fun resetPassword(
         userId: String,
         password: CharArray,
     ) = adminDelegate.resetPassword(userId, password)
+
+    fun resetAllData(
+        confirmation: String,
+        onReset: () -> Unit,
+    ) = actionRunner.run(onSuccess = onReset) { actor ->
+        dataResetRepository.resetAll(actor, confirmation)
+    }
+
+    fun resetOrders(
+        confirmation: String,
+        onReset: () -> Unit,
+    ) = actionRunner.run(onSuccess = onReset) { actor ->
+        dataResetRepository.resetOrders(actor, confirmation)
+    }
+
+    fun generateRecoveryKit() {
+        viewModelScope.launch {
+            authRepository
+                .getRecoveryKit()
+                .onSuccess { code ->
+                    _recoveryCode.value = code
+                }.onFailure { error ->
+                    _message.value = WorkspaceMessage(error.message ?: "Errore", isError = true)
+                }
+        }
+    }
+
+    fun clearRecoveryCode() {
+        _recoveryCode.value = null
+    }
 
     fun exportConfiguration(uri: Uri) = backupDelegate.exportConfiguration(uri)
 
@@ -231,6 +282,7 @@ class SettingsViewModel(
         private val catalogRepository: CatalogRepository,
         private val templateRepository: TemplateRepository,
         private val backupRepository: BackupRepository,
+        private val dataResetRepository: DataResetRepository,
         private val backupReminderPreferences: BackupReminderPreferences,
         private val securityPreferences: SecurityPreferences,
         private val storageStatsService: StorageStatsService,
@@ -246,6 +298,7 @@ class SettingsViewModel(
                 catalogRepository,
                 templateRepository,
                 backupRepository,
+                dataResetRepository,
                 backupReminderPreferences,
                 securityPreferences,
                 storageStatsService,

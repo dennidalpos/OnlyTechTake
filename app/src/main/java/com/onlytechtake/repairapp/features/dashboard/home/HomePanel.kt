@@ -37,12 +37,18 @@ import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.domain.models.AppSummary
+import androidx.compose.foundation.layout.ContextualFlowRow
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
 import com.onlytechtake.repairapp.features.dashboard.common.BackupReminderCard
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.workspace.queueFilter
+import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HomePanel(
     summary: AppSummary,
@@ -58,6 +64,9 @@ fun HomePanel(
         rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
             uri?.let(viewModel::exportCompleteBackup)
         }
+
+    val windowSizeClass = LocalWindowSizeClass.current
+    val isWide = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Medium
 
     AppScreenContainer {
         HomeHeader(onNewOrder)
@@ -91,17 +100,25 @@ fun HomePanel(
                 onAction = onNewOrder,
             )
         } else {
-            queues.forEach { queue ->
-                AppQueueCard(
-                    title = queue.title,
-                    count = queue.orders.size,
-                    lastElementTitle =
-                        queue.orders
-                            .firstOrNull()
-                            ?.let { "${it.orderNumber} - ${it.title}" },
-                    onOpenQueue = { onOpenQueue(queueFilter(queue)) },
-                    modifier = Modifier.padding(bottom = RepairAppSpacing.cardGap),
-                )
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
+                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
+                maxItemsInEachRow = if (isWide) 2 else 1,
+            ) {
+                queues.forEach { queue ->
+                    val itemModifier = if (isWide) Modifier.weight(1f) else Modifier.fillMaxWidth()
+                    AppQueueCard(
+                        title = queue.title,
+                        count = queue.orders.size,
+                        lastElementTitle =
+                            queue.orders
+                                .firstOrNull()
+                                ?.let { "${it.orderNumber} - ${it.title}" },
+                        onOpenQueue = { onOpenQueue(queueFilter(queue)) },
+                        modifier = itemModifier,
+                    )
+                }
             }
         }
     }

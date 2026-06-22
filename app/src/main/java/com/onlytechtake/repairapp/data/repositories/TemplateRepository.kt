@@ -198,8 +198,7 @@ class TemplateRepository(
         return prepareMessage(actor, orderId, templateCode, anchor)
     }
 
-    private suspend fun resolveAnchor(anchor: TemplateAnchor): String =
-        settingDao.findByKey(anchor.settingKey)?.value ?: anchor.defaultCode
+    private suspend fun resolveAnchor(anchor: TemplateAnchor): String = settingDao.findByKey(anchor.settingKey)?.value ?: anchor.defaultCode
 
     suspend fun prepareMessage(
         actor: AuthenticatedUser,
@@ -266,8 +265,7 @@ class TemplateRepository(
         actor: AuthenticatedUser,
         prepared: PreparedMessage,
         body: String,
-    ): Result<Unit> =
-        writeMessage(actor, prepared, body, MessageStatus.SENT_CONFIRMED, clockMillis())
+    ): Result<Unit> = writeMessage(actor, prepared, body, MessageStatus.SENT_CONFIRMED, clockMillis())
 
     private suspend fun writeMessage(
         actor: AuthenticatedUser,

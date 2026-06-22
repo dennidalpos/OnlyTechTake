@@ -110,15 +110,18 @@ class SocialCampaignScreenshotTest {
                 "Richiesta pulizia interna e cambio pasta termica.",
                 scroll = true,
             )
-            capture(outputDir, "03-diagnosi.png")
+            capture(outputDir, "03-step2-diagnosi.png")
 
-            // 4. Wizard: media, privacy e firma reale nell'intake.
+            // 4. Wizard: media
             clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
             waitForText("Foto e allegati")
             clickTag(RepairAppTestTags.IntakeMediaTakePhotoButton, scroll = true)
             waitForTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
             clickTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
             waitForText("PHOTO", scroll = true)
+            capture(outputDir, "03b-step3-media.png")
+
+            // 5. Wizard: privacy e firma
             clickTag(RepairAppTestTags.NewOrderStep4NextButton, scroll = true)
             waitForText("Privacy e firma")
             clickText("Accetta informativa privacy", scroll = true)
@@ -128,7 +131,7 @@ class SocialCampaignScreenshotTest {
                 swipeRight()
             }
             waitForTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
-            capture(outputDir, "04-firma.png")
+            capture(outputDir, "04-step4-firma.png")
 
             clickTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
             waitForTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
@@ -568,8 +571,7 @@ class SocialCampaignScreenshotTest {
             .fetchSemanticsNodes()
             .isNotEmpty()
 
-    private fun isTextDisplayed(text: String): Boolean =
-        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+    private fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
     private fun waitForText(
         text: String,
@@ -625,8 +627,7 @@ class SocialCampaignScreenshotTest {
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    private fun isRecordingDemo(): Boolean =
-        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     private fun prepareScreenshotDirectory(): File {
         val directory = File(requireNotNull(context.getExternalFilesDir(null)), "social-campaign")

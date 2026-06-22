@@ -9,8 +9,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.domain.models.AppSummary
-import com.onlytechtake.repairapp.features.dashboard.admin.AdminPanel
-import com.onlytechtake.repairapp.features.dashboard.admin.AdminViewModel
 import com.onlytechtake.repairapp.features.dashboard.customers.CustomerPanel
 import com.onlytechtake.repairapp.features.dashboard.customers.CustomersViewModel
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel
@@ -232,6 +230,7 @@ fun DashboardNavHost(
                             catalogRepository = container.catalogRepository,
                             templateRepository = container.templateRepository,
                             backupRepository = container.backupRepository,
+                            dataResetRepository = container.dataResetRepository,
                             backupReminderPreferences = container.backupReminderPreferences,
                             securityPreferences = container.securityPreferences,
                             storageStatsService = container.storageStatsService,
@@ -246,25 +245,36 @@ fun DashboardNavHost(
                 initialSection = section,
                 fromIntake = fromIntake,
                 onBackupRestored = onAppDataRestored,
+                onLogout = onLogout,
                 onNavigate = { route -> navController.navigate(route) },
             )
         }
         composable(DashboardRoutes.ADMIN) {
-            val adminViewModel: AdminViewModel =
+            val settingsViewModel: SettingsViewModel =
                 viewModel(
                     factory =
-                        AdminViewModel.Factory(
+                        SettingsViewModel.Factory(
                             authRepository = container.authRepository,
                             adminUserRepository = container.adminUserRepository,
+                            catalogRepository = container.catalogRepository,
+                            templateRepository = container.templateRepository,
                             backupRepository = container.backupRepository,
                             dataResetRepository = container.dataResetRepository,
                             backupReminderPreferences = container.backupReminderPreferences,
+                            securityPreferences = container.securityPreferences,
+                            storageStatsService = container.storageStatsService,
+                            orderFileCleanupService = container.orderFileCleanupService,
+                            database = container.database,
+                            onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) },
                         ),
                 )
-            AdminPanel(
-                viewModel = adminViewModel,
+            SettingsPanel(
+                viewModel = settingsViewModel,
                 isAdmin = isAdmin,
-                onResetComplete = onLogout,
+                initialSection = "ADMIN",
+                onBackupRestored = onAppDataRestored,
+                onLogout = onLogout,
+                onNavigate = { route -> navController.navigate(route) },
             )
         }
     }

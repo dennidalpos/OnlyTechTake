@@ -19,6 +19,7 @@ import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
+import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.test.swipeUp
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -107,26 +108,38 @@ class SocialStoryDemoScreenshotTest {
                 "Il cliente segnala spegnimento improvviso dopo caduta accidentale.",
                 scroll = true,
             )
-            capture(outputDir, "04-categoria-problema.png")
+            capture(outputDir, "story-05-problem.png")
+
+            // 4. Wizard: media
+            clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
+            waitForText("Foto e allegati")
+            clickTag(RepairAppTestTags.IntakeMediaTakePhotoButton, scroll = true)
+            waitForTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
+            clickTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
+            waitForText("PHOTO", scrollIfNotFound = true)
+            capture(outputDir, "story-06-media.png")
+
+            // 5. Wizard: privacy e firma
+            clickTag(RepairAppTestTags.NewOrderStep4NextButton, scroll = true)
+            waitForText("Privacy e firma")
+            clickText("Accetta informativa privacy", scroll = true)
+            clickText("Accetta condizioni di presa in carico", scroll = true)
+            waitForTag(RepairAppTestTags.SignatureCanvas, scroll = true)
+            composeRule.onNodeWithTag(RepairAppTestTags.SignatureCanvas).performTouchInput {
+                swipeRight()
+            }
+            waitForTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
+            capture(outputDir, "story-07-signature.png")
+
+            clickTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
+            waitForTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
+            capture(outputDir, "story-08-summary.png")
+            clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
 
             clickDashboardTab("ORDERS")
             waitForText("Commesse")
+            capture(outputDir, "story-09-orders-list.png")
             waitForTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
-            waitForTag(
-                RepairAppTestTags.orderCardOrderReference(DemoDataSeeder.DEMO_ORDER_ID),
-                scroll = true,
-                useUnmergedTree = true,
-            )
-            waitForTag(
-                RepairAppTestTags.orderCardCustomerReference(DemoDataSeeder.DEMO_ORDER_ID),
-                scroll = true,
-                useUnmergedTree = true,
-            )
-            waitForTag(
-                RepairAppTestTags.orderCardStatusStep(DemoDataSeeder.DEMO_ORDER_ID, 1),
-                scroll = true,
-                useUnmergedTree = true,
-            )
             clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID))
 
             waitForTag(RepairAppTestTags.OrderStatusLabel)
@@ -134,34 +147,28 @@ class SocialStoryDemoScreenshotTest {
             waitForTag(RepairAppTestTags.OrderDetailCustomerReference, useUnmergedTree = true)
             waitForTag(RepairAppTestTags.orderDetailStatusStep(1), useUnmergedTree = true)
             waitForText("Asus ROG Strix")
-            capture(outputDir, "05-commessa-aperta.png")
+            capture(outputDir, "story-10-order-detail.png")
 
             applySimpleStatus(
                 OrderStatusAction.START_PROGRESS,
                 nextAction = OrderStatusAction.START_DIAGNOSIS,
             )
-            capture(outputDir, "06-presa-in-carico.png")
-
             applySimpleStatus(
                 OrderStatusAction.START_DIAGNOSIS,
                 nextAction = OrderStatusAction.RECORD_RESULT,
             )
             applyResultStatus()
-            capture(outputDir, "07-diagnosi-risultato.png")
+            capture(outputDir, "story-11-diagnosis.png")
 
             acceptQuote()
-            capture(outputDir, "08-riparazione.png")
-
             applySimpleStatus(
                 OrderStatusAction.READY_FOR_PICKUP,
                 nextAction = OrderStatusAction.CLOSE_ORDER,
             )
-            capture(outputDir, "09-pronta-ritiro.png")
-
             closeOrder()
             clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
             waitForText("Chiusa")
-            capture(outputDir, "10-chiusura-timeline.png")
+            capture(outputDir, "story-12-closed.png")
         }
     }
 
@@ -448,8 +455,7 @@ class SocialStoryDemoScreenshotTest {
         Thread.sleep(2000)
     }
 
-    private fun isTextDisplayed(text: String): Boolean =
-        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+    private fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
     private fun loginDemo(username: String) {
         repeat(LOGIN_ATTEMPTS) { attempt ->
@@ -847,8 +853,7 @@ class SocialStoryDemoScreenshotTest {
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    private fun isRecordingDemo(): Boolean =
-        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     private companion object {
         const val CASE_ORDER = "01-commessa-nuovo-cliente-chiusura"

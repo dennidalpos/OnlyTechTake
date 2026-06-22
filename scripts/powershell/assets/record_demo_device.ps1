@@ -89,7 +89,7 @@ if ($MaxDurationSeconds -lt 1 -or $MaxDurationSeconds -gt 180) {
 
 # Output Root
 if (-not $OutputRoot) {
-    $basePath = if ($AssetProfile) { "reports/generated-assets/$AssetProfile" } else { "reports/generated-assets/$Flavor" }
+    $basePath = "reports/generated-assets/$($Flavor.ToLower())/$AssetProfile"
     $targetPlatform = if ($Platform) { $Platform } else { "device" }
     $targetVariant = if ($Variant) { $Variant } else { "raw" }
     $OutputRoot = Join-Path $root "$basePath/$targetPlatform/$targetVariant"

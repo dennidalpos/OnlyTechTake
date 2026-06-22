@@ -56,12 +56,14 @@ import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
+import com.onlytechtake.repairapp.features.dashboard.settings.SettingsViewModel
 
 @Composable
 fun AdminPanel(
-    viewModel: AdminViewModel,
+    viewModel: SettingsViewModel,
     isAdmin: Boolean,
     onResetComplete: () -> Unit,
+    onBack: () -> Unit = {},
 ) {
     val users by viewModel.users.collectAsState()
     val recoveryCode by viewModel.recoveryCode.collectAsState()
@@ -645,6 +647,16 @@ fun AdminPanel(
                 )
             }
         }
+
+        Spacer(Modifier.height(RepairAppSpacing.sectionGap))
+
+        AppButton(
+            text = stringResource(R.string.config_backup_close),
+            variant = AppButtonVariant.Ghost,
+            size = AppButtonSize.Default,
+            modifier = Modifier.fillMaxWidth(),
+            onClick = onBack,
+        )
     }
 
     confirmTitle?.let { title ->

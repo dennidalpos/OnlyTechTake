@@ -65,7 +65,11 @@ abstract class BaseAssetRobot(
         Thread.sleep(2000)
     }
 
-    fun typeTag(tag: String, text: String, scroll: Boolean = false) {
+    fun typeTag(
+        tag: String,
+        text: String,
+        scroll: Boolean = false,
+    ) {
         waitForTagExists(tag, scroll = scroll)
         val node = composeRule.onNodeWithTag(tag)
         node.performClick()
@@ -78,7 +82,11 @@ abstract class BaseAssetRobot(
         pauseForDemo()
     }
 
-    fun clickTag(tag: String, scroll: Boolean = false, useUnmergedTree: Boolean = false) {
+    fun clickTag(
+        tag: String,
+        scroll: Boolean = false,
+        useUnmergedTree: Boolean = false,
+    ) {
         waitForTag(tag, scroll = scroll, useUnmergedTree = useUnmergedTree)
         val node = composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
         try {
@@ -101,7 +109,10 @@ abstract class BaseAssetRobot(
         pauseForDemo()
     }
 
-    fun clickText(text: String, scroll: Boolean = false) {
+    fun clickText(
+        text: String,
+        scroll: Boolean = false,
+    ) {
         waitForText(text, scroll = scroll)
         val node = composeRule.onNodeWithText(text, substring = true)
         try {
@@ -117,20 +128,25 @@ abstract class BaseAssetRobot(
         pauseForDemo()
     }
 
-    fun waitForTag(tag: String, scroll: Boolean = false, useUnmergedTree: Boolean = false) {
+    fun waitForTag(
+        tag: String,
+        scroll: Boolean = false,
+        useUnmergedTree: Boolean = false,
+    ) {
         waitForTagExists(tag, scroll = scroll, useUnmergedTree = useUnmergedTree)
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
         while (System.currentTimeMillis() < deadline) {
-            val displayed = runCatching {
-                val node = composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
-                if (scroll) {
-                    runCatching { node.performScrollTo() }
-                    composeRule.waitForIdle()
-                }
-                node.assertIsDisplayed()
-                true
-            }.getOrDefault(false)
+            val displayed =
+                runCatching {
+                    val node = composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
+                    if (scroll) {
+                        runCatching { node.performScrollTo() }
+                        composeRule.waitForIdle()
+                    }
+                    node.assertIsDisplayed()
+                    true
+                }.getOrDefault(false)
             if (displayed) return
             if (scroll) {
                 if (attempts % 15 < 10) performSafeSwipeUp() else performSafeSwipeDown()
@@ -141,7 +157,11 @@ abstract class BaseAssetRobot(
         composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).assertIsDisplayed()
     }
 
-    fun waitForTagExists(tag: String, scroll: Boolean = false, useUnmergedTree: Boolean = false) {
+    fun waitForTagExists(
+        tag: String,
+        scroll: Boolean = false,
+        useUnmergedTree: Boolean = false,
+    ) {
         var found = false
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
@@ -151,7 +171,8 @@ abstract class BaseAssetRobot(
             if (scroll) {
                 if (attempts % 2 == 0) {
                     try {
-                        composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
+                        composeRule
+                            .onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
                             .performScrollTo()
                         composeRule.waitForIdle()
                         if (isTagPresent(tag, useUnmergedTree)) {
@@ -171,14 +192,21 @@ abstract class BaseAssetRobot(
         if (!found) composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).assertExists()
     }
 
-    fun isTagPresent(tag: String, useUnmergedTree: Boolean = false): Boolean =
-        composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).fetchSemanticsNodes()
+    fun isTagPresent(
+        tag: String,
+        useUnmergedTree: Boolean = false,
+    ): Boolean =
+        composeRule
+            .onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree)
+            .fetchSemanticsNodes()
             .isNotEmpty()
 
-    fun isTextDisplayed(text: String): Boolean =
-        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+    fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
-    fun waitForText(text: String, scroll: Boolean = false) {
+    fun waitForText(
+        text: String,
+        scroll: Boolean = false,
+    ) {
         var found = false
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
@@ -210,11 +238,13 @@ abstract class BaseAssetRobot(
     fun waitForTagGone(
         tag: String,
         useUnmergedTree: Boolean = false,
-        timeoutMillis: Long = WAIT_TIMEOUT_MILLIS
+        timeoutMillis: Long = WAIT_TIMEOUT_MILLIS,
     ) {
         composeRule.waitUntil(timeoutMillis = timeoutMillis) {
-            composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree)
-                .fetchSemanticsNodes().isEmpty()
+            composeRule
+                .onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree)
+                .fetchSemanticsNodes()
+                .isEmpty()
         }
         composeRule.waitForIdle()
     }
@@ -222,7 +252,7 @@ abstract class BaseAssetRobot(
     fun waitForTagIfPresent(
         tag: String,
         timeoutMillis: Long,
-        useUnmergedTree: Boolean = false
+        useUnmergedTree: Boolean = false,
     ): Boolean {
         val deadline = System.currentTimeMillis() + timeoutMillis
         do {
@@ -236,20 +266,21 @@ abstract class BaseAssetRobot(
         if (waitForTagIfPresent(
                 RepairAppTestTags.OrderWhatsAppPreviewPanel,
                 5000,
-                useUnmergedTree = true
+                useUnmergedTree = true,
             )
         ) {
             repeat(5) {
                 if (isTagPresent(
                         RepairAppTestTags.OrderWhatsAppPreviewPanel,
-                        useUnmergedTree = true
+                        useUnmergedTree = true,
                     )
                 ) {
                     try {
-                        composeRule.onNodeWithTag(
-                            RepairAppTestTags.OrderWhatsAppClosePreviewButton,
-                            useUnmergedTree = true
-                        ).performClick()
+                        composeRule
+                            .onNodeWithTag(
+                                RepairAppTestTags.OrderWhatsAppClosePreviewButton,
+                                useUnmergedTree = true,
+                            ).performClick()
                         composeRule.waitForIdle()
                         Thread.sleep(1000)
                     } catch (e: Throwable) {
@@ -267,21 +298,23 @@ abstract class BaseAssetRobot(
             waitForTagGone(
                 RepairAppTestTags.OrderWhatsAppPreviewPanel,
                 useUnmergedTree = true,
-                timeoutMillis = 3000
+                timeoutMillis = 3000,
             )
         }
     }
 
     fun performSafeSwipeUp() {
-        val listTags = listOf(
-            RepairAppTestTags.OrderDetailLazyColumn,
-            "categories_list",
-            "customer_list",
-            "customer_form"
-        )
+        val listTags =
+            listOf(
+                RepairAppTestTags.OrderDetailLazyColumn,
+                "categories_list",
+                "customer_list",
+                "customer_form",
+            )
         for (tag in listTags) {
             try {
-                composeRule.onNodeWithTag(tag)
+                composeRule
+                    .onNodeWithTag(tag)
                     .performTouchInput { swipeUp(startY = bottom * 0.8f, endY = top + 30f) }
                 composeRule.waitForIdle()
                 return
@@ -289,7 +322,9 @@ abstract class BaseAssetRobot(
             }
         }
         try {
-            composeRule.onAllNodes(isRoot()).onFirst()
+            composeRule
+                .onAllNodes(isRoot())
+                .onFirst()
                 .performTouchInput { swipeUp(startY = bottom * 0.8f, endY = top + 30f) }
         } catch (e: Throwable) {
         }
@@ -297,15 +332,17 @@ abstract class BaseAssetRobot(
     }
 
     fun performSafeSwipeDown() {
-        val listTags = listOf(
-            RepairAppTestTags.OrderDetailLazyColumn,
-            "categories_list",
-            "customer_list",
-            "customer_form"
-        )
+        val listTags =
+            listOf(
+                RepairAppTestTags.OrderDetailLazyColumn,
+                "categories_list",
+                "customer_list",
+                "customer_form",
+            )
         for (tag in listTags) {
             try {
-                composeRule.onNodeWithTag(tag)
+                composeRule
+                    .onNodeWithTag(tag)
                     .performTouchInput { swipeDown(startY = top + 30f, endY = bottom * 0.8f) }
                 composeRule.waitForIdle()
                 return
@@ -313,14 +350,19 @@ abstract class BaseAssetRobot(
             }
         }
         try {
-            composeRule.onAllNodes(isRoot()).onFirst()
+            composeRule
+                .onAllNodes(isRoot())
+                .onFirst()
                 .performTouchInput { swipeDown(startY = top + 30f, endY = bottom * 0.8f) }
         } catch (e: Throwable) {
         }
         composeRule.waitForIdle()
     }
 
-    fun capture(outputDir: File, fileName: String) {
+    fun capture(
+        outputDir: File,
+        fileName: String,
+    ) {
         composeRule.waitForIdle()
         InstrumentationRegistry.getInstrumentation().waitForIdleSync()
         pauseForScreenshot()
@@ -339,8 +381,7 @@ abstract class BaseAssetRobot(
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    fun isRecordingDemo(): Boolean =
-        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     companion object {
         const val WAIT_TIMEOUT_MILLIS = 30_000L

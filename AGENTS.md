@@ -66,6 +66,7 @@ dal repository o dall'utente.
 - Usare `FileProvider`, storage privato app e permessi runtime minimi; evitare permessi storage larghi se SAF e' sufficiente.
 - Usare version catalog Gradle per nuove versioni; non spargere numeri versione nei build file.
 - Validare flavor/build variant impattati dalla modifica.
+- Mantenere la coerenza tra le varianti di build (demo, full, showcase): ogni modifica a asset, icone o grafiche in una variante deve essere valutata ed eventualmente replicata o distinta consapevolmente nelle altre per mantenere l'allineamento visivo e funzionale del progetto.
 
 ### Apple / iOS
 
