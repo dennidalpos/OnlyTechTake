@@ -1,187 +1,63 @@
-# AGENTS.md - Mobile App Development Guide
+# AGENTS.md - Mobile App Development Guide (OnlyTechTake)
 
-Istruzioni per agenti AI che lavorano su questo repository e, come base
-riutilizzabile, su progetti mobile Android / Apple trattati come fresh project.
-
-Ambiente locale primario: **Windows 11 + PowerShell**.
+Istruzioni per agenti AI. Ambiente locale: **Windows 11 + PowerShell**.
 
 ---
 
-## 1. Scope & Precedence
-
-1. La richiesta corrente dell'utente ha precedenza su questo file.
-2. Eventuali `AGENTS.md` annidati hanno precedenza nella propria sottocartella.
-3. Le convenzioni gia' presenti nel repository prevalgono su preferenze generiche.
-4. In caso di conflitto, scegliere la modifica sicura meno invasiva e segnalarlo nel report finale.
-
-Applicare queste regole solo ai file necessari alla richiesta. Non introdurre
-refactor, dipendenze, migrazioni, API pubbliche, configurazioni o workflow nuovi
-se non sono richiesti o chiaramente necessari.
+## 1. Scope & Governance
+1. La richiesta utente ha sempre la precedenza.
+2. `PROJECT_STATUS.json` è la fonte di verità per il backlog attivo; consultarlo e aggiornarlo ad ogni sessione.
+3. In caso di conflitto tra istruzioni, scegliere la modifica sicura meno invasiva e segnalarlo.
+4. Trattare il progetto come **fresh**: evitare debito legacy, shim o workaround storici.
 
 ---
 
-## 2. Environment
-
-- Usare PowerShell e comandi compatibili Windows 11 come default.
-- Preferire path quoted, UTF-8, API cross-platform (`pathlib`, `java.nio.file`, `kotlin.io.path`, `Node path`) e separatori gestiti dal runtime.
-- Non assumere Bash, WSL, GNU tools, `/tmp`, `/home`, `chmod`, `sed -i` o `rm -rf` in locale.
-- Usare il Gradle Wrapper, gli script del repository e gli strumenti IDE-native quando disponibili.
-- Non salvare nei file tracciati path personali, credenziali, keystore, token o configurazioni locali.
+## 2. Environment & Tooling
+- **Shell**: Usare PowerShell e i wrapper in `scripts\powershell\`.
+- **Gradle**: Usare `scripts\powershell\android\gradle.ps1` per garantire il corretto caricamento di JDK/SDK.
+- **Code Style**: Il progetto usa **Spotless**. Eseguire `./gradlew spotlessApply` (tramite wrapper ps1) prima di concludere il task.
+- **Dependencies**: Usare esclusivamente `gradle/libs.versions.toml`. Non inserire versioni hardcoded nei file `build.gradle.kts`.
 
 ---
 
-## 3. Fresh Project Policy
-
-Trattare il progetto come fresh fino al primo lancio pubblico/produzione indicato
-dal repository o dall'utente.
-
-- Evitare debito legacy: niente shim, compat layer, workaround storici o supporto per formati obsoleti se non richiesti.
-- Non aggiungere migrazioni dati o compatibilita' retroattiva prima del lancio, salvo approvazione esplicita.
-- Preferire architettura pulita, diretta, testabile e allineata agli standard correnti della piattaforma.
-- Rimuovere o aggiornare pattern obsoleti quando sono nel perimetro della modifica, senza fare riscritture ampie non richieste.
-- Se il repository mostra vincoli reali gia' in uso, rispettarli e fare la modifica piu' piccola che mantiene il sistema coerente.
+## 3. Architecture & Patterns
+- **Stack**: Kotlin, Compose, Material 3, Navigation Compose, Room + SQLCipher, DataStore, CameraX.
+- **Layers**: UI (Compose) -> ViewModel (StateHolder) -> UseCase (opzionale) -> Repository -> Data Source.
+- **Naming**: `*Screen.kt` per UI, `*ViewModel.kt` per logica di stato, `*Repository.kt` per dati.
+- **Previews**: Ogni Composable di tipo Screen o componente principale DEVE avere almeno una `@Preview` per Light e Dark mode.
+- **Strings**: Spostare tutte le stringhe in `strings.xml`; evitare hardcoded UI copy.
 
 ---
 
-## 4. Architecture
-
-- Organizzare il codice per feature e layer chiari: UI, ViewModel/state holder, use case quando utili, repository, data source, persistenza/servizi.
-- Tenere le UI sottili: niente logica di business pesante in Composable, View, Controller o SwiftUI View.
-- Usare dependency injection esistente prima di introdurre nuovi framework o container.
-- Separare contratti domain/repository dalle implementazioni locali per permettere futuri backend o data source remoti senza rompere il dominio.
-- Aggiungere astrazioni solo quando riducono complessita' reale, duplicazione significativa o accoppiamento concreto.
-- Evitare nomi generici come `utils`, `helpers`, `common` se il repository non li usa gia' con uno scopo chiaro.
-- Mantenere i file focalizzati su una responsabilita' e testabili con il framework gia' presente.
+## 4. Platform Rules (Android-only)
+- **Flavors**: `full` (Pro), `demo` (Trial), `showcase` (Internal). Ogni modifica deve essere coerente tra i flavor.
+- **UI Testing & Assets**: Usare `RepairAppTestTags` per i `testTag`. Ogni modifica UI che impatta la navigazione o i tag deve essere riflessa in `docs\operations\DEMO_ASSET_WORKFLOW.md`.
+- **Storage**: Preferire `FileProvider` e storage privato (`filesDir`). Evitare permessi larghi se non necessari.
 
 ---
 
-## 5. Platform Rules
-
-### Android
-
-- Preferire Kotlin, Gradle Wrapper, Jetpack Compose, Material 3 e le convenzioni Android correnti del repository.
-- Usare componenti e tema del design system esistente prima dei componenti Material diretti.
-- Spostare tutte le stringhe visibili all'utente in `strings.xml`; non introdurre hardcoded UI copy.
-- Usare Room/DataStore/Storage Access Framework secondo le policy gia' presenti.
-- Usare `FileProvider`, storage privato app e permessi runtime minimi; evitare permessi storage larghi se SAF e' sufficiente.
-- Usare version catalog Gradle per nuove versioni; non spargere numeri versione nei build file.
-- Validare flavor/build variant impattati dalla modifica.
-- Mantenere la coerenza tra le varianti di build (demo, full, showcase): ogni modifica a asset, icone o grafiche in una variante deve essere valutata ed eventualmente replicata o distinta consapevolmente nelle altre per mantenere l'allineamento visivo e funzionale del progetto.
-
-### Apple / iOS
-
-Applicare queste regole solo se il repository contiene davvero target iOS, Xcode,
-Swift, SwiftUI, Kotlin Multiplatform o Compose Multiplatform.
-
-- Non inventare cartelle, target o workflow Apple in un repository Android-only.
-- Se presenti, rispettare struttura Xcode/SPM/KMP esistente, signing locale e asset catalog.
-- Preferire Swift/SwiftUI moderni, string resources/localization, Keychain per segreti e storage sandboxed.
-- Mantenere contratti condivisi stabili tra Android e iOS; evitare divergenze non necessarie nei flussi utente.
+## 5. Data & Storage
+- **Schema Lock**: `DATABASE_VERSION = 1` è bloccata. Non modificare entità Room, DAO persistenti o indici senza ordine esplicito dell'owner.
+- **Security**: Database cifrato con SQLCipher. Non loggare dati sensibili, password o chiavi.
+- **Integrations**: WhatsApp è gestito solo tramite handoff manuale (intent); non introdurre automazioni cloud/API.
 
 ---
 
-## 6. Data & Storage
-
-- LOCAL_ONLY resta il default finche' non esiste un backend reale richiesto o documentato.
-- Progettare repository e data source in modo sostituibile, ma non aggiungere stub cloud/API non usati.
-- Ogni input esterno va validato; ogni output condiviso va prodotto tramite meccanismi sicuri della piattaforma.
-- Non loggare dati sensibili, password, chiavi, token, contenuti personali o percorsi privati non necessari.
-- Ogni cambio schema database richiede richiesta esplicita, documentazione e test fresh-install.
-- Nei progetti fresh non aggiungere migrazioni conservative salvo richiesta esplicita o vincolo gia' documentato.
-
-### Current Repo Profile
-
-Questo repository, allo stato corrente, e' Android-only:
-
-- Modulo: `:app`.
-- Package: `com.onlytechtake.repairapp`.
-- Flavor Gradle: `full`, `demo`, `showcase`.
-- Stack: Kotlin, Compose, Material 3, Navigation Compose, Room, SQLCipher, DataStore, CameraX, Coroutines/Flow.
-- Backend: assente; WhatsApp e' solo manuale.
-- Database: Room `DATABASE_VERSION = 1`, schema esportato solo `1.json`.
-- Persistenza: database locale cifrato SQLCipher, file privati in `filesDir/app_media`, export/import tramite SAF.
-- Governance schema: schema Room bloccato su v1 fino a ordine esplicito dell'owner; non cambiare entita' Room, DAO con impatto schema, indici persistenti, `DATABASE_VERSION` o migrazioni Room senza approvazione.
-- Script canonici: `scripts\powershell\android`; `scripts\powershell\project` contiene wrapper compatibili e pipeline demo/check.
+## 6. Workflow Operativo
+1. **Analisi**: Controllare `PROJECT_STATUS.json` e `git status`.
+2. **Esecuzione**: Modifiche atomiche e focalizzate.
+3. **Verifica**: 
+   - Eseguire `scripts\powershell\android\check_env.ps1`.
+   - Eseguire `scripts\powershell\project\check_project.ps1 -Flavor Full -SkipReleaseBuild`.
+   - Se la UI cambia, verificare l'impatto su screenshot/video tramite `DEMO_ASSET_WORKFLOW.md`.
+4. **Cleanup**: Eseguire Spotless e aggiornare `PROJECT_STATUS.json` (rimuovere task completati, aggiornare residui).
 
 ---
 
-## 7. UI/UX
-
-- Seguire il design system del progetto, il tema app e i componenti condivisi.
-- Preferire interfacce dense, operative e leggibili per app gestionali; evitare layout decorativi che rallentano il lavoro.
-- Garantire stati completi: loading, empty, errore, conferma, successo, permessi negati e input non valido.
-- Mantenere accessibilita', contrasto, touch target e testi localizzati.
-- Dopo modifiche UI o flussi demo, aggiornare scenari strumentati e pipeline asset quando richiesto dal repository.
-
----
-
-## 8. Workflow
-
-1. Controllare `git status --short` prima di editare.
-2. Leggere solo i file necessari: istruzioni applicabili, implementazione vicina, test, docs e config build.
-3. Preservare modifiche utente non correlate; non fare revert di lavoro non proprio.
-4. Fare modifiche atomiche, piccole e verificabili.
-5. Aggiornare documentazione solo se cambiano comportamento, setup, architettura, release flow o asset demo.
-6. Aggiornare `docs\DEMO_ASSET_WORKFLOW.md` ad ogni modifica di UI, navigazione, copy, test tag o dati demo che impatta la generazione di screenshot e video.
-7. Tenere aggiornati gli script canonici e `scripts\README.md` quando cambiano comandi, workflow, toolchain, opzioni, output, prerequisiti o convenzioni operative. Se un cambio rende obsoleto uno script, aggiornarlo o rimuoverlo nello stesso prompt invece di lasciare wrapper incoerenti.
-8. Mantenere `PROJECT_STATUS.json` rigorosamente aggiornato, prioritizzato e pulito. Ad ogni prompt completato, allineare il file allo stato corrente del progetto: ordinare i blocchi per priorita', rimuovere task completati, aggiornare solo residui reali, azionabili e incompleti, senza storico o changelog. Il file deve rappresentare solo il backlog attivo.
-9. Non lasciare artifact temporanei, report generati o output build non richiesti nel working tree.
-
-Per questo repository:
-
-- Usare `powershell -ExecutionPolicy Bypass -File scripts\powershell\android\check_env.ps1 -NonInteractive` per validare ambiente Android.
-- Usare `powershell -ExecutionPolicy Bypass -File scripts\powershell\android\gradle.ps1 -NonInteractive -- <task>` quando serve Gradle con JDK/SDK risolti dallo script.
-- Usare `powershell -ExecutionPolicy Bypass -File scripts\powershell\project\check_project.ps1 -Flavor Full -SkipReleaseBuild -NonInteractive` come check locale standard senza signing release.
-- Usare `docs\DEMO_ASSET_WORKFLOW.md` come fonte di verita' per screenshot/video demo, aggiornare il workflow se viene cambiato.
-
-*Nota CI: In GitHub Actions è attiva la variabile `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true` per garantire la compatibilità con i futuri runtime.*
-
----
-
-## 9. Verification
-
-- Se cambia comportamento, aggiungere o aggiornare test usando il framework esistente.
-- Eseguire il set minimo utile di lint, typecheck, unit test, build o test strumentati per il perimetro toccato.
-- Per modifiche Android in questo repository, preferire:
-  - `powershell -ExecutionPolicy Bypass -File scripts\powershell\android\check_env.ps1 -NonInteractive`
-  - `powershell -ExecutionPolicy Bypass -File scripts\powershell\project\check_project.ps1 -Flavor Full -SkipReleaseBuild -NonInteractive`
-  - test unitari mirati, per esempio `powershell -ExecutionPolicy Bypass -File scripts\powershell\android\gradle.ps1 -NonInteractive -- --no-configuration-cache :app:testFullDebugUnitTest`
-- Eseguire test strumentati solo quando il cambio tocca UI, storage Android, permessi, SAF, CameraX, Room reale o flussi device.
-- Per sole modifiche documentali, non serve build Gradle; verificare diff e formattazione.
-- Se un check non puo' essere eseguito, indicare il motivo senza dichiararlo passato.
-
----
-
-## 10. Documentation
-
-- Mantenere `README.md` come ingresso rapido e `docs\README.md` come indice canonico della documentazione.
-- Aggiornare documenti in `docs\` quando cambiano flussi funzionali, architettura, dati, sicurezza, backup, release o demo asset.
-- Non aggiungere documentazione speculativa su backend, cloud, Apple/iOS o multipiattaforma se non c'e' implementazione o richiesta esplicita.
-- Se una modifica lascia un rischio o lavoro residuo concreto, registrarlo in `PROJECT_STATUS.json` con priorita' e criterio di chiusura.
-
----
-
-## 11. Security
-
-- Non creare, stampare, committare o esporre segreti.
-- Usare `.env.example`, file example o documentazione placeholder per configurazioni richieste.
-- Tenere keystore, password, token, signing config locali e dati personali fuori dai file tracciati.
-- Usare hashing password robusto, storage sicuro della piattaforma, query parametrizzate e validazione input.
-- Prima di aggiungere dipendenze, verificare se esiste gia' una libreria o utility adatta; motivare ogni nuova dipendenza.
-- Non introdurre integrazioni cloud, analytics, crash reporting o telemetria senza richiesta esplicita e documentazione privacy.
-
----
-
-## 12. Final Reporting
-
-Per task che modificano file, riportare:
-
-1. Cosa e' cambiato.
-2. File modificati.
-3. Documentazione aggiornata o motivo per cui non serviva.
-4. Check eseguiti e risultato.
-5. Stato di `PROJECT_STATUS.json`.
-6. Rischi o follow-up, inclusi impatti futuri su backend/cloud/multipiattaforma se rilevanti.
-
-Essere fattuali. Non dichiarare il lavoro production-ready se i check pertinenti
-non sono stati eseguiti o se restano limitazioni note.
+## 7. Final Reporting
+Per ogni task che modifica file, riportare:
+1. Cosa è cambiato e perché.
+2. File modificati e documentazione aggiornata.
+3. Check eseguiti (build, test, spotless) e risultati.
+4. Stato aggiornato di `PROJECT_STATUS.json`.
+5. Eventuali rischi o blocchi residui (es. impatto su schema Room).
