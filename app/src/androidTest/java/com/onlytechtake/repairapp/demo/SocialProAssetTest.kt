@@ -65,6 +65,11 @@ class SocialProAssetTest {
             // 03-carousel-category (Highlighting versatility)
             robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-pc"), scroll = true)
             robot.pauseForDemo()
+            robot.clickTag(
+                RepairAppTestTags.categoryButton(DemoDataSeeder.DEMO_CATEGORY_ID),
+                scroll = true
+            )
+            robot.pauseForDemo()
             robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-gaming"), scroll = true)
             robot.pauseForDemo()
             robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-rog-strix"), scroll = true)
@@ -84,7 +89,11 @@ class SocialProAssetTest {
             )
             robot.clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
 
-            // Skip photo for social assets if not strictly needed or capture generic photo screen
+            robot.waitForText("Foto e allegati")
+            robot.clickTag(RepairAppTestTags.IntakeMediaTakePhotoButton, scroll = true)
+            robot.waitForTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
+            robot.clickTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
+            robot.waitForText("PHOTO", scroll = true)
             robot.clickTag(RepairAppTestTags.NewOrderStep4NextButton, scroll = true)
 
             // 04-stories-signature (Highlighting transparency/trust)
@@ -119,7 +128,7 @@ class SocialProAssetTest {
                 OrderStatusAction.START_DIAGNOSIS,
                 OrderStatusAction.RECORD_RESULT
             )
-            robot.applyResultStatus("Problema risolto con ripristino OS e pulizia.", "0,00")
+            robot.applyResultStatus("Problema risolto con ripristino OS e pulizia.", "89,00")
             robot.waitForText("Documenti cliente", scroll = true)
             robot.capture(outputDir, "06-reel-pdf.png")
         }

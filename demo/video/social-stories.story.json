@@ -1,0 +1,44 @@
+{
+  "title": "OnlyTechTake - storie operative Pro",
+  "outputFile": "onlytechtake-pro-social-stories.mp4",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "scenes": [
+    {
+      "file": "01-commessa-nuovo-cliente-chiusura/02-dashboard-home.png",
+      "caption": "La giornata parte dalle code operative",
+      "durationSeconds": 3.0
+    },
+    {
+      "file": "01-commessa-nuovo-cliente-chiusura/03-nuovo-cliente.png",
+      "caption": "Accoglienza cliente senza passaggi dispersi",
+      "durationSeconds": 3.0
+    },
+    {
+      "file": "01-commessa-nuovo-cliente-chiusura/05-commessa-aperta.png",
+      "caption": "Commessa, cliente, foto e firma sempre tracciati",
+      "durationSeconds": 3.0
+    },
+    {
+      "file": "01-commessa-nuovo-cliente-chiusura/07-diagnosi-risultato.png",
+      "caption": "Diagnosi e preventivo restano nel flusso di lavoro",
+      "durationSeconds": 3.0
+    },
+    {
+      "file": "02-categorie-template/02-config-hub.png",
+      "caption": "Configurazione operativa per categorie e template",
+      "durationSeconds": 3.0
+    },
+    {
+      "file": "03-clienti-privato-azienda/01-archivio-clienti.png",
+      "caption": "Archivio clienti pronto per privati e aziende",
+      "durationSeconds": 3.0
+    },
+    {
+      "file": "05-manutenzione-backup/02-backup-dati.png",
+      "caption": "Backup e manutenzione sotto controllo locale",
+      "durationSeconds": 3.0
+    }
+  ]
+}

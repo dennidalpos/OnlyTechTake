@@ -856,7 +856,7 @@ class SocialStoryDemoScreenshotTest {
         const val CASE_CUSTOMERS = "03-clienti-privato-azienda"
         const val CASE_MAINTENANCE = "05-manutenzione-backup"
         const val CASE_DEMO_LIMIT = "06-demo-limit"
-        const val SCREENSHOT_ROOT_DIR_NAME = "demo-social-screenshots"
+        const val SCREENSHOT_ROOT_DIR_NAME = "social-stories"
         const val WAIT_TIMEOUT_MILLIS = 30_000L
         const val LOGIN_ATTEMPTS = 2
         const val LOGIN_ATTEMPT_TIMEOUT_MILLIS = 20_000L

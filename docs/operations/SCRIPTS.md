@@ -16,8 +16,8 @@ Gli script calcolano automaticamente la root del progetto dal proprio percorso, 
 | Quality check | `scripts\powershell\project\quality.ps1` | Esegue Spotless/ktlint su tutti i sorgenti configurati e Android Lint su tutte le varianti debug/release. | Default interattivo con prompt per autofix; supporta `-Apply`, `-NonInteractive` e `-SkipLint`. |
 | Check progetto | `scripts\powershell\project\check_project.ps1` | Esegue lint, compile Kotlin debug, test unitari, build APK debug e, senza `-SkipReleaseBuild`, build APK release firmata. | Menu interattivo per Flavor e opzioni test/release. |
 | Audit vulnerabilità dipendenze | `scripts\powershell\project\check_dependency_vulnerabilities.ps1` | Interroga OSV sulle coordinate Maven presenti nei lockfile Gradle. | Chiede conferma prima di avviare la scansione online. |
-| Asset unificati | `scripts\powershell\assets\create_demo_assets.ps1` | Genera screenshot e video montati basati su profili JSON in `demo/assets/profiles/`. | Parametri: `-AssetProfile`, `-Flavor`, `-Platform`, `-Variant`. |
-| Registrazione demo device | `scripts\powershell\assets\record_demo_device.ps1` | Registra video MP4 manuali o automatici basati su profili asset. | Parametri: `-AssetProfile`, `-Flavor`. |
+| Asset unificati | `scripts\powershell\assets\create_demo_assets.ps1` | Genera screenshot e video montati basati su profili JSON in `demo/assets/profiles/`. | `Full` genera gli asset pubblici Pro/social; `Demo` e' limitata a `store-demo`; `Showcase` resta interna. Parametri: `-AssetProfile`, `-Flavor`, `-Platform`, `-Variant`. |
+| Registrazione demo device | `scripts\powershell\assets\record_demo_device.ps1` | Registra video MP4 manuali o automatici basati su profili asset. | Se il profilo dichiara un flavor, lo script lo usa come default e blocca mismatch espliciti. Parametri: `-AssetProfile`, `-Flavor`. |
 
 ## Comandi per obiettivo
 
@@ -28,11 +28,13 @@ Gli script calcolano automaticamente la root del progetto dal proprio percorso, 
 | clean repo | `powershell -ExecutionPolicy Bypass -File scripts\powershell\project\clean_repo.ps1` |
 | quality check | `powershell -ExecutionPolicy Bypass -File scripts\powershell\project\quality.ps1` |
 | quality autofix | `powershell -ExecutionPolicy Bypass -File scripts\powershell\project\quality.ps1 -Apply` |
-| asset completi (demo + social) | `powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\create_demo_assets.ps1` |
-| asset Demo separati | `powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\create_demo_assets.ps1 -Flavor Demo` |
+| asset Play Store Pro | `powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\create_demo_assets.ps1 -AssetProfile store-pro -Flavor Full` |
+| asset Play Store Demo | `powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\create_demo_assets.ps1 -AssetProfile store-demo -Flavor Demo` |
+| asset social Pro | `powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\create_demo_assets.ps1 -AssetProfile social-pro -Flavor Full` |
+| walkthrough operatore Pro | `powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\create_demo_assets.ps1 -AssetProfile operator-intake -Flavor Full` |
 | asset su device USB fisico | `powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\create_demo_assets.ps1 -UseConnectedDevice` |
 | registrazione device USB guidata | `powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\record_demo_device.ps1 -UseConnectedDevice` |
 
 ## Manutenzione asset demo
 
-[`DEMO_ASSET_WORKFLOW.md`](DEMO_ASSET_WORKFLOW.md) descrive il flusso completo, la corrispondenza tra test strumentati e output e il registro degli impatti. Dopo modifiche a UI, navigazione, copy, test tag, permessi, schema o seed demo, aggiornare insieme scenari, script, helper e `demo\video\operator-intake.story.json`; riportare in `PROJECT_STATUS.json` solo i residui ancora incompleti.
+[`DEMO_ASSET_WORKFLOW.md`](DEMO_ASSET_WORKFLOW.md) descrive il flusso completo, la corrispondenza tra test strumentati e output e il registro degli impatti. Dopo modifiche a UI, navigazione, copy, test tag, permessi, schema o seed demo, aggiornare insieme scenari, script, helper e gli story JSON in `demo\video`; riportare in `PROJECT_STATUS.json` solo i residui ancora incompleti.

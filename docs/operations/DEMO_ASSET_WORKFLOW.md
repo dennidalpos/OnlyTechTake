@@ -6,9 +6,9 @@ This document is the source of truth for OnlyTechTake screenshot and video gener
 
 Asset generation is flavor-aware and profile-driven. Flavor and commercial role must not be treated as synonyms:
 
-- `Full` is the **Pro** product. It supports `store-pro` and `social-pro` profiles.
-- `Demo` is a limited trial. It supports `store-demo` and `social-demo` profiles.
-- `Showcase` is a guided presentation build. It supports the `showcase-representanza` profile.
+- `Full` is the **Pro** product. It is the source for all public screenshots and videos except Demo Play Store assets. It supports `store-pro`, `social-pro`, `social-campaign`, `operator-intake`, and `social-stories`.
+- `Demo` is a limited trial. It supports only `store-demo` assets needed for Play Store management.
+- `Showcase` is a guided internal presentation build. It supports `showcase-representanza` for internal review only and is not a published store listing.
 
 WhatsApp must always be represented as a manual handoff: the app prepares the message, then the operator reviews and sends it in WhatsApp. Do not describe backend sync, proprietary cloud, WhatsApp Business API, automatic replies, or automatic sending unless they are actually implemented.
 
@@ -42,8 +42,13 @@ Command:
 # Generate Play Store assets for Pro
 powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\create_demo_assets.ps1 -AssetProfile store-pro -Flavor Full
 
-# Generate Social assets for Demo
-powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\create_demo_assets.ps1 -AssetProfile social-demo -Flavor Demo
+# Generate Play Store assets for Demo
+powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\create_demo_assets.ps1 -AssetProfile store-demo -Flavor Demo
+
+# Generate secondary Pro social/workflow assets
+powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\create_demo_assets.ps1 -AssetProfile social-campaign -Flavor Full
+powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\create_demo_assets.ps1 -AssetProfile operator-intake -Flavor Full
+powershell -ExecutionPolicy Bypass -File scripts\powershell\assets\create_demo_assets.ps1 -AssetProfile social-stories -Flavor Full
 ```
 
 Flow:
@@ -58,8 +63,10 @@ Flow:
 | **store-pro** | Full | `StoreProScreenshotTest` | Play Store Pro screenshots and video. |
 | **store-demo** | Demo | `StoreDemoScreenshotTest` | Play Store Demo screenshots. |
 | **social-pro** | Full | `SocialProAssetTest` | Multichannel social assets (IG, FB, WA, LI). |
-| **social-demo** | Demo | `SocialDemoAssetTest` | Limited social assets for trial version. |
-| **showcase-representanza** | Showcase | `ShowcaseRepresentanzaScreenshotTest` | Presentation highlights and demo clips. |
+| **social-campaign** | Full | `SocialCampaignScreenshotTest` | Compact repair workflow for campaign posts and stories. |
+| **operator-intake** | Full | `OperatorIntakeDemoScreenshotTest` | Complete operator intake-to-closure walkthrough. |
+| **social-stories** | Full | `SocialStoryDemoScreenshotTest` | Secondary operational story sets: workflow, configuration, customers, maintenance. |
+| **showcase-representanza** | Showcase | `ShowcaseRepresentanzaScreenshotTest` | Internal presentation highlights only. |
 
 ### Direct device-recording flow
 
@@ -93,8 +100,7 @@ This register lists only active demo-asset residuals.
 
 | ID | Description | Impacted assets | Status |
 |---|---|---|---|
-| R02 | Nuova Home Pro/Demo/Showcase | Tutti | not run |
-| R03 | AssetProfile e directory dinamiche | Tutti | not run |
+| R02 | Profili Pro secondari e acquisizione Full | `social-pro`, `social-campaign`, `operator-intake`, `social-stories` | screenshots and recording verified |
 
 Use concise validation values such as `not run`, `compile only`, `screenshots verified`, or `screenshots and recording verified`.
 

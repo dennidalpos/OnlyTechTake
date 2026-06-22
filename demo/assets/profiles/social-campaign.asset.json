@@ -1,0 +1,30 @@
+{
+  "id": "social-campaign",
+  "flavor": "Full",
+  "testClass": "com.onlytechtake.repairapp.demo.SocialCampaignScreenshotTest",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/social-campaign",
+  "pulledDirectoryName": "social-campaign",
+  "storyJson": "demo/video/social-campaign.story.json",
+  "cases": [
+    {
+      "id": "repair-campaign",
+      "sourceDirectory": ".",
+      "outputs": [
+        { "platform": "instagram", "variant": "vertical", "subDir": "stories" },
+        { "platform": "instagram", "variant": "square", "subDir": "feed" },
+        { "platform": "facebook", "variant": "vertical", "subDir": "stories" },
+        { "platform": "facebook", "variant": "square", "subDir": "feed" },
+        { "platform": "whatsapp", "variant": "vertical", "subDir": "status" },
+        { "platform": "linkedin", "variant": "landscape", "subDir": "presentation" }
+      ],
+      "expectedFiles": [
+        "01-home.png",
+        "02-accoglienza.png",
+        "03-diagnosi.png",
+        "04-firma.png",
+        "05-whatsapp.png",
+        "06-successo.png"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "id": "operator-intake",
+  "flavor": "Full",
+  "testClass": "com.onlytechtake.repairapp.demo.OperatorIntakeDemoScreenshotTest",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/operator-intake",
+  "pulledDirectoryName": "operator-intake",
+  "storyJson": "demo/video/operator-intake.story.json",
+  "cases": [
+    {
+      "id": "complete-workflow",
+      "sourceDirectory": ".",
+      "outputs": [
+        { "platform": "demo-video", "variant": "vertical", "subDir": "operator-workflow" },
+        { "platform": "linkedin", "variant": "landscape", "subDir": "operator-workflow" },
+        { "platform": "instagram", "variant": "vertical", "subDir": "operator-workflow" }
+      ],
+      "expectedFiles": [
+        "01-login.png",
+        "02-home.png",
+        "03-new-customer.png",
+        "04-category-problem.png",
+        "05-signature-capture.png",
+        "06-summary-submit.png",
+        "07-order-created.png",
+        "08-whatsapp-preview.png",
+        "09-signature-detail.png",
+        "10-in-progress.png",
+        "11-diagnosis-result.png",
+        "12-pdf-documents.png",
+        "13-ready-for-pickup.png",
+        "14-closed-timeline.png"
+      ]
+    }
+  ]
+}

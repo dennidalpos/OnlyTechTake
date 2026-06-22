@@ -21,10 +21,10 @@
     "global_guardrails": [
       "Full/Pro = prodotto completo da vendere e mostrare.",
       "Demo = prodotto limitato da provare su Play Store.",
-      "Showcase = vetrina guidata con dati seed e login automatico.",
-      "Gli asset Play Store e social principali devono partire da Flavor Full.",
-      "La Demo deve mostrare solo flusso base e limiti chiari.",
-      "Showcase deve essere usata per rappresentanza, walkthrough e registrazioni controllate.",
+      "Showcase = vetrina guidata interna con dati seed e login automatico.",
+      "Gli asset Play Store Pro, social e video pubblici devono partire da Flavor Full.",
+      "La Demo deve generare solo gli asset necessari alla gestione Play Store e mostrare limiti chiari.",
+      "Showcase deve essere usata solo internamente per rappresentanza, walkthrough e registrazioni controllate.",
       "Non modificare schema Room, DATABASE_VERSION, entita', DAO persistenti, indici persistenti o migrazioni senza ordine esplicito owner."
     ]
   },
@@ -60,21 +60,6 @@
       "plan": [
         "Debug stato iniziale Activity in ScrollToTopTest.",
         "Eseguire check_project.ps1 -AndroidTests."
-      ]
-    },
-    {
-      "id": "R02",
-      "title": "Completamento Asset Generation (Social Pro)",
-      "priority": "P2",
-      "status": "active",
-      "recommended_batch_size": 2,
-      "identified_residual": [
-        "Fallimento wizard in SocialProAssetTest (Step 2: tasto Avanti disabilitato nonostante selezione categoria).",
-        "Generazione profili social secondari: social-campaign, operator-intake, social-stories."
-      ],
-      "plan": [
-        "Investigare logica canSaveNewCustomer/abilitazione tasti in QuickActionsPanel durante il test social-pro.",
-        "Eseguire create_demo_assets.ps1 per i profili social residui."
       ]
     }
   ]

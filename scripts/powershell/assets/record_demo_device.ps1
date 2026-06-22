@@ -50,7 +50,28 @@ if (-not $NonInteractive) {
 
 # Risoluzione AssetProfile/ScenarioId
 if (-not $AssetProfile -and $ScenarioId -and $ScenarioId -ne "manual" -and $ScenarioId -ne "all") {
-    $AssetProfile = $ScenarioId
+    $AssetProfile = switch ($ScenarioId) {
+        "full-workflow" { "operator-intake" }
+        default { $ScenarioId }
+    }
+}
+
+$profilesDir = Join-Path $root "demo/assets/profiles"
+$selectedProfileConfig = $null
+if ($AssetProfile) {
+    $profilePath = Join-Path $profilesDir "$AssetProfile.asset.json"
+    if (Test-Path $profilePath) {
+        $selectedProfileConfig = Get-Content -Path $profilePath -Raw | ConvertFrom-Json
+        if ($selectedProfileConfig.flavor) {
+            if ($PSBoundParameters.ContainsKey('Flavor') -eq $false) {
+                $Flavor = $selectedProfileConfig.flavor
+            } elseif ($Flavor -ne $selectedProfileConfig.flavor) {
+                throw "Il profilo '$AssetProfile' richiede Flavor '$($selectedProfileConfig.flavor)', non '$Flavor'."
+            }
+        }
+    } elseif ($ScenarioId -ne "manual" -and $ScenarioId -ne "all") {
+        throw "Profilo asset non trovato: $profilePath"
+    }
 }
 
 if ([string]::IsNullOrWhiteSpace($PackageName)) {
@@ -98,8 +119,6 @@ trap {
     throw $_
 }
 
-# Configurazioni Caricabili da profili o statiche per compatibilità
-$profilesDir = Join-Path $root "demo/assets/profiles"
 $recordingsConfig = @()
 
 # Carica profili JSON
@@ -112,18 +131,6 @@ if (Test-Path $profilesDir) {
             TestClass = $cfg.testClass
             RequiredFlavor = $cfg.flavor
         }
-    }
-}
-
-# Aggiunta scenari legacy se non presenti (hardcoded fallback)
-$legacyScenarios = @(
-    @{ Id = "social-stories"; Description = "Social Stories Legacy"; TestClass = "com.onlytechtake.repairapp.demo.SocialStoryDemoScreenshotTest" },
-    @{ Id = "social-campaign"; Description = "Social Campaign Legacy"; TestClass = "com.onlytechtake.repairapp.demo.SocialCampaignScreenshotTest" },
-    @{ Id = "full-workflow"; Description = "Full Workflow Legacy"; TestClass = "com.onlytechtake.repairapp.demo.OperatorIntakeDemoScreenshotTest" }
-)
-foreach ($leg in $legacyScenarios) {
-    if (-not ($recordingsConfig | Where-Object { $_.Id -eq $leg.Id })) {
-        $recordingsConfig += [PSCustomObject]$leg
     }
 }
 

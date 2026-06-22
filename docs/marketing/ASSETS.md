@@ -29,7 +29,7 @@ Gli asset generali non destinati allo store sono separati sotto `media/brand/ide
 
 ### Screenshot & Video (Generati)
 
-Gli screenshot e i video applicativi sono generati automaticamente e salvati sotto `reports/generated-assets/<Flavor>/`. Ogni flusso ha una sottocartella specifica:
+Gli screenshot e i video applicativi sono generati automaticamente e salvati sotto `reports/generated-assets/<AssetProfile>/`. Ogni flusso ha una sottocartella specifica.
 
 | Flusso | Cartella Screenshot | Note |
 |---|---|---|
@@ -49,12 +49,13 @@ Gli screenshot e i video applicativi sono generati automaticamente e salvati sot
 |---|---:|---:|
 | Pro | `pro/icon-512.png` 512x512 | `pro/feature-graphic-1024x500.png` 1024x500 |
 | Demo | `demo/icon-512.png` 512x512 | `demo/feature-graphic-1024x500.png` 1024x500 |
-| Showcase | `showcase/icon-512.png` 512x512 | `showcase/feature-graphic-1024x500.png` 1024x500 |
 
 ### Note Operative
 
 - Pro e Demo sono asset per due app Google Play distinte; gli asset principali commerciali partono da Full/Pro.
 - Showcase resta asset di rappresentanza fuori store e non va presentato come prodotto Play finale.
 - Non inserire sito web o URL pubblico inventato negli asset.
-- Gli screenshot e i video applicativi restano output generati e ignorati da Git sotto `reports/generated-assets/<Flavor>`.
+- Gli screenshot e i video applicativi restano output generati e ignorati da Git sotto `reports/generated-assets/<AssetProfile>`.
+- La variante `Full` genera gli asset pubblici Pro, social e walkthrough; la variante `Demo` genera solo gli asset Play Store necessari alla listing Demo.
+- La variante `Showcase` e' interna e non ha asset Play Store pubblicabili.
 - Le feature graphic mostrano solo UI reale; non sostituirla con mockup che promettono funzioni non presenti.

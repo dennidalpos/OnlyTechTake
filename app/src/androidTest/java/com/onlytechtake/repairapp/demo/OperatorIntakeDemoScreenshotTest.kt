@@ -727,7 +727,7 @@ class OperatorIntakeDemoScreenshotTest {
     }
 
     private companion object {
-        const val SCREENSHOT_DIR_NAME = "demo-screenshots"
+        const val SCREENSHOT_DIR_NAME = "operator-intake"
         const val WAIT_TIMEOUT_MILLIS = 30_000L
         const val LOGIN_ATTEMPTS = 2
         const val LOGIN_ATTEMPT_TIMEOUT_MILLIS = 20_000L

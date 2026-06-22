@@ -1,0 +1,39 @@
+{
+  "title": "OnlyTechTake - campagna Pro",
+  "outputFile": "onlytechtake-pro-social-campaign.mp4",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "scenes": [
+    {
+      "file": "01-home.png",
+      "caption": "Code operative e priorita' visibili in apertura",
+      "durationSeconds": 3.0
+    },
+    {
+      "file": "02-accoglienza.png",
+      "caption": "Nuovo cliente registrato durante la presa in carico",
+      "durationSeconds": 3.0
+    },
+    {
+      "file": "03-diagnosi.png",
+      "caption": "Categoria e problema tecnico guidano il flusso",
+      "durationSeconds": 3.0
+    },
+    {
+      "file": "04-firma.png",
+      "caption": "Foto, privacy e firma restano collegate alla commessa",
+      "durationSeconds": 3.0
+    },
+    {
+      "file": "05-whatsapp.png",
+      "caption": "Messaggio WhatsApp preparato per invio manuale",
+      "durationSeconds": 3.0
+    },
+    {
+      "file": "06-successo.png",
+      "caption": "Chiusura e storico completi in un unico posto",
+      "durationSeconds": 4.0
+    }
+  ]
+}

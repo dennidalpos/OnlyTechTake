@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS
-  Genera tutti gli asset (demo e social): screenshot verticali/square/landscape e video montati.
+  Genera asset screenshot/video da profili JSON flavor-aware.
 
 .USAGE
-  Generazione completa su device fisico:
+  Generazione Pro su device fisico:
     .\scripts\powershell\assets\create_demo_assets.ps1 -UseConnectedDevice -AssetProfile store-pro
 
   Generazione specifica:
@@ -14,6 +14,7 @@
   Esegue gli scenari strumentati, processa le immagini secondo la piattaforma
   (verticale, quadrata, landscape) e monta i video tramite ffmpeg.
   Tutti gli output sono in reports/generated-assets/<AssetProfile>/<Platform>/<Variant>.
+  Gli asset pubblici principali usano Full; Demo resta limitata ai profili Play Store.
 #>
 
 param(
@@ -77,22 +78,12 @@ if (-not (Test-Path $profilePath)) {
 }
 $config = Get-Content -Path $profilePath -Raw | ConvertFrom-Json
 
-# Sovrascrittura flavor da config se non specificato
-if ($PSBoundParameters.ContainsKey('Flavor') -eq $false -and $config.flavor) {
-    $Flavor = $config.flavor
-}
-
-# Validazione Matrice Flavor/Profile
-$allowedMatrix = @{
-    "Full" = @("store-pro", "social-pro", "social-campaign", "operator-intake", "social-stories")
-    "Demo" = @("store-demo", "social-demo", "social-campaign", "operator-intake", "social-stories")
-    "Showcase" = @("showcase-representanza")
-}
-
-if ($allowedMatrix.ContainsKey($Flavor)) {
-    if ($allowedMatrix[$Flavor] -notcontains $AssetProfile) {
-        $validChoices = $allowedMatrix[$Flavor] -join ', '
-        throw "Il Flavor '$Flavor' non supporta il profilo '$AssetProfile'. Validi: $validChoices"
+# Sovrascrittura flavor da config se non specificato; se specificato, deve combaciare.
+if ($config.flavor) {
+    if ($PSBoundParameters.ContainsKey('Flavor') -eq $false) {
+        $Flavor = $config.flavor
+    } elseif ($Flavor -ne $config.flavor) {
+        throw "Il profilo '$AssetProfile' richiede Flavor '$($config.flavor)', non '$Flavor'."
     }
 }
 
@@ -138,6 +129,16 @@ try {
 
     foreach ($case in $activeCases) {
         $src = if ($case.sourceDirectory -eq ".") { $pulledRoot } else { Join-Path $pulledRoot $case.sourceDirectory }
+
+        if ($case.expectedFiles) {
+            $missingFiles = @(
+                $case.expectedFiles |
+                    Where-Object { -not (Test-Path (Join-Path $src $_)) }
+            )
+            if ($missingFiles.Count -gt 0) {
+                throw "Acquisizione incompleta per '$($case.id)': file mancanti: $($missingFiles -join ', ')"
+            }
+        }
 
         # Mappatura output
         $outputs = @()
