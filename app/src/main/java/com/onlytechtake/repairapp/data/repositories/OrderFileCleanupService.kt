@@ -76,7 +76,8 @@ class OrderFileCleanupService(
         }
     }
 
-    private fun getIntakeMediaDir(sessionId: String) = mediaStorageProvider.getIntakeMediaDir(sessionId)
+    private fun getIntakeMediaDir(sessionId: String) =
+        mediaStorageProvider.getIntakeMediaDir(sessionId)
 
     private fun getSharedCacheDir() = File(context.cacheDir, "shared")
 

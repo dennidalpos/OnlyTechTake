@@ -72,14 +72,16 @@ class ShowcaseRepresentanzaScreenshotTest {
     }
 
     private fun prepareScreenshotDirectory(): File {
-        val directory = File(requireNotNull(context.getExternalFilesDir(null)), "showcase-representanza")
+        val directory =
+            File(requireNotNull(context.getExternalFilesDir(null)), "showcase-representanza")
         directory.deleteRecursively()
         directory.mkdirs()
         return directory
     }
 }
 
-class ShowcaseAssetRobot(composeRule: ComposeTestRule, context: Context) : BaseAssetRobot(composeRule, context) {
+class ShowcaseAssetRobot(composeRule: ComposeTestRule, context: Context) :
+    BaseAssetRobot(composeRule, context) {
     fun waitForTag(tag: String, timeoutMillis: Long) {
         waitForTagIfPresent(tag, timeoutMillis)
     }

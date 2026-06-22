@@ -52,7 +52,11 @@ class SocialProAssetTest {
             robot.typeTag(RepairAppTestTags.NewOrderFirstNameField, "Marco", scroll = true)
             robot.typeTag(RepairAppTestTags.NewOrderLastNameField, "Bianchi", scroll = true)
             robot.typeTag(RepairAppTestTags.NewOrderPhoneField, "+39 347 123 4567", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderEmailField, "m.bianchi@example.invalid", scroll = true)
+            robot.typeTag(
+                RepairAppTestTags.NewOrderEmailField,
+                "m.bianchi@example.invalid",
+                scroll = true
+            )
             robot.capture(outputDir, "02-reel-intake.png")
 
             robot.clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
@@ -68,8 +72,16 @@ class SocialProAssetTest {
             robot.capture(outputDir, "03-carousel-category.png")
             robot.clickTag(RepairAppTestTags.NewOrderStep2NextButton, scroll = true)
 
-            robot.typeTag(RepairAppTestTags.NewOrderProblemSummaryField, "Gaming Laptop - Overheating", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderProblemDetailsField, "Spegnimenti improvvisi durante sessioni di gioco.", scroll = true)
+            robot.typeTag(
+                RepairAppTestTags.NewOrderProblemSummaryField,
+                "Gaming Laptop - Overheating",
+                scroll = true
+            )
+            robot.typeTag(
+                RepairAppTestTags.NewOrderProblemDetailsField,
+                "Spegnimenti improvvisi durante sessioni di gioco.",
+                scroll = true
+            )
             robot.clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
 
             // Skip photo for social assets if not strictly needed or capture generic photo screen
@@ -96,11 +108,17 @@ class SocialProAssetTest {
             robot.clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
 
             // 05-carousel-status (Highlighting progress tracking)
-            robot.applySimpleStatus(OrderStatusAction.START_PROGRESS, OrderStatusAction.START_DIAGNOSIS)
+            robot.applySimpleStatus(
+                OrderStatusAction.START_PROGRESS,
+                OrderStatusAction.START_DIAGNOSIS
+            )
             robot.capture(outputDir, "05-carousel-status.png")
 
             // 06-reel-pdf (Highlighting professionalism)
-            robot.applySimpleStatus(OrderStatusAction.START_DIAGNOSIS, OrderStatusAction.RECORD_RESULT)
+            robot.applySimpleStatus(
+                OrderStatusAction.START_DIAGNOSIS,
+                OrderStatusAction.RECORD_RESULT
+            )
             robot.applyResultStatus("Problema risolto con ripristino OS e pulizia.", "0,00")
             robot.waitForText("Documenti cliente", scroll = true)
             robot.capture(outputDir, "06-reel-pdf.png")

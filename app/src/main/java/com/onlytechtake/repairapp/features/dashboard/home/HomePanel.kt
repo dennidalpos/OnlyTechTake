@@ -18,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,11 +31,9 @@ import com.onlytechtake.repairapp.core.design.components.AppBadge
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
-import com.onlytechtake.repairapp.core.design.components.AppMessageBanner
 import com.onlytechtake.repairapp.core.design.components.AppMetricCard
 import com.onlytechtake.repairapp.core.design.components.AppQueueCard
 import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
-import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.domain.models.AppSummary

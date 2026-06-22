@@ -21,7 +21,6 @@ import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.test.swipeUp
 import androidx.test.espresso.Espresso
 import androidx.test.platform.app.InstrumentationRegistry
-import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import java.io.File
 import java.io.FileOutputStream
@@ -152,7 +151,8 @@ abstract class BaseAssetRobot(
             if (scroll) {
                 if (attempts % 2 == 0) {
                     try {
-                        composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).performScrollTo()
+                        composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
+                            .performScrollTo()
                         composeRule.waitForIdle()
                         if (isTagPresent(tag, useUnmergedTree)) {
                             found = true
@@ -172,7 +172,8 @@ abstract class BaseAssetRobot(
     }
 
     fun isTagPresent(tag: String, useUnmergedTree: Boolean = false): Boolean =
-        composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).fetchSemanticsNodes().isNotEmpty()
+        composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).fetchSemanticsNodes()
+            .isNotEmpty()
 
     fun isTextDisplayed(text: String): Boolean =
         composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
@@ -206,14 +207,23 @@ abstract class BaseAssetRobot(
         if (!found) composeRule.onNodeWithText(text, substring = true).assertExists()
     }
 
-    fun waitForTagGone(tag: String, useUnmergedTree: Boolean = false, timeoutMillis: Long = WAIT_TIMEOUT_MILLIS) {
+    fun waitForTagGone(
+        tag: String,
+        useUnmergedTree: Boolean = false,
+        timeoutMillis: Long = WAIT_TIMEOUT_MILLIS
+    ) {
         composeRule.waitUntil(timeoutMillis = timeoutMillis) {
-            composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).fetchSemanticsNodes().isEmpty()
+            composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree)
+                .fetchSemanticsNodes().isEmpty()
         }
         composeRule.waitForIdle()
     }
 
-    fun waitForTagIfPresent(tag: String, timeoutMillis: Long, useUnmergedTree: Boolean = false): Boolean {
+    fun waitForTagIfPresent(
+        tag: String,
+        timeoutMillis: Long,
+        useUnmergedTree: Boolean = false
+    ): Boolean {
         val deadline = System.currentTimeMillis() + timeoutMillis
         do {
             if (isTagPresent(tag, useUnmergedTree)) return true
@@ -223,14 +233,27 @@ abstract class BaseAssetRobot(
     }
 
     fun dismissWhatsAppPreviewIfPresent() {
-        if (waitForTagIfPresent(RepairAppTestTags.OrderWhatsAppPreviewPanel, 5000, useUnmergedTree = true)) {
+        if (waitForTagIfPresent(
+                RepairAppTestTags.OrderWhatsAppPreviewPanel,
+                5000,
+                useUnmergedTree = true
+            )
+        ) {
             repeat(5) {
-                if (isTagPresent(RepairAppTestTags.OrderWhatsAppPreviewPanel, useUnmergedTree = true)) {
+                if (isTagPresent(
+                        RepairAppTestTags.OrderWhatsAppPreviewPanel,
+                        useUnmergedTree = true
+                    )
+                ) {
                     try {
-                        composeRule.onNodeWithTag(RepairAppTestTags.OrderWhatsAppClosePreviewButton, useUnmergedTree = true).performClick()
+                        composeRule.onNodeWithTag(
+                            RepairAppTestTags.OrderWhatsAppClosePreviewButton,
+                            useUnmergedTree = true
+                        ).performClick()
                         composeRule.waitForIdle()
                         Thread.sleep(1000)
-                    } catch (e: Throwable) {}
+                    } catch (e: Throwable) {
+                    }
                 }
             }
             if (isTagPresent(RepairAppTestTags.OrderWhatsAppPreviewPanel, useUnmergedTree = true)) {
@@ -238,39 +261,62 @@ abstract class BaseAssetRobot(
                     Espresso.pressBackUnconditionally()
                     composeRule.waitForIdle()
                     Thread.sleep(500)
-                } catch (e: Throwable) {}
+                } catch (e: Throwable) {
+                }
             }
-            waitForTagGone(RepairAppTestTags.OrderWhatsAppPreviewPanel, useUnmergedTree = true, timeoutMillis = 3000)
+            waitForTagGone(
+                RepairAppTestTags.OrderWhatsAppPreviewPanel,
+                useUnmergedTree = true,
+                timeoutMillis = 3000
+            )
         }
     }
 
     fun performSafeSwipeUp() {
-        val listTags = listOf(RepairAppTestTags.OrderDetailLazyColumn, "categories_list", "customer_list", "customer_form")
+        val listTags = listOf(
+            RepairAppTestTags.OrderDetailLazyColumn,
+            "categories_list",
+            "customer_list",
+            "customer_form"
+        )
         for (tag in listTags) {
             try {
-                composeRule.onNodeWithTag(tag).performTouchInput { swipeUp(startY = bottom * 0.8f, endY = top + 30f) }
+                composeRule.onNodeWithTag(tag)
+                    .performTouchInput { swipeUp(startY = bottom * 0.8f, endY = top + 30f) }
                 composeRule.waitForIdle()
                 return
-            } catch (e: Throwable) {}
+            } catch (e: Throwable) {
+            }
         }
         try {
-            composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { swipeUp(startY = bottom * 0.8f, endY = top + 30f) }
-        } catch (e: Throwable) {}
+            composeRule.onAllNodes(isRoot()).onFirst()
+                .performTouchInput { swipeUp(startY = bottom * 0.8f, endY = top + 30f) }
+        } catch (e: Throwable) {
+        }
         composeRule.waitForIdle()
     }
 
     fun performSafeSwipeDown() {
-        val listTags = listOf(RepairAppTestTags.OrderDetailLazyColumn, "categories_list", "customer_list", "customer_form")
+        val listTags = listOf(
+            RepairAppTestTags.OrderDetailLazyColumn,
+            "categories_list",
+            "customer_list",
+            "customer_form"
+        )
         for (tag in listTags) {
             try {
-                composeRule.onNodeWithTag(tag).performTouchInput { swipeDown(startY = top + 30f, endY = bottom * 0.8f) }
+                composeRule.onNodeWithTag(tag)
+                    .performTouchInput { swipeDown(startY = top + 30f, endY = bottom * 0.8f) }
                 composeRule.waitForIdle()
                 return
-            } catch (e: Throwable) {}
+            } catch (e: Throwable) {
+            }
         }
         try {
-            composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { swipeDown(startY = top + 30f, endY = bottom * 0.8f) }
-        } catch (e: Throwable) {}
+            composeRule.onAllNodes(isRoot()).onFirst()
+                .performTouchInput { swipeDown(startY = top + 30f, endY = bottom * 0.8f) }
+        } catch (e: Throwable) {
+        }
         composeRule.waitForIdle()
     }
 
@@ -293,7 +339,8 @@ abstract class BaseAssetRobot(
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    fun isRecordingDemo(): Boolean =
+        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     companion object {
         const val WAIT_TIMEOUT_MILLIS = 30_000L

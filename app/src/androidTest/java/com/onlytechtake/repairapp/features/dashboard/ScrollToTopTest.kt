@@ -1,7 +1,13 @@
 package com.onlytechtake.repairapp.features.dashboard
 
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextReplacement
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeUp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.onlytechtake.repairapp.MainActivity
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
@@ -29,15 +35,19 @@ class ScrollToTopTest {
     fun ordersList_showsScrollToTop_afterScrollingDown() {
         // 1. Wait for Login and Perform it
         composeRule.waitUntil(10_000) {
-            composeRule.onAllNodesWithTag(RepairAppTestTags.AuthUsernameField).fetchSemanticsNodes().isNotEmpty()
+            composeRule.onAllNodesWithTag(RepairAppTestTags.AuthUsernameField).fetchSemanticsNodes()
+                .isNotEmpty()
         }
-        composeRule.onNodeWithTag(RepairAppTestTags.AuthUsernameField).performTextReplacement(DemoDataSeeder.DEMO_ADMIN_USERNAME)
-        composeRule.onNodeWithTag(RepairAppTestTags.AuthPasswordField).performTextReplacement(DemoDataSeeder.DEMO_PASSWORD)
+        composeRule.onNodeWithTag(RepairAppTestTags.AuthUsernameField)
+            .performTextReplacement(DemoDataSeeder.DEMO_ADMIN_USERNAME)
+        composeRule.onNodeWithTag(RepairAppTestTags.AuthPasswordField)
+            .performTextReplacement(DemoDataSeeder.DEMO_PASSWORD)
         composeRule.onNodeWithTag(RepairAppTestTags.AuthSubmitButton).performClick()
 
         // 2. Wait for Dashboard and Go to Orders tab
         composeRule.waitUntil(10_000) {
-            composeRule.onAllNodesWithTag(RepairAppTestTags.dashboardTab("HOME")).fetchSemanticsNodes().isNotEmpty()
+            composeRule.onAllNodesWithTag(RepairAppTestTags.dashboardTab("HOME"))
+                .fetchSemanticsNodes().isNotEmpty()
         }
         composeRule.onNodeWithTag(RepairAppTestTags.dashboardTab("ORDERS")).performClick()
         composeRule.waitForIdle()

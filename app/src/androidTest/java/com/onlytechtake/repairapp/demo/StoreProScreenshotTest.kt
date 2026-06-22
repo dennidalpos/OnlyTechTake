@@ -54,7 +54,11 @@ class StoreProScreenshotTest {
             robot.typeTag(RepairAppTestTags.NewOrderFirstNameField, "Marco", scroll = true)
             robot.typeTag(RepairAppTestTags.NewOrderLastNameField, "Bianchi", scroll = true)
             robot.typeTag(RepairAppTestTags.NewOrderPhoneField, "+39 347 123 4567", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderEmailField, "m.bianchi@example.invalid", scroll = true)
+            robot.typeTag(
+                RepairAppTestTags.NewOrderEmailField,
+                "m.bianchi@example.invalid",
+                scroll = true
+            )
             robot.capture(outputDir, "02-nuova-commessa-pro.png")
 
             robot.clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
@@ -63,13 +67,24 @@ class StoreProScreenshotTest {
 
             // Fill Step 2 & 3
             robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-pc"), scroll = true)
-            robot.clickTag(RepairAppTestTags.categoryButton(DemoDataSeeder.DEMO_CATEGORY_ID), scroll = true)
+            robot.clickTag(
+                RepairAppTestTags.categoryButton(DemoDataSeeder.DEMO_CATEGORY_ID),
+                scroll = true
+            )
             robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-gaming"), scroll = true)
             robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-rog-strix"), scroll = true)
             robot.clickTag(RepairAppTestTags.NewOrderStep2NextButton, scroll = true)
 
-            robot.typeTag(RepairAppTestTags.NewOrderProblemSummaryField, "Samsung Galaxy S23 - Schermo rotto", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderProblemDetailsField, "Sostituzione display originale dopo caduta.", scroll = true)
+            robot.typeTag(
+                RepairAppTestTags.NewOrderProblemSummaryField,
+                "Samsung Galaxy S23 - Schermo rotto",
+                scroll = true
+            )
+            robot.typeTag(
+                RepairAppTestTags.NewOrderProblemDetailsField,
+                "Sostituzione display originale dopo caduta.",
+                scroll = true
+            )
             robot.clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
 
             // Step 4: Photo
@@ -101,8 +116,14 @@ class StoreProScreenshotTest {
             robot.clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
 
             // 04-diagnosi-preventivo-pro
-            robot.applySimpleStatus(OrderStatusAction.START_PROGRESS, OrderStatusAction.START_DIAGNOSIS)
-            robot.applySimpleStatus(OrderStatusAction.START_DIAGNOSIS, OrderStatusAction.RECORD_RESULT)
+            robot.applySimpleStatus(
+                OrderStatusAction.START_PROGRESS,
+                OrderStatusAction.START_DIAGNOSIS
+            )
+            robot.applySimpleStatus(
+                OrderStatusAction.START_DIAGNOSIS,
+                OrderStatusAction.RECORD_RESULT
+            )
             robot.applyResultStatus("Display AMOLED originale Samsung.", "249,00")
             robot.capture(outputDir, "04-diagnosi-preventivo-pro.png")
 
@@ -115,7 +136,10 @@ class StoreProScreenshotTest {
 
             // 06-timeline-chiusura-pro
             robot.acceptQuote()
-            robot.applySimpleStatus(OrderStatusAction.READY_FOR_PICKUP, OrderStatusAction.CLOSE_ORDER)
+            robot.applySimpleStatus(
+                OrderStatusAction.READY_FOR_PICKUP,
+                OrderStatusAction.CLOSE_ORDER
+            )
             robot.closeOrder("Riparazione completata con successo.")
             robot.clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
             robot.waitForText("Chiusa")
@@ -155,7 +179,8 @@ class StoreProScreenshotTest {
     }
 }
 
-class ProAssetRobot(composeRule: ComposeTestRule, context: Context) : BaseAssetRobot(composeRule, context) {
+class ProAssetRobot(composeRule: ComposeTestRule, context: Context) :
+    BaseAssetRobot(composeRule, context) {
     fun applySimpleStatus(action: OrderStatusAction, nextAction: OrderStatusAction) {
         scrollOrderDetailToTop()
         waitForTag(RepairAppTestTags.OrderActionSection, scroll = true)
@@ -170,7 +195,10 @@ class ProAssetRobot(composeRule: ComposeTestRule, context: Context) : BaseAssetR
 
     fun applyResultStatus(summary: String, estimate: String) {
         waitForTag(RepairAppTestTags.OrderActionSection, scroll = true)
-        clickTag(RepairAppTestTags.statusAction(OrderStatusAction.RECORD_RESULT.name), scroll = true)
+        clickTag(
+            RepairAppTestTags.statusAction(OrderStatusAction.RECORD_RESULT.name),
+            scroll = true
+        )
         waitForTag(RepairAppTestTags.StatusResultSummaryField)
         typeTag(RepairAppTestTags.StatusResultSummaryField, summary, scroll = false)
         clickTag(RepairAppTestTags.DiagnosisRepairableToggle)
@@ -189,7 +217,10 @@ class ProAssetRobot(composeRule: ComposeTestRule, context: Context) : BaseAssetR
         clickTag(RepairAppTestTags.QuoteAcceptedToggle)
         clickTag(RepairAppTestTags.QuoteConfirmButton, scroll = true)
         composeRule.waitForIdle()
-        waitForTag(RepairAppTestTags.statusAction(OrderStatusAction.READY_FOR_PICKUP.name), scroll = true)
+        waitForTag(
+            RepairAppTestTags.statusAction(OrderStatusAction.READY_FOR_PICKUP.name),
+            scroll = true
+        )
     }
 
     fun closeOrder(note: String) {

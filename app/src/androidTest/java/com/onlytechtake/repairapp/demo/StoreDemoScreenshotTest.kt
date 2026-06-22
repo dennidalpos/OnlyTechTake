@@ -51,7 +51,10 @@ class StoreDemoScreenshotTest {
             // 03-limite-demo
             robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
             robot.pauseForDemo()
-            robot.waitForText(context.getString(com.onlytechtake.repairapp.R.string.demo_error_order_limit).substring(0, 10))
+            robot.waitForText(
+                context.getString(com.onlytechtake.repairapp.R.string.demo_error_order_limit)
+                    .substring(0, 10)
+            )
             robot.capture(outputDir, "03-limite-demo.png")
 
             // 04-passa-a-pro-demo (Close banner and show Home with some Pro CTA if any)
@@ -70,5 +73,6 @@ class StoreDemoScreenshotTest {
     }
 }
 
-class DemoAssetRobot(composeRule: ComposeTestRobot, context: Context) : BaseAssetRobot(composeRule, context)
+class DemoAssetRobot(composeRule: ComposeTestRobot, context: Context) :
+    BaseAssetRobot(composeRule, context)
 typealias ComposeTestRobot = ComposeTestRule
