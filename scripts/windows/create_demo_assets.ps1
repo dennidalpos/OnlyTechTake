@@ -57,6 +57,26 @@ if (-not $OutputRoot) {
 # Configurazioni asset
 $assetsConfig = @(
     [PSCustomObject]@{
+        Id = "social-campaign"
+        Flavors = @("Full", "Demo")
+        TestClass = "com.onlytechtake.repairapp.demo.SocialCampaignScreenshotTest"
+        DeviceDirectory = "/sdcard/Android/data/$packageName/files/social-campaign"
+        PulledDirectoryName = "social-campaign"
+        StoryJson = $null
+        Cases = @(
+            [PSCustomObject]@{
+                Id = "campaign-flow"
+                Flavors = @("Full", "Demo")
+                SourceDirectory = "."
+                TargetDirectory = "social-assets"
+                ExpectedFiles = @(
+                    "01-home.png", "02-accoglienza.png", "03-diagnosi.png",
+                    "04-firma.png", "05-whatsapp.png", "06-successo.png"
+                )
+            }
+        )
+    },
+    [PSCustomObject]@{
         Id = "operator-intake"
         Flavors = @("Full", "Demo")
         TestClass = "com.onlytechtake.repairapp.demo.OperatorIntakeDemoScreenshotTest"

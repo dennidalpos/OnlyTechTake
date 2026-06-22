@@ -279,8 +279,7 @@ class OperatorIntakeDemoScreenshotTest {
         Thread.sleep(2000)
     }
 
-    private fun isTextDisplayed(text: String): Boolean =
-        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+    private fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
     private fun loginOperatorDemo() {
         val username =
@@ -520,10 +519,19 @@ class OperatorIntakeDemoScreenshotTest {
     }
 
     private fun dismissWhatsAppPreviewIfPresent() {
-        if (waitForTagIfPresent(RepairAppTestTags.OrderWhatsAppPreviewPanel, 5000, useUnmergedTree = true)) {
+        if (waitForTagIfPresent(
+                RepairAppTestTags.OrderWhatsAppPreviewPanel,
+                5000,
+                useUnmergedTree = true,
+            )
+        ) {
             // Try to click the close button. If it's still there, retry.
             repeat(5) {
-                if (isTagPresent(RepairAppTestTags.OrderWhatsAppPreviewPanel, useUnmergedTree = true)) {
+                if (isTagPresent(
+                        RepairAppTestTags.OrderWhatsAppPreviewPanel,
+                        useUnmergedTree = true,
+                    )
+                ) {
                     try {
                         composeRule
                             .onNodeWithTag(
@@ -539,7 +547,8 @@ class OperatorIntakeDemoScreenshotTest {
             if (isTagPresent(RepairAppTestTags.OrderWhatsAppPreviewPanel, useUnmergedTree = true)) {
                 // If still there, try back button as fallback for the dialog
                 try {
-                    androidx.test.espresso.Espresso.pressBackUnconditionally()
+                    androidx.test.espresso.Espresso
+                        .pressBackUnconditionally()
                     composeRule.waitForIdle()
                     Thread.sleep(500)
                 } catch (e: Throwable) {
@@ -574,7 +583,10 @@ class OperatorIntakeDemoScreenshotTest {
         timeoutMillis: Long = WAIT_TIMEOUT_MILLIS,
     ) {
         composeRule.waitUntil(timeoutMillis = timeoutMillis) {
-            composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).fetchSemanticsNodes().isEmpty()
+            composeRule
+                .onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree)
+                .fetchSemanticsNodes()
+                .isEmpty()
         }
         composeRule.waitForIdle()
     }
@@ -650,8 +662,7 @@ class OperatorIntakeDemoScreenshotTest {
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    private fun isRecordingDemo(): Boolean =
-        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     private fun prepareScreenshotDirectory(): File {
         val directory = File(requireNotNull(context.getExternalFilesDir(null)), SCREENSHOT_DIR_NAME)

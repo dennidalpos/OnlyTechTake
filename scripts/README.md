@@ -15,7 +15,6 @@ Gli script calcolano automaticamente la root del progetto dal proprio percorso, 
 | Check progetto | `scripts\windows\check_project.ps1` | Esegue lint, compile Kotlin debug, test unitari, build APK debug e, senza `-SkipReleaseBuild`, build APK release firmata. | Supporta `-Flavor Full|Demo|Showcase`; `-AndroidTests` esegue il connected test del flavor selezionato. |
 | Audit vulnerabilita' dipendenze | `scripts\windows\check_dependency_vulnerabilities.ps1` | Interroga OSV sulle coordinate Maven presenti nei lockfile Gradle. | Separato dai check offline; non invia codice sorgente, solo group/artifact/version. |
 | Asset demo unificati | `scripts\windows\create_demo_assets.ps1` | Genera screenshot verticali e video MP4 montati dagli scenari strumentati. | Supporta `-Flavor Full|Demo`; richiede ffmpeg per i video e usa AVD `OnlyTechTakeDemo` o device fisico. Output sotto `reports\demo-assets\<Flavor>`. |
-| Media brand e Play Store | `scripts\windows\generate_media_assets.py` | Rigenera logo, favicon, cover e asset Play dalla palette app e dagli screenshot demo reali. | Richiede Python con Pillow e screenshot Full/Demo gia' generati; sincronizza `media` e `landing\assets`. |
 | Registrazione demo device | `scripts\windows\record_demo_device.ps1` | Registra video MP4 manuali o automatici tramite `adb screenrecord`. | Supporta `-Flavor Full|Demo`, emulatore o device fisico; output sotto `reports\demo-assets\<Flavor>\videos\device`. |
 
 ## Comandi per obiettivo

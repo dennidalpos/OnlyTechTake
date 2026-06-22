@@ -11,28 +11,12 @@ media/brand/identity/   logo e marchio vettoriali
 media/brand/icons/      favicon e anteprima icona
 media/brand/social/     cover GitHub e social preview
 media/play-store/       asset Pro, Demo e Showcase
+reports/social-assets/  screenshot e copy per campagne (LinkedIn, IG, FB, WA)
 ```
 
-Gli asset statici Play tracciati sono in:
+Per il dettaglio della campagna corrente e i testi promozionali, vedi [`SOCIAL_CAMPAIGN.md`](SOCIAL_CAMPAIGN.md).
 
-```text
-media/play-store/pro/icon-512.png
-media/play-store/pro/feature-graphic-1024x500.png
-media/play-store/demo/icon-512.png
-media/play-store/demo/feature-graphic-1024x500.png
-media/play-store/showcase/icon-512.png
-media/play-store/showcase/feature-graphic-1024x500.png
-```
-
-Logo, favicon, cover e asset Play sono rigenerabili dalla palette Material 3 e
-dagli screenshot reali dell'app:
-
-```powershell
-& "<python-con-Pillow>" scripts\windows\generate_media_assets.py
-```
-
-Il comando richiede gli screenshot Full e Demo sotto `reports\demo-assets`,
-aggiorna `media` e sincronizza le copie pubblicate in `landing\assets`.
+Logo, favicon, cover e asset Play sono rigenerabili tramite gli script PowerShell nella cartella `scripts\windows\`.
 
 Pro e Demo sono per Google Play; Showcase resta per presentazioni commerciali fuori store.
 

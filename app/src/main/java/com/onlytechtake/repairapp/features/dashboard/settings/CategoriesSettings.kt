@@ -174,7 +174,7 @@ fun ColumnScope.CategoriesSettings(
                         (
                             currentParent?.level
                                 ?: -1
-                            ) < 3
+                        ) < 3
                     ) {
                         Surface(
                             onClick = ::loadNewCategory,

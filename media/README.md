@@ -11,11 +11,4 @@ play-store/       icone e feature graphic per variante
 
 Le copie necessarie alla landing sono pubblicate sotto `landing/assets` con la
 stessa separazione `brand`, `icons` e `social`. Non modificare manualmente le
-copie: rigenerare e sincronizzare tutto con:
-
-```powershell
-& "<python-con-Pillow>" scripts\windows\generate_media_assets.py
-```
-
-Il comando richiede gli screenshot Full e Demo già presenti sotto
-`reports\demo-assets`.
+copie: sincronizzare tutto tramite gli script di progetto quando richiesto.

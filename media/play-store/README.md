@@ -1,17 +1,12 @@
 # Play Store Assets
 
-Asset statici generati per Google Play e presentazioni commerciali.
+Asset statici per Google Play e presentazioni commerciali.
 
 Gli asset usano il marchio `OnlyTechTakeMark`, la palette Material 3 dell'app e
-screenshot reali generati dalla pipeline demo. Per rigenerarli:
+screenshot reali generati dalla pipeline demo.
 
-```powershell
-& "<python-con-Pillow>" scripts\windows\generate_media_assets.py
-```
-
-Prima del comando devono esistere gli screenshot Full e Demo sotto
-`reports\demo-assets`. Il generatore aggiorna anche gli asset brand e le copie
-pubblicate in `landing\assets`.
+Prima di aggiornare gli asset devono esistere gli screenshot Full e Demo sotto
+`reports\demo-assets`.
 
 Gli asset generali non destinati allo store sono separati sotto
 `media/brand/identity`, `media/brand/icons` e `media/brand/social`.

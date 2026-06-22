@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.webkit.MimeTypeMap
+import androidx.core.util.AtomicFile
 import androidx.exifinterface.media.ExifInterface
 import androidx.room.withTransaction
 import com.onlytechtake.repairapp.core.media.AttachmentImportPolicy
@@ -12,7 +13,6 @@ import com.onlytechtake.repairapp.core.media.MediaOptimizer
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.media.OrderMediaFileNamer
 import com.onlytechtake.repairapp.core.media.exifOrientationTransform
-import androidx.core.util.AtomicFile
 import com.onlytechtake.repairapp.core.media.toMiBLabel
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.data.local.dao.OrderMediaDao
@@ -460,8 +460,7 @@ class OrderMediaRepository(
         }
     }
 
-    private suspend fun <T> inTransaction(block: suspend () -> T): T =
-        database?.withTransaction { block() } ?: block()
+    private suspend fun <T> inTransaction(block: suspend () -> T): T = database?.withTransaction { block() } ?: block()
 
     private fun copyToWithLimit(
         input: InputStream,

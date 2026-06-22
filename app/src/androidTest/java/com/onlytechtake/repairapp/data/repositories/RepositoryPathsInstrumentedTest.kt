@@ -563,13 +563,25 @@ class RepositoryPathsInstrumentedTest {
                         templateDao = fileBackedDatabase.messageTemplateDao(),
                         settingDao = fileBackedDatabase.appSettingDao(),
                         auditLogDao = fileBackedDatabase.auditLogDao(),
-                        backupReminderPreferences = com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences(context),
-                        securityPreferences = com.onlytechtake.repairapp.data.preferences.SecurityPreferences(context),
+                        backupReminderPreferences =
+                            com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences(
+                                context,
+                            ),
+                        securityPreferences =
+                            com.onlytechtake.repairapp.data.preferences.SecurityPreferences(
+                                context,
+                            ),
                         orderExportDao = fileBackedDatabase.orderExportDao(),
                         database = fileBackedDatabase,
                         authPreferences = authPreferences,
-                        sessionStore = com.onlytechtake.repairapp.data.session.InMemorySessionStore(),
-                        storageStatsService = com.onlytechtake.repairapp.data.services.StorageStatsService(context, MediaStorageProvider(context)),
+                        sessionStore =
+                            com.onlytechtake.repairapp.data.session
+                                .InMemorySessionStore(),
+                        storageStatsService =
+                            com.onlytechtake.repairapp.data.services.StorageStatsService(
+                                context,
+                                MediaStorageProvider(context),
+                            ),
                         mediaStorageProvider = MediaStorageProvider(context),
                         clockMillis = { NOW },
                     )
@@ -661,13 +673,23 @@ class RepositoryPathsInstrumentedTest {
                         templateDao = fileBackedDatabase.messageTemplateDao(),
                         settingDao = fileBackedDatabase.appSettingDao(),
                         auditLogDao = fileBackedDatabase.auditLogDao(),
-                        backupReminderPreferences = com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences(context),
-                        securityPreferences = com.onlytechtake.repairapp.data.preferences.SecurityPreferences(context),
+                        backupReminderPreferences =
+                            com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences(
+                                context,
+                            ),
+                        securityPreferences =
+                            com.onlytechtake.repairapp.data.preferences.SecurityPreferences(
+                                context,
+                            ),
                         orderExportDao = fileBackedDatabase.orderExportDao(),
                         database = fileBackedDatabase,
                         authPreferences = authPreferences,
                         sessionStore = sessionStore,
-                        storageStatsService = com.onlytechtake.repairapp.data.services.StorageStatsService(context, MediaStorageProvider(context)),
+                        storageStatsService =
+                            com.onlytechtake.repairapp.data.services.StorageStatsService(
+                                context,
+                                MediaStorageProvider(context),
+                            ),
                         mediaStorageProvider = MediaStorageProvider(context),
                         clockMillis = { NOW },
                     )
@@ -1039,13 +1061,25 @@ class RepositoryPathsInstrumentedTest {
             templateDao = database.messageTemplateDao(),
             settingDao = database.appSettingDao(),
             auditLogDao = database.auditLogDao(),
-            backupReminderPreferences = com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences(context),
-            securityPreferences = com.onlytechtake.repairapp.data.preferences.SecurityPreferences(context),
+            backupReminderPreferences =
+                com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences(
+                    context,
+                ),
+            securityPreferences =
+                com.onlytechtake.repairapp.data.preferences.SecurityPreferences(
+                    context,
+                ),
             orderExportDao = database.orderExportDao(),
             database = database,
             authPreferences = authPreferences,
-            sessionStore = com.onlytechtake.repairapp.data.session.InMemorySessionStore(),
-            storageStatsService = com.onlytechtake.repairapp.data.services.StorageStatsService(context, MediaStorageProvider(context)),
+            sessionStore =
+                com.onlytechtake.repairapp.data.session
+                    .InMemorySessionStore(),
+            storageStatsService =
+                com.onlytechtake.repairapp.data.services.StorageStatsService(
+                    context,
+                    MediaStorageProvider(context),
+                ),
             mediaStorageProvider = MediaStorageProvider(context),
             clockMillis = { NOW },
         )
@@ -1127,8 +1161,7 @@ class RepositoryPathsInstrumentedTest {
         }
     }
 
-    private fun File.walkFiles(): Sequence<File> =
-        if (exists()) walkTopDown().filter { it.isFile } else emptySequence()
+    private fun File.walkFiles(): Sequence<File> = if (exists()) walkTopDown().filter { it.isFile } else emptySequence()
 
     private fun File.unzipTextEntries(): Map<String, String> {
         val entries = mutableMapOf<String, String>()

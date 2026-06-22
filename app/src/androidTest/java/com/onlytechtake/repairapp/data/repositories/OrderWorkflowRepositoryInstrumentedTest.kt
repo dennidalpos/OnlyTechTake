@@ -62,7 +62,8 @@ class OrderWorkflowRepositoryInstrumentedTest {
                 fileCleanupService =
                     OrderFileCleanupService(
                         context,
-                        com.onlytechtake.repairapp.core.media.MediaStorageProvider(context),
+                        com.onlytechtake.repairapp.core.media
+                            .MediaStorageProvider(context),
                     ),
             )
     }

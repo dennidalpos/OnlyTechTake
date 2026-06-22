@@ -448,8 +448,7 @@ class SocialStoryDemoScreenshotTest {
         Thread.sleep(2000)
     }
 
-    private fun isTextDisplayed(text: String): Boolean =
-        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+    private fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
     private fun loginDemo(username: String) {
         repeat(LOGIN_ATTEMPTS) { attempt ->
@@ -693,9 +692,18 @@ class SocialStoryDemoScreenshotTest {
     }
 
     private fun dismissWhatsAppPreviewIfPresent() {
-        if (waitForTagIfPresent(RepairAppTestTags.OrderWhatsAppPreviewPanel, 5000, useUnmergedTree = true)) {
+        if (waitForTagIfPresent(
+                RepairAppTestTags.OrderWhatsAppPreviewPanel,
+                5000,
+                useUnmergedTree = true,
+            )
+        ) {
             repeat(5) {
-                if (isTagPresent(RepairAppTestTags.OrderWhatsAppPreviewPanel, useUnmergedTree = true)) {
+                if (isTagPresent(
+                        RepairAppTestTags.OrderWhatsAppPreviewPanel,
+                        useUnmergedTree = true,
+                    )
+                ) {
                     try {
                         composeRule
                             .onNodeWithTag(
@@ -710,7 +718,8 @@ class SocialStoryDemoScreenshotTest {
             }
             if (isTagPresent(RepairAppTestTags.OrderWhatsAppPreviewPanel, useUnmergedTree = true)) {
                 try {
-                    androidx.test.espresso.Espresso.pressBackUnconditionally()
+                    androidx.test.espresso.Espresso
+                        .pressBackUnconditionally()
                     composeRule.waitForIdle()
                     Thread.sleep(500)
                 } catch (e: Throwable) {
@@ -745,7 +754,10 @@ class SocialStoryDemoScreenshotTest {
         timeoutMillis: Long = WAIT_TIMEOUT_MILLIS,
     ) {
         composeRule.waitUntil(timeoutMillis = timeoutMillis) {
-            composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).fetchSemanticsNodes().isEmpty()
+            composeRule
+                .onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree)
+                .fetchSemanticsNodes()
+                .isEmpty()
         }
         composeRule.waitForIdle()
     }
@@ -834,8 +846,7 @@ class SocialStoryDemoScreenshotTest {
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    private fun isRecordingDemo(): Boolean =
-        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     private companion object {
         const val CASE_ORDER = "01-commessa-nuovo-cliente-chiusura"
