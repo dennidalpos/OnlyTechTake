@@ -219,6 +219,27 @@ Per usare temporaneamente un device fisico collegato, esegui con -UseConnectedDe
 "@
 }
 
+function Get-RepoRelativePath {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$FullPath,
+        [Parameter(Mandatory = $true)]
+        [string]$RootPath
+    )
+
+    $fullRoot = [System.IO.Path]::GetFullPath($RootPath)
+    $rootWithSeparator = $fullRoot.TrimEnd([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar) + [System.IO.Path]::DirectorySeparatorChar
+    if ($FullPath.StartsWith($rootWithSeparator, [System.StringComparison]::OrdinalIgnoreCase)) {
+        return $FullPath.Substring($rootWithSeparator.Length)
+    }
+
+    if ($FullPath -eq $fullRoot) {
+        return "."
+    }
+
+    return $FullPath
+}
+
 function Assert-PathInsideRoot {
     param(
         [Parameter(Mandatory = $true)][string]$Path,

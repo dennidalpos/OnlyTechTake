@@ -24,11 +24,18 @@ param(
     [switch]$SkipVideo,
     [string]$OutputRoot,
     [string]$AssetId,
-    [string]$CaseId
+    [string]$CaseId,
+    [switch]$NonInteractive
 )
 
 $ErrorActionPreference = "Stop"
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
+
+# Banner
+if (-not $NonInteractive) {
+    Write-Host "`n--- OnlyTechTake Demo Asset Creator ---" -ForegroundColor Cyan
+    Write-Host "Genera screenshot e video demo per il marketing."
+}
 
 $packageNameSuffix = switch ($Flavor) {
     "Full" { "" }
@@ -180,7 +187,7 @@ function Assert-Files {
 }
 
 # Main selection
-if (-not $AssetId -and -not $CaseId) {
+if (-not $AssetId -and -not $CaseId -and -not $NonInteractive) {
     Write-Host "`n--- Selezione Asset da Rigenerare ---" -ForegroundColor Yellow
     Write-Host "0. Tutto (default)"
     $i = 1
@@ -237,6 +244,7 @@ foreach ($asset in $assetsConfig) {
         foreach ($case in $activeCases) {
             $src = if ($case.SourceDirectory -eq ".") { $pulledRoot } else { Join-Path $pulledRoot $case.SourceDirectory }
             $destVertical = Join-Path $OutputRoot $case.TargetDirectory
+            Write-Host "Salvataggio in: $(Get-RepoRelativePath -FullPath $destVertical -RootPath $root)" -ForegroundColor Gray
             Reset-ManagedDirectory -Path $destVertical
 
             Get-ChildItem -Path $src -Filter "*.png" | ForEach-Object {
@@ -259,7 +267,7 @@ foreach ($asset in $assetsConfig) {
             if (-not (Test-Path $videoDest)) { New-Item -ItemType Directory -Path $videoDest -Force | Out-Null }
 
             $storyPath = Join-Path $root $asset.StoryJson
-            if (Test-Path $storyPath -and (Get-Command "ffmpeg" -ErrorAction SilentlyContinue)) {
+            if ((Test-Path $storyPath) -and (Get-Command "ffmpeg" -ErrorAction SilentlyContinue)) {
                 Write-Host "Generazione video montato..." -ForegroundColor Gray
                 $story = Get-Content -Path $storyPath -Raw | ConvertFrom-Json
                 $slidesDir = Join-Path $videoDest "temp_slides"

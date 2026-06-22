@@ -6,9 +6,20 @@
   powershell -ExecutionPolicy Bypass -File scripts\powershell\android\check_env.ps1
 #>
 
+param(
+    [switch]$NonInteractive
+)
+
 $ErrorActionPreference = "Continue"
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
+
+# Banner
+if (-not $NonInteractive) {
+    Write-Host "`n--- OnlyTechTake Environment Check ---" -ForegroundColor Cyan
+    Write-Host "Verifica la configurazione di JDK, Android SDK e strumenti CLI."
+}
+
 $supportScript = Join-Path $PSScriptRoot "..\support\android_env.ps1"
 . $supportScript
 $resolvedEnvironment = Set-AndroidCliEnvironment
@@ -123,6 +134,10 @@ if ($canRunGradle) {
 
 Write-Host ""
 Write-Host "Controllo completato."
+
+if (-not $NonInteractive) {
+    Read-Host "`nPremi INVIO per uscire..."
+}
 
 if (-not $canRunGradle) {
     exit 1

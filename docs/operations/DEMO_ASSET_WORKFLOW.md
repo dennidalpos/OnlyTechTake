@@ -37,14 +37,13 @@ Flow:
 
 | Asset | Instrumented scenario | Device source | Repository output |
 |---|---|---|---|
-| Operator intake | `OperatorIntakeDemoScreenshotTest` | `demo-screenshots` | `demo/screenshots/01-operatore-banco` |
-| Order intake and closure | `SocialStoryDemoScreenshotTest#capturesOrderIntakeToClosureStories` | `demo-social-screenshots/01-commessa-nuovo-cliente-chiusura` | `demo/screenshots/02-commessa-nuovo-cliente-chiusura` |
-| Categories and templates | `SocialStoryDemoScreenshotTest#capturesCategoryAndTemplateStories` | `demo-social-screenshots/02-categorie-template` | `demo/screenshots/03-categorie-template` |
-| Template Anchors | Manual verification recommended (Settings -> Templates) | N/A | N/A |
-| Customers | `SocialStoryDemoScreenshotTest#capturesPrivateAndBusinessCustomerStories` | `demo-social-screenshots/03-clienti-privato-azienda` | `demo/screenshots/04-clienti-privato-azienda` |
-| Maintenance and backup | `SocialStoryDemoScreenshotTest#capturesMaintenanceStories` | `demo-social-screenshots/05-manutenzione-backup` | `demo/screenshots/05-manutenzione-backup` |
-| Demo order limit | `SocialStoryDemoScreenshotTest#capturesDemoLimitStory` | `demo-social-screenshots/06-demo-limit` | `demo/screenshots/06-demo-limit` (Demo only) |
-| Social campaign | `SocialCampaignScreenshotTest` | `social-campaign` | `social/vertical` and `social/square` |
+| **Social Campaign** | `SocialCampaignScreenshotTest` | `social-campaign` | `social/vertical`, `social/square` |
+| **Operator Intake** | `OperatorIntakeDemoScreenshotTest` | `demo-screenshots` | `demo/screenshots/01-operatore-banco` |
+| **Order Lifecycle** | `SocialStoryDemoScreenshotTest#capturesOrderIntakeToClosureStories` | `demo-social-screenshots/01-commessa-nuovo-cliente-chiusura` | `demo/screenshots/02-commessa-nuovo-cliente-chiusura` |
+| **Categories and templates** | `SocialStoryDemoScreenshotTest#capturesCategoryAndTemplateStories` | `demo-social-screenshots/02-categorie-template` | `demo/screenshots/03-categorie-template` |
+| **Customers** | `SocialStoryDemoScreenshotTest#capturesPrivateAndBusinessCustomerStories` | `demo-social-screenshots/03-clienti-privato-azienda` | `demo/screenshots/04-clienti-privato-azienda` |
+| **Maintenance and backup** | `SocialStoryDemoScreenshotTest#capturesMaintenanceStories` | `demo-social-screenshots/05-manutenzione-backup` | `demo/screenshots/05-manutenzione-backup` |
+| **Demo order limit** | `SocialStoryDemoScreenshotTest#capturesDemoLimitStory` | `demo-social-screenshots/06-demo-limit` | `demo/screenshots/06-demo-limit` (Demo only) |
 
 `demo/video/operator-intake.story.json` defines the assembled operator video. Any changed filename, order, caption, duration, resolution, or output name must be synchronized with the test and script configuration.
 

@@ -12,12 +12,22 @@
 #>
 
 param(
-    [string]$OsvApiUrl = "https://api.osv.dev/v1/querybatch"
+    [string]$OsvApiUrl = "https://api.osv.dev/v1/querybatch",
+    [switch]$NonInteractive
 )
 
 $ErrorActionPreference = "Stop"
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
+
+# Interactive Mode
+if ($PSBoundParameters.Count -eq 0 -and -not $NonInteractive) {
+    Write-Host "`n--- OnlyTechTake Dependency Vulnerability Check ---" -ForegroundColor Cyan
+    Write-Host "Verifica la presenza di vulnerabilità note (OSV) nelle dipendenze del progetto."
+
+    $confirm = Read-Host "`nAvviare la scansione (richiede internet)? [Y/n]"
+    if ($confirm -eq 'n') { exit 0 }
+}
 
 function Write-Section($Text) {
     Write-Host ""

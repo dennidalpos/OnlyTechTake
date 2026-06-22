@@ -20,13 +20,25 @@
 
 param(
     [switch]$Apply,
-    [switch]$NoPrompt,
+    [switch]$NonInteractive,
     [switch]$SkipLint
 )
 
 $ErrorActionPreference = "Stop"
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
+
+# Interactive Mode
+if ($PSBoundParameters.Count -eq 0 -and -not $NonInteractive) {
+    Write-Host "`n--- OnlyTechTake Code Quality Check ---" -ForegroundColor Cyan
+    Write-Host "Esegue linting e check della formattazione."
+
+    $aChoice = Read-Host "`nApplicare automaticamente le correzioni di formattazione? [y/N]"
+    if ($aChoice -eq 'y') { $Apply = $true }
+
+    $sChoice = Read-Host "`nSaltare Android Lint (più veloce)? [y/N]"
+    if ($sChoice -eq 'y') { $SkipLint = $true }
+}
 
 $supportScript = Join-Path $PSScriptRoot "..\support\android_env.ps1"
 if (Test-Path $supportScript) {
@@ -89,7 +101,7 @@ try {
     } else {
         $spotlessExitCode = Invoke-GradleTask @("spotlessCheck") -AllowFailure
         if ($spotlessExitCode -ne 0) {
-            if ($NoPrompt) {
+            if ($NonInteractive) {
                 throw "spotlessCheck fallito. Esegui lo script con -Apply per applicare la formattazione."
             }
 

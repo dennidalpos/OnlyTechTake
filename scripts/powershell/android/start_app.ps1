@@ -5,21 +5,50 @@
 
 param(
     [ValidateSet("Full", "Demo", "Showcase")]
-    [string]$Flavor = "Full",
+    [string]$Flavor,
 
     [ValidateSet("Debug", "Release")]
-    [string]$BuildType = "Debug",
+    [string]$BuildType,
 
     [string]$ApkPath,
 
     [switch]$NoInstall,
 
-    [switch]$CleanInstall
+    [switch]$CleanInstall,
+
+    [switch]$NonInteractive
 )
 
 $ErrorActionPreference = "Stop"
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
+
+# Interactive Mode
+if ($PSBoundParameters.Count -eq 0 -and -not $NonInteractive) {
+    Write-Host "`n--- OnlyTechTake App Launcher ---" -ForegroundColor Cyan
+    Write-Host "Installa e avvia l'applicazione sul dispositivo."
+
+    if (-not $Flavor) {
+        Write-Host "`nScegli il Flavor:"
+        Write-Host "1. Full (default)"
+        Write-Host "2. Demo"
+        Write-Host "3. Showcase"
+        $fChoice = Read-Host "Scelta [1-3]"
+        $Flavor = switch ($fChoice) { "2" { "Demo" }; "3" { "Showcase" }; default { "Full" } }
+    }
+
+    if (-not $BuildType) {
+        Write-Host "`nScegli il Build Type:"
+        Write-Host "1. Debug (default)"
+        Write-Host "2. Release"
+        $btChoice = Read-Host "Scelta [1-2]"
+        $BuildType = switch ($btChoice) { "2" { "Release" }; default { "Debug" } }
+    }
+} else {
+    if (-not $Flavor) { $Flavor = "Full" }
+    if (-not $BuildType) { $BuildType = "Debug" }
+}
+
 $supportScript = Join-Path $PSScriptRoot "..\support\android_env.ps1"
 . $supportScript
 Set-AndroidCliEnvironment | Out-Null

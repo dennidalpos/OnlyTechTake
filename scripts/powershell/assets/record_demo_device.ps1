@@ -8,19 +8,26 @@ param(
     [switch]$UseConnectedDevice,
     [switch]$SkipBuild,
     [switch]$SeedData,
-    [ValidateSet("", "manual", "full-workflow", "social-stories", "config", "customers", "maintenance", "demo-limit", "social-campaign")]
+    [ValidateSet("", "manual", "all", "full-workflow", "social-stories", "config", "customers", "maintenance", "demo-limit", "social-campaign")]
     [string]$ScenarioId = "",
     [switch]$StartImmediately,
     [int]$MaxDurationSeconds = 180,
     [int]$BitRate = 4000000,
     [double]$AutomaticTrimStartSeconds = 7,
     [double]$AutomaticTrimEndSeconds = 2,
-    [string]$Size
+    [string]$Size,
+    [switch]$NonInteractive
 )
 
 $ErrorActionPreference = "Stop"
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
+
+# Banner
+if (-not $NonInteractive) {
+    Write-Host "`n--- OnlyTechTake Demo Recorder ---" -ForegroundColor Cyan
+    Write-Host "Registra flussi utente dal dispositivo per video promozionali."
+}
 
 if ([string]::IsNullOrWhiteSpace($PackageName)) {
     $packageNameSuffix = switch ($Flavor) {
@@ -100,8 +107,9 @@ $recordingsConfig = @(
     },
     [PSCustomObject]@{
         Id = "social-stories"
-        Description = "Social Stories (Wizard, Configurazione, Clienti, Limite Demo)"
+        Description = "Social Stories (Tutti i flussi in un unico video)"
         TestClass = "com.onlytechtake.repairapp.demo.SocialStoryDemoScreenshotTest"
+        SkipBatch = $true
     },
     [PSCustomObject]@{
         Id = "config"
@@ -128,8 +136,13 @@ $recordingsConfig = @(
 
 # Selezione flussi se non specificato
 $selectedTestClass = $null
+$allScenarios = $false
+
 if ($ScenarioId) {
-    if ($ScenarioId -ne "manual") {
+    if ($ScenarioId -eq "all") {
+        $allScenarios = $true
+        Write-Host "Verranno eseguiti TUTTI gli scenari automatici in sequenza." -ForegroundColor Green
+    } elseif ($ScenarioId -ne "manual") {
         $selectedFlow = $recordingsConfig | Where-Object { $_.Id -eq $ScenarioId } | Select-Object -First 1
         if ($null -eq $selectedFlow) {
             throw "ScenarioId non valido: $ScenarioId"
@@ -140,33 +153,87 @@ if ($ScenarioId) {
         $selectedTestClass = $selectedFlow.TestClass
         Write-Host "Verrà eseguito lo scenario: $($selectedFlow.Description)" -ForegroundColor Green
     }
-} else {
+} elseif (-not $NonInteractive) {
     Write-Host "`n--- Selezione Modalità Registrazione ---" -ForegroundColor Yellow
     Write-Host "0. Manuale (Avvia l'app e registra quello che fai)"
+    Write-Host "A. Tutto (Esegue tutti gli scenari automatici in sequenza)"
     $i = 1
     foreach ($flow in $recordingsConfig) {
-        Write-Host "$i. $($flow.Description)"
+        if ($flow.RequiredFlavor -and $flow.RequiredFlavor -ne $Flavor) {
+            Write-Host "$i. [NON DISPONIBILE] $($flow.Description)" -ForegroundColor Gray
+        } else {
+            Write-Host "$i. $($flow.Description)"
+        }
         $i++
     }
 
-    $choice = Read-Host "`nScegli il flusso da registrare [0-$($i-1)]"
-    if ($choice -match "^\d+$" -and [int]$choice -gt 0 -and [int]$choice -lt $i) {
+    $choice = Read-Host "`nScegli il flusso da registrare [0-$($i-1) o A]"
+    if ($choice -eq 'A') {
+        $allScenarios = $true
+        Write-Host "Verranno eseguiti TUTTI gli scenari." -ForegroundColor Green
+    } elseif ($choice -match "^\d+$" -and [int]$choice -gt 0 -and [int]$choice -lt $i) {
         $selectedTestClass = $recordingsConfig[[int]$choice - 1].TestClass
         Write-Host "Verrà eseguito lo scenario: $($recordingsConfig[[int]$choice - 1].Description)" -ForegroundColor Green
     }
 }
 
+function Normalize-Video {
+    param(
+        [string]$Path,
+        [string]$OutputRoot,
+        [double]$StartSec,
+        [double]$EndSec
+    )
+
+    if ($null -eq (Get-Command "ffmpeg" -ErrorAction SilentlyContinue) -or
+        $null -eq (Get-Command "ffprobe" -ErrorAction SilentlyContinue)
+    ) {
+        return
+    }
+
+    $probeJson = & ffprobe -v error -show_entries format=duration -of json $Path
+    if ($LASTEXITCODE -ne 0) { return }
+    $durationText = (($probeJson -join "`n") | ConvertFrom-Json).format.duration
+    $duration = [double]::Parse([string]$durationText, [System.Globalization.CultureInfo]::InvariantCulture)
+    $normalizedDuration = $duration - $StartSec - $EndSec
+    if ($normalizedDuration -le 0) { return }
+
+    $tempPath = Join-Path $OutputRoot (".temp_norm_" + [System.IO.Path]::GetFileName($Path))
+    try {
+        Write-Host "Normalizzazione video..." -ForegroundColor Gray
+        Invoke-Checked -FilePath "ffmpeg" -Arguments @(
+            "-y", "-fflags", "+genpts",
+            "-ss", $StartSec.ToString([System.Globalization.CultureInfo]::InvariantCulture),
+            "-i", $Path,
+            "-t", $normalizedDuration.ToString([System.Globalization.CultureInfo]::InvariantCulture),
+            "-map", "0:v:0", "-an",
+            "-vf", "setpts=PTS-STARTPTS,fps=30",
+            "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
+            "-pix_fmt", "yuv420p", "-movflags", "+faststart",
+            $tempPath
+        )
+        Move-Item -LiteralPath $tempPath -Destination $Path -Force
+    } finally {
+        if (Test-Path $tempPath) { Remove-Item -LiteralPath $tempPath -Force }
+    }
+}
+
 # Grant necessary permissions for demo recording
-Write-Host "Concessione permessi..." -ForegroundColor Gray
-adb -s $serial shell pm grant $PackageName android.permission.CAMERA
-adb -s $serial shell pm grant $PackageName android.permission.POST_NOTIFICATIONS 2>$null
+function Grant-DemoPermissions {
+    param([string]$Serial, [string]$PackageName)
+    Write-Host "Concessione permessi a $PackageName..." -ForegroundColor Gray
+    adb -s $Serial shell pm grant $PackageName android.permission.CAMERA 2>$null
+    adb -s $Serial shell pm grant $PackageName android.permission.POST_NOTIFICATIONS 2>$null
+}
+
+Grant-DemoPermissions -Serial $serial -PackageName $PackageName
 
 if ($SeedData) {
     Write-Host "Seeding dati demo ($Flavor)..." -ForegroundColor Yellow
     Invoke-DemoScreenshotTest -Serial $serial -TestClass "com.onlytechtake.repairapp.demo.SeedDemoDataTest" -Flavor $Flavor -FailureMessage "Seed dei dati fallito."
 }
 
-if ($null -eq $selectedTestClass) {
+if ($null -eq $selectedTestClass -and -not $allScenarios) {
     Write-Host "Avvio applicazione in modalità MANUALE..." -ForegroundColor Gray
     adb -s $serial shell am start -W -n "$PackageName/com.onlytechtake.repairapp.MainActivity"
 }
@@ -183,10 +250,56 @@ if ($Size) {
 }
 $screenRecordArgs += $remoteVideoPath
 
-if ($selectedTestClass) {
+if ($selectedTestClass -or $allScenarios) {
     Write-Host "Avvio registrazione e scenario AUTOMATICO..." -ForegroundColor Cyan
 
     $fullRecordArgs = @("-s", $serial, "shell", "screenrecord") + $screenRecordArgs
+
+    if ($allScenarios) {
+        foreach ($flow in $recordingsConfig) {
+            if ($flow.RequiredFlavor -and $flow.RequiredFlavor -ne $Flavor) { continue }
+            if ($flow.SkipBatch) { continue }
+
+            $scenarioName = $flow.Id
+            $currentOutputFile = "onlytechtake-$($Flavor.ToLowerInvariant())-$scenarioName.mp4"
+            $currentOutputPath = Join-Path $OutputRoot $currentOutputFile
+
+            Write-Host "`n--- Esecuzione Scenario: $($flow.Description) ---" -ForegroundColor Yellow
+
+            # Pulizia dati per ogni scenario nel batch per garantire stato noto
+            adb -s $serial shell pm clear $PackageName | Out-Null
+            Grant-DemoPermissions -Serial $serial -PackageName $PackageName
+
+            # Restart screenrecord for each scenario to have separate files
+            $recordProc = Start-Process -FilePath "adb" -ArgumentList $fullRecordArgs -PassThru -WindowStyle Hidden
+            try {
+                Start-Sleep -Seconds 3
+                Invoke-DemoScreenshotTest `
+                    -Serial $serial `
+                    -TestClass $flow.TestClass `
+                    -Flavor $Flavor `
+                    -InstrumentationExtras @{ demoRecording = "true" }
+            } finally {
+                adb -s $serial shell "pkill -2 screenrecord 2>/dev/null"
+                if ($recordProc) {
+                    $recordProc | Wait-Process -Timeout 10 -ErrorAction SilentlyContinue
+                    Stop-Process -Id $recordProc.Id -Force -ErrorAction SilentlyContinue
+                }
+                Start-Sleep -Seconds 2
+            }
+
+            Write-Host "Recupero video: $currentOutputFile" -ForegroundColor Cyan
+            Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "shell", "test", "-s", $remoteVideoPath)
+            Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "pull", $remoteVideoPath, $currentOutputPath)
+            Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "shell", "rm", "-f", $remoteVideoPath)
+
+            # Normalize each video
+            Normalize-Video -Path $currentOutputPath -OutputRoot $OutputRoot -StartSec $AutomaticTrimStartSeconds -EndSec $AutomaticTrimEndSeconds
+        }
+        Write-Host "`nBatch completato." -ForegroundColor Green
+        Restore-DeviceGlobalSettings
+        exit 0
+    }
 
     # Avviamo screenrecord come processo separato per gestire meglio la terminazione
     $recordProc = Start-Process -FilePath "adb" -ArgumentList $fullRecordArgs -PassThru -WindowStyle Hidden
@@ -233,53 +346,9 @@ Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "pull", $remoteVideoP
 Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "shell", "rm", "-f", $remoteVideoPath)
 
 if (Test-Path $outputPath) {
-    if ($selectedTestClass -and
-        $null -ne (Get-Command "ffmpeg" -ErrorAction SilentlyContinue) -and
-        $null -ne (Get-Command "ffprobe" -ErrorAction SilentlyContinue)
-    ) {
-        $probeJson = & ffprobe -v error -show_entries format=duration -of json $outputPath
-        if ($LASTEXITCODE -ne 0) {
-            throw "Impossibile leggere la durata della registrazione: $outputPath"
-        }
-        $durationText = (($probeJson -join "`n") | ConvertFrom-Json).format.duration
-        $duration = [double]::Parse(
-            [string]$durationText,
-            [System.Globalization.CultureInfo]::InvariantCulture
-        )
-        $normalizedDuration = $duration - $AutomaticTrimStartSeconds - $AutomaticTrimEndSeconds
-        if ($normalizedDuration -le 0) {
-            throw "Margini di taglio superiori alla durata della registrazione ($duration secondi)."
-        }
-
-        $normalizedPath = Join-Path $OutputRoot (
-            ".{0}.normalized.mp4" -f [System.IO.Path]::GetFileNameWithoutExtension($OutputFile)
-        )
-        try {
-            Write-Host "Normalizzazione video automatico..." -ForegroundColor Gray
-            Invoke-Checked -FilePath "ffmpeg" -Arguments @(
-                "-y",
-                "-fflags", "+genpts",
-                "-ss", $AutomaticTrimStartSeconds.ToString([System.Globalization.CultureInfo]::InvariantCulture),
-                "-i", $outputPath,
-                "-t", $normalizedDuration.ToString([System.Globalization.CultureInfo]::InvariantCulture),
-                "-map", "0:v:0",
-                "-an",
-                "-vf", "setpts=PTS-STARTPTS,fps=30",
-                "-c:v", "libx264",
-                "-preset", "veryfast",
-                "-crf", "20",
-                "-pix_fmt", "yuv420p",
-                "-movflags", "+faststart",
-                $normalizedPath
-            )
-            Move-Item -LiteralPath $normalizedPath -Destination $outputPath -Force
-        } finally {
-            if (Test-Path $normalizedPath) {
-                Remove-Item -LiteralPath $normalizedPath -Force
-            }
-        }
-    } elseif ($selectedTestClass) {
-        Write-Warning "ffmpeg/ffprobe non disponibili: registrazione automatica salvata senza taglio e normalizzazione."
+    Write-Host "Salvataggio in: $(Get-RepoRelativePath -FullPath $outputPath -RootPath $root)" -ForegroundColor Gray
+    if ($selectedTestClass) {
+        Normalize-Video -Path $outputPath -OutputRoot $OutputRoot -StartSec $AutomaticTrimStartSeconds -EndSec $AutomaticTrimEndSeconds
     }
 
     if ($null -ne (Get-Command "ffprobe" -ErrorAction SilentlyContinue)) {

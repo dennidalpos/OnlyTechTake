@@ -5,24 +5,68 @@
 
 param(
     [ValidateSet("Full", "Demo", "Showcase")]
-    [string]$Flavor = "Full",
+    [string]$Flavor,
 
     [ValidateSet("Debug", "Release")]
-    [string]$BuildType = "Debug",
+    [string]$BuildType,
 
     [ValidateSet("Apk", "Aab")]
-    [string]$OutputType = "Apk",
+    [string]$OutputType,
 
     [switch]$Clean,
 
     [switch]$RerunTasks,
 
-    [switch]$Install
+    [switch]$Install,
+
+    [switch]$NonInteractive
 )
 
 $ErrorActionPreference = "Stop"
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
+
+# Interactive Mode
+if ($PSBoundParameters.Count -eq 0 -and -not $NonInteractive) {
+    Write-Host "`n--- OnlyTechTake Build Installer ---" -ForegroundColor Cyan
+    Write-Host "Genera e installa gli artifact Android (APK/AAB)."
+
+    if (-not $Flavor) {
+        Write-Host "`nScegli il Flavor:"
+        Write-Host "1. Full (default)"
+        Write-Host "2. Demo"
+        Write-Host "3. Showcase"
+        $fChoice = Read-Host "Scelta [1-3]"
+        $Flavor = switch ($fChoice) { "2" { "Demo" }; "3" { "Showcase" }; default { "Full" } }
+    }
+
+    if (-not $BuildType) {
+        Write-Host "`nScegli il Build Type:"
+        Write-Host "1. Debug (default)"
+        Write-Host "2. Release"
+        $btChoice = Read-Host "Scelta [1-2]"
+        $BuildType = switch ($btChoice) { "2" { "Release" }; default { "Debug" } }
+    }
+
+    if (-not $OutputType) {
+        Write-Host "`nScegli l'Output Type:"
+        Write-Host "1. Apk (default)"
+        Write-Host "2. Aab"
+        $otChoice = Read-Host "Scelta [1-2]"
+        $OutputType = switch ($otChoice) { "2" { "Aab" }; default { "Apk" } }
+    }
+
+    if ($OutputType -eq "Apk" -and -not $Install) {
+        $iChoice = Read-Host "`nVuoi installare l'APK dopo la build? [y/N]"
+        if ($iChoice -eq 'y') { $Install = $true }
+    }
+} else {
+    # Default values for non-interactive or partially provided parameters
+    if (-not $Flavor) { $Flavor = "Full" }
+    if (-not $BuildType) { $BuildType = "Debug" }
+    if (-not $OutputType) { $OutputType = "Apk" }
+}
+
 $supportScript = Join-Path $PSScriptRoot "..\support\android_env.ps1"
 . $supportScript
 $resolvedEnvironment = Set-AndroidCliEnvironment

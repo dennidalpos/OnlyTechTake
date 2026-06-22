@@ -22,12 +22,28 @@
 param(
     [switch]$DryRun,
     [switch]$IncludeIde,
-    [switch]$StopGradle
+    [switch]$StopGradle,
+    [switch]$NonInteractive
 )
 
 $ErrorActionPreference = "Stop"
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
+
+# Interactive Mode
+if ($PSBoundParameters.Count -eq 0 -and -not $NonInteractive) {
+    Write-Host "`n--- OnlyTechTake Repo Cleaner ---" -ForegroundColor Cyan
+    Write-Host "Rimuove output temporanei e cache dal repository."
+
+    $dChoice = Read-Host "`nEseguire solo un'anteprima (DryRun)? [Y/n]"
+    if ($dChoice -ne 'n') { $DryRun = $true }
+
+    $iChoice = Read-Host "`nRimuovere anche le cache IDE (.idea)? [y/N]"
+    if ($iChoice -eq 'y') { $IncludeIde = $true }
+
+    $sChoice = Read-Host "`nFermare i daemon Gradle? [y/N]"
+    if ($sChoice -eq 'y') { $StopGradle = $true }
+}
 $excludedRelativePaths = @(
     "reports\demo-assets"
 )

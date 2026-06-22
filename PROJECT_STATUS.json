@@ -1,7 +1,7 @@
 {
   "agent_execution_directives": {
     "status": "active",
-    "updated_at": "2026-06-20",
+    "updated_at": "2026-06-22",
     "purpose": "Backlog residuo attivo in ordine di priorita'. Non usare come changelog.",
     "rules": [
       "Quando l'utente chiede di risolvere PROJECT_STATUS.json, scegliere un solo blocco open per volta e dichiararlo prima di iniziare.",
@@ -12,5 +12,27 @@
       "Ogni blocco deve mantenere identified_residual e plan aggiornati finche' resta aperto."
     ]
   },
-  "todos": []
+  "todos": [
+    {
+      "id": "T01",
+      "title": "Allineamento Workflow Demo a Codice Sorgente Reale",
+      "status": "open",
+      "priority": "high",
+      "recommended_batch_size": 2,
+      "identified_residual": [
+        "Incoerenza lineare: la firma viene acquisita nel wizard (Step 5) ma mostrata come consultazione post-creazione nel video.",
+        "Anacronismo: WhatsApp e PDF vengono generati prima di mostrare l'acquisizione della firma nel video.",
+        "Aspect ratio errato: il video 'operator-intake' e' 1920x1080 (Landscape) invece di 1080x1920 (Vertical).",
+        "Screenshot mancante: lo Step 6 (Riepilogo finale wizard) non viene catturato.",
+        "Possibile bypass firma anche in SocialCampaignScreenshotTest.kt."
+      ],
+      "plan": [
+        "Rifattorizzare 'OperatorIntakeDemoScreenshotTest.kt' per includere interazione con Step 5 (Canvas firma) e Step 6 (Submit wizard).",
+        "Riordinare sequenza in 'operator-intake.story.json': Login -> Home -> Step 1-3 -> Step 5 (Firma) -> Step 6 (Conferma) -> Dettaglio (07-12).",
+        "Aggiornare risoluzione video a 1080x1920 in 'operator-intake.story.json'.",
+        "Allineare 'SocialCampaignScreenshotTest.kt' per mostrare l'acquisizione reale della firma durante l'intake.",
+        "Eseguire 'create_demo_assets.ps1 -NonInteractive' per rigenerare e validare i percorsi di output."
+      ]
+    }
+  ]
 }
