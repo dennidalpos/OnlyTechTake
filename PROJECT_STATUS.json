@@ -35,7 +35,7 @@
       "status": "open",
       "recommended_batch_size": 1,
       "identified_residual": [
-        "Debito Tecnico: Esecuzione screen recording automatizzato per tutti i profili Full e Demo.",
+        "Esecuzione screen recording automatizzato per profili Full e Demo.",
         "Validazione fluidità registrazioni su device fisico reale.",
         "Normalizzazione automatica (trim) dei video generati tramite record_demo_device.ps1."
       ],
@@ -51,8 +51,7 @@
       "status": "open",
       "recommended_batch_size": 1,
       "identified_residual": [
-        "Signing release con keystore.properties reale (locale).",
-        "Allineamento versioning release v1 (DONE).",
+        "Signing release con keystore.properties reale.",
         "Generazione AAB Full e Demo.",
         "Privacy Policy definitiva e URL pubblico.",
         "Data Safety form in Play Console."
@@ -69,12 +68,45 @@
       "status": "active",
       "recommended_batch_size": 1,
       "identified_residual": [
-        "Risolvere ComposeTimeoutException in ScrollToTopTest.kt (Login non rilevata su device fisico).",
+        "Risolvere ComposeTimeoutException in ScrollToTopTest.kt (Login non rilevata).",
+        "Implementare IdlingResource o attese basate su stato UI invece di timeout fissi.",
         "Esecuzione regression test su suite completa flavor Full."
       ],
       "plan": [
         "Debug stato iniziale Activity in ScrollToTopTest.",
-        "Eseguire check_project.ps1 -AndroidTests."
+        "Refactoring attese asincrone nei test."
+      ]
+    },
+    {
+      "id": "C01",
+      "title": "Bonifica Tecnica: Stringhe e Design Compliance",
+      "priority": "P1",
+      "status": "open",
+      "recommended_batch_size": 2,
+      "identified_residual": [
+        "Estrazione stringhe hardcoded in strings.xml (Camera, Home, Customer Panels).",
+        "Aggiunta @Preview (Light/Dark) mancanti in HomePanel, DashboardScreen e SettingsPanel.",
+        "Allineamento naming risorse secondo AGENTS.md."
+      ],
+      "plan": [
+        "Grep sistematico di text=\"...\" nei Composable.",
+        "Migrazione stringhe e implementazione Previews."
+      ]
+    },
+    {
+      "id": "C02",
+      "title": "Raffinamento UX e Feedback Visivo",
+      "priority": "P2",
+      "status": "open",
+      "recommended_batch_size": 1,
+      "identified_residual": [
+        "Indicatori di progresso (Loading) per Export ZIP e Backup.",
+        "Parametrizzazione nome file backup basato su flavor/data.",
+        "Miglioramento messaggi di errore durante inizializzazione database."
+      ],
+      "plan": [
+        "Inserimento CircularProgressIndicator negli stati di caricamento ViewModel.",
+        "Refactoring logica di naming file in BackupRepository."
       ]
     }
   ]
