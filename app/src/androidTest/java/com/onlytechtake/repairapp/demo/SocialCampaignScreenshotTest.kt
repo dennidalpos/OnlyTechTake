@@ -82,15 +82,26 @@ class SocialCampaignScreenshotTest {
 
             // 2. Wizard: Categorie
             clickTag(RepairAppTestTags.categoryButton("demo-cat-pc"), scroll = true)
-            clickTag(RepairAppTestTags.categoryButton(DemoDataSeeder.DEMO_CATEGORY_ID), scroll = true)
+            clickTag(
+                RepairAppTestTags.categoryButton(DemoDataSeeder.DEMO_CATEGORY_ID),
+                scroll = true,
+            )
             clickTag(RepairAppTestTags.categoryButton("demo-cat-gaming"), scroll = true)
             clickTag(RepairAppTestTags.categoryButton("demo-cat-rog-strix"), scroll = true)
 
             clickTag(RepairAppTestTags.NewOrderStep2NextButton, scroll = true)
 
             // 3. Wizard: Problema
-            typeTag(RepairAppTestTags.NewOrderProblemSummaryField, "Asus ROG - Surriscaldamento", scroll = true)
-            typeTag(RepairAppTestTags.NewOrderProblemDetailsField, "Richiesta pulizia interna e cambio pasta termica.", scroll = true)
+            typeTag(
+                RepairAppTestTags.NewOrderProblemSummaryField,
+                "Asus ROG - Surriscaldamento",
+                scroll = true,
+            )
+            typeTag(
+                RepairAppTestTags.NewOrderProblemDetailsField,
+                "Richiesta pulizia interna e cambio pasta termica.",
+                scroll = true,
+            )
             capture(outputDir, "03-diagnosi.png")
 
             // Proseguiamo per mostrare lo stepper che avanza (Step 4: Media)
@@ -113,8 +124,14 @@ class SocialCampaignScreenshotTest {
             pauseForDemo()
 
             // Workflow di lavorazione
-            applySimpleStatus(OrderStatusAction.START_PROGRESS, nextAction = OrderStatusAction.START_DIAGNOSIS)
-            applySimpleStatus(OrderStatusAction.START_DIAGNOSIS, nextAction = OrderStatusAction.RECORD_RESULT)
+            applySimpleStatus(
+                OrderStatusAction.START_PROGRESS,
+                nextAction = OrderStatusAction.START_DIAGNOSIS,
+            )
+            applySimpleStatus(
+                OrderStatusAction.START_DIAGNOSIS,
+                nextAction = OrderStatusAction.RECORD_RESULT,
+            )
 
             // 5. WHATSAPP & PREVENTIVO
             applyResultStatus()
@@ -126,7 +143,10 @@ class SocialCampaignScreenshotTest {
             pauseForDemo()
 
             acceptQuote()
-            applySimpleStatus(OrderStatusAction.READY_FOR_PICKUP, nextAction = OrderStatusAction.CLOSE_ORDER)
+            applySimpleStatus(
+                OrderStatusAction.READY_FOR_PICKUP,
+                nextAction = OrderStatusAction.CLOSE_ORDER,
+            )
 
             // 6. SUCCESSO (Timeline chiusura)
             closeOrder()
@@ -159,7 +179,10 @@ class SocialCampaignScreenshotTest {
     private fun applyResultStatus() {
         waitForTag(RepairAppTestTags.OrderActionSection, scroll = true)
         pauseForDemo()
-        clickTag(RepairAppTestTags.statusAction(OrderStatusAction.RECORD_RESULT.name), scroll = true)
+        clickTag(
+            RepairAppTestTags.statusAction(OrderStatusAction.RECORD_RESULT.name),
+            scroll = true,
+        )
         pauseForDemo()
         waitForTag(RepairAppTestTags.StatusResultSummaryField)
         typeTag(RepairAppTestTags.StatusResultSummaryField, "Pasta termica secca.", scroll = false)
@@ -183,7 +206,10 @@ class SocialCampaignScreenshotTest {
         clickTag(RepairAppTestTags.QuoteConfirmButton, scroll = true)
         composeRule.waitForIdle()
         pauseForDemo()
-        waitForTag(RepairAppTestTags.statusAction(OrderStatusAction.READY_FOR_PICKUP.name), scroll = true)
+        waitForTag(
+            RepairAppTestTags.statusAction(OrderStatusAction.READY_FOR_PICKUP.name),
+            scroll = true,
+        )
     }
 
     private fun closeOrder() {
@@ -202,7 +228,8 @@ class SocialCampaignScreenshotTest {
     }
 
     private fun loginOperatorDemo() {
-        val username = if (BuildConfig.IS_DEMO_VERSION) DemoDataSeeder.DEMO_ADMIN_USERNAME else DemoDataSeeder.DEMO_OPERATOR_USERNAME
+        val username =
+            if (BuildConfig.IS_DEMO_VERSION) DemoDataSeeder.DEMO_ADMIN_USERNAME else DemoDataSeeder.DEMO_OPERATOR_USERNAME
         repeat(LOGIN_ATTEMPTS) { attempt ->
             waitForTag(RepairAppTestTags.AuthUsernameField)
             typeTag(RepairAppTestTags.AuthUsernameField, username)
@@ -211,7 +238,13 @@ class SocialCampaignScreenshotTest {
             pauseForDemo()
             clickTag(RepairAppTestTags.AuthSubmitButton)
 
-            if (waitForTagIfPresent(RepairAppTestTags.dashboardTab("HOME"), LOGIN_ATTEMPT_TIMEOUT_MILLIS)) return
+            if (waitForTagIfPresent(
+                    RepairAppTestTags.dashboardTab("HOME"),
+                    LOGIN_ATTEMPT_TIMEOUT_MILLIS,
+                )
+            ) {
+                return
+            }
             if (attempt == (LOGIN_ATTEMPTS - 1) || !isTagPresent(RepairAppTestTags.AuthUsernameField)) {
                 waitForTag(RepairAppTestTags.dashboardTab("HOME"))
             }
@@ -296,34 +329,56 @@ class SocialCampaignScreenshotTest {
     }
 
     private fun performSafeSwipeUp() {
-        val listTags = listOf(RepairAppTestTags.OrderDetailLazyColumn, "categories_list", "customer_list", "customer_form")
+        val listTags =
+            listOf(
+                RepairAppTestTags.OrderDetailLazyColumn,
+                "categories_list",
+                "customer_list",
+                "customer_form",
+            )
         for (tag in listTags) {
             try {
-                composeRule.onNodeWithTag(tag).performTouchInput { swipeUp(startY = bottom * 0.8f, endY = top + 30f) }
+                composeRule
+                    .onNodeWithTag(tag)
+                    .performTouchInput { swipeUp(startY = bottom * 0.8f, endY = top + 30f) }
                 composeRule.waitForIdle()
                 return
             } catch (e: Throwable) {
             }
         }
         try {
-            composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { swipeUp(startY = bottom * 0.8f, endY = top + 30f) }
+            composeRule
+                .onAllNodes(isRoot())
+                .onFirst()
+                .performTouchInput { swipeUp(startY = bottom * 0.8f, endY = top + 30f) }
         } catch (e: Throwable) {
         }
         composeRule.waitForIdle()
     }
 
     private fun performSafeSwipeDown() {
-        val listTags = listOf(RepairAppTestTags.OrderDetailLazyColumn, "categories_list", "customer_list", "customer_form")
+        val listTags =
+            listOf(
+                RepairAppTestTags.OrderDetailLazyColumn,
+                "categories_list",
+                "customer_list",
+                "customer_form",
+            )
         for (tag in listTags) {
             try {
-                composeRule.onNodeWithTag(tag).performTouchInput { swipeDown(startY = top + 30f, endY = bottom * 0.8f) }
+                composeRule
+                    .onNodeWithTag(tag)
+                    .performTouchInput { swipeDown(startY = top + 30f, endY = bottom * 0.8f) }
                 composeRule.waitForIdle()
                 return
             } catch (e: Throwable) {
             }
         }
         try {
-            composeRule.onAllNodes(isRoot()).onFirst().performTouchInput { swipeDown(startY = top + 30f, endY = bottom * 0.8f) }
+            composeRule
+                .onAllNodes(isRoot())
+                .onFirst()
+                .performTouchInput { swipeDown(startY = top + 30f, endY = bottom * 0.8f) }
         } catch (e: Throwable) {
         }
         composeRule.waitForIdle()
@@ -378,7 +433,9 @@ class SocialCampaignScreenshotTest {
             if (scroll) {
                 if (attempts % 2 == 0) {
                     try {
-                        composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).performScrollTo()
+                        composeRule
+                            .onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
+                            .performScrollTo()
                         composeRule.waitForIdle()
                         if (isTagPresent(tag, useUnmergedTree)) {
                             found = true
@@ -398,11 +455,24 @@ class SocialCampaignScreenshotTest {
     }
 
     private fun dismissWhatsAppPreviewIfPresent() {
-        if (waitForTagIfPresent(RepairAppTestTags.OrderWhatsAppPreviewPanel, 5000, useUnmergedTree = true)) {
+        if (waitForTagIfPresent(
+                RepairAppTestTags.OrderWhatsAppPreviewPanel,
+                5000,
+                useUnmergedTree = true,
+            )
+        ) {
             repeat(5) {
-                if (isTagPresent(RepairAppTestTags.OrderWhatsAppPreviewPanel, useUnmergedTree = true)) {
+                if (isTagPresent(
+                        RepairAppTestTags.OrderWhatsAppPreviewPanel,
+                        useUnmergedTree = true,
+                    )
+                ) {
                     try {
-                        composeRule.onNodeWithTag(RepairAppTestTags.OrderWhatsAppClosePreviewButton, useUnmergedTree = true).performClick()
+                        composeRule
+                            .onNodeWithTag(
+                                RepairAppTestTags.OrderWhatsAppClosePreviewButton,
+                                useUnmergedTree = true,
+                            ).performClick()
                         composeRule.waitForIdle()
                         Thread.sleep(1000)
                     } catch (e: Throwable) {
@@ -416,7 +486,11 @@ class SocialCampaignScreenshotTest {
                 } catch (e: Throwable) {
                 }
             }
-            waitForTagGone(RepairAppTestTags.OrderWhatsAppPreviewPanel, useUnmergedTree = true, timeoutMillis = 3000)
+            waitForTagGone(
+                RepairAppTestTags.OrderWhatsAppPreviewPanel,
+                useUnmergedTree = true,
+                timeoutMillis = 3000,
+            )
         }
     }
 
@@ -439,7 +513,10 @@ class SocialCampaignScreenshotTest {
         timeoutMillis: Long = WAIT_TIMEOUT_MILLIS,
     ) {
         composeRule.waitUntil(timeoutMillis = timeoutMillis) {
-            composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).fetchSemanticsNodes().isEmpty()
+            composeRule
+                .onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree)
+                .fetchSemanticsNodes()
+                .isEmpty()
         }
         composeRule.waitForIdle()
     }
@@ -447,7 +524,11 @@ class SocialCampaignScreenshotTest {
     private fun isTagPresent(
         tag: String,
         useUnmergedTree: Boolean = false,
-    ): Boolean = composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).fetchSemanticsNodes().isNotEmpty()
+    ): Boolean =
+        composeRule
+            .onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree)
+            .fetchSemanticsNodes()
+            .isNotEmpty()
 
     private fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
