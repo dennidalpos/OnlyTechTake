@@ -16,6 +16,7 @@ Gli script calcolano automaticamente la root del progetto dal proprio percorso, 
 | Audit vulnerabilita' dipendenze | `scripts\windows\check_dependency_vulnerabilities.ps1` | Interroga OSV sulle coordinate Maven presenti nei lockfile Gradle. | Separato dai check offline; non invia codice sorgente, solo group/artifact/version. |
 | Asset demo unificati | `scripts\windows\create_demo_assets.ps1` | Genera screenshot verticali e video MP4 montati dagli scenari strumentati. | Supporta `-Flavor Full|Demo`; richiede ffmpeg per i video e usa AVD `OnlyTechTakeDemo` o device fisico. Output sotto `reports\demo-assets\<Flavor>`. |
 | Registrazione demo device | `scripts\windows\record_demo_device.ps1` | Registra video MP4 manuali o automatici tramite `adb screenrecord`. | Supporta `-Flavor Full|Demo`, emulatore o device fisico; output sotto `reports\demo-assets\<Flavor>\videos\device`. |
+| Campagna social | `scripts\windows\generate_social_campaign.ps1` | Genera asset ottimizzati per social: screenshot (9:16, 1:1) e video demo continuo. | Salva tutto in `./social_assets/` per facile accesso. |
 
 ## Comandi per obiettivo
 
@@ -30,6 +31,7 @@ Gli script calcolano automaticamente la root del progetto dal proprio percorso, 
 | asset Demo separati | `powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_assets.ps1 -Flavor Demo` |
 | asset demo su device USB | `powershell -ExecutionPolicy Bypass -File scripts\windows\create_demo_assets.ps1 -UseConnectedDevice` |
 | registrazione demo USB guidata | `powershell -ExecutionPolicy Bypass -File scripts\windows\record_demo_device.ps1` |
+| generazione asset social | `powershell -ExecutionPolicy Bypass -File scripts\windows\generate_social_campaign.ps1` |
 
 ## Manutenzione asset demo
 

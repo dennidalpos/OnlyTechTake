@@ -8,7 +8,7 @@ param(
     [switch]$UseConnectedDevice,
     [switch]$SkipBuild,
     [switch]$SeedData,
-    [ValidateSet("", "manual", "full-workflow", "social-stories", "config", "customers", "maintenance", "demo-limit")]
+    [ValidateSet("", "manual", "full-workflow", "social-stories", "config", "customers", "maintenance", "demo-limit", "social-campaign")]
     [string]$ScenarioId = "",
     [switch]$StartImmediately,
     [int]$MaxDurationSeconds = 180,
@@ -88,6 +88,11 @@ Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "shell", "pm", "clear
 
 # Configurazioni flussi demo per registrazione
 $recordingsConfig = @(
+    [PSCustomObject]@{
+        Id = "social-campaign"
+        Description = "Social Campaign (Flusso completo ottimizzato per marketing)"
+        TestClass = "com.onlytechtake.repairapp.demo.SocialCampaignScreenshotTest"
+    },
     [PSCustomObject]@{
         Id = "full-workflow"
         Description = "Workflow Completo (Wizard, Firma, WhatsApp, PDF, Chiusura)"
