@@ -35,7 +35,7 @@
                     <a href="#features" class="nav-link">Funzioni</a>
                     <a href="#pricing" class="nav-link">Versioni</a>
                     <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="btn-nav btn-pro">Scarica PRO</a>
-                    <div id="theme-toggle" class="theme-switch">
+                    <div id="theme-toggle" class="theme-switch" title="Cambia Tema">
                         <i data-lucide="sun" class="sun-icon"></i>
                         <i data-lucide="moon" class="moon-icon"></i>
                     </div>
@@ -55,7 +55,7 @@
                 <img src="assets/brand/onlytechtake-mark.svg" alt="OTT" class="logo-mark">
                 <span class="app-title">OnlyTechTake</span>
             </a>
-            <button id="sidebar-close" class="close-btn">
+            <button id="sidebar-close" class="close-btn" aria-label="Chiudi">
                 <i data-lucide="x"></i>
             </button>
         </div>
@@ -71,7 +71,7 @@
             <a href="privacy.html" class="sidebar-link"><i data-lucide="shield"></i> Privacy Policy</a>
         </nav>
         <div class="sidebar-footer">
-            <p>v1.0.0 Production</p>
+            <p>v1.0.0 Production | MD3 Ready</p>
         </div>
     </aside>
 
@@ -83,10 +83,10 @@
                     <div class="intro-text">
                         <div class="badge">
                             <img src="assets/brand/android-logo.svg" alt="Android" class="badge-icon">
-                            Disponibile su Android
+                            Target Android 15 (API 37)
                         </div>
-                        <h1>Il tuo Laboratorio,<br><span class="gradient-text">Sempre con te.</span></h1>
-                        <p>L'applicazione professionale per la gestione di riparazioni, commesse e clienti. Sicura, locale e senza abbonamenti ricorrenti.</p>
+                        <h1>Un'app per ogni problema!<br><span class="gradient-text">Il tuo Banco Riparazioni.</span></h1>
+                        <p>L'applicazione Local-First professionale per gestire commesse, diagnosi e clienti in totale sicurezza. Senza abbonamenti, senza cloud.</p>
                         <div class="hero-btns">
                             <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="btn-primary">Inizia ora (PRO)</a>
                             <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp.demo" class="btn-secondary">Prova la Demo</a>
@@ -107,13 +107,13 @@
             </div>
         </section>
 
-        <!-- Privacy Focus -->
+        <!-- Privacy & Security -->
         <section class="privacy-section">
             <div class="container">
                 <div class="privacy-card">
-                    <div class="icon-box"><i data-lucide="shield-check"></i></div>
-                    <h2>Sicurezza dei dati al primo posto</h2>
-                    <p>OnlyTechTake opera in modalità <strong>Local-First</strong>. I dati dei tuoi clienti, le foto e le firme non lasciano mai il dispositivo. Database cifrato con standard SQLCipher per la massima riservatezza.</p>
+                    <div class="icon-box"><i data-lucide="lock"></i></div>
+                    <h2>Dati locali, sicurezza SQLCipher</h2>
+                    <p>OTT opera in modalità <strong>Local-First</strong>. Foto, firme e dati sensibili non lasciano mai il dispositivo. Il database è protetto da cifratura hardware-backed per garantirti la massima riservatezza professionale.</p>
                 </div>
             </div>
         </section>
@@ -122,39 +122,39 @@
         <section id="features" class="features-section">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-title">Tutto quello che ti serve</h2>
-                    <p>Progettato per tecnici che lavorano in mobilità o in laboratorio.</p>
+                    <h2 class="section-title">Workflow Professionale</h2>
+                    <p>Progettato per laboratori che necessitano di velocità, precisione e privacy.</p>
                 </div>
                 <div class="grid-3">
                     <div class="feature-card">
-                        <i data-lucide="clipboard-list"></i>
-                        <h3>Commesse & Diagnosi</h3>
-                        <p>Traccia ogni riparazione dalla presa in carico alla riconsegna con stati personalizzati.</p>
+                        <i data-lucide="layout"></i>
+                        <h3>Banco Riparazioni</h3>
+                        <p>Gestisci il flusso operativo: Aperta, In Lavorazione, Diagnosi, Pronta al Ritiro e Chiusa.</p>
                     </div>
                     <div class="feature-card">
                         <i data-lucide="camera"></i>
-                        <h3>Documentazione Foto</h3>
-                        <p>Scatta e allega foto dello stato estetico del dispositivo per evitare contestazioni.</p>
+                        <h3>Documentazione Media</h3>
+                        <p>Scatta foto con CameraX per documentare lo stato estetico e tecnico di ogni dispositivo.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i data-lucide="signature"></i>
+                        <h3>Firma & Privacy</h3>
+                        <p>Firma digitale su schermo per accettazione privacy e condizioni di presa in carico personalizzabili.</p>
                     </div>
                     <div class="feature-card">
                         <i data-lucide="file-text"></i>
                         <h3>Report PDF Professionali</h3>
-                        <p>Genera istantaneamente schede tecniche e ricevute PDF con il tuo logo.</p>
+                        <p>Genera istantaneamente schede tecniche e ricevute PDF con il logo del tuo laboratorio.</p>
                     </div>
                     <div class="feature-card">
-                        <i data-lucide="signature"></i>
-                        <h3>Firma Digitale</h3>
-                        <p>Raccogli la firma del cliente direttamente sul touch screen per l'accettazione privacy.</p>
+                        <i data-lucide="message-circle"></i>
+                        <h3>WhatsApp Manuale</h3>
+                        <p>Invia stati di avanzamento e PDF ai clienti tramite template predefiniti in un solo tap.</p>
                     </div>
                     <div class="feature-card">
-                        <i data-lucide="message-square"></i>
-                        <h3>Pronto per WhatsApp</h3>
-                        <p>Invia PDF e aggiornamenti ai clienti in un tap tramite le tue app di messaggistica.</p>
-                    </div>
-                    <div class="feature-card">
-                        <i data-lucide="database"></i>
-                        <h3>Backup & Export</h3>
-                        <p>Esporta i dati in Excel (XLSX) o crea backup ZIP cifrati per la massima sicurezza.</p>
+                        <i data-lucide="shield-check"></i>
+                        <h3>Backup ZIP Cifrato</h3>
+                        <p>Esporta l'intero archivio o singole tabelle XLSX per backup esterni in totale sicurezza.</p>
                     </div>
                 </div>
             </div>
@@ -164,59 +164,59 @@
         <section id="gallery" class="gallery-section">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-title">Uno sguardo all'App</h2>
-                    <p>Interfaccia moderna basata su Material 3, ottimizzata per la produttività.</p>
+                    <h2 class="section-title">Esperienza Material 3</h2>
+                    <p>Interfaccia moderna e coerente con le linee guida Android, ottimizzata per il lavoro al banco.</p>
                 </div>
                 <div class="gallery-grid">
-                    <div class="gallery-item" onclick="openLightbox(this)">
-                        <img src="assets/screenshots/01-dashboard-pro.png" alt="Dashboard">
-                        <div class="gallery-overlay">Dashboard</div>
+                    <div class="gallery-item">
+                        <img src="assets/screenshots/01-dashboard-pro.png" alt="Banco Riparazioni">
+                        <div class="gallery-overlay">Dashboard & Code Operative</div>
                     </div>
-                    <div class="gallery-item" onclick="openLightbox(this)">
+                    <div class="gallery-item">
                         <img src="assets/screenshots/02-nuova-commessa-pro.png" alt="Nuova Commessa">
-                        <div class="gallery-overlay">Nuova Commessa</div>
+                        <div class="gallery-overlay">Presa in Carico Guidata</div>
                     </div>
-                    <div class="gallery-item" onclick="openLightbox(this)">
-                        <img src="assets/screenshots/03-foto-firma-pro.png" alt="Foto e Firma">
-                        <div class="gallery-overlay">Foto e Firma</div>
+                    <div class="gallery-item">
+                        <img src="assets/screenshots/03-foto-firma-pro.png" alt="Media e Firme">
+                        <div class="gallery-overlay">Foto e Firma Digitale</div>
                     </div>
-                    <div class="gallery-item" onclick="openLightbox(this)">
+                    <div class="gallery-item">
                         <img src="assets/screenshots/04-diagnosi-preventivo-pro.png" alt="Diagnosi">
-                        <div class="gallery-overlay">Diagnosi</div>
+                        <div class="gallery-overlay">Diagnosi e Preventivi</div>
                     </div>
-                    <div class="gallery-item" onclick="openLightbox(this)">
-                        <img src="assets/screenshots/05-whatsapp-pdf-pro.png" alt="PDF WhatsApp">
-                        <div class="gallery-overlay">PDF WhatsApp</div>
+                    <div class="gallery-item">
+                        <img src="assets/screenshots/05-whatsapp-pdf-pro.png" alt="PDF e Social">
+                        <div class="gallery-overlay">Invio PDF su WhatsApp</div>
                     </div>
-                    <div class="gallery-item" onclick="openLightbox(this)">
-                        <img src="assets/screenshots/06-timeline-chiusura-pro.png" alt="Timeline">
-                        <div class="gallery-overlay">Timeline</div>
+                    <div class="gallery-item">
+                        <img src="assets/screenshots/06-timeline-chiusura-pro.png" alt="Timeline Eventi">
+                        <div class="gallery-overlay">Cronologia Eventi & Timeline</div>
                     </div>
-                    <div class="gallery-item" onclick="openLightbox(this)">
-                        <img src="assets/screenshots/07-clienti-pro.png" alt="Clienti">
-                        <div class="gallery-overlay">Clienti</div>
+                    <div class="gallery-item">
+                        <img src="assets/screenshots/07-clienti-pro.png" alt="Archivio Clienti">
+                        <div class="gallery-overlay">Anagrafica Clienti Locale</div>
                     </div>
-                    <div class="gallery-item" onclick="openLightbox(this)">
-                        <img src="assets/screenshots/08-configurazione-pro.png" alt="Configurazione">
-                        <div class="gallery-overlay">Configurazione</div>
+                    <div class="gallery-item">
+                        <img src="assets/screenshots/08-configurazione-pro.png" alt="Setup">
+                        <div class="gallery-overlay">Configurazione & Backup</div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Lightbox Modal -->
-        <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-            <span class="close-lightbox">&times;</span>
-            <img id="lightbox-img" src="" alt="Enlarged view">
+        <div id="lightbox" class="lightbox">
+            <span class="close-lightbox" aria-label="Chiudi">&times;</span>
+            <img id="lightbox-img" src="" alt="Dettaglio Screenshot">
             <div id="lightbox-caption"></div>
         </div>
 
-        <!-- Comparison / Pricing -->
+        <!-- Versions / Pricing -->
         <section id="pricing" class="pricing-section">
             <div class="container">
                 <div class="section-header">
                     <h2 class="section-title">Scegli la tua versione</h2>
-                    <p>Nessun abbonamento. Paghi una volta, lo usi per sempre.</p>
+                    <p>Paghi una volta, possiedi i tuoi dati per sempre. Niente Cloud, niente canoni.</p>
                 </div>
                 <div class="pricing-grid">
                     <div class="price-card">
@@ -227,10 +227,12 @@
                         <ul class="price-features">
                             <li><i data-lucide="check"></i> 1 Commessa attiva</li>
                             <li><i data-lucide="check"></i> Diagnosi e Foto</li>
-                            <li><i data-lucide="check"></i> Firma Digitale</li>
-                            <li class="disabled"><i data-lucide="x"></i> Export Excel (XLSX)</li>
-                            <li class="disabled"><i data-lucide="x"></i> Backup Cifrati</li>
+                            <li><i data-lucide="check"></i> Firma Digitale su Touch</li>
+                            <li><i data-lucide="check"></i> Accesso Admin locale</li>
                             <li class="disabled"><i data-lucide="x"></i> PDF senza Watermark</li>
+                            <li class="disabled"><i data-lucide="x"></i> Gestione Operatori</li>
+                            <li class="disabled"><i data-lucide="x"></i> Export Excel (XLSX)</li>
+                            <li class="disabled"><i data-lucide="x"></i> Backup ZIP completo</li>
                         </ul>
                         <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp.demo" class="btn-outline">Scarica Demo</a>
                     </div>
@@ -241,14 +243,15 @@
                             <div class="price">Licenza Unica</div>
                         </div>
                         <ul class="price-features">
-                            <li><i data-lucide="check"></i> Commesse illimitate</li>
-                            <li><i data-lucide="check"></i> PDF personalizzati (No Watermark)</li>
-                            <li><i data-lucide="check"></i> Export XLSX e Backup ZIP</li>
-                            <li><i data-lucide="check"></i> Multi-operatore</li>
+                            <li><i data-lucide="check"></i> Commesse Illimitate</li>
+                            <li><i data-lucide="check"></i> PDF Personalizzati (No Watermark)</li>
+                            <li><i data-lucide="check"></i> Gestione Multi-operatore</li>
+                            <li><i data-lucide="check"></i> Export XLSX & Backup ZIP</li>
+                            <li><i data-lucide="check"></i> Cifratura SQLCipher Pro</li>
                             <li><i data-lucide="check"></i> Supporto prioritario</li>
                             <li><i data-lucide="check"></i> Aggiornamenti gratuiti</li>
                         </ul>
-                        <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="btn-primary">Acquista Pro</a>
+                        <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="btn-primary">Acquista PRO</a>
                     </div>
                 </div>
             </div>
@@ -263,78 +266,21 @@
                         <img src="assets/brand/onlytechtake-mark.svg" alt="OTT" class="logo-mark">
                         <span class="app-title">OnlyTechTake</span>
                     </a>
-                    <p>La soluzione professionale per i laboratori tecnici indipendenti.</p>
+                    <p>La soluzione professionale Local-First per i laboratori tecnici indipendenti.</p>
                 </div>
                 <div class="footer-links">
                     <h4>Risorse</h4>
                     <a href="privacy.html">Privacy Policy</a>
-                    <a href="mailto:support@onlytechtake.com">Supporto</a>
+                    <a href="mailto:support@onlytechtake.com">Supporto Tecnico</a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 OnlyTechTake | <a href="https://github.com/dennidalpos" class="footer-dev-link" aria-label="GitHub Repository"><img src="assets/icons/github-logo.svg" alt="GitHub" class="dev-icon"> Repo</a></p>
+                <p>&copy; 2026 OnlyTechTake | <a href="https://github.com/dennidalpos" class="footer-github-link" aria-label="GitHub Repository"><img src="assets/icons/github-logo.svg" alt="GitHub" class="github-icon"></a></p>
                 <p class="legal-disclaimer">Nessuna garanzia legale implicita sui moduli di firma. Consultare un legale per la conformità normativa locale.</p>
             </div>
         </div>
     </footer>
 
-    <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
-
-        // Theme Toggle
-        const themeToggle = document.getElementById('theme-toggle');
-        const html = document.documentElement;
-
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', newTheme);
-        });
-
-        // Sidebar Logic
-        const sidebarToggle = document.getElementById('sidebar-toggle');
-        const sidebarClose = document.getElementById('sidebar-close');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebar-overlay');
-
-        function toggleSidebar() {
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
-            document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : 'auto';
-        }
-
-        sidebarToggle.addEventListener('click', toggleSidebar);
-        sidebarClose.addEventListener('click', toggleSidebar);
-        overlay.addEventListener('click', toggleSidebar);
-
-        // Close sidebar when clicking a link
-        document.querySelectorAll('.sidebar-link').forEach(link => {
-            link.addEventListener('click', () => {
-                if (sidebar.classList.contains('active')) toggleSidebar();
-            });
-        });
-
-        // Lightbox Logic
-        function openLightbox(element) {
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImg = document.getElementById('lightbox-img');
-            const lightboxCaption = document.getElementById('lightbox-caption');
-            const clickedImg = element.querySelector('img');
-            const clickedCaption = element.querySelector('.gallery-overlay').innerText;
-
-            lightboxImg.src = clickedImg.src;
-            lightboxCaption.innerText = clickedCaption;
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Prevent scroll
-        }
-
-        function closeLightbox() {
-            const lightbox = document.getElementById('lightbox');
-            lightbox.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-    </script>
     <script src="script.js"></script>
 </body>
 </html>

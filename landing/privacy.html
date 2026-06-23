@@ -32,7 +32,7 @@
                 </a>
                 <div class="nav-actions">
                     <a href="index.html" class="nav-link">Home</a>
-                    <div id="theme-toggle" class="theme-switch">
+                    <div id="theme-toggle" class="theme-switch" title="Cambia Tema">
                         <i data-lucide="sun" class="sun-icon"></i>
                         <i data-lucide="moon" class="moon-icon"></i>
                     </div>
@@ -52,7 +52,7 @@
                 <img src="assets/brand/onlytechtake-mark.svg" alt="OTT" class="logo-mark">
                 <span class="app-title">OnlyTechTake</span>
             </a>
-            <button id="sidebar-close" class="close-btn">
+            <button id="sidebar-close" class="close-btn" aria-label="Chiudi">
                 <i data-lucide="x"></i>
             </button>
         </div>
@@ -68,64 +68,61 @@
             <a href="#" class="sidebar-link active"><i data-lucide="shield"></i> Privacy Policy</a>
         </nav>
         <div class="sidebar-footer">
-            <p>v1.0.0 Production</p>
+            <p>v1.0.0 Production | Privacy focus</p>
         </div>
     </aside>
 
-    <main class="container" style="padding: 6rem 1.5rem; max-width: 800px;">
-        <h1 style="font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 1.5rem; letter-spacing: -1px;">Informativa sulla Privacy</h1>
-        <p style="color: var(--md-sys-color-primary); font-weight: 700; margin-bottom: 3rem; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">Versione Corrente: 1.0.0</p>
+    <main class="legal-main">
+        <div class="container container-narrow">
+            <h1 class="legal-title">Informativa sulla Privacy</h1>
+            <p class="legal-version">Versione Corrente: 1.0.0</p>
 
-        <section style="margin-bottom: 4rem;">
-            <p style="font-size: 1.1rem; color: var(--md-sys-color-on-surface-variant);">L'applicazione <strong>OnlyTechTake</strong> (di seguito "l'App") è progettata con un approccio <strong>Local-First</strong>. La presente informativa descrive come gestiamo la tua privacy, basandoci su un principio fondamentale: i tuoi dati appartengono a te e non lasciano mai il tuo dispositivo senza il tuo esplicito comando manuale.</p>
-        </section>
+            <section class="legal-section">
+                <p class="legal-intro">L'applicazione <strong>OnlyTechTake</strong> (di seguito "l'App") è progettata con un approccio <strong>Local-First</strong>. La presente informativa descrive come gestiamo la tua privacy, basandoci su un principio fondamentale: i tuoi dati appartengono a te e non lasciano mai il tuo dispositivo senza il tuo esplicito comando manuale.</p>
+            </section>
 
-        <section style="margin-bottom: 4rem;">
-            <h2 style="margin-bottom: 1.5rem;">1. Trattamento dei Dati Locali</h2>
-            <p>L'App non dispone di un server centrale o di un database cloud gestito dagli sviluppatori. Tutte le informazioni inserite nell'App, inclusi:</p>
-            <ul style="padding-left: 1.5rem; margin-top: 1rem; color: var(--md-sys-color-on-surface-variant);">
-                <li style="margin-bottom: 0.75rem;">Anagrafiche clienti e contatti</li>
-                <li style="margin-bottom: 0.75rem;">Dettagli tecnici sulle riparazioni</li>
-                <li style="margin-bottom: 0.75rem;">Fotografie e allegati multimediali</li>
-                <li style="margin-bottom: 0.75rem;">Firme digitali dei clienti</li>
-            </ul>
-            <p>vengono memorizzati esclusivamente in un <strong>database cifrato (SQLCipher)</strong> all'interno dello storage privato del tuo dispositivo Android.</p>
-        </section>
+            <section class="legal-section">
+                <h2>1. Trattamento dei Dati Locali</h2>
+                <p>L'App non dispone di un server centrale o di un database cloud gestito dagli sviluppatori. Tutte le informazioni inserite nell'App, inclusi:</p>
+                <ul class="legal-list">
+                    <li>Anagrafiche clienti e contatti</li>
+                    <li>Dettagli tecnici sulle riparazioni</li>
+                    <li>Fotografie e allegati multimediali (CameraX)</li>
+                    <li>Firme digitali dei clienti</li>
+                </ul>
+                <p>vengono memorizzati esclusivamente in un <strong>database cifrato (SQLCipher)</strong> all'interno dello storage privato del tuo dispositivo Android.</p>
+            </section>
 
-        <section style="margin-bottom: 4rem;">
-            <h2 style="margin-bottom: 1.5rem;">2. Sicurezza e Cifratura</h2>
-            <p>Per garantire la massima protezione dei dati sensibili dei tuoi clienti, OnlyTechTake implementa una cifratura a livello di database. L'accesso ai dati è protetto dalle credenziali operatore create durante la prima configurazione. È responsabilità dell'utente mantenere la sicurezza fisica del dispositivo e utilizzare sistemi di sblocco sicuri (PIN, Biometria).</p>
-        </section>
+            <section class="legal-section">
+                <h2>2. Sicurezza e Cifratura</h2>
+                <p>Per garantire la massima protezione dei dati sensibili dei tuoi clienti, OnlyTechTake implementa una cifratura a livello di database. L'accesso ai dati è protetto dalle credenziali operatore (Admin o Operatore) create durante la prima configurazione. È responsabilità dell'utente mantenere la sicurezza fisica del dispositivo e utilizzare sistemi di sblocco sicuri (PIN, Biometria).</p>
+            </section>
 
-        <section style="margin-bottom: 4rem;">
-            <h2 style="margin-bottom: 1.5rem;">3. Permessi Richiesti</h2>
-            <p>L'App richiede i seguenti permessi per funzionare correttamente:</p>
-            <ul style="padding-left: 1.5rem; margin-top: 1rem; color: var(--md-sys-color-on-surface-variant);">
-                <li style="margin-bottom: 0.75rem;"><strong>Fotocamera:</strong> Necessaria per documentare visivamente lo stato dei dispositivi in entrata.</li>
-                <li style="margin-bottom: 0.75rem;"><strong>Storage / Media:</strong> Utilizzato esclusivamente per salvare e recuperare i file relativi alle commesse.</li>
-                <li style="margin-bottom: 0.75rem;"><strong>Internet:</strong> L'App non richiede accesso a internet per il funzionamento core. L'accesso alla rete può essere utilizzato solo per il controllo della licenza tramite Google Play Services.</li>
-            </ul>
-        </section>
+            <section class="legal-section">
+                <h2>3. Permessi Richiesti</h2>
+                <p>L'App richiede i seguenti permessi per funzionare correttamente:</p>
+                <ul class="legal-list">
+                    <li><strong>Fotocamera:</strong> Necessaria per documentare visivamente lo stato dei dispositivi in entrata tramite scatti rapidi.</li>
+                    <li><strong>Storage / Media:</strong> Utilizzato esclusivamente per salvare e recuperare i file relativi alle commesse nello storage privato.</li>
+                    <li><strong>Internet:</strong> L'App non richiede accesso a internet per il funzionamento core. L'accesso alla rete può essere utilizzato solo per il controllo della licenza tramite Google Play Services.</li>
+                </ul>
+            </section>
 
-        <section style="margin-bottom: 4rem;">
-            <h2 style="margin-bottom: 1.5rem;">4. Condivisione dei Dati verso Terzi</h2>
-            <p>OnlyTechTake <strong>non trasmette, vende o condivide</strong> automaticamente i dati con terze parti. La condivisione avviene solo su tua iniziativa esplicita attraverso:</p>
-            <ul style="padding-left: 1.5rem; margin-top: 1rem; color: var(--md-sys-color-on-surface-variant);">
-                <li style="margin-bottom: 0.75rem;">Invio manuale di PDF tramite WhatsApp o Email.</li>
-                <li style="margin-bottom: 0.75rem;">Esportazione manuale di file Excel (XLSX).</li>
-                <li style="margin-bottom: 0.75rem;">Creazione di backup ZIP cifrati per trasferimento su altri dispositivi.</li>
-            </ul>
-        </section>
+            <section class="legal-section">
+                <h2>4. Condivisione dei Dati verso Terzi</h2>
+                <p>OnlyTechTake <strong>non trasmette, vende o condivide</strong> automaticamente i dati con terze parti. La condivisione avviene solo su tua iniziativa esplicita attraverso:</p>
+                <ul class="legal-list">
+                    <li>Invio manuale di PDF tramite WhatsApp o app di messaggistica.</li>
+                    <li>Esportazione manuale di file Excel (XLSX).</li>
+                    <li>Creazione di backup ZIP cifrati per trasferimento manuale.</li>
+                </ul>
+            </section>
 
-        <section style="margin-bottom: 4rem;">
-            <h2 style="margin-bottom: 1.5rem;">5. Titolare del Trattamento</h2>
-            <p>Ai sensi del GDPR, il <strong>Titolare del Trattamento</strong> dei dati dei clienti finali è l'utilizzatore professionale dell'App (il laboratorio o il tecnico). Lo sviluppatore dell'App non ha accesso ai dati inseriti e non agisce come responsabile del trattamento.</p>
-        </section>
-
-        <section style="margin-bottom: 4rem; padding: 2rem; background: var(--md-sys-color-surface-variant); border-radius: 16px;">
-            <h2 style="margin-bottom: 1rem; font-size: 1.25rem;">Domande sullo sviluppo?</h2>
-            <p>Per informazioni riguardanti il progetto, puoi consultare il repository ufficiale su <a href="https://github.com/dennidalpos" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--md-sys-color-primary); text-decoration: none; font-weight: 600;" aria-label="GitHub"><img src="assets/icons/github-logo.svg" alt="" style="width: 20px; height: 20px;"> GitHub</a>.</p>
-        </section>
+            <section class="legal-section">
+                <h2>5. Titolare del Trattamento</h2>
+                <p>Ai sensi del GDPR, il <strong>Titolare del Trattamento</strong> dei dati dei clienti finali è l'utilizzatore professionale dell'App (il laboratorio o il tecnico). Lo sviluppatore dell'App non ha accesso ai dati inseriti e non agisce come responsabile del trattamento.</p>
+            </section>
+        </div>
     </main>
 
     <footer>
@@ -136,42 +133,15 @@
                         <img src="assets/brand/onlytechtake-mark.svg" alt="OTT" class="logo-mark">
                         <span class="app-title">OnlyTechTake</span>
                     </a>
-                    <p>La soluzione professionale per i laboratori tecnici indipendenti.</p>
+                    <p>La soluzione professionale Local-First per i laboratori tecnici indipendenti.</p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 OnlyTechTake | <a href="https://github.com/dennidalpos" style="display: inline-flex; align-items: center; vertical-align: middle; gap: 0.5rem; color: inherit; text-decoration: none;" aria-label="GitHub Repository"><img src="assets/icons/github-logo.svg" alt="GitHub" style="width: 18px; height: 18px; filter: opacity(0.8);"> Repo</a></p>
+                <p>&copy; 2026 OnlyTechTake | <a href="https://github.com/dennidalpos" class="footer-github-link" aria-label="GitHub Repository"><img src="assets/icons/github-logo.svg" alt="GitHub" class="github-icon"></a></p>
             </div>
         </div>
     </footer>
 
-    <script>
-        lucide.createIcons();
-
-        // Theme Toggle
-        const themeToggle = document.getElementById('theme-toggle');
-        const html = document.documentElement;
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', newTheme);
-        });
-
-        // Sidebar Logic
-        const sidebarToggle = document.getElementById('sidebar-toggle');
-        const sidebarClose = document.getElementById('sidebar-close');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebar-overlay');
-
-        function toggleSidebar() {
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
-            document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : 'auto';
-        }
-
-        sidebarToggle.addEventListener('click', toggleSidebar);
-        sidebarClose.addEventListener('click', toggleSidebar);
-        overlay.addEventListener('click', toggleSidebar);
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

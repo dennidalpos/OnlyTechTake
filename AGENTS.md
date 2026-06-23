@@ -33,9 +33,9 @@ Guida operativa per agenti AI. Ambiente: **Windows 11 + PowerShell**.
 
 ## 4. Platform & Build Rules
 - **Flavors**:
-  - `full` (Pro): Prodotto completo.
-  - `demo` (Trial): 1 commessa, no export, watermark PDF.
-  - `showcase`: Build interna con dati pre-caricati.
+  - `full` (Pro): Prodotto completo per utenti finali.
+  - `demo` (Trial): 1 commessa, no export, watermark PDF. Versione pubblica limitata.
+  - `showcase`: Build interna ad uso esclusivo del proprietario/sviluppatore con dati pre-caricati per demo rapide. **NON pubblicare o menzionare sulla landing page.**
 - **SDK**: Target 37, Min 26.
 - **Database**: `DATABASE_VERSION = 1` bloccata. Non modificare schema o entità senza ordine esplicito.
 - **Permissions**: Solo `CAMERA` (per documentazione riparazioni). `android:required="false"`.
