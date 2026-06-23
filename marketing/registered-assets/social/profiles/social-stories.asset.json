@@ -1,0 +1,30 @@
+{
+  "id": "social-stories",
+  "flavor": "Full",
+  "testClass": "com.onlytechtake.repairapp.demo.SocialStoryDemoScreenshotTest",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/social-stories",
+  "pulledDirectoryName": "social-stories",
+  "cases": [
+    {
+      "id": "operational-stories",
+      "sourceDirectory": ".",
+      "outputs": [
+        { "platform": "whatsapp", "variant": "vertical", "subDir": "stories" }
+      ],
+      "expectedFiles": [
+        "story-01-dashboard.png",
+        "story-02-new-order.png",
+        "story-03-customer.png",
+        "story-04-category.png",
+        "story-05-problem.png",
+        "story-06-media.png",
+        "story-07-signature.png",
+        "story-08-summary.png",
+        "story-09-orders-list.png",
+        "story-10-order-detail.png",
+        "story-11-diagnosis.png",
+        "story-12-closed.png"
+      ]
+    }
+  ]
+}

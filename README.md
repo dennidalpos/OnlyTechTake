@@ -1,56 +1,39 @@
-# OnlyTechTake: Un'app per ogni problema! 🛠️
+# OnlyTechTake Repair App
 
-[![Android](https://img.shields.io/badge/Platform-Android-green.svg)](https://developer.android.com)
-[![Kotlin](https://img.shields.io/badge/Language-Kotlin-orange.svg)](https://kotlinlang.org)
-[![Compose](https://img.shields.io/badge/UI-Jetpack%20Compose-blue.svg)](https://developer.android.com/jetpack/compose)
-[![SQLCipher](https://img.shields.io/badge/Security-SQLCipher-red.svg)](https://www.zetetic.net/sqlcipher/)
+Gestionale "local-first" per laboratori di riparazione smartphone e PC.
 
-Benvenuti in **OnlyTechTake**, la soluzione definitiva per la gestione delle commesse di riparazione. Nata per trasformare il caos dei fogli di carta in un flusso di lavoro digitale, sicuro e orientato al cliente.
+## Overview
+OnlyTechTake è un'applicazione Android progettata per professionisti tecnici. Consente la gestione completa del ciclo di vita delle riparazioni (commesse), anagrafica clienti, firma digitale e generazione report PDF, tutto mantenendo i dati esclusivamente sul dispositivo.
 
-> **"Un'app per ogni problema!"** — Dalla presa in carico alla consegna, OnlyTechTake è al tuo fianco.
+## Stack Tecnologico
+- **Linguaggio**: Kotlin
+- **UI**: Jetpack Compose con Material 3
+- **Database**: Room + SQLCipher (cifratura locale)
+- **Altro**: DataStore, CameraX, Navigation Compose, Coroutines.
 
-![OnlyTechTake Showcase](media/brand/social/github-cover.svg)
+## Policy Local-First
+- **Privacy**: Nessun dato lascia il dispositivo senza azione esplicita dell'utente (backup/export).
+- **Offline**: Funzionalità completa senza connessione internet.
+- **Sicurezza**: Database cifrato.
 
-## ✨ Perché scegliere OnlyTechTake?
+## Varianti (Flavors)
+- `full`: Versione Pro completa.
+- `demo`: Versione Trial limitata (1 sola commessa attiva, export disabilitato).
+- `showcase`: Build interna per dimostrazioni con dati pre-caricati.
 
-OnlyTechTake non è solo un software di gestione; è la tua vetrina operativa. Progettata per laboratori tecnici e centri riparazione che vogliono offrire trasparenza e professionalità.
+## Sviluppo e Comandi
+L'ambiente di sviluppo preferito è Windows 11 con PowerShell.
 
-*   **🔒 Local-First & Privacy-By-Design**: I tuoi dati (e quelli dei tuoi clienti) non lasciano mai il dispositivo. Database cifrato con **SQLCipher** per la massima sicurezza.
-*   **📱 Integrazione WhatsApp manuale**: L'app prepara il messaggio di avanzamento, l'operatore lo controlla e lo invia da WhatsApp.
-*   **📸 Documentazione Multimediale**: Scatta foto prima e dopo la riparazione, cattura firme digitali e allega documenti tecnici.
-*   **🧩 Varianti chiare**:
-    *   **Pro / Full**: prodotto completo per vendita, Play Store principale, social e materiali commerciali.
-    *   **Demo**: prova limitata e trasparente del flusso base, con una sola commessa e funzioni Pro bloccate.
-    *   **Showcase**: vetrina guidata con dati pre-caricati per presentazioni e registrazioni controllate, non listing Play principale.
-
-## 🚀 Funzionalità Chiave
-
-*   **Workflow Guidato**: Un percorso a step che ti porta dalla diagnosi al preventivo, fino alla chiusura della commessa.
-*   **Gestione Clienti Evoluta**: Database anagrafico completo per privati e aziende.
-*   **Backup & Sicurezza**: Esporta i tuoi dati in formato ZIP cifrato o XLSX per la tua contabilità.
-*   **Dashboard Operativa**: Tieni d'occhio le code: banco, diagnosi, riparazione e pronte per la consegna.
-
----
-
-## 🛠️ Note Tecniche per lo Sviluppo
-
-### Ambiente
-*   **OS**: Windows 11 + PowerShell.
-*   **Stack**: Kotlin, Compose, Material 3, Room, CameraX, Coroutines.
-*   **SDK**: Target 37, Min 26.
-
-### Setup Rapido
 ```powershell
 # Verifica ambiente
-powershell -ExecutionPolicy Bypass -File scripts\powershell\android\check_env.ps1
+./scripts/powershell/android/check_env.ps1
 
-# Build e avvio (Flavor Full Debug)
-powershell -ExecutionPolicy Bypass -File scripts\powershell\android\start_app.ps1 -CleanInstall
+# Controllo qualità (Spotless, Lint, Tests)
+./scripts/powershell/project/quality.ps1
+
+# Build e controllo progetto
+./scripts/powershell/project/check_project.ps1 -Flavor Full -SkipReleaseBuild
 ```
 
-## 📖 Documentazione Completa
-Consulta la nostra [Wiki interna](docs/README.md) per guide dettagliate su architettura, modelli dati e workflow di rilascio.
-
----
-
-*OnlyTechTake è un prodotto local-only. Nessun cloud, nessuna dipendenza esterna, solo pura efficienza sul tuo dispositivo.*
+Per istruzioni operative dettagliate per agenti AI, consultare [AGENTS.md](AGENTS.md).
+Per asset marketing e testi, consultare [marketing/](marketing/README.md).

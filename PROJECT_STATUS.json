@@ -48,16 +48,13 @@
       "id": "B11",
       "title": "Pubblicazione Google Play (Pro e Demo)",
       "priority": "P0",
-      "status": "open",
+      "status": "active",
       "recommended_batch_size": 1,
       "identified_residual": [
-        "Signing release con keystore.properties reale.",
-        "Generazione AAB Full e Demo.",
         "Privacy Policy definitiva e URL pubblico.",
         "Data Safety form in Play Console."
       ],
       "plan": [
-        "Verificare build release locale con keystore placeholder.",
         "Validazione App Access e Content Rating in Play Console."
       ]
     },

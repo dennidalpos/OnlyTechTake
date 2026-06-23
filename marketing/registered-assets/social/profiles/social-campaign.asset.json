@@ -1,0 +1,25 @@
+{
+  "id": "social-campaign",
+  "flavor": "Full",
+  "testClass": "com.onlytechtake.repairapp.demo.SocialCampaignScreenshotTest",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/social-campaign",
+  "pulledDirectoryName": "social-campaign",
+  "cases": [
+    {
+      "id": "social-flow",
+      "sourceDirectory": ".",
+      "outputs": [
+        { "platform": "whatsapp", "variant": "vertical", "subDir": "campaign" }
+      ],
+      "expectedFiles": [
+        "01-home.png",
+        "02-accoglienza.png",
+        "03-step2-diagnosi.png",
+        "03b-step3-media.png",
+        "04-step4-firma.png",
+        "05-whatsapp.png",
+        "06-successo.png"
+      ]
+    }
+  ]
+}

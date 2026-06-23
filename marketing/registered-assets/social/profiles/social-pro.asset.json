@@ -1,0 +1,22 @@
+{
+  "id": "social-pro",
+  "flavor": "Full",
+  "testClass": "com.onlytechtake.repairapp.demo.SocialProAssetTest",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/social-pro",
+  "pulledDirectoryName": "social-pro",
+  "cases": [
+    {
+      "id": "multichannel",
+      "sourceDirectory": ".",
+      "outputs": [
+        { "platform": "whatsapp", "variant": "vertical", "subDir": "highlights" }
+      ],
+      "expectedFiles": [
+        "01-dashboard.png",
+        "02-order-details.png",
+        "03-customer-list.png",
+        "04-pdf-preview.png"
+      ]
+    }
+  ]
+}
