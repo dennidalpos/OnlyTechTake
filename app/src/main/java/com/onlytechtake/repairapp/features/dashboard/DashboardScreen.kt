@@ -441,7 +441,11 @@ private data class NavigationItem(
 )
 
 @Preview(showBackground = true, name = "Light Mode")
-@Preview(showBackground = true, name = "Dark Mode", uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    showBackground = true,
+    name = "Dark Mode",
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 private fun DashboardScreenPreview() {
     MaterialTheme {

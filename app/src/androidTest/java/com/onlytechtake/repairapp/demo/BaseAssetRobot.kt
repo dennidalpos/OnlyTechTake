@@ -46,7 +46,7 @@ abstract class BaseAssetRobot(
                 return
             }
 
-            if (attempt == (LOGIN_ATTEMPTS - 1) || !isTagPresent(RepairAppTestTags.AuthUsernameField)) {
+            if ((attempt == (LOGIN_ATTEMPTS - 1)) || !isTagPresent(RepairAppTestTags.AuthUsernameField)) {
                 waitForTag(RepairAppTestTags.dashboardTab("HOME"))
             }
             pauseForDemo()
@@ -93,15 +93,15 @@ abstract class BaseAssetRobot(
             composeRule.waitUntil(timeoutMillis = 5_000) {
                 runCatching { node.assertIsEnabled() }.isSuccess
             }
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             node.assertIsEnabled()
         }
         try {
             node.performClick()
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             try {
                 node.performTouchInput { click() }
-            } catch (e2: Throwable) {
+            } catch (_: Throwable) {
                 node.performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
             }
         }
@@ -117,10 +117,10 @@ abstract class BaseAssetRobot(
         val node = composeRule.onNodeWithText(text, substring = true)
         try {
             node.performClick()
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             try {
                 node.performTouchInput { click() }
-            } catch (e2: Throwable) {
+            } catch (_: Throwable) {
                 node.performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
             }
         }
@@ -146,10 +146,10 @@ abstract class BaseAssetRobot(
                     }
                     node.assertIsDisplayed()
                     true
-                }.getOrDefault(false)
+                }.getOrDefault(defaultValue = false)
             if (displayed) return
             if (scroll) {
-                if (attempts % 15 < 10) performSafeSwipeUp() else performSafeSwipeDown()
+                if ((attempts % 15) < 10) performSafeSwipeUp() else performSafeSwipeDown()
             }
             Thread.sleep(TAG_POLL_MILLIS)
             attempts++
@@ -165,7 +165,7 @@ abstract class BaseAssetRobot(
         var found = false
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
-        while (!found && System.currentTimeMillis() < deadline) {
+        while (System.currentTimeMillis() < deadline) {
             found = isTagPresent(tag, useUnmergedTree)
             if (found) break
             if (scroll) {
@@ -179,15 +179,13 @@ abstract class BaseAssetRobot(
                             found = true
                             break
                         }
-                    } catch (e: Throwable) {
-                        if (attempts % 15 < 10) performSafeSwipeUp() else performSafeSwipeDown()
+                    } catch (_: Throwable) {
+                        if ((attempts % 15) < 10) performSafeSwipeUp() else performSafeSwipeDown()
                     }
                 }
             }
-            if (!found) {
-                Thread.sleep(TAG_POLL_MILLIS)
-                attempts++
-            }
+            Thread.sleep(TAG_POLL_MILLIS)
+            attempts++
         }
         if (!found) composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).assertExists()
     }
@@ -201,7 +199,8 @@ abstract class BaseAssetRobot(
             .fetchSemanticsNodes()
             .isNotEmpty()
 
-    fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+    fun isTextDisplayed(text: String): Boolean =
+        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
     fun waitForText(
         text: String,
@@ -210,7 +209,7 @@ abstract class BaseAssetRobot(
         var found = false
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
-        while (!found && System.currentTimeMillis() < deadline) {
+        while (System.currentTimeMillis() < deadline) {
             found = isTextDisplayed(text)
             if (found) break
             if (scroll) {
@@ -222,15 +221,13 @@ abstract class BaseAssetRobot(
                             found = true
                             break
                         }
-                    } catch (e: Throwable) {
-                        if (attempts % 15 < 10) performSafeSwipeUp() else performSafeSwipeDown()
+                    } catch (_: Throwable) {
+                        if ((attempts % 15) < 10) performSafeSwipeUp() else performSafeSwipeDown()
                     }
                 }
             }
-            if (!found) {
-                Thread.sleep(TAG_POLL_MILLIS)
-                attempts++
-            }
+            Thread.sleep(TAG_POLL_MILLIS)
+            attempts++
         }
         if (!found) composeRule.onNodeWithText(text, substring = true).assertExists()
     }
@@ -283,7 +280,7 @@ abstract class BaseAssetRobot(
                             ).performClick()
                         composeRule.waitForIdle()
                         Thread.sleep(1000)
-                    } catch (e: Throwable) {
+                    } catch (_: Throwable) {
                     }
                 }
             }
@@ -292,7 +289,7 @@ abstract class BaseAssetRobot(
                     Espresso.pressBackUnconditionally()
                     composeRule.waitForIdle()
                     Thread.sleep(500)
-                } catch (e: Throwable) {
+                } catch (_: Throwable) {
                 }
             }
             waitForTagGone(
@@ -318,7 +315,7 @@ abstract class BaseAssetRobot(
                     .performTouchInput { swipeUp(startY = bottom * 0.8f, endY = top + 30f) }
                 composeRule.waitForIdle()
                 return
-            } catch (e: Throwable) {
+            } catch (_: Throwable) {
             }
         }
         try {
@@ -326,7 +323,7 @@ abstract class BaseAssetRobot(
                 .onAllNodes(isRoot())
                 .onFirst()
                 .performTouchInput { swipeUp(startY = bottom * 0.8f, endY = top + 30f) }
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
         }
         composeRule.waitForIdle()
     }
@@ -346,7 +343,7 @@ abstract class BaseAssetRobot(
                     .performTouchInput { swipeDown(startY = top + 30f, endY = bottom * 0.8f) }
                 composeRule.waitForIdle()
                 return
-            } catch (e: Throwable) {
+            } catch (_: Throwable) {
             }
         }
         try {
@@ -354,7 +351,7 @@ abstract class BaseAssetRobot(
                 .onAllNodes(isRoot())
                 .onFirst()
                 .performTouchInput { swipeDown(startY = top + 30f, endY = bottom * 0.8f) }
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
         }
         composeRule.waitForIdle()
     }
@@ -381,7 +378,8 @@ abstract class BaseAssetRobot(
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    fun isRecordingDemo(): Boolean =
+        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     companion object {
         const val WAIT_TIMEOUT_MILLIS = 30_000L

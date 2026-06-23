@@ -355,11 +355,8 @@ class SocialStoryDemoScreenshotTest {
     }
 
     private fun withDemoApp(block: () -> Unit) {
-        val scenario = ActivityScenario.launch(MainActivity::class.java)
-        try {
+        ActivityScenario.launch(MainActivity::class.java).use {
             block()
-        } finally {
-            scenario.close()
         }
     }
 
@@ -461,7 +458,8 @@ class SocialStoryDemoScreenshotTest {
         Thread.sleep(2000)
     }
 
-    private fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+    private fun isTextDisplayed(text: String): Boolean =
+        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
     private fun loginDemo(username: String) {
         repeat(LOGIN_ATTEMPTS) { attempt ->
@@ -480,7 +478,7 @@ class SocialStoryDemoScreenshotTest {
                 return
             }
 
-            if (attempt == LOGIN_ATTEMPTS - 1 || !isTagPresent(RepairAppTestTags.AuthUsernameField)) {
+            if ((attempt == LOGIN_ATTEMPTS - 1) || !isTagPresent(RepairAppTestTags.AuthUsernameField)) {
                 waitForTag(RepairAppTestTags.dashboardTab("HOME"))
             }
             pauseForDemo()
@@ -517,16 +515,16 @@ class SocialStoryDemoScreenshotTest {
             composeRule.waitUntil(timeoutMillis = 5_000) {
                 runCatching { node.assertIsEnabled() }.isSuccess
             }
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             node.assertIsEnabled()
         }
 
         try {
             node.performClick()
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             try {
                 node.performTouchInput { click() }
-            } catch (e2: Throwable) {
+            } catch (_: Throwable) {
                 node.performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
             }
         }
@@ -544,10 +542,10 @@ class SocialStoryDemoScreenshotTest {
 
         try {
             node.performClick()
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             try {
                 node.performTouchInput { click() }
-            } catch (e2: Throwable) {
+            } catch (_: Throwable) {
                 node.performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
             }
         }
@@ -572,14 +570,14 @@ class SocialStoryDemoScreenshotTest {
                 }
                 composeRule.waitForIdle()
                 return
-            } catch (e: Throwable) {
+            } catch (_: Throwable) {
             }
         }
         try {
             composeRule.onAllNodes(isRoot()).onFirst().performTouchInput {
                 swipeUp(startY = bottom * 0.8f, endY = top + 30f)
             }
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
         }
         composeRule.waitForIdle()
     }
@@ -600,14 +598,14 @@ class SocialStoryDemoScreenshotTest {
                 }
                 composeRule.waitForIdle()
                 return
-            } catch (e: Throwable) {
+            } catch (_: Throwable) {
             }
         }
         try {
             composeRule.onAllNodes(isRoot()).onFirst().performTouchInput {
                 swipeDown(startY = top + 30f, endY = bottom * 0.8f)
             }
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
         }
         composeRule.waitForIdle()
     }
@@ -630,7 +628,7 @@ class SocialStoryDemoScreenshotTest {
                     }
                     node.assertIsDisplayed()
                     true
-                }.getOrDefault(false)
+                }.getOrDefault(defaultValue = false)
             if (displayed) return
 
             if (scroll) {
@@ -655,7 +653,7 @@ class SocialStoryDemoScreenshotTest {
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
 
-        while (!found && System.currentTimeMillis() < deadline) {
+        while (System.currentTimeMillis() < deadline) {
             found = isTagPresent(tag, useUnmergedTree)
             if (found) break
 
@@ -670,7 +668,7 @@ class SocialStoryDemoScreenshotTest {
                             found = true
                             break
                         }
-                    } catch (e: Throwable) {
+                    } catch (_: Throwable) {
                         if (attempts % 15 < 10) {
                             performSafeSwipeUp() // Scroll DOWN (reveal items below)
                         } else {
@@ -679,10 +677,8 @@ class SocialStoryDemoScreenshotTest {
                     }
                 }
             }
-            if (!found) {
-                Thread.sleep(TAG_POLL_MILLIS)
-                attempts++
-            }
+            Thread.sleep(TAG_POLL_MILLIS)
+            attempts++
         }
         if (!found) {
             composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).assertExists()
@@ -710,17 +706,16 @@ class SocialStoryDemoScreenshotTest {
                             ).performClick()
                         composeRule.waitForIdle()
                         Thread.sleep(1000)
-                    } catch (e: Throwable) {
+                    } catch (_: Throwable) {
                     }
                 }
             }
             if (isTagPresent(RepairAppTestTags.OrderWhatsAppPreviewPanel, useUnmergedTree = true)) {
                 try {
-                    androidx.test.espresso.Espresso
-                        .pressBackUnconditionally()
+                    Espresso.pressBackUnconditionally()
                     composeRule.waitForIdle()
                     Thread.sleep(500)
-                } catch (e: Throwable) {
+                } catch (_: Throwable) {
                 }
             }
             waitForTagGone(
@@ -769,11 +764,6 @@ class SocialStoryDemoScreenshotTest {
             .fetchSemanticsNodes()
             .isNotEmpty()
 
-    private fun isTagDisplayed(tag: String): Boolean =
-        runCatching {
-            composeRule.onNodeWithTag(tag).assertIsDisplayed()
-        }.isSuccess
-
     private fun waitForText(
         text: String,
         scrollIfNotFound: Boolean = false,
@@ -782,7 +772,7 @@ class SocialStoryDemoScreenshotTest {
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
 
-        while (!found && System.currentTimeMillis() < deadline) {
+        while (System.currentTimeMillis() < deadline) {
             found = isTextDisplayed(text)
             if (found) break
 
@@ -795,7 +785,7 @@ class SocialStoryDemoScreenshotTest {
                             found = true
                             break
                         }
-                    } catch (e: Throwable) {
+                    } catch (_: Throwable) {
                         if (attempts % 15 < 10) {
                             performSafeSwipeUp() // Scroll DOWN (reveal items below)
                         } else {
@@ -804,10 +794,8 @@ class SocialStoryDemoScreenshotTest {
                     }
                 }
             }
-            if (!found) {
-                Thread.sleep(TAG_POLL_MILLIS)
-                attempts++
-            }
+            Thread.sleep(TAG_POLL_MILLIS)
+            attempts++
         }
         if (!found) {
             composeRule.onNodeWithText(text, substring = true).assertExists()
@@ -844,7 +832,8 @@ class SocialStoryDemoScreenshotTest {
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean =
+        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     private companion object {
         const val CASE_ORDER = "01-commessa-nuovo-cliente-chiusura"
@@ -856,7 +845,6 @@ class SocialStoryDemoScreenshotTest {
         const val WAIT_TIMEOUT_MILLIS = 30_000L
         const val LOGIN_ATTEMPTS = 2
         const val LOGIN_ATTEMPT_TIMEOUT_MILLIS = 20_000L
-        const val VISIBILITY_SWIPE_ATTEMPTS = 5
         const val TAG_POLL_MILLIS = 250L
         const val ACTION_PAUSE_MILLIS = 1_400L
         const val SCREENSHOT_PAUSE_MILLIS = 1_400L

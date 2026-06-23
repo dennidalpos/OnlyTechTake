@@ -248,7 +248,12 @@ private fun SettingsSectionContent(
 }
 
 @Preview(showBackground = true, name = "Light Mode", widthDp = 1000)
-@Preview(showBackground = true, name = "Dark Mode", widthDp = 1000, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    showBackground = true,
+    name = "Dark Mode",
+    widthDp = 1000,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 private fun SettingsPanelWidePreview() {
     MaterialTheme {

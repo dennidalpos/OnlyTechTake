@@ -45,7 +45,7 @@ internal class OrderWorkflowQueries(
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> true
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
-                -> false
+                    -> false
 
                 else -> null
             }
@@ -77,7 +77,7 @@ internal class OrderWorkflowQueries(
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> true
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
-                -> false
+                    -> false
 
                 else -> null
             }
@@ -123,7 +123,7 @@ internal class OrderWorkflowQueries(
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> true
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
-                -> false
+                    -> false
 
                 else -> null
             }

@@ -189,11 +189,11 @@ class SocialCampaignScreenshotTest {
                         .observeRecentActiveOrders(limit = 20)
                         .first()
                         .firstOrNull {
-                            it.id != DemoDataSeeder.DEMO_ORDER_ID &&
-                                it.title == "Asus ROG - Surriscaldamento"
+                            (it.id != DemoDataSeeder.DEMO_ORDER_ID) &&
+                                (it.title == "Asus ROG - Surriscaldamento")
                         }
                 }
-            if (order != null) return order.id
+            order?.let { return it.id }
             Thread.sleep(TAG_POLL_MILLIS)
         }
         error("Ordine creato dal wizard non trovato")
@@ -286,7 +286,7 @@ class SocialCampaignScreenshotTest {
             ) {
                 return
             }
-            if (attempt == (LOGIN_ATTEMPTS - 1) || !isTagPresent(RepairAppTestTags.AuthUsernameField)) {
+            if ((attempt == (LOGIN_ATTEMPTS - 1)) || !isTagPresent(RepairAppTestTags.AuthUsernameField)) {
                 waitForTag(RepairAppTestTags.dashboardTab("HOME"))
             }
             pauseForDemo()
@@ -333,16 +333,16 @@ class SocialCampaignScreenshotTest {
             composeRule.waitUntil(timeoutMillis = 5_000) {
                 runCatching { node.assertIsEnabled() }.isSuccess
             }
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             node.assertIsEnabled()
         }
 
         try {
             node.performClick()
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             try {
                 node.performTouchInput { click() }
-            } catch (e2: Throwable) {
+            } catch (_: Throwable) {
                 node.performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
             }
         }
@@ -358,10 +358,10 @@ class SocialCampaignScreenshotTest {
         val node = composeRule.onNodeWithText(text, substring = true)
         try {
             node.performClick()
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             try {
                 node.performTouchInput { click() }
-            } catch (e2: Throwable) {
+            } catch (_: Throwable) {
                 node.performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
             }
         }
@@ -384,7 +384,7 @@ class SocialCampaignScreenshotTest {
                     .performTouchInput { swipeUp(startY = bottom * 0.8f, endY = top + 30f) }
                 composeRule.waitForIdle()
                 return
-            } catch (e: Throwable) {
+            } catch (_: Throwable) {
             }
         }
         try {
@@ -392,7 +392,7 @@ class SocialCampaignScreenshotTest {
                 .onAllNodes(isRoot())
                 .onFirst()
                 .performTouchInput { swipeUp(startY = bottom * 0.8f, endY = top + 30f) }
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
         }
         composeRule.waitForIdle()
     }
@@ -412,7 +412,7 @@ class SocialCampaignScreenshotTest {
                     .performTouchInput { swipeDown(startY = top + 30f, endY = bottom * 0.8f) }
                 composeRule.waitForIdle()
                 return
-            } catch (e: Throwable) {
+            } catch (_: Throwable) {
             }
         }
         try {
@@ -420,7 +420,7 @@ class SocialCampaignScreenshotTest {
                 .onAllNodes(isRoot())
                 .onFirst()
                 .performTouchInput { swipeDown(startY = top + 30f, endY = bottom * 0.8f) }
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
         }
         composeRule.waitForIdle()
     }
@@ -449,7 +449,7 @@ class SocialCampaignScreenshotTest {
                     }
                     node.assertIsDisplayed()
                     true
-                }.getOrDefault(false)
+                }.getOrDefault(defaultValue = false)
             if (displayed) return
             if (scroll) {
                 if (attempts % 15 < 10) performSafeSwipeUp() else performSafeSwipeDown()
@@ -468,7 +468,7 @@ class SocialCampaignScreenshotTest {
         var found = false
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
-        while (!found && System.currentTimeMillis() < deadline) {
+        while (System.currentTimeMillis() < deadline) {
             found = isTagPresent(tag, useUnmergedTree)
             if (found) break
             if (scroll) {
@@ -482,15 +482,13 @@ class SocialCampaignScreenshotTest {
                             found = true
                             break
                         }
-                    } catch (e: Throwable) {
+                    } catch (_: Throwable) {
                         if (attempts % 15 < 10) performSafeSwipeUp() else performSafeSwipeDown()
                     }
                 }
             }
-            if (!found) {
-                Thread.sleep(TAG_POLL_MILLIS)
-                attempts++
-            }
+            Thread.sleep(TAG_POLL_MILLIS)
+            attempts++
         }
         if (!found) composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).assertExists()
     }
@@ -516,7 +514,7 @@ class SocialCampaignScreenshotTest {
                             ).performClick()
                         composeRule.waitForIdle()
                         Thread.sleep(1000)
-                    } catch (e: Throwable) {
+                    } catch (_: Throwable) {
                     }
                 }
             }
@@ -524,7 +522,7 @@ class SocialCampaignScreenshotTest {
                 try {
                     Espresso.pressBackUnconditionally()
                     composeRule.waitForIdle()
-                } catch (e: Throwable) {
+                } catch (_: Throwable) {
                 }
             }
             waitForTagGone(
@@ -571,7 +569,8 @@ class SocialCampaignScreenshotTest {
             .fetchSemanticsNodes()
             .isNotEmpty()
 
-    private fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+    private fun isTextDisplayed(text: String): Boolean =
+        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
     private fun waitForText(
         text: String,
@@ -580,7 +579,7 @@ class SocialCampaignScreenshotTest {
         var found = false
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
-        while (!found && System.currentTimeMillis() < deadline) {
+        while (System.currentTimeMillis() < deadline) {
             found = isTextDisplayed(text)
             if (found) break
             if (scroll) {
@@ -592,15 +591,13 @@ class SocialCampaignScreenshotTest {
                             found = true
                             break
                         }
-                    } catch (e: Throwable) {
+                    } catch (_: Throwable) {
                         if (attempts % 15 < 10) performSafeSwipeUp() else performSafeSwipeDown()
                     }
                 }
             }
-            if (!found) {
-                Thread.sleep(TAG_POLL_MILLIS)
-                attempts++
-            }
+            Thread.sleep(TAG_POLL_MILLIS)
+            attempts++
         }
         if (!found) composeRule.onNodeWithText(text, substring = true).assertExists()
     }
@@ -627,7 +624,8 @@ class SocialCampaignScreenshotTest {
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean =
+        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     private fun prepareScreenshotDirectory(): File {
         val directory = File(requireNotNull(context.getExternalFilesDir(null)), "social-campaign")

@@ -4,10 +4,10 @@
   "status": "Production-Ready",
   "last_updated": "2026-06-23",
   "landing_page": {
-    "status": "Modernized",
+    "status": "Modernized + Gallery",
     "theme": "Material 3 + Inter Typography",
     "visual_first": true,
-    "features_updated": "Added pricing table, icons, and privacy section.",
+    "features_updated": "Unified logo branding, interactive photo gallery with zoom effects, and refined professional copy for regulatory compliance.",
     "last_modernization": "2026-06-23"
   },
   "features": [

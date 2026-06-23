@@ -144,9 +144,9 @@ class SocialProAssetTest {
                         .repairOrderDao()
                         .observeRecentActiveOrders(limit = 20)
                         .first()
-                        .firstOrNull { it.id != DemoDataSeeder.DEMO_ORDER_ID && it.title == summary }
+                        .firstOrNull { (it.id != DemoDataSeeder.DEMO_ORDER_ID) && (it.title == summary) }
                 }
-            if (order != null) return order.id
+            order?.let { return it.id }
             Thread.sleep(250)
         }
         error("Ordine creato dal wizard non trovato")

@@ -130,7 +130,7 @@ object DemoDataSeeder {
             (1..12).map { i ->
                 CustomerEntity(
                     id = if (i == 1) DEMO_CUSTOMER_ID else "demo-customer-$i",
-                    type = if (i % 3 == 0) CustomerType.BUSINESS else CustomerType.PRIVATE,
+                    type = if ((i % 3) == 0) CustomerType.BUSINESS else CustomerType.PRIVATE,
                     firstName = if (i % 3 == 0) null else "Cliente $i",
                     lastName = if (i % 3 == 0) null else "Demo",
                     companyName = if (i % 3 == 0) "Azienda $i Srl" else null,

@@ -223,11 +223,11 @@ class OperatorIntakeDemoScreenshotTest {
                         .observeRecentActiveOrders(limit = 20)
                         .first()
                         .firstOrNull {
-                            it.id != DemoDataSeeder.DEMO_ORDER_ID &&
-                                it.title == "Notebook non si accende"
+                            (it.id != DemoDataSeeder.DEMO_ORDER_ID) &&
+                                (it.title == "Notebook non si accende")
                         }
                 }
-            if (order != null) return order.id
+            order?.let { return it.id }
             Thread.sleep(TAG_POLL_MILLIS)
         }
         error("Ordine creato dal wizard non trovato")
@@ -333,7 +333,8 @@ class OperatorIntakeDemoScreenshotTest {
         Thread.sleep(2000)
     }
 
-    private fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+    private fun isTextDisplayed(text: String): Boolean =
+        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
     private fun loginOperatorDemo() {
         val username =
@@ -354,7 +355,7 @@ class OperatorIntakeDemoScreenshotTest {
                 return
             }
 
-            if (attempt == (LOGIN_ATTEMPTS - 1) || !isTagPresent(RepairAppTestTags.AuthUsernameField)) {
+            if ((attempt == (LOGIN_ATTEMPTS - 1)) || !isTagPresent(RepairAppTestTags.AuthUsernameField)) {
                 waitForTag(RepairAppTestTags.dashboardTab("HOME"))
             }
             pauseForDemo()
@@ -391,16 +392,16 @@ class OperatorIntakeDemoScreenshotTest {
             composeRule.waitUntil(timeoutMillis = 5_000) {
                 runCatching { node.assertIsEnabled() }.isSuccess
             }
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             node.assertIsEnabled()
         }
 
         try {
             node.performClick()
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             try {
                 node.performTouchInput { click() }
-            } catch (e2: Throwable) {
+            } catch (_: Throwable) {
                 node.performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
             }
         }
@@ -418,10 +419,10 @@ class OperatorIntakeDemoScreenshotTest {
 
         try {
             node.performClick()
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             try {
                 node.performTouchInput { click() }
-            } catch (e2: Throwable) {
+            } catch (_: Throwable) {
                 node.performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
             }
         }
@@ -446,14 +447,14 @@ class OperatorIntakeDemoScreenshotTest {
                 }
                 composeRule.waitForIdle()
                 return
-            } catch (e: Throwable) {
+            } catch (_: Throwable) {
             }
         }
         try {
             composeRule.onAllNodes(isRoot()).onFirst().performTouchInput {
                 swipeUp(startY = bottom * 0.8f, endY = top + 30f)
             }
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
         }
         composeRule.waitForIdle()
     }
@@ -474,14 +475,14 @@ class OperatorIntakeDemoScreenshotTest {
                 }
                 composeRule.waitForIdle()
                 return
-            } catch (e: Throwable) {
+            } catch (_: Throwable) {
             }
         }
         try {
             composeRule.onAllNodes(isRoot()).onFirst().performTouchInput {
                 swipeDown(startY = top + 30f, endY = bottom * 0.8f)
             }
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
         }
         composeRule.waitForIdle()
     }
@@ -512,7 +513,7 @@ class OperatorIntakeDemoScreenshotTest {
                     }
                     node.assertIsDisplayed()
                     true
-                }.getOrDefault(false)
+                }.getOrDefault(defaultValue = false)
             if (displayed) return
 
             if (scroll) {
@@ -537,7 +538,7 @@ class OperatorIntakeDemoScreenshotTest {
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
 
-        while (!found && System.currentTimeMillis() < deadline) {
+        while (System.currentTimeMillis() < deadline) {
             found = isTagPresent(tag, useUnmergedTree)
             if (found) break
 
@@ -552,7 +553,7 @@ class OperatorIntakeDemoScreenshotTest {
                             found = true
                             break
                         }
-                    } catch (e: Throwable) {
+                    } catch (_: Throwable) {
                         // Scan logic: try DOWN a lot (reveal below), then UP a bit (reveal above)
                         if (attempts % 15 < 10) {
                             performSafeSwipeUp() // Scroll DOWN
@@ -562,10 +563,8 @@ class OperatorIntakeDemoScreenshotTest {
                     }
                 }
             }
-            if (!found) {
-                Thread.sleep(TAG_POLL_MILLIS)
-                attempts++
-            }
+            Thread.sleep(TAG_POLL_MILLIS)
+            attempts++
         }
         if (!found) {
             composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).assertExists()
@@ -594,18 +593,17 @@ class OperatorIntakeDemoScreenshotTest {
                             ).performClick()
                         composeRule.waitForIdle()
                         Thread.sleep(1000)
-                    } catch (e: Throwable) {
+                    } catch (_: Throwable) {
                     }
                 }
             }
             if (isTagPresent(RepairAppTestTags.OrderWhatsAppPreviewPanel, useUnmergedTree = true)) {
                 // If still there, try back button as fallback for the dialog
                 try {
-                    androidx.test.espresso.Espresso
-                        .pressBackUnconditionally()
+                    Espresso.pressBackUnconditionally()
                     composeRule.waitForIdle()
                     Thread.sleep(500)
-                } catch (e: Throwable) {
+                } catch (_: Throwable) {
                 }
             }
             waitForTagGone(
@@ -662,7 +660,7 @@ class OperatorIntakeDemoScreenshotTest {
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
         var attempts = 0
 
-        while (!found && System.currentTimeMillis() < deadline) {
+        while (System.currentTimeMillis() < deadline) {
             found = isTextDisplayed(text)
             if (found) break
 
@@ -675,7 +673,7 @@ class OperatorIntakeDemoScreenshotTest {
                             found = true
                             break
                         }
-                    } catch (e: Throwable) {
+                    } catch (_: Throwable) {
                         if (attempts % 15 < 10) {
                             performSafeSwipeDown() // Scroll UP
                         } else {
@@ -684,10 +682,8 @@ class OperatorIntakeDemoScreenshotTest {
                     }
                 }
             }
-            if (!found) {
-                Thread.sleep(TAG_POLL_MILLIS)
-                attempts++
-            }
+            Thread.sleep(TAG_POLL_MILLIS)
+            attempts++
         }
         if (!found) {
             composeRule.onNodeWithText(text, substring = true).assertExists()
@@ -716,7 +712,8 @@ class OperatorIntakeDemoScreenshotTest {
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean =
+        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     private fun prepareScreenshotDirectory(): File {
         val directory = File(requireNotNull(context.getExternalFilesDir(null)), SCREENSHOT_DIR_NAME)

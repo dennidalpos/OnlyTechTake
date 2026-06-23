@@ -21,8 +21,7 @@
     <header>
         <div class="container">
             <nav>
-                <a href="#" class="logo">
-                    <img src="assets/brand/onlytechtake-logo.svg" alt="OnlyTechTake" height="32" id="logo-img">
+                <a href="#" class="logo-text-only">
                     <span class="app-title">OnlyTechTake</span>
                 </a>
                 <div class="nav-actions">
@@ -72,8 +71,8 @@
             <div class="container">
                 <div class="privacy-card">
                     <div class="icon-box"><i data-lucide="shield-check"></i></div>
-                    <h2>La tua privacy è la nostra priorità</h2>
-                    <p>OnlyTechTake opera in modalità <strong>Local-First</strong>. I dati dei tuoi clienti, le foto e le firme non lasciano mai il dispositivo. Database cifrato con SQLCipher di grado militare.</p>
+                    <h2>Sicurezza dei dati al primo posto</h2>
+                    <p>OnlyTechTake opera in modalità <strong>Local-First</strong>. I dati dei tuoi clienti, le foto e le firme non lasciano mai il dispositivo. Database cifrato con standard SQLCipher per la massima riservatezza.</p>
                 </div>
             </div>
         </section>
@@ -119,6 +118,57 @@
                 </div>
             </div>
         </section>
+
+        <!-- App Gallery -->
+        <section id="gallery" class="gallery-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Uno sguardo all'App</h2>
+                    <p>Interfaccia moderna basata su Material 3, ottimizzata per la produttività.</p>
+                </div>
+                <div class="gallery-grid">
+                    <div class="gallery-item" onclick="openLightbox(this)">
+                        <img src="assets/screenshots/01-dashboard-pro.png" alt="Dashboard">
+                        <div class="gallery-overlay">Dashboard</div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(this)">
+                        <img src="assets/screenshots/02-nuova-commessa-pro.png" alt="Nuova Commessa">
+                        <div class="gallery-overlay">Nuova Commessa</div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(this)">
+                        <img src="assets/screenshots/03-foto-firma-pro.png" alt="Foto e Firma">
+                        <div class="gallery-overlay">Foto e Firma</div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(this)">
+                        <img src="assets/screenshots/04-diagnosi-preventivo-pro.png" alt="Diagnosi">
+                        <div class="gallery-overlay">Diagnosi</div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(this)">
+                        <img src="assets/screenshots/05-whatsapp-pdf-pro.png" alt="PDF WhatsApp">
+                        <div class="gallery-overlay">PDF WhatsApp</div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(this)">
+                        <img src="assets/screenshots/06-timeline-chiusura-pro.png" alt="Timeline">
+                        <div class="gallery-overlay">Timeline</div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(this)">
+                        <img src="../marketing/screenshots/play-store/pro/07-clienti-pro.png" alt="Clienti">
+                        <div class="gallery-overlay">Clienti</div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(this)">
+                        <img src="../marketing/screenshots/play-store/pro/08-configurazione-pro.png" alt="Configurazione">
+                        <div class="gallery-overlay">Configurazione</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lightbox Modal -->
+        <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+            <span class="close-lightbox">&times;</span>
+            <img id="lightbox-img" src="" alt="Enlarged view">
+            <div id="lightbox-caption"></div>
+        </div>
 
         <!-- Comparison / Pricing -->
         <section id="pricing" class="pricing-section">
@@ -168,11 +218,10 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <div class="logo">
-                        <img src="assets/brand/onlytechtake-logo.svg" alt="OnlyTechTake" height="24">
+                    <div class="logo-text-only">
                         <span class="app-title">OnlyTechTake</span>
                     </div>
-                    <p>La soluzione definitiva per i laboratori tecnici indipendenti.</p>
+                    <p>La soluzione professionale per i laboratori tecnici indipendenti.</p>
                 </div>
                 <div class="footer-links">
                     <h4>Risorse</h4>
@@ -199,9 +248,27 @@
             const currentTheme = html.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             html.setAttribute('data-theme', newTheme);
-
-            // Re-render icons if needed or just let CSS handle visibility
         });
+
+        // Lightbox Logic
+        function openLightbox(element) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxCaption = document.getElementById('lightbox-caption');
+            const clickedImg = element.querySelector('img');
+            const clickedCaption = element.querySelector('.gallery-overlay').innerText;
+
+            lightboxImg.src = clickedImg.src;
+            lightboxCaption.innerText = clickedCaption;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scroll
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
     </script>
 </body>
 </html>

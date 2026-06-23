@@ -274,7 +274,9 @@ fun OrderDetailWorkspace(
                                     modifier = Modifier.padding(RepairAppSpacing.tinyGap),
                                 )
                                 Text(
-                                    if (signaturesExpanded) stringResource(R.string.content_description_close) else stringResource(R.string.content_description_open),
+                                    if (signaturesExpanded) stringResource(R.string.content_description_close) else stringResource(
+                                        R.string.content_description_open
+                                    ),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.primary,
                                 )
@@ -327,7 +329,9 @@ fun OrderDetailWorkspace(
                                     modifier = Modifier.padding(RepairAppSpacing.tinyGap),
                                 )
                                 Text(
-                                    if (timelineExpanded) stringResource(R.string.content_description_close) else stringResource(R.string.content_description_open),
+                                    if (timelineExpanded) stringResource(R.string.content_description_close) else stringResource(
+                                        R.string.content_description_open
+                                    ),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.primary,
                                 )
