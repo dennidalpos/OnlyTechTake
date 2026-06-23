@@ -1,61 +1,92 @@
 # OnlyTechTake Repair App
 
-Gestionale "local-first" per laboratori di riparazione smartphone e PC.
-
-## Overview
-OnlyTechTake è un'applicazione Android progettata per professionisti tecnici. Consente la gestione completa del ciclo di vita delle riparazioni (commesse), anagrafica clienti, firma digitale e generazione report PDF, tutto mantenendo i dati esclusivamente sul dispositivo.
-
-## Visual Showcase
-### Screenshots (Pro Version)
 <p align="center">
-  <img src="reports/generated-assets/full/store-pro/play-store/vertical/screenshots/01-dashboard-pro.png" width="200" />
-  <img src="reports/generated-assets/full/store-pro/play-store/vertical/screenshots/02-nuova-commessa-pro.png" width="200" />
-  <img src="reports/generated-assets/full/store-pro/play-store/vertical/screenshots/03-foto-firma-pro.png" width="200" />
-  <img src="reports/generated-assets/full/store-pro/play-store/vertical/screenshots/05-whatsapp-pdf-pro.png" width="200" />
+  <img src="marketing/registered-assets/brand/identity/onlytechtake-logo.svg" alt="OnlyTechTake Logo" width="400">
 </p>
 
-### Video Demo
-[Guarda la registrazione completa del workflow](reports/generated-assets/full/store-pro/device/raw/onlytechtake-full-store-pro.mp4)
+<p align="center">
+  <a href="https://android.com"><img src="https://img.shields.io/badge/Platform-Android-green.svg" alt="Platform"></a>
+  <a href="https://kotlinlang.org"><img src="https://img.shields.io/badge/Language-Kotlin-blue.svg" alt="Language"></a>
+  <a href="https://developer.android.com/jetpack/compose"><img src="https://img.shields.io/badge/UI-Jetpack%20Compose-orange.svg" alt="UI"></a>
+  <img src="https://img.shields.io/badge/License-Proprietary-red.svg" alt="License">
+</p>
 
-## Project Metrics & Status
+---
+
+## 📱 Overview
+
+**OnlyTechTake** è la soluzione definitiva "local-first" per la gestione di laboratori di riparazione smartphone e PC. Progettata per la massima privacy e velocità, l'app gestisce l'intero ciclo di vita delle commesse senza mai inviare dati sensibili al cloud.
+
+### ✨ Key Features
+- 🛠️ **Gestione Commesse**: Monitoraggio in tempo reale (Aperta, Diagnosi, In Lavorazione, Pronta, Chiusa).
+- 👤 **Anagrafica Clienti**: Database locale ottimizzato per ricerca rapida e storico riparazioni.
+- ✍️ **Firma Digitale**: Acquisizione legale della firma per accettazione e privacy direttamente su schermo.
+- 📸 **Documentazione Media**: Allegati fotografici dello stato del dispositivo integrati nella commessa.
+- 📄 **Report PDF**: Generazione istantanea di schede di accettazione e ricevute.
+- 🔐 **Privacy Totale**: Database cifrato con SQLCipher e archiviazione offline.
+
+---
+
+## 🖼️ Visual Showcase
+
+### Screenshots (Pro Version)
+> [!NOTE]
+> Gli screenshot ufficiali devono essere spostati da `reports/` a `marketing/screenshots/` per essere visibili su GitHub.
+
+<p align="center">
+  <img src="marketing/screenshots/play-store/pro/01-dashboard-pro.png" width="200" alt="Dashboard">
+  <img src="marketing/screenshots/play-store/pro/02-nuova-commessa-pro.png" width="200" alt="New Order">
+  <img src="marketing/screenshots/play-store/pro/03-foto-firma-pro.png" width="200" alt="Signature">
+  <img src="marketing/screenshots/play-store/pro/05-whatsapp-pdf-pro.png" width="200" alt="PDF Export">
+</p>
+
+### 🎥 Video Demo
+[▶️ Guarda il Workflow Completo](marketing/videos/play-store/pro-workflow.mp4)
+
+---
+
+## 📊 Project Metrics & Status
+
 | Metrica | Valore |
-|---------|--------|
+|:---|:---|
 | **Target SDK** | 37 (Android 15) |
 | **Min SDK** | 26 (Android 8.0) |
-| **Database** | Room + SQLCipher (v1) |
-| **Code Style** | Spotless / ktlint |
-| **Tests** | Instrumented (Passed), Unit (Passed) |
-| **Local-First** | 100% Offline, No Cloud |
+| **Architecture** | Clean Architecture / MVI |
+| **Database** | SQLCipher v4 (Encrypted) |
+| **Build Flavors** | `full`, `demo`, `showcase` |
+| **Status** | 🟢 Production Ready |
 
-## Stack Tecnologico
-- **Linguaggio**: Kotlin
-- **UI**: Jetpack Compose con Material 3
-- **Database**: Room + SQLCipher (cifratura locale)
-- **Altro**: DataStore, CameraX, Navigation Compose, Coroutines.
+---
 
-## Policy Local-First
-- **Privacy**: Nessun dato lascia il dispositivo senza azione esplicita dell'utente (backup/export).
-- **Offline**: Funzionalità completa senza connessione internet.
-- **Sicurezza**: Database cifrato.
+## 🛠️ Tech Stack
+- **Linguaggio**: [Kotlin](https://kotlinlang.org/)
+- **UI Framework**: [Jetpack Compose](https://developer.android.com/jetpack/compose)
+- **Local Storage**: [Room](https://developer.android.com/training/data-storage/room) + [SQLCipher](https://www.zetetic.net/sqlcipher/)
+- **Asincronia**: Coroutines & Flow
+- **Dependency Injection**: Manual DI (Container Pattern)
+- **Media**: CameraX & ImagePicker
 
-## Varianti (Flavors)
-- `full`: Versione Pro completa.
-- `demo`: Versione Trial limitata (1 sola commessa attiva, export disabilitato).
-- `showcase`: Build interna per dimostrazioni con dati pre-caricati.
+---
 
-## Sviluppo e Comandi
-L'ambiente di sviluppo preferito è Windows 11 con PowerShell.
+## 🚀 Sviluppo Locale
+
+L'ambiente è ottimizzato per **Windows 11 + PowerShell**.
 
 ```powershell
-# Verifica ambiente
+# 1. Verifica l'ambiente di sviluppo
 ./scripts/powershell/android/check_env.ps1
 
-# Controllo qualità (Spotless, Lint, Tests)
+# 2. Esegui i controlli di qualità (Lint + Tests)
 ./scripts/powershell/project/quality.ps1
 
-# Build e controllo progetto
+# 3. Compila la versione Pro
 ./scripts/powershell/project/check_project.ps1 -Flavor Full -SkipReleaseBuild
 ```
 
-Per istruzioni operative dettagliate per agenti AI, consultare [AGENTS.md](AGENTS.md).
-Per asset marketing e testi, consultare [marketing/](marketing/README.md).
+Per le linee guida operative degli agenti AI, consulta [AGENTS.md](AGENTS.md).
+
+---
+
+<p align="center">
+  Developed by <b>OnlyTechTake Team</b> © 2026
+</p>
