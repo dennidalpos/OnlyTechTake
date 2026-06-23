@@ -1,29 +1,20 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OnlyTechTake - Soluzione per Laboratori di Riparazione</title>
-    <meta name="description" content="Strumento per la gestione locale di commesse, clienti, firme e report PDF per laboratori di riparazione smartphone e PC.">
+    <title>OnlyTechTake - Gestione Riparazioni Local-First</title>
+    <meta name="description" content="Gestione locale di commesse, foto e report PDF per laboratori di riparazione. Tutto sul tuo dispositivo Android.">
 
-    <link rel="icon" href="assets/icons/favicon.ico" sizes="any">
-    <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="assets/icons/favicon-192.png">
-    <link rel="manifest" href="manifest.json">
-
-    <!-- Open Graph -->
-    <meta property="og:title" content="OnlyTechTake - Soluzione per Laboratori di Riparazione">
-    <meta property="og:description" content="Gestione locale di commesse, foto, firme e PDF su Android.">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="assets/social/github-social-preview.png">
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="OnlyTechTake - Soluzione per Laboratori di Riparazione">
-    <meta name="twitter:description" content="Gestione locale di commesse su Android.">
-    <meta name="twitter:image" content="assets/social/github-social-preview.png">
+    <!-- Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="styles.css">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
@@ -31,10 +22,17 @@
         <div class="container">
             <nav>
                 <a href="#" class="logo">
-                    <img src="assets/brand/onlytechtake-logo.svg" alt="OnlyTechTake" height="32">
+                    <img src="assets/brand/onlytechtake-logo.svg" alt="OnlyTechTake" height="32" id="logo-img">
+                    <span class="app-title">OnlyTechTake</span>
                 </a>
-                <div class="nav-links">
-                    <a href="#download" class="btn btn-primary btn-sm">Build Locali</a>
+                <div class="nav-actions">
+                    <a href="#features" class="nav-link">Funzioni</a>
+                    <a href="#pricing" class="nav-link">Versioni</a>
+                    <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="btn-nav btn-pro">Scarica PRO</a>
+                    <div id="theme-toggle" class="theme-switch">
+                        <i data-lucide="sun" class="sun-icon"></i>
+                        <i data-lucide="moon" class="moon-icon"></i>
+                    </div>
                 </div>
             </nav>
         </div>
@@ -42,145 +40,125 @@
 
     <main>
         <!-- Hero Section -->
-        <section class="hero">
+        <section class="hero-visual">
             <div class="container">
-                <h1>OnlyTechTake Repair App</h1>
-                <p>Strumento Android per la gestione di commesse, clienti, documentazione fotografica e report PDF con approccio local-first.</p>
-                <div class="cta-group">
-                    <a href="#download" class="btn btn-primary">Comandi Build</a>
-                    <a href="#screenshots" class="btn btn-secondary">Anteprima</a>
+                <div class="hero-grid">
+                    <div class="intro-text">
+                        <div class="badge">Disponibile su Android</div>
+                        <h1>Il tuo Laboratorio,<br><span class="gradient-text">Sempre con te.</span></h1>
+                        <p>L'applicazione professionale per la gestione di riparazioni, commesse e clienti. Sicura, locale e senza abbonamenti ricorrenti.</p>
+                        <div class="hero-btns">
+                            <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="btn-primary">Inizia ora (PRO)</a>
+                            <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp.demo" class="btn-secondary">Prova la Demo</a>
+                        </div>
+                    </div>
+
+                    <div class="showcase-visual">
+                        <div class="video-frame">
+                            <video autoplay muted loop playsinline poster="assets/screenshots/01-dashboard-pro.png">
+                                <source src="assets/videos/intake-flow.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <!-- Floating screenshots decorations -->
+                        <div class="floating-img img-1"><img src="assets/screenshots/01-dashboard-pro.png" alt="Dashboard"></div>
+                        <div class="floating-img img-2"><img src="assets/screenshots/05-whatsapp-pdf-pro.png" alt="PDF"></div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Funzionalità Section -->
-        <section id="funzionalita">
+        <!-- Privacy Focus -->
+        <section class="privacy-section">
             <div class="container">
-                <div class="section-title">
-                    <h2>Gestione efficiente del laboratorio</h2>
+                <div class="privacy-card">
+                    <div class="icon-box"><i data-lucide="shield-check"></i></div>
+                    <h2>La tua privacy è la nostra priorità</h2>
+                    <p>OnlyTechTake opera in modalità <strong>Local-First</strong>. I dati dei tuoi clienti, le foto e le firme non lasciano mai il dispositivo. Database cifrato con SQLCipher di grado militare.</p>
                 </div>
-                <div class="grid grid-2">
-                    <div class="card">
-                        <div class="icon">📝</div>
-                        <h3>Commesse e Diagnosi</h3>
-                        <p>Traccia l'intero ciclo di vita delle riparazioni, dalla presa in carico alla consegna finale.</p>
+            </div>
+        </section>
+
+        <!-- Features Grid -->
+        <section id="features" class="features-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Tutto quello che ti serve</h2>
+                    <p>Progettato per tecnici che lavorano in mobilità o in laboratorio.</p>
+                </div>
+                <div class="grid-3">
+                    <div class="feature-card">
+                        <i data-lucide="clipboard-list"></i>
+                        <h3>Commesse & Diagnosi</h3>
+                        <p>Traccia ogni riparazione dalla presa in carico alla riconsegna con stati personalizzati.</p>
                     </div>
-                    <div class="card">
-                        <div class="icon">✍️</div>
-                        <h3>Firma Digitale</h3>
-                        <p>Acquisisci la firma del cliente per l'accettazione e la privacy direttamente sullo schermo.</p>
-                    </div>
-                    <div class="card">
-                        <div class="icon">📸</div>
+                    <div class="feature-card">
+                        <i data-lucide="camera"></i>
                         <h3>Documentazione Foto</h3>
-                        <p>Scatta e allega foto dello stato del dispositivo direttamente alla commessa per massima trasparenza.</p>
+                        <p>Scatta e allega foto dello stato estetico del dispositivo per evitare contestazioni.</p>
                     </div>
-                    <div class="card">
-                        <div class="icon">📄</div>
-                        <h3>Report PDF</h3>
-                        <p>Genera schede di accettazione e ricevute PDF pronte per la stampa o la condivisione.</p>
+                    <div class="feature-card">
+                        <i data-lucide="file-text"></i>
+                        <h3>Report PDF Professionali</h3>
+                        <p>Genera istantaneamente schede tecniche e ricevute PDF con il tuo logo.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i data-lucide="signature"></i>
+                        <h3>Firma Digitale</h3>
+                        <p>Raccogli la firma del cliente direttamente sul touch screen per l'accettazione privacy.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i data-lucide="message-square"></i>
+                        <h3>Pronto per WhatsApp</h3>
+                        <p>Invia PDF e aggiornamenti ai clienti in un tap tramite le tue app di messaggistica.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i data-lucide="database"></i>
+                        <h3>Backup & Export</h3>
+                        <p>Esporta i dati in Excel (XLSX) o crea backup ZIP cifrati per la massima sicurezza.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Soluzione Section -->
-        <section id="sicurezza" style="background-color: white;">
+        <!-- Comparison / Pricing -->
+        <section id="pricing" class="pricing-section">
             <div class="container">
-                <div class="section-title">
-                    <h2>Privacy e Sicurezza</h2>
+                <div class="section-header">
+                    <h2 class="section-title">Scegli la tua versione</h2>
+                    <p>Nessun abbonamento. Paghi una volta, lo usi per sempre.</p>
                 </div>
-                <div class="grid grid-3">
-                    <div class="card">
-                        <div class="icon">🔐</div>
-                        <h3>Database Cifrato</h3>
-                        <p>I dati sono protetti localmente tramite SQLCipher per garantire la riservatezza delle informazioni.</p>
-                    </div>
-                    <div class="card">
-                        <div class="icon">📱</div>
-                        <h3>Local-First</h3>
-                        <p>Nessun dato viene inviato a server cloud. Tutto risiede esclusivamente sul tuo dispositivo.</p>
-                    </div>
-                    <div class="card">
-                        <div class="icon">💬</div>
-                        <h3>Messaggi Pronti</h3>
-                        <p>Prepara comunicazioni per i clienti da inviare manualmente tramite app di messaggistica.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Screenshot Section -->
-        <section id="screenshots">
-            <div class="container">
-                <div class="section-title">
-                    <h2>L'applicazione in azione</h2>
-                </div>
-                <div class="screenshot-grid">
-                    <div class="screenshot-item">
-                        <div class="screenshot-placeholder">
-                            <img src="assets/screenshots/01-operatore-banco/01-login.png" alt="Login" onerror="this.parentElement.innerHTML='Dashboard Login'; this.parentElement.classList.add('screenshot-placeholder-fallback')">
+                <div class="pricing-grid">
+                    <div class="price-card">
+                        <div class="price-header">
+                            <h3>Demo</h3>
+                            <div class="price">Gratis</div>
                         </div>
-                        <p>Accesso Sicuro</p>
+                        <ul class="price-features">
+                            <li><i data-lucide="check"></i> 1 Commessa attiva</li>
+                            <li><i data-lucide="check"></i> Diagnosi e Foto</li>
+                            <li><i data-lucide="check"></i> Firma Digitale</li>
+                            <li class="disabled"><i data-lucide="x"></i> Export Excel (XLSX)</li>
+                            <li class="disabled"><i data-lucide="x"></i> Backup Cifrati</li>
+                            <li class="disabled"><i data-lucide="x"></i> PDF senza Watermark</li>
+                        </ul>
+                        <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp.demo" class="btn-outline">Scarica Demo</a>
                     </div>
-                    <div class="screenshot-item">
-                        <div class="screenshot-placeholder">
-                            <img src="assets/screenshots/01-operatore-banco/02-home.png" alt="Home" onerror="this.parentElement.innerHTML='Home Dashboard'; this.parentElement.classList.add('screenshot-placeholder-fallback')">
+                    <div class="price-card featured">
+                        <div class="featured-badge">Consigliato</div>
+                        <div class="price-header">
+                            <h3>Pro</h3>
+                            <div class="price">Licenza Unica</div>
                         </div>
-                        <p>Panoramica Attività</p>
+                        <ul class="price-features">
+                            <li><i data-lucide="check"></i> Commesse illimitate</li>
+                            <li><i data-lucide="check"></i> PDF personalizzati (No Watermark)</li>
+                            <li><i data-lucide="check"></i> Export XLSX e Backup ZIP</li>
+                            <li><i data-lucide="check"></i> Multi-operatore</li>
+                            <li><i data-lucide="check"></i> Supporto prioritario</li>
+                            <li><i data-lucide="check"></i> Aggiornamenti gratuiti</li>
+                        </ul>
+                        <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="btn-primary">Acquista Pro</a>
                     </div>
-                    <div class="screenshot-item">
-                        <div class="screenshot-placeholder">
-                            <img src="assets/screenshots/01-operatore-banco/03-new-customer.png" alt="Nuova Commessa" onerror="this.parentElement.innerHTML='Nuova Commessa'; this.parentElement.classList.add('screenshot-placeholder-fallback')">
-                        </div>
-                        <p>Apertura Commessa</p>
-                    </div>
-                    <div class="screenshot-item">
-                        <div class="screenshot-placeholder">
-                            <img src="assets/screenshots/01-operatore-banco/09-diagnosis-result.png" alt="Diagnosi" onerror="this.parentElement.innerHTML='Risultato Diagnosi'; this.parentElement.classList.add('screenshot-placeholder-fallback')">
-                        </div>
-                        <p>Dettagli Tecnici</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Flavor Section -->
-        <section id="versioni">
-            <div class="container">
-                <div class="section-title">
-                    <h2>Varianti Disponibili</h2>
-                </div>
-                <div class="card pricing-card">
-                    <div class="badge">LOCAL</div>
-                    <h3>Demo e Full</h3>
-                    <p>Il progetto include le varianti Demo e Full per diverse esigenze operative.</p>
-                    <ul style="list-style: none; margin: 2rem 0; text-align: left; padding-left: 1rem;">
-                        <li><strong>Full:</strong> Gestione illimitata di commesse e funzioni complete.</li>
-                        <li><strong>Demo:</strong> Versione di valutazione con limiti funzionali.</li>
-                    </ul>
-                    <a href="#download" class="btn btn-primary">Configurazione Build</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Download Section -->
-        <section id="download" style="background-color: var(--primary-container);">
-            <div class="container" style="text-align: center;">
-                <div class="section-title">
-                    <h2>Generazione Build</h2>
-                </div>
-                <p>Utilizzare gli script PowerShell inclusi nel repository per generare gli installer locali.</p>
-                <pre style="text-align: left; white-space: pre-wrap; background: white; padding: 1rem; border-radius: 8px;">./scripts/powershell/android/build_installer.ps1 -Flavor Full -BuildType Debug -OutputType Apk</pre>
-            </div>
-        </section>
-
-        <!-- Contatto Section -->
-        <section id="contatto">
-            <div class="container">
-                <div class="section-title">
-                    <h2>Informazioni</h2>
-                    <p>Per supporto o dettagli sullo sviluppo, consultare la documentazione nel repository.</p>
                 </div>
             </div>
         </section>
@@ -188,14 +166,42 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2026 OnlyTechTake.</p>
-            <div style="margin-top: 1rem;">
-                <a href="privacy.html" style="color: white; opacity: 0.8; text-decoration: none; font-size: 0.9rem;">Privacy Policy</a>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <img src="assets/brand/onlytechtake-logo.svg" alt="OnlyTechTake" height="24">
+                        <span class="app-title">OnlyTechTake</span>
+                    </div>
+                    <p>La soluzione definitiva per i laboratori tecnici indipendenti.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Risorse</h4>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="mailto:support@onlytechtake.com">Supporto</a>
+                </div>
             </div>
-            <p style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.7;">Applicazione local-only. I dati sono salvati esclusivamente sul dispositivo.</p>
+            <div class="footer-bottom">
+                <p>&copy; 2026 OnlyTechTake. Progettato con cura per i tecnici.</p>
+                <p class="legal-disclaimer">Nessuna garanzia legale implicita sui moduli di firma. Consultare un legale per la conformità normativa locale.</p>
+            </div>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+
+            // Re-render icons if needed or just let CSS handle visibility
+        });
+    </script>
 </body>
 </html>

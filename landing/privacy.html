@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - OnlyTechTake</title>
-    <link rel="icon" href="assets/icons/favicon.ico" sizes="any">
-    <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="assets/icons/favicon-192.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
     <header>
@@ -15,72 +16,82 @@
             <nav>
                 <a href="index.html" class="logo">
                     <img src="assets/brand/onlytechtake-logo.svg" alt="OnlyTechTake" height="32">
+                    <span class="app-title">OnlyTechTake</span>
                 </a>
-                <div class="nav-links">
-                    <a href="index.html" class="btn btn-secondary btn-sm">Torna alla Home</a>
+                <div class="nav-actions">
+                    <a href="index.html" class="nav-link">Torna alla Home</a>
+                    <div id="theme-toggle" class="theme-switch">
+                        <i data-lucide="sun" class="sun-icon"></i>
+                        <i data-lucide="moon" class="moon-icon"></i>
+                    </div>
                 </div>
             </nav>
         </div>
     </header>
 
-    <main class="container" style="padding: 4rem 1.5rem;">
-        <h1>Informativa sulla Privacy</h1>
-        <p><strong>Ultimo aggiornamento:</strong> 22 Giugno 2026</p>
+    <main class="container" style="padding: 6rem 1.5rem; max-width: 800px;">
+        <h1 style="font-size: 3rem; margin-bottom: 2rem;">Informativa sulla Privacy</h1>
+        <p style="color: var(--md-sys-color-primary); font-weight: 600; margin-bottom: 2rem;">Ultimo aggiornamento: 22 Giugno 2026</p>
 
-        <p>L'applicazione <strong>OnlyTechTake</strong> (di seguito "l'App") è progettata per essere utilizzata in modalità locale ("Local-first"). Questa Informativa sulla Privacy descrive come i dati vengono gestiti all'interno dell'App.</p>
+        <section style="margin-bottom: 3rem;">
+            <p>L'applicazione <strong>OnlyTechTake</strong> (di seguito "l'App") è progettata per essere utilizzata in modalità locale ("Local-first"). Questa Informativa sulla Privacy descrive come i dati vengono gestiti all'interno dell'App.</p>
+        </section>
 
-        <h2>1. Titolare del Trattamento</h2>
-        <p>Il trattamento dei dati avviene sotto la responsabilità dell'utilizzatore dell'App (il titolare del negozio o laboratorio di riparazioni). L'utente è tenuto a inserire i propri riferimenti legali all'interno della configurazione dell'app se richiesto per le stampe, e a rendere disponibile questa informativa ai propri clienti.</p>
+        <section style="margin-bottom: 3rem;">
+            <h2>1. Titolare del Trattamento</h2>
+            <p>Il trattamento dei dati avviene sotto la responsabilità dell'utilizzatore dell'App (il titolare del negozio o laboratorio di riparazioni). L'utente è tenuto a inserire i propri riferimenti legali all'interno della configurazione dell'app se richiesto per le stampe, e a rendere disponibile questa informativa ai propri clienti.</p>
+        </section>
 
-        <h2>2. Tipologia di Dati Trattati</h2>
-        <p>L'App permette l'inserimento e la gestione dei seguenti dati:</p>
-        <ul>
-            <li><strong>Dati Anagrafici Clienti:</strong> Nome, cognome, ragione sociale, codice fiscale, partita IVA, indirizzo, email, numero di telefono.</li>
-            <li><strong>Dati di Riparazione:</strong> Descrizione del problema, stato del dispositivo, diagnosi, note tecniche.</li>
-            <li><strong>Media:</strong> Fotografie del dispositivo scattate tramite la fotocamera del dispositivo.</li>
-            <li><strong>Firme:</strong> Firma autografa digitale acquisita sullo schermo per l'accettazione dei termini di servizio.</li>
-            <li><strong>Log di Audit:</strong> Tracciamento delle operazioni effettuate dagli operatori (creazione, modifica, eliminazione).</li>
-        </ul>
+        <section style="margin-bottom: 3rem;">
+            <h2>2. Tipologia di Dati Trattati</h2>
+            <p>L'App permette l'inserimento e la gestione dei seguenti dati:</p>
+            <ul style="padding-left: 1.5rem; margin-top: 1rem;">
+                <li style="margin-bottom: 0.5rem;"><strong>Dati Anagrafici Clienti:</strong> Nome, cognome, ragione sociale, codice fiscale, partita IVA, indirizzo, email, numero di telefono.</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Dati di Riparazione:</strong> Descrizione del problema, stato del dispositivo, diagnosi, note tecniche.</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Media:</strong> Fotografie del dispositivo scattate tramite la fotocamera del dispositivo.</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Firme:</strong> Firma autografa digitale acquisita sullo schermo per l'accettazione dei termini di servizio.</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Log di Audit:</strong> Tracciamento delle operazioni effettuate dagli operatori.</li>
+            </ul>
+        </section>
 
-        <h2>3. Modalità di Trattamento e Archiviazione</h2>
-        <p>Tutti i dati inseriti nell'App vengono salvati <strong>esclusivamente nella memoria locale del dispositivo</strong> su cui l'App è installata.</p>
-        <ul>
-            <li>Non esiste un database cloud centralizzato gestito dallo sviluppatore dell'App.</li>
-            <li>I dati non vengono trasmessi automaticamente a server esterni.</li>
-            <li>La sicurezza fisica del dispositivo e dei dati in esso contenuti è responsabilità dell'utente finale.</li>
-        </ul>
+        <section style="margin-bottom: 3rem;">
+            <h2>3. Modalità di Trattamento e Archiviazione</h2>
+            <p>Tutti i dati inseriti nell'App vengono salvati <strong>esclusivamente nella memoria locale del dispositivo</strong> su cui l'App è installata.</p>
+            <ul style="padding-left: 1.5rem; margin-top: 1rem;">
+                <li style="margin-bottom: 0.5rem;">Non esiste un database cloud centralizzato gestito dallo sviluppatore dell'App.</li>
+                <li style="margin-bottom: 0.5rem;">I dati non vengono trasmessi automaticamente a server esterni.</li>
+                <li style="margin-bottom: 0.5rem;">La sicurezza fisica del dispositivo e dei dati in esso contenuti è responsabilità dell'utente finale.</li>
+            </ul>
+        </section>
 
-        <h2>4. Finalità del Trattamento</h2>
-        <p>I dati sono trattati esclusivamente per:</p>
-        <ul>
-            <li>La gestione delle commesse di riparazione.</li>
-            <li>La comunicazione con il cliente tramite WhatsApp (attivata manualmente dall'utente).</li>
-            <li>La generazione di documenti PDF di riepilogo.</li>
-            <li>Finalità amministrative e contabili del negozio.</li>
-        </ul>
+        <section style="margin-bottom: 3rem;">
+            <h2>4. Finalità del Trattamento</h2>
+            <p>I dati sono trattati esclusivamente per la gestione delle commesse, comunicazione con il cliente e generazione di documenti professionali.</p>
+        </section>
 
-        <h2>5. Condivisione dei Dati</h2>
-        <p>L'App non vende né condivide dati con terze parti per finalità di marketing. La condivisione dei dati avviene solo su iniziativa manuale dell'utente tramite le funzioni di sistema di Android:</p>
-        <ul>
-            <li><strong>WhatsApp:</strong> Invio di messaggi preimpostati al cliente.</li>
-            <li><strong>PDF:</strong> Condivisione del report tramite email o altre app di messaggistica.</li>
-            <li><strong>Backup:</strong> Esportazione di file ZIP o Excel verso una destinazione scelta dall'utente tramite il selettore documenti Android.</li>
-        </ul>
-
-        <h2>6. Diritti dell'Interessato (Clienti finali)</h2>
-        <p>Poiché i dati risiedono localmente sul dispositivo dell'utilizzatore, i clienti finali che desiderano esercitare i propri diritti (accesso, rettifica, cancellazione) devono rivolgersi direttamente al titolare del negozio.</p>
-
-        <h2>7. Cancellazione dei Dati</h2>
-        <p>L'App fornisce una funzione di "Reset totale" che permette all'amministratore di eliminare permanentemente tutti i dati salvati nel database locale e i file associati.</p>
-
-        <h2>8. Modifiche alla Privacy Policy</h2>
-        <p>Ci riserviamo il diritto di aggiornare questa informativa in caso di aggiornamenti funzionali dell'App che modifichino il flusso dei dati.</p>
+        <section style="margin-bottom: 3rem;">
+            <h2>5. Condivisione dei Dati</h2>
+            <p>L'App non vende né condivide dati con terze parti. La condivisione avviene solo su iniziativa manuale dell'utente tramite WhatsApp, Email o Esportazione manuale.</p>
+        </section>
     </main>
 
     <footer>
         <div class="container">
-            <p>&copy; 2026 OnlyTechTake.</p>
+            <div class="footer-bottom">
+                <p>&copy; 2026 OnlyTechTake. Progettato con cura per i tecnici.</p>
+            </div>
         </div>
     </footer>
+
+    <script>
+        lucide.createIcons();
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+        });
+    </script>
 </body>
 </html>

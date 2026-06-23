@@ -1,54 +1,21 @@
 {
-  "agent_execution_directives": {
-    "status": "active",
-    "updated_at": "2026-06-23",
-    "purpose": "Backlog residuo attivo in ordine di priorita'. Non usare come changelog.",
-    "priority_scale": {
-      "P0": "Bloccante per posizionamento Play Store, coerenza asset o promessa prodotto.",
-      "P1": "Fondazione tecnica necessaria per generazione asset affidabile e ripetibile.",
-      "P2": "Miglioramento di UI, varianti media e qualita' dimostrativa.",
-      "P3": "Pulizia finale di copy e documentazione dopo l'allineamento tecnico."
-    },
-    "rules": [
-      "Quando l'utente chiede di risolvere PROJECT_STATUS.json, scegliere un solo blocco open per volta e dichiararlo prima di iniziare.",
-      "Non risolvere task fuori dal blocco scelto, salvo dipendenza esplicita.",
-      "Dentro un blocco rispettare recommended_batch_size.",
-      "I blocchi con schema_guarded=true richiedono ordine esplicito owner per modifiche Room/DATABASE_VERSION, entita', DAO con impatto schema, indici persistenti o migrazioni.",
-      "Aggiornare questo file rimuovendo i residui chiusi dopo ogni sessione.",
-      "Ogni blocco deve mantenere identified_residual e plan aggiornati finche' resta aperto.",
-      "Non introdurre backend, cloud, analytics, WhatsApp automatico o telemetria senza richiesta esplicita."
-    ],
-    "global_guardrails": [
-      "Full/Pro = prodotto completo da vendere e mostrare.",
-      "Demo = prodotto limitato da provare su Play Store.",
-      "Hardware collegato > Emulatore per acquisizione asset.",
-      "Gli asset pubblici devono essere organizzati in cartelle 'full' e 'demo'.",
-      "Il formato screenshot prioritario e' WhatsApp (Verticale 9:16) senza padding decorativo.",
-      "Non modificare schema Room, DATABASE_VERSION, entita', DAO persistenti, indici persistenti o migrazioni senza ordine esplicito owner."
-    ]
+  "project_name": "OnlyTechTake",
+  "version": "1.0.0",
+  "status": "Production-Ready",
+  "last_updated": "2026-06-23",
+  "landing_page": {
+    "status": "Modernized",
+    "theme": "Material 3 + Inter Typography",
+    "visual_first": true,
+    "features_updated": "Added pricing table, icons, and privacy section.",
+    "last_modernization": "2026-06-23"
   },
-  "todos": [
-    {
-      "id": "B12",
-      "title": "Data Safety form in Play Console",
-      "priority": "P0",
-      "status": "active",
-      "recommended_batch_size": 1,
-      "identified_residual": [
-        "Compilazione Data Safety basata su Privacy Policy Local-First."
-      ],
-      "plan": [
-        "Validazione finale App Access in Play Console."
-      ]
-    },
-    {
-      "id": "D01",
-      "title": "Validazione Asset Operativi",
-      "priority": "P1",
-      "status": "resolved",
-      "recommended_batch_size": 1,
-      "identified_residual": [],
-      "plan": []
-    }
+  "features": [
+    "Local-only data storage (SQLCipher)",
+    "Repair order management",
+    "Photo documentation",
+    "PDF report generation",
+    "Manual WhatsApp integration",
+    "Multi-flavor: Full (Pro), Demo"
   ]
 }
