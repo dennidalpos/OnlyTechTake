@@ -43,7 +43,8 @@ class OperatorIntakeDemoScreenshotTest {
             robot.waitForTag(RepairAppTestTags.AuthUsernameField)
             robot.capture(outputDir, "01-login.png")
 
-            val username = if (BuildConfig.IS_DEMO_VERSION) DemoDataSeeder.DEMO_ADMIN_USERNAME else DemoDataSeeder.DEMO_OPERATOR_USERNAME
+            val username =
+                if (BuildConfig.IS_DEMO_VERSION) DemoDataSeeder.DEMO_ADMIN_USERNAME else DemoDataSeeder.DEMO_OPERATOR_USERNAME
             robot.loginDemo(username)
             robot.capture(outputDir, "02-home.png")
 
@@ -99,10 +100,7 @@ class OperatorIntakeDemoScreenshotTest {
             robot.waitForText("Privacy e firma")
             robot.clickText("Accetta informativa privacy", scroll = true)
             robot.clickText("Accetta condizioni di presa in carico", scroll = true)
-            robot.waitForTag(RepairAppTestTags.SignatureCanvas, scroll = true)
-            composeRule.onNodeWithTag(RepairAppTestTags.SignatureCanvas).performTouchInput {
-                swipeRight()
-            }
+            robot.drawSignature(RepairAppTestTags.SignatureCanvas)
             robot.waitForTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
             robot.capture(outputDir, "06-step4-signature.png")
 
@@ -135,21 +133,6 @@ class OperatorIntakeDemoScreenshotTest {
             robot.waitForTag(RepairAppTestTags.OrderWhatsAppPreviewPanel)
             robot.capture(outputDir, "10-whatsapp-preview.png")
             robot.dismissWhatsAppPreviewIfPresent()
-            robot.pauseForDemo()
-
-            robot.clickTag(RepairAppTestTags.OrderSignaturesCard, scroll = true)
-            composeRule.waitForIdle()
-
-            robot.pauseForDemo()
-            robot.waitForTag(
-                RepairAppTestTags.OrderSignatureSection,
-                scroll = true,
-                useUnmergedTree = true,
-            )
-            robot.capture(outputDir, "11-signature-detail.png")
-
-            // Collapse signatures card to keep UI clean and test the toggle
-            robot.clickTag(RepairAppTestTags.OrderSignaturesCard)
             robot.pauseForDemo()
 
             robot.applySimpleStatus(

@@ -100,10 +100,7 @@ class SocialProAssetTest {
             robot.waitForText("Privacy e firma")
             robot.clickText("Accetta informativa privacy", scroll = true)
             robot.clickText("Accetta condizioni di presa in carico", scroll = true)
-            robot.waitForTag(RepairAppTestTags.SignatureCanvas, scroll = true)
-            composeRule.onNodeWithTag(RepairAppTestTags.SignatureCanvas).performTouchInput {
-                swipeRight()
-            }
+            robot.drawSignature(RepairAppTestTags.SignatureCanvas)
             robot.capture(outputDir, "04-stories-signature.png")
             robot.clickTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
 

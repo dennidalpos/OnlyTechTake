@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.demo
 
 import android.content.Context
 import android.graphics.Bitmap
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.click
@@ -17,6 +18,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipe
 import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.test.swipeUp
 import androidx.test.espresso.Espresso
@@ -351,6 +353,19 @@ abstract class BaseAssetRobot(
                 .onFirst()
                 .performTouchInput { swipeDown(startY = top + 30f, endY = bottom * 0.8f) }
         } catch (_: Throwable) {
+        }
+        composeRule.waitForIdle()
+    }
+
+    fun drawSignature(tag: String) {
+        waitForTag(tag, scroll = true)
+        composeRule.onNodeWithTag(tag).performTouchInput {
+            val w = size.width.toFloat()
+            val h = size.height.toFloat()
+            // Una croce zigzagata per simulare una firma complessa
+            swipe(Offset(w * 0.2f, h * 0.3f), Offset(w * 0.8f, h * 0.7f), 200)
+            swipe(Offset(w * 0.8f, h * 0.3f), Offset(w * 0.2f, h * 0.7f), 200)
+            swipe(Offset(w * 0.3f, h * 0.5f), Offset(w * 0.7f, h * 0.5f), 200)
         }
         composeRule.waitForIdle()
     }

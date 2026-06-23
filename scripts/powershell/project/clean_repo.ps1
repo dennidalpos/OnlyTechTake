@@ -1,103 +1,130 @@
 <#
 .SYNOPSIS
-  Rimuove output temporanei e cache generate dentro il repository.
+  Pulizia sicura degli output generati di un progetto Android/Gradle su Windows.
 
 .USAGE
-  Anteprima senza cancellare:
-    .\scripts\powershell\project\clean_repo.ps1 -DryRun
+  Anteprima:
+    .\scripts\powershell\project\clean_repo_optimized.ps1 -DryRun
 
-  Pulizia standard:
-    .\scripts\powershell\project\clean_repo.ps1
+  Pulizia standard, senza toccare cache globali e metadati IDE:
+    .\scripts\powershell\project\clean_repo_optimized.ps1
 
-  Pulizia includendo cache IDE locali:
-    .\scripts\powershell\project\clean_repo.ps1 -IncludeIde
+  Pulizia profonda delle cache Gradle/Kotlin locali al repository:
+    .\scripts\powershell\project\clean_repo_optimized.ps1 -Deep -StopGradle
+
+  Reset mirato dei metadati Android Studio locali al progetto, non dell'intera .idea:
+    .\scripts\powershell\project\clean_repo_optimized.ps1 -ResetIdeProjectMetadata
+
+  Pulizia cache di sistema Android Studio in %LOCALAPPDATA%\Google\AndroidStudio*:
+    .\scripts\powershell\project\clean_repo_optimized.ps1 -PurgeAndroidStudioCaches -StopGradle
 
 .DESCRIPTION
-  Lo script rileva la root del progetto dal proprio percorso e rimuove solo
-  directory/file generati nel working tree. Non tocca cache globali Gradle,
-  Android SDK, keystore, local.properties o altri file di configurazione locale.
+  Default conservativo: rimuove output generati nel working tree, ma NON cancella
+  .gradle, .idea, local.properties, keystore, SDK o cache globali Gradle.
+
+  Usa -Deep solo quando sospetti cache Gradle/Kotlin corrotte nel repository.
+  Usa -PurgeAndroidStudioCaches solo con Android Studio chiuso.
 #>
 
-[CmdletBinding(SupportsShouldProcess = $true)]
+[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
 param(
     [switch]$DryRun,
-    [switch]$IncludeIde,
+    [switch]$Deep,
+    [Alias('IncludeIde')]
+    [switch]$ResetIdeProjectMetadata,
+    [switch]$PurgeAndroidStudioCaches,
     [switch]$StopGradle,
-    [switch]$NonInteractive
+    [switch]$NonInteractive,
+    [switch]$FailOnError
 )
 
-$ErrorActionPreference = "Stop"
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
 
-$root = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
-
-# Interactive Mode
-if ($PSBoundParameters.Count -eq 0 -and -not $NonInteractive) {
-    Write-Host "`n--- OnlyTechTake Repo Cleaner ---" -ForegroundColor Cyan
-    Write-Host "Rimuove output temporanei e cache dal repository."
-
-    $dChoice = Read-Host "`nEseguire solo un'anteprima (DryRun)? [Y/n]"
-    if ($dChoice -ne 'n') { $DryRun = $true }
-
-    $iChoice = Read-Host "`nRimuovere anche le cache IDE (.idea)? [y/N]"
-    if ($iChoice -eq 'y') { $IncludeIde = $true }
-
-    $sChoice = Read-Host "`nFermare i daemon Gradle? [y/N]"
-    if ($sChoice -eq 'y') { $StopGradle = $true }
-}
-$excludedRelativePaths = @(
-    "reports\demo-assets"
+$script:Failures = New-Object System.Collections.Generic.List[string]
+$script:ExcludedRelativePaths = @(
+    'reports\demo-assets'
 )
 
-function Write-Section($Text) {
-    Write-Host ""
+function Write-Section {
+    param([Parameter(Mandatory = $true)][string]$Text)
+    Write-Host ''
     Write-Host "== $Text ==" -ForegroundColor Cyan
 }
 
+function Find-RepoRoot {
+    param([Parameter(Mandatory = $true)][string]$StartDirectory)
+
+    $current = (Resolve-Path -LiteralPath $StartDirectory).Path
+    while ($true) {
+        $hasWrapper = Test-Path -LiteralPath (Join-Path $current 'gradlew.bat') -PathType Leaf
+        $hasSettings =
+            (Test-Path -LiteralPath (Join-Path $current 'settings.gradle.kts') -PathType Leaf) -or
+            (Test-Path -LiteralPath (Join-Path $current 'settings.gradle') -PathType Leaf)
+
+        if ($hasWrapper -and $hasSettings) {
+            return $current
+        }
+
+        $parent = Split-Path -Path $current -Parent
+        if ([string]::IsNullOrWhiteSpace($parent) -or $parent -eq $current) {
+            throw "Root Gradle non trovata partendo da: $StartDirectory"
+        }
+        $current = $parent
+    }
+}
+
+$script:Root = Find-RepoRoot -StartDirectory $PSScriptRoot
+
 function Resolve-RepoPath {
-    param(
-        [Parameter(Mandatory = $true)]
-        [string]$RelativePath
-    )
+    param([Parameter(Mandatory = $true)][string]$RelativePath)
 
-    $candidate = Join-Path $root $RelativePath
+    $candidate = Join-Path $script:Root $RelativePath
     $fullPath = [System.IO.Path]::GetFullPath($candidate)
-    $rootWithSeparator = $root.TrimEnd([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar) + [System.IO.Path]::DirectorySeparatorChar
+    $rootFull = [System.IO.Path]::GetFullPath($script:Root).TrimEnd(
+        [System.IO.Path]::DirectorySeparatorChar,
+        [System.IO.Path]::AltDirectorySeparatorChar
+    )
+    $rootWithSeparator = $rootFull + [System.IO.Path]::DirectorySeparatorChar
 
-    if ($fullPath -ne $root -and -not $fullPath.StartsWith($rootWithSeparator, [System.StringComparison]::OrdinalIgnoreCase)) {
+    if ($fullPath -ne $rootFull -and -not $fullPath.StartsWith($rootWithSeparator, [System.StringComparison]::OrdinalIgnoreCase)) {
         throw "Percorso fuori dalla root del repository: $RelativePath"
     }
 
-    $fullPath
+    return $fullPath
 }
 
 function Get-RepoRelativePath {
-    param(
-        [Parameter(Mandatory = $true)]
-        [string]$FullPath
+    param([Parameter(Mandatory = $true)][string]$FullPath)
+
+    $full = [System.IO.Path]::GetFullPath($FullPath)
+    $rootFull = [System.IO.Path]::GetFullPath($script:Root).TrimEnd(
+        [System.IO.Path]::DirectorySeparatorChar,
+        [System.IO.Path]::AltDirectorySeparatorChar
     )
+    $rootWithSeparator = $rootFull + [System.IO.Path]::DirectorySeparatorChar
 
-    $rootWithSeparator = $root.TrimEnd([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar) + [System.IO.Path]::DirectorySeparatorChar
-    if ($FullPath.StartsWith($rootWithSeparator, [System.StringComparison]::OrdinalIgnoreCase)) {
-        return $FullPath.Substring($rootWithSeparator.Length)
-    }
-
-    if ($FullPath -eq $root) {
-        return "."
+    if ($full -eq $rootFull) { return '.' }
+    if ($full.StartsWith($rootWithSeparator, [System.StringComparison]::OrdinalIgnoreCase)) {
+        return $full.Substring($rootWithSeparator.Length)
     }
 
     throw "Percorso fuori dalla root del repository: $FullPath"
 }
 
 function Test-IsExcludedRepoPath {
-    param(
-        [Parameter(Mandatory = $true)]
-        [string]$FullPath
+    param([Parameter(Mandatory = $true)][string]$FullPath)
+
+    $normalizedPath = [System.IO.Path]::GetFullPath($FullPath).TrimEnd(
+        [System.IO.Path]::DirectorySeparatorChar,
+        [System.IO.Path]::AltDirectorySeparatorChar
     )
 
-    $normalizedPath = [System.IO.Path]::GetFullPath($FullPath).TrimEnd([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar)
-
-    foreach ($relativePath in $excludedRelativePaths) {
-        $excludedPath = (Resolve-RepoPath -RelativePath $relativePath).TrimEnd([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar)
+    foreach ($relativePath in $script:ExcludedRelativePaths) {
+        $excludedPath = (Resolve-RepoPath -RelativePath $relativePath).TrimEnd(
+            [System.IO.Path]::DirectorySeparatorChar,
+            [System.IO.Path]::AltDirectorySeparatorChar
+        )
         $excludedPathWithSeparator = $excludedPath + [System.IO.Path]::DirectorySeparatorChar
 
         if ($normalizedPath -eq $excludedPath -or $normalizedPath.StartsWith($excludedPathWithSeparator, [System.StringComparison]::OrdinalIgnoreCase)) {
@@ -105,14 +132,42 @@ function Test-IsExcludedRepoPath {
         }
     }
 
-    $false
+    return $false
+}
+
+function Remove-PathSafe {
+    param(
+        [Parameter(Mandatory = $true)][string]$Path,
+        [Parameter(Mandatory = $true)][string]$DisplayPath,
+        [string]$Reason = 'Remove generated item'
+    )
+
+    if (-not (Test-Path -LiteralPath $Path)) {
+        Write-Host "Skip: $DisplayPath"
+        return
+    }
+
+    if ($DryRun) {
+        Write-Host "DryRun: rimuoverei $DisplayPath" -ForegroundColor Yellow
+        return
+    }
+
+    if (-not $PSCmdlet.ShouldProcess($Path, $Reason)) {
+        return
+    }
+
+    try {
+        Remove-Item -LiteralPath $Path -Recurse -Force -ErrorAction Stop
+        Write-Host "Rimosso: $DisplayPath" -ForegroundColor Green
+    } catch {
+        $message = "Non rimosso: $DisplayPath - $($_.Exception.Message)"
+        $script:Failures.Add($message)
+        Write-Warning $message
+    }
 }
 
 function Remove-RepoItem {
-    param(
-        [Parameter(Mandatory = $true)]
-        [string]$RelativePath
-    )
+    param([Parameter(Mandatory = $true)][string]$RelativePath)
 
     $target = Resolve-RepoPath -RelativePath $RelativePath
     if (Test-IsExcludedRepoPath -FullPath $target) {
@@ -120,27 +175,31 @@ function Remove-RepoItem {
         return
     }
 
-    if (-not (Test-Path -LiteralPath $target)) {
-        Write-Host "Skip: $RelativePath"
-        return
-    }
+    Remove-PathSafe -Path $target -DisplayPath $RelativePath -Reason 'Remove generated repository item'
+}
 
-    if ($DryRun) {
-        Write-Host "DryRun: rimuoverei $RelativePath" -ForegroundColor Yellow
-        return
-    }
+function Remove-GeneratedDirectoriesByName {
+    param([Parameter(Mandatory = $true)][string[]]$Names)
 
-    if ($PSCmdlet.ShouldProcess($target, "Remove generated repository item")) {
-        Remove-Item -LiteralPath $target -Recurse -Force
-        Write-Host "Rimosso: $RelativePath" -ForegroundColor Green
+    $directories = Get-ChildItem -LiteralPath $script:Root -Directory -Recurse -Force -ErrorAction SilentlyContinue |
+        Where-Object { $Names -contains $_.Name } |
+        Sort-Object { $_.FullName.Length } -Descending
+
+    foreach ($directory in $directories) {
+        if (Test-IsExcludedRepoPath -FullPath $directory.FullName) {
+            Write-Host "Preservo: $(Get-RepoRelativePath -FullPath $directory.FullName)"
+            continue
+        }
+
+        Remove-PathSafe `
+            -Path $directory.FullName `
+            -DisplayPath (Get-RepoRelativePath -FullPath $directory.FullName) `
+            -Reason 'Remove generated repository directory'
     }
 }
 
 function Remove-RepoDirectoryContents {
-    param(
-        [Parameter(Mandatory = $true)]
-        [string]$RelativePath
-    )
+    param([Parameter(Mandatory = $true)][string]$RelativePath)
 
     $directory = Resolve-RepoPath -RelativePath $RelativePath
     if (-not (Test-Path -LiteralPath $directory -PathType Container)) {
@@ -148,114 +207,140 @@ function Remove-RepoDirectoryContents {
         return
     }
 
-    Get-ChildItem -LiteralPath $directory -Force | ForEach-Object {
-        $relativePath = Get-RepoRelativePath -FullPath $_.FullName
-        if (Test-IsExcludedRepoPath -FullPath $_.FullName) {
+    foreach ($child in Get-ChildItem -LiteralPath $directory -Force -ErrorAction SilentlyContinue) {
+        $relativePath = Get-RepoRelativePath -FullPath $child.FullName
+        if (Test-IsExcludedRepoPath -FullPath $child.FullName) {
             Write-Host "Preservo: $relativePath"
-            return
+            continue
         }
 
-        if ($DryRun) {
-            Write-Host "DryRun: rimuoverei $relativePath" -ForegroundColor Yellow
-            return
-        }
-
-        if ($PSCmdlet.ShouldProcess($_.FullName, "Remove generated repository item")) {
-            Remove-Item -LiteralPath $_.FullName -Recurse -Force
-            Write-Host "Rimosso: $relativePath" -ForegroundColor Green
-        }
+        Remove-PathSafe -Path $child.FullName -DisplayPath $relativePath -Reason 'Remove generated repository item'
     }
 }
 
-function Remove-RepoPattern {
-    param(
-        [Parameter(Mandatory = $true)]
-        [string]$RelativeDirectory,
-
-        [Parameter(Mandatory = $true)]
-        [string]$Filter
-    )
-
-    $directory = Resolve-RepoPath -RelativePath $RelativeDirectory
-    if (-not (Test-Path -LiteralPath $directory -PathType Container)) {
+function Stop-GradleDaemon {
+    $gradlew = Join-Path $script:Root 'gradlew.bat'
+    if (-not (Test-Path -LiteralPath $gradlew -PathType Leaf)) {
+        Write-Host 'Skip: gradlew.bat non trovato'
         return
     }
 
-    Get-ChildItem -LiteralPath $directory -Filter $Filter -File -Recurse -Force | ForEach-Object {
-        $relativePath = Get-RepoRelativePath -FullPath $_.FullName
-        if (Test-IsExcludedRepoPath -FullPath $_.FullName) {
-            Write-Host "Preservo: $relativePath"
-            return
-        }
+    if ($DryRun) {
+        Write-Host 'DryRun: eseguirei .\gradlew.bat --stop' -ForegroundColor Yellow
+        return
+    }
 
-        if ($DryRun) {
-            Write-Host "DryRun: rimuoverei $relativePath" -ForegroundColor Yellow
-            return
-        }
+    & $gradlew --stop
+    if ($LASTEXITCODE -ne 0) {
+        $message = 'gradlew.bat --stop fallito.'
+        $script:Failures.Add($message)
+        Write-Warning $message
+    }
+}
 
-        if ($PSCmdlet.ShouldProcess($_.FullName, "Remove generated repository file")) {
-            Remove-Item -LiteralPath $_.FullName -Force
-            Write-Host "Rimosso: $relativePath" -ForegroundColor Green
+function Remove-AndroidStudioSystemCaches {
+    if (-not $env:LOCALAPPDATA) {
+        throw 'LOCALAPPDATA non definito: impossibile individuare le cache Android Studio.'
+    }
+
+    $studioProcesses = Get-Process -Name 'studio64', 'studio' -ErrorAction SilentlyContinue
+    if ($studioProcesses) {
+        $names = ($studioProcesses | Select-Object -ExpandProperty ProcessName -Unique) -join ', '
+        $message = "Android Studio sembra aperto ($names). Chiudilo e rilancia lo script per evitare file bloccati."
+        if ($FailOnError) { throw $message }
+        Write-Warning $message
+        return
+    }
+
+    $googleLocal = Join-Path $env:LOCALAPPDATA 'Google'
+    if (-not (Test-Path -LiteralPath $googleLocal -PathType Container)) {
+        Write-Host "Skip: $googleLocal"
+        return
+    }
+
+    $targets = Get-ChildItem -LiteralPath $googleLocal -Directory -Filter 'AndroidStudio*' -ErrorAction SilentlyContinue
+    if (-not $targets) {
+        Write-Host 'Skip: nessuna directory AndroidStudio* in %LOCALAPPDATA%\Google'
+        return
+    }
+
+    $cacheChildNames = @('caches', 'index', 'compile-server', 'jcef_cache')
+    foreach ($studioDir in $targets) {
+        foreach ($childName in $cacheChildNames) {
+            $cachePath = Join-Path $studioDir.FullName $childName
+            $display = "%LOCALAPPDATA%\Google\$($studioDir.Name)\$childName"
+            Remove-PathSafe -Path $cachePath -DisplayPath $display -Reason 'Remove Android Studio system cache'
         }
     }
 }
 
-Push-Location $root
+if ($PSBoundParameters.Count -eq 0 -and -not $NonInteractive) {
+    Write-Host "`n--- Repo Cleaner Android/Gradle ---" -ForegroundColor Cyan
+    Write-Host 'Default: pulizia sicura. Non rimuove .gradle, .idea o cache globali IDE.'
+
+    $dryChoice = Read-Host "`nEseguire solo anteprima DryRun? [Y/n]"
+    if ($dryChoice -ne 'n') { $DryRun = $true }
+
+    $deepChoice = Read-Host "`nPulizia profonda delle cache locali .gradle/.kotlin? [y/N]"
+    if ($deepChoice -eq 'y') { $Deep = $true }
+
+    $ideChoice = Read-Host "`nReset mirato metadati IDE locali al progetto? [y/N]"
+    if ($ideChoice -eq 'y') { $ResetIdeProjectMetadata = $true }
+
+    $globalIdeChoice = Read-Host "`nPulire cache Android Studio in %LOCALAPPDATA%? Richiede IDE chiuso. [y/N]"
+    if ($globalIdeChoice -eq 'y') { $PurgeAndroidStudioCaches = $true }
+
+    $gradleChoice = Read-Host "`nFermare i daemon Gradle? [y/N]"
+    if ($gradleChoice -eq 'y') { $StopGradle = $true }
+}
+
+Push-Location $script:Root
 try {
-    Write-Section "Root repository"
-    Write-Host $root
+    Write-Section 'Root repository'
+    Write-Host $script:Root
 
     if ($StopGradle) {
-        Write-Section "Gradle daemon"
-        $gradlew = Join-Path $root "gradlew.bat"
-        if (Test-Path -LiteralPath $gradlew) {
-            if ($DryRun) {
-                Write-Host "DryRun: eseguirei .\gradlew.bat --stop" -ForegroundColor Yellow
-            } else {
-                & $gradlew --stop
-                if ($LASTEXITCODE -ne 0) {
-                    throw "gradlew.bat --stop fallito."
-                }
-            }
-        } else {
-            Write-Host "Skip: gradlew.bat non trovato"
+        Write-Section 'Gradle daemon'
+        Stop-GradleDaemon
+    }
+
+    Write-Section 'Directory generate standard'
+    Remove-GeneratedDirectoriesByName -Names @('build', '.cxx', '.externalNativeBuild')
+
+    foreach ($relativePath in @('captures', 'logs', 'tmp', 'demo\recordings', 'demo\screenshots', 'demo\videos')) {
+        Remove-RepoItem -RelativePath $relativePath
+    }
+
+    if (Test-Path -LiteralPath (Resolve-RepoPath -RelativePath 'reports') -PathType Container) {
+        Remove-RepoDirectoryContents -RelativePath 'reports'
+    }
+
+    if ($Deep) {
+        Write-Section 'Cache locali Gradle/Kotlin nel repository'
+        foreach ($relativePath in @('.gradle', '.kotlin')) {
+            Remove-RepoItem -RelativePath $relativePath
         }
     }
 
-    Write-Section "Directory generate"
-    $paths = @(
-        ".gradle",
-        ".kotlin",
-        "build",
-        "app\build",
-        ".cxx",
-        "app\.cxx",
-        ".externalNativeBuild",
-        "app\.externalNativeBuild",
-        "captures",
-        "logs",
-        "tmp",
-        "demo\recordings",
-        "demo\screenshots",
-        "demo\videos"
-    )
-
-    if ($IncludeIde) {
-        $paths += @(".idea")
+    if ($ResetIdeProjectMetadata) {
+        Write-Section 'Metadati IDE locali al progetto'
+        foreach ($relativePath in @('.idea\caches', '.idea\workspace.xml', '.idea\shelf')) {
+            Remove-RepoItem -RelativePath $relativePath
+        }
     }
 
-    foreach ($path in $paths) {
-        Remove-RepoItem -RelativePath $path
+    if ($PurgeAndroidStudioCaches) {
+        Write-Section 'Cache di sistema Android Studio'
+        Remove-AndroidStudioSystemCaches
     }
 
-    Remove-RepoDirectoryContents -RelativePath "reports"
-
-    Write-Section "Artifact Android generati"
-    foreach ($pattern in @("*.apk", "*.aab", "*.ap_")) {
-        Remove-RepoPattern -RelativeDirectory "." -Filter $pattern
+    Write-Section 'Completato'
+    if ($script:Failures.Count -gt 0) {
+        Write-Warning "Pulizia completata con $($script:Failures.Count) elemento/i non rimossi. Chiudi Android Studio, terminali e processi Gradle, poi riprova."
+        if ($FailOnError) {
+            throw ($script:Failures -join [Environment]::NewLine)
+        }
     }
-
-    Write-Section "Completato"
 } finally {
     Pop-Location
 }

@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.demo
 
 import android.content.Context
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performScrollToIndex
@@ -80,9 +81,19 @@ class OperationalRobot(
         clickText("Accetta informativa privacy", scroll = true)
         clickText("Accetta condizioni di presa in carico", scroll = true)
         waitForTag(RepairAppTestTags.SignatureCanvas, scroll = true)
-        composeRule
-            .onNodeWithTag(RepairAppTestTags.SignatureCanvas)
-            .performTouchInput { swipeRight() }
+        composeRule.onNodeWithTag(RepairAppTestTags.SignatureCanvas).performTouchInput {
+            val w = this.size.width.toFloat()
+            val h = this.size.height.toFloat()
+            val startX = w * 0.2f
+            val startY = h * 0.5f
+            down(Offset(startX, startY))
+            for (i in 1..20) {
+                val dx = i * (w * 0.03f)
+                val dy = if (i % 2 == 0) -h * 0.1f else h * 0.1f
+                moveTo(Offset(startX + dx, startY + dy))
+            }
+            up()
+        }
         nextCapture("intake-signature")
         clickTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
 

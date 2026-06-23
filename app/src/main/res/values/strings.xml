@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="demo_mode_banner">MODALITÀ DEMO ATTIVA</string>
     <string name="demo_version_banner">VERSIONE DEMO</string>
     <string name="order_created_title">Commessa creata</string>
     <string name="status_updated_title">Stato aggiornato</string>
@@ -24,7 +23,6 @@
     <string name="loading_load_workspace">Caricamento ambiente di lavoro…</string>
     <string name="loading_system_ready">Sistema pronto!</string>
 
-    <string name="app_motto">Un\'app per ogni problema!</string>
 
     <string name="status_open">Aperta</string>
     <string name="status_in_progress">In lavorazione</string>
@@ -163,7 +161,6 @@
     <string name="signature_empty">Nessuna firma acquisita.</string>
     <string name="signature_section_title">Firme</string>
     <string name="signature_image_description">Firma %s</string>
-    <string name="signature_signer_value">Firmatario: %s</string>
     <string name="signature_privacy_accepted">Privacy accettata</string>
     <string name="signature_privacy_rejected">Privacy NON accettata</string>
     <string name="signature_read_privacy">Leggi informativa privacy</string>
@@ -206,7 +203,6 @@
     <string name="customer_search_results">Risultati ricerca</string>
     <string name="customer_search_hint">Inizia a digitare per cercare un cliente…</string>
     <string name="customer_search_empty_title">Cerca nell\'archivio clienti</string>
-    <string name="customer_search_empty_body">Trova un cliente, una commessa o visualizza l\'intero archivio.</string>
     <string name="customer_no_results">Nessun cliente trovato per questa ricerca.</string>
     <string name="customer_no_results_title">Nessun risultato</string>
     <string name="customer_save">Salva cliente</string>
@@ -279,7 +275,6 @@
 
     <string name="orders_filter_title">Filtri</string>
     <string name="orders_title">Commesse</string>
-    <string name="orders_empty_filter">Nessuna commessa per questo filtro.</string>
     <string name="orders_empty_title">Nessuna commessa trovata</string>
     <string name="orders_empty_body">Modifica ricerca o filtri, oppure crea una nuova commessa dal banco.</string>
 
@@ -295,10 +290,6 @@
     <string name="orders_filter_open_unassigned">Aperte (non assegnate)</string>
     <string name="orders_filter_closed_discarded">Chiuse (chiuse o scartate)</string>
     <string name="orders_filter_in_progress_assigned">In lavorazione (assegnate)</string>
-    <string name="orders_filter_open">Aperte</string>
-    <string name="orders_filter_progress">Lav./diagnosi</string>
-    <string name="orders_filter_result">Ris./rip.</string>
-    <string name="orders_filter_ready">Pronte</string>
     <string name="orders_search_label">Cerca cliente</string>
     <string name="orders_select_detail_hint">Seleziona una commessa per vedere i dettagli</string>
     <string name="orders_select_detail_title">Nessuna commessa selezionata</string>
@@ -376,17 +367,13 @@
     <string name="admin_confirm_create_title">Creare operatore?</string>
     <string name="admin_confirm_create_text">Il nuovo operatore verra\' salvato nel database locale.</string>
     <string name="admin_users_title">Utenti</string>
-    <string name="admin_no_users">Nessun utente configurato.</string>
     <string name="admin_no_users_title">Nessun operatore</string>
     <string name="admin_no_users_body">Crea almeno un operatore per separare accessi, permessi e responsabilità sulle commesse.</string>
     <string name="admin_user_active">Attivo</string>
     <string name="admin_user_inactive">Disattivo</string>
     <string name="admin_user_activate">Attiva</string>
     <string name="admin_user_deactivate">Disattiva</string>
-    <string name="admin_confirm_status_title">Cambiare stato utente?</string>
-    <string name="admin_confirm_status_text">Lo stato di %s verra\' aggiornato.</string>
-    <string name="admin_confirm_delete_user_title">Eliminare operatore?</string>
-    <string name="admin_confirm_delete_user_text">L\'operatore %s verra\' rimosso permanentemente dal sistema. Non sara\' piu\' possibile recuperare le sue credenziali, ma le commesse da lui gestite resteranno in archivio.</string>
+    <string name="admin_confirm_delete_user_text" tools:ignore="Typos">L\'operatore %s verra\' rimosso permanentemente dal sistema. Non sara\' piu\' possibile recuperare le sue credenziali, ma le commesse da lui gestite resteranno in archivio.</string>
     <string name="admin_reset_password">Reset password</string>
     <string name="admin_confirm_reset_title">Resettare password?</string>
     <string name="admin_confirm_reset_text">La password temporanea inserita verra\' salvata per %s.</string>
@@ -431,7 +418,6 @@
     <string name="config_hub_template_mapping_title">Associazione Template</string>
     <string name="config_hub_template_mapping_subtitle">Attivatori e placeholder</string>
     <string name="config_template_tooltip">Personalizza i messaggi predefiniti per ogni fase della lavorazione e le informative legali.</string>
-    <string name="config_template_association_title">Associazione Template</string>
     <string name="config_template_association_tooltip">Collega i template ai momenti chiave dell\'app (es. apertura commessa, preventivo).</string>
     <string name="config_template_default_label">Default (%s)</string>
     <string name="config_template_step_prefix">Step %1$d</string>
@@ -472,8 +458,6 @@
     <string name="about_close">Chiudi Informazioni</string>
     <string name="about_development">Sviluppo</string>
 
-    <string name="config_category_level_main">Categoria principale</string>
-    <string name="config_category_level_sub">Sottocategoria livello %1$d</string>
     <string name="config_category_root">Tutte</string>
     <string name="config_category_up">Su</string>
     <string name="config_category_name_label">Nome categoria</string>
@@ -549,9 +533,6 @@
     <string name="config_backup_confirm_restore_zip_text">Il backup ZIP sostituira\' database e file locali dell\'app. Dopo il ripristino sara\' richiesto un nuovo login.</string>
     <string name="config_backup_orders_export_title">Esportazione Commesse</string>
 
-    <string name="config_backup_export_config">Export configurazione JSON</string>
-    <string name="config_backup_confirm_export_config_title">Esportare configurazione?</string>
-    <string name="config_backup_confirm_export_config_text">Verra\' creato un file JSON tramite selettore di sistema contenente categorie e template.</string>
 
     <string name="admin_export_database">Export database SQLite</string>
     <string name="admin_confirm_export_database_title">Esportare database?</string>
@@ -618,7 +599,10 @@
     <string name="catalog_error_parent_not_found">Categoria padre non trovata</string>
     <string name="catalog_error_depth_limit">Profondità massima raggiunta (4 livelli)</string>
 
-    <string name="demo_error_order_limit">Limite Demo raggiunto. La versione Demo consente %1$d sola commessa e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</string>
+    <plurals name="demo_error_order_limit">
+        <item quantity="one">Limite Demo raggiunto. La versione Demo consente %1$d sola commessa e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
+        <item quantity="other">Limite Demo raggiunto. La versione Demo consente %1$d commesse e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
+    </plurals>
     <string name="demo_error_operator_not_available">La versione Demo non consente la creazione di operatori. Usa solo l\'account admin locale.</string>
     <plurals name="demo_error_operator_limit">
         <item quantity="one">Limite Demo raggiunto. Massimo %1$d operatore consentito nella versione Demo. Per continuare senza limiti, attiva la versione Full.</item>

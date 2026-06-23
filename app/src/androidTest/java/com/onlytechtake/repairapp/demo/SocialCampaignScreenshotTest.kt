@@ -41,7 +41,8 @@ class SocialCampaignScreenshotTest {
         ActivityScenario.launch(MainActivity::class.java).use {
             robot.waitForTag(RepairAppTestTags.AuthUsernameField)
 
-            val username = if (BuildConfig.IS_DEMO_VERSION) DemoDataSeeder.DEMO_ADMIN_USERNAME else DemoDataSeeder.DEMO_OPERATOR_USERNAME
+            val username =
+                if (BuildConfig.IS_DEMO_VERSION) DemoDataSeeder.DEMO_ADMIN_USERNAME else DemoDataSeeder.DEMO_OPERATOR_USERNAME
             robot.loginDemo(username)
             robot.capture(outputDir, "01-home.png")
 
@@ -54,7 +55,11 @@ class SocialCampaignScreenshotTest {
             robot.typeTag(RepairAppTestTags.NewOrderFirstNameField, "Marco", scroll = true)
             robot.typeTag(RepairAppTestTags.NewOrderLastNameField, "Bianchi", scroll = true)
             robot.typeTag(RepairAppTestTags.NewOrderPhoneField, "+39 347 123 4567", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderEmailField, "m.bianchi@example.invalid", scroll = true)
+            robot.typeTag(
+                RepairAppTestTags.NewOrderEmailField,
+                "m.bianchi@example.invalid",
+                scroll = true,
+            )
             robot.capture(outputDir, "02-accoglienza.png")
 
             robot.clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
@@ -99,10 +104,7 @@ class SocialCampaignScreenshotTest {
             robot.waitForText("Privacy e firma")
             robot.clickText("Accetta informativa privacy", scroll = true)
             robot.clickText("Accetta condizioni di presa in carico", scroll = true)
-            robot.waitForTag(RepairAppTestTags.SignatureCanvas, scroll = true)
-            composeRule.onNodeWithTag(RepairAppTestTags.SignatureCanvas).performTouchInput {
-                swipeRight()
-            }
+            robot.drawSignature(RepairAppTestTags.SignatureCanvas)
             robot.waitForTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
             robot.capture(outputDir, "04-step4-firma.png")
 

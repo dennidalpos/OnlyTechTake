@@ -101,10 +101,7 @@ class StoreProScreenshotTest {
             robot.waitForText("Privacy e firma")
             robot.clickText("Accetta informativa privacy", scroll = true)
             robot.clickText("Accetta condizioni di presa in carico", scroll = true)
-            robot.waitForTag(RepairAppTestTags.SignatureCanvas, scroll = true)
-            composeRule.onNodeWithTag(RepairAppTestTags.SignatureCanvas).performTouchInput {
-                swipeRight()
-            }
+            robot.drawSignature(RepairAppTestTags.SignatureCanvas)
             robot.capture(outputDir, "03-foto-firma-pro.png")
             robot.clickTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
 

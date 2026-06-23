@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.demo
 
 import android.content.Context
 import android.graphics.Bitmap
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.click
@@ -18,6 +19,7 @@ import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipe
 import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.test.swipeUp
@@ -130,10 +132,7 @@ class SocialStoryDemoScreenshotTest {
             waitForText("Privacy e firma")
             clickText("Accetta informativa privacy", scroll = true)
             clickText("Accetta condizioni di presa in carico", scroll = true)
-            waitForTag(RepairAppTestTags.SignatureCanvas, scroll = true)
-            composeRule.onNodeWithTag(RepairAppTestTags.SignatureCanvas).performTouchInput {
-                swipeRight()
-            }
+            drawSignature(RepairAppTestTags.SignatureCanvas)
             waitForTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
             capture(outputDir, "07-firma-cliente.png")
 
@@ -345,9 +344,12 @@ class SocialStoryDemoScreenshotTest {
 
             // Error dialog should appear
             waitForText(
-                context
-                    .getString(com.onlytechtake.repairapp.R.string.demo_error_order_limit)
-                    .substring(0, 10),
+                context.resources
+                    .getQuantityString(
+                        com.onlytechtake.repairapp.R.plurals.demo_error_order_limit,
+                        BuildConfig.MAX_ORDERS,
+                        BuildConfig.MAX_ORDERS,
+                    ).substring(0, 10),
             )
             capture(outputDir, "01-demo-limit-error.png")
             clickTag(RepairAppTestTags.MessageBannerCloseButton)
@@ -799,6 +801,19 @@ class SocialStoryDemoScreenshotTest {
         if (!found) {
             composeRule.onNodeWithText(text, substring = true).assertExists()
         }
+    }
+
+    private fun drawSignature(tag: String) {
+        waitForTag(tag, scroll = true)
+        composeRule.onNodeWithTag(tag).performTouchInput {
+            val w = this.size.width.toFloat()
+            val h = this.size.height.toFloat()
+            // Una croce zigzagata per simulare una firma complessa
+            swipe(Offset(w * 0.2f, h * 0.3f), Offset(w * 0.8f, h * 0.7f), 200)
+            swipe(Offset(w * 0.8f, h * 0.3f), Offset(w * 0.2f, h * 0.7f), 200)
+            swipe(Offset(w * 0.3f, h * 0.5f), Offset(w * 0.7f, h * 0.5f), 200)
+        }
+        composeRule.waitForIdle()
     }
 
     private fun capture(

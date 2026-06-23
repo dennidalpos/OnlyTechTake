@@ -51,9 +51,12 @@ class StoreDemoScreenshotTest {
             robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
             robot.pauseForDemo()
             robot.waitForText(
-                context
-                    .getString(com.onlytechtake.repairapp.R.string.demo_error_order_limit)
-                    .substring(0, 10),
+                context.resources
+                    .getQuantityString(
+                        com.onlytechtake.repairapp.R.plurals.demo_error_order_limit,
+                        BuildConfig.MAX_ORDERS,
+                        BuildConfig.MAX_ORDERS,
+                    ).substring(0, 10),
             )
             robot.capture(outputDir, "03-limite-demo.png")
 
