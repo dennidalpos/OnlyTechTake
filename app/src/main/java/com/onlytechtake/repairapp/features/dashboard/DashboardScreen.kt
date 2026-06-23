@@ -446,15 +446,18 @@ private data class NavigationItem(
 private fun DashboardScreenPreview() {
     MaterialTheme {
         DashboardScreen(
-            summary = AppSummary(
-                title = "Banco Riparazioni",
-                userCount = 1,
-                customerCount = 10,
-                activeOrderCount = 5
-            ),
-            sharedViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+            summary =
+                AppSummary(
+                    title = "Banco Riparazioni",
+                    userCount = 1,
+                    customerCount = 10,
+                    activeOrderCount = 5,
+                ),
+            sharedViewModel =
+                androidx.lifecycle.viewmodel.compose
+                    .viewModel(),
             onLogout = {},
-            onAppDataRestored = {}
+            onAppDataRestored = {},
         )
     }
 }

@@ -234,16 +234,19 @@ private fun DemoInfoCard() {
 private fun HomePanelPreview() {
     MaterialTheme {
         HomePanel(
-            summary = AppSummary(
-                title = "Banco Riparazioni",
-                userCount = 3,
-                customerCount = 120,
-                activeOrderCount = 45
-            ),
-            viewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+            summary =
+                AppSummary(
+                    title = "Banco Riparazioni",
+                    userCount = 3,
+                    customerCount = 120,
+                    activeOrderCount = 45,
+                ),
+            viewModel =
+                androidx.lifecycle.viewmodel.compose
+                    .viewModel(),
             onNewOrder = {},
             onOpenQueue = {},
-            onOpenBackupSettings = {}
+            onOpenBackupSettings = {},
         )
     }
 }

@@ -253,10 +253,12 @@ private fun SettingsSectionContent(
 private fun SettingsPanelWidePreview() {
     MaterialTheme {
         SettingsPanel(
-            viewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+            viewModel =
+                androidx.lifecycle.viewmodel.compose
+                    .viewModel(),
             isAdmin = true,
             onBackupRestored = {},
-            onNavigate = {}
+            onNavigate = {},
         )
     }
 }
@@ -266,10 +268,12 @@ private fun SettingsPanelWidePreview() {
 private fun SettingsPanelMobilePreview() {
     MaterialTheme {
         SettingsPanel(
-            viewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+            viewModel =
+                androidx.lifecycle.viewmodel.compose
+                    .viewModel(),
             isAdmin = true,
             onBackupRestored = {},
-            onNavigate = {}
+            onNavigate = {},
         )
     }
 }

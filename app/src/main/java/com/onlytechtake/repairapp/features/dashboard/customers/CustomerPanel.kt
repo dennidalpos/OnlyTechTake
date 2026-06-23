@@ -47,10 +47,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
@@ -923,8 +923,10 @@ private fun CustomerEmptyState(hasQuery: Boolean) {
 private fun CustomerPanelPreview() {
     MaterialTheme {
         CustomerPanel(
-            viewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
-            onOrderClick = {}
+            viewModel =
+                androidx.lifecycle.viewmodel.compose
+                    .viewModel(),
+            onOrderClick = {},
         )
     }
 }

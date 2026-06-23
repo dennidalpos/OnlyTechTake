@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -62,9 +62,10 @@ fun BackupSettings(
 
     val timestamp =
         remember {
-            val date = java.text
-                .SimpleDateFormat("yyyyMMdd_HHmm", java.util.Locale.getDefault())
-                .format(java.util.Date())
+            val date =
+                java.text
+                    .SimpleDateFormat("yyyyMMdd_HHmm", java.util.Locale.getDefault())
+                    .format(java.util.Date())
             "${com.onlytechtake.repairapp.BuildConfig.FLAVOR}_$date"
         }
 
@@ -222,9 +223,10 @@ fun BackupSettings(
 
                     if (isProcessing) {
                         CircularProgressIndicator(
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .padding(RepairAppSpacing.compactGap)
+                            modifier =
+                                Modifier
+                                    .align(Alignment.CenterHorizontally)
+                                    .padding(RepairAppSpacing.compactGap),
                         )
                     }
 
@@ -270,9 +272,10 @@ fun BackupSettings(
 
             if (isProcessing) {
                 CircularProgressIndicator(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(RepairAppSpacing.compactGap)
+                    modifier =
+                        Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(RepairAppSpacing.compactGap),
                 )
             }
         }

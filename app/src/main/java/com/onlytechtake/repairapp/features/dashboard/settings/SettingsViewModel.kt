@@ -59,7 +59,7 @@ class SettingsViewModel(
             currentUser = authRepository.currentUser,
             scope = viewModelScope,
             showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) },
-            setLoading = { _isProcessing.value = it }
+            setLoading = { _isProcessing.value = it },
         )
 
     private val catalogDelegate = CatalogSettingsDelegate(catalogRepository, actionRunner)

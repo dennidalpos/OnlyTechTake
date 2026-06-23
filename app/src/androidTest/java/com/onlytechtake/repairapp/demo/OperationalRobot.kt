@@ -8,16 +8,15 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
-import kotlinx.coroutines.runBlocking
 import java.io.File
 
 class OperationalRobot(
     composeRule: ComposeTestRule,
     context: Context,
 ) : BaseAssetRobot(composeRule, context) {
-
     fun intakeFlow(outputDir: File) {
         var step = 1
+
         fun nextCapture(name: String) = capture(outputDir, "${String.format("%02d", step++)}-$name.png")
 
         // 1. Home
@@ -90,6 +89,7 @@ class OperationalRobot(
 
     fun managementFlow(outputDir: File) {
         var step = 1
+
         fun nextCapture(name: String) = capture(outputDir, "${String.format("%02d", step++)}-$name.png")
 
         // 1. Orders List
@@ -158,6 +158,7 @@ class OperationalRobot(
 
     fun adminOperatorsFlow(outputDir: File) {
         var step = 1
+
         fun nextCapture(name: String) = capture(outputDir, "${String.format("%02d", step++)}-$name.png")
 
         clickDashboardTab("SETTINGS")
@@ -187,6 +188,7 @@ class OperationalRobot(
 
     fun adminTemplatesFlow(outputDir: File) {
         var step = 1
+
         fun nextCapture(name: String) = capture(outputDir, "${String.format("%02d", step++)}-$name.png")
 
         clickDashboardTab("SETTINGS")
