@@ -175,8 +175,8 @@ fun OrderPhotoSection(
     deleteMedia?.let { media ->
         AppDialog(
             onDismissRequest = { deleteMedia = null },
-            title = "Eliminare media?",
-            text = "Il file ${media.fileName} verra' rimosso permanentemente.",
+            title = stringResource(R.string.order_delete_media_title),
+            text = stringResource(R.string.order_delete_media_text, media.fileName),
             confirmButton = {
                 AppButton(
                     text = stringResource(R.string.confirm),

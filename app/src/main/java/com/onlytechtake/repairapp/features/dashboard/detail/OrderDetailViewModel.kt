@@ -45,12 +45,17 @@ class OrderDetailViewModel(
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
 
+    private val _isProcessing = MutableStateFlow(false)
+    val isProcessing = _isProcessing.asStateFlow()
+
     private val actionRunner =
         AuthenticatedActionRunner(
             authRepository = authRepository,
             currentUser = authRepository.currentUser,
             scope = viewModelScope,
-        ) { text, isError -> _message.value = WorkspaceMessage(text, isError) }
+            showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) },
+            setLoading = { _isProcessing.value = it }
+        )
 
     private val _isGeneratingStatusPdf = MutableStateFlow(value = false)
     val isGeneratingStatusPdf = _isGeneratingStatusPdf.asStateFlow()

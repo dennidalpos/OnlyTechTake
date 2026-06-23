@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.catch
 import java.util.UUID
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -66,6 +67,13 @@ class DefaultAuthRepository(
                 configured = adminCount > 0,
                 currentUser = activeUser,
                 lastUsername = lastUserId?.let { userDao.findById(it)?.username }.orEmpty(),
+            )
+        }.catch { e ->
+            emit(
+                AuthState(
+                    initialized = true,
+                    initializationError = e.message ?: "Errore critico database",
+                ),
             )
         }.onStart {
             // Artificial delay to allow the brand animation to complete at least one cycle (1500ms)

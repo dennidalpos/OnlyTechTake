@@ -1,6 +1,6 @@
-# Informativa sulla Privacy (Bozza)
+# Informativa sulla Privacy
 
-**Ultimo aggiornamento:** 17 Giugno 2026
+**Ultimo aggiornamento:** 22 Giugno 2026
 
 L'applicazione **OnlyTechTake** (di seguito "l'App") è progettata per essere utilizzata in modalità locale ("Local-first"). Questa Informativa sulla Privacy descrive come i dati vengono gestiti all'interno dell'App.
 
@@ -45,4 +45,4 @@ L\'App fornisce una funzione di "Reset totale" che permette all\'amministratore 
 Ci riserviamo il diritto di aggiornare questa informativa in caso di aggiornamenti funzionali dell\'App che modifichino il flusso dei dati.
 
 ---
-**Nota Legale:** Questa è una bozza tecnica basata sulle funzionalità dell\'App. Si consiglia di far revisionare il testo definitivo da un consulente legale per garantire la piena conformità al GDPR e alle normative locali.
+**Nota Legale:** Questa informativa è basata sulle funzionalità tecniche dell'App. L'utilizzatore è responsabile della conformità al GDPR per quanto riguarda la gestione fisica del dispositivo e il rapporto con i propri clienti.

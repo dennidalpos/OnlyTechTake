@@ -70,15 +70,20 @@ fun CameraCapturePreview(
             ) == PackageManager.PERMISSION_GRANTED,
         )
     }
+    val cameraPermissionDeniedMsg = stringResource(R.string.camera_permission_denied)
+    val cameraUnavailableMsg = stringResource(R.string.camera_unavailable)
+    val cameraCaptureFailedMsg = stringResource(R.string.camera_capture_failed)
+    val cameraFileErrorMsg = stringResource(R.string.camera_file_error)
+
     val permissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             hasCameraPermission = granted
-            if (!granted) onError("Permesso camera negato")
+            if (!granted) onError(cameraPermissionDeniedMsg)
         }
 
     if (!hasCameraPermission) {
         AppButton(
-            text = "Concedi permesso camera",
+            text = stringResource(R.string.camera_grant_permission),
             onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) },
         )
         return
@@ -94,7 +99,7 @@ fun CameraCapturePreview(
                         when {
                             cameraProvider.hasCamera(CameraSelector.DEFAULT_BACK_CAMERA) -> CameraSelector.DEFAULT_BACK_CAMERA
                             cameraProvider.hasCamera(CameraSelector.DEFAULT_FRONT_CAMERA) -> CameraSelector.DEFAULT_FRONT_CAMERA
-                            else -> error("Camera non disponibile")
+                            else -> error(cameraUnavailableMsg)
                         }
                     val preview =
                         Preview.Builder().build().also {
@@ -104,7 +109,7 @@ fun CameraCapturePreview(
                     cameraProvider.unbindAll()
                     cameraProvider.bindToLifecycle(lifecycleOwner, selector, preview, imageCapture)
                 }.onFailure {
-                    onError(it.message ?: "Camera non disponibile")
+                    onError(it.message ?: cameraUnavailableMsg)
                 }
             },
             executor,
@@ -132,7 +137,7 @@ fun CameraCapturePreview(
                 Modifier
                     .fillMaxWidth()
                     .testTag(RepairAppTestTags.IntakeMediaCapturePhotoButton),
-            text = "Acquisisci foto",
+            text = stringResource(R.string.camera_capture_photo),
             onClick = {
                 imageCapture.targetRotation = cameraTargetRotation(context, previewView)
                 createPhotoFile(orderId, orderNumber).fold(
@@ -148,12 +153,12 @@ fun CameraCapturePreview(
 
                                 override fun onError(exception: ImageCaptureException) {
                                     file.delete()
-                                    onError(exception.message ?: "Scatto non riuscito")
+                                    onError(exception.message ?: cameraCaptureFailedMsg)
                                 }
                             },
                         )
                     },
-                    onFailure = { onError(it.message ?: "File foto non disponibile") },
+                    onFailure = { onError(it.message ?: cameraFileErrorMsg) },
                 )
             },
         )

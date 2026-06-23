@@ -120,6 +120,8 @@
     <string name="home_open_queue">Apri coda</string>
     <string name="home_backup_reminder_title">Backup consigliato</string>
     <string name="home_backup_reminder_settings">Setup backup</string>
+    <string name="home_demo_pro_features_description">Backup ZIP, Export Excel, Gestione Operatori e Commesse illimitate sono disponibili nella versione Pro.</string>
+
     <string name="backup_run_full_zip">Esegui backup ZIP completo</string>
     <string name="backup_status_never">Mai eseguito</string>
     <plurals name="backup_status_days_ago">
@@ -138,10 +140,22 @@
     <string name="content_description_delete_order">Elimina commessa</string>
     <string name="order_confirm_delete_title">Eliminare commessa?</string>
     <string name="order_confirm_delete_text">Tutti i dati, allegati, firme e record di questa commessa verranno rimossi permanentemente. Questa azione non è reversibile.</string>
+    <string name="order_exit_close">Chiudi ed esci</string>
+    <string name="order_delete_media_title">Eliminare media?</string>
+    <string name="order_delete_media_text">Il file %1$s verra\' rimosso permanentemente.</string>
+    <string name="order_delete_signature_title">Eliminare firma?</string>
+    <string name="order_delete_signature_text">La firma verrà rimossa permanentemente.</string>
+    <string name="order_not_repairable_note">Cliente avvisato: dispositivo non riparabile</string>
     <string name="content_description_edit">Modifica</string>
     <string name="content_description_open">Apri</string>
     <string name="content_description_clear">Pulisci</string>
     <string name="camera_preview_description">Anteprima camera per acquisire una foto</string>
+    <string name="camera_grant_permission">Concedi permesso camera</string>
+    <string name="camera_permission_denied">Permesso camera negato</string>
+    <string name="camera_capture_photo">Acquisisci foto</string>
+    <string name="camera_unavailable">Camera non disponibile</string>
+    <string name="camera_capture_failed">Scatto non riuscito</string>
+    <string name="camera_file_error">File foto non disponibile</string>
     <string name="signature_canvas_description">Area firma cliente. Traccia la firma con dito o pennino.</string>
 
     <string name="signature_form_title">Privacy e firma</string>
@@ -213,6 +227,7 @@
     <string name="customer_no_open_orders">Nessuna commessa aperta</string>
     <string name="customer_no_closed_orders">Nessuna commessa chiusa</string>
     <string name="customer_show_all">Mostra tutti i clienti</string>
+    <string name="customer_scroll_to_top">Torna su</string>
 
     <string name="customer_field_company_name">Ragione sociale</string>
     <string name="customer_field_vat_number">P.IVA</string>
@@ -610,6 +625,4 @@
         <item quantity="other">Limite Demo raggiunto. Massimo %1$d operatori consentiti nella versione Demo. Per continuare senza limiti, attiva la versione Full.</item>
     </plurals>
 
-    <string name="preview_pro_icon">Pro Icon</string>
-    <string name="preview_demo_icon">Demo Icon</string>
 </resources>

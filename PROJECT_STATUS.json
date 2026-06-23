@@ -49,7 +49,7 @@
       "status": "active",
       "recommended_batch_size": 1,
       "identified_residual": [
-        "Privacy Policy definitiva e URL pubblico.",
+        "Privacy Policy definitiva (Markdown e HTML aggiornati).",
         "Data Safety form in Play Console."
       ],
       "plan": [
@@ -57,45 +57,22 @@
       ]
     },
     {
-      "id": "B12",
-      "title": "Verifica stabilità Test Strumentali",
-      "priority": "P1",
-      "status": "resolved",
-      "recommended_batch_size": 1,
-      "identified_residual": [],
-      "plan": []
-    },
-    {
       "id": "C01",
       "title": "Bonifica Tecnica: Stringhe e Design Compliance",
       "priority": "P1",
-      "status": "open",
+      "status": "resolved",
       "recommended_batch_size": 2,
-      "identified_residual": [
-        "Estrazione stringhe hardcoded in strings.xml (Camera, Home, Customer Panels).",
-        "Aggiunta @Preview (Light/Dark) mancanti in HomePanel, DashboardScreen e SettingsPanel.",
-        "Allineamento naming risorse secondo AGENTS.md."
-      ],
-      "plan": [
-        "Grep sistematico di text=\"...\" nei Composable.",
-        "Migrazione stringhe e implementazione Previews."
-      ]
+      "identified_residual": [],
+      "plan": []
     },
     {
       "id": "C02",
       "title": "Raffinamento UX e Feedback Visivo",
       "priority": "P2",
-      "status": "open",
+      "status": "resolved",
       "recommended_batch_size": 1,
-      "identified_residual": [
-        "Indicatori di progresso (Loading) per Export ZIP e Backup.",
-        "Parametrizzazione nome file backup basato su flavor/data.",
-        "Miglioramento messaggi di errore durante inizializzazione database."
-      ],
-      "plan": [
-        "Inserimento CircularProgressIndicator negli stati di caricamento ViewModel.",
-        "Refactoring logica di naming file in BackupRepository."
-      ]
+      "identified_residual": [],
+      "plan": []
     }
   ]
 }

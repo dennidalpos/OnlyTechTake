@@ -6,9 +6,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -110,6 +113,12 @@ fun AuthGateRoute(
     val isShowcasePreparing =
         if (BuildConfig.IS_SHOWCASE_MODE_ENABLED) !authState.configured else false
     when {
+        authState.initializationError != null ->
+            AuthErrorScreen(
+                error = authState.initializationError!!,
+                onRetry = onAppDataRestored,
+            )
+
         !authState.initialized || isShowcasePreparing || formState.seeding ->
             AuthLoadingScreen(
                 text =
@@ -270,6 +279,42 @@ private fun AuthLoadingScreen(text: String) {
             LoadingBrandIndicator(
                 text = text,
                 contentDescription = text,
+            )
+        }
+    }
+}
+
+@Composable
+private fun AuthErrorScreen(
+    error: String,
+    onRetry: () -> Unit,
+) {
+    Scaffold { paddingValues ->
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(RepairAppSpacing.screenHorizontal),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = "Errore di Inizializzazione",
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.error,
+            )
+            Spacer(Modifier.height(RepairAppSpacing.compactGap))
+            Text(
+                text = error,
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            )
+            Spacer(Modifier.height(RepairAppSpacing.sectionGap))
+            AppButton(
+                text = "Riprova",
+                onClick = onRetry,
+                variant = AppButtonVariant.Primary,
             )
         }
     }

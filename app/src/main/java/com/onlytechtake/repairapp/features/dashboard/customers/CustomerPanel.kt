@@ -47,6 +47,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -544,7 +545,7 @@ private fun CustomerListContent(
 
             if (showScrollToTop) {
                 AppButton(
-                    text = "Torna su",
+                    text = stringResource(R.string.customer_scroll_to_top),
                     leadingIcon = Icons.Default.KeyboardArrowUp,
                     modifier =
                         Modifier
@@ -914,4 +915,16 @@ private fun CustomerEmptyState(hasQuery: Boolean) {
             },
         body = if (hasQuery) stringResource(R.string.customer_no_results) else stringResource(R.string.customer_search_hint),
     )
+}
+
+@Preview(showBackground = true, name = "Light Mode")
+@Preview(showBackground = true, name = "Dark Mode", uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun CustomerPanelPreview() {
+    MaterialTheme {
+        CustomerPanel(
+            viewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+            onOrderClick = {}
+        )
+    }
 }

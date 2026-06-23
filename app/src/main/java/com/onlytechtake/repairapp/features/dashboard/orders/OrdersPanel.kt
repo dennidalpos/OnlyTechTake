@@ -374,7 +374,7 @@ private fun OrdersListContent(
 
             if (showScrollToTop) {
                 AppButton(
-                    text = "Torna su",
+                    text = stringResource(R.string.customer_scroll_to_top),
                     leadingIcon = Icons.Default.KeyboardArrowUp,
                     modifier =
                         Modifier

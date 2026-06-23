@@ -117,8 +117,8 @@ fun OrderSignatureSection(
     deleteSignatureId?.let { id ->
         AppDialog(
             onDismissRequest = { deleteSignatureId = null },
-            title = "Eliminare firma?",
-            text = "La firma verrà rimossa permanentemente.",
+            title = stringResource(R.string.order_delete_signature_title),
+            text = stringResource(R.string.order_delete_signature_text),
             confirmButton = {
                 AppButton(
                     text = stringResource(R.string.confirm),

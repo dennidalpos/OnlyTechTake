@@ -17,6 +17,7 @@ data class AuthState(
     val configured: Boolean = false,
     val currentUser: AuthenticatedUser? = null,
     val lastUsername: String = "",
+    val initializationError: String? = null,
 )
 
 sealed interface LoginResult {

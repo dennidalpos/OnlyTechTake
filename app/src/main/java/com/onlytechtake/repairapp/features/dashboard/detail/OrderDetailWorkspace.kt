@@ -80,6 +80,7 @@ fun OrderDetailWorkspace(
     val diagnosisOutcomeConfirmText = stringResource(R.string.order_confirm_diagnosis_outcome_text)
     val deleteOrderConfirmTitle = stringResource(R.string.order_confirm_delete_title)
     val deleteOrderConfirmText = stringResource(R.string.order_confirm_delete_text)
+    val notRepairableNote = stringResource(R.string.order_not_repairable_note)
 
     val selected = detail
     if (selected == null) {
@@ -229,7 +230,7 @@ fun OrderDetailWorkspace(
                                         ) {
                                             viewModel.changeStatus(
                                                 status = OrderStatus.READY_FOR_PICKUP,
-                                                note = "Cliente avvisato: dispositivo non riparabile",
+                                                note = notRepairableNote,
                                             ) {
                                                 viewModel.prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
                                             }
@@ -273,7 +274,7 @@ fun OrderDetailWorkspace(
                                     modifier = Modifier.padding(RepairAppSpacing.tinyGap),
                                 )
                                 Text(
-                                    if (signaturesExpanded) "Chiudi" else "Apri",
+                                    if (signaturesExpanded) stringResource(R.string.content_description_close) else stringResource(R.string.content_description_open),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.primary,
                                 )
@@ -326,7 +327,7 @@ fun OrderDetailWorkspace(
                                     modifier = Modifier.padding(RepairAppSpacing.tinyGap),
                                 )
                                 Text(
-                                    if (timelineExpanded) "Chiudi" else "Apri",
+                                    if (timelineExpanded) stringResource(R.string.content_description_close) else stringResource(R.string.content_description_open),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.primary,
                                 )
@@ -344,7 +345,7 @@ fun OrderDetailWorkspace(
                             Modifier
                                 .fillMaxWidth()
                                 .padding(top = RepairAppSpacing.screenHorizontal),
-                        text = "Chiudi ed esci",
+                        text = stringResource(R.string.order_exit_close),
                         variant = AppButtonVariant.Secondary,
                         onClick = onBack,
                     )

@@ -47,6 +47,9 @@ class SettingsViewModel(
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
 
+    private val _isProcessing = MutableStateFlow(false)
+    val isProcessing = _isProcessing.asStateFlow()
+
     private val _recoveryCode = MutableStateFlow<String?>(null)
     val recoveryCode = _recoveryCode.asStateFlow()
 
@@ -55,7 +58,9 @@ class SettingsViewModel(
             authRepository = authRepository,
             currentUser = authRepository.currentUser,
             scope = viewModelScope,
-        ) { text, isError -> _message.value = WorkspaceMessage(text, isError) }
+            showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) },
+            setLoading = { _isProcessing.value = it }
+        )
 
     private val catalogDelegate = CatalogSettingsDelegate(catalogRepository, actionRunner)
     private val templateDelegate = TemplateSettingsDelegate(templateRepository, actionRunner)

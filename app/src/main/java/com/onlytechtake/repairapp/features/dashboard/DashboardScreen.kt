@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -438,3 +439,22 @@ private data class NavigationItem(
     val labelRes: Int,
     val testTag: String,
 )
+
+@Preview(showBackground = true, name = "Light Mode")
+@Preview(showBackground = true, name = "Dark Mode", uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun DashboardScreenPreview() {
+    MaterialTheme {
+        DashboardScreen(
+            summary = AppSummary(
+                title = "Banco Riparazioni",
+                userCount = 1,
+                customerCount = 10,
+                activeOrderCount = 5
+            ),
+            sharedViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+            onLogout = {},
+            onAppDataRestored = {}
+        )
+    }
+}

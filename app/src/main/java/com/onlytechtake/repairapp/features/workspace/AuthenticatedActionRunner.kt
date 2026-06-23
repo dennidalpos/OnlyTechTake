@@ -11,6 +11,7 @@ internal class AuthenticatedActionRunner(
     private val currentUser: StateFlow<AuthenticatedUser?>,
     private val scope: CoroutineScope,
     private val showMessage: (String, Boolean) -> Unit,
+    private val setLoading: (Boolean) -> Unit = {},
 ) {
     fun run(
         successMessage: String? = null,
@@ -25,13 +26,16 @@ internal class AuthenticatedActionRunner(
                 return@launch
             }
 
+            setLoading(true)
             authRepository.touchSession()
             block(actor).fold(
                 onSuccess = { result ->
+                    setLoading(false)
                     ((result as? String) ?: successMessage)?.let { showMessage(it, false) }
                     onSuccess()
                 },
             ) { error ->
+                setLoading(false)
                 showMessage(error.message ?: "Errore", true)
             }
         }

@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.demo.DemoMode
@@ -220,9 +221,29 @@ private fun DemoInfoCard() {
                 )
             }
             Text(
-                text = "Backup ZIP, Export Excel, Gestione Operatori e Commesse illimitate sono disponibili nella versione Pro.",
+                text = stringResource(R.string.home_demo_pro_features_description),
                 style = MaterialTheme.typography.bodySmall,
             )
         }
+    }
+}
+
+@Preview(showBackground = true, name = "Light Mode")
+@Preview(showBackground = true, name = "Dark Mode", uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun HomePanelPreview() {
+    MaterialTheme {
+        HomePanel(
+            summary = AppSummary(
+                title = "Banco Riparazioni",
+                userCount = 3,
+                customerCount = 120,
+                activeOrderCount = 45
+            ),
+            viewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+            onNewOrder = {},
+            onOpenQueue = {},
+            onOpenBackupSettings = {}
+        )
     }
 }
