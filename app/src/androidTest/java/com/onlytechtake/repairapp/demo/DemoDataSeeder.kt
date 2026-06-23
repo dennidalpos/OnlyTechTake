@@ -150,7 +150,7 @@ object DemoDataSeeder {
         val assignedUserId = if (BuildConfig.IS_DEMO_VERSION) DEMO_ADMIN_ID else DEMO_OPERATOR_ID
 
         database.repairOrderDao().upsertAll(
-            (1..8).map { i ->
+            (1..50).map { i ->
                 RepairOrderEntity(
                     id = if (i == 1) DEMO_ORDER_ID else "demo-order-$i",
                     orderNumber = "2026-${1000 + i}",

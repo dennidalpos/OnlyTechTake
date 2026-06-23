@@ -5,6 +5,28 @@ Gestionale "local-first" per laboratori di riparazione smartphone e PC.
 ## Overview
 OnlyTechTake è un'applicazione Android progettata per professionisti tecnici. Consente la gestione completa del ciclo di vita delle riparazioni (commesse), anagrafica clienti, firma digitale e generazione report PDF, tutto mantenendo i dati esclusivamente sul dispositivo.
 
+## Visual Showcase
+### Screenshots (Pro Version)
+<p align="center">
+  <img src="reports/generated-assets/full/store-pro/play-store/vertical/screenshots/01-dashboard-pro.png" width="200" />
+  <img src="reports/generated-assets/full/store-pro/play-store/vertical/screenshots/02-nuova-commessa-pro.png" width="200" />
+  <img src="reports/generated-assets/full/store-pro/play-store/vertical/screenshots/03-foto-firma-pro.png" width="200" />
+  <img src="reports/generated-assets/full/store-pro/play-store/vertical/screenshots/05-whatsapp-pdf-pro.png" width="200" />
+</p>
+
+### Video Demo
+[Guarda la registrazione completa del workflow](reports/generated-assets/full/store-pro/device/raw/onlytechtake-full-store-pro.mp4)
+
+## Project Metrics & Status
+| Metrica | Valore |
+|---------|--------|
+| **Target SDK** | 37 (Android 15) |
+| **Min SDK** | 26 (Android 8.0) |
+| **Database** | Room + SQLCipher (v1) |
+| **Code Style** | Spotless / ktlint |
+| **Tests** | Instrumented (Passed), Unit (Passed) |
+| **Local-First** | 100% Offline, No Cloud |
+
 ## Stack Tecnologico
 - **Linguaggio**: Kotlin
 - **UI**: Jetpack Compose con Material 3

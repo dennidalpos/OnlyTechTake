@@ -32,15 +32,13 @@
       "id": "A01",
       "title": "Generazione Video Fluidi (Screen Recording)",
       "priority": "P0",
-      "status": "open",
+      "status": "active",
       "recommended_batch_size": 1,
       "identified_residual": [
-        "Esecuzione screen recording automatizzato per profili Full e Demo.",
         "Validazione fluidità registrazioni su device fisico reale.",
         "Normalizzazione automatica (trim) dei video generati tramite record_demo_device.ps1."
       ],
       "plan": [
-        "Configurazione ambiente adb su device fisico prioritario.",
         "Esecuzione batch record_demo_device.ps1 -ScenarioId all."
       ]
     },
@@ -62,17 +60,10 @@
       "id": "B12",
       "title": "Verifica stabilità Test Strumentali",
       "priority": "P1",
-      "status": "active",
+      "status": "resolved",
       "recommended_batch_size": 1,
-      "identified_residual": [
-        "Risolvere ComposeTimeoutException in ScrollToTopTest.kt (Login non rilevata).",
-        "Implementare IdlingResource o attese basate su stato UI invece di timeout fissi.",
-        "Esecuzione regression test su suite completa flavor Full."
-      ],
-      "plan": [
-        "Debug stato iniziale Activity in ScrollToTopTest.",
-        "Refactoring attese asincrone nei test."
-      ]
+      "identified_residual": [],
+      "plan": []
     },
     {
       "id": "C01",
