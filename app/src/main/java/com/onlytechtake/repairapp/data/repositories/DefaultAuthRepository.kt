@@ -55,7 +55,7 @@ class DefaultAuthRepository(
                             now,
                             AuthPolicy.INACTIVITY_TIMEOUT_MILLIS,
                         )
-                        )
+                    )
                 ) {
                     sessionStore.clear()
                     null

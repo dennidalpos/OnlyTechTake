@@ -17,8 +17,7 @@ class OperationalRobot(
     fun intakeFlow(outputDir: File) {
         var step = 1
 
-        fun nextCapture(name: String) =
-            capture(outputDir, "${String.format("%02d", step++)}-$name.png")
+        fun nextCapture(name: String) = capture(outputDir, "${String.format("%02d", step++)}-$name.png")
 
         // 1. Home
         waitForTag(RepairAppTestTags.dashboardTab("HOME"))
@@ -62,7 +61,7 @@ class OperationalRobot(
         typeTag(
             RepairAppTestTags.NewOrderProblemDetailsField,
             "Il disco non viene rilevato dal BIOS.",
-            scroll = true
+            scroll = true,
         )
         nextCapture("intake-problem")
         clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
@@ -81,7 +80,8 @@ class OperationalRobot(
         clickText("Accetta informativa privacy", scroll = true)
         clickText("Accetta condizioni di presa in carico", scroll = true)
         waitForTag(RepairAppTestTags.SignatureCanvas, scroll = true)
-        composeRule.onNodeWithTag(RepairAppTestTags.SignatureCanvas)
+        composeRule
+            .onNodeWithTag(RepairAppTestTags.SignatureCanvas)
             .performTouchInput { swipeRight() }
         nextCapture("intake-signature")
         clickTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
@@ -96,8 +96,7 @@ class OperationalRobot(
     fun managementFlow(outputDir: File) {
         var step = 1
 
-        fun nextCapture(name: String) =
-            capture(outputDir, "${String.format("%02d", step++)}-$name.png")
+        fun nextCapture(name: String) = capture(outputDir, "${String.format("%02d", step++)}-$name.png")
 
         // 1. Orders List
         clickDashboardTab("ORDERS")
@@ -114,7 +113,7 @@ class OperationalRobot(
         // 3. Start Progress
         clickTag(
             RepairAppTestTags.statusAction(OrderStatusAction.START_PROGRESS.name),
-            scroll = true
+            scroll = true,
         )
         confirmStatusDialog()
         nextCapture("management-in-progress")
@@ -122,7 +121,7 @@ class OperationalRobot(
         // 4. Start Diagnosis
         clickTag(
             RepairAppTestTags.statusAction(OrderStatusAction.START_DIAGNOSIS.name),
-            scroll = true
+            scroll = true,
         )
         confirmStatusDialog()
         nextCapture("management-diagnosing")
@@ -130,13 +129,13 @@ class OperationalRobot(
         // 5. Record Result (Diagnosis)
         clickTag(
             RepairAppTestTags.statusAction(OrderStatusAction.RECORD_RESULT.name),
-            scroll = true
+            scroll = true,
         )
         waitForTag(RepairAppTestTags.StatusResultSummaryField)
         typeTag(
             RepairAppTestTags.StatusResultSummaryField,
             "Sostituzione SSD necessaria.",
-            scroll = false
+            scroll = false,
         )
         clickTag(RepairAppTestTags.DiagnosisRepairableToggle)
         typeTag(RepairAppTestTags.DiagnosisEstimateField, "120,00", scroll = false)
@@ -155,7 +154,7 @@ class OperationalRobot(
         // 7. Ready for Pickup
         clickTag(
             RepairAppTestTags.statusAction(OrderStatusAction.READY_FOR_PICKUP.name),
-            scroll = true
+            scroll = true,
         )
         confirmStatusDialog()
         nextCapture("management-ready")
@@ -182,8 +181,7 @@ class OperationalRobot(
     fun adminOperatorsFlow(outputDir: File) {
         var step = 1
 
-        fun nextCapture(name: String) =
-            capture(outputDir, "${String.format("%02d", step++)}-$name.png")
+        fun nextCapture(name: String) = capture(outputDir, "${String.format("%02d", step++)}-$name.png")
 
         clickDashboardTab("SETTINGS")
         waitForTag(RepairAppTestTags.ConfigHubAdminButton, scroll = true)
@@ -213,8 +211,7 @@ class OperationalRobot(
     fun adminTemplatesFlow(outputDir: File) {
         var step = 1
 
-        fun nextCapture(name: String) =
-            capture(outputDir, "${String.format("%02d", step++)}-$name.png")
+        fun nextCapture(name: String) = capture(outputDir, "${String.format("%02d", step++)}-$name.png")
 
         clickDashboardTab("SETTINGS")
         clickTag(RepairAppTestTags.ConfigHubTemplatesButton, scroll = true)
@@ -225,7 +222,7 @@ class OperationalRobot(
         typeTag(RepairAppTestTags.ConfigTemplateTitleField, "Dispositivo pronto")
         typeTag(
             RepairAppTestTags.ConfigTemplateBodyField,
-            "Gentile {{cliente}}, il suo dispositivo e' pronto."
+            "Gentile {{cliente}}, il suo dispositivo e' pronto.",
         )
         nextCapture("template-editor")
         clickTag(RepairAppTestTags.ConfigTemplateSaveButton, scroll = true)

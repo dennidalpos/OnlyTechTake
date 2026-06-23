@@ -34,8 +34,7 @@ class DefaultOrderDocumentRepository(
 
     override suspend fun findById(id: String): OrderDocumentEntity? = dao.getById(id)
 
-    override fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>> =
-        dao.observeByOrder(orderId)
+    override fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>> = dao.observeByOrder(orderId)
 
     override suspend fun delete(documentId: String): Result<Unit> =
         runCatching {

@@ -26,6 +26,7 @@ Guida operativa per agenti AI. Ambiente: **Windows 11 + PowerShell**.
 - **Layers**: UI (Compose) -> ViewModel (StateHolder) -> UseCase (opzionale) -> Repository -> Data Source.
 - **Naming**: `*Screen.kt` (UI), `*ViewModel.kt` (Logica), `*Repository.kt` (Dati).
 - **Previews**: Ogni Screen/Componente principale DEVE avere `@Preview` per Light e Dark mode.
+- **UI Tests**: Usare il pattern **Robot**. I robot comuni sono definiti in `app/src/androidTest/.../demo/Robots.kt` e `BaseAssetRobot.kt`. Non duplicare logica di interazione UI.
 - **Storage**: Directory private (`filesDir`). Import/Export tramite Storage Access Framework (SAF).
 
 ---

@@ -194,20 +194,15 @@ class SettingsViewModel(
 
     fun setMessageMode(mode: MessageMode) = templateDelegate.setMessageMode(mode)
 
-    fun setBackupReminderEnabled(enabled: Boolean) =
-        backupDelegate.setBackupReminderEnabled(enabled)
+    fun setBackupReminderEnabled(enabled: Boolean) = backupDelegate.setBackupReminderEnabled(enabled)
 
-    fun setBackupReminderIntervalDays(days: Int) =
-        backupDelegate.setBackupReminderIntervalDays(days)
+    fun setBackupReminderIntervalDays(days: Int) = backupDelegate.setBackupReminderIntervalDays(days)
 
-    fun setBackupEncryptionEnabled(enabled: Boolean) =
-        securityDelegate.setBackupEncryptionEnabled(enabled)
+    fun setBackupEncryptionEnabled(enabled: Boolean) = securityDelegate.setBackupEncryptionEnabled(enabled)
 
-    fun setBackupEncryptionPassword(password: String) =
-        securityDelegate.setBackupEncryptionPassword(password)
+    fun setBackupEncryptionPassword(password: String) = securityDelegate.setBackupEncryptionPassword(password)
 
-    fun setDatabaseEncryptionEnabled(enabled: Boolean) =
-        securityDelegate.setDatabaseEncryptionEnabled(enabled)
+    fun setDatabaseEncryptionEnabled(enabled: Boolean) = securityDelegate.setDatabaseEncryptionEnabled(enabled)
 
     fun createOperator(
         displayName: String,

@@ -45,6 +45,15 @@
 
 ---
 
+## 🌐 Landing Page & Presence
+
+Il progetto include una landing page moderna e reattiva situata in `/landing`.
+- **Tecnologie**: HTML5, CSS3 (Modern Material 3 Design), Lucide Icons.
+- **Features**: Galleria interattiva, toggle Dark/Light mode, ottimizzazione per dispositivi mobili.
+- **URL Locale**: Aprire `landing/index.html` nel browser.
+
+---
+
 ## 📊 Project Metrics & Status
 
 | Metrica | Valore |
@@ -88,5 +97,5 @@ Per le linee guida operative degli agenti AI, consulta [AGENTS.md](AGENTS.md).
 ---
 
 <p align="center">
-  Developed by <b>OnlyTechTake Team</b> © 2026
+  OnlyTechTake © 2026 | <a href="https://github.com/dennidalpos">GitHub Repo</a>
 </p>

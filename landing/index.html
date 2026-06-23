@@ -13,6 +13,12 @@
 
     <link rel="stylesheet" href="styles.css">
 
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="assets/icons/favicon.ico">
+    <link rel="apple-touch-icon" href="assets/icons/favicon-192.png">
+    <link rel="manifest" href="manifest.json">
+
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -21,7 +27,8 @@
     <header>
         <div class="container">
             <nav>
-                <a href="#" class="logo-text-only">
+                <a href="#" class="logo">
+                    <img src="assets/brand/onlytechtake-mark.svg" alt="OTT" class="logo-mark">
                     <span class="app-title">OnlyTechTake</span>
                 </a>
                 <div class="nav-actions">
@@ -32,10 +39,41 @@
                         <i data-lucide="sun" class="sun-icon"></i>
                         <i data-lucide="moon" class="moon-icon"></i>
                     </div>
+                    <button id="sidebar-toggle" class="menu-btn" aria-label="Menu">
+                        <i data-lucide="menu"></i>
+                    </button>
                 </div>
             </nav>
         </div>
     </header>
+
+    <!-- Side Navigation Drawer -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+    <aside id="sidebar" class="side-nav">
+        <div class="sidebar-header">
+            <a href="#" class="logo">
+                <img src="assets/brand/onlytechtake-mark.svg" alt="OTT" class="logo-mark">
+                <span class="app-title">OnlyTechTake</span>
+            </a>
+            <button id="sidebar-close" class="close-btn">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <nav class="sidebar-links">
+            <a href="#" class="sidebar-link active"><i data-lucide="home"></i> Home</a>
+            <a href="#features" class="sidebar-link"><i data-lucide="zap"></i> Funzioni</a>
+            <a href="#gallery" class="sidebar-link"><i data-lucide="image"></i> Gallery</a>
+            <a href="#pricing" class="sidebar-link"><i data-lucide="layout-grid"></i> Versioni</a>
+            <div class="sidebar-divider"></div>
+            <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="sidebar-link pro-link">
+                <i data-lucide="shopping-cart"></i> Acquista PRO
+            </a>
+            <a href="privacy.html" class="sidebar-link"><i data-lucide="shield"></i> Privacy Policy</a>
+        </nav>
+        <div class="sidebar-footer">
+            <p>v1.0.0 Production</p>
+        </div>
+    </aside>
 
     <main>
         <!-- Hero Section -->
@@ -43,7 +81,10 @@
             <div class="container">
                 <div class="hero-grid">
                     <div class="intro-text">
-                        <div class="badge">Disponibile su Android</div>
+                        <div class="badge">
+                            <img src="assets/brand/android-logo.svg" alt="Android" class="badge-icon">
+                            Disponibile su Android
+                        </div>
                         <h1>Il tuo Laboratorio,<br><span class="gradient-text">Sempre con te.</span></h1>
                         <p>L'applicazione professionale per la gestione di riparazioni, commesse e clienti. Sicura, locale e senza abbonamenti ricorrenti.</p>
                         <div class="hero-btns">
@@ -152,11 +193,11 @@
                         <div class="gallery-overlay">Timeline</div>
                     </div>
                     <div class="gallery-item" onclick="openLightbox(this)">
-                        <img src="../marketing/screenshots/play-store/pro/07-clienti-pro.png" alt="Clienti">
+                        <img src="assets/screenshots/07-clienti-pro.png" alt="Clienti">
                         <div class="gallery-overlay">Clienti</div>
                     </div>
                     <div class="gallery-item" onclick="openLightbox(this)">
-                        <img src="../marketing/screenshots/play-store/pro/08-configurazione-pro.png" alt="Configurazione">
+                        <img src="assets/screenshots/08-configurazione-pro.png" alt="Configurazione">
                         <div class="gallery-overlay">Configurazione</div>
                     </div>
                 </div>
@@ -218,9 +259,10 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <div class="logo-text-only">
+                    <a href="#" class="logo">
+                        <img src="assets/brand/onlytechtake-mark.svg" alt="OTT" class="logo-mark">
                         <span class="app-title">OnlyTechTake</span>
-                    </div>
+                    </a>
                     <p>La soluzione professionale per i laboratori tecnici indipendenti.</p>
                 </div>
                 <div class="footer-links">
@@ -230,7 +272,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 OnlyTechTake. Progettato con cura per i tecnici.</p>
+                <p>&copy; 2026 OnlyTechTake | <a href="https://github.com/dennidalpos" class="footer-dev-link" aria-label="GitHub Repository"><img src="assets/icons/github-logo.svg" alt="GitHub" class="dev-icon"> Repo</a></p>
                 <p class="legal-disclaimer">Nessuna garanzia legale implicita sui moduli di firma. Consultare un legale per la conformità normativa locale.</p>
             </div>
         </div>
@@ -248,6 +290,29 @@
             const currentTheme = html.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             html.setAttribute('data-theme', newTheme);
+        });
+
+        // Sidebar Logic
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebarClose = document.getElementById('sidebar-close');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : 'auto';
+        }
+
+        sidebarToggle.addEventListener('click', toggleSidebar);
+        sidebarClose.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+
+        // Close sidebar when clicking a link
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (sidebar.classList.contains('active')) toggleSidebar();
+            });
         });
 
         // Lightbox Logic
@@ -270,5 +335,6 @@
             document.body.style.overflow = 'auto';
         }
     </script>
+    <script src="script.js"></script>
 </body>
 </html>

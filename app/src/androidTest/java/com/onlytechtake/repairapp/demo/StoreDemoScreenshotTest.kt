@@ -1,7 +1,6 @@
 package com.onlytechtake.repairapp.demo
 
 import android.content.Context
-import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -73,9 +72,3 @@ class StoreDemoScreenshotTest {
         return directory
     }
 }
-
-class DemoAssetRobot(
-    composeRule: ComposeTestRobot,
-    context: Context,
-) : BaseAssetRobot(composeRule, context)
-typealias ComposeTestRobot = ComposeTestRule

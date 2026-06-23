@@ -11,6 +11,5 @@ class OrderDocumentFileStorage(
         fileName: String,
     ): File = File(mediaStorageProvider.getOrderDocumentsDir(orderId), fileName)
 
-    fun getOrderDocumentsDir(orderId: String): File =
-        mediaStorageProvider.getOrderDocumentsDir(orderId)
+    fun getOrderDocumentsDir(orderId: String): File = mediaStorageProvider.getOrderDocumentsDir(orderId)
 }

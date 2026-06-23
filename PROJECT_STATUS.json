@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "status": "Production-Ready",
   "last_updated": "2026-06-23",
+  "alignment_status": "Aligned all flavors (Full, Demo, Showcase) and screenshot tests with unified branding and test data (Marco Bianchi).",
   "landing_page": {
-    "status": "Modernized + Gallery",
+    "status": "Modernized + Gallery + Paths Aligned",
     "theme": "Material 3 + Inter Typography",
     "visual_first": true,
-    "features_updated": "Unified logo branding, interactive photo gallery with zoom effects, and refined professional copy for regulatory compliance.",
+    "features_updated": "Unified logo branding, interactive photo gallery with zoom effects, refined professional copy, and consistent asset paths.",
     "last_modernization": "2026-06-23"
   },
   "features": [
@@ -16,6 +17,6 @@
     "Photo documentation",
     "PDF report generation",
     "Manual WhatsApp integration",
-    "Multi-flavor: Full (Pro), Demo"
+    "Multi-flavor: Full (Pro), Demo, Showcase"
   ]
 }

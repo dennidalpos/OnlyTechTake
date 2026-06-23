@@ -43,7 +43,7 @@ spotless {
     }
 }
 
-allprojects {
+subprojects {
     dependencyLocking {
         lockAllConfigurations()
     }
