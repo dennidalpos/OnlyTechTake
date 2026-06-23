@@ -1,0 +1,22 @@
+{
+  "id": "workflow-admin-operators",
+  "flavor": "Full",
+  "testClass": "com.onlytechtake.repairapp.demo.WorkflowOperationalTest",
+  "testMethod": "flow3_AdminOperators",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/workflows/workflow-admin-operators",
+  "pulledDirectoryName": "workflow-admin-operators",
+  "cases": [
+    {
+      "id": "admin-operators",
+      "sourceDirectory": ".",
+      "outputs": [
+        { "platform": "whatsapp", "variant": "vertical", "subDir": "admin" }
+      ],
+      "expectedFiles": [
+        "01-admin-hub.png",
+        "02-operator-creation-form.png",
+        "03-operator-confirm-dialog.png"
+      ]
+    }
+  ]
+}

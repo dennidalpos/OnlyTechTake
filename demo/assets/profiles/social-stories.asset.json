@@ -12,18 +12,18 @@
         { "platform": "whatsapp", "variant": "vertical", "subDir": "stories" }
       ],
       "expectedFiles": [
-        "story-01-dashboard.png",
-        "story-02-new-order.png",
-        "story-03-customer.png",
-        "story-04-category.png",
-        "story-05-problem.png",
-        "story-06-media.png",
-        "story-07-signature.png",
-        "story-08-summary.png",
-        "story-09-orders-list.png",
-        "story-10-order-detail.png",
-        "story-11-diagnosis.png",
-        "story-12-closed.png"
+        "01-login.png",
+        "02-dashboard-home.png",
+        "03-nuovo-cliente.png",
+        "04-selezione-categoria.png",
+        "05-dettaglio-problema.png",
+        "06-acquisizione-media.png",
+        "07-firma-cliente.png",
+        "08-riepilogo-invio.png",
+        "09-elenco-commesse.png",
+        "10-dettaglio-commessa.png",
+        "11-risultato-diagnosi.png",
+        "12-chiusura-timeline.png"
       ]
     }
   ]

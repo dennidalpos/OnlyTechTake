@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -156,12 +157,14 @@ fun AdminPanel(
                     { displayName = it },
                     stringResource(R.string.customer_field_first_name),
                     required = true,
+                    modifier = Modifier.testTag(RepairAppTestTags.AdminDisplayNameField),
                 )
                 AppTextField(
                     username,
                     { username = it },
                     stringResource(R.string.auth_username),
                     required = true,
+                    modifier = Modifier.testTag(RepairAppTestTags.AdminUsernameField),
                 )
                 AppTextField(
                     value = password,
@@ -170,6 +173,7 @@ fun AdminPanel(
                     required = true,
                     singleLine = true,
                     keyboardType = KeyboardType.Password,
+                    modifier = Modifier.testTag(RepairAppTestTags.AdminPasswordField),
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
                         PasswordVisibilityButton(
@@ -677,6 +681,7 @@ fun AdminPanel(
                     },
                     variant = AppButtonVariant.Primary,
                     size = AppButtonSize.Compact,
+                    modifier = Modifier.testTag(RepairAppTestTags.GenericConfirmButton),
                 )
             },
             dismissButton = {

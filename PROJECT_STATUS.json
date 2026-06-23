@@ -1,7 +1,7 @@
 {
   "agent_execution_directives": {
     "status": "active",
-    "updated_at": "2026-06-22",
+    "updated_at": "2026-06-23",
     "purpose": "Backlog residuo attivo in ordine di priorita'. Non usare come changelog.",
     "priority_scale": {
       "P0": "Bloccante per posizionamento Play Store, coerenza asset o promessa prodotto.",
@@ -29,46 +29,22 @@
   },
   "todos": [
     {
-      "id": "A01",
-      "title": "Generazione Video Fluidi (Screen Recording)",
+      "id": "B12",
+      "title": "Data Safety form in Play Console",
       "priority": "P0",
       "status": "active",
       "recommended_batch_size": 1,
       "identified_residual": [
-        "Validazione fluidità registrazioni su device fisico reale.",
-        "Normalizzazione automatica (trim) dei video generati tramite record_demo_device.ps1."
+        "Compilazione Data Safety basata su Privacy Policy Local-First."
       ],
       "plan": [
-        "Esecuzione batch record_demo_device.ps1 -ScenarioId all."
+        "Validazione finale App Access in Play Console."
       ]
     },
     {
-      "id": "B11",
-      "title": "Pubblicazione Google Play (Pro e Demo)",
-      "priority": "P0",
-      "status": "active",
-      "recommended_batch_size": 1,
-      "identified_residual": [
-        "Privacy Policy definitiva (Markdown e HTML aggiornati).",
-        "Data Safety form in Play Console."
-      ],
-      "plan": [
-        "Validazione App Access e Content Rating in Play Console."
-      ]
-    },
-    {
-      "id": "C01",
-      "title": "Bonifica Tecnica: Stringhe e Design Compliance",
+      "id": "D01",
+      "title": "Validazione Asset Operativi",
       "priority": "P1",
-      "status": "resolved",
-      "recommended_batch_size": 2,
-      "identified_residual": [],
-      "plan": []
-    },
-    {
-      "id": "C02",
-      "title": "Raffinamento UX e Feedback Visivo",
-      "priority": "P2",
       "status": "resolved",
       "recommended_batch_size": 1,
       "identified_residual": [],

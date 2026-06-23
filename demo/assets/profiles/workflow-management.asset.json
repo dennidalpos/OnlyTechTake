@@ -1,0 +1,27 @@
+{
+  "id": "workflow-management",
+  "flavor": "Full",
+  "testClass": "com.onlytechtake.repairapp.demo.WorkflowOperationalTest",
+  "testMethod": "flow2_Management",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/workflows/workflow-management",
+  "pulledDirectoryName": "workflow-management",
+  "cases": [
+    {
+      "id": "management",
+      "sourceDirectory": ".",
+      "outputs": [
+        { "platform": "whatsapp", "variant": "vertical", "subDir": "management" }
+      ],
+      "expectedFiles": [
+        "01-orders-list.png",
+        "02-order-details.png",
+        "03-management-in-progress.png",
+        "04-management-diagnosing.png",
+        "05-management-diagnosis-result.png",
+        "06-management-quote.png",
+        "07-management-ready.png",
+        "08-management-closure.png"
+      ]
+    }
+  ]
+}

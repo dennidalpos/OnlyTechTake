@@ -26,6 +26,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.GrantPermissionRule
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.MainActivity
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
@@ -41,6 +42,10 @@ import java.io.FileOutputStream
 class SocialStoryDemoScreenshotTest {
     @get:Rule
     val composeRule = createEmptyComposeRule()
+
+    @get:Rule
+    val cameraPermissionRule: GrantPermissionRule =
+        GrantPermissionRule.grant(android.Manifest.permission.CAMERA)
 
     private val context: Context = ApplicationProvider.getApplicationContext()
 
@@ -96,6 +101,7 @@ class SocialStoryDemoScreenshotTest {
             )
             clickTag(RepairAppTestTags.categoryButton("demo-cat-gaming"), scroll = true)
             clickTag(RepairAppTestTags.categoryButton("demo-cat-rog-strix"), scroll = true)
+            capture(outputDir, "04-selezione-categoria.png")
 
             clickTag(RepairAppTestTags.NewOrderStep2NextButton, scroll = true)
             typeTag(
@@ -108,7 +114,7 @@ class SocialStoryDemoScreenshotTest {
                 "Il cliente segnala spegnimento improvviso dopo caduta accidentale.",
                 scroll = true,
             )
-            capture(outputDir, "story-05-problem.png")
+            capture(outputDir, "05-dettaglio-problema.png")
 
             // 4. Wizard: media
             clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
@@ -117,7 +123,7 @@ class SocialStoryDemoScreenshotTest {
             waitForTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
             clickTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
             waitForText("PHOTO", scrollIfNotFound = true)
-            capture(outputDir, "story-06-media.png")
+            capture(outputDir, "06-acquisizione-media.png")
 
             // 5. Wizard: privacy e firma
             clickTag(RepairAppTestTags.NewOrderStep4NextButton, scroll = true)
@@ -129,16 +135,16 @@ class SocialStoryDemoScreenshotTest {
                 swipeRight()
             }
             waitForTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
-            capture(outputDir, "story-07-signature.png")
+            capture(outputDir, "07-firma-cliente.png")
 
             clickTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
             waitForTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
-            capture(outputDir, "story-08-summary.png")
+            capture(outputDir, "08-riepilogo-invio.png")
             clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
 
             clickDashboardTab("ORDERS")
             waitForText("Commesse")
-            capture(outputDir, "story-09-orders-list.png")
+            capture(outputDir, "09-elenco-commesse.png")
             waitForTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
             clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID))
 
@@ -147,7 +153,7 @@ class SocialStoryDemoScreenshotTest {
             waitForTag(RepairAppTestTags.OrderDetailCustomerReference, useUnmergedTree = true)
             waitForTag(RepairAppTestTags.orderDetailStatusStep(1), useUnmergedTree = true)
             waitForText("Asus ROG Strix")
-            capture(outputDir, "story-10-order-detail.png")
+            capture(outputDir, "10-dettaglio-commessa.png")
 
             applySimpleStatus(
                 OrderStatusAction.START_PROGRESS,
@@ -158,7 +164,7 @@ class SocialStoryDemoScreenshotTest {
                 nextAction = OrderStatusAction.RECORD_RESULT,
             )
             applyResultStatus()
-            capture(outputDir, "story-11-diagnosis.png")
+            capture(outputDir, "11-risultato-diagnosi.png")
 
             acceptQuote()
             applySimpleStatus(
@@ -168,7 +174,7 @@ class SocialStoryDemoScreenshotTest {
             closeOrder()
             clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
             waitForText("Chiusa")
-            capture(outputDir, "story-12-closed.png")
+            capture(outputDir, "12-chiusura-timeline.png")
         }
     }
 
@@ -214,7 +220,7 @@ class SocialStoryDemoScreenshotTest {
             // Capture Tooltip for variables
             clickTag(RepairAppTestTags.ConfigTemplateVariablesTooltip, scroll = true)
             pauseForDemo()
-            capture(outputDir, "05a-template-tooltip.png")
+            capture(outputDir, "06-template-tooltip.png")
 
             typeTag(
                 RepairAppTestTags.ConfigTemplateCodeField,
@@ -231,12 +237,12 @@ class SocialStoryDemoScreenshotTest {
                 "Ciao {{cliente}}, la commessa {{numero_commessa}} e' ora in stato {{stato_commessa}}.",
                 scroll = true,
             )
-            capture(outputDir, "05b-creazione-template.png")
+            capture(outputDir, "07-creazione-template.png")
             clickTag(RepairAppTestTags.ConfigTemplateSaveButton, scroll = true)
             waitForTag(RepairAppTestTags.GenericConfirmButton)
             clickTag(RepairAppTestTags.GenericConfirmButton)
             waitForText("Operazione completata")
-            capture(outputDir, "06-template-salvato.png")
+            capture(outputDir, "08-template-salvato.png")
         }
     }
 
@@ -681,21 +687,6 @@ class SocialStoryDemoScreenshotTest {
         if (!found) {
             composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).assertExists()
         }
-    }
-
-    private fun waitForTagIfPresent(
-        tag: String,
-        timeoutMillis: Long,
-    ): Boolean {
-        val deadline = System.currentTimeMillis() + timeoutMillis
-        do {
-            if (isTagPresent(tag)) {
-                composeRule.onNodeWithTag(tag).assertIsDisplayed()
-                return true
-            }
-            Thread.sleep(TAG_POLL_MILLIS)
-        } while (System.currentTimeMillis() < deadline)
-        return false
     }
 
     private fun dismissWhatsAppPreviewIfPresent() {

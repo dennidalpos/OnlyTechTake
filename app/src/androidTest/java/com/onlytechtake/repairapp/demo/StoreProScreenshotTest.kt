@@ -195,6 +195,7 @@ class ProAssetRobot(
         action: OrderStatusAction,
         nextAction: OrderStatusAction,
     ) {
+        waitForTag(RepairAppTestTags.OrderDetailLazyColumn)
         scrollOrderDetailToTop()
         waitForTag(RepairAppTestTags.OrderActionSection, scroll = true)
         clickTag(RepairAppTestTags.statusAction(action.name), scroll = true)

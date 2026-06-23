@@ -23,13 +23,20 @@ keystore.properties
 Thumbs.db
 .DS_Store
 
-# Generated local outputs, including demo screenshots and videos
+# Generated local outputs (temporary)
 /reports/
 /logs/
 /tmp/
 /demo/recordings/
 /demo/screenshots/
 /demo/videos/
+
+# Assets to be committed are in /marketing/ (NOT ignored)
+# Ensure binary files in marketing/ are tracked
+!/marketing/**/*.png
+!/marketing/**/*.jpg
+!/marketing/**/*.svg
+!/marketing/**/*.mp4
 *.apk
 *.aab
 *.ap_
