@@ -194,6 +194,46 @@ nav {
     color: var(--md-sys-color-on-primary);
 }
 
+/* Language Selector */
+.lang-selector {
+    display: flex;
+    gap: 0.5rem;
+    background: var(--md-sys-color-surface-variant);
+    padding: 4px;
+    border-radius: 100px;
+}
+
+.lang-btn {
+    background: none;
+    border: none;
+    color: var(--md-sys-color-on-surface-variant);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lang-btn.active {
+    background: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+}
+
+.sidebar-lang-selector {
+    padding: 1rem 1.5rem;
+    display: flex;
+    gap: 1rem;
+    border-top: 1px solid var(--md-sys-color-surface-variant);
+    margin-top: auto;
+}
+
+@media (max-width: 768px) {
+    .nav-actions .lang-selector {
+        display: none;
+    }
+}
+
 /* Theme Switch */
 .theme-switch {
     cursor: pointer;

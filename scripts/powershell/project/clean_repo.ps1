@@ -181,11 +181,25 @@ function Remove-RepoItem {
 function Remove-GeneratedDirectoriesByName {
     param([Parameter(Mandatory = $true)][string[]]$Names)
 
-    $directories = Get-ChildItem -LiteralPath $script:Root -Directory -Recurse -Force -ErrorAction SilentlyContinue |
-        Where-Object { $Names -contains $_.Name } |
-        Sort-Object { $_.FullName.Length } -Descending
+    # Optimization: avoid searching inside .git and other large hidden directories
+    $directories = Get-ChildItem -LiteralPath $script:Root -Directory -Force -ErrorAction SilentlyContinue |
+        Where-Object { $_.Name -ne '.git' } |
+        ForEach-Object {
+            Get-ChildItem -Path $_.FullName -Directory -Recurse -Force -ErrorAction SilentlyContinue
+        } |
+        Where-Object { $Names -contains $_.Name }
 
-    foreach ($directory in $directories) {
+    # Also check root level directories
+    $rootDirs = Get-ChildItem -LiteralPath $script:Root -Directory -Force -ErrorAction SilentlyContinue |
+        Where-Object { $Names -contains $_.Name }
+
+    $allDirs = @()
+    if ($null -ne $directories) { $allDirs += $directories }
+    if ($null -ne $rootDirs) { $allDirs += $rootDirs }
+
+    $allDirs = $allDirs | Sort-Object { $_.FullName.Length } -Descending
+
+    foreach ($directory in $allDirs) {
         if (Test-IsExcludedRepoPath -FullPath $directory.FullName) {
             Write-Host "Preservo: $(Get-RepoRelativePath -FullPath $directory.FullName)"
             continue
@@ -276,22 +290,22 @@ function Remove-AndroidStudioSystemCaches {
 
 if ($PSBoundParameters.Count -eq 0 -and -not $NonInteractive) {
     Write-Host "`n--- Repo Cleaner Android/Gradle ---" -ForegroundColor Cyan
-    Write-Host 'Default: pulizia sicura. Non rimuove .gradle, .idea o cache globali IDE.'
+    Write-Host 'Pulisce gli output generati mantenendo i sorgenti e le configurazioni.'
 
-    $dryChoice = Read-Host "`nEseguire solo anteprima DryRun? [Y/n]"
-    if ($dryChoice -ne 'n') { $DryRun = $true }
+    $DryRun = (Read-Host "`nEseguire solo anteprima (DryRun)? [Y/n]").ToLower() -ne 'n'
+    $Deep = (Read-Host "Pulizia profonda cache locali (.gradle, .kotlin)? [y/N]").ToLower() -eq 'y'
+    $ResetIdeProjectMetadata = (Read-Host "Reset metadati IDE locali (workspace, shelf)? [y/N]").ToLower() -eq 'y'
+    $StopGradle = (Read-Host "Fermare i daemon Gradle? [y/N]").ToLower() -eq 'y'
 
-    $deepChoice = Read-Host "`nPulizia profonda delle cache locali .gradle/.kotlin? [y/N]"
-    if ($deepChoice -eq 'y') { $Deep = $true }
+    if (-not $DryRun) {
+        $PurgeAndroidStudioCaches = (Read-Host "Pulire cache globali Android Studio? (Richiede IDE chiuso) [y/N]").ToLower() -eq 'y'
 
-    $ideChoice = Read-Host "`nReset mirato metadati IDE locali al progetto? [y/N]"
-    if ($ideChoice -eq 'y') { $ResetIdeProjectMetadata = $true }
-
-    $globalIdeChoice = Read-Host "`nPulire cache Android Studio in %LOCALAPPDATA%? Richiede IDE chiuso. [y/N]"
-    if ($globalIdeChoice -eq 'y') { $PurgeAndroidStudioCaches = $true }
-
-    $gradleChoice = Read-Host "`nFermare i daemon Gradle? [y/N]"
-    if ($gradleChoice -eq 'y') { $StopGradle = $true }
+        Write-Host "`nATTENZIONE: Stai per avviare la pulizia REALE." -ForegroundColor Yellow
+        if ((Read-Host "Confermi di voler procedere? [y/N]").ToLower() -ne 'y') {
+            Write-Host "Operazione annullata." -ForegroundColor Red
+            exit 0
+        }
+    }
 }
 
 Push-Location $script:Root

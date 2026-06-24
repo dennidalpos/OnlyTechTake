@@ -7,7 +7,8 @@
 #>
 
 param(
-    [switch]$NonInteractive
+    [switch]$NonInteractive,
+    [switch]$Stop
 )
 
 $ErrorActionPreference = "Stop"
@@ -18,6 +19,10 @@ $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
 $arguments = @()
 foreach ($argument in $args) {
     if ($argument -ne "--") { $arguments += $argument }
+}
+
+if ($Stop) {
+    $arguments = @("--stop")
 }
 
 if ($arguments.Count -eq 0 -and -not $NonInteractive) {
@@ -42,7 +47,7 @@ if ($arguments.Count -eq 0 -and -not $NonInteractive) {
             $manual = Read-Host "Inserisci i task (es. clean assembleDebug)"
             $arguments = $manual -split " "
         }
-        default { throw "Nessun task selezionato." }
+        default { Write-Host "Annullato." -ForegroundColor Yellow; exit 0 }
     }
 }
 
@@ -53,13 +58,18 @@ if (Test-Path $supportScript) {
 }
 
 $gradlew = Join-Path $root "gradlew.bat"
+if (-not (Test-Path $gradlew)) { throw "gradlew.bat non trovato in $root" }
 
 Push-Location $root
+$sw = [System.Diagnostics.Stopwatch]::StartNew()
 try {
-    & $gradlew @arguments
+    Write-Host "Eseguo: .\gradlew.bat $($arguments -join ' ')" -ForegroundColor Gray
+    & $gradlew @arguments | Out-Host
     if ($LASTEXITCODE -ne 0) {
         throw "Gradle fallito con exit code $LASTEXITCODE."
     }
+    $sw.Stop()
+    Write-Host "`nBUILD SUCCESSFUL in $($sw.Elapsed.ToString('mm\:ss'))" -ForegroundColor Green
 } finally {
     Pop-Location
 }

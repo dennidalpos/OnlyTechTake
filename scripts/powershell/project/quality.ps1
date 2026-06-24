@@ -21,7 +21,10 @@
 param(
     [switch]$Apply,
     [switch]$NonInteractive,
-    [switch]$SkipLint
+    [switch]$SkipLint,
+    [string]$Flavor = "Full",
+    [string]$BuildType = "Debug",
+    [switch]$AllVariants
 )
 
 $ErrorActionPreference = "Stop"
@@ -31,13 +34,31 @@ $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
 # Interactive Mode
 if ($PSBoundParameters.Count -eq 0 -and -not $NonInteractive) {
     Write-Host "`n--- OnlyTechTake Code Quality Check ---" -ForegroundColor Cyan
-    Write-Host "Esegue linting e check della formattazione."
+    Write-Host "Verifica formattazione (Spotless) e analisi statica (Lint)."
 
-    $aChoice = Read-Host "`nApplicare automaticamente le correzioni di formattazione? [y/N]"
-    if ($aChoice -eq 'y') { $Apply = $true }
+    $Apply = (Read-Host "`nApplicare automaticamente le correzioni di formattazione? [y/N]").ToLower() -eq 'y'
+    $SkipLint = (Read-Host "Saltare Android Lint (più veloce)? [y/N]").ToLower() -eq 'y'
 
-    $sChoice = Read-Host "`nSaltare Android Lint (più veloce)? [y/N]"
-    if ($sChoice -eq 'y') { $SkipLint = $true }
+    if (-not $SkipLint) {
+        Write-Host "`nScegli variante per Lint:"
+        Write-Host "1. Solo Full (Default)"
+        Write-Host "2. Solo Demo"
+        Write-Host "3. Solo Showcase"
+        Write-Host "4. TUTTE le varianti (Lento)"
+        $lChoice = Read-Host "Opzione [1-4]"
+
+        switch ($lChoice) {
+            "2" { $Flavor = "Demo" }
+            "3" { $Flavor = "Showcase" }
+            "4" { $AllVariants = $true }
+            default { $Flavor = "Full" }
+        }
+
+        if (-not $AllVariants) {
+            $bChoice = Read-Host "Build Type? [1. Debug (default) / 2. Release]"
+            if ($bChoice -eq "2") { $BuildType = "Release" }
+        }
+    }
 }
 
 $supportScript = Join-Path $PSScriptRoot "..\support\android_env.ps1"
@@ -89,10 +110,12 @@ function Read-YesNo($Prompt) {
 }
 
 $gradlew = Join-Path $root "gradlew.bat"
+$script:gradlew = $gradlew
 Require-File $gradlew "gradlew.bat non trovato nella root rilevata: $root"
 Require-File (Join-Path $root "app\build.gradle.kts") "Modulo app Android non trovato."
 
 Push-Location $root
+$sw = [System.Diagnostics.Stopwatch]::StartNew()
 try {
     Write-Section "Formatting"
     if ($Apply) {
@@ -116,18 +139,29 @@ try {
 
     if (-not $SkipLint) {
         Write-Section "Android Lint"
-        $lintTasks = @(
-            ":app:lintFullDebug",
-            ":app:lintFullRelease",
-            ":app:lintDemoDebug",
-            ":app:lintDemoRelease",
-            ":app:lintShowcaseDebug",
-            ":app:lintShowcaseRelease"
-        )
+
+        $lintTasks = @()
+        if ($AllVariants) {
+            $lintTasks = @(
+                ":app:lintFullDebug",
+                ":app:lintFullRelease",
+                ":app:lintDemoDebug",
+                ":app:lintDemoRelease",
+                ":app:lintShowcaseDebug",
+                ":app:lintShowcaseRelease"
+            )
+        } else {
+            # Default optimization: run lint only on the selected or default variant
+            $taskName = ":app:lint$($Flavor)$($BuildType)"
+            Write-Host "Running optimized lint for: $Flavor$BuildType" -ForegroundColor Gray
+            $lintTasks = @($taskName)
+        }
+
         $null = Invoke-GradleTask $lintTasks
     }
 
-    Write-Section "Completato"
+    $sw.Stop()
+    Write-Section "Completato in $($sw.Elapsed.ToString('mm\:ss'))"
 } finally {
     Pop-Location
 }

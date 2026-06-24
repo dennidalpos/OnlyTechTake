@@ -80,18 +80,20 @@ function Invoke-GradleTask {
     )
 
     $gradleArguments = @("--no-configuration-cache") + $Tasks
-    Write-Host "Eseguo: .\gradlew.bat $($gradleArguments -join ' ')"
-    & $script:gradlew @gradleArguments
+    Write-Host "Eseguo: .\gradlew.bat $($gradleArguments -join ' ')" -ForegroundColor Gray
+    & $script:gradlew @gradleArguments | Out-Host
     if ($LASTEXITCODE -ne 0) {
         throw "Gradle fallito: $($Tasks -join ' ')"
     }
 }
 
 $gradlew = Join-Path $root "gradlew.bat"
+$script:gradlew = $gradlew
 Require-File $gradlew "gradlew.bat non trovato nella root rilevata: $root"
 Require-File (Join-Path $root "app\build.gradle.kts") "Modulo app Android non trovato."
 
 Push-Location $root
+$sw = [System.Diagnostics.Stopwatch]::StartNew()
 try {
 Write-Section "Controlli locali"
 $debugVariant = "$Flavor" + "Debug"
@@ -121,7 +123,8 @@ if ($AndroidTests) {
     Invoke-GradleTask @($connectedAndroidTestTask)
 }
 
-Write-Section "Completato"
+$sw.Stop()
+Write-Section "Completato in $($sw.Elapsed.ToString('mm\:ss'))"
 } finally {
     Pop-Location
 }

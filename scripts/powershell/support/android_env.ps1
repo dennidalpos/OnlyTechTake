@@ -21,15 +21,23 @@ function Get-JavaMajorVersion {
 
     $previousErrorActionPreference = $ErrorActionPreference
     $ErrorActionPreference = "Continue"
+    # Capture both stdout and stderr since java -version often writes to stderr
     $output = & $java -version 2>&1
     $ErrorActionPreference = $previousErrorActionPreference
-    $versionLine = ($output | Select-Object -First 1).ToString()
 
-    if ($versionLine -match '"1\.(\d+)\.') {
+    $fullOutput = ($output | ForEach-Object { $_.ToString() }) -join "`n"
+
+    # Match "1.8.0", "11.0.1", "17.0.1", "21.0.1" etc.
+    if ($fullOutput -match 'version\s+"1\.(\d+)\.') {
         return [int]$Matches[1]
     }
 
-    if ($versionLine -match '"(\d+)\.') {
+    if ($fullOutput -match 'version\s+"(\d+)\.') {
+        return [int]$Matches[1]
+    }
+
+    # Fallback for OpenJDK output formats
+    if ($fullOutput -match 'openjdk\s+(\d+)\.') {
         return [int]$Matches[1]
     }
 

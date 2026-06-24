@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OnlyTechTake - Gestione Riparazioni Local-First</title>
-    <meta name="description" content="Gestione locale di commesse, foto e report PDF per laboratori di riparazione. Tutto sul tuo dispositivo Android.">
+    <title data-i18n="meta.title">OnlyTechTake - Gestione Riparazioni Local-First</title>
+    <meta name="description" data-i18n-meta-description content="Gestione locale di commesse, foto e report PDF per laboratori di riparazione. Tutto sul tuo dispositivo Android.">
 
     <!-- Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,14 +32,18 @@
                     <span class="app-title">OnlyTechTake</span>
                 </a>
                 <div class="nav-actions">
-                    <a href="#features" class="nav-link">Funzioni</a>
-                    <a href="#pricing" class="nav-link">Versioni</a>
-                    <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="btn-nav btn-pro">Scarica PRO</a>
-                    <div id="theme-toggle" class="theme-switch" title="Cambia Tema">
+                    <div class="lang-selector">
+                        <button class="lang-btn active" data-lang-switch="it">IT</button>
+                        <button class="lang-btn" data-lang-switch="en">EN</button>
+                    </div>
+                    <a href="#features" class="nav-link" data-i18n="nav.features">Funzioni</a>
+                    <a href="#pricing" class="nav-link" data-i18n="nav.versions">Versioni</a>
+                    <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="btn-nav btn-pro" data-i18n="nav.downloadPro">Scarica PRO</a>
+                    <div id="theme-toggle" class="theme-switch" data-i18n-title="nav.theme" title="Cambia Tema">
                         <i data-lucide="sun" class="sun-icon"></i>
                         <i data-lucide="moon" class="moon-icon"></i>
                     </div>
-                    <button id="sidebar-toggle" class="menu-btn" aria-label="Menu">
+                    <button id="sidebar-toggle" class="menu-btn" data-i18n-aria-label="nav.menu" aria-label="Menu">
                         <i data-lucide="menu"></i>
                     </button>
                 </div>
@@ -55,21 +59,25 @@
                 <img src="assets/brand/onlytechtake-mark.svg" alt="OTT" class="logo-mark">
                 <span class="app-title">OnlyTechTake</span>
             </a>
-            <button id="sidebar-close" class="close-btn" aria-label="Chiudi">
+            <button id="sidebar-close" class="close-btn" data-i18n-aria-label="nav.close" aria-label="Chiudi">
                 <i data-lucide="x"></i>
             </button>
         </div>
         <nav class="sidebar-links">
-            <a href="#" class="sidebar-link active"><i data-lucide="home"></i> Home</a>
-            <a href="#features" class="sidebar-link"><i data-lucide="zap"></i> Funzioni</a>
-            <a href="#gallery" class="sidebar-link"><i data-lucide="image"></i> Gallery</a>
-            <a href="#pricing" class="sidebar-link"><i data-lucide="layout-grid"></i> Versioni</a>
+            <a href="#" class="sidebar-link active"><i data-lucide="home"></i> <span data-i18n="sidebar.home">Home</span></a>
+            <a href="#features" class="sidebar-link"><i data-lucide="zap"></i> <span data-i18n="sidebar.features">Funzioni</span></a>
+            <a href="#gallery" class="sidebar-link"><i data-lucide="image"></i> <span data-i18n="sidebar.gallery">Gallery</span></a>
+            <a href="#pricing" class="sidebar-link"><i data-lucide="layout-grid"></i> <span data-i18n="sidebar.versions">Versioni</span></a>
             <div class="sidebar-divider"></div>
             <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="sidebar-link pro-link">
-                <i data-lucide="shopping-cart"></i> Acquista PRO
+                <i data-lucide="shopping-cart"></i> <span data-i18n="sidebar.buyPro">Acquista PRO</span>
             </a>
-            <a href="privacy.html" class="sidebar-link"><i data-lucide="shield"></i> Privacy Policy</a>
+            <a href="privacy.html" class="sidebar-link"><i data-lucide="shield"></i> <span data-i18n="sidebar.privacy">Privacy Policy</span></a>
         </nav>
+        <div class="sidebar-lang-selector">
+            <button class="lang-btn active" data-lang-switch="it">IT</button>
+            <button class="lang-btn" data-lang-switch="en">EN</button>
+        </div>
         <div class="sidebar-footer">
             <p>v1.0.0 Production | MD3 Ready</p>
         </div>
@@ -85,11 +93,11 @@
                             <img src="assets/brand/android-logo.svg" alt="Android" class="badge-icon">
                             Target Android 15 (API 37)
                         </div>
-                        <h1>Un'app per ogni problema!<br><span class="gradient-text">Il tuo Banco Riparazioni.</span></h1>
-                        <p>L'applicazione Local-First professionale per gestire commesse, diagnosi e clienti in totale sicurezza. Senza abbonamenti, senza cloud.</p>
+                        <h1 data-i18n-html="hero.title">Un'app per ogni problema!<br><span class="gradient-text">Il tuo Banco Riparazioni.</span></h1>
+                        <p data-i18n="hero.subtitle">L'applicazione Local-First professionale per gestire commesse, diagnosi e clienti in totale sicurezza. Senza abbonamenti, senza cloud.</p>
                         <div class="hero-btns">
-                            <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="btn-primary">Inizia ora (PRO)</a>
-                            <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp.demo" class="btn-secondary">Prova la Demo</a>
+                            <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="btn-primary" data-i18n="hero.ctaPro">Inizia ora (PRO)</a>
+                            <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp.demo" class="btn-secondary" data-i18n="hero.ctaDemo">Prova la Demo</a>
                         </div>
                     </div>
 
@@ -100,8 +108,8 @@
                             </video>
                         </div>
                         <!-- Floating screenshots decorations -->
-                        <div class="floating-img img-1"><img src="assets/screenshots/01-dashboard-pro.png" alt="Dashboard"></div>
-                        <div class="floating-img img-2"><img src="assets/screenshots/05-whatsapp-pdf-pro.png" alt="PDF"></div>
+                        <div class="floating-img img-1"><img src="assets/screenshots/01-dashboard-pro.png" data-i18n-alt="gallery.alt.dashboard" alt="Dashboard"></div>
+                        <div class="floating-img img-2"><img src="assets/screenshots/05-whatsapp-pdf-pro.png" data-i18n-alt="gallery.alt.pdf" alt="PDF"></div>
                     </div>
                 </div>
             </div>
@@ -112,8 +120,8 @@
             <div class="container">
                 <div class="privacy-card">
                     <div class="icon-box"><i data-lucide="lock"></i></div>
-                    <h2>Dati locali, sicurezza SQLCipher</h2>
-                    <p>OTT opera in modalità <strong>Local-First</strong>. Foto, firme e dati sensibili non lasciano mai il dispositivo. Il database è protetto da cifratura hardware-backed per garantirti la massima riservatezza professionale.</p>
+                    <h2 data-i18n="privacySection.title">Dati locali, sicurezza SQLCipher</h2>
+                    <p data-i18n-html="privacySection.text">OTT opera in modalità <strong>Local-First</strong>. Foto, firme e dati sensibili non lasciano mai il dispositivo. Il database è protetto da cifratura hardware-backed per garantirti la massima riservatezza professionale.</p>
                 </div>
             </div>
         </section>
@@ -122,39 +130,39 @@
         <section id="features" class="features-section">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-title">Workflow Professionale</h2>
-                    <p>Progettato per laboratori che necessitano di velocità, precisione e privacy.</p>
+                    <h2 class="section-title" data-i18n="features.title">Workflow Professionale</h2>
+                    <p data-i18n="features.subtitle">Progettato per laboratori che necessitano di velocità, precisione e privacy.</p>
                 </div>
                 <div class="grid-3">
                     <div class="feature-card">
                         <i data-lucide="layout"></i>
-                        <h3>Banco Riparazioni</h3>
-                        <p>Gestisci il flusso operativo: Aperta, In Lavorazione, Diagnosi, Pronta al Ritiro e Chiusa.</p>
+                        <h3 data-i18n="features.workbench.title">Banco Riparazioni</h3>
+                        <p data-i18n="features.workbench.text">Gestisci il flusso operativo: Aperta, In Lavorazione, Diagnosi, Pronta al Ritiro e Chiusa.</p>
                     </div>
                     <div class="feature-card">
                         <i data-lucide="camera"></i>
-                        <h3>Documentazione Media</h3>
-                        <p>Scatta foto con CameraX per documentare lo stato estetico e tecnico di ogni dispositivo.</p>
+                        <h3 data-i18n="features.media.title">Documentazione Media</h3>
+                        <p data-i18n="features.media.text">Scatta foto con CameraX per documentare lo stato estetico e tecnico di ogni dispositivo.</p>
                     </div>
                     <div class="feature-card">
                         <i data-lucide="signature"></i>
-                        <h3>Firma & Privacy</h3>
-                        <p>Firma digitale su schermo per accettazione privacy e condizioni di presa in carico personalizzabili.</p>
+                        <h3 data-i18n="features.signature.title">Firma & Privacy</h3>
+                        <p data-i18n="features.signature.text">Firma digitale su schermo per accettazione privacy e condizioni di presa in carico personalizzabili.</p>
                     </div>
                     <div class="feature-card">
                         <i data-lucide="file-text"></i>
-                        <h3>Report PDF Professionali</h3>
-                        <p>Genera istantaneamente schede tecniche e ricevute PDF con il logo del tuo laboratorio.</p>
+                        <h3 data-i18n="features.pdf.title">Report PDF Professionali</h3>
+                        <p data-i18n="features.pdf.text">Genera istantaneamente schede tecniche e ricevute PDF con il logo del tuo laboratorio.</p>
                     </div>
                     <div class="feature-card">
                         <i data-lucide="message-circle"></i>
-                        <h3>WhatsApp Manuale</h3>
-                        <p>Invia stati di avanzamento e PDF ai clienti tramite template predefiniti in un solo tap.</p>
+                        <h3 data-i18n="features.whatsapp.title">WhatsApp Manuale</h3>
+                        <p data-i18n="features.whatsapp.text">Invia stati di avanzamento e PDF ai clienti tramite template predefiniti in un solo tap.</p>
                     </div>
                     <div class="feature-card">
                         <i data-lucide="shield-check"></i>
-                        <h3>Backup ZIP Cifrato</h3>
-                        <p>Esporta l'intero archivio o singole tabelle XLSX per backup esterni in totale sicurezza.</p>
+                        <h3 data-i18n="features.backup.title">Backup ZIP Cifrato</h3>
+                        <p data-i18n="features.backup.text">Esporta l'intero archivio o singole tabelle XLSX per backup esterni in totale sicurezza.</p>
                     </div>
                 </div>
             </div>
@@ -164,37 +172,37 @@
         <section id="gallery" class="gallery-section">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-title">Esperienza Material 3</h2>
-                    <p>Interfaccia moderna e coerente con le linee guida Android, ottimizzata per il lavoro al banco.</p>
+                    <h2 class="section-title" data-i18n="gallery.title">Esperienza Material 3</h2>
+                    <p data-i18n="gallery.subtitle">Interfaccia moderna e coerente con le linee guida Android, ottimizzata per il lavoro al banco.</p>
                 </div>
                 <div class="gallery-grid">
                     <div class="gallery-item">
-                        <img src="assets/screenshots/01-dashboard-pro.png" alt="Banco Riparazioni">
-                        <div class="gallery-overlay">Dashboard & Code Operative</div>
+                        <img src="assets/screenshots/01-dashboard-pro.png" data-i18n-alt="gallery.alt.dashboard" alt="Banco Riparazioni">
+                        <div class="gallery-overlay" data-i18n="gallery.overlay.dashboard">Dashboard & Code Operative</div>
                     </div>
                     <div class="gallery-item">
-                        <img src="assets/screenshots/02-nuova-commessa-pro.png" alt="Nuova Commessa">
-                        <div class="gallery-overlay">Presa in Carico Guidata</div>
+                        <img src="assets/screenshots/02-nuova-commessa-pro.png" data-i18n-alt="gallery.alt.newOrder" alt="Nuova Commessa">
+                        <div class="gallery-overlay" data-i18n="gallery.overlay.intake">Presa in Carico Guidata</div>
                     </div>
                     <div class="gallery-item">
-                        <img src="assets/screenshots/03-foto-firma-pro.png" alt="Media e Firme">
-                        <div class="gallery-overlay">Foto e Firma Digitale</div>
+                        <img src="assets/screenshots/03-foto-firma-pro.png" data-i18n-alt="gallery.alt.media" alt="Media e Firme">
+                        <div class="gallery-overlay" data-i18n="gallery.overlay.media">Foto e Firma Digitale</div>
                     </div>
                     <div class="gallery-item">
-                        <img src="assets/screenshots/04-diagnosi-preventivo-pro.png" alt="Diagnosi">
-                        <div class="gallery-overlay">Diagnosi e Preventivi</div>
+                        <img src="assets/screenshots/04-diagnosi-preventivo-pro.png" data-i18n-alt="gallery.alt.diagnosis" alt="Diagnosi">
+                        <div class="gallery-overlay" data-i18n="gallery.overlay.quotes">Diagnosi e Preventivi</div>
                     </div>
                     <div class="gallery-item">
-                        <img src="assets/screenshots/05-whatsapp-pdf-pro.png" alt="PDF e Social">
-                        <div class="gallery-overlay">Invio PDF su WhatsApp</div>
+                        <img src="assets/screenshots/05-whatsapp-pdf-pro.png" data-i18n-alt="gallery.alt.pdf" alt="PDF e Social">
+                        <div class="gallery-overlay" data-i18n="gallery.overlay.whatsapp">Invio PDF su WhatsApp</div>
                     </div>
                     <div class="gallery-item">
-                        <img src="assets/screenshots/06-timeline-chiusura-pro.png" alt="Timeline Eventi">
-                        <div class="gallery-overlay">Cronologia Eventi & Timeline</div>
+                        <img src="assets/screenshots/06-timeline-chiusura-pro.png" data-i18n-alt="gallery.alt.timeline" alt="Timeline Eventi">
+                        <div class="gallery-overlay" data-i18n="gallery.overlay.timeline">Cronologia Eventi & Timeline</div>
                     </div>
                     <div class="gallery-item">
-                        <img src="assets/screenshots/07-clienti-pro.png" alt="Archivio Clienti">
-                        <div class="gallery-overlay">Anagrafica Clienti Locale</div>
+                        <img src="assets/screenshots/07-clienti-pro.png" data-i18n-alt="gallery.alt.customers" alt="Archivio Clienti">
+                        <div class="gallery-overlay" data-i18n="gallery.overlay.customers">Anagrafica Clienti Locale</div>
                     </div>
                 </div>
             </div>
@@ -202,8 +210,8 @@
 
         <!-- Lightbox Modal -->
         <div id="lightbox" class="lightbox">
-            <span class="close-lightbox" aria-label="Chiudi">&times;</span>
-            <img id="lightbox-img" src="" alt="Dettaglio Screenshot">
+            <span class="close-lightbox" data-i18n-aria-label="gallery.alt.close" aria-label="Chiudi">&times;</span>
+            <img id="lightbox-img" src="" data-i18n-alt="gallery.alt.detail" alt="Dettaglio Screenshot">
             <div id="lightbox-caption"></div>
         </div>
 
@@ -211,43 +219,43 @@
         <section id="pricing" class="pricing-section">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-title">Scegli la tua versione</h2>
-                    <p>Paghi una volta, possiedi i tuoi dati per sempre. Niente Cloud, niente canoni.</p>
+                    <h2 class="section-title" data-i18n="pricing.title">Scegli la tua versione</h2>
+                    <p data-i18n="pricing.subtitle">Paghi una volta, possiedi i tuoi dati per sempre. Niente Cloud, niente canoni.</p>
                 </div>
                 <div class="pricing-grid">
                     <div class="price-card">
                         <div class="price-header">
                             <h3>Demo</h3>
-                            <div class="price">Gratis</div>
+                            <div class="price" data-i18n="pricing.demo.price">Gratis</div>
                         </div>
                         <ul class="price-features">
-                            <li><i data-lucide="check"></i> 1 Commessa attiva</li>
-                            <li><i data-lucide="check"></i> Diagnosi e Foto</li>
-                            <li><i data-lucide="check"></i> Firma Digitale su Touch</li>
-                            <li><i data-lucide="check"></i> Accesso Admin locale</li>
-                            <li class="disabled"><i data-lucide="x"></i> PDF senza Watermark</li>
-                            <li class="disabled"><i data-lucide="x"></i> Gestione Operatori</li>
-                            <li class="disabled"><i data-lucide="x"></i> Export Excel (XLSX)</li>
-                            <li class="disabled"><i data-lucide="x"></i> Backup ZIP completo</li>
+                            <li data-i18n-html="pricing.demo.feature1"><i data-lucide="check"></i> 1 Commessa attiva</li>
+                            <li data-i18n-html="pricing.demo.feature2"><i data-lucide="check"></i> Diagnosi e Foto</li>
+                            <li data-i18n-html="pricing.demo.feature3"><i data-lucide="check"></i> Firma Digitale su Touch</li>
+                            <li data-i18n-html="pricing.demo.feature4"><i data-lucide="check"></i> Accesso Admin locale</li>
+                            <li class="disabled" data-i18n-html="pricing.demo.feature5"><i data-lucide="x"></i> PDF senza Watermark</li>
+                            <li class="disabled" data-i18n-html="pricing.demo.feature6"><i data-lucide="x"></i> Gestione Operatori</li>
+                            <li class="disabled" data-i18n-html="pricing.demo.feature7"><i data-lucide="x"></i> Export Excel (XLSX)</li>
+                            <li class="disabled" data-i18n-html="pricing.demo.feature8"><i data-lucide="x"></i> Backup ZIP completo</li>
                         </ul>
-                        <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp.demo" class="btn-outline">Scarica Demo</a>
+                        <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp.demo" class="btn-outline" data-i18n="pricing.demo.cta">Scarica Demo</a>
                     </div>
                     <div class="price-card featured">
-                        <div class="featured-badge">Consigliato</div>
+                        <div class="featured-badge" data-i18n="pricing.pro.badge">Consigliato</div>
                         <div class="price-header">
                             <h3>Pro</h3>
-                            <div class="price">Licenza Unica</div>
+                            <div class="price" data-i18n="pricing.pro.price">Licenza Unica</div>
                         </div>
                         <ul class="price-features">
-                            <li><i data-lucide="check"></i> Commesse Illimitate</li>
-                            <li><i data-lucide="check"></i> PDF Personalizzati (No Watermark)</li>
-                            <li><i data-lucide="check"></i> Gestione Multi-operatore</li>
-                            <li><i data-lucide="check"></i> Export XLSX & Backup ZIP</li>
-                            <li><i data-lucide="check"></i> Cifratura SQLCipher Pro</li>
-                            <li><i data-lucide="check"></i> Supporto prioritario</li>
-                            <li><i data-lucide="check"></i> Aggiornamenti gratuiti</li>
+                            <li data-i18n-html="pricing.pro.feature1"><i data-lucide="check"></i> Commesse Illimitate</li>
+                            <li data-i18n-html="pricing.pro.feature2"><i data-lucide="check"></i> PDF Personalizzati (No Watermark)</li>
+                            <li data-i18n-html="pricing.pro.feature3"><i data-lucide="check"></i> Gestione Multi-operatore</li>
+                            <li data-i18n-html="pricing.pro.feature4"><i data-lucide="check"></i> Export XLSX & Backup ZIP</li>
+                            <li data-i18n-html="pricing.pro.feature5"><i data-lucide="check"></i> Cifratura SQLCipher Pro</li>
+                            <li data-i18n-html="pricing.pro.feature6"><i data-lucide="check"></i> Supporto prioritario</li>
+                            <li data-i18n-html="pricing.pro.feature7"><i data-lucide="check"></i> Aggiornamenti gratuiti</li>
                         </ul>
-                        <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="btn-primary">Acquista PRO</a>
+                        <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="btn-primary" data-i18n="pricing.pro.cta">Acquista PRO</a>
                     </div>
                 </div>
             </div>
@@ -262,17 +270,17 @@
                         <img src="assets/brand/onlytechtake-mark.svg" alt="OTT" class="logo-mark">
                         <span class="app-title">OnlyTechTake</span>
                     </a>
-                    <p>La soluzione professionale Local-First per i laboratori tecnici indipendenti.</p>
+                    <p data-i18n="footer.subtitle">La soluzione professionale Local-First per i laboratori tecnici indipendenti.</p>
                 </div>
                 <div class="footer-links">
-                    <h4>Risorse</h4>
-                    <a href="privacy.html">Privacy Policy</a>
-                    <a href="mailto:support@onlytechtake.com">Supporto Tecnico</a>
+                    <h4 data-i18n="footer.resources">Risorse</h4>
+                    <a href="privacy.html" data-i18n="sidebar.privacy">Privacy Policy</a>
+                    <a href="mailto:support@onlytechtake.com" data-i18n="footer.support">Supporto Tecnico</a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 OnlyTechTake | <a href="https://github.com/dennidalpos" class="footer-github-link" aria-label="GitHub Repository"><img src="assets/icons/github-logo.svg" alt="GitHub" class="github-icon"></a></p>
-                <p class="legal-disclaimer">Nessuna garanzia legale implicita sui moduli di firma. Consultare un legale per la conformità normativa locale.</p>
+                <p>&copy; 2026 OnlyTechTake | <a href="https://github.com/dennidalpos" class="footer-github-link" data-i18n-aria-label="footer.github" aria-label="GitHub Repository"><img src="assets/icons/github-logo.svg" alt="GitHub" class="github-icon"></a></p>
+                <p class="legal-disclaimer" data-i18n="footer.disclaimer">Nessuna garanzia legale implicita sui moduli di firma. Consultare un legale per la conformità normativa locale.</p>
             </div>
         </div>
     </footer>

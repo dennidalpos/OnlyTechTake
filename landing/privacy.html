@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy - OnlyTechTake</title>
-    <meta name="description" content="Informativa sulla privacy per l'app OnlyTechTake. I tuoi dati restano sul tuo dispositivo.">
+    <title data-i18n="privacyPage.titleMeta">Privacy Policy - OnlyTechTake</title>
+    <meta name="description" data-i18n-meta-description content="Informativa sulla privacy per l'app OnlyTechTake. I tuoi dati restano sul tuo dispositivo.">
 
     <!-- Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,12 +31,16 @@
                     <span class="app-title">OnlyTechTake</span>
                 </a>
                 <div class="nav-actions">
-                    <a href="index.html" class="nav-link">Home</a>
-                    <div id="theme-toggle" class="theme-switch" title="Cambia Tema">
+                    <div class="lang-selector">
+                        <button class="lang-btn" data-lang-switch="it">IT</button>
+                        <button class="lang-btn" data-lang-switch="en">EN</button>
+                    </div>
+                    <a href="index.html" class="nav-link" data-i18n="sidebar.home">Home</a>
+                    <div id="theme-toggle" class="theme-switch" data-i18n-title="nav.theme" title="Cambia Tema">
                         <i data-lucide="sun" class="sun-icon"></i>
                         <i data-lucide="moon" class="moon-icon"></i>
                     </div>
-                    <button id="sidebar-toggle" class="menu-btn" aria-label="Menu">
+                    <button id="sidebar-toggle" class="menu-btn" data-i18n-aria-label="nav.menu" aria-label="Menu">
                         <i data-lucide="menu"></i>
                     </button>
                 </div>
@@ -52,21 +56,25 @@
                 <img src="assets/brand/onlytechtake-mark.svg" alt="OTT" class="logo-mark">
                 <span class="app-title">OnlyTechTake</span>
             </a>
-            <button id="sidebar-close" class="close-btn" aria-label="Chiudi">
+            <button id="sidebar-close" class="close-btn" data-i18n-aria-label="nav.close" aria-label="Chiudi">
                 <i data-lucide="x"></i>
             </button>
         </div>
         <nav class="sidebar-links">
-            <a href="index.html" class="sidebar-link"><i data-lucide="home"></i> Home</a>
-            <a href="index.html#features" class="sidebar-link"><i data-lucide="zap"></i> Funzioni</a>
-            <a href="index.html#gallery" class="sidebar-link"><i data-lucide="image"></i> Gallery</a>
-            <a href="index.html#pricing" class="sidebar-link"><i data-lucide="layout-grid"></i> Versioni</a>
+            <a href="index.html" class="sidebar-link"><i data-lucide="home"></i> <span data-i18n="sidebar.home">Home</span></a>
+            <a href="index.html#features" class="sidebar-link"><i data-lucide="zap"></i> <span data-i18n="sidebar.features">Funzioni</span></a>
+            <a href="index.html#gallery" class="sidebar-link"><i data-lucide="image"></i> <span data-i18n="sidebar.gallery">Gallery</span></a>
+            <a href="index.html#pricing" class="sidebar-link"><i data-lucide="layout-grid"></i> <span data-i18n="sidebar.versions">Versioni</span></a>
             <div class="sidebar-divider"></div>
             <a href="https://play.google.com/store/apps/details?id=com.onlytechtake.repairapp" class="sidebar-link pro-link">
-                <i data-lucide="shopping-cart"></i> Acquista PRO
+                <i data-lucide="shopping-cart"></i> <span data-i18n="sidebar.buyPro">Acquista PRO</span>
             </a>
-            <a href="#" class="sidebar-link active"><i data-lucide="shield"></i> Privacy Policy</a>
+            <a href="#" class="sidebar-link active"><i data-lucide="shield"></i> <span data-i18n="sidebar.privacy">Privacy Policy</span></a>
         </nav>
+        <div class="sidebar-lang-selector">
+            <button class="lang-btn" data-lang-switch="it">IT</button>
+            <button class="lang-btn" data-lang-switch="en">EN</button>
+        </div>
         <div class="sidebar-footer">
             <p>v1.0.0 Production | Privacy focus</p>
         </div>
@@ -74,53 +82,53 @@
 
     <main class="legal-main">
         <div class="container container-narrow">
-            <h1 class="legal-title">Informativa sulla Privacy</h1>
-            <p class="legal-version">Versione Corrente: 1.0.0</p>
+            <h1 class="legal-title" data-i18n="privacyPage.title">Informativa sulla Privacy</h1>
+            <p class="legal-version" data-i18n="privacyPage.version">Versione Corrente: 1.0.0</p>
 
             <section class="legal-section">
-                <p class="legal-intro">L'applicazione <strong>OnlyTechTake</strong> (di seguito "l'App") è progettata con un approccio <strong>Local-First</strong>. La presente informativa descrive come gestiamo la tua privacy, basandoci su un principio fondamentale: i tuoi dati appartengono a te e non lasciano mai il tuo dispositivo senza il tuo esplicito comando manuale.</p>
+                <p class="legal-intro" data-i18n-html="privacyPage.intro">L'applicazione <strong>OnlyTechTake</strong> (di seguito "l'App") è progettata con un approccio <strong>Local-First</strong>. La presente informativa descrive come gestiamo la tua privacy, basandoci su un principio fondamentale: i tuoi dati appartengono a te e non lasciano mai il tuo dispositivo senza il tuo esplicito comando manuale.</p>
             </section>
 
             <section class="legal-section">
-                <h2>1. Trattamento dei Dati Locali</h2>
-                <p>L'App non dispone di un server centrale o di un database cloud gestito dagli sviluppatori. Tutte le informazioni inserite nell'App, inclusi:</p>
+                <h2 data-i18n="privacyPage.section1.title">1. Trattamento dei Dati Locali</h2>
+                <p data-i18n="privacyPage.section1.text">L'App non dispone di un server centrale o di un database cloud gestito dagli sviluppatori. Tutte le informazioni inserite nell'App, inclusi:</p>
                 <ul class="legal-list">
-                    <li>Anagrafiche clienti e contatti</li>
-                    <li>Dettagli tecnici sulle riparazioni</li>
-                    <li>Fotografie e allegati multimediali (CameraX)</li>
-                    <li>Firme digitali dei clienti</li>
+                    <li data-i18n="privacyPage.section1.list.0">Anagrafiche clienti e contatti</li>
+                    <li data-i18n="privacyPage.section1.list.1">Dettagli tecnici sulle riparazioni</li>
+                    <li data-i18n="privacyPage.section1.list.2">Fotografie e allegati multimediali (CameraX)</li>
+                    <li data-i18n="privacyPage.section1.list.3">Firme digitali dei clienti</li>
                 </ul>
-                <p>vengono memorizzati esclusivamente in un <strong>database cifrato (SQLCipher)</strong> all'interno dello storage privato del tuo dispositivo Android.</p>
+                <p data-i18n-html="privacyPage.section1.footer">vengono memorizzati esclusivamente in un <strong>database cifrato (SQLCipher)</strong> all'interno dello storage privato del tuo dispositivo Android.</p>
             </section>
 
             <section class="legal-section">
-                <h2>2. Sicurezza e Cifratura</h2>
-                <p>Per garantire la massima protezione dei dati sensibili dei tuoi clienti, OnlyTechTake implementa una cifratura a livello di database. L'accesso ai dati è protetto dalle credenziali operatore (Admin o Operatore) create durante la prima configurazione. È responsabilità dell'utente mantenere la sicurezza fisica del dispositivo e utilizzare sistemi di sblocco sicuri (PIN, Biometria).</p>
+                <h2 data-i18n="privacyPage.section2.title">2. Sicurezza e Cifratura</h2>
+                <p data-i18n="privacyPage.section2.text">Per garantire la massima protezione dei dati sensibili dei tuoi clienti, OnlyTechTake implementa una cifratura a livello di database. L'accesso ai dati è protetto dalle credenziali operatore (Admin o Operatore) create durante la prima configurazione. È responsabilità dell'utente mantenere la sicurezza fisica del dispositivo e utilizzare sistemi di sblocco sicuri (PIN, Biometria).</p>
             </section>
 
             <section class="legal-section">
-                <h2>3. Permessi Richiesti</h2>
-                <p>L'App richiede i seguenti permessi per funzionare correttamente:</p>
+                <h2 data-i18n="privacyPage.section3.title">3. Permessi Richiesti</h2>
+                <p data-i18n="privacyPage.section3.text">L'App richiede i seguenti permessi per funzionare correttamente:</p>
                 <ul class="legal-list">
-                    <li><strong>Fotocamera:</strong> Necessaria per documentare visivamente lo stato dei dispositivi in entrata tramite scatti rapidi.</li>
-                    <li><strong>Storage / Media:</strong> Utilizzato esclusivamente per salvare e recuperare i file relativi alle commesse nello storage privato.</li>
-                    <li><strong>Internet:</strong> L'App non richiede accesso a internet per il funzionamento core. L'accesso alla rete può essere utilizzato solo per il controllo della licenza tramite Google Play Services.</li>
-                </ul>
-            </section>
-
-            <section class="legal-section">
-                <h2>4. Condivisione dei Dati verso Terzi</h2>
-                <p>OnlyTechTake <strong>non trasmette, vende o condivide</strong> automaticamente i dati con terze parti. La condivisione avviene solo su tua iniziativa esplicita attraverso:</p>
-                <ul class="legal-list">
-                    <li>Invio manuale di PDF tramite WhatsApp o app di messaggistica.</li>
-                    <li>Esportazione manuale di file Excel (XLSX).</li>
-                    <li>Creazione di backup ZIP cifrati per trasferimento manuale.</li>
+                    <li data-i18n-html="privacyPage.section3.list.0"><strong>Fotocamera:</strong> Necessaria per documentare visivamente lo stato dei dispositivi in entrata tramite scatti rapidi.</li>
+                    <li data-i18n-html="privacyPage.section3.list.1"><strong>Storage / Media:</strong> Utilizzato esclusivamente per salvare e recuperare i file relativi alle commesse nello storage privato.</li>
+                    <li data-i18n-html="privacyPage.section3.list.2"><strong>Internet:</strong> L'App non richiede accesso a internet per il funzionamento core. L'accesso alla rete può essere utilizzato solo per il controllo della licenza tramite Google Play Services.</li>
                 </ul>
             </section>
 
             <section class="legal-section">
-                <h2>5. Titolare del Trattamento</h2>
-                <p>Ai sensi del GDPR, il <strong>Titolare del Trattamento</strong> dei dati dei clienti finali è l'utilizzatore professionale dell'App (il laboratorio o il tecnico). Lo sviluppatore dell'App non ha accesso ai dati inseriti e non agisce come responsabile del trattamento.</p>
+                <h2 data-i18n="privacyPage.section4.title">4. Condivisione dei Dati verso Terzi</h2>
+                <p data-i18n-html="privacyPage.section4.text">OnlyTechTake <strong>non trasmette, vende o condivide</strong> automaticamente i dati con terze parti. La condivisione avviene solo su tua iniziativa esplicita attraverso:</p>
+                <ul class="legal-list">
+                    <li data-i18n="privacyPage.section4.list.0">Invio manuale di PDF tramite WhatsApp o app di messaggistica.</li>
+                    <li data-i18n="privacyPage.section4.list.1">Esportazione manuale di file Excel (XLSX).</li>
+                    <li data-i18n="privacyPage.section4.list.2">Creazione di backup ZIP cifrati per trasferimento manuale.</li>
+                </ul>
+            </section>
+
+            <section class="legal-section">
+                <h2 data-i18n="privacyPage.section5.title">5. Titolare del Trattamento</h2>
+                <p data-i18n-html="privacyPage.section5.text">Ai sensi del GDPR, il <strong>Titolare del Trattamento</strong> dei dati dei clienti finali è l'utilizzatore professionale dell'App (il laboratorio o il tecnico). Lo sviluppatore dell'App non ha accesso ai dati inseriti e non agisce come responsabile del trattamento.</p>
             </section>
         </div>
     </main>
@@ -133,11 +141,11 @@
                         <img src="assets/brand/onlytechtake-mark.svg" alt="OTT" class="logo-mark">
                         <span class="app-title">OnlyTechTake</span>
                     </a>
-                    <p>La soluzione professionale Local-First per i laboratori tecnici indipendenti.</p>
+                    <p data-i18n="footer.subtitle">La soluzione professionale Local-First per i laboratori tecnici indipendenti.</p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 OnlyTechTake | <a href="https://github.com/dennidalpos" class="footer-github-link" aria-label="GitHub Repository"><img src="assets/icons/github-logo.svg" alt="GitHub" class="github-icon"></a></p>
+                <p>&copy; 2026 OnlyTechTake | <a href="https://github.com/dennidalpos" class="footer-github-link" data-i18n-aria-label="footer.github" aria-label="GitHub Repository"><img src="assets/icons/github-logo.svg" alt="GitHub" class="github-icon"></a></p>
             </div>
         </div>
     </footer>
