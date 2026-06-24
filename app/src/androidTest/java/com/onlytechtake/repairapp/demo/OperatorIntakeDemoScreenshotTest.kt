@@ -108,7 +108,7 @@ class OperatorIntakeDemoScreenshotTest {
             robot.capture(outputDir, "07-step5-summary.png")
             robot.clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
 
-            val createdOrderId = waitForCreatedOrderId("Samsung Galaxy S23 - Schermo rotto")
+            val createdOrderId = waitForCreatedOrderId()
             robot.clickDashboardTab("ORDERS")
             robot.waitForText("Commesse")
 
@@ -164,7 +164,8 @@ class OperatorIntakeDemoScreenshotTest {
         }
     }
 
-    private fun waitForCreatedOrderId(summary: String): String {
+    private fun waitForCreatedOrderId(): String {
+        val summary = "Samsung Galaxy S23 - Schermo rotto"
         val database = RepairAppDatabase.getInstance(context)
         val deadline = System.currentTimeMillis() + 30_000L
         while (System.currentTimeMillis() < deadline) {

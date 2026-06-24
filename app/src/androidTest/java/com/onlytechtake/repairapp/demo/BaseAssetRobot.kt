@@ -18,7 +18,6 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
-import androidx.compose.ui.test.swipe
 import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.test.swipeUp
 import androidx.test.espresso.Espresso
@@ -171,7 +170,7 @@ abstract class BaseAssetRobot(
             found = isTagPresent(tag, useUnmergedTree)
             if (found) break
             if (scroll) {
-                if (attempts % 2 == 0) {
+                if ((attempts % 2) == 0) {
                     try {
                         composeRule
                             .onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
@@ -214,7 +213,7 @@ abstract class BaseAssetRobot(
             found = isTextDisplayed(text)
             if (found) break
             if (scroll) {
-                if (attempts % 2 == 0) {
+                if ((attempts % 2) == 0) {
                     try {
                         composeRule.onNodeWithText(text, substring = true).performScrollTo()
                         composeRule.waitForIdle()

@@ -108,7 +108,7 @@ class SocialCampaignScreenshotTest {
             robot.clickTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
             robot.clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
-            val createdOrderId = waitForCreatedOrderId("Samsung Galaxy S23 - Schermo rotto")
+            val createdOrderId = waitForCreatedOrderId()
 
             robot.clickDashboardTab("ORDERS")
             robot.waitForTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
@@ -150,7 +150,8 @@ class SocialCampaignScreenshotTest {
         }
     }
 
-    private fun waitForCreatedOrderId(summary: String): String {
+    private fun waitForCreatedOrderId(): String {
+        val summary = "Samsung Galaxy S23 - Schermo rotto"
         val database = RepairAppDatabase.getInstance(context)
         val deadline = System.currentTimeMillis() + 30_000L
         while (System.currentTimeMillis() < deadline) {

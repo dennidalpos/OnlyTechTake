@@ -131,7 +131,7 @@ class SocialStoryDemoScreenshotTest {
             waitForText("Privacy e firma")
             clickText("Accetta informativa privacy", scroll = true)
             clickText("Accetta condizioni di presa in carico", scroll = true)
-            drawSignature(RepairAppTestTags.SignatureCanvas)
+            drawSignature()
             waitForTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
             capture(outputDir, "07-firma-cliente.png")
 
@@ -478,7 +478,7 @@ class SocialStoryDemoScreenshotTest {
                 return
             }
 
-            if ((attempt == LOGIN_ATTEMPTS - 1) || !isTagPresent(RepairAppTestTags.AuthUsernameField)) {
+            if ((attempt == (LOGIN_ATTEMPTS - 1)) || !isTagPresent(RepairAppTestTags.AuthUsernameField)) {
                 waitForTag(RepairAppTestTags.dashboardTab("HOME"))
             }
             pauseForDemo()
@@ -632,7 +632,7 @@ class SocialStoryDemoScreenshotTest {
             if (displayed) return
 
             if (scroll) {
-                if (attempts % 15 < 10) {
+                if ((attempts % 15) < 10) {
                     performSafeSwipeUp()
                 } else {
                     performSafeSwipeDown()
@@ -658,7 +658,7 @@ class SocialStoryDemoScreenshotTest {
             if (found) break
 
             if (scrollIfNotFound) {
-                if (attempts % 2 == 0) {
+                if ((attempts % 2) == 0) {
                     try {
                         composeRule
                             .onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
@@ -669,7 +669,7 @@ class SocialStoryDemoScreenshotTest {
                             break
                         }
                     } catch (_: Throwable) {
-                        if (attempts % 15 < 10) {
+                        if ((attempts % 15) < 10) {
                             performSafeSwipeUp() // Scroll DOWN (reveal items below)
                         } else {
                             performSafeSwipeDown() // Scroll UP (reveal items above)
@@ -777,7 +777,7 @@ class SocialStoryDemoScreenshotTest {
             if (found) break
 
             if (scrollIfNotFound) {
-                if (attempts % 2 == 0) {
+                if ((attempts % 2) == 0) {
                     try {
                         composeRule.onNodeWithText(text, substring = true).performScrollTo()
                         composeRule.waitForIdle()
@@ -786,7 +786,7 @@ class SocialStoryDemoScreenshotTest {
                             break
                         }
                     } catch (_: Throwable) {
-                        if (attempts % 15 < 10) {
+                        if ((attempts % 15) < 10) {
                             performSafeSwipeUp() // Scroll DOWN (reveal items below)
                         } else {
                             performSafeSwipeDown() // Scroll UP (reveal items above)
@@ -802,7 +802,8 @@ class SocialStoryDemoScreenshotTest {
         }
     }
 
-    private fun drawSignature(tag: String) {
+    private fun drawSignature() {
+        val tag = RepairAppTestTags.SignatureCanvas
         waitForTag(tag, scroll = true)
         composeRule.onNodeWithTag(tag).performTouchInput {
             val w = width.toFloat()

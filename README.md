@@ -1,7 +1,11 @@
+<p align="center">
+  <img src="marketing/registered-assets/brand/social/github-cover.svg" width="100%" alt="OnlyTechTake Cover">
+</p>
+
 # OnlyTechTake Repair App
 
 <p align="center">
-  <img src="marketing/registered-assets/brand/identity/onlytechtake-logo.svg" alt="OnlyTechTake Logo" width="400">
+  <img src="marketing/registered-assets/brand/identity/onlytechtake-logo.svg" alt="OnlyTechTake Logo" width="200">
 </p>
 
 <p align="center">
@@ -30,8 +34,8 @@
 ## 🖼️ Visual Showcase
 
 ### Screenshots (Pro Version)
-> [!NOTE]
-> Gli screenshot ufficiali devono essere spostati da `asset/` a `marketing/screenshots/` per essere visibili su GitHub.
+> [!TIP]
+> Gli screenshot sono generati e distribuiti automaticamente nelle cartelle marketing e landing page tramite lo script `scripts/powershell/assets/create_demo_assets.ps1`.
 
 <p align="center">
   <img src="marketing/screenshots/play-store/pro/01-dashboard-pro.png" width="200" alt="Dashboard">
