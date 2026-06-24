@@ -1,7 +1,7 @@
 # OnlyTechTake Repair App
 
 <p align="center">
-  <img src="marketing/registered-assets/brand/identity/onlytechtake-logo.svg" alt="OnlyTechTake Logo" width="400">
+  <img src="marketing/registered-assets/brand/social/github-cover.svg" alt="OnlyTechTake Logo" width="400">
 </p>
 
 <p align="center">
