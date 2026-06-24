@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="demo_version_banner">VERSIONE DEMO</string>
     <string name="order_created_title">Commessa creata</string>
     <string name="status_updated_title">Stato aggiornato</string>
@@ -373,7 +373,7 @@
     <string name="admin_user_inactive">Disattivo</string>
     <string name="admin_user_activate">Attiva</string>
     <string name="admin_user_deactivate">Disattiva</string>
-    <string name="admin_confirm_delete_user_text" tools:ignore="Typos">L\'operatore %s verra\' rimosso permanentemente dal sistema. Non sara\' piu\' possibile recuperare le sue credenziali, ma le commesse da lui gestite resteranno in archivio.</string>
+    <string name="admin_confirm_delete_user_text">L\'operatore %s verrà rimosso permanentemente dal sistema. Non sarà più possibile recuperare le sue credenziali, ma le commesse da lui gestite resteranno in archivio.</string>
     <string name="admin_reset_password">Reset password</string>
     <string name="admin_confirm_reset_title">Resettare password?</string>
     <string name="admin_confirm_reset_text">La password temporanea inserita verra\' salvata per %s.</string>
@@ -482,7 +482,7 @@
     <string name="config_category_close">Chiudi Categorie</string>
 
 
-    <string name="config_category_confirm_delete_specific_text" tools:ignore="Typos">La categoria \'%1$s\' e tutte le sue sottocategorie verranno eliminate. Non e\' possibile eliminare categorie usate in commesse esistenti.</string>
+    <string name="config_category_confirm_delete_specific_text">La categoria \'%1$s\' e tutte le sue sottocategorie verranno eliminate. Non è possibile eliminare categorie usate in commesse esistenti.</string>
 
     <string name="config_category_empty_branch">Nessuna categoria in questo ramo.</string>
     <string name="config_template_code_label">Codice</string>

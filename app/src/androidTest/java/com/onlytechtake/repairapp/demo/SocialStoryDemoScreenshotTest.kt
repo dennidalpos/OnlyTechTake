@@ -1,32 +1,10 @@
 package com.onlytechtake.repairapp.demo
 
 import android.content.Context
-import android.graphics.Bitmap
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsEnabled
-import androidx.compose.ui.test.click
-import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
-import androidx.compose.ui.test.onAllNodesWithTag
-import androidx.compose.ui.test.onAllNodesWithText
-import androidx.compose.ui.test.onFirst
-import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollTo
-import androidx.compose.ui.test.performScrollToIndex
-import androidx.compose.ui.test.performSemanticsAction
-import androidx.compose.ui.test.performTextReplacement
-import androidx.compose.ui.test.performTouchInput
-import androidx.compose.ui.test.swipe
-import androidx.compose.ui.test.swipeDown
-import androidx.compose.ui.test.swipeUp
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.MainActivity
@@ -37,7 +15,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
-import java.io.FileOutputStream
 
 @RunWith(AndroidJUnit4::class)
 class SocialStoryDemoScreenshotTest {
@@ -54,125 +31,129 @@ class SocialStoryDemoScreenshotTest {
     fun capturesOrderIntakeToClosureStories() {
         runBlocking { DemoDataSeeder.seedDemoProfile(context) }
         val outputDir = prepareCaseDirectory(CASE_ORDER)
+        val robot = ProAssetRobot(composeRule, context)
 
         withDemoApp {
-            waitForTag(RepairAppTestTags.AuthUsernameField)
-            capture(outputDir, "01-login.png")
+            robot.waitForTag(RepairAppTestTags.AuthUsernameField)
+            robot.capture(outputDir, "01-login.png")
 
             val username =
                 if (BuildConfig.IS_DEMO_VERSION) DemoDataSeeder.DEMO_ADMIN_USERNAME else DemoDataSeeder.DEMO_OPERATOR_USERNAME
-            loginDemo(username)
-            waitForText(if (BuildConfig.IS_DEMO_VERSION) "Admin" else "Operatore")
-            capture(outputDir, "02-dashboard-home.png")
+            robot.loginDemo(username)
+            robot.waitForText(if (BuildConfig.IS_DEMO_VERSION) "Admin" else "Operatore")
+            robot.capture(outputDir, "02-dashboard-home.png")
 
-            clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
-            waitForTag("quick_actions_screen")
+            robot.clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
+            robot.waitForTag("quick_actions_screen")
 
             var formOpened = false
             repeat(3) {
                 if (!formOpened) {
-                    if (isTagPresent(RepairAppTestTags.NewOrderInsertCustomerButton)) {
-                        clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
+                    if (robot.isTagPresent(RepairAppTestTags.NewOrderInsertCustomerButton)) {
+                        robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
                     }
-                    pauseForDemo()
-                    formOpened = isTagPresent(RepairAppTestTags.NewOrderFirstNameField)
+                    robot.pauseForDemo()
+                    formOpened = robot.isTagPresent(RepairAppTestTags.NewOrderFirstNameField)
                 }
             }
 
-            waitForTagExists(RepairAppTestTags.NewOrderFirstNameField)
+            robot.waitForTagExists(RepairAppTestTags.NewOrderFirstNameField)
 
-            typeTag(RepairAppTestTags.NewOrderFirstNameField, "Giulia", scroll = true)
-            typeTag(RepairAppTestTags.NewOrderLastNameField, "Bianchi", scroll = true)
-            typeTag(RepairAppTestTags.NewOrderPhoneField, "+39 333 010 2020", scroll = true)
-            typeTag(
+            robot.typeTag(RepairAppTestTags.NewOrderFirstNameField, "Giulia", scroll = true)
+            robot.typeTag(RepairAppTestTags.NewOrderLastNameField, "Bianchi", scroll = true)
+            robot.typeTag(RepairAppTestTags.NewOrderPhoneField, "+39 333 010 2020", scroll = true)
+            robot.typeTag(
                 RepairAppTestTags.NewOrderEmailField,
                 "giulia.bianchi@example.invalid",
                 scroll = true,
             )
-            capture(outputDir, "03-nuovo-cliente.png")
+            robot.capture(outputDir, "03-nuovo-cliente.png")
 
-            clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
-            waitForText("Cliente selezionato")
-            clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
+            robot.clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
+            robot.waitForText("Cliente selezionato")
+            robot.clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
 
-            clickTag(RepairAppTestTags.categoryButton("demo-cat-pc"), scroll = true)
-            clickTag(
+            robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-pc"), scroll = true)
+            robot.clickTag(
                 RepairAppTestTags.categoryButton(DemoDataSeeder.DEMO_CATEGORY_ID),
                 scroll = true,
             )
-            clickTag(RepairAppTestTags.categoryButton("demo-cat-gaming"), scroll = true)
-            clickTag(RepairAppTestTags.categoryButton("demo-cat-rog-strix"), scroll = true)
-            capture(outputDir, "04-selezione-categoria.png")
+            robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-gaming"), scroll = true)
+            robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-rog-strix"), scroll = true)
+            robot.capture(outputDir, "04-selezione-categoria.png")
 
-            clickTag(RepairAppTestTags.NewOrderStep2NextButton, scroll = true)
-            typeTag(
+            robot.clickTag(RepairAppTestTags.NewOrderStep2NextButton, scroll = true)
+            robot.typeTag(
                 RepairAppTestTags.NewOrderProblemSummaryField,
                 "Notebook non si accende",
                 scroll = true,
             )
-            typeTag(
+            robot.typeTag(
                 RepairAppTestTags.NewOrderProblemDetailsField,
                 "Il cliente segnala spegnimento improvviso dopo caduta accidentale.",
                 scroll = true,
             )
-            capture(outputDir, "05-dettaglio-problema.png")
+            robot.capture(outputDir, "05-dettaglio-problema.png")
 
             // 4. Wizard: media
-            clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
-            waitForText("Foto e allegati")
-            clickTag(RepairAppTestTags.IntakeMediaTakePhotoButton, scroll = true)
-            waitForTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
-            clickTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
-            waitForText("PHOTO", scrollIfNotFound = true)
-            capture(outputDir, "06-acquisizione-media.png")
+            robot.clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
+            robot.waitForText("Foto e allegati")
+            robot.clickTag(RepairAppTestTags.IntakeMediaTakePhotoButton, scroll = true)
+            robot.waitForTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
+            robot.clickTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
+            robot.waitForText("PHOTO", scroll = true)
+            robot.capture(outputDir, "06-acquisizione-media.png")
 
             // 5. Wizard: privacy e firma
-            clickTag(RepairAppTestTags.NewOrderStep4NextButton, scroll = true)
-            waitForText("Privacy e firma")
-            clickText("Accetta informativa privacy", scroll = true)
-            clickText("Accetta condizioni di presa in carico", scroll = true)
-            drawSignature()
-            waitForTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
-            capture(outputDir, "07-firma-cliente.png")
+            robot.clickTag(RepairAppTestTags.NewOrderStep4NextButton, scroll = true)
+            robot.waitForText("Privacy e firma")
+            robot.clickText("Accetta informativa privacy", scroll = true)
+            robot.clickText("Accetta condizioni di presa in carico", scroll = true)
+            robot.drawSignature(RepairAppTestTags.SignatureCanvas)
+            robot.waitForTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
+            robot.capture(outputDir, "07-firma-cliente.png")
 
-            clickTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
-            waitForTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
-            capture(outputDir, "08-riepilogo-invio.png")
-            clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
+            robot.clickTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
+            robot.waitForTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
+            robot.capture(outputDir, "08-riepilogo-invio.png")
+            robot.clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
 
-            clickDashboardTab("ORDERS")
-            waitForText("Commesse")
-            capture(outputDir, "09-elenco-commesse.png")
-            waitForTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
-            clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID))
+            robot.clickDashboardTab("ORDERS")
+            robot.waitForText("Commesse")
+            robot.capture(outputDir, "09-elenco-commesse.png")
+            robot.waitForTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
+            robot.clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID))
 
-            waitForTag(RepairAppTestTags.OrderStatusLabel)
-            waitForTag(RepairAppTestTags.OrderDetailOrderReference, useUnmergedTree = true)
-            waitForTag(RepairAppTestTags.OrderDetailCustomerReference, useUnmergedTree = true)
-            waitForTag(RepairAppTestTags.orderDetailStatusStep(1), useUnmergedTree = true)
-            waitForText("Asus ROG Strix")
-            capture(outputDir, "10-dettaglio-commessa.png")
+            robot.waitForTag(RepairAppTestTags.OrderStatusLabel)
+            robot.waitForTag(RepairAppTestTags.OrderDetailOrderReference, useUnmergedTree = true)
+            robot.waitForTag(RepairAppTestTags.OrderDetailCustomerReference, useUnmergedTree = true)
+            robot.waitForTag(RepairAppTestTags.orderDetailStatusStep(1), useUnmergedTree = true)
+            robot.waitForText("Asus ROG Strix")
+            robot.capture(outputDir, "10-dettaglio-commessa.png")
 
-            applySimpleStatus(
+            robot.applySimpleStatus(
                 OrderStatusAction.START_PROGRESS,
                 nextAction = OrderStatusAction.START_DIAGNOSIS,
             )
-            applySimpleStatus(
+            robot.applySimpleStatus(
                 OrderStatusAction.START_DIAGNOSIS,
                 nextAction = OrderStatusAction.RECORD_RESULT,
             )
-            applyResultStatus()
-            capture(outputDir, "11-risultato-diagnosi.png")
+            robot.applyResultStatus(
+                summary = "Connettore di alimentazione danneggiato.",
+                estimate = "149,00",
+            )
+            robot.capture(outputDir, "11-risultato-diagnosi.png")
 
-            acceptQuote()
-            applySimpleStatus(
+            robot.acceptQuote()
+            robot.applySimpleStatus(
                 OrderStatusAction.READY_FOR_PICKUP,
                 nextAction = OrderStatusAction.CLOSE_ORDER,
             )
-            closeOrder()
-            clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
-            waitForText("Chiusa")
-            capture(outputDir, "12-chiusura-timeline.png")
+            robot.closeOrder()
+            robot.clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
+            robot.waitForText("Chiusa")
+            robot.capture(outputDir, "12-chiusura-timeline.png")
         }
     }
 
@@ -180,67 +161,68 @@ class SocialStoryDemoScreenshotTest {
     fun capturesCategoryAndTemplateStories() {
         runBlocking { DemoDataSeeder.seedDemoProfile(context) }
         val outputDir = prepareCaseDirectory(CASE_CONFIG)
+        val robot = ProAssetRobot(composeRule, context)
 
         withDemoApp {
-            waitForTag(RepairAppTestTags.AuthUsernameField)
-            loginDemo(DemoDataSeeder.DEMO_ADMIN_USERNAME)
-            waitForText("Admin")
-            capture(outputDir, "01-dashboard-admin.png")
+            robot.waitForTag(RepairAppTestTags.AuthUsernameField)
+            robot.loginDemo(DemoDataSeeder.DEMO_ADMIN_USERNAME)
+            robot.waitForText("Admin")
+            robot.capture(outputDir, "01-dashboard-admin.png")
 
-            clickDashboardTab("SETTINGS")
-            waitForText("Setup")
-            capture(outputDir, "02-config-hub.png")
+            robot.clickDashboardTab("SETTINGS")
+            robot.waitForText("Setup")
+            robot.capture(outputDir, "02-config-hub.png")
 
-            clickTag(RepairAppTestTags.ConfigHubCategoriesButton, scroll = true)
-            clickTag(RepairAppTestTags.ConfigCategoryNewButton, scroll = true)
-            typeTag(RepairAppTestTags.ConfigCategoryNameField, "Console portatile", scroll = true)
-            typeTag(
+            robot.clickTag(RepairAppTestTags.ConfigHubCategoriesButton, scroll = true)
+            robot.clickTag(RepairAppTestTags.ConfigCategoryNewButton, scroll = true)
+            robot.typeTag(RepairAppTestTags.ConfigCategoryNameField, "Console portatile", scroll = true)
+            robot.typeTag(
                 RepairAppTestTags.ConfigCategoryDescriptionField,
                 "Riparazioni console portatili, display e batterie.",
                 scroll = true,
             )
-            capture(outputDir, "03-creazione-categoria.png")
-            clickTag(RepairAppTestTags.ConfigCategorySaveButton, scroll = true)
-            waitForTag(RepairAppTestTags.GenericConfirmButton)
-            clickTag(RepairAppTestTags.GenericConfirmButton)
-            waitForText("Operazione completata")
-            capture(outputDir, "04-categoria-salvata.png")
+            robot.capture(outputDir, "03-creazione-categoria.png")
+            robot.clickTag(RepairAppTestTags.ConfigCategorySaveButton, scroll = true)
+            robot.waitForTag(RepairAppTestTags.GenericConfirmButton)
+            robot.clickTag(RepairAppTestTags.GenericConfirmButton)
+            robot.waitForText("Operazione completata")
+            robot.capture(outputDir, "04-categoria-salvata.png")
 
-            clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
-            clickTag(RepairAppTestTags.ConfigHubTemplateMappingButton, scroll = true)
-            waitForText("Associazione Template")
-            capture(outputDir, "05-template-associazioni.png")
-            clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
-            clickTag(RepairAppTestTags.ConfigHubTemplatesButton, scroll = true)
-            waitForText("Gestione Template")
-            clickTag(RepairAppTestTags.ConfigTemplateNewButton, scroll = true)
+            robot.clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
+            robot.clickTag(RepairAppTestTags.ConfigHubTemplateMappingButton, scroll = true)
+            robot.waitForText("Associazione Template")
+            robot.capture(outputDir, "05-template-associazioni.png")
+            robot.clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
+            robot.clickTag(RepairAppTestTags.ConfigHubTemplatesButton, scroll = true)
+            robot.waitForText("Gestione Template")
+            robot.clickTag(RepairAppTestTags.ConfigTemplateNewButton, scroll = true)
 
             // Capture Tooltip for variables
-            clickTag(RepairAppTestTags.ConfigTemplateVariablesTooltip, scroll = true)
-            pauseForDemo()
-            capture(outputDir, "06-template-tooltip.png")
+            robot.clickTag(RepairAppTestTags.ConfigTemplateVariablesTooltip, scroll = true)
+            robot.pauseForDemo()
+            robot.capture(outputDir, "06-template-tooltip.png")
 
-            typeTag(
+            robot.typeTag(
                 RepairAppTestTags.ConfigTemplateCodeField,
                 "whatsapp_demo_social",
                 scroll = true,
             )
-            typeTag(
+            robot.typeTag(
                 RepairAppTestTags.ConfigTemplateTitleField,
                 "Aggiornamento social demo",
                 scroll = true,
             )
-            typeTag(
+            robot.typeTag(
                 RepairAppTestTags.ConfigTemplateBodyField,
                 "Ciao {{cliente}}, la commessa {{numero_commessa}} e' ora in stato {{stato_commessa}}.",
                 scroll = true,
             )
-            capture(outputDir, "07-creazione-template.png")
-            clickTag(RepairAppTestTags.ConfigTemplateSaveButton, scroll = true)
-            waitForTag(RepairAppTestTags.GenericConfirmButton)
-            clickTag(RepairAppTestTags.GenericConfirmButton)
-            waitForText("Operazione completata")
-            capture(outputDir, "08-template-salvato.png")
+            robot.capture(outputDir, "07-creazione-template.png")
+            robot.clickTag(RepairAppTestTags.ConfigTemplateSaveButton, scroll = true)
+            robot.waitForTag(RepairAppTestTags.GenericConfirmButton)
+            robot.clickTag(RepairAppTestTags.GenericConfirmButton)
+            robot.waitForText("Operazione completata")
+            robot.capture(outputDir, "08-template-salvato.png")
         }
     }
 
@@ -248,50 +230,51 @@ class SocialStoryDemoScreenshotTest {
     fun capturesPrivateAndBusinessCustomerStories() {
         runBlocking { DemoDataSeeder.seedDemoProfile(context) }
         val outputDir = prepareCaseDirectory(CASE_CUSTOMERS)
+        val robot = ProAssetRobot(composeRule, context)
 
         withDemoApp {
-            waitForTag(RepairAppTestTags.AuthUsernameField)
-            loginDemo(DemoDataSeeder.DEMO_ADMIN_USERNAME)
-            clickDashboardTab("CUSTOMERS")
-            capture(outputDir, "01-archivio-clienti.png")
+            robot.waitForTag(RepairAppTestTags.AuthUsernameField)
+            robot.loginDemo(DemoDataSeeder.DEMO_ADMIN_USERNAME)
+            robot.clickDashboardTab("CUSTOMERS")
+            robot.capture(outputDir, "01-archivio-clienti.png")
 
-            clickTag(RepairAppTestTags.CustomerNewButton, scroll = true)
-            clickTag(RepairAppTestTags.CustomerPrivateToggle, scroll = true)
-            typeTag(RepairAppTestTags.CustomerFirstNameField, "Luca", scroll = true)
-            typeTag(RepairAppTestTags.CustomerLastNameField, "Rossi", scroll = true)
-            typeTag(RepairAppTestTags.CustomerTaxCodeField, "RSSLCU90A01F205X", scroll = true)
-            typeTag(RepairAppTestTags.CustomerPhoneField, "+39 333 010 3030", scroll = true)
-            typeTag(
+            robot.clickTag(RepairAppTestTags.CustomerNewButton, scroll = true)
+            robot.clickTag(RepairAppTestTags.CustomerPrivateToggle, scroll = true)
+            robot.typeTag(RepairAppTestTags.CustomerFirstNameField, "Luca", scroll = true)
+            robot.typeTag(RepairAppTestTags.CustomerLastNameField, "Rossi", scroll = true)
+            robot.typeTag(RepairAppTestTags.CustomerTaxCodeField, "RSSLCU90A01F205X", scroll = true)
+            robot.typeTag(RepairAppTestTags.CustomerPhoneField, "+39 333 010 3030", scroll = true)
+            robot.typeTag(
                 RepairAppTestTags.CustomerEmailField,
                 "luca.rossi@example.invalid",
                 scroll = true,
             )
-            capture(outputDir, "02-cliente-privato.png")
-            clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
-            waitForTag(RepairAppTestTags.CustomerConfirmSaveButton, useUnmergedTree = true)
-            clickText("Conferma")
-            typeTag(RepairAppTestTags.CustomerSearchField, "Luca")
-            waitForText("Luca Rossi")
-            capture(outputDir, "03-privato-salvato.png")
+            robot.capture(outputDir, "02-cliente-privato.png")
+            robot.clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
+            robot.waitForTag(RepairAppTestTags.CustomerConfirmSaveButton, useUnmergedTree = true)
+            robot.clickText("Conferma")
+            robot.typeTag(RepairAppTestTags.CustomerSearchField, "Luca")
+            robot.waitForText("Luca Rossi")
+            robot.capture(outputDir, "03-privato-salvato.png")
 
-            clickTag(RepairAppTestTags.CustomerNewButton, scroll = true)
-            clickTag(RepairAppTestTags.CustomerBusinessToggle, scroll = true)
-            typeTag(RepairAppTestTags.CustomerCompanyNameField, "Demo Lab Srl", scroll = true)
-            typeTag(RepairAppTestTags.CustomerVatNumberField, "IT12345678901", scroll = true)
-            typeTag(RepairAppTestTags.CustomerPhoneField, "+39 02 010 4040", scroll = true)
-            typeTag(
+            robot.clickTag(RepairAppTestTags.CustomerNewButton, scroll = true)
+            robot.clickTag(RepairAppTestTags.CustomerBusinessToggle, scroll = true)
+            robot.typeTag(RepairAppTestTags.CustomerCompanyNameField, "Demo Lab Srl", scroll = true)
+            robot.typeTag(RepairAppTestTags.CustomerVatNumberField, "IT12345678901", scroll = true)
+            robot.typeTag(RepairAppTestTags.CustomerPhoneField, "+39 02 010 4040", scroll = true)
+            robot.typeTag(
                 RepairAppTestTags.CustomerEmailField,
                 "amministrazione@example.invalid",
                 scroll = true,
             )
-            typeTag(RepairAppTestTags.CustomerAddressField, "Via Demo 24, Milano", scroll = true)
-            capture(outputDir, "04-cliente-azienda.png")
-            clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
-            waitForTag(RepairAppTestTags.CustomerConfirmSaveButton, useUnmergedTree = true)
-            clickText("Conferma")
-            typeTag(RepairAppTestTags.CustomerSearchField, "Demo")
-            waitForText("Demo Lab Srl")
-            capture(outputDir, "05-azienda-salvata.png")
+            robot.typeTag(RepairAppTestTags.CustomerAddressField, "Via Demo 24, Milano", scroll = true)
+            robot.capture(outputDir, "04-cliente-azienda.png")
+            robot.clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
+            robot.waitForTag(RepairAppTestTags.CustomerConfirmSaveButton, useUnmergedTree = true)
+            robot.clickText("Conferma")
+            robot.typeTag(RepairAppTestTags.CustomerSearchField, "Demo")
+            robot.waitForText("Demo Lab Srl")
+            robot.capture(outputDir, "05-azienda-salvata.png")
         }
     }
 
@@ -299,26 +282,27 @@ class SocialStoryDemoScreenshotTest {
     fun capturesMaintenanceStories() {
         runBlocking { DemoDataSeeder.seedDemoProfile(context) }
         val outputDir = prepareCaseDirectory(CASE_MAINTENANCE)
+        val robot = ProAssetRobot(composeRule, context)
 
         withDemoApp {
-            waitForTag(RepairAppTestTags.AuthUsernameField)
-            loginDemo(DemoDataSeeder.DEMO_ADMIN_USERNAME)
+            robot.waitForTag(RepairAppTestTags.AuthUsernameField)
+            robot.loginDemo(DemoDataSeeder.DEMO_ADMIN_USERNAME)
 
-            clickDashboardTab("SETTINGS")
-            waitForText("Setup")
+            robot.clickDashboardTab("SETTINGS")
+            robot.waitForText("Setup")
 
-            clickTag(RepairAppTestTags.ConfigHubStorageButton, scroll = true)
-            waitForText("Archiviazione")
-            capture(outputDir, "01-gestione-memoria.png")
-            clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
+            robot.clickTag(RepairAppTestTags.ConfigHubStorageButton, scroll = true)
+            robot.waitForText("Archiviazione")
+            robot.capture(outputDir, "01-gestione-memoria.png")
+            robot.clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
 
-            clickTag(RepairAppTestTags.ConfigHubBackupButton, scroll = true)
-            waitForText("Backup")
-            capture(outputDir, "02-backup-dati.png")
+            robot.clickTag(RepairAppTestTags.ConfigHubBackupButton, scroll = true)
+            robot.waitForText("Backup")
+            robot.capture(outputDir, "02-backup-dati.png")
 
-            clickText("Esportazione Commesse", scroll = true)
-            waitForText("Esportazione")
-            capture(outputDir, "03-export-excel.png")
+            robot.clickText("Esportazione Commesse", scroll = true)
+            robot.waitForText("Esportazione")
+            robot.capture(outputDir, "03-export-excel.png")
         }
     }
 
@@ -328,21 +312,22 @@ class SocialStoryDemoScreenshotTest {
 
         runBlocking { DemoDataSeeder.seedDemoProfile(context) }
         val outputDir = prepareCaseDirectory(CASE_DEMO_LIMIT)
+        val robot = ProAssetRobot(composeRule, context)
 
         withDemoApp {
-            waitForTag(RepairAppTestTags.AuthUsernameField)
-            loginDemo(DemoDataSeeder.DEMO_ADMIN_USERNAME)
+            robot.waitForTag(RepairAppTestTags.AuthUsernameField)
+            robot.loginDemo(DemoDataSeeder.DEMO_ADMIN_USERNAME)
 
             // We already have 1 order from seeder
-            clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
-            waitForTag("quick_actions_screen")
+            robot.clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
+            robot.waitForTag("quick_actions_screen")
 
             // Try to create another one
-            clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
-            pauseForDemo()
+            robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
+            robot.pauseForDemo()
 
             // Error dialog should appear
-            waitForText(
+            robot.waitForText(
                 context.resources
                     .getQuantityString(
                         com.onlytechtake.repairapp.R.plurals.demo_error_order_limit,
@@ -350,8 +335,8 @@ class SocialStoryDemoScreenshotTest {
                         BuildConfig.MAX_ORDERS,
                     ).substring(0, 10),
             )
-            capture(outputDir, "01-demo-limit-error.png")
-            clickTag(RepairAppTestTags.MessageBannerCloseButton)
+            robot.capture(outputDir, "01-demo-limit-error.png")
+            robot.clickTag(RepairAppTestTags.MessageBannerCloseButton)
         }
     }
 
@@ -359,475 +344,6 @@ class SocialStoryDemoScreenshotTest {
         ActivityScenario.launch(MainActivity::class.java).use {
             block()
         }
-    }
-
-    private fun applySimpleStatus(
-        action: OrderStatusAction,
-        nextAction: OrderStatusAction,
-    ) {
-        waitForTag(RepairAppTestTags.OrderActionSection, scroll = true)
-        pauseForDemo()
-        clickTag(RepairAppTestTags.statusAction(action.name), scroll = true)
-        pauseForDemo()
-        waitForTag(RepairAppTestTags.StatusDialogConfirmButton)
-        clickTag(RepairAppTestTags.StatusDialogConfirmButton)
-        waitForTagGone(RepairAppTestTags.StatusDialogConfirmButton)
-        composeRule.waitForIdle()
-        pauseForDemo()
-
-        // Handle auto-opened WhatsApp preview after status change
-        dismissWhatsAppPreviewIfPresent()
-
-        waitForTag(RepairAppTestTags.statusAction(nextAction.name), scroll = true)
-    }
-
-    private fun applyResultStatus() {
-        waitForTag(RepairAppTestTags.OrderActionSection, scroll = true)
-        pauseForDemo()
-        clickTag(
-            RepairAppTestTags.statusAction(OrderStatusAction.RECORD_RESULT.name),
-            scroll = true,
-        )
-        pauseForDemo()
-        waitForTag(RepairAppTestTags.StatusResultSummaryField)
-        typeTag(
-            RepairAppTestTags.StatusResultSummaryField,
-            "Connettore di alimentazione danneggiato.",
-            scroll = false,
-        )
-        clickTag(RepairAppTestTags.DiagnosisRepairableToggle)
-        typeTag(RepairAppTestTags.DiagnosisEstimateField, "149,00", scroll = false)
-        clickTag(RepairAppTestTags.StatusDialogConfirmButton)
-        waitForTagGone(RepairAppTestTags.StatusDialogConfirmButton)
-        composeRule.waitForIdle()
-        pauseForDemo()
-
-        // Handle auto-opened WhatsApp preview after recording result
-        dismissWhatsAppPreviewIfPresent()
-
-        waitForTag(RepairAppTestTags.QuoteAcceptedToggle, scroll = true)
-    }
-
-    private fun acceptQuote() {
-        composeRule
-            .onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn)
-            .performScrollToIndex(2)
-        composeRule.waitForIdle()
-        pauseForDemo()
-        waitForTag(RepairAppTestTags.QuoteAcceptedToggle)
-        clickTag(RepairAppTestTags.QuoteAcceptedToggle)
-        pauseForDemo()
-        clickTag(RepairAppTestTags.QuoteConfirmButton, scroll = true)
-        composeRule.waitForIdle()
-        pauseForDemo()
-        waitForTag(
-            RepairAppTestTags.statusAction(OrderStatusAction.READY_FOR_PICKUP.name),
-            scroll = true,
-        )
-    }
-
-    private fun closeOrder() {
-        waitForTag(RepairAppTestTags.OrderActionSection, scroll = true)
-        pauseForDemo()
-        clickTag(RepairAppTestTags.statusAction(OrderStatusAction.CLOSE_ORDER.name), scroll = true)
-        pauseForDemo()
-        waitForTag(RepairAppTestTags.StatusNoteField)
-        typeTag(
-            RepairAppTestTags.StatusNoteField,
-            "Riparazione completata e consegnata al cliente.",
-        )
-        clickTag(RepairAppTestTags.closureReason("COMPLETED"))
-        pauseForDemo()
-        clickTag(RepairAppTestTags.StatusDialogConfirmButton)
-        waitForTagGone(RepairAppTestTags.StatusDialogConfirmButton)
-        composeRule.waitForIdle()
-        pauseForDemo()
-        waitForText("Commesse")
-    }
-
-    private fun clickDashboardTab(destination: String) {
-        val tabTag = RepairAppTestTags.dashboardTab(destination)
-        waitForTagExists(tabTag)
-
-        composeRule.onNodeWithTag(tabTag).performClick()
-        composeRule.waitForIdle()
-
-        if (isTextDisplayed("Dati non salvati")) {
-            clickTag(RepairAppTestTags.DashboardDiscardChangesButton)
-        }
-
-        Thread.sleep(2000)
-    }
-
-    private fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
-
-    private fun loginDemo(username: String) {
-        repeat(LOGIN_ATTEMPTS) { attempt ->
-            waitForTag(RepairAppTestTags.AuthUsernameField)
-            typeTag(RepairAppTestTags.AuthUsernameField, username)
-            pauseForDemo()
-            typeTag(RepairAppTestTags.AuthPasswordField, DemoDataSeeder.DEMO_PASSWORD)
-            pauseForDemo()
-            clickTag(RepairAppTestTags.AuthSubmitButton)
-
-            if (waitForTagIfPresent(
-                    RepairAppTestTags.dashboardTab("HOME"),
-                    LOGIN_ATTEMPT_TIMEOUT_MILLIS,
-                )
-            ) {
-                return
-            }
-
-            if ((attempt == (LOGIN_ATTEMPTS - 1)) || !isTagPresent(RepairAppTestTags.AuthUsernameField)) {
-                waitForTag(RepairAppTestTags.dashboardTab("HOME"))
-            }
-            pauseForDemo()
-        }
-    }
-
-    private fun typeTag(
-        tag: String,
-        text: String,
-        scroll: Boolean = false,
-    ) {
-        waitForTagExists(tag, scrollIfNotFound = scroll)
-        val node = composeRule.onNodeWithTag(tag)
-        node.performClick()
-        composeRule.waitForIdle()
-        Thread.sleep(200)
-        node.performTextReplacement(text)
-        composeRule.waitForIdle()
-        Espresso.closeSoftKeyboard()
-        Thread.sleep(500)
-        pauseForDemo()
-    }
-
-    private fun clickTag(
-        tag: String,
-        scroll: Boolean = false,
-        useUnmergedTree: Boolean = false,
-    ) {
-        waitForTag(tag, scroll = scroll, useUnmergedTree = useUnmergedTree)
-        val node = composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
-
-        // Ensure the node is enabled before clicking
-        try {
-            composeRule.waitUntil(timeoutMillis = 5_000) {
-                runCatching { node.assertIsEnabled() }.isSuccess
-            }
-        } catch (_: Throwable) {
-            node.assertIsEnabled()
-        }
-
-        try {
-            node.performClick()
-        } catch (_: Throwable) {
-            try {
-                node.performTouchInput { click() }
-            } catch (_: Throwable) {
-                node.performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
-            }
-        }
-
-        composeRule.waitForIdle()
-        pauseForDemo()
-    }
-
-    private fun clickText(
-        text: String,
-        scroll: Boolean = false,
-    ) {
-        waitForText(text, scrollIfNotFound = scroll)
-        val node = composeRule.onNodeWithText(text, substring = true)
-
-        try {
-            node.performClick()
-        } catch (_: Throwable) {
-            try {
-                node.performTouchInput { click() }
-            } catch (_: Throwable) {
-                node.performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
-            }
-        }
-
-        composeRule.waitForIdle()
-        pauseForDemo()
-    }
-
-    private fun performSafeSwipeUp() {
-        val listTags =
-            listOf(
-                RepairAppTestTags.OrderDetailLazyColumn,
-                "categories_list",
-                "templates_list",
-                "customer_list",
-                "customer_form",
-            )
-        for (tag in listTags) {
-            try {
-                composeRule.onNodeWithTag(tag).performTouchInput {
-                    swipeUp(startY = bottom * 0.8f, endY = top + 30f)
-                }
-                composeRule.waitForIdle()
-                return
-            } catch (_: Throwable) {
-            }
-        }
-        try {
-            composeRule.onAllNodes(isRoot()).onFirst().performTouchInput {
-                swipeUp(startY = bottom * 0.8f, endY = top + 30f)
-            }
-        } catch (_: Throwable) {
-        }
-        composeRule.waitForIdle()
-    }
-
-    private fun performSafeSwipeDown() {
-        val listTags =
-            listOf(
-                RepairAppTestTags.OrderDetailLazyColumn,
-                "categories_list",
-                "templates_list",
-                "customer_list",
-                "customer_form",
-            )
-        for (tag in listTags) {
-            try {
-                composeRule.onNodeWithTag(tag).performTouchInput {
-                    swipeDown(startY = top + 30f, endY = bottom * 0.8f)
-                }
-                composeRule.waitForIdle()
-                return
-            } catch (_: Throwable) {
-            }
-        }
-        try {
-            composeRule.onAllNodes(isRoot()).onFirst().performTouchInput {
-                swipeDown(startY = top + 30f, endY = bottom * 0.8f)
-            }
-        } catch (_: Throwable) {
-        }
-        composeRule.waitForIdle()
-    }
-
-    private fun waitForTag(
-        tag: String,
-        scroll: Boolean = false,
-        useUnmergedTree: Boolean = false,
-    ) {
-        waitForTagExists(tag, scrollIfNotFound = scroll, useUnmergedTree = useUnmergedTree)
-        val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
-        var attempts = 0
-        while (System.currentTimeMillis() < deadline) {
-            val displayed =
-                runCatching {
-                    val node = composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
-                    if (scroll) {
-                        runCatching { node.performScrollTo() }
-                        composeRule.waitForIdle()
-                    }
-                    node.assertIsDisplayed()
-                    true
-                }.getOrDefault(defaultValue = false)
-            if (displayed) return
-
-            if (scroll) {
-                if ((attempts % 15) < 10) {
-                    performSafeSwipeUp()
-                } else {
-                    performSafeSwipeDown()
-                }
-            }
-            Thread.sleep(TAG_POLL_MILLIS)
-            attempts++
-        }
-        composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).assertIsDisplayed()
-    }
-
-    private fun waitForTagExists(
-        tag: String,
-        scrollIfNotFound: Boolean = false,
-        useUnmergedTree: Boolean = false,
-    ) {
-        var found = false
-        val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
-        var attempts = 0
-
-        while (System.currentTimeMillis() < deadline) {
-            found = isTagPresent(tag, useUnmergedTree)
-            if (found) break
-
-            if (scrollIfNotFound) {
-                if ((attempts % 2) == 0) {
-                    try {
-                        composeRule
-                            .onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
-                            .performScrollTo()
-                        composeRule.waitForIdle()
-                        if (isTagPresent(tag, useUnmergedTree)) {
-                            found = true
-                            break
-                        }
-                    } catch (_: Throwable) {
-                        if ((attempts % 15) < 10) {
-                            performSafeSwipeUp() // Scroll DOWN (reveal items below)
-                        } else {
-                            performSafeSwipeDown() // Scroll UP (reveal items above)
-                        }
-                    }
-                }
-            }
-            Thread.sleep(TAG_POLL_MILLIS)
-            attempts++
-        }
-        if (!found) {
-            composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).assertExists()
-        }
-    }
-
-    private fun dismissWhatsAppPreviewIfPresent() {
-        if (waitForTagIfPresent(
-                RepairAppTestTags.OrderWhatsAppPreviewPanel,
-                5000,
-                useUnmergedTree = true,
-            )
-        ) {
-            repeat(5) {
-                if (isTagPresent(
-                        RepairAppTestTags.OrderWhatsAppPreviewPanel,
-                        useUnmergedTree = true,
-                    )
-                ) {
-                    try {
-                        composeRule
-                            .onNodeWithTag(
-                                RepairAppTestTags.OrderWhatsAppClosePreviewButton,
-                                useUnmergedTree = true,
-                            ).performClick()
-                        composeRule.waitForIdle()
-                        Thread.sleep(1000)
-                    } catch (_: Throwable) {
-                    }
-                }
-            }
-            if (isTagPresent(RepairAppTestTags.OrderWhatsAppPreviewPanel, useUnmergedTree = true)) {
-                try {
-                    Espresso.pressBackUnconditionally()
-                    composeRule.waitForIdle()
-                    Thread.sleep(500)
-                } catch (_: Throwable) {
-                }
-            }
-            waitForTagGone(
-                RepairAppTestTags.OrderWhatsAppPreviewPanel,
-                useUnmergedTree = true,
-                timeoutMillis = 3000,
-            )
-        }
-    }
-
-    private fun waitForTagIfPresent(
-        tag: String,
-        timeoutMillis: Long,
-        useUnmergedTree: Boolean = false,
-    ): Boolean {
-        val deadline = System.currentTimeMillis() + timeoutMillis
-        do {
-            if (isTagPresent(tag, useUnmergedTree)) {
-                return true
-            }
-            Thread.sleep(TAG_POLL_MILLIS)
-        } while (System.currentTimeMillis() < deadline)
-        return false
-    }
-
-    private fun waitForTagGone(
-        tag: String,
-        useUnmergedTree: Boolean = false,
-        timeoutMillis: Long = WAIT_TIMEOUT_MILLIS,
-    ) {
-        composeRule.waitUntil(timeoutMillis = timeoutMillis) {
-            composeRule
-                .onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree)
-                .fetchSemanticsNodes()
-                .isEmpty()
-        }
-        composeRule.waitForIdle()
-    }
-
-    private fun isTagPresent(
-        tag: String,
-        useUnmergedTree: Boolean = false,
-    ): Boolean =
-        composeRule
-            .onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree)
-            .fetchSemanticsNodes()
-            .isNotEmpty()
-
-    private fun waitForText(
-        text: String,
-        scrollIfNotFound: Boolean = false,
-    ) {
-        var found = false
-        val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
-        var attempts = 0
-
-        while (System.currentTimeMillis() < deadline) {
-            found = isTextDisplayed(text)
-            if (found) break
-
-            if (scrollIfNotFound) {
-                if ((attempts % 2) == 0) {
-                    try {
-                        composeRule.onNodeWithText(text, substring = true).performScrollTo()
-                        composeRule.waitForIdle()
-                        if (isTextDisplayed(text)) {
-                            found = true
-                            break
-                        }
-                    } catch (_: Throwable) {
-                        if ((attempts % 15) < 10) {
-                            performSafeSwipeUp() // Scroll DOWN (reveal items below)
-                        } else {
-                            performSafeSwipeDown() // Scroll UP (reveal items above)
-                        }
-                    }
-                }
-            }
-            Thread.sleep(TAG_POLL_MILLIS)
-            attempts++
-        }
-        if (!found) {
-            composeRule.onNodeWithText(text, substring = true).assertExists()
-        }
-    }
-
-    private fun drawSignature() {
-        val tag = RepairAppTestTags.SignatureCanvas
-        waitForTag(tag, scroll = true)
-        composeRule.onNodeWithTag(tag).performTouchInput {
-            val w = width.toFloat()
-            val h = height.toFloat()
-            // Una croce zigzagata per simulare una firma complessa
-            swipe(Offset(w * 0.2f, h * 0.3f), Offset(w * 0.8f, h * 0.7f), 200)
-            swipe(Offset(w * 0.8f, h * 0.3f), Offset(w * 0.2f, h * 0.7f), 200)
-            swipe(Offset(w * 0.3f, h * 0.5f), Offset(w * 0.7f, h * 0.5f), 200)
-        }
-        composeRule.waitForIdle()
-    }
-
-    private fun capture(
-        outputDir: File,
-        fileName: String,
-    ) {
-        composeRule.waitForIdle()
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
-        pauseForScreenshot()
-        val bitmap = InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot()
-        FileOutputStream(File(outputDir, fileName)).use { output ->
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, output)
-        }
-        bitmap.recycle()
     }
 
     private fun prepareCaseDirectory(caseName: String): File {
@@ -838,16 +354,6 @@ class SocialStoryDemoScreenshotTest {
         return directory
     }
 
-    private fun pauseForDemo() {
-        Thread.sleep(if (isRecordingDemo()) RECORDING_ACTION_PAUSE_MILLIS else ACTION_PAUSE_MILLIS)
-    }
-
-    private fun pauseForScreenshot() {
-        Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
-    }
-
-    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
-
     private companion object {
         const val CASE_ORDER = "01-commessa-nuovo-cliente-chiusura"
         const val CASE_CONFIG = "02-categorie-template"
@@ -855,13 +361,5 @@ class SocialStoryDemoScreenshotTest {
         const val CASE_MAINTENANCE = "05-manutenzione-backup"
         const val CASE_DEMO_LIMIT = "06-demo-limit"
         const val SCREENSHOT_ROOT_DIR_NAME = "social-stories"
-        const val WAIT_TIMEOUT_MILLIS = 30_000L
-        const val LOGIN_ATTEMPTS = 2
-        const val LOGIN_ATTEMPT_TIMEOUT_MILLIS = 20_000L
-        const val TAG_POLL_MILLIS = 250L
-        const val ACTION_PAUSE_MILLIS = 1_400L
-        const val SCREENSHOT_PAUSE_MILLIS = 1_400L
-        const val RECORDING_ACTION_PAUSE_MILLIS = 500L
-        const val RECORDING_SCREENSHOT_PAUSE_MILLIS = 250L
     }
 }
