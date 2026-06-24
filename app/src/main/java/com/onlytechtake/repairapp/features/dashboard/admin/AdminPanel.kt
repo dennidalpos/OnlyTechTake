@@ -596,12 +596,12 @@ fun AdminPanel(
                 AppTextField(
                     value = ordersResetConfirmation,
                     onValueChange = { ordersResetConfirmation = it },
-                    label = stringResource(R.string.admin_delete_all_orders_field_short),
+                    label = stringResource(R.string.admin_delete_all_orders_field_short, stringResource(R.string.admin_delete_all_orders_confirmation_value)),
                 )
                 AppButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.admin_delete_all_orders),
-                    enabled = ordersResetConfirmation == "CANCELLA TUTTO",
+                    enabled = ordersResetConfirmation == stringResource(R.string.admin_delete_all_orders_confirmation_value),
                     variant = AppButtonVariant.Warning,
                     leadingIcon = Icons.Default.Delete,
                     testTag = RepairAppTestTags.AdminDeleteAllOrdersButton,
@@ -633,12 +633,12 @@ fun AdminPanel(
                 AppTextField(
                     resetConfirmation,
                     { resetConfirmation = it },
-                    stringResource(R.string.admin_total_reset_field),
+                    stringResource(R.string.admin_total_reset_field, stringResource(R.string.admin_total_reset_confirmation_value)),
                 )
                 AppButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.admin_total_reset),
-                    enabled = resetConfirmation == "RESET",
+                    enabled = resetConfirmation == stringResource(R.string.admin_total_reset_confirmation_value),
                     variant = AppButtonVariant.Danger,
                     leadingIcon = Icons.Default.DeleteForever,
                     testTag = RepairAppTestTags.AdminTotalResetButton,

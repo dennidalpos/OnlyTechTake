@@ -1,5 +1,7 @@
 package com.onlytechtake.repairapp.data.repositories
 
+import android.content.Context
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import net.lingala.zip4j.io.inputstream.ZipInputStream
 import net.lingala.zip4j.io.outputstream.ZipOutputStream
@@ -21,6 +23,7 @@ internal object BackupArchive {
     const val CANONICAL_MEDIA_DIRECTORY = "app_media"
 
     fun extract(
+        context: Context,
         input: InputStream,
         restoreRoot: File,
         password: CharArray? = null,
@@ -34,7 +37,7 @@ internal object BackupArchive {
                 val entry = zip.getNextEntry() ?: break
                 try {
                     if (entry.isDirectory) continue
-                    requireSafeEntry(entry.fileName)
+                    requireSafeEntry(context, entry.fileName)
                     when {
                         entry.fileName == METADATA_ENTRY -> {
                             hasMetadata = true
@@ -44,9 +47,9 @@ internal object BackupArchive {
                         entry.fileName.startsWith(DATABASE_ENTRY_PREFIX) -> {
                             val fileName = entry.fileName.removePrefix(DATABASE_ENTRY_PREFIX)
                             require(fileName.isNotBlank() && !fileName.contains('/')) {
-                                "Backup database non valido"
+                                context.getString(R.string.error_invalid_db_backup)
                             }
-                            val destination = safeChild(File(restoreRoot, "database"), fileName)
+                            val destination = safeChild(context, File(restoreRoot, "database"), fileName)
                             destination.parentFile?.mkdirs()
                             destination.outputStream().use(zip::copyTo)
                             databaseFiles[fileName] = destination
@@ -55,9 +58,9 @@ internal object BackupArchive {
                         entry.fileName.startsWith(FILES_ENTRY_PREFIX) -> {
                             val relativePath = entry.fileName.removePrefix(FILES_ENTRY_PREFIX)
                             require(isSupportedAppFile(relativePath)) {
-                                "Backup contiene file app non supportati"
+                                context.getString(R.string.error_unsupported_app_files)
                             }
-                            val destination = safeChild(File(restoreRoot, "files"), relativePath)
+                            val destination = safeChild(context, File(restoreRoot, "files"), relativePath)
                             destination.parentFile?.mkdirs()
                             destination.outputStream().use(zip::copyTo)
                         }
@@ -68,9 +71,9 @@ internal object BackupArchive {
             }
         }
 
-        require(hasMetadata) { "Metadata backup mancanti" }
+        require(hasMetadata) { context.getString(R.string.error_backup_metadata_missing) }
         require(databaseFiles.containsKey(RepairAppDatabase.DATABASE_NAME)) {
-            "Database backup mancante"
+            context.getString(R.string.error_backup_db_missing)
         }
         return ExtractedBackup(metadata.toString(), databaseFiles)
     }
@@ -106,23 +109,24 @@ internal object BackupArchive {
 
     private fun isSupportedAppFile(relativePath: String): Boolean = relativePath.startsWith("$CANONICAL_MEDIA_DIRECTORY/")
 
-    private fun requireSafeEntry(name: String) {
-        require(name.isNotBlank()) { "Backup ZIP non valido" }
+    private fun requireSafeEntry(context: Context, name: String) {
+        require(name.isNotBlank()) { context.getString(R.string.error_invalid_zip_backup) }
         require(!name.startsWith("/") && !name.startsWith("\\") && '\\' !in name) {
-            "Percorso backup non valido"
+            context.getString(R.string.error_invalid_backup_path)
         }
         val parts = name.split('/')
-        require(parts.none { it == ".." || it.isBlank() }) { "Percorso backup non valido" }
+        require(parts.none { it == ".." || it.isBlank() }) { context.getString(R.string.error_invalid_backup_path) }
     }
 
     private fun safeChild(
+        context: Context,
         root: File,
         relativePath: String,
     ): File {
         val destination = File(root, relativePath)
         val rootPath = root.canonicalPath + File.separator
         val destinationPath = destination.canonicalPath
-        require(destinationPath.startsWith(rootPath)) { "Percorso backup non valido" }
+        require(destinationPath.startsWith(rootPath)) { context.getString(R.string.error_invalid_backup_path) }
         return destination
     }
 }

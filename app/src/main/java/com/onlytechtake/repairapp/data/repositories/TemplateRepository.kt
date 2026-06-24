@@ -48,7 +48,25 @@ class TemplateRepository(
 ) {
     private val eventWriter = OrderWorkflowEventWriter(context, timelineEventDao = timelineEventDao)
 
-    fun observeTemplates(): Flow<List<MessageTemplateEntity>> = templateDao.observeAll()
+    fun observeTemplates(): Flow<List<MessageTemplateEntity>> =
+        templateDao.observeAll().map { list ->
+            list.map { template ->
+                if (template.code in systemTemplateCodes && template.version == 1) {
+                    val default = getDefaultTemplates().find { it.code == template.code }
+                    if (default != null) {
+                        template.copy(
+                            title = default.title,
+                            body = default.body,
+                            step = default.step,
+                        )
+                    } else {
+                        template
+                    }
+                } else {
+                    template
+                }
+            }
+        }
 
     fun observeAnchorMappings(): Flow<Map<TemplateAnchor, String>> =
         settingDao.observeAll().map { settings ->
@@ -102,11 +120,25 @@ class TemplateRepository(
 
     suspend fun ensureDefaults(actorUserId: String?) {
         val now = clockMillis()
-        defaultTemplates.forEach { template ->
+        // 1. Ensure all system templates exist in the database
+        getDefaultTemplates().forEach { template ->
             if (templateDao.findByCode(template.code) == null) {
                 templateDao.upsert(
                     template.copy(
                         id = UUID.randomUUID().toString(),
+                        updatedByUserId = actorUserId,
+                        updatedAt = now,
+                    ),
+                )
+            }
+        }
+        // 2. Ensure all activators (anchors) have a default mapping explicitly set in settings
+        TemplateAnchor.entries.forEach { anchor ->
+            if (settingDao.findByKey(anchor.settingKey) == null) {
+                settingDao.upsert(
+                    AppSettingEntity(
+                        key = anchor.settingKey,
+                        value = anchor.defaultCode,
                         updatedByUserId = actorUserId,
                         updatedAt = now,
                     ),
@@ -119,7 +151,8 @@ class TemplateRepository(
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_TEMPLATES)
             val now = clockMillis()
-            defaultTemplates.forEach { template ->
+            val defaults = getDefaultTemplates()
+            defaults.forEach { template ->
                 val existing = templateDao.findByCode(template.code)
                 templateDao.upsert(
                     template.copy(
@@ -132,6 +165,7 @@ class TemplateRepository(
                 )
             }
             settingDao.deleteByKeys(TemplateAnchor.entries.map { it.settingKey })
+            ensureDefaults(actor.id)
             auditLogDao.upsert(
                 AuditLogEntity(
                     id = UUID.randomUUID().toString(),
@@ -139,7 +173,7 @@ class TemplateRepository(
                     actorUserId = actor.id,
                     orderId = null,
                     customerId = null,
-                    detailsJson = """{"action":"reset_to_defaults","templates":${defaultTemplates.size},"anchors":${TemplateAnchor.entries.size}}""",
+                    detailsJson = """{"action":"reset_to_defaults","templates":${defaults.size},"anchors":${TemplateAnchor.entries.size}}""",
                     createdAt = now,
                 ),
             )
@@ -215,8 +249,14 @@ class TemplateRepository(
             }
             val customer =
                 requireNotNull(customerDao.findById(order.customerId)) { "Cliente non trovato" }
-            val template =
+            val dbTemplate =
                 requireNotNull(templateDao.findActiveByCode(templateCode)) { "Template non trovato" }
+            val template =
+                if (dbTemplate.code in systemTemplateCodes && dbTemplate.version == 1) {
+                    getDefaultTemplates().find { it.code == dbTemplate.code } ?: dbTemplate
+                } else {
+                    dbTemplate
+                }
             val categoryPath = categoryPath(order.categoryId)
             val phone = customer.phone?.filter { it.isDigit() || (it == '+') }.orEmpty()
             require(phone.isNotBlank()) { "Telefono cliente mancante" }
@@ -234,10 +274,10 @@ class TemplateRepository(
                                 customer.firstName,
                                 customer.lastName,
                             ).joinToString(" ")
-                                .ifBlank { "Cliente" },
+                                .ifBlank { context.getString(com.onlytechtake.repairapp.R.string.signature_default_signer) },
                         "esito_diagnosi" to order.diagnosisOutcome?.label(context).orEmpty(),
                         "importo_preventivo" to order.estimateAmountCents.formatEuroCentsForExport(),
-                        "prossima_azione" to nextActionLabel(order),
+                        "prossima_azione" to nextActionLabel(context, order),
                         "motivo_chiusura" to
                             when {
                                 order.closureReason != null -> order.closureReason.label(context)
@@ -247,7 +287,7 @@ class TemplateRepository(
                                 else -> ""
                             },
                         "categoria_percorso" to categoryPath,
-                        "ancora_label" to (anchor?.label ?: ""),
+                        "ancora_label" to (anchor?.let { context.getString(it.labelRes) } ?: ""),
                         "ancora_id" to (anchor?.settingKey ?: ""),
                         "template_codice" to template.code,
                     ),
@@ -313,8 +353,186 @@ class TemplateRepository(
         return chain.asReversed().joinToString(" > ") { it.name }
     }
 
+    private fun getDefaultTemplates() =
+        listOf(
+            MessageTemplateEntity(
+                id = "",
+                code = "whatsapp_presa_in_carico",
+                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_intake_title),
+                channel = MessageChannel.WHATSAPP,
+                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_intake_body),
+                active = true,
+                version = 1,
+                updatedByUserId = null,
+                updatedAt = 0L,
+                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_intake),
+            ),
+            MessageTemplateEntity(
+                id = "",
+                code = "whatsapp_aggiornamento",
+                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_update_title),
+                channel = MessageChannel.WHATSAPP,
+                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_update_body),
+                active = true,
+                version = 1,
+                updatedByUserId = null,
+                updatedAt = 0L,
+                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_update),
+            ),
+            MessageTemplateEntity(
+                id = "",
+                code = "whatsapp_diagnosi",
+                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_diagnosis_title),
+                channel = MessageChannel.WHATSAPP,
+                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_diagnosis_body),
+                active = true,
+                version = 1,
+                updatedByUserId = null,
+                updatedAt = 0L,
+                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_diagnosis),
+            ),
+            MessageTemplateEntity(
+                id = "",
+                code = "whatsapp_risultato",
+                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_result_title),
+                channel = MessageChannel.WHATSAPP,
+                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_result_body),
+                active = true,
+                version = 1,
+                updatedByUserId = null,
+                updatedAt = 0L,
+                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_outcome),
+            ),
+            MessageTemplateEntity(
+                id = "",
+                code = "whatsapp_preventivo_intervento",
+                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_quote_title),
+                channel = MessageChannel.WHATSAPP,
+                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_quote_body),
+                active = true,
+                version = 1,
+                updatedByUserId = null,
+                updatedAt = 0L,
+                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_quote),
+            ),
+            MessageTemplateEntity(
+                id = "",
+                code = "whatsapp_non_riparabile",
+                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_not_repairable_title),
+                channel = MessageChannel.WHATSAPP,
+                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_not_repairable_body),
+                active = true,
+                version = 1,
+                updatedByUserId = null,
+                updatedAt = 0L,
+                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_outcome),
+            ),
+            MessageTemplateEntity(
+                id = "",
+                code = "whatsapp_riparazione",
+                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_repairing_title),
+                channel = MessageChannel.WHATSAPP,
+                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_repairing_body),
+                active = true,
+                version = 1,
+                updatedByUserId = null,
+                updatedAt = 0L,
+                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_repair),
+            ),
+            MessageTemplateEntity(
+                id = "",
+                code = "whatsapp_lavorazione",
+                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_lavorazione_title),
+                channel = MessageChannel.WHATSAPP,
+                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_lavorazione_body),
+                active = true,
+                version = 1,
+                updatedByUserId = null,
+                updatedAt = 0L,
+                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_intake),
+            ),
+            MessageTemplateEntity(
+                id = "",
+                code = "whatsapp_completamento",
+                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_completamento_title),
+                channel = MessageChannel.WHATSAPP,
+                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_completamento_body),
+                active = true,
+                version = 1,
+                updatedByUserId = null,
+                updatedAt = 0L,
+                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_outcome),
+            ),
+            MessageTemplateEntity(
+                id = "",
+                code = "whatsapp_pronto_ritiro",
+                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_ready_title),
+                channel = MessageChannel.WHATSAPP,
+                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_ready_body),
+                active = true,
+                version = 1,
+                updatedByUserId = null,
+                updatedAt = 0L,
+                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_pickup),
+            ),
+            MessageTemplateEntity(
+                id = "",
+                code = "whatsapp_stato_avanzamento_pdf",
+                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_pdf_status_title),
+                channel = MessageChannel.WHATSAPP,
+                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_pdf_status_body),
+                active = true,
+                version = 1,
+                updatedByUserId = null,
+                updatedAt = 0L,
+                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_docs),
+            ),
+            MessageTemplateEntity(
+                id = "",
+                code = "privacy_breve",
+                title = context.getString(com.onlytechtake.repairapp.R.string.template_privacy_breve_title),
+                channel = MessageChannel.WHATSAPP,
+                body = context.getString(com.onlytechtake.repairapp.R.string.template_privacy_breve_body),
+                active = true,
+                version = 1,
+                updatedByUserId = null,
+                updatedAt = 0L,
+                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_legal),
+            ),
+            MessageTemplateEntity(
+                id = "",
+                code = "condizioni_presa_in_carico",
+                title = context.getString(com.onlytechtake.repairapp.R.string.template_condizioni_title),
+                channel = MessageChannel.WHATSAPP,
+                body = context.getString(com.onlytechtake.repairapp.R.string.template_condizioni_body),
+                active = true,
+                version = 1,
+                updatedByUserId = null,
+                updatedAt = 0L,
+                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_legal),
+            ),
+        )
+
     private companion object {
         const val MESSAGE_MODE_SETTING_KEY = "message_mode"
+
+        val systemTemplateCodes =
+            setOf(
+                "privacy_breve",
+                "condizioni_presa_in_carico",
+                "whatsapp_presa_in_carico",
+                "whatsapp_aggiornamento",
+                "whatsapp_diagnosi",
+                "whatsapp_risultato",
+                "whatsapp_preventivo_intervento",
+                "whatsapp_non_riparabile",
+                "whatsapp_riparazione",
+                "whatsapp_lavorazione",
+                "whatsapp_completamento",
+                "whatsapp_pronto_ritiro",
+                "whatsapp_stato_avanzamento_pdf",
+            )
+
         val supportedVariables =
             setOf(
                 "numero_commessa",
@@ -329,166 +547,6 @@ class TemplateRepository(
                 "ancora_label",
                 "ancora_id",
                 "template_codice",
-            )
-
-        val defaultTemplates =
-            listOf(
-                MessageTemplateEntity(
-                    id = "",
-                    code = "whatsapp_presa_in_carico",
-                    title = "WhatsApp presa in carico",
-                    channel = MessageChannel.WHATSAPP,
-                    body = "Ciao {{cliente}}, abbiamo preso in carico la commessa {{numero_commessa}}: {{titolo_commessa}}.\nCategoria: {{categoria_percorso}}.\nTi aggiorneremo appena avremo novita'.",
-                    active = true,
-                    version = 1,
-                    updatedByUserId = null,
-                    updatedAt = 0L,
-                    step = "Ingresso",
-                ),
-                MessageTemplateEntity(
-                    id = "",
-                    code = "whatsapp_aggiornamento",
-                    title = "WhatsApp aggiornamento",
-                    channel = MessageChannel.WHATSAPP,
-                    body = "Aggiornamento commessa {{numero_commessa}}: stato attuale {{stato_commessa}}.\nProssima azione: {{prossima_azione}}.",
-                    active = true,
-                    version = 1,
-                    updatedByUserId = null,
-                    updatedAt = 0L,
-                    step = "Aggiornamento",
-                ),
-                MessageTemplateEntity(
-                    id = "",
-                    code = "whatsapp_diagnosi",
-                    title = "WhatsApp diagnosi",
-                    channel = MessageChannel.WHATSAPP,
-                    body = "Ciao {{cliente}}, la commessa {{numero_commessa}} e' in diagnosi.\nOggetto: {{titolo_commessa}}.\nTi comunicheremo esito e preventivo prima di procedere.",
-                    active = true,
-                    version = 1,
-                    updatedByUserId = null,
-                    updatedAt = 0L,
-                    step = "Diagnosi",
-                ),
-                MessageTemplateEntity(
-                    id = "",
-                    code = "whatsapp_risultato",
-                    title = "WhatsApp risultato",
-                    channel = MessageChannel.WHATSAPP,
-                    body = "Ciao {{cliente}}, abbiamo completato la diagnosi della commessa {{numero_commessa}}.\nEsito: {{esito_diagnosi}}.\nStato: {{stato_commessa}}.\nProssima azione: {{prossima_azione}}.",
-                    active = true,
-                    version = 1,
-                    updatedByUserId = null,
-                    updatedAt = 0L,
-                    step = "Risultato",
-                ),
-                MessageTemplateEntity(
-                    id = "",
-                    code = "whatsapp_preventivo_intervento",
-                    title = "WhatsApp preventivo intervento",
-                    channel = MessageChannel.WHATSAPP,
-                    body = "Ciao {{cliente}}, per la commessa {{numero_commessa}} abbiamo completato la diagnosi.\nPreventivo intervento: {{importo_preventivo}}.\nRispondi confermando o rifiutando il preventivo: procederemo solo dopo la tua conferma.",
-                    active = true,
-                    version = 1,
-                    updatedByUserId = null,
-                    updatedAt = 0L,
-                    step = "Preventivo",
-                ),
-                MessageTemplateEntity(
-                    id = "",
-                    code = "whatsapp_non_riparabile",
-                    title = "WhatsApp non riparabile",
-                    channel = MessageChannel.WHATSAPP,
-                    body = "Ciao {{cliente}}, dopo la diagnosi della commessa {{numero_commessa}} l'oggetto risulta non riparabile.\nPuoi passare in negozio per il ritiro o contattarci per chiarimenti.",
-                    active = true,
-                    version = 1,
-                    updatedByUserId = null,
-                    updatedAt = 0L,
-                    step = "Non riparabile",
-                ),
-                MessageTemplateEntity(
-                    id = "",
-                    code = "whatsapp_riparazione",
-                    title = "WhatsApp riparazione",
-                    channel = MessageChannel.WHATSAPP,
-                    body = "Ciao {{cliente}}, la riparazione della commessa {{numero_commessa}} e' in corso.\nTi aggiorneremo quando sara' pronta.",
-                    active = true,
-                    version = 1,
-                    updatedByUserId = null,
-                    updatedAt = 0L,
-                    step = "Riparazione",
-                ),
-                MessageTemplateEntity(
-                    id = "",
-                    code = "whatsapp_lavorazione",
-                    title = "WhatsApp lavorazione",
-                    channel = MessageChannel.WHATSAPP,
-                    body = "Ciao {{cliente}}, la commessa {{numero_commessa}} e' in lavorazione.\nProssima azione: {{prossima_azione}}.",
-                    active = true,
-                    version = 1,
-                    updatedByUserId = null,
-                    updatedAt = 0L,
-                    step = "Lavorazione",
-                ),
-                MessageTemplateEntity(
-                    id = "",
-                    code = "whatsapp_completamento",
-                    title = "WhatsApp completamento",
-                    channel = MessageChannel.WHATSAPP,
-                    body = "Ciao {{cliente}}, la lavorazione della commessa {{numero_commessa}} e' completata.",
-                    active = true,
-                    version = 1,
-                    updatedByUserId = null,
-                    updatedAt = 0L,
-                    step = "Chiusura",
-                ),
-                MessageTemplateEntity(
-                    id = "",
-                    code = "whatsapp_pronto_ritiro",
-                    title = "WhatsApp pronto ritiro",
-                    channel = MessageChannel.WHATSAPP,
-                    body = "Ciao {{cliente}}, la commessa {{numero_commessa}} e' pronta per il ritiro.",
-                    active = true,
-                    version = 1,
-                    updatedByUserId = null,
-                    updatedAt = 0L,
-                    step = "Pronto ritiro",
-                ),
-                MessageTemplateEntity(
-                    id = "",
-                    code = "whatsapp_stato_avanzamento_pdf",
-                    title = "WhatsApp stato avanzamento PDF",
-                    channel = MessageChannel.WHATSAPP,
-                    body = "Ciao {{cliente}}, ti inviamo in allegato lo stato avanzamento della commessa {{numero_commessa}}: {{titolo_commessa}}.\n\nStato attuale: {{stato_commessa}}\nProssima azione: {{prossima_azione}}\n\nOnlyTechTake",
-                    active = true,
-                    version = 1,
-                    updatedByUserId = null,
-                    updatedAt = 0L,
-                    step = "PDF Stato",
-                ),
-                MessageTemplateEntity(
-                    id = "",
-                    code = "privacy_breve",
-                    title = "Privacy breve",
-                    channel = MessageChannel.WHATSAPP,
-                    body = "Informativa privacy sintetica ai sensi del Regolamento UE 2016/679 (GDPR).\nTitolare: OnlyTechTake, contattabile presso il punto vendita o i recapiti indicati nella ricevuta.\nFinalita': presa in carico e gestione della commessa, diagnosi, preventivo, riparazione, consegna, assistenza post-intervento, comunicazioni operative e adempimenti contabili/fiscali.\nBasi giuridiche: esecuzione di misure precontrattuali o contrattuali, obblighi di legge e legittimo interesse alla gestione organizzativa e alla tutela dei diritti. Per comunicazioni WhatsApp non indispensabili o ulteriori rispetto alla gestione della commessa puo' essere richiesto consenso specifico.\nDati trattati: dati identificativi e di contatto, dati fiscali se necessari, informazioni sull'oggetto consegnato, descrizione del problema, foto/allegati, firma, note operative e storico comunicazioni.\nConservazione: per il tempo necessario alla gestione della commessa e successivamente per obblighi di legge o tutela dei diritti.\nDestinatari: personale autorizzato, fornitori tecnici strettamente necessari, consulenti e soggetti previsti dalla legge. L'uso di WhatsApp comporta trattamento secondo le condizioni della piattaforma usata dal cliente.\nDiritti: accesso, rettifica, cancellazione nei casi previsti, limitazione, opposizione, portabilita' ove applicabile e reclamo al Garante per la protezione dei dati personali.",
-                    active = true,
-                    version = 1,
-                    updatedByUserId = null,
-                    updatedAt = 0L,
-                    step = "Legale",
-                ),
-                MessageTemplateEntity(
-                    id = "",
-                    code = "condizioni_presa_in_carico",
-                    title = "Condizioni presa in carico",
-                    channel = MessageChannel.WHATSAPP,
-                    body = "Condizioni di presa in carico.\nIl cliente dichiara di consegnare l'oggetto indicato in commessa e autorizza OnlyTechTake a custodirlo, verificarlo e svolgere diagnosi tecnica preliminare.\nLa diagnosi puo' richiedere apertura, test, pulizia tecnica o collegamento ad alimentatori/strumenti compatibili. L'intervento di riparazione viene eseguito solo dopo accettazione del preventivo quando previsto.\nIl cliente si impegna a fornire informazioni corrette su proprieta', difetti noti, blocchi, accessori e condizioni dell'oggetto. OnlyTechTake non risponde di dati non salvati, password non comunicate, difetti preesistenti o peggioramenti inevitabili emersi durante diagnosi su oggetti gia' danneggiati.\nGli importi comunicati come preventivo devono essere accettati dal cliente prima dell'avvio intervento. In caso di rifiuto, impossibilita' di riparazione o mancato ritiro, la commessa puo' essere chiusa secondo le condizioni comunicate dall'operatore.\nCon la firma il cliente conferma presa visione di privacy e condizioni operative.",
-                    active = true,
-                    version = 1,
-                    updatedByUserId = null,
-                    updatedAt = 0L,
-                    step = "Legale",
-                ),
             )
     }
 }

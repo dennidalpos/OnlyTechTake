@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import com.onlytechtake.repairapp.BuildConfig
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
@@ -54,7 +55,7 @@ object DemoDataSeeder {
         database.userDao().upsert(
             UserEntity(
                 id = DEMO_ADMIN_ID,
-                displayName = "Admin Demo",
+                displayName = context.getString(R.string.demo_admin_display_name),
                 username = DEMO_ADMIN_USERNAME,
                 passwordHash = adminHash.hash,
                 passwordSalt = adminHash.salt,
@@ -70,7 +71,7 @@ object DemoDataSeeder {
             database.userDao().upsert(
                 UserEntity(
                     id = DEMO_OPERATOR_ID,
-                    displayName = "Operatore Banco",
+                    displayName = context.getString(R.string.demo_operator_display_name),
                     username = DEMO_OPERATOR_USERNAME,
                     passwordHash = operatorHash.hash,
                     passwordSalt = operatorHash.salt,
@@ -96,32 +97,32 @@ object DemoDataSeeder {
                     id = "demo-cat-pc",
                     parentId = null,
                     level = 0,
-                    name = "Computer & Laptop",
-                    description = "Riparazioni hardware e software PC",
+                    name = context.getString(R.string.demo_cat_pc),
+                    description = context.getString(R.string.demo_cat_pc_desc),
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = DEMO_CATEGORY_ID, // notebook
                     parentId = "demo-cat-pc",
                     level = 1,
-                    name = "Notebook",
-                    description = "Portatili e Ultrabook",
+                    name = context.getString(R.string.demo_cat_notebook),
+                    description = context.getString(R.string.demo_cat_notebook_desc),
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = "demo-cat-gaming",
                     parentId = DEMO_CATEGORY_ID,
                     level = 2,
-                    name = "Gaming Laptop",
-                    description = "MSI, ROG, Alienware, Legion",
+                    name = context.getString(R.string.demo_cat_gaming),
+                    description = context.getString(R.string.demo_cat_gaming_desc),
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = "demo-cat-rog-strix",
                     parentId = "demo-cat-gaming",
                     level = 3,
-                    name = "Asus ROG Strix",
-                    description = "Pulizia interna e pasta termica",
+                    name = context.getString(R.string.demo_cat_rog_strix),
+                    description = context.getString(R.string.demo_cat_rog_strix_desc),
                     active = true,
                 ),
             ),
@@ -131,15 +132,15 @@ object DemoDataSeeder {
                 CustomerEntity(
                     id = if (i == 1) DEMO_CUSTOMER_ID else "demo-customer-$i",
                     type = if ((i % 3) == 0) CustomerType.BUSINESS else CustomerType.PRIVATE,
-                    firstName = if (i % 3 == 0) null else "Cliente $i",
+                    firstName = if (i % 3 == 0) null else context.getString(R.string.demo_customer_name, i),
                     lastName = if (i % 3 == 0) null else "Demo",
-                    companyName = if (i % 3 == 0) "Azienda $i Srl" else null,
+                    companyName = if (i % 3 == 0) context.getString(R.string.demo_customer_business_name, i) else null,
                     vatNumber = if (i % 3 == 0) "IT${10000000000L + i}" else null,
                     taxCode = if (i % 3 == 0) null else "CF${1000000000000000L + i}",
                     phone = "+39 333 000 ${1000 + i}",
                     email = "cliente$i@example.invalid",
                     address = "Via Demo $i, Milano",
-                    notes = "Cliente demo $i per presentazioni.",
+                    notes = context.getString(R.string.demo_customer_notes, i),
                     createdAt = now - (i * 1000L),
                     updatedAt = now - (i * 1000L),
                 )
@@ -155,14 +156,14 @@ object DemoDataSeeder {
                     id = if (i == 1) DEMO_ORDER_ID else "demo-order-$i",
                     orderNumber = "2026-${1000 + i}",
                     customerId = DEMO_CUSTOMER_ID,
-                    title = if (i == 1) "Asus ROG Strix - Pulizia e Pasta" else "Riparazione $i",
+                    title = if (i == 1) context.getString(R.string.demo_order_title_1) else context.getString(R.string.demo_order_title_n, i),
                     categoryId = "demo-cat-rog-strix",
                     status = if (i % 2 == 0) OrderStatus.IN_PROGRESS else OrderStatus.OPEN,
                     priority = OrderPriority.NORMAL,
                     assignedToUserId = assignedUserId,
                     createdByUserId = assignedUserId,
-                    description = "Descrizione commessa demo $i.",
-                    internalNotes = "Note interne demo $i.",
+                    description = context.getString(R.string.demo_order_desc, i),
+                    internalNotes = context.getString(R.string.demo_order_notes, i),
                     estimateAmountCents = null,
                     finalAmountCents = null,
                     createdAt = now - (i * 3600000L),
@@ -177,7 +178,7 @@ object DemoDataSeeder {
             writeDemoBitmap(
                 directory = mediaStorageProvider.getOrderMediaDir(DEMO_ORDER_ID),
                 fileName = "demo-oggetto.png",
-                label = "Foto oggetto",
+                label = context.getString(R.string.demo_photo_label),
                 backgroundColor = Color.rgb(229, 241, 255),
             )
         database.orderMediaDao().upsert(
@@ -201,7 +202,7 @@ object DemoDataSeeder {
             writeDemoBitmap(
                 directory = mediaStorageProvider.getOrderSignaturesDir(DEMO_ORDER_ID),
                 fileName = "demo-firma.png",
-                label = "Firma cliente",
+                label = context.getString(R.string.demo_signature_label),
                 backgroundColor = Color.WHITE,
             )
         database.signatureDao().upsert(
@@ -211,9 +212,9 @@ object DemoDataSeeder {
                 signerName = "Marco Verdi",
                 privacyAccepted = true,
                 termsAccepted = true,
-                privacyTextSnapshot = "Informativa privacy demo.",
+                privacyTextSnapshot = context.getString(R.string.demo_privacy_snapshot),
                 privacyTemplateVersion = 1,
-                termsTextSnapshot = "Condizioni presa in carico demo.",
+                termsTextSnapshot = context.getString(R.string.demo_terms_snapshot),
                 termsTemplateVersion = 1,
                 localPath = signaturePath.absolutePath,
                 fileName = signaturePath.name,
@@ -231,8 +232,8 @@ object DemoDataSeeder {
                 id = "demo-timeline-created",
                 orderId = DEMO_ORDER_ID,
                 type = TimelineEventType.ORDER_CREATED,
-                title = "Commessa creata",
-                description = "Presa in carico demo con foto e firma cliente.",
+                title = context.getString(R.string.demo_event_title_created),
+                description = context.getString(R.string.demo_event_desc_created),
                 oldStatus = null,
                 newStatus = OrderStatus.OPEN.name,
                 visibleToCustomer = true,
@@ -247,17 +248,17 @@ object DemoDataSeeder {
         )
 
         listOf(
-            DemoTemplate("privacy_breve", "Informativa privacy", "Legale"),
-            DemoTemplate("condizioni_presa_in_carico", "Condizioni presa in carico", "Legale"),
-            DemoTemplate("whatsapp_presa_in_carico", "Presa in carico", "Ingresso"),
-            DemoTemplate("whatsapp_aggiornamento", "Aggiornamento commessa", "Aggiornamento"),
-            DemoTemplate("whatsapp_diagnosi", "Diagnosi", "Diagnosi"),
-            DemoTemplate("whatsapp_risultato", "Risultato diagnosi", "Risultato"),
-            DemoTemplate("whatsapp_preventivo_intervento", "Preventivo intervento", "Preventivo"),
-            DemoTemplate("whatsapp_non_riparabile", "Non riparabile", "Esito"),
-            DemoTemplate("whatsapp_riparazione", "Riparazione", "Riparazione"),
-            DemoTemplate("whatsapp_pronto_ritiro", "Pronto ritiro", "Ritiro"),
-            DemoTemplate("whatsapp_stato_avanzamento_pdf", "Stato avanzamento PDF", "Documenti"),
+            DemoTemplate("privacy_breve", context.getString(R.string.template_privacy_breve_title), context.getString(R.string.anchor_step_legal)),
+            DemoTemplate("condizioni_presa_in_carico", context.getString(R.string.template_condizioni_title), context.getString(R.string.anchor_step_legal)),
+            DemoTemplate("whatsapp_presa_in_carico", context.getString(R.string.template_wa_intake_title), context.getString(R.string.anchor_step_intake)),
+            DemoTemplate("whatsapp_aggiornamento", context.getString(R.string.template_wa_update_title), context.getString(R.string.anchor_step_update)),
+            DemoTemplate("whatsapp_diagnosi", context.getString(R.string.template_wa_diagnosis_title), context.getString(R.string.anchor_step_diagnosis)),
+            DemoTemplate("whatsapp_risultato", context.getString(R.string.template_wa_result_title), context.getString(R.string.anchor_step_outcome)),
+            DemoTemplate("whatsapp_preventivo_intervento", context.getString(R.string.template_wa_quote_title), context.getString(R.string.anchor_step_quote)),
+            DemoTemplate("whatsapp_non_riparabile", context.getString(R.string.template_wa_not_repairable_title), context.getString(R.string.anchor_step_outcome)),
+            DemoTemplate("whatsapp_riparazione", context.getString(R.string.template_wa_repairing_title), context.getString(R.string.anchor_step_repair)),
+            DemoTemplate("whatsapp_pronto_ritiro", context.getString(R.string.template_wa_ready_title), context.getString(R.string.anchor_step_pickup)),
+            DemoTemplate("whatsapp_stato_avanzamento_pdf", context.getString(R.string.template_wa_pdf_status_title), context.getString(R.string.anchor_step_docs)),
         ).forEachIndexed { index, template ->
             database.messageTemplateDao().upsert(
                 MessageTemplateEntity(
@@ -265,7 +266,7 @@ object DemoDataSeeder {
                     code = template.code,
                     title = template.title,
                     channel = MessageChannel.WHATSAPP,
-                    body = "Aggiornamento {{numero_commessa}}: {{stato_commessa}} per {{cliente}}.",
+                    body = context.getString(R.string.demo_template_body),
                     active = true,
                     version = 1,
                     updatedByUserId = DEMO_ADMIN_ID,

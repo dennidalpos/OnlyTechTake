@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.features.dashboard.detail
 
+import android.content.Context
 import android.content.Intent
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
@@ -92,12 +93,17 @@ class OrderDetailViewModelTest {
             every {
                 shareFactory.createPdfShareIntent(
                     pdf,
-                    "Documento stato.pdf",
+                    "label",
                 )
             } returns mockk<Intent>(relaxed = true)
 
+            val context = mockk<Context>(relaxed = true)
+            every { context.getString(any()) } returns "label"
+            every { context.getString(any(), any()) } returns "label"
+
             val viewModel =
                 OrderDetailViewModel(
+                    context = context,
                     orderId = "order-1",
                     authRepository = FakeAuthRepository(actor),
                     orderRepository = orderRepository,

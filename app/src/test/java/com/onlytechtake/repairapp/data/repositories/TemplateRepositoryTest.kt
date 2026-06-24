@@ -17,17 +17,18 @@ import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.mockk
-import io.mockk.slot
+import io.mockk.*
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class TemplateRepositoryTest {
-    private val context = mockk<Context>(relaxed = true)
+    private val context =
+        mockk<Context>(relaxed = true) {
+            every { getString(any<Int>()) } returns "localized"
+            every { getString(any<Int>(), *anyVararg()) } returns "localized"
+        }
     private val templateDao = mockk<MessageTemplateDao>(relaxed = true)
     private val settingDao = mockk<AppSettingDao>(relaxed = true)
     private val auditLogDao = mockk<AuditLogDao>(relaxed = true)

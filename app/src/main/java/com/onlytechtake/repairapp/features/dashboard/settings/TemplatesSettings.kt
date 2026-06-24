@@ -21,8 +21,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Link
+import androidx.compose.material.icons.filled.RadioButtonUnchecked
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -78,6 +81,8 @@ fun ColumnScope.TemplatesSettings(
     val confirmTitle = stringResource(R.string.config_template_confirm_save_title)
     val confirmRisky = stringResource(R.string.config_template_confirm_save_risky)
     val confirmNewVersion = stringResource(R.string.config_template_confirm_save_new_version)
+    val confirmResetTitle = stringResource(R.string.config_template_reset_confirm_title)
+    val confirmResetText = stringResource(R.string.config_template_reset_confirm_text)
     val usedTemplateCodes = remember(anchorMappings) { anchorMappings.values.toSet() }
 
     val filteredTemplates =
@@ -199,31 +204,47 @@ fun ColumnScope.TemplatesSettings(
                                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                             )
-                            AppBadge(
-                                text =
-                                    if (template.active) {
-                                        stringResource(R.string.config_template_active)
-                                    } else {
-                                        stringResource(R.string.config_template_archived)
-                                    },
-                                containerColor =
-                                    if (template.active) {
-                                        MaterialTheme.colorScheme.primary
-                                    } else {
-                                        MaterialTheme.colorScheme.surfaceVariant
-                                    },
-                                contentColor =
-                                    if (template.active) {
-                                        MaterialTheme.colorScheme.onPrimary
-                                    } else {
-                                        MaterialTheme.colorScheme.onSurfaceVariant
-                                    },
-                            )
-                            if (!isUsed) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = if (template.active) Icons.Default.Check else Icons.Default.Clear,
+                                    contentDescription = null,
+                                    tint = if (template.active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Spacer(modifier = Modifier.width(RepairAppSpacing.compactGap))
                                 AppBadge(
-                                    text = stringResource(R.string.config_template_unassigned_label),
-                                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                                    text =
+                                        if (template.active) {
+                                            stringResource(R.string.config_template_active)
+                                        } else {
+                                            stringResource(R.string.config_template_archived)
+                                        },
+                                    containerColor =
+                                        if (template.active) {
+                                            MaterialTheme.colorScheme.primaryContainer
+                                        } else {
+                                            MaterialTheme.colorScheme.surfaceVariant
+                                        },
+                                    contentColor =
+                                        if (template.active) {
+                                            MaterialTheme.colorScheme.onPrimaryContainer
+                                        } else {
+                                            MaterialTheme.colorScheme.onSurfaceVariant
+                                        },
+                                )
+                            }
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = if (isUsed) Icons.Default.Link else Icons.Default.RadioButtonUnchecked,
+                                    contentDescription = null,
+                                    tint = if (isUsed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Spacer(modifier = Modifier.width(RepairAppSpacing.compactGap))
+                                AppBadge(
+                                    text = if (isUsed) stringResource(R.string.config_template_status_associated) else stringResource(R.string.config_template_status_free),
+                                    containerColor = if (isUsed) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.tertiaryContainer,
+                                    contentColor = if (isUsed) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onTertiaryContainer,
                                 )
                             }
                         }
@@ -256,16 +277,35 @@ fun ColumnScope.TemplatesSettings(
         }
 
         item {
-            AppButton(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = RepairAppSpacing.screenHorizontal),
-                text = stringResource(R.string.config_template_close),
-                variant = AppButtonVariant.Secondary,
-                size = AppButtonSize.Compact,
-                onClick = onBack,
-            )
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+            ) {
+                if (isAdmin) {
+                    AppButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.config_template_reset_defaults),
+                        variant = AppButtonVariant.Danger,
+                        size = AppButtonSize.Compact,
+                        onClick = {
+                            onRequestConfirm(
+                                confirmResetTitle,
+                                confirmResetText,
+                            ) {
+                                viewModel.resetTemplatesToDefaults()
+                            }
+                        },
+                    )
+                }
+
+                AppButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.config_template_close),
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact,
+                    onClick = onBack,
+                )
+            }
         }
     }
 
@@ -273,9 +313,10 @@ fun ColumnScope.TemplatesSettings(
         val assignedAnchors = TemplateAnchor.entries.filter { anchorMappings[it] == template.code }
         val associatedWarning =
             if (assignedAnchors.isNotEmpty()) {
+                val anchorLabels = assignedAnchors.map { stringResource(it.labelRes) }.joinToString()
                 stringResource(
                     R.string.config_template_associated_warning,
-                    assignedAnchors.joinToString { it.label },
+                    anchorLabels,
                 )
             } else {
                 ""

@@ -46,7 +46,7 @@ class CreateIntakeOrderUseCase(
                     stagedMediaCount = stagedMedia.size,
                     hasPrivacySignature = privacyAccepted && termsAccepted,
                 )
-            val errors = normalizedInput.validationErrors()
+            val errors = normalizedInput.validationErrors(context)
             require(errors.isEmpty()) { errors.joinToString("\n") }
 
             if (BuildConfig.IS_DEMO_VERSION && BuildConfig.MAX_ORDERS > 0) {

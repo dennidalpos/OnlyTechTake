@@ -1,5 +1,8 @@
 package com.onlytechtake.repairapp.features.workspace
 
+import android.content.Context
+import androidx.annotation.StringRes
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import kotlinx.coroutines.CoroutineScope
@@ -7,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 internal class AuthenticatedActionRunner(
+    private val context: Context,
     private val authRepository: AuthRepository,
     private val currentUser: StateFlow<AuthenticatedUser?>,
     private val scope: CoroutineScope,
@@ -14,6 +18,7 @@ internal class AuthenticatedActionRunner(
     private val setLoading: (Boolean) -> Unit = {},
 ) {
     fun run(
+        @StringRes successMessageRes: Int? = null,
         successMessage: String? = null,
         onSuccess: () -> Unit = {},
         block: suspend (AuthenticatedUser) -> Result<*>,
@@ -22,7 +27,7 @@ internal class AuthenticatedActionRunner(
             val actor = currentUser.value
             if (actor == null) {
                 authRepository.logout()
-                showMessage(SESSION_EXPIRED_MESSAGE, true)
+                showMessage(context.getString(R.string.error_session_expired), true)
                 return@launch
             }
 
@@ -31,17 +36,17 @@ internal class AuthenticatedActionRunner(
             block(actor).fold(
                 onSuccess = { result ->
                     setLoading(false)
-                    ((result as? String) ?: successMessage)?.let { showMessage(it, false) }
+                    val message =
+                        (result as? String)
+                            ?: successMessage
+                            ?: successMessageRes?.let { context.getString(it) }
+                    message?.let { showMessage(it, false) }
                     onSuccess()
                 },
             ) { error ->
                 setLoading(false)
-                showMessage(error.message ?: "Errore", true)
+                showMessage(error.message ?: context.getString(R.string.error_unknown), true)
             }
         }
-    }
-
-    private companion object {
-        const val SESSION_EXPIRED_MESSAGE = "Sessione scaduta. Accedi di nuovo."
     }
 }

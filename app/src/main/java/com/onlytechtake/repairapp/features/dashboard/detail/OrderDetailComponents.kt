@@ -194,7 +194,7 @@ fun OrderActionCard(
 
         primaryAction?.let {
             AppButton(
-                text = it.label,
+                text = stringResource(it.labelRes),
                 onClick = { onActionClick(it) },
                 variant = if (it.requiresConfirmation()) AppButtonVariant.Warning else AppButtonVariant.Primary,
                 size = AppButtonSize.FullWidth,
@@ -232,7 +232,7 @@ fun OrderActionCard(
             ActionRow {
                 secondaryActions.forEach { action ->
                     AppButton(
-                        text = action.label,
+                        text = stringResource(action.labelRes),
                         onClick = { onActionClick(action) },
                         variant = if (action.requiresConfirmation()) AppButtonVariant.Warning else AppButtonVariant.Secondary,
                         size = AppButtonSize.Compact,
@@ -336,13 +336,14 @@ fun QuoteDecisionPanel(
             }
 
             if (quoteDecision != null) {
+                val quoteAcceptedLabel = stringResource(R.string.order_quote_accepted)
                 AppButton(
                     text = stringResource(R.string.confirm),
                     modifier = Modifier.fillMaxWidth(),
                     testTag = RepairAppTestTags.QuoteConfirmButton,
                     onClick = {
                         if (quoteDecision == QuoteDecision.ACCEPTED) {
-                            onConfirm(CustomerFeedbackType.ACCEPT, "Preventivo accettato", null)
+                            onConfirm(CustomerFeedbackType.ACCEPT, quoteAcceptedLabel, null)
                         } else {
                             onConfirm(
                                 CustomerFeedbackType.REJECT,

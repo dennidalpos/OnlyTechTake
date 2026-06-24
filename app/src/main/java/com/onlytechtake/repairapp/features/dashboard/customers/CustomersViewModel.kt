@@ -10,6 +10,7 @@ import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
+import com.onlytechtake.repairapp.domain.workspace.OrderFilterMode
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -105,6 +106,7 @@ class CustomersViewModel(
             orderWorkflowRepository.observeOrderList(
                 user,
                 OrderFilter(
+                    mode = if (openOnly) OrderFilterMode.ALL else OrderFilterMode.CLOSED,
                     customerId = customerId,
                     statuses =
                         if (openOnly) {
@@ -112,7 +114,7 @@ class CustomersViewModel(
                                 .filter { it != OrderStatus.CLOSED }
                                 .toSet()
                         } else {
-                            emptySet()
+                            setOf(OrderStatus.CLOSED)
                         },
                 ),
             )

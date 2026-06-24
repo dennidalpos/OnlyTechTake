@@ -47,7 +47,20 @@ internal class OrderWorkflowQueries(
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
                 -> false
 
-                else -> null
+                else -> {
+                    if (filter.statuses.isNotEmpty()) {
+                        val hasClosed = filter.statuses.contains(com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED)
+                        if (hasClosed && filter.statuses.size == 1) {
+                            true
+                        } else if (!hasClosed) {
+                            false
+                        } else {
+                            null
+                        }
+                    } else {
+                        null
+                    }
+                }
             }
 
         return repairOrderDao.observeFiltered(
@@ -79,7 +92,20 @@ internal class OrderWorkflowQueries(
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
                 -> false
 
-                else -> null
+                else -> {
+                    if (filter.statuses.isNotEmpty()) {
+                        val hasClosed = filter.statuses.contains(com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED)
+                        if (hasClosed && filter.statuses.size == 1) {
+                            true
+                        } else if (!hasClosed) {
+                            false
+                        } else {
+                            null
+                        }
+                    } else {
+                        null
+                    }
+                }
             }
 
         return repairOrderDao
@@ -125,7 +151,20 @@ internal class OrderWorkflowQueries(
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
                 -> false
 
-                else -> null
+                else -> {
+                    if (filter.statuses.isNotEmpty()) {
+                        val hasClosed = filter.statuses.contains(com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED)
+                        if (hasClosed && filter.statuses.size == 1) {
+                            true
+                        } else if (!hasClosed) {
+                            false
+                        } else {
+                            null
+                        }
+                    } else {
+                        null
+                    }
+                }
             }
 
         return repairOrderDao

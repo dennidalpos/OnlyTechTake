@@ -75,7 +75,7 @@ fun AuthGateRoute(
     val viewModel: AuthGateViewModel =
         viewModel(
             key = "auth_gate_$appInstanceKey",
-            factory = AuthGateViewModel.Factory(container.authRepository),
+            factory = AuthGateViewModel.Factory(container.context, container.authRepository),
         )
     val authState by viewModel.authState.collectAsState()
     val formState by viewModel.formState.collectAsState()

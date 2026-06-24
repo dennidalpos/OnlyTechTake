@@ -7,6 +7,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Code
+import androidx.compose.material.icons.filled.Public
+import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -105,7 +109,34 @@ fun AboutSettings(onBack: () -> Unit) {
                     AppButton(
                         text = stringResource(R.string.about_github),
                         variant = AppButtonVariant.Secondary,
+                        leadingIcon = Icons.Default.Code,
                         onClick = { uriHandler.openUri("https://github.com/dennidalpos") },
+                    )
+                }
+            }
+        }
+
+        item {
+            StandardCard {
+                Column(
+                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+                ) {
+                    Text(
+                        stringResource(R.string.about_links_title),
+                        style = MaterialTheme.typography.titleSmall,
+                    )
+                    AppButton(
+                        text = stringResource(R.string.about_home_page),
+                        variant = AppButtonVariant.Ghost,
+                        leadingIcon = Icons.Default.Public,
+                        onClick = { uriHandler.openUri("https://inventoveritas.mine.nu/index.html") },
+                    )
+                    AppButton(
+                        text = stringResource(R.string.about_privacy_policy),
+                        variant = AppButtonVariant.Ghost,
+                        leadingIcon = Icons.Default.Shield,
+                        onClick = { uriHandler.openUri("https://inventoveritas.mine.nu/privacy.html") },
                     )
                 }
             }

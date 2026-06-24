@@ -1,5 +1,7 @@
 package com.onlytechtake.repairapp.domain.workspace
 
+import android.content.Context
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 
@@ -50,15 +52,16 @@ object OrderStatusPolicy {
     fun requiresClosureReason(to: OrderStatus): Boolean = to == OrderStatus.CLOSED
 
     fun requireAllowed(
+        context: Context,
         from: OrderStatus,
         to: OrderStatus,
         closureReason: ClosureReason? = null,
     ) {
         require(to in allowedTargets(from)) {
-            "Transizione stato non valida: ${from.name} -> ${to.name}"
+            "Invalid status transition: ${from.name} -> ${to.name}"
         }
         require(!requiresClosureReason(to) || (closureReason != null)) {
-            "Motivo chiusura obbligatorio"
+            context.getString(R.string.error_closure_reason_required)
         }
     }
 }

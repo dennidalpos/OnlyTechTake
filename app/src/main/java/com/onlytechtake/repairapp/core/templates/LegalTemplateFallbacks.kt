@@ -2,8 +2,8 @@ package com.onlytechtake.repairapp.core.templates
 
 object LegalTemplateFallbacks {
     const val PrivacyText =
-        "Informativa privacy sintetica GDPR: i dati sono trattati per presa in carico, diagnosi, preventivo, riparazione, consegna, comunicazioni operative e obblighi di legge. Il cliente puo' esercitare i diritti previsti dal GDPR e proporre reclamo al Garante."
+        "Summary GDPR Privacy Notice: Data is processed for intake, diagnosis, quote, repair, delivery, operational communications, and legal obligations. Customers may exercise their GDPR rights and lodge a complaint with the Data Protection Authority."
 
     const val TermsText =
-        "Il cliente autorizza presa in carico, custodia e diagnosi tecnica dell'oggetto. Ogni riparazione con preventivo viene eseguita solo dopo conferma del cliente."
+        "The customer authorizes the intake, custody, and technical diagnosis of the object. Any repair with an estimated cost is performed only after customer confirmation."
 }

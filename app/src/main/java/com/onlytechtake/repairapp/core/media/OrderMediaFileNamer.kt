@@ -1,11 +1,15 @@
 package com.onlytechtake.repairapp.core.media
 
+import android.content.Context
+import com.onlytechtake.repairapp.R
+
 class OrderMediaFileNamer {
     fun photoFileName(
+        context: Context,
         orderNumber: String,
         timestampMillis: Long,
     ): String {
-        val safeOrderNumber = sanitize(orderNumber).ifBlank { "commessa" }
+        val safeOrderNumber = sanitize(orderNumber).ifBlank { context.getString(R.string.label_order_fallback) }
         return "${safeOrderNumber}_$timestampMillis.jpg"
     }
 

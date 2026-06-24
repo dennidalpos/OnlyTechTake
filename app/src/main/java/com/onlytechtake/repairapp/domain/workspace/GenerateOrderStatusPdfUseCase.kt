@@ -81,7 +81,7 @@ class GenerateOrderStatusPdfUseCase(
             val fileName = "stato-avanzamento-${detail.order.orderNumber}-$now.pdf"
             val file = fileStorage.getDocumentFile(orderId, fileName)
 
-            pdfGenerator.generate(file, payload)
+            pdfGenerator.generate(context, file, payload)
 
             val entity =
                 OrderDocumentEntity(

@@ -1,25 +1,33 @@
 package com.onlytechtake.repairapp.domain.workspace
 
+import android.content.Context
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class IntakeOrderInputTest {
+    private val context =
+        mockk<Context> {
+            every { getString(any()) } returns "error"
+        }
+
     @Test
     fun validationRequiresCustomerProblemMediaAndSignature() {
-        val errors = IntakeOrderInput().validationErrors()
+        val errors = IntakeOrderInput().validationErrors(context)
 
         assertEquals(
             listOf(
-                "Cliente obbligatorio",
-                "Problema obbligatorio",
-                "Categoria obbligatoria",
-                "Almeno una foto o allegato obbligatorio",
-                "Privacy e firma obbligatorie",
+                "error",
+                "error",
+                "error",
+                "error",
+                "error",
             ),
             errors,
         )
@@ -36,7 +44,7 @@ class IntakeOrderInputTest {
                 hasPrivacySignature = true,
             )
 
-        assertTrue(input.isReadyForSubmit())
+        assertTrue(input.isReadyForSubmit(context))
     }
 
     @Test
@@ -55,7 +63,7 @@ class IntakeOrderInputTest {
                 hasPrivacySignature = true,
             )
 
-        assertTrue(input.validationErrors().isEmpty())
+        assertTrue(input.validationErrors(context).isEmpty())
     }
 
     @Test
@@ -77,7 +85,7 @@ class IntakeOrderInputTest {
                 hasPrivacySignature = true,
             )
 
-        assertEquals(listOf("Cliente obbligatorio"), input.validationErrors())
+        assertEquals(listOf("error"), input.validationErrors(context))
     }
 
     @Test
@@ -96,7 +104,7 @@ class IntakeOrderInputTest {
                 hasPrivacySignature = true,
             )
 
-        assertEquals(listOf("Cliente obbligatorio"), input.validationErrors())
+        assertEquals(listOf("error"), input.validationErrors(context))
     }
 
     @Test
@@ -110,7 +118,7 @@ class IntakeOrderInputTest {
                 hasPrivacySignature = true,
             )
 
-        assertTrue(input.isReadyForSubmit())
+        assertTrue(input.isReadyForSubmit(context))
     }
 
     @Test

@@ -46,6 +46,7 @@ class AuthContainer(
 
     val authRepository: AuthRepository by lazy {
         DefaultAuthRepository(
+            context = context,
             userDao = dataContainer.database.userDao(),
             auditLogDao = dataContainer.database.auditLogDao(),
             loginAttemptDao = dataContainer.database.loginAttemptDao(),
@@ -99,6 +100,7 @@ class MediaContainer(
 
     val orderDocumentRepository: OrderDocumentRepository by lazy {
         DefaultOrderDocumentRepository(
+            context = context,
             dao = dataContainer.database.orderDocumentDao(),
             fileCleanupService = orderFileCleanupService,
         )

@@ -452,7 +452,7 @@ private fun DashboardScreenPreview() {
         DashboardScreen(
             summary =
                 AppSummary(
-                    title = "Banco Riparazioni",
+                    title = "OnlyTechTake",
                     userCount = 1,
                     customerCount = 10,
                     activeOrderCount = 5,

@@ -1,5 +1,7 @@
 package com.onlytechtake.repairapp.core.media
 
+import android.content.Context
+import com.onlytechtake.repairapp.R
 import java.util.Locale
 
 class AttachmentImportPolicy(
@@ -12,16 +14,17 @@ class AttachmentImportPolicy(
     }
 
     fun requireAllowed(
+        context: Context,
         rawMimeType: String?,
         declaredSizeBytes: Long?,
     ) {
         val mimeType = normalize(rawMimeType)
-        require(mimeType.isNotBlank()) { "Tipo allegato non riconosciuto" }
-        require(mimeType in allowedMimeTypes) { "Tipo allegato non consentito: $mimeType" }
+        require(mimeType.isNotBlank()) { context.getString(R.string.error_unrecognized_attachment_type) }
+        require(mimeType in allowedMimeTypes) { context.getString(R.string.error_attachment_type_not_allowed, mimeType) }
 
         if (declaredSizeBytes != null && declaredSizeBytes >= 0L) {
             require(declaredSizeBytes <= maxSizeBytes) {
-                "Allegato troppo grande: massimo ${maxSizeBytes.toMiBLabel()}"
+                context.getString(R.string.error_attachment_too_large, maxSizeBytes.toMiBLabel(context))
             }
         }
     }
@@ -58,9 +61,9 @@ class AttachmentImportPolicy(
     }
 }
 
-fun Long.toMiBLabel(): String =
+fun Long.toMiBLabel(context: Context): String =
     if (this < 1024L * 1024L) {
-        "$this bytes"
+        "$this ${context.getString(R.string.label_bytes)}"
     } else {
         "${this / (1024L * 1024L)} MiB"
     }

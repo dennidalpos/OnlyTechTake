@@ -155,6 +155,7 @@ class GenerateOrderStatusPdfUseCaseDemoTest {
             private set
 
         override fun generate(
+            context: Context,
             outputFile: File,
             payload: OrderStatusPdfPayload,
         ): File {

@@ -45,8 +45,8 @@ class TemplateRendererTest {
     @Test
     fun templateAnchorsExposeStepMetadataForSettingsWorkflow() {
         assertEquals(1, TemplateAnchor.WHATSAPP_INTAKE.stepNumber)
-        assertEquals("Ingresso", TemplateAnchor.WHATSAPP_INTAKE.stepName)
+        assertEquals(com.onlytechtake.repairapp.R.string.anchor_step_intake, TemplateAnchor.WHATSAPP_INTAKE.stepNameRes)
         assertEquals(0, TemplateAnchor.PRIVACY_TEXT.stepNumber)
-        assertEquals("Legale", TemplateAnchor.PRIVACY_TEXT.stepName)
+        assertEquals(com.onlytechtake.repairapp.R.string.anchor_step_legal, TemplateAnchor.PRIVACY_TEXT.stepNameRes)
     }
 }

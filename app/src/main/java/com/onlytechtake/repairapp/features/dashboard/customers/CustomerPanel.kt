@@ -69,10 +69,13 @@ import com.onlytechtake.repairapp.core.design.components.AppVerticalDivider
 import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
 import com.onlytechtake.repairapp.core.design.components.StandardCard
+import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
+import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
 import com.onlytechtake.repairapp.features.dashboard.common.CustomerTypeToggle
@@ -840,16 +843,30 @@ fun OrderSummaryRow(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Column {
+            Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.tinyGap)) {
                 Text(
                     text = "${item.order.orderNumber}: ${item.order.title}",
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
                 )
-                Text(
-                    text = item.order.status.label(LocalContext.current),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary,
+                val status = item.order.status
+                val containerColor =
+                    when (status) {
+                        OrderStatus.CLOSED -> MaterialTheme.colorScheme.errorContainer
+                        OrderStatus.OPEN -> MaterialTheme.colorScheme.secondaryContainer
+                        else -> MaterialTheme.repairColors.warningContainer
+                    }
+                val contentColor =
+                    when (status) {
+                        OrderStatus.CLOSED -> MaterialTheme.colorScheme.onErrorContainer
+                        OrderStatus.OPEN -> MaterialTheme.colorScheme.onSecondaryContainer
+                        else -> MaterialTheme.repairColors.onWarningContainer
+                    }
+
+                AppStatusBadge(
+                    text = status.label(LocalContext.current),
+                    containerColor = containerColor,
+                    contentColor = contentColor,
                 )
             }
             Icon(

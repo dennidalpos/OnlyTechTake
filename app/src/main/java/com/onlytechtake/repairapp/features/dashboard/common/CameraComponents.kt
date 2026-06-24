@@ -13,16 +13,22 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -31,6 +37,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppButton
@@ -124,20 +131,30 @@ fun CameraCapturePreview(
         }
     }
 
-    Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
-        AndroidView(
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Box(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .height(280.dp),
-            factory = { previewView },
-        )
+                    .aspectRatio(1f)
+                    .clip(RepairAppShapes.card),
+        ) {
+            AndroidView(
+                modifier = Modifier.fillMaxSize(),
+                factory = { previewView },
+            )
+        }
         AppButton(
             modifier =
                 Modifier
                     .fillMaxWidth()
                     .testTag(RepairAppTestTags.IntakeMediaCapturePhotoButton),
             text = stringResource(R.string.camera_capture_photo),
+            leadingIcon = Icons.Default.PhotoCamera,
             onClick = {
                 imageCapture.targetRotation = cameraTargetRotation(context, previewView)
                 createPhotoFile(orderId, orderNumber).fold(

@@ -7,8 +7,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.SettingsBackupRestore
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -46,7 +50,7 @@ fun AnchorStepHeader(anchor: TemplateAnchor) {
             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
         )
         Text(
-            text = anchor.stepName,
+            text = stringResource(anchor.stepNameRes),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -74,7 +78,7 @@ fun AnchorSelectionDialog(
                         .fillMaxWidth(),
             ) {
                 Text(
-                    text = stringResource(R.string.config_template_associate_with, anchor.label),
+                    text = stringResource(R.string.config_template_associate_with, stringResource(anchor.labelRes)),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                 )
@@ -89,15 +93,24 @@ fun AnchorSelectionDialog(
                             onClick = { onSelect(anchor.defaultCode) },
                             highlight = (currentMapping == null || currentMapping == anchor.defaultCode),
                         ) {
-                            Text(
-                                text =
-                                    stringResource(
+                            Row(
+                                modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.SettingsBackupRestore,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.outline
+                                )
+                                Spacer(modifier = Modifier.width(RepairAppSpacing.compactGap))
+                                Text(
+                                    text = stringResource(
                                         R.string.config_template_default_label,
                                         anchor.defaultCode,
                                     ),
-                                modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
+                                    style = MaterialTheme.typography.bodyMedium,
+                                )
+                            }
                         }
                     }
 

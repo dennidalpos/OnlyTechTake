@@ -6,7 +6,7 @@ import com.onlytechtake.repairapp.data.repositories.DefaultRepairAppRepository
 import com.onlytechtake.repairapp.domain.repositories.RepairAppRepository
 
 class AppContainer(
-    context: Context,
+    val context: Context,
 ) {
     private val dataContainer = DataContainer(context)
     private val authContainer by lazy { AuthContainer(context, dataContainer) }

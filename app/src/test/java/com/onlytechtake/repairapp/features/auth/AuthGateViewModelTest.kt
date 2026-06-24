@@ -1,9 +1,11 @@
 package com.onlytechtake.repairapp.features.auth
 
+import android.content.Context
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.auth.AuthState
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.auth.LoginResult
+import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -38,7 +40,7 @@ class AuthGateViewModelTest {
     fun logoutResetsLoadingState() =
         runTest {
             val fakeRepo = FakeAuthRepository()
-            val viewModel = AuthGateViewModel(fakeRepo)
+            val viewModel = AuthGateViewModel(mockk(relaxed = true), fakeRepo)
 
             // Logout resets the form state including loading
             viewModel.logout()

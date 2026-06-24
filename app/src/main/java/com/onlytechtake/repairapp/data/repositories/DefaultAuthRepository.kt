@@ -1,5 +1,7 @@
 package com.onlytechtake.repairapp.data.repositories
 
+import android.content.Context
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
@@ -30,6 +32,7 @@ import java.util.UUID
 import kotlin.time.Duration.Companion.milliseconds
 
 class DefaultAuthRepository(
+    private val context: Context,
     private val userDao: UserDao,
     private val auditLogDao: AuditLogDao,
     private val loginAttemptDao: LoginAttemptDao,
@@ -72,7 +75,7 @@ class DefaultAuthRepository(
             emit(
                 AuthState(
                     initialized = true,
-                    initializationError = e.message ?: "Errore critico database",
+                    initializationError = e.message ?: context.getString(R.string.error_critical_db_error),
                 ),
             )
         }.onStart {
@@ -86,11 +89,11 @@ class DefaultAuthRepository(
         password: CharArray,
     ): AuthenticatedUser {
         check(userDao.observeCountByRole(UserRole.ADMIN).first() == 0) {
-            "First admin already exists"
+            context.getString(R.string.error_first_admin_exists)
         }
-        require(displayName.isNotBlank()) { "Display name is required" }
-        require(username.isNotBlank()) { "Username is required" }
-        require(password.size >= AuthPolicy.MIN_PASSWORD_LENGTH) { "Password too short" }
+        require(displayName.isNotBlank()) { context.getString(R.string.error_name_required) }
+        require(username.isNotBlank()) { context.getString(R.string.error_username_required) }
+        require(password.size >= AuthPolicy.MIN_PASSWORD_LENGTH) { context.getString(R.string.error_password_too_short) }
 
         try {
             val passwordHash = passwordHasher.hash(password)
@@ -190,7 +193,7 @@ class DefaultAuthRepository(
         val demoUser =
             AuthenticatedUser(
                 id = "admin",
-                displayName = "Demo Admin",
+                displayName = context.getString(R.string.label_demo_admin),
                 username = "admin",
                 role = UserRole.ADMIN,
                 permissions =
@@ -208,11 +211,11 @@ class DefaultAuthRepository(
         newPassword: CharArray,
     ): Result<Unit> =
         runCatching {
-            val user = requireNotNull(userDao.findByUsername(username)) { "Utente non trovato" }
+            val user = requireNotNull(userDao.findByUsername(username)) { context.getString(R.string.error_user_not_found) }
             val matches =
                 passwordHasher.verify(currentPassword, user.passwordHash, user.passwordSalt)
-            require(matches) { "Password attuale non corretta" }
-            require(newPassword.size >= AuthPolicy.MIN_PASSWORD_LENGTH) { "Nuova password troppo corta" }
+            require(matches) { context.getString(R.string.error_current_password_incorrect) }
+            require(newPassword.size >= AuthPolicy.MIN_PASSWORD_LENGTH) { context.getString(R.string.error_new_password_too_short) }
 
             val newHash = passwordHasher.hash(newPassword)
             val now = clockMillis()
@@ -271,22 +274,22 @@ class DefaultAuthRepository(
         runCatching {
             val hashSetting =
                 appSettingDao.findByKey("master_recovery_code_hash") ?: throw IllegalStateException(
-                    "Recovery Kit non configurato",
+                    context.getString(R.string.error_recovery_kit_not_configured),
                 )
             val saltSetting =
                 appSettingDao.findByKey("master_recovery_code_salt") ?: throw IllegalStateException(
-                    "Recovery Kit non configurato",
+                    context.getString(R.string.error_recovery_kit_not_configured),
                 )
 
             val matches =
                 passwordHasher.verify(code.toCharArray(), hashSetting.value, saltSetting.value)
-            require(matches) { "Codice di recupero non valido" }
-            require(newPassword.size >= AuthPolicy.MIN_PASSWORD_LENGTH) { "Nuova password troppo corta" }
+            require(matches) { context.getString(R.string.error_recovery_code_invalid) }
+            require(newPassword.size >= AuthPolicy.MIN_PASSWORD_LENGTH) { context.getString(R.string.error_new_password_too_short) }
 
             // Find all admins and reset their password, or just the first one?
             // Let's reset all admins to the new password to be sure.
             val admins = userDao.findAllAdmins()
-            require(admins.isNotEmpty()) { "Nessun account admin trovato" }
+            require(admins.isNotEmpty()) { context.getString(R.string.error_no_admin_found) }
 
             val newHash = passwordHasher.hash(newPassword)
             val now = clockMillis()

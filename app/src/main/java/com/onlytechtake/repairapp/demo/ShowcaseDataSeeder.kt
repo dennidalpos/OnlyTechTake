@@ -7,8 +7,10 @@ import android.graphics.Color
 import android.graphics.Paint
 import androidx.core.graphics.createBitmap
 import androidx.room.withTransaction
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.security.PasswordHasher
+import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
@@ -68,7 +70,7 @@ object ShowcaseDataSeeder {
                 listOf(
                     UserEntity(
                         id = "op-reception",
-                        displayName = "Anna Receptionist",
+                        displayName = context.getString(R.string.showcase_op_reception),
                         username = "anna.reception",
                         passwordHash = pwdHash.hash,
                         passwordSalt = pwdHash.salt,
@@ -86,7 +88,7 @@ object ShowcaseDataSeeder {
                     ),
                     UserEntity(
                         id = "op-technician",
-                        displayName = "Marco Tecnico",
+                        displayName = context.getString(R.string.showcase_op_technician),
                         username = "marco.tech",
                         passwordHash = pwdHash.hash,
                         passwordSalt = pwdHash.salt,
@@ -103,7 +105,7 @@ object ShowcaseDataSeeder {
                     ),
                     UserEntity(
                         id = "op-manager",
-                        displayName = "Elena Manager",
+                        displayName = context.getString(R.string.showcase_op_manager),
                         username = "elena.manager",
                         passwordHash = pwdHash.hash,
                         passwordSalt = pwdHash.salt,
@@ -121,7 +123,7 @@ object ShowcaseDataSeeder {
                     ),
                     UserEntity(
                         id = "admin-showcase",
-                        displayName = "Admin Showcase",
+                        displayName = context.getString(R.string.showcase_admin),
                         username = "admin",
                         passwordHash = pwdHash.hash,
                         passwordSalt = pwdHash.salt,
@@ -142,8 +144,8 @@ object ShowcaseDataSeeder {
                         "cat-smartphone",
                         null,
                         0,
-                        "Smartphone",
-                        "Riparazione telefoni cellulari",
+                        context.getString(R.string.showcase_cat_smartphone),
+                        context.getString(R.string.showcase_cat_smartphone_desc),
                         true,
                     ),
                     OrderCategoryEntity(
@@ -151,7 +153,7 @@ object ShowcaseDataSeeder {
                         "cat-smartphone",
                         1,
                         "Apple",
-                        "Dispositivi iOS",
+                        context.getString(R.string.showcase_cat_apple_desc),
                         true,
                     ),
                     OrderCategoryEntity(
@@ -159,7 +161,7 @@ object ShowcaseDataSeeder {
                         "cat-apple",
                         2,
                         "iPhone",
-                        "Tutti i modelli iPhone",
+                        context.getString(R.string.showcase_cat_iphone_desc),
                         true,
                     ),
                     OrderCategoryEntity(
@@ -167,7 +169,7 @@ object ShowcaseDataSeeder {
                         "cat-iphone",
                         3,
                         "iPhone 14 Pro",
-                        "Riparazione display e vetro posteriore",
+                        context.getString(R.string.showcase_cat_iphone_14_pro_desc),
                         true,
                     ),
                     OrderCategoryEntity(
@@ -175,7 +177,7 @@ object ShowcaseDataSeeder {
                         "cat-iphone",
                         3,
                         "iPhone 13",
-                        "Sostituzione batteria e connettore",
+                        context.getString(R.string.showcase_cat_iphone_13_desc),
                         true,
                     ),
                     OrderCategoryEntity(
@@ -183,15 +185,15 @@ object ShowcaseDataSeeder {
                         "cat-smartphone",
                         1,
                         "Samsung",
-                        "Dispositivi Android Galaxy",
+                        context.getString(R.string.showcase_cat_samsung_desc),
                         true,
                     ),
                     OrderCategoryEntity(
                         "cat-galaxy-s",
                         "cat-samsung",
                         2,
-                        "Serie Galaxy S",
-                        "Fascia alta Samsung",
+                        context.getString(R.string.showcase_cat_galaxy_s),
+                        context.getString(R.string.showcase_cat_galaxy_s_desc),
                         true,
                     ),
                     OrderCategoryEntity(
@@ -199,7 +201,7 @@ object ShowcaseDataSeeder {
                         "cat-galaxy-s",
                         3,
                         "S23 Ultra",
-                        "Riparazione schermo curvo e S-Pen",
+                        context.getString(R.string.showcase_cat_s23_ultra_desc),
                         true,
                     ),
                     // Computer branch (4 levels)
@@ -207,8 +209,8 @@ object ShowcaseDataSeeder {
                         "cat-pc",
                         null,
                         0,
-                        "Computer & Laptop",
-                        "Riparazioni hardware e software PC",
+                        context.getString(R.string.showcase_cat_pc),
+                        context.getString(R.string.showcase_cat_pc_desc),
                         true,
                     ),
                     OrderCategoryEntity(
@@ -216,15 +218,15 @@ object ShowcaseDataSeeder {
                         "cat-pc",
                         1,
                         "Notebook",
-                        "Portatili e Ultrabook",
+                        context.getString(R.string.showcase_cat_notebook_desc),
                         true,
                     ),
                     OrderCategoryEntity(
                         "cat-gaming-laptop",
                         "cat-notebook",
                         2,
-                        "Gaming Laptop",
-                        "MSI, ROG, Alienware, Legion",
+                        context.getString(R.string.showcase_cat_gaming_laptop),
+                        context.getString(R.string.showcase_cat_gaming_laptop_desc),
                         true,
                     ),
                     OrderCategoryEntity(
@@ -232,15 +234,15 @@ object ShowcaseDataSeeder {
                         "cat-gaming-laptop",
                         3,
                         "Asus ROG Strix",
-                        "Pulizia interna e pasta termica",
+                        context.getString(R.string.showcase_cat_rog_strix_desc),
                         true,
                     ),
                     OrderCategoryEntity(
                         "cat-windows-laptop",
                         "cat-notebook",
                         2,
-                        "Windows Laptop",
-                        "Asus, HP, Lenovo, Dell",
+                        context.getString(R.string.showcase_cat_windows_laptop),
+                        context.getString(R.string.showcase_cat_windows_laptop_desc),
                         true,
                     ),
                     OrderCategoryEntity(
@@ -248,7 +250,7 @@ object ShowcaseDataSeeder {
                         "cat-windows-laptop",
                         3,
                         "Asus Zenbook OLED",
-                        "Riparazione cerniere e display",
+                        context.getString(R.string.showcase_cat_asus_zenbook_desc),
                         true,
                     ),
                     // Console branch (4 levels)
@@ -256,8 +258,8 @@ object ShowcaseDataSeeder {
                         "cat-console",
                         null,
                         0,
-                        "Console Game",
-                        "Riparazioni PlayStation, Xbox, Switch",
+                        context.getString(R.string.showcase_cat_console),
+                        context.getString(R.string.showcase_cat_console_desc),
                         true,
                     ),
                     OrderCategoryEntity(
@@ -265,7 +267,7 @@ object ShowcaseDataSeeder {
                         "cat-console",
                         1,
                         "Sony",
-                        "Ecosistema PlayStation",
+                        context.getString(R.string.showcase_cat_sony_desc),
                         true,
                     ),
                     OrderCategoryEntity(
@@ -273,15 +275,15 @@ object ShowcaseDataSeeder {
                         "cat-sony",
                         2,
                         "PlayStation 5",
-                        "Revisione e riparazione PS5",
+                        context.getString(R.string.showcase_cat_ps5_desc),
                         true,
                     ),
                     OrderCategoryEntity(
                         "cat-ps5-hdmi",
                         "cat-ps5",
                         3,
-                        "Sostituzione Porta HDMI",
-                        "Sostituzione connettore video 4K",
+                        context.getString(R.string.showcase_cat_ps5_hdmi),
+                        context.getString(R.string.showcase_cat_ps5_hdmi_desc),
                         true,
                     ),
                     OrderCategoryEntity(
@@ -289,7 +291,7 @@ object ShowcaseDataSeeder {
                         "cat-ps5",
                         3,
                         "DualSense Controller",
-                        "Riparazione Analogico Drift e Tasti",
+                        context.getString(R.string.showcase_cat_dualsense_desc),
                         true,
                     ),
                     OrderCategoryEntity(
@@ -297,24 +299,24 @@ object ShowcaseDataSeeder {
                         null,
                         0,
                         "Tablet",
-                        "Riparazioni iPad e Android",
+                        context.getString(R.string.showcase_cat_tablet_desc),
                         true,
                     ),
-                    OrderCategoryEntity("cat-ipad", "cat-tablet", 1, "iPad", "Tablet Apple", true),
+                    OrderCategoryEntity("cat-ipad", "cat-tablet", 1, "iPad", context.getString(R.string.showcase_cat_ipad_desc), true),
                     OrderCategoryEntity(
                         "cat-ipad-pro",
                         "cat-ipad",
                         2,
                         "iPad Pro",
-                        "Modelli 11\" e 12.9\"",
+                        context.getString(R.string.showcase_cat_ipad_pro_desc),
                         true,
                     ),
                     OrderCategoryEntity(
                         "cat-ipad-glass",
                         "cat-ipad-pro",
                         3,
-                        "Sostituzione Vetro/LCD",
-                        "Riparazione pannello touch",
+                        context.getString(R.string.showcase_cat_ipad_glass),
+                        context.getString(R.string.showcase_cat_ipad_glass_desc),
                         true,
                     ),
                 )
@@ -341,7 +343,7 @@ object ShowcaseDataSeeder {
                         phone = "+39 333 100 200$i",
                         email = "customer.p$i@example.com",
                         address = "Via Roma $i, Milano",
-                        notes = "Cliente privato di test.",
+                        notes = context.getString(R.string.showcase_customer_notes),
                         createdAt = now - (i * 86400000L),
                         updatedAt = now - (i * 86400000L),
                     )
@@ -358,18 +360,18 @@ object ShowcaseDataSeeder {
                         lastName = null,
                         companyName =
                             listOf(
-                                "Tech Solutions Srl",
-                                "Global Food SpA",
-                                "Studio Legale Rossi",
-                                "Officina Meccanica",
-                                "Bar Centrale",
+                                context.getString(R.string.showcase_business_name_1),
+                                context.getString(R.string.showcase_business_name_2),
+                                context.getString(R.string.showcase_business_name_3),
+                                context.getString(R.string.showcase_business_name_4),
+                                context.getString(R.string.showcase_business_name_5),
                             )[i - 1],
                         vatNumber = "0123456789$i",
                         taxCode = "BCN${UUID.randomUUID().toString().take(13)}",
                         phone = "+39 02 555 666$i",
                         email = "info@business$i.example.com",
                         address = "Piazza Affari $i, Milano",
-                        notes = "Cliente aziendale di test.",
+                        notes = context.getString(R.string.showcase_customer_notes),
                         createdAt = now - (i * 86400000L),
                         updatedAt = now - (i * 86400000L),
                     )
@@ -396,26 +398,27 @@ object ShowcaseDataSeeder {
                         selectableCategories[(orderCount % selectableCategories.size)].id
                     val operatorId = operators[(orderCount % 3)].id
 
+                    val repairType =
+                        listOf(
+                            "PC",
+                            "Smartphone",
+                            "Tablet",
+                            "Console",
+                        )[orderCount % 4]
+
                     val order =
                         RepairOrderEntity(
                             id = orderId,
                             orderNumber = "2026-${orderCount.toString().padStart(4, '0')}",
                             customerId = customer.id,
-                            title = "Riparazione ${
-                                listOf(
-                                    "PC",
-                                    "Smartphone",
-                                    "Tablet",
-                                    "Console",
-                                )[orderCount % 4]
-                            } - Modello $j",
+                            title = context.getString(R.string.showcase_order_title, repairType, j),
                             categoryId = categoryId,
                             status = status,
                             priority = OrderPriority.NORMAL,
                             assignedToUserId = operatorId,
                             createdByUserId = "op-reception",
-                            description = "Problema riscontrato: il dispositivo non funziona correttamente.",
-                            internalNotes = "Nota interna di test.",
+                            description = context.getString(R.string.showcase_order_description),
+                            internalNotes = context.getString(R.string.showcase_order_internal_notes),
                             estimateAmountCents = if (isClosed) 5000L else null,
                             finalAmountCents = if (isClosed) 4500L else null,
                             diagnosisOutcome = if (isClosed) DiagnosisOutcome.REPAIRABLE else null,
@@ -432,8 +435,8 @@ object ShowcaseDataSeeder {
                             id = "event-$orderId-init",
                             orderId = orderId,
                             type = TimelineEventType.ORDER_CREATED,
-                            title = "Presa in carico",
-                            description = "Dispositivo ricevuto al banco.",
+                            title = context.getString(R.string.order_created_title),
+                            description = context.getString(R.string.showcase_event_intake_desc),
                             oldStatus = null,
                             newStatus = OrderStatus.OPEN.name,
                             visibleToCustomer = true,
@@ -453,8 +456,8 @@ object ShowcaseDataSeeder {
                                 id = "event-$orderId-closed",
                                 orderId = orderId,
                                 type = TimelineEventType.STATUS_CHANGED,
-                                title = "Commessa Chiusa",
-                                description = "Riparazione completata e consegnata.",
+                                title = context.getString(R.string.status_closed),
+                                description = context.getString(R.string.showcase_event_closed_desc),
                                 oldStatus = OrderStatus.READY_FOR_PICKUP.name,
                                 newStatus = OrderStatus.CLOSED.name,
                                 visibleToCustomer = true,
@@ -474,7 +477,7 @@ object ShowcaseDataSeeder {
                         writeDemoBitmap(
                             directory = mediaStorageProvider.getOrderMediaDir(orderId),
                             fileName = "photo-$orderId.png",
-                            label = "Oggetto: ${order.title}",
+                            label = context.getString(R.string.showcase_photo_label, order.title),
                             backgroundColor = Color.LTGRAY,
                             paint = paint,
                         )
@@ -500,7 +503,7 @@ object ShowcaseDataSeeder {
                         writeDemoBitmap(
                             directory = mediaStorageProvider.getOrderSignaturesDir(orderId),
                             fileName = "sig-$orderId.png",
-                            label = "Firma: ${customer.firstName ?: customer.companyName}",
+                            label = context.getString(R.string.showcase_sig_label, customer.firstName ?: customer.companyName),
                             backgroundColor = Color.WHITE,
                             paint = paint,
                         )
@@ -508,12 +511,12 @@ object ShowcaseDataSeeder {
                         SignatureEntity(
                             id = "sig-$orderId",
                             orderId = orderId,
-                            signerName = customer.firstName ?: customer.companyName ?: "Cliente",
+                            signerName = customer.firstName ?: customer.companyName ?: context.getString(R.string.signature_default_signer),
                             privacyAccepted = true,
                             termsAccepted = true,
-                            privacyTextSnapshot = "Informativa Privacy Standard",
+                            privacyTextSnapshot = context.getString(R.string.showcase_privacy_snapshot),
                             privacyTemplateVersion = 1,
-                            termsTextSnapshot = "Termini e Condizioni di Riparazione",
+                            termsTextSnapshot = context.getString(R.string.showcase_terms_snapshot),
                             termsTemplateVersion = 1,
                             localPath = sigFile.absolutePath,
                             fileName = sigFile.name,
@@ -534,18 +537,28 @@ object ShowcaseDataSeeder {
             // 6. Create Default Templates
             val templates =
                 listOf(
-                    "privacy" to "Informativa privacy",
-                    "terms" to "Condizioni presa in carico",
-                    "whatsapp_presa_in_carico" to "Presa in carico",
-                    "whatsapp_lavorazione" to "Aggiornamento lavorazione",
-                    "whatsapp_pronto_ritiro" to "Pronto ritiro",
-                ).mapIndexed { index, (code, title) ->
+                    "privacy_breve" to context.getString(R.string.template_privacy_breve_title) to context.getString(R.string.template_privacy_breve_body),
+                    "condizioni_presa_in_carico" to context.getString(R.string.template_condizioni_title) to context.getString(R.string.template_condizioni_body),
+                    "whatsapp_presa_in_carico" to context.getString(R.string.template_wa_intake_title) to context.getString(R.string.template_wa_intake_body),
+                    "whatsapp_aggiornamento" to context.getString(R.string.template_wa_update_title) to context.getString(R.string.template_wa_update_body),
+                    "whatsapp_diagnosi" to context.getString(R.string.template_wa_diagnosis_title) to context.getString(R.string.template_wa_diagnosis_body),
+                    "whatsapp_risultato" to context.getString(R.string.template_wa_result_title) to context.getString(R.string.template_wa_result_body),
+                    "whatsapp_preventivo_intervento" to context.getString(R.string.template_wa_quote_title) to context.getString(R.string.template_wa_quote_body),
+                    "whatsapp_non_riparabile" to context.getString(R.string.template_wa_not_repairable_title) to context.getString(R.string.template_wa_not_repairable_body),
+                    "whatsapp_riparazione" to context.getString(R.string.template_wa_repairing_title) to context.getString(R.string.template_wa_repairing_body),
+                    "whatsapp_lavorazione" to context.getString(R.string.template_wa_lavorazione_title) to context.getString(R.string.template_wa_lavorazione_body),
+                    "whatsapp_completamento" to context.getString(R.string.template_wa_completamento_title) to context.getString(R.string.template_wa_completamento_body),
+                    "whatsapp_pronto_ritiro" to context.getString(R.string.template_wa_ready_title) to context.getString(R.string.template_wa_ready_body),
+                    "whatsapp_stato_avanzamento_pdf" to context.getString(R.string.template_wa_pdf_status_title) to context.getString(R.string.template_wa_pdf_status_body),
+                ).mapIndexed { index, pair ->
+                    val (codeTitle, body) = pair
+                    val (code, title) = codeTitle
                     MessageTemplateEntity(
                         id = "template-$index",
                         code = code,
                         title = title,
                         channel = MessageChannel.WHATSAPP,
-                        body = "Ciao {{cliente}}, la tua commessa {{numero_commessa}} è ora in stato {{stato_commessa}}.",
+                        body = body,
                         active = true,
                         version = 1,
                         updatedByUserId = "admin-showcase",

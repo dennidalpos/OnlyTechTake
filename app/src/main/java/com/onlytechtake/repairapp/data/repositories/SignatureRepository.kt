@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.data.repositories
 
 import android.content.Context
 import android.graphics.Bitmap
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.templates.LegalTemplateFallbacks
@@ -40,16 +41,16 @@ class SignatureRepository(
         bitmap: Bitmap,
     ): Result<SignatureEntity> =
         runCatching {
-            val order = requireNotNull(repairOrderDao.findById(orderId)) { "Commessa non trovata" }
+            val order = requireNotNull(repairOrderDao.findById(orderId)) { context.getString(R.string.error_order_not_found) }
             if (order.assignedToUserId != actor.id) {
                 PermissionService.requirePermission(actor, UserPermission.EDIT_ALL_ORDERS)
             } else {
                 PermissionService.requirePermission(actor, UserPermission.EDIT_OWN_ORDERS)
             }
-            require(signatureDao.countForOrder(orderId) == 0) { "Firma gia' presente per questa commessa" }
-            require(privacyAccepted) { "Consenso privacy obbligatorio" }
-            require(termsAccepted) { "Accettazione condizioni obbligatoria" }
-            require(bitmap.width > 0 && bitmap.height > 0) { "Firma non valida" }
+            require(signatureDao.countForOrder(orderId) == 0) { context.getString(R.string.error_signature_exists) }
+            require(privacyAccepted) { context.getString(R.string.error_privacy_consent_required) }
+            require(termsAccepted) { context.getString(R.string.error_terms_acceptance_required) }
+            require(bitmap.width > 0 && bitmap.height > 0) { context.getString(R.string.error_invalid_signature) }
 
             val now = clockMillis()
             val privacyCode =
@@ -71,14 +72,14 @@ class SignatureRepository(
                         PNG_QUALITY,
                         output,
                     ),
-                ) { "Salvataggio firma non riuscito" }
+                ) { context.getString(R.string.error_signature_save_failed) }
             }
 
             val signature =
                 SignatureEntity(
                     id = UUID.randomUUID().toString(),
                     orderId = orderId,
-                    signerName = signerName.trim().ifBlank { DEFAULT_SIGNER_NAME },
+                    signerName = signerName.trim().ifBlank { context.getString(R.string.signature_default_signer) },
                     privacyAccepted = privacyAccepted,
                     termsAccepted = termsAccepted,
                     privacyTextSnapshot =

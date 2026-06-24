@@ -1,5 +1,7 @@
 package com.onlytechtake.repairapp.domain.workspace
 
+import android.content.Context
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
@@ -89,18 +91,18 @@ sealed interface IntakeOrderCreationResult {
     ) : IntakeOrderCreationResult
 }
 
-fun IntakeOrderInput.validationErrors(): List<String> =
+fun IntakeOrderInput.validationErrors(context: Context): List<String> =
     buildList {
         val hasExistingCustomer = !existingCustomerId.isNullOrBlank()
         val hasValidNewCustomer = newCustomer?.isValidForIntake() == true
-        if (!hasExistingCustomer && !hasValidNewCustomer) add("Cliente obbligatorio")
-        if (problemSummary.isBlank()) add("Problema obbligatorio")
-        if (categoryId.isNullOrBlank()) add("Categoria obbligatoria")
-        if (stagedMediaCount <= 0) add("Almeno una foto o allegato obbligatorio")
-        if (!hasPrivacySignature) add("Privacy e firma obbligatorie")
+        if (!hasExistingCustomer && !hasValidNewCustomer) add(context.getString(R.string.error_customer_required))
+        if (problemSummary.isBlank()) add(context.getString(R.string.error_problem_required))
+        if (categoryId.isNullOrBlank()) add(context.getString(R.string.error_category_required))
+        if (stagedMediaCount <= 0) add(context.getString(R.string.error_media_required))
+        if (!hasPrivacySignature) add(context.getString(R.string.error_privacy_required))
     }
 
-fun IntakeOrderInput.isReadyForSubmit(): Boolean = validationErrors().isEmpty()
+fun IntakeOrderInput.isReadyForSubmit(context: Context): Boolean = validationErrors(context).isEmpty()
 
 private fun CustomerInput.isValidForIntake(): Boolean {
     val hasContact = phone.isNotBlank() || email.isNotBlank()
@@ -174,10 +176,10 @@ data class FeedbackInput(
     val closureReason: ClosureReason? = null,
 )
 
-fun FeedbackInput.validationErrors(): List<String> =
+fun FeedbackInput.validationErrors(context: Context): List<String> =
     buildList {
         if ((feedback == CustomerFeedbackType.REJECT) && note.isBlank()) {
-            add("Motivo rifiuto obbligatorio")
+            add(context.getString(R.string.error_reject_reason_required))
         }
     }
 
@@ -187,11 +189,11 @@ data class DiagnosisResultInput(
     val estimateAmountCents: Long? = null,
 )
 
-fun DiagnosisResultInput.validationErrors(): List<String> =
+fun DiagnosisResultInput.validationErrors(context: Context): List<String> =
     buildList {
-        if (summary.isBlank()) add("Sintesi risultato obbligatoria")
+        if (summary.isBlank()) add(context.getString(R.string.error_result_summary_required))
         if ((diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) && ((estimateAmountCents == null) || (estimateAmountCents <= 0L))) {
-            add("Importo preventivo positivo obbligatorio")
+            add(context.getString(R.string.error_positive_estimate_required))
         }
     }
 

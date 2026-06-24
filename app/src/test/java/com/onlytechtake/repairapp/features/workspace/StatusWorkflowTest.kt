@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.features.workspace
 
+import android.content.Context
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
@@ -11,12 +12,19 @@ import com.onlytechtake.repairapp.domain.workspace.OrderStatusPolicy
 import com.onlytechtake.repairapp.domain.workspace.availableOrderStatusActions
 import com.onlytechtake.repairapp.domain.workspace.requiresConfirmation
 import com.onlytechtake.repairapp.domain.workspace.statusTemplateAnchor
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class StatusWorkflowTest {
+    private val context =
+        mockk<Context>(relaxed = true) {
+            every { getString(any()) } returns "error"
+        }
+
     @Test
     fun openOrderStartsWithProgressOrClose() {
         assertEquals(
@@ -55,7 +63,7 @@ class StatusWorkflowTest {
     @Test
     fun closingRequiresClosureReason() {
         assertThrows(IllegalArgumentException::class.java) {
-            OrderStatusPolicy.requireAllowed(OrderStatus.READY_FOR_PICKUP, OrderStatus.CLOSED)
+            OrderStatusPolicy.requireAllowed(context, OrderStatus.READY_FOR_PICKUP, OrderStatus.CLOSED)
         }
     }
 

@@ -110,6 +110,7 @@ fun OrdersPanel(
                             key = "order_detail_$selectedOrderId",
                             factory =
                                 OrderDetailViewModel.Factory(
+                                    context = container.context,
                                     orderId = selectedOrderId!!,
                                     authRepository = container.authRepository,
                                     orderRepository = container.orderWorkflowRepository,
@@ -360,7 +361,7 @@ private fun OrdersListContent(
                                     text =
                                         stringResource(
                                             R.string.orders_next_action_label,
-                                            nextActionLabel(order),
+                                            nextActionLabel(LocalContext.current, order),
                                         ),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.primary,

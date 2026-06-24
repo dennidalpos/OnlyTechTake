@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.data.repositories
 
 import android.content.Context
 import androidx.room.withTransaction
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
@@ -34,7 +35,9 @@ class DataResetRepository(
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.DELETE_DATA)
-            require(confirmation == RESET_CONFIRMATION) { "Digitare RESET per confermare" }
+            require(confirmation == RESET_CONFIRMATION) {
+                context.getString(R.string.error_type_reset_to_confirm, RESET_CONFIRMATION)
+            }
 
             withContext(Dispatchers.IO) {
                 eventWriter.dataReset(actor.id, System.currentTimeMillis())
@@ -66,7 +69,9 @@ class DataResetRepository(
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.DELETE_DATA)
-            require(confirmation == ORDERS_RESET_CONFIRMATION) { "Digitare CANCELLA TUTTO per confermare" }
+            require(confirmation == ORDERS_RESET_CONFIRMATION) {
+                context.getString(R.string.error_type_reset_to_confirm, ORDERS_RESET_CONFIRMATION)
+            }
 
             withContext(Dispatchers.IO) {
                 database.withTransaction {

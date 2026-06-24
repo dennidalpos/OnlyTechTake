@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.data.repositories
 
 import android.content.Context
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.orders.OrderNumberGenerator
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.CustomerDao
@@ -168,7 +169,7 @@ class OrderWorkflowRepository(
     ): Result<Unit> =
         runCatching {
             val sig =
-                requireNotNull(signatureDao.findById(signatureId)) { "Firma non trovata" }
+                requireNotNull(signatureDao.findById(signatureId)) { context.getString(R.string.error_signature_not_found) }
             if (sig.createdByUserId != actor.id) {
                 com.onlytechtake.repairapp.core.permissions.PermissionService.requirePermission(
                     actor,

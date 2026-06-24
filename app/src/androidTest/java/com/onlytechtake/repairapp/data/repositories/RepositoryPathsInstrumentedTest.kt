@@ -982,6 +982,7 @@ class RepositoryPathsInstrumentedTest {
 
     private fun authRepository(clockMillis: () -> Long): DefaultAuthRepository =
         DefaultAuthRepository(
+            context = context,
             userDao = database.userDao(),
             auditLogDao = database.auditLogDao(),
             loginAttemptDao = database.loginAttemptDao(),

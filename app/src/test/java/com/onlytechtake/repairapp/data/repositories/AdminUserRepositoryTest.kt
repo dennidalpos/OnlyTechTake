@@ -52,6 +52,8 @@ class AdminUserRepositoryTest {
                 )
 
             coEvery { userDao.findById("admin-1") } returns admin
+            every { context.getString(R.string.error_admin_cannot_be_deactivated) } returns
+                "L'account Admin non può essere disattivato"
 
             val result = repository.setActive(actor, "admin-1", false)
 

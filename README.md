@@ -19,15 +19,19 @@
 
 ## 📱 Overview
 
-**OnlyTechTake** è la soluzione definitiva "local-first" per la gestione di laboratori di riparazione smartphone e PC. Progettata per la massima privacy e velocità, l'app gestisce l'intero ciclo di vita delle commesse senza mai inviare dati sensibili al cloud.
+**OnlyTechTake** is the ultimate local-first management solution for smartphone and PC repair labs. Designed for maximum privacy and speed, the app handles the entire lifecycle of repair orders without ever sending sensitive data to the cloud.
+
+The app uses **English** as the default fallback language and includes full localization in **Italian**.
 
 ### ✨ Key Features
-- 🛠️ **Gestione Commesse**: Monitoraggio in tempo reale (Aperta, Diagnosi, In Lavorazione, Pronta, Chiusa).
-- 👤 **Anagrafica Clienti**: Database locale ottimizzato per ricerca rapida e storico riparazioni.
-- ✍️ **Firma Digitale**: Acquisizione legale della firma per accettazione e privacy direttamente su schermo.
-- 📸 **Documentazione Media**: Allegati fotografici dello stato del dispositivo integrati nella commessa.
-- 📄 **Report PDF**: Generazione istantanea di schede di accettazione e ricevute.
-- 🔐 **Privacy Totale**: Database cifrato con SQLCipher e archiviazione offline.
+- 🛠️ **Order Management**: Real-time tracking (Open, Diagnosis, In Progress, Ready, Closed) with expanded operator permissions for full technical autonomy.
+- 👤 **Customer CRM**: Local database optimized for quick search and repair history.
+- ✍️ **Digital Signature**: Legal signature capture for terms and privacy acceptance directly on screen.
+- 📸 **Media Documentation**: Photo attachments of device status integrated into the order.
+- 📄 **PDF Reports**: Instant generation of intake forms and status receipts.
+- 🔄 **Smart Templates**: WhatsApp and legal templates that auto-switch language (English/Italian) unless customized by the user.
+- 🔐 **Total Privacy**: SQLCipher encrypted database and offline storage.
+- 🌐 **Multi-language**: Native support for English (Default) and Italian.
 
 ---
 
@@ -35,7 +39,7 @@
 
 ### Screenshots (Pro Version)
 > [!NOTE]
-> Gli screenshot ufficiali devono essere spostati da `asset/` a `marketing/screenshots/` per essere visibili su GitHub.
+> Official screenshots should be moved from `asset/` to `marketing/screenshots/` to be visible on GitHub.
 
 <p align="center">
   <img src="marketing/screenshots/play-store/pro/01-dashboard-pro.png" width="200" alt="Dashboard">
@@ -45,58 +49,59 @@
 </p>
 
 ### 🎥 Video Demo
-[▶️ Guarda il Workflow Completo](marketing/videos/play-store/pro-workflow.mp4)
+[▶️ Watch the Full Workflow](marketing/videos/play-store/pro-workflow.mp4)
 
 ---
 
 ## 🌐 Landing Page & Presence
 
-Il progetto include una landing page moderna e reattiva situata in `/landing`.
-- **Tecnologie**: HTML5, CSS3 (Modern Material 3 Design), Lucide Icons.
-- **Features**: Galleria interattiva, toggle Dark/Light mode, ottimizzazione per dispositivi mobili.
-- **URL Locale**: Aprire `landing/index.html` nel browser.
+The project includes a modern and responsive landing page located in `/landing`.
+- **Technologies**: HTML5, CSS3 (Modern Material 3 Design), Lucide Icons.
+- **Features**: Interactive gallery, Dark/Light mode toggle, mobile optimization.
+- **Local URL**: Open `landing/index.html` in your browser.
 
 ---
 
 ## 📊 Project Metrics & Status
 
-| Metrica | Valore |
+| Metric | Value |
 |:---|:---|
 | **Target SDK** | 37 (Android 15) |
 | **Min SDK** | 26 (Android 8.0) |
 | **Architecture** | Clean Architecture / MVI |
 | **Database** | SQLCipher v4 (Encrypted) |
 | **Build Flavors** | `full`, `demo`, `showcase` |
-| **Status** | 🟢 Production Ready |
+| **Localization** | 🇺🇸 English (Default), 🇮🇹 Italian |
+| **Status** | 🟢 Production Ready (v1.0.5) |
 
 ---
 
 ## 🛠️ Tech Stack
-- **Linguaggio**: [Kotlin](https://kotlinlang.org/)
+- **Language**: [Kotlin](https://kotlinlang.org/)
 - **UI Framework**: [Jetpack Compose](https://developer.android.com/jetpack/compose)
 - **Local Storage**: [Room](https://developer.android.com/training/data-storage/room) + [SQLCipher](https://www.zetetic.net/sqlcipher/)
-- **Asincronia**: Coroutines & Flow
+- **Asynchrony**: Coroutines & Flow
 - **Dependency Injection**: Manual DI (Container Pattern)
 - **Media**: CameraX & ImagePicker
 
 ---
 
-## 🚀 Sviluppo Locale
+## 🚀 Local Development
 
-L'ambiente è ottimizzato per **Windows 11 + PowerShell**.
+The environment is optimized for **Windows 11 + PowerShell**.
 
 ```powershell
-# 1. Verifica l'ambiente di sviluppo
+# 1. Verify development environment
 ./scripts/powershell/android/check_env.ps1
 
-# 2. Esegui i controlli di qualità (Lint + Tests)
+# 2. Run quality checks (Lint + Tests)
 ./scripts/powershell/project/quality.ps1
 
-# 3. Compila la versione Pro
+# 3. Build Pro version
 ./scripts/powershell/project/check_project.ps1 -Flavor Full -SkipReleaseBuild
 ```
 
-Per le linee guida operative degli agenti AI, consulta [AGENTS.md](AGENTS.md).
+For AI agent operational guidelines, see [AGENTS.md](AGENTS.md).
 
 ---
 

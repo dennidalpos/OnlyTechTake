@@ -48,6 +48,6 @@ This version allows you to test the base flow of our "local-first" management to
 - Maximum 1 active order for workflow testing.
 - Operator Accounts disabled (Local Admin only).
 - Export functions (XLSX, ZIP Backup) blocked.
-- Generated PDFs include a "VERSIONE DEMO" watermark.
+- Generated PDFs include a "DEMO VERSION" watermark.
 
 Ideal for those who want to experience the speed and simplicity of OnlyTechTake before adopting it in their daily business.

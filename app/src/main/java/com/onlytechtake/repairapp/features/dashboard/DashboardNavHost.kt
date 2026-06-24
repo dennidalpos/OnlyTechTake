@@ -188,6 +188,7 @@ fun DashboardNavHost(
                     key = "order_detail_$orderId",
                     factory =
                         OrderDetailViewModel.Factory(
+                            context = container.context,
                             orderId = orderId,
                             authRepository = container.authRepository,
                             orderRepository = container.orderWorkflowRepository,
@@ -225,6 +226,7 @@ fun DashboardNavHost(
                 viewModel(
                     factory =
                         SettingsViewModel.Factory(
+                            context = container.context,
                             authRepository = container.authRepository,
                             adminUserRepository = container.adminUserRepository,
                             catalogRepository = container.catalogRepository,
@@ -254,6 +256,7 @@ fun DashboardNavHost(
                 viewModel(
                     factory =
                         SettingsViewModel.Factory(
+                            context = container.context,
                             authRepository = container.authRepository,
                             adminUserRepository = container.adminUserRepository,
                             catalogRepository = container.catalogRepository,

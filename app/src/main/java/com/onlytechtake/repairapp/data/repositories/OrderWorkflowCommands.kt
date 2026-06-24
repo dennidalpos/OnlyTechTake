@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.data.repositories
 
 import android.content.Context
 import androidx.room.withTransaction
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.orders.OrderNumberGenerator
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.utils.capitalizeFirst
@@ -47,11 +48,11 @@ internal class OrderWorkflowCommands(
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.CREATE_ORDERS)
             inTransaction {
-                require(input.customerId.isNotBlank()) { "Cliente obbligatorio" }
-                require(input.title.isNotBlank()) { "Titolo obbligatorio" }
-                require(input.categoryId.isNotBlank()) { "Categoria obbligatoria" }
-                requireNotNull(customerDao.findById(input.customerId)) { "Cliente non trovato" }
-                requireNotNull(categoryDao.findById(input.categoryId)) { "Categoria non trovata" }
+                require(input.customerId.isNotBlank()) { context.getString(R.string.error_customer_required) }
+                require(input.title.isNotBlank()) { context.getString(R.string.error_problem_required) }
+                require(input.categoryId.isNotBlank()) { context.getString(R.string.error_category_required) }
+                requireNotNull(customerDao.findById(input.customerId)) { context.getString(R.string.customer_no_results_title) }
+                requireNotNull(categoryDao.findById(input.categoryId)) { context.getString(R.string.catalog_error_not_found) }
 
                 val now = clockMillis()
                 val prefix = orderNumberGenerator.yearPrefix(now)
@@ -100,7 +101,7 @@ internal class OrderWorkflowCommands(
             inTransaction {
                 val order = requireWritableOrder(actor, orderId)
                 if (order.status == status) return@inTransaction
-                OrderStatusPolicy.requireAllowed(order.status, status, closureReason)
+                OrderStatusPolicy.requireAllowed(context, order.status, status, closureReason)
                 OrderClosurePermissionPolicy.requireClosePermissionIfNeeded(actor, status)
                 if ((order.status == OrderStatus.RESULT) && (status == OrderStatus.REPAIRING)) {
                     require(order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
@@ -150,23 +151,23 @@ internal class OrderWorkflowCommands(
     ): Result<Unit> =
         runCatching {
             inTransaction {
-                val errors = input.validationErrors()
+                val errors = input.validationErrors(context)
                 require(errors.isEmpty()) { errors.joinToString("\n") }
                 val order = requireWritableOrder(actor, orderId)
                 require((order.status == OrderStatus.DIAGNOSIS) || (order.status == OrderStatus.RESULT)) {
-                    "La diagnosi puo' essere registrata solo durante o dopo la diagnosi"
+                    context.getString(R.string.error_diagnosis_only_during)
                 }
                 if (order.status != OrderStatus.RESULT) {
-                    OrderStatusPolicy.requireAllowed(order.status, OrderStatus.RESULT)
+                    OrderStatusPolicy.requireAllowed(context, order.status, OrderStatus.RESULT)
                 }
 
                 val now = clockMillis()
                 val estimateAmountCents = input.normalizedEstimateAmountCents()
                 val details =
                     listOfNotNull(
-                        "Sintesi risultato: ${input.summary.capitalizeFirst()}",
-                        "Esito diagnosi: ${input.diagnosisOutcome.label(context)}",
-                        estimateAmountCents?.let { "Importo riparazione: ${it.formatEuroCents()}" },
+                        context.getString(R.string.timeline_result_summary, input.summary.capitalizeFirst()),
+                        context.getString(R.string.timeline_diagnosis_outcome, input.diagnosisOutcome.label(context)),
+                        estimateAmountCents?.let { context.getString(R.string.timeline_repair_amount, it.formatEuroCents()) },
                     ).joinToString("\n")
 
                 val customerActionStatus =
@@ -232,7 +233,7 @@ internal class OrderWorkflowCommands(
     ): Result<Unit> =
         runCatching {
             inTransaction {
-                require(note.isNotBlank()) { "Nota vuota" }
+                require(note.isNotBlank()) { context.getString(R.string.error_note_empty) }
                 val order = requireWritableOrder(actor, orderId)
                 val now = clockMillis()
                 val normalizedNote = note.capitalizeFirst()
@@ -250,18 +251,18 @@ internal class OrderWorkflowCommands(
     ): Result<Unit> =
         runCatching {
             inTransaction {
-                val errors = input.validationErrors()
+                val errors = input.validationErrors(context)
                 require(errors.isEmpty()) { errors.joinToString("\n") }
                 val order = requireWritableOrder(actor, orderId)
                 require(order.status == OrderStatus.RESULT) {
-                    "Il feedback preventivo richiede una commessa in attesa cliente"
+                    context.getString(R.string.error_feedback_requires_result)
                 }
                 when (input.feedback) {
                     CustomerFeedbackType.ACCEPT,
                     CustomerFeedbackType.REJECT,
                     ->
                         require(order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
-                            "Accettazione o rifiuto sono disponibili solo per una diagnosi riparabile"
+                            context.getString(R.string.error_feedback_only_repairable)
                         }
 
                     else -> Unit
@@ -287,7 +288,7 @@ internal class OrderWorkflowCommands(
                         else -> null
                     }
                 if (targetStatus != order.status) {
-                    OrderStatusPolicy.requireAllowed(order.status, targetStatus, closureReason)
+                    OrderStatusPolicy.requireAllowed(context, order.status, targetStatus, closureReason)
                     OrderClosurePermissionPolicy.requireClosePermissionIfNeeded(actor, targetStatus)
                 }
                 repairOrderDao.upsert(
@@ -405,7 +406,7 @@ internal class OrderWorkflowCommands(
                         id = UUID.randomUUID().toString(),
                         action = com.onlytechtake.repairapp.data.local.entities.AuditAction.ORDER_DELETED,
                         actorUserId = actor.id,
-                        orderId = orderId,
+                        orderId = null, // Set to null to avoid Foreign Key constraint error (787) after deletion
                         customerId = order.customerId,
                         detailsJson = """{"orderNumber":"${order.orderNumber}","title":"${order.title}"}""",
                         createdAt = now,

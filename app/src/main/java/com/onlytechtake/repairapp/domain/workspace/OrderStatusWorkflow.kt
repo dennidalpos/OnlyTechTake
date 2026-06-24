@@ -1,5 +1,8 @@
 package com.onlytechtake.repairapp.domain.workspace
 
+import android.content.Context
+import androidx.annotation.StringRes
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
@@ -7,16 +10,16 @@ import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 
 enum class OrderStatusAction(
-    val label: String,
+    @StringRes val labelRes: Int,
     val targetStatus: OrderStatus?,
     val closureReason: ClosureReason? = null,
 ) {
-    START_PROGRESS("Prendi in carico", OrderStatus.IN_PROGRESS),
-    START_DIAGNOSIS("Avvia diagnosi", OrderStatus.DIAGNOSIS),
-    RECORD_RESULT("Registra risultato", OrderStatus.RESULT),
-    START_REPAIR("Avvia riparazione", OrderStatus.REPAIRING),
-    READY_FOR_PICKUP("Pronta al ritiro", OrderStatus.READY_FOR_PICKUP),
-    CLOSE_ORDER("Chiudi commessa", OrderStatus.CLOSED),
+    START_PROGRESS(R.string.action_start_progress, OrderStatus.IN_PROGRESS),
+    START_DIAGNOSIS(R.string.action_start_diagnosis, OrderStatus.DIAGNOSIS),
+    RECORD_RESULT(R.string.action_record_result, OrderStatus.RESULT),
+    START_REPAIR(R.string.action_start_repair, OrderStatus.REPAIRING),
+    READY_FOR_PICKUP(R.string.action_ready_for_pickup, OrderStatus.READY_FOR_PICKUP),
+    CLOSE_ORDER(R.string.action_close_order, OrderStatus.CLOSED),
 }
 
 fun availableOrderStatusActions(status: OrderStatus): List<OrderStatusAction> =
@@ -52,22 +55,30 @@ fun statusTemplateAnchor(order: RepairOrderEntity): TemplateAnchor =
         else -> statusTemplateAnchor(order.status)
     }
 
-fun nextActionLabel(status: OrderStatus): String =
+fun nextActionLabel(
+    context: Context,
+    status: OrderStatus,
+): String =
     if (status == OrderStatus.RESULT) {
-        "Registra esito preventivo"
+        context.getString(R.string.action_record_quote_outcome)
     } else {
-        availableOrderStatusActions(status).firstOrNull()?.label ?: "Nessuna azione"
+        availableOrderStatusActions(status).firstOrNull()?.let {
+            context.getString(it.labelRes)
+        } ?: context.getString(R.string.action_none_label)
     }
 
-fun nextActionLabel(order: RepairOrderEntity): String =
+fun nextActionLabel(
+    context: Context,
+    order: RepairOrderEntity,
+): String =
     when {
         order.status == OrderStatus.RESULT && order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE ->
-            "Attendere accettazione o rifiuto preventivo"
+            context.getString(R.string.action_wait_quote)
 
         order.status == OrderStatus.RESULT && order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE ->
-            "Avvisare il cliente e preparare il ritiro"
+            context.getString(R.string.action_notify_not_repairable)
 
-        else -> nextActionLabel(order.status)
+        else -> nextActionLabel(context, order.status)
     }
 
 fun shouldShowDiagnosisEstimate(outcome: DiagnosisOutcome?): Boolean = outcome == DiagnosisOutcome.REPAIRABLE

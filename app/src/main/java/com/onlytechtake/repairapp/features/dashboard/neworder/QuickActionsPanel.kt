@@ -31,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
@@ -115,8 +116,9 @@ fun QuickActions(
             unnamedBusiness = unnamedBusiness,
         ) ?: draft.selectedCustomerLabel
 
+    val context = LocalContext.current
     val missingRequirements =
-        remember(stepperState.intakeInput) { stepperState.intakeInput.validationErrors() }
+        remember(stepperState.intakeInput) { stepperState.intakeInput.validationErrors(context) }
 
     LaunchedEffect(stepperState.isDirty) {
         viewModel.setFormDirty(stepperState.isDirty)
@@ -556,7 +558,7 @@ fun QuickActions(
                 enabled =
                     isIntakeSubmitUnlocked(draft.completedStep) &&
                         stepperState.activeCategories.isNotEmpty() &&
-                        stepperState.intakeInput.isReadyForSubmit(),
+                        stepperState.intakeInput.isReadyForSubmit(context),
                 onSubmit = {
                     draft.signatureCapture?.let { capture ->
                         val resolvedSignerName =

@@ -240,7 +240,7 @@ private fun HomePanelPreview() {
         HomePanel(
             summary =
                 AppSummary(
-                    title = "Banco Riparazioni",
+                    title = "OnlyTechTake",
                     userCount = 3,
                     customerCount = 120,
                     activeOrderCount = 45,

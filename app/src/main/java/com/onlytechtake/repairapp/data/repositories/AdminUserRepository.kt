@@ -34,10 +34,10 @@ class AdminUserRepository(
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
-            require(input.displayName.isNotBlank()) { "Nome obbligatorio" }
-            require(input.username.isNotBlank()) { "Username obbligatorio" }
-            require(input.password.size >= MIN_PASSWORD_LENGTH) { "Password troppo corta" }
-            require(userDao.findByUsername(input.username.trim()) == null) { "Username gia' esistente" }
+            require(input.displayName.isNotBlank()) { context.getString(R.string.error_name_required) }
+            require(input.username.isNotBlank()) { context.getString(R.string.error_username_required) }
+            require(input.password.size >= MIN_PASSWORD_LENGTH) { context.getString(R.string.error_password_too_short) }
+            require(userDao.findByUsername(input.username.trim()) == null) { context.getString(R.string.error_username_exists) }
 
             if (BuildConfig.IS_DEMO_VERSION) {
                 if (MAX_DEMO_OPERATORS <= 0) {
@@ -74,7 +74,10 @@ class AdminUserRepository(
                         setOf(
                             UserPermission.CREATE_ORDERS,
                             UserPermission.EDIT_OWN_ORDERS,
+                            UserPermission.CLOSE_ORDERS,
                             UserPermission.MANAGE_CUSTOMERS,
+                            UserPermission.MANAGE_CATEGORIES,
+                            UserPermission.MANAGE_PAYMENTS,
                         ),
                     active = true,
                     forcePasswordChange = true,
@@ -94,12 +97,12 @@ class AdminUserRepository(
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
-            val existing = requireNotNull(userDao.findById(userId)) { "Utente non trovato" }
+            val existing = requireNotNull(userDao.findById(userId)) { context.getString(R.string.error_user_not_found) }
             val trimmedUsername = username.trim()
-            require(displayName.isNotBlank()) { "Nome obbligatorio" }
-            require(trimmedUsername.isNotBlank()) { "Username obbligatorio" }
+            require(displayName.isNotBlank()) { context.getString(R.string.error_name_required) }
+            require(trimmedUsername.isNotBlank()) { context.getString(R.string.error_username_required) }
             val sameUsernameUser = userDao.findByUsername(trimmedUsername)
-            require(sameUsernameUser == null || sameUsernameUser.id == userId) { "Username gia' esistente" }
+            require(sameUsernameUser == null || sameUsernameUser.id == userId) { context.getString(R.string.error_username_exists) }
 
             val now = clockMillis()
             userDao.upsert(
@@ -119,8 +122,8 @@ class AdminUserRepository(
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
-            require(password.size >= MIN_PASSWORD_LENGTH) { "Password troppo corta" }
-            val existing = requireNotNull(userDao.findById(userId)) { "Utente non trovato" }
+            require(password.size >= MIN_PASSWORD_LENGTH) { context.getString(R.string.error_password_too_short) }
+            val existing = requireNotNull(userDao.findById(userId)) { context.getString(R.string.error_user_not_found) }
             val hash =
                 try {
                     passwordHasher.hash(password)
@@ -146,9 +149,9 @@ class AdminUserRepository(
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
-            val existing = requireNotNull(userDao.findById(userId)) { "Utente non trovato" }
+            val existing = requireNotNull(userDao.findById(userId)) { context.getString(R.string.error_user_not_found) }
             if (!active && existing.role == UserRole.ADMIN) {
-                throw IllegalStateException("L'account Admin non può essere disattivato")
+                throw IllegalStateException(context.getString(R.string.error_admin_cannot_be_deactivated))
             }
 
             val now = clockMillis()
@@ -167,9 +170,9 @@ class AdminUserRepository(
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
-            val existing = requireNotNull(userDao.findById(userId)) { "Utente non trovato" }
+            val existing = requireNotNull(userDao.findById(userId)) { context.getString(R.string.error_user_not_found) }
             if (existing.role == UserRole.ADMIN) {
-                throw IllegalStateException("L'account Admin non può essere eliminato")
+                throw IllegalStateException(context.getString(R.string.error_admin_cannot_be_deleted))
             }
 
             userDao.deleteById(userId)
@@ -188,8 +191,8 @@ class AdminUserRepository(
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
-            val existing = requireNotNull(userDao.findById(userId)) { "Utente non trovato" }
-            require(existing.role != UserRole.ADMIN) { "I permessi dell'admin non possono essere modificati" }
+            val existing = requireNotNull(userDao.findById(userId)) { context.getString(R.string.error_user_not_found) }
+            require(existing.role != UserRole.ADMIN) { context.getString(R.string.error_admin_permissions_immutable) }
 
             val now = clockMillis()
             userDao.upsert(existing.copy(permissions = permissions, updatedAt = now))

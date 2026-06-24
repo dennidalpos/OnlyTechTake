@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.features.dashboard.settings
 
 import android.net.Uri
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
@@ -32,7 +33,7 @@ internal class CatalogSettingsDelegate(
         active: Boolean,
         onSaved: (String) -> Unit = {},
     ) {
-        actionRunner.run(successMessage = "Operazione completata") { actor ->
+        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
             catalogRepository
                 .saveCategory(
                     actor,
@@ -60,7 +61,7 @@ internal class TemplateSettingsDelegate(
         active: Boolean,
         step: String? = null,
     ) {
-        actionRunner.run(successMessage = "Operazione completata") { actor ->
+        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
             templateRepository.saveTemplate(actor, code, title, body, active, step)
         }
     }
@@ -69,13 +70,13 @@ internal class TemplateSettingsDelegate(
         anchor: TemplateAnchor,
         templateCode: String,
     ) {
-        actionRunner.run(successMessage = "Associazione aggiornata") { actor ->
+        actionRunner.run(successMessageRes = R.string.success_association_updated) { actor ->
             templateRepository.setTemplateForAnchor(actor, anchor, templateCode)
         }
     }
 
     fun resetTemplatesToDefaults() {
-        actionRunner.run(successMessage = "Template ripristinati") { actor ->
+        actionRunner.run(successMessageRes = R.string.success_templates_restored) { actor ->
             templateRepository.resetToDefaults(actor)
         }
     }
@@ -223,7 +224,7 @@ internal class StorageSettingsDelegate(
     }
 
     fun cleanupOrphanedFiles() {
-        actionRunner.run(successMessage = "Pulizia file orfani completata") { actor ->
+        actionRunner.run(successMessageRes = R.string.success_orphaned_files_cleaned) { actor ->
             runCatching {
                 PermissionService.requirePermission(actor, UserPermission.MANAGE_STORAGE)
                 val paths = mutableSetOf<String>()

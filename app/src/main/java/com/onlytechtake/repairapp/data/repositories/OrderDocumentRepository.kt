@@ -1,5 +1,7 @@
 package com.onlytechtake.repairapp.data.repositories
 
+import android.content.Context
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.data.local.dao.OrderDocumentDao
 import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
 import kotlinx.coroutines.flow.Flow
@@ -20,6 +22,7 @@ interface OrderDocumentRepository {
 }
 
 class DefaultOrderDocumentRepository(
+    private val context: Context,
     private val dao: OrderDocumentDao,
     private val fileCleanupService: OrderFileCleanupService,
 ) : OrderDocumentRepository {
@@ -38,7 +41,7 @@ class DefaultOrderDocumentRepository(
 
     override suspend fun delete(documentId: String): Result<Unit> =
         runCatching {
-            val doc = dao.getById(documentId) ?: throw Exception("Documento non trovato")
+            val doc = dao.getById(documentId) ?: throw Exception(context.getString(R.string.error_document_not_found))
             dao.deleteById(documentId)
             fileCleanupService.deleteSpecificFile(doc.localPath)
         }

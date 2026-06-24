@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.CustomerActionStatus
@@ -102,7 +103,10 @@ class DataResetRepositoryInstrumentedTest {
             val actor = mockAdmin()
             val result = repository.resetAll(actor, "WRONG")
             assertTrue(result.isFailure)
-            assertEquals("Digitare RESET per confermare", result.exceptionOrNull()?.message)
+            assertEquals(
+                context.getString(R.string.error_type_reset_to_confirm, "RESET"),
+                result.exceptionOrNull()?.message,
+            )
         }
 
     @Test
@@ -119,8 +123,12 @@ class DataResetRepositoryInstrumentedTest {
             otherFile.parentFile?.mkdirs()
             otherFile.writeText("keep")
 
-            val result = repository.resetOrders(actor, "CANCELLA TUTTO")
-            assertTrue(result.isSuccess)
+            val confirmation = "CANCELLA TUTTO"
+            val result = repository.resetOrders(actor, confirmation)
+            assertTrue(
+                "Reset orders failed: ${result.exceptionOrNull()?.message}",
+                result.isSuccess
+            )
 
             // Orders should be gone
             val orderCount = database.repairOrderDao().countAll()

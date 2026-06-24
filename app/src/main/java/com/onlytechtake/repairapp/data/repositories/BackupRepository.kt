@@ -77,14 +77,14 @@ class BackupRepository(
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.EXPORT_DATA)
             if (BuildConfig.IS_DEMO_VERSION) {
-                throw IllegalStateException("Funzione disponibile nella versione Full")
+                throw IllegalStateException(context.getString(R.string.error_feature_pro_only))
             }
             withContext(Dispatchers.IO) {
                 val dbFile = dbBackupService.databaseFile()
-                require(dbFile.exists()) { "Database non ancora creato" }
+                require(dbFile.exists()) { context.getString(R.string.error_db_not_created) }
                 context.contentResolver.openOutputStream(uri)?.use { output ->
                     dbFile.inputStream().use { input -> input.copyTo(output) }
-                } ?: throw IOException("Destinazione non disponibile")
+                } ?: throw IOException(context.getString(R.string.error_destination_unavailable))
             }
             eventWriter.dataExported(actor.id, clockMillis())
         }
@@ -97,7 +97,7 @@ class BackupRepository(
             StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
             PermissionService.requirePermission(actor, UserPermission.BACKUP_RESTORE)
             if (BuildConfig.IS_DEMO_VERSION) {
-                throw IllegalStateException("Funzione disponibile nella versione Full")
+                throw IllegalStateException(context.getString(R.string.error_feature_pro_only))
             }
 
             val securitySettings = securityPreferences.settings.first()
@@ -125,7 +125,7 @@ class BackupRepository(
                             password = password,
                         )
                     }
-                } ?: throw IOException("Destinazione non disponibile")
+                } ?: throw IOException(context.getString(R.string.error_destination_unavailable))
             }
 
             val fileName = displayName(uri)
@@ -143,7 +143,7 @@ class BackupRepository(
             StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
             PermissionService.requirePermission(actor, UserPermission.BACKUP_RESTORE)
             if (BuildConfig.IS_DEMO_VERSION) {
-                throw IllegalStateException("Funzione disponibile nella versione Full")
+                throw IllegalStateException(context.getString(R.string.error_feature_pro_only))
             }
 
             val securitySettings = securityPreferences.settings.first()
@@ -153,19 +153,19 @@ class BackupRepository(
                 val stagingDir =
                     File(context.cacheDir, RESTORE_WORK_DIR).also {
                         it.deleteRecursively()
-                        check(it.mkdirs()) { "Area ripristino non disponibile" }
+                        check(it.mkdirs()) { context.getString(R.string.error_restore_area_unavailable) }
                     }
                 try {
                     val extracted =
                         context.contentResolver.openInputStream(uri)?.use { input ->
-                            BackupArchive.extract(input, stagingDir, password?.toCharArray())
-                        } ?: throw IOException("Backup non disponibile")
+                            BackupArchive.extract(context, input, stagingDir, password?.toCharArray())
+                        } ?: throw IOException(context.getString(R.string.error_backup_unavailable))
                     require(extracted.metadataText.contains("\"databaseVersion\": ${RepairAppDatabase.DATABASE_VERSION}")) {
-                        "Versione backup non compatibile"
+                        context.getString(R.string.error_backup_incompatible)
                     }
                     val backupDbFile =
                         extracted.databaseFiles[RepairAppDatabase.DATABASE_NAME]
-                            ?: throw IOException("Database mancante nel backup")
+                            ?: throw IOException(context.getString(R.string.error_db_missing_in_backup))
                     dbBackupService.validateDatabase(backupDbFile)
 
                     // Atomic replacement: close, move current to backup, move new to current, delete backup
@@ -267,7 +267,7 @@ class BackupRepository(
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.EXPORT_DATA)
             if (BuildConfig.IS_DEMO_VERSION) {
-                throw IllegalStateException("Funzione disponibile nella versione Full")
+                throw IllegalStateException(context.getString(R.string.error_feature_pro_only))
             }
 
             val securitySettings = securityPreferences.settings.first()
@@ -332,7 +332,7 @@ class BackupRepository(
                     }
                 context.contentResolver.openOutputStream(uri)?.use { output ->
                     OrderExportXlsxWriter(labels).write(rowSequence.asIterable(), output, password)
-                } ?: throw IOException("Destinazione non disponibile")
+                } ?: throw IOException(context.getString(R.string.error_destination_unavailable))
             }
             eventWriter.dataExported(actor.id, clockMillis())
         }
@@ -349,60 +349,71 @@ class BackupRepository(
                 try {
                     val writer = PdfTextWriter(document)
                     if (BuildConfig.IS_DEMO_VERSION) {
-                        writer.setWatermark("VERSIONE DEMO")
+                        writer.setWatermark(context.getString(R.string.demo_version_banner))
                     }
-                    writer.title("Riepilogo commessa ${detail.order.orderNumber}")
-                    writer.line("Numero: ${detail.order.orderNumber}")
-                    writer.line("Titolo: ${detail.order.title}")
-                    writer.line("Stato: ${detail.order.status.label(context)}")
+                    writer.title(context.getString(R.string.backup_pdf_order_summary, detail.order.orderNumber))
+                    writer.line(context.getString(R.string.backup_pdf_number, detail.order.orderNumber))
+                    writer.line(context.getString(R.string.backup_pdf_title, detail.order.title))
+                    writer.line(context.getString(R.string.backup_pdf_status, detail.order.status.label(context)))
                     detail.order.closureReason?.let { reason ->
-                        writer.line("Motivo chiusura: ${reason.label(context)}")
+                        writer.line(context.getString(R.string.backup_pdf_closure_reason, reason.label(context)))
                     }
-                    writer.line("Cliente: ${detail.customer?.displayName(context) ?: ""}")
+                    writer.line(context.getString(R.string.backup_pdf_customer, detail.customer?.displayName(context) ?: ""))
                     writer.line(
-                        "Categoria: ${
-                            detail.category?.name.orEmpty().ifBlank { "Nessuna" }
-                        }",
+                        context.getString(
+                            R.string.backup_pdf_category,
+                            detail.category
+                                ?.name
+                                .orEmpty()
+                                .ifBlank { context.getString(R.string.backup_pdf_none) },
+                        ),
                     )
                     writer.line(
-                        "Operatore: ${
-                            detail.assignedUser?.displayName.orEmpty().ifBlank { "Non assegnato" }
-                        }",
+                        context.getString(
+                            R.string.backup_pdf_operator,
+                            detail.assignedUser
+                                ?.displayName
+                                .orEmpty()
+                                .ifBlank { context.getString(R.string.unassigned) },
+                        ),
                     )
-                    writer.line("Data creazione: ${formatTime(detail.order.createdAt)}")
+                    writer.line(context.getString(R.string.backup_pdf_created_at, formatTime(detail.order.createdAt)))
                     writer.line(
-                        "Descrizione: ${
-                            detail.order.description.orEmpty().ifBlank { "Nessuna" }
-                        }",
+                        context.getString(
+                            R.string.backup_pdf_description,
+                            detail.order.description
+                                .orEmpty()
+                                .ifBlank { context.getString(R.string.backup_pdf_none) },
+                        ),
                     )
-                    writer.section("Timeline")
+                    writer.section(context.getString(R.string.backup_pdf_timeline))
                     if (detail.timeline.isEmpty()) {
-                        writer.line("Nessun evento registrato.")
+                        writer.line(context.getString(R.string.backup_pdf_no_events))
                     } else {
                         detail.timeline
                             .sortedBy { it.createdAt }
                             .forEach { event ->
-                                writer.line(formatTimelineEvent(event))
+                                writer.line(formatTimelineEvent(context, event))
                             }
                     }
-                    writer.section("Firme")
+                    writer.section(context.getString(R.string.backup_pdf_signatures))
                     if (detail.signatures.isEmpty()) {
-                        writer.line("Nessuna firma acquisita.")
+                        writer.line(context.getString(R.string.backup_pdf_no_signatures))
                     } else {
                         detail.signatures.forEach { signature ->
                             writer.line("${signature.signerName} - ${formatTime(signature.signedAt)} - ${signature.fileName}")
                         }
                         detail.signatures.firstOrNull()?.let { signature ->
-                            writer.section("Condizioni firmate")
-                            writer.line("Privacy v${signature.privacyTemplateVersion}: ${signature.privacyTextSnapshot}")
-                            writer.line("Condizioni v${signature.termsTemplateVersion}: ${signature.termsTextSnapshot}")
+                            writer.section(context.getString(R.string.backup_pdf_signed_conditions))
+                            writer.line(context.getString(R.string.backup_pdf_privacy_version, signature.privacyTemplateVersion, signature.privacyTextSnapshot))
+                            writer.line(context.getString(R.string.backup_pdf_terms_version, signature.termsTemplateVersion, signature.termsTextSnapshot))
                         }
                     }
                     writer.finish()
 
                     context.contentResolver.openOutputStream(uri)?.use { output ->
                         document.writeTo(output)
-                    } ?: throw IOException("Destinazione non disponibile")
+                    } ?: throw IOException(context.getString(R.string.error_destination_unavailable))
                 } finally {
                     document.close()
                 }
@@ -436,7 +447,7 @@ class BackupRepository(
     ) {
         context.contentResolver.openOutputStream(uri)?.use { output ->
             output.write(text.toByteArray(Charsets.UTF_8))
-        } ?: throw IOException("Destinazione non disponibile")
+        } ?: throw IOException(context.getString(R.string.error_destination_unavailable))
     }
 
     private companion object {
@@ -463,24 +474,29 @@ private fun ZipOutputStream.putTextEntry(
     closeEntry()
 }
 
-private fun formatTimelineEvent(event: TimelineEventEntity): String {
+private fun formatTimelineEvent(
+    context: Context,
+    event: TimelineEventEntity,
+): String {
     val parts =
         buildList {
             add("${formatTime(event.createdAt)} - ${event.title}")
             event.description?.takeIf { it.isNotBlank() }?.let { add(it) }
             if (!event.oldStatus.isNullOrBlank() || !event.newStatus.isNullOrBlank()) {
                 add(
-                    "Cambio stato: ${
-                        event.oldStatus.orEmpty().ifBlank { "-" }
-                    } -> ${event.newStatus.orEmpty().ifBlank { "-" }}",
+                    context.getString(
+                        R.string.backup_pdf_status_change,
+                        event.oldStatus.orEmpty().ifBlank { "-" },
+                        event.newStatus.orEmpty().ifBlank { "-" },
+                    ),
                 )
             }
-            event.expectedFeedbackType?.let { add("Feedback atteso: ${it.name}") }
-            event.customerFeedback?.let { add("Feedback cliente: ${it.name}") }
+            event.expectedFeedbackType?.let { add(context.getString(R.string.backup_pdf_expected_feedback, it.name)) }
+            event.customerFeedback?.let { add(context.getString(R.string.backup_pdf_customer_feedback, it.name)) }
             event.customerFeedbackNote
                 ?.takeIf { it.isNotBlank() }
-                ?.let { add("Nota feedback: $it") }
-            event.customerFeedbackAt?.let { add("Feedback registrato: ${formatTime(it)}") }
+                ?.let { add(context.getString(R.string.backup_pdf_feedback_note, it)) }
+            event.customerFeedbackAt?.let { add(context.getString(R.string.backup_pdf_feedback_recorded, formatTime(it))) }
         }
     return parts.joinToString(" | ")
 }

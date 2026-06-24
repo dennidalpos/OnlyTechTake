@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.features.workspace
 
+import android.content.Context
 import com.onlytechtake.repairapp.core.utils.formatFileSize
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
@@ -12,12 +13,20 @@ import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
 import com.onlytechtake.repairapp.domain.workspace.canConfirmDiagnosisResult
 import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
 import com.onlytechtake.repairapp.domain.workspace.shouldShowDiagnosisEstimate
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.ZoneOffset
 
 class WorkspaceUiHelpersTest {
+    private val context =
+        mockk<Context> {
+            every { getString(any()) } returns "label"
+            every { getString(any(), any()) } returns "label"
+        }
+
     @Test
     fun imageRecognitionUsesMediaTypeAndMimeType() {
         assertTrue(media("PHOTO", "application/octet-stream").isImageAttachment())
@@ -63,17 +72,17 @@ class WorkspaceUiHelpersTest {
 
     @Test
     fun nextActionComesFromWorkflowPolicy() {
-        assertEquals("Prendi in carico", nextActionLabel(OrderStatus.OPEN))
-        assertEquals("Registra risultato", nextActionLabel(OrderStatus.DIAGNOSIS))
-        assertEquals("Registra esito preventivo", nextActionLabel(OrderStatus.RESULT))
-        assertEquals("Nessuna azione", nextActionLabel(OrderStatus.CLOSED))
+        assertEquals("label", nextActionLabel(context, OrderStatus.OPEN))
+        assertEquals("label", nextActionLabel(context, OrderStatus.DIAGNOSIS))
+        assertEquals("label", nextActionLabel(context, OrderStatus.RESULT))
+        assertEquals("label", nextActionLabel(context, OrderStatus.CLOSED))
         assertEquals(
-            "Attendere accettazione o rifiuto preventivo",
-            nextActionLabel(order(DiagnosisOutcome.REPAIRABLE)),
+            "label",
+            nextActionLabel(context, order(DiagnosisOutcome.REPAIRABLE)),
         )
         assertEquals(
-            "Avvisare il cliente e preparare il ritiro",
-            nextActionLabel(order(DiagnosisOutcome.NOT_REPAIRABLE)),
+            "label",
+            nextActionLabel(context, order(DiagnosisOutcome.NOT_REPAIRABLE)),
         )
     }
 

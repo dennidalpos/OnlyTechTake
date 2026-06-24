@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.features.auth
 
 import android.content.Context
+import com.onlytechtake.repairapp.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -31,6 +32,7 @@ data class AuthFormState(
 )
 
 class AuthGateViewModel(
+    private val context: Context,
     private val authRepository: AuthRepository,
 ) : ViewModel() {
     val authState: StateFlow<AuthState> =
@@ -63,7 +65,7 @@ class AuthGateViewModel(
                     it.copy(
                         seeding = false,
                         loading = false,
-                        errorMessage = "Errore durante l'inizializzazione: ${e.message}",
+                        errorMessage = context.getString(R.string.error_init_failed, e.message),
                     )
                 }
             }
@@ -110,7 +112,7 @@ class AuthGateViewModel(
                 // The AuthState update will trigger the transition to Dashboard
             }.onFailure {
                 mutableFormState.update {
-                    it.copy(loading = false, errorMessage = "Creazione admin non riuscita")
+                    it.copy(loading = false, errorMessage = context.getString(R.string.error_admin_creation_failed))
                 }
             }
         }
@@ -119,7 +121,7 @@ class AuthGateViewModel(
     fun login() {
         val form = formState.value
         if (form.username.isBlank() || form.password.isBlank()) {
-            setError("Inserisci username e password")
+            setError(context.getString(R.string.error_enter_username_password))
             return
         }
 
@@ -144,19 +146,19 @@ class AuthGateViewModel(
 
                 LoginResult.InactiveUser ->
                     mutableFormState.update {
-                        it.copy(loading = false, errorMessage = "Utente disattivato")
+                        it.copy(loading = false, errorMessage = context.getString(R.string.error_user_deactivated))
                     }
 
                 LoginResult.InvalidCredentials ->
                     mutableFormState.update {
-                        it.copy(loading = false, errorMessage = "Credenziali non valide")
+                        it.copy(loading = false, errorMessage = context.getString(R.string.error_invalid_credentials))
                     }
 
                 LoginResult.LockedOut ->
                     mutableFormState.update {
                         it.copy(
                             loading = false,
-                            errorMessage = "Troppi tentativi: riprova piu' tardi",
+                            errorMessage = context.getString(R.string.error_too_many_attempts),
                         )
                     }
             }
@@ -196,15 +198,15 @@ class AuthGateViewModel(
     fun recoverAdmin() {
         val form = formState.value
         if (form.recoveryCode.isBlank()) {
-            setError("Inserisci il codice di recupero")
+            setError(context.getString(R.string.error_enter_recovery_code))
             return
         }
         if (form.password.length < AuthPolicy.MIN_PASSWORD_LENGTH) {
-            setError("La password deve avere almeno 8 caratteri")
+            setError(context.getString(R.string.error_password_min_length))
             return
         }
         if (form.password != form.confirmPassword) {
-            setError("Le password non coincidono")
+            setError(context.getString(R.string.error_passwords_mismatch))
             return
         }
 
@@ -217,7 +219,7 @@ class AuthGateViewModel(
                         it.copy(
                             loading = false,
                             recoveryMode = false,
-                            errorMessage = "Password resettata con successo. Effettua il login.",
+                            errorMessage = context.getString(R.string.success_password_reset),
                             password = "",
                             confirmPassword = "",
                             recoveryCode = "",
@@ -227,7 +229,7 @@ class AuthGateViewModel(
                     mutableFormState.update {
                         it.copy(
                             loading = false,
-                            errorMessage = e.message ?: "Errore durante il recupero",
+                            errorMessage = e.message ?: context.getString(R.string.error_recovery_failed),
                         )
                     }
                 }
@@ -265,11 +267,11 @@ class AuthGateViewModel(
     fun changePassword() {
         val form = formState.value
         if (form.password.length < AuthPolicy.MIN_PASSWORD_LENGTH) {
-            setError("La password deve avere almeno 8 caratteri")
+            setError(context.getString(R.string.error_password_min_length))
             return
         }
         if (form.password != form.confirmPassword) {
-            setError("Le password non coincidono")
+            setError(context.getString(R.string.error_passwords_mismatch))
             return
         }
 
@@ -301,7 +303,7 @@ class AuthGateViewModel(
                             it.copy(
                                 loading = false,
                                 passwordChangeRequired = false,
-                                errorMessage = "Password cambiata, effettua il login",
+                                errorMessage = context.getString(R.string.success_password_changed_login),
                                 password = "",
                                 confirmPassword = "",
                                 currentPassword = "",
@@ -312,7 +314,7 @@ class AuthGateViewModel(
                     mutableFormState.update {
                         it.copy(
                             loading = false,
-                            errorMessage = e.message ?: "Errore durante il cambio password",
+                            errorMessage = e.message ?: context.getString(R.string.error_change_password_failed),
                         )
                     }
                 }
@@ -321,10 +323,10 @@ class AuthGateViewModel(
 
     private fun validateSetup(form: AuthFormState): String? =
         when {
-            form.displayName.isBlank() -> "Inserisci il nome admin"
-            form.username.isBlank() -> "Inserisci lo username admin"
-            form.password.length < AuthPolicy.MIN_PASSWORD_LENGTH -> "La password deve avere almeno 8 caratteri"
-            form.password != form.confirmPassword -> "Le password non coincidono"
+            form.displayName.isBlank() -> context.getString(R.string.error_enter_admin_name)
+            form.username.isBlank() -> context.getString(R.string.error_enter_admin_username)
+            form.password.length < AuthPolicy.MIN_PASSWORD_LENGTH -> context.getString(R.string.error_password_min_length)
+            form.password != form.confirmPassword -> context.getString(R.string.error_passwords_mismatch)
             else -> null
         }
 
@@ -337,6 +339,7 @@ class AuthGateViewModel(
     }
 
     class Factory(
+        private val context: Context,
         private val authRepository: AuthRepository,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
@@ -344,7 +347,7 @@ class AuthGateViewModel(
             require(modelClass.isAssignableFrom(AuthGateViewModel::class.java)) {
                 "Unknown ViewModel class: ${modelClass.name}"
             }
-            return AuthGateViewModel(authRepository) as T
+            return AuthGateViewModel(context, authRepository) as T
         }
     }
 }

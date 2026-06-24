@@ -1,11 +1,13 @@
 package com.onlytechtake.repairapp.core.pdf
 
+import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import androidx.core.graphics.withRotation
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.media.decodeOrientedBitmap
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
@@ -33,6 +35,7 @@ data class OrderStatusPdfPayload(
 
 interface OrderStatusPdfWriter {
     fun generate(
+        context: Context,
         outputFile: File,
         payload: OrderStatusPdfPayload,
     ): File
@@ -78,6 +81,7 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
 
     override fun generate(
+        context: Context,
         outputFile: File,
         payload: OrderStatusPdfPayload,
     ): File {
@@ -112,22 +116,22 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         }
 
         // Header
-        canvas.drawText("OnlyTechTake - Stato avanzamento commessa", margin, y, titlePaint)
+        canvas.drawText(context.getString(R.string.pdf_title), margin, y, titlePaint)
         y += 30f
 
         // Info General
-        canvas.drawText("Commessa N:", margin, y, labelPaint)
+        canvas.drawText(context.getString(R.string.pdf_label_order_number), margin, y, labelPaint)
         canvas.drawText(payload.order.orderNumber, margin + 80f, y, textPaint)
         y += 15f
-        canvas.drawText("Data:", margin, y, labelPaint)
+        canvas.drawText(context.getString(R.string.pdf_label_date), margin, y, labelPaint)
         canvas.drawText(dateFormat.format(Date(payload.generatedAt)), margin + 80f, y, textPaint)
         y += 15f
-        canvas.drawText("Generato da:", margin, y, labelPaint)
+        canvas.drawText(context.getString(R.string.pdf_label_generated_by), margin, y, labelPaint)
         canvas.drawText(payload.generatedBy, margin + 80f, y, textPaint)
         y += 25f
 
         // Customer Section
-        canvas.drawText("CLIENTE", margin, y, sectionPaint)
+        canvas.drawText(context.getString(R.string.pdf_section_customer), margin, y, sectionPaint)
         y += 15f
         val customerName =
             if (payload.customer.type.name ==
@@ -137,10 +141,10 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
             } else {
                 "${payload.customer.firstName} ${payload.customer.lastName}"
             }
-        canvas.drawText("Nominativo:", margin, y, labelPaint)
+        canvas.drawText(context.getString(R.string.pdf_label_customer_name), margin, y, labelPaint)
         canvas.drawText(customerName ?: "", margin + 80f, y, textPaint)
         y += 15f
-        canvas.drawText("Contatto:", margin, y, labelPaint)
+        canvas.drawText(context.getString(R.string.pdf_label_customer_contact), margin, y, labelPaint)
         canvas.drawText(
             "${payload.customer.phone ?: ""} / ${payload.customer.email ?: ""}",
             margin + 80f,
@@ -150,19 +154,19 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         y += 25f
 
         // Order Details
-        canvas.drawText("DETTAGLI DISPOSITIVO", margin, y, sectionPaint)
+        canvas.drawText(context.getString(R.string.pdf_section_device_details), margin, y, sectionPaint)
         y += 15f
-        canvas.drawText("Categoria:", margin, y, labelPaint)
+        canvas.drawText(context.getString(R.string.pdf_label_category), margin, y, labelPaint)
         canvas.drawText(payload.categoryPath, margin + 80f, y, textPaint)
         y += 15f
-        canvas.drawText("Oggetto:", margin, y, labelPaint)
+        canvas.drawText(context.getString(R.string.pdf_label_object), margin, y, labelPaint)
         canvas.drawText(payload.order.title, margin + 80f, y, textPaint)
         y += 15f
-        canvas.drawText("Problema:", margin, y, labelPaint)
+        canvas.drawText(context.getString(R.string.pdf_label_problem), margin, y, labelPaint)
         y =
             drawWrappedText(
                 canvas,
-                payload.order.description ?: "Nessuna descrizione",
+                payload.order.description ?: context.getString(R.string.pdf_no_description),
                 margin + 80f,
                 y,
                 contentWidth - 80f,
@@ -171,20 +175,20 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         y += 10f
 
         // Status
-        canvas.drawText("STATO ATTUALE", margin, y, sectionPaint)
+        canvas.drawText(context.getString(R.string.pdf_section_current_status), margin, y, sectionPaint)
         y += 15f
-        canvas.drawText("Stato:", margin, y, labelPaint)
+        canvas.drawText(context.getString(R.string.pdf_label_status), margin, y, labelPaint)
         canvas.drawText(payload.statusLabel, margin + 80f, y, textPaint)
         y += 15f
         if (payload.estimateAmountLabel != null) {
-            canvas.drawText("Preventivo:", margin, y, labelPaint)
+            canvas.drawText(context.getString(R.string.pdf_label_estimate), margin, y, labelPaint)
             canvas.drawText(payload.estimateAmountLabel, margin + 80f, y, textPaint)
             y += 15f
         }
         y += 10f
 
         // Timeline
-        canvas.drawText("STORICO EVENTI (visibili al cliente)", margin, y, sectionPaint)
+        canvas.drawText(context.getString(R.string.pdf_section_timeline), margin, y, sectionPaint)
         y += 15f
         payload.timeline.filter { it.visibleToCustomer }.forEach { event ->
             checkNewPage(20f)
@@ -210,26 +214,26 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         // Signature
         if (payload.signature != null) {
             checkNewPage(150f)
-            canvas.drawText("FIRMA CLIENTE", margin, y, sectionPaint)
+            canvas.drawText(context.getString(R.string.pdf_section_signature), margin, y, sectionPaint)
             y += 15f
-            canvas.drawText("Firmatario: ${payload.signature.signerName}", margin, y, textPaint)
+            canvas.drawText(context.getString(R.string.pdf_label_signer, payload.signature.signerName), margin, y, textPaint)
             y += 12f
             canvas.drawText(
-                "Data firma: ${dateFormat.format(Date(payload.signature.signedAt))}",
+                context.getString(R.string.pdf_label_signed_at, dateFormat.format(Date(payload.signature.signedAt))),
                 margin,
                 y,
                 textPaint,
             )
             y += 12f
             canvas.drawText(
-                "Privacy: Accettata (v${payload.signature.privacyTemplateVersion})",
+                context.getString(R.string.pdf_label_privacy_accepted, payload.signature.privacyTemplateVersion),
                 margin,
                 y,
                 textPaint,
             )
             y += 12f
             canvas.drawText(
-                "Condizioni: Accettate (v${payload.signature.termsTemplateVersion})",
+                context.getString(R.string.pdf_label_terms_accepted, payload.signature.termsTemplateVersion),
                 margin,
                 y,
                 textPaint,

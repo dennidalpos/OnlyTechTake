@@ -1,6 +1,8 @@
 package com.onlytechtake.repairapp.features.dashboard.detail
 
+import android.content.Context
 import android.graphics.Bitmap
+import com.onlytechtake.repairapp.R
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -32,6 +34,7 @@ import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class OrderDetailViewModel(
+    private val context: Context,
     private val orderId: String,
     private val authRepository: AuthRepository,
     private val orderRepository: OrderWorkflowRepository,
@@ -50,6 +53,7 @@ class OrderDetailViewModel(
 
     private val actionRunner =
         AuthenticatedActionRunner(
+            context = context,
             authRepository = authRepository,
             currentUser = authRepository.currentUser,
             scope = viewModelScope,
@@ -263,9 +267,9 @@ class OrderDetailViewModel(
             generateOrderStatusPdfUseCase(orderId, actor.id, includeSignature)
                 .onSuccess { document ->
                     _isGeneratingStatusPdf.value = false
-                    _lastGeneratedDocumentId.value = document.id
-                    triggerShare(document.localPath, "Stato avanzamento ${document.fileName}")
-                    _showPdfSentConfirmation.value = true
+                _lastGeneratedDocumentId.value = document.id
+                triggerShare(document.localPath, context.getString(R.string.share_title_status_report, document.fileName))
+                _showPdfSentConfirmation.value = true
                 }.onFailure { error ->
                     _isGeneratingStatusPdf.value = false
                     _statusPdfError.value = error.message
@@ -278,10 +282,10 @@ class OrderDetailViewModel(
             val document = orderDocumentRepository.findById(documentId)
             if (document != null) {
                 _lastGeneratedDocumentId.value = documentId
-                triggerShare(document.localPath, "Documento ${document.fileName}")
+                triggerShare(document.localPath, context.getString(R.string.share_title_document, document.fileName))
                 _showPdfSentConfirmation.value = true
             } else {
-                _message.value = WorkspaceMessage("Documento non trovato", true)
+                _message.value = WorkspaceMessage(context.getString(R.string.error_document_not_found), true)
             }
         }
     }
@@ -296,7 +300,7 @@ class OrderDetailViewModel(
                         orderRepository.recordMediaRemoved(actor, orderId, document.fileName)
                     },
                 ) { error ->
-                    _message.value = WorkspaceMessage(error.message ?: "Errore", isError = true)
+                    _message.value = WorkspaceMessage(error.message ?: context.getString(R.string.error_unknown), isError = true)
                 }
             }
         }
@@ -336,6 +340,7 @@ class OrderDetailViewModel(
     }
 
     class Factory(
+        private val context: Context,
         private val orderId: String,
         private val authRepository: AuthRepository,
         private val orderRepository: OrderWorkflowRepository,
@@ -349,6 +354,7 @@ class OrderDetailViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
             OrderDetailViewModel(
+                context,
                 orderId,
                 authRepository,
                 orderRepository,

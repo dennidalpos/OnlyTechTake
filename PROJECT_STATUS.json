@@ -1,9 +1,9 @@
 {
   "project_name": "OnlyTechTake",
-  "version": "1.0.0",
-  "status": "Production-Ready",
-  "last_updated": "2026-06-26",
-  "alignment_status": "All variants aligned. Repository cleaned: removed unused temp folders (.agents, reports, .kotlin). README updated with github-cover.svg banner and automated asset notes. Deep lint and code cleanup (Spotless) executed. Verified build and tests for all flavors.",
+  "version": "1.0.5",
+  "status": "Production-Ready / Maintenance",
+  "last_updated": "2026-06-28",
+  "alignment_status": "Fully aligned across all flavors. UI standardized with consistent icons and 'Quick Preview' in Mapping. English legal texts professionally reviewed. Small-screen layout optimized. Template localization automated (auto-switch language if not customized). Status coloring applied to customer detail view.",
   "landing_page": {
     "status": "Standalone Ready + Assets Automated",
     "theme": "Material 3 + Inter Typography",
@@ -15,8 +15,36 @@
     "Local-only data storage (SQLCipher)",
     "Repair order management",
     "Photo documentation",
+    "Digital Signature (Privacy/Terms)",
     "PDF report generation",
-    "Manual WhatsApp integration",
-    "Multi-flavor: Full (Pro), Demo, Showcase"
+    "Manual WhatsApp integration with Templates",
+    "Multi-flavor: Full (Pro), Demo, Showcase",
+    "English default + Italian localization",
+    "Automated Template Localization (System fallback)",
+    "Advanced Template Mapping with Quick Preview",
+    "Customer Detail with Status-colored history"
+  ],
+  "backlog": [
+    {
+      "priority": "HIGH",
+      "task": "Final Play Store package generation and signing verification for Full and Demo flavors."
+    },
+    {
+      "priority": "MEDIUM",
+      "task": "Update 'About' screen with final release notes and legal credits for open-source libraries (SQLCipher, Room, Compose)."
+    },
+    {
+      "priority": "LOW",
+      "task": "Monitor performance of PDF generation with very long technical notes (>2000 characters) to ensure no page-break issues."
+    }
+  ],
+  "completed_recently": [
+    "Template localization automation (auto-switch based on system language)",
+    "Reset templates to defaults button in Settings",
+    "GitHub icon integrated in About screen development section",
+    "Order status coloring in Customer detail view",
+    "Fixed order categorization in Customer history (Open vs Closed)",
+    "Removal of external Inventoveritas links for standalone release",
+    "Restored Privacy and Home Page links with cleaner labels (no site name in parentheses)"
   ]
 }

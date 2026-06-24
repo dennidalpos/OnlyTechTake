@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.features.dashboard.settings
 
+import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -31,6 +32,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SettingsViewModel(
+    private val context: Context,
     private val authRepository: AuthRepository,
     private val adminUserRepository: AdminUserRepository,
     private val catalogRepository: CatalogRepository,
@@ -55,6 +57,7 @@ class SettingsViewModel(
 
     private val actionRunner =
         AuthenticatedActionRunner(
+            context = context,
             authRepository = authRepository,
             currentUser = authRepository.currentUser,
             scope = viewModelScope,
@@ -282,6 +285,7 @@ class SettingsViewModel(
     ) = backupDelegate.restoreCompleteBackup(uri, onRestored)
 
     class Factory(
+        private val context: Context,
         private val authRepository: AuthRepository,
         private val adminUserRepository: AdminUserRepository,
         private val catalogRepository: CatalogRepository,
@@ -298,6 +302,7 @@ class SettingsViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
             SettingsViewModel(
+                context,
                 authRepository,
                 adminUserRepository,
                 catalogRepository,

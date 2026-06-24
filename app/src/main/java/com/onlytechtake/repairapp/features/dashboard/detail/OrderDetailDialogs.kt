@@ -80,7 +80,7 @@ fun OrderStatusActionDialog(
         val isClosure = action.requiresConfirmation()
         AppDialog(
             onDismissRequest = { state.dismissStatusAction() },
-            title = action.label,
+            title = stringResource(action.labelRes),
             content = {
                 Column(
                     modifier = Modifier.verticalScroll(rememberScrollState()),
