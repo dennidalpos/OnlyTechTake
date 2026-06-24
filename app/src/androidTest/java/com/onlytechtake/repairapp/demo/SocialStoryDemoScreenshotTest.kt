@@ -805,8 +805,8 @@ class SocialStoryDemoScreenshotTest {
     private fun drawSignature(tag: String) {
         waitForTag(tag, scroll = true)
         composeRule.onNodeWithTag(tag).performTouchInput {
-            val w = this.size.width.toFloat()
-            val h = this.size.height.toFloat()
+            val w = width.toFloat()
+            val h = height.toFloat()
             // Una croce zigzagata per simulare una firma complessa
             swipe(Offset(w * 0.2f, h * 0.3f), Offset(w * 0.8f, h * 0.7f), 200)
             swipe(Offset(w * 0.8f, h * 0.3f), Offset(w * 0.2f, h * 0.7f), 200)

@@ -360,14 +360,36 @@ abstract class BaseAssetRobot(
     fun drawSignature(tag: String) {
         waitForTag(tag, scroll = true)
         composeRule.onNodeWithTag(tag).performTouchInput {
-            val w = size.width.toFloat()
-            val h = size.height.toFloat()
-            // Una croce zigzagata per simulare una firma complessa
-            swipe(Offset(w * 0.2f, h * 0.3f), Offset(w * 0.8f, h * 0.7f), 200)
-            swipe(Offset(w * 0.8f, h * 0.3f), Offset(w * 0.2f, h * 0.7f), 200)
-            swipe(Offset(w * 0.3f, h * 0.5f), Offset(w * 0.7f, h * 0.5f), 200)
+            val w = width.toFloat()
+            val h = height.toFloat()
+
+            // Una firma più realistica (una specie di \"D.P.\" stilizzato)
+            // Lettera D
+            down(Offset(w * 0.25f, h * 0.3f))
+            moveTo(Offset(w * 0.25f, h * 0.7f))
+            moveTo(Offset(w * 0.45f, h * 0.7f))
+            moveTo(Offset(w * 0.5f, h * 0.5f))
+            moveTo(Offset(w * 0.45f, h * 0.3f))
+            moveTo(Offset(w * 0.25f, h * 0.3f))
+            up()
+
+            // Scarabocchio centrale
+            down(Offset(w * 0.5f, h * 0.6f))
+            moveTo(Offset(w * 0.55f, h * 0.65f))
+            moveTo(Offset(w * 0.6f, h * 0.6f))
+            up()
+
+            // Lettera P
+            down(Offset(w * 0.65f, h * 0.75f))
+            moveTo(Offset(w * 0.65f, h * 0.35f))
+            moveTo(Offset(w * 0.8f, h * 0.35f))
+            moveTo(Offset(w * 0.85f, h * 0.45f))
+            moveTo(Offset(w * 0.8f, h * 0.55f))
+            moveTo(Offset(w * 0.65f, h * 0.55f))
+            up()
         }
         composeRule.waitForIdle()
+        Thread.sleep(1000) // Pausa per far sparire eventuali artefatti UI della gesture
     }
 
     fun capture(

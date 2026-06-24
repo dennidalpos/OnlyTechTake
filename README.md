@@ -31,7 +31,7 @@
 
 ### Screenshots (Pro Version)
 > [!NOTE]
-> Gli screenshot ufficiali devono essere spostati da `reports/` a `marketing/screenshots/` per essere visibili su GitHub.
+> Gli screenshot ufficiali devono essere spostati da `asset/` a `marketing/screenshots/` per essere visibili su GitHub.
 
 <p align="center">
   <img src="marketing/screenshots/play-store/pro/01-dashboard-pro.png" width="200" alt="Dashboard">

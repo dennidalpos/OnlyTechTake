@@ -6,15 +6,11 @@
   Generazione Pro su device fisico:
     .\scripts\powershell\assets\create_demo_assets.ps1 -UseConnectedDevice -AssetProfile store-pro
 
-  Generazione specifica:
-    .\scripts\powershell\assets\create_demo_assets.ps1 -AssetProfile social-pro -Platform instagram -Variant vertical
-
 .DESCRIPTION
   Lo script centralizza la generazione di asset visuali basandosi su profili JSON.
-  Esegue gli scenari strumentati, processa le immagini secondo la piattaforma
-  (verticale, quadrata, landscape) e monta i video tramite ffmpeg.
-  Tutti gli output sono in reports/generated-assets/<AssetProfile>/<Platform>/<Variant>.
-  Gli asset pubblici principali usano Full; Demo resta limitata ai profili Play Store.
+  Esegue gli scenari strumentati, processa le immagini e distribuisce gli asset
+  nelle cartelle marketing e landing page.
+  Tutti gli output originali sono in asset/<AssetProfile>.
 #>
 
 param(
@@ -30,7 +26,8 @@ param(
     [string]$OutputRoot,
     [string]$AssetId,
     [string]$CaseId,
-    [switch]$NonInteractive
+    [switch]$NonInteractive,
+    [switch]$NoDistribute
 )
 
 $ErrorActionPreference = "Stop"
@@ -43,19 +40,15 @@ Set-AndroidCliEnvironment | Out-Null
 
 # Banner
 if (-not $NonInteractive) {
-    Write-Host "`n--- OnlyTechTake Demo Asset Creator ---" -ForegroundColor Cyan
-    Write-Host "Genera screenshot e video demo basati su profili asset."
+    Write-Host "`n--- OnlyTechTake Asset Creator ---" -ForegroundColor Cyan
 }
 
 # Risoluzione AssetProfile
-if (-not $AssetProfile -and $AssetId) {
-    $AssetProfile = $AssetId
-}
+if (-not $AssetProfile -and $AssetId) { $AssetProfile = $AssetId }
 
 $profilesDir = Join-Path $root "demo/assets/profiles"
 $availableProfiles = Get-ChildItem -Path $profilesDir -Filter "*.asset.json" | ForEach-Object { $_.BaseName.Replace(".asset", "") }
 
-# Selezione interattiva se mancante
 if (-not $AssetProfile -and -not $NonInteractive) {
     Write-Host "`n--- Selezione Profilo Asset ---" -ForegroundColor Yellow
     for ($i = 0; $i -lt $availableProfiles.Count; $i++) {
@@ -67,41 +60,27 @@ if (-not $AssetProfile -and -not $NonInteractive) {
     }
 }
 
-if (-not $AssetProfile) {
-    throw "AssetProfile mancante."
-}
+if (-not $AssetProfile) { throw "AssetProfile mancante." }
 
 # Caricamento configurazione profilo
 $profilePath = Join-Path $profilesDir "$AssetProfile.asset.json"
-if (-not (Test-Path $profilePath)) {
-    throw "Profilo asset non trovato: $profilePath"
-}
+if (-not (Test-Path $profilePath)) { throw "Profilo asset non trovato: $profilePath" }
 $config = Get-Content -Path $profilePath -Raw | ConvertFrom-Json
 
-# Sovrascrittura flavor da config se non specificato; se specificato, deve combaciare.
-if ($config.flavor) {
-    if ($PSBoundParameters.ContainsKey('Flavor') -eq $false) {
-        $Flavor = $config.flavor
-    } elseif ($Flavor -ne $config.flavor) {
-        throw "Il profilo '$AssetProfile' richiede Flavor '$($config.flavor)', non '$Flavor'."
-    }
+if ($config.flavor -and ($PSBoundParameters.ContainsKey('Flavor') -eq $false)) {
+    $Flavor = $config.flavor
 }
 
-$packageNameSuffix = switch ($Flavor) {
-    "Full" { "" }
-    "Demo" { ".demo" }
-    "Showcase" { ".showcase" }
-}
+$packageNameSuffix = switch ($Flavor) { "Full" { "" }; "Demo" { ".demo" }; "Showcase" { ".showcase" } }
 $packageName = "com.onlytechtake.repairapp$($packageNameSuffix).debug"
 
-# Post-processing placeholders
 if ($config.deviceDirectory) {
     $config.deviceDirectory = $config.deviceDirectory.Replace("{PACKAGE_NAME}", $packageName)
 }
 
-# Output Root
+# Output Root (Gerarchia Orizzontale)
 if (-not $OutputRoot) {
-    $OutputRoot = Join-Path $root "reports/generated-assets/$($Flavor.ToLower())/$AssetProfile"
+    $OutputRoot = Join-Path $root "asset/$AssetProfile"
 } elseif (-not [System.IO.Path]::IsPathRooted($OutputRoot)) {
     $OutputRoot = Join-Path $root $OutputRoot
 }
@@ -127,57 +106,45 @@ $pulledRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("onlytechtake-assets-
 try {
     Pull-DeviceDirectory -Serial $serial -DevicePath $config.deviceDirectory -TargetRoot $pulledRoot -PulledDirectoryName $config.pulledDirectoryName
 
+    if (-not (Test-Path $OutputRoot)) { New-Item -ItemType Directory -Path $OutputRoot -Force | Out-Null }
+
     foreach ($case in $activeCases) {
         $src = if ($case.sourceDirectory -eq ".") { $pulledRoot } else { Join-Path $pulledRoot $case.sourceDirectory }
 
-        if ($case.expectedFiles) {
-            $missingFiles = @(
-                $case.expectedFiles |
-                    Where-Object { -not (Test-Path (Join-Path $src $_)) }
-            )
-            if ($missingFiles.Count -gt 0) {
-                throw "Acquisizione incompleta per '$($case.id)': file mancanti: $($missingFiles -join ', ')"
-            }
-        }
-
-        # Mappatura output
-        $outputs = @()
-        if ($case.outputs) {
-            $outputs = @($case.outputs)
-        } else {
-            # Fallback legacy mapping
-            if ($case.targetDirectory) { $outputs += [PSCustomObject]@{ platform = "play-store"; variant = "vertical"; subDir = "." } }
-        }
-
-        # Filtro per parametri riga di comando
-        if ($Platform) { $outputs = @($outputs | Where-Object { $_.platform -eq $Platform }) }
-        if ($Variant) { $outputs = @($outputs | Where-Object { $_.variant -eq $Variant }) }
-
-        foreach ($out in $outputs) {
-            $sub = if ($out.subDir -and $out.subDir -ne ".") { $out.subDir } else { "" }
-            $dest = Join-Path $OutputRoot "$($out.platform)/$($out.variant)/$sub"
-            Write-Host "Generazione in: $(Get-RepoRelativePath -FullPath $dest -RootPath $root)" -ForegroundColor Gray
-            if (-not (Test-Path $dest)) { New-Item -ItemType Directory -Path $dest -Force | Out-Null }
-
-            $items = Get-ChildItem -Path $src -Filter "*.png"
-            foreach ($item in $items) {
-                $p = $item.FullName
-                $n = $item.Name
-                $targetFile = Join-Path $dest $n
-                if ($out.variant -eq "vertical") {
-                    Convert-ToStoryPng -SourcePath $p -TargetPath $targetFile
-                } else {
-                    Copy-Item -Path $p -Destination $targetFile -Force
-                }
-            }
+        $items = Get-ChildItem -Path $src -Filter "*.png"
+        foreach ($item in $items) {
+            $targetFile = Join-Path $OutputRoot $item.Name
+            Copy-Item -Path $item.FullName -Destination $targetFile -Force
         }
     }
+
+    # Distribuzione Automatica
+    if (-not $NoDistribute) {
+        Write-Host "Distribuzione asset in corso..." -ForegroundColor Cyan
+
+        # 1. Marketing (Play Store)
+        $marketingPath = switch ($AssetProfile) {
+            "store-pro" { "marketing/screenshots/play-store/pro" }
+            "store-demo" { "marketing/screenshots/play-store/demo" }
+            "social-pro" { "marketing/screenshots/social" }
+            default { "marketing/screenshots/workflows/$AssetProfile" }
+        }
+        $fullMarketingPath = Join-Path $root $marketingPath
+        if (-not (Test-Path $fullMarketingPath)) { New-Item -ItemType Directory -Path $fullMarketingPath -Force | Out-Null }
+        Copy-Item -Path "$OutputRoot\*.png" -Destination $fullMarketingPath -Force
+
+        # 2. Landing Page (solo per profili principali)
+        if ($AssetProfile -eq "store-pro") {
+            $landingPath = Join-Path $root "landing/assets/screenshots"
+            if (-not (Test-Path $landingPath)) { New-Item -ItemType Directory -Path $landingPath -Force | Out-Null }
+            Copy-Item -Path "$OutputRoot\*.png" -Destination $landingPath -Force
+            Write-Host "Landing page aggiornata con nuovi screenshot." -ForegroundColor Gray
+        }
+    }
+
 } finally {
     if (Test-Path $pulledRoot) { Remove-Item $pulledRoot -Recurse -Force }
 }
 
 Restore-DeviceGlobalSettings
-Write-Host "`nAsset completati in: $OutputRoot" -ForegroundColor Green
-
-Restore-DeviceGlobalSettings
-Write-Host "`nAsset completati in: $OutputRoot" -ForegroundColor Green
+Write-Host "`nAsset completati e distribuiti." -ForegroundColor Green

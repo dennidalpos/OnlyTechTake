@@ -60,7 +60,7 @@ class StoreProScreenshotTest {
             robot.waitForText("Cliente selezionato")
             robot.clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
 
-            // Fill Step 2 (Category)
+            // Step 2 (Category) - Skip capture
             robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-pc"), scroll = true)
             robot.clickTag(
                 RepairAppTestTags.categoryButton(DemoDataSeeder.DEMO_CATEGORY_ID),
@@ -68,10 +68,9 @@ class StoreProScreenshotTest {
             )
             robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-gaming"), scroll = true)
             robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-rog-strix"), scroll = true)
-            robot.capture(outputDir, "02b-categoria-pro.png")
             robot.clickTag(RepairAppTestTags.NewOrderStep2NextButton, scroll = true)
 
-            // Step 3 (Problem)
+            // Step 3 (Problem) - Skip capture
             robot.typeTag(
                 RepairAppTestTags.NewOrderProblemSummaryField,
                 "Samsung Galaxy S23 - Schermo rotto",
@@ -82,16 +81,14 @@ class StoreProScreenshotTest {
                 "Sostituzione display originale dopo caduta.",
                 scroll = true,
             )
-            robot.capture(outputDir, "02c-problema-pro.png")
             robot.clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
 
-            // Step 4: Photo
+            // Step 4: Photo - Skip capture
             robot.waitForText("Foto e allegati")
             robot.clickTag(RepairAppTestTags.IntakeMediaTakePhotoButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
             robot.clickTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
             robot.waitForText("PHOTO", scroll = true)
-            robot.capture(outputDir, "02d-foto-pro.png")
             robot.clickTag(RepairAppTestTags.NewOrderStep4NextButton, scroll = true)
 
             // 03-foto-firma-pro (Step 5 Signature)
@@ -145,11 +142,6 @@ class StoreProScreenshotTest {
             robot.clickDashboardTab("CUSTOMERS")
             robot.waitForTag(RepairAppTestTags.CustomerSearchField)
             robot.capture(outputDir, "07-clienti-pro.png")
-
-            // 08-configurazione-pro
-            robot.clickDashboardTab("SETTINGS")
-            robot.waitForText("Setup")
-            robot.capture(outputDir, "08-configurazione-pro.png")
         }
     }
 

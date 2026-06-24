@@ -12,7 +12,7 @@ spotless {
             ".gradle/**",
             ".kotlin/**",
             "app/schemas/**",
-            "reports/**",
+            "asset/**",
             "demo/**",
         )
 

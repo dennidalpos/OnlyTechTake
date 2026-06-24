@@ -81,8 +81,8 @@ class OperationalRobot(
         clickText("Accetta condizioni di presa in carico", scroll = true)
         waitForTag(RepairAppTestTags.SignatureCanvas, scroll = true)
         composeRule.onNodeWithTag(RepairAppTestTags.SignatureCanvas).performTouchInput {
-            val w = this.size.width.toFloat()
-            val h = this.size.height.toFloat()
+            val w = width.toFloat()
+            val h = height.toFloat()
             val startX = w * 0.2f
             val startY = h * 0.5f
             down(Offset(startX, startY))

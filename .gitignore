@@ -24,7 +24,7 @@ Thumbs.db
 .DS_Store
 
 # Generated local outputs (temporary)
-/reports/
+/asset/
 /logs/
 /tmp/
 /demo/recordings/
