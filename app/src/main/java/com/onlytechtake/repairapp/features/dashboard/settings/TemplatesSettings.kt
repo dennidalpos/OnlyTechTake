@@ -209,7 +209,7 @@ fun ColumnScope.TemplatesSettings(
                                     imageVector = if (template.active) Icons.Default.Check else Icons.Default.Clear,
                                     contentDescription = null,
                                     tint = if (template.active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
-                                    modifier = Modifier.size(16.dp)
+                                    modifier = Modifier.size(16.dp),
                                 )
                                 Spacer(modifier = Modifier.width(RepairAppSpacing.compactGap))
                                 AppBadge(
@@ -238,7 +238,7 @@ fun ColumnScope.TemplatesSettings(
                                     imageVector = if (isUsed) Icons.Default.Link else Icons.Default.RadioButtonUnchecked,
                                     contentDescription = null,
                                     tint = if (isUsed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
-                                    modifier = Modifier.size(16.dp)
+                                    modifier = Modifier.size(16.dp),
                                 )
                                 Spacer(modifier = Modifier.width(RepairAppSpacing.compactGap))
                                 AppBadge(
@@ -279,7 +279,7 @@ fun ColumnScope.TemplatesSettings(
         item {
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)
+                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
             ) {
                 if (isAdmin) {
                     AppButton(

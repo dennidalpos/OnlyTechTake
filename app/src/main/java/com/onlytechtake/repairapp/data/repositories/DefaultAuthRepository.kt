@@ -65,22 +65,25 @@ class DefaultAuthRepository(
                 } else {
                     session.user
                 }
+
+            // Simple non-blocking state creation
             AuthState(
                 initialized = true,
                 configured = adminCount > 0,
                 currentUser = activeUser,
-                lastUsername = lastUserId?.let { userDao.findById(it)?.username }.orEmpty(),
+                lastUsername = lastUserId ?: "",
             )
+        }.onStart {
+            // Artificial delay for splash/animation
+            delay(1500.milliseconds)
         }.catch { e ->
+            android.util.Log.e("AuthRepository", "Flow error", e)
             emit(
                 AuthState(
                     initialized = true,
                     initializationError = e.message ?: context.getString(R.string.error_critical_db_error),
                 ),
             )
-        }.onStart {
-            // Artificial delay to allow the brand animation to complete at least one cycle (1500ms)
-            delay(1500.milliseconds)
         }
 
     override suspend fun createFirstAdmin(

@@ -162,58 +162,22 @@ fun StorageSettings(
                         label = stringResource(R.string.storage_cache_size),
                         value = formatFileSize(stats.cacheBytes),
                     )
-                }
-            }
-
-            Spacer(Modifier.height(RepairAppSpacing.cardGap))
-
-            StandardCard {
-                Column(
-                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
-                ) {
-                    Text(
-                        stringResource(R.string.storage_deep_maintenance),
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
-                    )
-                    Text(
-                        text = stringResource(R.string.storage_cleanup_orphans_tooltip),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                    Spacer(Modifier.height(RepairAppSpacing.tinyGap))
-                    AppButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.storage_cleanup_orphans),
-                        variant = AppButtonVariant.Secondary,
-                        size = AppButtonSize.Compact,
-                        onClick = viewModel::cleanupOrphanedFiles,
+                    AppKeyValueRow(
+                        label = stringResource(R.string.config_backup_logs_title),
+                        value = formatFileSize(stats.logsBytes),
                     )
                 }
             }
 
             Spacer(Modifier.height(RepairAppSpacing.sectionGap))
 
-            Row(
+            AppButton(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.actionGap),
-            ) {
-                AppButton(
-                    modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.storage_cleanup_cache),
-                    variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact,
-                    onClick = viewModel::cleanupCache,
-                )
-                AppButton(
-                    modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.storage_refresh),
-                    variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact,
-                    onClick = viewModel::refreshStorageStats,
-                )
-            }
+                text = stringResource(R.string.storage_refresh),
+                variant = AppButtonVariant.Secondary,
+                size = AppButtonSize.Default,
+                onClick = viewModel::refreshStorageStats,
+            )
         }
 
         Spacer(Modifier.height(RepairAppSpacing.sectionGap))

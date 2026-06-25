@@ -95,19 +95,20 @@ fun AnchorSelectionDialog(
                         ) {
                             Row(
                                 modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.SettingsBackupRestore,
                                     contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.outline
+                                    tint = MaterialTheme.colorScheme.outline,
                                 )
                                 Spacer(modifier = Modifier.width(RepairAppSpacing.compactGap))
                                 Text(
-                                    text = stringResource(
-                                        R.string.config_template_default_label,
-                                        anchor.defaultCode,
-                                    ),
+                                    text =
+                                        stringResource(
+                                            R.string.config_template_default_label,
+                                            anchor.defaultCode,
+                                        ),
                                     style = MaterialTheme.typography.bodyMedium,
                                 )
                             }

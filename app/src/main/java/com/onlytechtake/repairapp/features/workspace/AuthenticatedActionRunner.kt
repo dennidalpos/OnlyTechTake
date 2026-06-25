@@ -10,12 +10,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 internal class AuthenticatedActionRunner(
-    private val context: Context,
+    val context: Context,
     private val authRepository: AuthRepository,
     private val currentUser: StateFlow<AuthenticatedUser?>,
     private val scope: CoroutineScope,
     private val showMessage: (String, Boolean) -> Unit,
     private val setLoading: (Boolean) -> Unit = {},
+    private val diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger? = null,
 ) {
     fun run(
         @StringRes successMessageRes: Int? = null,
@@ -45,6 +46,7 @@ internal class AuthenticatedActionRunner(
                 },
             ) { error ->
                 setLoading(false)
+                diagnosticLogger?.logError("AuthenticatedActionRunner", error.message ?: "Action failed", error)
                 showMessage(error.message ?: context.getString(R.string.error_unknown), true)
             }
         }

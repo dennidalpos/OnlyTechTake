@@ -1,10 +1,10 @@
 package com.onlytechtake.repairapp.features.auth
 
 import android.content.Context
-import com.onlytechtake.repairapp.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.demo.ShowcaseDataSeeder
 import com.onlytechtake.repairapp.domain.auth.AuthPolicy
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
@@ -40,7 +40,7 @@ class AuthGateViewModel(
             .observeAuthState()
             .stateIn(
                 scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
+                started = SharingStarted.Eagerly,
                 initialValue = AuthState(),
             )
 

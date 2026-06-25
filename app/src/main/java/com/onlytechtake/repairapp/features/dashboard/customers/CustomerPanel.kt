@@ -69,7 +69,6 @@ import com.onlytechtake.repairapp.core.design.components.AppVerticalDivider
 import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
 import com.onlytechtake.repairapp.core.design.components.StandardCard
-import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
 import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label

@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.core.di
 
 import android.content.Context
 import androidx.compose.runtime.staticCompositionLocalOf
+import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.repositories.DefaultRepairAppRepository
 import com.onlytechtake.repairapp.domain.repositories.RepairAppRepository
 
@@ -48,9 +49,11 @@ class AppContainer(
     val securityPreferences get() = settingsContainer.securityPreferences
     val dataResetRepository get() = settingsContainer.dataResetRepository
     val storageStatsService get() = settingsContainer.storageStatsService
+    val diagnosticLogService get() = settingsContainer.diagnosticLogService
+    val diagnosticLogger get() = dataContainer.diagnosticLogger
 
     fun close() {
-        dataContainer.database.close()
+        RepairAppDatabase.closeInstance()
     }
 }
 

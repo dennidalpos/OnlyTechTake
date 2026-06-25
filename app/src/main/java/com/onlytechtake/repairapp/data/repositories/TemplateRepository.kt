@@ -449,7 +449,7 @@ class TemplateRepository(
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
-                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_intake),
+                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_update),
             ),
             MessageTemplateEntity(
                 id = "",
@@ -461,7 +461,7 @@ class TemplateRepository(
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
-                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_outcome),
+                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_closed),
             ),
             MessageTemplateEntity(
                 id = "",

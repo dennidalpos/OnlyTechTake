@@ -119,6 +119,7 @@ fun OrdersPanel(
                                     templateRepository = container.templateRepository,
                                     generateOrderStatusPdfUseCase = container.generateOrderStatusPdfUseCase,
                                     shareDocumentIntentFactory = container.shareDocumentIntentFactory,
+                                    diagnosticLogger = container.diagnosticLogger,
                                     onSetFormDirty = onSetFormDirty,
                                 ),
                         )

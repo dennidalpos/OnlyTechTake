@@ -16,6 +16,7 @@ import com.onlytechtake.repairapp.data.repositories.CatalogRepository
 import com.onlytechtake.repairapp.data.repositories.DataResetRepository
 import com.onlytechtake.repairapp.data.repositories.OrderFileCleanupService
 import com.onlytechtake.repairapp.data.repositories.TemplateRepository
+import com.onlytechtake.repairapp.data.services.DiagnosticLogService
 import com.onlytechtake.repairapp.data.services.StorageStatsService
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
@@ -42,7 +43,9 @@ class SettingsViewModel(
     private val backupReminderPreferences: BackupReminderPreferences,
     private val securityPreferences: SecurityPreferences,
     private val storageStatsService: StorageStatsService,
+    private val diagnosticLogService: DiagnosticLogService,
     private val orderFileCleanupService: OrderFileCleanupService,
+    private val diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger,
     private val database: com.onlytechtake.repairapp.data.local.db.RepairAppDatabase,
     private val onSetFormDirty: (Boolean) -> Unit,
 ) : ViewModel() {
@@ -63,6 +66,7 @@ class SettingsViewModel(
             scope = viewModelScope,
             showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) },
             setLoading = { _isProcessing.value = it },
+            diagnosticLogger = diagnosticLogger,
         )
 
     private val catalogDelegate = CatalogSettingsDelegate(catalogRepository, actionRunner)
@@ -81,6 +85,13 @@ class SettingsViewModel(
             storageStatsService,
             orderFileCleanupService,
             database,
+            actionRunner,
+            viewModelScope,
+            ::refreshStorageStats,
+        )
+    private val diagnosticDelegate =
+        DiagnosticSettingsDelegate(
+            diagnosticLogService,
             actionRunner,
             viewModelScope,
             ::refreshStorageStats,
@@ -163,6 +174,10 @@ class SettingsViewModel(
     fun cleanupCache() = storageDelegate.cleanupCache()
 
     fun cleanupOrphanedFiles() = storageDelegate.cleanupOrphanedFiles()
+
+    fun clearDiagnosticLogs() = diagnosticDelegate.clearLogs()
+
+    fun shareDiagnosticLogs() = diagnosticDelegate.shareLogs()
 
     fun saveCategory(
         id: String?,
@@ -295,7 +310,9 @@ class SettingsViewModel(
         private val backupReminderPreferences: BackupReminderPreferences,
         private val securityPreferences: SecurityPreferences,
         private val storageStatsService: StorageStatsService,
+        private val diagnosticLogService: DiagnosticLogService,
         private val orderFileCleanupService: OrderFileCleanupService,
+        private val diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger,
         private val database: com.onlytechtake.repairapp.data.local.db.RepairAppDatabase,
         private val onSetFormDirty: (Boolean) -> Unit,
     ) : ViewModelProvider.Factory {
@@ -312,7 +329,9 @@ class SettingsViewModel(
                 backupReminderPreferences,
                 securityPreferences,
                 storageStatsService,
+                diagnosticLogService,
                 orderFileCleanupService,
+                diagnosticLogger,
                 database,
                 onSetFormDirty,
             ) as T

@@ -14,6 +14,7 @@ import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
 import com.onlytechtake.repairapp.data.repositories.OrderFileCleanupService
 import com.onlytechtake.repairapp.data.repositories.TemplateRepository
+import com.onlytechtake.repairapp.data.services.DiagnosticLogService
 import com.onlytechtake.repairapp.data.services.StorageStatsService
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import com.onlytechtake.repairapp.domain.workspace.OperatorInput
@@ -233,6 +234,38 @@ internal class StorageSettingsDelegate(
                 paths.addAll(database.orderDocumentDao().getAllPaths())
                 orderFileCleanupService.cleanupOrphanedFiles(paths)
                 onRefreshStats()
+            }
+        }
+    }
+}
+
+internal class DiagnosticSettingsDelegate(
+    private val diagnosticLogService: DiagnosticLogService,
+    private val actionRunner: AuthenticatedActionRunner,
+    private val scope: CoroutineScope,
+    private val onRefreshStats: () -> Unit,
+) {
+    fun clearLogs() {
+        scope.launch {
+            diagnosticLogService.clearLogs()
+            onRefreshStats()
+        }
+    }
+
+    fun shareLogs() {
+        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
+            runCatching {
+                com.onlytechtake.repairapp.core.permissions.PermissionService.requirePermission(
+                    actor,
+                    UserPermission.MANAGE_STORAGE,
+                )
+                val zipFile = diagnosticLogService.collectAndPrepareZip()
+                if (zipFile != null) {
+                    val intent = diagnosticLogService.createShareIntent(zipFile)
+                    actionRunner.context.startActivity(intent)
+                } else {
+                    throw IllegalStateException("Impossibile generare il file dei log.")
+                }
             }
         }
     }

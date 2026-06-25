@@ -2,8 +2,8 @@
   "project_name": "OnlyTechTake",
   "version": "1.0.5",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-06-28",
-  "alignment_status": "Fully aligned across all flavors. UI standardized with consistent icons and 'Quick Preview' in Mapping. English legal texts professionally reviewed. Small-screen layout optimized. Template localization automated (auto-switch language if not customized). Status coloring applied to customer detail view.",
+  "last_updated": "2026-06-29",
+  "alignment_status": "Fully aligned across all flavors. Settings reorganized: Users/Operators separated from Maintenance & Backup hub. Consolidated all exports, reset, and deep maintenance operations (cache/orphans/logs) in the Backup section.",
   "landing_page": {
     "status": "Standalone Ready + Assets Automated",
     "theme": "Material 3 + Inter Typography",
@@ -22,7 +22,8 @@
     "English default + Italian localization",
     "Automated Template Localization (System fallback)",
     "Advanced Template Mapping with Quick Preview",
-    "Customer Detail with Status-colored history"
+    "Customer Detail with Status-colored history",
+    "Diagnostic Logs management (Backup section)"
   ],
   "backlog": [
     {
@@ -39,6 +40,9 @@
     }
   ],
   "completed_recently": [
+    "Reorganized Settings: Consolidated all operations (Export XLSX/DB, Reset All, Reset Orders, Clear Logs, Cleanup Cache/Orphans) into 'Maintenance & Backup' section",
+    "Fixed 'Total Reset' bug (error 1811) by breaking category self-referencing hierarchy before deletion",
+    "Diagnostic Logs feature in Backup section (Share via WhatsApp, Clear, Size monitoring)",
     "Template localization automation (auto-switch based on system language)",
     "Reset templates to defaults button in Settings",
     "GitHub icon integrated in About screen development section",

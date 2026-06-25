@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.core.di
 
 import android.content.Context
 import androidx.room.withTransaction
+import com.onlytechtake.repairapp.core.error.DiagnosticLogger
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
@@ -23,6 +24,7 @@ import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
 import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
 import com.onlytechtake.repairapp.data.repositories.SignatureRepository
 import com.onlytechtake.repairapp.data.repositories.TemplateRepository
+import com.onlytechtake.repairapp.data.services.DiagnosticLogService
 import com.onlytechtake.repairapp.data.services.StorageStatsService
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
@@ -34,6 +36,7 @@ class DataContainer(
 ) {
     val database by lazy { RepairAppDatabase.getInstance(context) }
     val clockMillis: () -> Long = System::currentTimeMillis
+    val diagnosticLogger by lazy { DiagnosticLogger(context) }
 }
 
 class AuthContainer(
@@ -191,6 +194,12 @@ class SettingsContainer(
         StorageStatsService(
             context.applicationContext,
             mediaContainer.mediaStorageProvider,
+        )
+    }
+    val diagnosticLogService by lazy {
+        DiagnosticLogService(
+            context.applicationContext,
+            dataContainer.diagnosticLogger,
         )
     }
 

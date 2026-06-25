@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Backup
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -102,7 +103,7 @@ fun SettingsHub(
             SettingsHubCard(
                 title = stringResource(R.string.config_hub_admin_title),
                 subtitle = stringResource(R.string.config_hub_admin_subtitle),
-                icon = Icons.Default.Lock,
+                icon = Icons.Default.People,
                 testTag = RepairAppTestTags.ConfigHubAdminButton,
             ) {
                 onNavigate(DashboardRoutes.settings("ADMIN"))

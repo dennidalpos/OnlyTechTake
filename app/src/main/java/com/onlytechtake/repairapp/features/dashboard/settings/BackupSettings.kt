@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -34,6 +37,7 @@ import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppDivider
 import com.onlytechtake.repairapp.core.design.components.AppMessageBanner
 import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
 import com.onlytechtake.repairapp.core.design.components.AppTextField
@@ -51,11 +55,13 @@ fun BackupSettings(
     viewModel: SettingsViewModel,
     isAdmin: Boolean,
     onBackupRestored: () -> Unit,
+    onResetComplete: () -> Unit = {},
     onRequestConfirm: (String, String, () -> Unit) -> Unit,
     onBack: () -> Unit,
 ) {
     val backupReminderSettings by viewModel.backupReminderSettings.collectAsState()
     val securitySettings by viewModel.securitySettings.collectAsState()
+    val storageStats by viewModel.storageStats.collectAsState()
     val isProcessing by viewModel.isProcessing.collectAsState()
     var backupIntervalDays by rememberSaveable { mutableStateOf(backupReminderSettings.intervalDays.toString()) }
     var backupPassword by rememberSaveable { mutableStateOf(securitySettings.backupEncryptionPassword) }
@@ -81,6 +87,13 @@ fun BackupSettings(
         rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) { uri ->
             uri?.let(viewModel::exportOrdersXlsx)
         }
+    val exportDatabaseLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/x-sqlite3")) { uri ->
+            uri?.let(viewModel::exportDatabase)
+        }
+
+    var ordersResetConfirmation by rememberSaveable { mutableStateOf("") }
+    var resetConfirmation by rememberSaveable { mutableStateOf("") }
 
     // Pre-fetch strings for callbacks
     val confirmExportZipTitle = stringResource(R.string.config_backup_confirm_export_zip_title)
@@ -89,8 +102,30 @@ fun BackupSettings(
     val confirmRestoreZipText = stringResource(R.string.config_backup_confirm_restore_zip_text)
     val confirmExportXlsxTitle = stringResource(R.string.config_backup_confirm_export_xlsx_title)
     val confirmExportXlsxText = stringResource(R.string.config_backup_confirm_export_xlsx_text)
+    val confirmSendLogsTitle = stringResource(R.string.config_backup_logs_send_confirm_title)
+    val confirmSendLogsText = stringResource(R.string.config_backup_logs_send_confirm_text)
+    val confirmClearLogsTitle = stringResource(R.string.config_backup_logs_clear_confirm_title)
+    val confirmClearLogsText = stringResource(R.string.config_backup_logs_clear_confirm_text)
+
+    val confirmExportDatabaseTitle = stringResource(R.string.admin_confirm_export_database_title)
+    val confirmExportDatabaseText = stringResource(R.string.admin_confirm_export_database_text)
+    val confirmDeleteAllOrdersTitle = stringResource(R.string.admin_confirm_delete_all_orders_title)
+    val confirmDeleteAllOrdersText = stringResource(R.string.admin_confirm_delete_all_orders_text)
+    val confirmTotalResetTitle = stringResource(R.string.admin_confirm_total_reset_title)
+    val confirmTotalResetText = stringResource(R.string.admin_confirm_total_reset_text)
 
     AppScreenContainer {
+        if (isProcessing) {
+            androidx.compose.foundation.layout.Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.padding(RepairAppSpacing.compactGap),
+                )
+            }
+        }
+
         SectionTitle(
             text = stringResource(R.string.config_backup_title),
             tooltip = stringResource(R.string.config_backup_tooltip),
@@ -221,15 +256,6 @@ fun BackupSettings(
                         },
                     )
 
-                    if (isProcessing) {
-                        CircularProgressIndicator(
-                            modifier =
-                                Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(RepairAppSpacing.compactGap),
-                        )
-                    }
-
                     AppButton(
                         text = stringResource(R.string.config_backup_restore_zip),
                         variant = AppButtonVariant.Warning,
@@ -258,25 +284,210 @@ fun BackupSettings(
                 tooltip = stringResource(R.string.config_backup_orders_tooltip),
             )
 
-            AppButton(
-                text = stringResource(R.string.config_backup_export_xlsx),
-                size = AppButtonSize.Default,
-                variant = AppButtonVariant.Secondary,
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    onRequestConfirm(confirmExportXlsxTitle, confirmExportXlsxText) {
-                        exportOrdersXlsxLauncher.launch("onlytechtake_commesse_$timestamp.xlsx")
-                    }
-                },
+            StandardCard {
+                Column(
+                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
+                ) {
+                    AppButton(
+                        text = stringResource(R.string.config_backup_export_xlsx),
+                        size = AppButtonSize.Default,
+                        variant = AppButtonVariant.Secondary,
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            onRequestConfirm(confirmExportXlsxTitle, confirmExportXlsxText) {
+                                exportOrdersXlsxLauncher.launch("onlytechtake_commesse_$timestamp.xlsx")
+                            }
+                        },
+                    )
+
+                    AppButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.admin_export_database),
+                        variant = AppButtonVariant.Secondary,
+                        size = AppButtonSize.Compact,
+                        onClick = {
+                            onRequestConfirm(confirmExportDatabaseTitle, confirmExportDatabaseText) {
+                                exportDatabaseLauncher.launch("onlytechtake_backup_$timestamp.db")
+                            }
+                        },
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(RepairAppSpacing.sectionGap))
+
+            SectionTitle(
+                text = stringResource(R.string.admin_total_reset),
+                tooltip = stringResource(R.string.admin_total_reset_tooltip),
             )
 
-            if (isProcessing) {
-                CircularProgressIndicator(
-                    modifier =
-                        Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(RepairAppSpacing.compactGap),
-                )
+            StandardCard {
+                Column(
+                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
+                ) {
+                    Text(
+                        text = stringResource(R.string.admin_delete_all_orders),
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Text(
+                        text = stringResource(R.string.admin_delete_all_orders_tooltip),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    AppTextField(
+                        value = ordersResetConfirmation,
+                        onValueChange = { ordersResetConfirmation = it },
+                        label = stringResource(
+                            R.string.admin_delete_all_orders_field_short,
+                            stringResource(R.string.admin_delete_all_orders_confirmation_value),
+                        ),
+                    )
+                    AppButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.admin_delete_all_orders),
+                        enabled = ordersResetConfirmation == stringResource(R.string.admin_delete_all_orders_confirmation_value),
+                        variant = AppButtonVariant.Warning,
+                        leadingIcon = Icons.Default.Delete,
+                        testTag = RepairAppTestTags.AdminDeleteAllOrdersButton,
+                        onClick = {
+                            onRequestConfirm(
+                                confirmDeleteAllOrdersTitle,
+                                confirmDeleteAllOrdersText,
+                            ) {
+                                viewModel.resetOrders(ordersResetConfirmation) {
+                                    ordersResetConfirmation = ""
+                                }
+                            }
+                        },
+                    )
+
+                    Spacer(Modifier.height(RepairAppSpacing.cardGap))
+
+                    AppDivider()
+
+                    Text(
+                        text = stringResource(R.string.admin_total_reset),
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                    Text(
+                        text = stringResource(R.string.admin_total_reset_tooltip),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    AppTextField(
+                        resetConfirmation,
+                        { resetConfirmation = it },
+                        stringResource(
+                            R.string.admin_total_reset_field,
+                            stringResource(R.string.admin_total_reset_confirmation_value),
+                        ),
+                    )
+                    AppButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.admin_total_reset),
+                        enabled = resetConfirmation == stringResource(R.string.admin_total_reset_confirmation_value),
+                        variant = AppButtonVariant.Danger,
+                        leadingIcon = Icons.Default.DeleteForever,
+                        testTag = RepairAppTestTags.AdminTotalResetButton,
+                        onClick = {
+                            onRequestConfirm(confirmTotalResetTitle, confirmTotalResetText) {
+                                viewModel.resetAllData(resetConfirmation, onResetComplete)
+                                resetConfirmation = ""
+                            }
+                        },
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(RepairAppSpacing.sectionGap))
+
+            SectionTitle(
+                text = stringResource(R.string.config_backup_logs_title),
+                tooltip = stringResource(R.string.config_backup_logs_tooltip),
+            )
+
+            StandardCard {
+                Column(
+                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
+                ) {
+                    val logsSize =
+                        storageStats?.logsBytes?.let {
+                            com.onlytechtake.repairapp.core.utils
+                                .formatFileSize(it)
+                        } ?: "0 B"
+
+                    Text(
+                        text = stringResource(R.string.config_backup_logs_size_label, logsSize),
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+                    ) {
+                        AppButton(
+                            text = stringResource(R.string.config_backup_logs_send_whatsapp),
+                            variant = AppButtonVariant.WhatsApp,
+                            modifier = Modifier.weight(1f),
+                            onClick = {
+                                onRequestConfirm(
+                                    confirmSendLogsTitle,
+                                    confirmSendLogsText,
+                                ) {
+                                    viewModel.shareDiagnosticLogs()
+                                }
+                            },
+                        )
+                        AppButton(
+                            text = stringResource(R.string.config_backup_logs_clear),
+                            variant = AppButtonVariant.Warning,
+                            modifier = Modifier.weight(1f),
+                            onClick = {
+                                onRequestConfirm(
+                                    confirmClearLogsTitle,
+                                    confirmClearLogsText,
+                                ) {
+                                    viewModel.clearDiagnosticLogs()
+                                }
+                            },
+                        )
+                    }
+
+                    AppDivider()
+
+                    Text(
+                        text = stringResource(R.string.storage_deep_maintenance),
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+                    ) {
+                        AppButton(
+                            modifier = Modifier.weight(1f),
+                            text = stringResource(R.string.storage_cleanup_cache),
+                            variant = AppButtonVariant.Secondary,
+                            size = AppButtonSize.Compact,
+                            onClick = viewModel::cleanupCache,
+                        )
+                        AppButton(
+                            modifier = Modifier.weight(1f),
+                            text = stringResource(R.string.storage_cleanup_orphans),
+                            variant = AppButtonVariant.Secondary,
+                            size = AppButtonSize.Compact,
+                            onClick = viewModel::cleanupOrphanedFiles,
+                        )
+                    }
+                }
             }
         }
 

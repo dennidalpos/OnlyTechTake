@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.onlytechtake.repairapp.R
+import kotlinx.coroutines.launch
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppButton
@@ -178,6 +179,7 @@ private fun SettingsSectionContent(
     val windowSizeClass = LocalWindowSizeClass.current
     val isWide = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Medium
     val message by viewModel.message.collectAsState()
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
 
     Column(
         modifier =
@@ -217,7 +219,13 @@ private fun SettingsSectionContent(
                 BackupSettings(
                     viewModel,
                     isAdmin,
-                    onBackupRestored,
+                    onBackupRestored = onBackupRestored,
+                    onResetComplete = {
+                        scope.launch {
+                            kotlinx.coroutines.delay(500)
+                            onBackupRestored()
+                        }
+                    },
                     requestConfirm,
                     onBack = onBack,
                 )
@@ -227,7 +235,6 @@ private fun SettingsSectionContent(
                 AdminPanel(
                     viewModel = viewModel,
                     isAdmin = isAdmin,
-                    onResetComplete = onLogout,
                     onBack = onBack,
                 )
 

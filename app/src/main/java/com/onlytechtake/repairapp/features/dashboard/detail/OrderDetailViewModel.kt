@@ -2,11 +2,11 @@ package com.onlytechtake.repairapp.features.dashboard.detail
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.onlytechtake.repairapp.R
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
@@ -43,6 +43,7 @@ class OrderDetailViewModel(
     private val templateRepository: TemplateRepository,
     private val generateOrderStatusPdfUseCase: GenerateOrderStatusPdfUseCase,
     private val shareDocumentIntentFactory: ShareDocumentIntentFactory,
+    private val diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger,
     private val onSetFormDirty: (Boolean) -> Unit,
 ) : ViewModel() {
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
@@ -59,6 +60,7 @@ class OrderDetailViewModel(
             scope = viewModelScope,
             showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) },
             setLoading = { _isProcessing.value = it },
+            diagnosticLogger = diagnosticLogger,
         )
 
     private val _isGeneratingStatusPdf = MutableStateFlow(value = false)
@@ -267,9 +269,9 @@ class OrderDetailViewModel(
             generateOrderStatusPdfUseCase(orderId, actor.id, includeSignature)
                 .onSuccess { document ->
                     _isGeneratingStatusPdf.value = false
-                _lastGeneratedDocumentId.value = document.id
-                triggerShare(document.localPath, context.getString(R.string.share_title_status_report, document.fileName))
-                _showPdfSentConfirmation.value = true
+                    _lastGeneratedDocumentId.value = document.id
+                    triggerShare(document.localPath, context.getString(R.string.share_title_status_report, document.fileName))
+                    _showPdfSentConfirmation.value = true
                 }.onFailure { error ->
                     _isGeneratingStatusPdf.value = false
                     _statusPdfError.value = error.message
@@ -349,6 +351,7 @@ class OrderDetailViewModel(
         private val templateRepository: TemplateRepository,
         private val generateOrderStatusPdfUseCase: GenerateOrderStatusPdfUseCase,
         private val shareDocumentIntentFactory: ShareDocumentIntentFactory,
+        private val diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger,
         private val onSetFormDirty: (Boolean) -> Unit,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
@@ -363,6 +366,7 @@ class OrderDetailViewModel(
                 templateRepository,
                 generateOrderStatusPdfUseCase,
                 shareDocumentIntentFactory,
+                diagnosticLogger,
                 onSetFormDirty,
             ) as T
     }

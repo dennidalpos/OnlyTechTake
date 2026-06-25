@@ -109,7 +109,10 @@ internal object BackupArchive {
 
     private fun isSupportedAppFile(relativePath: String): Boolean = relativePath.startsWith("$CANONICAL_MEDIA_DIRECTORY/")
 
-    private fun requireSafeEntry(context: Context, name: String) {
+    private fun requireSafeEntry(
+        context: Context,
+        name: String,
+    ) {
         require(name.isNotBlank()) { context.getString(R.string.error_invalid_zip_backup) }
         require(!name.startsWith("/") && !name.startsWith("\\") && '\\' !in name) {
             context.getString(R.string.error_invalid_backup_path)

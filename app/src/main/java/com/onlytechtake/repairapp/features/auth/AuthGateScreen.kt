@@ -64,13 +64,12 @@ import com.onlytechtake.repairapp.core.design.components.AppTopBar
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.features.dashboard.DashboardRoute
 
-private var showcaseSeedRequested = false
-
 @Composable
 fun AuthGateRoute(
     appInstanceKey: Int,
     onAppDataRestored: () -> Unit,
 ) {
+    var showcaseSeedRequested by rememberSaveable(appInstanceKey) { mutableStateOf(false) }
     val container = LocalAppContainer.current
     val viewModel: AuthGateViewModel =
         viewModel(

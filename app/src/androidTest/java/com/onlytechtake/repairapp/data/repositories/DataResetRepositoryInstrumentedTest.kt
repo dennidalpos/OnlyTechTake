@@ -127,7 +127,7 @@ class DataResetRepositoryInstrumentedTest {
             val result = repository.resetOrders(actor, confirmation)
             assertTrue(
                 "Reset orders failed: ${result.exceptionOrNull()?.message}",
-                result.isSuccess
+                result.isSuccess,
             )
 
             // Orders should be gone

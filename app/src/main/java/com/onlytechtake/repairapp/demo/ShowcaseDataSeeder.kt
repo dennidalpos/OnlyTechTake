@@ -39,23 +39,13 @@ object ShowcaseDataSeeder {
 
     suspend fun seedShowcaseData(context: Context) {
         val authPreferences = AuthPreferences(context)
-
-        // Clean up before seeding
-        RepairAppDatabase.closeInstance()
-        context.deleteDatabase(RepairAppDatabase.DATABASE_NAME)
-
-        // IMPORTANT: delete WAL files as well just in case
-        context.deleteDatabase("${RepairAppDatabase.DATABASE_NAME}-wal")
-        context.deleteDatabase("${RepairAppDatabase.DATABASE_NAME}-shm")
-
-        authPreferences.clear()
-
         val mediaStorageProvider = MediaStorageProvider(context)
-        mediaStorageProvider.getBaseMediaDir().deleteRecursively()
 
-        // Re-get instance after deletion
+        // DO NOT close or delete the database here.
+        // This method is called when authState.configured is false,
+        // meaning the database is already open and ready to be seeded.
+
         val db = RepairAppDatabase.getInstance(context)
-
         val now = System.currentTimeMillis()
         val passwordHasher = PasswordHasher()
         val pwdHash = passwordHasher.hash(DEFAULT_PASSWORD.toCharArray())

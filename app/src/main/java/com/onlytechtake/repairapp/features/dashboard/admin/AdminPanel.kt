@@ -1,7 +1,5 @@
 package com.onlytechtake.repairapp.features.dashboard.admin
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -43,7 +40,6 @@ import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
-import com.onlytechtake.repairapp.core.design.components.AppDialog
 import com.onlytechtake.repairapp.core.design.components.AppDivider
 import com.onlytechtake.repairapp.core.design.components.AppIconButton
 import com.onlytechtake.repairapp.core.design.components.AppMessageBanner
@@ -63,22 +59,11 @@ import com.onlytechtake.repairapp.features.dashboard.settings.SettingsViewModel
 fun AdminPanel(
     viewModel: SettingsViewModel,
     isAdmin: Boolean,
-    onResetComplete: () -> Unit,
     onBack: () -> Unit = {},
 ) {
     val users by viewModel.users.collectAsState()
     val recoveryCode by viewModel.recoveryCode.collectAsState()
-    val isBackupReminderDue by viewModel.isBackupReminderDue.collectAsState()
     val message by viewModel.message.collectAsState()
-
-    val exportDatabaseLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/x-sqlite3")) { uri ->
-            uri?.let(viewModel::exportDatabase)
-        }
-    val exportOrdersXlsxLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) { uri ->
-            uri?.let(viewModel::exportOrdersXlsx)
-        }
 
     val confirmCreateTitle = stringResource(R.string.admin_confirm_create_title)
     val confirmCreateText = stringResource(R.string.admin_confirm_create_text)
@@ -88,14 +73,6 @@ fun AdminPanel(
     val confirmDeleteTextTemplate = stringResource(R.string.admin_confirm_delete_user_text)
     val confirmResetTitle = stringResource(R.string.admin_confirm_reset_title)
     val confirmResetTextTemplate = stringResource(R.string.admin_confirm_reset_text)
-    val confirmTotalResetTitle = stringResource(R.string.admin_confirm_total_reset_title)
-    val confirmTotalResetText = stringResource(R.string.admin_confirm_total_reset_text)
-    val confirmDeleteAllOrdersTitle = stringResource(R.string.admin_confirm_delete_all_orders_title)
-    val confirmDeleteAllOrdersText = stringResource(R.string.admin_confirm_delete_all_orders_text)
-    val confirmExportDatabaseTitle = stringResource(R.string.admin_confirm_export_database_title)
-    val confirmExportDatabaseText = stringResource(R.string.admin_confirm_export_database_text)
-    val confirmExportXlsxTitle = stringResource(R.string.config_backup_confirm_export_xlsx_title)
-    val confirmExportXlsxText = stringResource(R.string.config_backup_confirm_export_xlsx_text)
 
     var displayName by rememberSaveable { mutableStateOf("") }
     var username by rememberSaveable { mutableStateOf("") }
@@ -103,9 +80,6 @@ fun AdminPanel(
     var passwordVisible by rememberSaveable { mutableStateOf(value = false) }
 
     var resetPasswords by remember { mutableStateOf(emptyMap<String, String>()) }
-
-    var resetConfirmation by rememberSaveable { mutableStateOf("") }
-    var ordersResetConfirmation by rememberSaveable { mutableStateOf("") }
 
     var confirmTitle by remember { mutableStateOf<String?>(null) }
     var confirmText by remember { mutableStateOf("") }
@@ -536,165 +510,14 @@ fun AdminPanel(
             }
         }
 
-        if (isBackupReminderDue) {
-            AppMessageBanner(
-                message = "${stringResource(R.string.admin_backup_overdue_title)}: ${
-                    stringResource(
-                        R.string.admin_backup_overdue_text,
-                    )
-                }",
-                type = BannerType.Error,
-            )
-            Spacer(Modifier.height(RepairAppSpacing.cardGap))
-        }
-
-        StandardCard {
-            Column(
-                modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
-            ) {
-                SectionTitle(
-                    text = stringResource(R.string.config_backup_orders_export_title),
-                    tooltip = stringResource(R.string.config_backup_orders_tooltip),
-                )
-                AppButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.admin_export_database),
-                    variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact,
-                    onClick = {
-                        requestConfirm(confirmExportDatabaseTitle, confirmExportDatabaseText) {
-                            exportDatabaseLauncher.launch("repairapp-export.db")
-                        }
-                    },
-                )
-                AppButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.config_backup_export_xlsx),
-                    variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact,
-                    onClick = {
-                        requestConfirm(confirmExportXlsxTitle, confirmExportXlsxText) {
-                            exportOrdersXlsxLauncher.launch("repairapp-commesse.xlsx")
-                        }
-                    },
-                )
-            }
-        }
-
-        Spacer(Modifier.height(RepairAppSpacing.cardGap))
-
-        StandardCard {
-            Column(
-                modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
-            ) {
-                SectionTitle(
-                    text = stringResource(R.string.admin_delete_all_orders),
-                    tooltip = stringResource(R.string.admin_delete_all_orders_tooltip),
-                )
-                AppTextField(
-                    value = ordersResetConfirmation,
-                    onValueChange = { ordersResetConfirmation = it },
-                    label = stringResource(R.string.admin_delete_all_orders_field_short, stringResource(R.string.admin_delete_all_orders_confirmation_value)),
-                )
-                AppButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.admin_delete_all_orders),
-                    enabled = ordersResetConfirmation == stringResource(R.string.admin_delete_all_orders_confirmation_value),
-                    variant = AppButtonVariant.Warning,
-                    leadingIcon = Icons.Default.Delete,
-                    testTag = RepairAppTestTags.AdminDeleteAllOrdersButton,
-                    onClick = {
-                        requestConfirm(
-                            confirmDeleteAllOrdersTitle,
-                            confirmDeleteAllOrdersText,
-                        ) {
-                            viewModel.resetOrders(ordersResetConfirmation) {
-                                ordersResetConfirmation = ""
-                            }
-                        }
-                    },
-                )
-            }
-        }
-
-        Spacer(Modifier.height(RepairAppSpacing.cardGap))
-
-        StandardCard {
-            Column(
-                modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
-            ) {
-                SectionTitle(
-                    text = stringResource(R.string.admin_total_reset),
-                    tooltip = stringResource(R.string.admin_total_reset_tooltip),
-                )
-                AppTextField(
-                    resetConfirmation,
-                    { resetConfirmation = it },
-                    stringResource(R.string.admin_total_reset_field, stringResource(R.string.admin_total_reset_confirmation_value)),
-                )
-                AppButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.admin_total_reset),
-                    enabled = resetConfirmation == stringResource(R.string.admin_total_reset_confirmation_value),
-                    variant = AppButtonVariant.Danger,
-                    leadingIcon = Icons.Default.DeleteForever,
-                    testTag = RepairAppTestTags.AdminTotalResetButton,
-                    onClick = {
-                        requestConfirm(confirmTotalResetTitle, confirmTotalResetText) {
-                            viewModel.resetAllData(resetConfirmation, onResetComplete)
-                            resetConfirmation = ""
-                        }
-                    },
-                )
-            }
-        }
-
         Spacer(Modifier.height(RepairAppSpacing.sectionGap))
 
         AppButton(
-            text = stringResource(R.string.config_backup_close),
+            text = stringResource(R.string.admin_close),
             variant = AppButtonVariant.Ghost,
             size = AppButtonSize.Default,
             modifier = Modifier.fillMaxWidth(),
             onClick = onBack,
-        )
-    }
-
-    confirmTitle?.let { title ->
-        AppDialog(
-            onDismissRequest = {
-                confirmTitle = null
-                confirmAction = null
-            },
-            title = title,
-            text = confirmText,
-            confirmButton = {
-                AppButton(
-                    text = stringResource(R.string.confirm),
-                    onClick = {
-                        confirmAction?.invoke()
-                        confirmTitle = null
-                        confirmAction = null
-                    },
-                    variant = AppButtonVariant.Primary,
-                    size = AppButtonSize.Compact,
-                    modifier = Modifier.testTag(RepairAppTestTags.GenericConfirmButton),
-                )
-            },
-            dismissButton = {
-                AppButton(
-                    text = stringResource(R.string.customer_cancel),
-                    variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact,
-                    onClick = {
-                        confirmTitle = null
-                        confirmAction = null
-                    },
-                )
-            },
         )
     }
 }

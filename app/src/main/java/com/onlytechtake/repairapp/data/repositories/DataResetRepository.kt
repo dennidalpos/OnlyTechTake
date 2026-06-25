@@ -44,6 +44,9 @@ class DataResetRepository(
 
                 database.withTransaction {
                     val db = database.openHelper.writableDatabase
+                    // Break self-referencing hierarchies before deletion to avoid FK violations (code 1811)
+                    db.execSQL("UPDATE order_categories SET parentId = NULL")
+
                     TABLES_ORDERED_FOR_DELETION.forEach { table ->
                         db.execSQL("DELETE FROM $table")
                     }
@@ -52,11 +55,13 @@ class DataResetRepository(
                 authPreferences.clear()
                 sessionStore.clear()
 
-                // Clear all files
-                fileCleanupService.cleanupSharedCache()
-                // For a full reset, we wipe the centralized media folder and the rest of filesDir
+                // Clear files specifically instead of nuking everything in filesDir
+                // This prevents deleting datastore files while they are being closed
                 mediaStorageProvider.getBaseMediaDir().deleteRecursively()
-                context.filesDir.listFiles()?.forEach { it.deleteRecursively() }
+                fileCleanupService.cleanupSharedCache()
+
+                // Optional: delete other specific folders if needed, but NOT the root filesDir
+                File(context.filesDir, "logs").deleteRecursively()
             }
         }
 
@@ -110,6 +115,7 @@ class DataResetRepository(
                 "order_categories",
                 "message_templates",
                 "app_settings",
+                "login_attempts",
                 "users",
             )
 

@@ -219,6 +219,17 @@
     <string name="success_templates_restored">Template ripristinati</string>
     <string name="success_orphaned_files_cleaned">Pulizia file orfani completata</string>
 
+    <string name="config_backup_logs_title">Log Diagnostici</string>
+    <string name="config_backup_logs_tooltip">Raccoglie i log degli errori per l\'assistenza tecnica.</string>
+    <string name="config_backup_logs_size_label">Spazio occupato dai log: %s</string>
+    <string name="config_backup_logs_send_whatsapp">Invia Log via WhatsApp</string>
+    <string name="config_backup_logs_clear">Svuota Log</string>
+    <string name="config_backup_logs_clear_confirm_title">Svuota Log</string>
+    <string name="config_backup_logs_clear_confirm_text">Sei sicuro di voler eliminare tutti i log diagnostici? Questa operazione libererà spazio.</string>
+    <string name="config_backup_logs_send_confirm_title">Invia Log</string>
+    <string name="config_backup_logs_send_confirm_text">Verrà generato un file compresso con i dati tecnici da inviare via WhatsApp.</string>
+    <string name="success_logs_cleared">Log svuotati con successo.</string>
+
     <string name="error_feature_pro_only">Funzione disponibile nella versione Full</string>
     <string name="error_db_not_created">Database non ancora creato</string>
     <string name="error_restore_area_unavailable">Area ripristino non disponibile</string>
@@ -665,6 +676,7 @@
     <string name="yes_confirmed">Sì, confermato</string>
     <string name="no_cancel">No, annulla</string>
 
+    <string name="admin_close">Chiudi Utenti e Operatori</string>
     <string name="admin_only_section">Sezione disponibile solo per admin.</string>
     <string name="admin_create_operator">Crea operatore</string>
     <string name="admin_field_temp_password">Password temporanea</string>
@@ -751,10 +763,10 @@
     <string name="config_hub_templates_subtitle_user">Area admin</string>
     <string name="config_hub_whatsapp_title">WhatsApp</string>
     <string name="config_hub_whatsapp_subtitle">Invio manuale</string>
-    <string name="config_hub_admin_title">Utenti e reset</string>
-    <string name="config_hub_admin_subtitle">Area admin</string>
-    <string name="config_hub_backup_title">Backup</string>
-    <string name="config_hub_backup_subtitle">Export e ripristino</string>
+    <string name="config_hub_admin_title">Utenti e Operatori</string>
+    <string name="config_hub_admin_subtitle">Gestione operatori e kit di recupero</string>
+    <string name="config_hub_backup_title">Backup e Manutenzione</string>
+    <string name="config_hub_backup_subtitle">Export, reset e ripristino</string>
     <string name="config_hub_storage_subtitle">Spazio disco e monitoraggio</string>
     <string name="config_hub_about_title">Informazioni</string>
     <string name="config_hub_about_subtitle">Versione e contatti dell\'app</string>

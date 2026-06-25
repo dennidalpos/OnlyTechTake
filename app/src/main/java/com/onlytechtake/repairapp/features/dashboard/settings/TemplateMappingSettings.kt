@@ -109,7 +109,7 @@ fun ColumnScope.TemplateMappingSettings(
                             Text(
                                 text = stringResource(anchor.labelRes),
                                 style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
                             )
                             Text(
                                 text = stringResource(anchor.descriptionRes),
@@ -120,37 +120,42 @@ fun ColumnScope.TemplateMappingSettings(
                             Spacer(modifier = Modifier.height(RepairAppSpacing.cardGap))
 
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                val statusIcon = when {
-                                    assignedTemplate == null -> Icons.Default.Error
-                                    isDefault -> Icons.Default.RadioButtonUnchecked
-                                    else -> Icons.Default.Link
-                                }
-                                val statusColor = when {
-                                    assignedTemplate == null -> MaterialTheme.colorScheme.error
-                                    isDefault -> MaterialTheme.colorScheme.outline
-                                    else -> MaterialTheme.colorScheme.primary
-                                }
-                                val statusText = when {
-                                    assignedTemplate == null -> stringResource(R.string.config_template_status_missing)
-                                    isDefault -> stringResource(R.string.config_template_status_default)
-                                    else -> stringResource(R.string.config_template_status_associated)
-                                }
-                                val badgeContainerColor = when {
-                                    assignedTemplate == null -> MaterialTheme.colorScheme.errorContainer
-                                    isDefault -> MaterialTheme.colorScheme.surfaceVariant
-                                    else -> MaterialTheme.colorScheme.primaryContainer
-                                }
-                                val badgeContentColor = when {
-                                    assignedTemplate == null -> MaterialTheme.colorScheme.onErrorContainer
-                                    isDefault -> MaterialTheme.colorScheme.onSurfaceVariant
-                                    else -> MaterialTheme.colorScheme.onPrimaryContainer
-                                }
+                                val statusIcon =
+                                    when {
+                                        assignedTemplate == null -> Icons.Default.Error
+                                        isDefault -> Icons.Default.RadioButtonUnchecked
+                                        else -> Icons.Default.Link
+                                    }
+                                val statusColor =
+                                    when {
+                                        assignedTemplate == null -> MaterialTheme.colorScheme.error
+                                        isDefault -> MaterialTheme.colorScheme.outline
+                                        else -> MaterialTheme.colorScheme.primary
+                                    }
+                                val statusText =
+                                    when {
+                                        assignedTemplate == null -> stringResource(R.string.config_template_status_missing)
+                                        isDefault -> stringResource(R.string.config_template_status_default)
+                                        else -> stringResource(R.string.config_template_status_associated)
+                                    }
+                                val badgeContainerColor =
+                                    when {
+                                        assignedTemplate == null -> MaterialTheme.colorScheme.errorContainer
+                                        isDefault -> MaterialTheme.colorScheme.surfaceVariant
+                                        else -> MaterialTheme.colorScheme.primaryContainer
+                                    }
+                                val badgeContentColor =
+                                    when {
+                                        assignedTemplate == null -> MaterialTheme.colorScheme.onErrorContainer
+                                        isDefault -> MaterialTheme.colorScheme.onSurfaceVariant
+                                        else -> MaterialTheme.colorScheme.onPrimaryContainer
+                                    }
 
                                 Icon(
                                     imageVector = statusIcon,
                                     contentDescription = null,
                                     tint = statusColor,
-                                    modifier = Modifier.size(16.dp)
+                                    modifier = Modifier.size(16.dp),
                                 )
                                 Spacer(modifier = Modifier.width(RepairAppSpacing.compactGap))
                                 AppBadge(
@@ -162,22 +167,29 @@ fun ColumnScope.TemplateMappingSettings(
                                 Text(
                                     text = assignedTemplate?.title ?: assignedCode ?: stringResource(R.string.config_template_status_not_configured),
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = if (assignedTemplate == null) MaterialTheme.colorScheme.error else if (isDefault) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.onSurface,
+                                    color =
+                                        if (assignedTemplate == null) {
+                                            MaterialTheme.colorScheme.error
+                                        } else if (isDefault) {
+                                            MaterialTheme.colorScheme.outline
+                                        } else {
+                                            MaterialTheme.colorScheme.onSurface
+                                        },
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
-                                    modifier = Modifier.weight(1f, fill = false)
+                                    modifier = Modifier.weight(1f, fill = false),
                                 )
                                 if (assignedTemplate != null) {
                                     IconButton(
                                         onClick = {
                                             expandedAnchor = if (expandedAnchor == anchor) null else anchor
                                         },
-                                        modifier = Modifier.size(24.dp)
+                                        modifier = Modifier.size(24.dp),
                                     ) {
                                         Icon(
                                             imageVector = if (expandedAnchor == anchor) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
                                             contentDescription = null,
-                                            tint = MaterialTheme.colorScheme.primary
+                                            tint = MaterialTheme.colorScheme.primary,
                                         )
                                     }
                                 }
@@ -186,24 +198,25 @@ fun ColumnScope.TemplateMappingSettings(
                             AnimatedVisibility(
                                 visible = expandedAnchor == anchor,
                                 enter = fadeIn() + expandVertically(),
-                                exit = fadeOut() + shrinkVertically()
+                                exit = fadeOut() + shrinkVertically(),
                             ) {
                                 assignedTemplate?.let { template ->
                                     Column(
-                                        modifier = Modifier
-                                            .padding(top = RepairAppSpacing.compactGap)
-                                            .fillMaxWidth()
+                                        modifier =
+                                            Modifier
+                                                .padding(top = RepairAppSpacing.compactGap)
+                                                .fillMaxWidth(),
                                     ) {
                                         HorizontalDivider(
                                             modifier = Modifier.padding(vertical = RepairAppSpacing.compactGap),
                                             thickness = 0.5.dp,
-                                            color = MaterialTheme.colorScheme.outlineVariant
+                                            color = MaterialTheme.colorScheme.outlineVariant,
                                         )
                                         Text(
                                             text = template.body,
                                             style = MaterialTheme.typography.bodySmall,
                                             fontStyle = FontStyle.Italic,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
                                     }
                                 }

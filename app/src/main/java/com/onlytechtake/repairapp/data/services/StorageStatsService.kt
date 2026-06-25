@@ -13,6 +13,7 @@ data class StorageStats(
     val mediaBytes: Long,
     val documentsBytes: Long,
     val cacheBytes: Long,
+    val logsBytes: Long,
 )
 
 class StorageStatsService(
@@ -39,6 +40,7 @@ class StorageStatsService(
         val intakeBytes = getDirectorySize(File(baseMediaDir, "intake_media"))
 
         val cacheBytes = getDirectorySize(context.cacheDir)
+        val logsBytes = getDirectorySize(File(context.filesDir, "logs"))
 
         val appUsedBytes = getDirectorySize(context.filesDir) + totalDbBytes + cacheBytes
 
@@ -50,6 +52,7 @@ class StorageStatsService(
             mediaBytes = mediaBytes + intakeBytes,
             documentsBytes = documentBytes + signatureBytes,
             cacheBytes = cacheBytes,
+            logsBytes = logsBytes,
         )
     }
 

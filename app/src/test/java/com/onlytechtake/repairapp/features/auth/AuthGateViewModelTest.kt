@@ -1,6 +1,5 @@
 package com.onlytechtake.repairapp.features.auth
 
-import android.content.Context
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.auth.AuthState
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
