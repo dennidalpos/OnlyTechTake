@@ -69,6 +69,7 @@
     "Ottimizzazione performance LazyColumn nei setup Template e Categorie tramite l'uso di chiavi univoche (keys)",
     "Messa in sicurezza del parsing delle configurazioni (MessageMode) e ottimizzazione osservazione template",
     "Corretto rischio di crash nella condivisione log tramite l'aggiunta di FLAG_ACTIVITY_NEW_TASK per contesti non-Activity",
-    "Risolti vari warning segnalati dall'editor in DashboardNavHost, OrderStatusPdfGenerator, AuthGateViewModel, DiagnosticLogger, OrderDetailComponents e SettingsDelegates, migliorando la pulizia del codice e risolvendo un potenziale context leak."
+    "Risolti vari warning segnalati dall'editor in DashboardNavHost, OrderStatusPdfGenerator, AuthGateViewModel, DiagnosticLogger, OrderDetailComponents e SettingsDelegates, migliorando la pulizia del codice e risolvendo un potenziale context leak.",
+    "Risolta regressione nel test WorkspaceUiHelpersTest: corretta la formattazione di dimensioni file e date forzando il Locale nei test per evitare fallimenti dovuti a differenze tra ambiente locale e CI (es. separatore decimale punto vs virgola)."
   ]
 }

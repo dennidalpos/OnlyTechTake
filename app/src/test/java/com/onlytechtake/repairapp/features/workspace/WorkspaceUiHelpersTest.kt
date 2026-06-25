@@ -19,6 +19,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.ZoneOffset
+import java.util.Locale
 
 class WorkspaceUiHelpersTest {
     private val context =
@@ -64,10 +65,11 @@ class WorkspaceUiHelpersTest {
 
     @Test
     fun fileSizeAndDatesAreReadable() {
-        assertEquals("512 B", formatFileSize(512))
-        assertEquals("2 KB", formatFileSize(2_048))
-        assertEquals("1,5 MB", formatFileSize(1_572_864))
-        assertEquals("01/01/1970 00:00", formatUiDateTime(0L, ZoneOffset.UTC))
+        val locale = Locale.ITALY
+        assertEquals("512 B", formatFileSize(512, locale))
+        assertEquals("2 KB", formatFileSize(2_048, locale))
+        assertEquals("1,5 MB", formatFileSize(1_572_864, locale))
+        assertEquals("01/01/1970 00:00", formatUiDateTime(0L, ZoneOffset.UTC, locale))
     }
 
     @Test
