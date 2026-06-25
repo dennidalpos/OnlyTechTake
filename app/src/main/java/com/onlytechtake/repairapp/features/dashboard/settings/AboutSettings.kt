@@ -106,11 +106,30 @@ fun AboutSettings(onBack: () -> Unit) {
                         style = MaterialTheme.typography.bodyMedium,
                     )
 
+                    val githubUrl = stringResource(R.string.about_url_github)
                     AppButton(
                         text = stringResource(R.string.about_github),
                         variant = AppButtonVariant.Secondary,
                         leadingIcon = Icons.Default.Code,
-                        onClick = { uriHandler.openUri("https://github.com/dennidalpos") },
+                        onClick = { uriHandler.openUri(githubUrl) },
+                    )
+                }
+            }
+        }
+
+        item {
+            StandardCard {
+                Column(
+                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+                ) {
+                    Text(
+                        stringResource(R.string.about_legal_credits_title),
+                        style = MaterialTheme.typography.titleSmall,
+                    )
+                    Text(
+                        text = stringResource(R.string.about_legal_credits_text),
+                        style = MaterialTheme.typography.bodyMedium,
                     )
                 }
             }
@@ -126,17 +145,19 @@ fun AboutSettings(onBack: () -> Unit) {
                         stringResource(R.string.about_links_title),
                         style = MaterialTheme.typography.titleSmall,
                     )
+                    val homeUrl = stringResource(R.string.about_url_home)
                     AppButton(
                         text = stringResource(R.string.about_home_page),
                         variant = AppButtonVariant.Ghost,
                         leadingIcon = Icons.Default.Public,
-                        onClick = { uriHandler.openUri("https://inventoveritas.mine.nu/index.html") },
+                        onClick = { uriHandler.openUri(homeUrl) },
                     )
+                    val privacyUrl = stringResource(R.string.about_url_privacy)
                     AppButton(
                         text = stringResource(R.string.about_privacy_policy),
                         variant = AppButtonVariant.Ghost,
                         leadingIcon = Icons.Default.Shield,
-                        onClick = { uriHandler.openUri("https://inventoveritas.mine.nu/privacy.html") },
+                        onClick = { uriHandler.openUri(privacyUrl) },
                     )
                 }
             }
@@ -165,6 +186,6 @@ fun AboutSettings(onBack: () -> Unit) {
 @Composable
 private fun AboutSettingsPreview() {
     MaterialTheme {
-        AboutSettings(onBack = {})
+        AboutSettings {}
     }
 }

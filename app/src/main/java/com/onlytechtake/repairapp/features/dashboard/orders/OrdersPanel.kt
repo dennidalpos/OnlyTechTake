@@ -459,32 +459,27 @@ private fun OrderFilterBar(
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_all),
             selected = filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL,
-            onClick = { onFilter(OrderFilter(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL)) },
-        )
+        ) { onFilter(OrderFilter(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL)) }
 
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_mine),
             selected = filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.MINE,
-            onClick = { onFilter(filter.copy(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.MINE)) },
-        )
+        ) { onFilter(filter.copy(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.MINE)) }
 
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_open_unassigned),
             selected = filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
-            onClick = { onFilter(filter.copy(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED)) },
-        )
+        ) { onFilter(filter.copy(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED)) }
 
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_in_progress_assigned),
             selected = filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
-            onClick = { onFilter(filter.copy(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS)) },
-        )
+        ) { onFilter(filter.copy(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS)) }
 
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_closed_discarded),
             selected = filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED,
-            onClick = { onFilter(filter.copy(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED)) },
-        )
+        ) { onFilter(filter.copy(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED)) }
     }
 }
 
@@ -504,4 +499,5 @@ private fun FilterToggleButton(
     )
 }
 
-private fun OrderFilter.hasActiveFilter(): Boolean = (mode != com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL || query.isNotBlank())
+private fun OrderFilter.hasActiveFilter(): Boolean =
+    (mode != com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL) || query.isNotBlank()

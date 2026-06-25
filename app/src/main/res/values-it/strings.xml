@@ -406,6 +406,7 @@
     <string name="backup_status_never">Mai eseguito</string>
     <plurals name="backup_status_days_ago">
         <item quantity="one">%1$d giorno fa</item>
+        <item quantity="many">%1$d giorni fa</item>
         <item quantity="other">%1$d giorni fa</item>
     </plurals>
     <string name="backup_status_failed">Ultimo tentativo fallito</string>
@@ -781,7 +782,12 @@
     <string name="about_description_text">OnlyTechTake è un gestionale locale per laboratori di riparazione. Tutti i tuoi dati restano sul dispositivo per garantirti massima privacy e velocità.</string>
     <string name="about_copyright">© 2026 OnlyTechTake</string>
     <string name="about_github">GitHub: dennidalpos</string>
+    <string name="about_url_github">https://github.com/dennidalpos</string>
+    <string name="about_url_home">https://inventoveritas.mine.nu/index.html</string>
+    <string name="about_url_privacy">https://inventoveritas.mine.nu/privacy.html</string>
     <string name="about_close">Chiudi Informazioni</string>
+    <string name="about_legal_credits_title">Crediti Open Source</string>
+    <string name="about_legal_credits_text">Questa applicazione utilizza le seguenti librerie: SQLCipher per la crittografia, Room per il database locale, Jetpack Compose per la UI, e Zip4j per i backup.</string>
     <string name="about_development">Sviluppo</string>
 
     <string name="config_category_root">Tutte</string>
@@ -834,6 +840,7 @@
     <string name="config_backup_reminder_info">Stato: %1$s\nUltimo backup riuscito: %2$s\nIntervallo: %3$s\nFile: %4$s</string>
     <plurals name="config_backup_reminder_interval">
         <item quantity="one">ogni %1$d giorno</item>
+        <item quantity="many">ogni %1$d giorni</item>
         <item quantity="other">ogni %1$d giorni</item>
     </plurals>
     <string name="config_backup_last_success_none">Nessuno</string>
@@ -927,11 +934,13 @@
 
     <plurals name="demo_error_order_limit">
         <item quantity="one">Limite Demo raggiunto. La versione Demo consente %1$d sola commessa e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
+        <item quantity="many">Limite Demo raggiunto. La versione Demo consente %1$d commesse e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
         <item quantity="other">Limite Demo raggiunto. La versione Demo consente %1$d commesse e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
     </plurals>
     <string name="demo_error_operator_not_available">La versione Demo non consente la creazione di operatori. Usa solo l\'account admin locale.</string>
     <plurals name="demo_error_operator_limit">
         <item quantity="one">Limite Demo raggiunto. Massimo %1$d operatore consentito nella versione Demo. Per continuare senza limiti, attiva la versione Full.</item>
+        <item quantity="many">Limite Demo raggiunto. Massimo %1$d operatori consentiti nella versione Demo. Per continuare senza limiti, attiva la versione Full.</item>
         <item quantity="other">Limite Demo raggiunto. Massimo %1$d operatori consentiti nella versione Demo. Per continuare senza limiti, attiva la versione Full.</item>
     </plurals>
 

@@ -3,12 +3,12 @@
   "version": "1.0.5",
   "status": "Production-Ready / Maintenance",
   "last_updated": "2026-06-29",
-  "alignment_status": "Fully aligned across all flavors. Settings reorganized: Users/Operators separated from Maintenance & Backup hub. Consolidated all exports, reset, and deep maintenance operations (cache/orphans/logs) in the Backup section.",
+  "alignment_status": "Pienamente allineato tra tutti i flavor. Ottimizzato per prestazioni, stabilità del thread UI e conformità standalone.",
   "landing_page": {
     "status": "Standalone Ready + Assets Automated",
     "theme": "Material 3 + Inter Typography",
     "visual_first": true,
-    "features_updated": "Unified logo branding, interactive photo gallery (filtered to main flows), and automated asset synchronization from device acquisition.",
+    "features_updated": "Branding logo unificato, galleria interattiva filtrata e sincronizzazione asset automatizzata.",
     "last_modernization": "2026-06-25"
   },
   "features": [
@@ -16,39 +16,41 @@
     "Repair order management",
     "Photo documentation",
     "Digital Signature (Privacy/Terms)",
-    "PDF report generation",
+    "PDF report generation (Enhanced pagination)",
     "Manual WhatsApp integration with Templates",
     "Multi-flavor: Full (Pro), Demo, Showcase",
     "English default + Italian localization",
     "Automated Template Localization (System fallback)",
     "Advanced Template Mapping with Quick Preview",
     "Customer Detail with Status-colored history",
-    "Diagnostic Logs management (Backup section)"
+    "Diagnostic Logs management (Backup section)",
+    "UI Thread optimization (IO offloading)",
+    "Standalone compliance (Clean metadata and internal links)"
   ],
   "backlog": [
     {
       "priority": "HIGH",
-      "task": "Final Play Store package generation and signing verification for Full and Demo flavors."
+      "task": "Generazione pacchetti finali Play Store e verifica firma per flavor Full e Demo."
     },
     {
       "priority": "MEDIUM",
-      "task": "Update 'About' screen with final release notes and legal credits for open-source libraries (SQLCipher, Room, Compose)."
+      "task": "Test di regressione su hardware low-end (Android 10-12) per verificare la fluidità della UI dopo le ottimizzazioni dei dispatcher."
     },
     {
       "priority": "LOW",
-      "task": "Monitor performance of PDF generation with very long technical notes (>2000 characters) to ensure no page-break issues."
+      "task": "Monitoraggio warning interni Compose 'frameRate=NaN' su API 35 per futuri aggiornamenti delle librerie core."
     }
   ],
   "completed_recently": [
-    "Reorganized Settings: Consolidated all operations (Export XLSX/DB, Reset All, Reset Orders, Clear Logs, Cleanup Cache/Orphans) into 'Maintenance & Backup' section",
-    "Fixed 'Total Reset' bug (error 1811) by breaking category self-referencing hierarchy before deletion",
-    "Diagnostic Logs feature in Backup section (Share via WhatsApp, Clear, Size monitoring)",
-    "Template localization automation (auto-switch based on system language)",
-    "Reset templates to defaults button in Settings",
-    "GitHub icon integrated in About screen development section",
-    "Order status coloring in Customer detail view",
-    "Fixed order categorization in Customer history (Open vs Closed)",
-    "Removal of external Inventoveritas links for standalone release",
-    "Restored Privacy and Home Page links with cleaner labels (no site name in parentheses)"
+    "Risolti vari warning e piccoli errori segnalati dall'editor in TemplatesSettings, OrdersPanel, TemplateAnchor, AboutSettings e nei test.",
+    "Corretta la localizzazione delle plurali in italiano (aggiunta quantità 'many' dove richiesto dal linter).",
+    "Completata schermata 'Informazioni': inserimento note di rilascio, crediti open-source e rimozione URL hardcoded",
+    "Allineamento versionamento build (1.0.5) tra configurazione Gradle e stato progetto",
+    "Migliorata robustezza generazione PDF: implementata paginazione dinamica per descrizioni e timeline molto lunghe",
+    "Risolta regressione nei test strumentali: corretto passaggio dei parametri delegati nel pannello Admin",
+    "Risolti blocchi del thread principale (UI jank) spostando il calcolo statistiche memoria e operazioni log su Dispatchers.IO",
+    "Ottimizzazione performance LazyColumn nei setup Template e Categorie tramite l'uso di chiavi univoche (keys)",
+    "Messa in sicurezza del parsing delle configurazioni (MessageMode) e ottimizzazione osservazione template",
+    "Corretto rischio di crash nella condivisione log tramite l'aggiunta di FLAG_ACTIVITY_NEW_TASK per contesti non-Activity"
   ]
 }

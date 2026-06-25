@@ -178,7 +178,7 @@ fun ColumnScope.TemplatesSettings(
             }
         }
 
-        items(filteredTemplates) { template ->
+        items(filteredTemplates, key = { it.id }) { template ->
             val isUsed = template.code in usedTemplateCodes
             StandardCard(
                 onClick = { editingTemplate = template },
@@ -313,7 +313,12 @@ fun ColumnScope.TemplatesSettings(
         val assignedAnchors = TemplateAnchor.entries.filter { anchorMappings[it] == template.code }
         val associatedWarning =
             if (assignedAnchors.isNotEmpty()) {
-                val anchorLabels = assignedAnchors.map { stringResource(it.labelRes) }.joinToString()
+                val anchorLabels = buildString {
+                    assignedAnchors.forEachIndexed { index, anchor ->
+                        append(stringResource(anchor.labelRes))
+                        if (index < (assignedAnchors.size - 1)) append(", ")
+                    }
+                }
                 stringResource(
                     R.string.config_template_associated_warning,
                     anchorLabels,
@@ -326,7 +331,7 @@ fun ColumnScope.TemplatesSettings(
             template = template,
             onDismiss = {
                 editingTemplate = null
-                viewModel.setFormDirty(false)
+                viewModel.setFormDirty(dirty = false)
             },
             onSave = { code, title, body, active, step ->
                 val riskyTemplateChange =
@@ -545,4 +550,4 @@ private fun isRiskyTemplateChange(
     loadedCode: String?,
     currentCode: String,
     active: Boolean,
-): Boolean = (loadedCode != null && loadedCode != currentCode) || (currentCode in systemTemplateCodes && !active)
+): Boolean = ((loadedCode != null) && (loadedCode != currentCode)) || ((currentCode in systemTemplateCodes) && !active)

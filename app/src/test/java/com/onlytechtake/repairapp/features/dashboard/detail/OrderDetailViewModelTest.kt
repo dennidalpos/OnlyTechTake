@@ -74,7 +74,6 @@ class OrderDetailViewModelTest {
             val documentRepository =
                 FakeOrderDocumentRepository(
                     document(
-                        id = "document-1",
                         localPath = pdf.absolutePath,
                         fileName = pdf.name,
                     ),
@@ -112,8 +111,8 @@ class OrderDetailViewModelTest {
                     templateRepository = mockk<TemplateRepository>(relaxed = true),
                     generateOrderStatusPdfUseCase = mockk<GenerateOrderStatusPdfUseCase>(relaxed = true),
                     shareDocumentIntentFactory = shareFactory,
-                    onSetFormDirty = {},
-                )
+                    diagnosticLogger = mockk(relaxed = true),
+                ) {}
 
             viewModel.onShareDocumentClicked("document-1")
             advanceUntilIdle()
@@ -133,9 +132,9 @@ class OrderDetailViewModelTest {
         }
 
     private fun document(
-        id: String,
         localPath: String,
         fileName: String,
+        id: String = "document-1",
     ): OrderDocumentEntity =
         OrderDocumentEntity(
             id = id,

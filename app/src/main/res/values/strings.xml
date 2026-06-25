@@ -776,7 +776,12 @@
     <string name="about_description_text">OnlyTechTake is a local management software for repair shops. All your data stays on the device to guarantee maximum privacy and speed.</string>
     <string name="about_copyright">© 2026 OnlyTechTake</string>
     <string name="about_github">GitHub: dennidalpos</string>
+    <string name="about_url_github">https://github.com/dennidalpos</string>
+    <string name="about_url_home">https://inventoveritas.mine.nu/index.html</string>
+    <string name="about_url_privacy">https://inventoveritas.mine.nu/privacy.html</string>
     <string name="about_close">Close Information</string>
+    <string name="about_legal_credits_title">Open Source Credits</string>
+    <string name="about_legal_credits_text">This application uses the following libraries: SQLCipher for encryption, Room for local database, Jetpack Compose for the UI, and Zip4j for backups.</string>
     <string name="about_development">Development</string>
 
     <string name="config_category_root">All</string>

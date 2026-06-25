@@ -235,6 +235,7 @@ private fun SettingsSectionContent(
                 AdminPanel(
                     viewModel = viewModel,
                     isAdmin = isAdmin,
+                    onRequestConfirm = requestConfirm,
                     onBack = onBack,
                 )
 

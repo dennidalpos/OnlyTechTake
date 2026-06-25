@@ -86,7 +86,7 @@ fun ColumnScope.TemplateMappingSettings(
         }
 
         if (isAdmin) {
-            items(TemplateAnchor.entries) { anchor ->
+            items(TemplateAnchor.entries, key = { it.settingKey }) { anchor ->
                 val assignedCode = anchorMappings[anchor]
                 val isDefault = assignedCode == anchor.defaultCode
                 val assignedTemplate = templates.find { it.code == assignedCode }
@@ -263,16 +263,17 @@ fun ColumnScope.TemplateMappingSettings(
         }
     }
 
+    val activeTemplates = remember(templates) { templates.filter { it.active } }
+
     selectingAnchorForTemplate?.let { anchor ->
         AnchorSelectionDialog(
             anchor = anchor,
-            templates = templates.filter { it.active },
+            templates = activeTemplates,
             currentMapping = anchorMappings[anchor],
             onDismiss = { selectingAnchorForTemplate = null },
-            onSelect = { templateCode ->
-                viewModel.setTemplateForAnchor(anchor, templateCode)
-                selectingAnchorForTemplate = null
-            },
-        )
+        ) { templateCode ->
+            viewModel.setTemplateForAnchor(anchor, templateCode)
+            selectingAnchorForTemplate = null
+        }
     }
 }

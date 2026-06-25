@@ -167,7 +167,11 @@ class SettingsViewModel(
 
     fun refreshStorageStats() {
         viewModelScope.launch {
-            _storageStats.value = storageStatsService.getStorageStats()
+            val stats =
+                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                    storageStatsService.getStorageStats()
+                }
+            _storageStats.value = stats
         }
     }
 

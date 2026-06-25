@@ -50,9 +50,10 @@ class TemplateRepository(
 
     fun observeTemplates(): Flow<List<MessageTemplateEntity>> =
         templateDao.observeAll().map { list ->
+            val defaults = getDefaultTemplates()
             list.map { template ->
                 if (template.code in systemTemplateCodes && template.version == 1) {
-                    val default = getDefaultTemplates().find { it.code == template.code }
+                    val default = defaults.find { it.code == template.code }
                     if (default != null) {
                         template.copy(
                             title = default.title,
@@ -95,11 +96,16 @@ class TemplateRepository(
 
     fun observeMessageMode(): Flow<MessageMode> =
         settingDao.observeAll().map { settings ->
-            settings
-                .firstOrNull { it.key == MESSAGE_MODE_SETTING_KEY }
-                ?.value
-                ?.let(MessageMode::valueOf)
-                ?: MessageMode.MANUAL_WHATSAPP
+            val value = settings.firstOrNull { it.key == MESSAGE_MODE_SETTING_KEY }?.value
+            if (value != null) {
+                try {
+                    MessageMode.valueOf(value)
+                } catch (e: Exception) {
+                    MessageMode.MANUAL_WHATSAPP
+                }
+            } else {
+                MessageMode.MANUAL_WHATSAPP
+            }
         }
 
     suspend fun setMessageMode(

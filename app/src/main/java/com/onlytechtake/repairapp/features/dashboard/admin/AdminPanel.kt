@@ -59,6 +59,7 @@ import com.onlytechtake.repairapp.features.dashboard.settings.SettingsViewModel
 fun AdminPanel(
     viewModel: SettingsViewModel,
     isAdmin: Boolean,
+    onRequestConfirm: (String, String, () -> Unit) -> Unit,
     onBack: () -> Unit = {},
 ) {
     val users by viewModel.users.collectAsState()
@@ -80,20 +81,6 @@ fun AdminPanel(
     var passwordVisible by rememberSaveable { mutableStateOf(value = false) }
 
     var resetPasswords by remember { mutableStateOf(emptyMap<String, String>()) }
-
-    var confirmTitle by remember { mutableStateOf<String?>(null) }
-    var confirmText by remember { mutableStateOf("") }
-    var confirmAction by remember { mutableStateOf<(() -> Unit)?>(null) }
-
-    fun requestConfirm(
-        title: String,
-        text: String,
-        action: () -> Unit,
-    ) {
-        confirmTitle = title
-        confirmText = text
-        confirmAction = action
-    }
 
     if (!isAdmin) {
         AppScreenContainer {
@@ -165,7 +152,7 @@ fun AdminPanel(
                     modifier = Modifier.fillMaxWidth(),
                     testTag = RepairAppTestTags.AdminCreateOperatorButton,
                     onClick = {
-                        requestConfirm(confirmCreateTitle, confirmCreateText) {
+                        onRequestConfirm(confirmCreateTitle, confirmCreateText) {
                             viewModel.createOperator(displayName, username, password.toCharArray())
                             displayName = ""
                             username = ""
@@ -309,14 +296,13 @@ fun AdminPanel(
                                 Switch(
                                     checked = user.active,
                                     onCheckedChange = { checked ->
-                                        requestConfirm(
-                                            title = if (checked) "$labelActivate?" else "$labelDeactivate?",
-                                            text =
-                                                if (checked) {
-                                                    "Vuoi attivare l'operatore ${user.displayName}? Potrà riprendere a gestire le commesse."
-                                                } else {
-                                                    "Vuoi disattivare l'operatore ${user.displayName}? Non potrà più accedere all'app finché non verrà riattivato."
-                                                },
+                                        onRequestConfirm(
+                                            if (checked) "$labelActivate?" else "$labelDeactivate?",
+                                            if (checked) {
+                                                "Vuoi attivare l'operatore ${user.displayName}? Potrà riprendere a gestire le commesse."
+                                            } else {
+                                                "Vuoi disattivare l'operatore ${user.displayName}? Non potrà più accedere all'app finché non verrà riattivato."
+                                            },
                                         ) {
                                             viewModel.setUserActive(user.id, checked)
                                         }
@@ -326,9 +312,9 @@ fun AdminPanel(
                                     imageVector = Icons.Default.Delete,
                                     contentDescription = labelDelete,
                                     onClick = {
-                                        requestConfirm(
-                                            title = "$labelDelete?",
-                                            text = confirmDeleteTextTemplate.format(user.displayName),
+                                        onRequestConfirm(
+                                            "$labelDelete?",
+                                            confirmDeleteTextTemplate.format(user.displayName),
                                         ) {
                                             viewModel.deleteUser(user.id)
                                         }
@@ -492,7 +478,7 @@ fun AdminPanel(
                                     currentPassword = ""
                                     resetPasswords -= user.id
                                 } else {
-                                    requestConfirm(
+                                    onRequestConfirm(
                                         confirmResetTitle,
                                         confirmResetTextTemplate.format(user.displayName),
                                     ) {

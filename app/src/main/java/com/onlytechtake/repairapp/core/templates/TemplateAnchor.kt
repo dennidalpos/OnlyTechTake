@@ -11,9 +11,9 @@ enum class TemplateAnchor(
     val settingKey: String,
     val defaultCode: String,
     val stepNumber: Int,
-    @StringRes val stepNameRes: Int,
-    @StringRes val labelRes: Int,
-    @StringRes val descriptionRes: Int,
+    @param:StringRes val stepNameRes: Int,
+    @param:StringRes val labelRes: Int,
+    @param:StringRes val descriptionRes: Int,
 ) {
     WHATSAPP_INTAKE(
         settingKey = "anchor_wa_intake",
@@ -120,8 +120,4 @@ enum class TemplateAnchor(
         descriptionRes = R.string.anchor_desc_legal_terms,
     ),
     ;
-
-    companion object {
-        fun fromSettingKey(key: String): TemplateAnchor? = entries.find { it.settingKey == key }
-    }
 }

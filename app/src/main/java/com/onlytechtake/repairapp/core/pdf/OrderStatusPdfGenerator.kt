@@ -98,20 +98,52 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
             document.finishPage(page)
         }
 
+        fun createNewPage() {
+            finishCurrentPage()
+            page =
+                document.startPage(
+                    PdfDocument.PageInfo
+                        .Builder(
+                            595,
+                            842,
+                            document.pages.size + 1,
+                        ).create(),
+                )
+            canvas = page.canvas
+            y = margin
+        }
+
         fun checkNewPage(neededHeight: Float) {
             if (y + neededHeight > 842f - margin) {
-                finishCurrentPage()
-                page =
-                    document.startPage(
-                        PdfDocument.PageInfo
-                            .Builder(
-                                595,
-                                842,
-                                pageInfo.pageNumber + 1,
-                            ).create(),
-                    )
-                canvas = page.canvas
-                y = margin
+                createNewPage()
+            }
+        }
+
+        fun drawWrappedText(
+            text: String,
+            x: Float,
+            maxWidth: Float,
+            paint: Paint,
+            lineSpacing: Float = 2f,
+        ) {
+            val words = text.split(Regex("\\s+"))
+            var line = ""
+            for (word in words) {
+                val testLine = if (line.isEmpty()) word else "$line $word"
+                if (paint.measureText(testLine) > maxWidth) {
+                    canvas.drawText(line, x, y, paint)
+                    line = word
+                    y += paint.textSize + lineSpacing
+                    if (y > 842f - margin) {
+                        createNewPage()
+                    }
+                } else {
+                    line = testLine
+                }
+            }
+            if (line.isNotEmpty()) {
+                canvas.drawText(line, x, y, paint)
+                y += paint.textSize + lineSpacing
             }
         }
 
@@ -134,9 +166,7 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         canvas.drawText(context.getString(R.string.pdf_section_customer), margin, y, sectionPaint)
         y += 15f
         val customerName =
-            if (payload.customer.type.name ==
-                "BUSINESS"
-            ) {
+            if (payload.customer.type.name == "BUSINESS") {
                 payload.customer.companyName
             } else {
                 "${payload.customer.firstName} ${payload.customer.lastName}"
@@ -163,18 +193,16 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         canvas.drawText(payload.order.title, margin + 80f, y, textPaint)
         y += 15f
         canvas.drawText(context.getString(R.string.pdf_label_problem), margin, y, labelPaint)
-        y =
-            drawWrappedText(
-                canvas,
-                payload.order.description ?: context.getString(R.string.pdf_no_description),
-                margin + 80f,
-                y,
-                contentWidth - 80f,
-                textPaint,
-            )
+        drawWrappedText(
+            payload.order.description ?: context.getString(R.string.pdf_no_description),
+            margin + 80f,
+            contentWidth - 80f,
+            textPaint,
+        )
         y += 10f
 
         // Status
+        checkNewPage(40f)
         canvas.drawText(context.getString(R.string.pdf_section_current_status), margin, y, sectionPaint)
         y += 15f
         canvas.drawText(context.getString(R.string.pdf_label_status), margin, y, labelPaint)
@@ -188,24 +216,22 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         y += 10f
 
         // Timeline
+        checkNewPage(30f)
         canvas.drawText(context.getString(R.string.pdf_section_timeline), margin, y, sectionPaint)
         y += 15f
         payload.timeline.filter { it.visibleToCustomer }.forEach { event ->
-            checkNewPage(20f)
+            checkNewPage(25f)
             val dateStr = dateFormat.format(Date(event.createdAt))
             canvas.drawText(dateStr, margin, y, labelPaint)
             canvas.drawText(event.title, margin + 90f, y, textPaint)
             y += 12f
             if (!event.description.isNullOrBlank()) {
-                y =
-                    drawWrappedText(
-                        canvas,
-                        event.description,
-                        margin + 90f,
-                        y,
-                        contentWidth - 90f,
-                        textPaint,
-                    )
+                drawWrappedText(
+                    event.description,
+                    margin + 90f,
+                    contentWidth - 90f,
+                    textPaint,
+                )
             }
             y += 5f
         }
@@ -213,7 +239,7 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
 
         // Signature
         if (payload.signature != null) {
-            checkNewPage(150f)
+            checkNewPage(180f)
             canvas.drawText(context.getString(R.string.pdf_section_signature), margin, y, sectionPaint)
             y += 15f
             canvas.drawText(context.getString(R.string.pdf_label_signer, payload.signature.signerName), margin, y, textPaint)
@@ -274,31 +300,6 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         canvas.withRotation(-35f, PAGE_WIDTH / 2f, PAGE_HEIGHT / 2f) {
             drawText(watermarkText, PAGE_WIDTH / 2f, PAGE_HEIGHT / 2f, watermarkPaint)
         }
-    }
-
-    private fun drawWrappedText(
-        canvas: Canvas,
-        text: String,
-        x: Float,
-        y: Float,
-        maxWidth: Float,
-        paint: Paint,
-    ): Float {
-        var currentY = y
-        val words = text.split(" ")
-        var line = ""
-        for (word in words) {
-            val testLine = if (line.isEmpty()) word else "$line $word"
-            if (paint.measureText(testLine) > maxWidth) {
-                canvas.drawText(line, x, currentY, paint)
-                line = word
-                currentY += paint.textSize + 2f
-            } else {
-                line = testLine
-            }
-        }
-        canvas.drawText(line, x, currentY, paint)
-        return currentY + paint.textSize + 2f
     }
 }
 

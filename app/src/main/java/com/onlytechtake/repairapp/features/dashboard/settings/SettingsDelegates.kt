@@ -218,7 +218,7 @@ internal class StorageSettingsDelegate(
     private val onRefreshStats: () -> Unit,
 ) {
     fun cleanupCache() {
-        scope.launch {
+        scope.launch(kotlinx.coroutines.Dispatchers.IO) {
             orderFileCleanupService.cleanupSharedCache()
             onRefreshStats()
         }
@@ -226,14 +226,16 @@ internal class StorageSettingsDelegate(
 
     fun cleanupOrphanedFiles() {
         actionRunner.run(successMessageRes = R.string.success_orphaned_files_cleaned) { actor ->
-            runCatching {
-                PermissionService.requirePermission(actor, UserPermission.MANAGE_STORAGE)
-                val paths = mutableSetOf<String>()
-                paths.addAll(database.orderMediaDao().getAllPaths())
-                paths.addAll(database.signatureDao().getAllPaths())
-                paths.addAll(database.orderDocumentDao().getAllPaths())
-                orderFileCleanupService.cleanupOrphanedFiles(paths)
-                onRefreshStats()
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                runCatching {
+                    PermissionService.requirePermission(actor, UserPermission.MANAGE_STORAGE)
+                    val paths = mutableSetOf<String>()
+                    paths.addAll(database.orderMediaDao().getAllPaths())
+                    paths.addAll(database.signatureDao().getAllPaths())
+                    paths.addAll(database.orderDocumentDao().getAllPaths())
+                    orderFileCleanupService.cleanupOrphanedFiles(paths)
+                    onRefreshStats()
+                }
             }
         }
     }
@@ -246,7 +248,7 @@ internal class DiagnosticSettingsDelegate(
     private val onRefreshStats: () -> Unit,
 ) {
     fun clearLogs() {
-        scope.launch {
+        scope.launch(kotlinx.coroutines.Dispatchers.IO) {
             diagnosticLogService.clearLogs()
             onRefreshStats()
         }
@@ -254,17 +256,21 @@ internal class DiagnosticSettingsDelegate(
 
     fun shareLogs() {
         actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
-            runCatching {
-                com.onlytechtake.repairapp.core.permissions.PermissionService.requirePermission(
-                    actor,
-                    UserPermission.MANAGE_STORAGE,
-                )
-                val zipFile = diagnosticLogService.collectAndPrepareZip()
-                if (zipFile != null) {
-                    val intent = diagnosticLogService.createShareIntent(zipFile)
-                    actionRunner.context.startActivity(intent)
-                } else {
-                    throw IllegalStateException("Impossibile generare il file dei log.")
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                runCatching {
+                    com.onlytechtake.repairapp.core.permissions.PermissionService.requirePermission(
+                        actor,
+                        UserPermission.MANAGE_STORAGE,
+                    )
+                    val zipFile = diagnosticLogService.collectAndPrepareZip()
+                    if (zipFile != null) {
+                        val intent = diagnosticLogService.createShareIntent(zipFile).apply {
+                            addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                        }
+                        actionRunner.context.startActivity(intent)
+                    } else {
+                        throw IllegalStateException("Impossibile generare il file dei log.")
+                    }
                 }
             }
         }
