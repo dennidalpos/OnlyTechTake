@@ -139,7 +139,9 @@ fun OrderDetailWorkspace(
 
         if (isProcessing) {
             androidx.compose.foundation.layout.Box(
-                modifier = Modifier.fillMaxWidth().padding(RepairAppSpacing.compactGap),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(RepairAppSpacing.compactGap),
                 contentAlignment = Alignment.Center,
             ) {
                 androidx.compose.material3.LinearProgressIndicator(

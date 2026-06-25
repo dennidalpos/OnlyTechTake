@@ -316,7 +316,10 @@ fun BackupSettings(
                         variant = AppButtonVariant.Secondary,
                         size = AppButtonSize.Compact,
                         onClick = {
-                            onRequestConfirm(confirmExportDatabaseTitle, confirmExportDatabaseText) {
+                            onRequestConfirm(
+                                confirmExportDatabaseTitle,
+                                confirmExportDatabaseText
+                            ) {
                                 exportDatabaseLauncher.launch("onlytechtake_backup_$timestamp.db")
                             }
                         },

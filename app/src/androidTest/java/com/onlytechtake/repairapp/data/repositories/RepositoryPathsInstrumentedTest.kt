@@ -575,8 +575,7 @@ class RepositoryPathsInstrumentedTest {
                         database = fileBackedDatabase,
                         authPreferences = authPreferences,
                         sessionStore =
-                            com.onlytechtake.repairapp.data.session
-                                .InMemorySessionStore(),
+                            InMemorySessionStore(),
                         storageStatsService =
                             com.onlytechtake.repairapp.data.services.StorageStatsService(
                                 context,
@@ -615,8 +614,6 @@ class RepositoryPathsInstrumentedTest {
                 output.delete()
                 context.deleteDatabase(databaseName)
             }
-
-            Unit
         }
 
     @Test
@@ -739,8 +736,6 @@ class RepositoryPathsInstrumentedTest {
                 context.deleteDatabase(databaseName)
                 clearAppFiles()
             }
-
-            Unit
         }
 
     @Test
@@ -1074,8 +1069,7 @@ class RepositoryPathsInstrumentedTest {
             database = database,
             authPreferences = authPreferences,
             sessionStore =
-                com.onlytechtake.repairapp.data.session
-                    .InMemorySessionStore(),
+                InMemorySessionStore(),
             storageStatsService =
                 com.onlytechtake.repairapp.data.services.StorageStatsService(
                     context,
@@ -1162,7 +1156,8 @@ class RepositoryPathsInstrumentedTest {
         }
     }
 
-    private fun File.walkFiles(): Sequence<File> = if (exists()) walkTopDown().filter { it.isFile } else emptySequence()
+    private fun File.walkFiles(): Sequence<File> =
+        if (exists()) walkTopDown().filter { it.isFile } else emptySequence()
 
     private fun File.unzipTextEntries(): Map<String, String> {
         val entries = mutableMapOf<String, String>()

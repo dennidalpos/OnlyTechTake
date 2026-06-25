@@ -34,7 +34,7 @@ internal object BackupArchive {
 
         ZipInputStream(input, password).use { zip ->
             while (true) {
-                val entry = zip.getNextEntry() ?: break
+                val entry = zip.nextEntry ?: break
                 try {
                     if (entry.isDirectory) continue
                     requireSafeEntry(context, entry.fileName)
@@ -49,7 +49,8 @@ internal object BackupArchive {
                             require(fileName.isNotBlank() && !fileName.contains('/')) {
                                 context.getString(R.string.error_invalid_db_backup)
                             }
-                            val destination = safeChild(context, File(restoreRoot, "database"), fileName)
+                            val destination =
+                                safeChild(context, File(restoreRoot, "database"), fileName)
                             destination.parentFile?.mkdirs()
                             destination.outputStream().use(zip::copyTo)
                             databaseFiles[fileName] = destination
@@ -60,7 +61,8 @@ internal object BackupArchive {
                             require(isSupportedAppFile(relativePath)) {
                                 context.getString(R.string.error_unsupported_app_files)
                             }
-                            val destination = safeChild(context, File(restoreRoot, "files"), relativePath)
+                            val destination =
+                                safeChild(context, File(restoreRoot, "files"), relativePath)
                             destination.parentFile?.mkdirs()
                             destination.outputStream().use(zip::copyTo)
                         }
@@ -107,7 +109,8 @@ internal object BackupArchive {
             }
     }
 
-    private fun isSupportedAppFile(relativePath: String): Boolean = relativePath.startsWith("$CANONICAL_MEDIA_DIRECTORY/")
+    private fun isSupportedAppFile(relativePath: String): Boolean =
+        relativePath.startsWith("$CANONICAL_MEDIA_DIRECTORY/")
 
     private fun requireSafeEntry(
         context: Context,

@@ -109,7 +109,7 @@ fun CameraCapturePreview(
                         }
                     val preview =
                         Preview.Builder().build().also {
-                            it.setSurfaceProvider(previewView.surfaceProvider)
+                            it.surfaceProvider = previewView.surfaceProvider
                         }
                     imageCapture.targetRotation = cameraTargetRotation(context, previewView)
                     cameraProvider.unbindAll()

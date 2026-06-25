@@ -499,4 +499,5 @@ private fun FilterToggleButton(
     )
 }
 
-private fun OrderFilter.hasActiveFilter(): Boolean = (mode != com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL) || query.isNotBlank()
+private fun OrderFilter.hasActiveFilter(): Boolean =
+    (mode != com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL) || query.isNotBlank()

@@ -9,7 +9,8 @@ class OrderMediaFileNamer {
         orderNumber: String,
         timestampMillis: Long,
     ): String {
-        val safeOrderNumber = sanitize(orderNumber).ifBlank { context.getString(R.string.label_order_fallback) }
+        val safeOrderNumber =
+            sanitize(orderNumber).ifBlank { context.getString(R.string.label_order_fallback) }
         return "${safeOrderNumber}_$timestampMillis.jpg"
     }
 

@@ -294,7 +294,14 @@ object ShowcaseDataSeeder {
                         context.getString(R.string.showcase_cat_tablet_desc),
                         true,
                     ),
-                    OrderCategoryEntity("cat-ipad", "cat-tablet", 1, "iPad", context.getString(R.string.showcase_cat_ipad_desc), true),
+                    OrderCategoryEntity(
+                        "cat-ipad",
+                        "cat-tablet",
+                        1,
+                        "iPad",
+                        context.getString(R.string.showcase_cat_ipad_desc),
+                        true
+                    ),
                     OrderCategoryEntity(
                         "cat-ipad-pro",
                         "cat-ipad",
@@ -320,7 +327,13 @@ object ShowcaseDataSeeder {
                     CustomerEntity(
                         id = "cust-p-$i",
                         type = CustomerType.PRIVATE,
-                        firstName = listOf("Mario", "Luigi", "Giovanna", "Francesca", "Roberto")[i - 1],
+                        firstName = listOf(
+                            "Mario",
+                            "Luigi",
+                            "Giovanna",
+                            "Francesca",
+                            "Roberto"
+                        )[i - 1],
                         lastName = listOf("Rossi", "Bianchi", "Verdi", "Neri", "Gialli")[i - 1],
                         companyName = null,
                         vatNumber = null,
@@ -366,15 +379,18 @@ object ShowcaseDataSeeder {
             // 5. Create Orders
             val allCustomers = privateCustomers + businessCustomers
             val statuses = OrderStatus.entries.toTypedArray()
-            val selectableCategories = categories.filter { cat -> categories.none { it.parentId == cat.id } }
+            val selectableCategories =
+                categories.filter { cat -> categories.none { it.parentId == cat.id } }
 
             var orderCount = 1
             allCustomers.forEach { customer ->
                 repeat(3) { j ->
                     val orderId = "order-$orderCount"
                     val isClosed = (j == 2)
-                    val status = if (isClosed) OrderStatus.CLOSED else statuses[(orderCount % (statuses.size - 1))]
-                    val categoryId = selectableCategories[(orderCount % selectableCategories.size)].id
+                    val status =
+                        if (isClosed) OrderStatus.CLOSED else statuses[(orderCount % (statuses.size - 1))]
+                    val categoryId =
+                        selectableCategories[(orderCount % selectableCategories.size)].id
                     val operatorId = operators[(orderCount % 3)].id
                     val repairType = listOf("PC", "Smartphone", "Tablet", "Console")[orderCount % 4]
 
@@ -472,7 +488,10 @@ object ShowcaseDataSeeder {
                         writeDemoBitmap(
                             directory = mediaStorageProvider.getOrderSignaturesDir(orderId),
                             fileName = "sig-$orderId.png",
-                            label = context.getString(R.string.showcase_sig_label, customer.firstName ?: customer.companyName),
+                            label = context.getString(
+                                R.string.showcase_sig_label,
+                                customer.firstName ?: customer.companyName
+                            ),
                             backgroundColor = Color.WHITE,
                             paint = paint,
                         )
@@ -480,7 +499,8 @@ object ShowcaseDataSeeder {
                         SignatureEntity(
                             id = "sig-$orderId",
                             orderId = orderId,
-                            signerName = customer.firstName ?: customer.companyName ?: context.getString(R.string.signature_default_signer),
+                            signerName = customer.firstName ?: customer.companyName
+                            ?: context.getString(R.string.signature_default_signer),
                             privacyAccepted = true,
                             termsAccepted = true,
                             privacyTextSnapshot = context.getString(R.string.showcase_privacy_snapshot),
@@ -506,19 +526,45 @@ object ShowcaseDataSeeder {
             // 6. Create Templates
             val templates =
                 listOf(
-                    "privacy_breve" to context.getString(R.string.template_privacy_breve_title) to context.getString(R.string.template_privacy_breve_body),
-                    "condizioni_presa_in_carico" to context.getString(R.string.template_condizioni_title) to context.getString(R.string.template_condizioni_body),
-                    "whatsapp_presa_in_carico" to context.getString(R.string.template_wa_intake_title) to context.getString(R.string.template_wa_intake_body),
-                    "whatsapp_aggiornamento" to context.getString(R.string.template_wa_update_title) to context.getString(R.string.template_wa_update_body),
-                    "whatsapp_diagnosi" to context.getString(R.string.template_wa_diagnosis_title) to context.getString(R.string.template_wa_diagnosis_body),
-                    "whatsapp_risultato" to context.getString(R.string.template_wa_result_title) to context.getString(R.string.template_wa_result_body),
-                    "whatsapp_preventivo_intervento" to context.getString(R.string.template_wa_quote_title) to context.getString(R.string.template_wa_quote_body),
-                    "whatsapp_non_riparabile" to context.getString(R.string.template_wa_not_repairable_title) to context.getString(R.string.template_wa_not_repairable_body),
-                    "whatsapp_riparazione" to context.getString(R.string.template_wa_repairing_title) to context.getString(R.string.template_wa_repairing_body),
-                    "whatsapp_lavorazione" to context.getString(R.string.template_wa_lavorazione_title) to context.getString(R.string.template_wa_lavorazione_body),
-                    "whatsapp_completamento" to context.getString(R.string.template_wa_completamento_title) to context.getString(R.string.template_wa_completamento_body),
-                    "whatsapp_pronto_ritiro" to context.getString(R.string.template_wa_ready_title) to context.getString(R.string.template_wa_ready_body),
-                    "whatsapp_stato_avanzamento_pdf" to context.getString(R.string.template_wa_pdf_status_title) to context.getString(R.string.template_wa_pdf_status_body),
+                    "privacy_breve" to context.getString(R.string.template_privacy_breve_title) to context.getString(
+                        R.string.template_privacy_breve_body
+                    ),
+                    "condizioni_presa_in_carico" to context.getString(R.string.template_condizioni_title) to context.getString(
+                        R.string.template_condizioni_body
+                    ),
+                    "whatsapp_presa_in_carico" to context.getString(R.string.template_wa_intake_title) to context.getString(
+                        R.string.template_wa_intake_body
+                    ),
+                    "whatsapp_aggiornamento" to context.getString(R.string.template_wa_update_title) to context.getString(
+                        R.string.template_wa_update_body
+                    ),
+                    "whatsapp_diagnosi" to context.getString(R.string.template_wa_diagnosis_title) to context.getString(
+                        R.string.template_wa_diagnosis_body
+                    ),
+                    "whatsapp_risultato" to context.getString(R.string.template_wa_result_title) to context.getString(
+                        R.string.template_wa_result_body
+                    ),
+                    "whatsapp_preventivo_intervento" to context.getString(R.string.template_wa_quote_title) to context.getString(
+                        R.string.template_wa_quote_body
+                    ),
+                    "whatsapp_non_riparabile" to context.getString(R.string.template_wa_not_repairable_title) to context.getString(
+                        R.string.template_wa_not_repairable_body
+                    ),
+                    "whatsapp_riparazione" to context.getString(R.string.template_wa_repairing_title) to context.getString(
+                        R.string.template_wa_repairing_body
+                    ),
+                    "whatsapp_lavorazione" to context.getString(R.string.template_wa_lavorazione_title) to context.getString(
+                        R.string.template_wa_lavorazione_body
+                    ),
+                    "whatsapp_completamento" to context.getString(R.string.template_wa_completamento_title) to context.getString(
+                        R.string.template_wa_completamento_body
+                    ),
+                    "whatsapp_pronto_ritiro" to context.getString(R.string.template_wa_ready_title) to context.getString(
+                        R.string.template_wa_ready_body
+                    ),
+                    "whatsapp_stato_avanzamento_pdf" to context.getString(R.string.template_wa_pdf_status_title) to context.getString(
+                        R.string.template_wa_pdf_status_body
+                    ),
                 ).mapIndexed { index, pair ->
                     val (codeTitle, body) = pair
                     val (code, title) = codeTitle

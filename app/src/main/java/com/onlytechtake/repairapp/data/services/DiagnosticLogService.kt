@@ -21,7 +21,11 @@ class DiagnosticLogService(
         val logFile = diagnosticLogger.getLogFile()
         if (!logFile.exists() || logFile.length() == 0L) {
             // Create a dummy log if none exists to avoid empty zip error
-            diagnosticLogger.logError("DiagnosticLogService", "Automatic log generation for export", null)
+            diagnosticLogger.logError(
+                "DiagnosticLogService",
+                "Automatic log generation for export",
+                null
+            )
         }
 
         val zipFile = File(context.cacheDir, "diagnostic_logs_${UUID.randomUUID()}.zip")

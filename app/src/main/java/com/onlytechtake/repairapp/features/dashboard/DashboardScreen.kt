@@ -458,8 +458,7 @@ private fun DashboardScreenPreview() {
                     activeOrderCount = 5,
                 ),
             sharedViewModel =
-                androidx.lifecycle.viewmodel.compose
-                    .viewModel(),
+                viewModel(),
             onLogout = {},
             onAppDataRestored = {},
         )

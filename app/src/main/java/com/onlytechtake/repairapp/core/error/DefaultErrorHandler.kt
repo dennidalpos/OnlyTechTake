@@ -13,5 +13,6 @@ class DefaultErrorHandler(
         diagnosticLogger.logError(context, error.message ?: "Unknown error", error)
     }
 
-    override fun getErrorMessage(error: Throwable): String = error.message ?: "Si è verificato un errore"
+    override fun getErrorMessage(error: Throwable): String =
+        error.message ?: "Si è verificato un errore"
 }

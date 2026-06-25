@@ -242,7 +242,9 @@ fun ColumnScope.TemplatesSettings(
                                 )
                                 Spacer(modifier = Modifier.width(RepairAppSpacing.compactGap))
                                 AppBadge(
-                                    text = if (isUsed) stringResource(R.string.config_template_status_associated) else stringResource(R.string.config_template_status_free),
+                                    text = if (isUsed) stringResource(R.string.config_template_status_associated) else stringResource(
+                                        R.string.config_template_status_free
+                                    ),
                                     containerColor = if (isUsed) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.tertiaryContainer,
                                     contentColor = if (isUsed) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onTertiaryContainer,
                                 )
@@ -551,4 +553,5 @@ private fun isRiskyTemplateChange(
     loadedCode: String?,
     currentCode: String,
     active: Boolean,
-): Boolean = ((loadedCode != null) && (loadedCode != currentCode)) || ((currentCode in systemTemplateCodes) && !active)
+): Boolean =
+    ((loadedCode != null) && (loadedCode != currentCode)) || ((currentCode in systemTemplateCodes) && !active)

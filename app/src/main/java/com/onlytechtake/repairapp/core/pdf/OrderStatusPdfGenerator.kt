@@ -174,7 +174,12 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         canvas.drawText(context.getString(R.string.pdf_label_customer_name), margin, y, labelPaint)
         canvas.drawText(customerName ?: "", margin + 80f, y, textPaint)
         y += 15f
-        canvas.drawText(context.getString(R.string.pdf_label_customer_contact), margin, y, labelPaint)
+        canvas.drawText(
+            context.getString(R.string.pdf_label_customer_contact),
+            margin,
+            y,
+            labelPaint
+        )
         canvas.drawText(
             "${payload.customer.phone ?: ""} / ${payload.customer.email ?: ""}",
             margin + 80f,
@@ -184,7 +189,12 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         y += 25f
 
         // Order Details
-        canvas.drawText(context.getString(R.string.pdf_section_device_details), margin, y, sectionPaint)
+        canvas.drawText(
+            context.getString(R.string.pdf_section_device_details),
+            margin,
+            y,
+            sectionPaint
+        )
         y += 15f
         canvas.drawText(context.getString(R.string.pdf_label_category), margin, y, labelPaint)
         canvas.drawText(payload.categoryPath, margin + 80f, y, textPaint)
@@ -203,7 +213,12 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
 
         // Status
         checkNewPage(40f)
-        canvas.drawText(context.getString(R.string.pdf_section_current_status), margin, y, sectionPaint)
+        canvas.drawText(
+            context.getString(R.string.pdf_section_current_status),
+            margin,
+            y,
+            sectionPaint
+        )
         y += 15f
         canvas.drawText(context.getString(R.string.pdf_label_status), margin, y, labelPaint)
         canvas.drawText(payload.statusLabel, margin + 80f, y, textPaint)
@@ -240,26 +255,45 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         // Signature
         if (payload.signature != null) {
             checkNewPage(180f)
-            canvas.drawText(context.getString(R.string.pdf_section_signature), margin, y, sectionPaint)
+            canvas.drawText(
+                context.getString(R.string.pdf_section_signature),
+                margin,
+                y,
+                sectionPaint
+            )
             y += 15f
-            canvas.drawText(context.getString(R.string.pdf_label_signer, payload.signature.signerName), margin, y, textPaint)
+            canvas.drawText(
+                context.getString(
+                    R.string.pdf_label_signer,
+                    payload.signature.signerName
+                ), margin, y, textPaint
+            )
             y += 12f
             canvas.drawText(
-                context.getString(R.string.pdf_label_signed_at, dateFormat.format(Date(payload.signature.signedAt))),
+                context.getString(
+                    R.string.pdf_label_signed_at,
+                    dateFormat.format(Date(payload.signature.signedAt))
+                ),
                 margin,
                 y,
                 textPaint,
             )
             y += 12f
             canvas.drawText(
-                context.getString(R.string.pdf_label_privacy_accepted, payload.signature.privacyTemplateVersion),
+                context.getString(
+                    R.string.pdf_label_privacy_accepted,
+                    payload.signature.privacyTemplateVersion
+                ),
                 margin,
                 y,
                 textPaint,
             )
             y += 12f
             canvas.drawText(
-                context.getString(R.string.pdf_label_terms_accepted, payload.signature.termsTemplateVersion),
+                context.getString(
+                    R.string.pdf_label_terms_accepted,
+                    payload.signature.termsTemplateVersion
+                ),
                 margin,
                 y,
                 textPaint,

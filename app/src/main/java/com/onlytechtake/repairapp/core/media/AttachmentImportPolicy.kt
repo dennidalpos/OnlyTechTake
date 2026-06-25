@@ -20,11 +20,19 @@ class AttachmentImportPolicy(
     ) {
         val mimeType = normalize(rawMimeType)
         require(mimeType.isNotBlank()) { context.getString(R.string.error_unrecognized_attachment_type) }
-        require(mimeType in allowedMimeTypes) { context.getString(R.string.error_attachment_type_not_allowed, mimeType) }
+        require(mimeType in allowedMimeTypes) {
+            context.getString(
+                R.string.error_attachment_type_not_allowed,
+                mimeType
+            )
+        }
 
         if (declaredSizeBytes != null && declaredSizeBytes >= 0L) {
             require(declaredSizeBytes <= maxSizeBytes) {
-                context.getString(R.string.error_attachment_too_large, maxSizeBytes.toMiBLabel(context))
+                context.getString(
+                    R.string.error_attachment_too_large,
+                    maxSizeBytes.toMiBLabel(context)
+                )
             }
         }
     }

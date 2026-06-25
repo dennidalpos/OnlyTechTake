@@ -45,11 +45,12 @@ internal class OrderWorkflowQueries(
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> true
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
-                -> false
+                    -> false
 
                 else -> {
                     if (filter.statuses.isNotEmpty()) {
-                        val hasClosed = filter.statuses.contains(com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED)
+                        val hasClosed =
+                            filter.statuses.contains(com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED)
                         if (hasClosed && filter.statuses.size == 1) {
                             true
                         } else if (!hasClosed) {
@@ -90,11 +91,12 @@ internal class OrderWorkflowQueries(
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> true
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
-                -> false
+                    -> false
 
                 else -> {
                     if (filter.statuses.isNotEmpty()) {
-                        val hasClosed = filter.statuses.contains(com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED)
+                        val hasClosed =
+                            filter.statuses.contains(com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED)
                         if (hasClosed && filter.statuses.size == 1) {
                             true
                         } else if (!hasClosed) {
@@ -149,11 +151,12 @@ internal class OrderWorkflowQueries(
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> true
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
                 com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
-                -> false
+                    -> false
 
                 else -> {
                     if (filter.statuses.isNotEmpty()) {
-                        val hasClosed = filter.statuses.contains(com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED)
+                        val hasClosed =
+                            filter.statuses.contains(com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED)
                         if (hasClosed && filter.statuses.size == 1) {
                             true
                         } else if (!hasClosed) {

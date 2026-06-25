@@ -41,7 +41,8 @@ class SignatureRepository(
         bitmap: Bitmap,
     ): Result<SignatureEntity> =
         runCatching {
-            val order = requireNotNull(repairOrderDao.findById(orderId)) { context.getString(R.string.error_order_not_found) }
+            val order =
+                requireNotNull(repairOrderDao.findById(orderId)) { context.getString(R.string.error_order_not_found) }
             if (order.assignedToUserId != actor.id) {
                 PermissionService.requirePermission(actor, UserPermission.EDIT_ALL_ORDERS)
             } else {
@@ -79,7 +80,8 @@ class SignatureRepository(
                 SignatureEntity(
                     id = UUID.randomUUID().toString(),
                     orderId = orderId,
-                    signerName = signerName.trim().ifBlank { context.getString(R.string.signature_default_signer) },
+                    signerName = signerName.trim()
+                        .ifBlank { context.getString(R.string.signature_default_signer) },
                     privacyAccepted = privacyAccepted,
                     termsAccepted = termsAccepted,
                     privacyTextSnapshot =

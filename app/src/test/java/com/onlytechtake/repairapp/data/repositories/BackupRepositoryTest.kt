@@ -187,7 +187,7 @@ class BackupRepositoryTest {
         val entries = mutableMapOf<String, String>()
         ZipInputStream(ByteArrayInputStream(bytes)).use { zip ->
             while (true) {
-                val entry = zip.getNextEntry() ?: break
+                val entry = zip.nextEntry ?: break
                 entries[entry.fileName] = zip.readBytes().toString(Charsets.UTF_8)
             }
         }

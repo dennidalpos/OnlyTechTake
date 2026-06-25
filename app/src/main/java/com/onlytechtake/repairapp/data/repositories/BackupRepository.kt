@@ -158,7 +158,12 @@ class BackupRepository(
                 try {
                     val extracted =
                         context.contentResolver.openInputStream(uri)?.use { input ->
-                            BackupArchive.extract(context, input, stagingDir, password?.toCharArray())
+                            BackupArchive.extract(
+                                context,
+                                input,
+                                stagingDir,
+                                password?.toCharArray()
+                            )
                         } ?: throw IOException(context.getString(R.string.error_backup_unavailable))
                     require(extracted.metadataText.contains("\"databaseVersion\": ${RepairAppDatabase.DATABASE_VERSION}")) {
                         context.getString(R.string.error_backup_incompatible)
@@ -351,14 +356,39 @@ class BackupRepository(
                     if (BuildConfig.IS_DEMO_VERSION) {
                         writer.setWatermark(context.getString(R.string.demo_version_banner))
                     }
-                    writer.title(context.getString(R.string.backup_pdf_order_summary, detail.order.orderNumber))
-                    writer.line(context.getString(R.string.backup_pdf_number, detail.order.orderNumber))
+                    writer.title(
+                        context.getString(
+                            R.string.backup_pdf_order_summary,
+                            detail.order.orderNumber
+                        )
+                    )
+                    writer.line(
+                        context.getString(
+                            R.string.backup_pdf_number,
+                            detail.order.orderNumber
+                        )
+                    )
                     writer.line(context.getString(R.string.backup_pdf_title, detail.order.title))
-                    writer.line(context.getString(R.string.backup_pdf_status, detail.order.status.label(context)))
+                    writer.line(
+                        context.getString(
+                            R.string.backup_pdf_status,
+                            detail.order.status.label(context)
+                        )
+                    )
                     detail.order.closureReason?.let { reason ->
-                        writer.line(context.getString(R.string.backup_pdf_closure_reason, reason.label(context)))
+                        writer.line(
+                            context.getString(
+                                R.string.backup_pdf_closure_reason,
+                                reason.label(context)
+                            )
+                        )
                     }
-                    writer.line(context.getString(R.string.backup_pdf_customer, detail.customer?.displayName(context) ?: ""))
+                    writer.line(
+                        context.getString(
+                            R.string.backup_pdf_customer,
+                            detail.customer?.displayName(context) ?: ""
+                        )
+                    )
                     writer.line(
                         context.getString(
                             R.string.backup_pdf_category,
@@ -377,7 +407,12 @@ class BackupRepository(
                                 .ifBlank { context.getString(R.string.unassigned) },
                         ),
                     )
-                    writer.line(context.getString(R.string.backup_pdf_created_at, formatTime(detail.order.createdAt)))
+                    writer.line(
+                        context.getString(
+                            R.string.backup_pdf_created_at,
+                            formatTime(detail.order.createdAt)
+                        )
+                    )
                     writer.line(
                         context.getString(
                             R.string.backup_pdf_description,
@@ -405,15 +440,28 @@ class BackupRepository(
                         }
                         detail.signatures.firstOrNull()?.let { signature ->
                             writer.section(context.getString(R.string.backup_pdf_signed_conditions))
-                            writer.line(context.getString(R.string.backup_pdf_privacy_version, signature.privacyTemplateVersion, signature.privacyTextSnapshot))
-                            writer.line(context.getString(R.string.backup_pdf_terms_version, signature.termsTemplateVersion, signature.termsTextSnapshot))
+                            writer.line(
+                                context.getString(
+                                    R.string.backup_pdf_privacy_version,
+                                    signature.privacyTemplateVersion,
+                                    signature.privacyTextSnapshot
+                                )
+                            )
+                            writer.line(
+                                context.getString(
+                                    R.string.backup_pdf_terms_version,
+                                    signature.termsTemplateVersion,
+                                    signature.termsTextSnapshot
+                                )
+                            )
                         }
                     }
                     writer.finish()
 
                     context.contentResolver.openOutputStream(uri)?.use { output ->
                         document.writeTo(output)
-                    } ?: throw IOException(context.getString(R.string.error_destination_unavailable))
+                    }
+                        ?: throw IOException(context.getString(R.string.error_destination_unavailable))
                 } finally {
                     document.close()
                 }
@@ -491,12 +539,33 @@ private fun formatTimelineEvent(
                     ),
                 )
             }
-            event.expectedFeedbackType?.let { add(context.getString(R.string.backup_pdf_expected_feedback, it.name)) }
-            event.customerFeedback?.let { add(context.getString(R.string.backup_pdf_customer_feedback, it.name)) }
+            event.expectedFeedbackType?.let {
+                add(
+                    context.getString(
+                        R.string.backup_pdf_expected_feedback,
+                        it.name
+                    )
+                )
+            }
+            event.customerFeedback?.let {
+                add(
+                    context.getString(
+                        R.string.backup_pdf_customer_feedback,
+                        it.name
+                    )
+                )
+            }
             event.customerFeedbackNote
                 ?.takeIf { it.isNotBlank() }
                 ?.let { add(context.getString(R.string.backup_pdf_feedback_note, it)) }
-            event.customerFeedbackAt?.let { add(context.getString(R.string.backup_pdf_feedback_recorded, formatTime(it))) }
+            event.customerFeedbackAt?.let {
+                add(
+                    context.getString(
+                        R.string.backup_pdf_feedback_recorded,
+                        formatTime(it)
+                    )
+                )
+            }
         }
     return parts.joinToString(" | ")
 }

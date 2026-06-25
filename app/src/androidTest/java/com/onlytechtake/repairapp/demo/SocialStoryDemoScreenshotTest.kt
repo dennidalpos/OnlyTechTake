@@ -50,7 +50,10 @@ class SocialStoryDemoScreenshotTest {
             repeat(3) {
                 if (!formOpened) {
                     if (robot.isTagPresent(RepairAppTestTags.NewOrderInsertCustomerButton)) {
-                        robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
+                        robot.clickTag(
+                            RepairAppTestTags.NewOrderInsertCustomerButton,
+                            scroll = true
+                        )
                     }
                     robot.pauseForDemo()
                     formOpened = robot.isTagPresent(RepairAppTestTags.NewOrderFirstNameField)
@@ -121,7 +124,10 @@ class SocialStoryDemoScreenshotTest {
             robot.clickDashboardTab("ORDERS")
             robot.waitForText("Commesse")
             robot.capture(outputDir, "09-elenco-commesse.png")
-            robot.waitForTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
+            robot.waitForTag(
+                RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID),
+                scroll = true
+            )
             robot.clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID))
 
             robot.waitForTag(RepairAppTestTags.OrderStatusLabel)
@@ -175,7 +181,11 @@ class SocialStoryDemoScreenshotTest {
 
             robot.clickTag(RepairAppTestTags.ConfigHubCategoriesButton, scroll = true)
             robot.clickTag(RepairAppTestTags.ConfigCategoryNewButton, scroll = true)
-            robot.typeTag(RepairAppTestTags.ConfigCategoryNameField, "Console portatile", scroll = true)
+            robot.typeTag(
+                RepairAppTestTags.ConfigCategoryNameField,
+                "Console portatile",
+                scroll = true
+            )
             robot.typeTag(
                 RepairAppTestTags.ConfigCategoryDescriptionField,
                 "Riparazioni console portatili, display e batterie.",
@@ -267,7 +277,11 @@ class SocialStoryDemoScreenshotTest {
                 "amministrazione@example.invalid",
                 scroll = true,
             )
-            robot.typeTag(RepairAppTestTags.CustomerAddressField, "Via Demo 24, Milano", scroll = true)
+            robot.typeTag(
+                RepairAppTestTags.CustomerAddressField,
+                "Via Demo 24, Milano",
+                scroll = true
+            )
             robot.capture(outputDir, "04-cliente-azienda.png")
             robot.clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.CustomerConfirmSaveButton, useUnmergedTree = true)

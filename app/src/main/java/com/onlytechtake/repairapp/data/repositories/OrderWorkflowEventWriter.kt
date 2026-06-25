@@ -129,7 +129,13 @@ internal class OrderWorkflowEventWriter(
                 createdAt = now,
             ),
         )
-        audit(actorUserId, AuditAction.ORDER_DELETED, null, null, now) // orderId set to null to avoid FK error
+        audit(
+            actorUserId,
+            AuditAction.ORDER_DELETED,
+            null,
+            null,
+            now
+        ) // orderId set to null to avoid FK error
     }
 
     suspend fun feedbackRecorded(

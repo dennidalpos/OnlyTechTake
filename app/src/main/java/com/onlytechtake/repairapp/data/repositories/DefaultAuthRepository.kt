@@ -58,7 +58,7 @@ class DefaultAuthRepository(
                             now,
                             AuthPolicy.INACTIVITY_TIMEOUT_MILLIS,
                         )
-                    )
+                        )
                 ) {
                     sessionStore.clear()
                     null
@@ -81,7 +81,8 @@ class DefaultAuthRepository(
             emit(
                 AuthState(
                     initialized = true,
-                    initializationError = e.message ?: context.getString(R.string.error_critical_db_error),
+                    initializationError = e.message
+                        ?: context.getString(R.string.error_critical_db_error),
                 ),
             )
         }
@@ -217,7 +218,8 @@ class DefaultAuthRepository(
     ): Result<Unit> =
         kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
             runCatching {
-                val user = requireNotNull(userDao.findByUsername(username)) { context.getString(R.string.error_user_not_found) }
+                val user =
+                    requireNotNull(userDao.findByUsername(username)) { context.getString(R.string.error_user_not_found) }
                 val matches =
                     passwordHasher.verify(currentPassword, user.passwordHash, user.passwordSalt)
                 require(matches) { context.getString(R.string.error_current_password_incorrect) }
@@ -283,13 +285,15 @@ class DefaultAuthRepository(
         kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
             runCatching {
                 val hashSetting =
-                    appSettingDao.findByKey("master_recovery_code_hash") ?: throw IllegalStateException(
-                        context.getString(R.string.error_recovery_kit_not_configured),
-                    )
+                    appSettingDao.findByKey("master_recovery_code_hash")
+                        ?: throw IllegalStateException(
+                            context.getString(R.string.error_recovery_kit_not_configured),
+                        )
                 val saltSetting =
-                    appSettingDao.findByKey("master_recovery_code_salt") ?: throw IllegalStateException(
-                        context.getString(R.string.error_recovery_kit_not_configured),
-                    )
+                    appSettingDao.findByKey("master_recovery_code_salt")
+                        ?: throw IllegalStateException(
+                            context.getString(R.string.error_recovery_kit_not_configured),
+                        )
 
                 val matches =
                     passwordHasher.verify(code.toCharArray(), hashSetting.value, saltSetting.value)

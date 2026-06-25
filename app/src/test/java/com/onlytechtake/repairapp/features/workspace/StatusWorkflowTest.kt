@@ -63,7 +63,11 @@ class StatusWorkflowTest {
     @Test
     fun closingRequiresClosureReason() {
         assertThrows(IllegalArgumentException::class.java) {
-            OrderStatusPolicy.requireAllowed(context, OrderStatus.READY_FOR_PICKUP, OrderStatus.CLOSED)
+            OrderStatusPolicy.requireAllowed(
+                context,
+                OrderStatus.READY_FOR_PICKUP,
+                OrderStatus.CLOSED
+            )
         }
     }
 

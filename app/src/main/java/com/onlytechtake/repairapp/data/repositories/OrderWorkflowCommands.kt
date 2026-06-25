@@ -165,9 +165,20 @@ internal class OrderWorkflowCommands(
                 val estimateAmountCents = input.normalizedEstimateAmountCents()
                 val details =
                     listOfNotNull(
-                        context.getString(R.string.timeline_result_summary, input.summary.capitalizeFirst()),
-                        context.getString(R.string.timeline_diagnosis_outcome, input.diagnosisOutcome.label(context)),
-                        estimateAmountCents?.let { context.getString(R.string.timeline_repair_amount, it.formatEuroCents()) },
+                        context.getString(
+                            R.string.timeline_result_summary,
+                            input.summary.capitalizeFirst()
+                        ),
+                        context.getString(
+                            R.string.timeline_diagnosis_outcome,
+                            input.diagnosisOutcome.label(context)
+                        ),
+                        estimateAmountCents?.let {
+                            context.getString(
+                                R.string.timeline_repair_amount,
+                                it.formatEuroCents()
+                            )
+                        },
                     ).joinToString("\n")
 
                 val customerActionStatus =
@@ -260,7 +271,7 @@ internal class OrderWorkflowCommands(
                 when (input.feedback) {
                     CustomerFeedbackType.ACCEPT,
                     CustomerFeedbackType.REJECT,
-                    ->
+                        ->
                         require(order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
                             context.getString(R.string.error_feedback_only_repairable)
                         }
@@ -288,7 +299,12 @@ internal class OrderWorkflowCommands(
                         else -> null
                     }
                 if (targetStatus != order.status) {
-                    OrderStatusPolicy.requireAllowed(context, order.status, targetStatus, closureReason)
+                    OrderStatusPolicy.requireAllowed(
+                        context,
+                        order.status,
+                        targetStatus,
+                        closureReason
+                    )
                     OrderClosurePermissionPolicy.requireClosePermissionIfNeeded(actor, targetStatus)
                 }
                 repairOrderDao.upsert(
@@ -428,7 +444,8 @@ internal class OrderWorkflowCommands(
         return order
     }
 
-    private suspend fun <T> inTransaction(block: suspend () -> T): T = database?.withTransaction { block() } ?: block()
+    private suspend fun <T> inTransaction(block: suspend () -> T): T =
+        database?.withTransaction { block() } ?: block()
 
     private suspend fun buildCategoryPathSnapshot(categoryId: String): String? {
         val path = mutableListOf<String>()

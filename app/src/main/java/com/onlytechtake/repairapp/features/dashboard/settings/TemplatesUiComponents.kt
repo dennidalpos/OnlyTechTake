@@ -78,7 +78,10 @@ fun AnchorSelectionDialog(
                         .fillMaxWidth(),
             ) {
                 Text(
-                    text = stringResource(R.string.config_template_associate_with, stringResource(anchor.labelRes)),
+                    text = stringResource(
+                        R.string.config_template_associate_with,
+                        stringResource(anchor.labelRes)
+                    ),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                 )

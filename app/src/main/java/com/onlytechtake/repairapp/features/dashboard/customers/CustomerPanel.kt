@@ -716,7 +716,7 @@ private fun CustomerDetailContent(
         .observeOrdersForCustomer(customer.id, openOnly = false)
         .collectAsState(emptyList())
     val closedOrders =
-        allOrders.filter { it.order.status == com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED }
+        allOrders.filter { it.order.status == OrderStatus.CLOSED }
     val context = LocalContext.current
 
     Column(

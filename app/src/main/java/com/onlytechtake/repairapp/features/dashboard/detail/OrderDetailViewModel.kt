@@ -288,7 +288,10 @@ class OrderDetailViewModel(
                 .onSuccess { document ->
                     _isGeneratingStatusPdf.value = false
                     _lastGeneratedDocumentId.value = document.id
-                    val title = applicationContext.getString(R.string.share_title_status_report, document.fileName)
+                    val title = applicationContext.getString(
+                        R.string.share_title_status_report,
+                        document.fileName
+                    )
                     triggerShare(document.localPath, title)
                     _showPdfSentConfirmation.value = true
                 }.onFailure { error ->
@@ -306,11 +309,15 @@ class OrderDetailViewModel(
                 }
             if (document != null) {
                 _lastGeneratedDocumentId.value = documentId
-                val title = applicationContext.getString(R.string.share_title_document, document.fileName)
+                val title =
+                    applicationContext.getString(R.string.share_title_document, document.fileName)
                 triggerShare(document.localPath, title)
                 _showPdfSentConfirmation.value = true
             } else {
-                _message.value = WorkspaceMessage(applicationContext.getString(R.string.error_document_not_found), isError = true)
+                _message.value = WorkspaceMessage(
+                    applicationContext.getString(R.string.error_document_not_found),
+                    isError = true
+                )
             }
         }
     }
@@ -355,7 +362,8 @@ class OrderDetailViewModel(
         withContext(ioDispatcher) {
             val file = File(localPath)
             if (file.exists()) {
-                _pendingShareIntent.value = shareDocumentIntentFactory.createPdfShareIntent(file, title)
+                _pendingShareIntent.value =
+                    shareDocumentIntentFactory.createPdfShareIntent(file, title)
             }
         }
     }

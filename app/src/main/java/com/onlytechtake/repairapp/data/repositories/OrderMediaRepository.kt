@@ -92,7 +92,8 @@ class OrderMediaRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 val resolver = context.contentResolver
-                val sourceName = resolver.displayName(uri) ?: context.getString(R.string.label_attachment)
+                val sourceName =
+                    resolver.displayName(uri) ?: context.getString(R.string.label_attachment)
                 val mimeType = attachmentPolicy.normalize(resolver.getType(uri))
                 attachmentPolicy.requireAllowed(context, mimeType, resolver.openableSize(uri))
                 val directory = mediaStorageProvider.getIntakeAttachmentsDir(sessionId)
@@ -209,7 +210,8 @@ class OrderMediaRepository(
                 StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
                 requireWritableOrder(actor, orderId)
                 val resolver = context.contentResolver
-                val sourceName = resolver.displayName(uri) ?: context.getString(R.string.label_attachment)
+                val sourceName =
+                    resolver.displayName(uri) ?: context.getString(R.string.label_attachment)
                 val mimeType = attachmentPolicy.normalize(resolver.getType(uri))
                 attachmentPolicy.requireAllowed(context, mimeType, resolver.openableSize(uri))
                 val directory = mediaStorageProvider.getOrderAttachmentsDir(orderId)
@@ -279,7 +281,8 @@ class OrderMediaRepository(
     ): Result<Unit> =
         withContext(Dispatchers.IO) {
             runCatching {
-                val media = requireNotNull(orderMediaDao.findById(mediaId)) { context.getString(R.string.error_media_not_found) }
+                val media =
+                    requireNotNull(orderMediaDao.findById(mediaId)) { context.getString(R.string.error_media_not_found) }
                 requireWritableOrder(actor, media.orderId)
                 val now = clockMillis()
 
@@ -299,7 +302,8 @@ class OrderMediaRepository(
     ): Result<OrderMediaEntity> =
         withContext(Dispatchers.IO) {
             runCatching {
-                val media = requireNotNull(orderMediaDao.findById(mediaId)) { context.getString(R.string.error_media_not_found) }
+                val media =
+                    requireNotNull(orderMediaDao.findById(mediaId)) { context.getString(R.string.error_media_not_found) }
                 requireWritableOrder(actor, media.orderId)
                 require(
                     media.mimeType.startsWith(
@@ -348,7 +352,12 @@ class OrderMediaRepository(
                 val entities =
                     stagedMedia.mapIndexed { index, staged ->
                         val source = File(staged.localPath)
-                        require(source.exists() && source.length() > 0L) { context.getString(R.string.error_intake_file_unavailable, staged.fileName) }
+                        require(source.exists() && source.length() > 0L) {
+                            context.getString(
+                                R.string.error_intake_file_unavailable,
+                                staged.fileName
+                            )
+                        }
                         val destination = moveStagedFile(orderId, source, staged, now + index)
                         movedFiles += destination
                         OrderMediaEntity(
@@ -453,7 +462,8 @@ class OrderMediaRepository(
         actor: AuthenticatedUser,
         orderId: String,
     ) {
-        val order = requireNotNull(repairOrderDao.findById(orderId)) { context.getString(R.string.error_order_not_found) }
+        val order =
+            requireNotNull(repairOrderDao.findById(orderId)) { context.getString(R.string.error_order_not_found) }
         if (order.assignedToUserId != actor.id) {
             PermissionService.requirePermission(actor, UserPermission.EDIT_ALL_ORDERS)
         } else {
@@ -461,7 +471,8 @@ class OrderMediaRepository(
         }
     }
 
-    private suspend fun <T> inTransaction(block: suspend () -> T): T = database?.withTransaction { block() } ?: block()
+    private suspend fun <T> inTransaction(block: suspend () -> T): T =
+        database?.withTransaction { block() } ?: block()
 
     private fun copyToWithLimit(
         input: InputStream,
@@ -477,7 +488,10 @@ class OrderMediaRepository(
 
             copiedBytes += readBytes
             require(copiedBytes <= maxSizeBytes) {
-                context.getString(R.string.error_attachment_too_large, maxSizeBytes.toMiBLabel(context))
+                context.getString(
+                    R.string.error_attachment_too_large,
+                    maxSizeBytes.toMiBLabel(context)
+                )
             }
             output.write(buffer, 0, readBytes)
         }
@@ -498,7 +512,8 @@ class OrderMediaRepository(
             sanitizedName
                 .substringAfterLast('.', missingDelimiterValue = "")
                 .ifBlank { MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType).orEmpty() }
-        val baseName = sanitizedName.substringBeforeLast('.', sanitizedName).ifBlank { context.getString(R.string.label_attachment) }
+        val baseName = sanitizedName.substringBeforeLast('.', sanitizedName)
+            .ifBlank { context.getString(R.string.label_attachment) }
         return if (extension.isBlank()) {
             "${now}_$baseName"
         } else {

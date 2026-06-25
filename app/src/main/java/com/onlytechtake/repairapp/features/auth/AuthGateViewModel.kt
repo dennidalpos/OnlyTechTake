@@ -68,7 +68,10 @@ class AuthGateViewModel(
                     it.copy(
                         seeding = false,
                         loading = false,
-                        errorMessage = applicationContext.getString(R.string.error_init_failed, e.message),
+                        errorMessage = applicationContext.getString(
+                            R.string.error_init_failed,
+                            e.message
+                        ),
                     )
                 }
             }
@@ -85,15 +88,18 @@ class AuthGateViewModel(
         }
     }
 
-    fun updateDisplayName(value: String) = updateForm { copy(displayName = value, errorMessage = null) }
+    fun updateDisplayName(value: String) =
+        updateForm { copy(displayName = value, errorMessage = null) }
 
     fun updateUsername(value: String) = updateForm { copy(username = value, errorMessage = null) }
 
     fun updatePassword(value: String) = updateForm { copy(password = value, errorMessage = null) }
 
-    fun updateConfirmPassword(value: String) = updateForm { copy(confirmPassword = value, errorMessage = null) }
+    fun updateConfirmPassword(value: String) =
+        updateForm { copy(confirmPassword = value, errorMessage = null) }
 
-    fun updateRecoveryCode(value: String) = updateForm { copy(recoveryCode = value, errorMessage = null) }
+    fun updateRecoveryCode(value: String) =
+        updateForm { copy(recoveryCode = value, errorMessage = null) }
 
     fun createFirstAdmin() {
         val form = formState.value
@@ -116,7 +122,10 @@ class AuthGateViewModel(
                 // The AuthState update will trigger the transition to Dashboard
             }.onFailure {
                 mutableFormState.update {
-                    it.copy(loading = false, errorMessage = applicationContext.getString(R.string.error_admin_creation_failed))
+                    it.copy(
+                        loading = false,
+                        errorMessage = applicationContext.getString(R.string.error_admin_creation_failed)
+                    )
                 }
             }
         }
@@ -150,12 +159,18 @@ class AuthGateViewModel(
 
                 LoginResult.InactiveUser ->
                     mutableFormState.update {
-                        it.copy(loading = false, errorMessage = applicationContext.getString(R.string.error_user_deactivated))
+                        it.copy(
+                            loading = false,
+                            errorMessage = applicationContext.getString(R.string.error_user_deactivated)
+                        )
                     }
 
                 LoginResult.InvalidCredentials ->
                     mutableFormState.update {
-                        it.copy(loading = false, errorMessage = applicationContext.getString(R.string.error_invalid_credentials))
+                        it.copy(
+                            loading = false,
+                            errorMessage = applicationContext.getString(R.string.error_invalid_credentials)
+                        )
                     }
 
                 LoginResult.LockedOut ->
@@ -233,7 +248,8 @@ class AuthGateViewModel(
                     mutableFormState.update {
                         it.copy(
                             loading = false,
-                            errorMessage = e.message ?: applicationContext.getString(R.string.error_recovery_failed),
+                            errorMessage = e.message
+                                ?: applicationContext.getString(R.string.error_recovery_failed),
                         )
                     }
                 }
@@ -318,7 +334,8 @@ class AuthGateViewModel(
                     mutableFormState.update {
                         it.copy(
                             loading = false,
-                            errorMessage = e.message ?: applicationContext.getString(R.string.error_change_password_failed),
+                            errorMessage = e.message
+                                ?: applicationContext.getString(R.string.error_change_password_failed),
                         )
                     }
                 }

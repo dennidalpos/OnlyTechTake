@@ -41,7 +41,8 @@ class GenerateOrderStatusPdfUseCase(
                     workflowRepository.observeOrderDetail(orderId).firstOrNull()
                         ?: throw IllegalStateException("Commessa non trovata")
 
-                val user = userDao.findById(userId) ?: throw IllegalStateException("Utente non trovato")
+                val user =
+                    userDao.findById(userId) ?: throw IllegalStateException("Utente non trovato")
 
                 val signature =
                     if (includeCustomerSignature) {
