@@ -26,10 +26,12 @@ import com.onlytechtake.repairapp.data.local.entities.MessageStatus
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
+import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
 import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import java.util.UUID
 
@@ -43,6 +45,7 @@ class TemplateRepository(
     private val messageLogDao: MessageLogDao,
     private val timelineEventDao: TimelineEventDao,
     private val auditLogDao: AuditLogDao,
+    private val ownerPreferences: OwnerPreferences,
     private val renderer: TemplateRenderer = TemplateRenderer(),
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
@@ -238,7 +241,8 @@ class TemplateRepository(
         return prepareMessage(actor, orderId, templateCode, anchor)
     }
 
-    private suspend fun resolveAnchor(anchor: TemplateAnchor): String = settingDao.findByKey(anchor.settingKey)?.value ?: anchor.defaultCode
+    private suspend fun resolveAnchor(anchor: TemplateAnchor): String =
+        settingDao.findByKey(anchor.settingKey)?.value ?: anchor.defaultCode
 
     suspend fun prepareMessage(
         actor: AuthenticatedUser,
@@ -266,6 +270,8 @@ class TemplateRepository(
             val categoryPath = categoryPath(order.categoryId)
             val phone = customer.phone?.filter { it.isDigit() || (it == '+') }.orEmpty()
             require(phone.isNotBlank()) { "Telefono cliente mancante" }
+
+            val owner = ownerPreferences.ownerInfo.firstOrNull()
 
             val body =
                 renderer.render(
@@ -296,6 +302,11 @@ class TemplateRepository(
                         "ancora_label" to (anchor?.let { context.getString(it.labelRes) } ?: ""),
                         "ancora_id" to (anchor?.settingKey ?: ""),
                         "template_codice" to template.code,
+                        "proprietario_nome" to (owner?.name ?: ""),
+                        "proprietario_piva" to (owner?.vatNumber ?: ""),
+                        "proprietario_indirizzo" to (owner?.address ?: ""),
+                        "proprietario_email" to (owner?.email ?: ""),
+                        "proprietario_telefono" to (owner?.phone ?: ""),
                     ),
                 )
             PreparedMessage(order.id, customer.id, phone, body, template.title)
@@ -311,7 +322,8 @@ class TemplateRepository(
         actor: AuthenticatedUser,
         prepared: PreparedMessage,
         body: String,
-    ): Result<Unit> = writeMessage(actor, prepared, body, MessageStatus.SENT_CONFIRMED, clockMillis())
+    ): Result<Unit> =
+        writeMessage(actor, prepared, body, MessageStatus.SENT_CONFIRMED, clockMillis())
 
     private suspend fun writeMessage(
         actor: AuthenticatedUser,
@@ -553,6 +565,11 @@ class TemplateRepository(
                 "ancora_label",
                 "ancora_id",
                 "template_codice",
+                "proprietario_nome",
+                "proprietario_piva",
+                "proprietario_indirizzo",
+                "proprietario_email",
+                "proprietario_telefono",
             )
     }
 }

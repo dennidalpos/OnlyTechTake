@@ -62,6 +62,7 @@ import com.onlytechtake.repairapp.core.design.components.AppIconButton
 import com.onlytechtake.repairapp.core.design.components.AppTextField
 import com.onlytechtake.repairapp.core.design.components.AppTopBar
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
+import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
 import com.onlytechtake.repairapp.features.dashboard.DashboardRoute
 
 @Composable
@@ -78,10 +79,12 @@ fun AuthGateRoute(
                 AuthGateViewModel.Factory(
                     container.context,
                     container.authRepository,
+                    container.ownerPreferences,
                     container.dataSeeder,
                 ),
         )
     val authState by viewModel.authState.collectAsState()
+    val ownerInfo by viewModel.ownerInfo.collectAsState()
     val formState by viewModel.formState.collectAsState()
     val context = LocalContext.current
 
@@ -134,6 +137,12 @@ fun AuthGateRoute(
 
                         else -> stringResource(R.string.auth_system_ready)
                     },
+            )
+
+        authState.currentUser != null && !ownerInfo.isComplete() ->
+            OwnerWizardScreen(
+                ownerInfo = ownerInfo,
+                onSubmit = viewModel::updateOwnerInfo,
             )
 
         authState.currentUser != null ->
@@ -593,6 +602,138 @@ private fun AuthForm(
                     enabled = !formState.loading,
                     variant = AppButtonVariant.Secondary,
                     modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun OwnerWizardScreen(
+    ownerInfo: OwnerInfo,
+    onSubmit: (OwnerInfo) -> Unit,
+) {
+    // Pre-fill with showcase data if empty and showcase mode is enabled
+    val initialName =
+        if (BuildConfig.IS_SHOWCASE_MODE_ENABLED && ownerInfo.name.isBlank()) {
+            stringResource(R.string.showcase_owner_name)
+        } else {
+            ownerInfo.name
+        }
+    val initialVat =
+        if (BuildConfig.IS_SHOWCASE_MODE_ENABLED && ownerInfo.vatNumber.isBlank()) {
+            stringResource(R.string.showcase_owner_vat)
+        } else {
+            ownerInfo.vatNumber
+        }
+    val initialAddress =
+        if (BuildConfig.IS_SHOWCASE_MODE_ENABLED && ownerInfo.address.isBlank()) {
+            stringResource(R.string.showcase_owner_address)
+        } else {
+            ownerInfo.address
+        }
+    val initialEmail =
+        if (BuildConfig.IS_SHOWCASE_MODE_ENABLED && ownerInfo.email.isBlank()) {
+            stringResource(R.string.showcase_owner_email)
+        } else {
+            ownerInfo.email
+        }
+    val initialPhone =
+        if (BuildConfig.IS_SHOWCASE_MODE_ENABLED && ownerInfo.phone.isBlank()) {
+            stringResource(R.string.showcase_owner_phone)
+        } else {
+            ownerInfo.phone
+        }
+
+    var name by rememberSaveable { mutableStateOf(initialName) }
+    var vatNumber by rememberSaveable { mutableStateOf(initialVat) }
+    var address by rememberSaveable { mutableStateOf(initialAddress) }
+    var email by rememberSaveable { mutableStateOf(initialEmail) }
+    var phone by rememberSaveable { mutableStateOf(initialPhone) }
+
+    Scaffold(
+        topBar = {
+            AppTopBar(
+                title = stringResource(R.string.config_hub_owner_title),
+            )
+        },
+    ) { paddingValues ->
+        BoxWithConstraints(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+            contentAlignment = Alignment.TopCenter,
+        ) {
+            val compactHeight = maxHeight < 420.dp
+            Column(
+                modifier =
+                    Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth()
+                        .widthIn(max = RepairAppSpacing.maxContentWidthMedium)
+                        .verticalScroll(rememberScrollState())
+                        .imePadding()
+                        .padding(
+                            horizontal = RepairAppSpacing.screenHorizontal,
+                            vertical = if (compactHeight) RepairAppSpacing.compactGap else RepairAppSpacing.screenHorizontal,
+                        ),
+                verticalArrangement = Arrangement.spacedBy(if (compactHeight) RepairAppSpacing.compactGap else RepairAppSpacing.fieldGap),
+            ) {
+                AppTextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = stringResource(R.string.owner_field_name),
+                    required = true,
+                    imeAction = ImeAction.Next,
+                )
+                AppTextField(
+                    value = vatNumber,
+                    onValueChange = { vatNumber = it },
+                    label = stringResource(R.string.owner_field_vat),
+                    required = true,
+                    imeAction = ImeAction.Next,
+                )
+                AppTextField(
+                    value = address,
+                    onValueChange = { address = it },
+                    label = stringResource(R.string.owner_field_address),
+                    required = true,
+                    imeAction = ImeAction.Next,
+                )
+                AppTextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    label = stringResource(R.string.owner_field_email),
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next,
+                )
+                AppTextField(
+                    value = phone,
+                    onValueChange = { phone = it },
+                    label = stringResource(R.string.owner_field_phone),
+                    keyboardType = KeyboardType.Phone,
+                    imeAction = ImeAction.Done,
+                )
+
+                Spacer(Modifier.height(RepairAppSpacing.sectionGap))
+
+                AppButton(
+                    text = stringResource(R.string.confirm),
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = name.isNotBlank() && vatNumber.isNotBlank() && address.isNotBlank(),
+                    onClick = {
+                        onSubmit(
+                            OwnerInfo(
+                                name = name,
+                                vatNumber = vatNumber,
+                                address = address,
+                                email = email,
+                                phone = phone,
+                            ),
+                        )
+                    },
                 )
             }
         }

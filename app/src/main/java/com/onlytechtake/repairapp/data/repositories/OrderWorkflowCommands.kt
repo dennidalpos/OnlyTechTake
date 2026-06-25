@@ -271,7 +271,7 @@ internal class OrderWorkflowCommands(
                 when (input.feedback) {
                     CustomerFeedbackType.ACCEPT,
                     CustomerFeedbackType.REJECT,
-                    ->
+                        ->
                         require(order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
                             context.getString(R.string.error_feedback_only_repairable)
                         }
@@ -444,7 +444,8 @@ internal class OrderWorkflowCommands(
         return order
     }
 
-    private suspend fun <T> inTransaction(block: suspend () -> T): T = database?.withTransaction { block() } ?: block()
+    private suspend fun <T> inTransaction(block: suspend () -> T): T =
+        database?.withTransaction { block() } ?: block()
 
     private suspend fun buildCategoryPathSnapshot(categoryId: String): String? {
         val path = mutableListOf<String>()

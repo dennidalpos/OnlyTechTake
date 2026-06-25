@@ -9,6 +9,7 @@ import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
+import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
@@ -116,6 +117,7 @@ class OrderContainer(
     context: Context,
     dataContainer: DataContainer,
     mediaContainer: MediaContainer,
+    private val ownerPreferences: OwnerPreferences,
 ) {
     val orderWorkflowRepository by lazy {
         OrderWorkflowRepository(
@@ -178,6 +180,7 @@ class OrderContainer(
             documentRepository = mediaContainer.orderDocumentRepository,
             userDao = dataContainer.database.userDao(),
             fileStorage = mediaContainer.orderDocumentFileStorage,
+            ownerPreferences = ownerPreferences,
         )
     }
 }
@@ -188,6 +191,7 @@ class SettingsContainer(
     authContainer: AuthContainer,
     mediaContainer: MediaContainer,
 ) {
+    val ownerPreferences by lazy { OwnerPreferences(context.applicationContext) }
     val backupReminderPreferences by lazy { BackupReminderPreferences(context.applicationContext) }
     val securityPreferences by lazy { SecurityPreferences(context.applicationContext) }
     val storageStatsService by lazy {
@@ -214,6 +218,7 @@ class SettingsContainer(
             messageLogDao = dataContainer.database.messageLogDao(),
             timelineEventDao = dataContainer.database.timelineEventDao(),
             auditLogDao = dataContainer.database.auditLogDao(),
+            ownerPreferences = ownerPreferences,
         )
     }
 

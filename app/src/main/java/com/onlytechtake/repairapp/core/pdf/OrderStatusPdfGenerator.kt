@@ -13,6 +13,7 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
+import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -30,6 +31,7 @@ data class OrderStatusPdfPayload(
     val signature: SignatureEntity?,
     val generatedAt: Long,
     val generatedBy: String,
+    val ownerInfo: OwnerInfo? = null,
     val watermarkText: String? = null,
 )
 
@@ -149,7 +151,27 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
 
         // Header
         canvas.drawText(context.getString(R.string.pdf_title), margin, y, titlePaint)
-        y += 30f
+        y += 20f
+
+        payload.ownerInfo?.let { owner ->
+            if (owner.name.isNotBlank()) {
+                canvas.drawText(owner.name, margin, y, labelPaint)
+                y += 12f
+                if (owner.vatNumber.isNotBlank()) {
+                    canvas.drawText(owner.vatNumber, margin, y, textPaint)
+                    y += 12f
+                }
+                if (owner.address.isNotBlank()) {
+                    canvas.drawText(owner.address, margin, y, textPaint)
+                    y += 12f
+                }
+                if (owner.phone.isNotBlank() || owner.email.isNotBlank()) {
+                    canvas.drawText("${owner.phone} ${owner.email}".trim(), margin, y, textPaint)
+                    y += 12f
+                }
+            }
+        }
+        y += 10f
 
         // Info General
         canvas.drawText(context.getString(R.string.pdf_label_order_number), margin, y, labelPaint)

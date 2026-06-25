@@ -9,6 +9,7 @@ import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
+import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
@@ -21,6 +22,7 @@ import com.onlytechtake.repairapp.data.services.StorageStatsService
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
+import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
 import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
 import kotlinx.coroutines.CoroutineDispatcher
@@ -44,6 +46,7 @@ class SettingsViewModel(
     backupRepository: BackupRepository,
     private val dataResetRepository: DataResetRepository,
     backupReminderPreferences: BackupReminderPreferences,
+    private val ownerPreferences: OwnerPreferences,
     securityPreferences: SecurityPreferences,
     private val storageStatsService: StorageStatsService,
     diagnosticLogService: DiagnosticLogService,
@@ -103,6 +106,9 @@ class SettingsViewModel(
             ioDispatcher,
         )
 
+    private val ownerDelegate =
+        OwnerSettingsDelegate(ownerPreferences, actionRunner, viewModelScope)
+
     fun initializeTemplatesIfNeeded() {
         viewModelScope.launch {
             val user = authRepository.currentUser.value
@@ -160,6 +166,10 @@ class SettingsViewModel(
             com.onlytechtake.repairapp.data.preferences
                 .SecuritySettings(),
         )
+
+    val ownerInfo: kotlinx.coroutines.flow.StateFlow<OwnerInfo> =
+        ownerPreferences.ownerInfo
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), OwnerInfo())
 
     val isBackupReminderDue =
         backupReminderPreferences.settings
@@ -222,13 +232,19 @@ class SettingsViewModel(
 
     fun setMessageMode(mode: MessageMode) = templateDelegate.setMessageMode(mode)
 
-    fun setBackupReminderEnabled(enabled: Boolean) = backupDelegate.setBackupReminderEnabled(enabled)
+    fun setBackupReminderEnabled(enabled: Boolean) =
+        backupDelegate.setBackupReminderEnabled(enabled)
 
-    fun setBackupReminderIntervalDays(days: Int) = backupDelegate.setBackupReminderIntervalDays(days)
+    fun setBackupReminderIntervalDays(days: Int) =
+        backupDelegate.setBackupReminderIntervalDays(days)
 
-    fun setBackupEncryptionEnabled(enabled: Boolean) = securityDelegate.setBackupEncryptionEnabled(enabled)
+    fun setBackupEncryptionEnabled(enabled: Boolean) =
+        securityDelegate.setBackupEncryptionEnabled(enabled)
 
-    fun setBackupEncryptionPassword(password: String) = securityDelegate.setBackupEncryptionPassword(password)
+    fun setBackupEncryptionPassword(password: String) =
+        securityDelegate.setBackupEncryptionPassword(password)
+
+    fun updateOwnerInfo(info: OwnerInfo) = ownerDelegate.updateOwnerInfo(info)
 
     fun createOperator(
         displayName: String,
@@ -314,6 +330,7 @@ class SettingsViewModel(
         private val backupRepository: BackupRepository,
         private val dataResetRepository: DataResetRepository,
         private val backupReminderPreferences: BackupReminderPreferences,
+        private val ownerPreferences: OwnerPreferences,
         private val securityPreferences: SecurityPreferences,
         private val storageStatsService: StorageStatsService,
         private val diagnosticLogService: DiagnosticLogService,
@@ -334,6 +351,7 @@ class SettingsViewModel(
                 backupRepository,
                 dataResetRepository,
                 backupReminderPreferences,
+                ownerPreferences,
                 securityPreferences,
                 storageStatsService,
                 diagnosticLogService,

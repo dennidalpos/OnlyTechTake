@@ -8,6 +8,7 @@ import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.MessageMode
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
+import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
@@ -17,6 +18,7 @@ import com.onlytechtake.repairapp.data.repositories.TemplateRepository
 import com.onlytechtake.repairapp.data.services.DiagnosticLogService
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import com.onlytechtake.repairapp.domain.workspace.OperatorInput
+import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
 import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -258,6 +260,19 @@ internal class DiagnosticSettingsDelegate(
             } else {
                 Result.failure<Unit>(IllegalStateException("Impossibile generare il file dei log."))
             }
+        }
+    }
+}
+
+internal class OwnerSettingsDelegate(
+    private val ownerPreferences: OwnerPreferences,
+    private val actionRunner: AuthenticatedActionRunner,
+    private val scope: CoroutineScope,
+) {
+    fun updateOwnerInfo(info: OwnerInfo) {
+        actionRunner.run(successMessageRes = R.string.owner_save_success) {
+            ownerPreferences.updateOwnerInfo(info)
+            Result.success(Unit)
         }
     }
 }

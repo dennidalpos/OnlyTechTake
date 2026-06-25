@@ -13,13 +13,20 @@ class AppContainer(
     private val dataContainer = DataContainer(context)
     private val authContainer by lazy { AuthContainer(context, dataContainer) }
     private val mediaContainer by lazy { MediaContainer(context, dataContainer) }
-    private val orderContainer by lazy { OrderContainer(context, dataContainer, mediaContainer) }
     private val settingsContainer by lazy {
         SettingsContainer(
             context,
             dataContainer,
             authContainer,
             mediaContainer,
+        )
+    }
+    private val orderContainer by lazy {
+        OrderContainer(
+            context,
+            dataContainer,
+            mediaContainer,
+            settingsContainer.ownerPreferences,
         )
     }
 
@@ -47,6 +54,7 @@ class AppContainer(
     val templateRepository get() = settingsContainer.templateRepository
     val backupRepository get() = settingsContainer.backupRepository
     val backupReminderPreferences get() = settingsContainer.backupReminderPreferences
+    val ownerPreferences get() = settingsContainer.ownerPreferences
     val securityPreferences get() = settingsContainer.securityPreferences
     val dataResetRepository get() = settingsContainer.dataResetRepository
     val storageStatsService get() = settingsContainer.storageStatsService

@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Backup
+import androidx.compose.material.icons.filled.Business
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
@@ -89,6 +90,15 @@ fun SettingsHub(
                 testTag = RepairAppTestTags.ConfigHubWhatsappButton,
             ) {
                 onNavigate(DashboardRoutes.settings("WHATSAPP"))
+            }
+
+            SettingsHubCard(
+                title = stringResource(R.string.config_hub_owner_title),
+                subtitle = stringResource(R.string.config_hub_owner_subtitle),
+                icon = Icons.Default.Business,
+                testTag = RepairAppTestTags.ConfigHubOwnerButton,
+            ) {
+                onNavigate(DashboardRoutes.settings("OWNER"))
             }
 
             SettingsHubCard(

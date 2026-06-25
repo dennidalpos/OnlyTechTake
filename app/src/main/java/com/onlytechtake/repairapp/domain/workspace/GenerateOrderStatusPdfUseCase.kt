@@ -11,6 +11,7 @@ import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.dao.UserDao
 import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderDocumentType
+import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentFileStorage
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
@@ -26,6 +27,7 @@ class GenerateOrderStatusPdfUseCase(
     private val documentRepository: OrderDocumentRepository,
     private val userDao: UserDao,
     private val fileStorage: OrderDocumentFileStorage,
+    private val ownerPreferences: OwnerPreferences,
     private val pdfGenerator: OrderStatusPdfWriter = OrderStatusPdfGenerator(),
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
@@ -57,6 +59,7 @@ class GenerateOrderStatusPdfUseCase(
 
                 val categoryPath = catalogRepository.getCategoryPath(detail.order.categoryId)
                 val now = clockMillis()
+                val ownerInfo = ownerPreferences.ownerInfo.firstOrNull()
 
                 val payload =
                     OrderStatusPdfPayload(
@@ -72,6 +75,7 @@ class GenerateOrderStatusPdfUseCase(
                         signature = signature,
                         generatedAt = now,
                         generatedBy = user.displayName,
+                        ownerInfo = ownerInfo,
                         watermarkText =
                             if (BuildConfig.IS_DEMO_VERSION) {
                                 context.getString(R.string.demo_version_banner)

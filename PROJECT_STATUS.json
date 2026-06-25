@@ -2,7 +2,7 @@
   "project_name": "OnlyTechTake",
   "version": "1.0.5",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-07-01",
+  "last_updated": "2026-07-02",
   "alignment_status": "Pienamente allineato tra tutti i flavor. Ottimizzato per prestazioni, stabilità del thread UI e conformità standalone.",
   "landing_page": {
     "status": "Standalone Ready + Assets Automated",
@@ -16,8 +16,8 @@
     "Repair order management",
     "Photo documentation",
     "Digital Signature (Privacy/Terms)",
-    "PDF report generation (Enhanced pagination)",
-    "Manual WhatsApp integration with Templates",
+    "PDF report generation (Full owner legal info and enhanced pagination)",
+    "Manual WhatsApp integration with Templates and Owner placeholders",
     "Multi-flavor: Full (Pro), Demo, Showcase",
     "English default + Italian localization",
     "Automated Template Localization (System fallback)",
@@ -25,12 +25,13 @@
     "Customer Detail with Status-colored history",
     "Diagnostic Logs management (Backup section)",
     "UI Thread optimization (IO offloading)",
-    "Standalone compliance (Clean metadata and internal links)"
+    "Standalone compliance (Clean metadata and internal links)",
+    "Initial Setup Wizard for Owner legal information"
   ],
   "backlog": [
     {
-      "priority": "HIGH",
-      "task": "Generazione pacchetti finali Play Store e verifica firma per flavor Full e Demo."
+      "priority": "MEDIUM",
+      "task": "Configurazione finale Data Safety e questionari Play Console basati sui documenti tecnici aggiornati."
     },
     {
       "priority": "MEDIUM",
@@ -41,35 +42,25 @@
       "task": "Monitoraggio warning interni Compose 'frameRate=NaN' su API 35 per futuri aggiornamenti delle librerie core."
     }
   ],
+  "identified_residuals": [
+    {
+      "area": "PROCEDURAL",
+      "risk": "Requisito Google 20 tester per 14 giorni (Account Personali post-2023).",
+      "plan": "Pianificare gruppo di test chiuso prima del lancio in produzione."
+    },
+    {
+      "area": "LEGAL",
+      "risk": "URL Privacy Policy deve essere HTTPS pubblico e definitivo.",
+      "plan": "Verificare accessibilità di inventoveritas.mine.nu prima dell'invio."
+    }
+  ],
   "completed_recently": [
-    "Rigenerati e verificati tutti gli asset (screenshot e video) per i flavor Full e Demo tramite script automatizzati su device fisico.",
-    "Sincronizzati gli asset aggiornati nelle cartelle marketing/ e landing page.",
-    "Rifattorizzata la logica di seeding: introdotta interfaccia DataSeeder e spostato il seeding specifico per Showcase nel relativo flavor, pulendo il codice 'main'.",
-    "Allineati tutti i ViewModel (Customers, NewOrder, Settings) all'uso di AuthenticatedActionRunner per un offloading IO coerente e gestione centralizzata degli errori.",
-    "Migliorata la testabilità dei ViewModel tramite l'iniezione del dispatcher IO, risolvendo regressioni nei test unitari di tutte le varianti.",
-    "Rimosso codice legacy inutilizzato (AdminViewModel) in ottica di semplificazione e manutenzione del progetto come 'nuova app'.",
-    "Ottimizzate le prestazioni globali dell'app introducendo l'offloading automatico su Dispatchers.IO in AuthenticatedActionRunner.",
-    "Risolti lag nella UI durante il login e la creazione admin spostando l'hashing crittografico (PBKDF2) su thread background in DefaultAuthRepository.",
-    "Migliorata la main-safety di GenerateOrderStatusPdfUseCase e OrderDetailViewModel, assicurando che le operazioni su file e PDF non blocchino il thread principale.",
-    "Rifattorizzati i metodi di OrderDetailViewModel per una maggiore coerenza nell'uso di AuthenticatedActionRunner e gestione degli stati di caricamento.",
-    "Risolti warning di Context leak, variabili non utilizzate e parametri ridondanti in OrderDetailViewModel e SettingsViewModel. Migliorata la UI con indicatori di caricamento e banner di promemoria backup.",
-    "Risolti warning di formattazione e lint in OrderDetailViewModel e DashboardNavHost, migliorando la conformità con le regole di stile del progetto.",
-    "Risolto errore di formattazione in OrderDetailViewModel: aggiunta esposizione pubblica per isProcessing per conformità con le regole ktlint e coerenza con gli altri ViewModel.",
-    "Risolti warning di Context leak nei ViewModel, rimosse proprietà inutilizzate, corretta formattazione e allineamento dei temi nelle Preview.",
-    "Risolta regressione nel test OrderDetailViewModelTest: corretto mock dell'intent di condivisione.",
-    "Risolti oltre 800 errori di Lint rimuovendo la directory locale 'values-en' vuota che causava errori di MissingTranslation.",
-    "Risolti vari warning e piccoli errori segnalati dall'editor in TemplatesSettings, OrdersPanel, TemplateAnchor, AboutSettings e nei test.",
-    "Corretta la localizzazione delle plurali in italiano (aggiunta quantità 'many' dove richiesto dal linter).",
-    "Aggiornata firma automatizzata nelle acquisizioni asset: ora disegna il nome del cliente campione (Marco Bianchi).",
-    "Completata schermata 'Informazioni': inserimento note di rilascio, crediti open-source e rimozione URL hardcoded",
-    "Allineamento versionamento build (1.0.5) tra configurazione Gradle e stato progetto",
-    "Migliorata robustezza generazione PDF: implementata paginazione dinamica per descrizioni e timeline molto lunghe",
-    "Risolta regressione nei test strumentali: corretto passaggio dei parametri delegati nel pannello Admin",
-    "Risolti blocchi del thread principale (UI jank) spostando il calcolo statistiche memoria e operazioni log su Dispatchers.IO",
-    "Ottimizzazione performance LazyColumn nei setup Template e Categorie tramite l'uso di chiavi univoche (keys)",
-    "Messa in sicurezza del parsing delle configurazioni (MessageMode) e ottimizzazione osservazione template",
-    "Corretto rischio di crash nella condivisione log tramite l'aggiunta di FLAG_ACTIVITY_NEW_TASK per contesti non-Activity",
-    "Risolti vari warning segnalati dall'editor in DashboardNavHost, OrderStatusPdfGenerator, AuthGateViewModel, DiagnosticLogger, OrderDetailComponents e SettingsDelegates, migliorando la pulizia del codice e risolvendo un potenziale context leak.",
-    "Risolta regressione nel test WorkspaceUiHelpersTest: corretta la formattazione di dimensioni file e date forzando il Locale nei test per evitare fallimenti dovuti a differenze tra ambiente locale e CI (es. separatore decimale punto vs virgola)."
+    "Implementato Wizard di configurazione iniziale per i dati legali del proprietario.",
+    "Aggiornati template predefiniti con placeholder dinamici per i dati del proprietario (nome, P.IVA, indirizzo).",
+    "Coperta con test unitari la logica di 'OwnerInfo' e il rendering delle variabili owner nei messaggi.",
+    "Aggiornato il seeding dei dati Showcase con informazioni aziendali e privati fittizi localizzati.",
+    "Implementato il pre-caricamento dei dati proprietario fittizi nel wizard iniziale per la variante Showcase.",
+    "Implementata sezione 'Dati Proprietario' (neutralizzata per aziende/privati) nelle impostazioni.",
+    "Generati con successo AAB firmati (Release) per i flavor Full e Demo."
   ]
 }

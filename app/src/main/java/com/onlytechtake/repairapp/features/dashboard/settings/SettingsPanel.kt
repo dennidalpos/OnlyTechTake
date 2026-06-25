@@ -215,6 +215,7 @@ private fun SettingsSectionContent(
                 )
 
             "WHATSAPP" -> WhatsAppSettings(viewModel, requestConfirm, onBack = onBack)
+            "OWNER" -> OwnerSettings(viewModel, onBack = onBack)
             "EXPORT" ->
                 BackupSettings(
                     viewModel,

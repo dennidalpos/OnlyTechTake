@@ -29,6 +29,7 @@ import com.onlytechtake.repairapp.data.local.entities.UserEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
+import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
@@ -51,6 +52,9 @@ object ShowcaseDataSeeder {
     suspend fun seedShowcaseData(context: Context) {
         val authPreferences = AuthPreferences(context)
         val mediaStorageProvider = MediaStorageProvider(context)
+
+        // We don't pre-fill owner info here anymore to allow the Showcase user
+        // to see the initial Setup Wizard (pre-filled in the UI).
 
         val db = RepairAppDatabase.getInstance(context)
         val now = System.currentTimeMillis()
@@ -323,22 +327,28 @@ object ShowcaseDataSeeder {
 
             // 3. Create Private Customers
             val privateCustomers =
-                (1..5).map { i ->
+                (1..6).map { i ->
+                    val name = if (i <= 5) {
+                        val resId = context.resources.getIdentifier("showcase_private_name_$i", "string", context.packageName)
+                        context.getString(resId)
+                    } else {
+                        context.getString(R.string.showcase_private_fictitious_name)
+                    }
+                    val surname = if (i <= 5) {
+                        val resId = context.resources.getIdentifier("showcase_private_surname_$i", "string", context.packageName)
+                        context.getString(resId)
+                    } else {
+                        context.getString(R.string.showcase_private_fictitious_surname)
+                    }
+
                     CustomerEntity(
                         id = "cust-p-$i",
                         type = CustomerType.PRIVATE,
-                        firstName =
-                            listOf(
-                                "Mario",
-                                "Luigi",
-                                "Giovanna",
-                                "Francesca",
-                                "Roberto",
-                            )[i - 1],
-                        lastName = listOf("Rossi", "Bianchi", "Verdi", "Neri", "Gialli")[i - 1],
+                        firstName = name,
+                        lastName = surname,
                         companyName = null,
                         vatNumber = null,
-                        taxCode = "CUSTPRV$i${UUID.randomUUID().toString().take(5)}",
+                        taxCode = if (i <= 5) "CUSTPRV$i${UUID.randomUUID().toString().take(5)}" else "PRIVATO12345678",
                         phone = "+39 333 100 200$i",
                         email = "customer.p$i@example.com",
                         address = "Via Roma $i, Milano",
@@ -351,24 +361,24 @@ object ShowcaseDataSeeder {
 
             // 4. Create Business Customers
             val businessCustomers =
-                (1..5).map { i ->
+                (1..6).map { i ->
+                    val businessName = if (i <= 5) {
+                        val resId = context.resources.getIdentifier("showcase_business_name_$i", "string", context.packageName)
+                        context.getString(resId)
+                    } else {
+                        context.getString(R.string.showcase_business_fictitious)
+                    }
+
                     CustomerEntity(
                         id = "cust-b-$i",
                         type = CustomerType.BUSINESS,
                         firstName = null,
                         lastName = null,
-                        companyName =
-                            listOf(
-                                context.getString(R.string.showcase_business_name_1),
-                                context.getString(R.string.showcase_business_name_2),
-                                context.getString(R.string.showcase_business_name_3),
-                                context.getString(R.string.showcase_business_name_4),
-                                context.getString(R.string.showcase_business_name_5),
-                            )[i - 1],
-                        vatNumber = "0123456789$i",
-                        taxCode = "BCN${UUID.randomUUID().toString().take(13)}",
+                        companyName = businessName,
+                        vatNumber = if (i <= 5) "0123456789$i" else "00000000000",
+                        taxCode = if (i <= 5) "BCN${UUID.randomUUID().toString().take(13)}" else "BUSINESS123456",
                         phone = "+39 02 555 666$i",
-                        email = "info@business$i.example.com",
+                        email = "info@business$i@example.com",
                         address = "Piazza Affari $i, Milano",
                         notes = context.getString(R.string.showcase_customer_notes),
                         createdAt = now - (i * 86400000L),
@@ -503,7 +513,7 @@ object ShowcaseDataSeeder {
                             orderId = orderId,
                             signerName =
                                 customer.firstName ?: customer.companyName
-                                    ?: context.getString(R.string.signature_default_signer),
+                                ?: context.getString(R.string.signature_default_signer),
                             privacyAccepted = true,
                             termsAccepted = true,
                             privacyTextSnapshot = context.getString(R.string.showcase_privacy_snapshot),

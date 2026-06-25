@@ -16,12 +16,15 @@ import com.onlytechtake.repairapp.data.local.entities.MessageChannel
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
+import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -36,6 +39,10 @@ class TemplateRepositoryTest {
     private val templateDao = mockk<MessageTemplateDao>(relaxed = true)
     private val settingDao = mockk<AppSettingDao>(relaxed = true)
     private val auditLogDao = mockk<AuditLogDao>(relaxed = true)
+    private val ownerPreferences =
+        mockk<OwnerPreferences>(relaxed = true) {
+            every { ownerInfo } returns flowOf(OwnerInfo(name = "Test Owner"))
+        }
     private val repository =
         TemplateRepository(
             context = context,
@@ -47,8 +54,101 @@ class TemplateRepositoryTest {
             messageLogDao = mockk<MessageLogDao>(relaxed = true),
             timelineEventDao = mockk<TimelineEventDao>(relaxed = true),
             auditLogDao = auditLogDao,
+            ownerPreferences = ownerPreferences,
             clockMillis = { 42L },
         )
+
+    @Test
+    fun `prepareMessage renders owner variables correctly`() =
+        runBlocking {
+            val orderDao = mockk<RepairOrderDao>(relaxed = true)
+            val customerDao = mockk<CustomerDao>(relaxed = true)
+            val categoryDao = mockk<OrderCategoryDao>(relaxed = true)
+            val repository =
+                TemplateRepository(
+                    context = context,
+                    templateDao = templateDao,
+                    orderDao = orderDao,
+                    customerDao = customerDao,
+                    categoryDao = categoryDao,
+                    settingDao = settingDao,
+                    messageLogDao = mockk(relaxed = true),
+                    timelineEventDao = mockk(relaxed = true),
+                    auditLogDao = auditLogDao,
+                    ownerPreferences =
+                        mockk {
+                            every { ownerInfo } returns
+                                flowOf(
+                                    OwnerInfo(
+                                        name = "Owner Name",
+                                        vatNumber = "PIVA123",
+                                    ),
+                                )
+                        },
+                )
+
+            val orderId = "order-1"
+            val customerId = "cust-1"
+            coEvery { orderDao.findById(orderId) } returns
+                com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity(
+                    id = orderId,
+                    orderNumber = "2026-001",
+                    customerId = customerId,
+                    title = "Phone Repair",
+                    categoryId = "cat-1",
+                    status = com.onlytechtake.repairapp.data.local.entities.OrderStatus.OPEN,
+                    priority = com.onlytechtake.repairapp.data.local.entities.OrderPriority.NORMAL,
+                    createdByUserId = "u1",
+                    assignedToUserId = null,
+                    description = "",
+                    createdAt = 0L,
+                    updatedAt = 0L,
+                    internalNotes = null,
+                    diagnosisOutcome = null,
+                    estimateAmountCents = null,
+                    finalAmountCents = null,
+                    closedAt = null,
+                    closureReason = null,
+                    customerActionStatus = null,
+                    closeNote = null,
+                    closedByUserId = null,
+                    categoryPathSnapshot = null,
+                    lastCustomerContactAt = null,
+                )
+            coEvery { customerDao.findById(customerId) } returns
+                com.onlytechtake.repairapp.data.local.entities.CustomerEntity(
+                    id = customerId,
+                    firstName = "John",
+                    lastName = "Doe",
+                    type = com.onlytechtake.repairapp.data.local.entities.CustomerType.PRIVATE,
+                    phone = "123456",
+                    companyName = null,
+                    vatNumber = null,
+                    taxCode = null,
+                    email = null,
+                    address = null,
+                    notes = null,
+                    createdAt = 0L,
+                    updatedAt = 0L,
+                )
+            coEvery { templateDao.findActiveByCode("test_code") } returns
+                MessageTemplateEntity(
+                    id = "t1",
+                    code = "test_code",
+                    title = "Test",
+                    body = "Owner: {{proprietario_nome}}, PIVA: {{proprietario_piva}}",
+                    channel = MessageChannel.WHATSAPP,
+                    active = true,
+                    version = 1,
+                    updatedByUserId = "u1",
+                    updatedAt = 0L,
+                )
+
+            val result = repository.prepareMessage(admin(), orderId, "test_code")
+
+            assertTrue(result.isSuccess)
+            assertEquals("Owner: Owner Name, PIVA: PIVA123", result.getOrNull()?.body)
+        }
 
     @Test
     fun resetToDefaultsRestoresSystemTemplatesAndAnchorMappings() =

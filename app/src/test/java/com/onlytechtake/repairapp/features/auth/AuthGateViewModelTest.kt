@@ -40,7 +40,12 @@ class AuthGateViewModelTest {
         runTest {
             val fakeRepo = FakeAuthRepository()
             val viewModel =
-                AuthGateViewModel(mockk(relaxed = true), fakeRepo, mockk(relaxed = true))
+                AuthGateViewModel(
+                    context = mockk(relaxed = true),
+                    authRepository = fakeRepo,
+                    ownerPreferences = mockk(relaxed = true),
+                    dataSeeder = mockk(relaxed = true),
+                )
 
             // Logout resets the form state including loading
             viewModel.logout()

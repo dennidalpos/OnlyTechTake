@@ -5,11 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.demo.DataSeeder
 import com.onlytechtake.repairapp.domain.auth.AuthPolicy
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.auth.AuthState
 import com.onlytechtake.repairapp.domain.auth.LoginResult
+import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -34,6 +36,7 @@ data class AuthFormState(
 class AuthGateViewModel(
     context: Context,
     private val authRepository: AuthRepository,
+    private val ownerPreferences: OwnerPreferences,
     private val dataSeeder: DataSeeder,
 ) : ViewModel() {
     private val applicationContext = context.applicationContext
@@ -49,6 +52,13 @@ class AuthGateViewModel(
 
     private val mutableFormState = MutableStateFlow(AuthFormState())
     val formState: StateFlow<AuthFormState> = mutableFormState
+
+    val ownerInfo =
+        ownerPreferences.ownerInfo.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            OwnerInfo(),
+        )
 
     fun seedShowcaseData(
         context: Context,
@@ -89,15 +99,18 @@ class AuthGateViewModel(
         }
     }
 
-    fun updateDisplayName(value: String) = updateForm { copy(displayName = value, errorMessage = null) }
+    fun updateDisplayName(value: String) =
+        updateForm { copy(displayName = value, errorMessage = null) }
 
     fun updateUsername(value: String) = updateForm { copy(username = value, errorMessage = null) }
 
     fun updatePassword(value: String) = updateForm { copy(password = value, errorMessage = null) }
 
-    fun updateConfirmPassword(value: String) = updateForm { copy(confirmPassword = value, errorMessage = null) }
+    fun updateConfirmPassword(value: String) =
+        updateForm { copy(confirmPassword = value, errorMessage = null) }
 
-    fun updateRecoveryCode(value: String) = updateForm { copy(recoveryCode = value, errorMessage = null) }
+    fun updateRecoveryCode(value: String) =
+        updateForm { copy(recoveryCode = value, errorMessage = null) }
 
     fun createFirstAdmin() {
         val form = formState.value
@@ -359,9 +372,16 @@ class AuthGateViewModel(
         mutableFormState.update { it.copy(errorMessage = message) }
     }
 
+    fun updateOwnerInfo(info: OwnerInfo) {
+        viewModelScope.launch {
+            ownerPreferences.updateOwnerInfo(info)
+        }
+    }
+
     class Factory(
         private val context: Context,
         private val authRepository: AuthRepository,
+        private val ownerPreferences: OwnerPreferences,
         private val dataSeeder: DataSeeder,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
@@ -369,7 +389,7 @@ class AuthGateViewModel(
             require(modelClass.isAssignableFrom(AuthGateViewModel::class.java)) {
                 "Unknown ViewModel class: ${modelClass.name}"
             }
-            return AuthGateViewModel(context, authRepository, dataSeeder) as T
+            return AuthGateViewModel(context, authRepository, ownerPreferences, dataSeeder) as T
         }
     }
 }

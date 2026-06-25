@@ -314,6 +314,27 @@
     <string name="showcase_business_name_4">Officina Meccanica</string>
     <string name="showcase_business_name_5">Bar Centrale</string>
 
+    <string name="showcase_private_name_1">Mario</string>
+    <string name="showcase_private_surname_1">Rossi</string>
+    <string name="showcase_private_name_2">Luigi</string>
+    <string name="showcase_private_surname_2">Bianchi</string>
+    <string name="showcase_private_name_3">Giovanna</string>
+    <string name="showcase_private_surname_3">Verdi</string>
+    <string name="showcase_private_name_4">Francesca</string>
+    <string name="showcase_private_surname_4">Neri</string>
+    <string name="showcase_private_name_5">Roberto</string>
+    <string name="showcase_private_surname_5">Gialli</string>
+
+    <string name="showcase_business_fictitious">Azienda di Esempio Srl</string>
+    <string name="showcase_private_fictitious_name">Privato</string>
+    <string name="showcase_private_fictitious_surname">di Esempio</string>
+
+    <string name="showcase_owner_name">OnlyTechTake Lab Showcase</string>
+    <string name="showcase_owner_vat">IT01234567890</string>
+    <string name="showcase_owner_address">Via delle Riparazioni 42, 00100 Roma (RM)</string>
+    <string name="showcase_owner_email">showcase@onlytechtake.it</string>
+    <string name="showcase_owner_phone">+39 06 1234567</string>
+
     <string name="priority_low">Bassa</string>
     <string name="priority_normal">Normale</string>
     <string name="priority_high">Alta</string>
@@ -644,31 +665,31 @@
     <string name="order_confirm_diagnosis_outcome_text">La commessa passera\' a pronta per il ritiro.</string>
 
     <string name="template_wa_intake_title">WhatsApp presa in carico</string>
-    <string name="template_wa_intake_body">Ciao {{cliente}}, abbiamo preso in carico la commessa {{numero_commessa}}: {{titolo_commessa}}.\nCategoria: {{categoria_percorso}}.\nTi aggiorneremo appena avremo novita\'.</string>
+    <string name="template_wa_intake_body">Ciao {{cliente}}, abbiamo preso in carico la commessa {{numero_commessa}}: {{titolo_commessa}}.\nCategoria: {{categoria_percorso}}.\nTi aggiorneremo appena avremo novita\'.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_update_title">WhatsApp aggiornamento</string>
-    <string name="template_wa_update_body">Aggiornamento commessa {{numero_commessa}}: stato attuale {{stato_commessa}}.\nProssima azione: {{prossima_azione}}.</string>
+    <string name="template_wa_update_body">Aggiornamento commessa {{numero_commessa}}: stato attuale {{stato_commessa}}.\nProssima azione: {{prossima_azione}}.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_diagnosis_title">WhatsApp diagnosi</string>
-    <string name="template_wa_diagnosis_body">Ciao {{cliente}}, la commessa {{numero_commessa}} e\' in diagnosi.\nOggetto: {{titolo_commessa}}.\nTi comunicheremo esito e preventivo prima di procedere.</string>
+    <string name="template_wa_diagnosis_body">Ciao {{cliente}}, la commessa {{numero_commessa}} e\' in diagnosi.\nOggetto: {{titolo_commessa}}.\nTi comunicheremo esito e preventivo prima di procedere.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_result_title">WhatsApp risultato</string>
-    <string name="template_wa_result_body">Ciao {{cliente}}, abbiamo completato la diagnosi della commessa {{numero_commessa}}.\nEsito: {{esito_diagnosi}}.\nStato: {{stato_commessa}}.\nProssima azione: {{prossima_azione}}.</string>
+    <string name="template_wa_result_body">Ciao {{cliente}}, abbiamo completato la diagnosi della commessa {{numero_commessa}}.\nEsito: {{esito_diagnosi}}.\nStato: {{stato_commessa}}.\nProssima azione: {{prossima_azione}}.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_quote_title">WhatsApp preventivo intervento</string>
-    <string name="template_wa_quote_body">Ciao {{cliente}}, per la commessa {{numero_commessa}} abbiamo completato la diagnosi.\nPreventivo intervento: {{importo_preventivo}}.\nRispondi confermando o rifiutando il preventivo: procederemo solo dopo la tua conferma.</string>
+    <string name="template_wa_quote_body">Ciao {{cliente}}, per la commessa {{numero_commessa}} abbiamo completato la diagnosi.\nPreventivo intervento: {{importo_preventivo}}.\nRispondi confermando o rifiutando il preventivo: procederemo solo dopo la tua conferma.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_not_repairable_title">WhatsApp non riparabile</string>
-    <string name="template_wa_not_repairable_body">Ciao {{cliente}}, dopo la diagnosi della commessa {{numero_commessa}} l\'oggetto risulta non riparabile.\nPuoi passare in negozio per il ritiro o contattarci per chiarimenti.</string>
+    <string name="template_wa_not_repairable_body">Ciao {{cliente}}, dopo la diagnosi della commessa {{numero_commessa}} l\'oggetto risulta non riparabile.\nPuoi passare in negozio per il ritiro o contattarci per chiarimenti.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_repairing_title">WhatsApp riparazione</string>
-    <string name="template_wa_repairing_body">Ciao {{cliente}}, la riparazione della commessa {{numero_commessa}} e\' in corso.\nTi aggiorneremo quando sara\' pronta.</string>
+    <string name="template_wa_repairing_body">Ciao {{cliente}}, la riparazione della commessa {{numero_commessa}} e\' in corso.\nTi aggiorneremo quando sara\' pronta.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_lavorazione_title">WhatsApp lavorazione</string>
-    <string name="template_wa_lavorazione_body">Ciao {{cliente}}, la commessa {{numero_commessa}} e\' in lavorazione.\nProssima azione: {{prossima_azione}}.</string>
+    <string name="template_wa_lavorazione_body">Ciao {{cliente}}, la commessa {{numero_commessa}} e\' in lavorazione.\nProssima azione: {{prossima_azione}}.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_completamento_title">WhatsApp completamento</string>
-    <string name="template_wa_completamento_body">Ciao {{cliente}}, la lavorazione della commessa {{numero_commessa}} e\' completata.</string>
+    <string name="template_wa_completamento_body">Ciao {{cliente}}, la lavorazione della commessa {{numero_commessa}} e\' completata.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_ready_title">WhatsApp pronto ritiro</string>
-    <string name="template_wa_ready_body">Ciao {{cliente}}, la commessa {{numero_commessa}} e\' pronta per il ritiro.</string>
+    <string name="template_wa_ready_body">Ciao {{cliente}}, la commessa {{numero_commessa}} e\' pronta per il ritiro.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_pdf_status_title">WhatsApp stato avanzamento PDF</string>
-    <string name="template_wa_pdf_status_body">Ciao {{cliente}}, ti inviamo in allegato lo stato avanzamento della commessa {{numero_commessa}}: {{titolo_commessa}}.\n\nStato attuale: {{stato_commessa}}\nProssima azione: {{prossima_azione}}\n\nOnlyTechTake</string>
+    <string name="template_wa_pdf_status_body">Ciao {{cliente}}, ti inviamo in allegato lo stato avanzamento della commessa {{numero_commessa}}: {{titolo_commessa}}.\n\nStato attuale: {{stato_commessa}}\nProssima azione: {{prossima_azione}}\n\n{{proprietario_nome}}</string>
     <string name="template_privacy_breve_title">Privacy breve</string>
-    <string name="template_privacy_breve_body">Informativa privacy sintetica ai sensi del Regolamento UE 2016/679 (GDPR).\nTitolare: OnlyTechTake, contattabile presso il punto vendita o i recapiti indicati nella ricevuta.\nFinalita\': presa in carico e gestione della commessa, diagnosi, preventivo, riparazione, consegna, assistenza post-intervento, comunicazioni operative e adempimenti contabili/fiscali.\nBasi giuridiche: esecuzione di misure precontrattuali o contrattuali, obblighi di legge e legittimo interesse alla gestione organizzativa e alla tutela dei diritti. Per comunicazioni WhatsApp non indispensabili o ulteriori rispetto alla gestione della commessa puo\' essere richiesto consenso specifico.\nDati trattati: dati identificativi e di contatto, dati fiscali se necessari, informazioni sull\'oggetto consegnato, descrizione del problema, foto/allegati, firma, note operative e storico comunicazioni.\nConservazione: per il tempo necessario alla gestione della commessa e successivamente per obblighi di legge o tutela dei diritti.\nDestinatari: personale autorizzato, fornitori tecnici strettamente necessari, consulenti e soggetti previsti dalla legge. L\'uso di WhatsApp comporta trattamento secondo le condizioni della piattaforma usata dal cliente.\nDiritti: accesso, rettifica, cancellazione nei casi previsti, limitazione, opposizione, portabilita\' ove applicabile e reclamo al Garante per la protezione dei dati personali.</string>
+    <string name="template_privacy_breve_body">Informativa privacy sintetica ai sensi del Regolamento UE 2016/679 (GDPR).\nTitolare: {{proprietario_nome}}, {{proprietario_piva}}, {{proprietario_indirizzo}}, contattabile presso il punto vendita o i recapiti indicati nella ricevuta: {{proprietario_email}} {{proprietario_telefono}}.\nFinalita\': presa in carico e gestione della commessa, diagnosi, preventivo, riparazione, consegna, assistenza post-intervento, comunicazioni operative e adempimenti contabili/fiscali.\nBasi giuridiche: esecuzione di misure precontrattuali o contrattuali, obblighi di legge e legittimo interesse alla gestione organizzativa e alla tutela dei diritti. Per comunicazioni WhatsApp non indispensabili o ulteriori rispetto alla gestione della commessa puo\' essere richiesto consenso specifico.\nDati trattati: dati identificativi e di contatto, dati fiscali se necessari, informazioni sull\'oggetto consegnato, descrizione del problema, foto/allegati, firma, note operative e storico comunicazioni.\nConservazione: per il tempo necessario alla gestione della commessa e successivamente per obblighi di legge o tutela dei diritti.\nDestinatari: personale autorizzato, fornitori tecnici strettamente necessari, consulenti e soggetti previsti dalla legge. L\'uso di WhatsApp comporta trattamento secondo le condizioni della piattaforma usata dal cliente.\nDiritti: accesso, rettifica, cancellazione nei casi previsti, limitazione, opposizione, portabilita\' ove applicabile e reclamo al Garante per la protezione dei dati personali.</string>
     <string name="template_condizioni_title">Condizioni presa in carico</string>
-    <string name="template_condizioni_body">Condizioni di presa in carico.\nIl cliente dichiara di consegnare l\'oggetto indicato in commessa e autorizza OnlyTechTake a custodirlo, verificarlo e svolgere diagnosi tecnica preliminare.\nLa diagnosi puo\' richiedere apertura, test, pulizia tecnica o collegamento ad alimentatori/strumenti compatibili. L\'intervento di riparazione viene eseguito solo dopo accettazione del preventivo quando previsto.\nIl cliente si impegna a fornire informazioni corrette su proprieta\', difetti noti, blocchi, accessori e condizioni dell\'oggetto. OnlyTechTake non risponde di dati non salvati, password non comunicate, difetti preesistenti o peggioramenti inevitabili emersi durante diagnosi su oggetti gia\' danneggiati.\nGli importi comunicati come preventivo devono essere accettati dal cliente prima dell\'avvio intervento. In caso di rifiuto, impossibilita\' di riparazione o mancato ritiro, la commessa puo\' essere chiusa secondo le condizioni comunicate dall\'operatore.\nCon la firma il cliente conferma presa visione di privacy e condizioni operative.</string>
+    <string name="template_condizioni_body">Condizioni di presa in carico.\nIl cliente dichiara di consegnare l\'oggetto indicato in commessa e autorizza {{proprietario_nome}} a custodirlo, verificarlo e svolgere diagnosi tecnica preliminare.\nLa diagnosi puo\' richiedere apertura, test, pulizia tecnica o collegamento ad alimentatori/strumenti compatibili. L\'intervento di riparazione viene eseguito solo dopo accettazione del preventivo quando previsto.\nIl cliente si impegna a fornire informazioni corrette su proprieta\', difetti noti, blocchi, accessori e condizioni dell\'oggetto. {{proprietario_nome}} non risponde di dati non salvati, password non comunicate, difetti preesistenti o peggioramenti inevitabili emersi durante diagnosi su oggetti gia\' danneggiati.\nGli importi comunicati come preventivo devono essere accettati dal cliente prima dell\'avvio intervento. In caso di rifiuto, impossibilita\' di riparazione o mancato ritiro, la commessa puo\' essere chiusa secondo le condizioni comunicate dall\'operatore.\nCon la firma il cliente conferma presa visione di privacy e condizioni operative.</string>
 
     <string name="order_confirm_delete_document_title">Eliminare documento?</string>
     <string name="order_confirm_delete_document_text">Il file verra\' rimosso permanentemente.</string>
@@ -764,6 +785,17 @@
     <string name="config_hub_templates_subtitle_user">Area admin</string>
     <string name="config_hub_whatsapp_title">WhatsApp</string>
     <string name="config_hub_whatsapp_subtitle">Invio manuale</string>
+    <string name="config_hub_owner_title">Dati Proprietario</string>
+    <string name="config_hub_owner_subtitle">Informazioni per PDF e messaggi</string>
+    <string name="config_owner_tooltip">Configura i dati da includere nei report e nelle comunicazioni.</string>
+    <string name="owner_field_name">Ragione Sociale / Nome</string>
+    <string name="owner_field_vat">P.IVA / Codice Fiscale</string>
+    <string name="owner_field_address">Indirizzo / Sede Legale</string>
+    <string name="owner_field_email">Email</string>
+    <string name="owner_field_phone">Telefono</string>
+    <string name="owner_save_success">Dati proprietario salvati con successo.</string>
+    <string name="owner_close">Chiudi Setup Proprietario</string>
+
     <string name="config_hub_admin_title">Utenti e Operatori</string>
     <string name="config_hub_admin_subtitle">Gestione operatori e kit di recupero</string>
     <string name="config_hub_backup_title">Backup e Manutenzione</string>

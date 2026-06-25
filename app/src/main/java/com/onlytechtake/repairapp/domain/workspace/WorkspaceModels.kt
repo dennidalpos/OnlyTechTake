@@ -18,6 +18,16 @@ import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventType
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
 
+data class OwnerInfo(
+    val name: String = "",
+    val vatNumber: String = "",
+    val address: String = "",
+    val email: String = "",
+    val phone: String = "",
+) {
+    fun isComplete(): Boolean = name.isNotBlank() && vatNumber.isNotBlank() && address.isNotBlank()
+}
+
 data class OperatorInput(
     val displayName: String,
     val username: String,
@@ -102,7 +112,8 @@ fun IntakeOrderInput.validationErrors(context: Context): List<String> =
         if (!hasPrivacySignature) add(context.getString(R.string.error_privacy_required))
     }
 
-fun IntakeOrderInput.isReadyForSubmit(context: Context): Boolean = validationErrors(context).isEmpty()
+fun IntakeOrderInput.isReadyForSubmit(context: Context): Boolean =
+    validationErrors(context).isEmpty()
 
 private fun CustomerInput.isValidForIntake(): Boolean {
     val hasContact = phone.isNotBlank() || email.isNotBlank()
@@ -197,4 +208,5 @@ fun DiagnosisResultInput.validationErrors(context: Context): List<String> =
         }
     }
 
-fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? = estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }
+fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? =
+    estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }
