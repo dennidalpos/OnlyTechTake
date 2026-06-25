@@ -134,7 +134,7 @@ internal class OrderWorkflowEventWriter(
             AuditAction.ORDER_DELETED,
             null,
             null,
-            now
+            now,
         ) // orderId set to null to avoid FK error
     }
 

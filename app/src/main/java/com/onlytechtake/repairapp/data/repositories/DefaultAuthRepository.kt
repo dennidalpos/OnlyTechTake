@@ -58,7 +58,7 @@ class DefaultAuthRepository(
                             now,
                             AuthPolicy.INACTIVITY_TIMEOUT_MILLIS,
                         )
-                        )
+                    )
                 ) {
                     sessionStore.clear()
                     null
@@ -81,8 +81,9 @@ class DefaultAuthRepository(
             emit(
                 AuthState(
                     initialized = true,
-                    initializationError = e.message
-                        ?: context.getString(R.string.error_critical_db_error),
+                    initializationError =
+                        e.message
+                            ?: context.getString(R.string.error_critical_db_error),
                 ),
             )
         }

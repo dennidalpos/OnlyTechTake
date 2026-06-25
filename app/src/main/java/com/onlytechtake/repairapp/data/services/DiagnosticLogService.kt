@@ -24,7 +24,7 @@ class DiagnosticLogService(
             diagnosticLogger.logError(
                 "DiagnosticLogService",
                 "Automatic log generation for export",
-                null
+                null,
             )
         }
 

@@ -165,8 +165,9 @@ fun ColumnScope.TemplateMappingSettings(
                                 )
                                 Spacer(modifier = Modifier.width(RepairAppSpacing.compactGap))
                                 Text(
-                                    text = assignedTemplate?.title ?: assignedCode
-                                    ?: stringResource(R.string.config_template_status_not_configured),
+                                    text =
+                                        assignedTemplate?.title ?: assignedCode
+                                            ?: stringResource(R.string.config_template_status_not_configured),
                                     style = MaterialTheme.typography.bodySmall,
                                     color =
                                         if (assignedTemplate == null) {

@@ -80,8 +80,10 @@ class SignatureRepository(
                 SignatureEntity(
                     id = UUID.randomUUID().toString(),
                     orderId = orderId,
-                    signerName = signerName.trim()
-                        .ifBlank { context.getString(R.string.signature_default_signer) },
+                    signerName =
+                        signerName
+                            .trim()
+                            .ifBlank { context.getString(R.string.signature_default_signer) },
                     privacyAccepted = privacyAccepted,
                     termsAccepted = termsAccepted,
                     privacyTextSnapshot =

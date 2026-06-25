@@ -57,7 +57,7 @@ internal class AuthenticatedActionRunner(
                 diagnosticLogger?.logError(
                     "AuthenticatedActionRunner",
                     error.message ?: "Action failed",
-                    error
+                    error,
                 )
                 showMessage(error.message ?: context.getString(R.string.error_unknown), true)
             }

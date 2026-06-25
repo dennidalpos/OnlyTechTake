@@ -52,7 +52,7 @@ class SocialStoryDemoScreenshotTest {
                     if (robot.isTagPresent(RepairAppTestTags.NewOrderInsertCustomerButton)) {
                         robot.clickTag(
                             RepairAppTestTags.NewOrderInsertCustomerButton,
-                            scroll = true
+                            scroll = true,
                         )
                     }
                     robot.pauseForDemo()
@@ -126,7 +126,7 @@ class SocialStoryDemoScreenshotTest {
             robot.capture(outputDir, "09-elenco-commesse.png")
             robot.waitForTag(
                 RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID),
-                scroll = true
+                scroll = true,
             )
             robot.clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID))
 
@@ -184,7 +184,7 @@ class SocialStoryDemoScreenshotTest {
             robot.typeTag(
                 RepairAppTestTags.ConfigCategoryNameField,
                 "Console portatile",
-                scroll = true
+                scroll = true,
             )
             robot.typeTag(
                 RepairAppTestTags.ConfigCategoryDescriptionField,
@@ -280,7 +280,7 @@ class SocialStoryDemoScreenshotTest {
             robot.typeTag(
                 RepairAppTestTags.CustomerAddressField,
                 "Via Demo 24, Milano",
-                scroll = true
+                scroll = true,
             )
             robot.capture(outputDir, "04-cliente-azienda.png")
             robot.clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)

@@ -109,8 +109,7 @@ internal object BackupArchive {
             }
     }
 
-    private fun isSupportedAppFile(relativePath: String): Boolean =
-        relativePath.startsWith("$CANONICAL_MEDIA_DIRECTORY/")
+    private fun isSupportedAppFile(relativePath: String): Boolean = relativePath.startsWith("$CANONICAL_MEDIA_DIRECTORY/")
 
     private fun requireSafeEntry(
         context: Context,

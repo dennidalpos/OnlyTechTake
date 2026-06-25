@@ -23,7 +23,7 @@ class AttachmentImportPolicy(
         require(mimeType in allowedMimeTypes) {
             context.getString(
                 R.string.error_attachment_type_not_allowed,
-                mimeType
+                mimeType,
             )
         }
 
@@ -31,7 +31,7 @@ class AttachmentImportPolicy(
             require(declaredSizeBytes <= maxSizeBytes) {
                 context.getString(
                     R.string.error_attachment_too_large,
-                    maxSizeBytes.toMiBLabel(context)
+                    maxSizeBytes.toMiBLabel(context),
                 )
             }
         }

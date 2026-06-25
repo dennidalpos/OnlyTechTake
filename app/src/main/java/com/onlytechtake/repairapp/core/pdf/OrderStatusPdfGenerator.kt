@@ -178,7 +178,7 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
             context.getString(R.string.pdf_label_customer_contact),
             margin,
             y,
-            labelPaint
+            labelPaint,
         )
         canvas.drawText(
             "${payload.customer.phone ?: ""} / ${payload.customer.email ?: ""}",
@@ -193,7 +193,7 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
             context.getString(R.string.pdf_section_device_details),
             margin,
             y,
-            sectionPaint
+            sectionPaint,
         )
         y += 15f
         canvas.drawText(context.getString(R.string.pdf_label_category), margin, y, labelPaint)
@@ -217,7 +217,7 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
             context.getString(R.string.pdf_section_current_status),
             margin,
             y,
-            sectionPaint
+            sectionPaint,
         )
         y += 15f
         canvas.drawText(context.getString(R.string.pdf_label_status), margin, y, labelPaint)
@@ -259,20 +259,23 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
                 context.getString(R.string.pdf_section_signature),
                 margin,
                 y,
-                sectionPaint
+                sectionPaint,
             )
             y += 15f
             canvas.drawText(
                 context.getString(
                     R.string.pdf_label_signer,
-                    payload.signature.signerName
-                ), margin, y, textPaint
+                    payload.signature.signerName,
+                ),
+                margin,
+                y,
+                textPaint,
             )
             y += 12f
             canvas.drawText(
                 context.getString(
                     R.string.pdf_label_signed_at,
-                    dateFormat.format(Date(payload.signature.signedAt))
+                    dateFormat.format(Date(payload.signature.signedAt)),
                 ),
                 margin,
                 y,
@@ -282,7 +285,7 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
             canvas.drawText(
                 context.getString(
                     R.string.pdf_label_privacy_accepted,
-                    payload.signature.privacyTemplateVersion
+                    payload.signature.privacyTemplateVersion,
                 ),
                 margin,
                 y,
@@ -292,7 +295,7 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
             canvas.drawText(
                 context.getString(
                     R.string.pdf_label_terms_accepted,
-                    payload.signature.termsTemplateVersion
+                    payload.signature.termsTemplateVersion,
                 ),
                 margin,
                 y,

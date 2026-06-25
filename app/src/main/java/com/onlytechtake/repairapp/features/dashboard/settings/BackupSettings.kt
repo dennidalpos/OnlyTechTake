@@ -318,7 +318,7 @@ fun BackupSettings(
                         onClick = {
                             onRequestConfirm(
                                 confirmExportDatabaseTitle,
-                                confirmExportDatabaseText
+                                confirmExportDatabaseText,
                             ) {
                                 exportDatabaseLauncher.launch("onlytechtake_backup_$timestamp.db")
                             }

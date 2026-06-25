@@ -162,7 +162,7 @@ class BackupRepository(
                                 context,
                                 input,
                                 stagingDir,
-                                password?.toCharArray()
+                                password?.toCharArray(),
                             )
                         } ?: throw IOException(context.getString(R.string.error_backup_unavailable))
                     require(extracted.metadataText.contains("\"databaseVersion\": ${RepairAppDatabase.DATABASE_VERSION}")) {
@@ -359,35 +359,35 @@ class BackupRepository(
                     writer.title(
                         context.getString(
                             R.string.backup_pdf_order_summary,
-                            detail.order.orderNumber
-                        )
+                            detail.order.orderNumber,
+                        ),
                     )
                     writer.line(
                         context.getString(
                             R.string.backup_pdf_number,
-                            detail.order.orderNumber
-                        )
+                            detail.order.orderNumber,
+                        ),
                     )
                     writer.line(context.getString(R.string.backup_pdf_title, detail.order.title))
                     writer.line(
                         context.getString(
                             R.string.backup_pdf_status,
-                            detail.order.status.label(context)
-                        )
+                            detail.order.status.label(context),
+                        ),
                     )
                     detail.order.closureReason?.let { reason ->
                         writer.line(
                             context.getString(
                                 R.string.backup_pdf_closure_reason,
-                                reason.label(context)
-                            )
+                                reason.label(context),
+                            ),
                         )
                     }
                     writer.line(
                         context.getString(
                             R.string.backup_pdf_customer,
-                            detail.customer?.displayName(context) ?: ""
-                        )
+                            detail.customer?.displayName(context) ?: "",
+                        ),
                     )
                     writer.line(
                         context.getString(
@@ -410,8 +410,8 @@ class BackupRepository(
                     writer.line(
                         context.getString(
                             R.string.backup_pdf_created_at,
-                            formatTime(detail.order.createdAt)
-                        )
+                            formatTime(detail.order.createdAt),
+                        ),
                     )
                     writer.line(
                         context.getString(
@@ -444,15 +444,15 @@ class BackupRepository(
                                 context.getString(
                                     R.string.backup_pdf_privacy_version,
                                     signature.privacyTemplateVersion,
-                                    signature.privacyTextSnapshot
-                                )
+                                    signature.privacyTextSnapshot,
+                                ),
                             )
                             writer.line(
                                 context.getString(
                                     R.string.backup_pdf_terms_version,
                                     signature.termsTemplateVersion,
-                                    signature.termsTextSnapshot
-                                )
+                                    signature.termsTextSnapshot,
+                                ),
                             )
                         }
                     }
@@ -543,16 +543,16 @@ private fun formatTimelineEvent(
                 add(
                     context.getString(
                         R.string.backup_pdf_expected_feedback,
-                        it.name
-                    )
+                        it.name,
+                    ),
                 )
             }
             event.customerFeedback?.let {
                 add(
                     context.getString(
                         R.string.backup_pdf_customer_feedback,
-                        it.name
-                    )
+                        it.name,
+                    ),
                 )
             }
             event.customerFeedbackNote
@@ -562,8 +562,8 @@ private fun formatTimelineEvent(
                 add(
                     context.getString(
                         R.string.backup_pdf_feedback_recorded,
-                        formatTime(it)
-                    )
+                        formatTime(it),
+                    ),
                 )
             }
         }

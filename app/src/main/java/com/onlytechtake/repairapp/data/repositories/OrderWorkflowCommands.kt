@@ -167,16 +167,16 @@ internal class OrderWorkflowCommands(
                     listOfNotNull(
                         context.getString(
                             R.string.timeline_result_summary,
-                            input.summary.capitalizeFirst()
+                            input.summary.capitalizeFirst(),
                         ),
                         context.getString(
                             R.string.timeline_diagnosis_outcome,
-                            input.diagnosisOutcome.label(context)
+                            input.diagnosisOutcome.label(context),
                         ),
                         estimateAmountCents?.let {
                             context.getString(
                                 R.string.timeline_repair_amount,
-                                it.formatEuroCents()
+                                it.formatEuroCents(),
                             )
                         },
                     ).joinToString("\n")
@@ -271,7 +271,7 @@ internal class OrderWorkflowCommands(
                 when (input.feedback) {
                     CustomerFeedbackType.ACCEPT,
                     CustomerFeedbackType.REJECT,
-                        ->
+                    ->
                         require(order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
                             context.getString(R.string.error_feedback_only_repairable)
                         }
@@ -303,7 +303,7 @@ internal class OrderWorkflowCommands(
                         context,
                         order.status,
                         targetStatus,
-                        closureReason
+                        closureReason,
                     )
                     OrderClosurePermissionPolicy.requireClosePermissionIfNeeded(actor, targetStatus)
                 }
@@ -444,8 +444,7 @@ internal class OrderWorkflowCommands(
         return order
     }
 
-    private suspend fun <T> inTransaction(block: suspend () -> T): T =
-        database?.withTransaction { block() } ?: block()
+    private suspend fun <T> inTransaction(block: suspend () -> T): T = database?.withTransaction { block() } ?: block()
 
     private suspend fun buildCategoryPathSnapshot(categoryId: String): String? {
         val path = mutableListOf<String>()

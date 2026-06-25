@@ -355,7 +355,7 @@ class OrderMediaRepository(
                         require(source.exists() && source.length() > 0L) {
                             context.getString(
                                 R.string.error_intake_file_unavailable,
-                                staged.fileName
+                                staged.fileName,
                             )
                         }
                         val destination = moveStagedFile(orderId, source, staged, now + index)
@@ -471,8 +471,7 @@ class OrderMediaRepository(
         }
     }
 
-    private suspend fun <T> inTransaction(block: suspend () -> T): T =
-        database?.withTransaction { block() } ?: block()
+    private suspend fun <T> inTransaction(block: suspend () -> T): T = database?.withTransaction { block() } ?: block()
 
     private fun copyToWithLimit(
         input: InputStream,
@@ -490,7 +489,7 @@ class OrderMediaRepository(
             require(copiedBytes <= maxSizeBytes) {
                 context.getString(
                     R.string.error_attachment_too_large,
-                    maxSizeBytes.toMiBLabel(context)
+                    maxSizeBytes.toMiBLabel(context),
                 )
             }
             output.write(buffer, 0, readBytes)
@@ -512,8 +511,10 @@ class OrderMediaRepository(
             sanitizedName
                 .substringAfterLast('.', missingDelimiterValue = "")
                 .ifBlank { MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType).orEmpty() }
-        val baseName = sanitizedName.substringBeforeLast('.', sanitizedName)
-            .ifBlank { context.getString(R.string.label_attachment) }
+        val baseName =
+            sanitizedName
+                .substringBeforeLast('.', sanitizedName)
+                .ifBlank { context.getString(R.string.label_attachment) }
         return if (extension.isBlank()) {
             "${now}_$baseName"
         } else {

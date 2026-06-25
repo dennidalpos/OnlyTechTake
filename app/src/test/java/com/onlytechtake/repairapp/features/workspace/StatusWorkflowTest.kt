@@ -66,7 +66,7 @@ class StatusWorkflowTest {
             OrderStatusPolicy.requireAllowed(
                 context,
                 OrderStatus.READY_FOR_PICKUP,
-                OrderStatus.CLOSED
+                OrderStatus.CLOSED,
             )
         }
     }

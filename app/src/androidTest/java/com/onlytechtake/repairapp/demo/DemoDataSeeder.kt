@@ -132,15 +132,25 @@ object DemoDataSeeder {
                 CustomerEntity(
                     id = if (i == 1) DEMO_CUSTOMER_ID else "demo-customer-$i",
                     type = if ((i % 3) == 0) CustomerType.BUSINESS else CustomerType.PRIVATE,
-                    firstName = if (i % 3 == 0) null else context.getString(
-                        R.string.demo_customer_name,
-                        i
-                    ),
+                    firstName =
+                        if (i % 3 == 0) {
+                            null
+                        } else {
+                            context.getString(
+                                R.string.demo_customer_name,
+                                i,
+                            )
+                        },
                     lastName = if (i % 3 == 0) null else "Demo",
-                    companyName = if (i % 3 == 0) context.getString(
-                        R.string.demo_customer_business_name,
-                        i
-                    ) else null,
+                    companyName =
+                        if (i % 3 == 0) {
+                            context.getString(
+                                R.string.demo_customer_business_name,
+                                i,
+                            )
+                        } else {
+                            null
+                        },
                     vatNumber = if (i % 3 == 0) "IT${10000000000L + i}" else null,
                     taxCode = if (i % 3 == 0) null else "CF${1000000000000000L + i}",
                     phone = "+39 333 000 ${1000 + i}",
@@ -162,10 +172,15 @@ object DemoDataSeeder {
                     id = if (i == 1) DEMO_ORDER_ID else "demo-order-$i",
                     orderNumber = "2026-${1000 + i}",
                     customerId = DEMO_CUSTOMER_ID,
-                    title = if (i == 1) context.getString(R.string.demo_order_title_1) else context.getString(
-                        R.string.demo_order_title_n,
-                        i
-                    ),
+                    title =
+                        if (i == 1) {
+                            context.getString(R.string.demo_order_title_1)
+                        } else {
+                            context.getString(
+                                R.string.demo_order_title_n,
+                                i,
+                            )
+                        },
                     categoryId = "demo-cat-rog-strix",
                     status = if (i % 2 == 0) OrderStatus.IN_PROGRESS else OrderStatus.OPEN,
                     priority = OrderPriority.NORMAL,
@@ -260,57 +275,57 @@ object DemoDataSeeder {
             DemoTemplate(
                 "privacy_breve",
                 context.getString(R.string.template_privacy_breve_title),
-                context.getString(R.string.anchor_step_legal)
+                context.getString(R.string.anchor_step_legal),
             ),
             DemoTemplate(
                 "condizioni_presa_in_carico",
                 context.getString(R.string.template_condizioni_title),
-                context.getString(R.string.anchor_step_legal)
+                context.getString(R.string.anchor_step_legal),
             ),
             DemoTemplate(
                 "whatsapp_presa_in_carico",
                 context.getString(R.string.template_wa_intake_title),
-                context.getString(R.string.anchor_step_intake)
+                context.getString(R.string.anchor_step_intake),
             ),
             DemoTemplate(
                 "whatsapp_aggiornamento",
                 context.getString(R.string.template_wa_update_title),
-                context.getString(R.string.anchor_step_update)
+                context.getString(R.string.anchor_step_update),
             ),
             DemoTemplate(
                 "whatsapp_diagnosi",
                 context.getString(R.string.template_wa_diagnosis_title),
-                context.getString(R.string.anchor_step_diagnosis)
+                context.getString(R.string.anchor_step_diagnosis),
             ),
             DemoTemplate(
                 "whatsapp_risultato",
                 context.getString(R.string.template_wa_result_title),
-                context.getString(R.string.anchor_step_outcome)
+                context.getString(R.string.anchor_step_outcome),
             ),
             DemoTemplate(
                 "whatsapp_preventivo_intervento",
                 context.getString(R.string.template_wa_quote_title),
-                context.getString(R.string.anchor_step_quote)
+                context.getString(R.string.anchor_step_quote),
             ),
             DemoTemplate(
                 "whatsapp_non_riparabile",
                 context.getString(R.string.template_wa_not_repairable_title),
-                context.getString(R.string.anchor_step_outcome)
+                context.getString(R.string.anchor_step_outcome),
             ),
             DemoTemplate(
                 "whatsapp_riparazione",
                 context.getString(R.string.template_wa_repairing_title),
-                context.getString(R.string.anchor_step_repair)
+                context.getString(R.string.anchor_step_repair),
             ),
             DemoTemplate(
                 "whatsapp_pronto_ritiro",
                 context.getString(R.string.template_wa_ready_title),
-                context.getString(R.string.anchor_step_pickup)
+                context.getString(R.string.anchor_step_pickup),
             ),
             DemoTemplate(
                 "whatsapp_stato_avanzamento_pdf",
                 context.getString(R.string.template_wa_pdf_status_title),
-                context.getString(R.string.anchor_step_docs)
+                context.getString(R.string.anchor_step_docs),
             ),
         ).forEachIndexed { index, template ->
             database.messageTemplateDao().upsert(

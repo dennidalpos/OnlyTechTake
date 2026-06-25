@@ -42,6 +42,8 @@
     }
   ],
   "completed_recently": [
+    "Rigenerati e verificati tutti gli asset (screenshot e video) per i flavor Full e Demo tramite script automatizzati su device fisico.",
+    "Sincronizzati gli asset aggiornati nelle cartelle marketing/ e landing page.",
     "Rifattorizzata la logica di seeding: introdotta interfaccia DataSeeder e spostato il seeding specifico per Showcase nel relativo flavor, pulendo il codice 'main'.",
     "Allineati tutti i ViewModel (Customers, NewOrder, Settings) all'uso di AuthenticatedActionRunner per un offloading IO coerente e gestione centralizzata degli errori.",
     "Migliorata la testabilità dei ViewModel tramite l'iniezione del dispatcher IO, risolvendo regressioni nei test unitari di tutte le varianti.",
