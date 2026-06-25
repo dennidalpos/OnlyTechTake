@@ -185,7 +185,7 @@ fun AboutSettings(onBack: () -> Unit) {
 )
 @Composable
 private fun AboutSettingsPreview() {
-    MaterialTheme {
+    com.onlytechtake.repairapp.core.design.RepairAppTheme {
         AboutSettings {}
     }
 }

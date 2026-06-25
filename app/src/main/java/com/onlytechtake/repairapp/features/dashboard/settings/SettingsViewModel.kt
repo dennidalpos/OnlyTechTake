@@ -23,6 +23,8 @@ import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -30,29 +32,31 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SettingsViewModel(
-    private val context: Context,
+    context: Context,
     private val authRepository: AuthRepository,
     private val adminUserRepository: AdminUserRepository,
-    private val catalogRepository: CatalogRepository,
+    catalogRepository: CatalogRepository,
     private val templateRepository: TemplateRepository,
-    private val backupRepository: BackupRepository,
+    backupRepository: BackupRepository,
     private val dataResetRepository: DataResetRepository,
-    private val backupReminderPreferences: BackupReminderPreferences,
-    private val securityPreferences: SecurityPreferences,
+    backupReminderPreferences: BackupReminderPreferences,
+    securityPreferences: SecurityPreferences,
     private val storageStatsService: StorageStatsService,
-    private val diagnosticLogService: DiagnosticLogService,
-    private val orderFileCleanupService: OrderFileCleanupService,
-    private val diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger,
-    private val database: com.onlytechtake.repairapp.data.local.db.RepairAppDatabase,
+    diagnosticLogService: DiagnosticLogService,
+    orderFileCleanupService: OrderFileCleanupService,
+    diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger,
+    database: com.onlytechtake.repairapp.data.local.db.RepairAppDatabase,
     private val onSetFormDirty: (Boolean) -> Unit,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
 
-    private val _isProcessing = MutableStateFlow(false)
+    private val _isProcessing = MutableStateFlow(value = false)
     val isProcessing = _isProcessing.asStateFlow()
 
     private val _recoveryCode = MutableStateFlow<String?>(null)
@@ -60,13 +64,14 @@ class SettingsViewModel(
 
     private val actionRunner =
         AuthenticatedActionRunner(
-            context = context,
+            context = context.applicationContext,
             authRepository = authRepository,
             currentUser = authRepository.currentUser,
             scope = viewModelScope,
             showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) },
             setLoading = { _isProcessing.value = it },
             diagnosticLogger = diagnosticLogger,
+            ioDispatcher = ioDispatcher,
         )
 
     private val catalogDelegate = CatalogSettingsDelegate(catalogRepository, actionRunner)
@@ -88,6 +93,7 @@ class SettingsViewModel(
             actionRunner,
             viewModelScope,
             ::refreshStorageStats,
+            ioDispatcher,
         )
     private val diagnosticDelegate =
         DiagnosticSettingsDelegate(
@@ -95,6 +101,7 @@ class SettingsViewModel(
             actionRunner,
             viewModelScope,
             ::refreshStorageStats,
+            ioDispatcher,
         )
 
     fun initializeTemplatesIfNeeded() {
@@ -168,7 +175,7 @@ class SettingsViewModel(
     fun refreshStorageStats() {
         viewModelScope.launch {
             val stats =
-                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                withContext(ioDispatcher) {
                     storageStatsService.getStorageStats()
                 }
             _storageStats.value = stats
@@ -223,8 +230,6 @@ class SettingsViewModel(
     fun setBackupEncryptionEnabled(enabled: Boolean) = securityDelegate.setBackupEncryptionEnabled(enabled)
 
     fun setBackupEncryptionPassword(password: String) = securityDelegate.setBackupEncryptionPassword(password)
-
-    fun setDatabaseEncryptionEnabled(enabled: Boolean) = securityDelegate.setDatabaseEncryptionEnabled(enabled)
 
     fun createOperator(
         displayName: String,
@@ -290,8 +295,6 @@ class SettingsViewModel(
         _recoveryCode.value = null
     }
 
-    fun exportConfiguration(uri: Uri) = backupDelegate.exportConfiguration(uri)
-
     fun exportDatabase(uri: Uri) = backupDelegate.exportDatabase(uri)
 
     fun exportCompleteBackup(uri: Uri) = backupDelegate.exportCompleteBackup(uri)
@@ -319,6 +322,7 @@ class SettingsViewModel(
         private val diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger,
         private val database: com.onlytechtake.repairapp.data.local.db.RepairAppDatabase,
         private val onSetFormDirty: (Boolean) -> Unit,
+        private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
@@ -338,6 +342,7 @@ class SettingsViewModel(
                 diagnosticLogger,
                 database,
                 onSetFormDirty,
+                ioDispatcher,
             ) as T
     }
 }

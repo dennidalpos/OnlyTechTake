@@ -57,6 +57,7 @@ fun OrderDetailWorkspace(
     val documents by viewModel.documents.collectAsState()
     val preparedMessage by viewModel.preparedMessage.collectAsState()
     val preparedMessageBody by viewModel.preparedMessageBody.collectAsState()
+    val isProcessing by viewModel.isProcessing.collectAsState()
     val isGeneratingStatusPdf by viewModel.isGeneratingStatusPdf.collectAsState()
     val statusPdfError by viewModel.statusPdfError.collectAsState()
     val showPdfSentConfirmation by viewModel.showPdfSentConfirmation.collectAsState()
@@ -134,6 +135,18 @@ fun OrderDetailWorkspace(
                 onDismiss = viewModel::clearMessage,
                 modifier = Modifier.padding(RepairAppSpacing.compactGap),
             )
+        }
+
+        if (isProcessing) {
+            androidx.compose.foundation.layout.Box(
+                modifier = Modifier.fillMaxWidth().padding(RepairAppSpacing.compactGap),
+                contentAlignment = Alignment.Center,
+            ) {
+                androidx.compose.material3.LinearProgressIndicator(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            }
         }
 
         AppScreenContainer(scrollable = false) {

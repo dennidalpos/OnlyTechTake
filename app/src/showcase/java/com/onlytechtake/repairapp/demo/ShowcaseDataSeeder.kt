@@ -10,7 +10,6 @@ import androidx.room.withTransaction
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.security.PasswordHasher
-import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
@@ -34,6 +33,18 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
 
+/**
+ * Showcase implementation of [DataSeeder].
+ * Populates the database with a rich set of demo data for quick presentations.
+ */
+class DataSeederImpl : DataSeeder {
+    override suspend fun seed(context: Context) {
+        ShowcaseDataSeeder.seedShowcaseData(context)
+    }
+
+    override val defaultPassword: String = ShowcaseDataSeeder.DEFAULT_PASSWORD
+}
+
 object ShowcaseDataSeeder {
     const val DEFAULT_PASSWORD = "ShowcasePassword123"
 
@@ -41,21 +52,15 @@ object ShowcaseDataSeeder {
         val authPreferences = AuthPreferences(context)
         val mediaStorageProvider = MediaStorageProvider(context)
 
-        // DO NOT close or delete the database here.
-        // This method is called when authState.configured is false,
-        // meaning the database is already open and ready to be seeded.
-
         val db = RepairAppDatabase.getInstance(context)
         val now = System.currentTimeMillis()
         val passwordHasher = PasswordHasher()
         val pwdHash = passwordHasher.hash(DEFAULT_PASSWORD.toCharArray())
 
-        // Create bitmap resources once
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-        // Use transaction for all DB operations
         db.withTransaction {
-            // 1. Create Operators (3 with different permissions)
+            // 1. Create Operators
             val operators =
                 listOf(
                     UserEntity(
@@ -129,7 +134,6 @@ object ShowcaseDataSeeder {
             // 2. Create Categories
             val categories =
                 listOf(
-                    // Smartphone branch (4 levels)
                     OrderCategoryEntity(
                         "cat-smartphone",
                         null,
@@ -194,7 +198,6 @@ object ShowcaseDataSeeder {
                         context.getString(R.string.showcase_cat_s23_ultra_desc),
                         true,
                     ),
-                    // Computer branch (4 levels)
                     OrderCategoryEntity(
                         "cat-pc",
                         null,
@@ -243,7 +246,6 @@ object ShowcaseDataSeeder {
                         context.getString(R.string.showcase_cat_asus_zenbook_desc),
                         true,
                     ),
-                    // Console branch (4 levels)
                     OrderCategoryEntity(
                         "cat-console",
                         null,
@@ -312,20 +314,13 @@ object ShowcaseDataSeeder {
                 )
             db.orderCategoryDao().upsertAll(categories)
 
-            // 3. Create Private Customers (5)
+            // 3. Create Private Customers
             val privateCustomers =
                 (1..5).map { i ->
                     CustomerEntity(
                         id = "cust-p-$i",
                         type = CustomerType.PRIVATE,
-                        firstName =
-                            listOf(
-                                "Mario",
-                                "Luigi",
-                                "Giovanna",
-                                "Francesca",
-                                "Roberto",
-                            )[i - 1],
+                        firstName = listOf("Mario", "Luigi", "Giovanna", "Francesca", "Roberto")[i - 1],
                         lastName = listOf("Rossi", "Bianchi", "Verdi", "Neri", "Gialli")[i - 1],
                         companyName = null,
                         vatNumber = null,
@@ -340,7 +335,7 @@ object ShowcaseDataSeeder {
                 }
             db.customerDao().upsertAll(privateCustomers)
 
-            // 4. Create Business Customers (5)
+            // 4. Create Business Customers
             val businessCustomers =
                 (1..5).map { i ->
                     CustomerEntity(
@@ -368,33 +363,20 @@ object ShowcaseDataSeeder {
                 }
             db.customerDao().upsertAll(businessCustomers)
 
-            // 5. Create Orders for each customer
+            // 5. Create Orders
             val allCustomers = privateCustomers + businessCustomers
             val statuses = OrderStatus.entries.toTypedArray()
-
-            // Select leaf categories for orders
-            val selectableCategories =
-                categories.filter { cat -> categories.none { it.parentId == cat.id } }
+            val selectableCategories = categories.filter { cat -> categories.none { it.parentId == cat.id } }
 
             var orderCount = 1
             allCustomers.forEach { customer ->
-                // Create 3 orders for each customer: 2 active and 1 closed
                 repeat(3) { j ->
                     val orderId = "order-$orderCount"
                     val isClosed = (j == 2)
-                    val status =
-                        if (isClosed) OrderStatus.CLOSED else statuses[(orderCount % (statuses.size - 1))]
-                    val categoryId =
-                        selectableCategories[(orderCount % selectableCategories.size)].id
+                    val status = if (isClosed) OrderStatus.CLOSED else statuses[(orderCount % (statuses.size - 1))]
+                    val categoryId = selectableCategories[(orderCount % selectableCategories.size)].id
                     val operatorId = operators[(orderCount % 3)].id
-
-                    val repairType =
-                        listOf(
-                            "PC",
-                            "Smartphone",
-                            "Tablet",
-                            "Console",
-                        )[orderCount % 4]
+                    val repairType = listOf("PC", "Smartphone", "Tablet", "Console")[orderCount % 4]
 
                     val order =
                         RepairOrderEntity(
@@ -419,7 +401,6 @@ object ShowcaseDataSeeder {
                         )
                     db.repairOrderDao().upsert(order)
 
-                    // Add Timeline Event
                     db.timelineEventDao().upsert(
                         TimelineEventEntity(
                             id = "event-$orderId-init",
@@ -462,7 +443,6 @@ object ShowcaseDataSeeder {
                         )
                     }
 
-                    // Add Sample Photo
                     val photoFile =
                         writeDemoBitmap(
                             directory = mediaStorageProvider.getOrderMediaDir(orderId),
@@ -488,7 +468,6 @@ object ShowcaseDataSeeder {
                         ),
                     )
 
-                    // Add Sample Signature
                     val sigFile =
                         writeDemoBitmap(
                             directory = mediaStorageProvider.getOrderSignaturesDir(orderId),
@@ -524,7 +503,7 @@ object ShowcaseDataSeeder {
                 }
             }
 
-            // 6. Create Default Templates
+            // 6. Create Templates
             val templates =
                 listOf(
                     "privacy_breve" to context.getString(R.string.template_privacy_breve_title) to context.getString(R.string.template_privacy_breve_body),

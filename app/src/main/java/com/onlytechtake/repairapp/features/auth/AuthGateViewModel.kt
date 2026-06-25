@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.demo.ShowcaseDataSeeder
+import com.onlytechtake.repairapp.demo.DataSeeder
 import com.onlytechtake.repairapp.domain.auth.AuthPolicy
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.auth.AuthState
@@ -34,6 +34,7 @@ data class AuthFormState(
 class AuthGateViewModel(
     private val context: Context,
     private val authRepository: AuthRepository,
+    private val dataSeeder: DataSeeder,
 ) : ViewModel() {
     val authState: StateFlow<AuthState> =
         authRepository
@@ -56,7 +57,7 @@ class AuthGateViewModel(
 
             mutableFormState.update { it.copy(seeding = true, loading = true, errorMessage = null) }
             runCatching {
-                ShowcaseDataSeeder.seedShowcaseData(context)
+                dataSeeder.seed(context)
             }.onSuccess {
                 onDone()
             }.onFailure { e ->
@@ -74,9 +75,10 @@ class AuthGateViewModel(
 
     fun loginShowcaseAdmin() {
         if (mutableFormState.value.loading) return
+        val password = dataSeeder.defaultPassword ?: return
         viewModelScope.launch {
             mutableFormState.update { it.copy(loading = true, errorMessage = null) }
-            authRepository.login("admin", ShowcaseDataSeeder.DEFAULT_PASSWORD.toCharArray())
+            authRepository.login("admin", password.toCharArray())
             mutableFormState.update { it.copy(loading = false) }
         }
     }
@@ -341,13 +343,14 @@ class AuthGateViewModel(
     class Factory(
         private val context: Context,
         private val authRepository: AuthRepository,
+        private val dataSeeder: DataSeeder,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             require(modelClass.isAssignableFrom(AuthGateViewModel::class.java)) {
                 "Unknown ViewModel class: ${modelClass.name}"
             }
-            return AuthGateViewModel(context, authRepository) as T
+            return AuthGateViewModel(context, authRepository, dataSeeder) as T
         }
     }
 }

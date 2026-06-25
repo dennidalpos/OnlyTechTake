@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.features.dashboard.neworder
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.ViewModel
@@ -16,8 +17,11 @@ import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
+import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,16 +38,35 @@ import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class NewOrderViewModel(
-    authRepository: AuthRepository,
+    context: Context,
+    private val authRepository: AuthRepository,
     private val customerRepository: CustomerRepository,
     catalogRepository: CatalogRepository,
     private val orderMediaRepository: OrderMediaRepository,
     private val templateRepository: TemplateRepository,
     private val createIntakeOrderUseCase: CreateIntakeOrderUseCase,
     private val onSetFormDirty: (Boolean) -> Unit,
+    diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger,
+    ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
+    private val applicationContext = context.applicationContext
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
+
+    private val _isProcessing = MutableStateFlow(value = false)
+    val isProcessing = _isProcessing.asStateFlow()
+
+    private val actionRunner =
+        AuthenticatedActionRunner(
+            context = applicationContext,
+            authRepository = authRepository,
+            currentUser = authRepository.currentUser,
+            scope = viewModelScope,
+            showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) },
+            setLoading = { _isProcessing.value = it },
+            diagnosticLogger = diagnosticLogger,
+            ioDispatcher = ioDispatcher,
+        )
 
     private val _quickIntakeDraft = MutableStateFlow(QuickIntakeDraft())
     val quickIntakeDraft = _quickIntakeDraft.asStateFlow()
@@ -128,12 +151,8 @@ class NewOrderViewModel(
         input: CustomerInput,
         onSaved: (CustomerEntity) -> Unit,
     ) {
-        viewModelScope.launch {
-            customerRepository.save(currentUser.value, input).fold(
-                onSuccess = { onSaved(it) },
-            ) { error ->
-                _message.value = WorkspaceMessage(error.message ?: "Errore", isError = true)
-            }
+        actionRunner.run { actor ->
+            customerRepository.save(actor, input).onSuccess { onSaved(it) }
         }
     }
 
@@ -142,12 +161,8 @@ class NewOrderViewModel(
         uri: Uri,
         onStaged: (StagedOrderMedia) -> Unit,
     ) {
-        viewModelScope.launch {
-            orderMediaRepository.importIntakeAttachment(sessionId, uri).fold(
-                onSuccess = { onStaged(it) },
-            ) { error ->
-                _message.value = WorkspaceMessage(error.message ?: "Errore", isError = true)
-            }
+        actionRunner.run { _ ->
+            orderMediaRepository.importIntakeAttachment(sessionId, uri).onSuccess { onStaged(it) }
         }
     }
 
@@ -162,12 +177,8 @@ class NewOrderViewModel(
         bitmap: Bitmap,
         onReplaced: (StagedOrderMedia) -> Unit,
     ) {
-        viewModelScope.launch {
-            orderMediaRepository.replaceStagedImage(staged, bitmap).fold(
-                onSuccess = { onReplaced(it) },
-            ) { error ->
-                _message.value = WorkspaceMessage(error.message ?: "Errore", isError = true)
-            }
+        actionRunner.run { _ ->
+            orderMediaRepository.replaceStagedImage(staged, bitmap).onSuccess { onReplaced(it) }
         }
     }
 
@@ -177,12 +188,8 @@ class NewOrderViewModel(
         file: File,
         onStaged: (StagedOrderMedia) -> Unit,
     ) {
-        viewModelScope.launch {
-            orderMediaRepository.stageCapturedIntakePhoto(file).fold(
-                onSuccess = { onStaged(it) },
-            ) { error ->
-                _message.value = WorkspaceMessage(error.message ?: "Errore", isError = true)
-            }
+        actionRunner.run { _ ->
+            orderMediaRepository.stageCapturedIntakePhoto(file).onSuccess { onStaged(it) }
         }
     }
 
@@ -199,8 +206,7 @@ class NewOrderViewModel(
         signatureBitmap: Bitmap,
         onCreated: () -> Unit,
     ) {
-        val actor = currentUser.value ?: return
-        viewModelScope.launch {
+        actionRunner.run { actor ->
             createIntakeOrderUseCase
                 .execute(
                     actor = actor,
@@ -210,26 +216,26 @@ class NewOrderViewModel(
                     privacyAccepted = privacyAccepted,
                     termsAccepted = termsAccepted,
                     signatureBitmap = signatureBitmap,
-                ).fold(
-                    onSuccess = { onCreated() },
-                ) { error ->
-                    _message.value = WorkspaceMessage(error.message ?: "Errore", isError = true)
-                }
+                ).onSuccess { onCreated() }
         }
     }
 
     class Factory(
+        private val context: Context,
         private val authRepository: AuthRepository,
         private val customerRepository: CustomerRepository,
         private val catalogRepository: CatalogRepository,
         private val orderMediaRepository: OrderMediaRepository,
         private val templateRepository: TemplateRepository,
         private val createIntakeOrderUseCase: CreateIntakeOrderUseCase,
+        private val diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger,
         private val onSetFormDirty: (Boolean) -> Unit,
+        private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
             NewOrderViewModel(
+                context,
                 authRepository,
                 customerRepository,
                 catalogRepository,
@@ -237,6 +243,8 @@ class NewOrderViewModel(
                 templateRepository,
                 createIntakeOrderUseCase,
                 onSetFormDirty,
+                diagnosticLogger,
+                ioDispatcher,
             ) as T
     }
 }

@@ -17,7 +17,11 @@ import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
-import io.mockk.*
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.slot
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

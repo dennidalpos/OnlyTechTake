@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.features.dashboard.customers
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -11,7 +12,10 @@ import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.domain.workspace.OrderFilterMode
+import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,23 +25,41 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class CustomersViewModel(
-    authRepository: AuthRepository,
+    context: Context,
+    private val authRepository: AuthRepository,
     private val customerRepository: CustomerRepository,
     private val orderWorkflowRepository: OrderWorkflowRepository,
     private val onSetFormDirty: (Boolean) -> Unit,
+    diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger,
+    ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
+    private val applicationContext = context.applicationContext
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
+
+    private val _isProcessing = MutableStateFlow(value = false)
+    val isProcessing = _isProcessing.asStateFlow()
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
     private val _showAll = MutableStateFlow(value = false)
     val showAll = _showAll.asStateFlow()
+
+    private val actionRunner =
+        AuthenticatedActionRunner(
+            context = applicationContext,
+            authRepository = authRepository,
+            currentUser = authRepository.currentUser,
+            scope = viewModelScope,
+            showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) },
+            setLoading = { _isProcessing.value = it },
+            diagnosticLogger = diagnosticLogger,
+            ioDispatcher = ioDispatcher,
+        )
 
     private val _isFormDirty = MutableStateFlow(value = false)
 
@@ -83,15 +105,11 @@ class CustomersViewModel(
         input: CustomerInput,
         onSaved: (CustomerEntity) -> Unit = {},
     ) {
-        viewModelScope.launch {
-            customerRepository.save(currentUser.value, input).fold(
-                onSuccess = {
-                    onSaved(it)
-                    _searchQuery.value = ""
-                    setFormDirty(dirty = false)
-                },
-            ) { error ->
-                _message.value = WorkspaceMessage(error.message ?: "Errore", isError = true)
+        actionRunner.run { actor ->
+            customerRepository.save(actor, input).onSuccess {
+                onSaved(it)
+                _searchQuery.value = ""
+                setFormDirty(dirty = false)
             }
         }
     }
@@ -122,18 +140,24 @@ class CustomersViewModel(
     }
 
     class Factory(
+        private val context: Context,
         private val authRepository: AuthRepository,
         private val customerRepository: CustomerRepository,
         private val orderWorkflowRepository: OrderWorkflowRepository,
+        private val diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger,
         private val onSetFormDirty: (Boolean) -> Unit,
+        private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
             CustomersViewModel(
+                context,
                 authRepository,
                 customerRepository,
                 orderWorkflowRepository,
                 onSetFormDirty,
+                diagnosticLogger,
+                ioDispatcher,
             ) as T
     }
 }

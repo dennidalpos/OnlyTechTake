@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.features.dashboard.detail
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderDocumentType
@@ -92,13 +93,15 @@ class OrderDetailViewModelTest {
             every {
                 shareFactory.createPdfShareIntent(
                     pdf,
-                    "label",
+                    any(),
                 )
             } returns mockk<Intent>(relaxed = true)
 
             val context = mockk<Context>(relaxed = true)
-            every { context.getString(any()) } returns "label"
-            every { context.getString(any(), any()) } returns "label"
+            val resources = mockk<Resources>()
+            every { context.resources } returns resources
+            every { resources.getString(any()) } returns "label"
+            every { resources.getString(any(), *anyVararg()) } returns "label"
 
             val viewModel =
                 OrderDetailViewModel(
@@ -112,7 +115,9 @@ class OrderDetailViewModelTest {
                     generateOrderStatusPdfUseCase = mockk<GenerateOrderStatusPdfUseCase>(relaxed = true),
                     shareDocumentIntentFactory = shareFactory,
                     diagnosticLogger = mockk(relaxed = true),
-                ) {}
+                    ioDispatcher = testDispatcher,
+                    onSetFormDirty = {},
+                )
 
             viewModel.onShareDocumentClicked("document-1")
             advanceUntilIdle()

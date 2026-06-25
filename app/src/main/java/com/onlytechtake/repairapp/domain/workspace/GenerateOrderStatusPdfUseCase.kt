@@ -34,71 +34,73 @@ class GenerateOrderStatusPdfUseCase(
         userId: String,
         includeCustomerSignature: Boolean = true,
     ): Result<OrderDocumentEntity> =
-        runCatching {
-            StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
-            val detail =
-                workflowRepository.observeOrderDetail(orderId).firstOrNull()
-                    ?: throw IllegalStateException("Commessa non trovata")
+        kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+            runCatching {
+                StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
+                val detail =
+                    workflowRepository.observeOrderDetail(orderId).firstOrNull()
+                        ?: throw IllegalStateException("Commessa non trovata")
 
-            val user = userDao.findById(userId) ?: throw IllegalStateException("Utente non trovato")
+                val user = userDao.findById(userId) ?: throw IllegalStateException("Utente non trovato")
 
-            val signature =
-                if (includeCustomerSignature) {
-                    detail.signatures.maxByOrNull { it.signedAt }
-                } else {
-                    null
+                val signature =
+                    if (includeCustomerSignature) {
+                        detail.signatures.maxByOrNull { it.signedAt }
+                    } else {
+                        null
+                    }
+
+                if (includeCustomerSignature && (signature == null)) {
+                    throw IllegalStateException("Firma cliente non trovata")
                 }
 
-            if (includeCustomerSignature && (signature == null)) {
-                throw IllegalStateException("Firma cliente non trovata")
+                val categoryPath = catalogRepository.getCategoryPath(detail.order.categoryId)
+                val now = clockMillis()
+
+                val payload =
+                    OrderStatusPdfPayload(
+                        order = detail.order,
+                        customer =
+                            detail.customer
+                                ?: throw IllegalStateException("Cliente non trovato"),
+                        categoryPath = categoryPath,
+                        statusLabel = detail.order.status.label(context),
+                        estimateAmountLabel = detail.order.estimateAmountCents?.formatEuroCents(),
+                        assignedOperatorName = detail.assignedUser?.displayName,
+                        timeline = detail.timeline,
+                        signature = signature,
+                        generatedAt = now,
+                        generatedBy = user.displayName,
+                        watermarkText =
+                            if (BuildConfig.IS_DEMO_VERSION) {
+                                context.getString(R.string.demo_version_banner)
+                            } else {
+                                null
+                            },
+                    )
+
+                val fileName = "stato-avanzamento-${detail.order.orderNumber}-$now.pdf"
+                val file = fileStorage.getDocumentFile(orderId, fileName)
+
+                pdfGenerator.generate(context, file, payload)
+
+                val entity =
+                    OrderDocumentEntity(
+                        id = UUID.randomUUID().toString(),
+                        orderId = orderId,
+                        type = OrderDocumentType.STATUS_PROGRESS_PDF,
+                        localPath = file.absolutePath,
+                        fileName = fileName,
+                        mimeType = "application/pdf",
+                        sizeBytes = file.length(),
+                        includesCustomerSignature = signature != null,
+                        createdByUserId = userId,
+                        createdAt = now,
+                        sharedAt = null,
+                    )
+
+                documentRepository.save(entity)
+                entity
             }
-
-            val categoryPath = catalogRepository.getCategoryPath(detail.order.categoryId)
-            val now = clockMillis()
-
-            val payload =
-                OrderStatusPdfPayload(
-                    order = detail.order,
-                    customer =
-                        detail.customer
-                            ?: throw IllegalStateException("Cliente non trovato"),
-                    categoryPath = categoryPath,
-                    statusLabel = detail.order.status.label(context),
-                    estimateAmountLabel = detail.order.estimateAmountCents?.formatEuroCents(),
-                    assignedOperatorName = detail.assignedUser?.displayName,
-                    timeline = detail.timeline,
-                    signature = signature,
-                    generatedAt = now,
-                    generatedBy = user.displayName,
-                    watermarkText =
-                        if (BuildConfig.IS_DEMO_VERSION) {
-                            context.getString(R.string.demo_version_banner)
-                        } else {
-                            null
-                        },
-                )
-
-            val fileName = "stato-avanzamento-${detail.order.orderNumber}-$now.pdf"
-            val file = fileStorage.getDocumentFile(orderId, fileName)
-
-            pdfGenerator.generate(context, file, payload)
-
-            val entity =
-                OrderDocumentEntity(
-                    id = UUID.randomUUID().toString(),
-                    orderId = orderId,
-                    type = OrderDocumentType.STATUS_PROGRESS_PDF,
-                    localPath = file.absolutePath,
-                    fileName = fileName,
-                    mimeType = "application/pdf",
-                    sizeBytes = file.length(),
-                    includesCustomerSignature = signature != null,
-                    createdByUserId = userId,
-                    createdAt = now,
-                    sharedAt = null,
-                )
-
-            documentRepository.save(entity)
-            entity
         }
 }

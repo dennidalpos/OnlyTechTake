@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.features.dashboard.detail
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
@@ -7,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.error.DiagnosticLogger
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
@@ -24,17 +26,25 @@ import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
 import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
 import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
+/**
+ * ViewModel for the Order Detail screen.
+ * Optimized for performance by offloading IO operations to background dispatchers via [AuthenticatedActionRunner]
+ * and ensuring main-safety across all public methods.
+ */
 @OptIn(ExperimentalCoroutinesApi::class)
 class OrderDetailViewModel(
-    private val context: Context,
+    context: Context,
     private val orderId: String,
     private val authRepository: AuthRepository,
     private val orderRepository: OrderWorkflowRepository,
@@ -43,24 +53,28 @@ class OrderDetailViewModel(
     private val templateRepository: TemplateRepository,
     private val generateOrderStatusPdfUseCase: GenerateOrderStatusPdfUseCase,
     private val shareDocumentIntentFactory: ShareDocumentIntentFactory,
-    private val diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger,
+    private val diagnosticLogger: DiagnosticLogger,
     private val onSetFormDirty: (Boolean) -> Unit,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
+    @SuppressLint("StaticFieldLeak")
+    private val applicationContext = context.applicationContext
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
 
-    private val _isProcessing = MutableStateFlow(false)
+    private val _isProcessing = MutableStateFlow(value = false)
     val isProcessing = _isProcessing.asStateFlow()
 
     private val actionRunner =
         AuthenticatedActionRunner(
-            context = context,
+            context = applicationContext,
             authRepository = authRepository,
             currentUser = authRepository.currentUser,
             scope = viewModelScope,
             showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) },
             setLoading = { _isProcessing.value = it },
             diagnosticLogger = diagnosticLogger,
+            ioDispatcher = ioDispatcher,
         )
 
     private val _isGeneratingStatusPdf = MutableStateFlow(value = false)
@@ -126,10 +140,12 @@ class OrderDetailViewModel(
         estimateAmountCents: Long?,
         onSuccess: () -> Unit = {},
     ) {
-        actionRunner.run(onSuccess = {
-            clearPreparedMessage()
-            onSuccess()
-        }) { actor ->
+        actionRunner.run(
+            onSuccess = {
+                clearPreparedMessage()
+                onSuccess()
+            },
+        ) { actor ->
             orderRepository.recordResult(
                 actor,
                 orderId,
@@ -144,10 +160,12 @@ class OrderDetailViewModel(
         closureReason: ClosureReason? = null,
         onSuccess: () -> Unit = {},
     ) {
-        actionRunner.run(onSuccess = {
-            clearPreparedMessage()
-            onSuccess()
-        }) { actor ->
+        actionRunner.run(
+            onSuccess = {
+                clearPreparedMessage()
+                onSuccess()
+            },
+        ) { actor ->
             orderRepository.recordFeedback(
                 actor,
                 orderId,
@@ -231,20 +249,20 @@ class OrderDetailViewModel(
             templateRepository.prepareMessage(actor, orderId, anchor).onSuccess { prepared ->
                 _preparedMessage.value = prepared
                 _preparedMessageBody.value = prepared.body
-                setFormDirty(true)
+                setFormDirty(dirty = true)
             }
         }
     }
 
     fun updatePreparedMessageBody(body: String) {
         _preparedMessageBody.value = body
-        setFormDirty(true)
+        setFormDirty(dirty = true)
     }
 
     fun clearPreparedMessage() {
         _preparedMessage.value = null
         _preparedMessageBody.value = ""
-        setFormDirty(false)
+        setFormDirty(dirty = false)
     }
 
     fun recordPreparedMessage() {
@@ -270,7 +288,8 @@ class OrderDetailViewModel(
                 .onSuccess { document ->
                     _isGeneratingStatusPdf.value = false
                     _lastGeneratedDocumentId.value = document.id
-                    triggerShare(document.localPath, context.getString(R.string.share_title_status_report, document.fileName))
+                    val title = applicationContext.getString(R.string.share_title_status_report, document.fileName)
+                    triggerShare(document.localPath, title)
                     _showPdfSentConfirmation.value = true
                 }.onFailure { error ->
                     _isGeneratingStatusPdf.value = false
@@ -281,45 +300,43 @@ class OrderDetailViewModel(
 
     fun onShareDocumentClicked(documentId: String) {
         viewModelScope.launch {
-            val document = orderDocumentRepository.findById(documentId)
+            val document = withContext(ioDispatcher) {
+                orderDocumentRepository.findById(documentId)
+            }
             if (document != null) {
                 _lastGeneratedDocumentId.value = documentId
-                triggerShare(document.localPath, context.getString(R.string.share_title_document, document.fileName))
+                val title = applicationContext.getString(R.string.share_title_document, document.fileName)
+                triggerShare(document.localPath, title)
                 _showPdfSentConfirmation.value = true
             } else {
-                _message.value = WorkspaceMessage(context.getString(R.string.error_document_not_found), true)
+                _message.value = WorkspaceMessage(applicationContext.getString(R.string.error_document_not_found), isError = true)
             }
         }
     }
 
     fun onDeleteDocumentClicked(documentId: String) {
-        val actor = currentUser.value ?: return
-        viewModelScope.launch {
+        actionRunner.run { actor ->
             val document = orderDocumentRepository.findById(documentId)
-            if (document != null) {
-                orderDocumentRepository.delete(documentId).fold(
-                    onSuccess = {
-                        orderRepository.recordMediaRemoved(actor, orderId, document.fileName)
-                    },
-                ) { error ->
-                    _message.value = WorkspaceMessage(error.message ?: context.getString(R.string.error_unknown), isError = true)
-                }
+                ?: throw Exception(applicationContext.getString(R.string.error_document_not_found))
+            orderDocumentRepository.delete(documentId).onSuccess {
+                orderRepository.recordMediaRemoved(actor, orderId, document.fileName)
             }
         }
     }
 
     fun onPdfSentConfirmed() {
-        val actor = currentUser.value ?: return
         val documentId = _lastGeneratedDocumentId.value ?: return
-        viewModelScope.launch {
+        actionRunner.run(onSuccess = {
+            _showPdfSentConfirmation.value = false
+            _lastGeneratedDocumentId.value = null
+        }) { actor ->
             val now = System.currentTimeMillis()
             orderDocumentRepository.markShared(documentId, now)
             val doc = orderDocumentRepository.findById(documentId)
             doc?.let {
                 orderRepository.recordPdfShared(actor, orderId, it.fileName)
             }
-            _showPdfSentConfirmation.value = false
-            _lastGeneratedDocumentId.value = null
+            Result.success(Unit)
         }
     }
 
@@ -327,13 +344,15 @@ class OrderDetailViewModel(
         _showPdfSentConfirmation.value = false
     }
 
-    private fun triggerShare(
+    private suspend fun triggerShare(
         localPath: String,
         title: String,
     ) {
-        val file = File(localPath)
-        if (file.exists()) {
-            _pendingShareIntent.value = shareDocumentIntentFactory.createPdfShareIntent(file, title)
+        withContext(ioDispatcher) {
+            val file = File(localPath)
+            if (file.exists()) {
+                _pendingShareIntent.value = shareDocumentIntentFactory.createPdfShareIntent(file, title)
+            }
         }
     }
 
@@ -351,8 +370,9 @@ class OrderDetailViewModel(
         private val templateRepository: TemplateRepository,
         private val generateOrderStatusPdfUseCase: GenerateOrderStatusPdfUseCase,
         private val shareDocumentIntentFactory: ShareDocumentIntentFactory,
-        private val diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger,
+        private val diagnosticLogger: DiagnosticLogger,
         private val onSetFormDirty: (Boolean) -> Unit,
+        private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
@@ -368,6 +388,7 @@ class OrderDetailViewModel(
                 shareDocumentIntentFactory,
                 diagnosticLogger,
                 onSetFormDirty,
+                ioDispatcher,
             ) as T
     }
 }

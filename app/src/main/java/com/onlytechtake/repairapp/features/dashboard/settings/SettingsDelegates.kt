@@ -19,8 +19,11 @@ import com.onlytechtake.repairapp.data.services.StorageStatsService
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import com.onlytechtake.repairapp.domain.workspace.OperatorInput
 import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 internal class CatalogSettingsDelegate(
     private val catalogRepository: CatalogRepository,
@@ -216,9 +219,10 @@ internal class StorageSettingsDelegate(
     private val actionRunner: AuthenticatedActionRunner,
     private val scope: CoroutineScope,
     private val onRefreshStats: () -> Unit,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) {
     fun cleanupCache() {
-        scope.launch(kotlinx.coroutines.Dispatchers.IO) {
+        scope.launch(ioDispatcher) {
             orderFileCleanupService.cleanupSharedCache()
             onRefreshStats()
         }
@@ -226,17 +230,14 @@ internal class StorageSettingsDelegate(
 
     fun cleanupOrphanedFiles() {
         actionRunner.run(successMessageRes = R.string.success_orphaned_files_cleaned) { actor ->
-            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-                runCatching {
-                    PermissionService.requirePermission(actor, UserPermission.MANAGE_STORAGE)
-                    val paths = mutableSetOf<String>()
-                    paths.addAll(database.orderMediaDao().getAllPaths())
-                    paths.addAll(database.signatureDao().getAllPaths())
-                    paths.addAll(database.orderDocumentDao().getAllPaths())
-                    orderFileCleanupService.cleanupOrphanedFiles(paths)
-                    onRefreshStats()
-                }
-            }
+            PermissionService.requirePermission(actor, UserPermission.MANAGE_STORAGE)
+            val paths = mutableSetOf<String>()
+            paths.addAll(database.orderMediaDao().getAllPaths())
+            paths.addAll(database.signatureDao().getAllPaths())
+            paths.addAll(database.orderDocumentDao().getAllPaths())
+            orderFileCleanupService.cleanupOrphanedFiles(paths)
+            onRefreshStats()
+            Result.success(Unit)
         }
     }
 }
@@ -246,9 +247,10 @@ internal class DiagnosticSettingsDelegate(
     private val actionRunner: AuthenticatedActionRunner,
     private val scope: CoroutineScope,
     private val onRefreshStats: () -> Unit,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) {
     fun clearLogs() {
-        scope.launch(kotlinx.coroutines.Dispatchers.IO) {
+        scope.launch(ioDispatcher) {
             diagnosticLogService.clearLogs()
             onRefreshStats()
         }
@@ -256,22 +258,20 @@ internal class DiagnosticSettingsDelegate(
 
     fun shareLogs() {
         actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
-            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-                runCatching {
-                    com.onlytechtake.repairapp.core.permissions.PermissionService.requirePermission(
-                        actor,
-                        UserPermission.MANAGE_STORAGE,
-                    )
-                    val zipFile = diagnosticLogService.collectAndPrepareZip()
-                    if (zipFile != null) {
-                        val intent = diagnosticLogService.createShareIntent(zipFile).apply {
-                            addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
-                        }
-                        actionRunner.context.startActivity(intent)
-                    } else {
-                        throw IllegalStateException("Impossibile generare il file dei log.")
+            com.onlytechtake.repairapp.core.permissions.PermissionService.requirePermission(
+                actor,
+                UserPermission.MANAGE_STORAGE,
+            )
+            val zipFile = diagnosticLogService.collectAndPrepareZip()
+            if (zipFile != null) {
+                val intent =
+                    diagnosticLogService.createShareIntent(zipFile).apply {
+                        addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
                     }
-                }
+                actionRunner.context.startActivity(intent)
+                Result.success(Unit)
+            } else {
+                Result.failure<Unit>(IllegalStateException("Impossibile generare il file dei log."))
             }
         }
     }

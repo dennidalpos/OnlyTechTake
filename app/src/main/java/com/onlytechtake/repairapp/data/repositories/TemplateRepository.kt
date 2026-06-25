@@ -52,7 +52,7 @@ class TemplateRepository(
         templateDao.observeAll().map { list ->
             val defaults = getDefaultTemplates()
             list.map { template ->
-                if (template.code in systemTemplateCodes && template.version == 1) {
+                if ((template.code in systemTemplateCodes) && (template.version == 1)) {
                     val default = defaults.find { it.code == template.code }
                     if (default != null) {
                         template.copy(
@@ -100,7 +100,7 @@ class TemplateRepository(
             if (value != null) {
                 try {
                     MessageMode.valueOf(value)
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     MessageMode.MANUAL_WHATSAPP
                 }
             } else {

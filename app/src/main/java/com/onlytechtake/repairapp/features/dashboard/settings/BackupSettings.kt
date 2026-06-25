@@ -63,6 +63,7 @@ fun BackupSettings(
     val securitySettings by viewModel.securitySettings.collectAsState()
     val storageStats by viewModel.storageStats.collectAsState()
     val isProcessing by viewModel.isProcessing.collectAsState()
+    val isBackupReminderDue by viewModel.isBackupReminderDue.collectAsState()
     var backupIntervalDays by rememberSaveable { mutableStateOf(backupReminderSettings.intervalDays.toString()) }
     var backupPassword by rememberSaveable { mutableStateOf(securitySettings.backupEncryptionPassword) }
 
@@ -115,6 +116,14 @@ fun BackupSettings(
     val confirmTotalResetText = stringResource(R.string.admin_confirm_total_reset_text)
 
     AppScreenContainer {
+        if (isBackupReminderDue) {
+            AppMessageBanner(
+                message = stringResource(R.string.home_backup_reminder_title),
+                type = BannerType.Warning,
+                modifier = Modifier.padding(bottom = RepairAppSpacing.cardGap),
+            )
+        }
+
         if (isProcessing) {
             androidx.compose.foundation.layout.Box(
                 modifier = Modifier.fillMaxWidth(),
@@ -340,10 +349,11 @@ fun BackupSettings(
                     AppTextField(
                         value = ordersResetConfirmation,
                         onValueChange = { ordersResetConfirmation = it },
-                        label = stringResource(
-                            R.string.admin_delete_all_orders_field_short,
-                            stringResource(R.string.admin_delete_all_orders_confirmation_value),
-                        ),
+                        label =
+                            stringResource(
+                                R.string.admin_delete_all_orders_field_short,
+                                stringResource(R.string.admin_delete_all_orders_confirmation_value),
+                            ),
                     )
                     AppButton(
                         modifier = Modifier.fillMaxWidth(),

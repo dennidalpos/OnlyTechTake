@@ -119,5 +119,4 @@ enum class TemplateAnchor(
         labelRes = R.string.anchor_label_legal_terms,
         descriptionRes = R.string.anchor_desc_legal_terms,
     ),
-    ;
 }

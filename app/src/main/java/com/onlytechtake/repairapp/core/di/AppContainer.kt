@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.repositories.DefaultRepairAppRepository
+import com.onlytechtake.repairapp.demo.DataSeederImpl
 import com.onlytechtake.repairapp.domain.repositories.RepairAppRepository
 
 class AppContainer(
@@ -51,6 +52,8 @@ class AppContainer(
     val storageStatsService get() = settingsContainer.storageStatsService
     val diagnosticLogService get() = settingsContainer.diagnosticLogService
     val diagnosticLogger get() = dataContainer.diagnosticLogger
+
+    val dataSeeder by lazy { DataSeederImpl() }
 
     fun close() {
         RepairAppDatabase.closeInstance()

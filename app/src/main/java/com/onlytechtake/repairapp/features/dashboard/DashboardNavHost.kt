@@ -71,13 +71,16 @@ fun DashboardNavHost(
                 viewModel(
                     factory =
                         NewOrderViewModel.Factory(
+                            context = container.context,
                             authRepository = container.authRepository,
                             customerRepository = container.customerRepository,
                             catalogRepository = container.catalogRepository,
                             orderMediaRepository = container.orderMediaRepository,
                             templateRepository = container.templateRepository,
                             createIntakeOrderUseCase = container.createIntakeOrderUseCase,
-                        ) { dirty -> sharedViewModel.setFormDirty(dirty) },
+                            diagnosticLogger = container.diagnosticLogger,
+                            onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) },
+                        ),
                 )
             QuickActions(
                 viewModel = newOrderViewModel,
@@ -96,9 +99,11 @@ fun DashboardNavHost(
                 viewModel(
                     factory =
                         CustomersViewModel.Factory(
+                            context = container.context,
                             authRepository = container.authRepository,
                             customerRepository = container.customerRepository,
                             orderWorkflowRepository = container.orderWorkflowRepository,
+                            diagnosticLogger = container.diagnosticLogger,
                             onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) },
                         ),
                 )

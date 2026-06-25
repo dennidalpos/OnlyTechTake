@@ -313,12 +313,13 @@ fun ColumnScope.TemplatesSettings(
         val assignedAnchors = TemplateAnchor.entries.filter { anchorMappings[it] == template.code }
         val associatedWarning =
             if (assignedAnchors.isNotEmpty()) {
-                val anchorLabels = buildString {
-                    assignedAnchors.forEachIndexed { index, anchor ->
-                        append(stringResource(anchor.labelRes))
-                        if (index < (assignedAnchors.size - 1)) append(", ")
+                val anchorLabels =
+                    buildString {
+                        assignedAnchors.forEachIndexed { index, anchor ->
+                            append(stringResource(anchor.labelRes))
+                            if (index < (assignedAnchors.size - 1)) append(", ")
+                        }
                     }
-                }
                 stringResource(
                     R.string.config_template_associated_warning,
                     anchorLabels,

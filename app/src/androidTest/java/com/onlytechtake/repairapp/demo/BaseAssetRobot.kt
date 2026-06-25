@@ -362,29 +362,43 @@ abstract class BaseAssetRobot(
             val w = width.toFloat()
             val h = height.toFloat()
 
-            // Una firma più realistica (una specie di \"D.P.\" stilizzato)
-            // Lettera D
-            down(Offset(w * 0.25f, h * 0.3f))
-            moveTo(Offset(w * 0.25f, h * 0.7f))
-            moveTo(Offset(w * 0.45f, h * 0.7f))
-            moveTo(Offset(w * 0.5f, h * 0.5f))
-            moveTo(Offset(w * 0.45f, h * 0.3f))
-            moveTo(Offset(w * 0.25f, h * 0.3f))
+            // Firma stilizzata di "Marco Bianchi" (Nome e Cognome)
+            // --- MARCO ---
+            // M
+            down(Offset(w * 0.10f, h * 0.65f))
+            moveTo(Offset(w * 0.12f, h * 0.35f))
+            moveTo(Offset(w * 0.18f, h * 0.55f))
+            moveTo(Offset(w * 0.24f, h * 0.35f))
+            moveTo(Offset(w * 0.26f, h * 0.65f))
+            // Tratto legato per "arco"
+            moveTo(Offset(w * 0.28f, h * 0.60f))
+            moveTo(Offset(w * 0.32f, h * 0.65f))
+            moveTo(Offset(w * 0.36f, h * 0.60f))
+            moveTo(Offset(w * 0.40f, h * 0.65f))
+            moveTo(Offset(w * 0.44f, h * 0.60f))
             up()
 
-            // Scarabocchio centrale
-            down(Offset(w * 0.5f, h * 0.6f))
-            moveTo(Offset(w * 0.55f, h * 0.65f))
-            moveTo(Offset(w * 0.6f, h * 0.6f))
-            up()
-
-            // Lettera P
-            down(Offset(w * 0.65f, h * 0.75f))
+            // --- BIANCHI ---
+            // B
+            down(Offset(w * 0.55f, h * 0.70f))
+            moveTo(Offset(w * 0.55f, h * 0.30f))
             moveTo(Offset(w * 0.65f, h * 0.35f))
-            moveTo(Offset(w * 0.8f, h * 0.35f))
-            moveTo(Offset(w * 0.85f, h * 0.45f))
-            moveTo(Offset(w * 0.8f, h * 0.55f))
-            moveTo(Offset(w * 0.65f, h * 0.55f))
+            moveTo(Offset(w * 0.60f, h * 0.50f))
+            moveTo(Offset(w * 0.55f, h * 0.50f))
+            moveTo(Offset(w * 0.68f, h * 0.60f))
+            moveTo(Offset(w * 0.62f, h * 0.75f))
+            moveTo(Offset(w * 0.55f, h * 0.70f))
+            // Tratto legato per "ianchi"
+            moveTo(Offset(w * 0.70f, h * 0.65f))
+            moveTo(Offset(w * 0.75f, h * 0.70f))
+            moveTo(Offset(w * 0.80f, h * 0.65f))
+            moveTo(Offset(w * 0.85f, h * 0.70f))
+            moveTo(Offset(w * 0.90f, h * 0.60f))
+            up()
+
+            // Sottolineatura d'autore
+            down(Offset(w * 0.05f, h * 0.88f))
+            moveTo(Offset(w * 0.95f, h * 0.82f))
             up()
         }
         composeRule.waitForIdle()
