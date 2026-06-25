@@ -87,7 +87,6 @@ class SettingsViewModel(
     private val adminDelegate = AdminSettingsDelegate(adminUserRepository, actionRunner)
     private val storageDelegate =
         StorageSettingsDelegate(
-            storageStatsService,
             orderFileCleanupService,
             database,
             actionRunner,

@@ -211,11 +211,11 @@ fun OrderActionCard(
             modifier = Modifier.testTag(RepairAppTestTags.OrderWhatsAppButton),
         )
 
-        if (onDeleteOrder != null) {
+        onDeleteOrder?.let {
             AppButton(
                 text = stringResource(R.string.content_description_delete_order),
                 variant = AppButtonVariant.Danger,
-                onClick = onDeleteOrder,
+                onClick = it,
                 size = AppButtonSize.Compact,
                 modifier = Modifier.align(Alignment.End),
             )
@@ -250,7 +250,7 @@ fun OrderActionCard(
             )
         }
 
-        if ((isPaid || status == OrderStatus.READY_FOR_PICKUP || status == OrderStatus.CLOSED)) {
+        if (isPaid || (status == OrderStatus.READY_FOR_PICKUP) || (status == OrderStatus.CLOSED)) {
             AppDivider(modifier = Modifier.alpha(0.3f))
 
             Row(

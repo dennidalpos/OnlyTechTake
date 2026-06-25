@@ -51,6 +51,7 @@
     "Migliorata la main-safety di GenerateOrderStatusPdfUseCase e OrderDetailViewModel, assicurando che le operazioni su file e PDF non blocchino il thread principale.",
     "Rifattorizzati i metodi di OrderDetailViewModel per una maggiore coerenza nell'uso di AuthenticatedActionRunner e gestione degli stati di caricamento.",
     "Risolti warning di Context leak, variabili non utilizzate e parametri ridondanti in OrderDetailViewModel e SettingsViewModel. Migliorata la UI con indicatori di caricamento e banner di promemoria backup.",
+    "Risolti warning di formattazione e lint in OrderDetailViewModel e DashboardNavHost, migliorando la conformità con le regole di stile del progetto.",
     "Risolto errore di formattazione in OrderDetailViewModel: aggiunta esposizione pubblica per isProcessing per conformità con le regole ktlint e coerenza con gli altri ViewModel.",
     "Risolti warning di Context leak nei ViewModel, rimosse proprietà inutilizzate, corretta formattazione e allineamento dei temi nelle Preview.",
     "Risolta regressione nel test OrderDetailViewModelTest: corretto mock dell'intent di condivisione.",
@@ -65,6 +66,7 @@
     "Risolti blocchi del thread principale (UI jank) spostando il calcolo statistiche memoria e operazioni log su Dispatchers.IO",
     "Ottimizzazione performance LazyColumn nei setup Template e Categorie tramite l'uso di chiavi univoche (keys)",
     "Messa in sicurezza del parsing delle configurazioni (MessageMode) e ottimizzazione osservazione template",
-    "Corretto rischio di crash nella condivisione log tramite l'aggiunta di FLAG_ACTIVITY_NEW_TASK per contesti non-Activity"
+    "Corretto rischio di crash nella condivisione log tramite l'aggiunta di FLAG_ACTIVITY_NEW_TASK per contesti non-Activity",
+    "Risolti vari warning segnalati dall'editor in DashboardNavHost, OrderStatusPdfGenerator, AuthGateViewModel, DiagnosticLogger, OrderDetailComponents e SettingsDelegates, migliorando la pulizia del codice e risolvendo un potenziale context leak."
   ]
 }

@@ -107,16 +107,13 @@ fun DashboardNavHost(
                             onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) },
                         ),
                 )
-            CustomerPanel(
-                viewModel = customersViewModel,
-                onOrderClick = { orderId ->
-                    navController.navigate(
-                        DashboardRoutes.orderDetail(
-                            orderId,
-                        ),
-                    )
-                },
-            )
+            CustomerPanel(viewModel = customersViewModel) { orderId ->
+                navController.navigate(
+                    DashboardRoutes.orderDetail(
+                        orderId,
+                    ),
+                )
+            }
         }
         composable(
             route = DashboardRoutes.ORDERS,
@@ -175,8 +172,7 @@ fun DashboardNavHost(
                 onOpenBackupSettings = {
                     navController.navigate(DashboardRoutes.settings("EXPORT"))
                 },
-                onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) },
-            )
+            ) { dirty -> sharedViewModel.setFormDirty(dirty) }
         }
         composable(
             route = DashboardRoutes.ORDER_DETAIL,
@@ -208,8 +204,7 @@ fun DashboardNavHost(
                 )
             OrderDetailWorkspace(
                 viewModel = orderDetailViewModel,
-                onBack = { navController.popBackStack() },
-            )
+            ) { navController.popBackStack() }
         }
         composable(
             route = DashboardRoutes.SETTINGS,

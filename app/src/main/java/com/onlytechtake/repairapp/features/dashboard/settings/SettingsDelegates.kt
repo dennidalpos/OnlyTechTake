@@ -15,7 +15,6 @@ import com.onlytechtake.repairapp.data.repositories.CatalogRepository
 import com.onlytechtake.repairapp.data.repositories.OrderFileCleanupService
 import com.onlytechtake.repairapp.data.repositories.TemplateRepository
 import com.onlytechtake.repairapp.data.services.DiagnosticLogService
-import com.onlytechtake.repairapp.data.services.StorageStatsService
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import com.onlytechtake.repairapp.domain.workspace.OperatorInput
 import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
@@ -23,7 +22,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 internal class CatalogSettingsDelegate(
     private val catalogRepository: CatalogRepository,
@@ -110,12 +108,6 @@ internal class BackupSettingsDelegate(
         }
     }
 
-    fun exportConfiguration(uri: Uri) {
-        actionRunner.run { actor ->
-            backupRepository.exportConfiguration(actor, uri)
-        }
-    }
-
     fun exportDatabase(uri: Uri) {
         actionRunner.run { actor ->
             backupRepository.exportDatabase(actor, uri)
@@ -157,12 +149,6 @@ internal class SecuritySettingsDelegate(
     fun setBackupEncryptionPassword(password: String) {
         scope.launch {
             securityPreferences.setBackupEncryptionPassword(password)
-        }
-    }
-
-    fun setDatabaseEncryptionEnabled(enabled: Boolean) {
-        scope.launch {
-            securityPreferences.setDatabaseEncryptionEnabled(enabled)
         }
     }
 }
@@ -213,7 +199,6 @@ internal class AdminSettingsDelegate(
 }
 
 internal class StorageSettingsDelegate(
-    private val storageStatsService: StorageStatsService,
     private val orderFileCleanupService: OrderFileCleanupService,
     private val database: RepairAppDatabase,
     private val actionRunner: AuthenticatedActionRunner,
@@ -258,7 +243,7 @@ internal class DiagnosticSettingsDelegate(
 
     fun shareLogs() {
         actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
-            com.onlytechtake.repairapp.core.permissions.PermissionService.requirePermission(
+            PermissionService.requirePermission(
                 actor,
                 UserPermission.MANAGE_STORAGE,
             )

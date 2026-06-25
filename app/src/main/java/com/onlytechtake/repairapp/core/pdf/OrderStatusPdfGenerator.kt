@@ -91,7 +91,7 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         var canvas = page.canvas
         var y = 36f
         val margin = 36f
-        val contentWidth = 595f - 2 * margin
+        val contentWidth = 595f - (2 * margin)
 
         fun finishCurrentPage() {
             drawWatermark(canvas, payload.watermarkText)
@@ -271,7 +271,7 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
             if (bitmap != null) {
                 val maxWidth = 220f
                 val maxHeight = 90f
-                val scale = Math.min(maxWidth / bitmap.width, maxHeight / bitmap.height)
+                val scale = kotlin.math.min(maxWidth / bitmap.width, maxHeight / bitmap.height)
                 val drawWidth = bitmap.width * scale
                 val drawHeight = bitmap.height * scale
 

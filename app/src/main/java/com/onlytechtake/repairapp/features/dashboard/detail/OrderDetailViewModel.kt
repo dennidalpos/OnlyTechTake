@@ -300,9 +300,10 @@ class OrderDetailViewModel(
 
     fun onShareDocumentClicked(documentId: String) {
         viewModelScope.launch {
-            val document = withContext(ioDispatcher) {
-                orderDocumentRepository.findById(documentId)
-            }
+            val document =
+                withContext(ioDispatcher) {
+                    orderDocumentRepository.findById(documentId)
+                }
             if (document != null) {
                 _lastGeneratedDocumentId.value = documentId
                 val title = applicationContext.getString(R.string.share_title_document, document.fileName)
@@ -316,8 +317,9 @@ class OrderDetailViewModel(
 
     fun onDeleteDocumentClicked(documentId: String) {
         actionRunner.run { actor ->
-            val document = orderDocumentRepository.findById(documentId)
-                ?: throw Exception(applicationContext.getString(R.string.error_document_not_found))
+            val document =
+                orderDocumentRepository.findById(documentId)
+                    ?: throw Exception(applicationContext.getString(R.string.error_document_not_found))
             orderDocumentRepository.delete(documentId).onSuccess {
                 orderRepository.recordMediaRemoved(actor, orderId, document.fileName)
             }
@@ -326,10 +328,12 @@ class OrderDetailViewModel(
 
     fun onPdfSentConfirmed() {
         val documentId = _lastGeneratedDocumentId.value ?: return
-        actionRunner.run(onSuccess = {
-            _showPdfSentConfirmation.value = false
-            _lastGeneratedDocumentId.value = null
-        }) { actor ->
+        actionRunner.run(
+            onSuccess = {
+                _showPdfSentConfirmation.value = false
+                _lastGeneratedDocumentId.value = null
+            },
+        ) { actor ->
             val now = System.currentTimeMillis()
             orderDocumentRepository.markShared(documentId, now)
             val doc = orderDocumentRepository.findById(documentId)

@@ -9,7 +9,7 @@ import java.util.Date
 import java.util.Locale
 
 class DiagnosticLogger(
-    private val context: Context,
+    context: Context,
 ) {
     private val logDir = File(context.filesDir, "logs")
     private val logFile = File(logDir, "error_logs.txt")
