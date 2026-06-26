@@ -279,7 +279,7 @@ fun OrderActionCard(
 
 @Composable
 fun AppActionPanel(
-    @Suppress("UNUSED_PARAMETER") title: String,
+    title: String,
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {

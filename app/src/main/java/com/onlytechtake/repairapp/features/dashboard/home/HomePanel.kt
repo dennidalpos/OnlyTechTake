@@ -144,7 +144,7 @@ fun HomePanelContent(
                 queues.forEach { queue ->
                     val itemModifier = if (isWide) Modifier.weight(1f) else Modifier.fillMaxWidth()
                     AppQueueCard(
-                        title = queue.title,
+                        title = stringResource(queue.titleRes),
                         count = queue.orders.size,
                         lastElementTitle =
                             queue.orders
@@ -302,8 +302,11 @@ private fun HomePanelPreview() {
     }
 }
 
+@Suppress("SameReturnValue")
 private fun isProFlavor(): Boolean = BuildConfig.IS_PRO_VERSION
 
+@Suppress("SameReturnValue")
 private fun isDemoFlavor(): Boolean = BuildConfig.IS_DEMO_VERSION
 
+@Suppress("SameReturnValue")
 private fun isAnyDemo(): Boolean = isDemoFlavor()

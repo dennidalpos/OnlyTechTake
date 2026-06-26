@@ -197,65 +197,67 @@ fun OrderDetailWorkspace(
                     )
                 }
 
-                if ((selected.order.status == OrderStatus.RESULT) &&
-                    (selected.order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE)
-                ) {
-                    item(key = "quote_decision", contentType = "decision") {
-                        QuoteDecisionPanel(
-                            quoteDecision = workspaceState.quoteDecision,
-                            quoteRejectNote = workspaceState.quoteRejectNote,
-                            onQuoteDecisionChange = { workspaceState.quoteDecision = it },
-                            onQuoteRejectNoteChange = { workspaceState.quoteRejectNote = it },
-                            onConfirm = { feedback, note, closureReason ->
-                                if (feedback == CustomerFeedbackType.ACCEPT) {
-                                    viewModel.recordFeedback(feedback, note)
-                                } else {
-                                    viewModel.recordFeedback(
-                                        feedback,
-                                        note,
-                                        closureReason,
-                                    ) { onBack() }
-                                }
-                            },
-                        )
-                    }
-                }
-
-                if ((selected.order.status == OrderStatus.RESULT) &&
-                    (selected.order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE)
-                ) {
-                    item(key = "not_repairable", contentType = "info") {
-                        StandardCard {
-                            Column(
-                                modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-                                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
-                            ) {
-                                Text(
-                                    stringResource(R.string.order_not_repairable_title),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = MaterialTheme.colorScheme.error,
-                                )
-                                OperatorText(stringResource(R.string.order_not_repairable_body))
-                                AppButton(
-                                    text = stringResource(R.string.order_not_repairable_ready),
-                                    variant = AppButtonVariant.Success,
-                                    modifier = Modifier.fillMaxWidth(),
-                                    onClick = {
-                                        workspaceState.requestConfirm(
-                                            diagnosisOutcomeConfirmTitle,
-                                            diagnosisOutcomeConfirmText,
-                                        ) {
-                                            viewModel.changeStatus(
-                                                status = OrderStatus.READY_FOR_PICKUP,
-                                                note = notRepairableNote,
-                                            ) {
-                                                viewModel.prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
-                                            }
+                if (selected.order.status == OrderStatus.RESULT) {
+                    when (selected.order.diagnosisOutcome) {
+                        DiagnosisOutcome.REPAIRABLE -> {
+                            item(key = "quote_decision", contentType = "decision") {
+                                QuoteDecisionPanel(
+                                    quoteDecision = workspaceState.quoteDecision,
+                                    quoteRejectNote = workspaceState.quoteRejectNote,
+                                    onQuoteDecisionChange = { workspaceState.quoteDecision = it },
+                                    onQuoteRejectNoteChange = { workspaceState.quoteRejectNote = it },
+                                    onConfirm = { feedback, note, closureReason ->
+                                        if (feedback == CustomerFeedbackType.ACCEPT) {
+                                            viewModel.recordFeedback(feedback, note)
+                                        } else {
+                                            viewModel.recordFeedback(
+                                                feedback,
+                                                note,
+                                                closureReason,
+                                            ) { onBack() }
                                         }
                                     },
                                 )
                             }
                         }
+
+                        DiagnosisOutcome.NOT_REPAIRABLE -> {
+                            item(key = "not_repairable", contentType = "info") {
+                                StandardCard {
+                                    Column(
+                                        modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                                        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
+                                    ) {
+                                        Text(
+                                            stringResource(R.string.order_not_repairable_title),
+                                            style = MaterialTheme.typography.titleMedium,
+                                            color = MaterialTheme.colorScheme.error,
+                                        )
+                                        OperatorText(stringResource(R.string.order_not_repairable_body))
+                                        AppButton(
+                                            text = stringResource(R.string.order_not_repairable_ready),
+                                            variant = AppButtonVariant.Success,
+                                            modifier = Modifier.fillMaxWidth(),
+                                            onClick = {
+                                                workspaceState.requestConfirm(
+                                                    diagnosisOutcomeConfirmTitle,
+                                                    diagnosisOutcomeConfirmText,
+                                                ) {
+                                                    viewModel.changeStatus(
+                                                        status = OrderStatus.READY_FOR_PICKUP,
+                                                        note = notRepairableNote,
+                                                    ) {
+                                                        viewModel.prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
+                                                    }
+                                                }
+                                            },
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        else -> {}
                     }
                 }
 

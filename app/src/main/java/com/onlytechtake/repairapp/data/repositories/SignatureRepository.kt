@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.permissions.PermissionService
-import com.onlytechtake.repairapp.core.templates.LegalTemplateFallbacks
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
 import com.onlytechtake.repairapp.data.local.dao.MessageTemplateDao
@@ -88,9 +87,10 @@ class SignatureRepository(
                     termsAccepted = termsAccepted,
                     privacyTextSnapshot =
                         privacyTemplate?.body
-                            ?: LegalTemplateFallbacks.PrivacyText,
+                            ?: context.getString(R.string.legal_privacy_fallback),
                     privacyTemplateVersion = privacyTemplate?.version ?: 0,
-                    termsTextSnapshot = termsTemplate?.body ?: LegalTemplateFallbacks.TermsText,
+                    termsTextSnapshot =
+                        termsTemplate?.body ?: context.getString(R.string.legal_terms_fallback),
                     termsTemplateVersion = termsTemplate?.version ?: 0,
                     localPath = file.absolutePath,
                     fileName = file.name,

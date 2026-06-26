@@ -61,9 +61,13 @@
     }
   ],
   "completed_recently": [
+    "Quality: Implementata validazione stringa di conferma in DataResetRepository per reset dati.",
+    "Quality: Soppressi warning 'UNUSED_PARAMETER' in componenti UI QuickIntake e SettingsPanel per parametri riservati a sviluppi futuri.",
+    "Quality: Soppressi warning 'ConstPropertyName' in RepairAppTestTags, DemoMode e DesignTokenContrastTest.",
+    "Quality: Soppressi warning 'SameReturnValue' in DemoMode, HomePanel, DAO e DataSeeder (falsi positivi o comportamenti previsti per i flavor).",
     "Flavor: Estratte tutte le stringhe demo/showcase da main a flavor-specific resources.",
     "Flavor: Implementata astrazione in DemoMode per accesso sicuro alle risorse dipendenti dal flavor.",
-    "Cleanup: Rimosso debito tecnico in main/strings.xml rimuovendo riferimenti a modalita' speciali.",
+    "Cleanup: Rimosso debito tecnico in main/strings.xml rimuovendo riferimenti a modalità speciali.",
     "Bugfix: Corretto test BackupRepositoryTest per riflettere il nuovo meccanismo di restore files.",
     "Bugfix: Allineato AdminUserRepositoryTest ai nuovi limiti di MAX_OPERATORS per la variante Demo.",
     "Test: Verificato build e test completi per varianti Full, Demo e Showcase.",

@@ -1,5 +1,7 @@
 package com.onlytechtake.repairapp.data.repositories
 
+import android.content.Context
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.utils.capitalizeFirst
@@ -15,6 +17,7 @@ import kotlinx.coroutines.flow.flowOf
 import java.util.UUID
 
 class CustomerRepository(
+    private val context: Context,
     private val customerDao: CustomerDao,
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) : CustomerRepository {
@@ -76,7 +79,7 @@ class CustomerRepository(
             PermissionService.requirePermission(actor, UserPermission.MANAGE_CUSTOMERS)
             val now = clockMillis()
             val existing = input.id?.let { customerDao.findById(it) }
-            require(isValid(input)) { "Inserisci i dati cliente obbligatori" }
+            require(isValid(input)) { context.getString(R.string.error_customer_required_fields) }
 
             val entity =
                 CustomerEntity(

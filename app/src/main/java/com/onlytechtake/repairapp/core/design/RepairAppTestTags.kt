@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.core.design
 
+@Suppress("ConstPropertyName")
 object RepairAppTestTags {
     const val DashboardTabs = "dashboard_tabs"
     const val LogoutButton = "logout_button"

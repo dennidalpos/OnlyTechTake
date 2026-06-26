@@ -3,19 +3,19 @@
   Esegue linting, formatting check e beautification del progetto.
 
 .USAGE
-  Check qualita' standard:
+  Check qualità standard:
     .\scripts\powershell\project\quality.ps1
 
   Applica formattazione e rilancia i check:
     .\scripts\powershell\project\quality.ps1 -Apply
 
-  Modalita' non interattiva per CI:
+  Modalità non interattiva per CI:
     .\scripts\powershell\project\quality.ps1 -NoPrompt
 
 .DESCRIPTION
   Lo script usa Spotless/ktlint per Kotlin e file testuali, piu' Android Lint
   su tutte le varianti debug e release. Senza -Apply non modifica file; se
-  Spotless fallisce in modalita' interattiva propone di eseguire l'autofix.
+  Spotless fallisce in modalità interattiva propone di eseguire l'autofix.
 #>
 
 param(

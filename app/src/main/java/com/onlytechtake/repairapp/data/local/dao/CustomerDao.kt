@@ -20,6 +20,7 @@ interface CustomerDao {
     @Query("SELECT * FROM customers ORDER BY updatedAt DESC")
     fun observeAll(): Flow<List<CustomerEntity>>
 
+    @Suppress("SameReturnValue")
     @Query("SELECT * FROM customers WHERE id = :id LIMIT 1")
     suspend fun findById(id: String): CustomerEntity?
 

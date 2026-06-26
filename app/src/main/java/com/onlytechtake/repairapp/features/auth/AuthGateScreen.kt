@@ -310,7 +310,7 @@ private fun AuthErrorScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = "Errore di Inizializzazione",
+                text = stringResource(com.onlytechtake.repairapp.R.string.error_init_title),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.error,
             )
@@ -322,7 +322,7 @@ private fun AuthErrorScreen(
             )
             Spacer(Modifier.height(RepairAppSpacing.sectionGap))
             AppButton(
-                text = "Riprova",
+                text = stringResource(com.onlytechtake.repairapp.R.string.action_retry),
                 onClick = onRetry,
                 variant = AppButtonVariant.Primary,
             )

@@ -312,9 +312,9 @@ class AuthGateViewModel(
                     currentPassword = form.currentPassword.toCharArray(),
                     newPassword = form.password.toCharArray(),
                 ).onSuccess {
-                    // After password change, we can try to login again automatically
+                    // After password change, we can try to log in again automatically
                     // or just go back to login screen.
-                    // Let's try to login automatically.
+                    // Let's try to log in automatically.
                     val loginResult =
                         authRepository.login(form.username, form.password.toCharArray())
                     if (loginResult is LoginResult.Success) {

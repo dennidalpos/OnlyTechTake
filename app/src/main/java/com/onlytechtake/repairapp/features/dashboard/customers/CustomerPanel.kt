@@ -72,7 +72,7 @@ import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBa
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.core.utils.displayName
-import com.onlytechtake.repairapp.core.utils.label
+import com.onlytechtake.repairapp.core.utils.labelRes
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
@@ -749,7 +749,7 @@ private fun CustomerDetailContent(
                     fontWeight = FontWeight.Bold,
                 )
                 AppStatusBadge(
-                    text = customer.type.label(context),
+                    text = stringResource(customer.type.labelRes),
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
                     contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                 )
@@ -874,7 +874,7 @@ fun OrderSummaryRow(
                     }
 
                 AppStatusBadge(
-                    text = status.label(LocalContext.current),
+                    text = stringResource(status.labelRes),
                     containerColor = containerColor,
                     contentColor = contentColor,
                 )
@@ -913,7 +913,7 @@ private fun CustomerCard(
                 Text(
                     text =
                         listOfNotNull(
-                            customer.type.label(context),
+                            stringResource(customer.type.labelRes),
                             customer.phone,
                         ).joinToString(" - "),
                     style = MaterialTheme.typography.bodySmall,

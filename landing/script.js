@@ -136,7 +136,7 @@ const translations = {
                     "Documentazione multimediale (Foto CameraX)",
                     "Firme digitali di presa in carico e accettazione privacy"
                 ],
-                footer: "vengono memorizzati esclusivamente in un <strong>database cifrato (SQLCipher)</strong> all'interno dello storage privato del tuo dispositivo Android. Nessun dato viene indicizzato dal sistema operativo o reso accessibile ad altre app."
+                footer: "Vengono memorizzati esclusivamente in un <strong>database cifrato (SQLCipher)</strong> all'interno dello storage privato del tuo dispositivo Android. Nessun dato viene indicizzato dal sistema operativo o reso accessibile ad altre app."
             },
             section2: {
                 title: "2. Sicurezza e Cifratura",

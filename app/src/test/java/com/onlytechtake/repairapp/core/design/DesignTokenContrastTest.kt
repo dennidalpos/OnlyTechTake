@@ -81,6 +81,7 @@ class DesignTokenContrastTest {
         fun ratio(): Double = contrastRatio(background, foreground)
     }
 
+    @Suppress("ConstPropertyName")
     private companion object {
         const val MinimumTextContrast = 4.5
         const val MinimumUiContrast = 3.0

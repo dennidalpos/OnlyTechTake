@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.data.repositories
 
 import android.content.Context
 import androidx.room.withTransaction
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
@@ -30,10 +31,13 @@ class DataResetRepository(
      */
     suspend fun resetAll(
         actor: AuthenticatedUser,
-        @Suppress("UNUSED_PARAMETER") confirmation: String,
+        confirmation: String,
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.DELETE_DATA)
+            if (confirmation != "RESET") {
+                throw IllegalArgumentException(context.getString(R.string.error_recovery_code_invalid))
+            }
 
             withContext(Dispatchers.IO) {
                 eventWriter.dataReset(actor.id, System.currentTimeMillis())
@@ -66,10 +70,13 @@ class DataResetRepository(
      */
     suspend fun resetOrders(
         actor: AuthenticatedUser,
-        @Suppress("UNUSED_PARAMETER") confirmation: String,
+        confirmation: String,
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.DELETE_DATA)
+            if (confirmation != "CANCELLA_ORDINI") {
+                throw IllegalArgumentException(context.getString(R.string.error_recovery_code_invalid))
+            }
 
             withContext(Dispatchers.IO) {
                 database.withTransaction {

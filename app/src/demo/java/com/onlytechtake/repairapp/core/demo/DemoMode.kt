@@ -8,6 +8,7 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
 
+@Suppress("SameReturnValue", "ConstPropertyName")
 object DemoMode {
     var isEnabled: Boolean = false
         private set

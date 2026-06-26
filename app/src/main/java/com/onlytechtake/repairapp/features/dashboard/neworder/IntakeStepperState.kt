@@ -1,6 +1,5 @@
 package com.onlytechtake.repairapp.features.dashboard.neworder
 
-import com.onlytechtake.repairapp.core.templates.LegalTemplateFallbacks
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
@@ -16,6 +15,8 @@ data class IntakeStepperState(
     val templates: List<MessageTemplateEntity>,
     private val anchorMappings: Map<TemplateAnchor, String>,
     val currentUser: AuthenticatedUser?,
+    private val privacyFallback: String,
+    private val termsFallback: String,
 ) {
     val activeCategories = categories.filter { it.active }
 
@@ -63,13 +64,13 @@ data class IntakeStepperState(
         val code =
             anchorMappings[TemplateAnchor.PRIVACY_TEXT] ?: TemplateAnchor.PRIVACY_TEXT.defaultCode
         templates.firstOrNull { (it.code == code) && it.active }?.body
-            ?: LegalTemplateFallbacks.PrivacyText
+            ?: privacyFallback
     }
 
     val termsText: String by lazy {
         val code =
             anchorMappings[TemplateAnchor.TERMS_TEXT] ?: TemplateAnchor.TERMS_TEXT.defaultCode
         templates.firstOrNull { (it.code == code) && it.active }?.body
-            ?: LegalTemplateFallbacks.TermsText
+            ?: termsFallback
     }
 }

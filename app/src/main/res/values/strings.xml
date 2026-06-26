@@ -110,6 +110,9 @@
     <string name="timeline_repair_amount">Repair amount: %s</string>
 
     <string name="error_customer_required">Customer required</string>
+    <string name="error_customer_required_fields">Enter mandatory customer fields</string>
+    <string name="error_customer_not_found">Customer not found</string>
+    <string name="error_customer_phone_missing">Customer phone missing</string>
     <string name="error_problem_required">Problem required</string>
     <string name="error_category_required">Category required</string>
     <string name="error_note_empty">Empty note</string>
@@ -138,6 +141,10 @@
     <string name="label_signature">signature</string>
     <string name="label_document">document</string>
     <string name="label_attachment">attachment</string>
+    <string name="label_photos_count">Photos %d</string>
+    <string name="label_documents_count">Documents %d</string>
+    <string name="label_signatures_count">Signatures %d</string>
+    <string name="label_final_photos_count">Final photos %d</string>
     <string name="error_attachment_unavailable">Attachment unavailable</string>
     <string name="error_attachment_empty">Empty or unsaved attachment</string>
     <string name="error_media_not_found">Media not found</string>
@@ -176,6 +183,12 @@
     <string name="error_closure_reason_required">Closure reason required</string>
     <string name="error_admin_creation_failed">Admin creation failed</string>
     <string name="error_init_failed">Initialization error: %s</string>
+    <string name="error_init_title">Initialization Error</string>
+    <string name="error_template_not_found">Template not found</string>
+    <string name="error_template_code_required">Template code required</string>
+    <string name="error_template_title_required">Template title required</string>
+    <string name="error_template_body_required">Template body required</string>
+    <string name="action_retry">Retry</string>
     <string name="error_enter_username_password">Enter username and password</string>
     <string name="error_user_deactivated">User deactivated</string>
     <string name="error_invalid_credentials">Invalid credentials</string>
@@ -206,7 +219,6 @@
     <string name="config_backup_logs_send_confirm_text">A compressed file with technical data will be generated to be sent via WhatsApp.</string>
 
     <string name="error_feature_pro_only">Feature available in Full version</string>
-    <string name="error_db_not_created">Database not yet created</string>
     <string name="error_restore_area_unavailable">Restore area unavailable</string>
     <string name="error_backup_unavailable">Backup unavailable</string>
     <string name="error_backup_incompatible">Incompatible backup version</string>
@@ -289,6 +301,10 @@
 
     <string name="home_metric_operators">Operators</string>
     <string name="home_metric_active">Active</string>
+    <string name="queue_open">Open</string>
+    <string name="queue_processing">In Progress / Diagnosis</string>
+    <string name="queue_result">Result / Repair</string>
+    <string name="queue_ready">Ready</string>
     <string name="home_new_order">New repair order</string>
     <string name="home_empty_queue">No repair orders in this queue.</string>
     <string name="home_empty_queues_title">No active queues</string>
@@ -553,6 +569,8 @@
     <string name="template_wa_ready_body">Hello {{cliente}}, repair order {{numero_commessa}} is ready for pickup.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_pdf_status_title">WhatsApp progress status PDF</string>
     <string name="template_wa_pdf_status_body">Hello {{cliente}}, we are sending you the attached progress status for repair order {{numero_commessa}}: {{titolo_commessa}}.\n\nCurrent status: {{stato_commessa}}\nNext action: {{prossima_azione}}\n\n{{proprietario_nome}}</string>
+    <string name="legal_privacy_fallback">Summary GDPR Privacy Notice: Data is processed for intake, diagnosis, quote, repair, delivery, operational communications, and legal obligations. Customers may exercise their GDPR rights and lodge a complaint with the Data Protection Authority.</string>
+    <string name="legal_terms_fallback">The customer authorizes the intake, custody, and technical diagnosis of the object. Any repair with an estimated cost is performed only after customer confirmation.</string>
     <string name="template_privacy_breve_title">Short privacy notice</string>
     <string name="template_privacy_breve_body">Summary Privacy Notice pursuant to EU Regulation 2016/679 (GDPR).\nData Controller: {{proprietario_nome}}, {{proprietario_piva}}, {{proprietario_indirizzo}}, contactable at the point of sale or via: {{proprietario_email}} {{proprietario_telefono}}.\nPurposes: Management of repair orders, technical diagnosis, quoting, repair execution, delivery, post-intervention assistance, operational communications, and accounting/tax compliance.\nLegal bases: Execution of pre-contractual or contractual measures, compliance with legal obligations, and legitimate interest in organizational management. For non-essential communications (e.g. via WhatsApp), specific consent is required and granted by the customer by providing the contact number.\nProcessed data: Identification and contact details, tax information, device info, problem description, photos, signatures, and history.\nRetention: Data is retained for the period necessary to manage the repair order and subsequently as required for legal compliance or protection of rights.\nRecipients: Authorized personnel, strictly necessary technical service providers, and legal authorities.\nRights: You have the right to access, rectify, or erase your data, as well as the right to restriction, objection, portability, and to lodge a complaint with the Data Protection Authority.</string>
     <string name="template_condizioni_title">Service Intake Terms</string>

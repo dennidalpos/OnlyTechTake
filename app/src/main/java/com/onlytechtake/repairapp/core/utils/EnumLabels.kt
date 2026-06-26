@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.core.utils
 
 import android.content.Context
+import androidx.annotation.StringRes
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerActionStatus
@@ -9,54 +10,72 @@ import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 
-fun OrderStatus.label(context: Context): String =
-    when (this) {
-        OrderStatus.OPEN -> context.getString(R.string.status_open)
-        OrderStatus.IN_PROGRESS -> context.getString(R.string.status_in_progress)
-        OrderStatus.DIAGNOSIS -> context.getString(R.string.status_diagnosis)
-        OrderStatus.RESULT -> context.getString(R.string.status_result)
-        OrderStatus.REPAIRING -> context.getString(R.string.status_repairing)
-        OrderStatus.READY_FOR_PICKUP -> context.getString(R.string.status_ready_for_pickup)
-        OrderStatus.CLOSED -> context.getString(R.string.status_closed)
-    }
+val OrderStatus.labelRes: Int
+    @StringRes get() =
+        when (this) {
+            OrderStatus.OPEN -> R.string.status_open
+            OrderStatus.IN_PROGRESS -> R.string.status_in_progress
+            OrderStatus.DIAGNOSIS -> R.string.status_diagnosis
+            OrderStatus.RESULT -> R.string.status_result
+            OrderStatus.REPAIRING -> R.string.status_repairing
+            OrderStatus.READY_FOR_PICKUP -> R.string.status_ready_for_pickup
+            OrderStatus.CLOSED -> R.string.status_closed
+        }
 
-fun ClosureReason.label(context: Context): String =
-    when (this) {
-        ClosureReason.COMPLETED -> context.getString(R.string.reason_completed)
-        ClosureReason.CUSTOMER_DECLINED -> context.getString(R.string.reason_customer_declined)
-        ClosureReason.NOT_REPAIRABLE -> context.getString(R.string.reason_not_repairable)
-        ClosureReason.CANCELLED -> context.getString(R.string.reason_cancelled)
-        ClosureReason.OTHER -> context.getString(R.string.reason_other)
-    }
+fun OrderStatus.label(context: Context): String = context.getString(labelRes)
 
-fun CustomerActionStatus.label(context: Context): String =
-    when (this) {
-        CustomerActionStatus.NONE -> context.getString(R.string.action_none)
-        CustomerActionStatus.TO_NOTIFY -> context.getString(R.string.action_to_notify)
-        CustomerActionStatus.WAITING_ACCEPTANCE -> context.getString(R.string.action_waiting_acceptance)
-        CustomerActionStatus.ACCEPTED -> context.getString(R.string.action_accepted)
-        CustomerActionStatus.REJECTED -> context.getString(R.string.action_rejected)
-        CustomerActionStatus.ASKED_INFO -> context.getString(R.string.action_asked_info)
-        CustomerActionStatus.CALL_REQUESTED -> context.getString(R.string.action_call_requested)
-        CustomerActionStatus.NOTIFIED -> context.getString(R.string.action_notified)
-    }
+val ClosureReason.labelRes: Int
+    @StringRes get() =
+        when (this) {
+            ClosureReason.COMPLETED -> R.string.reason_completed
+            ClosureReason.CUSTOMER_DECLINED -> R.string.reason_customer_declined
+            ClosureReason.NOT_REPAIRABLE -> R.string.reason_not_repairable
+            ClosureReason.CANCELLED -> R.string.reason_cancelled
+            ClosureReason.OTHER -> R.string.reason_other
+        }
 
-fun DiagnosisOutcome.label(context: Context): String =
-    when (this) {
-        DiagnosisOutcome.REPAIRABLE -> context.getString(R.string.order_diagnosis_repairable)
-        DiagnosisOutcome.NOT_REPAIRABLE -> context.getString(R.string.order_diagnosis_not_repairable)
-    }
+fun ClosureReason.label(context: Context): String = context.getString(labelRes)
 
-fun CustomerType.label(context: Context): String =
-    when (this) {
-        CustomerType.PRIVATE -> context.getString(R.string.customer_type_private)
-        CustomerType.BUSINESS -> context.getString(R.string.customer_type_business)
-    }
+val CustomerActionStatus.labelRes: Int
+    @StringRes get() =
+        when (this) {
+            CustomerActionStatus.NONE -> R.string.action_none
+            CustomerActionStatus.TO_NOTIFY -> R.string.action_to_notify
+            CustomerActionStatus.WAITING_ACCEPTANCE -> R.string.action_waiting_acceptance
+            CustomerActionStatus.ACCEPTED -> R.string.action_accepted
+            CustomerActionStatus.REJECTED -> R.string.action_rejected
+            CustomerActionStatus.ASKED_INFO -> R.string.action_asked_info
+            CustomerActionStatus.CALL_REQUESTED -> R.string.action_call_requested
+            CustomerActionStatus.NOTIFIED -> R.string.action_notified
+        }
 
-fun OrderPriority.label(context: Context): String =
-    when (this) {
-        OrderPriority.LOW -> context.getString(R.string.priority_low)
-        OrderPriority.NORMAL -> context.getString(R.string.priority_normal)
-        OrderPriority.HIGH -> context.getString(R.string.priority_high)
-        OrderPriority.URGENT -> context.getString(R.string.priority_urgent)
-    }
+fun CustomerActionStatus.label(context: Context): String = context.getString(labelRes)
+
+val DiagnosisOutcome.labelRes: Int
+    @StringRes get() =
+        when (this) {
+            DiagnosisOutcome.REPAIRABLE -> R.string.order_diagnosis_repairable
+            DiagnosisOutcome.NOT_REPAIRABLE -> R.string.order_diagnosis_not_repairable
+        }
+
+fun DiagnosisOutcome.label(context: Context): String = context.getString(labelRes)
+
+val CustomerType.labelRes: Int
+    @StringRes get() =
+        when (this) {
+            CustomerType.PRIVATE -> R.string.customer_type_private
+            CustomerType.BUSINESS -> R.string.customer_type_business
+        }
+
+fun CustomerType.label(context: Context): String = context.getString(labelRes)
+
+val OrderPriority.labelRes: Int
+    @StringRes get() =
+        when (this) {
+            OrderPriority.LOW -> R.string.priority_low
+            OrderPriority.NORMAL -> R.string.priority_normal
+            OrderPriority.HIGH -> R.string.priority_high
+            OrderPriority.URGENT -> R.string.priority_urgent
+        }
+
+fun OrderPriority.label(context: Context): String = context.getString(labelRes)

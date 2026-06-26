@@ -105,20 +105,23 @@
 
 
     <string name="error_destination_unavailable">Destinazione non disponibile</string>
-    <string name="error_diagnosis_only_during">La diagnosi puo\' essere registrata solo durante o dopo la diagnosi</string>
+    <string name="error_diagnosis_only_during">La diagnosi può essere registrata solo durante o dopo la diagnosi</string>
     <string name="timeline_result_summary">Sintesi risultato: %s</string>
     <string name="timeline_diagnosis_outcome">Esito diagnosi: %s</string>
     <string name="timeline_repair_amount">Importo riparazione: %s</string>
 
     <string name="error_customer_required">Cliente obbligatorio</string>
+    <string name="error_customer_required_fields">Inserisci i dati cliente obbligatori</string>
+    <string name="error_customer_not_found">Cliente non trovato</string>
+    <string name="error_customer_phone_missing">Telefono cliente mancante</string>
     <string name="error_problem_required">Problema obbligatorio</string>
     <string name="error_category_required">Categoria obbligatoria</string>
     <string name="error_note_empty">Nota vuota</string>
     <string name="error_name_required">Nome obbligatorio</string>
     <string name="error_username_required">Username obbligatorio</string>
     <string name="error_password_too_short">Password troppo corta</string>
-    <string name="error_username_exists">Username gia\' esistente</string>
-    <string name="error_media_required">Almeno una foto o allegato obbligatorio</string>
+    <string name="error_username_exists">Username già esistente</string>
+    <string name="error_media_required">Almeno una foto od allegato obbligatorio</string>
     <string name="error_privacy_required">Privacy e firma obbligatorie</string>
     <string name="error_positive_estimate_required">Importo preventivo positivo obbligatorio</string>
     <string name="error_reject_reason_required">Motivo rifiuto obbligatorio</string>
@@ -139,6 +142,10 @@
     <string name="label_signature">firma</string>
     <string name="label_document">documento</string>
     <string name="label_attachment">allegato</string>
+    <string name="label_photos_count">Foto %d</string>
+    <string name="label_documents_count">Documenti %d</string>
+    <string name="label_signatures_count">Firme %d</string>
+    <string name="label_final_photos_count">Lavoro finito %d</string>
     <string name="error_attachment_unavailable">Allegato non disponibile</string>
     <string name="error_attachment_empty">Allegato vuoto o non salvato</string>
     <string name="error_media_not_found">Media non trovato</string>
@@ -151,7 +158,7 @@
     <string name="error_media_move_failed">Spostamento media non riuscito</string>
     <string name="error_order_not_found">Commessa non trovata</string>
     <string name="error_signature_not_found">Firma non trovata</string>
-    <string name="error_signature_exists">Firma gia\' presente per questa commessa</string>
+    <string name="error_signature_exists">Firma già presente per questa commessa</string>
     <string name="error_attachment_too_large">Allegato troppo grande: massimo %s</string>
     <string name="error_invalid_db_backup">Backup database non valido</string>
     <string name="error_unsupported_app_files">Backup contiene file app non supportati</string>
@@ -177,6 +184,12 @@
     <string name="error_closure_reason_required">Motivo chiusura obbligatorio</string>
     <string name="error_admin_creation_failed">Creazione admin non riuscita</string>
     <string name="error_init_failed">Errore durante l\'inizializzazione: %s</string>
+    <string name="error_init_title">Errore di Inizializzazione</string>
+    <string name="error_template_not_found">Template non trovato</string>
+    <string name="error_template_code_required">Codice template obbligatorio</string>
+    <string name="error_template_title_required">Titolo template obbligatorio</string>
+    <string name="error_template_body_required">Corpo template obbligatorio</string>
+    <string name="action_retry">Riprova</string>
     <string name="error_enter_username_password">Inserisci username e password</string>
     <string name="error_user_deactivated">Utente disattivato</string>
     <string name="error_invalid_credentials">Credenziali non valide</string>
@@ -207,7 +220,6 @@
     <string name="config_backup_logs_send_confirm_text">Verrà generato un file compresso con i dati tecnici da inviare via WhatsApp.</string>
 
     <string name="error_feature_pro_only">Funzione disponibile nella versione Full</string>
-    <string name="error_db_not_created">Database non ancora creato</string>
     <string name="error_restore_area_unavailable">Area ripristino non disponibile</string>
     <string name="error_backup_unavailable">Backup non disponibile</string>
     <string name="error_backup_incompatible">Versione backup non compatibile</string>
@@ -293,6 +305,10 @@
 
     <string name="home_metric_operators">Operatori</string>
     <string name="home_metric_active">Attive</string>
+    <string name="queue_open">Aperte</string>
+    <string name="queue_processing">In lavorazione / diagnosi</string>
+    <string name="queue_result">Risultato / riparazione</string>
+    <string name="queue_ready">Pronte</string>
     <string name="home_new_order">Nuova commessa</string>
     <string name="home_empty_queue">Nessuna commessa in questa coda.</string>
     <string name="home_empty_queues_title">Nessuna coda attiva</string>
@@ -320,7 +336,7 @@
     <string name="content_description_delete">Elimina</string>
     <string name="content_description_delete_order">Elimina</string>
     <string name="action_delete_confirm_title">Eliminare %1$s?</string>
-    <string name="action_delete_confirm_text">\%1$s verra\' rimosso permanentemente. Questa azione non è reversibile.</string>
+    <string name="action_delete_confirm_text">\%1$s verrà rimosso permanentemente. Questa azione non è reversibile.</string>
     <string name="order_not_repairable_note">Cliente avvisato: dispositivo non riparabile</string>
     <string name="content_description_edit">Modifica</string>
     <string name="content_description_open">Apri</string>
@@ -475,7 +491,7 @@
 
 
     <string name="order_exit_confirm_title">Uscire dalla scheda?</string>
-    <string name="order_exit_confirm_text">Nota non salvata o anteprima WhatsApp verranno scartate.</string>
+    <string name="order_exit_confirm_text">Nota non salvata od anteprima WhatsApp verranno scartate.</string>
 
     <string name="order_internal_notes">Note interne</string>
     <string name="order_new_note">Nuova nota</string>
@@ -537,14 +553,14 @@
     <string name="order_pdf_sent_confirm_title">Conferma invio</string>
     <string name="order_pdf_sent_confirm_text">Hai completato l\'invio del PDF al cliente?</string>
     <string name="order_confirm_diagnosis_outcome_title">Cliente avvisato?</string>
-    <string name="order_confirm_diagnosis_outcome_text">La commessa passera\' a pronta per il ritiro.</string>
+    <string name="order_confirm_diagnosis_outcome_text">La commessa passerà a pronta per il ritiro.</string>
 
     <string name="template_wa_intake_title">WhatsApp presa in carico</string>
-    <string name="template_wa_intake_body">Ciao {{cliente}}, abbiamo preso in carico la commessa {{numero_commessa}}: {{titolo_commessa}}.\nCategoria: {{categoria_percorso}}.\nTi aggiorneremo appena avremo novita\'.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_intake_body">Ciao {{cliente}}, abbiamo preso in carico la commessa {{numero_commessa}}: {{titolo_commessa}}.\nCategoria: {{categoria_percorso}}.\nTi aggiorneremo appena avremo novità.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_update_title">WhatsApp aggiornamento</string>
     <string name="template_wa_update_body">Aggiornamento commessa {{numero_commessa}}: stato attuale {{stato_commessa}}.\nProssima azione: {{prossima_azione}}.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_diagnosis_title">WhatsApp diagnosi</string>
-    <string name="template_wa_diagnosis_body">Ciao {{cliente}}, la commessa {{numero_commessa}} e\' in diagnosi.\nOggetto: {{titolo_commessa}}.\nTi comunicheremo esito e preventivo prima di procedere.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_diagnosis_body">Ciao {{cliente}}, la commessa {{numero_commessa}} è in diagnosi.\nOggetto: {{titolo_commessa}}.\nTi comunicheremo esito e preventivo prima di procedere.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_result_title">WhatsApp risultato</string>
     <string name="template_wa_result_body">Ciao {{cliente}}, abbiamo completato la diagnosi della commessa {{numero_commessa}}.\nEsito: {{esito_diagnosi}}.\nStato: {{stato_commessa}}.\nProssima azione: {{prossima_azione}}.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_quote_title">WhatsApp preventivo intervento</string>
@@ -552,23 +568,25 @@
     <string name="template_wa_not_repairable_title">WhatsApp non riparabile</string>
     <string name="template_wa_not_repairable_body">Ciao {{cliente}}, dopo la diagnosi della commessa {{numero_commessa}} l\'oggetto risulta non riparabile.\nPuoi passare in negozio per il ritiro o contattarci per chiarimenti.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_repairing_title">WhatsApp riparazione</string>
-    <string name="template_wa_repairing_body">Ciao {{cliente}}, la riparazione della commessa {{numero_commessa}} e\' in corso.\nTi aggiorneremo quando sara\' pronta.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_repairing_body">Ciao {{cliente}}, la riparazione della commessa {{numero_commessa}} è in corso.\nTi aggiorneremo quando sarà pronta.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_lavorazione_title">WhatsApp lavorazione</string>
-    <string name="template_wa_lavorazione_body">Ciao {{cliente}}, la commessa {{numero_commessa}} e\' in lavorazione.\nProssima azione: {{prossima_azione}}.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_lavorazione_body">Ciao {{cliente}}, la commessa {{numero_commessa}} è in lavorazione.\nProssima azione: {{prossima_azione}}.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_completamento_title">WhatsApp completamento</string>
-    <string name="template_wa_completamento_body">Ciao {{cliente}}, la lavorazione della commessa {{numero_commessa}} e\' completata.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_completamento_body">Ciao {{cliente}}, la lavorazione della commessa {{numero_commessa}} è completata.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_ready_title">WhatsApp pronto ritiro</string>
-    <string name="template_wa_ready_body">Ciao {{cliente}}, la commessa {{numero_commessa}} e\' pronta per il ritiro.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_ready_body">Ciao {{cliente}}, la commessa {{numero_commessa}} è pronta per il ritiro.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_pdf_status_title">WhatsApp stato avanzamento PDF</string>
     <string name="template_wa_pdf_status_body">Ciao {{cliente}}, ti inviamo in allegato lo stato avanzamento della commessa {{numero_commessa}}: {{titolo_commessa}}.\n\nStato attuale: {{stato_commessa}}\nProssima azione: {{prossima_azione}}\n\n{{proprietario_nome}}</string>
+    <string name="legal_privacy_fallback">Informativa Privacy sintetica GDPR: I dati sono trattati per presa in carico, diagnosi, preventivo, riparazione, consegna, comunicazioni operative e obblighi di legge. Il cliente può esercitare i diritti GDPR e proporre reclamo al Garante Privacy.</string>
+    <string name="legal_terms_fallback">Il cliente autorizza la presa in carico, la custodia e la diagnosi tecnica dell\'oggetto. Ogni riparazione con importo stimato viene eseguita solo dopo conferma del cliente.</string>
     <string name="template_privacy_breve_title">Privacy breve</string>
-    <string name="template_privacy_breve_body">Informativa privacy sintetica ai sensi del Regolamento UE 2016/679 (GDPR).\nTitolare: {{proprietario_nome}}, {{proprietario_piva}}, {{proprietario_indirizzo}}, contattabile presso il punto vendita o via: {{proprietario_email}} {{proprietario_telefono}}.\nFinalita\': presa in carico e gestione della commessa, diagnosi, preventivo, riparazione, consegna, assistenza post-intervento e adempimenti fiscali.\nBasi giuridiche: esecuzione di misure precontrattuali o contrattuali, obblighi di legge e legittimo interesse. Per comunicazioni WhatsApp non indispensabili, il consenso si ritiene conferito con il rilascio del numero di contatto.\nDati trattati: identificativi, fiscali, informazioni sull\'oggetto, foto, firme e cronologia.\nConservazione: per il tempo necessario alla gestione della commessa e successivamente per obblighi di legge (10 anni per fini fiscali).\nDestinatari: personale autorizzato e fornitori tecnici strettamente necessari.\nDiritti: accesso, rettifica, cancellazione, limitazione, opposizione e reclamo al Garante Privacy.</string>
+    <string name="template_privacy_breve_body">Informativa privacy sintetica ai sensi del Regolamento UE 2016/679 (GDPR).\nTitolare: {{proprietario_nome}}, {{proprietario_piva}}, {{proprietario_indirizzo}}, contattabile presso il punto vendita o via: {{proprietario_email}} {{proprietario_telefono}}.\nFinalità: presa in carico e gestione della commessa, diagnosi, preventivo, riparazione, consegna, assistenza post-intervento e adempimenti fiscali.\nBasi giuridiche: esecuzione di misure precontrattuali o contrattuali, obblighi di legge e legittimo interesse. Per comunicazioni WhatsApp non indispensabili, il consenso si ritiene conferito con il rilascio del numero di contatto.\nDati trattati: identificativi, fiscali, informazioni sull\'oggetto, foto, firme e cronologia.\nConservazione: per il tempo necessario alla gestione della commessa e successivamente per obblighi di legge (10 anni per fini fiscali).\nDestinatari: personale autorizzato e fornitori tecnici strettamente necessari.\nDiritti: accesso, rettifica, cancellazione, limitazione, opposizione e reclamo al Garante Privacy.</string>
     <string name="template_condizioni_title">Condizioni presa in carico</string>
-    <string name="template_condizioni_body">Condizioni di presa in carico.\nIl cliente consegna l\'oggetto indicato in commessa e autorizza {{proprietario_nome}} a custodirlo, verificarlo e svolgere diagnosi tecnica.\nLa diagnosi puo\' richiedere l\'apertura del dispositivo o il collegamento a strumenti di test. L\'intervento di riparazione prosegue solo dopo accettazione del preventivo.\n{{proprietario_nome}} non risponde di perdita dati, password non comunicate, difetti preesistenti o deterioramenti inevitabili emersi durante la diagnosi. È responsabilità del cliente eseguire il backup prima della consegna.\nGli importi del preventivo devono essere accettati prima dell\'avvio. In caso di mancato ritiro entro 90 giorni, l\'oggetto verra\' gestito secondo le norme vigenti sui beni abbandonati.\nCon la firma il cliente conferma di aver letto e accettato l\'informativa privacy e le presenti condizioni.\n\nLaboratorio: {{proprietario_nome}} - {{proprietario_indirizzo}}</string>
+    <string name="template_condizioni_body">Condizioni di presa in carico.\nIl cliente consegna l\'oggetto indicato in commessa e autorizza {{proprietario_nome}} a custodirlo, verificarlo e svolgere diagnosi tecnica.\nLa diagnosi può richiedere l\'apertura del dispositivo o il collegamento a strumenti di test. L\'intervento di riparazione prosegue solo dopo accettazione del preventivo.\n{{proprietario_nome}} non risponde di perdita dati, password non comunicate, difetti preesistenti o deterioramenti inevitabili emersi durante la diagnosi. È responsabilità del cliente eseguire il backup prima della consegna.\nGli importi del preventivo devono essere accettati prima dell\'avvio. In caso di mancato ritiro entro 90 giorni, l\'oggetto verrà gestito secondo le norme vigenti sui beni abbandonati.\nCon la firma il cliente conferma di aver letto e accettato l\'informativa privacy e le presenti condizioni.\n\nLaboratorio: {{proprietario_nome}} - {{proprietario_indirizzo}}</string>
 
 
     <string name="order_pdf_missing_signature_title">Firma mancante</string>
-    <string name="order_pdf_missing_signature_text">Il documento non conterra\' la firma del cliente. Proseguire?</string>
+    <string name="order_pdf_missing_signature_text">Il documento non conterrà la firma del cliente. Proseguire?</string>
     <string name="yes_confirmed">Sì, confermato</string>
     <string name="no_cancel">No, annulla</string>
 
@@ -578,7 +596,7 @@
     <string name="admin_create_operator">Crea operatore</string>
     <string name="admin_field_temp_password">Password temporanea</string>
     <string name="admin_confirm_create_title">Creare operatore?</string>
-    <string name="admin_confirm_create_text">Il nuovo operatore verra\' salvato nel database locale.</string>
+    <string name="admin_confirm_create_text">Il nuovo operatore verrà salvato nel database locale.</string>
     <string name="admin_users_title">Utenti</string>
     <string name="admin_no_users_title">Nessun operatore</string>
     <string name="admin_no_users_body">Crea almeno un operatore per separare accessi, permessi e responsabilità sulle commesse.</string>
@@ -596,7 +614,7 @@
     <string name="admin_confirm_delete_user_text">L\'operatore %s verrà rimosso permanentemente dal sistema. Non sarà più possibile recuperare le sue credenziali, ma le commesse da lui gestite resteranno in archivio.</string>
     <string name="admin_reset_password">Reset password</string>
     <string name="admin_confirm_reset_title">Resettare password?</string>
-    <string name="admin_confirm_reset_text">La password temporanea inserita verra\' salvata per %s.</string>
+    <string name="admin_confirm_reset_text">La password temporanea inserita verrà salvata per %s.</string>
     <string name="admin_total_reset">Reset totale dati</string>
     <string name="admin_confirm_total_reset_title">Reset totale?</string>
     <string name="admin_confirm_total_reset_text">Questa azione elimina i dati locali dell\'app e riporta al primo setup admin.</string>
@@ -718,7 +736,7 @@
     <string name="config_category_save">Salva categoria</string>
 
     <string name="config_category_confirm_save_title">Salvare categoria?</string>
-    <string name="config_category_confirm_save_text">La categoria verra\' aggiornata nel catalogo locale.</string>
+    <string name="config_category_confirm_save_text">La categoria verrà aggiornata nel catalogo locale.</string>
 
     <string name="config_category_confirm_delete_title">Eliminare categoria?</string>
     <string name="config_category_close">Chiudi Categorie</string>
@@ -738,12 +756,12 @@
     <string name="config_template_confirm_save_risky">La modifica puo\' interrompere i flussi che usano questo codice. Le firme salvate non cambiano.</string>
     <string name="config_template_confirm_save_new_version">Verra\' salvata una nuova versione.</string>
     <string name="config_template_empty">Nessun template configurato.</string>
-    <string name="config_whatsapp_mode">Modalita\': %1$s</string>
+    <string name="config_whatsapp_mode">Modalità: %1$s</string>
     <string name="config_whatsapp_manual">Manuale</string>
-    <string name="config_whatsapp_tooltip">Configura la modalita\' di invio dei messaggi ai clienti. Attualmente e\' supportato l\'invio manuale tramite WhatsApp.</string>
+    <string name="config_whatsapp_tooltip">Configura la modalità di invio dei messaggi ai clienti. Attualmente è supportato l\'invio manuale tramite WhatsApp.</string>
     <string name="config_whatsapp_close">Chiudi Setup WhatsApp</string>
-    <string name="config_whatsapp_confirm_manual_title">Impostare modalita\' manuale?</string>
-    <string name="config_whatsapp_confirm_manual_text">La modalita\' WhatsApp verra\' salvata.</string>
+    <string name="config_whatsapp_confirm_manual_title">Impostare modalità manuale?</string>
+    <string name="config_whatsapp_confirm_manual_text">La modalità WhatsApp verrà salvata.</string>
     <string name="config_backup_title">Backup e Ripristino</string>
     <string name="config_backup_reminder_disabled_warning">Attenzione: con il promemoria disattivato non riceverai notifiche per eseguire il backup periodico consigliato.</string>
     <string name="config_backup_reminder_enabled">Promemoria backup attivo</string>
@@ -767,13 +785,13 @@
 
     <string name="config_backup_export_xlsx">Export commesse XLSX</string>
     <string name="config_backup_confirm_export_xlsx_title">Esportare commesse?</string>
-    <string name="config_backup_confirm_export_xlsx_text">Verra\' creato un file XLSX tramite selettore di sistema.</string>
+    <string name="config_backup_confirm_export_xlsx_text">Verrà creato un file XLSX tramite selettore di sistema.</string>
 
     <string name="config_backup_confirm_export_zip_title">Esegui backup completo?</string>
-    <string name="config_backup_confirm_export_zip_text">Verra\' creato un file ZIP tramite selettore di sistema.</string>
+    <string name="config_backup_confirm_export_zip_text">Verrà creato un file ZIP tramite selettore di sistema.</string>
     <string name="config_backup_restore_zip">Ripristina ZIP</string>
     <string name="config_backup_confirm_restore_zip_title">Ripristinare backup?</string>
-    <string name="config_backup_confirm_restore_zip_text">Il backup ZIP sostituira\' database e file locali dell\'app. Dopo il ripristino sara\' richiesto un nuovo login.</string>
+    <string name="config_backup_confirm_restore_zip_text">Il backup ZIP sostituirà database e file locali dell\'app. Dopo il ripristino sarà richiesto un nuovo login.</string>
 
 
 
@@ -830,12 +848,12 @@
     <string name="catalog_path_separator">\u0020&gt;\u0020</string>
 
     <string name="catalog_error_name_required">Nome categoria obbligatorio</string>
-    <string name="catalog_error_duplicate_name">Categoria gia\' presente in questo ramo</string>
+    <string name="catalog_error_duplicate_name">Categoria già presente in questo ramo</string>
 
     <string name="catalog_error_not_found">Categoria non trovata</string>
     <string name="catalog_error_used_by_order">Categoria usata da una commessa</string>
     <string name="catalog_error_cycle_detected">Il ramo categorie contiene un ciclo</string>
-    <string name="catalog_error_self_parent">Una categoria non puo\' essere padre di se stessa</string>
+    <string name="catalog_error_self_parent">Una categoria non può essere padre di se stessa</string>
     <string name="catalog_error_parent_not_found">Categoria padre non trovata</string>
     <string name="catalog_error_depth_limit">Profondità massima raggiunta (4 livelli)</string>
 

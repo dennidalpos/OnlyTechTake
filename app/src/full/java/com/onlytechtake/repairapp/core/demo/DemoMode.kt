@@ -5,13 +5,14 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
 
+@Suppress("SameReturnValue", "ConstPropertyName")
 object DemoMode {
     const val isEnabled: Boolean = false
 
     fun canEnable(): Boolean = false
 
     fun setEnabled(
-        @Suppress("UNUSED_PARAMETER") enabled: Boolean,
+        enabled: Boolean,
     ) {
         // No-op in full version
     }

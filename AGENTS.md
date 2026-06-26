@@ -24,7 +24,7 @@ Operational guide for AI agents. Environment: **Windows 11 + PowerShell**.
 
 ## 3. Architecture & Patterns
 - **Stack**: Kotlin, Compose, Material 3, Room + SQLCipher, DataStore, CameraX, Navigation Compose.
-- **Layers**: UI (Compose) -> ViewModel (StateHolder) -> UseCase (optional) -> Repository -> Data Source.
+- **Layers**: UI (Compose) → ViewModel (StateHolder) → UseCase (optional) → Repository → Data Source.
 - **Naming**: `*Screen.kt` (UI), `*ViewModel.kt` (Logic), `*Repository.kt` (Data).
 - **Previews**: Every main Screen/Component MUST have `@Preview` for Light and Dark mode. (*Ogni Screen/Componente principale DEVE avere `@Preview` per Light e Dark mode.*)
 - **UI Tests**: Use the **Robot** pattern. Common robots are defined in `app/src/androidTest/.../demo/Robots.kt` and `BaseAssetRobot.kt`. Do not duplicate UI interaction logic. (*Usare il pattern **Robot**. I robot comuni sono definiti in `app/src/androidTest/.../demo/Robots.kt` e `BaseAssetRobot.kt`. Non duplicare logica di interazione UI.*)
@@ -36,7 +36,7 @@ Operational guide for AI agents. Environment: **Windows 11 + PowerShell**.
 - **Flavors**:
   - `full` (Pro): Complete product for end users. (*Prodotto completo per utenti finali.*)
   - `demo` (Trial): 1 order, no export, PDF watermark. Limited public version. (*1 commessa, no export, watermark PDF. Versione pubblica limitata.*)
-  - `showcase`: Internal build for exclusive use of the owner/developer with pre-loaded data for quick demos. **DO NOT publish or mention on the landing page.** (*Build interna ad uso esclusivo del proprietario/sviluppatore con dati pre-caricati per demo rapide.*)
+  - `showcase`: Internal build for exclusive use of the owner/developer with preloaded data for quick demos. **DO NOT publish or mention on the landing page.** (*Build interna ad uso esclusivo del proprietario/sviluppatore con dati pre-caricati per demo rapide.*)
 - **SDK**: Target 37, Min 26.
 - **Database**: `DATABASE_VERSION = 1` locked. Do not modify schema or entities without explicit order. (*Non modificare schema o entità senza ordine esplicito.*)
 - **Permissions**: Only `CAMERA` (for repair documentation). `android:required="false"`.

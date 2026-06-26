@@ -112,9 +112,21 @@ fun QuickActions(
                 focusManager.clearFocus()
             },
         )
+
+    val privacyFallback = stringResource(R.string.legal_privacy_fallback)
+    val termsFallback = stringResource(R.string.legal_terms_fallback)
+
     val stepperState =
-        remember(draft, categories, templates, anchorMappings, currentUser) {
-            IntakeStepperState(draft, categories, templates, anchorMappings, currentUser)
+        remember(draft, categories, templates, anchorMappings, currentUser, privacyFallback, termsFallback) {
+            IntakeStepperState(
+                draft = draft,
+                categories = categories,
+                templates = templates,
+                anchorMappings = anchorMappings,
+                currentUser = currentUser,
+                privacyFallback = privacyFallback,
+                termsFallback = termsFallback,
+            )
         }
 
     val selectedCustomer =

@@ -141,6 +141,7 @@ class OrderContainer(
 
     val customerRepository by lazy {
         CustomerRepository(
+            context = context.applicationContext,
             customerDao = dataContainer.database.customerDao(),
         )
     }

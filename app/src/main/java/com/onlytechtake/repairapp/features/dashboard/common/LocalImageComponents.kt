@@ -326,7 +326,7 @@ private fun EditableLocalImage(
 @Composable
 private fun ImageEditCanvas(
     bitmap: Bitmap?,
-    @Suppress("UNUSED_PARAMETER") description: String,
+    description: String,
     arrows: List<ImageEditArrow>,
     cropRect: Rect?,
     dragStart: Offset?,

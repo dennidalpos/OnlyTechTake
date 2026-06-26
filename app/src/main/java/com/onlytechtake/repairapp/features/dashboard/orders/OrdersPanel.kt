@@ -67,7 +67,7 @@ import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
-import com.onlytechtake.repairapp.core.utils.label
+import com.onlytechtake.repairapp.core.utils.labelRes
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
@@ -425,7 +425,6 @@ private fun OrdersListContent(
 
 @Composable
 private fun ActiveFilterInfo(filter: OrderFilter) {
-    val context = LocalContext.current
     val modeText =
         when (filter.mode) {
             com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL -> null
@@ -445,8 +444,11 @@ private fun ActiveFilterInfo(filter: OrderFilter) {
     val filterText =
         listOfNotNull(
             modeText?.lowercase(),
-            filter.status?.label(context),
-            filter.statuses.takeIf { it.isNotEmpty() }?.joinToString(" / ") { it.label(context) },
+            filter.status?.let { stringResource(it.labelRes) },
+            filter.statuses
+                .takeIf { it.isNotEmpty() }
+                ?.map { stringResource(it.labelRes) }
+                ?.joinToString(" / "),
         ).joinToString(", ")
 
     if (filterText.isNotBlank()) {

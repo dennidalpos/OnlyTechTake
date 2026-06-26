@@ -198,9 +198,9 @@ class TemplateRepository(
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_TEMPLATES)
-            require(code.isNotBlank()) { "Codice template obbligatorio" }
-            require(title.isNotBlank()) { "Titolo template obbligatorio" }
-            require(body.isNotBlank()) { "Corpo template obbligatorio" }
+            require(code.isNotBlank()) { context.getString(com.onlytechtake.repairapp.R.string.error_template_code_required) }
+            require(title.isNotBlank()) { context.getString(com.onlytechtake.repairapp.R.string.error_template_title_required) }
+            require(body.isNotBlank()) { context.getString(com.onlytechtake.repairapp.R.string.error_template_body_required) }
             renderer.requireSupportedVariables(body, supportedVariables)
 
             val existing = templateDao.findByCode(code.trim())
@@ -250,16 +250,16 @@ class TemplateRepository(
         anchor: TemplateAnchor? = null,
     ): Result<PreparedMessage> =
         runCatching {
-            val order = requireNotNull(orderDao.findById(orderId)) { "Commessa non trovata" }
+            val order = requireNotNull(orderDao.findById(orderId)) { context.getString(com.onlytechtake.repairapp.R.string.error_order_not_found) }
             if (order.assignedToUserId != actor.id) {
                 PermissionService.requirePermission(actor, UserPermission.EDIT_ALL_ORDERS)
             } else {
                 PermissionService.requirePermission(actor, UserPermission.EDIT_OWN_ORDERS)
             }
             val customer =
-                requireNotNull(customerDao.findById(order.customerId)) { "Cliente non trovato" }
+                requireNotNull(customerDao.findById(order.customerId)) { context.getString(com.onlytechtake.repairapp.R.string.error_customer_not_found) }
             val dbTemplate =
-                requireNotNull(templateDao.findActiveByCode(templateCode)) { "Template non trovato" }
+                requireNotNull(templateDao.findActiveByCode(templateCode)) { context.getString(com.onlytechtake.repairapp.R.string.error_template_not_found) }
             val template =
                 if (dbTemplate.code in systemTemplateCodes && dbTemplate.version == 1) {
                     getDefaultTemplates().find { it.code == dbTemplate.code } ?: dbTemplate
@@ -268,7 +268,7 @@ class TemplateRepository(
                 }
             val categoryPath = categoryPath(order.categoryId)
             val phone = customer.phone?.filter { it.isDigit() || (it == '+') }.orEmpty()
-            require(phone.isNotBlank()) { "Telefono cliente mancante" }
+            require(phone.isNotBlank()) { context.getString(com.onlytechtake.repairapp.R.string.error_customer_phone_missing) }
 
             val owner = ownerPreferences.ownerInfo.firstOrNull()
 

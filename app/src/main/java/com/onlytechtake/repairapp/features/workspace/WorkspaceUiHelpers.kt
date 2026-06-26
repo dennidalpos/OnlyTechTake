@@ -49,20 +49,20 @@ fun attachmentCounts(
         finalPhotos = media.count { it.isFinalPhoto() },
     )
 
-fun AttachmentCounts.label(): String =
+fun AttachmentCounts.label(context: android.content.Context): String =
     buildList {
-        add("Foto $images")
-        add("Documenti $documents")
-        add("Firme $signatures")
-        if (finalPhotos > 0) add("Lavoro finito $finalPhotos")
+        add(context.getString(com.onlytechtake.repairapp.R.string.label_photos_count, images))
+        add(context.getString(com.onlytechtake.repairapp.R.string.label_documents_count, documents))
+        add(context.getString(com.onlytechtake.repairapp.R.string.label_signatures_count, signatures))
+        if (finalPhotos > 0) add(context.getString(com.onlytechtake.repairapp.R.string.label_final_photos_count, finalPhotos))
     }.joinToString(" - ")
 
-fun OrderAttachmentCounts.label(): String =
+fun OrderAttachmentCounts.label(context: android.content.Context): String =
     buildList {
-        add("Foto $images")
-        add("Documenti $documents")
-        add("Firme $signatures")
-        if (finalPhotos > 0) add("Lavoro finito $finalPhotos")
+        add(context.getString(com.onlytechtake.repairapp.R.string.label_photos_count, images))
+        add(context.getString(com.onlytechtake.repairapp.R.string.label_documents_count, documents))
+        add(context.getString(com.onlytechtake.repairapp.R.string.label_signatures_count, signatures))
+        if (finalPhotos > 0) add(context.getString(com.onlytechtake.repairapp.R.string.label_final_photos_count, finalPhotos))
     }.joinToString(" - ")
 
 fun OrderMediaEntity.isImageAttachment(): Boolean =

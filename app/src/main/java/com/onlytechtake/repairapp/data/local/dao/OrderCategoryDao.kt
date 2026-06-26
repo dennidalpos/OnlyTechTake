@@ -23,12 +23,15 @@ interface OrderCategoryDao {
     @Query("SELECT * FROM order_categories")
     suspend fun findAll(): List<OrderCategoryEntity>
 
+    @Suppress("SameReturnValue")
     @Query("SELECT * FROM order_categories WHERE id = :id LIMIT 1")
     suspend fun findById(id: String): OrderCategoryEntity?
 
+    @Suppress("SameReturnValue")
     @Query("SELECT COUNT(*) FROM repair_orders WHERE categoryId IN (:categoryIds)")
     suspend fun countOrdersForCategories(categoryIds: List<String>): Int
 
+    @Suppress("SameReturnValue")
     @Query("DELETE FROM order_categories WHERE id = :id")
     suspend fun deleteById(id: String): Int
 

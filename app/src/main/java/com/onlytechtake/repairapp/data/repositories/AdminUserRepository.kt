@@ -13,6 +13,7 @@ import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.domain.auth.AuthPolicy
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.OperatorInput
 import kotlinx.coroutines.flow.Flow
@@ -35,7 +36,7 @@ class AdminUserRepository(
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
             require(input.displayName.isNotBlank()) { context.getString(R.string.error_name_required) }
             require(input.username.isNotBlank()) { context.getString(R.string.error_username_required) }
-            require(input.password.size >= MIN_PASSWORD_LENGTH) { context.getString(R.string.error_password_too_short) }
+            require(input.password.size >= AuthPolicy.MIN_PASSWORD_LENGTH) { context.getString(R.string.error_password_too_short) }
             require(userDao.findByUsername(input.username.trim()) == null) { context.getString(R.string.error_username_exists) }
 
             if (BuildConfig.IS_DEMO_VERSION) {
@@ -91,7 +92,7 @@ class AdminUserRepository(
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
-            require(password.size >= MIN_PASSWORD_LENGTH) { context.getString(R.string.error_password_too_short) }
+            require(password.size >= AuthPolicy.MIN_PASSWORD_LENGTH) { context.getString(R.string.error_password_too_short) }
             val existing =
                 requireNotNull(userDao.findById(userId)) { context.getString(R.string.error_user_not_found) }
             val hash =
@@ -197,6 +198,5 @@ class AdminUserRepository(
     }
 
     private companion object {
-        const val MIN_PASSWORD_LENGTH = 8
     }
 }

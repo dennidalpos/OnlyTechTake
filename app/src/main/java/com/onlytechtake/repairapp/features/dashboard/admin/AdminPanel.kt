@@ -73,8 +73,6 @@ fun AdminPanel(
 
     val confirmCreateTitle = stringResource(R.string.admin_confirm_create_title)
     val confirmCreateText = stringResource(R.string.admin_confirm_create_text)
-    val labelActivate = stringResource(R.string.admin_user_activate)
-    val labelDeactivate = stringResource(R.string.admin_user_deactivate)
     val labelDelete = stringResource(R.string.content_description_delete)
     val confirmDeleteTitle = stringResource(R.string.admin_confirm_delete_user_title)
     val confirmDeleteTextTemplate = stringResource(R.string.admin_confirm_delete_user_text)
@@ -105,7 +103,7 @@ fun AdminPanel(
         }
 
     var expandedUserId by rememberSaveable { mutableStateOf<String?>(null) }
-    var isCreateOperatorExpanded by rememberSaveable { mutableStateOf(false) }
+    var isCreateOperatorExpanded by rememberSaveable { mutableStateOf(value = false) }
 
     var resetPasswords by remember { mutableStateOf(emptyMap<String, String>()) }
 
@@ -607,7 +605,7 @@ fun AdminPanel(
                                     },
                                 enabled =
                                     if (user.role == UserRole.ADMIN) {
-                                        (currentPassword.isNotBlank() && resetPasswords[user.id]?.isNotBlank() == true)
+                                        (currentPassword.isNotBlank() && (resetPasswords[user.id]?.isNotBlank() == true))
                                     } else {
                                         resetPasswords[user.id]?.isNotBlank() == true
                                     },

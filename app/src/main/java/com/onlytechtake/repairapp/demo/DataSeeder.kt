@@ -15,5 +15,6 @@ interface DataSeeder {
     /**
      * Optional default password for seeded accounts.
      */
+    @Suppress("SameReturnValue")
     val defaultPassword: String? get() = null
 }

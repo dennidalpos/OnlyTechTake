@@ -1,19 +1,21 @@
 package com.onlytechtake.repairapp.features.workspace
 
+import androidx.annotation.StringRes
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 
 data class OperationalQueue(
-    val title: String,
+    @StringRes val titleRes: Int,
     val statuses: Set<OrderStatus>,
     val orders: List<RepairOrderEntity>,
 )
 
 fun buildOperationalQueues(orders: List<RepairOrderEntity>): List<OperationalQueue> =
-    queueDefinitions.map { (title, statuses) ->
+    queueDefinitions.map { (titleRes, statuses) ->
         OperationalQueue(
-            title = title,
+            titleRes = titleRes,
             statuses = statuses,
             orders = orders.filter { it.status in statuses },
         )
@@ -23,8 +25,8 @@ fun queueFilter(queue: OperationalQueue): OrderFilter = OrderFilter(statuses = q
 
 private val queueDefinitions =
     listOf(
-        "Aperte" to setOf(OrderStatus.OPEN),
-        "In lavorazione / diagnosi" to setOf(OrderStatus.IN_PROGRESS, OrderStatus.DIAGNOSIS),
-        "Risultato / riparazione" to setOf(OrderStatus.RESULT, OrderStatus.REPAIRING),
-        "Pronte" to setOf(OrderStatus.READY_FOR_PICKUP),
+        R.string.queue_open to setOf(OrderStatus.OPEN),
+        R.string.queue_processing to setOf(OrderStatus.IN_PROGRESS, OrderStatus.DIAGNOSIS),
+        R.string.queue_result to setOf(OrderStatus.RESULT, OrderStatus.REPAIRING),
+        R.string.queue_ready to setOf(OrderStatus.READY_FOR_PICKUP),
     )
