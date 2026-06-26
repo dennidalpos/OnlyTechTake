@@ -1,7 +1,7 @@
 <problems>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
-  <line>12</line>
+  <line>14</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.core.demo</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode void setEnabled(boolean enabled)" />
@@ -13,6 +13,262 @@
   <highlighted_element>enabled</highlighted_element>
   <language>kotlin</language>
   <offset>38</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>19</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode java.lang.String getVersionBanner(android.content.Context context)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="context" />
+  </hints>
+  <description>Parameter &lt;code&gt;context&lt;/code&gt; is not used</description>
+  <highlighted_element>context</highlighted_element>
+  <language>kotlin</language>
+  <offset>25</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>21</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode java.lang.String getAdminDisplayName(android.content.Context context)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="context" />
+  </hints>
+  <description>Parameter &lt;code&gt;context&lt;/code&gt; is not used</description>
+  <highlighted_element>context</highlighted_element>
+  <language>kotlin</language>
+  <offset>28</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>23</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode java.lang.String getOperatorNotAvailableMessage(android.content.Context context)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="context" />
+  </hints>
+  <description>Parameter &lt;code&gt;context&lt;/code&gt; is not used</description>
+  <highlighted_element>context</highlighted_element>
+  <language>kotlin</language>
+  <offset>39</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>26</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode java.lang.String getOperatorLimitMessage(android.content.Context context, int limit)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="context" />
+  </hints>
+  <description>Parameter &lt;code&gt;context&lt;/code&gt; is not used</description>
+  <highlighted_element>context</highlighted_element>
+  <language>kotlin</language>
+  <offset>8</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>27</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode java.lang.String getOperatorLimitMessage(android.content.Context context, int limit)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="limit" />
+  </hints>
+  <description>Parameter &lt;code&gt;limit&lt;/code&gt; is not used</description>
+  <highlighted_element>limit</highlighted_element>
+  <language>kotlin</language>
+  <offset>8</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>31</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode java.lang.String getOrderLimitMessage(android.content.Context context, int limit)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="context" />
+  </hints>
+  <description>Parameter &lt;code&gt;context&lt;/code&gt; is not used</description>
+  <highlighted_element>context</highlighted_element>
+  <language>kotlin</language>
+  <offset>8</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>32</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode java.lang.String getOrderLimitMessage(android.content.Context context, int limit)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="limit" />
+  </hints>
+  <description>Parameter &lt;code&gt;limit&lt;/code&gt; is not used</description>
+  <highlighted_element>limit</highlighted_element>
+  <language>kotlin</language>
+  <offset>8</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>35</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode java.lang.String getShowcaseInitializingMessage(android.content.Context context)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="context" />
+  </hints>
+  <description>Parameter &lt;code&gt;context&lt;/code&gt; is not used</description>
+  <highlighted_element>context</highlighted_element>
+  <language>kotlin</language>
+  <offset>39</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>37</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode java.lang.String getShowcasePreparingMessage(android.content.Context context)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="context" />
+  </hints>
+  <description>Parameter &lt;code&gt;context&lt;/code&gt; is not used</description>
+  <highlighted_element>context</highlighted_element>
+  <language>kotlin</language>
+  <offset>36</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>39</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode java.lang.String getDemoActionLabel(android.content.Context context)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="context" />
+  </hints>
+  <description>Parameter &lt;code&gt;context&lt;/code&gt; is not used</description>
+  <highlighted_element>context</highlighted_element>
+  <language>kotlin</language>
+  <offset>27</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>41</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode java.lang.String getShowcaseScenarioLabel(android.content.Context context)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="context" />
+  </hints>
+  <description>Parameter &lt;code&gt;context&lt;/code&gt; is not used</description>
+  <highlighted_element>context</highlighted_element>
+  <language>kotlin</language>
+  <offset>33</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>43</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode java.lang.String getShowcaseWalkthroughLabel(android.content.Context context)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="context" />
+  </hints>
+  <description>Parameter &lt;code&gt;context&lt;/code&gt; is not used</description>
+  <highlighted_element>context</highlighted_element>
+  <language>kotlin</language>
+  <offset>36</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>45</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode java.lang.String getDemoTryCta(android.content.Context context)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="context" />
+  </hints>
+  <description>Parameter &lt;code&gt;context&lt;/code&gt; is not used</description>
+  <highlighted_element>context</highlighted_element>
+  <language>kotlin</language>
+  <offset>22</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>47</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode java.lang.String getDemoProFeaturesLabel(android.content.Context context)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="context" />
+  </hints>
+  <description>Parameter &lt;code&gt;context&lt;/code&gt; is not used</description>
+  <highlighted_element>context</highlighted_element>
+  <language>kotlin</language>
+  <offset>32</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>49</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode java.lang.String getDemoProFeaturesDesc(android.content.Context context)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="context" />
+  </hints>
+  <description>Parameter &lt;code&gt;context&lt;/code&gt; is not used</description>
+  <highlighted_element>context</highlighted_element>
+  <language>kotlin</language>
+  <offset>31</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>51</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode com.onlytechtake.repairapp.domain.workspace.OwnerInfo getShowcaseOwnerInfo(android.content.Context context)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="context" />
+  </hints>
+  <description>Parameter &lt;code&gt;context&lt;/code&gt; is not used</description>
+  <highlighted_element>context</highlighted_element>
+  <language>kotlin</language>
+  <offset>29</offset>
   <length>7</length>
 </problem>
 <problem>
@@ -49,7 +305,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/CustomerDao.kt</file>
-  <line>35</line>
+  <line>36</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.local.dao</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.CustomerDao kotlinx.coroutines.flow.Flow&lt;java.util.List&lt;com.onlytechtake.repairapp.data.local.entities.CustomerEntity&gt;&gt; search(java.lang.String query)" />
@@ -241,7 +497,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/customers/CustomerPanel.kt</file>
-  <line>710</line>
+  <line>721</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.dashboard.customers</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.customers.CustomerPanelKt void CustomerDetailContent(com.onlytechtake.repairapp.data.local.entities.CustomerEntity customer, com.onlytechtake.repairapp.features.dashboard.customers.CustomersViewModel viewModel, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onEdit, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onOrderClick, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onClose)" />
@@ -257,7 +513,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailComponents.kt</file>
-  <line>278</line>
+  <line>282</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailComponentsKt void AppActionPanel(java.lang.String title, androidx.compose.ui.Modifier modifier, androidx.compose.runtime.internal.ComposableFunction1&lt;? super androidx.compose.foundation.layout.ColumnScope,kotlin.Unit&gt; content)" />

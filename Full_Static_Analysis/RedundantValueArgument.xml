@@ -807,7 +807,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/auth/AuthGateScreen.kt</file>
-  <line>493</line>
+  <line>491</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.auth</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateScreenKt void AuthForm(java.lang.String title, java.lang.String subtitle, com.onlytechtake.repairapp.features.auth.AuthFormState formState, androidx.compose.foundation.layout.PaddingValues paddingValues, java.lang.String submitLabel, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onDisplayNameChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onUsernameChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onPasswordChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onConfirmPasswordChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onRecoveryCodeChange, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onSubmit, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onDemoLogin, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onRecovery, boolean showDisplayName, boolean showConfirmPassword, boolean showUsername, boolean showRecoveryCode)" />
@@ -820,7 +820,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/auth/AuthGateScreen.kt</file>
-  <line>504</line>
+  <line>502</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.auth</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateScreenKt void AuthForm(java.lang.String title, java.lang.String subtitle, com.onlytechtake.repairapp.features.auth.AuthFormState formState, androidx.compose.foundation.layout.PaddingValues paddingValues, java.lang.String submitLabel, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onDisplayNameChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onUsernameChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onPasswordChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onConfirmPasswordChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onRecoveryCodeChange, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onSubmit, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onDemoLogin, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onRecovery, boolean showDisplayName, boolean showConfirmPassword, boolean showUsername, boolean showRecoveryCode)" />
@@ -833,7 +833,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/auth/AuthGateScreen.kt</file>
-  <line>518</line>
+  <line>516</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.auth</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateScreenKt void AuthForm(java.lang.String title, java.lang.String subtitle, com.onlytechtake.repairapp.features.auth.AuthFormState formState, androidx.compose.foundation.layout.PaddingValues paddingValues, java.lang.String submitLabel, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onDisplayNameChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onUsernameChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onPasswordChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onConfirmPasswordChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onRecoveryCodeChange, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onSubmit, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onDemoLogin, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onRecovery, boolean showDisplayName, boolean showConfirmPassword, boolean showUsername, boolean showRecoveryCode)" />
@@ -846,7 +846,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/auth/AuthGateScreen.kt</file>
-  <line>529</line>
+  <line>527</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.auth</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateScreenKt void AuthForm(java.lang.String title, java.lang.String subtitle, com.onlytechtake.repairapp.features.auth.AuthFormState formState, androidx.compose.foundation.layout.PaddingValues paddingValues, java.lang.String submitLabel, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onDisplayNameChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onUsernameChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onPasswordChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onConfirmPasswordChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onRecoveryCodeChange, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onSubmit, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onDemoLogin, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onRecovery, boolean showDisplayName, boolean showConfirmPassword, boolean showUsername, boolean showRecoveryCode)" />
@@ -859,7 +859,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/auth/AuthGateScreen.kt</file>
-  <line>557</line>
+  <line>555</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.auth</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateScreenKt void AuthForm(java.lang.String title, java.lang.String subtitle, com.onlytechtake.repairapp.features.auth.AuthFormState formState, androidx.compose.foundation.layout.PaddingValues paddingValues, java.lang.String submitLabel, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onDisplayNameChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onUsernameChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onPasswordChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onConfirmPasswordChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onRecoveryCodeChange, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onSubmit, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onDemoLogin, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onRecovery, boolean showDisplayName, boolean showConfirmPassword, boolean showUsername, boolean showRecoveryCode)" />
@@ -937,7 +937,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/customers/CustomerPanel.kt</file>
-  <line>454</line>
+  <line>465</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.dashboard.customers</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.customers.CustomerPanelKt void CustomerListContent(com.onlytechtake.repairapp.features.dashboard.customers.CustomersViewModel viewModel, kotlin.jvm.functions.Function1&lt;? super com.onlytechtake.repairapp.data.local.entities.CustomerEntity,kotlin.Unit&gt; onCustomerClick, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onNewCustomer)" />
@@ -1080,10 +1080,10 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/QuickActionsPanel.kt</file>
-  <line>273</line>
+  <line>282</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.dashboard.neworder</package>
-  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.neworder.QuickActionsPanelKt void QuickActions(com.onlytechtake.repairapp.features.dashboard.neworder.NewOrderViewModel viewModel, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onOpenConfig, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onClose)" />
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.neworder.QuickActionsPanelKt void QuickActions(com.onlytechtake.repairapp.features.dashboard.neworder.NewOrderViewModel viewModel, com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel sharedViewModel, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onOpenConfig, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onClose)" />
   <problem_class id="RedundantValueArgument" severity="WEAK WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Redundant value argument</problem_class>
   <description>Value argument matches the default value of parameter 'singleLine'</description>
   <highlighted_element>singleLine = true</highlighted_element>
@@ -1106,7 +1106,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/orders/OrdersPanel.kt</file>
-  <line>226</line>
+  <line>234</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.dashboard.orders</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.orders.OrdersPanelKt void OrdersListContent(com.onlytechtake.repairapp.features.dashboard.orders.OrdersViewModel viewModel, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onOrderClick, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onNewOrder, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onOpenBackupSettings)" />
@@ -1119,7 +1119,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/BackupSettings.kt</file>
-  <line>185</line>
+  <line>179</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.dashboard.settings</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.settings.BackupSettingsKt void BackupSettings(com.onlytechtake.repairapp.features.dashboard.settings.SettingsViewModel viewModel, boolean isAdmin, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onBackupRestored, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onResetComplete, kotlin.jvm.functions.Function3&lt;? super java.lang.String,? super java.lang.String,? super kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt;,kotlin.Unit&gt; onRequestConfirm, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onBack)" />

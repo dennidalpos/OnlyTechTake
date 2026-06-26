@@ -109,13 +109,13 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/AdminUserRepository.kt</file>
-  <line>20</line>
+  <line>21</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.AdminUserRepository" />
   <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
   <hints />
-  <description>Class 'AdminUserRepository' has too many dependencies (12 &gt; 10)</description>
+  <description>Class 'AdminUserRepository' has too many dependencies (13 &gt; 10)</description>
   <highlighted_element />
   <language />
 </problem>
@@ -217,13 +217,13 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCase.kt</file>
-  <line>17</line>
+  <line>18</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.domain.workspace</package>
   <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase" />
   <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
   <hints />
-  <description>Class 'CreateIntakeOrderUseCase' has too many dependencies (12 &gt; 10)</description>
+  <description>Class 'CreateIntakeOrderUseCase' has too many dependencies (13 &gt; 10)</description>
   <highlighted_element />
   <language />
 </problem>
@@ -235,7 +235,7 @@
   <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase" />
   <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
   <hints />
-  <description>Class 'GenerateOrderStatusPdfUseCase' has too many dependencies (18 &gt; 10)</description>
+  <description>Class 'GenerateOrderStatusPdfUseCase' has too many dependencies (19 &gt; 10)</description>
   <highlighted_element />
   <language />
 </problem>

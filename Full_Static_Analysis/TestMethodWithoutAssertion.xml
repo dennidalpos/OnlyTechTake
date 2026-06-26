@@ -91,19 +91,6 @@
   <length>26</length>
 </problem>
 <problem>
-  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/OperatorIntakeDemoScreenshotTest.kt</file>
-  <line>36</line>
-  <module>OnlyTechTakeRepairApp.app.androidTest</module>
-  <package>com.onlytechtake.repairapp.demo</package>
-  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.OperatorIntakeDemoScreenshotTest void capturesOperatorIntakeDemo()" />
-  <problem_class id="TestMethodWithoutAssertion" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Test method without assertions</problem_class>
-  <description>Test method &lt;code&gt;capturesOperatorIntakeDemo()&lt;/code&gt; contains no assertions</description>
-  <highlighted_element>capturesOperatorIntakeDemo</highlighted_element>
-  <language>kotlin</language>
-  <offset>8</offset>
-  <length>26</length>
-</problem>
-<problem>
   <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/SeedDemoDataTest.kt</file>
   <line>19</line>
   <module>OnlyTechTakeRepairApp.app.androidTest</module>

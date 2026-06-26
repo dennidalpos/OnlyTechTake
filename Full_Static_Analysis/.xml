@@ -1429,7 +1429,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/DaoProjections.kt</file>
-  <line>48</line>
+  <line>36</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.local.dao</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.OrderListItemProjection OrderListItemProjection(com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity order, com.onlytechtake.repairapp.data.local.entities.CustomerEntity customer, int imagesCount, int documentsCount, int signaturesCount, int finalPhotosCount)" />
@@ -1956,7 +1956,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/DashboardScreen.kt</file>
-  <line>445</line>
+  <line>454</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.dashboard</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.DashboardScreenKt void DashboardScreenPreview()" />
@@ -1973,7 +1973,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/customers/CustomerPanel.kt</file>
-  <line>936</line>
+  <line>947</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.dashboard.customers</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.customers.CustomerPanelKt void CustomerPanelPreview()" />
@@ -1990,7 +1990,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/home/HomePanel.kt</file>
-  <line>264</line>
+  <line>269</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.dashboard.home</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.home.HomePanelKt void HomePanelPreview()" />
@@ -3231,7 +3231,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriterTest.kt</file>
-  <line>53</line>
+  <line>54</line>
   <module>OnlyTechTakeRepairApp.app.unitTest</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderExportXlsxWriterTest void writesValidXlsxEntriesAndEscapesCellText()" />

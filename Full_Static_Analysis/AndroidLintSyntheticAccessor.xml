@@ -211,7 +211,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupRepository.kt</file>
-  <line>105</line>
+  <line>86</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupRepository.kt" />
@@ -225,7 +225,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupRepository.kt</file>
-  <line>110</line>
+  <line>91</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupRepository.kt" />
@@ -235,20 +235,6 @@
   <highlighted_element>zip.putTextEntry</highlighted_element>
   <language>kotlin</language>
   <offset>24</offset>
-  <length>16</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
-  <line>44</line>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <package>com.onlytechtake.repairapp.data.repositories</package>
-  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt" />
-  <problem_class id="AndroidLintSyntheticAccessor" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Synthetic Accessor</problem_class>
-  <hints />
-  <description>&lt;html&gt;Access to &lt;code&gt;private&lt;/code&gt; method &lt;code&gt;putTextEntry&lt;/code&gt; of class &lt;code&gt;OrderExportXlsxWriterKt&lt;/code&gt; requires synthetic accessor&lt;/html&gt;</description>
-  <highlighted_element>zip.putTextEntry</highlighted_element>
-  <language>kotlin</language>
-  <offset>12</offset>
   <length>16</length>
 </problem>
 <problem>
@@ -295,6 +281,20 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
+  <line>47</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt" />
+  <problem_class id="AndroidLintSyntheticAccessor" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Synthetic Accessor</problem_class>
+  <hints />
+  <description>&lt;html&gt;Access to &lt;code&gt;private&lt;/code&gt; method &lt;code&gt;workbookXml&lt;/code&gt; of class &lt;code&gt;OrderExportXlsxWriterKt&lt;/code&gt; requires synthetic accessor&lt;/html&gt;</description>
+  <highlighted_element>workbookXml</highlighted_element>
+  <language>kotlin</language>
+  <offset>48</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
   <line>48</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
@@ -309,7 +309,21 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
-  <line>50</line>
+  <line>49</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt" />
+  <problem_class id="AndroidLintSyntheticAccessor" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Synthetic Accessor</problem_class>
+  <hints />
+  <description>&lt;html&gt;Access to &lt;code&gt;private&lt;/code&gt; method &lt;code&gt;putTextEntry&lt;/code&gt; of class &lt;code&gt;OrderExportXlsxWriterKt&lt;/code&gt; requires synthetic accessor&lt;/html&gt;</description>
+  <highlighted_element>zip.putTextEntry</highlighted_element>
+  <language>kotlin</language>
+  <offset>12</offset>
+  <length>16</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
+  <line>51</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt" />
@@ -323,7 +337,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
-  <line>61</line>
+  <line>62</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt" />
@@ -334,5 +348,19 @@
   <language>kotlin</language>
   <offset>21</offset>
   <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
+  <line>91</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt" />
+  <problem_class id="AndroidLintSyntheticAccessor" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Synthetic Accessor</problem_class>
+  <hints />
+  <description>&lt;html&gt;Access to &lt;code&gt;private&lt;/code&gt; method &lt;code&gt;xmlEscaped&lt;/code&gt; of class &lt;code&gt;OrderExportXlsxWriterKt&lt;/code&gt; requires synthetic accessor&lt;/html&gt;</description>
+  <highlighted_element>value.xmlEscaped</highlighted_element>
+  <language>kotlin</language>
+  <offset>25</offset>
+  <length>16</length>
 </problem>
 </problems>

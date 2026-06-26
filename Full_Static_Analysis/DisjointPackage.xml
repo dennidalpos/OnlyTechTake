@@ -58,7 +58,7 @@
   <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.data.local.dao" />
   <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
   <hints />
-  <description>Package com.onlytechtake.repairapp.data.local.dao can be decomposed into 19 independent packages</description>
+  <description>Package com.onlytechtake.repairapp.data.local.dao can be decomposed into 17 independent packages</description>
   <highlighted_element />
   <language />
 </problem>

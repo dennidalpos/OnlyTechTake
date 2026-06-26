@@ -2224,7 +2224,20 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/AdminUserRepositoryTest.kt</file>
-  <line>91</line>
+  <line>90</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.AdminUserRepositoryTest void createOperatorRespectsFlavorLimits()" />
+  <problem_class id="MigrateAssertToMatcherAssert" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">JUnit assertion can be 'assertThat()' call</problem_class>
+  <description>Assert expression &lt;code&gt;assertTrue&lt;/code&gt; can be replaced with 'assertThat()' call</description>
+  <highlighted_element>assertTrue</highlighted_element>
+  <language>kotlin</language>
+  <offset>16</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/AdminUserRepositoryTest.kt</file>
+  <line>93</line>
   <module>OnlyTechTakeRepairApp.app.unitTest</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.AdminUserRepositoryTest void createOperatorRespectsFlavorLimits()" />
@@ -2328,7 +2341,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/BackupRepositoryTest.kt</file>
-  <line>154</line>
+  <line>159</line>
   <module>OnlyTechTakeRepairApp.app.unitTest</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.BackupRepositoryTest void restoreWithoutCanonicalAppMediaClearsDestinationOnly()" />
@@ -2341,7 +2354,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/BackupRepositoryTest.kt</file>
-  <line>155</line>
+  <line>160</line>
   <module>OnlyTechTakeRepairApp.app.unitTest</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.BackupRepositoryTest void restoreWithoutCanonicalAppMediaClearsDestinationOnly()" />
@@ -2627,19 +2640,6 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriterTest.kt</file>
-  <line>84</line>
-  <module>OnlyTechTakeRepairApp.app.unitTest</module>
-  <package>com.onlytechtake.repairapp.data.repositories</package>
-  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderExportXlsxWriterTest void writesValidXlsxEntriesAndEscapesCellText()" />
-  <problem_class id="MigrateAssertToMatcherAssert" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">JUnit assertion can be 'assertThat()' call</problem_class>
-  <description>Assert expression &lt;code&gt;assertNotNull&lt;/code&gt; can be replaced with 'assertThat()' call</description>
-  <highlighted_element>assertNotNull</highlighted_element>
-  <language>kotlin</language>
-  <offset>8</offset>
-  <length>13</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriterTest.kt</file>
   <line>85</line>
   <module>OnlyTechTakeRepairApp.app.unitTest</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
@@ -2679,7 +2679,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriterTest.kt</file>
-  <line>89</line>
+  <line>88</line>
   <module>OnlyTechTakeRepairApp.app.unitTest</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderExportXlsxWriterTest void writesValidXlsxEntriesAndEscapesCellText()" />
@@ -2697,11 +2697,11 @@
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderExportXlsxWriterTest void writesValidXlsxEntriesAndEscapesCellText()" />
   <problem_class id="MigrateAssertToMatcherAssert" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">JUnit assertion can be 'assertThat()' call</problem_class>
-  <description>Assert expression &lt;code&gt;assertTrue&lt;/code&gt; can be replaced with 'assertThat()' call</description>
-  <highlighted_element>assertTrue</highlighted_element>
+  <description>Assert expression &lt;code&gt;assertNotNull&lt;/code&gt; can be replaced with 'assertThat()' call</description>
+  <highlighted_element>assertNotNull</highlighted_element>
   <language>kotlin</language>
   <offset>8</offset>
-  <length>10</length>
+  <length>13</length>
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriterTest.kt</file>
@@ -2809,7 +2809,20 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriterTest.kt</file>
-  <line>110</line>
+  <line>99</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderExportXlsxWriterTest void writesValidXlsxEntriesAndEscapesCellText()" />
+  <problem_class id="MigrateAssertToMatcherAssert" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">JUnit assertion can be 'assertThat()' call</problem_class>
+  <description>Assert expression &lt;code&gt;assertTrue&lt;/code&gt; can be replaced with 'assertThat()' call</description>
+  <highlighted_element>assertTrue</highlighted_element>
+  <language>kotlin</language>
+  <offset>8</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriterTest.kt</file>
+  <line>111</line>
   <module>OnlyTechTakeRepairApp.app.unitTest</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderExportXlsxWriterTest java.util.Map&lt;java.lang.String,java.lang.String&gt; unzip(byte[] bytes)" />

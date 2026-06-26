@@ -552,6 +552,258 @@
   <length>0</length>
 </problem>
 <problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>3</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>95</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>7</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>97</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>10</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>0</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>10</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>97</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>11</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>99</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>14</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>100</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>17</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>0</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>28</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>0</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>31</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>0</offset>
+  <length>3</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>32</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>0</offset>
+  <length>3</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>34</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>0</offset>
+  <length>3</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>34</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>95</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>36</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>0</offset>
+  <length>3</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>37</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>0</offset>
+  <length>3</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>38</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>0</offset>
+  <length>3</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>40</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>0</offset>
+  <length>3</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>41</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>0</offset>
+  <length>3</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>42</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>0</offset>
+  <length>3</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>47</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>0</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>53</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>0</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>55</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>Markdown</language>
+  <offset>97</offset>
+  <length>1</length>
+</problem>
+<problem>
   <file>file://$PROJECT_DIR$/README.md</file>
   <line>22</line>
   <module>OnlyTechTakeRepairApp</module>
@@ -995,7 +1247,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupArchive.kt</file>
-  <line>112</line>
+  <line>122</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.BackupArchive boolean isSupportedAppFile(java.lang.String relativePath)" />
@@ -1086,6 +1338,19 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowCommands.kt</file>
+  <line>445</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderWorkflowCommands java.lang.Object requireWritableOrder(com.onlytechtake.repairapp.domain.auth.AuthenticatedUser actor, java.lang.String orderId, kotlin.coroutines.Continuation&lt;? super com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity&gt; $completion)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>19</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowCommands.kt</file>
   <line>454</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
@@ -1150,8 +1415,21 @@
   <length>1</length>
 </problem>
 <problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/services/DiagnosticLogService.kt</file>
+  <line>43</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.services</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.services.DiagnosticLogService java.io.File collectAndPrepareZip(java.lang.String password)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>39</offset>
+  <length>1</length>
+</problem>
+<problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/backup/BackupReminderPolicy.kt</file>
-  <line>55</line>
+  <line>56</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.domain.backup</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy com.onlytechtake.repairapp.domain.backup.BackupReminderSettings recordFailure(com.onlytechtake.repairapp.domain.backup.BackupReminderSettings settings)" />
@@ -1160,6 +1438,123 @@
   <highlighted_element />
   <language>kotlin</language>
   <offset>81</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCase.kt</file>
+  <line>28</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase java.lang.String getDemoLimitErrorMessage()" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>44</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCase.kt</file>
+  <line>67</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase java.lang.Object execute(com.onlytechtake.repairapp.domain.auth.AuthenticatedUser actor, com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput input, java.util.List&lt;com.onlytechtake.repairapp.data.repositories.StagedOrderMedia&gt; stagedMedia, java.lang.String signerName, boolean privacyAccepted, boolean termsAccepted, android.graphics.Bitmap signatureBitmap, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends com.onlytechtake.repairapp.domain.workspace.IntakeOrderCreationResult&gt;&gt; $completion)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>81</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCase.kt</file>
+  <line>67</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase java.lang.Object execute(com.onlytechtake.repairapp.domain.auth.AuthenticatedUser actor, com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput input, java.util.List&lt;com.onlytechtake.repairapp.data.repositories.StagedOrderMedia&gt; stagedMedia, java.lang.String signerName, boolean privacyAccepted, boolean termsAccepted, android.graphics.Bitmap signatureBitmap, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends com.onlytechtake.repairapp.domain.workspace.IntakeOrderCreationResult&gt;&gt; $completion)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>100</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCase.kt</file>
+  <line>67</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase java.lang.Object execute(com.onlytechtake.repairapp.domain.auth.AuthenticatedUser actor, com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput input, java.util.List&lt;com.onlytechtake.repairapp.data.repositories.StagedOrderMedia&gt; stagedMedia, java.lang.String signerName, boolean privacyAccepted, boolean termsAccepted, android.graphics.Bitmap signatureBitmap, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends com.onlytechtake.repairapp.domain.workspace.IntakeOrderCreationResult&gt;&gt; $completion)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>132</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCase.kt</file>
+  <line>67</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase java.lang.Object execute(com.onlytechtake.repairapp.domain.auth.AuthenticatedUser actor, com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput input, java.util.List&lt;com.onlytechtake.repairapp.data.repositories.StagedOrderMedia&gt; stagedMedia, java.lang.String signerName, boolean privacyAccepted, boolean termsAccepted, android.graphics.Bitmap signatureBitmap, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends com.onlytechtake.repairapp.domain.workspace.IntakeOrderCreationResult&gt;&gt; $completion)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>133</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCase.kt</file>
+  <line>79</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase java.lang.Object execute(com.onlytechtake.repairapp.domain.auth.AuthenticatedUser actor, com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput input, java.util.List&lt;com.onlytechtake.repairapp.data.repositories.StagedOrderMedia&gt; stagedMedia, java.lang.String signerName, boolean privacyAccepted, boolean termsAccepted, android.graphics.Bitmap signatureBitmap, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends com.onlytechtake.repairapp.domain.workspace.IntakeOrderCreationResult&gt;&gt; $completion)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>97</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCase.kt</file>
+  <line>79</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase java.lang.Object execute(com.onlytechtake.repairapp.domain.auth.AuthenticatedUser actor, com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput input, java.util.List&lt;com.onlytechtake.repairapp.data.repositories.StagedOrderMedia&gt; stagedMedia, java.lang.String signerName, boolean privacyAccepted, boolean termsAccepted, android.graphics.Bitmap signatureBitmap, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends com.onlytechtake.repairapp.domain.workspace.IntakeOrderCreationResult&gt;&gt; $completion)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>116</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCase.kt</file>
+  <line>79</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase java.lang.Object execute(com.onlytechtake.repairapp.domain.auth.AuthenticatedUser actor, com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput input, java.util.List&lt;com.onlytechtake.repairapp.data.repositories.StagedOrderMedia&gt; stagedMedia, java.lang.String signerName, boolean privacyAccepted, boolean termsAccepted, android.graphics.Bitmap signatureBitmap, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends com.onlytechtake.repairapp.domain.workspace.IntakeOrderCreationResult&gt;&gt; $completion)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>148</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCase.kt</file>
+  <line>79</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase java.lang.Object execute(com.onlytechtake.repairapp.domain.auth.AuthenticatedUser actor, com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput input, java.util.List&lt;com.onlytechtake.repairapp.data.repositories.StagedOrderMedia&gt; stagedMedia, java.lang.String signerName, boolean privacyAccepted, boolean termsAccepted, android.graphics.Bitmap signatureBitmap, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends com.onlytechtake.repairapp.domain.workspace.IntakeOrderCreationResult&gt;&gt; $completion)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>149</offset>
   <length>1</length>
 </problem>
 <problem>
@@ -1177,7 +1572,46 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/OrderStatusWorkflow.kt</file>
-  <line>84</line>
+  <line>53</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.workspace.OrderStatusWorkflowKt com.onlytechtake.repairapp.core.templates.TemplateAnchor statusTemplateAnchor(com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity order)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>0</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/OrderStatusWorkflow.kt</file>
+  <line>60</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.workspace.OrderStatusWorkflowKt com.onlytechtake.repairapp.core.templates.TemplateAnchor statusTemplateAnchor(com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity order)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>0</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/OrderStatusWorkflow.kt</file>
+  <line>87</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.workspace.OrderStatusWorkflowKt java.lang.String nextActionLabel(android.content.Context context, com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity order)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>0</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/OrderStatusWorkflow.kt</file>
+  <line>90</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.domain.workspace</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.workspace.OrderStatusWorkflowKt boolean shouldShowDiagnosisEstimate(com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome outcome)" />
@@ -1212,6 +1646,19 @@
   <highlighted_element />
   <language>kotlin</language>
   <offset>65</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/auth/AuthGateScreen.kt</file>
+  <line>617</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.auth</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateScreenKt void OwnerWizardScreen(com.onlytechtake.repairapp.domain.workspace.OwnerInfo ownerInfo, kotlin.jvm.functions.Function1&lt;? super com.onlytechtake.repairapp.domain.workspace.OwnerInfo,kotlin.Unit&gt; onSubmit)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>22</offset>
   <length>1</length>
 </problem>
 <problem>
@@ -1268,7 +1715,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailComponents.kt</file>
-  <line>111</line>
+  <line>110</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailComponentsKt void OrderHeader(com.onlytechtake.repairapp.domain.workspace.OrderDetail detail, android.content.Context context)" />
@@ -1278,6 +1725,253 @@
   <language>kotlin</language>
   <offset>0</offset>
   <length>28</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailDocuments.kt</file>
+  <line>45</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailDocumentsKt void OrderDocumentSection(boolean isGeneratingPdf, java.lang.String pdfError, java.util.List&lt;com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity&gt; documents, boolean hasSignatures, kotlin.jvm.functions.Function1&lt;? super java.lang.Boolean,kotlin.Unit&gt; onGeneratePdf, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onShareDocument, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onDeleteDocument, kotlin.jvm.functions.Function3&lt;? super java.lang.String,? super java.lang.String,? super kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt;,kotlin.Unit&gt; requestConfirm)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>52</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailDocuments.kt</file>
+  <line>45</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailDocumentsKt void OrderDocumentSection(boolean isGeneratingPdf, java.lang.String pdfError, java.util.List&lt;com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity&gt; documents, boolean hasSignatures, kotlin.jvm.functions.Function1&lt;? super java.lang.Boolean,kotlin.Unit&gt; onGeneratePdf, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onShareDocument, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onDeleteDocument, kotlin.jvm.functions.Function3&lt;? super java.lang.String,? super java.lang.String,? super kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt;,kotlin.Unit&gt; requestConfirm)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>89</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailDocuments.kt</file>
+  <line>45</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailDocumentsKt void OrderDocumentSection(boolean isGeneratingPdf, java.lang.String pdfError, java.util.List&lt;com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity&gt; documents, boolean hasSignatures, kotlin.jvm.functions.Function1&lt;? super java.lang.Boolean,kotlin.Unit&gt; onGeneratePdf, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onShareDocument, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onDeleteDocument, kotlin.jvm.functions.Function3&lt;? super java.lang.String,? super java.lang.String,? super kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt;,kotlin.Unit&gt; requestConfirm)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>129</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailDocuments.kt</file>
+  <line>46</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailDocumentsKt void OrderDocumentSection(boolean isGeneratingPdf, java.lang.String pdfError, java.util.List&lt;com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity&gt; documents, boolean hasSignatures, kotlin.jvm.functions.Function1&lt;? super java.lang.Boolean,kotlin.Unit&gt; onGeneratePdf, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onShareDocument, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onDeleteDocument, kotlin.jvm.functions.Function3&lt;? super java.lang.String,? super java.lang.String,? super kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt;,kotlin.Unit&gt; requestConfirm)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>35</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailWorkspace.kt</file>
+  <line>82</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspaceKt void OrderDetailWorkspace(com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel viewModel, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onBack)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>49</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailWorkspace.kt</file>
+  <line>82</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspaceKt void OrderDetailWorkspace(com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel viewModel, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onBack)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>86</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailWorkspace.kt</file>
+  <line>82</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspaceKt void OrderDetailWorkspace(com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel viewModel, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onBack)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>130</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailWorkspace.kt</file>
+  <line>83</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspaceKt void OrderDetailWorkspace(com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel viewModel, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onBack)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>48</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailWorkspace.kt</file>
+  <line>83</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspaceKt void OrderDetailWorkspace(com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel viewModel, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onBack)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>84</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailWorkspace.kt</file>
+  <line>83</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspaceKt void OrderDetailWorkspace(com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel viewModel, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onBack)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>128</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderPhotoSection.kt</file>
+  <line>178</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderPhotoSectionKt void OrderPhotoSection(com.onlytechtake.repairapp.domain.workspace.OrderDetail detail, com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel viewModel)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>35</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderPhotoSection.kt</file>
+  <line>178</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderPhotoSectionKt void OrderPhotoSection(com.onlytechtake.repairapp.domain.workspace.OrderDetail detail, com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel viewModel)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>72</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderPhotoSection.kt</file>
+  <line>178</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderPhotoSectionKt void OrderPhotoSection(com.onlytechtake.repairapp.domain.workspace.OrderDetail detail, com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel viewModel)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>109</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderSignatureSection.kt</file>
+  <line>120</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderSignatureSectionKt void OrderSignatureSection(com.onlytechtake.repairapp.domain.workspace.OrderDetail detail, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onDeleteSignature)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>35</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderSignatureSection.kt</file>
+  <line>120</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderSignatureSectionKt void OrderSignatureSection(com.onlytechtake.repairapp.domain.workspace.OrderDetail detail, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onDeleteSignature)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>72</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderSignatureSection.kt</file>
+  <line>120</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderSignatureSectionKt void OrderSignatureSection(com.onlytechtake.repairapp.domain.workspace.OrderDetail detail, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onDeleteSignature)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>113</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderSignatureSection.kt</file>
+  <line>121</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderSignatureSectionKt void OrderSignatureSection(com.onlytechtake.repairapp.domain.workspace.OrderDetail detail, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onDeleteSignature)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>34</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderSignatureSection.kt</file>
+  <line>121</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderSignatureSectionKt void OrderSignatureSection(com.onlytechtake.repairapp.domain.workspace.OrderDetail detail, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onDeleteSignature)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>70</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderSignatureSection.kt</file>
+  <line>121</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderSignatureSectionKt void OrderSignatureSection(com.onlytechtake.repairapp.domain.workspace.OrderDetail detail, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onDeleteSignature)" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>111</offset>
+  <length>0</length>
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/IntakeStepperLogic.kt</file>
@@ -1307,7 +2001,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/orders/OrdersPanel.kt</file>
-  <line>502</line>
+  <line>510</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.dashboard.orders</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.orders.OrdersPanelKt boolean hasActiveFilter(com.onlytechtake.repairapp.domain.workspace.OrderFilter $this$hasActiveFilter)" />
@@ -1332,8 +2026,21 @@
   <length>24</length>
 </problem>
 <problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/SettingsDelegates.kt</file>
+  <line>256</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.settings</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.settings.DiagnosticSettingsDelegate void shareLogs()" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>26</offset>
+  <length>1</length>
+</problem>
+<problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/SettingsViewModel.kt</file>
-  <line>235</line>
+  <line>236</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.dashboard.settings</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.settings.SettingsViewModel void setBackupReminderEnabled(boolean enabled)" />
@@ -1346,7 +2053,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/SettingsViewModel.kt</file>
-  <line>237</line>
+  <line>238</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.dashboard.settings</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.settings.SettingsViewModel void setBackupReminderIntervalDays(int days)" />
@@ -1359,7 +2066,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/SettingsViewModel.kt</file>
-  <line>239</line>
+  <line>240</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.dashboard.settings</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.settings.SettingsViewModel void setBackupEncryptionEnabled(boolean enabled)" />
@@ -1372,7 +2079,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/SettingsViewModel.kt</file>
-  <line>241</line>
+  <line>242</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.dashboard.settings</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.settings.SettingsViewModel void setBackupEncryptionPassword(java.lang.String password)" />
@@ -1385,7 +2092,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/SettingsViewModel.kt</file>
-  <line>243</line>
+  <line>244</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.dashboard.settings</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.settings.SettingsViewModel void setInactivityTimeoutMinutes(int minutes)" />
@@ -1424,7 +2131,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/workspace/SharedWorkspaceViewModel.kt</file>
-  <line>33</line>
+  <line>40</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.workspace</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel.Factory T create(java.lang.Class&lt;T&gt; modelClass)" />
@@ -1434,6 +2141,120 @@
   <language>kotlin</language>
   <offset>70</offset>
   <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>215</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>XML</language>
+  <offset>0</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>777</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>XML</language>
+  <offset>0</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>841</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>XML</language>
+  <offset>0</offset>
+  <length>3</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/BackupRepositoryTest.kt</file>
+  <line>71</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.BackupRepositoryTest void restoreAcceptsCanonicalAppMedia()" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>21</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/BackupRepositoryTest.kt</file>
+  <line>71</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.BackupRepositoryTest void restoreAcceptsCanonicalAppMedia()" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>29</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/BackupRepositoryTest.kt</file>
+  <line>71</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.BackupRepositoryTest void restoreAcceptsCanonicalAppMedia()" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>101</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/BackupRepositoryTest.kt</file>
+  <line>72</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.BackupRepositoryTest void restoreAcceptsCanonicalAppMedia()" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>21</offset>
+  <length>0</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/BackupRepositoryTest.kt</file>
+  <line>72</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.BackupRepositoryTest void restoreAcceptsCanonicalAppMedia()" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Incorrect whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>33</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/BackupRepositoryTest.kt</file>
+  <line>72</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.BackupRepositoryTest void restoreAcceptsCanonicalAppMedia()" />
+  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
+  <description>Missing whitespace</description>
+  <highlighted_element />
+  <language>kotlin</language>
+  <offset>108</offset>
+  <length>0</length>
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailViewModelTest.kt</file>
@@ -1460,71 +2281,6 @@
   <language>kotlin</language>
   <offset>63</offset>
   <length>1</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/build.gradle.kts</file>
-  <line>59</line>
-  <module>OnlyTechTakeRepairApp</module>
-  <package>&lt;default&gt;</package>
-  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/build.gradle.kts" />
-  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
-  <description>Incorrect whitespace</description>
-  <highlighted_element />
-  <language>kotlin</language>
-  <offset>0</offset>
-  <length>16</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/build.gradle.kts</file>
-  <line>64</line>
-  <module>OnlyTechTakeRepairApp</module>
-  <package>&lt;default&gt;</package>
-  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/build.gradle.kts" />
-  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
-  <description>Incorrect whitespace</description>
-  <highlighted_element />
-  <language>kotlin</language>
-  <offset>0</offset>
-  <length>16</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/build.gradle.kts</file>
-  <line>71</line>
-  <module>OnlyTechTakeRepairApp</module>
-  <package>&lt;default&gt;</package>
-  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/build.gradle.kts" />
-  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
-  <description>Incorrect whitespace</description>
-  <highlighted_element />
-  <language>kotlin</language>
-  <offset>0</offset>
-  <length>16</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/build.gradle.kts</file>
-  <line>78</line>
-  <module>OnlyTechTakeRepairApp</module>
-  <package>&lt;default&gt;</package>
-  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/build.gradle.kts" />
-  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
-  <description>Incorrect whitespace</description>
-  <highlighted_element />
-  <language>kotlin</language>
-  <offset>0</offset>
-  <length>16</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/build.gradle.kts</file>
-  <line>82</line>
-  <module>OnlyTechTakeRepairApp</module>
-  <package>&lt;default&gt;</package>
-  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/build.gradle.kts" />
-  <problem_class id="IncorrectFormatting" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Incorrect formatting</problem_class>
-  <description>Incorrect whitespace</description>
-  <highlighted_element />
-  <language>kotlin</language>
-  <offset>0</offset>
-  <length>24</length>
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/demo/assets/profiles/operator-intake.asset.json</file>

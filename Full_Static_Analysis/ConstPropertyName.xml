@@ -1,5 +1,18 @@
 <problems>
 <problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode isEnabled" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;isEnabled&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>isEnabled</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>9</length>
+</problem>
+<problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
   <line>4</line>
   <module>OnlyTechTakeRepairApp.app.main</module>

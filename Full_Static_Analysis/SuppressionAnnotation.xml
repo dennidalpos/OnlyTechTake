@@ -14,7 +14,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
-  <line>12</line>
+  <line>14</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.core.demo</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode void setEnabled(boolean enabled)" />
@@ -144,7 +144,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailComponents.kt</file>
-  <line>278</line>
+  <line>282</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailComponentsKt void AppActionPanel(java.lang.String title, androidx.compose.ui.Modifier modifier, androidx.compose.runtime.internal.ComposableFunction1&lt;? super androidx.compose.foundation.layout.ColumnScope,kotlin.Unit&gt; content)" />
@@ -261,7 +261,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/SettingsViewModel.kt</file>
-  <line>341</line>
+  <line>340</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.dashboard.settings</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.settings.SettingsViewModel.Factory T create(java.lang.Class&lt;T&gt; modelClass)" />
@@ -274,7 +274,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/workspace/SharedWorkspaceViewModel.kt</file>
-  <line>15</line>
+  <line>22</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.workspace</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel void showMessage(java.lang.String text, boolean isError)" />
@@ -287,7 +287,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/workspace/SharedWorkspaceViewModel.kt</file>
-  <line>32</line>
+  <line>39</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.workspace</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel.Factory T create(java.lang.Class&lt;T&gt; modelClass)" />

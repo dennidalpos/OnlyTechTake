@@ -241,7 +241,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
-  <line>72</line>
+  <line>71</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.local.entities</package>
   <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType" />
@@ -253,7 +253,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
-  <line>113</line>
+  <line>112</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.local.entities</package>
   <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.UserPermission" />

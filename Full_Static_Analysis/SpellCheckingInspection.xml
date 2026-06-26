@@ -37,31 +37,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
-  <line>236</line>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
-  <description>Typo: In word 'zenbook'</description>
-  <highlighted_element>zenbook</highlighted_element>
-  <language>XML</language>
-  <offset>36</offset>
-  <length>7</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
-  <line>243</line>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
-  <description>Typo: In word 'dualsense'</description>
-  <highlighted_element>dualsense</highlighted_element>
-  <language>XML</language>
-  <offset>31</offset>
-  <length>9</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
-  <line>792</line>
+  <line>686</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
   <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
@@ -70,6 +46,30 @@
   <language>XML</language>
   <offset>40</offset>
   <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/showcase/res/values/strings.xml</file>
+  <line>27</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/showcase/res/values/strings.xml" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'zenbook'</description>
+  <highlighted_element>zenbook</highlighted_element>
+  <language>XML</language>
+  <offset>36</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/showcase/res/values/strings.xml</file>
+  <line>34</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/showcase/res/values/strings.xml" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'dualsense'</description>
+  <highlighted_element>dualsense</highlighted_element>
+  <language>XML</language>
+  <offset>31</offset>
+  <length>9</length>
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/gradlew.bat</file>

@@ -13,7 +13,7 @@
   <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.data.local.dao" />
   <problem_class id="PackageWithTooManyClasses" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with too many classes</problem_class>
   <hints />
-  <description>Package 'com.onlytechtake.repairapp.data.local.dao' contains too many classes (68 &gt; 50)</description>
+  <description>Package 'com.onlytechtake.repairapp.data.local.dao' contains too many classes (64 &gt; 50)</description>
   <highlighted_element />
   <language />
 </problem>

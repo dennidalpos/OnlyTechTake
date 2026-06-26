@@ -1,7 +1,7 @@
 <problems>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/AdminUserRepository.kt</file>
-  <line>41</line>
+  <line>42</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.AdminUserRepository java.lang.Object createOperator(com.onlytechtake.repairapp.domain.auth.AuthenticatedUser actor, com.onlytechtake.repairapp.domain.workspace.OperatorInput input, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends kotlin.Unit&gt;&gt; $completion)" />
@@ -13,8 +13,21 @@
   <length>30</length>
 </problem>
 <problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/CustomerRepository.kt</file>
+  <line>65</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.CustomerRepository java.lang.Object findById(java.lang.String id, kotlin.coroutines.Continuation&lt;? super com.onlytechtake.repairapp.data.local.entities.CustomerEntity&gt; $completion)" />
+  <problem_class id="SimplifyBooleanWithConstants" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Boolean expression can be simplified</problem_class>
+  <description>Boolean expression can be simplified</description>
+  <highlighted_element>DemoMode.isEnabled &amp;&amp; (id == DemoMode.demoCustomer.id)</highlighted_element>
+  <language>kotlin</language>
+  <offset>12</offset>
+  <length>54</length>
+</problem>
+<problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCase.kt</file>
-  <line>52</line>
+  <line>48</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.domain.workspace</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase java.lang.Object execute(com.onlytechtake.repairapp.domain.auth.AuthenticatedUser actor, com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput input, java.util.List&lt;com.onlytechtake.repairapp.data.repositories.StagedOrderMedia&gt; stagedMedia, java.lang.String signerName, boolean privacyAccepted, boolean termsAccepted, android.graphics.Bitmap signatureBitmap, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends com.onlytechtake.repairapp.domain.workspace.IntakeOrderCreationResult&gt;&gt; $completion)" />
@@ -27,7 +40,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCase.kt</file>
-  <line>52</line>
+  <line>48</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.domain.workspace</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase java.lang.Object execute(com.onlytechtake.repairapp.domain.auth.AuthenticatedUser actor, com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput input, java.util.List&lt;com.onlytechtake.repairapp.data.repositories.StagedOrderMedia&gt; stagedMedia, java.lang.String signerName, boolean privacyAccepted, boolean termsAccepted, android.graphics.Bitmap signatureBitmap, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends com.onlytechtake.repairapp.domain.workspace.IntakeOrderCreationResult&gt;&gt; $completion)" />
@@ -37,71 +50,6 @@
   <language>kotlin</language>
   <offset>47</offset>
   <length>26</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/auth/AuthGateScreen.kt</file>
-  <line>619</line>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <package>com.onlytechtake.repairapp.features.auth</package>
-  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateScreenKt void OwnerWizardScreen(com.onlytechtake.repairapp.domain.workspace.OwnerInfo ownerInfo, kotlin.jvm.functions.Function1&lt;? super com.onlytechtake.repairapp.domain.workspace.OwnerInfo,kotlin.Unit&gt; onSubmit)" />
-  <problem_class id="SimplifyBooleanWithConstants" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Boolean expression can be simplified</problem_class>
-  <description>Boolean expression can be simplified</description>
-  <highlighted_element>BuildConfig.IS_SHOWCASE_MODE_ENABLED &amp;&amp; ownerInfo.name.isBlank()</highlighted_element>
-  <language>kotlin</language>
-  <offset>12</offset>
-  <length>64</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/auth/AuthGateScreen.kt</file>
-  <line>625</line>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <package>com.onlytechtake.repairapp.features.auth</package>
-  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateScreenKt void OwnerWizardScreen(com.onlytechtake.repairapp.domain.workspace.OwnerInfo ownerInfo, kotlin.jvm.functions.Function1&lt;? super com.onlytechtake.repairapp.domain.workspace.OwnerInfo,kotlin.Unit&gt; onSubmit)" />
-  <problem_class id="SimplifyBooleanWithConstants" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Boolean expression can be simplified</problem_class>
-  <description>Boolean expression can be simplified</description>
-  <highlighted_element>BuildConfig.IS_SHOWCASE_MODE_ENABLED &amp;&amp; ownerInfo.vatNumber.isBlank()</highlighted_element>
-  <language>kotlin</language>
-  <offset>12</offset>
-  <length>69</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/auth/AuthGateScreen.kt</file>
-  <line>631</line>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <package>com.onlytechtake.repairapp.features.auth</package>
-  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateScreenKt void OwnerWizardScreen(com.onlytechtake.repairapp.domain.workspace.OwnerInfo ownerInfo, kotlin.jvm.functions.Function1&lt;? super com.onlytechtake.repairapp.domain.workspace.OwnerInfo,kotlin.Unit&gt; onSubmit)" />
-  <problem_class id="SimplifyBooleanWithConstants" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Boolean expression can be simplified</problem_class>
-  <description>Boolean expression can be simplified</description>
-  <highlighted_element>BuildConfig.IS_SHOWCASE_MODE_ENABLED &amp;&amp; ownerInfo.address.isBlank()</highlighted_element>
-  <language>kotlin</language>
-  <offset>12</offset>
-  <length>67</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/auth/AuthGateScreen.kt</file>
-  <line>637</line>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <package>com.onlytechtake.repairapp.features.auth</package>
-  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateScreenKt void OwnerWizardScreen(com.onlytechtake.repairapp.domain.workspace.OwnerInfo ownerInfo, kotlin.jvm.functions.Function1&lt;? super com.onlytechtake.repairapp.domain.workspace.OwnerInfo,kotlin.Unit&gt; onSubmit)" />
-  <problem_class id="SimplifyBooleanWithConstants" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Boolean expression can be simplified</problem_class>
-  <description>Boolean expression can be simplified</description>
-  <highlighted_element>BuildConfig.IS_SHOWCASE_MODE_ENABLED &amp;&amp; ownerInfo.email.isBlank()</highlighted_element>
-  <language>kotlin</language>
-  <offset>12</offset>
-  <length>65</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/auth/AuthGateScreen.kt</file>
-  <line>643</line>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <package>com.onlytechtake.repairapp.features.auth</package>
-  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateScreenKt void OwnerWizardScreen(com.onlytechtake.repairapp.domain.workspace.OwnerInfo ownerInfo, kotlin.jvm.functions.Function1&lt;? super com.onlytechtake.repairapp.domain.workspace.OwnerInfo,kotlin.Unit&gt; onSubmit)" />
-  <problem_class id="SimplifyBooleanWithConstants" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Boolean expression can be simplified</problem_class>
-  <description>Boolean expression can be simplified</description>
-  <highlighted_element>BuildConfig.IS_SHOWCASE_MODE_ENABLED &amp;&amp; ownerInfo.phone.isBlank()</highlighted_element>
-  <language>kotlin</language>
-  <offset>12</offset>
-  <length>65</length>
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/NewOrderViewModel.kt</file>

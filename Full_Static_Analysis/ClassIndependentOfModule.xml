@@ -336,34 +336,6 @@
   <length>12</length>
 </problem>
 <problem>
-  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/DaoProjections.kt</file>
-  <line>12</line>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <package>com.onlytechtake.repairapp.data.local.dao</package>
-  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.OrderMediaAggregate" />
-  <problem_class id="ClassIndependentOfModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class independent of its module</problem_class>
-  <hints />
-  <description>Class &lt;code&gt;OrderMediaAggregate&lt;/code&gt; has no dependencies or dependents in its module</description>
-  <highlighted_element>OrderMediaAggregate</highlighted_element>
-  <language>kotlin</language>
-  <offset>11</offset>
-  <length>19</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/DaoProjections.kt</file>
-  <line>19</line>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <package>com.onlytechtake.repairapp.data.local.dao</package>
-  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.SignatureAggregate" />
-  <problem_class id="ClassIndependentOfModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class independent of its module</problem_class>
-  <hints />
-  <description>Class &lt;code&gt;SignatureAggregate&lt;/code&gt; has no dependencies or dependents in its module</description>
-  <highlighted_element>SignatureAggregate</highlighted_element>
-  <language>kotlin</language>
-  <offset>11</offset>
-  <length>18</length>
-</problem>
-<problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/DashboardRoutes.kt</file>
   <line>3</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
@@ -379,7 +351,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/DashboardScreen.kt</file>
-  <line>438</line>
+  <line>447</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.features.dashboard</package>
   <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.NavigationItem" />

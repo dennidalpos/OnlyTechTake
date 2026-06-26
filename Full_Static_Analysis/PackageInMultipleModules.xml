@@ -4,7 +4,7 @@
   <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp" />
   <problem_class id="PackageInMultipleModules" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with classes in multiple modules</problem_class>
   <hints />
-  <description>Package 'com.onlytechtake.repairapp' has classes in modules 'OnlyTechTakeRepairApp.app.androidTest', 'OnlyTechTakeRepairApp.app.main' and 'OnlyTechTakeRepairApp.app.unitTest'</description>
+  <description>Package 'com.onlytechtake.repairapp' has classes in modules 'OnlyTechTakeRepairApp.app.main', 'OnlyTechTakeRepairApp.app.androidTest' and 'OnlyTechTakeRepairApp.app.unitTest'</description>
   <highlighted_element />
   <language />
 </problem>
@@ -22,7 +22,7 @@
   <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.core.demo" />
   <problem_class id="PackageInMultipleModules" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with classes in multiple modules</problem_class>
   <hints />
-  <description>Package 'com.onlytechtake.repairapp.core.demo' has classes in modules 'OnlyTechTakeRepairApp.app', 'OnlyTechTakeRepairApp.app.main' and 'OnlyTechTakeRepairApp.app.unitTest'</description>
+  <description>Package 'com.onlytechtake.repairapp.core.demo' has classes in modules 'OnlyTechTakeRepairApp.app.main' and 'OnlyTechTakeRepairApp.app.unitTest'</description>
   <highlighted_element />
   <language />
 </problem>
@@ -49,7 +49,7 @@
   <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.data.local.db" />
   <problem_class id="PackageInMultipleModules" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with classes in multiple modules</problem_class>
   <hints />
-  <description>Package 'com.onlytechtake.repairapp.data.local.db' has classes in modules 'OnlyTechTakeRepairApp.app.androidTest' and 'OnlyTechTakeRepairApp.app.main'</description>
+  <description>Package 'com.onlytechtake.repairapp.data.local.db' has classes in modules 'OnlyTechTakeRepairApp.app.main' and 'OnlyTechTakeRepairApp.app.androidTest'</description>
   <highlighted_element />
   <language />
 </problem>
@@ -76,7 +76,7 @@
   <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.data.repositories" />
   <problem_class id="PackageInMultipleModules" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with classes in multiple modules</problem_class>
   <hints />
-  <description>Package 'com.onlytechtake.repairapp.data.repositories' has classes in modules 'OnlyTechTakeRepairApp.app.androidTest', 'OnlyTechTakeRepairApp.app.main' and 'OnlyTechTakeRepairApp.app.unitTest'</description>
+  <description>Package 'com.onlytechtake.repairapp.data.repositories' has classes in modules 'OnlyTechTakeRepairApp.app.main', 'OnlyTechTakeRepairApp.app.androidTest' and 'OnlyTechTakeRepairApp.app.unitTest'</description>
   <highlighted_element />
   <language />
 </problem>
@@ -94,7 +94,7 @@
   <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.core.design" />
   <problem_class id="PackageInMultipleModules" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with classes in multiple modules</problem_class>
   <hints />
-  <description>Package 'com.onlytechtake.repairapp.core.design' has classes in modules 'OnlyTechTakeRepairApp.app.androidTest', 'OnlyTechTakeRepairApp.app.main' and 'OnlyTechTakeRepairApp.app.unitTest'</description>
+  <description>Package 'com.onlytechtake.repairapp.core.design' has classes in modules 'OnlyTechTakeRepairApp.app.main', 'OnlyTechTakeRepairApp.app.androidTest' and 'OnlyTechTakeRepairApp.app.unitTest'</description>
   <highlighted_element />
   <language />
 </problem>
@@ -103,7 +103,7 @@
   <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.core.share" />
   <problem_class id="PackageInMultipleModules" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with classes in multiple modules</problem_class>
   <hints />
-  <description>Package 'com.onlytechtake.repairapp.core.share' has classes in modules 'OnlyTechTakeRepairApp.app.androidTest' and 'OnlyTechTakeRepairApp.app.main'</description>
+  <description>Package 'com.onlytechtake.repairapp.core.share' has classes in modules 'OnlyTechTakeRepairApp.app.main' and 'OnlyTechTakeRepairApp.app.androidTest'</description>
   <highlighted_element />
   <language />
 </problem>
@@ -148,7 +148,7 @@
   <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.demo" />
   <problem_class id="PackageInMultipleModules" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with classes in multiple modules</problem_class>
   <hints />
-  <description>Package 'com.onlytechtake.repairapp.demo' has classes in modules 'OnlyTechTakeRepairApp.app', 'OnlyTechTakeRepairApp.app.androidTest' and 'OnlyTechTakeRepairApp.app.main'</description>
+  <description>Package 'com.onlytechtake.repairapp.demo' has classes in modules 'OnlyTechTakeRepairApp.app.main' and 'OnlyTechTakeRepairApp.app.androidTest'</description>
   <highlighted_element />
   <language />
 </problem>
@@ -157,7 +157,7 @@
   <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.features.dashboard" />
   <problem_class id="PackageInMultipleModules" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with classes in multiple modules</problem_class>
   <hints />
-  <description>Package 'com.onlytechtake.repairapp.features.dashboard' has classes in modules 'OnlyTechTakeRepairApp.app.androidTest', 'OnlyTechTakeRepairApp.app.main' and 'OnlyTechTakeRepairApp.app.unitTest'</description>
+  <description>Package 'com.onlytechtake.repairapp.features.dashboard' has classes in modules 'OnlyTechTakeRepairApp.app.main', 'OnlyTechTakeRepairApp.app.androidTest' and 'OnlyTechTakeRepairApp.app.unitTest'</description>
   <highlighted_element />
   <language />
 </problem>

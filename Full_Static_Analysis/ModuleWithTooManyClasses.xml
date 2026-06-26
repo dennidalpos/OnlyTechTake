@@ -5,7 +5,7 @@
   <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
   <problem_class id="ModuleWithTooManyClasses" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Module with too many classes</problem_class>
   <hints />
-  <description>Module 'OnlyTechTakeRepairApp.app.main' contains too many classes (307 &gt; 100)</description>
+  <description>Module 'OnlyTechTakeRepairApp.app.main' contains too many classes (305 &gt; 100)</description>
   <highlighted_element />
   <language />
 </problem>

@@ -1,5 +1,197 @@
 <problems>
 <problem>
+  <file>OnlyTechTakeRepairApp.app.main</file>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
+  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
+  <hints>
+    <hint value="Gradle: androidx.compose.ui:ui-tooling-android:1.11.3@aar" />
+  </hints>
+  <description>Unused library 'Gradle: androidx.compose.ui:ui-tooling-android:1.11.3@aar'</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>OnlyTechTakeRepairApp.app.main</file>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
+  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
+  <hints>
+    <hint value="Gradle: androidx.lifecycle:lifecycle-runtime-ktx-android:2.11.0@aar" />
+  </hints>
+  <description>Unused library 'Gradle: androidx.lifecycle:lifecycle-runtime-ktx-android:2.11.0@aar'</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>OnlyTechTakeRepairApp.app.main</file>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
+  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
+  <hints>
+    <hint value="Gradle: androidx.compose.ui:ui-tooling-data-android:1.11.3@aar" />
+  </hints>
+  <description>Unused library 'Gradle: androidx.compose.ui:ui-tooling-data-android:1.11.3@aar'</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>OnlyTechTakeRepairApp.app.main</file>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
+  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
+  <hints>
+    <hint value="Gradle: androidx.compose.ui:ui-test-manifest:1.11.3@aar" />
+  </hints>
+  <description>Unused library 'Gradle: androidx.compose.ui:ui-test-manifest:1.11.3@aar'</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>OnlyTechTakeRepairApp.app.main</file>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
+  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
+  <hints>
+    <hint value="Gradle: androidx.core:core-ktx:1.19.0@aar" />
+  </hints>
+  <description>Unused library 'Gradle: androidx.core:core-ktx:1.19.0@aar'</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>OnlyTechTakeRepairApp.app.main</file>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
+  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
+  <hints>
+    <hint value="Gradle: androidx.activity:activity-ktx:1.13.0@aar" />
+  </hints>
+  <description>Unused library 'Gradle: androidx.activity:activity-ktx:1.13.0@aar'</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>OnlyTechTakeRepairApp.app.main</file>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
+  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
+  <hints>
+    <hint value="Gradle: androidx.lifecycle:lifecycle-viewmodel-ktx:2.11.0@aar" />
+  </hints>
+  <description>Unused library 'Gradle: androidx.lifecycle:lifecycle-viewmodel-ktx:2.11.0@aar'</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>OnlyTechTakeRepairApp.app.main</file>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
+  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
+  <hints>
+    <hint value="Gradle: androidx.savedstate:savedstate-ktx:1.4.0@aar" />
+  </hints>
+  <description>Unused library 'Gradle: androidx.savedstate:savedstate-ktx:1.4.0@aar'</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>OnlyTechTakeRepairApp.app.main</file>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
+  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
+  <hints>
+    <hint value="Gradle: androidx.room:room-ktx:2.8.4@aar" />
+  </hints>
+  <description>Unused library 'Gradle: androidx.room:room-ktx:2.8.4@aar'</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>OnlyTechTakeRepairApp.app.main</file>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
+  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
+  <hints>
+    <hint value="Gradle: androidx.datastore:datastore-preferences-android:1.2.1@aar" />
+  </hints>
+  <description>Unused library 'Gradle: androidx.datastore:datastore-preferences-android:1.2.1@aar'</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>OnlyTechTakeRepairApp.app.main</file>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
+  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
+  <hints>
+    <hint value="Gradle: androidx.datastore:datastore-android:1.2.1@aar" />
+  </hints>
+  <description>Unused library 'Gradle: androidx.datastore:datastore-android:1.2.1@aar'</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>OnlyTechTakeRepairApp.app.main</file>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
+  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
+  <hints>
+    <hint value="Gradle: androidx.lifecycle:lifecycle-livedata-core-ktx:2.11.0@aar" />
+  </hints>
+  <description>Unused library 'Gradle: androidx.lifecycle:lifecycle-livedata-core-ktx:2.11.0@aar'</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>OnlyTechTakeRepairApp.app.main</file>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
+  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
+  <hints>
+    <hint value="Gradle: androidx.camera:camera-camera2:1.6.1@aar" />
+  </hints>
+  <description>Unused library 'Gradle: androidx.camera:camera-camera2:1.6.1@aar'</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>OnlyTechTakeRepairApp.app.main</file>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
+  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
+  <hints>
+    <hint value="Gradle: androidx.sqlite:sqlite-ktx:2.6.2@aar" />
+  </hints>
+  <description>Unused library 'Gradle: androidx.sqlite:sqlite-ktx:2.6.2@aar'</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>OnlyTechTakeRepairApp.app.main</file>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
+  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
+  <hints>
+    <hint value="Gradle: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" />
+  </hints>
+  <description>Unused library 'Gradle: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>OnlyTechTakeRepairApp.app.main</file>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
+  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
+  <hints>
+    <hint value="Gradle: com.google.code.findbugs:jsr305:3.0.2" />
+  </hints>
+  <description>Unused library 'Gradle: com.google.code.findbugs:jsr305:3.0.2'</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
   <file>OnlyTechTakeRepairApp.app.androidTest</file>
   <module>OnlyTechTakeRepairApp.app.androidTest</module>
   <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.androidTest" />
@@ -500,198 +692,6 @@
     <hint value="Gradle: net.lingala.zip4j:zip4j:2.11.6" />
   </hints>
   <description>Unused library 'Gradle: net.lingala.zip4j:zip4j:2.11.6'</description>
-  <highlighted_element />
-  <language />
-</problem>
-<problem>
-  <file>OnlyTechTakeRepairApp.app.main</file>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
-  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
-  <hints>
-    <hint value="Gradle: androidx.compose.ui:ui-tooling-android:1.11.3@aar" />
-  </hints>
-  <description>Unused library 'Gradle: androidx.compose.ui:ui-tooling-android:1.11.3@aar'</description>
-  <highlighted_element />
-  <language />
-</problem>
-<problem>
-  <file>OnlyTechTakeRepairApp.app.main</file>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
-  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
-  <hints>
-    <hint value="Gradle: androidx.lifecycle:lifecycle-runtime-ktx-android:2.11.0@aar" />
-  </hints>
-  <description>Unused library 'Gradle: androidx.lifecycle:lifecycle-runtime-ktx-android:2.11.0@aar'</description>
-  <highlighted_element />
-  <language />
-</problem>
-<problem>
-  <file>OnlyTechTakeRepairApp.app.main</file>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
-  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
-  <hints>
-    <hint value="Gradle: androidx.compose.ui:ui-tooling-data-android:1.11.3@aar" />
-  </hints>
-  <description>Unused library 'Gradle: androidx.compose.ui:ui-tooling-data-android:1.11.3@aar'</description>
-  <highlighted_element />
-  <language />
-</problem>
-<problem>
-  <file>OnlyTechTakeRepairApp.app.main</file>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
-  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
-  <hints>
-    <hint value="Gradle: androidx.compose.ui:ui-test-manifest:1.11.3@aar" />
-  </hints>
-  <description>Unused library 'Gradle: androidx.compose.ui:ui-test-manifest:1.11.3@aar'</description>
-  <highlighted_element />
-  <language />
-</problem>
-<problem>
-  <file>OnlyTechTakeRepairApp.app.main</file>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
-  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
-  <hints>
-    <hint value="Gradle: androidx.core:core-ktx:1.19.0@aar" />
-  </hints>
-  <description>Unused library 'Gradle: androidx.core:core-ktx:1.19.0@aar'</description>
-  <highlighted_element />
-  <language />
-</problem>
-<problem>
-  <file>OnlyTechTakeRepairApp.app.main</file>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
-  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
-  <hints>
-    <hint value="Gradle: androidx.activity:activity-ktx:1.13.0@aar" />
-  </hints>
-  <description>Unused library 'Gradle: androidx.activity:activity-ktx:1.13.0@aar'</description>
-  <highlighted_element />
-  <language />
-</problem>
-<problem>
-  <file>OnlyTechTakeRepairApp.app.main</file>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
-  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
-  <hints>
-    <hint value="Gradle: androidx.lifecycle:lifecycle-viewmodel-ktx:2.11.0@aar" />
-  </hints>
-  <description>Unused library 'Gradle: androidx.lifecycle:lifecycle-viewmodel-ktx:2.11.0@aar'</description>
-  <highlighted_element />
-  <language />
-</problem>
-<problem>
-  <file>OnlyTechTakeRepairApp.app.main</file>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
-  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
-  <hints>
-    <hint value="Gradle: androidx.savedstate:savedstate-ktx:1.4.0@aar" />
-  </hints>
-  <description>Unused library 'Gradle: androidx.savedstate:savedstate-ktx:1.4.0@aar'</description>
-  <highlighted_element />
-  <language />
-</problem>
-<problem>
-  <file>OnlyTechTakeRepairApp.app.main</file>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
-  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
-  <hints>
-    <hint value="Gradle: androidx.room:room-ktx:2.8.4@aar" />
-  </hints>
-  <description>Unused library 'Gradle: androidx.room:room-ktx:2.8.4@aar'</description>
-  <highlighted_element />
-  <language />
-</problem>
-<problem>
-  <file>OnlyTechTakeRepairApp.app.main</file>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
-  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
-  <hints>
-    <hint value="Gradle: androidx.datastore:datastore-preferences-android:1.2.1@aar" />
-  </hints>
-  <description>Unused library 'Gradle: androidx.datastore:datastore-preferences-android:1.2.1@aar'</description>
-  <highlighted_element />
-  <language />
-</problem>
-<problem>
-  <file>OnlyTechTakeRepairApp.app.main</file>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
-  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
-  <hints>
-    <hint value="Gradle: androidx.datastore:datastore-android:1.2.1@aar" />
-  </hints>
-  <description>Unused library 'Gradle: androidx.datastore:datastore-android:1.2.1@aar'</description>
-  <highlighted_element />
-  <language />
-</problem>
-<problem>
-  <file>OnlyTechTakeRepairApp.app.main</file>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
-  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
-  <hints>
-    <hint value="Gradle: androidx.lifecycle:lifecycle-livedata-core-ktx:2.11.0@aar" />
-  </hints>
-  <description>Unused library 'Gradle: androidx.lifecycle:lifecycle-livedata-core-ktx:2.11.0@aar'</description>
-  <highlighted_element />
-  <language />
-</problem>
-<problem>
-  <file>OnlyTechTakeRepairApp.app.main</file>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
-  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
-  <hints>
-    <hint value="Gradle: androidx.camera:camera-camera2:1.6.1@aar" />
-  </hints>
-  <description>Unused library 'Gradle: androidx.camera:camera-camera2:1.6.1@aar'</description>
-  <highlighted_element />
-  <language />
-</problem>
-<problem>
-  <file>OnlyTechTakeRepairApp.app.main</file>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
-  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
-  <hints>
-    <hint value="Gradle: androidx.sqlite:sqlite-ktx:2.6.2@aar" />
-  </hints>
-  <description>Unused library 'Gradle: androidx.sqlite:sqlite-ktx:2.6.2@aar'</description>
-  <highlighted_element />
-  <language />
-</problem>
-<problem>
-  <file>OnlyTechTakeRepairApp.app.main</file>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
-  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
-  <hints>
-    <hint value="Gradle: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" />
-  </hints>
-  <description>Unused library 'Gradle: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'</description>
-  <highlighted_element />
-  <language />
-</problem>
-<problem>
-  <file>OnlyTechTakeRepairApp.app.main</file>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="module" FQNAME="OnlyTechTakeRepairApp.app.main" />
-  <problem_class id="UnusedLibrary" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused library</problem_class>
-  <hints>
-    <hint value="Gradle: com.google.code.findbugs:jsr305:3.0.2" />
-  </hints>
-  <description>Unused library 'Gradle: com.google.code.findbugs:jsr305:3.0.2'</description>
   <highlighted_element />
   <language />
 </problem>

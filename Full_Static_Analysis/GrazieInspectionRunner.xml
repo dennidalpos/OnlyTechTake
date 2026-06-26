@@ -120,52 +120,28 @@
   <length>5</length>
 </problem>
 <problem>
-  <file>file://$PROJECT_DIR$/PROJECT_STATUS.json</file>
-  <line>67</line>
+  <file>file://$PROJECT_DIR$/BACKUP_FLOW.md</file>
+  <line>7</line>
   <module>OnlyTechTakeRepairApp</module>
-  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/PROJECT_STATUS.json" />
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/BACKUP_FLOW.md" />
   <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
-  <description>Typo: In word 'Rifattorizzato'</description>
-  <highlighted_element>Rifattorizzato</highlighted_element>
-  <language>JSON</language>
-  <offset>5</offset>
-  <length>14</length>
+  <description>Possible typo detected.</description>
+  <highlighted_element>Zip4j</highlighted_element>
+  <language>Markdown</language>
+  <offset>55</offset>
+  <length>5</length>
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/PROJECT_STATUS.json</file>
-  <line>69</line>
+  <line>66</line>
   <module>OnlyTechTakeRepairApp</module>
   <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/PROJECT_STATUS.json" />
   <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
-  <description>Typo: In word 'dall'admin'</description>
-  <highlighted_element>dall'admin</highlighted_element>
+  <description>Typo: In word 'modalita'</description>
+  <highlighted_element>modalita</highlighted_element>
   <language>JSON</language>
-  <offset>79</offset>
-  <length>10</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/PROJECT_STATUS.json</file>
-  <line>71</line>
-  <module>OnlyTechTakeRepairApp</module>
-  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/PROJECT_STATUS.json" />
-  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
-  <description>Typo: In word 'collassabili'</description>
-  <highlighted_element>collassabili</highlighted_element>
-  <language>JSON</language>
-  <offset>63</offset>
-  <length>12</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/PROJECT_STATUS.json</file>
-  <line>72</line>
-  <module>OnlyTechTakeRepairApp</module>
-  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/PROJECT_STATUS.json" />
-  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
-  <description>Typo: In word 'Sicurezza'</description>
-  <highlighted_element>Sicurezza</highlighted_element>
-  <language>JSON</language>
-  <offset>16</offset>
-  <length>9</length>
+  <offset>82</offset>
+  <length>8</length>
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json</file>
@@ -647,32 +623,6 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/OperatorIntakeDemoScreenshotTest.kt</file>
-  <line>80</line>
-  <module>OnlyTechTakeRepairApp.app.androidTest</module>
-  <package>com.onlytechtake.repairapp.demo</package>
-  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.OperatorIntakeDemoScreenshotTest void capturesOperatorIntakeDemo()" />
-  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
-  <description>Typo: In word 'Schermo'</description>
-  <highlighted_element>Schermo</highlighted_element>
-  <language>kotlin</language>
-  <offset>38</offset>
-  <length>7</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/OperatorIntakeDemoScreenshotTest.kt</file>
-  <line>168</line>
-  <module>OnlyTechTakeRepairApp.app.androidTest</module>
-  <package>com.onlytechtake.repairapp.demo</package>
-  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.OperatorIntakeDemoScreenshotTest java.lang.String waitForCreatedOrderId()" />
-  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
-  <description>Typo: In word 'Schermo'</description>
-  <highlighted_element>Schermo</highlighted_element>
-  <language>kotlin</language>
-  <offset>44</offset>
-  <length>7</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/OperatorIntakeDemoScreenshotTest.kt</file>
   <line>168</line>
   <module>OnlyTechTakeRepairApp.app.androidTest</module>
   <package>com.onlytechtake.repairapp.demo</package>
@@ -803,7 +753,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/DaoProjections.kt</file>
-  <line>50</line>
+  <line>38</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.local.dao</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.OrderListItemProjection OrderListItemProjection(com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity order, com.onlytechtake.repairapp.data.local.entities.CustomerEntity customer, int imagesCount, int documentsCount, int signaturesCount, int finalPhotosCount)" />
@@ -842,7 +792,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupRepository.kt</file>
-  <line>171</line>
+  <line>158</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.BackupRepository java.lang.Object restoreCompleteBackup(com.onlytechtake.repairapp.domain.auth.AuthenticatedUser actor, android.net.Uri uri, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends kotlin.Unit&gt;&gt; $completion)" />
@@ -855,20 +805,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
-  <line>145</line>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <package>com.onlytechtake.repairapp.data.repositories</package>
-  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderExportXlsxWriter java.lang.String xmlEscaped(java.lang.String $this$xmlEscaped)" />
-  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
-  <description>Typo: In word 'apos'</description>
-  <highlighted_element>apos</highlighted_element>
-  <language>kotlin</language>
-  <offset>28</offset>
-  <length>4</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
-  <line>178</line>
+  <line>174</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="field" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt contentTypesXml" />
@@ -881,7 +818,20 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
-  <line>216</line>
+  <line>204</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderExportXlsxWriterKt java.lang.String xmlEscaped(java.lang.String $this$xmlEscaped)" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'apos'</description>
+  <highlighted_element>apos</highlighted_element>
+  <language>kotlin</language>
+  <offset>24</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
+  <line>220</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="field" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt stylesXml" />
@@ -894,7 +844,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
-  <line>216</line>
+  <line>220</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="field" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt stylesXml" />
@@ -907,7 +857,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
-  <line>217</line>
+  <line>221</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="field" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt stylesXml" />
@@ -920,7 +870,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
-  <line>217</line>
+  <line>221</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="field" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt stylesXml" />
@@ -933,7 +883,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
-  <line>217</line>
+  <line>221</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="field" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt stylesXml" />
@@ -946,7 +896,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/services/DiagnosticLogService.kt</file>
-  <line>42</line>
+  <line>56</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <package>com.onlytechtake.repairapp.data.services</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.services.DiagnosticLogService android.content.Intent createShareIntent(java.io.File zipFile)" />
@@ -1011,7 +961,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
-  <line>798</line>
+  <line>692</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
   <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
@@ -1023,7 +973,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
-  <line>745</line>
+  <line>641</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
   <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
@@ -1035,31 +985,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
-  <line>745</line>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
-  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
-  <description>Questa frase non inizia con una maiuscola</description>
-  <highlighted_element>apertura</highlighted_element>
-  <language>XML</language>
-  <offset>107</offset>
-  <length>8</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
-  <line>932</line>
-  <module>OnlyTechTakeRepairApp.app.main</module>
-  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
-  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
-  <description>Questa frase non inizia con una maiuscola</description>
-  <highlighted_element>foto</highlighted_element>
-  <language>XML</language>
-  <offset>121</offset>
-  <length>4</length>
-</problem>
-<problem>
-  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
-  <line>932</line>
+  <line>823</line>
   <module>OnlyTechTakeRepairApp.app.main</module>
   <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
   <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
@@ -1149,7 +1075,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriterTest.kt</file>
-  <line>59</line>
+  <line>60</line>
   <module>OnlyTechTakeRepairApp.app.unitTest</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderExportXlsxWriterTest void writesValidXlsxEntriesAndEscapesCellText()" />
@@ -1162,7 +1088,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriterTest.kt</file>
-  <line>92</line>
+  <line>93</line>
   <module>OnlyTechTakeRepairApp.app.unitTest</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderExportXlsxWriterTest void writesValidXlsxEntriesAndEscapesCellText()" />
@@ -1175,7 +1101,7 @@
 </problem>
 <problem>
   <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriterTest.kt</file>
-  <line>94</line>
+  <line>95</line>
   <module>OnlyTechTakeRepairApp.app.unitTest</module>
   <package>com.onlytechtake.repairapp.data.repositories</package>
   <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderExportXlsxWriterTest void writesValidXlsxEntriesAndEscapesCellText()" />
