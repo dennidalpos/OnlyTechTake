@@ -14,14 +14,9 @@ private val Context.authDataStore by preferencesDataStore(name = "auth_preferenc
 class AuthPreferences(
     private val context: Context,
 ) {
-    val appConfigured: Flow<Boolean> =
+    val lastUsername: Flow<String?> =
         context.authDataStore.data.map { preferences ->
-            preferences[APP_CONFIGURED] ?: false
-        }
-
-    val lastUserId: Flow<String?> =
-        context.authDataStore.data.map { preferences ->
-            preferences[LAST_USER_ID]
+            preferences[LAST_USERNAME]
         }
 
     suspend fun markConfigured() {
@@ -31,11 +26,11 @@ class AuthPreferences(
     }
 
     suspend fun recordLogin(
-        userId: String,
+        username: String,
         loginAt: Long,
     ) {
         context.authDataStore.edit { preferences ->
-            preferences[LAST_USER_ID] = userId
+            preferences[LAST_USERNAME] = username
             preferences[LAST_LOGIN_AT] = loginAt
         }
     }
@@ -48,7 +43,7 @@ class AuthPreferences(
 
     private companion object {
         val APP_CONFIGURED = booleanPreferencesKey("app_configured")
-        val LAST_USER_ID = stringPreferencesKey("last_user_id")
+        val LAST_USERNAME = stringPreferencesKey("last_username")
         val LAST_LOGIN_AT = longPreferencesKey("last_login_at")
     }
 }

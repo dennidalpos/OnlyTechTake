@@ -1,0 +1,50 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/README.md</file>
+  <line>45</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/README.md" />
+  <problem_class id="CheckImageSize" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Mismatched image size</problem_class>
+  <description>Original image width is 1080</description>
+  <highlighted_element>&quot;200&quot;</highlighted_element>
+  <language>HTML</language>
+  <offset>77</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/README.md</file>
+  <line>46</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/README.md" />
+  <problem_class id="CheckImageSize" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Mismatched image size</problem_class>
+  <description>Original image width is 1080</description>
+  <highlighted_element>&quot;200&quot;</highlighted_element>
+  <language>HTML</language>
+  <offset>82</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/README.md</file>
+  <line>47</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/README.md" />
+  <problem_class id="CheckImageSize" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Mismatched image size</problem_class>
+  <description>Original image width is 1080</description>
+  <highlighted_element>&quot;200&quot;</highlighted_element>
+  <language>HTML</language>
+  <offset>78</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/README.md</file>
+  <line>48</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/README.md" />
+  <problem_class id="CheckImageSize" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Mismatched image size</problem_class>
+  <description>Original image width is 1080</description>
+  <highlighted_element>&quot;200&quot;</highlighted_element>
+  <language>HTML</language>
+  <offset>80</offset>
+  <length>5</length>
+</problem>
+</problems>

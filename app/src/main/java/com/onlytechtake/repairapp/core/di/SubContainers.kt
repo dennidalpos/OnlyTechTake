@@ -152,7 +152,7 @@ class OrderContainer(
         )
     }
 
-    val signatureRepository by lazy {
+    private val signatureRepository by lazy {
         SignatureRepository(
             context = context.applicationContext,
             repairOrderDao = dataContainer.database.repairOrderDao(),
@@ -193,7 +193,7 @@ class SettingsContainer(
     dataContainer: DataContainer,
     authContainer: AuthContainer,
     mediaContainer: MediaContainer,
-    val securityPreferences: SecurityPreferences,
+    private val securityPreferences: SecurityPreferences,
 ) {
     val ownerPreferences by lazy { OwnerPreferences(context.applicationContext) }
     val backupReminderPreferences by lazy { BackupReminderPreferences(context.applicationContext) }
@@ -238,7 +238,6 @@ class SettingsContainer(
             database = dataContainer.database,
             authPreferences = authContainer.authPreferences,
             sessionStore = authContainer.sessionStore,
-            storageStatsService = storageStatsService,
             mediaStorageProvider = mediaContainer.mediaStorageProvider,
         )
     }

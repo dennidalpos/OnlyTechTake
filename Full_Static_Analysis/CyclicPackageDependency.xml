@@ -1,0 +1,83 @@
+<problems>
+<problem>
+  <package>com.onlytechtake.repairapp</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp" />
+  <problem_class id="CyclicPackageDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cyclic package dependency</problem_class>
+  <hints />
+  <description>Package 'com.onlytechtake.repairapp' is cyclically dependent on package 'com.onlytechtake.repairapp.navigation'</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.core.pdf</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.core.pdf" />
+  <problem_class id="CyclicPackageDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cyclic package dependency</problem_class>
+  <hints />
+  <description>Package 'com.onlytechtake.repairapp.core.pdf' is cyclically dependent on 4 other packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.core.di</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.core.di" />
+  <problem_class id="CyclicPackageDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cyclic package dependency</problem_class>
+  <hints />
+  <description>Package 'com.onlytechtake.repairapp.core.di' is cyclically dependent on package 'com.onlytechtake.repairapp.navigation'</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.domain.repositories</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.domain.repositories" />
+  <problem_class id="CyclicPackageDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cyclic package dependency</problem_class>
+  <hints />
+  <description>Package 'com.onlytechtake.repairapp.domain.repositories' is cyclically dependent on 4 other packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.data.repositories" />
+  <problem_class id="CyclicPackageDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cyclic package dependency</problem_class>
+  <hints />
+  <description>Package 'com.onlytechtake.repairapp.data.repositories' is cyclically dependent on 4 other packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.core.design" />
+  <problem_class id="CyclicPackageDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cyclic package dependency</problem_class>
+  <hints />
+  <description>Package 'com.onlytechtake.repairapp.core.design' is cyclically dependent on 4 other packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.domain.workspace" />
+  <problem_class id="CyclicPackageDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cyclic package dependency</problem_class>
+  <hints />
+  <description>Package 'com.onlytechtake.repairapp.domain.workspace' is cyclically dependent on 4 other packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.demo" />
+  <problem_class id="CyclicPackageDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cyclic package dependency</problem_class>
+  <hints />
+  <description>Package 'com.onlytechtake.repairapp.demo' is cyclically dependent on package 'com.onlytechtake.repairapp.navigation'</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.data.preferences</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.data.preferences" />
+  <problem_class id="CyclicPackageDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cyclic package dependency</problem_class>
+  <hints />
+  <description>Package 'com.onlytechtake.repairapp.data.preferences' is cyclically dependent on 4 other packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+</problems>

@@ -1,9 +1,9 @@
 {
   "project_name": "OnlyTechTake",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-07-03",
-  "alignment_status": "Pienamente allineato tra tutti i flavor. Ottimizzato per prestazioni, stabilità del thread UI e conformità standalone. Implementate misure di sicurezza e UX avanzate.",
+  "last_updated": "2026-06-26",
+  "alignment_status": "Allineamento varianti completato. Source set 'main' ripulito da logica legacy e risorse demo/showcase. Test unitari e strumentati allineati alle nuove astrazioni di DemoMode.",
   "landing_page": {
     "status": "Standalone Ready + Assets Automated",
     "theme": "Material 3 + Inter Typography",
@@ -33,45 +33,40 @@
   ],
   "backlog": [
     {
-      "priority": "MEDIUM",
-      "task": "Configurazione finale Data Safety e questionari Play Console basati sui documenti tecnici aggiornati."
+      "priority": "HIGH",
+      "task": "LEGAL: Verifica accessibilità e pubblicazione HTTPS definitiva per Privacy Policy (inventoveritas.mine.nu)."
+    },
+    {
+      "priority": "HIGH",
+      "task": "PROCEDURAL: Pianificazione e avvio gruppo di test chiuso (20 tester per 14 giorni) per compliance Play Store account post-2023."
     },
     {
       "priority": "MEDIUM",
-      "task": "Test di regressione su hardware low-end (Android 10-12) per verificare la fluidità della UI dopo le ottimizzazioni dei dispatcher."
+      "task": "TECHNICAL: Configurazione finale Data Safety e questionari Play Console basati sui documenti tecnici aggiornati."
+    },
+    {
+      "priority": "MEDIUM",
+      "task": "QUALITY: Test di regressione su hardware low-end (Android 10-12) per verificare fluidità UI dopo ottimizzazioni dispatcher."
     },
     {
       "priority": "LOW",
-      "task": "Monitoraggio warning interni Compose 'frameRate=NaN' su API 35 per futuri aggiornamenti delle librerie core."
+      "task": "MAINTENANCE: Monitoraggio warning Gradle 10 (AGP 9.2.1), problemi Configuration Cache Spotless e warning Compose 'frameRate=NaN'."
     }
   ],
   "identified_residuals": [
     {
-      "area": "TECHNICAL",
-      "risk": "Warning Gradle 10 interni ad AGP 9.2.1 e problemi Configuration Cache in Spotless 8.7.0.",
-      "plan": "Monitorare aggiornamenti AGP/Spotless. Workaround '--no-configuration-cache' attivo negli script di qualità per garantire stabilità."
-    },
-    {
-      "area": "PROCEDURAL",
-      "risk": "Requisito Google 20 tester per 14 giorni (Account Personali post-2023).",
-      "plan": "Pianificare gruppo di test chiuso prima del lancio in produzione."
-    },
-    {
-      "area": "LEGAL",
-      "risk": "URL Privacy Policy deve essere HTTPS pubblico e definitivo.",
-      "plan": "Verificare accessibilità di inventoveritas.mine.nu prima dell'invio."
+      "area": "TESTING",
+      "risk": "Necessità di un giro completo di smoke test sugli automated marketing assets dopo lo spostamento delle stringhe in androidTest/res.",
+      "plan": "Eseguire i test strumentati SocialProAssetTest e SocialDemoAssetTest su device fisico."
     }
   ],
   "completed_recently": [
-    "Risolti errori di rendering nelle Preview di HomePanel e DashboardScreen tramite mocking dei CompositionLocal.",
-    "Rifattorizzato HomePanel per separare la logica dello stato (ViewModel) dalla UI (HomePanelContent).",
-    "Ottimizzata la struttura di DemoInfoCard rimuovendo Column ridondanti.",
-    "Implementato Timeout di inattività configurabile (default 10 min) gestito dall'admin.",
-    "Aggiornata Dashboard: convertita metrica 'Utenti' in 'Operatori'.",
-    "Ottimizzata gestione Operatori: aggiunta ricerca e schede collassabili.",
-    "Migliorata Sicurezza Backup: aggiunto disclaimer per disattivazione promemoria e collassata sezione reset dati.",
-    "Potenziati Log Diagnostici: aggiunto supporto per livelli Warning e Info.",
-    "Implementati Tooltip informativi per operazioni di manutenzione memoria (pulizia cache/orfani).",
-    "Implementato Wizard di configurazione iniziale per i dati legali del proprietario."
+    "Flavor: Estratte tutte le stringhe demo/showcase da main a flavor-specific resources.",
+    "Flavor: Implementata astrazione in DemoMode per accesso sicuro alle risorse dipendenti dal flavor.",
+    "Cleanup: Rimosso debito tecnico in main/strings.xml rimuovendo riferimenti a modalita' speciali.",
+    "Bugfix: Corretto test BackupRepositoryTest per riflettere il nuovo meccanismo di restore files.",
+    "Bugfix: Allineato AdminUserRepositoryTest ai nuovi limiti di MAX_OPERATORS per la variante Demo.",
+    "Test: Verificato build e test completi per varianti Full, Demo e Showcase.",
+    "Instrumentation: Configurate risorse dedicate in androidTest/res per i seeder dei test."
   ]
 }

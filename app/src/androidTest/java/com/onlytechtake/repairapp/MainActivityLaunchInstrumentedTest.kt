@@ -10,15 +10,11 @@ import org.junit.runner.RunWith
 class MainActivityLaunchInstrumentedTest {
     @Test
     fun mainActivityLaunchesOnDevice() {
-        val scenario = ActivityScenario.launch(MainActivity::class.java)
-
-        try {
+        ActivityScenario.launch(MainActivity::class.java).use { scenario ->
             scenario.onActivity { activity ->
                 assertFalse(activity.isFinishing)
                 assertFalse(activity.isDestroyed)
             }
-        } finally {
-            scenario.close()
         }
     }
 }

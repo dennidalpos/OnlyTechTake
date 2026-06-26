@@ -1,0 +1,15 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/utils/CustomerExtensions.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.utils</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.utils.CustomerExtensionsKt java.lang.String displayName(com.onlytechtake.repairapp.data.local.entities.CustomerEntity $this$displayName, android.content.Context context)" />
+  <problem_class id="IfThenToElvis" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">If-Then foldable to '?:'</problem_class>
+  <description>If-Then foldable to '?:'</description>
+  <highlighted_element>if (this == null)</highlighted_element>
+  <language>kotlin</language>
+  <offset>4</offset>
+  <length>17</length>
+</problem>
+</problems>

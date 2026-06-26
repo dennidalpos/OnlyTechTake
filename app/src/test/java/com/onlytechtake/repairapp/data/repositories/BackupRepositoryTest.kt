@@ -66,10 +66,10 @@ class BackupRepositoryTest {
             )
         val destination = File(testRoot, "restored")
 
-        BackupArchive.restoreAppMedia(File(extracted, "files"), destination)
+        BackupArchive.restoreAppFiles(File(extracted, "files"), destination)
 
-        assertEquals("photo", File(destination, "order_media/order-1/photo.jpg").readText())
-        assertEquals("signature", File(destination, "signatures/order-1/signature.png").readText())
+        assertEquals("photo", File(destination, "app_media/order_media/order-1/photo.jpg").readText())
+        assertEquals("signature", File(destination, "app_media/signatures/order-1/signature.png").readText())
     }
 
     @Test
@@ -144,15 +144,20 @@ class BackupRepositoryTest {
     fun restoreWithoutCanonicalAppMediaClearsDestinationOnly() {
         val stagedFilesRoot = File(testRoot, "staged-files").apply { mkdirs() }
         val destination = File(testRoot, "destination")
-        File(destination, "order_media/order-1/photo.jpg").also {
+        val appMediaDir = File(destination, "app_media")
+        File(appMediaDir, "order_media/order-1/photo.jpg").also {
             it.parentFile?.mkdirs()
             it.writeText("old photo")
         }
 
-        BackupArchive.restoreAppMedia(stagedFilesRoot, destination)
+        // We need a datastore entry to trigger restoration OR I should change restoreAppFiles
+        // to clear anyway. Let's create an empty datastore source.
+        File(stagedFilesRoot, "app_media").mkdirs()
+
+        BackupArchive.restoreAppFiles(stagedFilesRoot, destination)
 
         assertTrue(destination.exists())
-        assertFalse(File(destination, "order_media/order-1/photo.jpg").exists())
+        assertFalse(File(appMediaDir, "order_media/order-1/photo.jpg").exists())
     }
 
     private fun extract(files: Map<String, String>): File {

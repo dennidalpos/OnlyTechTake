@@ -130,7 +130,7 @@ fun QuickIntakeMediaSection(
                     confirmButton = {},
                     dismissButton = {
                         AppButton(
-                            text = stringResource(R.string.customer_detail_close),
+                            text = stringResource(R.string.action_close),
                             onClick = { onShowCameraChange(false) },
                             variant = AppButtonVariant.Secondary,
                             size = AppButtonSize.Compact,

@@ -46,7 +46,7 @@ class SettingsViewModel(
     backupRepository: BackupRepository,
     private val dataResetRepository: DataResetRepository,
     backupReminderPreferences: BackupReminderPreferences,
-    private val ownerPreferences: OwnerPreferences,
+    ownerPreferences: OwnerPreferences,
     securityPreferences: SecurityPreferences,
     private val storageStatsService: StorageStatsService,
     diagnosticLogService: DiagnosticLogService,
@@ -100,6 +100,7 @@ class SettingsViewModel(
     private val diagnosticDelegate =
         DiagnosticSettingsDelegate(
             diagnosticLogService,
+            securityPreferences,
             actionRunner,
             viewModelScope,
             ::refreshStorageStats,
@@ -107,7 +108,7 @@ class SettingsViewModel(
         )
 
     private val ownerDelegate =
-        OwnerSettingsDelegate(ownerPreferences, actionRunner, viewModelScope)
+        OwnerSettingsDelegate(ownerPreferences, actionRunner)
 
     fun initializeTemplatesIfNeeded() {
         viewModelScope.launch {
@@ -307,8 +308,6 @@ class SettingsViewModel(
     fun clearRecoveryCode() {
         _recoveryCode.value = null
     }
-
-    fun exportDatabase(uri: Uri) = backupDelegate.exportDatabase(uri)
 
     fun exportCompleteBackup(uri: Uri) = backupDelegate.exportCompleteBackup(uri)
 

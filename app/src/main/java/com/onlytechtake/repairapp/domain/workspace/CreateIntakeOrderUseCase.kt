@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.data.repositories.CustomerRepository
@@ -25,11 +26,7 @@ class CreateIntakeOrderUseCase(
     suspend fun countAllOrders(): Int = orderRepository.countAllOrders()
 
     fun getDemoLimitErrorMessage(): String =
-        context.resources.getQuantityString(
-            R.plurals.demo_error_order_limit,
-            BuildConfig.MAX_ORDERS,
-            BuildConfig.MAX_ORDERS,
-        )
+        DemoMode.getOrderLimitMessage(context, BuildConfig.MAX_ORDERS)
 
     suspend fun execute(
         actor: AuthenticatedUser,
@@ -53,11 +50,7 @@ class CreateIntakeOrderUseCase(
                 val totalOrders = orderRepository.countAllOrders()
                 if (totalOrders >= BuildConfig.MAX_ORDERS) {
                     throw IllegalStateException(
-                        context.resources.getQuantityString(
-                            R.plurals.demo_error_order_limit,
-                            BuildConfig.MAX_ORDERS,
-                            BuildConfig.MAX_ORDERS,
-                        ),
+                        DemoMode.getOrderLimitMessage(context, BuildConfig.MAX_ORDERS)
                     )
                 }
             }
@@ -72,7 +65,7 @@ class CreateIntakeOrderUseCase(
                             ?: customerRepository
                                 .save(
                                     actor,
-                                    requireNotNull(normalizedInput.newCustomer) { "Cliente obbligatorio" },
+                                    requireNotNull(normalizedInput.newCustomer) { context.getString(R.string.error_customer_required) },
                                 ).getOrThrow()
                                 .id
 
@@ -84,7 +77,7 @@ class CreateIntakeOrderUseCase(
                                     RepairOrderInput(
                                         customerId = customerId,
                                         title = normalizedInput.problemSummary,
-                                        categoryId = requireNotNull(normalizedInput.categoryId) { "Categoria obbligatoria" },
+                                        categoryId = requireNotNull(normalizedInput.categoryId) { context.getString(R.string.error_category_required) },
                                         description = normalizedInput.problemDetails.trim(),
                                         assignedToUserId = normalizedInput.assignedToUserId,
                                     ),

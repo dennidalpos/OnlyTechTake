@@ -53,9 +53,6 @@ class NewOrderViewModel(
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
 
-    private val _isProcessing = MutableStateFlow(value = false)
-    val isProcessing = _isProcessing.asStateFlow()
-
     private val actionRunner =
         AuthenticatedActionRunner(
             context = applicationContext,
@@ -63,7 +60,7 @@ class NewOrderViewModel(
             currentUser = authRepository.currentUser,
             scope = viewModelScope,
             showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) },
-            setLoading = { _isProcessing.value = it },
+            setLoading = { /* Unused */ },
             diagnosticLogger = diagnosticLogger,
             ioDispatcher = ioDispatcher,
         )

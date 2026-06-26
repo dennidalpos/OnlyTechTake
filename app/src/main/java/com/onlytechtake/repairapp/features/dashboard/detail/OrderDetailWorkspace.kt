@@ -79,8 +79,8 @@ fun OrderDetailWorkspace(
     val diagnosisOutcomeConfirmTitle =
         stringResource(R.string.order_confirm_diagnosis_outcome_title)
     val diagnosisOutcomeConfirmText = stringResource(R.string.order_confirm_diagnosis_outcome_text)
-    val deleteOrderConfirmTitle = stringResource(R.string.order_confirm_delete_title)
-    val deleteOrderConfirmText = stringResource(R.string.order_confirm_delete_text)
+    val deleteOrderConfirmTitle = stringResource(R.string.action_delete_confirm_title, stringResource(R.string.label_repair_order))
+    val deleteOrderConfirmText = stringResource(R.string.action_delete_confirm_text, stringResource(R.string.label_repair_order))
     val notRepairableNote = stringResource(R.string.order_not_repairable_note)
 
     val selected = detail
@@ -193,6 +193,7 @@ fun OrderDetailWorkspace(
                             } else {
                                 null
                             },
+                        isPrimaryActionEnabled = selected.order.status != OrderStatus.RESULT || selected.order.diagnosisOutcome != DiagnosisOutcome.REPAIRABLE,
                     )
                 }
 
@@ -291,7 +292,7 @@ fun OrderDetailWorkspace(
                                 )
                                 Text(
                                     if (signaturesExpanded) {
-                                        stringResource(R.string.content_description_close)
+                                        stringResource(R.string.action_close)
                                     } else {
                                         stringResource(
                                             R.string.content_description_open,
@@ -350,7 +351,7 @@ fun OrderDetailWorkspace(
                                 )
                                 Text(
                                     if (timelineExpanded) {
-                                        stringResource(R.string.content_description_close)
+                                        stringResource(R.string.action_close)
                                     } else {
                                         stringResource(
                                             R.string.content_description_open,
@@ -373,7 +374,7 @@ fun OrderDetailWorkspace(
                             Modifier
                                 .fillMaxWidth()
                                 .padding(top = RepairAppSpacing.screenHorizontal),
-                        text = stringResource(R.string.order_exit_close),
+                        text = stringResource(R.string.action_close),
                         variant = AppButtonVariant.Secondary,
                         onClick = onBack,
                     )

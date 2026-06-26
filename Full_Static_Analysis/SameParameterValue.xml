@@ -1,0 +1,86 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/SocialProAssetTest.kt</file>
+  <line>131</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.SocialProAssetTest java.lang.String waitForCreatedOrderId(java.lang.String summary)" />
+  <problem_class id="SameParameterValue" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Method parameter always has the same value</problem_class>
+  <hints />
+  <description>Value of parameter &lt;code&gt;summary&lt;/code&gt; is always '&quot;Gaming Laptop - Overheating&quot;'</description>
+  <highlighted_element>summary</highlighted_element>
+  <language>kotlin</language>
+  <offset>38</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/error/DiagnosticLogger.kt</file>
+  <line>31</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.error</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.error.DiagnosticLogger void log(java.lang.String level, java.lang.String contextTag, java.lang.String message, java.lang.Throwable throwable)" />
+  <problem_class id="SameParameterValue" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Method parameter always has the same value</problem_class>
+  <hints />
+  <description>Value of parameter &lt;code&gt;level&lt;/code&gt; is always '&quot;ERROR&quot;'</description>
+  <highlighted_element>level</highlighted_element>
+  <language>kotlin</language>
+  <offset>8</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderMediaRepository.kt</file>
+  <line>154</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderMediaRepository java.lang.Object registerCapturedImage(com.onlytechtake.repairapp.domain.auth.AuthenticatedUser actor, java.lang.String orderId, java.io.File file, java.lang.String mediaType, java.lang.String timelineTitle, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity&gt;&gt; $completion)" />
+  <problem_class id="SameParameterValue" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Method parameter always has the same value</problem_class>
+  <hints />
+  <description>Value of parameter &lt;code&gt;mediaType&lt;/code&gt; is always 'OrderMediaRepository.MEDIA_TYPE_PHOTO'</description>
+  <highlighted_element>mediaType</highlighted_element>
+  <language>kotlin</language>
+  <offset>8</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowEventWriter.kt</file>
+  <line>377</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderWorkflowEventWriter java.lang.Object audit(java.lang.String actorUserId, com.onlytechtake.repairapp.data.local.entities.AuditAction action, java.lang.String orderId, java.lang.String customerId, long now, java.lang.String details, kotlin.coroutines.Continuation&lt;? super kotlin.Unit&gt; $completion)" />
+  <problem_class id="SameParameterValue" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Method parameter always has the same value</problem_class>
+  <hints />
+  <description>Value of parameter &lt;code&gt;customerId&lt;/code&gt; is always 'null'</description>
+  <highlighted_element>customerId</highlighted_element>
+  <language>kotlin</language>
+  <offset>8</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/common/SignatureCapture.kt</file>
+  <line>376</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.common</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.common.SignatureCaptureKt android.graphics.Path toAndroidPath(com.onlytechtake.repairapp.features.dashboard.common.SignatureStroke $this$toAndroidPath, float width, float height)" />
+  <problem_class id="SameParameterValue" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Method parameter always has the same value</problem_class>
+  <hints />
+  <description>Value of parameter &lt;code&gt;width&lt;/code&gt; is always '1200.0'</description>
+  <highlighted_element>width</highlighted_element>
+  <language>kotlin</language>
+  <offset>4</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/common/SignatureCapture.kt</file>
+  <line>377</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.common</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.common.SignatureCaptureKt android.graphics.Path toAndroidPath(com.onlytechtake.repairapp.features.dashboard.common.SignatureStroke $this$toAndroidPath, float width, float height)" />
+  <problem_class id="SameParameterValue" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Method parameter always has the same value</problem_class>
+  <hints />
+  <description>Value of parameter &lt;code&gt;height&lt;/code&gt; is always '400.0'</description>
+  <highlighted_element>height</highlighted_element>
+  <language>kotlin</language>
+  <offset>4</offset>
+  <length>6</length>
+</problem>
+</problems>

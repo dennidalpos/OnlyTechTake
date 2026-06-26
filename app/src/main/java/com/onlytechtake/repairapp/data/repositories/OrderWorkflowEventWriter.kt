@@ -113,31 +113,6 @@ internal class OrderWorkflowEventWriter(
         )
     }
 
-    suspend fun orderDeleted(
-        orderId: String,
-        actorUserId: String,
-        reason: String?,
-        now: Long,
-    ) {
-        writeTimeline(
-            timelineEvent(
-                orderId = orderId,
-                type = TimelineEventType.ORDER_DELETED,
-                title = context.getString(R.string.order_deleted_title),
-                description = reason,
-                actorUserId = actorUserId,
-                createdAt = now,
-            ),
-        )
-        audit(
-            actorUserId,
-            AuditAction.ORDER_DELETED,
-            null,
-            null,
-            now,
-        ) // orderId set to null to avoid FK error
-    }
-
     suspend fun feedbackRecorded(
         orderId: String,
         actorUserId: String,

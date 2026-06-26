@@ -1,0 +1,80 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTokens.kt</file>
+  <line>119</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppShapes chip" />
+  <problem_class id="UnusedSymbol" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused symbol</problem_class>
+  <description>Property &quot;chip&quot; is never used</description>
+  <highlighted_element>chip</highlighted_element>
+  <language>kotlin</language>
+  <offset>8</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/error/DiagnosticLogger.kt</file>
+  <line>59</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.error</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.error.DiagnosticLogger long getLogSize()" />
+  <problem_class id="UnusedSymbol" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused symbol</problem_class>
+  <description>Function &quot;getLogSize&quot; is never used</description>
+  <highlighted_element>getLogSize</highlighted_element>
+  <language>kotlin</language>
+  <offset>8</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/utils/CurrencyUtils.kt</file>
+  <line>7</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.utils</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.utils.CurrencyUtilsKt java.lang.String formatEuroCents(java.lang.Long $this$formatEuroCents)" />
+  <problem_class id="UnusedSymbol" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused symbol</problem_class>
+  <description>Function &quot;formatEuroCents&quot; is never used</description>
+  <highlighted_element>formatEuroCents</highlighted_element>
+  <language>kotlin</language>
+  <offset>10</offset>
+  <length>15</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/DaoProjections.kt</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.OrderMediaAggregate" />
+  <problem_class id="UnusedSymbol" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused symbol</problem_class>
+  <description>Class &quot;OrderMediaAggregate&quot; is never used</description>
+  <highlighted_element>OrderMediaAggregate</highlighted_element>
+  <language>kotlin</language>
+  <offset>11</offset>
+  <length>19</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/DaoProjections.kt</file>
+  <line>19</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.SignatureAggregate" />
+  <problem_class id="UnusedSymbol" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused symbol</problem_class>
+  <description>Class &quot;SignatureAggregate&quot; is never used</description>
+  <highlighted_element>SignatureAggregate</highlighted_element>
+  <language>kotlin</language>
+  <offset>11</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>65</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.data.local.entities.TimelineEventType ORDER_DELETED" />
+  <problem_class id="UnusedSymbol" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused symbol</problem_class>
+  <description>Class &quot;ORDER_DELETED&quot; is never used</description>
+  <highlighted_element>ORDER_DELETED</highlighted_element>
+  <language>kotlin</language>
+  <offset>4</offset>
+  <length>13</length>
+</problem>
+</problems>

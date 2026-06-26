@@ -15,10 +15,4 @@ interface LoginAttemptDao {
         username: String,
         since: Long,
     ): Int
-
-    @Query("DELETE FROM login_attempts WHERE username = :username")
-    suspend fun clearAttempts(username: String)
-
-    @Query("DELETE FROM login_attempts WHERE attemptAt < :before")
-    suspend fun cleanupOldAttempts(before: Long)
 }

@@ -89,10 +89,6 @@ fun BackupSettings(
         rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) { uri ->
             uri?.let(viewModel::exportOrdersXlsx)
         }
-    val exportDatabaseLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/x-sqlite3")) { uri ->
-            uri?.let(viewModel::exportDatabase)
-        }
 
     var ordersResetConfirmation by rememberSaveable { mutableStateOf("") }
     var resetConfirmation by rememberSaveable { mutableStateOf("") }
@@ -110,8 +106,6 @@ fun BackupSettings(
     val confirmClearLogsTitle = stringResource(R.string.config_backup_logs_clear_confirm_title)
     val confirmClearLogsText = stringResource(R.string.config_backup_logs_clear_confirm_text)
 
-    val confirmExportDatabaseTitle = stringResource(R.string.admin_confirm_export_database_title)
-    val confirmExportDatabaseText = stringResource(R.string.admin_confirm_export_database_text)
     val confirmDeleteAllOrdersTitle = stringResource(R.string.admin_confirm_delete_all_orders_title)
     val confirmDeleteAllOrdersText = stringResource(R.string.admin_confirm_delete_all_orders_text)
     val confirmTotalResetTitle = stringResource(R.string.admin_confirm_total_reset_title)
@@ -292,44 +286,17 @@ fun BackupSettings(
                             }
                         },
                     )
-                }
-            }
 
-            Spacer(Modifier.height(RepairAppSpacing.sectionGap))
+                    AppDivider()
 
-            SectionTitle(
-                text = stringResource(R.string.config_backup_orders_export_title),
-                tooltip = stringResource(R.string.config_backup_orders_tooltip),
-            )
-
-            StandardCard {
-                Column(
-                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
-                ) {
                     AppButton(
                         text = stringResource(R.string.config_backup_export_xlsx),
-                        size = AppButtonSize.Default,
+                        size = AppButtonSize.Compact,
                         variant = AppButtonVariant.Secondary,
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
                             onRequestConfirm(confirmExportXlsxTitle, confirmExportXlsxText) {
                                 exportOrdersXlsxLauncher.launch("onlytechtake_commesse_$timestamp.xlsx")
-                            }
-                        },
-                    )
-
-                    AppButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.admin_export_database),
-                        variant = AppButtonVariant.Secondary,
-                        size = AppButtonSize.Compact,
-                        onClick = {
-                            onRequestConfirm(
-                                confirmExportDatabaseTitle,
-                                confirmExportDatabaseText,
-                            ) {
-                                exportDatabaseLauncher.launch("onlytechtake_backup_$timestamp.db")
                             }
                         },
                     )

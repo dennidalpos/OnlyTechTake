@@ -94,17 +94,13 @@ object RepairAppSpacing {
     val tinyGap = 4.dp
     val bottomContentPadding = 16.dp
 
-    val maxContentWidthCompact = 600.dp
     val maxContentWidthMedium = 840.dp
-    val maxContentWidthExpanded = 1200.dp
 }
 
 object RepairAppSizes {
     val touchTarget = 48.dp
     val buttonDefault = 48.dp
     val buttonCompact = 36.dp
-    val iconButton = 40.dp
-    val intakeStepperDot = 32.dp
     val orderStepperDot = 20.dp
     val metricCardHeight = 100.dp
 }
@@ -113,17 +109,13 @@ object RepairAppIconSizes {
     val small = 16.dp
     val standard = 24.dp
     val medium = 32.dp
-    val large = 48.dp
 }
 
 object RepairAppShapes {
-    val screenContainer = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
     val card = RoundedCornerShape(16.dp)
-    val cardSelected = RoundedCornerShape(16.dp)
     val button = RoundedCornerShape(12.dp)
     val compactButton = RoundedCornerShape(8.dp)
     val pill = RoundedCornerShape(50)
-    val chip = RoundedCornerShape(8.dp)
     val badge = RoundedCornerShape(4.dp)
     val field = RoundedCornerShape(12.dp)
     val dialog = RoundedCornerShape(28.dp)

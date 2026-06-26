@@ -1,0 +1,338 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/local/db/OrderExportDaoInstrumentedTest.kt</file>
+  <line>27</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.local.db</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.db.OrderExportDaoInstrumentedTest" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'OrderExportDaoInstrumentedTest' has too many dependencies (20 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/local/db/RepairAppDatabaseInstrumentedTest.kt</file>
+  <line>26</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.local.db</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.db.RepairAppDatabaseInstrumentedTest" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'RepairAppDatabaseInstrumentedTest' has too many dependencies (14 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/DataResetRepositoryInstrumentedTest.kt</file>
+  <line>35</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.DataResetRepositoryInstrumentedTest" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'DataResetRepositoryInstrumentedTest' has too many dependencies (22 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowRepositoryInstrumentedTest.kt</file>
+  <line>34</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepositoryInstrumentedTest" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'OrderWorkflowRepositoryInstrumentedTest' has too many dependencies (26 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/RepositoryPathsInstrumentedTest.kt</file>
+  <line>58</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.RepositoryPathsInstrumentedTest" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'RepositoryPathsInstrumentedTest' has too many dependencies (64 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/DemoDataSeeder.kt</file>
+  <line>32</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.demo.DemoDataSeeder" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'DemoDataSeeder' has too many dependencies (30 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/di/SubContainers.kt</file>
+  <line>191</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.di</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.di.SettingsContainer" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'SettingsContainer' has too many dependencies (12 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/db/RepairAppDatabase.kt</file>
+  <line>43</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.db</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.db.RepairAppDatabase" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'RepairAppDatabase' has too many dependencies (17 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/db/RoomConverters.kt</file>
+  <line>20</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.db</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.db.RoomConverters" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'RoomConverters' has too many dependencies (15 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/AdminUserRepository.kt</file>
+  <line>20</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.AdminUserRepository" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'AdminUserRepository' has too many dependencies (12 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupRepository.kt</file>
+  <line>35</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.BackupRepository" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'BackupRepository' has too many dependencies (33 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/DefaultAuthRepository.kt</file>
+  <line>34</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.DefaultAuthRepository" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'DefaultAuthRepository' has too many dependencies (30 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderMediaRepository.kt</file>
+  <line>36</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderMediaRepository" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'OrderMediaRepository' has too many dependencies (19 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowCommands.kt</file>
+  <line>40</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderWorkflowCommands" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'OrderWorkflowCommands' has too many dependencies (31 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowQueries.kt</file>
+  <line>24</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderWorkflowQueries" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'OrderWorkflowQueries' has too many dependencies (20 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowRepository.kt</file>
+  <line>29</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'OrderWorkflowRepository' has too many dependencies (26 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/SignatureRepository.kt</file>
+  <line>22</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.SignatureRepository" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'SignatureRepository' has too many dependencies (17 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/TemplateRepository.kt</file>
+  <line>38</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.TemplateRepository" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'TemplateRepository' has too many dependencies (31 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCase.kt</file>
+  <line>17</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'CreateIntakeOrderUseCase' has too many dependencies (12 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/GenerateOrderStatusPdfUseCase.kt</file>
+  <line>23</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'GenerateOrderStatusPdfUseCase' has too many dependencies (18 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/auth/AuthGateViewModel.kt</file>
+  <line>36</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.auth</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateViewModel" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'AuthGateViewModel' has too many dependencies (13 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/customers/CustomersViewModel.kt</file>
+  <line>29</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.customers</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.customers.CustomersViewModel" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'CustomersViewModel' has too many dependencies (11 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailViewModel.kt</file>
+  <line>40</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'OrderDetailViewModel' has too many dependencies (22 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/NewOrderViewModel.kt</file>
+  <line>39</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.neworder</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.neworder.NewOrderViewModel" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'NewOrderViewModel' has too many dependencies (13 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/SettingsViewModel.kt</file>
+  <line>39</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.settings</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.settings.SettingsViewModel" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'SettingsViewModel' has too many dependencies (32 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/TemplateRepositoryTest.kt</file>
+  <line>33</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.TemplateRepositoryTest" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'TemplateRepositoryTest' has too many dependencies (25 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCaseTest.kt</file>
+  <line>27</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCaseTest" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'CreateIntakeOrderUseCaseTest' has too many dependencies (20 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailViewModelTest.kt</file>
+  <line>46</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModelTest" />
+  <problem_class id="ClassWithTooManyDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependencies</problem_class>
+  <hints />
+  <description>Class 'OrderDetailViewModelTest' has too many dependencies (12 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+</problems>

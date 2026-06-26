@@ -176,7 +176,7 @@ fun LocalImageViewer(
                     )
                 }
                 AppButton(
-                    text = stringResource(R.string.content_description_close),
+                    text = stringResource(R.string.action_close),
                     onClick = onDismiss,
                     variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact,

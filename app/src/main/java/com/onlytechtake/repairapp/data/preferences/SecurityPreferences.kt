@@ -7,7 +7,6 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 private val Context.securityDataStore by preferencesDataStore(name = "security_preferences")
@@ -40,12 +39,6 @@ class SecurityPreferences(
         }
     }
 
-    suspend fun setDatabaseEncryptionEnabled(enabled: Boolean) {
-        context.securityDataStore.edit { preferences ->
-            preferences[DATABASE_ENCRYPTION_ENABLED] = enabled
-        }
-    }
-
     suspend fun setBackupEncryptionPassword(password: String) {
         context.securityDataStore.edit { preferences ->
             preferences[BACKUP_ENCRYPTION_PASSWORD] = password
@@ -57,8 +50,6 @@ class SecurityPreferences(
             preferences[INACTIVITY_TIMEOUT_MINUTES] = minutes
         }
     }
-
-    suspend fun getSettings(): SecuritySettings = settings.first()
 
     private companion object {
         val BACKUP_ENCRYPTION_ENABLED = booleanPreferencesKey("backup_encryption_enabled")

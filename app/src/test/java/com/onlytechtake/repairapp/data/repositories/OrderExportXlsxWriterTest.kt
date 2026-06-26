@@ -41,6 +41,7 @@ class OrderExportXlsxWriterTest {
                     "Chiusa",
                     "Motivo chiusura",
                 ),
+            sheetName = "Commesse",
             statusLabels = OrderStatus.entries.associateWith { it.name },
             priorityLabels = OrderPriority.entries.associateWith { it.name },
             customerTypeLabels = CustomerType.entries.associateWith { it.name },

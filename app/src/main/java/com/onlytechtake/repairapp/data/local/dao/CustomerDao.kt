@@ -27,8 +27,9 @@ interface CustomerDao {
         """
         SELECT * FROM customers
         WHERE :query = ''
-           OR rowid IN (SELECT rowid FROM customers_fts WHERE customers_fts MATCH :query || '*')
-           OR id IN (SELECT customerId FROM repair_orders WHERE rowid IN (SELECT rowid FROM repair_orders_fts WHERE repair_orders_fts MATCH :query || '*'))
+           OR firstName LIKE '%' || :query || '%'
+           OR lastName LIKE '%' || :query || '%'
+           OR companyName LIKE '%' || :query || '%'
         ORDER BY updatedAt DESC
         """,
     )

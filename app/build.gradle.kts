@@ -60,6 +60,7 @@ android {
             buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "true")
             buildConfigField("boolean", "IS_SHOWCASE_MODE_ENABLED", "false")
             buildConfigField("int", "MAX_ORDERS", "1")
+            buildConfigField("int", "MAX_OPERATORS", "3")
         }
         create("showcase") {
             dimension = "version"
@@ -70,6 +71,7 @@ android {
             buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "false")
             buildConfigField("boolean", "IS_SHOWCASE_MODE_ENABLED", "true")
             buildConfigField("int", "MAX_ORDERS", "-1")
+            buildConfigField("int", "MAX_OPERATORS", "-1")
         }
         create("full") {
             isDefault = true
@@ -80,6 +82,7 @@ android {
             buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "false")
             buildConfigField("boolean", "IS_SHOWCASE_MODE_ENABLED", "false")
             buildConfigField("int", "MAX_ORDERS", "-1")
+            buildConfigField("int", "MAX_OPERATORS", "-1")
         }
     }
 

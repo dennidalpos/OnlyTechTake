@@ -1,0 +1,2693 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>4</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Repair order created&lt;/code&gt;, used in &lt;code&gt;demo_event_title_created&lt;/code&gt; and &lt;code&gt;order_created_title&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;order_created_title&quot;&gt;Repair order created&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>64</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>26</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Open&lt;/code&gt;, used in &lt;code&gt;content_description_open&lt;/code&gt; and &lt;code&gt;status_open&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;status_open&quot;&gt;Open&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>40</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>28</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Diagnosis&lt;/code&gt;, used in &lt;code&gt;anchor_step_diagnosis&lt;/code&gt; and &lt;code&gt;status_diagnosis&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;status_diagnosis&quot;&gt;Diagnosis&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>50</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>31</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Ready for pickup&lt;/code&gt;, used in &lt;code&gt;action_ready_for_pickup&lt;/code&gt; and &lt;code&gt;status_ready_for_pickup&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;status_ready_for_pickup&quot;&gt;Ready for pickup&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>64</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>32</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Closed&lt;/code&gt;, used in &lt;code&gt;anchor_step_closed&lt;/code&gt;, &lt;code&gt;export_xlsx_header_closed_at&lt;/code&gt; and &lt;code&gt;status_closed&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;status_closed&quot;&gt;Closed&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>44</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>38</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Ready for pickup&lt;/code&gt;, used in &lt;code&gt;action_ready_for_pickup&lt;/code&gt; and &lt;code&gt;status_ready_for_pickup&lt;/code&gt; (Duplicates value in &lt;code&gt;status_ready_for_pickup&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;action_ready_for_pickup&quot;&gt;Ready for pickup&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>64</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>47</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Diagnosis&lt;/code&gt;, used in &lt;code&gt;anchor_step_diagnosis&lt;/code&gt; and &lt;code&gt;status_diagnosis&lt;/code&gt; (Duplicates value in &lt;code&gt;status_diagnosis&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;anchor_step_diagnosis&quot;&gt;Diagnosis&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>55</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>53</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Closed&lt;/code&gt;, used in &lt;code&gt;anchor_step_closed&lt;/code&gt;, &lt;code&gt;export_xlsx_header_closed_at&lt;/code&gt; and &lt;code&gt;status_closed&lt;/code&gt; (Duplicates value in &lt;code&gt;status_closed&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;anchor_step_closed&quot;&gt;Closed&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>49</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>54</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Legal&lt;/code&gt;, used in &lt;code&gt;anchor_step_legal&lt;/code&gt; and &lt;code&gt;config_template_legal_step&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;anchor_step_legal&quot;&gt;Legal&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>47</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>88</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Customer&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_customer&lt;/code&gt;, &lt;code&gt;intake_step_customer&lt;/code&gt;, &lt;code&gt;pdf_section_customer&lt;/code&gt; and &lt;code&gt;signature_default_signer&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication.&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;pdf_section_customer&quot;&gt;CUSTOMER&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>53</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>99</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Customer signature&lt;/code&gt;, used in &lt;code&gt;demo_signature_label&lt;/code&gt; and &lt;code&gt;pdf_section_signature&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication.&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;pdf_section_signature&quot;&gt;CUSTOMER SIGNATURE&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>64</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>200</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Clear Logs&lt;/code&gt;, used in &lt;code&gt;config_backup_logs_clear_confirm_title&lt;/code&gt; and &lt;code&gt;config_backup_logs_clear&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;config_backup_logs_clear&quot;&gt;Clear Logs&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>59</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>201</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Clear Logs&lt;/code&gt;, used in &lt;code&gt;config_backup_logs_clear_confirm_title&lt;/code&gt; and &lt;code&gt;config_backup_logs_clear&lt;/code&gt; (Duplicates value in &lt;code&gt;config_backup_logs_clear&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;config_backup_logs_clear_confirm_title&quot;&gt;Clear Logs&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>73</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>212</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Demo Admin&lt;/code&gt;, used in &lt;code&gt;demo_admin_display_name&lt;/code&gt; and &lt;code&gt;label_demo_admin&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;label_demo_admin&quot;&gt;Demo Admin&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>51</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>228</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Computer &amp;amp; Laptop&lt;/code&gt;, used in &lt;code&gt;demo_cat_pc&lt;/code&gt; and &lt;code&gt;showcase_cat_pc&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;showcase_cat_pc&quot;&gt;Computer &amp;amp; Laptop&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>61</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>229</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;PC hardware and software repairs&lt;/code&gt;, used in &lt;code&gt;demo_cat_pc_desc&lt;/code&gt; and &lt;code&gt;showcase_cat_pc_desc&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;showcase_cat_pc_desc&quot;&gt;PC hardware and software repairs&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>77</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>230</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Laptops and Ultrabooks&lt;/code&gt;, used in &lt;code&gt;demo_cat_notebook_desc&lt;/code&gt; and &lt;code&gt;showcase_cat_notebook_desc&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;showcase_cat_notebook_desc&quot;&gt;Laptops and Ultrabooks&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>73</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>231</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Gaming Laptop&lt;/code&gt;, used in &lt;code&gt;demo_cat_gaming&lt;/code&gt; and &lt;code&gt;showcase_cat_gaming_laptop&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;showcase_cat_gaming_laptop&quot;&gt;Gaming Laptop&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>64</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>232</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;MSI, ROG, Alienware, Legion&lt;/code&gt;, used in &lt;code&gt;demo_cat_gaming_desc&lt;/code&gt; and &lt;code&gt;showcase_cat_gaming_laptop_desc&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;showcase_cat_gaming_laptop_desc&quot;&gt;MSI, ROG, Alienware, Legion&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>83</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>233</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Internal cleaning and thermal paste&lt;/code&gt;, used in &lt;code&gt;demo_cat_rog_strix_desc&lt;/code&gt; and &lt;code&gt;showcase_cat_rog_strix_desc&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;showcase_cat_rog_strix_desc&quot;&gt;Internal cleaning and thermal paste&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>87</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>260</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Demo Admin&lt;/code&gt;, used in &lt;code&gt;demo_admin_display_name&lt;/code&gt; and &lt;code&gt;label_demo_admin&lt;/code&gt; (Duplicates value in &lt;code&gt;label_demo_admin&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;demo_admin_display_name&quot;&gt;Demo Admin&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>58</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>262</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Computer &amp;amp; Laptop&lt;/code&gt;, used in &lt;code&gt;demo_cat_pc&lt;/code&gt; and &lt;code&gt;showcase_cat_pc&lt;/code&gt; (Duplicates value in &lt;code&gt;showcase_cat_pc&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;demo_cat_pc&quot;&gt;Computer &amp;amp; Laptop&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>57</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>263</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;PC hardware and software repairs&lt;/code&gt;, used in &lt;code&gt;demo_cat_pc_desc&lt;/code&gt; and &lt;code&gt;showcase_cat_pc_desc&lt;/code&gt; (Duplicates value in &lt;code&gt;showcase_cat_pc_desc&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;demo_cat_pc_desc&quot;&gt;PC hardware and software repairs&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>73</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>265</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Laptops and Ultrabooks&lt;/code&gt;, used in &lt;code&gt;demo_cat_notebook_desc&lt;/code&gt; and &lt;code&gt;showcase_cat_notebook_desc&lt;/code&gt; (Duplicates value in &lt;code&gt;showcase_cat_notebook_desc&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;demo_cat_notebook_desc&quot;&gt;Laptops and Ultrabooks&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>69</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>266</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Gaming Laptop&lt;/code&gt;, used in &lt;code&gt;demo_cat_gaming&lt;/code&gt; and &lt;code&gt;showcase_cat_gaming_laptop&lt;/code&gt; (Duplicates value in &lt;code&gt;showcase_cat_gaming_laptop&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;demo_cat_gaming&quot;&gt;Gaming Laptop&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>53</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>267</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;MSI, ROG, Alienware, Legion&lt;/code&gt;, used in &lt;code&gt;demo_cat_gaming_desc&lt;/code&gt; and &lt;code&gt;showcase_cat_gaming_laptop_desc&lt;/code&gt; (Duplicates value in &lt;code&gt;showcase_cat_gaming_laptop_desc&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;demo_cat_gaming_desc&quot;&gt;MSI, ROG, Alienware, Legion&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>72</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>269</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Internal cleaning and thermal paste&lt;/code&gt;, used in &lt;code&gt;demo_cat_rog_strix_desc&lt;/code&gt; and &lt;code&gt;showcase_cat_rog_strix_desc&lt;/code&gt; (Duplicates value in &lt;code&gt;showcase_cat_rog_strix_desc&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;demo_cat_rog_strix_desc&quot;&gt;Internal cleaning and thermal paste&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>83</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>278</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Customer signature&lt;/code&gt;, used in &lt;code&gt;demo_signature_label&lt;/code&gt; and &lt;code&gt;pdf_section_signature&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication. (Duplicates value in &lt;code&gt;pdf_section_signature&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation))&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;demo_signature_label&quot;&gt;Customer signature&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>63</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>281</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Repair order created&lt;/code&gt;, used in &lt;code&gt;demo_event_title_created&lt;/code&gt; and &lt;code&gt;order_created_title&lt;/code&gt; (Duplicates value in &lt;code&gt;order_created_title&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;demo_event_title_created&quot;&gt;Repair order created&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>69</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>318</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Not repairable&lt;/code&gt;, used in &lt;code&gt;order_diagnosis_not_repairable&lt;/code&gt; and &lt;code&gt;reason_not_repairable&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;reason_not_repairable&quot;&gt;Not repairable&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>60</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>322</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;None&lt;/code&gt;, used in &lt;code&gt;action_none&lt;/code&gt; and &lt;code&gt;config_backup_last_success_none&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;action_none&quot;&gt;None&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>40</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>348</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Login&lt;/code&gt;, used in &lt;code&gt;auth_login_submit&lt;/code&gt; and &lt;code&gt;auth_login_title&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;auth_login_title&quot;&gt;Login&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>46</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>349</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Login&lt;/code&gt;, used in &lt;code&gt;auth_login_submit&lt;/code&gt; and &lt;code&gt;auth_login_title&lt;/code&gt; (Duplicates value in &lt;code&gt;auth_login_title&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;auth_login_submit&quot;&gt;Login&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>47</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>367</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Customers&lt;/code&gt;, used in &lt;code&gt;customer_title&lt;/code&gt;, &lt;code&gt;dashboard_customers&lt;/code&gt; and &lt;code&gt;home_metric_customers&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;dashboard_customers&quot;&gt;Customers&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>53</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>376</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Operator&lt;/code&gt;, used in &lt;code&gt;dashboard_role_operator&lt;/code&gt;, &lt;code&gt;export_xlsx_header_operator&lt;/code&gt; and &lt;code&gt;order_operator_label&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;dashboard_role_operator&quot;&gt;Operator&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>56</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>384</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;New repair order&lt;/code&gt;, used in &lt;code&gt;home_new_order&lt;/code&gt;, &lt;code&gt;home_pro_cta_new&lt;/code&gt; and &lt;code&gt;new_order_title&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication.&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;home_pro_cta_new&quot;&gt;NEW REPAIR ORDER&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>57</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>391</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Customers&lt;/code&gt;, used in &lt;code&gt;customer_title&lt;/code&gt;, &lt;code&gt;dashboard_customers&lt;/code&gt; and &lt;code&gt;home_metric_customers&lt;/code&gt; (Duplicates value in &lt;code&gt;dashboard_customers&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;home_metric_customers&quot;&gt;Customers&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>55</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>392</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Active&lt;/code&gt;, used in &lt;code&gt;admin_user_active&lt;/code&gt; and &lt;code&gt;home_metric_active&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;home_metric_active&quot;&gt;Active&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>49</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>393</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;New repair order&lt;/code&gt;, used in &lt;code&gt;home_new_order&lt;/code&gt;, &lt;code&gt;home_pro_cta_new&lt;/code&gt; and &lt;code&gt;new_order_title&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication. (Duplicates value in &lt;code&gt;home_pro_cta_new&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation))&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;home_new_order&quot;&gt;New repair order&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>55</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>410</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Back&lt;/code&gt;, used in &lt;code&gt;content_description_back&lt;/code&gt; and &lt;code&gt;nav_back&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;nav_back&quot;&gt;Back&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>37</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>413</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Information&lt;/code&gt;, used in &lt;code&gt;config_hub_about_title&lt;/code&gt; and &lt;code&gt;content_description_info&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;content_description_info&quot;&gt;Information&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>60</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>414</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Back&lt;/code&gt;, used in &lt;code&gt;content_description_back&lt;/code&gt; and &lt;code&gt;nav_back&lt;/code&gt; (Duplicates value in &lt;code&gt;nav_back&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;content_description_back&quot;&gt;Back&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>53</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>415</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Close&lt;/code&gt;, used in &lt;code&gt;content_description_close&lt;/code&gt; and &lt;code&gt;customer_detail_close&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;content_description_close&quot;&gt;Close&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>55</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>426</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Edit&lt;/code&gt;, used in &lt;code&gt;content_description_edit&lt;/code&gt; and &lt;code&gt;customer_detail_edit&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;content_description_edit&quot;&gt;Edit&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>53</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>427</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Open&lt;/code&gt;, used in &lt;code&gt;content_description_open&lt;/code&gt; and &lt;code&gt;status_open&lt;/code&gt; (Duplicates value in &lt;code&gt;status_open&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;content_description_open&quot;&gt;Open&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>53</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>438</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Privacy and signature&lt;/code&gt;, used in &lt;code&gt;intake_step_privacy&lt;/code&gt; and &lt;code&gt;signature_form_title&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;signature_form_title&quot;&gt;Privacy and signature&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>66</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>439</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Signature %s&lt;/code&gt;, used in &lt;code&gt;signature_image_description&lt;/code&gt; and &lt;code&gt;signature_signer_label&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;signature_signer_label&quot;&gt;Signature %s&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>59</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>442</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Signature %s&lt;/code&gt;, used in &lt;code&gt;signature_image_description&lt;/code&gt; and &lt;code&gt;signature_signer_label&lt;/code&gt; (Duplicates value in &lt;code&gt;signature_signer_label&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;signature_image_description&quot;&gt;Signature %s&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>64</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>450</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Privacy Policy&lt;/code&gt;, used in &lt;code&gt;about_privacy_policy&lt;/code&gt; and &lt;code&gt;signature_privacy_title&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;signature_privacy_title&quot;&gt;Privacy Policy&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>62</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>451</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Service Intake Terms&lt;/code&gt;, used in &lt;code&gt;signature_terms_title&lt;/code&gt; and &lt;code&gt;template_condizioni_title&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;signature_terms_title&quot;&gt;Service Intake Terms&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>66</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>452</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Customer&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_customer&lt;/code&gt;, &lt;code&gt;intake_step_customer&lt;/code&gt;, &lt;code&gt;pdf_section_customer&lt;/code&gt; and &lt;code&gt;signature_default_signer&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication. (Duplicates value in &lt;code&gt;pdf_section_customer&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation))&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;signature_default_signer&quot;&gt;Customer&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>57</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>479</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Customers&lt;/code&gt;, used in &lt;code&gt;customer_title&lt;/code&gt;, &lt;code&gt;dashboard_customers&lt;/code&gt; and &lt;code&gt;home_metric_customers&lt;/code&gt; (Duplicates value in &lt;code&gt;dashboard_customers&lt;/code&gt;) (Duplicates value in &lt;code&gt;dashboard_customers&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;customer_title&quot;&gt;Customers&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>48</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>480</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Search customer&lt;/code&gt;, used in &lt;code&gt;customer_search_label&lt;/code&gt;, &lt;code&gt;intake_search_customer&lt;/code&gt; and &lt;code&gt;orders_search_label&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;customer_search_label&quot;&gt;Search customer&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>61</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>497</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Confirm&lt;/code&gt;, used in &lt;code&gt;confirm&lt;/code&gt; and &lt;code&gt;intake_submit_title&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;confirm&quot;&gt;Confirm&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>39</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>500</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Close&lt;/code&gt;, used in &lt;code&gt;content_description_close&lt;/code&gt; and &lt;code&gt;customer_detail_close&lt;/code&gt; (Duplicates value in &lt;code&gt;content_description_close&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;customer_detail_close&quot;&gt;Close&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>51</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>501</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Edit&lt;/code&gt;, used in &lt;code&gt;content_description_edit&lt;/code&gt; and &lt;code&gt;customer_detail_edit&lt;/code&gt; (Duplicates value in &lt;code&gt;content_description_edit&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;customer_detail_edit&quot;&gt;Edit&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>49</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>514</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Phone&lt;/code&gt;, used in &lt;code&gt;customer_field_phone&lt;/code&gt;, &lt;code&gt;export_xlsx_header_phone&lt;/code&gt; and &lt;code&gt;owner_field_phone&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;customer_field_phone&quot;&gt;Phone&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>50</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>515</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Email&lt;/code&gt;, used in &lt;code&gt;customer_field_email&lt;/code&gt;, &lt;code&gt;export_xlsx_header_email&lt;/code&gt; and &lt;code&gt;owner_field_email&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;customer_field_email&quot;&gt;Email&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>50</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>519</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;New repair order&lt;/code&gt;, used in &lt;code&gt;home_new_order&lt;/code&gt;, &lt;code&gt;home_pro_cta_new&lt;/code&gt; and &lt;code&gt;new_order_title&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication. (Duplicates value in &lt;code&gt;home_pro_cta_new&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation)) (Duplicates value in &lt;code&gt;home_pro_cta_new&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;new_order_title&quot;&gt;New repair order&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>56</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>520</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Customer&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_customer&lt;/code&gt;, &lt;code&gt;intake_step_customer&lt;/code&gt;, &lt;code&gt;pdf_section_customer&lt;/code&gt; and &lt;code&gt;signature_default_signer&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication. (Duplicates value in &lt;code&gt;pdf_section_customer&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation)) (Duplicates value in &lt;code&gt;pdf_section_customer&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;intake_step_customer&quot;&gt;Customer&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>53</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>521</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Category&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_category&lt;/code&gt; and &lt;code&gt;intake_step_category&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;intake_step_category&quot;&gt;Category&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>53</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>526</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Privacy and signature&lt;/code&gt;, used in &lt;code&gt;intake_step_privacy&lt;/code&gt; and &lt;code&gt;signature_form_title&lt;/code&gt; (Duplicates value in &lt;code&gt;signature_form_title&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;intake_step_privacy&quot;&gt;Privacy and signature&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>65</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>528</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Search customer&lt;/code&gt;, used in &lt;code&gt;customer_search_label&lt;/code&gt;, &lt;code&gt;intake_search_customer&lt;/code&gt; and &lt;code&gt;orders_search_label&lt;/code&gt; (Duplicates value in &lt;code&gt;customer_search_label&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;intake_search_customer&quot;&gt;Search customer&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>62</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>535</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;New Category&lt;/code&gt;, used in &lt;code&gt;config_category_dialog_title_new&lt;/code&gt; and &lt;code&gt;intake_add_missing_category&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication.&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;intake_add_missing_category&quot;&gt;New category&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>64</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>542</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Confirm&lt;/code&gt;, used in &lt;code&gt;confirm&lt;/code&gt; and &lt;code&gt;intake_submit_title&lt;/code&gt; (Duplicates value in &lt;code&gt;confirm&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;intake_submit_title&quot;&gt;Confirm&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>51</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>548</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Selected category&lt;/code&gt;, used in &lt;code&gt;intake_category_selected_icon&lt;/code&gt; and &lt;code&gt;intake_category_selected_state&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;intake_category_selected_icon&quot;&gt;Selected category&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>71</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>550</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Selected category&lt;/code&gt;, used in &lt;code&gt;intake_category_selected_icon&lt;/code&gt; and &lt;code&gt;intake_category_selected_state&lt;/code&gt; (Duplicates value in &lt;code&gt;intake_category_selected_icon&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;intake_category_selected_state&quot;&gt;Selected category&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>72</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>553</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Description&lt;/code&gt;, used in &lt;code&gt;about_description_title&lt;/code&gt;, &lt;code&gt;config_category_description_label&lt;/code&gt;, &lt;code&gt;export_xlsx_header_description&lt;/code&gt; and &lt;code&gt;intake_problem_description&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;intake_problem_description&quot;&gt;Description&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>62</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>567</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;All&lt;/code&gt;, used in &lt;code&gt;config_category_root&lt;/code&gt; and &lt;code&gt;orders_filter_all&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;orders_filter_all&quot;&gt;All&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>45</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>572</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Search customer&lt;/code&gt;, used in &lt;code&gt;customer_search_label&lt;/code&gt;, &lt;code&gt;intake_search_customer&lt;/code&gt; and &lt;code&gt;orders_search_label&lt;/code&gt; (Duplicates value in &lt;code&gt;customer_search_label&lt;/code&gt;) (Duplicates value in &lt;code&gt;customer_search_label&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;orders_search_label&quot;&gt;Search customer&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>59</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>580</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Internal notes&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_internal_notes&lt;/code&gt; and &lt;code&gt;order_internal_notes&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;order_internal_notes&quot;&gt;Internal notes&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>59</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>611</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Not repairable&lt;/code&gt;, used in &lt;code&gt;order_diagnosis_not_repairable&lt;/code&gt; and &lt;code&gt;reason_not_repairable&lt;/code&gt; (Duplicates value in &lt;code&gt;reason_not_repairable&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;order_diagnosis_not_repairable&quot;&gt;Not repairable&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>69</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>616</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Closure reason&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_closure_reason&lt;/code&gt; and &lt;code&gt;order_closure_reason_title&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;order_closure_reason_title&quot;&gt;Closure reason&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>65</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>617</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Paid&lt;/code&gt;, used in &lt;code&gt;export_xlsx_value_paid&lt;/code&gt;, &lt;code&gt;order_paid_badge&lt;/code&gt; and &lt;code&gt;order_paid_button&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication.&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;order_paid_button&quot;&gt;Paid&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>46</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>618</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Paid&lt;/code&gt;, used in &lt;code&gt;export_xlsx_value_paid&lt;/code&gt;, &lt;code&gt;order_paid_badge&lt;/code&gt; and &lt;code&gt;order_paid_button&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication. (Duplicates value in &lt;code&gt;order_paid_button&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation))&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;order_paid_badge&quot;&gt;PAID&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>45</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>622</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Diagnosis outcome&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_diagnosis_outcome&lt;/code&gt; and &lt;code&gt;order_not_repairable_title&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;order_not_repairable_title&quot;&gt;Diagnosis outcome&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>68</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>625</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Updated&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_updated_at&lt;/code&gt; and &lt;code&gt;order_updated_label&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;order_updated_label&quot;&gt;Updated&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>51</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>626</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Operator&lt;/code&gt;, used in &lt;code&gt;dashboard_role_operator&lt;/code&gt;, &lt;code&gt;export_xlsx_header_operator&lt;/code&gt; and &lt;code&gt;order_operator_label&lt;/code&gt; (Duplicates value in &lt;code&gt;dashboard_role_operator&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;order_operator_label&quot;&gt;Operator&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>53</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>663</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Service Intake Terms&lt;/code&gt;, used in &lt;code&gt;signature_terms_title&lt;/code&gt; and &lt;code&gt;template_condizioni_title&lt;/code&gt; (Duplicates value in &lt;code&gt;signature_terms_title&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;template_condizioni_title&quot;&gt;Service Intake Terms&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>70</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>685</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Active&lt;/code&gt;, used in &lt;code&gt;admin_user_active&lt;/code&gt; and &lt;code&gt;home_metric_active&lt;/code&gt; (Duplicates value in &lt;code&gt;home_metric_active&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;admin_user_active&quot;&gt;Active&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>48</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>727</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Type %s&lt;/code&gt;, used in &lt;code&gt;admin_delete_all_orders_field_short&lt;/code&gt; and &lt;code&gt;admin_total_reset_field&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;admin_delete_all_orders_field_short&quot;&gt;Type %s&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>67</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>728</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Type %s&lt;/code&gt;, used in &lt;code&gt;admin_delete_all_orders_field_short&lt;/code&gt; and &lt;code&gt;admin_total_reset_field&lt;/code&gt; (Duplicates value in &lt;code&gt;admin_delete_all_orders_field_short&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;admin_total_reset_field&quot;&gt;Type %s&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>55</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>742</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Legal&lt;/code&gt;, used in &lt;code&gt;anchor_step_legal&lt;/code&gt; and &lt;code&gt;config_template_legal_step&lt;/code&gt; (Duplicates value in &lt;code&gt;anchor_step_legal&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;config_template_legal_step&quot;&gt;Legal&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>56</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>770</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Email&lt;/code&gt;, used in &lt;code&gt;customer_field_email&lt;/code&gt;, &lt;code&gt;export_xlsx_header_email&lt;/code&gt; and &lt;code&gt;owner_field_email&lt;/code&gt; (Duplicates value in &lt;code&gt;customer_field_email&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;owner_field_email&quot;&gt;Email&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>47</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>771</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Phone&lt;/code&gt;, used in &lt;code&gt;customer_field_phone&lt;/code&gt;, &lt;code&gt;export_xlsx_header_phone&lt;/code&gt; and &lt;code&gt;owner_field_phone&lt;/code&gt; (Duplicates value in &lt;code&gt;customer_field_phone&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;owner_field_phone&quot;&gt;Phone&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>47</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>780</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Information&lt;/code&gt;, used in &lt;code&gt;config_hub_about_title&lt;/code&gt; and &lt;code&gt;content_description_info&lt;/code&gt; (Duplicates value in &lt;code&gt;content_description_info&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;config_hub_about_title&quot;&gt;Information&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>58</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>788</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Privacy Policy&lt;/code&gt;, used in &lt;code&gt;about_privacy_policy&lt;/code&gt; and &lt;code&gt;signature_privacy_title&lt;/code&gt; (Duplicates value in &lt;code&gt;signature_privacy_title&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;about_privacy_policy&quot;&gt;Privacy Policy&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>59</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>789</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Description&lt;/code&gt;, used in &lt;code&gt;about_description_title&lt;/code&gt;, &lt;code&gt;config_category_description_label&lt;/code&gt;, &lt;code&gt;export_xlsx_header_description&lt;/code&gt; and &lt;code&gt;intake_problem_description&lt;/code&gt; (Duplicates value in &lt;code&gt;intake_problem_description&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;about_description_title&quot;&gt;Description&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>59</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>801</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;All&lt;/code&gt;, used in &lt;code&gt;config_category_root&lt;/code&gt; and &lt;code&gt;orders_filter_all&lt;/code&gt; (Duplicates value in &lt;code&gt;orders_filter_all&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;config_category_root&quot;&gt;All&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>48</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>804</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Description&lt;/code&gt;, used in &lt;code&gt;about_description_title&lt;/code&gt;, &lt;code&gt;config_category_description_label&lt;/code&gt;, &lt;code&gt;export_xlsx_header_description&lt;/code&gt; and &lt;code&gt;intake_problem_description&lt;/code&gt; (Duplicates value in &lt;code&gt;intake_problem_description&lt;/code&gt;) (Duplicates value in &lt;code&gt;intake_problem_description&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;config_category_description_label&quot;&gt;Description&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>69</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>813</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;New Category&lt;/code&gt;, used in &lt;code&gt;config_category_dialog_title_new&lt;/code&gt; and &lt;code&gt;intake_add_missing_category&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication. (Duplicates value in &lt;code&gt;intake_add_missing_category&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation))&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;config_category_dialog_title_new&quot;&gt;New Category&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>69</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>828</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Title&lt;/code&gt;, used in &lt;code&gt;config_template_title_label&lt;/code&gt; and &lt;code&gt;export_xlsx_header_title&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;config_template_title_label&quot;&gt;Title&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>57</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>853</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;None&lt;/code&gt;, used in &lt;code&gt;action_none&lt;/code&gt; and &lt;code&gt;config_backup_last_success_none&lt;/code&gt; (Duplicates value in &lt;code&gt;action_none&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;config_backup_last_success_none&quot;&gt;None&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>60</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>881</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Title&lt;/code&gt;, used in &lt;code&gt;config_template_title_label&lt;/code&gt; and &lt;code&gt;export_xlsx_header_title&lt;/code&gt; (Duplicates value in &lt;code&gt;config_template_title_label&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_title&quot;&gt;Title&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>54</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>884</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Customer&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_customer&lt;/code&gt;, &lt;code&gt;intake_step_customer&lt;/code&gt;, &lt;code&gt;pdf_section_customer&lt;/code&gt; and &lt;code&gt;signature_default_signer&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication. (Duplicates value in &lt;code&gt;pdf_section_customer&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation)) (Duplicates value in &lt;code&gt;pdf_section_customer&lt;/code&gt;) (Duplicates value in &lt;code&gt;pdf_section_customer&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_customer&quot;&gt;Customer&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>60</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>886</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Phone&lt;/code&gt;, used in &lt;code&gt;customer_field_phone&lt;/code&gt;, &lt;code&gt;export_xlsx_header_phone&lt;/code&gt; and &lt;code&gt;owner_field_phone&lt;/code&gt; (Duplicates value in &lt;code&gt;customer_field_phone&lt;/code&gt;) (Duplicates value in &lt;code&gt;customer_field_phone&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_phone&quot;&gt;Phone&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>54</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>887</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Email&lt;/code&gt;, used in &lt;code&gt;customer_field_email&lt;/code&gt;, &lt;code&gt;export_xlsx_header_email&lt;/code&gt; and &lt;code&gt;owner_field_email&lt;/code&gt; (Duplicates value in &lt;code&gt;customer_field_email&lt;/code&gt;) (Duplicates value in &lt;code&gt;customer_field_email&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_email&quot;&gt;Email&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>54</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>888</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Category&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_category&lt;/code&gt; and &lt;code&gt;intake_step_category&lt;/code&gt; (Duplicates value in &lt;code&gt;intake_step_category&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_category&quot;&gt;Category&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>60</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>889</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Operator&lt;/code&gt;, used in &lt;code&gt;dashboard_role_operator&lt;/code&gt;, &lt;code&gt;export_xlsx_header_operator&lt;/code&gt; and &lt;code&gt;order_operator_label&lt;/code&gt; (Duplicates value in &lt;code&gt;dashboard_role_operator&lt;/code&gt;) (Duplicates value in &lt;code&gt;dashboard_role_operator&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_operator&quot;&gt;Operator&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>60</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>891</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Description&lt;/code&gt;, used in &lt;code&gt;about_description_title&lt;/code&gt;, &lt;code&gt;config_category_description_label&lt;/code&gt;, &lt;code&gt;export_xlsx_header_description&lt;/code&gt; and &lt;code&gt;intake_problem_description&lt;/code&gt; (Duplicates value in &lt;code&gt;intake_problem_description&lt;/code&gt;) (Duplicates value in &lt;code&gt;intake_problem_description&lt;/code&gt;) (Duplicates value in &lt;code&gt;intake_problem_description&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_description&quot;&gt;Description&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>66</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>892</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Internal notes&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_internal_notes&lt;/code&gt; and &lt;code&gt;order_internal_notes&lt;/code&gt; (Duplicates value in &lt;code&gt;order_internal_notes&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_internal_notes&quot;&gt;Internal notes&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>72</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>893</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Diagnosis outcome&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_diagnosis_outcome&lt;/code&gt; and &lt;code&gt;order_not_repairable_title&lt;/code&gt; (Duplicates value in &lt;code&gt;order_not_repairable_title&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_diagnosis_outcome&quot;&gt;Diagnosis outcome&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>78</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>898</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Updated&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_updated_at&lt;/code&gt; and &lt;code&gt;order_updated_label&lt;/code&gt; (Duplicates value in &lt;code&gt;order_updated_label&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_updated_at&quot;&gt;Updated&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>61</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>899</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Closed&lt;/code&gt;, used in &lt;code&gt;anchor_step_closed&lt;/code&gt;, &lt;code&gt;export_xlsx_header_closed_at&lt;/code&gt; and &lt;code&gt;status_closed&lt;/code&gt; (Duplicates value in &lt;code&gt;status_closed&lt;/code&gt;) (Duplicates value in &lt;code&gt;status_closed&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_closed_at&quot;&gt;Closed&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>59</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>900</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Closure reason&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_closure_reason&lt;/code&gt; and &lt;code&gt;order_closure_reason_title&lt;/code&gt; (Duplicates value in &lt;code&gt;order_closure_reason_title&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_closure_reason&quot;&gt;Closure reason&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>72</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>902</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Paid&lt;/code&gt;, used in &lt;code&gt;export_xlsx_value_paid&lt;/code&gt;, &lt;code&gt;order_paid_badge&lt;/code&gt; and &lt;code&gt;order_paid_button&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication. (Duplicates value in &lt;code&gt;order_paid_button&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation)) (Duplicates value in &lt;code&gt;order_paid_button&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation))&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_value_paid&quot;&gt;Paid&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>51</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>4</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Commessa creata&lt;/code&gt;, used in &lt;code&gt;demo_event_title_created&lt;/code&gt; and &lt;code&gt;order_created_title&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;order_created_title&quot;&gt;Commessa creata&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>59</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>29</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Diagnosi&lt;/code&gt;, used in &lt;code&gt;anchor_step_diagnosis&lt;/code&gt; and &lt;code&gt;status_diagnosis&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;status_diagnosis&quot;&gt;Diagnosi&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>49</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>31</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Riparazione&lt;/code&gt;, used in &lt;code&gt;anchor_step_repair&lt;/code&gt; and &lt;code&gt;status_repairing&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;status_repairing&quot;&gt;Riparazione&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>52</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>32</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Pronta al ritiro&lt;/code&gt;, used in &lt;code&gt;action_ready_for_pickup&lt;/code&gt; and &lt;code&gt;status_ready_for_pickup&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;status_ready_for_pickup&quot;&gt;Pronta al ritiro&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>64</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>33</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Chiusa&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_closed_at&lt;/code&gt; and &lt;code&gt;status_closed&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;status_closed&quot;&gt;Chiusa&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>44</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>39</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Pronta al ritiro&lt;/code&gt;, used in &lt;code&gt;action_ready_for_pickup&lt;/code&gt; and &lt;code&gt;status_ready_for_pickup&lt;/code&gt; (Duplicates value in &lt;code&gt;status_ready_for_pickup&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;action_ready_for_pickup&quot;&gt;Pronta al ritiro&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>64</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>48</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Diagnosi&lt;/code&gt;, used in &lt;code&gt;anchor_step_diagnosis&lt;/code&gt; and &lt;code&gt;status_diagnosis&lt;/code&gt; (Duplicates value in &lt;code&gt;status_diagnosis&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;anchor_step_diagnosis&quot;&gt;Diagnosi&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>54</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>51</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Riparazione&lt;/code&gt;, used in &lt;code&gt;anchor_step_repair&lt;/code&gt; and &lt;code&gt;status_repairing&lt;/code&gt; (Duplicates value in &lt;code&gt;status_repairing&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;anchor_step_repair&quot;&gt;Riparazione&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>54</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>55</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Legale&lt;/code&gt;, used in &lt;code&gt;anchor_step_legal&lt;/code&gt; and &lt;code&gt;config_template_legal_step&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;anchor_step_legal&quot;&gt;Legale&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>48</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>89</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Cliente&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_customer&lt;/code&gt;, &lt;code&gt;intake_step_customer&lt;/code&gt;, &lt;code&gt;pdf_section_customer&lt;/code&gt; and &lt;code&gt;signature_default_signer&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication.&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;pdf_section_customer&quot;&gt;CLIENTE&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>52</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>100</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Firma cliente&lt;/code&gt;, used in &lt;code&gt;demo_signature_label&lt;/code&gt; and &lt;code&gt;pdf_section_signature&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication.&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;pdf_section_signature&quot;&gt;FIRMA CLIENTE&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>59</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>201</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Svuota Log&lt;/code&gt;, used in &lt;code&gt;config_backup_logs_clear_confirm_title&lt;/code&gt; and &lt;code&gt;config_backup_logs_clear&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;config_backup_logs_clear&quot;&gt;Svuota Log&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>59</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>202</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Svuota Log&lt;/code&gt;, used in &lt;code&gt;config_backup_logs_clear_confirm_title&lt;/code&gt; and &lt;code&gt;config_backup_logs_clear&lt;/code&gt; (Duplicates value in &lt;code&gt;config_backup_logs_clear&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;config_backup_logs_clear_confirm_title&quot;&gt;Svuota Log&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>73</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>213</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Admin Demo&lt;/code&gt;, used in &lt;code&gt;demo_admin_display_name&lt;/code&gt; and &lt;code&gt;label_demo_admin&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;label_demo_admin&quot;&gt;Admin Demo&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>51</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>229</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Computer &amp;amp; Laptop&lt;/code&gt;, used in &lt;code&gt;demo_cat_pc&lt;/code&gt; and &lt;code&gt;showcase_cat_pc&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;showcase_cat_pc&quot;&gt;Computer &amp;amp; Laptop&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>61</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>230</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Riparazioni hardware e software PC&lt;/code&gt;, used in &lt;code&gt;demo_cat_pc_desc&lt;/code&gt; and &lt;code&gt;showcase_cat_pc_desc&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;showcase_cat_pc_desc&quot;&gt;Riparazioni hardware e software PC&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>79</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>231</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Portatili e Ultrabook&lt;/code&gt;, used in &lt;code&gt;demo_cat_notebook_desc&lt;/code&gt; and &lt;code&gt;showcase_cat_notebook_desc&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;showcase_cat_notebook_desc&quot;&gt;Portatili e Ultrabook&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>72</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>232</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Gaming Laptop&lt;/code&gt;, used in &lt;code&gt;demo_cat_gaming&lt;/code&gt; and &lt;code&gt;showcase_cat_gaming_laptop&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;showcase_cat_gaming_laptop&quot;&gt;Gaming Laptop&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>64</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>233</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;MSI, ROG, Alienware, Legion&lt;/code&gt;, used in &lt;code&gt;demo_cat_gaming_desc&lt;/code&gt; and &lt;code&gt;showcase_cat_gaming_laptop_desc&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;showcase_cat_gaming_laptop_desc&quot;&gt;MSI, ROG, Alienware, Legion&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>83</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>234</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Pulizia interna e pasta termica&lt;/code&gt;, used in &lt;code&gt;demo_cat_rog_strix_desc&lt;/code&gt; and &lt;code&gt;showcase_cat_rog_strix_desc&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;showcase_cat_rog_strix_desc&quot;&gt;Pulizia interna e pasta termica&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>83</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>261</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Admin Demo&lt;/code&gt;, used in &lt;code&gt;demo_admin_display_name&lt;/code&gt; and &lt;code&gt;label_demo_admin&lt;/code&gt; (Duplicates value in &lt;code&gt;label_demo_admin&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;demo_admin_display_name&quot;&gt;Admin Demo&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>58</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>263</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Computer &amp;amp; Laptop&lt;/code&gt;, used in &lt;code&gt;demo_cat_pc&lt;/code&gt; and &lt;code&gt;showcase_cat_pc&lt;/code&gt; (Duplicates value in &lt;code&gt;showcase_cat_pc&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;demo_cat_pc&quot;&gt;Computer &amp;amp; Laptop&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>57</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>264</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Riparazioni hardware e software PC&lt;/code&gt;, used in &lt;code&gt;demo_cat_pc_desc&lt;/code&gt; and &lt;code&gt;showcase_cat_pc_desc&lt;/code&gt; (Duplicates value in &lt;code&gt;showcase_cat_pc_desc&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;demo_cat_pc_desc&quot;&gt;Riparazioni hardware e software PC&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>75</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>266</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Portatili e Ultrabook&lt;/code&gt;, used in &lt;code&gt;demo_cat_notebook_desc&lt;/code&gt; and &lt;code&gt;showcase_cat_notebook_desc&lt;/code&gt; (Duplicates value in &lt;code&gt;showcase_cat_notebook_desc&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;demo_cat_notebook_desc&quot;&gt;Portatili e Ultrabook&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>68</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>267</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Gaming Laptop&lt;/code&gt;, used in &lt;code&gt;demo_cat_gaming&lt;/code&gt; and &lt;code&gt;showcase_cat_gaming_laptop&lt;/code&gt; (Duplicates value in &lt;code&gt;showcase_cat_gaming_laptop&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;demo_cat_gaming&quot;&gt;Gaming Laptop&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>53</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>268</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;MSI, ROG, Alienware, Legion&lt;/code&gt;, used in &lt;code&gt;demo_cat_gaming_desc&lt;/code&gt; and &lt;code&gt;showcase_cat_gaming_laptop_desc&lt;/code&gt; (Duplicates value in &lt;code&gt;showcase_cat_gaming_laptop_desc&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;demo_cat_gaming_desc&quot;&gt;MSI, ROG, Alienware, Legion&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>72</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>270</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Pulizia interna e pasta termica&lt;/code&gt;, used in &lt;code&gt;demo_cat_rog_strix_desc&lt;/code&gt; and &lt;code&gt;showcase_cat_rog_strix_desc&lt;/code&gt; (Duplicates value in &lt;code&gt;showcase_cat_rog_strix_desc&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;demo_cat_rog_strix_desc&quot;&gt;Pulizia interna e pasta termica&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>79</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>279</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Firma cliente&lt;/code&gt;, used in &lt;code&gt;demo_signature_label&lt;/code&gt; and &lt;code&gt;pdf_section_signature&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication. (Duplicates value in &lt;code&gt;pdf_section_signature&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation))&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;demo_signature_label&quot;&gt;Firma cliente&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>58</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>282</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Commessa creata&lt;/code&gt;, used in &lt;code&gt;demo_event_title_created&lt;/code&gt; and &lt;code&gt;order_created_title&lt;/code&gt; (Duplicates value in &lt;code&gt;order_created_title&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;demo_event_title_created&quot;&gt;Commessa creata&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>64</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>303</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Privato&lt;/code&gt;, used in &lt;code&gt;customer_type_private&lt;/code&gt; and &lt;code&gt;showcase_private_fictitious_name&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;showcase_private_fictitious_name&quot;&gt;Privato&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>64</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>320</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Non riparabile&lt;/code&gt;, used in &lt;code&gt;order_diagnosis_not_repairable&lt;/code&gt; and &lt;code&gt;reason_not_repairable&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;reason_not_repairable&quot;&gt;Non riparabile&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>60</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>369</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Clienti&lt;/code&gt;, used in &lt;code&gt;customer_title&lt;/code&gt;, &lt;code&gt;dashboard_customers&lt;/code&gt; and &lt;code&gt;home_metric_customers&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;dashboard_customers&quot;&gt;Clienti&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>51</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>370</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Commesse&lt;/code&gt;, used in &lt;code&gt;dashboard_orders&lt;/code&gt; and &lt;code&gt;orders_title&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;dashboard_orders&quot;&gt;Commesse&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>49</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>378</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Operatore&lt;/code&gt;, used in &lt;code&gt;dashboard_role_operator&lt;/code&gt;, &lt;code&gt;export_xlsx_header_operator&lt;/code&gt; and &lt;code&gt;order_operator_label&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;dashboard_role_operator&quot;&gt;Operatore&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>57</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>386</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Nuova commessa&lt;/code&gt;, used in &lt;code&gt;home_new_order&lt;/code&gt;, &lt;code&gt;home_pro_cta_new&lt;/code&gt; and &lt;code&gt;new_order_title&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication.&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;home_pro_cta_new&quot;&gt;NUOVA COMMESSA&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>55</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>393</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Clienti&lt;/code&gt;, used in &lt;code&gt;customer_title&lt;/code&gt;, &lt;code&gt;dashboard_customers&lt;/code&gt; and &lt;code&gt;home_metric_customers&lt;/code&gt; (Duplicates value in &lt;code&gt;dashboard_customers&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;home_metric_customers&quot;&gt;Clienti&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>53</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>395</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Nuova commessa&lt;/code&gt;, used in &lt;code&gt;home_new_order&lt;/code&gt;, &lt;code&gt;home_pro_cta_new&lt;/code&gt; and &lt;code&gt;new_order_title&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication. (Duplicates value in &lt;code&gt;home_pro_cta_new&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation))&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;home_new_order&quot;&gt;Nuova commessa&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>53</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>413</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Indietro&lt;/code&gt;, used in &lt;code&gt;content_description_back&lt;/code&gt; and &lt;code&gt;nav_back&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;nav_back&quot;&gt;Indietro&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>41</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>416</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Informazioni&lt;/code&gt;, used in &lt;code&gt;config_hub_about_title&lt;/code&gt; and &lt;code&gt;content_description_info&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;content_description_info&quot;&gt;Informazioni&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>61</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>417</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Indietro&lt;/code&gt;, used in &lt;code&gt;content_description_back&lt;/code&gt; and &lt;code&gt;nav_back&lt;/code&gt; (Duplicates value in &lt;code&gt;nav_back&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;content_description_back&quot;&gt;Indietro&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>57</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>418</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Chiudi&lt;/code&gt;, used in &lt;code&gt;content_description_close&lt;/code&gt; and &lt;code&gt;customer_detail_close&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;content_description_close&quot;&gt;Chiudi&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>56</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>429</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Modifica&lt;/code&gt;, used in &lt;code&gt;content_description_edit&lt;/code&gt; and &lt;code&gt;customer_detail_edit&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;content_description_edit&quot;&gt;Modifica&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>57</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>441</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Privacy e firma&lt;/code&gt;, used in &lt;code&gt;intake_step_privacy&lt;/code&gt; and &lt;code&gt;signature_form_title&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;signature_form_title&quot;&gt;Privacy e firma&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>60</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>442</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Firma %s&lt;/code&gt;, used in &lt;code&gt;signature_image_description&lt;/code&gt; and &lt;code&gt;signature_signer_label&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;signature_signer_label&quot;&gt;Firma %s&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>55</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>445</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Firma %s&lt;/code&gt;, used in &lt;code&gt;signature_image_description&lt;/code&gt; and &lt;code&gt;signature_signer_label&lt;/code&gt; (Duplicates value in &lt;code&gt;signature_signer_label&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;signature_image_description&quot;&gt;Firma %s&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>60</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>453</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Informativa Privacy&lt;/code&gt;, used in &lt;code&gt;about_privacy_policy&lt;/code&gt; and &lt;code&gt;signature_privacy_title&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication.&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;signature_privacy_title&quot;&gt;Informativa privacy&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>67</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>455</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Cliente&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_customer&lt;/code&gt;, &lt;code&gt;intake_step_customer&lt;/code&gt;, &lt;code&gt;pdf_section_customer&lt;/code&gt; and &lt;code&gt;signature_default_signer&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication. (Duplicates value in &lt;code&gt;pdf_section_customer&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation))&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;signature_default_signer&quot;&gt;Cliente&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>56</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>477</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Privato&lt;/code&gt;, used in &lt;code&gt;customer_type_private&lt;/code&gt; and &lt;code&gt;showcase_private_fictitious_name&lt;/code&gt; (Duplicates value in &lt;code&gt;showcase_private_fictitious_name&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;customer_type_private&quot;&gt;Privato&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>53</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>482</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Clienti&lt;/code&gt;, used in &lt;code&gt;customer_title&lt;/code&gt;, &lt;code&gt;dashboard_customers&lt;/code&gt; and &lt;code&gt;home_metric_customers&lt;/code&gt; (Duplicates value in &lt;code&gt;dashboard_customers&lt;/code&gt;) (Duplicates value in &lt;code&gt;dashboard_customers&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;customer_title&quot;&gt;Clienti&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>46</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>483</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Cerca cliente&lt;/code&gt;, used in &lt;code&gt;customer_search_label&lt;/code&gt;, &lt;code&gt;intake_search_customer&lt;/code&gt; and &lt;code&gt;orders_search_label&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;customer_search_label&quot;&gt;Cerca cliente&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>59</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>500</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Conferma&lt;/code&gt;, used in &lt;code&gt;confirm&lt;/code&gt; and &lt;code&gt;intake_submit_title&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;confirm&quot;&gt;Conferma&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>40</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>503</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Chiudi&lt;/code&gt;, used in &lt;code&gt;content_description_close&lt;/code&gt; and &lt;code&gt;customer_detail_close&lt;/code&gt; (Duplicates value in &lt;code&gt;content_description_close&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;customer_detail_close&quot;&gt;Chiudi&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>52</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>504</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Modifica&lt;/code&gt;, used in &lt;code&gt;content_description_edit&lt;/code&gt; and &lt;code&gt;customer_detail_edit&lt;/code&gt; (Duplicates value in &lt;code&gt;content_description_edit&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;customer_detail_edit&quot;&gt;Modifica&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>53</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>517</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Telefono&lt;/code&gt;, used in &lt;code&gt;customer_field_phone&lt;/code&gt;, &lt;code&gt;export_xlsx_header_phone&lt;/code&gt; and &lt;code&gt;owner_field_phone&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;customer_field_phone&quot;&gt;Telefono&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>53</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>518</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Email&lt;/code&gt;, used in &lt;code&gt;customer_field_email&lt;/code&gt;, &lt;code&gt;export_xlsx_header_email&lt;/code&gt; and &lt;code&gt;owner_field_email&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;customer_field_email&quot;&gt;Email&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>50</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>522</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Nuova commessa&lt;/code&gt;, used in &lt;code&gt;home_new_order&lt;/code&gt;, &lt;code&gt;home_pro_cta_new&lt;/code&gt; and &lt;code&gt;new_order_title&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication. (Duplicates value in &lt;code&gt;home_pro_cta_new&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation)) (Duplicates value in &lt;code&gt;home_pro_cta_new&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;new_order_title&quot;&gt;Nuova commessa&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>54</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>523</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Cliente&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_customer&lt;/code&gt;, &lt;code&gt;intake_step_customer&lt;/code&gt;, &lt;code&gt;pdf_section_customer&lt;/code&gt; and &lt;code&gt;signature_default_signer&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication. (Duplicates value in &lt;code&gt;pdf_section_customer&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation)) (Duplicates value in &lt;code&gt;pdf_section_customer&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;intake_step_customer&quot;&gt;Cliente&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>52</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>524</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Categoria&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_category&lt;/code&gt; and &lt;code&gt;intake_step_category&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;intake_step_category&quot;&gt;Categoria&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>54</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>529</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Privacy e firma&lt;/code&gt;, used in &lt;code&gt;intake_step_privacy&lt;/code&gt; and &lt;code&gt;signature_form_title&lt;/code&gt; (Duplicates value in &lt;code&gt;signature_form_title&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;intake_step_privacy&quot;&gt;Privacy e firma&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>59</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>532</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Cerca cliente&lt;/code&gt;, used in &lt;code&gt;customer_search_label&lt;/code&gt;, &lt;code&gt;intake_search_customer&lt;/code&gt; and &lt;code&gt;orders_search_label&lt;/code&gt; (Duplicates value in &lt;code&gt;customer_search_label&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;intake_search_customer&quot;&gt;Cerca cliente&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>60</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>539</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Nuova Categoria&lt;/code&gt;, used in &lt;code&gt;config_category_dialog_title_new&lt;/code&gt; and &lt;code&gt;intake_add_missing_category&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication.&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;intake_add_missing_category&quot;&gt;Nuova categoria&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>67</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>546</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Conferma&lt;/code&gt;, used in &lt;code&gt;confirm&lt;/code&gt; and &lt;code&gt;intake_submit_title&lt;/code&gt; (Duplicates value in &lt;code&gt;confirm&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;intake_submit_title&quot;&gt;Conferma&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>52</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>552</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Categoria selezionata&lt;/code&gt;, used in &lt;code&gt;intake_category_selected_icon&lt;/code&gt; and &lt;code&gt;intake_category_selected_state&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;intake_category_selected_icon&quot;&gt;Categoria selezionata&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>75</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>554</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Categoria selezionata&lt;/code&gt;, used in &lt;code&gt;intake_category_selected_icon&lt;/code&gt; and &lt;code&gt;intake_category_selected_state&lt;/code&gt; (Duplicates value in &lt;code&gt;intake_category_selected_icon&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;intake_category_selected_state&quot;&gt;Categoria selezionata&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>76</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>557</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Descrizione&lt;/code&gt;, used in &lt;code&gt;about_description_title&lt;/code&gt;, &lt;code&gt;config_category_description_label&lt;/code&gt;, &lt;code&gt;export_xlsx_header_description&lt;/code&gt; and &lt;code&gt;intake_problem_description&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;intake_problem_description&quot;&gt;Descrizione&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>62</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>561</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Commesse&lt;/code&gt;, used in &lt;code&gt;dashboard_orders&lt;/code&gt; and &lt;code&gt;orders_title&lt;/code&gt; (Duplicates value in &lt;code&gt;dashboard_orders&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;orders_title&quot;&gt;Commesse&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>45</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>572</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Tutte&lt;/code&gt;, used in &lt;code&gt;config_category_root&lt;/code&gt; and &lt;code&gt;orders_filter_all&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;orders_filter_all&quot;&gt;Tutte&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>47</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>577</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Cerca cliente&lt;/code&gt;, used in &lt;code&gt;customer_search_label&lt;/code&gt;, &lt;code&gt;intake_search_customer&lt;/code&gt; and &lt;code&gt;orders_search_label&lt;/code&gt; (Duplicates value in &lt;code&gt;customer_search_label&lt;/code&gt;) (Duplicates value in &lt;code&gt;customer_search_label&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;orders_search_label&quot;&gt;Cerca cliente&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>57</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>586</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Note interne&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_internal_notes&lt;/code&gt; and &lt;code&gt;order_internal_notes&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;order_internal_notes&quot;&gt;Note interne&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>57</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>617</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Non riparabile&lt;/code&gt;, used in &lt;code&gt;order_diagnosis_not_repairable&lt;/code&gt; and &lt;code&gt;reason_not_repairable&lt;/code&gt; (Duplicates value in &lt;code&gt;reason_not_repairable&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;order_diagnosis_not_repairable&quot;&gt;Non riparabile&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>69</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>622</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Motivo chiusura&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_closure_reason&lt;/code&gt; and &lt;code&gt;order_closure_reason_title&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;order_closure_reason_title&quot;&gt;Motivo chiusura&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>66</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>623</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Pagato&lt;/code&gt;, used in &lt;code&gt;export_xlsx_value_paid&lt;/code&gt;, &lt;code&gt;order_paid_badge&lt;/code&gt; and &lt;code&gt;order_paid_button&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication.&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;order_paid_button&quot;&gt;Pagato&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>48</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>624</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Pagato&lt;/code&gt;, used in &lt;code&gt;export_xlsx_value_paid&lt;/code&gt;, &lt;code&gt;order_paid_badge&lt;/code&gt; and &lt;code&gt;order_paid_button&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication. (Duplicates value in &lt;code&gt;order_paid_button&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation))&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;order_paid_badge&quot;&gt;PAGATO&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>47</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>628</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Esito diagnosi&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_diagnosis_outcome&lt;/code&gt; and &lt;code&gt;order_not_repairable_title&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;order_not_repairable_title&quot;&gt;Esito diagnosi&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>65</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>631</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Aggiornata&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_updated_at&lt;/code&gt; and &lt;code&gt;order_updated_label&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;order_updated_label&quot;&gt;Aggiornata&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>54</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>632</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Operatore&lt;/code&gt;, used in &lt;code&gt;dashboard_role_operator&lt;/code&gt;, &lt;code&gt;export_xlsx_header_operator&lt;/code&gt; and &lt;code&gt;order_operator_label&lt;/code&gt; (Duplicates value in &lt;code&gt;dashboard_role_operator&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;order_operator_label&quot;&gt;Operatore&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>54</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>733</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Digita %s&lt;/code&gt;, used in &lt;code&gt;admin_delete_all_orders_field_short&lt;/code&gt; and &lt;code&gt;admin_total_reset_field&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;admin_delete_all_orders_field_short&quot;&gt;Digita %s&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>69</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>734</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Digita %s&lt;/code&gt;, used in &lt;code&gt;admin_delete_all_orders_field_short&lt;/code&gt; and &lt;code&gt;admin_total_reset_field&lt;/code&gt; (Duplicates value in &lt;code&gt;admin_delete_all_orders_field_short&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;admin_total_reset_field&quot;&gt;Digita %s&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>57</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>748</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Legale&lt;/code&gt;, used in &lt;code&gt;anchor_step_legal&lt;/code&gt; and &lt;code&gt;config_template_legal_step&lt;/code&gt; (Duplicates value in &lt;code&gt;anchor_step_legal&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;config_template_legal_step&quot;&gt;Legale&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>57</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>776</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Email&lt;/code&gt;, used in &lt;code&gt;customer_field_email&lt;/code&gt;, &lt;code&gt;export_xlsx_header_email&lt;/code&gt; and &lt;code&gt;owner_field_email&lt;/code&gt; (Duplicates value in &lt;code&gt;customer_field_email&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;owner_field_email&quot;&gt;Email&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>47</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>777</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Telefono&lt;/code&gt;, used in &lt;code&gt;customer_field_phone&lt;/code&gt;, &lt;code&gt;export_xlsx_header_phone&lt;/code&gt; and &lt;code&gt;owner_field_phone&lt;/code&gt; (Duplicates value in &lt;code&gt;customer_field_phone&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;owner_field_phone&quot;&gt;Telefono&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>50</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>786</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Informazioni&lt;/code&gt;, used in &lt;code&gt;config_hub_about_title&lt;/code&gt; and &lt;code&gt;content_description_info&lt;/code&gt; (Duplicates value in &lt;code&gt;content_description_info&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;config_hub_about_title&quot;&gt;Informazioni&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>59</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>794</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Informativa Privacy&lt;/code&gt;, used in &lt;code&gt;about_privacy_policy&lt;/code&gt; and &lt;code&gt;signature_privacy_title&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication. (Duplicates value in &lt;code&gt;signature_privacy_title&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation))&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;about_privacy_policy&quot;&gt;Informativa Privacy&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>64</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>795</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Descrizione&lt;/code&gt;, used in &lt;code&gt;about_description_title&lt;/code&gt;, &lt;code&gt;config_category_description_label&lt;/code&gt;, &lt;code&gt;export_xlsx_header_description&lt;/code&gt; and &lt;code&gt;intake_problem_description&lt;/code&gt; (Duplicates value in &lt;code&gt;intake_problem_description&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;about_description_title&quot;&gt;Descrizione&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>59</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>807</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Tutte&lt;/code&gt;, used in &lt;code&gt;config_category_root&lt;/code&gt; and &lt;code&gt;orders_filter_all&lt;/code&gt; (Duplicates value in &lt;code&gt;orders_filter_all&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;config_category_root&quot;&gt;Tutte&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>50</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>810</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Descrizione&lt;/code&gt;, used in &lt;code&gt;about_description_title&lt;/code&gt;, &lt;code&gt;config_category_description_label&lt;/code&gt;, &lt;code&gt;export_xlsx_header_description&lt;/code&gt; and &lt;code&gt;intake_problem_description&lt;/code&gt; (Duplicates value in &lt;code&gt;intake_problem_description&lt;/code&gt;) (Duplicates value in &lt;code&gt;intake_problem_description&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;config_category_description_label&quot;&gt;Descrizione&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>69</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>819</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Nuova Categoria&lt;/code&gt;, used in &lt;code&gt;config_category_dialog_title_new&lt;/code&gt; and &lt;code&gt;intake_add_missing_category&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication. (Duplicates value in &lt;code&gt;intake_add_missing_category&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation))&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;config_category_dialog_title_new&quot;&gt;Nuova Categoria&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>72</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>835</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Titolo&lt;/code&gt;, used in &lt;code&gt;config_template_title_label&lt;/code&gt; and &lt;code&gt;export_xlsx_header_title&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;config_template_title_label&quot;&gt;Titolo&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>58</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>890</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Titolo&lt;/code&gt;, used in &lt;code&gt;config_template_title_label&lt;/code&gt; and &lt;code&gt;export_xlsx_header_title&lt;/code&gt; (Duplicates value in &lt;code&gt;config_template_title_label&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_title&quot;&gt;Titolo&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>55</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>893</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Cliente&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_customer&lt;/code&gt;, &lt;code&gt;intake_step_customer&lt;/code&gt;, &lt;code&gt;pdf_section_customer&lt;/code&gt; and &lt;code&gt;signature_default_signer&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication. (Duplicates value in &lt;code&gt;pdf_section_customer&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation)) (Duplicates value in &lt;code&gt;pdf_section_customer&lt;/code&gt;) (Duplicates value in &lt;code&gt;pdf_section_customer&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_customer&quot;&gt;Cliente&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>59</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>895</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Telefono&lt;/code&gt;, used in &lt;code&gt;customer_field_phone&lt;/code&gt;, &lt;code&gt;export_xlsx_header_phone&lt;/code&gt; and &lt;code&gt;owner_field_phone&lt;/code&gt; (Duplicates value in &lt;code&gt;customer_field_phone&lt;/code&gt;) (Duplicates value in &lt;code&gt;customer_field_phone&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_phone&quot;&gt;Telefono&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>57</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>896</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Email&lt;/code&gt;, used in &lt;code&gt;customer_field_email&lt;/code&gt;, &lt;code&gt;export_xlsx_header_email&lt;/code&gt; and &lt;code&gt;owner_field_email&lt;/code&gt; (Duplicates value in &lt;code&gt;customer_field_email&lt;/code&gt;) (Duplicates value in &lt;code&gt;customer_field_email&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_email&quot;&gt;Email&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>54</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>897</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Categoria&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_category&lt;/code&gt; and &lt;code&gt;intake_step_category&lt;/code&gt; (Duplicates value in &lt;code&gt;intake_step_category&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_category&quot;&gt;Categoria&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>61</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>898</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Operatore&lt;/code&gt;, used in &lt;code&gt;dashboard_role_operator&lt;/code&gt;, &lt;code&gt;export_xlsx_header_operator&lt;/code&gt; and &lt;code&gt;order_operator_label&lt;/code&gt; (Duplicates value in &lt;code&gt;dashboard_role_operator&lt;/code&gt;) (Duplicates value in &lt;code&gt;dashboard_role_operator&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_operator&quot;&gt;Operatore&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>61</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>900</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Descrizione&lt;/code&gt;, used in &lt;code&gt;about_description_title&lt;/code&gt;, &lt;code&gt;config_category_description_label&lt;/code&gt;, &lt;code&gt;export_xlsx_header_description&lt;/code&gt; and &lt;code&gt;intake_problem_description&lt;/code&gt; (Duplicates value in &lt;code&gt;intake_problem_description&lt;/code&gt;) (Duplicates value in &lt;code&gt;intake_problem_description&lt;/code&gt;) (Duplicates value in &lt;code&gt;intake_problem_description&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_description&quot;&gt;Descrizione&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>66</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>901</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Note interne&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_internal_notes&lt;/code&gt; and &lt;code&gt;order_internal_notes&lt;/code&gt; (Duplicates value in &lt;code&gt;order_internal_notes&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_internal_notes&quot;&gt;Note interne&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>70</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>902</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Esito diagnosi&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_diagnosis_outcome&lt;/code&gt; and &lt;code&gt;order_not_repairable_title&lt;/code&gt; (Duplicates value in &lt;code&gt;order_not_repairable_title&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_diagnosis_outcome&quot;&gt;Esito diagnosi&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>75</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>907</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Aggiornata&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_updated_at&lt;/code&gt; and &lt;code&gt;order_updated_label&lt;/code&gt; (Duplicates value in &lt;code&gt;order_updated_label&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_updated_at&quot;&gt;Aggiornata&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>64</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>908</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Chiusa&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_closed_at&lt;/code&gt; and &lt;code&gt;status_closed&lt;/code&gt; (Duplicates value in &lt;code&gt;status_closed&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_closed_at&quot;&gt;Chiusa&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>59</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>909</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Motivo chiusura&lt;/code&gt;, used in &lt;code&gt;export_xlsx_header_closure_reason&lt;/code&gt; and &lt;code&gt;order_closure_reason_title&lt;/code&gt; (Duplicates value in &lt;code&gt;order_closure_reason_title&lt;/code&gt;)&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_header_closure_reason&quot;&gt;Motivo chiusura&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>73</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>911</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintDuplicateStrings" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Duplicate Strings</problem_class>
+  <hints />
+  <description>&lt;html&gt;Duplicate string value &lt;code&gt;Pagato&lt;/code&gt;, used in &lt;code&gt;export_xlsx_value_paid&lt;/code&gt;, &lt;code&gt;order_paid_badge&lt;/code&gt; and &lt;code&gt;order_paid_button&lt;/code&gt;. Use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; to treat these as the same and avoid string duplication. (Duplicates value in &lt;code&gt;order_paid_button&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation)) (Duplicates value in &lt;code&gt;order_paid_button&lt;/code&gt; (case varies, but you can use &lt;code&gt;android:inputType&lt;/code&gt; or &lt;code&gt;android:capitalize&lt;/code&gt; in the presentation))&lt;/html&gt;</description>
+  <highlighted_element>&lt;string name=&quot;export_xlsx_value_paid&quot;&gt;Pagato&lt;/string&gt;</highlighted_element>
+  <language>XML</language>
+  <offset>4</offset>
+  <length>53</length>
+</problem>
+</problems>

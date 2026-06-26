@@ -1,0 +1,28 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/media/MediaStorageProvider.kt</file>
+  <line>11</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.media</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.media.MediaStorageProvider MediaStorageProvider(android.content.Context context)" />
+  <problem_class id="CanBeParameter" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Constructor parameter is never used as a property</problem_class>
+  <description>Constructor parameter is never used as a property</description>
+  <highlighted_element>val</highlighted_element>
+  <language>kotlin</language>
+  <offset>12</offset>
+  <length>3</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/NewOrderViewModel.kt</file>
+  <line>46</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.neworder</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.neworder.NewOrderViewModel NewOrderViewModel(android.content.Context context, com.onlytechtake.repairapp.domain.auth.AuthRepository authRepository, com.onlytechtake.repairapp.data.repositories.CustomerRepository customerRepository, com.onlytechtake.repairapp.data.repositories.CatalogRepository catalogRepository, com.onlytechtake.repairapp.data.repositories.OrderMediaRepository orderMediaRepository, com.onlytechtake.repairapp.data.repositories.TemplateRepository templateRepository, com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase createIntakeOrderUseCase, kotlin.jvm.functions.Function1&lt;? super java.lang.Boolean,kotlin.Unit&gt; onSetFormDirty, com.onlytechtake.repairapp.core.error.DiagnosticLogger diagnosticLogger, kotlinx.coroutines.CoroutineDispatcher ioDispatcher)" />
+  <problem_class id="CanBeParameter" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Constructor parameter is never used as a property</problem_class>
+  <description>Constructor parameter is never used as a property</description>
+  <highlighted_element>val</highlighted_element>
+  <language>kotlin</language>
+  <offset>12</offset>
+  <length>3</length>
+</problem>
+</problems>

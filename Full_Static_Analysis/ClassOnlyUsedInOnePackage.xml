@@ -1,0 +1,86 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/components/AppButton.kt</file>
+  <line>48</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design.components</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.design.components.AppButtonSize" />
+  <problem_class id="ClassOnlyUsedInOnePackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other package</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;AppButtonSize&lt;/code&gt; has only dependencies on and/or dependents in package 'com.onlytechtake.repairapp.core.design'</description>
+  <highlighted_element>AppButtonSize</highlighted_element>
+  <language>kotlin</language>
+  <offset>11</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/DashboardDao.kt</file>
+  <line>8</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.DashboardDao" />
+  <problem_class id="ClassOnlyUsedInOnePackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other package</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;DashboardDao&lt;/code&gt; has only dependencies on and/or dependents in package 'com.onlytechtake.repairapp.data.repositories'</description>
+  <highlighted_element>DashboardDao</highlighted_element>
+  <language>kotlin</language>
+  <offset>10</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/admin/AdminPanel.kt</file>
+  <line>660</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.admin</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.admin.PermissionUIItem" />
+  <problem_class id="ClassOnlyUsedInOnePackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other package</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;PermissionUIItem&lt;/code&gt; has only dependencies on and/or dependents in package 'com.onlytechtake.repairapp.data.local.entities'</description>
+  <highlighted_element>PermissionUIItem</highlighted_element>
+  <language>kotlin</language>
+  <offset>19</offset>
+  <length>16</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/SmokeTest.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.SmokeTest" />
+  <problem_class id="ClassOnlyUsedInOnePackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other package</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;SmokeTest&lt;/code&gt; has only dependencies on and/or dependents in package 'com.onlytechtake.repairapp.data.local.entities'</description>
+  <highlighted_element>SmokeTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/domain/workspace/OrderCleanupPolicyTest.kt</file>
+  <line>8</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.workspace.OrderCleanupPolicyTest" />
+  <problem_class id="ClassOnlyUsedInOnePackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other package</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;OrderCleanupPolicyTest&lt;/code&gt; has only dependencies on and/or dependents in package 'com.onlytechtake.repairapp.data.local.entities'</description>
+  <highlighted_element>OrderCleanupPolicyTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>22</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/dashboard/QuoteDecisionTest.kt</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.features.dashboard</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.QuoteDecisionTest" />
+  <problem_class id="ClassOnlyUsedInOnePackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other package</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;QuoteDecisionTest&lt;/code&gt; has only dependencies on and/or dependents in package 'com.onlytechtake.repairapp.features.dashboard.common'</description>
+  <highlighted_element>QuoteDecisionTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>17</length>
+</problem>
+</problems>

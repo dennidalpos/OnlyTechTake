@@ -1,0 +1,374 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/README.md</file>
+  <line>8</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/README.md" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'onlytechtake'</description>
+  <highlighted_element>onlytechtake</highlighted_element>
+  <language>HTML</language>
+  <offset>55</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/gradle.lockfile</file>
+  <line>21</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/gradle.lockfile" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'featurecombinationquery'</description>
+  <highlighted_element>featurecombinationquery</highlighted_element>
+  <language>TEXT</language>
+  <offset>16</offset>
+  <length>23</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml</file>
+  <line>34</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'fileprovider'</description>
+  <highlighted_element>fileprovider</highlighted_element>
+  <language>XML</language>
+  <offset>50</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>236</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'zenbook'</description>
+  <highlighted_element>zenbook</highlighted_element>
+  <language>XML</language>
+  <offset>36</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>243</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'dualsense'</description>
+  <highlighted_element>dualsense</highlighted_element>
+  <language>XML</language>
+  <offset>31</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>792</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'dennidalpos'</description>
+  <highlighted_element>dennidalpos</highlighted_element>
+  <language>XML</language>
+  <offset>40</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/gradlew.bat</file>
+  <line>16</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/gradlew.bat" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'SPDX'</description>
+  <highlighted_element>SPDX</highlighted_element>
+  <language>textmate</language>
+  <offset>5</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/gradlew.bat</file>
+  <line>27</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/gradlew.bat" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'setlocal'</description>
+  <highlighted_element>setlocal</highlighted_element>
+  <language>textmate</language>
+  <offset>24</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/gradlew.bat</file>
+  <line>77</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/gradlew.bat" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'Dorg'</description>
+  <highlighted_element>Dorg</highlighted_element>
+  <language>textmate</language>
+  <offset>60</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/gradlew.bat</file>
+  <line>77</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/gradlew.bat" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'appname'</description>
+  <highlighted_element>appname</highlighted_element>
+  <language>textmate</language>
+  <offset>72</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/landing/assets/brand/onlytechtake-logo.svg</file>
+  <line>10</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/landing/assets/brand/onlytechtake-logo.svg" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'Segoe'</description>
+  <highlighted_element>Segoe</highlighted_element>
+  <language>SVG</language>
+  <offset>36</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/landing/assets/brand/onlytechtake-logo.svg</file>
+  <line>11</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/landing/assets/brand/onlytechtake-logo.svg" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'Segoe'</description>
+  <highlighted_element>Segoe</highlighted_element>
+  <language>SVG</language>
+  <offset>37</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/landing/assets/brand/onlytechtake-logo.svg</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/landing/assets/brand/onlytechtake-logo.svg" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'Segoe'</description>
+  <highlighted_element>Segoe</highlighted_element>
+  <language>SVG</language>
+  <offset>37</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/landing/script.js</file>
+  <line>165</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/landing/script.js" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'dell''</description>
+  <highlighted_element>dell'</highlighted_element>
+  <language>TEXT</language>
+  <offset>146</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/landing/styles.css</file>
+  <line>422</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/landing/styles.css" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'btns'</description>
+  <highlighted_element>btns</highlighted_element>
+  <language>TEXT</language>
+  <offset>6</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/landing/styles.css</file>
+  <line>531</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/landing/styles.css" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'minmax'</description>
+  <highlighted_element>minmax</highlighted_element>
+  <language>TEXT</language>
+  <offset>44</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/registered-assets/brand/identity/onlytechtake-logo.svg</file>
+  <line>10</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/registered-assets/brand/identity/onlytechtake-logo.svg" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'Segoe'</description>
+  <highlighted_element>Segoe</highlighted_element>
+  <language>SVG</language>
+  <offset>36</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/registered-assets/brand/identity/onlytechtake-logo.svg</file>
+  <line>11</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/registered-assets/brand/identity/onlytechtake-logo.svg" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'Segoe'</description>
+  <highlighted_element>Segoe</highlighted_element>
+  <language>SVG</language>
+  <offset>37</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/registered-assets/brand/identity/onlytechtake-logo.svg</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/registered-assets/brand/identity/onlytechtake-logo.svg" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'Segoe'</description>
+  <highlighted_element>Segoe</highlighted_element>
+  <language>SVG</language>
+  <offset>37</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'Segoe'</description>
+  <highlighted_element>Segoe</highlighted_element>
+  <language>SVG</language>
+  <offset>37</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg</file>
+  <line>13</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'Segoe'</description>
+  <highlighted_element>Segoe</highlighted_element>
+  <language>SVG</language>
+  <offset>36</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg</file>
+  <line>14</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'Segoe'</description>
+  <highlighted_element>Segoe</highlighted_element>
+  <language>SVG</language>
+  <offset>36</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg</file>
+  <line>15</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'Segoe'</description>
+  <highlighted_element>Segoe</highlighted_element>
+  <language>SVG</language>
+  <offset>36</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg</file>
+  <line>16</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'Segoe'</description>
+  <highlighted_element>Segoe</highlighted_element>
+  <language>SVG</language>
+  <offset>36</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg</file>
+  <line>17</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'Segoe'</description>
+  <highlighted_element>Segoe</highlighted_element>
+  <language>SVG</language>
+  <offset>105</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg</file>
+  <line>18</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'Segoe'</description>
+  <highlighted_element>Segoe</highlighted_element>
+  <language>SVG</language>
+  <offset>107</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg</file>
+  <line>19</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'Segoe'</description>
+  <highlighted_element>Segoe</highlighted_element>
+  <language>SVG</language>
+  <offset>158</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg</file>
+  <line>19</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'Segoe'</description>
+  <highlighted_element>Segoe</highlighted_element>
+  <language>SVG</language>
+  <offset>275</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg</file>
+  <line>19</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'Segoe'</description>
+  <highlighted_element>Segoe</highlighted_element>
+  <language>SVG</language>
+  <offset>1065</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg</file>
+  <line>19</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'Segoe'</description>
+  <highlighted_element>Segoe</highlighted_element>
+  <language>SVG</language>
+  <offset>1270</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg</file>
+  <line>19</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/registered-assets/brand/social/github-cover.svg" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Spelling</problem_class>
+  <description>Typo: In word 'Segoe'</description>
+  <highlighted_element>Segoe</highlighted_element>
+  <language>SVG</language>
+  <offset>1402</offset>
+  <length>5</length>
+</problem>
+</problems>

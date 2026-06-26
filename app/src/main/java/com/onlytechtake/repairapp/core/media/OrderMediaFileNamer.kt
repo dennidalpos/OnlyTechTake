@@ -14,7 +14,7 @@ class OrderMediaFileNamer {
         return "${safeOrderNumber}_$timestampMillis.jpg"
     }
 
-    fun sanitize(value: String): String =
+    private fun sanitize(value: String): String =
         value
             .trim()
             .replace(unsafeCharacters, "_")

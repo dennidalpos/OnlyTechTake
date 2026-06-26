@@ -9,18 +9,6 @@ import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 
-data class OrderMediaAggregate(
-    val orderId: String,
-    val images: Int,
-    val documents: Int,
-    val finalPhotos: Int,
-)
-
-data class SignatureAggregate(
-    val orderId: String,
-    val signatures: Int,
-)
-
 data class OrderExportRow(
     val orderNumber: String,
     val title: String,

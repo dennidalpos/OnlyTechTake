@@ -1,9 +1,12 @@
 package com.onlytechtake.repairapp.core.demo
 
+import android.content.Context
 import com.onlytechtake.repairapp.BuildConfig
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
+import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
 
 object DemoMode {
     var isEnabled: Boolean = false
@@ -16,6 +19,33 @@ object DemoMode {
             isEnabled = enabled
         }
     }
+
+    fun getVersionBanner(context: Context): String = context.getString(R.string.demo_version_banner)
+
+    fun getAdminDisplayName(context: Context): String = context.getString(R.string.demo_admin_display_name)
+
+    fun getOperatorNotAvailableMessage(context: Context): String =
+        context.getString(R.string.demo_error_operator_not_available)
+
+    fun getOperatorLimitMessage(
+        context: Context,
+        limit: Int,
+    ): String = context.resources.getQuantityString(R.plurals.demo_error_operator_limit, limit, limit)
+
+    fun getOrderLimitMessage(
+        context: Context,
+        limit: Int,
+    ): String = context.resources.getQuantityString(R.plurals.demo_error_order_limit, limit, limit)
+
+    fun getShowcaseInitializingMessage(context: Context): String = ""
+    fun getShowcasePreparingMessage(context: Context): String = ""
+    fun getDemoActionLabel(context: Context): String = context.getString(R.string.auth_demo_action)
+    fun getShowcaseScenarioLabel(context: Context): String = ""
+    fun getShowcaseWalkthroughLabel(context: Context): String = ""
+    fun getDemoTryCta(context: Context): String = context.getString(R.string.home_demo_cta_try)
+    fun getDemoProFeaturesLabel(context: Context): String = context.getString(R.string.home_demo_pro_features)
+    fun getDemoProFeaturesDesc(context: Context): String = context.getString(R.string.home_demo_pro_features_description)
+    fun getShowcaseOwnerInfo(context: Context): OwnerInfo? = null
 
     val demoCustomer =
         CustomerEntity(

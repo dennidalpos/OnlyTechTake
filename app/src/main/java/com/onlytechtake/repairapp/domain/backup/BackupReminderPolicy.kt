@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.domain.backup
 
-import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.milliseconds
 
 enum class BackupReminderStatus {
     NEVER,
@@ -18,7 +19,7 @@ data class BackupReminderSettings(
 
 object BackupReminderPolicy {
     const val DEFAULT_INTERVAL_DAYS = 7
-    const val MIN_INTERVAL_DAYS = 1
+    private const val MIN_INTERVAL_DAYS = 1
 
     fun normalizeIntervalDays(days: Int): Int = days.coerceAtLeast(MIN_INTERVAL_DAYS)
 
@@ -28,9 +29,9 @@ object BackupReminderPolicy {
     ): Boolean {
         if (!settings.enabled) return false
         val lastSuccessfulBackup = settings.lastSuccessfulBackupAtMillis ?: return true
-        val intervalMillis =
-            TimeUnit.DAYS.toMillis(normalizeIntervalDays(settings.intervalDays).toLong())
-        return nowMillis - lastSuccessfulBackup >= intervalMillis
+        val interval = normalizeIntervalDays(settings.intervalDays).days
+        val elapsed = (nowMillis - lastSuccessfulBackup).milliseconds
+        return elapsed >= interval
     }
 
     fun daysSinceLastSuccessfulBackup(
@@ -38,7 +39,7 @@ object BackupReminderPolicy {
         nowMillis: Long,
     ): Long? =
         settings.lastSuccessfulBackupAtMillis?.let { lastBackup ->
-            TimeUnit.MILLISECONDS.toDays((nowMillis - lastBackup).coerceAtLeast(0L))
+            (nowMillis - lastBackup).coerceAtLeast(0L).milliseconds.inWholeDays
         }
 
     fun recordSuccess(

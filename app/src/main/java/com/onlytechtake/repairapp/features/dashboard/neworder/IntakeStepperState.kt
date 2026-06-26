@@ -11,10 +11,10 @@ import com.onlytechtake.repairapp.domain.workspace.IntakeOrderInput
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
 
 data class IntakeStepperState(
-    val draft: QuickIntakeDraft,
+    private val draft: QuickIntakeDraft,
     val categories: List<OrderCategoryEntity>,
     val templates: List<MessageTemplateEntity>,
-    val anchorMappings: Map<TemplateAnchor, String>,
+    private val anchorMappings: Map<TemplateAnchor, String>,
     val currentUser: AuthenticatedUser?,
 ) {
     val activeCategories = categories.filter { it.active }

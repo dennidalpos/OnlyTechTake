@@ -1,0 +1,542 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/media/MediaStorageProvider.kt</file>
+  <line>6</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.media</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.media.MediaStorageProvider" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'MediaStorageProvider' has too many transitive dependencies (50 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/permissions/PermissionService.kt</file>
+  <line>7</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.permissions</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.permissions.PermissionService" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'PermissionService' has too many transitive dependencies (47 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/security/DatabaseKeyManager.kt</file>
+  <line>15</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.security</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.security.DatabaseKeyManager" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'DatabaseKeyManager' has too many transitive dependencies (55 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/AuditLogDao.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.AuditLogDao" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'AuditLogDao' has too many transitive dependencies (39 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/CustomerDao.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.CustomerDao" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'CustomerDao' has too many transitive dependencies (47 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/MessageTemplateDao.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.MessageTemplateDao" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'MessageTemplateDao' has too many transitive dependencies (39 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/OrderCategoryDao.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'OrderCategoryDao' has too many transitive dependencies (51 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/OrderMediaDao.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.OrderMediaDao" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'OrderMediaDao' has too many transitive dependencies (42 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/RepairOrderDao.kt</file>
+  <line>10</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.RepairOrderDao" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'RepairOrderDao' has too many transitive dependencies (48 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/SignatureDao.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.SignatureDao" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'SignatureDao' has too many transitive dependencies (41 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/TimelineEventDao.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.TimelineEventDao" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'TimelineEventDao' has too many transitive dependencies (51 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/UserDao.kt</file>
+  <line>10</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.UserDao" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'UserDao' has too many transitive dependencies (48 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/db/RepairAppDatabase.kt</file>
+  <line>43</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.db</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.db.RepairAppDatabase" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'RepairAppDatabase' has too many transitive dependencies (54 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/db/RoomConverters.kt</file>
+  <line>20</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.db</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.db.RoomConverters" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'RoomConverters' has too many transitive dependencies (55 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/AppSettingEntity.kt</file>
+  <line>8</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.AppSettingEntity" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'AppSettingEntity' has too many transitive dependencies (61 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/AuditLogEntity.kt</file>
+  <line>8</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.AuditLogEntity" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'AuditLogEntity' has too many transitive dependencies (65 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/CustomerEntity.kt</file>
+  <line>7</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.CustomerEntity" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'CustomerEntity' has too many transitive dependencies (100 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/CustomerFtsEntity.kt</file>
+  <line>6</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.CustomerFtsEntity" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'CustomerFtsEntity' has too many transitive dependencies (55 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>3</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.CustomerType" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'CustomerType' has too many transitive dependencies (113 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>8</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.UserRole" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'UserRole' has too many transitive dependencies (128 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>13</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.OrderStatus" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'OrderStatus' has too many transitive dependencies (110 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>23</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'DiagnosisOutcome' has too many transitive dependencies (105 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>28</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.CustomerActionStatus" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'CustomerActionStatus' has too many transitive dependencies (97 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>39</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.ClosureReason" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'ClosureReason' has too many transitive dependencies (110 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>47</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.OrderPriority" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'OrderPriority' has too many transitive dependencies (103 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>54</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.TimelineEventType" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'TimelineEventType' has too many transitive dependencies (71 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>72</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'CustomerFeedbackType' has too many transitive dependencies (75 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>80</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.MessageChannel" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'MessageChannel' has too many transitive dependencies (68 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>84</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.MessageMode" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'MessageMode' has too many transitive dependencies (64 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>88</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.MessageStatus" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'MessageStatus' has too many transitive dependencies (64 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>93</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.OrderDocumentType" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'OrderDocumentType' has too many transitive dependencies (61 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>97</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.AuditAction" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'AuditAction' has too many transitive dependencies (68 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>113</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.UserPermission" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'UserPermission' has too many transitive dependencies (75 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LoginAttemptEntity.kt</file>
+  <line>7</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.LoginAttemptEntity" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'LoginAttemptEntity' has too many transitive dependencies (57 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/MessageLogEntity.kt</file>
+  <line>8</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.MessageLogEntity" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'MessageLogEntity' has too many transitive dependencies (62 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/MessageTemplateEntity.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'MessageTemplateEntity' has too many transitive dependencies (61 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/OrderCategoryEntity.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'OrderCategoryEntity' has too many transitive dependencies (103 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/OrderDocumentEntity.kt</file>
+  <line>8</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'OrderDocumentEntity' has too many transitive dependencies (59 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/OrderMediaEntity.kt</file>
+  <line>8</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'OrderMediaEntity' has too many transitive dependencies (60 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/RepairOrderEntity.kt</file>
+  <line>8</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'RepairOrderEntity' has too many transitive dependencies (95 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/RepairOrderFtsEntity.kt</file>
+  <line>6</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.RepairOrderFtsEntity" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'RepairOrderFtsEntity' has too many transitive dependencies (55 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/SignatureEntity.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.SignatureEntity" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'SignatureEntity' has too many transitive dependencies (64 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/TimelineEventEntity.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'TimelineEventEntity' has too many transitive dependencies (69 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/UserEntity.kt</file>
+  <line>8</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.UserEntity" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'UserEntity' has too many transitive dependencies (102 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/auth/AuthModels.kt</file>
+  <line>6</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.auth</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.auth.AuthenticatedUser" />
+  <problem_class id="ClassWithTooManyTransitiveDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependents</problem_class>
+  <hints />
+  <description>Class 'AuthenticatedUser' has too many transitive dependencies (64 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+</problems>

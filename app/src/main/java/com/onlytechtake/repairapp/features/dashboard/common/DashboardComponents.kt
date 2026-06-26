@@ -173,7 +173,7 @@ fun ActionRow(content: @Composable () -> Unit) {
 @Composable
 fun WizardNavigationBar(
     onBack: (() -> Unit)? = null,
-    nextLabel: String = stringResource(R.string.nav_next),
+    nextLabel: String = stringResource(R.string.action_next),
     nextEnabled: Boolean = true,
     nextTestTag: String? = null,
     onNext: () -> Unit,
@@ -193,7 +193,7 @@ fun WizardNavigationBar(
             onBack?.let {
                 AppButton(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.nav_back),
+                    text = stringResource(R.string.action_back),
                     variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Default,
                     onClick = it,
@@ -365,7 +365,7 @@ fun NoteFieldWithDialog(
             },
             confirmButton = {
                 AppButton(
-                    text = stringResource(R.string.confirm),
+                    text = stringResource(R.string.action_confirm),
                     onClick = {
                         onNoteChange(tempNote)
                         showDialog = false

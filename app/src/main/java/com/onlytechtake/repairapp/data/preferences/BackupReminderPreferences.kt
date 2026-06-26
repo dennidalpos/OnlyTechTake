@@ -11,7 +11,6 @@ import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import com.onlytechtake.repairapp.domain.backup.BackupReminderStatus
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 private val Context.backupReminderDataStore by preferencesDataStore(name = "backup_reminder_preferences")
@@ -67,8 +66,6 @@ class BackupReminderPreferences(
             preferences[LAST_BACKUP_STATUS] = BackupReminderStatus.FAILED.name
         }
     }
-
-    suspend fun currentSettings(): BackupReminderSettings = settings.first()
 
     private companion object {
         val ENABLED = booleanPreferencesKey("backup_reminder_enabled")

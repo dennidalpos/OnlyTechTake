@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="demo_version_banner">DEMO VERSION</string>
+
     <string name="order_created_title">Repair order created</string>
     <string name="status_updated_title">Status updated</string>
     <string name="closure_reason_prefix">Closure reason: %s</string>
     <string name="order_reassigned_title">Repair order reassigned</string>
     <string name="unassigned">Unassigned</string>
     <string name="internal_note_added_title">Internal note added</string>
-    <string name="order_deleted_title">Repair order deleted</string>
     <string name="customer_feedback_recorded_title">Customer feedback recorded</string>
     <string name="media_removed_title">Media removed</string>
     <string name="signature_captured_title">Signature captured</string>
@@ -36,7 +35,7 @@
     <string name="action_record_result">Record result</string>
     <string name="action_start_repair">Start repair</string>
     <string name="action_ready_for_pickup">Ready for pickup</string>
-    <string name="action_close_order">Close repair order</string>
+    <string name="action_close_order">Close</string>
     <string name="action_none_label">No action</string>
     <string name="action_wait_quote">Wait for quote acceptance or rejection</string>
     <string name="action_notify_not_repairable">Notify customer and prepare pickup</string>
@@ -103,29 +102,7 @@
     <string name="pdf_label_terms_accepted">Terms: Accepted (v%1$d)</string>
     <string name="pdf_no_description">No description</string>
 
-    <string name="backup_pdf_order_summary">Repair order summary %s</string>
-    <string name="backup_pdf_number">Number: %s</string>
-    <string name="backup_pdf_title">Title: %s</string>
-    <string name="backup_pdf_status">Status: %s</string>
-    <string name="backup_pdf_closure_reason">Closure reason: %s</string>
-    <string name="backup_pdf_customer">Customer: %s</string>
-    <string name="backup_pdf_category">Category: %s</string>
-    <string name="backup_pdf_operator">Operator: %s</string>
-    <string name="backup_pdf_created_at">Creation date: %s</string>
-    <string name="backup_pdf_description">Description: %s</string>
-    <string name="backup_pdf_timeline">Timeline</string>
-    <string name="backup_pdf_no_events">No events recorded.</string>
-    <string name="backup_pdf_signatures">Signatures</string>
-    <string name="backup_pdf_no_signatures">No signatures captured.</string>
-    <string name="backup_pdf_signed_conditions">Signed terms</string>
-    <string name="backup_pdf_privacy_version">Privacy v%1$d: %2$s</string>
-    <string name="backup_pdf_terms_version">Terms v%1$d: %2$s</string>
-    <string name="backup_pdf_none">None</string>
-    <string name="backup_pdf_status_change">Status change: %1$s -&gt; %2$s</string>
-    <string name="backup_pdf_expected_feedback">Expected feedback: %s</string>
-    <string name="backup_pdf_customer_feedback">Customer feedback: %s</string>
-    <string name="backup_pdf_feedback_note">Feedback note: %s</string>
-    <string name="backup_pdf_feedback_recorded">Feedback recorded: %s</string>
+
     <string name="error_destination_unavailable">Destination unavailable</string>
     <string name="error_diagnosis_only_during">Diagnosis can only be recorded during or after diagnosis</string>
     <string name="timeline_result_summary">Result summary: %s</string>
@@ -152,11 +129,14 @@
     <string name="error_admin_cannot_be_deleted">Admin account cannot be deleted</string>
     <string name="error_admin_permissions_immutable">Admin permissions cannot be modified</string>
     <string name="timeline_photo_attached">Photo attached</string>
-    <string name="timeline_photo_final">Final photo</string>
     <string name="timeline_attachment_added">Attachment added</string>
     <string name="timeline_image_modified">Image modified</string>
 
     <string name="error_photo_not_saved">Photo not saved</string>
+    <string name="label_repair_order">repair order</string>
+    <string name="label_media">media</string>
+    <string name="label_signature">signature</string>
+    <string name="label_document">document</string>
     <string name="label_attachment">attachment</string>
     <string name="error_attachment_unavailable">Attachment unavailable</string>
     <string name="error_attachment_empty">Empty or unsaved attachment</string>
@@ -179,8 +159,6 @@
     <string name="error_invalid_zip_backup">Invalid ZIP backup</string>
     <string name="error_invalid_backup_path">Invalid backup path</string>
     <string name="error_type_reset_to_confirm">Type %s to confirm</string>
-    <string name="error_invalid_max_attachment_size">Invalid maximum attachment size</string>
-    <string name="error_empty_attachment_allowlist">Empty attachment allowlist</string>
     <string name="error_unrecognized_attachment_type">Unrecognized attachment type</string>
     <string name="error_attachment_type_not_allowed">Attachment type not allowed: %s</string>
     <string name="error_critical_db_error">Critical database error</string>
@@ -195,7 +173,6 @@
     <string name="error_terms_acceptance_required">Terms acceptance required</string>
     <string name="error_invalid_signature">Invalid signature</string>
     <string name="error_signature_save_failed">Signature save failed</string>
-    <string name="error_message_empty">Empty message</string>
     <string name="error_closure_reason_required">Closure reason required</string>
     <string name="error_admin_creation_failed">Admin creation failed</string>
     <string name="error_init_failed">Initialization error: %s</string>
@@ -227,7 +204,6 @@
     <string name="config_backup_logs_clear_confirm_text">Are you sure you want to delete all diagnostic logs? This will free up space.</string>
     <string name="config_backup_logs_send_confirm_title">Send Logs</string>
     <string name="config_backup_logs_send_confirm_text">A compressed file with technical data will be generated to be sent via WhatsApp.</string>
-    <string name="success_logs_cleared">Logs cleared successfully.</string>
 
     <string name="error_feature_pro_only">Feature available in Full version</string>
     <string name="error_db_not_created">Database not yet created</string>
@@ -235,104 +211,7 @@
     <string name="error_backup_unavailable">Backup unavailable</string>
     <string name="error_backup_incompatible">Incompatible backup version</string>
     <string name="error_db_missing_in_backup">Database missing in backup</string>
-    <string name="label_demo_admin">Demo Admin</string>
 
-    <string name="showcase_op_reception">Anna Receptionist</string>
-    <string name="showcase_op_technician">Marco Technician</string>
-    <string name="showcase_op_manager">Elena Manager</string>
-    <string name="showcase_admin">Showcase Admin</string>
-    <string name="showcase_cat_smartphone">Smartphone</string>
-    <string name="showcase_cat_smartphone_desc">Mobile phone repair</string>
-    <string name="showcase_cat_apple_desc">iOS Devices</string>
-    <string name="showcase_cat_iphone_desc">All iPhone models</string>
-    <string name="showcase_cat_iphone_14_pro_desc">Display and back glass repair</string>
-    <string name="showcase_cat_iphone_13_desc">Battery and connector replacement</string>
-    <string name="showcase_cat_samsung_desc">Galaxy Android Devices</string>
-    <string name="showcase_cat_galaxy_s">Galaxy S Series</string>
-    <string name="showcase_cat_galaxy_s_desc">Samsung high-end</string>
-    <string name="showcase_cat_s23_ultra_desc">Curved screen and S-Pen repair</string>
-    <string name="showcase_cat_pc">Computer &amp; Laptop</string>
-    <string name="showcase_cat_pc_desc">PC hardware and software repairs</string>
-    <string name="showcase_cat_notebook_desc">Laptops and Ultrabooks</string>
-    <string name="showcase_cat_gaming_laptop">Gaming Laptop</string>
-    <string name="showcase_cat_gaming_laptop_desc">MSI, ROG, Alienware, Legion</string>
-    <string name="showcase_cat_rog_strix_desc">Internal cleaning and thermal paste</string>
-    <string name="showcase_cat_windows_laptop">Windows Laptop</string>
-    <string name="showcase_cat_windows_laptop_desc">Asus, HP, Lenovo, Dell</string>
-    <string name="showcase_cat_asus_zenbook_desc">Hinge and display repair</string>
-    <string name="showcase_cat_console">Game Console</string>
-    <string name="showcase_cat_console_desc">PlayStation, Xbox, Switch repairs</string>
-    <string name="showcase_cat_sony_desc">PlayStation Ecosystem</string>
-    <string name="showcase_cat_ps5_desc">PS5 overhaul and repair</string>
-    <string name="showcase_cat_ps5_hdmi">HDMI Port Replacement</string>
-    <string name="showcase_cat_ps5_hdmi_desc">4K video connector replacement</string>
-    <string name="showcase_cat_dualsense_desc">Analog Drift and Button repair</string>
-    <string name="showcase_cat_tablet_desc">iPad and Android repairs</string>
-    <string name="showcase_cat_ipad_desc">Apple Tablet</string>
-    <string name="showcase_cat_ipad_pro_desc">11\" and 12.9\" models</string>
-    <string name="showcase_cat_ipad_glass">Glass/LCD Replacement</string>
-    <string name="showcase_cat_ipad_glass_desc">Touch panel repair</string>
-
-    <string name="showcase_customer_notes">Test customer.</string>
-    <string name="showcase_order_title">%1$s Repair - Model %2$d</string>
-    <string name="showcase_order_description">Problem found: the device is not working correctly.</string>
-    <string name="showcase_order_internal_notes">Internal test note.</string>
-    <string name="showcase_event_intake_desc">Device received at the bench.</string>
-    <string name="showcase_event_closed_desc">Repair completed and delivered.</string>
-    <string name="showcase_photo_label">Object: %s</string>
-    <string name="showcase_sig_label">Signature: %s</string>
-    <string name="showcase_privacy_snapshot">Standard Privacy Policy</string>
-    <string name="showcase_terms_snapshot">Repair Terms and Conditions</string>
-    <string name="demo_admin_display_name">Demo Admin</string>
-    <string name="demo_operator_display_name">Bench Operator</string>
-    <string name="demo_cat_pc">Computer &amp; Laptop</string>
-    <string name="demo_cat_pc_desc">PC hardware and software repairs</string>
-    <string name="demo_cat_notebook">Notebook</string>
-    <string name="demo_cat_notebook_desc">Laptops and Ultrabooks</string>
-    <string name="demo_cat_gaming">Gaming Laptop</string>
-    <string name="demo_cat_gaming_desc">MSI, ROG, Alienware, Legion</string>
-    <string name="demo_cat_rog_strix">Asus ROG Strix</string>
-    <string name="demo_cat_rog_strix_desc">Internal cleaning and thermal paste</string>
-    <string name="demo_customer_name">Customer %d</string>
-    <string name="demo_customer_business_name">Company %d Ltd</string>
-    <string name="demo_customer_notes">Demo customer %d for presentations.</string>
-    <string name="demo_order_title_1">Asus ROG Strix - Cleaning and Paste</string>
-    <string name="demo_order_title_n">Repair %d</string>
-    <string name="demo_order_desc">Demo repair order description %d.</string>
-    <string name="demo_order_notes">Demo internal notes %d.</string>
-    <string name="demo_photo_label">Object photo</string>
-    <string name="demo_signature_label">Customer signature</string>
-    <string name="demo_privacy_snapshot">Demo privacy notice.</string>
-    <string name="demo_terms_snapshot">Demo service intake terms.</string>
-    <string name="demo_event_title_created">Repair order created</string>
-    <string name="demo_event_desc_created">Demo intake with photo and customer signature.</string>
-    <string name="demo_template_body">Update {{numero_commessa}}: {{stato_commessa}} for {{cliente}}.</string>
-    <string name="showcase_business_name_1">Tech Solutions Ltd</string>
-    <string name="showcase_business_name_2">Global Food Corp</string>
-    <string name="showcase_business_name_3">Rossi Law Firm</string>
-    <string name="showcase_business_name_4">Mechanical Workshop</string>
-    <string name="showcase_business_name_5">Central Bar</string>
-
-    <string name="showcase_private_name_1">John</string>
-    <string name="showcase_private_surname_1">Doe</string>
-    <string name="showcase_private_name_2">Jane</string>
-    <string name="showcase_private_surname_2">Smith</string>
-    <string name="showcase_private_name_3">Robert</string>
-    <string name="showcase_private_surname_3">Brown</string>
-    <string name="showcase_private_name_4">Emily</string>
-    <string name="showcase_private_surname_4">Davis</string>
-    <string name="showcase_private_name_5">Michael</string>
-    <string name="showcase_private_surname_5">Wilson</string>
-
-    <string name="showcase_business_fictitious">Example Business Ltd</string>
-    <string name="showcase_private_fictitious_name">Example</string>
-    <string name="showcase_private_fictitious_surname">Private Customer</string>
-
-    <string name="showcase_owner_name">OnlyTechTake Lab Showcase</string>
-    <string name="showcase_owner_vat">IT01234567890</string>
-    <string name="showcase_owner_address">Via delle Riparazioni 42, 00100 Roma (RM)</string>
-    <string name="showcase_owner_email">showcase@onlytechtake.it</string>
-    <string name="showcase_owner_phone">+39 06 1234567</string>
 
     <string name="priority_low">Low</string>
     <string name="priority_normal">Normal</string>
@@ -356,8 +235,7 @@
 
     <string name="share_pdf_text">Attached is the progress status of the repair order.</string>
 
-    <string name="auth_showcase_initializing">Initializing showcase data…</string>
-    <string name="auth_showcase_preparing">Preparing environment…</string>
+
     <string name="auth_system_ready">System ready</string>
     <string name="auth_password_change_top">Password change required</string>
     <string name="auth_security_title">Account security</string>
@@ -384,13 +262,12 @@
     <string name="auth_password">Password</string>
     <string name="auth_confirm_password">Confirm password</string>
     <string name="auth_recovery_action">Login problems? Admin recovery</string>
-    <string name="auth_demo_action">Launch demo mode</string>
+
     <string name="auth_show_password">Show password</string>
     <string name="auth_hide_password">Hide password</string>
 
     <string name="dashboard_home">Home</string>
     <string name="dashboard_new">New</string>
-    <string name="dashboard_customers">Customers</string>
     <string name="dashboard_orders">Orders</string>
     <string name="dashboard_config">Setup</string>
     <string name="settings_select_section_title">Select a section</string>
@@ -409,12 +286,8 @@
     <string name="home_title">Repair Bench</string>
     <string name="home_pro_cta_new">NEW REPAIR ORDER</string>
     <string name="home_pro_status_operational">BENCH OPERATIONAL</string>
-    <string name="home_demo_cta_try">TRY REPAIR ORDER</string>
-    <string name="home_demo_pro_features">Discover Pro version benefits</string>
-    <string name="home_showcase_scenario">DEMO SCENARIO</string>
-    <string name="home_showcase_walkthrough">Start Walkthrough</string>
+
     <string name="home_metric_operators">Operators</string>
-    <string name="home_metric_customers">Customers</string>
     <string name="home_metric_active">Active</string>
     <string name="home_new_order">New repair order</string>
     <string name="home_empty_queue">No repair orders in this queue.</string>
@@ -423,7 +296,7 @@
     <string name="home_open_queue">Open queue</string>
     <string name="home_backup_reminder_title">Backup recommended</string>
     <string name="home_backup_reminder_settings">Backup setup</string>
-    <string name="home_demo_pro_features_description">ZIP Backup, Excel Export, Operator Management, and Unlimited Orders are available in the Pro version.</string>
+
 
     <string name="backup_run_full_zip">Run full ZIP backup</string>
     <string name="backup_status_never">Never executed</string>
@@ -433,21 +306,16 @@
     </plurals>
     <string name="backup_status_failed">Last attempt failed</string>
 
-    <string name="nav_back">Back</string>
-    <string name="nav_next">Next</string>
+    <string name="action_back">Back</string>
+    <string name="action_next">Next</string>
+    <string name="action_close">Close</string>
+    <string name="action_confirm">Confirm</string>
     <string name="nav_cancel_and_close">Cancel and close</string>
     <string name="content_description_info">Information</string>
-    <string name="content_description_back">Back</string>
-    <string name="content_description_close">Close</string>
     <string name="content_description_delete">Delete</string>
-    <string name="content_description_delete_order">Delete repair order</string>
-    <string name="order_confirm_delete_title">Delete repair order?</string>
-    <string name="order_confirm_delete_text">All data, attachments, signatures, and records of this repair order will be permanently removed. This action is irreversible.</string>
-    <string name="order_exit_close">Close and exit</string>
-    <string name="order_delete_media_title">Delete media?</string>
-    <string name="order_delete_media_text">File %1$s will be permanently removed.</string>
-    <string name="order_delete_signature_title">Delete signature?</string>
-    <string name="order_delete_signature_text">The signature will be permanently removed.</string>
+    <string name="content_description_delete_order">Delete</string>
+    <string name="action_delete_confirm_title">Delete %1$s?</string>
+    <string name="action_delete_confirm_text">\%1$s will be permanently removed. This action is irreversible.</string>
     <string name="order_not_repairable_note">Customer notified: device not repairable</string>
     <string name="content_description_edit">Edit</string>
     <string name="content_description_open">Open</string>
@@ -502,8 +370,8 @@
     <string name="customer_unnamed_private">Unnamed private</string>
     <string name="customer_unnamed_business">Unnamed business</string>
 
-    <string name="customer_title">Customers</string>
-    <string name="customer_search_label">Search customer</string>
+    <string name="label_customers">Customers</string>
+    <string name="label_search_customer">Search customer</string>
     <string name="customer_new">New customer</string>
     <string name="customer_edit">Edit customer</string>
     <string name="customer_recent">Recent customers</string>
@@ -520,10 +388,10 @@
     <string name="customer_confirm_save_text">Save the customer?</string>
     <string name="customer_confirm_update_text">Update the selected customer\'s data?</string>
     <string name="customer_select">Select customer</string>
-    <string name="confirm">Confirm</string>
+
     <string name="customer_select_detail_hint">Select a customer to see details</string>
     <string name="customer_select_detail_title">No customer selected</string>
-    <string name="customer_detail_close">Close</string>
+
     <string name="customer_detail_edit">Edit</string>
     <string name="customer_open_orders">Open orders (%1$d)</string>
     <string name="customer_closed_orders">Closed history (%1$d)</string>
@@ -551,7 +419,6 @@
     <string name="intake_step_media">Photos and attachments</string>
     <string name="intake_step_privacy">Privacy and signature</string>
 
-    <string name="intake_search_customer">Search customer</string>
     <string name="intake_selected_customer">Selected customer: %s</string>
     <string name="intake_change_customer">Change customer</string>
     <string name="intake_insert_new_customer">Insert new customer</string>
@@ -565,7 +432,7 @@
     <string name="intake_media_attach_file">Attach file</string>
     <string name="intake_media_remove">Remove</string>
     <string name="intake_media_summary">%1$s - %2$d KB</string>
-    <string name="intake_submit_title">Confirm</string>
+
     <string name="intake_submit_missing">Missing: %s</string>
     <string name="intake_submit_create">Create intake order</string>
     <string name="intake_help">Fill in the steps to create a new repair order. You can save a draft and resume later.</string>
@@ -595,7 +462,6 @@
     <string name="orders_filter_open_unassigned">Open (unassigned)</string>
     <string name="orders_filter_closed_discarded">Closed (closed or discarded)</string>
     <string name="orders_filter_in_progress_assigned">In progress (assigned)</string>
-    <string name="orders_search_label">Search customer</string>
     <string name="orders_select_detail_hint">Select a repair order to see details</string>
     <string name="orders_select_detail_title">No repair order selected</string>
     <string name="orders_category_unavailable">Category unavailable</string>
@@ -632,8 +498,10 @@
     <string name="order_share_status_chooser">Send progress status</string>
     <string name="share_title_status_report">Progress status %s</string>
     <string name="share_title_document">Document %s</string>
+    <string name="error_repairable_diagnosis_required">Only a repairable diagnosis can pass to repairing</string>
+    <string name="error_not_repairable_diagnosis_required">Direct transition to pickup requires a non-repairable diagnosis</string>
     <string name="error_unknown">Error</string>
-    <string name="error_unknown_generic">An error occurred</string>
+    <string name="error_log_generation_failed">Failed to generate log file</string>
     <string name="order_diagnosis_repairable">Repairable</string>
     <string name="order_diagnosis_not_repairable">Not repairable</string>
     <string name="template_diagnosis_not_repairable_reason">Technical diagnosis: not repairable</string>
@@ -690,8 +558,7 @@
     <string name="template_condizioni_title">Service Intake Terms</string>
     <string name="template_condizioni_body">Service Intake Terms and Conditions.\nThe customer delivers the object specified in the repair order and authorizes {{proprietario_nome}} to store, inspect, and perform a technical diagnosis.\nDiagnosis may require opening the device, testing, or connection to compatible power supplies. Repair work is initiated only after customer acceptance of the quote.\n{{proprietario_nome}} is not liable for data loss, uncommunicated passwords, pre-existing defects, or inevitable deterioration emerging during diagnosis on already damaged objects. It is the customer\'s responsibility to back up data before delivery.\nQuoted amounts must be accepted by the customer before work begins. In the event of rejection or failure to collect the device within 90 days, the object may be handled according to current regulations on abandoned property.\nBy signing, the customer confirms having read and accepted the privacy notice and these terms.\n\nLaboratory: {{proprietario_nome}} - {{proprietario_indirizzo}}</string>
 
-    <string name="order_confirm_delete_document_title">Delete document?</string>
-    <string name="order_confirm_delete_document_text">The file will be permanently removed.</string>
+
     <string name="order_pdf_missing_signature_title">Missing signature</string>
     <string name="order_pdf_missing_signature_text">The document will not contain the customer\'s signature. Proceed?</string>
     <string name="yes_confirmed">Yes, confirmed</string>
@@ -751,8 +618,6 @@
     <string name="admin_current_password">Current password</string>
     <string name="admin_delete_all_orders_tooltip">Permanently deletes repair orders, timelines, messages, photos, signatures, and documents.</string>
     <string name="admin_total_reset_tooltip">Removes account, customers, configurations, and repair orders, returning the app to its initial state.</string>
-    <string name="admin_backup_overdue_title">Attention: no recent backup found</string>
-    <string name="admin_backup_overdue_text">Perform a full backup before proceeding with data deletion operations.</string>
     <string name="admin_delete_all_orders_field_short">Type %s</string>
     <string name="admin_total_reset_field">Type %s</string>
     <string name="admin_delete_all_orders_confirmation_value">DELETE ALL</string>
@@ -769,13 +634,11 @@
     <string name="config_template_default_label">Default (%s)</string>
     <string name="config_template_step_prefix">Step %1$d</string>
     <string name="config_template_legal_step">Legal</string>
-    <string name="config_template_assigned_template">Assigned template: %s</string>
     <string name="config_template_status_default">System</string>
     <string name="config_template_status_associated">Associated</string>
     <string name="config_template_status_free">Free</string>
     <string name="config_template_status_missing">Missing</string>
     <string name="config_template_status_not_configured">Not configured</string>
-    <string name="config_template_unassigned_label">Not used by triggers</string>
     <string name="config_template_reset_defaults">Reset default templates</string>
     <string name="config_template_reset_confirm_title">Reset default templates?</string>
     <string name="config_template_reset_confirm_text">System templates will return to default texts and custom associations will be removed. Custom templates will remain available but not associated.</string>
@@ -891,7 +754,6 @@
 
     <string name="config_backup_tooltip">Manage reminders and files through the Android document selector.</string>
     <string name="config_backup_close">Close backup setup</string>
-    <string name="config_backup_orders_tooltip">Export all repair orders to an Excel file readable from PC.</string>
 
     <string name="config_backup_export_xlsx">Export repair orders XLSX</string>
     <string name="config_backup_confirm_export_xlsx_title">Export repair orders?</string>
@@ -902,11 +764,7 @@
     <string name="config_backup_restore_zip">Restore ZIP</string>
     <string name="config_backup_confirm_restore_zip_title">Restore backup?</string>
     <string name="config_backup_confirm_restore_zip_text">The ZIP backup will replace the app\'s database and local files. After the restore, a new login will be required.</string>
-    <string name="config_backup_orders_export_title">Repair Orders Export</string>
 
-    <string name="admin_export_database">Export SQLite database</string>
-    <string name="admin_confirm_export_database_title">Export database?</string>
-    <string name="admin_confirm_export_database_text">A .db file will be created via system selector. Attention: it contains all sensitive app data.</string>
 
     <string name="export_xlsx_header_order_number">Order number</string>
     <string name="export_xlsx_header_title">Title</string>
@@ -969,13 +827,5 @@
     <string name="catalog_error_parent_not_found">Parent category not found</string>
     <string name="catalog_error_depth_limit">Maximum depth reached (4 levels)</string>
 
-    <plurals name="demo_error_order_limit">
-        <item quantity="one">Demo Limit reached. The Demo version allows only %1$d repair order and use only with admin account. To continue without limits, activate the Full version.</item>
-        <item quantity="other">Demo Limit reached. The Demo version allows %1$d repair orders and use only with admin account. To continue without limits, activate the Full version.</item>
-    </plurals>
-    <string name="demo_error_operator_not_available">The Demo version does not allow the creation of operators. Use only the local admin account.</string>
-    <plurals name="demo_error_operator_limit">
-        <item quantity="one">Demo Limit reached. Maximum %1$d operator allowed in the Demo version. To continue without limits, activate the Full version.</item>
-        <item quantity="other">Demo Limit reached. Maximum %1$d operators allowed in the Demo version. To continue without limits, activate the Full version.</item>
-    </plurals>
+
 </resources>

@@ -15,7 +15,13 @@ class AppContainer(
         com.onlytechtake.repairapp.data.preferences
             .SecurityPreferences(context.applicationContext)
     }
-    private val authContainer by lazy { AuthContainer(context, dataContainer, internalSecurityPreferences) }
+    private val authContainer by lazy {
+        AuthContainer(
+            context,
+            dataContainer,
+            internalSecurityPreferences,
+        )
+    }
     private val mediaContainer by lazy { MediaContainer(context, dataContainer) }
     private val settingsContainer by lazy {
         SettingsContainer(

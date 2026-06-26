@@ -40,9 +40,6 @@ class CustomersViewModel(
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
 
-    private val _isProcessing = MutableStateFlow(value = false)
-    val isProcessing = _isProcessing.asStateFlow()
-
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
@@ -56,7 +53,7 @@ class CustomersViewModel(
             currentUser = authRepository.currentUser,
             scope = viewModelScope,
             showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) },
-            setLoading = { _isProcessing.value = it },
+            setLoading = { /* Unused */ },
             diagnosticLogger = diagnosticLogger,
             ioDispatcher = ioDispatcher,
         )

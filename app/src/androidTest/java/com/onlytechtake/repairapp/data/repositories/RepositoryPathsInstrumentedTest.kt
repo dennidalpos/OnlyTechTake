@@ -7,6 +7,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.onlytechtake.repairapp.BuildConfig
+import com.onlytechtake.repairapp.core.error.DiagnosticLogger
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.security.DatabaseKeyManager
 import com.onlytechtake.repairapp.core.security.PasswordHasher
@@ -27,6 +28,9 @@ import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
+import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
+import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
+import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthPolicy
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
@@ -56,6 +60,9 @@ class RepositoryPathsInstrumentedTest {
     private lateinit var context: Context
     private lateinit var database: RepairAppDatabase
     private lateinit var authPreferences: AuthPreferences
+    private lateinit var securityPreferences: SecurityPreferences
+    private lateinit var ownerPreferences: OwnerPreferences
+    private lateinit var diagnosticLogger: DiagnosticLogger
 
     @Before
     fun setUp() =
@@ -70,6 +77,9 @@ class RepositoryPathsInstrumentedTest {
                     .allowMainThreadQueries()
                     .build()
             authPreferences = AuthPreferences(context)
+            securityPreferences = SecurityPreferences(context)
+            ownerPreferences = OwnerPreferences(context)
+            diagnosticLogger = DiagnosticLogger(context)
             authPreferences.clear()
             clearAppFiles()
         }
@@ -393,7 +403,7 @@ class RepositoryPathsInstrumentedTest {
                                 categoryId = CATEGORY_ID,
                             ),
                     ).getOrThrow()
-            val repository = CustomerRepository(database.customerDao(), clockMillis = { NOW + 1L })
+            val repository = CustomerRepository(database.customerDao()) { NOW + 1L }
 
             val updated =
                 repository
@@ -563,27 +573,15 @@ class RepositoryPathsInstrumentedTest {
                         templateDao = fileBackedDatabase.messageTemplateDao(),
                         settingDao = fileBackedDatabase.appSettingDao(),
                         auditLogDao = fileBackedDatabase.auditLogDao(),
-                        backupReminderPreferences =
-                            com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences(
-                                context,
-                            ),
-                        securityPreferences =
-                            com.onlytechtake.repairapp.data.preferences.SecurityPreferences(
-                                context,
-                            ),
+                        backupReminderPreferences = BackupReminderPreferences(context),
+                        securityPreferences = securityPreferences,
                         orderExportDao = fileBackedDatabase.orderExportDao(),
                         database = fileBackedDatabase,
                         authPreferences = authPreferences,
                         sessionStore =
                             InMemorySessionStore(),
-                        storageStatsService =
-                            com.onlytechtake.repairapp.data.services.StorageStatsService(
-                                context,
-                                MediaStorageProvider(context),
-                            ),
                         mediaStorageProvider = MediaStorageProvider(context),
-                        clockMillis = { NOW },
-                    )
+                    ) { NOW }
 
                 repository.exportCompleteBackup(actor, Uri.fromFile(output)).getOrThrow()
 
@@ -670,26 +668,14 @@ class RepositoryPathsInstrumentedTest {
                         templateDao = fileBackedDatabase.messageTemplateDao(),
                         settingDao = fileBackedDatabase.appSettingDao(),
                         auditLogDao = fileBackedDatabase.auditLogDao(),
-                        backupReminderPreferences =
-                            com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences(
-                                context,
-                            ),
-                        securityPreferences =
-                            com.onlytechtake.repairapp.data.preferences.SecurityPreferences(
-                                context,
-                            ),
+                        backupReminderPreferences = BackupReminderPreferences(context),
+                        securityPreferences = securityPreferences,
                         orderExportDao = fileBackedDatabase.orderExportDao(),
                         database = fileBackedDatabase,
                         authPreferences = authPreferences,
                         sessionStore = sessionStore,
-                        storageStatsService =
-                            com.onlytechtake.repairapp.data.services.StorageStatsService(
-                                context,
-                                MediaStorageProvider(context),
-                            ),
                         mediaStorageProvider = MediaStorageProvider(context),
-                        clockMillis = { NOW },
-                    )
+                    ) { NOW }
 
                 repository.exportCompleteBackup(actor, Uri.fromFile(output)).getOrThrow()
                 fileBackedDatabase.orderCategoryDao().upsert(
@@ -892,11 +878,10 @@ class RepositoryPathsInstrumentedTest {
                     orderRepository = orderWorkflowRepository(),
                     orderMediaRepository = mediaRepository,
                     signatureRepository = signatureRepository,
-                    runAtomically = { block ->
-                        block()
-                        error("Commit fallito")
-                    },
-                )
+                ) { block ->
+                    block()
+                    error("Commit fallito")
+                }
             val stagedFile =
                 File(context.filesDir, "app_media/intake_media/session/photo.jpg").also {
                     it.parentFile?.mkdirs()
@@ -942,8 +927,8 @@ class RepositoryPathsInstrumentedTest {
             val dao = database.orderCategoryDao()
             val repository = CatalogRepository(context, dao)
 
-            dao.upsert(OrderCategoryEntity("root", null, 0, "Root", null, true))
-            dao.upsert(OrderCategoryEntity("child", "root", 1, "Child", null, true))
+            dao.upsert(OrderCategoryEntity("root", null, 0, "Root", null, active = true))
+            dao.upsert(OrderCategoryEntity("child", "root", 1, "Child", null, active = true))
 
             // Delete fails if used
             seedCustomer()
@@ -983,7 +968,9 @@ class RepositoryPathsInstrumentedTest {
             loginAttemptDao = database.loginAttemptDao(),
             appSettingDao = database.appSettingDao(),
             authPreferences = authPreferences,
+            securityPreferences = securityPreferences,
             sessionStore = InMemorySessionStore(),
+            diagnosticLogger = diagnosticLogger,
             passwordHasher = PasswordHasher(),
             clockMillis = clockMillis,
         )
@@ -1003,8 +990,7 @@ class RepositoryPathsInstrumentedTest {
             auditLogDao = database.auditLogDao(),
             database = database,
             fileCleanupService = OrderFileCleanupService(context, mediaProvider),
-            clockMillis = { NOW },
-        )
+        ) { NOW }
     }
 
     private fun orderMediaRepository(): OrderMediaRepository {
@@ -1017,8 +1003,7 @@ class RepositoryPathsInstrumentedTest {
             fileCleanupService = OrderFileCleanupService(context, mediaProvider),
             mediaStorageProvider = mediaProvider,
             database = database,
-            clockMillis = { NOW },
-        )
+        ) { NOW }
     }
 
     private fun templateRepository(): TemplateRepository =
@@ -1032,8 +1017,8 @@ class RepositoryPathsInstrumentedTest {
             messageLogDao = database.messageLogDao(),
             timelineEventDao = database.timelineEventDao(),
             auditLogDao = database.auditLogDao(),
-            clockMillis = { NOW },
-        )
+            ownerPreferences = ownerPreferences,
+        ) { NOW }
 
     private fun signatureRepository(): SignatureRepository {
         val mediaProvider = MediaStorageProvider(context)
@@ -1046,8 +1031,7 @@ class RepositoryPathsInstrumentedTest {
             timelineEventDao = database.timelineEventDao(),
             fileCleanupService = OrderFileCleanupService(context, mediaProvider),
             mediaStorageProvider = mediaProvider,
-            clockMillis = { NOW },
-        )
+        ) { NOW }
     }
 
     private fun backupRepository(): BackupRepository =
@@ -1057,27 +1041,15 @@ class RepositoryPathsInstrumentedTest {
             templateDao = database.messageTemplateDao(),
             settingDao = database.appSettingDao(),
             auditLogDao = database.auditLogDao(),
-            backupReminderPreferences =
-                com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences(
-                    context,
-                ),
-            securityPreferences =
-                com.onlytechtake.repairapp.data.preferences.SecurityPreferences(
-                    context,
-                ),
+            backupReminderPreferences = BackupReminderPreferences(context),
+            securityPreferences = securityPreferences,
             orderExportDao = database.orderExportDao(),
             database = database,
             authPreferences = authPreferences,
             sessionStore =
                 InMemorySessionStore(),
-            storageStatsService =
-                com.onlytechtake.repairapp.data.services.StorageStatsService(
-                    context,
-                    MediaStorageProvider(context),
-                ),
             mediaStorageProvider = MediaStorageProvider(context),
-            clockMillis = { NOW },
-        )
+        ) { NOW }
 
     private suspend fun seedAdmin(): AuthenticatedUser {
         val hash = PasswordHasher().hash("correct-password".toCharArray())

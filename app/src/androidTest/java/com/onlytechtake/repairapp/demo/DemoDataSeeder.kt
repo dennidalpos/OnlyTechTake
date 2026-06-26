@@ -33,10 +33,10 @@ object DemoDataSeeder {
     const val DEMO_PASSWORD = "DemoPass123"
     const val DEMO_ADMIN_USERNAME = "admin.demo"
     const val DEMO_OPERATOR_USERNAME = "operatore.demo"
-    const val DEMO_ADMIN_ID = "demo-admin"
-    const val DEMO_OPERATOR_ID = "demo-operator"
+    private const val DEMO_ADMIN_ID = "demo-admin"
+    private const val DEMO_OPERATOR_ID = "demo-operator"
     const val DEMO_CATEGORY_ID = "demo-category-notebook"
-    const val DEMO_CUSTOMER_ID = "demo-customer"
+    private const val DEMO_CUSTOMER_ID = "demo-customer"
     const val DEMO_ORDER_ID = "demo-order-operator-intake"
 
     suspend fun seedDemoProfile(context: Context) {
@@ -97,32 +97,32 @@ object DemoDataSeeder {
                     id = "demo-cat-pc",
                     parentId = null,
                     level = 0,
-                    name = context.getString(R.string.demo_cat_pc),
-                    description = context.getString(R.string.demo_cat_pc_desc),
+                    name = context.getString(R.string.common_cat_pc),
+                    description = context.getString(R.string.common_cat_pc_desc),
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = DEMO_CATEGORY_ID, // notebook
                     parentId = "demo-cat-pc",
                     level = 1,
-                    name = context.getString(R.string.demo_cat_notebook),
-                    description = context.getString(R.string.demo_cat_notebook_desc),
+                    name = context.getString(R.string.common_cat_notebook),
+                    description = context.getString(R.string.common_cat_notebook_desc),
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = "demo-cat-gaming",
                     parentId = DEMO_CATEGORY_ID,
                     level = 2,
-                    name = context.getString(R.string.demo_cat_gaming),
-                    description = context.getString(R.string.demo_cat_gaming_desc),
+                    name = context.getString(R.string.common_cat_gaming),
+                    description = context.getString(R.string.common_cat_gaming_desc),
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = "demo-cat-rog-strix",
                     parentId = "demo-cat-gaming",
                     level = 3,
-                    name = context.getString(R.string.demo_cat_rog_strix),
-                    description = context.getString(R.string.demo_cat_rog_strix_desc),
+                    name = context.getString(R.string.common_cat_rog_strix),
+                    description = context.getString(R.string.common_cat_rog_strix_desc),
                     active = true,
                 ),
             ),

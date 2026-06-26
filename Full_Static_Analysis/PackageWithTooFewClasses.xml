@@ -1,0 +1,20 @@
+<problems>
+<problem>
+  <package>com.onlytechtake.repairapp.core.error</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.core.error" />
+  <problem_class id="PackageWithTooFewClasses" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with too few classes</problem_class>
+  <hints />
+  <description>Package 'com.onlytechtake.repairapp.core.error' contains too few classes (2 &lt; 3)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.domain.models</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.domain.models" />
+  <problem_class id="PackageWithTooFewClasses" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with too few classes</problem_class>
+  <hints />
+  <description>Package 'com.onlytechtake.repairapp.domain.models' contains too few classes (2 &lt; 3)</description>
+  <highlighted_element />
+  <language />
+</problem>
+</problems>

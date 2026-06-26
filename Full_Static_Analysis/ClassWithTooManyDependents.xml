@@ -1,0 +1,410 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/BaseAssetRobot.kt</file>
+  <line>29</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.demo.BaseAssetRobot" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'BaseAssetRobot' has too many dependents (11 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/DemoDataSeeder.kt</file>
+  <line>32</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.demo.DemoDataSeeder" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'DemoDataSeeder' has too many dependents (12 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>3</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'RepairAppTestTags' has too many dependents (12 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/error/DiagnosticLogger.kt</file>
+  <line>11</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.error</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.error.DiagnosticLogger" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'DiagnosticLogger' has too many dependents (13 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/media/MediaStorageProvider.kt</file>
+  <line>6</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.media</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.media.MediaStorageProvider" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'MediaStorageProvider' has too many dependents (12 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/permissions/PermissionService.kt</file>
+  <line>7</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.permissions</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.permissions.PermissionService" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'PermissionService' has too many dependents (17 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/AuditLogDao.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.AuditLogDao" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'AuditLogDao' has too many dependents (11 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/CustomerDao.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.CustomerDao" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'CustomerDao' has too many dependents (13 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/OrderCategoryDao.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'OrderCategoryDao' has too many dependents (15 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/RepairOrderDao.kt</file>
+  <line>10</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.RepairOrderDao" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'RepairOrderDao' has too many dependents (17 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/TimelineEventDao.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.TimelineEventDao" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'TimelineEventDao' has too many dependents (12 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/UserDao.kt</file>
+  <line>10</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.dao.UserDao" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'UserDao' has too many dependents (13 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/db/RepairAppDatabase.kt</file>
+  <line>43</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.db</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.db.RepairAppDatabase" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'RepairAppDatabase' has too many dependents (28 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/CustomerEntity.kt</file>
+  <line>7</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.CustomerEntity" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'CustomerEntity' has too many dependents (25 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>3</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.CustomerType" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'CustomerType' has too many dependents (21 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>8</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.UserRole" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'UserRole' has too many dependents (21 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>13</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.OrderStatus" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'OrderStatus' has too many dependents (34 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>23</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'DiagnosisOutcome' has too many dependents (18 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>39</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.ClosureReason" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'ClosureReason' has too many dependents (19 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>47</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.OrderPriority" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'OrderPriority' has too many dependents (20 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>72</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'CustomerFeedbackType' has too many dependents (12 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/LocalEnums.kt</file>
+  <line>113</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.UserPermission" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'UserPermission' has too many dependents (28 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/OrderCategoryEntity.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'OrderCategoryEntity' has too many dependents (18 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/RepairOrderEntity.kt</file>
+  <line>8</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'RepairOrderEntity' has too many dependents (40 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/SignatureEntity.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.SignatureEntity" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'SignatureEntity' has too many dependents (13 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/TimelineEventEntity.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'TimelineEventEntity' has too many dependents (13 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/entities/UserEntity.kt</file>
+  <line>8</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.entities.UserEntity" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'UserEntity' has too many dependents (24 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/preferences/OwnerPreferences.kt</file>
+  <line>13</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.preferences</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.preferences.OwnerPreferences" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'OwnerPreferences' has too many dependents (11 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderFileCleanupService.kt</file>
+  <line>7</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderFileCleanupService" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'OrderFileCleanupService' has too many dependents (13 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowRepository.kt</file>
+  <line>29</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'OrderWorkflowRepository' has too many dependents (15 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/TemplateRepository.kt</file>
+  <line>38</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.TemplateRepository" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'TemplateRepository' has too many dependents (11 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/auth/AuthModels.kt</file>
+  <line>6</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.auth</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.auth.AuthenticatedUser" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'AuthenticatedUser' has too many dependents (41 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/auth/AuthRepository.kt</file>
+  <line>6</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.auth</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.auth.AuthRepository" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'AuthRepository' has too many dependents (18 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/workspace/AuthenticatedActionRunner.kt</file>
+  <line>15</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner" />
+  <problem_class id="ClassWithTooManyDependents" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many dependents</problem_class>
+  <hints />
+  <description>Class 'AuthenticatedActionRunner' has too many dependents (11 &gt; 10)</description>
+  <highlighted_element />
+  <language />
+</problem>
+</problems>

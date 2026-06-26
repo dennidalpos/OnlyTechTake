@@ -38,6 +38,7 @@ internal class OrderWorkflowQueries(
             OrderFilterMode.OPEN_UNASSIGNED,
             OrderFilterMode.IN_PROGRESS,
             -> false
+
             else -> {
                 if (filter.statuses.isNotEmpty()) {
                     val hasClosed = filter.statuses.contains(OrderStatus.CLOSED)
@@ -58,7 +59,8 @@ internal class OrderWorkflowQueries(
         actor: AuthenticatedUser,
         filter: OrderFilter,
     ): Flow<List<RepairOrderEntity>> {
-        val assignedToUserId = if (filter.mode == OrderFilterMode.MINE || filter.showMineOnly) actor.id else null
+        val assignedToUserId =
+            if (filter.mode == OrderFilterMode.MINE || filter.showMineOnly) actor.id else null
         val unassignedOnly = filter.mode == OrderFilterMode.OPEN_UNASSIGNED
         val assignedOnly = filter.mode == OrderFilterMode.IN_PROGRESS
         val isClosed = calculateIsClosed(filter)
@@ -79,7 +81,8 @@ internal class OrderWorkflowQueries(
         actor: AuthenticatedUser,
         filter: OrderFilter,
     ): Flow<List<OrderListItem>> {
-        val assignedToUserId = if (filter.mode == OrderFilterMode.MINE || filter.showMineOnly) actor.id else null
+        val assignedToUserId =
+            if (filter.mode == OrderFilterMode.MINE || filter.showMineOnly) actor.id else null
         val unassignedOnly = filter.mode == OrderFilterMode.OPEN_UNASSIGNED
         val assignedOnly = filter.mode == OrderFilterMode.IN_PROGRESS
         val isClosed = calculateIsClosed(filter)
@@ -114,7 +117,8 @@ internal class OrderWorkflowQueries(
         actor: AuthenticatedUser,
         filter: OrderFilter,
     ): Flow<List<OrderListItem>> {
-        val assignedToUserId = if (filter.mode == OrderFilterMode.MINE || filter.showMineOnly) actor.id else null
+        val assignedToUserId =
+            if (filter.mode == OrderFilterMode.MINE || filter.showMineOnly) actor.id else null
         val unassignedOnly = filter.mode == OrderFilterMode.OPEN_UNASSIGNED
         val assignedOnly = filter.mode == OrderFilterMode.IN_PROGRESS
         val isClosed = calculateIsClosed(filter)

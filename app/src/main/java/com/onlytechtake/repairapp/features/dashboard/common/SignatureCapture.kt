@@ -260,7 +260,7 @@ fun SignatureCaptureForm(
                 },
             confirmButton = {
                 AppButton(
-                    text = stringResource(R.string.content_description_close),
+                    text = stringResource(R.string.action_close),
                     onClick = { textDialog = null },
                     variant = AppButtonVariant.Primary,
                     size = AppButtonSize.Compact,

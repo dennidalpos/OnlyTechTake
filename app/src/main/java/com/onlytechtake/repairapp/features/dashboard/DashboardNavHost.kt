@@ -84,6 +84,7 @@ fun DashboardNavHost(
                 )
             QuickActions(
                 viewModel = newOrderViewModel,
+                sharedViewModel = sharedViewModel,
                 onOpenConfig = {
                     navController.navigate(
                         DashboardRoutes.settings(
@@ -107,7 +108,10 @@ fun DashboardNavHost(
                             onSetFormDirty = { dirty -> sharedViewModel.setFormDirty(dirty) },
                         ),
                 )
-            CustomerPanel(viewModel = customersViewModel) { orderId ->
+            CustomerPanel(
+                viewModel = customersViewModel,
+                sharedViewModel = sharedViewModel,
+            ) { orderId ->
                 navController.navigate(
                     DashboardRoutes.orderDetail(
                         orderId,
@@ -165,6 +169,7 @@ fun DashboardNavHost(
 
             OrdersPanel(
                 viewModel = ordersViewModel,
+                sharedViewModel = sharedViewModel,
                 onOrderClick = { orderId ->
                     navController.navigate(DashboardRoutes.orderDetail(orderId))
                 },

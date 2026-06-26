@@ -115,6 +115,5 @@ class SignatureRepository(
     private companion object {
         const val MIME_TYPE_PNG = "image/png"
         const val PNG_QUALITY = 100
-        const val DEFAULT_SIGNER_NAME = "Cliente"
     }
 }

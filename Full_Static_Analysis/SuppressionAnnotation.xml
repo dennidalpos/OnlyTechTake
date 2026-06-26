@@ -1,0 +1,301 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/core/share/ShareDocumentIntentFactoryInstrumentedTest.kt</file>
+  <line>34</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.core.share</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactoryInstrumentedTest void pdfShareIntentUsesFileProviderReadGrantAndCopiesToSharedCache()" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'DEPRECATION'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>9</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode void setEnabled(boolean enabled)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'UNUSED_PARAMETER'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>9</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/DataResetRepository.kt</file>
+  <line>33</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.DataResetRepository java.lang.Object resetAll(com.onlytechtake.repairapp.domain.auth.AuthenticatedUser actor, java.lang.String confirmation, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends kotlin.Unit&gt;&gt; $completion)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'UNUSED_PARAMETER'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>9</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/DataResetRepository.kt</file>
+  <line>69</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.DataResetRepository java.lang.Object resetOrders(com.onlytechtake.repairapp.domain.auth.AuthenticatedUser actor, java.lang.String confirmation, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends kotlin.Unit&gt;&gt; $completion)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'UNUSED_PARAMETER'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>9</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderMediaRepository.kt</file>
+  <line>565</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderMediaRepository kotlin.Pair&lt;android.graphics.Bitmap.CompressFormat,java.lang.String&gt; compressFormatFor(java.lang.String mimeType)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'DEPRECATION'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>5</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/auth/AuthGateViewModel.kt</file>
+  <line>384</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.auth</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateViewModel.Factory T create(java.lang.Class&lt;T&gt; modelClass)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'UNCHECKED_CAST'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>9</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/DashboardViewModel.kt</file>
+  <line>33</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.DashboardViewModel.Factory T create(java.lang.Class&lt;T&gt; modelClass)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'UNCHECKED_CAST'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>9</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/common/CameraComponents.kt</file>
+  <line>184</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.common</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.common.CameraComponentsKt int cameraTargetRotation(android.content.Context context, androidx.camera.view.PreviewView previewView)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'DEPRECATION'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>1</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/common/LocalImageComponents.kt</file>
+  <line>329</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.common</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.common.LocalImageComponentsKt void ImageEditCanvas(android.graphics.Bitmap bitmap, java.lang.String description, java.util.List&lt;com.onlytechtake.repairapp.core.media.ImageEditArrow&gt; arrows, androidx.compose.ui.geometry.Rect cropRect, androidx.compose.ui.geometry.Offset dragStart, androidx.compose.ui.geometry.Offset dragCurrent, com.onlytechtake.repairapp.core.media.ImageEditMode editMode, long canvasSize, kotlin.jvm.functions.Function1&lt;? super androidx.compose.ui.unit.IntSize,kotlin.Unit&gt; onCanvasSizeChange, kotlin.jvm.functions.Function1&lt;? super androidx.compose.ui.geometry.Offset,kotlin.Unit&gt; onDragStart, kotlin.jvm.functions.Function1&lt;? super androidx.compose.ui.geometry.Offset,kotlin.Unit&gt; onDrag, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onDragEnd, androidx.compose.ui.Modifier modifier)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'UNUSED_PARAMETER'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>5</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/customers/CustomersViewModel.kt</file>
+  <line>63</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.customers</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.features.dashboard.customers.CustomersViewModel isFormDirty" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'unused'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>5</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/customers/CustomersViewModel.kt</file>
+  <line>148</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.customers</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.customers.CustomersViewModel.Factory T create(java.lang.Class&lt;T&gt; modelClass)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'UNCHECKED_CAST'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>9</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailComponents.kt</file>
+  <line>278</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailComponentsKt void AppActionPanel(java.lang.String title, androidx.compose.ui.Modifier modifier, androidx.compose.runtime.internal.ComposableFunction1&lt;? super androidx.compose.foundation.layout.ColumnScope,kotlin.Unit&gt; content)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'UNUSED_PARAMETER'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>5</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailViewModel.kt</file>
+  <line>391</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel.Factory T create(java.lang.Class&lt;T&gt; modelClass)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'UNCHECKED_CAST'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>9</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/home/HomeViewModel.kt</file>
+  <line>82</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.home</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.home.HomeViewModel.Factory T create(java.lang.Class&lt;T&gt; modelClass)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'UNCHECKED_CAST'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>9</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/NewOrderViewModel.kt</file>
+  <line>232</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.neworder</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.neworder.NewOrderViewModel.Factory T create(java.lang.Class&lt;T&gt; modelClass)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'UNCHECKED_CAST'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>9</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/QuickIntakeCategorySection.kt</file>
+  <line>45</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.neworder</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.neworder.QuickIntakeCategorySectionKt void QuickIntakeCategorySection(int stepNumber, java.util.List&lt;com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity&gt; activeCategories, java.lang.String selectedCategoryId, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onCategorySelected, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onOpenConfig)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'UNUSED_PARAMETER'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>5</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/QuickIntakeMediaSection.kt</file>
+  <line>41</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.neworder</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.neworder.QuickIntakeMediaSectionKt void QuickIntakeMediaSection(int stepNumber, java.lang.String intakeSessionId, java.util.List&lt;com.onlytechtake.repairapp.data.repositories.StagedOrderMedia&gt; stagedMedia, boolean showCamera, kotlin.jvm.functions.Function1&lt;? super java.lang.Boolean,kotlin.Unit&gt; onShowCameraChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onRemoveMedia, kotlin.jvm.functions.Function2&lt;? super com.onlytechtake.repairapp.data.repositories.StagedOrderMedia,? super android.graphics.Bitmap,kotlin.Unit&gt; onReplaceMedia, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onLaunchAttachmentPicker, kotlin.jvm.functions.Function2&lt;? super java.lang.String,? super java.lang.String,? extends kotlin.Result&lt;? extends java.io.File&gt;&gt; createPhotoFile, kotlin.jvm.functions.Function1&lt;? super java.io.File,kotlin.Unit&gt; onPhotoCaptured, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onCameraError)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'UNUSED_PARAMETER'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>5</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/QuickIntakeProblemSection.kt</file>
+  <line>22</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.neworder</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.neworder.QuickIntakeProblemSectionKt void QuickIntakeProblemSection(int stepNumber, java.lang.String problemSummary, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onProblemSummaryChange, java.lang.String problemDetails, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onProblemDetailsChange, androidx.compose.foundation.text.KeyboardActions nextAction, androidx.compose.foundation.text.KeyboardActions doneAction)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'UNUSED_PARAMETER'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>5</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/QuickIntakeSubmitSection.kt</file>
+  <line>25</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.neworder</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.neworder.QuickIntakeSubmitSectionKt void QuickIntakeSubmitSection(int stepNumber, java.util.List&lt;java.lang.String&gt; missingRequirements, boolean enabled, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onSubmit)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'UNUSED_PARAMETER'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>5</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/orders/OrdersViewModel.kt</file>
+  <line>88</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.orders</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.orders.OrdersViewModel.Factory T create(java.lang.Class&lt;T&gt; modelClass)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'UNCHECKED_CAST'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>9</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/SettingsViewModel.kt</file>
+  <line>341</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.settings</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.settings.SettingsViewModel.Factory T create(java.lang.Class&lt;T&gt; modelClass)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'UNCHECKED_CAST'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>9</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/workspace/SharedWorkspaceViewModel.kt</file>
+  <line>15</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.workspace</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel void showMessage(java.lang.String text, boolean isError)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'unused'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>5</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/workspace/SharedWorkspaceViewModel.kt</file>
+  <line>32</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.workspace</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel.Factory T create(java.lang.Class&lt;T&gt; modelClass)" />
+  <problem_class id="SuppressionAnnotation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Inspection suppression annotation</problem_class>
+  <description>Annotation suppresses 'UNCHECKED_CAST'</description>
+  <highlighted_element>Suppress</highlighted_element>
+  <language>kotlin</language>
+  <offset>9</offset>
+  <length>8</length>
+</problem>
+</problems>

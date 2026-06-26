@@ -19,7 +19,7 @@ internal data class ExtractedBackup(
 internal object BackupArchive {
     const val METADATA_ENTRY = "metadata/backup.json"
     const val DATABASE_ENTRY_PREFIX = "database/"
-    const val FILES_ENTRY_PREFIX = "files/"
+    private const val FILES_ENTRY_PREFIX = "files/"
     const val CANONICAL_MEDIA_DIRECTORY = "app_media"
 
     fun extract(
@@ -80,16 +80,26 @@ internal object BackupArchive {
         return ExtractedBackup(metadata.toString(), databaseFiles)
     }
 
-    fun restoreAppMedia(
+    fun restoreAppFiles(
         stagedFilesRoot: File,
-        destination: File,
+        filesDir: File,
     ) {
-        destination.deleteRecursively()
-        destination.mkdirs()
+        // Restore media
+        val mediaSource = File(stagedFilesRoot, CANONICAL_MEDIA_DIRECTORY)
+        val mediaDest = File(filesDir, CANONICAL_MEDIA_DIRECTORY)
+        if (mediaSource.exists()) {
+            mediaDest.deleteRecursively()
+            mediaDest.mkdirs()
+            mediaSource.copyRecursively(mediaDest, overwrite = true)
+        }
 
-        val canonicalSource = File(stagedFilesRoot, CANONICAL_MEDIA_DIRECTORY)
-        if (canonicalSource.exists()) {
-            canonicalSource.copyRecursively(destination, overwrite = true)
+        // Restore datastore preferences
+        val dsSource = File(stagedFilesRoot, "datastore")
+        val dsDest = File(filesDir, "datastore")
+        if (dsSource.exists()) {
+            dsDest.deleteRecursively()
+            dsDest.mkdirs()
+            dsSource.copyRecursively(dsDest, overwrite = true)
         }
     }
 
@@ -109,7 +119,7 @@ internal object BackupArchive {
             }
     }
 
-    private fun isSupportedAppFile(relativePath: String): Boolean = relativePath.startsWith("$CANONICAL_MEDIA_DIRECTORY/")
+    private fun isSupportedAppFile(relativePath: String): Boolean = relativePath.startsWith("$CANONICAL_MEDIA_DIRECTORY/") || relativePath.startsWith("datastore/")
 
     private fun requireSafeEntry(
         context: Context,

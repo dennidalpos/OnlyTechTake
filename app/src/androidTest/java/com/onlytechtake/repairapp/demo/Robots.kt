@@ -77,7 +77,7 @@ class ProAssetRobot(
         waitForText("Commesse")
     }
 
-    fun scrollOrderDetailToTop() {
+    private fun scrollOrderDetailToTop() {
         composeRule.onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn).performScrollToIndex(0)
         composeRule.waitForIdle()
     }

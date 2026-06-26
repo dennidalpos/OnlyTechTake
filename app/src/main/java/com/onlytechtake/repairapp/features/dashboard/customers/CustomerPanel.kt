@@ -32,6 +32,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -87,6 +88,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun CustomerPanel(
     viewModel: CustomersViewModel,
+    sharedViewModel: com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel,
     onOrderClick: (String) -> Unit,
 ) {
     val windowSizeClass = LocalWindowSizeClass.current
@@ -138,6 +140,15 @@ fun CustomerPanel(
         address = ""
         notes = ""
         viewModel.setFormDirty(false)
+    }
+
+    val resetSignal by sharedViewModel.resetSignal.collectAsState()
+    LaunchedEffect(resetSignal) {
+        if (resetSignal > 0) {
+            clearForm()
+            showForm = false
+            selectedCustomer = null
+        }
     }
 
     fun editCustomer(customer: CustomerEntity) {
@@ -349,7 +360,7 @@ fun CustomerPanel(
                     },
                     dismissButton = {
                         AppButton(
-                            text = stringResource(R.string.customer_detail_close),
+                            text = stringResource(R.string.action_close),
                             onClick = { selectedCustomer = null },
                             variant = AppButtonVariant.Secondary,
                             size = AppButtonSize.Compact,
@@ -390,7 +401,7 @@ fun CustomerPanel(
                 },
             confirmButton = {
                 AppButton(
-                    text = stringResource(R.string.confirm),
+                    text = stringResource(R.string.action_confirm),
                     onClick = {
                         confirmSave = false
                         viewModel.saveCustomer(input) {
@@ -450,7 +461,7 @@ private fun CustomerListContent(
                     viewModel.setSearchQuery(it)
                     if (it.isNotBlank()) viewModel.setShowAll(false)
                 },
-                label = stringResource(R.string.customer_search_label),
+                label = stringResource(R.string.label_search_customer),
                 singleLine = true,
                 imeAction = ImeAction.Search,
                 keyboardType = KeyboardType.Text,
@@ -492,7 +503,7 @@ private fun CustomerListContent(
                 Text(
                     text =
                         if (showAll) {
-                            stringResource(R.string.customer_title)
+                            stringResource(R.string.label_customers)
                         } else {
                             stringResource(
                                 R.string.customer_recent,
@@ -944,6 +955,9 @@ private fun CustomerPanelPreview() {
     MaterialTheme {
         CustomerPanel(
             viewModel =
+                androidx.lifecycle.viewmodel.compose
+                    .viewModel(),
+            sharedViewModel =
                 androidx.lifecycle.viewmodel.compose
                     .viewModel(),
             onOrderClick = {},

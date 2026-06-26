@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.domain.workspace
 import android.content.Context
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.pdf.OrderStatusPdfGenerator
 import com.onlytechtake.repairapp.core.pdf.OrderStatusPdfPayload
 import com.onlytechtake.repairapp.core.pdf.OrderStatusPdfWriter
@@ -78,7 +79,7 @@ class GenerateOrderStatusPdfUseCase(
                         ownerInfo = ownerInfo,
                         watermarkText =
                             if (BuildConfig.IS_DEMO_VERSION) {
-                                context.getString(R.string.demo_version_banner)
+                                DemoMode.getVersionBanner(context)
                             } else {
                                 null
                             },

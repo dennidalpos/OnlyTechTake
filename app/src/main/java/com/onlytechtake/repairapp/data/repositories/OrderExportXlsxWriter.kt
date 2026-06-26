@@ -19,6 +19,7 @@ import java.time.format.DateTimeFormatter
 
 internal data class OrderExportLabels(
     val headers: List<String>,
+    val sheetName: String,
     val statusLabels: Map<OrderStatus, String>,
     val priorityLabels: Map<OrderPriority, String>,
     val customerTypeLabels: Map<CustomerType, String>,
@@ -43,7 +44,7 @@ internal class OrderExportXlsxWriter(
         ZipOutputStream(output, password?.toCharArray()).use { zip ->
             zip.putTextEntry("[Content_Types].xml", contentTypesXml, password)
             zip.putTextEntry("_rels/.rels", rootRelationshipsXml, password)
-            zip.putTextEntry("xl/workbook.xml", workbookXml, password)
+            zip.putTextEntry("xl/workbook.xml", workbookXml(labels.sheetName), password)
             zip.putTextEntry("xl/_rels/workbook.xml.rels", workbookRelationshipsXml, password)
             zip.putTextEntry("xl/styles.xml", stylesXml, password)
 
@@ -137,12 +138,7 @@ internal class OrderExportXlsxWriter(
         return name.toString()
     }
 
-    private fun String.xmlEscaped(): String =
-        replace("&", "&amp;")
-            .replace("<", "&lt;")
-            .replace(">", "&gt;")
-            .replace("\"", "&quot;")
-            .replace("'", "&apos;")
+    // already defined below now
 }
 
 private fun ZipOutputStream.putTextEntry(
@@ -190,14 +186,22 @@ private const val rootRelationshipsXml = """
 </Relationships>
 """
 
-private const val workbookXml = """
+private fun workbookXml(sheetName: String) =
+    """
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
   <sheets>
-    <sheet name="Commesse" sheetId="1" r:id="rId1"/>
+    <sheet name="${sheetName.xmlEscaped()}" sheetId="1" r:id="rId1"/>
   </sheets>
 </workbook>
 """
+
+private fun String.xmlEscaped(): String =
+    replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace("\"", "&quot;")
+        .replace("'", "&apos;")
 
 private const val workbookRelationshipsXml = """
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>

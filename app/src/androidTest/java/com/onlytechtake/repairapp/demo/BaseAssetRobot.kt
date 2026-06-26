@@ -200,7 +200,7 @@ abstract class BaseAssetRobot(
             .fetchSemanticsNodes()
             .isNotEmpty()
 
-    fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+    private fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
     fun waitForText(
         text: String,
@@ -246,7 +246,7 @@ abstract class BaseAssetRobot(
         composeRule.waitForIdle()
     }
 
-    fun waitForTagIfPresent(
+    private fun waitForTagIfPresent(
         tag: String,
         timeoutMillis: Long,
         useUnmergedTree: Boolean = false,
@@ -300,7 +300,7 @@ abstract class BaseAssetRobot(
         }
     }
 
-    fun performSafeSwipeUp() {
+    private fun performSafeSwipeUp() {
         val listTags =
             listOf(
                 RepairAppTestTags.OrderDetailLazyColumn,
@@ -328,7 +328,7 @@ abstract class BaseAssetRobot(
         composeRule.waitForIdle()
     }
 
-    fun performSafeSwipeDown() {
+    private fun performSafeSwipeDown() {
         val listTags =
             listOf(
                 RepairAppTestTags.OrderDetailLazyColumn,
@@ -423,11 +423,11 @@ abstract class BaseAssetRobot(
         Thread.sleep(if (isRecordingDemo()) RECORDING_ACTION_PAUSE_MILLIS else ACTION_PAUSE_MILLIS)
     }
 
-    fun pauseForScreenshot() {
+    private fun pauseForScreenshot() {
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     companion object {
         const val WAIT_TIMEOUT_MILLIS = 30_000L

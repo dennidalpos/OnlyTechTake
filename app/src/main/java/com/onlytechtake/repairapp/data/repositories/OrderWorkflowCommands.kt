@@ -112,12 +112,12 @@ internal class OrderWorkflowCommands(
                 OrderClosurePermissionPolicy.requireClosePermissionIfNeeded(actor, status)
                 if ((order.status == OrderStatus.RESULT) && (status == OrderStatus.REPAIRING)) {
                     require(order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
-                        "Solo una diagnosi riparabile puo' passare in riparazione"
+                        context.getString(R.string.error_repairable_diagnosis_required)
                     }
                 }
                 if ((order.status == OrderStatus.RESULT) && (status == OrderStatus.READY_FOR_PICKUP)) {
                     require(order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE) {
-                        "Il passaggio diretto al ritiro richiede una diagnosi non riparabile"
+                        context.getString(R.string.error_not_repairable_diagnosis_required)
                     }
                 }
 
@@ -409,7 +409,7 @@ internal class OrderWorkflowCommands(
             PermissionService.requirePermission(actor, UserPermission.EDIT_ALL_ORDERS)
             inTransaction {
                 val order =
-                    requireNotNull(repairOrderDao.findById(orderId)) { "Commessa non trovata" }
+                    requireNotNull(repairOrderDao.findById(orderId)) { context.getString(R.string.error_order_not_found) }
                 val now = clockMillis()
 
                 // 1. Delete actual files
@@ -442,7 +442,7 @@ internal class OrderWorkflowCommands(
         actor: AuthenticatedUser,
         orderId: String,
     ): RepairOrderEntity {
-        val order = requireNotNull(repairOrderDao.findById(orderId)) { "Commessa non trovata" }
+        val order = requireNotNull(repairOrderDao.findById(orderId)) { context.getString(R.string.error_order_not_found) }
         if (order.assignedToUserId != actor.id) {
             PermissionService.requirePermission(actor, UserPermission.EDIT_ALL_ORDERS)
         } else {

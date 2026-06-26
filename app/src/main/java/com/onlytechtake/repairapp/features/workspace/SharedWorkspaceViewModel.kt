@@ -12,6 +12,13 @@ class SharedWorkspaceViewModel : ViewModel() {
     private val _isFormDirty = MutableStateFlow(value = false)
     val isFormDirty = _isFormDirty.asStateFlow()
 
+    private val _resetSignal = MutableStateFlow(value = 0)
+    val resetSignal = _resetSignal.asStateFlow()
+
+    fun triggerReset() {
+        _resetSignal.value += 1
+    }
+
     @Suppress("unused")
     fun showMessage(
         text: String,

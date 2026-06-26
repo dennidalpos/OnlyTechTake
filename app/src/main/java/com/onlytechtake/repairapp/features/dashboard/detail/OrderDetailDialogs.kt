@@ -46,7 +46,7 @@ fun OrderConfirmDialog(
             text = state.confirmText,
             confirmButton = {
                 AppButton(
-                    text = stringResource(R.string.confirm),
+                    text = stringResource(R.string.action_confirm),
                     onClick = {
                         state.confirmAction?.invoke()
                         state.dismissConfirm()
@@ -171,7 +171,7 @@ fun OrderStatusActionDialog(
             },
             confirmButton = {
                 AppButton(
-                    text = stringResource(R.string.confirm),
+                    text = stringResource(R.string.action_confirm),
                     enabled =
                         when {
                             isResultStep ->

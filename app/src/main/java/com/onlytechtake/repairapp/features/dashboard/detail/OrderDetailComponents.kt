@@ -50,7 +50,6 @@ import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.domain.workspace.availableOrderStatusActions
 import com.onlytechtake.repairapp.domain.workspace.requiresConfirmation
-import com.onlytechtake.repairapp.features.dashboard.common.ActionRow
 import com.onlytechtake.repairapp.features.dashboard.common.CompactExpandableRow
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision
@@ -177,6 +176,7 @@ fun OrderActionCard(
     onTogglePayment: () -> Unit,
     onSendWhatsApp: (TemplateAnchor) -> Unit,
     onDeleteOrder: (() -> Unit)? = null,
+    isPrimaryActionEnabled: Boolean = true,
 ) {
     val actions = availableOrderStatusActions(status)
     val primaryAction = actions.firstOrNull { !it.requiresConfirmation() } ?: actions.firstOrNull()
@@ -199,6 +199,7 @@ fun OrderActionCard(
                 variant = if (it.requiresConfirmation()) AppButtonVariant.Warning else AppButtonVariant.Primary,
                 size = AppButtonSize.FullWidth,
                 testTag = RepairAppTestTags.statusAction(it.name),
+                enabled = isPrimaryActionEnabled,
             )
         }
 
@@ -211,17 +212,7 @@ fun OrderActionCard(
             modifier = Modifier.testTag(RepairAppTestTags.OrderWhatsAppButton),
         )
 
-        onDeleteOrder?.let {
-            AppButton(
-                text = stringResource(R.string.content_description_delete_order),
-                variant = AppButtonVariant.Danger,
-                onClick = it,
-                size = AppButtonSize.Compact,
-                modifier = Modifier.align(Alignment.End),
-            )
-        }
-
-        if (secondaryActions.isNotEmpty()) {
+        if (secondaryActions.isNotEmpty() || onDeleteOrder != null) {
             AppDivider(modifier = Modifier.alpha(0.3f))
             Text(
                 stringResource(R.string.order_secondary_actions_title),
@@ -229,7 +220,10 @@ fun OrderActionCard(
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            ActionRow {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+            ) {
                 secondaryActions.forEach { action ->
                     AppButton(
                         text = stringResource(action.labelRes),
@@ -237,6 +231,16 @@ fun OrderActionCard(
                         variant = if (action.requiresConfirmation()) AppButtonVariant.Warning else AppButtonVariant.Secondary,
                         size = AppButtonSize.Compact,
                         testTag = RepairAppTestTags.statusAction(action.name),
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+                onDeleteOrder?.let {
+                    AppButton(
+                        text = stringResource(R.string.content_description_delete_order),
+                        variant = AppButtonVariant.Danger,
+                        onClick = it,
+                        size = AppButtonSize.Compact,
+                        modifier = Modifier.weight(1f),
                     )
                 }
             }
@@ -337,8 +341,14 @@ fun QuoteDecisionPanel(
 
             if (quoteDecision != null) {
                 val quoteAcceptedLabel = stringResource(R.string.order_quote_accepted)
+                val confirmLabel =
+                    if (quoteDecision == QuoteDecision.ACCEPTED) {
+                        stringResource(R.string.action_start_repair)
+                    } else {
+                        stringResource(R.string.action_close_order)
+                    }
                 AppButton(
-                    text = stringResource(R.string.confirm),
+                    text = confirmLabel,
                     modifier = Modifier.fillMaxWidth(),
                     testTag = RepairAppTestTags.QuoteConfirmButton,
                     onClick = {

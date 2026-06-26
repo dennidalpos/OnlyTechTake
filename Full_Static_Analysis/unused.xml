@@ -1,0 +1,514 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode void setEnabled(boolean enabled)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="enabled" />
+  </hints>
+  <description>Parameter &lt;code&gt;enabled&lt;/code&gt; is not used</description>
+  <highlighted_element>enabled</highlighted_element>
+  <language>kotlin</language>
+  <offset>38</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/CustomerDao.kt</file>
+  <line>15</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.CustomerDao java.lang.Object upsertAll(java.util.List&lt;com.onlytechtake.repairapp.data.local.entities.CustomerEntity&gt; customers, kotlin.coroutines.Continuation&lt;? super kotlin.Unit&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="customers" />
+  </hints>
+  <description>Parameter &lt;code&gt;customers&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>customers</highlighted_element>
+  <language>kotlin</language>
+  <offset>26</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/CustomerDao.kt</file>
+  <line>24</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.CustomerDao java.lang.Object findById(java.lang.String id, kotlin.coroutines.Continuation&lt;? super com.onlytechtake.repairapp.data.local.entities.CustomerEntity&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="id" />
+  </hints>
+  <description>Parameter &lt;code&gt;id&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>id</highlighted_element>
+  <language>kotlin</language>
+  <offset>25</offset>
+  <length>2</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/CustomerDao.kt</file>
+  <line>35</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.CustomerDao kotlinx.coroutines.flow.Flow&lt;java.util.List&lt;com.onlytechtake.repairapp.data.local.entities.CustomerEntity&gt;&gt; search(java.lang.String query)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="query" />
+  </hints>
+  <description>Parameter &lt;code&gt;query&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>query</highlighted_element>
+  <language>kotlin</language>
+  <offset>15</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/OrderCategoryDao.kt</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao java.lang.Object upsert(com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity category, kotlin.coroutines.Continuation&lt;? super kotlin.Unit&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="category" />
+  </hints>
+  <description>Parameter &lt;code&gt;category&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>category</highlighted_element>
+  <language>kotlin</language>
+  <offset>23</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/OrderCategoryDao.kt</file>
+  <line>15</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao java.lang.Object upsertAll(java.util.List&lt;com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity&gt; categories, kotlin.coroutines.Continuation&lt;? super kotlin.Unit&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="categories" />
+  </hints>
+  <description>Parameter &lt;code&gt;categories&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>categories</highlighted_element>
+  <language>kotlin</language>
+  <offset>26</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/OrderCategoryDao.kt</file>
+  <line>27</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao java.lang.Object findById(java.lang.String id, kotlin.coroutines.Continuation&lt;? super com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="id" />
+  </hints>
+  <description>Parameter &lt;code&gt;id&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>id</highlighted_element>
+  <language>kotlin</language>
+  <offset>25</offset>
+  <length>2</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/OrderCategoryDao.kt</file>
+  <line>30</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao java.lang.Object countOrdersForCategories(java.util.List&lt;java.lang.String&gt; categoryIds, kotlin.coroutines.Continuation&lt;? super java.lang.Integer&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="categoryIds" />
+  </hints>
+  <description>Parameter &lt;code&gt;categoryIds&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>categoryIds</highlighted_element>
+  <language>kotlin</language>
+  <offset>41</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/OrderCategoryDao.kt</file>
+  <line>33</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao java.lang.Object deleteById(java.lang.String id, kotlin.coroutines.Continuation&lt;? super java.lang.Integer&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="id" />
+  </hints>
+  <description>Parameter &lt;code&gt;id&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>id</highlighted_element>
+  <language>kotlin</language>
+  <offset>27</offset>
+  <length>2</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/OrderCategoryDao.kt</file>
+  <line>44</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao java.lang.Object findByParentAndName(java.lang.String parentId, java.lang.String name, kotlin.coroutines.Continuation&lt;? super com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="parentId" />
+  </hints>
+  <description>Parameter &lt;code&gt;parentId&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>parentId</highlighted_element>
+  <language>kotlin</language>
+  <offset>8</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/OrderCategoryDao.kt</file>
+  <line>45</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao java.lang.Object findByParentAndName(java.lang.String parentId, java.lang.String name, kotlin.coroutines.Continuation&lt;? super com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="name" />
+  </hints>
+  <description>Parameter &lt;code&gt;name&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>name</highlighted_element>
+  <language>kotlin</language>
+  <offset>8</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/DataResetRepository.kt</file>
+  <line>33</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.DataResetRepository java.lang.Object resetAll(com.onlytechtake.repairapp.domain.auth.AuthenticatedUser actor, java.lang.String confirmation, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends kotlin.Unit&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="confirmation" />
+  </hints>
+  <description>Parameter &lt;code&gt;confirmation&lt;/code&gt; is not used</description>
+  <highlighted_element>confirmation</highlighted_element>
+  <language>kotlin</language>
+  <offset>38</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/DataResetRepository.kt</file>
+  <line>69</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.DataResetRepository java.lang.Object resetOrders(com.onlytechtake.repairapp.domain.auth.AuthenticatedUser actor, java.lang.String confirmation, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends kotlin.Unit&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="confirmation" />
+  </hints>
+  <description>Parameter &lt;code&gt;confirmation&lt;/code&gt; is not used</description>
+  <highlighted_element>confirmation</highlighted_element>
+  <language>kotlin</language>
+  <offset>38</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/demo/DataSeeder.kt</file>
+  <line>13</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.DataSeeder java.lang.Object seed(android.content.Context context, kotlin.coroutines.Continuation&lt;? super kotlin.Unit&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="context" />
+  </hints>
+  <description>Parameter &lt;code&gt;context&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>context</highlighted_element>
+  <language>kotlin</language>
+  <offset>21</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/common/LocalImageComponents.kt</file>
+  <line>329</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.common</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.common.LocalImageComponentsKt void ImageEditCanvas(android.graphics.Bitmap bitmap, java.lang.String description, java.util.List&lt;com.onlytechtake.repairapp.core.media.ImageEditArrow&gt; arrows, androidx.compose.ui.geometry.Rect cropRect, androidx.compose.ui.geometry.Offset dragStart, androidx.compose.ui.geometry.Offset dragCurrent, com.onlytechtake.repairapp.core.media.ImageEditMode editMode, long canvasSize, kotlin.jvm.functions.Function1&lt;? super androidx.compose.ui.unit.IntSize,kotlin.Unit&gt; onCanvasSizeChange, kotlin.jvm.functions.Function1&lt;? super androidx.compose.ui.geometry.Offset,kotlin.Unit&gt; onDragStart, kotlin.jvm.functions.Function1&lt;? super androidx.compose.ui.geometry.Offset,kotlin.Unit&gt; onDrag, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onDragEnd, androidx.compose.ui.Modifier modifier)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="description" />
+  </hints>
+  <description>Parameter &lt;code&gt;description&lt;/code&gt; is not used</description>
+  <highlighted_element>description</highlighted_element>
+  <language>kotlin</language>
+  <offset>34</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/customers/CustomerPanel.kt</file>
+  <line>710</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.customers</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.customers.CustomerPanelKt void CustomerDetailContent(com.onlytechtake.repairapp.data.local.entities.CustomerEntity customer, com.onlytechtake.repairapp.features.dashboard.customers.CustomersViewModel viewModel, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onEdit, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onOrderClick, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onClose)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="onClose" />
+  </hints>
+  <description>Parameter &lt;code&gt;onClose&lt;/code&gt; is not used</description>
+  <highlighted_element>onClose</highlighted_element>
+  <language>kotlin</language>
+  <offset>4</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailComponents.kt</file>
+  <line>278</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailComponentsKt void AppActionPanel(java.lang.String title, androidx.compose.ui.Modifier modifier, androidx.compose.runtime.internal.ComposableFunction1&lt;? super androidx.compose.foundation.layout.ColumnScope,kotlin.Unit&gt; content)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="title" />
+  </hints>
+  <description>Parameter &lt;code&gt;title&lt;/code&gt; is not used</description>
+  <highlighted_element>title</highlighted_element>
+  <language>kotlin</language>
+  <offset>34</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/QuickIntakeCategorySection.kt</file>
+  <line>45</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.neworder</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.neworder.QuickIntakeCategorySectionKt void QuickIntakeCategorySection(int stepNumber, java.util.List&lt;com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity&gt; activeCategories, java.lang.String selectedCategoryId, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onCategorySelected, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onOpenConfig)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="stepNumber" />
+  </hints>
+  <description>Parameter &lt;code&gt;stepNumber&lt;/code&gt; is not used</description>
+  <highlighted_element>stepNumber</highlighted_element>
+  <language>kotlin</language>
+  <offset>34</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/QuickIntakeMediaSection.kt</file>
+  <line>41</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.neworder</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.neworder.QuickIntakeMediaSectionKt void QuickIntakeMediaSection(int stepNumber, java.lang.String intakeSessionId, java.util.List&lt;com.onlytechtake.repairapp.data.repositories.StagedOrderMedia&gt; stagedMedia, boolean showCamera, kotlin.jvm.functions.Function1&lt;? super java.lang.Boolean,kotlin.Unit&gt; onShowCameraChange, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onRemoveMedia, kotlin.jvm.functions.Function2&lt;? super com.onlytechtake.repairapp.data.repositories.StagedOrderMedia,? super android.graphics.Bitmap,kotlin.Unit&gt; onReplaceMedia, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onLaunchAttachmentPicker, kotlin.jvm.functions.Function2&lt;? super java.lang.String,? super java.lang.String,? extends kotlin.Result&lt;? extends java.io.File&gt;&gt; createPhotoFile, kotlin.jvm.functions.Function1&lt;? super java.io.File,kotlin.Unit&gt; onPhotoCaptured, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onCameraError)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="stepNumber" />
+  </hints>
+  <description>Parameter &lt;code&gt;stepNumber&lt;/code&gt; is not used</description>
+  <highlighted_element>stepNumber</highlighted_element>
+  <language>kotlin</language>
+  <offset>34</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/QuickIntakeProblemSection.kt</file>
+  <line>22</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.neworder</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.neworder.QuickIntakeProblemSectionKt void QuickIntakeProblemSection(int stepNumber, java.lang.String problemSummary, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onProblemSummaryChange, java.lang.String problemDetails, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onProblemDetailsChange, androidx.compose.foundation.text.KeyboardActions nextAction, androidx.compose.foundation.text.KeyboardActions doneAction)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="stepNumber" />
+  </hints>
+  <description>Parameter &lt;code&gt;stepNumber&lt;/code&gt; is not used</description>
+  <highlighted_element>stepNumber</highlighted_element>
+  <language>kotlin</language>
+  <offset>34</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/QuickIntakeSubmitSection.kt</file>
+  <line>25</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.neworder</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.neworder.QuickIntakeSubmitSectionKt void QuickIntakeSubmitSection(int stepNumber, java.util.List&lt;java.lang.String&gt; missingRequirements, boolean enabled, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onSubmit)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="stepNumber" />
+  </hints>
+  <description>Parameter &lt;code&gt;stepNumber&lt;/code&gt; is not used</description>
+  <highlighted_element>stepNumber</highlighted_element>
+  <language>kotlin</language>
+  <offset>34</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/SettingsPanel.kt</file>
+  <line>174</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.settings</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.settings.SettingsPanelKt void SettingsSectionContent(java.lang.String section, com.onlytechtake.repairapp.features.dashboard.settings.SettingsViewModel viewModel, boolean isAdmin, boolean fromIntake, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onBackupRestored, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onLogout, kotlin.jvm.functions.Function3&lt;? super java.lang.String,? super java.lang.String,? super kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt;,kotlin.Unit&gt; requestConfirm, kotlin.jvm.functions.Function1&lt;? super java.lang.String,kotlin.Unit&gt; onNavigate, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onBack)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="onLogout" />
+  </hints>
+  <description>Parameter &lt;code&gt;onLogout&lt;/code&gt; is not used</description>
+  <highlighted_element>onLogout</highlighted_element>
+  <language>kotlin</language>
+  <offset>4</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/auth/AuthGateViewModelTest.kt</file>
+  <line>82</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.features.auth</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateViewModelTest.FakeAuthRepository java.lang.Object changePassword(java.lang.String username, char[] currentPassword, char[] newPassword, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends kotlin.Unit&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="username" />
+  </hints>
+  <description>Parameter &lt;code&gt;username&lt;/code&gt; is not used</description>
+  <highlighted_element>username</highlighted_element>
+  <language>kotlin</language>
+  <offset>12</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/auth/AuthGateViewModelTest.kt</file>
+  <line>83</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.features.auth</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateViewModelTest.FakeAuthRepository java.lang.Object changePassword(java.lang.String username, char[] currentPassword, char[] newPassword, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends kotlin.Unit&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="currentPassword" />
+  </hints>
+  <description>Parameter &lt;code&gt;currentPassword&lt;/code&gt; is not used</description>
+  <highlighted_element>currentPassword</highlighted_element>
+  <language>kotlin</language>
+  <offset>12</offset>
+  <length>15</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/auth/AuthGateViewModelTest.kt</file>
+  <line>84</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.features.auth</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateViewModelTest.FakeAuthRepository java.lang.Object changePassword(java.lang.String username, char[] currentPassword, char[] newPassword, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends kotlin.Unit&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="newPassword" />
+  </hints>
+  <description>Parameter &lt;code&gt;newPassword&lt;/code&gt; is not used</description>
+  <highlighted_element>newPassword</highlighted_element>
+  <language>kotlin</language>
+  <offset>12</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/auth/AuthGateViewModelTest.kt</file>
+  <line>94</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.features.auth</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateViewModelTest.FakeAuthRepository java.lang.Object resetAdminWithRecoveryCode(java.lang.String code, char[] newPassword, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends kotlin.Unit&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="code" />
+  </hints>
+  <description>Parameter &lt;code&gt;code&lt;/code&gt; is not used</description>
+  <highlighted_element>code</highlighted_element>
+  <language>kotlin</language>
+  <offset>12</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/auth/AuthGateViewModelTest.kt</file>
+  <line>95</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.features.auth</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateViewModelTest.FakeAuthRepository java.lang.Object resetAdminWithRecoveryCode(java.lang.String code, char[] newPassword, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends kotlin.Unit&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="newPassword" />
+  </hints>
+  <description>Parameter &lt;code&gt;newPassword&lt;/code&gt; is not used</description>
+  <highlighted_element>newPassword</highlighted_element>
+  <language>kotlin</language>
+  <offset>12</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailViewModelTest.kt</file>
+  <line>212</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModelTest.FakeAuthRepository java.lang.Object changePassword(java.lang.String username, char[] currentPassword, char[] newPassword, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends kotlin.Unit&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="username" />
+  </hints>
+  <description>Parameter &lt;code&gt;username&lt;/code&gt; is not used</description>
+  <highlighted_element>username</highlighted_element>
+  <language>kotlin</language>
+  <offset>12</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailViewModelTest.kt</file>
+  <line>213</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModelTest.FakeAuthRepository java.lang.Object changePassword(java.lang.String username, char[] currentPassword, char[] newPassword, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends kotlin.Unit&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="currentPassword" />
+  </hints>
+  <description>Parameter &lt;code&gt;currentPassword&lt;/code&gt; is not used</description>
+  <highlighted_element>currentPassword</highlighted_element>
+  <language>kotlin</language>
+  <offset>12</offset>
+  <length>15</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailViewModelTest.kt</file>
+  <line>214</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModelTest.FakeAuthRepository java.lang.Object changePassword(java.lang.String username, char[] currentPassword, char[] newPassword, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends kotlin.Unit&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="newPassword" />
+  </hints>
+  <description>Parameter &lt;code&gt;newPassword&lt;/code&gt; is not used</description>
+  <highlighted_element>newPassword</highlighted_element>
+  <language>kotlin</language>
+  <offset>12</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailViewModelTest.kt</file>
+  <line>220</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModelTest.FakeAuthRepository java.lang.Object resetAdminWithRecoveryCode(java.lang.String code, char[] newPassword, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends kotlin.Unit&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="code" />
+  </hints>
+  <description>Parameter &lt;code&gt;code&lt;/code&gt; is not used</description>
+  <highlighted_element>code</highlighted_element>
+  <language>kotlin</language>
+  <offset>12</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailViewModelTest.kt</file>
+  <line>221</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModelTest.FakeAuthRepository java.lang.Object resetAdminWithRecoveryCode(java.lang.String code, char[] newPassword, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends kotlin.Unit&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="newPassword" />
+  </hints>
+  <description>Parameter &lt;code&gt;newPassword&lt;/code&gt; is not used</description>
+  <highlighted_element>newPassword</highlighted_element>
+  <language>kotlin</language>
+  <offset>12</offset>
+  <length>11</length>
+</problem>
+</problems>

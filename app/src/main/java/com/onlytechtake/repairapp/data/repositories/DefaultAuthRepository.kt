@@ -50,10 +50,10 @@ class DefaultAuthRepository(
         combine(
             userDao.observeCountByRole(UserRole.ADMIN),
             sessionStore.state,
-            authPreferences.lastUserId,
+            authPreferences.lastUsername,
             securityPreferences.settings,
             inactivityTicker(),
-        ) { adminCount, session, lastUserId, security, now ->
+        ) { adminCount, session, lastUsername, security, now ->
             val timeoutMillis = security.inactivityTimeoutMinutes * 60 * 1000L
             val activeUser =
                 if ((session.user != null) &&
@@ -76,7 +76,7 @@ class DefaultAuthRepository(
                 initialized = true,
                 configured = adminCount > 0,
                 currentUser = activeUser,
-                lastUsername = lastUserId ?: "",
+                lastUsername = lastUsername ?: "",
             )
         }.onStart {
             // Artificial delay for splash/animation
@@ -132,7 +132,7 @@ class DefaultAuthRepository(
 
                 val authenticatedUser = user.toAuthenticatedUser()
                 sessionStore.setCurrentUser(authenticatedUser, now)
-                authPreferences.recordLogin(user.id, now)
+                authPreferences.recordLogin(user.username, now)
                 writeAudit(AuditAction.ADMIN_LOGIN, user.id, null, now)
 
                 authenticatedUser
@@ -180,7 +180,7 @@ class DefaultAuthRepository(
                 }
 
                 sessionStore.setCurrentUser(authenticatedUser, now)
-                authPreferences.recordLogin(user.id, now)
+                authPreferences.recordLogin(user.username, now)
                 loginAttemptDao.upsert(
                     LoginAttemptEntity(
                         username = normalizedUsername,
@@ -206,7 +206,7 @@ class DefaultAuthRepository(
         val demoUser =
             AuthenticatedUser(
                 id = "admin",
-                displayName = context.getString(R.string.label_demo_admin),
+                displayName = DemoMode.getAdminDisplayName(context),
                 username = "admin",
                 role = UserRole.ADMIN,
                 permissions =

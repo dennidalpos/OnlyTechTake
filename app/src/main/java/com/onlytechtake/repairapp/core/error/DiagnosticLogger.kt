@@ -27,16 +27,6 @@ class DiagnosticLogger(
         throwable: Throwable?,
     ) = log("ERROR", contextTag, message, throwable)
 
-    fun logWarning(
-        contextTag: String?,
-        message: String,
-    ) = log("WARN ", contextTag, message, null)
-
-    fun logInfo(
-        contextTag: String?,
-        message: String,
-    ) = log("INFO ", contextTag, message, null)
-
     private fun log(
         level: String,
         contextTag: String?,
@@ -65,8 +55,6 @@ class DiagnosticLogger(
             Log.e("DiagnosticLogger", "Failed to write log", e)
         }
     }
-
-    fun getLogSize(): Long = if (logFile.exists()) logFile.length() else 0L
 
     fun clearLogs() {
         if (logFile.exists()) {

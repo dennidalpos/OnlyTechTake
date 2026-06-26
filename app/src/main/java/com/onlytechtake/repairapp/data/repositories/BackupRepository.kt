@@ -1,14 +1,12 @@
 package com.onlytechtake.repairapp.data.repositories
 
 import android.content.Context
-import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import android.provider.OpenableColumns
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.permissions.PermissionService
-import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.label
 import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
@@ -21,14 +19,12 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderPriority
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
-import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.storage.StoragePolicy
-import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -38,9 +34,9 @@ import java.io.IOException
 
 class BackupRepository(
     private val context: Context,
-    private val categoryDao: OrderCategoryDao,
-    private val templateDao: MessageTemplateDao,
-    private val settingDao: AppSettingDao,
+    categoryDao: OrderCategoryDao,
+    templateDao: MessageTemplateDao,
+    settingDao: AppSettingDao,
     private val auditLogDao: AuditLogDao,
     private val backupReminderPreferences: com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences,
     private val securityPreferences: SecurityPreferences,
@@ -48,7 +44,6 @@ class BackupRepository(
     private val database: RepairAppDatabase,
     private val authPreferences: AuthPreferences,
     private val sessionStore: InMemorySessionStore,
-    private val storageStatsService: com.onlytechtake.repairapp.data.services.StorageStatsService,
     private val mediaStorageProvider: MediaStorageProvider,
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) {
@@ -66,25 +61,6 @@ class BackupRepository(
             PermissionService.requirePermission(actor, UserPermission.EXPORT_DATA)
             withContext(Dispatchers.IO) {
                 writeText(uri, metadataService.buildConfigurationJson())
-            }
-            eventWriter.dataExported(actor.id, clockMillis())
-        }
-
-    suspend fun exportDatabase(
-        actor: AuthenticatedUser,
-        uri: Uri,
-    ): Result<Unit> =
-        runCatching {
-            PermissionService.requirePermission(actor, UserPermission.EXPORT_DATA)
-            if (BuildConfig.IS_DEMO_VERSION) {
-                throw IllegalStateException(context.getString(R.string.error_feature_pro_only))
-            }
-            withContext(Dispatchers.IO) {
-                val dbFile = dbBackupService.databaseFile()
-                require(dbFile.exists()) { context.getString(R.string.error_db_not_created) }
-                context.contentResolver.openOutputStream(uri)?.use { output ->
-                    dbFile.inputStream().use { input -> input.copyTo(output) }
-                } ?: throw IOException(context.getString(R.string.error_destination_unavailable))
             }
             eventWriter.dataExported(actor.id, clockMillis())
         }
@@ -122,6 +98,12 @@ class BackupRepository(
                             zip = zip,
                             directory = mediaStorageProvider.getBaseMediaDir(),
                             entryDirectory = "files/${BackupArchive.CANONICAL_MEDIA_DIRECTORY}",
+                            password = password,
+                        )
+                        BackupArchive.addDirectory(
+                            zip = zip,
+                            directory = File(context.filesDir, "datastore"),
+                            entryDirectory = "files/datastore",
                             password = password,
                         )
                     }
@@ -306,6 +288,7 @@ class BackupRepository(
                             context.getString(R.string.export_xlsx_header_closed_at),
                             context.getString(R.string.export_xlsx_header_closure_reason),
                         ),
+                    sheetName = context.getString(R.string.dashboard_orders),
                     statusLabels = OrderStatus.entries.associateWith { it.label(context) },
                     priorityLabels = OrderPriority.entries.associateWith { it.label(context) },
                     customerTypeLabels = CustomerType.entries.associateWith { it.label(context) },
@@ -321,155 +304,13 @@ class BackupRepository(
                 )
 
             withContext(Dispatchers.IO) {
-                val rowSequence =
-                    sequence {
-                        var offset = 0
-                        val limit = 100
-                        while (true) {
-                            val batch =
-                                kotlinx.coroutines.runBlocking {
-                                    exportDao.exportOrdersPaged(limit, offset)
-                                }
-                            if (batch.isEmpty()) break
-                            yieldAll(batch)
-                            offset += limit
-                        }
-                    }
+                val allOrders = exportDao.exportAllOrders()
                 context.contentResolver.openOutputStream(uri)?.use { output ->
-                    OrderExportXlsxWriter(labels).write(rowSequence.asIterable(), output, password)
+                    OrderExportXlsxWriter(labels).write(allOrders, output, password)
                 } ?: throw IOException(context.getString(R.string.error_destination_unavailable))
             }
             eventWriter.dataExported(actor.id, clockMillis())
         }
-
-    suspend fun exportOrderSummaryPdf(
-        actor: AuthenticatedUser,
-        detail: OrderDetail,
-        uri: Uri,
-    ): Result<Unit> =
-        runCatching {
-            PermissionService.requirePermission(actor, UserPermission.EXPORT_DATA)
-            withContext(Dispatchers.IO) {
-                val document = PdfDocument()
-                try {
-                    val writer = PdfTextWriter(document)
-                    if (BuildConfig.IS_DEMO_VERSION) {
-                        writer.setWatermark(context.getString(R.string.demo_version_banner))
-                    }
-                    writer.title(
-                        context.getString(
-                            R.string.backup_pdf_order_summary,
-                            detail.order.orderNumber,
-                        ),
-                    )
-                    writer.line(
-                        context.getString(
-                            R.string.backup_pdf_number,
-                            detail.order.orderNumber,
-                        ),
-                    )
-                    writer.line(context.getString(R.string.backup_pdf_title, detail.order.title))
-                    writer.line(
-                        context.getString(
-                            R.string.backup_pdf_status,
-                            detail.order.status.label(context),
-                        ),
-                    )
-                    detail.order.closureReason?.let { reason ->
-                        writer.line(
-                            context.getString(
-                                R.string.backup_pdf_closure_reason,
-                                reason.label(context),
-                            ),
-                        )
-                    }
-                    writer.line(
-                        context.getString(
-                            R.string.backup_pdf_customer,
-                            detail.customer?.displayName(context) ?: "",
-                        ),
-                    )
-                    writer.line(
-                        context.getString(
-                            R.string.backup_pdf_category,
-                            detail.category
-                                ?.name
-                                .orEmpty()
-                                .ifBlank { context.getString(R.string.backup_pdf_none) },
-                        ),
-                    )
-                    writer.line(
-                        context.getString(
-                            R.string.backup_pdf_operator,
-                            detail.assignedUser
-                                ?.displayName
-                                .orEmpty()
-                                .ifBlank { context.getString(R.string.unassigned) },
-                        ),
-                    )
-                    writer.line(
-                        context.getString(
-                            R.string.backup_pdf_created_at,
-                            formatTime(detail.order.createdAt),
-                        ),
-                    )
-                    writer.line(
-                        context.getString(
-                            R.string.backup_pdf_description,
-                            detail.order.description
-                                .orEmpty()
-                                .ifBlank { context.getString(R.string.backup_pdf_none) },
-                        ),
-                    )
-                    writer.section(context.getString(R.string.backup_pdf_timeline))
-                    if (detail.timeline.isEmpty()) {
-                        writer.line(context.getString(R.string.backup_pdf_no_events))
-                    } else {
-                        detail.timeline
-                            .sortedBy { it.createdAt }
-                            .forEach { event ->
-                                writer.line(formatTimelineEvent(context, event))
-                            }
-                    }
-                    writer.section(context.getString(R.string.backup_pdf_signatures))
-                    if (detail.signatures.isEmpty()) {
-                        writer.line(context.getString(R.string.backup_pdf_no_signatures))
-                    } else {
-                        detail.signatures.forEach { signature ->
-                            writer.line("${signature.signerName} - ${formatTime(signature.signedAt)} - ${signature.fileName}")
-                        }
-                        detail.signatures.firstOrNull()?.let { signature ->
-                            writer.section(context.getString(R.string.backup_pdf_signed_conditions))
-                            writer.line(
-                                context.getString(
-                                    R.string.backup_pdf_privacy_version,
-                                    signature.privacyTemplateVersion,
-                                    signature.privacyTextSnapshot,
-                                ),
-                            )
-                            writer.line(
-                                context.getString(
-                                    R.string.backup_pdf_terms_version,
-                                    signature.termsTemplateVersion,
-                                    signature.termsTextSnapshot,
-                                ),
-                            )
-                        }
-                    }
-                    writer.finish()
-
-                    context.contentResolver.openOutputStream(uri)?.use { output ->
-                        document.writeTo(output)
-                    }
-                        ?: throw IOException(context.getString(R.string.error_destination_unavailable))
-                } finally {
-                    document.close()
-                }
-            }
-            eventWriter.dataExported(actor.id, clockMillis())
-        }
-
-    fun databaseFile(): File = dbBackupService.databaseFile()
 
     fun displayName(uri: Uri): String? =
         runCatching {
@@ -485,8 +326,7 @@ class BackupRepository(
         }.getOrNull()
 
     private fun replacePrivateFiles(restoreRoot: File) {
-        val destination = mediaStorageProvider.getBaseMediaDir()
-        BackupArchive.restoreAppMedia(File(restoreRoot, "files"), destination)
+        BackupArchive.restoreAppFiles(File(restoreRoot, "files"), context.filesDir)
     }
 
     private fun writeText(
@@ -520,52 +360,4 @@ private fun ZipOutputStream.putTextEntry(
     putNextEntry(params)
     write(text.toByteArray(Charsets.UTF_8))
     closeEntry()
-}
-
-private fun formatTimelineEvent(
-    context: Context,
-    event: TimelineEventEntity,
-): String {
-    val parts =
-        buildList {
-            add("${formatTime(event.createdAt)} - ${event.title}")
-            event.description?.takeIf { it.isNotBlank() }?.let { add(it) }
-            if (!event.oldStatus.isNullOrBlank() || !event.newStatus.isNullOrBlank()) {
-                add(
-                    context.getString(
-                        R.string.backup_pdf_status_change,
-                        event.oldStatus.orEmpty().ifBlank { "-" },
-                        event.newStatus.orEmpty().ifBlank { "-" },
-                    ),
-                )
-            }
-            event.expectedFeedbackType?.let {
-                add(
-                    context.getString(
-                        R.string.backup_pdf_expected_feedback,
-                        it.name,
-                    ),
-                )
-            }
-            event.customerFeedback?.let {
-                add(
-                    context.getString(
-                        R.string.backup_pdf_customer_feedback,
-                        it.name,
-                    ),
-                )
-            }
-            event.customerFeedbackNote
-                ?.takeIf { it.isNotBlank() }
-                ?.let { add(context.getString(R.string.backup_pdf_feedback_note, it)) }
-            event.customerFeedbackAt?.let {
-                add(
-                    context.getString(
-                        R.string.backup_pdf_feedback_recorded,
-                        formatTime(it),
-                    ),
-                )
-            }
-        }
-    return parts.joinToString(" | ")
 }

@@ -8,7 +8,7 @@ import java.io.File
  * Tutti i file sono memorizzati sotto 'filesDir/app_media/'.
  */
 class MediaStorageProvider(
-    private val context: Context,
+    context: Context,
 ) {
     private val baseDir = File(context.filesDir, "app_media")
 

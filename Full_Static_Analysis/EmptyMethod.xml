@@ -1,0 +1,50 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>11</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode void setEnabled(boolean enabled)" />
+  <problem_class id="EmptyMethod" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Empty method</problem_class>
+  <hints>
+    <hint value="false" />
+  </hints>
+  <description>The method is empty</description>
+  <highlighted_element>setEnabled</highlighted_element>
+  <language>kotlin</language>
+  <offset>8</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/CustomerDao.kt</file>
+  <line>15</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.CustomerDao java.lang.Object upsertAll(java.util.List&lt;com.onlytechtake.repairapp.data.local.entities.CustomerEntity&gt; customers, kotlin.coroutines.Continuation&lt;? super kotlin.Unit&gt; $completion)" />
+  <problem_class id="EmptyMethod" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Empty method</problem_class>
+  <hints>
+    <hint value="true" />
+  </hints>
+  <description>All implementations of this method are empty</description>
+  <highlighted_element>upsertAll</highlighted_element>
+  <language>kotlin</language>
+  <offset>16</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/demo/DataSeeder.kt</file>
+  <line>13</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.DataSeeder java.lang.Object seed(android.content.Context context, kotlin.coroutines.Continuation&lt;? super kotlin.Unit&gt; $completion)" />
+  <problem_class id="EmptyMethod" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Empty method</problem_class>
+  <hints>
+    <hint value="true" />
+  </hints>
+  <description>All implementations of this method are empty</description>
+  <highlighted_element>seed</highlighted_element>
+  <language>kotlin</language>
+  <offset>16</offset>
+  <length>4</length>
+</problem>
+</problems>

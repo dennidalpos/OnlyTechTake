@@ -83,7 +83,7 @@ fun QuickIntakeCategorySection(
                 ) {
                     if (currentParentId != null) {
                         AppButton(
-                            text = stringResource(R.string.nav_back),
+                            text = stringResource(R.string.action_back),
                             variant = AppButtonVariant.Secondary,
                             size = AppButtonSize.Compact,
                             onClick = { currentParentId = currentParent?.parentId },

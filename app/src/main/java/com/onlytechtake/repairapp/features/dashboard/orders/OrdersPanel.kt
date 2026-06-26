@@ -82,6 +82,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun OrdersPanel(
     viewModel: OrdersViewModel,
+    sharedViewModel: com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel,
     onOrderClick: (String) -> Unit,
     onNewOrder: () -> Unit,
     onOpenBackupSettings: () -> Unit,
@@ -89,6 +90,13 @@ fun OrdersPanel(
 ) {
     val windowSizeClass = LocalWindowSizeClass.current
     val isWide = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Medium
+
+    val resetSignal by sharedViewModel.resetSignal.collectAsState()
+    androidx.compose.runtime.LaunchedEffect(resetSignal) {
+        if (resetSignal > 0) {
+            viewModel.setFilter(OrderFilter())
+        }
+    }
 
     if (isWide) {
         var selectedOrderId by rememberSaveable { mutableStateOf<String?>(null) }
@@ -208,7 +216,7 @@ private fun OrdersListContent(
                         .height(56.dp),
                 value = orderFilter.query,
                 onValueChange = { viewModel.setFilter(orderFilter.copy(query = it)) },
-                label = stringResource(R.string.orders_search_label),
+                label = stringResource(R.string.label_search_customer),
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                 trailingIcon =
                     if (orderFilter.query.isNotEmpty()) {
@@ -405,7 +413,7 @@ private fun OrdersListContent(
             },
             confirmButton = {
                 AppButton(
-                    text = stringResource(R.string.confirm),
+                    text = stringResource(R.string.action_confirm),
                     onClick = { showFilterDialog = false },
                     variant = AppButtonVariant.Primary,
                     size = AppButtonSize.Compact,

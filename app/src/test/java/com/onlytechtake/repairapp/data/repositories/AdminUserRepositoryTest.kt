@@ -70,24 +70,26 @@ class AdminUserRepositoryTest {
             val actor = mockAdmin()
             val input = OperatorInput("Operatore", "operatore", "password-sicura".toCharArray())
             coEvery { userDao.findByUsername("operatore") } returns null
-            every { context.getString(R.string.demo_error_operator_not_available) } returns
-                "La versione Demo non consente la creazione di operatori. Usa solo l'account admin locale."
-
-            if (!BuildConfig.IS_DEMO_VERSION) {
-                coEvery { passwordHasher.hash(any()) } returns PasswordHash("hash", "salt")
-                coEvery { userDao.upsert(any()) } returns Unit
-            }
-
-            val result = repository.createOperator(actor, input)
+            coEvery { passwordHasher.hash(any()) } returns PasswordHash("hash", "salt")
+            coEvery { userDao.upsert(any()) } returns Unit
 
             if (BuildConfig.IS_DEMO_VERSION) {
+                // Scenario 1: Max operators reached
+                coEvery { userDao.countActiveByRole(UserRole.OPERATOR) } returns BuildConfig.MAX_OPERATORS
+                every {
+                    context.resources.getQuantityString(any(), any(), *anyVararg())
+                } returns "Demo Limit reached"
+
+                val result = repository.createOperator(actor, input)
                 assertTrue(result.isFailure)
-                assertEquals(
-                    "La versione Demo non consente la creazione di operatori. Usa solo l'account admin locale.",
-                    result.exceptionOrNull()?.message,
-                )
-                coVerify(exactly = 0) { userDao.upsert(any()) }
+                assertEquals("Demo Limit reached", result.exceptionOrNull()?.message)
+
+                // Scenario 2: Below limit
+                coEvery { userDao.countActiveByRole(UserRole.OPERATOR) } returns 0
+                val resultSuccess = repository.createOperator(actor, input)
+                assertTrue(resultSuccess.isSuccess)
             } else {
+                val result = repository.createOperator(actor, input)
                 assertTrue(result.isSuccess)
                 coVerify(exactly = 1) { userDao.upsert(any()) }
             }

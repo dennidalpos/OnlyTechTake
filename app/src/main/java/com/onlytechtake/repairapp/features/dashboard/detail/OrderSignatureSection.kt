@@ -117,11 +117,11 @@ fun OrderSignatureSection(
     deleteSignatureId?.let { id ->
         AppDialog(
             onDismissRequest = { deleteSignatureId = null },
-            title = stringResource(R.string.order_delete_signature_title),
-            text = stringResource(R.string.order_delete_signature_text),
+            title = stringResource(R.string.action_delete_confirm_title, stringResource(R.string.label_signature)),
+            text = stringResource(R.string.action_delete_confirm_text, stringResource(R.string.label_signature)),
             confirmButton = {
                 AppButton(
-                    text = stringResource(R.string.confirm),
+                    text = stringResource(R.string.action_confirm),
                     onClick = {
                         onDeleteSignature(id)
                         deleteSignatureId = null

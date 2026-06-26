@@ -1,0 +1,58 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/db/RepairAppDatabase.kt</file>
+  <line>65</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.db</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.db.RepairAppDatabase" />
+  <problem_class id="CyclicClassDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cyclic class dependency</problem_class>
+  <hints />
+  <description>Class 'RepairAppDatabase' is cyclically dependent on class 'com.onlytechtake.repairapp.data.local.db.RepairAppDatabase.Companion'</description>
+  <highlighted_element>RepairAppDatabase</highlighted_element>
+  <language>kotlin</language>
+  <offset>15</offset>
+  <length>17</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/db/RepairAppDatabase.kt</file>
+  <line>96</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.db</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.db.RepairAppDatabase.Companion" />
+  <problem_class id="CyclicClassDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cyclic class dependency</problem_class>
+  <hints />
+  <description>Class 'Companion' is cyclically dependent on class 'com.onlytechtake.repairapp.data.local.db.RepairAppDatabase'</description>
+  <highlighted_element>object</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/backup/BackupReminderPolicy.kt</file>
+  <line>11</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.backup</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.backup.BackupReminderSettings" />
+  <problem_class id="CyclicClassDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cyclic class dependency</problem_class>
+  <hints />
+  <description>Class 'BackupReminderSettings' is cyclically dependent on class 'com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy'</description>
+  <highlighted_element>BackupReminderSettings</highlighted_element>
+  <language>kotlin</language>
+  <offset>11</offset>
+  <length>22</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/backup/BackupReminderPolicy.kt</file>
+  <line>19</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.backup</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy" />
+  <problem_class id="CyclicClassDependency" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cyclic class dependency</problem_class>
+  <hints />
+  <description>Class 'BackupReminderPolicy' is cyclically dependent on class 'com.onlytechtake.repairapp.domain.backup.BackupReminderSettings'</description>
+  <highlighted_element>BackupReminderPolicy</highlighted_element>
+  <language>kotlin</language>
+  <offset>7</offset>
+  <length>20</length>
+</problem>
+</problems>

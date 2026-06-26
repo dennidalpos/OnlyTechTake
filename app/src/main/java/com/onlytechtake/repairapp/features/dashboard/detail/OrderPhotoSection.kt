@@ -149,7 +149,7 @@ fun OrderPhotoSection(
             confirmButton = {},
             dismissButton = {
                 AppButton(
-                    text = stringResource(R.string.customer_detail_close),
+                    text = stringResource(R.string.action_close),
                     onClick = { showCamera = false },
                     variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact,
@@ -175,11 +175,11 @@ fun OrderPhotoSection(
     deleteMedia?.let { media ->
         AppDialog(
             onDismissRequest = { deleteMedia = null },
-            title = stringResource(R.string.order_delete_media_title),
-            text = stringResource(R.string.order_delete_media_text, media.fileName),
+            title = stringResource(R.string.action_delete_confirm_title, stringResource(R.string.label_media)),
+            text = stringResource(R.string.action_delete_confirm_text, media.fileName),
             confirmButton = {
                 AppButton(
-                    text = stringResource(R.string.confirm),
+                    text = stringResource(R.string.action_confirm),
                     onClick = {
                         viewModel.deleteMedia(media.id)
                         deleteMedia = null

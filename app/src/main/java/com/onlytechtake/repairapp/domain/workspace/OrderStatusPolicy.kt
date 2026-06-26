@@ -49,7 +49,7 @@ object OrderStatusPolicy {
             OrderStatus.CLOSED -> emptySet()
         }
 
-    fun requiresClosureReason(to: OrderStatus): Boolean = to == OrderStatus.CLOSED
+    private fun requiresClosureReason(to: OrderStatus): Boolean = to == OrderStatus.CLOSED
 
     fun requireAllowed(
         context: Context,

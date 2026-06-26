@@ -40,7 +40,7 @@ internal class AuthenticatedActionRunner(
             authRepository.touchSession()
             val result =
                 withContext(ioDispatcher) {
-                    block(actor)
+                    runCatching { block(actor) }.getOrElse { Result.failure<Any?>(it) }
                 }
             result.fold(
                 onSuccess = { result ->

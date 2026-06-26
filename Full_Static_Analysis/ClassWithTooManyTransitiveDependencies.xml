@@ -1,0 +1,578 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/local/db/OrderExportDaoInstrumentedTest.kt</file>
+  <line>27</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.local.db</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.db.OrderExportDaoInstrumentedTest" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'OrderExportDaoInstrumentedTest' has too many transitive dependencies (42 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/local/db/RepairAppDatabaseInstrumentedTest.kt</file>
+  <line>26</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.local.db</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.db.RepairAppDatabaseInstrumentedTest" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'RepairAppDatabaseInstrumentedTest' has too many transitive dependencies (38 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/DataResetRepositoryInstrumentedTest.kt</file>
+  <line>35</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.DataResetRepositoryInstrumentedTest" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'DataResetRepositoryInstrumentedTest' has too many transitive dependencies (49 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowRepositoryInstrumentedTest.kt</file>
+  <line>34</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepositoryInstrumentedTest" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'OrderWorkflowRepositoryInstrumentedTest' has too many transitive dependencies (65 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/RepositoryPathsInstrumentedTest.kt</file>
+  <line>58</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.RepositoryPathsInstrumentedTest" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'RepositoryPathsInstrumentedTest' has too many transitive dependencies (127 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/BaseAssetRobot.kt</file>
+  <line>29</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.demo.BaseAssetRobot" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'BaseAssetRobot' has too many transitive dependencies (49 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/DemoDataSeeder.kt</file>
+  <line>32</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.demo.DemoDataSeeder" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'DemoDataSeeder' has too many transitive dependencies (47 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/OperationalRobot.kt</file>
+  <line>13</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.demo.OperationalRobot" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'OperationalRobot' has too many transitive dependencies (51 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/OperatorIntakeDemoScreenshotTest.kt</file>
+  <line>24</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.demo.OperatorIntakeDemoScreenshotTest" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'OperatorIntakeDemoScreenshotTest' has too many transitive dependencies (53 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/Robots.kt</file>
+  <line>10</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.demo.DemoAssetRobot" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'DemoAssetRobot' has too many transitive dependencies (50 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/Robots.kt</file>
+  <line>15</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.demo.ProAssetRobot" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'ProAssetRobot' has too many transitive dependencies (51 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/SeedDemoDataTest.kt</file>
+  <line>10</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.demo.SeedDemoDataTest" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'SeedDemoDataTest' has too many transitive dependencies (48 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/SocialCampaignScreenshotTest.kt</file>
+  <line>21</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.demo.SocialCampaignScreenshotTest" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'SocialCampaignScreenshotTest' has too many transitive dependencies (53 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/SocialDemoAssetTest.kt</file>
+  <line>18</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.demo.SocialDemoAssetTest" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'SocialDemoAssetTest' has too many transitive dependencies (52 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/SocialProAssetTest.kt</file>
+  <line>20</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.demo.SocialProAssetTest" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'SocialProAssetTest' has too many transitive dependencies (53 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/SocialStoryDemoScreenshotTest.kt</file>
+  <line>19</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.demo.SocialStoryDemoScreenshotTest" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'SocialStoryDemoScreenshotTest' has too many transitive dependencies (53 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/StoreDemoScreenshotTest.kt</file>
+  <line>18</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.demo.StoreDemoScreenshotTest" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'StoreDemoScreenshotTest' has too many transitive dependencies (52 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/StoreProScreenshotTest.kt</file>
+  <line>20</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.demo.StoreProScreenshotTest" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'StoreProScreenshotTest' has too many transitive dependencies (53 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/WorkflowOperationalTest.kt</file>
+  <line>16</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.demo.WorkflowOperationalTest" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'WorkflowOperationalTest' has too many transitive dependencies (53 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/features/dashboard/ScrollToTopTest.kt</file>
+  <line>22</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.features.dashboard</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.ScrollToTopTest" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'ScrollToTopTest' has too many transitive dependencies (50 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/di/AppContainer.kt</file>
+  <line>10</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.di</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.di.AppContainer" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'AppContainer' has too many transitive dependencies (151 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/di/SubContainers.kt</file>
+  <line>43</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.di</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.di.AuthContainer" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'AuthContainer' has too many transitive dependencies (62 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/di/SubContainers.kt</file>
+  <line>77</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.di</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.di.MediaContainer" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'MediaContainer' has too many transitive dependencies (59 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/di/SubContainers.kt</file>
+  <line>119</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.di</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.di.OrderContainer" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'OrderContainer' has too many transitive dependencies (102 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/di/SubContainers.kt</file>
+  <line>191</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.di</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.di.SettingsContainer" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'SettingsContainer' has too many transitive dependencies (111 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupMetadataService.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.BackupMetadataService" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'BackupMetadataService' has too many transitive dependencies (37 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupRepository.kt</file>
+  <line>35</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.BackupRepository" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'BackupRepository' has too many transitive dependencies (63 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/DataResetRepository.kt</file>
+  <line>17</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.DataResetRepository" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'DataResetRepository' has too many transitive dependencies (44 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/DefaultAuthRepository.kt</file>
+  <line>34</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.DefaultAuthRepository" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'DefaultAuthRepository' has too many transitive dependencies (39 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderMediaRepository.kt</file>
+  <line>36</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderMediaRepository" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'OrderMediaRepository' has too many transitive dependencies (51 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowCommands.kt</file>
+  <line>40</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderWorkflowCommands" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'OrderWorkflowCommands' has too many transitive dependencies (54 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowRepository.kt</file>
+  <line>29</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'OrderWorkflowRepository' has too many transitive dependencies (64 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/TemplateRepository.kt</file>
+  <line>38</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.TemplateRepository" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'TemplateRepository' has too many transitive dependencies (39 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCase.kt</file>
+  <line>17</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'CreateIntakeOrderUseCase' has too many transitive dependencies (86 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/workspace/GenerateOrderStatusPdfUseCase.kt</file>
+  <line>23</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'GenerateOrderStatusPdfUseCase' has too many transitive dependencies (77 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/customers/CustomersViewModel.kt</file>
+  <line>29</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.customers</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.customers.CustomersViewModel" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'CustomersViewModel' has too many transitive dependencies (73 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailViewModel.kt</file>
+  <line>40</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'OrderDetailViewModel' has too many transitive dependencies (96 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/home/HomeViewModel.kt</file>
+  <line>26</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.home</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.home.HomeViewModel" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'HomeViewModel' has too many transitive dependencies (88 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/neworder/NewOrderViewModel.kt</file>
+  <line>39</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.neworder</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.neworder.NewOrderViewModel" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'NewOrderViewModel' has too many transitive dependencies (100 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/orders/OrdersViewModel.kt</file>
+  <line>24</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.orders</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.orders.OrdersViewModel" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'OrdersViewModel' has too many transitive dependencies (88 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/SettingsDelegates.kt</file>
+  <line>57</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.settings</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.settings.TemplateSettingsDelegate" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'TemplateSettingsDelegate' has too many transitive dependencies (43 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/SettingsDelegates.kt</file>
+  <line>95</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.settings</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.settings.BackupSettingsDelegate" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'BackupSettingsDelegate' has too many transitive dependencies (67 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/SettingsDelegates.kt</file>
+  <line>209</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.settings</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.settings.StorageSettingsDelegate" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'StorageSettingsDelegate' has too many transitive dependencies (44 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/SettingsViewModel.kt</file>
+  <line>39</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.settings</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.settings.SettingsViewModel" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'SettingsViewModel' has too many transitive dependencies (100 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/BackupRepositoryTest.kt</file>
+  <line>22</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.BackupRepositoryTest" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'BackupRepositoryTest' has too many transitive dependencies (36 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/TemplateRepositoryTest.kt</file>
+  <line>33</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.TemplateRepositoryTest" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'TemplateRepositoryTest' has too many transitive dependencies (40 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCaseTest.kt</file>
+  <line>27</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCaseTest" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'CreateIntakeOrderUseCaseTest' has too many transitive dependencies (87 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/dashboard/detail/OrderDetailViewModelTest.kt</file>
+  <line>46</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModelTest" />
+  <problem_class id="ClassWithTooManyTransitiveDependencies" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class with too many transitive dependencies</problem_class>
+  <hints />
+  <description>Class 'OrderDetailViewModelTest' has too many transitive dependencies (99 &gt; 35)</description>
+  <highlighted_element />
+  <language />
+</problem>
+</problems>

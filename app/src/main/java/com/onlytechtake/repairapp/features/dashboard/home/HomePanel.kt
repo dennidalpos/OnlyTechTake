@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.demo.DemoMode
@@ -170,17 +171,18 @@ private fun HomeHeader(onNewOrder: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             SectionTitle(stringResource(R.string.home_title))
+            val context = LocalContext.current
             when {
                 isShowcase ->
                     AppBadge(
-                        text = stringResource(R.string.home_showcase_scenario),
+                        text = DemoMode.getShowcaseScenarioLabel(context),
                         containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                         contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
                     )
 
                 isDemo ->
                     AppBadge(
-                        text = stringResource(R.string.demo_version_banner),
+                        text = DemoMode.getVersionBanner(context),
                         containerColor = MaterialTheme.colorScheme.errorContainer,
                         contentColor = MaterialTheme.colorScheme.onErrorContainer,
                     )
@@ -194,11 +196,12 @@ private fun HomeHeader(onNewOrder: () -> Unit) {
             }
         }
 
+        val context = LocalContext.current
         AppButton(
             text =
                 when {
-                    isDemo -> stringResource(R.string.home_demo_cta_try)
-                    isShowcase -> stringResource(R.string.home_showcase_walkthrough)
+                    isDemo -> DemoMode.getDemoTryCta(context)
+                    isShowcase -> DemoMode.getShowcaseWalkthroughLabel(context)
                     else -> stringResource(R.string.home_pro_cta_new)
                 },
             onClick = onNewOrder,
@@ -222,7 +225,7 @@ private fun HomeMetrics(summary: AppSummary) {
             modifier = Modifier.weight(1f),
         )
         AppMetricCard(
-            label = stringResource(R.string.home_metric_customers),
+            label = stringResource(R.string.label_customers),
             value = summary.customerCount.toString(),
             modifier = Modifier.weight(1f),
         )
@@ -247,14 +250,15 @@ private fun DemoInfoCard() {
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(end = RepairAppSpacing.compactGap),
             )
+            val context = LocalContext.current
             Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
                 Text(
-                    text = stringResource(R.string.home_demo_pro_features),
+                    text = DemoMode.getDemoProFeaturesLabel(context),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                 )
                 Text(
-                    text = stringResource(R.string.home_demo_pro_features_description),
+                    text = DemoMode.getDemoProFeaturesDesc(context),
                     style = MaterialTheme.typography.bodySmall,
                 )
             }
@@ -302,4 +306,4 @@ private fun isProFlavor(): Boolean = BuildConfig.IS_PRO_VERSION
 
 private fun isDemoFlavor(): Boolean = BuildConfig.IS_DEMO_VERSION
 
-private fun isAnyDemo(): Boolean = isDemoFlavor() || DemoMode.isEnabled
+private fun isAnyDemo(): Boolean = isDemoFlavor()

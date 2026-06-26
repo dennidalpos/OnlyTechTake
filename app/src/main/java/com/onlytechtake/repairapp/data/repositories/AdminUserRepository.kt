@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.data.repositories
 import android.content.Context
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
@@ -26,8 +27,6 @@ class AdminUserRepository(
 ) {
     fun observeUsers(): Flow<List<UserEntity>> = userDao.observeAll()
 
-    fun observeActiveUsers(): Flow<List<UserEntity>> = userDao.observeActiveUsers()
-
     suspend fun createOperator(
         actor: AuthenticatedUser,
         input: OperatorInput,
@@ -40,17 +39,13 @@ class AdminUserRepository(
             require(userDao.findByUsername(input.username.trim()) == null) { context.getString(R.string.error_username_exists) }
 
             if (BuildConfig.IS_DEMO_VERSION) {
-                if (MAX_DEMO_OPERATORS <= 0) {
-                    throw IllegalStateException(context.getString(R.string.demo_error_operator_not_available))
+                if (BuildConfig.MAX_OPERATORS <= 0) {
+                    throw IllegalStateException(DemoMode.getOperatorNotAvailableMessage(context))
                 }
 
-                if (userDao.countActiveByRole(UserRole.OPERATOR) >= MAX_DEMO_OPERATORS) {
+                if (userDao.countActiveByRole(UserRole.OPERATOR) >= BuildConfig.MAX_OPERATORS) {
                     throw IllegalStateException(
-                        context.resources.getQuantityString(
-                            R.plurals.demo_error_operator_limit,
-                            MAX_DEMO_OPERATORS,
-                            MAX_DEMO_OPERATORS,
-                        ),
+                        DemoMode.getOperatorLimitMessage(context, BuildConfig.MAX_OPERATORS)
                     )
                 }
             }
@@ -87,33 +82,6 @@ class AdminUserRepository(
 
             userDao.upsert(user)
             audit(actor.id, AuditAction.USER_CREATED, """{"userId":"${user.id}"}""", now)
-        }
-
-    suspend fun updateUser(
-        actor: AuthenticatedUser,
-        userId: String,
-        displayName: String,
-        username: String,
-    ): Result<Unit> =
-        runCatching {
-            PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
-            val existing =
-                requireNotNull(userDao.findById(userId)) { context.getString(R.string.error_user_not_found) }
-            val trimmedUsername = username.trim()
-            require(displayName.isNotBlank()) { context.getString(R.string.error_name_required) }
-            require(trimmedUsername.isNotBlank()) { context.getString(R.string.error_username_required) }
-            val sameUsernameUser = userDao.findByUsername(trimmedUsername)
-            require(sameUsernameUser == null || sameUsernameUser.id == userId) { context.getString(R.string.error_username_exists) }
-
-            val now = clockMillis()
-            userDao.upsert(
-                existing.copy(
-                    displayName = displayName.trim(),
-                    username = trimmedUsername,
-                    updatedAt = now,
-                ),
-            )
-            audit(actor.id, AuditAction.USER_UPDATED, """{"userId":"$userId"}""", now)
         }
 
     suspend fun resetPassword(
@@ -230,6 +198,5 @@ class AdminUserRepository(
 
     private companion object {
         const val MIN_PASSWORD_LENGTH = 8
-        const val MAX_DEMO_OPERATORS = 0
     }
 }

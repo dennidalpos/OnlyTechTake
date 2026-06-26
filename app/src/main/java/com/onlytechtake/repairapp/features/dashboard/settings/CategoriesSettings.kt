@@ -262,7 +262,7 @@ fun ColumnScope.CategoriesSettings(
                             )
                             AppIconButton(
                                 imageVector = Icons.Default.Close,
-                                contentDescription = stringResource(R.string.content_description_close),
+                                contentDescription = stringResource(R.string.action_close),
                                 onClick = {
                                     showEditCard = false
                                     viewModel.setFormDirty(false)

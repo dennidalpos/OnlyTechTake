@@ -33,7 +33,7 @@ fun QuickIntakeSubmitSection(
             verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
         ) {
             Text(
-                text = stringResource(R.string.intake_submit_title),
+                text = stringResource(R.string.action_confirm),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface,

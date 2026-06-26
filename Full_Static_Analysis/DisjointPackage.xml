@@ -1,0 +1,182 @@
+<problems>
+<problem>
+  <package>com.onlytechtake.repairapp</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp can be decomposed into 3 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.core.design.components</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.core.design.components" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp.core.design.components can be decomposed into 5 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.domain.auth</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.domain.auth" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp.domain.auth can be decomposed into 3 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.data.local.entities</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.data.local.entities" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp.data.local.entities can be decomposed into 3 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.core.media</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.core.media" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp.core.media can be decomposed into 8 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.features.dashboard.common</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.features.dashboard.common" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp.features.dashboard.common can be decomposed into 4 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.data.local.dao" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp.data.local.dao can be decomposed into 19 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.domain.repositories</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.domain.repositories" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp.domain.repositories can be decomposed into 3 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.data.services</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.data.services" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp.data.services can be decomposed into 2 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.features.dashboard.neworder</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.features.dashboard.neworder" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp.features.dashboard.neworder can be decomposed into 3 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.data.repositories" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp.data.repositories can be decomposed into 6 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.features.dashboard.detail</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.features.dashboard.detail" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp.features.dashboard.detail can be decomposed into 2 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.core.design" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp.core.design can be decomposed into 5 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.features.workspace</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.features.workspace" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp.features.workspace can be decomposed into 6 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.domain.workspace" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp.domain.workspace can be decomposed into 12 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.demo" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp.demo can be decomposed into 2 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.features.dashboard</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.features.dashboard" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp.features.dashboard can be decomposed into 5 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.core.templates</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.core.templates" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp.core.templates can be decomposed into 2 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.data.preferences</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.data.preferences" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp.data.preferences can be decomposed into 4 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+<problem>
+  <package>com.onlytechtake.repairapp.core.security</package>
+  <entry_point TYPE="package" FQNAME="com.onlytechtake.repairapp.core.security" />
+  <problem_class id="DisjointPackage" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Package with disjoint dependency graph</problem_class>
+  <hints />
+  <description>Package com.onlytechtake.repairapp.core.security can be decomposed into 2 independent packages</description>
+  <highlighted_element />
+  <language />
+</problem>
+</problems>

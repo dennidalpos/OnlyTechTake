@@ -23,7 +23,9 @@ import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 internal class CatalogSettingsDelegate(
     private val catalogRepository: CatalogRepository,
@@ -107,12 +109,6 @@ internal class BackupSettingsDelegate(
     fun setBackupReminderIntervalDays(days: Int) {
         scope.launch {
             backupReminderPreferences.setIntervalDays(days)
-        }
-    }
-
-    fun exportDatabase(uri: Uri) {
-        actionRunner.run { actor ->
-            backupRepository.exportDatabase(actor, uri)
         }
     }
 
@@ -237,6 +233,7 @@ internal class StorageSettingsDelegate(
 
 internal class DiagnosticSettingsDelegate(
     private val diagnosticLogService: DiagnosticLogService,
+    private val securityPreferences: SecurityPreferences,
     private val actionRunner: AuthenticatedActionRunner,
     private val scope: CoroutineScope,
     private val onRefreshStats: () -> Unit,
@@ -255,16 +252,21 @@ internal class DiagnosticSettingsDelegate(
                 actor,
                 UserPermission.MANAGE_STORAGE,
             )
-            val zipFile = diagnosticLogService.collectAndPrepareZip()
+            val settings = securityPreferences.settings.first()
+            val password = settings.backupEncryptionPassword.takeIf { settings.isBackupEncryptionEnabled && it.isNotBlank() }
+
+            val zipFile = diagnosticLogService.collectAndPrepareZip(password)
             if (zipFile != null) {
                 val intent =
                     diagnosticLogService.createShareIntent(zipFile).apply {
                         addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
                     }
-                actionRunner.context.startActivity(intent)
+                withContext(Dispatchers.Main) {
+                    actionRunner.context.startActivity(intent)
+                }
                 Result.success(Unit)
             } else {
-                Result.failure<Unit>(IllegalStateException("Impossibile generare il file dei log."))
+                Result.failure<Unit>(IllegalStateException(actionRunner.context.getString(R.string.error_log_generation_failed)))
             }
         }
     }
@@ -273,7 +275,6 @@ internal class DiagnosticSettingsDelegate(
 internal class OwnerSettingsDelegate(
     private val ownerPreferences: OwnerPreferences,
     private val actionRunner: AuthenticatedActionRunner,
-    private val scope: CoroutineScope,
 ) {
     fun updateOwnerInfo(info: OwnerInfo) {
         actionRunner.run(successMessageRes = R.string.owner_save_success) {

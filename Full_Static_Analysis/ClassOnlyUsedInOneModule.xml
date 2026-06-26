@@ -1,0 +1,660 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/MainActivityLaunchInstrumentedTest.kt</file>
+  <line>10</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.MainActivityLaunchInstrumentedTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;MainActivityLaunchInstrumentedTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>MainActivityLaunchInstrumentedTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>34</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/core/design/DesignComponentsTest.kt</file>
+  <line>25</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.design.DesignComponentsTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;DesignComponentsTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>DesignComponentsTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>20</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/core/share/ShareDocumentIntentFactoryInstrumentedTest.kt</file>
+  <line>17</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.core.share</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactoryInstrumentedTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;ShareDocumentIntentFactoryInstrumentedTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>ShareDocumentIntentFactoryInstrumentedTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>42</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/local/db/OrderExportDaoInstrumentedTest.kt</file>
+  <line>28</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.local.db</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.db.OrderExportDaoInstrumentedTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;OrderExportDaoInstrumentedTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>OrderExportDaoInstrumentedTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>30</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/local/db/RepairAppDatabaseInstrumentedTest.kt</file>
+  <line>27</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.local.db</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.db.RepairAppDatabaseInstrumentedTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;RepairAppDatabaseInstrumentedTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>RepairAppDatabaseInstrumentedTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>33</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/DataResetRepositoryInstrumentedTest.kt</file>
+  <line>36</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.DataResetRepositoryInstrumentedTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;DataResetRepositoryInstrumentedTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>DataResetRepositoryInstrumentedTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>35</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowRepositoryInstrumentedTest.kt</file>
+  <line>35</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepositoryInstrumentedTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;OrderWorkflowRepositoryInstrumentedTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>OrderWorkflowRepositoryInstrumentedTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>39</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/RepositoryPathsInstrumentedTest.kt</file>
+  <line>59</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.RepositoryPathsInstrumentedTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;RepositoryPathsInstrumentedTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>RepositoryPathsInstrumentedTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>31</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/MainActivity.kt</file>
+  <line>16</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.MainActivity" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;MainActivity&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.androidTest'</description>
+  <highlighted_element>MainActivity</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>3</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;RepairAppTestTags&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.androidTest'</description>
+  <highlighted_element>RepairAppTestTags</highlighted_element>
+  <language>kotlin</language>
+  <offset>7</offset>
+  <length>17</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTokens.kt</file>
+  <line>10</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppSemanticColors" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;RepairAppSemanticColors&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.unitTest'</description>
+  <highlighted_element>RepairAppSemanticColors</highlighted_element>
+  <language>kotlin</language>
+  <offset>11</offset>
+  <length>23</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTokens.kt</file>
+  <line>100</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppSizes" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;RepairAppSizes&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.androidTest'</description>
+  <highlighted_element>RepairAppSizes</highlighted_element>
+  <language>kotlin</language>
+  <offset>7</offset>
+  <length>14</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/components/AppButton.kt</file>
+  <line>48</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design.components</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.design.components.AppButtonSize" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;AppButtonSize&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.androidTest'</description>
+  <highlighted_element>AppButtonSize</highlighted_element>
+  <language>kotlin</language>
+  <offset>11</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/workspace/WorkspaceUiHelpers.kt</file>
+  <line>34</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.workspace.AttachmentCounts" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;AttachmentCounts&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.unitTest'</description>
+  <highlighted_element>AttachmentCounts</highlighted_element>
+  <language>kotlin</language>
+  <offset>11</offset>
+  <length>16</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/SmokeTest.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.SmokeTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;SmokeTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>SmokeTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/core/media/AttachmentImportPolicyTest.kt</file>
+  <line>11</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.core.media</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.media.AttachmentImportPolicyTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;AttachmentImportPolicyTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>AttachmentImportPolicyTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>26</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/core/media/LocalImageDecoderTest.kt</file>
+  <line>6</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.core.media</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.media.LocalImageDecoderTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;LocalImageDecoderTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>LocalImageDecoderTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>21</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/core/media/OrderMediaFileNamerTest.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.core.media</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.media.OrderMediaFileNamerTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;OrderMediaFileNamerTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>OrderMediaFileNamerTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>23</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/core/orders/OrderNumberGeneratorTest.kt</file>
+  <line>7</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.core.orders</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.orders.OrderNumberGeneratorTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;OrderNumberGeneratorTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>OrderNumberGeneratorTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>24</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/core/permissions/PermissionServiceTest.kt</file>
+  <line>10</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.core.permissions</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.permissions.PermissionServiceTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;PermissionServiceTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>PermissionServiceTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>21</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/core/security/PasswordHasherTest.kt</file>
+  <line>8</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.core.security</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.security.PasswordHasherTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;PasswordHasherTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>PasswordHasherTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/core/templates/TemplateRendererTest.kt</file>
+  <line>7</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.core.templates</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.templates.TemplateRendererTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;TemplateRendererTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>TemplateRendererTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>20</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/AdminUserRepositoryTest.kt</file>
+  <line>25</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.AdminUserRepositoryTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;AdminUserRepositoryTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>AdminUserRepositoryTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>23</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/BackupRepositoryTest.kt</file>
+  <line>22</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.BackupRepositoryTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;BackupRepositoryTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>BackupRepositoryTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>20</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/CatalogCategoryTreeTest.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.CatalogCategoryTreeTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;CatalogCategoryTreeTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>CatalogCategoryTreeTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>23</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/CatalogRepositoryTest.kt</file>
+  <line>17</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.CatalogRepositoryTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;CatalogRepositoryTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>CatalogRepositoryTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>21</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/CustomerRepositoryTest.kt</file>
+  <line>16</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.CustomerRepositoryTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;CustomerRepositoryTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>CustomerRepositoryTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>22</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriterTest.kt</file>
+  <line>17</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderExportXlsxWriterTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;OrderExportXlsxWriterTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>OrderExportXlsxWriterTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>25</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/TemplateRepositoryTest.kt</file>
+  <line>33</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.TemplateRepositoryTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;TemplateRepositoryTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>TemplateRepositoryTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>22</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/WhatsAppSendersTest.kt</file>
+  <line>7</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.repositories.WhatsAppSendersTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;WhatsAppSendersTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>WhatsAppSendersTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>19</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/domain/backup/BackupReminderPolicyTest.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.domain.backup</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.backup.BackupReminderPolicyTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;BackupReminderPolicyTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>BackupReminderPolicyTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>24</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/domain/storage/StoragePolicyTest.kt</file>
+  <line>8</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.domain.storage</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.storage.StoragePolicyTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;StoragePolicyTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>StoragePolicyTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>17</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCaseTest.kt</file>
+  <line>27</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCaseTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;CreateIntakeOrderUseCaseTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>CreateIntakeOrderUseCaseTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>28</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/domain/workspace/DiagnosisResultInputTest.kt</file>
+  <line>11</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInputTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;DiagnosisResultInputTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>DiagnosisResultInputTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>24</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/domain/workspace/FeedbackInputTest.kt</file>
+  <line>11</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.workspace.FeedbackInputTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;FeedbackInputTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>FeedbackInputTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>17</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/domain/workspace/IntakeOrderInputTest.kt</file>
+  <line>14</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.workspace.IntakeOrderInputTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;IntakeOrderInputTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>IntakeOrderInputTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>20</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/domain/workspace/OrderCleanupPolicyTest.kt</file>
+  <line>8</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.workspace.OrderCleanupPolicyTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;OrderCleanupPolicyTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>OrderCleanupPolicyTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>22</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/domain/workspace/OrderClosurePermissionPolicyTest.kt</file>
+  <line>10</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.workspace.OrderClosurePermissionPolicyTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;OrderClosurePermissionPolicyTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>OrderClosurePermissionPolicyTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>32</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/domain/workspace/OrderDetailPaymentStateTest.kt</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.workspace.OrderDetailPaymentStateTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;OrderDetailPaymentStateTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>OrderDetailPaymentStateTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>27</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/domain/workspace/OwnerInfoTest.kt</file>
+  <line>7</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.domain.workspace.OwnerInfoTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;OwnerInfoTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>OwnerInfoTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/dashboard/QuoteDecisionTest.kt</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.features.dashboard</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.QuoteDecisionTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;QuoteDecisionTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>QuoteDecisionTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>17</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/dashboard/neworder/IntakeStepperTest.kt</file>
+  <line>13</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.neworder</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.dashboard.neworder.IntakeStepperTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;IntakeStepperTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>IntakeStepperTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>17</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/workspace/OperationalQueuesTest.kt</file>
+  <line>10</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.features.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.workspace.OperationalQueuesTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;OperationalQueuesTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>OperationalQueuesTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>21</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/workspace/QuickIntakeDraftTest.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.features.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.workspace.QuickIntakeDraftTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;QuickIntakeDraftTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>QuickIntakeDraftTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>20</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/workspace/StatusWorkflowTest.kt</file>
+  <line>22</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.features.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.workspace.StatusWorkflowTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;StatusWorkflowTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>StatusWorkflowTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/features/workspace/WorkspaceUiHelpersTest.kt</file>
+  <line>24</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.features.workspace</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.features.workspace.WorkspaceUiHelpersTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;WorkspaceUiHelpersTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>WorkspaceUiHelpersTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>22</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/testFull/java/com/onlytechtake/repairapp/core/demo/DemoModeFullTest.kt</file>
+  <line>7</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.core.demo.DemoModeFullTest" />
+  <problem_class id="ClassOnlyUsedInOneModule" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Class only used from one other module</problem_class>
+  <hints />
+  <description>Class &lt;code&gt;DemoModeFullTest&lt;/code&gt; has only dependencies on and/or dependents in module 'OnlyTechTakeRepairApp.app.main'</description>
+  <highlighted_element>DemoModeFullTest</highlighted_element>
+  <language>kotlin</language>
+  <offset>6</offset>
+  <length>16</length>
+</problem>
+</problems>

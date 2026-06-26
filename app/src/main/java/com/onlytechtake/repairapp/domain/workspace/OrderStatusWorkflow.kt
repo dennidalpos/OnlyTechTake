@@ -42,16 +42,21 @@ fun statusTemplateAnchor(status: OrderStatus): TemplateAnchor =
     }
 
 fun statusTemplateAnchor(order: RepairOrderEntity): TemplateAnchor =
-    when {
-        order.status == OrderStatus.RESULT && order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE ->
-            TemplateAnchor.WHATSAPP_QUOTE
-
-        order.status == OrderStatus.RESULT && order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE ->
-            TemplateAnchor.WHATSAPP_NOT_REPAIRABLE
-
-        order.status == OrderStatus.CLOSED && order.closureReason == ClosureReason.NOT_REPAIRABLE ->
-            TemplateAnchor.WHATSAPP_NOT_REPAIRABLE
-
+    when (order.status) {
+        OrderStatus.RESULT -> {
+            if (order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
+                TemplateAnchor.WHATSAPP_QUOTE
+            } else {
+                TemplateAnchor.WHATSAPP_NOT_REPAIRABLE
+            }
+        }
+        OrderStatus.CLOSED -> {
+            if (order.closureReason == ClosureReason.NOT_REPAIRABLE) {
+                TemplateAnchor.WHATSAPP_NOT_REPAIRABLE
+            } else {
+                statusTemplateAnchor(order.status)
+            }
+        }
         else -> statusTemplateAnchor(order.status)
     }
 
@@ -71,13 +76,14 @@ fun nextActionLabel(
     context: Context,
     order: RepairOrderEntity,
 ): String =
-    when {
-        order.status == OrderStatus.RESULT && order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE ->
-            context.getString(R.string.action_wait_quote)
-
-        order.status == OrderStatus.RESULT && order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE ->
-            context.getString(R.string.action_notify_not_repairable)
-
+    when (order.status) {
+        OrderStatus.RESULT -> {
+            if (order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
+                context.getString(R.string.action_wait_quote)
+            } else {
+                context.getString(R.string.action_notify_not_repairable)
+            }
+        }
         else -> nextActionLabel(context, order.status)
     }
 

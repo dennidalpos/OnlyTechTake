@@ -1,0 +1,128 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/full/java/com/onlytechtake/repairapp/core/demo/DemoMode.kt</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.demo.DemoMode boolean canEnable()" />
+  <problem_class id="SameReturnValue" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Method always returns the same value</problem_class>
+  <hints />
+  <description>Method &lt;code&gt;canEnable()&lt;/code&gt; always returns &lt;code&gt;false&lt;/code&gt;</description>
+  <highlighted_element>canEnable</highlighted_element>
+  <language>kotlin</language>
+  <offset>8</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/CustomerDao.kt</file>
+  <line>24</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.CustomerDao java.lang.Object findById(java.lang.String id, kotlin.coroutines.Continuation&lt;? super com.onlytechtake.repairapp.data.local.entities.CustomerEntity&gt; $completion)" />
+  <problem_class id="SameReturnValue" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Method always returns the same value</problem_class>
+  <hints />
+  <description>All implementations of method &lt;code&gt;findById()&lt;/code&gt; always return &lt;code&gt;null&lt;/code&gt;</description>
+  <highlighted_element>findById</highlighted_element>
+  <language>kotlin</language>
+  <offset>16</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/OrderCategoryDao.kt</file>
+  <line>27</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao java.lang.Object findById(java.lang.String id, kotlin.coroutines.Continuation&lt;? super com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity&gt; $completion)" />
+  <problem_class id="SameReturnValue" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Method always returns the same value</problem_class>
+  <hints />
+  <description>All implementations of method &lt;code&gt;findById()&lt;/code&gt; always return &lt;code&gt;null&lt;/code&gt;</description>
+  <highlighted_element>findById</highlighted_element>
+  <language>kotlin</language>
+  <offset>16</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/OrderCategoryDao.kt</file>
+  <line>30</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao java.lang.Object countOrdersForCategories(java.util.List&lt;java.lang.String&gt; categoryIds, kotlin.coroutines.Continuation&lt;? super java.lang.Integer&gt; $completion)" />
+  <problem_class id="SameReturnValue" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Method always returns the same value</problem_class>
+  <hints />
+  <description>All implementations of method &lt;code&gt;countOrdersForCategories()&lt;/code&gt; always return &lt;code&gt;0&lt;/code&gt;</description>
+  <highlighted_element>countOrdersForCategories</highlighted_element>
+  <language>kotlin</language>
+  <offset>16</offset>
+  <length>24</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/OrderCategoryDao.kt</file>
+  <line>33</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao java.lang.Object deleteById(java.lang.String id, kotlin.coroutines.Continuation&lt;? super java.lang.Integer&gt; $completion)" />
+  <problem_class id="SameReturnValue" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Method always returns the same value</problem_class>
+  <hints />
+  <description>All implementations of method &lt;code&gt;deleteById()&lt;/code&gt; always return &lt;code&gt;0&lt;/code&gt;</description>
+  <highlighted_element>deleteById</highlighted_element>
+  <language>kotlin</language>
+  <offset>16</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/OrderCategoryDao.kt</file>
+  <line>43</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao java.lang.Object findByParentAndName(java.lang.String parentId, java.lang.String name, kotlin.coroutines.Continuation&lt;? super com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity&gt; $completion)" />
+  <problem_class id="SameReturnValue" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Method always returns the same value</problem_class>
+  <hints />
+  <description>All implementations of method &lt;code&gt;findByParentAndName()&lt;/code&gt; always return &lt;code&gt;null&lt;/code&gt;</description>
+  <highlighted_element>findByParentAndName</highlighted_element>
+  <language>kotlin</language>
+  <offset>16</offset>
+  <length>19</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/demo/DataSeeder.kt</file>
+  <line>18</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.DataSeeder java.lang.String getDefaultPassword()" />
+  <problem_class id="SameReturnValue" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Method always returns the same value</problem_class>
+  <hints />
+  <description>Method &lt;code&gt;get()&lt;/code&gt; always returns &lt;code&gt;null&lt;/code&gt;</description>
+  <highlighted_element>get</highlighted_element>
+  <language>kotlin</language>
+  <offset>33</offset>
+  <length>3</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/home/HomePanel.kt</file>
+  <line>300</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.home</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.home.HomePanelKt boolean isProFlavor()" />
+  <problem_class id="SameReturnValue" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Method always returns the same value</problem_class>
+  <hints />
+  <description>Method &lt;code&gt;isProFlavor()&lt;/code&gt; always returns &lt;code&gt;com.onlytechtake.repairapp.BuildConfig.IS_PRO_VERSION&lt;/code&gt;</description>
+  <highlighted_element>isProFlavor</highlighted_element>
+  <language>kotlin</language>
+  <offset>12</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/home/HomePanel.kt</file>
+  <line>302</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.dashboard.home</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.dashboard.home.HomePanelKt boolean isDemoFlavor()" />
+  <problem_class id="SameReturnValue" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Method always returns the same value</problem_class>
+  <hints />
+  <description>Method &lt;code&gt;isDemoFlavor()&lt;/code&gt; always returns &lt;code&gt;com.onlytechtake.repairapp.BuildConfig.IS_DEMO_VERSION&lt;/code&gt;</description>
+  <highlighted_element>isDemoFlavor</highlighted_element>
+  <language>kotlin</language>
+  <offset>12</offset>
+  <length>12</length>
+</problem>
+</problems>

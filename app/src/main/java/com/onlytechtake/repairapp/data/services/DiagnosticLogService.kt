@@ -13,11 +13,9 @@ class DiagnosticLogService(
     private val context: Context,
     private val diagnosticLogger: DiagnosticLogger,
 ) {
-    fun getLogSize(): Long = diagnosticLogger.getLogSize()
-
     fun clearLogs() = diagnosticLogger.clearLogs()
 
-    fun collectAndPrepareZip(): File? {
+    fun collectAndPrepareZip(password: String? = null): File? {
         val logFile = diagnosticLogger.getLogFile()
         if (!logFile.exists() || logFile.length() == 0L) {
             // Create a dummy log if none exists to avoid empty zip error
@@ -28,9 +26,23 @@ class DiagnosticLogService(
             )
         }
 
-        val zipFile = File(context.cacheDir, "diagnostic_logs_${UUID.randomUUID()}.zip")
+        val sharedCacheDir = File(context.cacheDir, "shared")
+        if (!sharedCacheDir.exists()) {
+            sharedCacheDir.mkdirs()
+        }
+
+        val zipFile = File(sharedCacheDir, "diagnostic_logs_${UUID.randomUUID()}.zip")
         try {
-            ZipFile(zipFile).addFile(logFile)
+            val zip = ZipFile(zipFile, password?.toCharArray())
+            val params =
+                net.lingala.zip4j.model
+                    .ZipParameters()
+            if (password != null) {
+                params.isEncryptFiles = true
+                params.encryptionMethod = net.lingala.zip4j.model.enums.EncryptionMethod.AES
+                params.aesKeyStrength = net.lingala.zip4j.model.enums.AesKeyStrength.KEY_STRENGTH_256
+            }
+            zip.addFile(logFile, params)
             return zipFile
         } catch (e: Exception) {
             return null

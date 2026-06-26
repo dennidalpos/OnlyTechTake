@@ -46,8 +46,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.compose.ui.platform.LocalContext
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppTheme
@@ -133,7 +135,7 @@ fun DashboardScreen(
                 NavigationItem(
                     DashboardRoutes.CUSTOMERS,
                     Icons.Default.Person,
-                    R.string.dashboard_customers,
+                    R.string.label_customers,
                     RepairAppTestTags.dashboardTab("CUSTOMERS"),
                 ),
                 NavigationItem(
@@ -154,6 +156,11 @@ fun DashboardScreen(
     var pendingRoute by androidx.compose.runtime.remember {
         androidx.compose.runtime.mutableStateOf<String?>(
             null,
+        )
+    }
+    var pendingIsReset by androidx.compose.runtime.remember {
+        androidx.compose.runtime.mutableStateOf(
+            value = false,
         )
     }
     var showUnsavedChangesDialog by androidx.compose.runtime.remember {
@@ -190,11 +197,17 @@ fun DashboardScreen(
         }
     }
 
-    fun performNavigation(route: String) {
+    fun performNavigation(
+        route: String,
+        isReset: Boolean = false,
+    ) {
+        if (isReset) {
+            sharedViewModel.triggerReset()
+        }
         navController.navigate(route) {
             popUpTo(DashboardRoutes.HOME) { saveState = true }
             launchSingleTop = true
-            restoreState = true
+            restoreState = !isReset
         }
         sharedViewModel.setFormDirty(dirty = false)
     }
@@ -214,7 +227,7 @@ fun DashboardScreen(
                             tint = if (isCloseIcon) Color.Unspecified else MaterialTheme.colorScheme.primary,
                             contentDescription =
                                 stringResource(
-                                    if (isCloseIcon) R.string.content_description_close else R.string.content_description_back,
+                                    if (isCloseIcon) R.string.action_close else R.string.action_back,
                                 ),
                             onClick = {
                                 if (isFormDirty) {
@@ -282,15 +295,10 @@ fun DashboardScreen(
                             onClick = {
                                 if (isFormDirty) {
                                     pendingRoute = item.route
+                                    pendingIsReset = selected
                                     showUnsavedChangesDialog = true
                                 } else {
-                                    if (selected) {
-                                        if (currentDestination != item.route) {
-                                            performNavigation(item.route)
-                                        }
-                                    } else {
-                                        performNavigation(item.route)
-                                    }
+                                    performNavigation(item.route, isReset = selected)
                                 }
                             },
                         )
@@ -335,15 +343,10 @@ fun DashboardScreen(
                             onClick = {
                                 if (isFormDirty) {
                                     pendingRoute = item.route
+                                    pendingIsReset = selected
                                     showUnsavedChangesDialog = true
                                 } else {
-                                    if (selected) {
-                                        if (currentDestination != item.route) {
-                                            performNavigation(item.route)
-                                        }
-                                    } else {
-                                        performNavigation(item.route)
-                                    }
+                                    performNavigation(item.route, isReset = selected)
                                 }
                             },
                         )
@@ -397,8 +400,10 @@ fun DashboardScreen(
                         showUnsavedChangesDialog = false
                         sharedViewModel.setFormDirty(dirty = false)
                         pendingRoute?.let {
-                            performNavigation(it)
+                            performNavigation(it, isReset = pendingIsReset)
                         } ?: navController.popBackStack()
+                        pendingRoute = null
+                        pendingIsReset = false
                     },
                     variant = AppButtonVariant.Danger,
                     size = AppButtonSize.Compact,
@@ -408,7 +413,11 @@ fun DashboardScreen(
             dismissButton = {
                 AppButton(
                     text = stringResource(R.string.dashboard_unsaved_continue),
-                    onClick = { showUnsavedChangesDialog = false },
+                    onClick = {
+                        showUnsavedChangesDialog = false
+                        pendingRoute = null
+                        pendingIsReset = false
+                    },
                     variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact,
                 )
@@ -425,7 +434,7 @@ fun DashboardScreen(
             contentAlignment = Alignment.Center,
         ) {
             Text(
-                text = stringResource(R.string.demo_version_banner),
+                text = DemoMode.getVersionBanner(LocalContext.current),
                 style = MaterialTheme.typography.displayLarge,
                 color = Color.Gray,
                 modifier = Modifier.rotate(-45f),
@@ -452,12 +461,12 @@ private data class NavigationItem(
 @Composable
 private fun DashboardScreenPreview() {
     androidx.compose.runtime.CompositionLocalProvider(
-        com.onlytechtake.repairapp.navigation.LocalWindowSizeClass provides
+        LocalWindowSizeClass provides
             androidx.compose.material3.windowsizeclass.WindowSizeClass.calculateFromSize(
                 androidx.compose.ui.unit
                     .DpSize(1000.dp, 800.dp),
             ),
-        com.onlytechtake.repairapp.core.di.LocalAppContainer provides
+        LocalAppContainer provides
             com.onlytechtake.repairapp.core.di
                 .AppContainer(androidx.compose.ui.platform.LocalContext.current),
     ) {
@@ -473,8 +482,9 @@ private fun DashboardScreenPreview() {
                 sharedViewModel =
                     androidx.compose.runtime.remember { SharedWorkspaceViewModel() },
                 onLogout = {},
-                onAppDataRestored = {},
-            )
+            ) {
+                // Preview: onAppDataRestored
+            }
         }
     }
 }

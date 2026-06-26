@@ -6,22 +6,16 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 
 fun CustomerEntity?.displayName(context: Context): String =
-    if (this == null) {
-        context.getString(R.string.orders_customer_unavailable)
-    } else {
-        displayName(
-            unnamedPrivate = context.getString(R.string.customer_unnamed_private),
-            unnamedBusiness = context.getString(R.string.customer_unnamed_business),
-        )
-    }
+    this?.displayName(
+        unnamedPrivate = context.getString(R.string.customer_unnamed_private),
+        unnamedBusiness = context.getString(R.string.customer_unnamed_business),
+    ) ?: context.getString(R.string.orders_customer_unavailable)
 
 fun CustomerEntity?.displayName(
     unnamedPrivate: String,
     unnamedBusiness: String,
 ): String =
-    if (this == null) {
-        ""
-    } else {
+    this?.run {
         when (type) {
             CustomerType.PRIVATE ->
                 listOfNotNull(firstName, lastName)
@@ -33,4 +27,4 @@ fun CustomerEntity?.displayName(
                     .orEmpty()
                     .ifBlank { unnamedBusiness }
         }
-    }
+    } ?: ""

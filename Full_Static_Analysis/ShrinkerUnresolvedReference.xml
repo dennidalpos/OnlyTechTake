@@ -1,0 +1,14 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/proguard-rules.pro</file>
+  <line>20</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/proguard-rules.pro" />
+  <problem_class id="ShrinkerUnresolvedReference" severity="ERROR" attribute_key="ERRORS_ATTRIBUTES">Unresolved reference in Shrinker Config file</problem_class>
+  <description>Unresolved class name</description>
+  <highlighted_element>kotlinx.coroutines.android.HandlerContext$HandlerPost</highlighted_element>
+  <language>SHRINKER_CONFIG</language>
+  <offset>28</offset>
+  <length>53</length>
+</problem>
+</problems>

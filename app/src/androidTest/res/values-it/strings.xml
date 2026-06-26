@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="demo_admin_display_name">Admin Demo</string>
+    <string name="demo_operator_display_name">Operatore Banco</string>
+    <string name="common_cat_pc">Computer &amp; Laptop</string>
+    <string name="common_cat_pc_desc">Riparazioni hardware e software PC</string>
+    <string name="common_cat_notebook">Notebook</string>
+    <string name="common_cat_notebook_desc">Portatili e Ultrabook</string>
+    <string name="common_cat_gaming">Gaming Laptop</string>
+    <string name="common_cat_gaming_desc">MSI, ROG, Alienware, Legion</string>
+    <string name="common_cat_rog_strix">Asus ROG Strix</string>
+    <string name="common_cat_rog_strix_desc">Pulizia interna e pasta termica</string>
+    <string name="demo_customer_name">Cliente %d</string>
+    <string name="demo_customer_business_name">Azienda %d Srl</string>
+    <string name="demo_customer_notes">Cliente demo per presentazioni (ID: %d).</string>
+    <string name="demo_order_title_1">Asus ROG Strix - Pulizia e Pasta</string>
+    <string name="demo_order_title_n">Riparazione %d</string>
+    <string name="demo_order_desc">Descrizione commessa demo %d.</string>
+    <string name="demo_order_notes">Note interne demo %d.</string>
+    <string name="demo_photo_label">Foto oggetto</string>
+    <string name="demo_signature_label">Firma cliente</string>
+    <string name="demo_privacy_snapshot">Informativa privacy demo.</string>
+    <string name="demo_terms_snapshot">Condizioni presa in carico demo.</string>
+    <string name="demo_event_title_created">Commessa creata</string>
+    <string name="demo_event_desc_created">Presa in carico demo con foto e firma cliente.</string>
+    <string name="demo_template_body">Aggiornamento {{numero_commessa}}: {{stato_commessa}} per {{cliente}}.</string>
+</resources>

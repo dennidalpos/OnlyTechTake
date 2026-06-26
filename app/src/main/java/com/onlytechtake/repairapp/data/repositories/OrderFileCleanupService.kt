@@ -30,13 +30,6 @@ class OrderFileCleanupService(
     }
 
     /**
-     * Deletes intake (staging) media for a given session.
-     */
-    fun deleteIntakeMedia(sessionId: String) {
-        deleteRecursively(getIntakeMediaDir(sessionId))
-    }
-
-    /**
      * Cleans up all staging and cache directories.
      */
     fun cleanupSharedCache(maxAgeMillis: Long = 24 * 60 * 60 * 1000L) {
@@ -75,8 +68,6 @@ class OrderFileCleanupService(
             }
         }
     }
-
-    private fun getIntakeMediaDir(sessionId: String) = mediaStorageProvider.getIntakeMediaDir(sessionId)
 
     private fun getSharedCacheDir() = File(context.cacheDir, "shared")
 

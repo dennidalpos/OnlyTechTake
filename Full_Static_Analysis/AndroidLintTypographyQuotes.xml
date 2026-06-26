@@ -1,0 +1,990 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>246</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace straight quotes (&quot;) with directional quotes (“”, &amp;amp;#8220; and &amp;amp;#8221;) ?&lt;/html&gt;</description>
+  <highlighted_element>11\&quot; and 12.9\&quot; models</highlighted_element>
+  <language>XML</language>
+  <offset>46</offset>
+  <length>22</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>495</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>customer\'s</highlighted_element>
+  <language>XML</language>
+  <offset>68</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>664</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>customer\'s</highlighted_element>
+  <language>XML</language>
+  <offset>594</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>669</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>customer\'s</highlighted_element>
+  <language>XML</language>
+  <offset>86</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>824</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace straight quotes ('') with directional quotes (‘’, &amp;amp;#8216; and &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>Category \'%1$s\' and all its subcategories will be deleted. It is not possible to delete categories...</highlighted_element>
+  <language>XML</language>
+  <offset>64</offset>
+  <length>132</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>873</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>app\'s</highlighted_element>
+  <language>XML</language>
+  <offset>90</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>73</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'oggetto</highlighted_element>
+  <language>XML</language>
+  <offset>59</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>74</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'accettazione.</highlighted_element>
+  <language>XML</language>
+  <offset>82</offset>
+  <length>16</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>75</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'oggetto</highlighted_element>
+  <language>XML</language>
+  <offset>64</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>76</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'intervento</highlighted_element>
+  <language>XML</language>
+  <offset>66</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>79</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'oggetto</highlighted_element>
+  <language>XML</language>
+  <offset>60</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>80</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'intervento</highlighted_element>
+  <language>XML</language>
+  <offset>59</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>81</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'invio</highlighted_element>
+  <language>XML</language>
+  <offset>49</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>82</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>dell\'informativa</highlighted_element>
+  <language>XML</language>
+  <offset>51</offset>
+  <length>17</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>109</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>puo\'</highlighted_element>
+  <language>XML</language>
+  <offset>59</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>121</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>gia\'</highlighted_element>
+  <language>XML</language>
+  <offset>50</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>130</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>L\'account</highlighted_element>
+  <language>XML</language>
+  <offset>53</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>131</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>L\'account</highlighted_element>
+  <language>XML</language>
+  <offset>49</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>132</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>dell\'admin</highlighted_element>
+  <language>XML</language>
+  <offset>64</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>144</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>un\'immagine</highlighted_element>
+  <language>XML</language>
+  <offset>65</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>152</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>gia\'</highlighted_element>
+  <language>XML</language>
+  <offset>48</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>164</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>L\'admin</highlighted_element>
+  <language>XML</language>
+  <offset>44</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>177</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'inizializzazione:</highlighted_element>
+  <language>XML</language>
+  <offset>52</offset>
+  <length>20</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>198</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'assistenza</highlighted_element>
+  <language>XML</language>
+  <offset>79</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>247</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace straight quotes (&quot;) with directional quotes (“”, &amp;amp;#8220; and &amp;amp;#8221;) ?&lt;/html&gt;</description>
+  <highlighted_element>Modelli 11\&quot; e 12.9\&quot;</highlighted_element>
+  <language>XML</language>
+  <offset>46</offset>
+  <length>21</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>425</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>verra\'</highlighted_element>
+  <language>XML</language>
+  <offset>56</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>465</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'immagine</highlighted_element>
+  <language>XML</language>
+  <offset>76</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>489</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>nell\'archivio</highlighted_element>
+  <language>XML</language>
+  <offset>53</offset>
+  <length>14</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>525</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>all\'ultimo</highlighted_element>
+  <language>XML</language>
+  <offset>59</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>603</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'invio</highlighted_element>
+  <language>XML</language>
+  <offset>95</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>606</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'operatore</highlighted_element>
+  <language>XML</language>
+  <offset>61</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>641</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'invio</highlighted_element>
+  <language>XML</language>
+  <offset>62</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>643</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>passera\'</highlighted_element>
+  <language>XML</language>
+  <offset>68</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>646</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>novita\'.\n\n{{proprietario_nome}}</highlighted_element>
+  <language>XML</language>
+  <offset>206</offset>
+  <length>34</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>650</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>e\'</highlighted_element>
+  <language>XML</language>
+  <offset>96</offset>
+  <length>3</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>656</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'oggetto</highlighted_element>
+  <language>XML</language>
+  <offset>121</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>658</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace straight quotes ('') with directional quotes (‘’, &amp;amp;#8216; and &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>Ciao {{cliente}}, la riparazione della commessa {{numero_commessa}} e\' in corso.\nTi aggiorneremo q...</highlighted_element>
+  <language>XML</language>
+  <offset>46</offset>
+  <length>145</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>660</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>e\'</highlighted_element>
+  <language>XML</language>
+  <offset>98</offset>
+  <length>3</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>662</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>e\'</highlighted_element>
+  <language>XML</language>
+  <offset>118</offset>
+  <length>3</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>664</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>e\'</highlighted_element>
+  <language>XML</language>
+  <offset>92</offset>
+  <length>3</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>668</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>Informativa privacy sintetica ai sensi del Regolamento UE 2016/679 (GDPR).\nTitolare: {{proprietario...</highlighted_element>
+  <language>XML</language>
+  <offset>47</offset>
+  <length>1048</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>670</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace straight quotes ('') with directional quotes (‘’, &amp;amp;#8216; and &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>Condizioni di presa in carico.\nIl cliente consegna l\'oggetto indicato in commessa e autorizza {{pr...</highlighted_element>
+  <language>XML</language>
+  <offset>44</offset>
+  <length>936</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>673</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>verra\'</highlighted_element>
+  <language>XML</language>
+  <offset>62</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>675</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>conterra\'</highlighted_element>
+  <language>XML</language>
+  <offset>69</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>685</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>verra\'</highlighted_element>
+  <language>XML</language>
+  <offset>64</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>689</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>L\'operatore</highlighted_element>
+  <language>XML</language>
+  <offset>49</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>690</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>L\'operatore</highlighted_element>
+  <language>XML</language>
+  <offset>51</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>697</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'operatore</highlighted_element>
+  <language>XML</language>
+  <offset>61</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>698</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>Vuoi disattivare l\'operatore %s? Non potrà più accedere all\'app finché non verrà riattivato.</highlighted_element>
+  <language>XML</language>
+  <offset>49</offset>
+  <length>94</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>700</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>L\'operatore</highlighted_element>
+  <language>XML</language>
+  <offset>50</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>703</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>verra\'</highlighted_element>
+  <language>XML</language>
+  <offset>76</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>706</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>dell\'app</highlighted_element>
+  <language>XML</language>
+  <offset>86</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>732</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'app</highlighted_element>
+  <language>XML</language>
+  <offset>109</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>745</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>dell\'app</highlighted_element>
+  <language>XML</language>
+  <offset>92</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>787</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>dell\'app</highlighted_element>
+  <language>XML</language>
+  <offset>65</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>788</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>dell\'applicazione</highlighted_element>
+  <language>XML</language>
+  <offset>57</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>825</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>verra\'</highlighted_element>
+  <language>XML</language>
+  <offset>66</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>831</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace straight quotes ('') with directional quotes (‘’, &amp;amp;#8216; and &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>La categoria \'%1$s\' e tutte le sue sottocategorie verranno eliminate. Non è possibile eliminare ca...</highlighted_element>
+  <language>XML</language>
+  <offset>64</offset>
+  <length>136</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>842</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>puo\'</highlighted_element>
+  <language>XML</language>
+  <offset>66</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>843</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>Verra\'</highlighted_element>
+  <language>XML</language>
+  <offset>60</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>845</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>Modalita\':</highlighted_element>
+  <language>XML</language>
+  <offset>40</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>847</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace straight quotes ('') with directional quotes (‘’, &amp;amp;#8216; and &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>Configura la modalita\' di invio dei messaggi ai clienti. Attualmente e\' supportato l\'invio manual...</highlighted_element>
+  <language>XML</language>
+  <offset>43</offset>
+  <length>119</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>849</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>modalita\'</highlighted_element>
+  <language>XML</language>
+  <offset>66</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>850</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace straight quotes ('') with directional quotes (‘’, &amp;amp;#8216; and &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>La modalita\' WhatsApp verra\' salvata.</highlighted_element>
+  <language>XML</language>
+  <offset>55</offset>
+  <length>39</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>875</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>Verra\'</highlighted_element>
+  <language>XML</language>
+  <offset>58</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>878</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>Verra\'</highlighted_element>
+  <language>XML</language>
+  <offset>57</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>881</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace straight quotes ('') with directional quotes (‘’, &amp;amp;#8216; and &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>Il backup ZIP sostituira\' database e file locali dell\'app. Dopo il ripristino sara\' richiesto un ...</highlighted_element>
+  <language>XML</language>
+  <offset>58</offset>
+  <length>112</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>887</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>Verra\' creato un file .db tramite selettore di sistema. Attenzione: contiene tutti i dati sensibili...</highlighted_element>
+  <language>XML</language>
+  <offset>54</offset>
+  <length>111</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>918</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>dall\'app</highlighted_element>
+  <language>XML</language>
+  <offset>49</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>933</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'uso</highlighted_element>
+  <language>XML</language>
+  <offset>44</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>942</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>gia\'</highlighted_element>
+  <language>XML</language>
+  <offset>58</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>947</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>puo\'</highlighted_element>
+  <language>XML</language>
+  <offset>63</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>952</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'uso</highlighted_element>
+  <language>XML</language>
+  <offset>99</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>953</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'uso</highlighted_element>
+  <language>XML</language>
+  <offset>95</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>954</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'uso</highlighted_element>
+  <language>XML</language>
+  <offset>96</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>956</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="AndroidLintTypographyQuotes" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Straight quotes can be replaced with curvy quotes, and apostrophes with typographic apostrophes.</problem_class>
+  <hints />
+  <description>&lt;html&gt;Replace apostrophe (') with typographic apostrophe (’, &amp;amp;#8217;) ?&lt;/html&gt;</description>
+  <highlighted_element>l\'account</highlighted_element>
+  <language>XML</language>
+  <offset>119</offset>
+  <length>10</length>
+</problem>
+</problems>

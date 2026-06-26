@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="demo_version_banner">VERSIONE DEMO</string>
+
     <string name="order_created_title">Commessa creata</string>
     <string name="status_updated_title">Stato aggiornato</string>
     <string name="closure_reason_prefix">Motivo chiusura: %s</string>
     <string name="order_reassigned_title">Commessa riassegnata</string>
     <string name="unassigned">Non assegnata</string>
     <string name="internal_note_added_title">Nota interna aggiunta</string>
-    <string name="order_deleted_title">Commessa eliminata</string>
     <string name="customer_feedback_recorded_title">Feedback cliente registrato</string>
     <string name="media_removed_title">Media rimosso</string>
     <string name="signature_captured_title">Firma acquisita</string>
@@ -37,7 +36,7 @@
     <string name="action_record_result">Registra risultato</string>
     <string name="action_start_repair">Avvia riparazione</string>
     <string name="action_ready_for_pickup">Pronta al ritiro</string>
-    <string name="action_close_order">Chiudi commessa</string>
+    <string name="action_close_order">Chiudi</string>
     <string name="action_none_label">Nessuna azione</string>
     <string name="action_wait_quote">Attendere accettazione o rifiuto preventivo</string>
     <string name="action_notify_not_repairable">Avvisare il cliente e preparare il ritiro</string>
@@ -104,29 +103,7 @@
     <string name="pdf_label_terms_accepted">Condizioni: Accettate (v%1$d)</string>
     <string name="pdf_no_description">Nessuna descrizione</string>
 
-    <string name="backup_pdf_order_summary">Riepilogo commessa %s</string>
-    <string name="backup_pdf_number">Numero: %s</string>
-    <string name="backup_pdf_title">Titolo: %s</string>
-    <string name="backup_pdf_status">Stato: %s</string>
-    <string name="backup_pdf_closure_reason">Motivo chiusura: %s</string>
-    <string name="backup_pdf_customer">Cliente: %s</string>
-    <string name="backup_pdf_category">Categoria: %s</string>
-    <string name="backup_pdf_operator">Operatore: %s</string>
-    <string name="backup_pdf_created_at">Data creazione: %s</string>
-    <string name="backup_pdf_description">Descrizione: %s</string>
-    <string name="backup_pdf_timeline">Timeline</string>
-    <string name="backup_pdf_no_events">Nessun evento registrato.</string>
-    <string name="backup_pdf_signatures">Firme</string>
-    <string name="backup_pdf_no_signatures">Nessuna firma acquisita.</string>
-    <string name="backup_pdf_signed_conditions">Condizioni firmate</string>
-    <string name="backup_pdf_privacy_version">Privacy v%1$d: %2$s</string>
-    <string name="backup_pdf_terms_version">Condizioni v%1$d: %2$s</string>
-    <string name="backup_pdf_none">Nessuna</string>
-    <string name="backup_pdf_status_change">Cambio stato: %1$s -&gt; %2$s</string>
-    <string name="backup_pdf_expected_feedback">Feedback atteso: %s</string>
-    <string name="backup_pdf_customer_feedback">Feedback cliente: %s</string>
-    <string name="backup_pdf_feedback_note">Nota feedback: %s</string>
-    <string name="backup_pdf_feedback_recorded">Feedback registrato: %s</string>
+
     <string name="error_destination_unavailable">Destinazione non disponibile</string>
     <string name="error_diagnosis_only_during">La diagnosi puo\' essere registrata solo durante o dopo la diagnosi</string>
     <string name="timeline_result_summary">Sintesi risultato: %s</string>
@@ -153,11 +130,14 @@
     <string name="error_admin_cannot_be_deleted">L\'account Admin non può essere eliminato</string>
     <string name="error_admin_permissions_immutable">I permessi dell\'admin non possono essere modificati</string>
     <string name="timeline_photo_attached">Foto allegata</string>
-    <string name="timeline_photo_final">Foto finale</string>
     <string name="timeline_attachment_added">Allegato aggiunto</string>
     <string name="timeline_image_modified">Immagine modificata</string>
 
     <string name="error_photo_not_saved">Foto non salvata</string>
+    <string name="label_repair_order">commessa</string>
+    <string name="label_media">media</string>
+    <string name="label_signature">firma</string>
+    <string name="label_document">documento</string>
     <string name="label_attachment">allegato</string>
     <string name="error_attachment_unavailable">Allegato non disponibile</string>
     <string name="error_attachment_empty">Allegato vuoto o non salvato</string>
@@ -180,8 +160,6 @@
     <string name="error_invalid_zip_backup">Backup ZIP non valido</string>
     <string name="error_invalid_backup_path">Percorso backup non valido</string>
     <string name="error_type_reset_to_confirm">Digitare %s per confermare</string>
-    <string name="error_invalid_max_attachment_size">Dimensione massima allegato non valida</string>
-    <string name="error_empty_attachment_allowlist">Allowlist allegati vuota</string>
     <string name="error_unrecognized_attachment_type">Tipo allegato non riconosciuto</string>
     <string name="error_attachment_type_not_allowed">Tipo allegato non consentito: %s</string>
     <string name="error_critical_db_error">Errore critico database</string>
@@ -196,7 +174,6 @@
     <string name="error_terms_acceptance_required">Accettazione condizioni obbligatoria</string>
     <string name="error_invalid_signature">Firma non valida</string>
     <string name="error_signature_save_failed">Salvataggio firma non riuscito</string>
-    <string name="error_message_empty">Messaggio vuoto</string>
     <string name="error_closure_reason_required">Motivo chiusura obbligatorio</string>
     <string name="error_admin_creation_failed">Creazione admin non riuscita</string>
     <string name="error_init_failed">Errore durante l\'inizializzazione: %s</string>
@@ -228,7 +205,6 @@
     <string name="config_backup_logs_clear_confirm_text">Sei sicuro di voler eliminare tutti i log diagnostici? Questa operazione libererà spazio.</string>
     <string name="config_backup_logs_send_confirm_title">Invia Log</string>
     <string name="config_backup_logs_send_confirm_text">Verrà generato un file compresso con i dati tecnici da inviare via WhatsApp.</string>
-    <string name="success_logs_cleared">Log svuotati con successo.</string>
 
     <string name="error_feature_pro_only">Funzione disponibile nella versione Full</string>
     <string name="error_db_not_created">Database non ancora creato</string>
@@ -236,104 +212,9 @@
     <string name="error_backup_unavailable">Backup non disponibile</string>
     <string name="error_backup_incompatible">Versione backup non compatibile</string>
     <string name="error_db_missing_in_backup">Database mancante nel backup</string>
-    <string name="label_demo_admin">Admin Demo</string>
 
-    <string name="showcase_op_reception">Anna Receptionist</string>
-    <string name="showcase_op_technician">Marco Tecnico</string>
-    <string name="showcase_op_manager">Elena Manager</string>
-    <string name="showcase_admin">Admin Showcase</string>
-    <string name="showcase_cat_smartphone">Smartphone</string>
-    <string name="showcase_cat_smartphone_desc">Riparazione telefoni cellulari</string>
-    <string name="showcase_cat_apple_desc">Dispositivi iOS</string>
-    <string name="showcase_cat_iphone_desc">Tutti i modelli iPhone</string>
-    <string name="showcase_cat_iphone_14_pro_desc">Riparazione display e vetro posteriore</string>
-    <string name="showcase_cat_iphone_13_desc">Sostituzione batteria e connettore</string>
-    <string name="showcase_cat_samsung_desc">Dispositivi Android Galaxy</string>
-    <string name="showcase_cat_galaxy_s">Serie Galaxy S</string>
-    <string name="showcase_cat_galaxy_s_desc">Fascia alta Samsung</string>
-    <string name="showcase_cat_s23_ultra_desc">Riparazione schermo curvo e S-Pen</string>
-    <string name="showcase_cat_pc">Computer &amp; Laptop</string>
-    <string name="showcase_cat_pc_desc">Riparazioni hardware e software PC</string>
-    <string name="showcase_cat_notebook_desc">Portatili e Ultrabook</string>
-    <string name="showcase_cat_gaming_laptop">Gaming Laptop</string>
-    <string name="showcase_cat_gaming_laptop_desc">MSI, ROG, Alienware, Legion</string>
-    <string name="showcase_cat_rog_strix_desc">Pulizia interna e pasta termica</string>
-    <string name="showcase_cat_windows_laptop">Windows Laptop</string>
-    <string name="showcase_cat_windows_laptop_desc">Asus, HP, Lenovo, Dell</string>
-    <string name="showcase_cat_asus_zenbook_desc">Riparazione cerniere e display</string>
-    <string name="showcase_cat_console">Console Game</string>
-    <string name="showcase_cat_console_desc">Riparazioni PlayStation, Xbox, Switch</string>
-    <string name="showcase_cat_sony_desc">Ecosistema PlayStation</string>
-    <string name="showcase_cat_ps5_desc">Revisione e riparazione PS5</string>
-    <string name="showcase_cat_ps5_hdmi">Sostituzione Porta HDMI</string>
-    <string name="showcase_cat_ps5_hdmi_desc">Sostituzione connettore video 4K</string>
-    <string name="showcase_cat_dualsense_desc">Riparazione Analogico Drift e Tasti</string>
-    <string name="showcase_cat_tablet_desc">Riparazioni iPad e Android</string>
-    <string name="showcase_cat_ipad_desc">Tablet Apple</string>
-    <string name="showcase_cat_ipad_pro_desc">Modelli 11\" e 12.9\"</string>
-    <string name="showcase_cat_ipad_glass">Sostituzione Vetro/LCD</string>
-    <string name="showcase_cat_ipad_glass_desc">Riparazione pannello touch</string>
 
-    <string name="showcase_customer_notes">Cliente di test.</string>
-    <string name="showcase_order_title">Riparazione %1$s - Modello %2$d</string>
-    <string name="showcase_order_description">Problema riscontrato: il dispositivo non funziona correttamente.</string>
-    <string name="showcase_order_internal_notes">Nota interna di test.</string>
-    <string name="showcase_event_intake_desc">Dispositivo ricevuto al banco.</string>
-    <string name="showcase_event_closed_desc">Riparazione completata e consegnata.</string>
-    <string name="showcase_photo_label">Oggetto: %s</string>
-    <string name="showcase_sig_label">Firma: %s</string>
-    <string name="showcase_privacy_snapshot">Informativa Privacy Standard</string>
-    <string name="showcase_terms_snapshot">Termini e Condizioni di Riparazione</string>
-    <string name="demo_admin_display_name">Admin Demo</string>
-    <string name="demo_operator_display_name">Operatore Banco</string>
-    <string name="demo_cat_pc">Computer &amp; Laptop</string>
-    <string name="demo_cat_pc_desc">Riparazioni hardware e software PC</string>
-    <string name="demo_cat_notebook">Notebook</string>
-    <string name="demo_cat_notebook_desc">Portatili e Ultrabook</string>
-    <string name="demo_cat_gaming">Gaming Laptop</string>
-    <string name="demo_cat_gaming_desc">MSI, ROG, Alienware, Legion</string>
-    <string name="demo_cat_rog_strix">Asus ROG Strix</string>
-    <string name="demo_cat_rog_strix_desc">Pulizia interna e pasta termica</string>
-    <string name="demo_customer_name">Cliente %d</string>
-    <string name="demo_customer_business_name">Azienda %d Srl</string>
-    <string name="demo_customer_notes">Cliente demo %d per presentazioni.</string>
-    <string name="demo_order_title_1">Asus ROG Strix - Pulizia e Pasta</string>
-    <string name="demo_order_title_n">Riparazione %d</string>
-    <string name="demo_order_desc">Descrizione commessa demo %d.</string>
-    <string name="demo_order_notes">Note interne demo %d.</string>
-    <string name="demo_photo_label">Foto oggetto</string>
-    <string name="demo_signature_label">Firma cliente</string>
-    <string name="demo_privacy_snapshot">Informativa privacy demo.</string>
-    <string name="demo_terms_snapshot">Condizioni presa in carico demo.</string>
-    <string name="demo_event_title_created">Commessa creata</string>
-    <string name="demo_event_desc_created">Presa in carico demo con foto e firma cliente.</string>
-    <string name="demo_template_body">Aggiornamento {{numero_commessa}}: {{stato_commessa}} per {{cliente}}.</string>
-    <string name="showcase_business_name_1">Tech Solutions Srl</string>
-    <string name="showcase_business_name_2">Global Food SpA</string>
-    <string name="showcase_business_name_3">Studio Legale Rossi</string>
-    <string name="showcase_business_name_4">Officina Meccanica</string>
-    <string name="showcase_business_name_5">Bar Centrale</string>
 
-    <string name="showcase_private_name_1">Mario</string>
-    <string name="showcase_private_surname_1">Rossi</string>
-    <string name="showcase_private_name_2">Luigi</string>
-    <string name="showcase_private_surname_2">Bianchi</string>
-    <string name="showcase_private_name_3">Giovanna</string>
-    <string name="showcase_private_surname_3">Verdi</string>
-    <string name="showcase_private_name_4">Francesca</string>
-    <string name="showcase_private_surname_4">Neri</string>
-    <string name="showcase_private_name_5">Roberto</string>
-    <string name="showcase_private_surname_5">Gialli</string>
-
-    <string name="showcase_business_fictitious">Azienda di Esempio Srl</string>
-    <string name="showcase_private_fictitious_name">Privato</string>
-    <string name="showcase_private_fictitious_surname">di Esempio</string>
-
-    <string name="showcase_owner_name">OnlyTechTake Lab Showcase</string>
-    <string name="showcase_owner_vat">IT01234567890</string>
-    <string name="showcase_owner_address">Via delle Riparazioni 42, 00100 Roma (RM)</string>
-    <string name="showcase_owner_email">showcase@onlytechtake.it</string>
-    <string name="showcase_owner_phone">+39 06 1234567</string>
 
     <string name="priority_low">Bassa</string>
     <string name="priority_normal">Normale</string>
@@ -358,8 +239,7 @@
 
     <string name="share_pdf_text">In allegato lo stato avanzamento della commessa.</string>
 
-    <string name="auth_showcase_initializing">Inizializzazione dati showcase…</string>
-    <string name="auth_showcase_preparing">Preparazione ambiente…</string>
+
     <string name="auth_system_ready">Sistema pronto</string>
     <string name="auth_password_change_top">Cambio password obbligatorio</string>
     <string name="auth_security_title">Sicurezza account</string>
@@ -386,13 +266,12 @@
     <string name="auth_password">Password</string>
     <string name="auth_confirm_password">Conferma password</string>
     <string name="auth_recovery_action">Problemi di accesso? Recupero admin</string>
-    <string name="auth_demo_action">Avvia modalità demo</string>
+
     <string name="auth_show_password">Mostra password</string>
     <string name="auth_hide_password">Nascondi password</string>
 
     <string name="dashboard_home">Home</string>
     <string name="dashboard_new">Nuova</string>
-    <string name="dashboard_customers">Clienti</string>
     <string name="dashboard_orders">Commesse</string>
     <string name="dashboard_config">Setup</string>
     <string name="settings_select_section_title">Seleziona una sezione</string>
@@ -411,12 +290,8 @@
     <string name="home_title">Banco riparazioni</string>
     <string name="home_pro_cta_new">NUOVA COMMESSA</string>
     <string name="home_pro_status_operational">BANCO OPERATIVO</string>
-    <string name="home_demo_cta_try">PROVA COMMESSA</string>
-    <string name="home_demo_pro_features">Scopri i vantaggi della versione Pro</string>
-    <string name="home_showcase_scenario">SCENARIO DIMOSTRATIVO</string>
-    <string name="home_showcase_walkthrough">Avvia Walkthrough</string>
+
     <string name="home_metric_operators">Operatori</string>
-    <string name="home_metric_customers">Clienti</string>
     <string name="home_metric_active">Attive</string>
     <string name="home_new_order">Nuova commessa</string>
     <string name="home_empty_queue">Nessuna commessa in questa coda.</string>
@@ -425,7 +300,7 @@
     <string name="home_open_queue">Apri coda</string>
     <string name="home_backup_reminder_title">Backup consigliato</string>
     <string name="home_backup_reminder_settings">Setup backup</string>
-    <string name="home_demo_pro_features_description">Backup ZIP, Export Excel, Gestione Operatori e Commesse illimitate sono disponibili nella versione Pro.</string>
+
 
     <string name="backup_run_full_zip">Esegui backup ZIP completo</string>
     <string name="backup_status_never">Mai eseguito</string>
@@ -436,21 +311,16 @@
     </plurals>
     <string name="backup_status_failed">Ultimo tentativo fallito</string>
 
-    <string name="nav_back">Indietro</string>
-    <string name="nav_next">Avanti</string>
+    <string name="action_back">Indietro</string>
+    <string name="action_next">Avanti</string>
+    <string name="action_close">Chiudi</string>
+    <string name="action_confirm">Conferma</string>
     <string name="nav_cancel_and_close">Annulla e chiudi</string>
     <string name="content_description_info">Informazioni</string>
-    <string name="content_description_back">Indietro</string>
-    <string name="content_description_close">Chiudi</string>
     <string name="content_description_delete">Elimina</string>
-    <string name="content_description_delete_order">Elimina commessa</string>
-    <string name="order_confirm_delete_title">Eliminare commessa?</string>
-    <string name="order_confirm_delete_text">Tutti i dati, allegati, firme e record di questa commessa verranno rimossi permanentemente. Questa azione non è reversibile.</string>
-    <string name="order_exit_close">Chiudi ed esci</string>
-    <string name="order_delete_media_title">Eliminare media?</string>
-    <string name="order_delete_media_text">Il file %1$s verra\' rimosso permanentemente.</string>
-    <string name="order_delete_signature_title">Eliminare firma?</string>
-    <string name="order_delete_signature_text">La firma verrà rimossa permanentemente.</string>
+    <string name="content_description_delete_order">Elimina</string>
+    <string name="action_delete_confirm_title">Eliminare %1$s?</string>
+    <string name="action_delete_confirm_text">\%1$s verra\' rimosso permanentemente. Questa azione non è reversibile.</string>
     <string name="order_not_repairable_note">Cliente avvisato: dispositivo non riparabile</string>
     <string name="content_description_edit">Modifica</string>
     <string name="content_description_open">Apri</string>
@@ -505,8 +375,8 @@
     <string name="customer_unnamed_private">Privato senza nome</string>
     <string name="customer_unnamed_business">Azienda senza nome</string>
 
-    <string name="customer_title">Clienti</string>
-    <string name="customer_search_label">Cerca cliente</string>
+    <string name="label_customers">Clienti</string>
+    <string name="label_search_customer">Cerca cliente</string>
     <string name="customer_new">Nuovo cliente</string>
     <string name="customer_edit">Modifica cliente</string>
     <string name="customer_recent">Clienti recenti</string>
@@ -523,10 +393,10 @@
     <string name="customer_confirm_save_text">Salvare il cliente?</string>
     <string name="customer_confirm_update_text">Aggiornare i dati del cliente selezionato?</string>
     <string name="customer_select">Seleziona cliente</string>
-    <string name="confirm">Conferma</string>
+
     <string name="customer_select_detail_hint">Seleziona un cliente per vedere i dettagli</string>
     <string name="customer_select_detail_title">Nessun cliente selezionato</string>
-    <string name="customer_detail_close">Chiudi</string>
+
     <string name="customer_detail_edit">Modifica</string>
     <string name="customer_open_orders">Commesse aperte (%1$d)</string>
     <string name="customer_closed_orders">Storico chiuse (%1$d)</string>
@@ -555,7 +425,6 @@
     <string name="intake_step_privacy">Privacy e firma</string>
 
 
-    <string name="intake_search_customer">Cerca cliente</string>
     <string name="intake_selected_customer">Cliente selezionato: %s</string>
     <string name="intake_change_customer">Cambia cliente</string>
     <string name="intake_insert_new_customer">Inserisci nuovo cliente</string>
@@ -569,7 +438,7 @@
     <string name="intake_media_attach_file">Allega file</string>
     <string name="intake_media_remove">Rimuovi</string>
     <string name="intake_media_summary">%1$s - %2$d KB</string>
-    <string name="intake_submit_title">Conferma</string>
+
     <string name="intake_submit_missing">Mancano: %s</string>
     <string name="intake_submit_create">Crea commessa in carico</string>
     <string name="intake_help">Compila i passaggi per creare una nuova commessa. Puoi salvare una bozza e riprendere in seguito.</string>
@@ -600,7 +469,6 @@
     <string name="orders_filter_open_unassigned">Aperte (non assegnate)</string>
     <string name="orders_filter_closed_discarded">Chiuse (chiuse o scartate)</string>
     <string name="orders_filter_in_progress_assigned">In lavorazione (assegnate)</string>
-    <string name="orders_search_label">Cerca cliente</string>
     <string name="orders_select_detail_hint">Seleziona una commessa per vedere i dettagli</string>
     <string name="orders_select_detail_title">Nessuna commessa selezionata</string>
     <string name="orders_category_unavailable">Categoria non disponibile</string>
@@ -638,8 +506,10 @@
     <string name="order_share_status_chooser">Invia stato avanzamento</string>
     <string name="share_title_status_report">Stato avanzamento %s</string>
     <string name="share_title_document">Documento %s</string>
+    <string name="error_repairable_diagnosis_required">Solo una diagnosi riparabile può passare in riparazione</string>
+    <string name="error_not_repairable_diagnosis_required">Il passaggio diretto al ritiro richiede una diagnosi non riparabile</string>
     <string name="error_unknown">Errore</string>
-    <string name="error_unknown_generic">Si è verificato un errore</string>
+    <string name="error_log_generation_failed">Impossibile generare il file dei log</string>
     <string name="order_diagnosis_repairable">Riparabile</string>
     <string name="order_diagnosis_not_repairable">Non riparabile</string>
     <string name="template_diagnosis_not_repairable_reason">Diagnosi tecnica: non riparabile</string>
@@ -696,8 +566,7 @@
     <string name="template_condizioni_title">Condizioni presa in carico</string>
     <string name="template_condizioni_body">Condizioni di presa in carico.\nIl cliente consegna l\'oggetto indicato in commessa e autorizza {{proprietario_nome}} a custodirlo, verificarlo e svolgere diagnosi tecnica.\nLa diagnosi puo\' richiedere l\'apertura del dispositivo o il collegamento a strumenti di test. L\'intervento di riparazione prosegue solo dopo accettazione del preventivo.\n{{proprietario_nome}} non risponde di perdita dati, password non comunicate, difetti preesistenti o deterioramenti inevitabili emersi durante la diagnosi. È responsabilità del cliente eseguire il backup prima della consegna.\nGli importi del preventivo devono essere accettati prima dell\'avvio. In caso di mancato ritiro entro 90 giorni, l\'oggetto verra\' gestito secondo le norme vigenti sui beni abbandonati.\nCon la firma il cliente conferma di aver letto e accettato l\'informativa privacy e le presenti condizioni.\n\nLaboratorio: {{proprietario_nome}} - {{proprietario_indirizzo}}</string>
 
-    <string name="order_confirm_delete_document_title">Eliminare documento?</string>
-    <string name="order_confirm_delete_document_text">Il file verra\' rimosso permanentemente.</string>
+
     <string name="order_pdf_missing_signature_title">Firma mancante</string>
     <string name="order_pdf_missing_signature_text">Il documento non conterra\' la firma del cliente. Proseguire?</string>
     <string name="yes_confirmed">Sì, confermato</string>
@@ -757,8 +626,6 @@
     <string name="admin_current_password">Password attuale</string>
     <string name="admin_delete_all_orders_tooltip">Elimina permanentemente commesse, timeline, messaggi, foto, firme e documenti.</string>
     <string name="admin_total_reset_tooltip">Rimuove account, clienti, configurazioni e commesse, riportando l\'app allo stato iniziale.</string>
-    <string name="admin_backup_overdue_title">Attenzione: nessun backup recente trovato</string>
-    <string name="admin_backup_overdue_text">Esegui un backup completo prima di procedere con operazioni di cancellazione dati.</string>
     <string name="admin_delete_all_orders_field_short">Digita %s</string>
     <string name="admin_total_reset_field">Digita %s</string>
     <string name="admin_delete_all_orders_confirmation_value">CANCELLA TUTTO</string>
@@ -775,13 +642,11 @@
     <string name="config_template_default_label">Default (%s)</string>
     <string name="config_template_step_prefix">Step %1$d</string>
     <string name="config_template_legal_step">Legale</string>
-    <string name="config_template_assigned_template">Template assegnato: %s</string>
     <string name="config_template_status_default">Sistema</string>
     <string name="config_template_status_associated">Associato</string>
     <string name="config_template_status_free">Libero</string>
     <string name="config_template_status_missing">Mancante</string>
     <string name="config_template_status_not_configured">Non configurato</string>
-    <string name="config_template_unassigned_label">Non usato da attivatori</string>
     <string name="config_template_reset_defaults">Ripristina template default</string>
     <string name="config_template_reset_confirm_title">Ripristinare template default?</string>
     <string name="config_template_reset_confirm_text">I template di sistema torneranno ai testi predefiniti e le associazioni personalizzate verranno rimosse. I template personalizzati resteranno disponibili ma non associati.</string>
@@ -899,7 +764,6 @@
 
     <string name="config_backup_tooltip">Gestisci promemoria e file tramite il selettore documenti Android.</string>
     <string name="config_backup_close">Chiudi setup backup</string>
-    <string name="config_backup_orders_tooltip">Esporta tutte le commesse in un file Excel leggibile da PC.</string>
 
     <string name="config_backup_export_xlsx">Export commesse XLSX</string>
     <string name="config_backup_confirm_export_xlsx_title">Esportare commesse?</string>
@@ -910,12 +774,8 @@
     <string name="config_backup_restore_zip">Ripristina ZIP</string>
     <string name="config_backup_confirm_restore_zip_title">Ripristinare backup?</string>
     <string name="config_backup_confirm_restore_zip_text">Il backup ZIP sostituira\' database e file locali dell\'app. Dopo il ripristino sara\' richiesto un nuovo login.</string>
-    <string name="config_backup_orders_export_title">Esportazione Commesse</string>
 
 
-    <string name="admin_export_database">Export database SQLite</string>
-    <string name="admin_confirm_export_database_title">Esportare database?</string>
-    <string name="admin_confirm_export_database_text">Verra\' creato un file .db tramite selettore di sistema. Attenzione: contiene tutti i dati sensibili dell\'app.</string>
 
     <string name="export_xlsx_header_order_number">Numero commessa</string>
     <string name="export_xlsx_header_title">Titolo</string>
@@ -979,16 +839,6 @@
     <string name="catalog_error_parent_not_found">Categoria padre non trovata</string>
     <string name="catalog_error_depth_limit">Profondità massima raggiunta (4 livelli)</string>
 
-    <plurals name="demo_error_order_limit">
-        <item quantity="one">Limite Demo raggiunto. La versione Demo consente %1$d sola commessa e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
-        <item quantity="many">Limite Demo raggiunto. La versione Demo consente %1$d commesse e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
-        <item quantity="other">Limite Demo raggiunto. La versione Demo consente %1$d commesse e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
-    </plurals>
-    <string name="demo_error_operator_not_available">La versione Demo non consente la creazione di operatori. Usa solo l\'account admin locale.</string>
-    <plurals name="demo_error_operator_limit">
-        <item quantity="one">Limite Demo raggiunto. Massimo %1$d operatore consentito nella versione Demo. Per continuare senza limiti, attiva la versione Full.</item>
-        <item quantity="many">Limite Demo raggiunto. Massimo %1$d operatori consentiti nella versione Demo. Per continuare senza limiti, attiva la versione Full.</item>
-        <item quantity="other">Limite Demo raggiunto. Massimo %1$d operatori consentiti nella versione Demo. Per continuare senza limiti, attiva la versione Full.</item>
-    </plurals>
+
 
 </resources>

@@ -138,7 +138,7 @@ fun SettingsPanel(
             text = confirmText,
             confirmButton = {
                 AppButton(
-                    text = stringResource(R.string.confirm),
+                    text = stringResource(R.string.action_confirm),
                     onClick = {
                         confirmAction?.invoke()
                         confirmTitle = null

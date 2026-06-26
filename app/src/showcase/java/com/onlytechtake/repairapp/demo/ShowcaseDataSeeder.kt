@@ -141,8 +141,8 @@ object ShowcaseDataSeeder {
                         "cat-smartphone",
                         null,
                         0,
-                        context.getString(R.string.showcase_cat_smartphone),
-                        context.getString(R.string.showcase_cat_smartphone_desc),
+                        context.getString(R.string.common_cat_smartphone),
+                        context.getString(R.string.common_cat_smartphone_desc),
                         true,
                     ),
                     OrderCategoryEntity(
@@ -205,8 +205,8 @@ object ShowcaseDataSeeder {
                         "cat-pc",
                         null,
                         0,
-                        context.getString(R.string.showcase_cat_pc),
-                        context.getString(R.string.showcase_cat_pc_desc),
+                        context.getString(R.string.common_cat_pc),
+                        context.getString(R.string.common_cat_pc_desc),
                         true,
                     ),
                     OrderCategoryEntity(
@@ -214,15 +214,15 @@ object ShowcaseDataSeeder {
                         "cat-pc",
                         1,
                         "Notebook",
-                        context.getString(R.string.showcase_cat_notebook_desc),
+                        context.getString(R.string.common_cat_notebook_desc),
                         true,
                     ),
                     OrderCategoryEntity(
                         "cat-gaming-laptop",
                         "cat-notebook",
                         2,
-                        context.getString(R.string.showcase_cat_gaming_laptop),
-                        context.getString(R.string.showcase_cat_gaming_laptop_desc),
+                        context.getString(R.string.common_cat_gaming),
+                        context.getString(R.string.common_cat_gaming_desc),
                         true,
                     ),
                     OrderCategoryEntity(
@@ -230,14 +230,14 @@ object ShowcaseDataSeeder {
                         "cat-gaming-laptop",
                         3,
                         "Asus ROG Strix",
-                        context.getString(R.string.showcase_cat_rog_strix_desc),
+                        context.getString(R.string.common_cat_rog_strix_desc),
                         true,
                     ),
                     OrderCategoryEntity(
                         "cat-windows-laptop",
                         "cat-notebook",
                         2,
-                        context.getString(R.string.showcase_cat_windows_laptop),
+                        context.getString(R.string.common_cat_notebook),
                         context.getString(R.string.showcase_cat_windows_laptop_desc),
                         true,
                     ),
@@ -329,14 +329,24 @@ object ShowcaseDataSeeder {
                 (1..6).map { i ->
                     val name =
                         if (i <= 5) {
-                            val resId = context.resources.getIdentifier("showcase_private_name_$i", "string", context.packageName)
+                            val resId =
+                                context.resources.getIdentifier(
+                                    "showcase_private_name_$i",
+                                    "string",
+                                    context.packageName,
+                                )
                             context.getString(resId)
                         } else {
                             context.getString(R.string.showcase_private_fictitious_name)
                         }
                     val surname =
                         if (i <= 5) {
-                            val resId = context.resources.getIdentifier("showcase_private_surname_$i", "string", context.packageName)
+                            val resId =
+                                context.resources.getIdentifier(
+                                    "showcase_private_surname_$i",
+                                    "string",
+                                    context.packageName,
+                                )
                             context.getString(resId)
                         } else {
                             context.getString(R.string.showcase_private_fictitious_surname)
@@ -349,7 +359,14 @@ object ShowcaseDataSeeder {
                         lastName = surname,
                         companyName = null,
                         vatNumber = null,
-                        taxCode = if (i <= 5) "CUSTPRV$i${UUID.randomUUID().toString().take(5)}" else "PRIVATO12345678",
+                        taxCode =
+                            if (i <= 5) {
+                                "CUSTPRV$i${
+                                    UUID.randomUUID().toString().take(5)
+                                }"
+                            } else {
+                                "PRIVATO12345678"
+                            },
                         phone = "+39 333 100 200$i",
                         email = "customer.p$i@example.com",
                         address = "Via Roma $i, Milano",
@@ -365,7 +382,12 @@ object ShowcaseDataSeeder {
                 (1..6).map { i ->
                     val businessName =
                         if (i <= 5) {
-                            val resId = context.resources.getIdentifier("showcase_business_name_$i", "string", context.packageName)
+                            val resId =
+                                context.resources.getIdentifier(
+                                    "showcase_business_name_$i",
+                                    "string",
+                                    context.packageName,
+                                )
                             context.getString(resId)
                         } else {
                             context.getString(R.string.showcase_business_fictitious)
@@ -378,7 +400,14 @@ object ShowcaseDataSeeder {
                         lastName = null,
                         companyName = businessName,
                         vatNumber = if (i <= 5) "0123456789$i" else "00000000000",
-                        taxCode = if (i <= 5) "BCN${UUID.randomUUID().toString().take(13)}" else "BUSINESS123456",
+                        taxCode =
+                            if (i <= 5) {
+                                "BCN${
+                                    UUID.randomUUID().toString().take(13)
+                                }"
+                            } else {
+                                "BUSINESS123456"
+                            },
                         phone = "+39 02 555 666$i",
                         email = "info@business$i@example.com",
                         address = "Piazza Affari $i, Milano",

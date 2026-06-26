@@ -110,7 +110,7 @@ class OrderMediaRepository(
                     file.delete()
                     throw error
                 }
-                require(file.exists() && file.length() > 0L) { context.getString(R.string.error_attachment_empty) }
+                require(file.exists() && (file.length() > 0L)) { context.getString(R.string.error_attachment_empty) }
 
                 mediaOptimizer.optimize(file)
                 val bounds =
@@ -147,19 +147,6 @@ class OrderMediaRepository(
             timelineTitle = context.getString(R.string.timeline_photo_attached),
         )
 
-    suspend fun registerCapturedFinalPhoto(
-        actor: AuthenticatedUser,
-        orderId: String,
-        file: File,
-    ): Result<OrderMediaEntity> =
-        registerCapturedImage(
-            actor = actor,
-            orderId = orderId,
-            file = file,
-            mediaType = MEDIA_TYPE_FINAL_PHOTO,
-            timelineTitle = context.getString(R.string.timeline_photo_final),
-        )
-
     private suspend fun registerCapturedImage(
         actor: AuthenticatedUser,
         orderId: String,
@@ -170,7 +157,7 @@ class OrderMediaRepository(
         withContext(Dispatchers.IO) {
             runCatching {
                 requireWritableOrder(actor, orderId)
-                require(file.exists() && file.length() > 0L) { context.getString(R.string.error_photo_not_saved) }
+                require(file.exists() && (file.length() > 0L)) { context.getString(R.string.error_photo_not_saved) }
 
                 mediaOptimizer.optimize(file)
 
@@ -228,7 +215,7 @@ class OrderMediaRepository(
                     file.delete()
                     throw error
                 }
-                require(file.exists() && file.length() > 0L) { context.getString(R.string.error_attachment_empty) }
+                require(file.exists() && (file.length() > 0L)) { context.getString(R.string.error_attachment_empty) }
 
                 mediaOptimizer.optimize(file)
                 val bounds =
@@ -352,7 +339,7 @@ class OrderMediaRepository(
                 val entities =
                     stagedMedia.mapIndexed { index, staged ->
                         val source = File(staged.localPath)
-                        require(source.exists() && source.length() > 0L) {
+                        require(source.exists() && (source.length() > 0L)) {
                             context.getString(
                                 R.string.error_intake_file_unavailable,
                                 staged.fileName,
@@ -540,7 +527,7 @@ class OrderMediaRepository(
             source.inputStream().use { input ->
                 FileOutputStream(destination).use { output -> input.copyTo(output) }
             }
-            check(destination.exists() && destination.length() > 0L) { context.getString(R.string.error_media_move_failed) }
+            check(destination.exists() && (destination.length() > 0L)) { context.getString(R.string.error_media_move_failed) }
             source.delete()
             destination
         } catch (error: Exception) {
@@ -593,7 +580,6 @@ class OrderMediaRepository(
 
     private companion object {
         const val MEDIA_TYPE_PHOTO = "PHOTO"
-        const val MEDIA_TYPE_FINAL_PHOTO = "FINAL_PHOTO"
         const val MEDIA_TYPE_IMAGE = "IMAGE"
         const val MEDIA_TYPE_DOCUMENT = "DOCUMENT"
         const val MIME_TYPE_JPEG = "image/jpeg"

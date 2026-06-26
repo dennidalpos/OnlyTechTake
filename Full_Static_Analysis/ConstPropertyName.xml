@@ -1,0 +1,1354 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>4</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags DashboardTabs" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;DashboardTabs&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>DashboardTabs</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>5</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags LogoutButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;LogoutButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>LogoutButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>6</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags HomeNewOrderButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;HomeNewOrderButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>HomeNewOrderButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>7</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags OrdersFilterButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;OrdersFilterButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>OrdersFilterButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>8</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags DashboardDiscardChangesButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;DashboardDiscardChangesButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>DashboardDiscardChangesButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>29</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>10</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags AuthUsernameField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;AuthUsernameField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>AuthUsernameField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>17</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>11</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags AuthPasswordField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;AuthPasswordField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>AuthPasswordField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>17</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags AuthSubmitButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;AuthSubmitButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>AuthSubmitButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>16</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>14</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags NewOrderCustomerSearchField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;NewOrderCustomerSearchField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>NewOrderCustomerSearchField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>27</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>15</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags NewOrderInsertCustomerButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;NewOrderInsertCustomerButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>NewOrderInsertCustomerButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>28</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>16</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags NewOrderFirstNameField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;NewOrderFirstNameField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>NewOrderFirstNameField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>22</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>17</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags NewOrderLastNameField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;NewOrderLastNameField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>NewOrderLastNameField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>21</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>18</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags NewOrderPhoneField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;NewOrderPhoneField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>NewOrderPhoneField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>19</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags NewOrderEmailField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;NewOrderEmailField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>NewOrderEmailField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>20</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags NewOrderSaveCustomerButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;NewOrderSaveCustomerButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>NewOrderSaveCustomerButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>26</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>21</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags NewOrderStep1NextButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;NewOrderStep1NextButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>NewOrderStep1NextButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>23</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>22</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags NewOrderStep2NextButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;NewOrderStep2NextButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>NewOrderStep2NextButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>23</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>23</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags NewOrderStep3NextButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;NewOrderStep3NextButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>NewOrderStep3NextButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>23</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>24</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags NewOrderStep4NextButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;NewOrderStep4NextButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>NewOrderStep4NextButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>23</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>25</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags NewOrderStep5NextButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;NewOrderStep5NextButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>NewOrderStep5NextButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>23</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>26</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags NewOrderProblemSummaryField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;NewOrderProblemSummaryField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>NewOrderProblemSummaryField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>27</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>27</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags NewOrderProblemDetailsField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;NewOrderProblemDetailsField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>NewOrderProblemDetailsField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>27</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>28</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags NewOrderNotesField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;NewOrderNotesField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>NewOrderNotesField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>29</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags SignatureCanvas" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;SignatureCanvas&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>SignatureCanvas</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>15</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>30</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags IntakeMediaTakePhotoButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;IntakeMediaTakePhotoButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>IntakeMediaTakePhotoButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>26</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>31</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags IntakeMediaCapturePhotoButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;IntakeMediaCapturePhotoButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>IntakeMediaCapturePhotoButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>29</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>32</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags IntakeMediaAttachFileButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;IntakeMediaAttachFileButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>IntakeMediaAttachFileButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>27</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>33</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags IntakeSubmitButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;IntakeSubmitButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>IntakeSubmitButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>34</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags IntakeStepperStep" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;IntakeStepperStep&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>IntakeStepperStep</highlighted_element>
+  <language>kotlin</language>
+  <offset>22</offset>
+  <length>17</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>36</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags StatusResultSummaryField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;StatusResultSummaryField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>StatusResultSummaryField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>24</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>37</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags StatusNoteField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;StatusNoteField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>StatusNoteField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>15</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>38</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags StatusDialogConfirmButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;StatusDialogConfirmButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>StatusDialogConfirmButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>25</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>39</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags GenericConfirmButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;GenericConfirmButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>GenericConfirmButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>20</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>40</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags QuoteAcceptedToggle" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;QuoteAcceptedToggle&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>QuoteAcceptedToggle</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>19</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>41</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags QuoteRejectedToggle" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;QuoteRejectedToggle&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>QuoteRejectedToggle</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>19</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>42</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags QuoteConfirmButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;QuoteConfirmButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>QuoteConfirmButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>43</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags DiagnosisRepairableToggle" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;DiagnosisRepairableToggle&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>DiagnosisRepairableToggle</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>25</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>44</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags DiagnosisNotRepairableToggle" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;DiagnosisNotRepairableToggle&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>DiagnosisNotRepairableToggle</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>28</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>45</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags DiagnosisEstimateField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;DiagnosisEstimateField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>DiagnosisEstimateField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>22</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>47</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags OrderStatusLabel" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;OrderStatusLabel&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>OrderStatusLabel</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>16</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>48</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags OrderDetailLazyColumn" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;OrderDetailLazyColumn&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>OrderDetailLazyColumn</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>21</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>49</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags OrderDetailOrderReference" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;OrderDetailOrderReference&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>OrderDetailOrderReference</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>25</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>50</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags OrderDetailCustomerReference" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;OrderDetailCustomerReference&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>OrderDetailCustomerReference</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>28</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>51</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags OrderActionSection" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;OrderActionSection&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>OrderActionSection</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>52</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags OrderWhatsAppButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;OrderWhatsAppButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>OrderWhatsAppButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>19</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>53</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags OrderWhatsAppPreviewPanel" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;OrderWhatsAppPreviewPanel&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>OrderWhatsAppPreviewPanel</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>25</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>54</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags OrderWhatsAppOpenButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;OrderWhatsAppOpenButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>OrderWhatsAppOpenButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>23</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>55</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags OrderWhatsAppSentButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;OrderWhatsAppSentButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>OrderWhatsAppSentButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>23</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>56</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags OrderWhatsAppClosePreviewButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;OrderWhatsAppClosePreviewButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>OrderWhatsAppClosePreviewButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>31</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>57</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags OrderSignaturesCard" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;OrderSignaturesCard&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>OrderSignaturesCard</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>19</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>58</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags OrderSignatureSection" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;OrderSignatureSection&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>OrderSignatureSection</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>21</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>59</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags OrderTimelineSection" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;OrderTimelineSection&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>OrderTimelineSection</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>20</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>61</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags CustomerNewButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;CustomerNewButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>CustomerNewButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>17</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>62</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags CustomerPrivateToggle" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;CustomerPrivateToggle&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>CustomerPrivateToggle</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>21</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>63</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags CustomerBusinessToggle" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;CustomerBusinessToggle&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>CustomerBusinessToggle</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>22</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>64</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags CustomerFirstNameField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;CustomerFirstNameField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>CustomerFirstNameField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>22</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>65</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags CustomerLastNameField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;CustomerLastNameField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>CustomerLastNameField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>21</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>66</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags CustomerCompanyNameField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;CustomerCompanyNameField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>CustomerCompanyNameField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>24</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>67</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags CustomerVatNumberField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;CustomerVatNumberField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>CustomerVatNumberField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>22</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>68</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags CustomerTaxCodeField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;CustomerTaxCodeField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>CustomerTaxCodeField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>20</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>69</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags CustomerPhoneField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;CustomerPhoneField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>CustomerPhoneField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>70</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags CustomerEmailField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;CustomerEmailField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>CustomerEmailField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>71</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags CustomerAddressField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;CustomerAddressField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>CustomerAddressField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>20</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>72</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags CustomerNotesField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;CustomerNotesField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>CustomerNotesField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>73</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags CustomerSaveButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;CustomerSaveButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>CustomerSaveButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>74</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags CustomerConfirmSaveButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;CustomerConfirmSaveButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>CustomerConfirmSaveButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>25</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>75</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags CustomerSearchField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;CustomerSearchField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>CustomerSearchField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>19</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>77</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigHubCategoriesButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigHubCategoriesButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigHubCategoriesButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>25</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>78</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigHubTemplatesButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigHubTemplatesButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigHubTemplatesButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>24</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>79</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigHubTemplateMappingButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigHubTemplateMappingButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigHubTemplateMappingButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>30</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>80</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigHubWhatsappButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigHubWhatsappButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigHubWhatsappButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>23</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>81</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigHubOwnerButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigHubOwnerButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigHubOwnerButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>20</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>82</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigHubStorageButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigHubStorageButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigHubStorageButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>22</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>83</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigHubBackupButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigHubBackupButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigHubBackupButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>21</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>84</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigHubAdminButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigHubAdminButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigHubAdminButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>20</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>85</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigHubAboutButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigHubAboutButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigHubAboutButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>20</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>86</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigBackButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigBackButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigBackButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>16</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>87</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigCategoryNameField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigCategoryNameField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigCategoryNameField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>23</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>88</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigCategoryDescriptionField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigCategoryDescriptionField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigCategoryDescriptionField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>30</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>89</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigCategoryNewButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigCategoryNewButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigCategoryNewButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>23</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>90</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigCategorySaveButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigCategorySaveButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigCategorySaveButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>24</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>91</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigTemplateCodeField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigTemplateCodeField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigTemplateCodeField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>23</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>92</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigTemplateTitleField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigTemplateTitleField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigTemplateTitleField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>24</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>93</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigTemplateBodyField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigTemplateBodyField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigTemplateBodyField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>23</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>94</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigTemplateVariablesTooltip" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigTemplateVariablesTooltip&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigTemplateVariablesTooltip</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>30</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>95</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigTemplateNewButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigTemplateNewButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigTemplateNewButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>23</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>96</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigTemplateSaveButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigTemplateSaveButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigTemplateSaveButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>24</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>97</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigBackupReminderSwitch" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigBackupReminderSwitch&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigBackupReminderSwitch</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>26</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>98</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigBackupIntervalField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigBackupIntervalField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigBackupIntervalField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>25</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>99</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ConfigBackupRunZipButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ConfigBackupRunZipButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ConfigBackupRunZipButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>24</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>100</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags BackupRestoreZipButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;BackupRestoreZipButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>BackupRestoreZipButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>22</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>101</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags BackupCloseButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;BackupCloseButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>BackupCloseButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>17</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>102</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags AdminDisplayNameField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;AdminDisplayNameField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>AdminDisplayNameField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>21</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>103</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags AdminUsernameField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;AdminUsernameField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>AdminUsernameField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>104</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags AdminPasswordField" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;AdminPasswordField&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>AdminPasswordField</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>105</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags AdminCreateOperatorButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;AdminCreateOperatorButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>AdminCreateOperatorButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>25</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>106</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags AdminDeleteAllOrdersButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;AdminDeleteAllOrdersButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>AdminDeleteAllOrdersButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>26</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>107</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags AdminTotalResetButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;AdminTotalResetButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>AdminTotalResetButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>21</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>108</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags ScrollToTopButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;ScrollToTopButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>ScrollToTopButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>17</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/design/RepairAppTestTags.kt</file>
+  <line>109</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.RepairAppTestTags MessageBannerCloseButton" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;MessageBannerCloseButton&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>MessageBannerCloseButton</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>24</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/templates/LegalTemplateFallbacks.kt</file>
+  <line>4</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.templates</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.templates.LegalTemplateFallbacks PrivacyText" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;PrivacyText&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>PrivacyText</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/templates/LegalTemplateFallbacks.kt</file>
+  <line>7</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.templates</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.templates.LegalTemplateFallbacks TermsText" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;TermsText&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>TermsText</highlighted_element>
+  <language>kotlin</language>
+  <offset>14</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/core/design/DesignTokenContrastTest.kt</file>
+  <line>85</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.DesignTokenContrastTest MinimumTextContrast" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;MinimumTextContrast&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>MinimumTextContrast</highlighted_element>
+  <language>kotlin</language>
+  <offset>18</offset>
+  <length>19</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/core/design/DesignTokenContrastTest.kt</file>
+  <line>86</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.core.design.DesignTokenContrastTest MinimumUiContrast" />
+  <problem_class id="ConstPropertyName" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Const property naming convention</problem_class>
+  <description>Const property name &lt;code&gt;MinimumUiContrast&lt;/code&gt; should not contain lowercase letters</description>
+  <highlighted_element>MinimumUiContrast</highlighted_element>
+  <language>kotlin</language>
+  <offset>18</offset>
+  <length>17</length>
+</problem>
+</problems>

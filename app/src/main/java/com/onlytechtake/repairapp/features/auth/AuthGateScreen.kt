@@ -70,7 +70,7 @@ fun AuthGateRoute(
     appInstanceKey: Int,
     onAppDataRestored: () -> Unit,
 ) {
-    var showcaseSeedRequested by rememberSaveable(appInstanceKey) { mutableStateOf(false) }
+    var showcaseSeedRequested by rememberSaveable(appInstanceKey) { mutableStateOf(value = false) }
     val container = LocalAppContainer.current
     val viewModel: AuthGateViewModel =
         viewModel(
@@ -125,21 +125,19 @@ fun AuthGateRoute(
                 onRetry = onAppDataRestored,
             )
 
-        !authState.initialized || isShowcasePreparing || formState.seeding ->
+        !authState.initialized || isShowcasePreparing || formState.seeding -> {
+            val context = LocalContext.current
             AuthLoadingScreen(
                 text =
                     when {
-                        formState.seeding -> stringResource(R.string.auth_showcase_initializing)
-                        isShowcasePreparing ->
-                            stringResource(
-                                R.string.auth_showcase_preparing,
-                            )
-
+                        formState.seeding -> DemoMode.getShowcaseInitializingMessage(context)
+                        isShowcasePreparing -> DemoMode.getShowcasePreparingMessage(context)
                         else -> stringResource(R.string.auth_system_ready)
                     },
             )
+        }
 
-        authState.currentUser != null && !ownerInfo.isComplete() ->
+        (authState.currentUser != null) && !ownerInfo.isComplete() ->
             OwnerWizardScreen(
                 ownerInfo = ownerInfo,
                 onSubmit = viewModel::updateOwnerInfo,
@@ -252,7 +250,7 @@ private fun AdminRecoveryScreen(
                     AppIconButton(
                         onClick = onCancel,
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.content_description_back),
+                        contentDescription = stringResource(R.string.action_back),
                     )
                 },
             )
@@ -351,7 +349,7 @@ private fun FirstSetupScreen(
                     AppIconButton(
                         onClick = onBack,
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.content_description_back),
+                        contentDescription = stringResource(R.string.action_back),
                     )
                 },
             )
@@ -597,7 +595,7 @@ private fun AuthForm(
 
             if ((onDemoLogin != null) && DemoMode.canEnable()) {
                 AppButton(
-                    text = stringResource(R.string.auth_demo_action),
+                    text = DemoMode.getDemoActionLabel(LocalContext.current),
                     onClick = onDemoLogin,
                     enabled = !formState.loading,
                     variant = AppButtonVariant.Secondary,
@@ -614,34 +612,37 @@ private fun OwnerWizardScreen(
     ownerInfo: OwnerInfo,
     onSubmit: (OwnerInfo) -> Unit,
 ) {
+    val context = LocalContext.current
     // Pre-fill with showcase data if empty and showcase mode is enabled
+    val showcaseInfo = if (BuildConfig.IS_SHOWCASE_MODE_ENABLED) DemoMode.getShowcaseOwnerInfo(context) else null
+
     val initialName =
-        if (BuildConfig.IS_SHOWCASE_MODE_ENABLED && ownerInfo.name.isBlank()) {
-            stringResource(R.string.showcase_owner_name)
+        if (showcaseInfo != null && ownerInfo.name.isBlank()) {
+            showcaseInfo.name
         } else {
             ownerInfo.name
         }
     val initialVat =
-        if (BuildConfig.IS_SHOWCASE_MODE_ENABLED && ownerInfo.vatNumber.isBlank()) {
-            stringResource(R.string.showcase_owner_vat)
+        if (showcaseInfo != null && ownerInfo.vatNumber.isBlank()) {
+            showcaseInfo.vatNumber
         } else {
             ownerInfo.vatNumber
         }
     val initialAddress =
-        if (BuildConfig.IS_SHOWCASE_MODE_ENABLED && ownerInfo.address.isBlank()) {
-            stringResource(R.string.showcase_owner_address)
+        if (showcaseInfo != null && ownerInfo.address.isBlank()) {
+            showcaseInfo.address
         } else {
             ownerInfo.address
         }
     val initialEmail =
-        if (BuildConfig.IS_SHOWCASE_MODE_ENABLED && ownerInfo.email.isBlank()) {
-            stringResource(R.string.showcase_owner_email)
+        if (showcaseInfo != null && ownerInfo.email.isBlank()) {
+            showcaseInfo.email
         } else {
             ownerInfo.email
         }
     val initialPhone =
-        if (BuildConfig.IS_SHOWCASE_MODE_ENABLED && ownerInfo.phone.isBlank()) {
-            stringResource(R.string.showcase_owner_phone)
+        if (showcaseInfo != null && ownerInfo.phone.isBlank()) {
+            showcaseInfo.phone
         } else {
             ownerInfo.phone
         }
@@ -720,7 +721,7 @@ private fun OwnerWizardScreen(
                 Spacer(Modifier.height(RepairAppSpacing.sectionGap))
 
                 AppButton(
-                    text = stringResource(R.string.confirm),
+                    text = stringResource(R.string.action_confirm),
                     modifier = Modifier.fillMaxWidth(),
                     enabled = name.isNotBlank() && vatNumber.isNotBlank() && address.isNotBlank(),
                     onClick = {

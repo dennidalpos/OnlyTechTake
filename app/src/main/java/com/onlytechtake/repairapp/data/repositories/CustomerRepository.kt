@@ -35,12 +35,16 @@ class CustomerRepository(
     override fun search(query: String): Flow<List<CustomerEntity>> {
         if (DemoMode.isEnabled) {
             val q = query.trim().lowercase()
-            return if (DemoMode.demoCustomer.firstName
-                    ?.lowercase()
-                    ?.contains(q) == true ||
-                DemoMode.demoCustomer.lastName
-                    ?.lowercase()
-                    ?.contains(q) == true
+            return if ((
+                    DemoMode.demoCustomer.firstName
+                        ?.lowercase()
+                        ?.contains(q) == true
+                ) ||
+                (
+                    DemoMode.demoCustomer.lastName
+                        ?.lowercase()
+                        ?.contains(q) == true
+                )
             ) {
                 flowOf(listOf(DemoMode.demoCustomer))
             } else {
@@ -48,12 +52,17 @@ class CustomerRepository(
             }
         }
         val trimmed = query.trim()
-        val sanitized = trimmed.split(" ").filter { it.isNotBlank() }.joinToString(" ") { "$it*" }
+        val sanitized =
+            trimmed
+                .split(" ")
+                .asSequence()
+                .filter { it.isNotBlank() }
+                .joinToString(" ") { "$it*" }
         return customerDao.search(sanitized)
     }
 
     override suspend fun findById(id: String): CustomerEntity? {
-        if (DemoMode.isEnabled && id == DemoMode.demoCustomer.id) {
+        if (DemoMode.isEnabled && (id == DemoMode.demoCustomer.id)) {
             return DemoMode.demoCustomer
         }
         return customerDao.findById(id)

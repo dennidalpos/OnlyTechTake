@@ -192,7 +192,11 @@ fun AdminPanel(
                         testTag = RepairAppTestTags.AdminCreateOperatorButton,
                         onClick = {
                             onRequestConfirm(confirmCreateTitle, confirmCreateText) {
-                                viewModel.createOperator(displayName, username, password.toCharArray())
+                                viewModel.createOperator(
+                                    displayName,
+                                    username,
+                                    password.toCharArray(),
+                                )
                                 displayName = ""
                                 username = ""
                                 password = ""
@@ -416,7 +420,14 @@ fun AdminPanel(
                                             color = if (user.active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
                                         )
                                         Text(
-                                            text = if (user.active) stringResource(R.string.admin_user_active_description) else stringResource(R.string.admin_user_inactive_description),
+                                            text =
+                                                if (user.active) {
+                                                    stringResource(R.string.admin_user_active_description)
+                                                } else {
+                                                    stringResource(
+                                                        R.string.admin_user_inactive_description,
+                                                    )
+                                                },
                                             style = MaterialTheme.typography.labelSmall,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
@@ -555,7 +566,10 @@ fun AdminPanel(
                                         PasswordVisibilityButton(
                                             visible = currentPasswordVisible,
                                             onVisibleChange = { currentPasswordVisible = it },
-                                            modifier = Modifier.focusProperties { canFocus = false },
+                                            modifier =
+                                                Modifier.focusProperties {
+                                                    canFocus = false
+                                                },
                                         )
                                     },
                                 )

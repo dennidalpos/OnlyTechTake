@@ -33,29 +33,26 @@ internal class DatabaseBackupFileService(
 
         val key = DatabaseKeyManager(context).getDatabaseKey()
         try {
-            val db =
-                net.zetetic.database.sqlcipher.SQLiteDatabase.openDatabase(
+            net.zetetic.database.sqlcipher.SQLiteDatabase
+                .openDatabase(
                     file.absolutePath,
                     key,
                     null,
                     net.zetetic.database.sqlcipher.SQLiteDatabase.OPEN_READONLY,
                     null,
                     null,
-                )
-            try {
-                db.rawQuery("PRAGMA integrity_check", null).use { cursor ->
-                    if (cursor.moveToFirst()) {
-                        val result = cursor.getString(0)
-                        if (result != "ok") {
-                            throw IOException("Integrità database compromessa: $result")
+                ).use { db ->
+                    db.rawQuery("PRAGMA integrity_check", null).use { cursor ->
+                        if (cursor.moveToFirst()) {
+                            val result = cursor.getString(0)
+                            if (result != "ok") {
+                                throw IOException("Integrità database compromessa: $result")
+                            }
+                        } else {
+                            throw IOException("Impossibile verificare integrità database")
                         }
-                    } else {
-                        throw IOException("Impossibile verificare integrità database")
                     }
                 }
-            } finally {
-                db.close()
-            }
         } catch (e: Exception) {
             throw IOException(
                 "Validazione database fallita (chiave errata o file corrotto): ${e.message}",

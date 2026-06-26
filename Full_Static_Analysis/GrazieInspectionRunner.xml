@@ -1,0 +1,1782 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/.github/workflows/android-instrumented.yml</file>
+  <line>31</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.github/workflows/android-instrumented.yml" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'temurin'</description>
+  <highlighted_element>temurin</highlighted_element>
+  <language>yaml</language>
+  <offset>24</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.github/workflows/android-instrumented.yml</file>
+  <line>48</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.github/workflows/android-instrumented.yml" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'swiftshader'</description>
+  <highlighted_element>swiftshader</highlighted_element>
+  <language>yaml</language>
+  <offset>44</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.github/workflows/android.yml</file>
+  <line>22</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.github/workflows/android.yml" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'temurin'</description>
+  <highlighted_element>temurin</highlighted_element>
+  <language>yaml</language>
+  <offset>24</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/AGENTS.md</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/AGENTS.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'loggare'</description>
+  <highlighted_element>loggare</highlighted_element>
+  <language>Markdown</language>
+  <offset>117</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/AGENTS.md</file>
+  <line>27</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/AGENTS.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Would you like to insert '→'?</description>
+  <highlighted_element>-&gt;</highlighted_element>
+  <language>Markdown</language>
+  <offset>27</offset>
+  <length>2</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/AGENTS.md</file>
+  <line>27</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/AGENTS.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Would you like to insert '→'?</description>
+  <highlighted_element>-&gt;</highlighted_element>
+  <language>Markdown</language>
+  <offset>54</offset>
+  <length>2</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/AGENTS.md</file>
+  <line>27</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/AGENTS.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Would you like to insert '→'?</description>
+  <highlighted_element>-&gt;</highlighted_element>
+  <language>Markdown</language>
+  <offset>76</offset>
+  <length>2</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/AGENTS.md</file>
+  <line>27</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/AGENTS.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Would you like to insert '→'?</description>
+  <highlighted_element>-&gt;</highlighted_element>
+  <language>Markdown</language>
+  <offset>90</offset>
+  <length>2</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/AGENTS.md</file>
+  <line>39</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/AGENTS.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>This word is normally spelled as one.</description>
+  <highlighted_element>pre-loaded</highlighted_element>
+  <language>Markdown</language>
+  <offset>77</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/AGENTS.md</file>
+  <line>68</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/AGENTS.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Stato'</description>
+  <highlighted_element>Stato</highlighted_element>
+  <language>Markdown</language>
+  <offset>46</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/PROJECT_STATUS.json</file>
+  <line>67</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/PROJECT_STATUS.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Rifattorizzato'</description>
+  <highlighted_element>Rifattorizzato</highlighted_element>
+  <language>JSON</language>
+  <offset>5</offset>
+  <length>14</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/PROJECT_STATUS.json</file>
+  <line>69</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/PROJECT_STATUS.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'dall'admin'</description>
+  <highlighted_element>dall'admin</highlighted_element>
+  <language>JSON</language>
+  <offset>79</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/PROJECT_STATUS.json</file>
+  <line>71</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/PROJECT_STATUS.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'collassabili'</description>
+  <highlighted_element>collassabili</highlighted_element>
+  <language>JSON</language>
+  <offset>63</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/PROJECT_STATUS.json</file>
+  <line>72</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/PROJECT_STATUS.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Sicurezza'</description>
+  <highlighted_element>Sicurezza</highlighted_element>
+  <language>JSON</language>
+  <offset>16</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json</file>
+  <line>318</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'docid'</description>
+  <highlighted_element>docid</highlighted_element>
+  <language>JSON</language>
+  <offset>160</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json</file>
+  <line>318</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'rowid'</description>
+  <highlighted_element>rowid</highlighted_element>
+  <language>JSON</language>
+  <offset>172</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json</file>
+  <line>319</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'docid'</description>
+  <highlighted_element>docid</highlighted_element>
+  <language>JSON</language>
+  <offset>160</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json</file>
+  <line>319</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'rowid'</description>
+  <highlighted_element>rowid</highlighted_element>
+  <language>JSON</language>
+  <offset>172</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json</file>
+  <line>320</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'docid'</description>
+  <highlighted_element>docid</highlighted_element>
+  <language>JSON</language>
+  <offset>152</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json</file>
+  <line>320</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'rowid'</description>
+  <highlighted_element>rowid</highlighted_element>
+  <language>JSON</language>
+  <offset>255</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json</file>
+  <line>321</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'docid'</description>
+  <highlighted_element>docid</highlighted_element>
+  <language>JSON</language>
+  <offset>152</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json</file>
+  <line>321</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'rowid'</description>
+  <highlighted_element>rowid</highlighted_element>
+  <language>JSON</language>
+  <offset>255</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json</file>
+  <line>730</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'docid'</description>
+  <highlighted_element>docid</highlighted_element>
+  <language>JSON</language>
+  <offset>172</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json</file>
+  <line>730</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'rowid'</description>
+  <highlighted_element>rowid</highlighted_element>
+  <language>JSON</language>
+  <offset>184</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json</file>
+  <line>731</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'docid'</description>
+  <highlighted_element>docid</highlighted_element>
+  <language>JSON</language>
+  <offset>172</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json</file>
+  <line>731</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'rowid'</description>
+  <highlighted_element>rowid</highlighted_element>
+  <language>JSON</language>
+  <offset>184</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json</file>
+  <line>732</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'docid'</description>
+  <highlighted_element>docid</highlighted_element>
+  <language>JSON</language>
+  <offset>164</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json</file>
+  <line>732</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'rowid'</description>
+  <highlighted_element>rowid</highlighted_element>
+  <language>JSON</language>
+  <offset>224</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json</file>
+  <line>733</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'docid'</description>
+  <highlighted_element>docid</highlighted_element>
+  <language>JSON</language>
+  <offset>164</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json</file>
+  <line>733</line>
+  <module>OnlyTechTakeRepairApp.app</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/schemas/com.onlytechtake.repairapp.data.local.db.RepairAppDatabase/1.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'rowid'</description>
+  <highlighted_element>rowid</highlighted_element>
+  <language>JSON</language>
+  <offset>224</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/core/share/ShareDocumentIntentFactoryInstrumentedTest.kt</file>
+  <line>27</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.core.share</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactoryInstrumentedTest void pdfShareIntentUsesFileProviderReadGrantAndCopiesToSharedCache()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Stato'</description>
+  <highlighted_element>Stato</highlighted_element>
+  <language>kotlin</language>
+  <offset>78</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/core/share/ShareDocumentIntentFactoryInstrumentedTest.kt</file>
+  <line>31</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.core.share</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactoryInstrumentedTest void pdfShareIntentUsesFileProviderReadGrantAndCopiesToSharedCache()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Stato'</description>
+  <highlighted_element>Stato</highlighted_element>
+  <language>kotlin</language>
+  <offset>22</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/core/share/ShareDocumentIntentFactoryInstrumentedTest.kt</file>
+  <line>38</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.core.share</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactoryInstrumentedTest void pdfShareIntentUsesFileProviderReadGrantAndCopiesToSharedCache()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'fileprovider'</description>
+  <highlighted_element>fileprovider</highlighted_element>
+  <language>kotlin</language>
+  <offset>45</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/local/db/RepairAppDatabaseInstrumentedTest.kt</file>
+  <line>197</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.local.db</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.db.RepairAppDatabaseInstrumentedTest void customerSearchFindsCustomersByMainFieldsAndOrderNumber()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'RSSMRA'</description>
+  <highlighted_element>RSSMRA</highlighted_element>
+  <language>kotlin</language>
+  <offset>34</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/DataResetRepositoryInstrumentedTest.kt</file>
+  <line>196</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.DataResetRepositoryInstrumentedTest java.lang.Object seedData(kotlin.coroutines.Continuation&lt;? super kotlin.Unit&gt; $completion)" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'cust'</description>
+  <highlighted_element>cust</highlighted_element>
+  <language>kotlin</language>
+  <offset>17</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/DataResetRepositoryInstrumentedTest.kt</file>
+  <line>215</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.DataResetRepositoryInstrumentedTest java.lang.Object seedData(kotlin.coroutines.Continuation&lt;? super kotlin.Unit&gt; $completion)" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'cust'</description>
+  <highlighted_element>cust</highlighted_element>
+  <language>kotlin</language>
+  <offset>30</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowRepositoryInstrumentedTest.kt</file>
+  <line>286</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepositoryInstrumentedTest java.lang.Object seedCoreData(java.lang.String userId, com.onlytechtake.repairapp.data.local.entities.UserRole role, java.util.Set&lt;? extends com.onlytechtake.repairapp.data.local.entities.UserPermission&gt; permissions, kotlin.coroutines.Continuation&lt;? super kotlin.Unit&gt; $completion)" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'cust'</description>
+  <highlighted_element>cust</highlighted_element>
+  <language>kotlin</language>
+  <offset>17</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/OrderWorkflowRepositoryInstrumentedTest.kt</file>
+  <line>315</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepositoryInstrumentedTest java.lang.Object createTestOrder(java.lang.String assignedToUserId, com.onlytechtake.repairapp.data.local.entities.OrderStatus status, com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome diagnosisOutcome, java.lang.Long estimateAmountCents, com.onlytechtake.repairapp.data.local.entities.CustomerActionStatus customerActionStatus, kotlin.coroutines.Continuation&lt;? super com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity&gt; $completion)" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'cust'</description>
+  <highlighted_element>cust</highlighted_element>
+  <language>kotlin</language>
+  <offset>30</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/RepositoryPathsInstrumentedTest.kt</file>
+  <line>200</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.RepositoryPathsInstrumentedTest void workflowRepositoryCreatesOrderAndTimelineEvent()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>41</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/RepositoryPathsInstrumentedTest.kt</file>
+  <line>284</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.RepositoryPathsInstrumentedTest void diagnosisWorkflowCoversRepairableRejectedAndNotRepairableBranches()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Scheda'</description>
+  <highlighted_element>Scheda</highlighted_element>
+  <language>kotlin</language>
+  <offset>25</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/RepositoryPathsInstrumentedTest.kt</file>
+  <line>402</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.RepositoryPathsInstrumentedTest void customerUpdatePreservesExistingOrderRelationship()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>41</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/RepositoryPathsInstrumentedTest.kt</file>
+  <line>436</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.RepositoryPathsInstrumentedTest void backupRepositoryExportsConfigurationAndRecordsAudit()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Stato'</description>
+  <highlighted_element>Stato</highlighted_element>
+  <language>kotlin</language>
+  <offset>29</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/RepositoryPathsInstrumentedTest.kt</file>
+  <line>484</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.RepositoryPathsInstrumentedTest void backupRepositoryExportsAllOrdersAsXlsxAndRecordsAudit()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>37</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/RepositoryPathsInstrumentedTest.kt</file>
+  <line>498</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.RepositoryPathsInstrumentedTest void backupRepositoryExportsAllOrdersAsXlsxAndRecordsAudit()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>78</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/RepositoryPathsInstrumentedTest.kt</file>
+  <line>686</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.RepositoryPathsInstrumentedTest void backupRepositoryRestoresCompleteZipReplacingDatabaseAndPrivateFiles()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'sovrascritta'</description>
+  <highlighted_element>sovrascritta</highlighted_element>
+  <language>kotlin</language>
+  <offset>42</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/RepositoryPathsInstrumentedTest.kt</file>
+  <line>820</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.RepositoryPathsInstrumentedTest void dataResetClearsFileBackedDatabaseWithoutLocking()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>33</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/data/repositories/RepositoryPathsInstrumentedTest.kt</file>
+  <line>908</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.RepositoryPathsInstrumentedTest void intakeUseCaseDeletesSignatureAndAttachedMediaWhenOuterTransactionFails()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>46</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/BaseAssetRobot.kt</file>
+  <line>391</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.BaseAssetRobot void drawSignature(java.lang.String tag)" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'ianchi'</description>
+  <highlighted_element>ianchi</highlighted_element>
+  <language>kotlin</language>
+  <offset>34</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/BaseAssetRobot.kt</file>
+  <line>399</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.BaseAssetRobot void drawSignature(java.lang.String tag)" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Sottolineatura'</description>
+  <highlighted_element>Sottolineatura</highlighted_element>
+  <language>kotlin</language>
+  <offset>15</offset>
+  <length>14</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/OperationalRobot.kt</file>
+  <line>147</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.OperationalRobot void managementFlow(java.io.File outputDir)" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Sostituzione'</description>
+  <highlighted_element>Sostituzione</highlighted_element>
+  <language>kotlin</language>
+  <offset>13</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/OperationalRobot.kt</file>
+  <line>175</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.OperationalRobot void managementFlow(java.io.File outputDir)" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Sostituito'</description>
+  <highlighted_element>Sostituito</highlighted_element>
+  <language>kotlin</language>
+  <offset>52</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/OperatorIntakeDemoScreenshotTest.kt</file>
+  <line>80</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.OperatorIntakeDemoScreenshotTest void capturesOperatorIntakeDemo()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>38</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/OperatorIntakeDemoScreenshotTest.kt</file>
+  <line>80</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.OperatorIntakeDemoScreenshotTest void capturesOperatorIntakeDemo()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>38</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/OperatorIntakeDemoScreenshotTest.kt</file>
+  <line>168</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.OperatorIntakeDemoScreenshotTest java.lang.String waitForCreatedOrderId()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>44</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/OperatorIntakeDemoScreenshotTest.kt</file>
+  <line>168</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.OperatorIntakeDemoScreenshotTest java.lang.String waitForCreatedOrderId()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>44</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/SocialCampaignScreenshotTest.kt</file>
+  <line>80</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.SocialCampaignScreenshotTest void capturesSocialCampaignFlow()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>38</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/SocialCampaignScreenshotTest.kt</file>
+  <line>143</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.SocialCampaignScreenshotTest void capturesSocialCampaignFlow()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'SUCCESSO'</description>
+  <highlighted_element>SUCCESSO</highlighted_element>
+  <language>kotlin</language>
+  <offset>18</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/SocialCampaignScreenshotTest.kt</file>
+  <line>154</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.SocialCampaignScreenshotTest java.lang.String waitForCreatedOrderId()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>44</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/SocialProAssetTest.kt</file>
+  <line>84</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.SocialProAssetTest void capturesSocialProAssets()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Spegnimenti'</description>
+  <highlighted_element>Spegnimenti</highlighted_element>
+  <language>kotlin</language>
+  <offset>17</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/StoreProScreenshotTest.kt</file>
+  <line>76</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.StoreProScreenshotTest void capturesStoreProScreenshots()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>38</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/StoreProScreenshotTest.kt</file>
+  <line>81</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.StoreProScreenshotTest void capturesStoreProScreenshots()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Sostituzione'</description>
+  <highlighted_element>Sostituzione</highlighted_element>
+  <language>kotlin</language>
+  <offset>17</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/androidTest/java/com/onlytechtake/repairapp/demo/StoreProScreenshotTest.kt</file>
+  <line>149</line>
+  <module>OnlyTechTakeRepairApp.app.androidTest</module>
+  <package>com.onlytechtake.repairapp.demo</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.demo.StoreProScreenshotTest java.lang.String waitForCreatedOrderId()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>44</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/media/MediaOptimizer.kt</file>
+  <line>96</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.media</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.media.MediaOptimizer java.lang.Object optimize(java.io.File file)" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Sostituisci'</description>
+  <highlighted_element>Sostituisci</highlighted_element>
+  <language>kotlin</language>
+  <offset>15</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/core/share/ShareDocumentIntentFactory.kt</file>
+  <line>24</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.core.share</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory android.content.Intent createPdfShareIntent(java.io.File file, java.lang.String title)" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'fileprovider'</description>
+  <highlighted_element>fileprovider</highlighted_element>
+  <language>kotlin</language>
+  <offset>40</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/dao/DaoProjections.kt</file>
+  <line>50</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.dao</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.local.dao.OrderListItemProjection OrderListItemProjection(com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity order, com.onlytechtake.repairapp.data.local.entities.CustomerEntity customer, int imagesCount, int documentsCount, int signaturesCount, int finalPhotosCount)" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'cust'</description>
+  <highlighted_element>cust</highlighted_element>
+  <language>kotlin</language>
+  <offset>24</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/local/db/RepairAppDatabase.kt</file>
+  <line>98</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.local.db</package>
+  <entry_point TYPE="class" FQNAME="com.onlytechtake.repairapp.data.local.db.RepairAppDatabase.Companion" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'sqlcipher'</description>
+  <highlighted_element>sqlcipher</highlighted_element>
+  <language>kotlin</language>
+  <offset>32</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupArchive.kt</file>
+  <line>71</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.BackupArchive com.onlytechtake.repairapp.data.repositories.ExtractedBackup extract(android.content.Context context, java.io.InputStream input, java.io.File restoreRoot, char[] password)" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Possible typo detected.</description>
+  <highlighted_element>zip4j</highlighted_element>
+  <language>kotlin</language>
+  <offset>23</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/BackupRepository.kt</file>
+  <line>171</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.BackupRepository java.lang.Object restoreCompleteBackup(com.onlytechtake.repairapp.domain.auth.AuthenticatedUser actor, android.net.Uri uri, kotlin.coroutines.Continuation&lt;? super kotlin.Result&lt;? extends kotlin.Unit&gt;&gt; $completion)" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Did you mean 'to back up'?</description>
+  <highlighted_element>to backup</highlighted_element>
+  <language>kotlin</language>
+  <offset>63</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
+  <line>145</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderExportXlsxWriter java.lang.String xmlEscaped(java.lang.String $this$xmlEscaped)" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'apos'</description>
+  <highlighted_element>apos</highlighted_element>
+  <language>kotlin</language>
+  <offset>28</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
+  <line>178</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="field" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt contentTypesXml" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'rels'</description>
+  <highlighted_element>rels</highlighted_element>
+  <language>kotlin</language>
+  <offset>22</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
+  <line>216</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="field" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt stylesXml" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'cellStyleXfs'</description>
+  <highlighted_element>cellStyleXfs</highlighted_element>
+  <language>kotlin</language>
+  <offset>3</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
+  <line>216</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="field" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt stylesXml" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'cellStyleXfs'</description>
+  <highlighted_element>cellStyleXfs</highlighted_element>
+  <language>kotlin</language>
+  <offset>81</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
+  <line>217</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="field" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt stylesXml" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'cellXfs'</description>
+  <highlighted_element>cellXfs</highlighted_element>
+  <language>kotlin</language>
+  <offset>3</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
+  <line>217</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="field" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt stylesXml" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'xfId'</description>
+  <highlighted_element>xfId</highlighted_element>
+  <language>kotlin</language>
+  <offset>73</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt</file>
+  <line>217</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="field" FQNAME="file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriter.kt stylesXml" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'cellXfs'</description>
+  <highlighted_element>cellXfs</highlighted_element>
+  <language>kotlin</language>
+  <offset>85</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/data/services/DiagnosticLogService.kt</file>
+  <line>42</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.data.services</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.services.DiagnosticLogService android.content.Intent createShareIntent(java.io.File zipFile)" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'fileprovider'</description>
+  <highlighted_element>fileprovider</highlighted_element>
+  <language>kotlin</language>
+  <offset>40</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/domain/storage/StoragePolicy.kt</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.domain.storage</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.storage.StoragePolicy void requireSpaceForHeavyWrite(java.io.File filesDir)" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Spazio'</description>
+  <highlighted_element>Spazio</highlighted_element>
+  <language>kotlin</language>
+  <offset>36</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/auth/AuthGateViewModel.kt</file>
+  <line>315</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.auth</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateViewModel void changePassword()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Did you mean the verb 'log in' instead of the noun 'login'?</description>
+  <highlighted_element>login</highlighted_element>
+  <language>kotlin</language>
+  <offset>60</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/auth/AuthGateViewModel.kt</file>
+  <line>316</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.auth</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateViewModel void changePassword()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Did you mean the verb 'log in' instead of the noun 'login'?</description>
+  <highlighted_element>login</highlighted_element>
+  <language>kotlin</language>
+  <offset>42</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/onlytechtake/repairapp/features/auth/AuthGateViewModel.kt</file>
+  <line>317</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <package>com.onlytechtake.repairapp.features.auth</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.features.auth.AuthGateViewModel void changePassword()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Did you mean the verb 'log in' instead of the noun 'login'?</description>
+  <highlighted_element>login</highlighted_element>
+  <language>kotlin</language>
+  <offset>36</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values/strings.xml</file>
+  <line>798</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Possible typo detected.</description>
+  <highlighted_element>Zip4j</highlighted_element>
+  <language>XML</language>
+  <offset>174</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>745</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Questa frase non inizia con una maiuscola</description>
+  <highlighted_element>apertura</highlighted_element>
+  <language>XML</language>
+  <offset>107</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>745</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Questa frase non inizia con una maiuscola</description>
+  <highlighted_element>apertura</highlighted_element>
+  <language>XML</language>
+  <offset>107</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>932</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Questa frase non inizia con una maiuscola</description>
+  <highlighted_element>foto</highlighted_element>
+  <language>XML</language>
+  <offset>121</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml</file>
+  <line>932</line>
+  <module>OnlyTechTakeRepairApp.app.main</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Questa frase non inizia con una maiuscola</description>
+  <highlighted_element>foto</highlighted_element>
+  <language>XML</language>
+  <offset>121</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/core/design/DesignTokenContrastTest.kt</file>
+  <line>25</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.design.DesignTokenContrastTest void semanticActionColorsMeetTextContrast()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'whatsapp'</description>
+  <highlighted_element>whatsapp</highlighted_element>
+  <language>kotlin</language>
+  <offset>27</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/core/design/DesignTokenContrastTest.kt</file>
+  <line>40</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.core.design</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.core.design.DesignTokenContrastTest void semanticActionColorsMeetTextContrast()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'whatsapp'</description>
+  <highlighted_element>whatsapp</highlighted_element>
+  <language>kotlin</language>
+  <offset>26</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/CustomerRepositoryTest.kt</file>
+  <line>60</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.CustomerRepositoryTest void normalizesFieldsOnSave()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'mario'</description>
+  <highlighted_element>mario</highlighted_element>
+  <language>kotlin</language>
+  <offset>34</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/CustomerRepositoryTest.kt</file>
+  <line>65</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.CustomerRepositoryTest void normalizesFieldsOnSave()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'roma'</description>
+  <highlighted_element>roma</highlighted_element>
+  <language>kotlin</language>
+  <offset>36</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/CustomerRepositoryTest.kt</file>
+  <line>77</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.CustomerRepositoryTest void normalizesFieldsOnSave()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'roma'</description>
+  <highlighted_element>roma</highlighted_element>
+  <language>kotlin</language>
+  <offset>30</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriterTest.kt</file>
+  <line>24</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="field" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderExportXlsxWriterTest testLabels" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Stato'</description>
+  <highlighted_element>Stato</highlighted_element>
+  <language>kotlin</language>
+  <offset>21</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriterTest.kt</file>
+  <line>59</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderExportXlsxWriterTest void writesValidXlsxEntriesAndEscapesCellText()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>25</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriterTest.kt</file>
+  <line>92</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderExportXlsxWriterTest void writesValidXlsxEntriesAndEscapesCellText()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>35</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/OrderExportXlsxWriterTest.kt</file>
+  <line>94</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.OrderExportXlsxWriterTest void writesValidXlsxEntriesAndEscapesCellText()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'apos'</description>
+  <highlighted_element>apos</highlighted_element>
+  <language>kotlin</language>
+  <offset>55</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/data/repositories/TemplateRepositoryTest.kt</file>
+  <line>91</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.data.repositories</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.data.repositories.TemplateRepositoryTest void prepareMessage renders owner variables correctly()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'cust'</description>
+  <highlighted_element>cust</highlighted_element>
+  <language>kotlin</language>
+  <offset>30</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCaseTest.kt</file>
+  <line>65</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCaseTest void executeCreatesNewCustomerForAuthorizedOperator()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>41</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCaseTest.kt</file>
+  <line>96</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCaseTest void executeCreatesNewCustomerForAuthorizedOperator()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>46</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/domain/workspace/CreateIntakeOrderUseCaseTest.kt</file>
+  <line>151</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCaseTest com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity order(java.lang.String customerId)" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>21</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/test/java/com/onlytechtake/repairapp/domain/workspace/IntakeOrderInputTest.kt</file>
+  <line>41</line>
+  <module>OnlyTechTakeRepairApp.app.unitTest</module>
+  <package>com.onlytechtake.repairapp.domain.workspace</package>
+  <entry_point TYPE="method" FQNAME="com.onlytechtake.repairapp.domain.workspace.IntakeOrderInputTest void validationAcceptsExistingCustomerWithProblemMediaAndSignature()" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Schermo'</description>
+  <highlighted_element>Schermo</highlighted_element>
+  <language>kotlin</language>
+  <offset>34</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/demo/assets/profiles/operator-intake.asset.json</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/demo/assets/profiles/operator-intake.asset.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'whatsapp'</description>
+  <highlighted_element>whatsapp</highlighted_element>
+  <language>JSON</language>
+  <offset>23</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/demo/assets/profiles/social-campaign.asset.json</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/demo/assets/profiles/social-campaign.asset.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'whatsapp'</description>
+  <highlighted_element>whatsapp</highlighted_element>
+  <language>JSON</language>
+  <offset>23</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/demo/assets/profiles/social-pro.asset.json</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/demo/assets/profiles/social-pro.asset.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'whatsapp'</description>
+  <highlighted_element>whatsapp</highlighted_element>
+  <language>JSON</language>
+  <offset>23</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/demo/assets/profiles/social-stories.asset.json</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/demo/assets/profiles/social-stories.asset.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'whatsapp'</description>
+  <highlighted_element>whatsapp</highlighted_element>
+  <language>JSON</language>
+  <offset>23</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/demo/assets/profiles/workflow-admin-operators.asset.json</file>
+  <line>13</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/demo/assets/profiles/workflow-admin-operators.asset.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'whatsapp'</description>
+  <highlighted_element>whatsapp</highlighted_element>
+  <language>JSON</language>
+  <offset>23</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/demo/assets/profiles/workflow-admin-templates.asset.json</file>
+  <line>13</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/demo/assets/profiles/workflow-admin-templates.asset.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'whatsapp'</description>
+  <highlighted_element>whatsapp</highlighted_element>
+  <language>JSON</language>
+  <offset>23</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/demo/assets/profiles/workflow-intake.asset.json</file>
+  <line>13</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/demo/assets/profiles/workflow-intake.asset.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'whatsapp'</description>
+  <highlighted_element>whatsapp</highlighted_element>
+  <language>JSON</language>
+  <offset>23</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/demo/assets/profiles/workflow-management.asset.json</file>
+  <line>13</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/demo/assets/profiles/workflow-management.asset.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'whatsapp'</description>
+  <highlighted_element>whatsapp</highlighted_element>
+  <language>JSON</language>
+  <offset>23</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/docs/README.md</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/docs/README.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Sviluppo'</description>
+  <highlighted_element>Sviluppo</highlighted_element>
+  <language>Markdown</language>
+  <offset>3</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/docs/play-store/PLAY_CONSOLE_GUIDE_IT.md</file>
+  <line>10</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/docs/play-store/PLAY_CONSOLE_GUIDE_IT.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Si suggerisce di non usare l'apostrofo per scrivere il verbo essere.</description>
+  <highlighted_element>e'</highlighted_element>
+  <language>Markdown</language>
+  <offset>17</offset>
+  <length>2</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/docs/play-store/PLAY_CONSOLE_GUIDE_IT.md</file>
+  <line>24</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/docs/play-store/PLAY_CONSOLE_GUIDE_IT.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Sicurezza'</description>
+  <highlighted_element>Sicurezza</highlighted_element>
+  <language>Markdown</language>
+  <offset>6</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/docs/play-store/PLAY_CONSOLE_GUIDE_IT.md</file>
+  <line>37</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/docs/play-store/PLAY_CONSOLE_GUIDE_IT.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'l'admin'</description>
+  <highlighted_element>l'admin</highlighted_element>
+  <language>Markdown</language>
+  <offset>99</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/docs/play-store/PLAY_CONSOLE_GUIDE_IT.md</file>
+  <line>38</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/docs/play-store/PLAY_CONSOLE_GUIDE_IT.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'l'admin'</description>
+  <highlighted_element>l'admin</highlighted_element>
+  <language>Markdown</language>
+  <offset>59</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/docs/play-store/PLAY_CONSOLE_GUIDE_IT.md</file>
+  <line>43</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/docs/play-store/PLAY_CONSOLE_GUIDE_IT.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Sicurezza'</description>
+  <highlighted_element>Sicurezza</highlighted_element>
+  <language>Markdown</language>
+  <offset>6</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/docs/play-store/PUBLISH_DEMO_IT.md</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/docs/play-store/PUBLISH_DEMO_IT.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Sito'</description>
+  <highlighted_element>Sito</highlighted_element>
+  <language>Markdown</language>
+  <offset>2</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/docs/play-store/PUBLISH_DEMO_IT.md</file>
+  <line>38</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/docs/play-store/PUBLISH_DEMO_IT.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'l'AAB'</description>
+  <highlighted_element>l'AAB</highlighted_element>
+  <language>Markdown</language>
+  <offset>43</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/docs/play-store/PUBLISH_PRO_IT.md</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/docs/play-store/PUBLISH_PRO_IT.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Sito'</description>
+  <highlighted_element>Sito</highlighted_element>
+  <language>Markdown</language>
+  <offset>2</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/docs/play-store/PUBLISH_PRO_IT.md</file>
+  <line>28</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/docs/play-store/PUBLISH_PRO_IT.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'l'AAB'</description>
+  <highlighted_element>l'AAB</highlighted_element>
+  <language>Markdown</language>
+  <offset>43</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/docs/play-store/STORE_LISTING_IT.md</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/docs/play-store/STORE_LISTING_IT.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Sicurezza'</description>
+  <highlighted_element>Sicurezza</highlighted_element>
+  <language>Markdown</language>
+  <offset>22</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/docs/play-store/STORE_LISTING_IT.md</file>
+  <line>43</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/docs/play-store/STORE_LISTING_IT.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Scatena'</description>
+  <highlighted_element>Scatena</highlighted_element>
+  <language>Markdown</language>
+  <offset>0</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/docs/play-store/STORE_LISTING_IT.md</file>
+  <line>45</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/docs/play-store/STORE_LISTING_IT.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Scopri'</description>
+  <highlighted_element>Scopri</highlighted_element>
+  <language>Markdown</language>
+  <offset>119</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/docs/play-store/STORE_LISTING_IT.md</file>
+  <line>51</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/docs/play-store/STORE_LISTING_IT.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'VERSIONE'</description>
+  <highlighted_element>VERSIONE</highlighted_element>
+  <language>Markdown</language>
+  <offset>30</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/docs/play-store/data-safety-notes.md</file>
+  <line>20</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/docs/play-store/data-safety-notes.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Sicurezza'</description>
+  <highlighted_element>Sicurezza</highlighted_element>
+  <language>Markdown</language>
+  <offset>4</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/docs/play-store/release-checklist.md</file>
+  <line>11</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/docs/play-store/release-checklist.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'dell'AAB'</description>
+  <highlighted_element>dell'AAB</highlighted_element>
+  <language>Markdown</language>
+  <offset>159</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/docs/play-store/release-checklist.md</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/docs/play-store/release-checklist.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'l'AAB'</description>
+  <highlighted_element>l'AAB</highlighted_element>
+  <language>Markdown</language>
+  <offset>149</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/docs/play-store/release-checklist.md</file>
+  <line>18</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/docs/play-store/release-checklist.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Stato'</description>
+  <highlighted_element>Stato</highlighted_element>
+  <language>Markdown</language>
+  <offset>3</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/landing/index.html</file>
+  <line>41</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/landing/index.html" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Scarica'</description>
+  <highlighted_element>Scarica</highlighted_element>
+  <language>HTML</language>
+  <offset>155</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/landing/index.html</file>
+  <line>97</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/landing/index.html" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Senza'</description>
+  <highlighted_element>Senza</highlighted_element>
+  <language>HTML</language>
+  <offset>156</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/landing/index.html</file>
+  <line>145</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/landing/index.html" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Scatta'</description>
+  <highlighted_element>Scatta</highlighted_element>
+  <language>HTML</language>
+  <offset>59</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/landing/index.html</file>
+  <line>222</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/landing/index.html" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Scegli'</description>
+  <highlighted_element>Scegli</highlighted_element>
+  <language>HTML</language>
+  <offset>72</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/landing/index.html</file>
+  <line>241</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/landing/index.html" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Scarica'</description>
+  <highlighted_element>Scarica</highlighted_element>
+  <language>HTML</language>
+  <offset>161</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/landing/index.html</file>
+  <line>255</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/landing/index.html" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Supporto'</description>
+  <highlighted_element>Supporto</highlighted_element>
+  <language>HTML</language>
+  <offset>98</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/landing/index.html</file>
+  <line>278</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/landing/index.html" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Supporto'</description>
+  <highlighted_element>Supporto</highlighted_element>
+  <language>HTML</language>
+  <offset>89</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/landing/privacy.html</file>
+  <line>101</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/landing/privacy.html" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Questa frase non inizia con una maiuscola</description>
+  <highlighted_element>vengono</highlighted_element>
+  <language>HTML</language>
+  <offset>64</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/landing/privacy.html</file>
+  <line>105</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/landing/privacy.html" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Sicurezza'</description>
+  <highlighted_element>Sicurezza</highlighted_element>
+  <language>HTML</language>
+  <offset>62</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/landing/privacy.html</file>
+  <line>106</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/landing/privacy.html" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>In questo caso l'uso della 'd' eufonica è ammesso: 'od Operatore'.</description>
+  <highlighted_element>o Operatore</highlighted_element>
+  <language>HTML</language>
+  <offset>255</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/README.md</file>
+  <line>5</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/README.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Struttura'</description>
+  <highlighted_element>Struttura</highlighted_element>
+  <language>Markdown</language>
+  <offset>3</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/copy/ads-it.md</file>
+  <line>9</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/copy/ads-it.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Sicurezza'</description>
+  <highlighted_element>Sicurezza</highlighted_element>
+  <language>Markdown</language>
+  <offset>86</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/copy/store-listing-it.md</file>
+  <line>6</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/copy/store-listing-it.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Soluzione'</description>
+  <highlighted_element>Soluzione</highlighted_element>
+  <language>Markdown</language>
+  <offset>23</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/copy/store-listing-it.md</file>
+  <line>10</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/copy/store-listing-it.md" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'Sicurezza'</description>
+  <highlighted_element>Sicurezza</highlighted_element>
+  <language>Markdown</language>
+  <offset>0</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/registered-assets/social/profiles/operator-intake.asset.json</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/registered-assets/social/profiles/operator-intake.asset.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'whatsapp'</description>
+  <highlighted_element>whatsapp</highlighted_element>
+  <language>JSON</language>
+  <offset>23</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/registered-assets/social/profiles/social-campaign.asset.json</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/registered-assets/social/profiles/social-campaign.asset.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'whatsapp'</description>
+  <highlighted_element>whatsapp</highlighted_element>
+  <language>JSON</language>
+  <offset>23</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/registered-assets/social/profiles/social-pro.asset.json</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/registered-assets/social/profiles/social-pro.asset.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'whatsapp'</description>
+  <highlighted_element>whatsapp</highlighted_element>
+  <language>JSON</language>
+  <offset>23</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/marketing/registered-assets/social/profiles/social-stories.asset.json</file>
+  <line>12</line>
+  <module>OnlyTechTakeRepairApp</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/marketing/registered-assets/social/profiles/social-stories.asset.json" />
+  <problem_class id="GrazieInspectionRunner" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Grammar</problem_class>
+  <description>Typo: In word 'whatsapp'</description>
+  <highlighted_element>whatsapp</highlighted_element>
+  <language>JSON</language>
+  <offset>23</offset>
+  <length>8</length>
+</problem>
+</problems>
