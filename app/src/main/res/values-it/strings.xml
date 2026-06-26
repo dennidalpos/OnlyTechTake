@@ -604,8 +604,6 @@
     <string name="admin_user_inactive_description">L\'operatore non può effettuare il login</string>
     <string name="admin_user_active">Attivo</string>
     <string name="admin_user_inactive">Disattivo</string>
-    <string name="admin_user_activate">Attiva</string>
-    <string name="admin_user_deactivate">Disattiva</string>
     <string name="admin_confirm_activate_title">Attivare operatore?</string>
     <string name="admin_confirm_deactivate_title">Disattivare operatore?</string>
     <string name="admin_confirm_activate_text">Vuoi attivare l\'operatore %s? Potrà riprendere a gestire le commesse.</string>
@@ -857,6 +855,35 @@
     <string name="catalog_error_parent_not_found">Categoria padre non trovata</string>
     <string name="catalog_error_depth_limit">Profondità massima raggiunta (4 livelli)</string>
 
-
+    <!-- Demo & Test strings -->
+    <string name="demo_admin_display_name">Admin Demo</string>
+    <string name="demo_operator_display_name">Operatore Banco</string>
+    <string name="common_cat_pc">Computer &amp; Laptop</string>
+    <string name="common_cat_pc_desc">Riparazioni hardware e software PC</string>
+    <string name="common_cat_notebook">Notebook</string>
+    <string name="common_cat_notebook_desc">Portatili e Ultrabook</string>
+    <string name="common_cat_gaming">Gaming Laptop</string>
+    <string name="common_cat_gaming_desc">MSI, ROG, Alienware, Legion</string>
+    <string name="common_cat_rog_strix">Asus ROG Strix</string>
+    <string name="common_cat_rog_strix_desc">Pulizia interna e pasta termica</string>
+    <string name="demo_customer_name">Cliente %d</string>
+    <string name="demo_customer_business_name">Azienda %d Srl</string>
+    <string name="demo_customer_notes">Cliente demo per presentazioni (ID: %d).</string>
+    <string name="demo_order_title_1">Asus ROG Strix - Pulizia e Pasta</string>
+    <string name="demo_order_title_n">Riparazione %d</string>
+    <string name="demo_order_desc">Descrizione commessa demo %d.</string>
+    <string name="demo_order_notes">Note interne demo %d.</string>
+    <string name="demo_photo_label">Foto oggetto</string>
+    <string name="demo_signature_label">Firma cliente</string>
+    <string name="demo_privacy_snapshot">Informativa privacy demo.</string>
+    <string name="demo_terms_snapshot">Condizioni presa in carico demo.</string>
+    <string name="demo_event_title_created">Commessa creata</string>
+    <string name="demo_event_desc_created">Presa in carico demo con foto e firma cliente.</string>
+    <string name="demo_template_body">Aggiornamento {{numero_commessa}}: {{stato_commessa}} per {{cliente}}.</string>
+    <plurals name="demo_error_order_limit">
+        <item quantity="one">Limite Demo raggiunto. La versione Demo consente %1$d sola commessa e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
+        <item quantity="many">Limite Demo raggiunto. La versione Demo consente %1$d commesse e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
+        <item quantity="other">Limite Demo raggiunto. La versione Demo consente %1$d commesse e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
+    </plurals>
 
 </resources>

@@ -51,8 +51,8 @@ class WorkspaceUiHelpersTest {
             AttachmentCounts(images = 1, documents = 1, signatures = 1, finalPhotos = 1),
             counts,
         )
-        assertEquals("Foto 1 - Documenti 1 - Firme 1 - Lavoro finito 1", counts.label())
-        assertEquals("Foto 2 - Documenti 3 - Firme 1", OrderAttachmentCounts(2, 3, 1).label())
+        assertEquals("Foto 1 - Documenti 1 - Firme 1 - Lavoro finito 1", counts.label(context))
+        assertEquals("Foto 2 - Documenti 3 - Firme 1", OrderAttachmentCounts(2, 3, 1).label(context))
     }
 
     @Test

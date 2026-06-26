@@ -403,7 +403,7 @@ class RepositoryPathsInstrumentedTest {
                                 categoryId = CATEGORY_ID,
                             ),
                     ).getOrThrow()
-            val repository = CustomerRepository(database.customerDao()) { NOW + 1L }
+            val repository = CustomerRepository(context, database.customerDao()) { NOW + 1L }
 
             val updated =
                 repository
@@ -874,7 +874,7 @@ class RepositoryPathsInstrumentedTest {
             val useCase =
                 CreateIntakeOrderUseCase(
                     context = context,
-                    customerRepository = CustomerRepository(database.customerDao()) { NOW },
+                    customerRepository = CustomerRepository(context, database.customerDao()) { NOW },
                     orderRepository = orderWorkflowRepository(),
                     orderMediaRepository = mediaRepository,
                     signatureRepository = signatureRepository,

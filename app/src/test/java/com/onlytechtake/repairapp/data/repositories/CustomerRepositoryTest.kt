@@ -1,11 +1,13 @@
 package com.onlytechtake.repairapp.data.repositories
 
+import android.content.Context
 import com.onlytechtake.repairapp.data.local.dao.CustomerDao
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
+import io.mockk.mockk
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.runBlocking
@@ -34,7 +36,8 @@ class CustomerRepositoryTest {
             }
         }
 
-    private val repository = CustomerRepository(stubDao)
+    private val context = mockk<Context>(relaxed = true)
+    private val repository = CustomerRepository(context, stubDao)
     private val manager =
         AuthenticatedUser(
             id = "manager",
