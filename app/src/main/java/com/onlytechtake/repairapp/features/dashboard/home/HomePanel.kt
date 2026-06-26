@@ -183,8 +183,8 @@ private fun HomeMetrics(summary: AppSummary) {
         horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
     ) {
         AppMetricCard(
-            label = stringResource(R.string.home_metric_users),
-            value = summary.userCount.toString(),
+            label = stringResource(R.string.home_metric_operators),
+            value = summary.operatorCount.toString(),
             modifier = Modifier.weight(1f),
         )
         AppMetricCard(
@@ -241,7 +241,7 @@ private fun HomePanelPreview() {
             summary =
                 AppSummary(
                     title = "OnlyTechTake",
-                    userCount = 3,
+                    operatorCount = 3,
                     customerCount = 120,
                     activeOrderCount = 45,
                 ),

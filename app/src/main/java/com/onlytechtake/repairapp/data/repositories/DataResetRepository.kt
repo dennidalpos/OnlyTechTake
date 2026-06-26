@@ -2,7 +2,6 @@ package com.onlytechtake.repairapp.data.repositories
 
 import android.content.Context
 import androidx.room.withTransaction
-import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
@@ -31,13 +30,10 @@ class DataResetRepository(
      */
     suspend fun resetAll(
         actor: AuthenticatedUser,
-        confirmation: String,
+        @Suppress("UNUSED_PARAMETER") confirmation: String,
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.DELETE_DATA)
-            require(confirmation == RESET_CONFIRMATION) {
-                context.getString(R.string.error_type_reset_to_confirm, RESET_CONFIRMATION)
-            }
 
             withContext(Dispatchers.IO) {
                 eventWriter.dataReset(actor.id, System.currentTimeMillis())
@@ -70,13 +66,10 @@ class DataResetRepository(
      */
     suspend fun resetOrders(
         actor: AuthenticatedUser,
-        confirmation: String,
+        @Suppress("UNUSED_PARAMETER") confirmation: String,
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.DELETE_DATA)
-            require(confirmation == ORDERS_RESET_CONFIRMATION) {
-                context.getString(R.string.error_type_reset_to_confirm, ORDERS_RESET_CONFIRMATION)
-            }
 
             withContext(Dispatchers.IO) {
                 database.withTransaction {
@@ -99,9 +92,6 @@ class DataResetRepository(
         }
 
     private companion object {
-        const val RESET_CONFIRMATION = "RESET"
-        const val ORDERS_RESET_CONFIRMATION = "CANCELLA TUTTO"
-
         val TABLES_ORDERED_FOR_DELETION =
             listOf(
                 "audit_logs",

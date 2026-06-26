@@ -43,6 +43,7 @@ class DataContainer(
 class AuthContainer(
     context: Context,
     dataContainer: DataContainer,
+    securityPreferences: SecurityPreferences,
 ) {
     val sessionStore by lazy { InMemorySessionStore() }
     val authPreferences by lazy { AuthPreferences(context) }
@@ -56,7 +57,9 @@ class AuthContainer(
             loginAttemptDao = dataContainer.database.loginAttemptDao(),
             appSettingDao = dataContainer.database.appSettingDao(),
             authPreferences = authPreferences,
+            securityPreferences = securityPreferences,
             sessionStore = sessionStore,
+            diagnosticLogger = dataContainer.diagnosticLogger,
             passwordHasher = passwordHasher,
         )
     }
@@ -190,10 +193,10 @@ class SettingsContainer(
     dataContainer: DataContainer,
     authContainer: AuthContainer,
     mediaContainer: MediaContainer,
+    val securityPreferences: SecurityPreferences,
 ) {
     val ownerPreferences by lazy { OwnerPreferences(context.applicationContext) }
     val backupReminderPreferences by lazy { BackupReminderPreferences(context.applicationContext) }
-    val securityPreferences by lazy { SecurityPreferences(context.applicationContext) }
     val storageStatsService by lazy {
         StorageStatsService(
             context.applicationContext,

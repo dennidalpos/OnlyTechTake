@@ -153,6 +153,12 @@ internal class SecuritySettingsDelegate(
             securityPreferences.setBackupEncryptionPassword(password)
         }
     }
+
+    fun setInactivityTimeoutMinutes(minutes: Int) {
+        scope.launch {
+            securityPreferences.setInactivityTimeoutMinutes(minutes)
+        }
+    }
 }
 
 internal class AdminSettingsDelegate(

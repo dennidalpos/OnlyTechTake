@@ -9,16 +9,18 @@ val keystoreProperties =
         }
     }
 
-gradle.taskGraph.whenReady {
-    val requiresReleaseSigning =
-        allTasks.any { task ->
-            task.path.startsWith(":app:") && task.name.contains("Release", ignoreCase = true)
+// Verifies that keystore.properties exists when a release build is requested.
+// Using a lazy approach to avoid early task realization.
+tasks.configureEach {
+    if (name.contains("Release", ignoreCase = true) &&
+        gradle.startParameter.taskNames.any { it.contains("Release", ignoreCase = true) } &&
+        !keystorePropertiesFile.exists()
+    ) {
+        doFirst {
+            if (!keystorePropertiesFile.exists()) {
+                throw GradleException("Release build requires keystore.properties in the project root")
+            }
         }
-    val isExplicitReleaseRequest =
-        gradle.startParameter.taskNames.any { it.contains("Release", ignoreCase = true) }
-
-    if (requiresReleaseSigning && isExplicitReleaseRequest && !keystorePropertiesFile.exists()) {
-        throw GradleException("Release build requires keystore.properties in the project root")
     }
 }
 
@@ -47,7 +49,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    flavorDimensions += "version"
+    flavorDimensions.add("version")
     productFlavors {
         create("demo") {
             dimension = "version"

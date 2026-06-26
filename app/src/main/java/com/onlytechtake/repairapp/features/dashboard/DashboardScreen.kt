@@ -453,7 +453,7 @@ private fun DashboardScreenPreview() {
             summary =
                 AppSummary(
                     title = "OnlyTechTake",
-                    userCount = 1,
+                    operatorCount = 1,
                     customerCount = 10,
                     activeOrderCount = 5,
                 ),

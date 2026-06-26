@@ -29,7 +29,6 @@ import com.onlytechtake.repairapp.data.local.entities.UserEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
-import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
@@ -328,18 +327,20 @@ object ShowcaseDataSeeder {
             // 3. Create Private Customers
             val privateCustomers =
                 (1..6).map { i ->
-                    val name = if (i <= 5) {
-                        val resId = context.resources.getIdentifier("showcase_private_name_$i", "string", context.packageName)
-                        context.getString(resId)
-                    } else {
-                        context.getString(R.string.showcase_private_fictitious_name)
-                    }
-                    val surname = if (i <= 5) {
-                        val resId = context.resources.getIdentifier("showcase_private_surname_$i", "string", context.packageName)
-                        context.getString(resId)
-                    } else {
-                        context.getString(R.string.showcase_private_fictitious_surname)
-                    }
+                    val name =
+                        if (i <= 5) {
+                            val resId = context.resources.getIdentifier("showcase_private_name_$i", "string", context.packageName)
+                            context.getString(resId)
+                        } else {
+                            context.getString(R.string.showcase_private_fictitious_name)
+                        }
+                    val surname =
+                        if (i <= 5) {
+                            val resId = context.resources.getIdentifier("showcase_private_surname_$i", "string", context.packageName)
+                            context.getString(resId)
+                        } else {
+                            context.getString(R.string.showcase_private_fictitious_surname)
+                        }
 
                     CustomerEntity(
                         id = "cust-p-$i",
@@ -362,12 +363,13 @@ object ShowcaseDataSeeder {
             // 4. Create Business Customers
             val businessCustomers =
                 (1..6).map { i ->
-                    val businessName = if (i <= 5) {
-                        val resId = context.resources.getIdentifier("showcase_business_name_$i", "string", context.packageName)
-                        context.getString(resId)
-                    } else {
-                        context.getString(R.string.showcase_business_fictitious)
-                    }
+                    val businessName =
+                        if (i <= 5) {
+                            val resId = context.resources.getIdentifier("showcase_business_name_$i", "string", context.packageName)
+                            context.getString(resId)
+                        } else {
+                            context.getString(R.string.showcase_business_fictitious)
+                        }
 
                     CustomerEntity(
                         id = "cust-b-$i",
@@ -513,7 +515,7 @@ object ShowcaseDataSeeder {
                             orderId = orderId,
                             signerName =
                                 customer.firstName ?: customer.companyName
-                                ?: context.getString(R.string.signature_default_signer),
+                                    ?: context.getString(R.string.signature_default_signer),
                             privacyAccepted = true,
                             termsAccepted = true,
                             privacyTextSnapshot = context.getString(R.string.showcase_privacy_snapshot),

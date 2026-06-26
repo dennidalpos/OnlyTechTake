@@ -2,8 +2,8 @@
   "project_name": "OnlyTechTake",
   "version": "1.0.5",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-07-02",
-  "alignment_status": "Pienamente allineato tra tutti i flavor. Ottimizzato per prestazioni, stabilità del thread UI e conformità standalone.",
+  "last_updated": "2026-07-03",
+  "alignment_status": "Pienamente allineato tra tutti i flavor. Ottimizzato per prestazioni, stabilità del thread UI e conformità standalone. Implementate misure di sicurezza e UX avanzate.",
   "landing_page": {
     "status": "Standalone Ready + Assets Automated",
     "theme": "Material 3 + Inter Typography",
@@ -23,10 +23,13 @@
     "Automated Template Localization (System fallback)",
     "Advanced Template Mapping with Quick Preview",
     "Customer Detail with Status-colored history",
-    "Diagnostic Logs management (Backup section)",
+    "Diagnostic Logs management (Backup section) with extended level tracking",
     "UI Thread optimization (IO offloading)",
     "Standalone compliance (Clean metadata and internal links)",
-    "Initial Setup Wizard for Owner legal information"
+    "Initial Setup Wizard for Owner legal information",
+    "Configurable Inactivity Timeout for operators",
+    "Operator Search and Collapsable Management UI",
+    "Enhanced Backup Security with disclaimer for disabled reminders"
   ],
   "backlog": [
     {
@@ -44,6 +47,11 @@
   ],
   "identified_residuals": [
     {
+      "area": "TECHNICAL",
+      "risk": "Warning Gradle 10 interni ad AGP 9.2.1 e problemi Configuration Cache in Spotless 8.7.0.",
+      "plan": "Monitorare aggiornamenti AGP/Spotless. Workaround '--no-configuration-cache' attivo negli script di qualità per garantire stabilità."
+    },
+    {
       "area": "PROCEDURAL",
       "risk": "Requisito Google 20 tester per 14 giorni (Account Personali post-2023).",
       "plan": "Pianificare gruppo di test chiuso prima del lancio in produzione."
@@ -55,12 +63,12 @@
     }
   ],
   "completed_recently": [
-    "Implementato Wizard di configurazione iniziale per i dati legali del proprietario.",
-    "Aggiornati template predefiniti con placeholder dinamici per i dati del proprietario (nome, P.IVA, indirizzo).",
-    "Coperta con test unitari la logica di 'OwnerInfo' e il rendering delle variabili owner nei messaggi.",
-    "Aggiornato il seeding dei dati Showcase con informazioni aziendali e privati fittizi localizzati.",
-    "Implementato il pre-caricamento dei dati proprietario fittizi nel wizard iniziale per la variante Showcase.",
-    "Implementata sezione 'Dati Proprietario' (neutralizzata per aziende/privati) nelle impostazioni.",
-    "Generati con successo AAB firmati (Release) per i flavor Full e Demo."
+    "Implementato Timeout di inattività configurabile (default 10 min) gestito dall'admin.",
+    "Aggiornata Dashboard: convertita metrica 'Utenti' in 'Operatori'.",
+    "Ottimizzata gestione Operatori: aggiunta ricerca e schede collassabili.",
+    "Migliorata Sicurezza Backup: aggiunto disclaimer per disattivazione promemoria e collassata sezione reset dati.",
+    "Potenziati Log Diagnostici: aggiunto supporto per livelli Warning e Info.",
+    "Implementati Tooltip informativi per operazioni di manutenzione memoria (pulizia cache/orfani).",
+    "Implementato Wizard di configurazione iniziale per i dati legali del proprietario."
   ]
 }

@@ -4,31 +4,47 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Code
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppDialog
 import com.onlytechtake.repairapp.core.design.components.StandardCard
+import com.onlytechtake.repairapp.core.utils.LicenseTexts
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 
 @Composable
 fun AboutSettings(onBack: () -> Unit) {
     val uriHandler = LocalUriHandler.current
+    var selectedLicenseName by remember { mutableStateOf<String?>(null) }
+    var selectedLicenseText by remember { mutableStateOf("") }
 
     LazyColumn(
         modifier =
@@ -131,6 +147,27 @@ fun AboutSettings(onBack: () -> Unit) {
                         text = stringResource(R.string.about_legal_credits_text),
                         style = MaterialTheme.typography.bodyMedium,
                     )
+
+                    AppButton(
+                        text = "Apache License 2.0",
+                        variant = AppButtonVariant.Ghost,
+                        size = AppButtonSize.Compact,
+                        leadingIcon = Icons.Default.Info,
+                        onClick = {
+                            selectedLicenseName = "Apache License 2.0"
+                            selectedLicenseText = LicenseTexts.APACHE_2_0
+                        },
+                    )
+                    AppButton(
+                        text = "BSD 3-Clause License",
+                        variant = AppButtonVariant.Ghost,
+                        size = AppButtonSize.Compact,
+                        leadingIcon = Icons.Default.Info,
+                        onClick = {
+                            selectedLicenseName = "BSD 3-Clause License"
+                            selectedLicenseText = LicenseTexts.BSD_3_CLAUSE
+                        },
+                    )
                 }
             }
         }
@@ -174,6 +211,41 @@ fun AboutSettings(onBack: () -> Unit) {
                 onClick = onBack,
             )
         }
+    }
+
+    selectedLicenseName?.let { name ->
+        AppDialog(
+            onDismissRequest = { selectedLicenseName = null },
+            title = name,
+            text = "", // We'll use a custom content for the license text
+            confirmButton = {
+                AppButton(
+                    text = stringResource(R.string.about_close),
+                    onClick = { selectedLicenseName = null },
+                    variant = AppButtonVariant.Primary,
+                    size = AppButtonSize.Compact,
+                )
+            },
+            content = {
+                Column(
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 16.dp)
+                            .heightIn(max = 400.dp)
+                            .verticalScroll(rememberScrollState()),
+                ) {
+                    Text(
+                        text = selectedLicenseText,
+                        style =
+                            MaterialTheme.typography.bodySmall.copy(
+                                fontFamily = FontFamily.Monospace,
+                                fontSize = 10.sp,
+                                lineHeight = 14.sp,
+                            ),
+                    )
+                }
+            },
+        )
     }
 }
 

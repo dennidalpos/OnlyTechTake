@@ -31,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
@@ -95,6 +96,7 @@ fun BackupSettings(
 
     var ordersResetConfirmation by rememberSaveable { mutableStateOf("") }
     var resetConfirmation by rememberSaveable { mutableStateOf("") }
+    var isTotalResetExpanded by rememberSaveable { mutableStateOf(false) }
 
     // Pre-fetch strings for callbacks
     val confirmExportZipTitle = stringResource(R.string.config_backup_confirm_export_zip_title)
@@ -185,6 +187,13 @@ fun BackupSettings(
                         testTag = RepairAppTestTags.ConfigBackupIntervalField,
                     )
                     OperatorText(backupReminderInfo(backupReminderSettings))
+
+                    if (!backupReminderSettings.enabled) {
+                        AppMessageBanner(
+                            message = stringResource(R.string.config_backup_reminder_disabled_warning),
+                            type = BannerType.Warning,
+                        )
+                    }
                 }
             }
 
@@ -339,81 +348,100 @@ fun BackupSettings(
                     modifier = Modifier.padding(RepairAppSpacing.cardPadding),
                     verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
                 ) {
-                    Text(
-                        text = stringResource(R.string.admin_delete_all_orders),
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
-                    )
-                    Text(
-                        text = stringResource(R.string.admin_delete_all_orders_tooltip),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                    AppTextField(
-                        value = ordersResetConfirmation,
-                        onValueChange = { ordersResetConfirmation = it },
-                        label =
-                            stringResource(
-                                R.string.admin_delete_all_orders_field_short,
-                                stringResource(R.string.admin_delete_all_orders_confirmation_value),
-                            ),
-                    )
-                    AppButton(
+                    Row(
                         modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.admin_delete_all_orders),
-                        enabled = ordersResetConfirmation == stringResource(R.string.admin_delete_all_orders_confirmation_value),
-                        variant = AppButtonVariant.Warning,
-                        leadingIcon = Icons.Default.Delete,
-                        testTag = RepairAppTestTags.AdminDeleteAllOrdersButton,
-                        onClick = {
-                            onRequestConfirm(
-                                confirmDeleteAllOrdersTitle,
-                                confirmDeleteAllOrdersText,
-                            ) {
-                                viewModel.resetOrders(ordersResetConfirmation) {
-                                    ordersResetConfirmation = ""
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = stringResource(R.string.admin_total_reset),
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.error,
+                        )
+                        Switch(
+                            checked = isTotalResetExpanded,
+                            onCheckedChange = { isTotalResetExpanded = it },
+                        )
+                    }
+
+                    if (isTotalResetExpanded) {
+                        Text(
+                            text = stringResource(R.string.admin_delete_all_orders),
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                        )
+                        Text(
+                            text = stringResource(R.string.admin_delete_all_orders_tooltip),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        AppTextField(
+                            value = ordersResetConfirmation,
+                            onValueChange = { ordersResetConfirmation = it },
+                            label =
+                                stringResource(
+                                    R.string.admin_delete_all_orders_field_short,
+                                    stringResource(R.string.admin_delete_all_orders_confirmation_value),
+                                ),
+                        )
+                        AppButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(R.string.admin_delete_all_orders),
+                            enabled = ordersResetConfirmation == stringResource(R.string.admin_delete_all_orders_confirmation_value),
+                            variant = AppButtonVariant.Warning,
+                            leadingIcon = Icons.Default.Delete,
+                            testTag = RepairAppTestTags.AdminDeleteAllOrdersButton,
+                            onClick = {
+                                onRequestConfirm(
+                                    confirmDeleteAllOrdersTitle,
+                                    confirmDeleteAllOrdersText,
+                                ) {
+                                    viewModel.resetOrders(ordersResetConfirmation) {
+                                        ordersResetConfirmation = ""
+                                    }
                                 }
-                            }
-                        },
-                    )
+                            },
+                        )
 
-                    Spacer(Modifier.height(RepairAppSpacing.cardGap))
+                        Spacer(Modifier.height(RepairAppSpacing.cardGap))
 
-                    AppDivider()
+                        AppDivider()
 
-                    Text(
-                        text = stringResource(R.string.admin_total_reset),
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.error,
-                    )
-                    Text(
-                        text = stringResource(R.string.admin_total_reset_tooltip),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                    AppTextField(
-                        resetConfirmation,
-                        { resetConfirmation = it },
-                        stringResource(
-                            R.string.admin_total_reset_field,
-                            stringResource(R.string.admin_total_reset_confirmation_value),
-                        ),
-                    )
-                    AppButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.admin_total_reset),
-                        enabled = resetConfirmation == stringResource(R.string.admin_total_reset_confirmation_value),
-                        variant = AppButtonVariant.Danger,
-                        leadingIcon = Icons.Default.DeleteForever,
-                        testTag = RepairAppTestTags.AdminTotalResetButton,
-                        onClick = {
-                            onRequestConfirm(confirmTotalResetTitle, confirmTotalResetText) {
-                                viewModel.resetAllData(resetConfirmation, onResetComplete)
-                                resetConfirmation = ""
-                            }
-                        },
-                    )
+                        Text(
+                            text = stringResource(R.string.admin_total_reset),
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.error,
+                        )
+                        Text(
+                            text = stringResource(R.string.admin_total_reset_tooltip),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        AppTextField(
+                            resetConfirmation,
+                            { resetConfirmation = it },
+                            stringResource(
+                                R.string.admin_total_reset_field,
+                                stringResource(R.string.admin_total_reset_confirmation_value),
+                            ),
+                        )
+                        AppButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(R.string.admin_total_reset),
+                            enabled = resetConfirmation == stringResource(R.string.admin_total_reset_confirmation_value),
+                            variant = AppButtonVariant.Danger,
+                            leadingIcon = Icons.Default.DeleteForever,
+                            testTag = RepairAppTestTags.AdminTotalResetButton,
+                            onClick = {
+                                onRequestConfirm(confirmTotalResetTitle, confirmTotalResetText) {
+                                    viewModel.resetAllData(resetConfirmation, onResetComplete)
+                                    resetConfirmation = ""
+                                }
+                            },
+                        )
+                    }
                 }
             }
 
@@ -475,30 +503,45 @@ fun BackupSettings(
 
                     AppDivider()
 
-                    Text(
+                    SectionTitle(
                         text = stringResource(R.string.storage_deep_maintenance),
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
+                        tooltip = stringResource(R.string.storage_tooltip),
                     )
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                     ) {
-                        AppButton(
-                            modifier = Modifier.weight(1f),
-                            text = stringResource(R.string.storage_cleanup_cache),
-                            variant = AppButtonVariant.Secondary,
-                            size = AppButtonSize.Compact,
-                            onClick = viewModel::cleanupCache,
-                        )
-                        AppButton(
-                            modifier = Modifier.weight(1f),
-                            text = stringResource(R.string.storage_cleanup_orphans),
-                            variant = AppButtonVariant.Secondary,
-                            size = AppButtonSize.Compact,
-                            onClick = viewModel::cleanupOrphanedFiles,
-                        )
+                        Column(modifier = Modifier.weight(1f)) {
+                            AppButton(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = stringResource(R.string.storage_cleanup_cache),
+                                variant = AppButtonVariant.Secondary,
+                                size = AppButtonSize.Compact,
+                                onClick = viewModel::cleanupCache,
+                            )
+                            Text(
+                                text = stringResource(R.string.storage_cleanup_cache_tooltip),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(top = 4.dp),
+                            )
+                        }
+                        Column(modifier = Modifier.weight(1f)) {
+                            AppButton(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = stringResource(R.string.storage_cleanup_orphans),
+                                variant = AppButtonVariant.Secondary,
+                                size = AppButtonSize.Compact,
+                                onClick = viewModel::cleanupOrphanedFiles,
+                            )
+                            Text(
+                                text = stringResource(R.string.storage_cleanup_orphans_tooltip),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(top = 4.dp),
+                            )
+                        }
                     }
                 }
             }

@@ -376,6 +376,10 @@
     <string name="auth_close_app">Close app</string>
     <string name="auth_admin_name">Admin name</string>
     <string name="auth_username">Username</string>
+    <string name="auth_inactivity_timeout_title">Inactivity Timeout</string>
+    <string name="auth_inactivity_timeout_label">Timeout (minutes)</string>
+    <string name="auth_inactivity_timeout_disabled">Disabled</string>
+    <string name="auth_inactivity_timeout_tooltip">Automatically log out operators after a period of inactivity. 0 to disable. Default: 10 min.</string>
     <string name="auth_recovery_code">Recovery code</string>
     <string name="auth_password">Password</string>
     <string name="auth_confirm_password">Confirm password</string>
@@ -409,7 +413,7 @@
     <string name="home_demo_pro_features">Discover Pro version benefits</string>
     <string name="home_showcase_scenario">DEMO SCENARIO</string>
     <string name="home_showcase_walkthrough">Start Walkthrough</string>
-    <string name="home_metric_users">Users</string>
+    <string name="home_metric_operators">Operators</string>
     <string name="home_metric_customers">Customers</string>
     <string name="home_metric_active">Active</string>
     <string name="home_new_order">New repair order</string>
@@ -681,9 +685,9 @@
     <string name="template_wa_pdf_status_title">WhatsApp progress status PDF</string>
     <string name="template_wa_pdf_status_body">Hello {{cliente}}, we are sending you the attached progress status for repair order {{numero_commessa}}: {{titolo_commessa}}.\n\nCurrent status: {{stato_commessa}}\nNext action: {{prossima_azione}}\n\n{{proprietario_nome}}</string>
     <string name="template_privacy_breve_title">Short privacy notice</string>
-    <string name="template_privacy_breve_body">Summary Privacy Notice pursuant to EU Regulation 2016/679 (GDPR).\nData Controller: {{proprietario_nome}}, {{proprietario_piva}}, {{proprietario_indirizzo}}, contactable at the point of sale or via the contact details provided on the receipt: {{proprietario_email}} {{proprietario_telefono}}.\nPurposes: Management of repair orders, technical diagnosis, quoting, repair execution, delivery, post-intervention assistance, operational communications, and accounting/tax compliance.\nLegal bases: Execution of pre-contractual or contractual measures, compliance with legal obligations, and legitimate interest in organizational management and protection of rights. For non-essential WhatsApp communications, specific consent may be requested.\nProcessed data: Identification and contact details, tax information if required, device information, problem description, photos/attachments, signatures, operational notes, and communication history.\nRetention: Data is retained for the period necessary to manage the repair order and subsequently as required for legal compliance or protection of rights.\nRecipients: Authorized personnel, strictly necessary technical service providers, consultants, and legal authorities. Use of WhatsApp involves processing according to the platform conditions accepted by the customer.\nRights: You have the right to access, rectify, or erase your data in provided cases, as well as the right to restriction, objection, portability, and to lodge a complaint with the Data Protection Authority.</string>
+    <string name="template_privacy_breve_body">Summary Privacy Notice pursuant to EU Regulation 2016/679 (GDPR).\nData Controller: {{proprietario_nome}}, {{proprietario_piva}}, {{proprietario_indirizzo}}, contactable at the point of sale or via: {{proprietario_email}} {{proprietario_telefono}}.\nPurposes: Management of repair orders, technical diagnosis, quoting, repair execution, delivery, post-intervention assistance, operational communications, and accounting/tax compliance.\nLegal bases: Execution of pre-contractual or contractual measures, compliance with legal obligations, and legitimate interest in organizational management. For non-essential communications (e.g. via WhatsApp), specific consent is required and granted by the customer by providing the contact number.\nProcessed data: Identification and contact details, tax information, device info, problem description, photos, signatures, and history.\nRetention: Data is retained for the period necessary to manage the repair order and subsequently as required for legal compliance or protection of rights.\nRecipients: Authorized personnel, strictly necessary technical service providers, and legal authorities.\nRights: You have the right to access, rectify, or erase your data, as well as the right to restriction, objection, portability, and to lodge a complaint with the Data Protection Authority.</string>
     <string name="template_condizioni_title">Service Intake Terms</string>
-    <string name="template_condizioni_body">Service Intake Terms and Conditions.\nThe customer delivers the object specified in the repair order and authorizes {{proprietario_nome}} to store, inspect, and perform a preliminary technical diagnosis.\nDiagnosis may require opening the device, testing, technical cleaning, or connection to compatible power supplies/instruments. Repair work is initiated only after customer acceptance of the provided quote.\nThe customer undertakes to provide accurate information regarding ownership, known defects, security locks (passwords/PINs), accessories, and general condition of the object. {{proprietario_nome}} is not liable for data loss, uncommunicated passwords, pre-existing defects, or inevitable deterioration emerging during diagnosis on already damaged objects.\nQuoted amounts must be accepted by the customer before work begins. In the event of rejection, impossibility of repair, or failure to collect the device, the repair order may be closed according to the conditions communicated by the operator.\nBy signing, the customer confirms having read and accepted the privacy notice and these operational terms.</string>
+    <string name="template_condizioni_body">Service Intake Terms and Conditions.\nThe customer delivers the object specified in the repair order and authorizes {{proprietario_nome}} to store, inspect, and perform a technical diagnosis.\nDiagnosis may require opening the device, testing, or connection to compatible power supplies. Repair work is initiated only after customer acceptance of the quote.\n{{proprietario_nome}} is not liable for data loss, uncommunicated passwords, pre-existing defects, or inevitable deterioration emerging during diagnosis on already damaged objects. It is the customer\'s responsibility to back up data before delivery.\nQuoted amounts must be accepted by the customer before work begins. In the event of rejection or failure to collect the device within 90 days, the object may be handled according to current regulations on abandoned property.\nBy signing, the customer confirms having read and accepted the privacy notice and these terms.\n\nLaboratory: {{proprietario_nome}} - {{proprietario_indirizzo}}</string>
 
     <string name="order_confirm_delete_document_title">Delete document?</string>
     <string name="order_confirm_delete_document_text">The file will be permanently removed.</string>
@@ -693,6 +697,7 @@
     <string name="no_cancel">No, cancel</string>
 
     <string name="admin_close">Close Users and Operators</string>
+    <string name="admin_search_operators_label">Search operators…</string>
     <string name="admin_only_section">Section available only for admin.</string>
     <string name="admin_create_operator">Create operator</string>
     <string name="admin_field_temp_password">Temporary password</string>
@@ -701,10 +706,17 @@
     <string name="admin_users_title">Users</string>
     <string name="admin_no_users_title">No operator</string>
     <string name="admin_no_users_body">Create at least one operator to separate access, permissions, and responsibilities on repair orders.</string>
+    <string name="admin_user_active_description">The operator can access the system</string>
+    <string name="admin_user_inactive_description">The operator cannot log in</string>
     <string name="admin_user_active">Active</string>
     <string name="admin_user_inactive">Inactive</string>
     <string name="admin_user_activate">Activate</string>
     <string name="admin_user_deactivate">Deactivate</string>
+    <string name="admin_confirm_activate_title">Activate operator?</string>
+    <string name="admin_confirm_deactivate_title">Deactivate operator?</string>
+    <string name="admin_confirm_activate_text">Do you want to activate operator %s? They will be able to manage repair orders again.</string>
+    <string name="admin_confirm_deactivate_text">Do you want to deactivate operator %s? They will no longer be able to access the app until reactivated.</string>
+    <string name="admin_confirm_delete_user_title">Delete operator?</string>
     <string name="admin_confirm_delete_user_text">The operator %s will be permanently removed from the system. It will no longer be possible to recover their credentials, but the repair orders managed by them will remain in the archive.</string>
     <string name="admin_reset_password">Reset password</string>
     <string name="admin_confirm_reset_title">Reset password?</string>
@@ -860,6 +872,7 @@
     <string name="config_whatsapp_confirm_manual_title">Set manual mode?</string>
     <string name="config_whatsapp_confirm_manual_text">The WhatsApp mode will be saved.</string>
     <string name="config_backup_title">Backup and Restore</string>
+    <string name="config_backup_reminder_disabled_warning">Warning: with the reminder disabled, you will not receive notifications to perform the recommended periodic backup.</string>
     <string name="config_backup_reminder_enabled">Backup reminder active</string>
     <string name="config_backup_interval_days">Reminder interval (days)</string>
     <string name="config_backup_reminder_info">Status: %1$s\nLast successful backup: %2$s\nInterval: %3$s\nFile: %4$s</string>
@@ -934,6 +947,7 @@
     <string name="storage_deep_maintenance">Deep maintenance</string>
 
     <string name="storage_cleanup_cache">Empty cache</string>
+    <string name="storage_cleanup_cache_tooltip">Deletes temporary files and cached data. Does not affect repair orders or documents.</string>
     <string name="storage_cleanup_orphans">Clean orphan files</string>
     <string name="storage_cleanup_orphans_tooltip">Permanently removes files no longer referenced in the database (e.g., photos of deleted repair orders).</string>
     <string name="storage_tooltip">Monitor memory use and clean temporary files to free up space.</string>

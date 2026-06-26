@@ -6,5 +6,10 @@ interface ErrorHandler {
         context: String? = null,
     )
 
+    fun handleWarning(
+        message: String,
+        context: String? = null,
+    )
+
     fun getErrorMessage(error: Throwable): String
 }

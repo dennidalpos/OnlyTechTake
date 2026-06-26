@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.data.preferences
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -17,6 +18,7 @@ data class SecuritySettings(
     // La password non dovrebbe essere salvata in chiaro nelle preferenze se possibile,
     // ma per questa implementazione "fresh" e locale seguiamo la richiesta dell'utente.
     val backupEncryptionPassword: String = "",
+    val inactivityTimeoutMinutes: Int = 10,
 )
 
 class SecurityPreferences(
@@ -28,6 +30,7 @@ class SecurityPreferences(
                 isBackupEncryptionEnabled = preferences[BACKUP_ENCRYPTION_ENABLED] ?: false,
                 isDatabaseEncryptionEnabled = preferences[DATABASE_ENCRYPTION_ENABLED] ?: false,
                 backupEncryptionPassword = preferences[BACKUP_ENCRYPTION_PASSWORD] ?: "",
+                inactivityTimeoutMinutes = preferences[INACTIVITY_TIMEOUT_MINUTES] ?: 10,
             )
         }
 
@@ -49,11 +52,18 @@ class SecurityPreferences(
         }
     }
 
+    suspend fun setInactivityTimeoutMinutes(minutes: Int) {
+        context.securityDataStore.edit { preferences ->
+            preferences[INACTIVITY_TIMEOUT_MINUTES] = minutes
+        }
+    }
+
     suspend fun getSettings(): SecuritySettings = settings.first()
 
     private companion object {
         val BACKUP_ENCRYPTION_ENABLED = booleanPreferencesKey("backup_encryption_enabled")
         val DATABASE_ENCRYPTION_ENABLED = booleanPreferencesKey("database_encryption_enabled")
         val BACKUP_ENCRYPTION_PASSWORD = stringPreferencesKey("backup_encryption_password")
+        val INACTIVITY_TIMEOUT_MINUTES = intPreferencesKey("inactivity_timeout_minutes")
     }
 }

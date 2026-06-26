@@ -52,6 +52,5 @@ object BackupReminderPolicy {
             lastBackupFileName = fileName?.takeIf { it.isNotBlank() },
         )
 
-    fun recordFailure(settings: BackupReminderSettings): BackupReminderSettings =
-        settings.copy(lastBackupStatus = BackupReminderStatus.FAILED)
+    fun recordFailure(settings: BackupReminderSettings): BackupReminderSettings = settings.copy(lastBackupStatus = BackupReminderStatus.FAILED)
 }

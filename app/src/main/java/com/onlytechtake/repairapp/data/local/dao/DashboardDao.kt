@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DashboardDao {
-    @Query("SELECT COUNT(*) FROM users")
-    fun observeUserCount(): Flow<Int>
+    @Query("SELECT COUNT(*) FROM users WHERE role = 'OPERATOR'")
+    fun observeOperatorCount(): Flow<Int>
 
     @Query("SELECT COUNT(*) FROM repair_orders")
     fun observeActiveOrderCount(): Flow<Int>

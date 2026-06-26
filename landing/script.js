@@ -125,44 +125,44 @@ const translations = {
         privacyPage: {
             titleMeta: "Privacy Policy - OnlyTechTake",
             title: "Informativa sulla Privacy",
-            version: "Versione Corrente: 1.0.0",
-            intro: "L'applicazione OnlyTechTake (di seguito \"l'App\") è progettata con un approccio Local-First. La presente informativa descrive come gestiamo la tua privacy, basandoci su un principio fondamentale: i tuoi dati appartengono a te e non lasciano mai il tuo dispositivo senza il tuo esplicito comando manuale.",
+            version: "Versione Corrente: 1.1.0 (Conforme GDPR)",
+            intro: "L'applicazione OnlyTechTake (di seguito \"l'App\") è progettata con un approccio Local-First per massimizzare la tutela della privacy. La presente informativa, redatta ai sensi del <strong>Regolamento UE 2016/679 (GDPR)</strong>, descrive come vengono gestiti i dati, basandoci su un principio fondamentale: i tuoi dati appartengono a te e non lasciano mai il tuo dispositivo senza il tuo comando manuale.",
             section1: {
                 title: "1. Trattamento dei Dati Locali",
-                text: "L'App non dispone di un server centrale o di un database cloud gestito dagli sviluppatori. Tutte le informazioni inserite nell'App, inclusi:",
+                text: "L'App non dispone di un server centrale o di un database cloud. Tutte le informazioni inserite, inclusi:",
                 list: [
-                    "Anagrafiche clienti e contatti",
-                    "Dettagli tecnici sulle riparazioni",
-                    "Fotografie e allegati multimediali (CameraX)",
-                    "Firme digitali dei clienti"
+                    "Anagrafiche clienti, contatti e note fiscali",
+                    "Dettagli tecnici sulle riparazioni e cronologia interventi",
+                    "Documentazione multimediale (Foto CameraX)",
+                    "Firme digitali di presa in carico e accettazione privacy"
                 ],
-                footer: "vengono memorizzati esclusivamente in un <strong>database cifrato (SQLCipher)</strong> all'interno dello storage privato del tuo dispositivo Android."
+                footer: "vengono memorizzati esclusivamente in un <strong>database cifrato (SQLCipher)</strong> all'interno dello storage privato del tuo dispositivo Android. Nessun dato viene indicizzato dal sistema operativo o reso accessibile ad altre app."
             },
             section2: {
                 title: "2. Sicurezza e Cifratura",
-                text: "Per garantire la massima protezione dei dati sensibili dei tuoi clienti, OnlyTechTake implementa una cifratura a livello di database. L'accesso ai dati è protetto dalle credenziali operatore (Admin o Operatore) create durante la prima configurazione. È responsabilità dell'utente mantenere la sicurezza fisica del dispositivo e utilizzare sistemi di sblocco sicuri (PIN, Biometria)."
+                text: "Per garantire la protezione contro l'accesso fisico non autorizzato, OnlyTechTake implementa una cifratura a livello di database. L'accesso ai dati è protetto da credenziali locali. È responsabilità dell'utente utilizzare sistemi di sblocco sicuri (PIN, Biometria) e non condividere il 'Master Code' del Kit di recupero."
             },
             section3: {
-                title: "3. Permessi Richiesti",
-                text: "L'App richiede i seguenti permessi per funzionare correttamente:",
+                title: "3. Permessi e Finalità",
+                text: "L'App richiede permessi minimi, utilizzati esclusivamente per le finalità operative del laboratorio:",
                 list: [
-                    "<strong>Fotocamera:</strong> Necessaria per documentare visivamente lo stato dei dispositivi in entrata tramite scatti rapidi.",
-                    "<strong>Storage / Media:</strong> Utilizzato esclusivamente per salvare e recuperare i file relativi alle commesse nello storage privato.",
-                    "<strong>Internet:</strong> L'App non richiede accesso a internet per il funzionamento core. L'accesso alla rete può essere utilizzato solo per il controllo della licenza tramite Google Play Services."
+                    "<strong>Fotocamera:</strong> Acquisizione di prove visive dello stato del dispositivo.",
+                    "<strong>Storage:</strong> Salvataggio locale dei PDF e degli export XLSX richiesti dall'utente.",
+                    "<strong>Internet:</strong> Nessun traffico dati core. Utilizzato solo dai Google Play Services per la verifica periodica della licenza (Google Play Billing)."
                 ]
             },
             section4: {
-                title: "4. Condivisione dei Dati verso Terzi",
-                text: "OnlyTechTake <strong>non trasmette, vende o condivide</strong> automaticamente i dati con terze parti. La condivisione avviene solo su tua iniziativa esplicita attraverso:",
+                title: "4. Condivisione e Trasferimento Dati",
+                text: "OnlyTechTake <strong>non trasmette automaticamente</strong> dati a terzi. La condivisione avviene solo su iniziativa manuale dell'utente professionale:",
                 list: [
-                    "Invio manuale di PDF tramite WhatsApp o app di messaggistica.",
-                    "Esportazione manuale di file Excel (XLSX).",
-                    "Creazione di backup ZIP cifrati per trasferimento manuale."
+                    "Invio manuale di PDF tramite protocolli di sistema (WhatsApp, Email).",
+                    "Esportazione XLSX per finalità contabili esterne.",
+                    "Backup ZIP cifrati per la migrazione del database tra dispositivi dell'utente."
                 ]
             },
             section5: {
-                title: "5. Titolare del Trattamento",
-                text: "Ai sensi del GDPR, il <strong>Titolare del Trattamento</strong> dei dati dei clienti finali è l'utilizzatore professionale dell'App (il laboratorio o il tecnico). Lo sviluppatore dell'App non ha accesso ai dati inseriti e non agisce come responsabile del trattamento."
+                title: "5. Diritti dell'Interessato e Titolare",
+                text: "Ai sensi del GDPR, il <strong>Titolare del Trattamento</strong> dei dati dei clienti finali è l'utilizzatore professionale dell'App. I clienti finali possono esercitare i propri diritti (accesso, rettifica, cancellazione, portabilità) rivolgendosi direttamente al laboratorio. L'App fornisce strumenti integrati per la <strong>cancellazione totale</strong> dei dati o dei singoli record per facilitare la conformità normativa."
             }
         }
     },
@@ -287,44 +287,44 @@ const translations = {
         privacyPage: {
             titleMeta: "Privacy Policy - OnlyTechTake",
             title: "Privacy Policy",
-            version: "Current Version: 1.0.0",
-            intro: "The OnlyTechTake application, hereinafter referred to as the “App”, is designed with a Local-First approach. This policy explains how we handle your privacy based on one core principle: your data belongs to you and never leaves your device without your explicit manual action.",
+            version: "Current Version: 1.1.0 (GDPR Compliant)",
+            intro: "The OnlyTechTake application (hereinafter the \"App\") is designed with a Local-First approach to maximize privacy protection. This policy, drafted in accordance with <strong>EU Regulation 2016/679 (GDPR)</strong>, describes how data is handled based on a core principle: your data belongs to you and never leaves your device without your manual command.",
             section1: {
                 title: "1. Local Data Processing",
-                text: "The App does not use a central server or a cloud database managed by the developers. All information entered in the App, including:",
+                text: "The App does not use a central server or cloud database. All entered information, including:",
                 list: [
-                    "Customer records and contact details",
-                    "Technical repair details",
-                    "Photos and media attachments (CameraX)",
-                    "Customer digital signatures"
+                    "Customer records, contacts, and tax notes",
+                    "Technical repair details and intervention history",
+                    "Multimedia documentation (CameraX photos)",
+                    "Digital signatures for intake and privacy acceptance"
                 ],
-                footer: "is stored exclusively in an <strong>encrypted database (SQLCipher)</strong> within the private storage of your Android device."
+                footer: "is stored exclusively in an <strong>encrypted database (SQLCipher)</strong> within your Android device's private storage. No data is indexed by the OS or accessible to other apps."
             },
             section2: {
                 title: "2. Security and Encryption",
-                text: "To provide strong protection for your customers’ sensitive data, OnlyTechTake implements database-level encryption. Access to data is protected by the operator credentials, Admin or Operator, created during the first setup. The user is responsible for maintaining the physical security of the device and using secure unlock methods, such as PIN or biometrics."
+                text: "To protect against unauthorized physical access, OnlyTechTake implements database-level encryption. Access to data is protected by local credentials. It is the user's responsibility to use secure unlock systems (PIN, Biometrics) and not to share the 'Master Code' from the Recovery Kit."
             },
             section3: {
-                title: "3. Required Permissions",
-                text: "The App requires the following permissions to work properly:",
+                title: "3. Permissions and Purposes",
+                text: "The App requires minimal permissions, used exclusively for the workshop's operational purposes:",
                 list: [
-                    "<strong>Camera:</strong> Required to visually document the condition of incoming devices through quick photos.",
-                    "<strong>Storage / Media:</strong> Used exclusively to save and retrieve files related to repair orders in private storage.",
-                    "<strong>Internet:</strong> The App does not require internet access for its core functionality. Network access may only be used for license verification through Google Play Services."
+                    "<strong>Camera:</strong> Acquiring visual evidence of the device's condition.",
+                    "<strong>Storage:</strong> Local saving of PDFs and XLSX exports requested by the user.",
+                    "<strong>Internet:</strong> No core data traffic. Used only by Google Play Services for periodic license verification (Google Play Billing)."
                 ]
             },
             section4: {
-                title: "4. Data Sharing with Third Parties",
-                text: "OnlyTechTake <strong>does not automatically transmit, sell, or share</strong> data with third parties. Sharing only occurs through your explicit manual action, such as:",
+                title: "4. Data Sharing and Transfer",
+                text: "OnlyTechTake <strong>does not automatically transmit</strong> data to third parties. Sharing only occurs through the professional user's manual initiative:",
                 list: [
-                    "Manual sending of PDFs through WhatsApp or messaging apps.",
-                    "Manual export of Excel files (XLSX).",
-                    "Creation of encrypted ZIP backups for manual transfer."
+                    "Manual PDF sending via system protocols (WhatsApp, Email).",
+                    "XLSX export for external accounting purposes.",
+                    "Encrypted ZIP backups for database migration between user devices."
                 ]
             },
             section5: {
-                title: "5. Data Controller",
-                text: "Under the GDPR, the <strong>Data Controller</strong> for end-customer data is the professional user of the App, such as the workshop or technician. The App developer has no access to the entered data and does not act as a data processor."
+                title: "5. Data Subject Rights and Controller",
+                text: "Under the GDPR, the <strong>Data Controller</strong> for end-customer data is the professional user of the App. End customers can exercise their rights (access, rectification, erasure, portability) by contacting the workshop directly. The App provides integrated tools for <strong>total data deletion</strong> or individual record removal to facilitate regulatory compliance."
             }
         }
     }

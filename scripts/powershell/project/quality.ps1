@@ -86,6 +86,8 @@ function Invoke-GradleTask {
         [switch]$AllowFailure
     )
 
+    # Spotless 8.x has serialization issues with Gradle 9.6 Configuration Cache (lineEndingsPolicy).
+    # We bypass Configuration Cache for quality tasks to ensure stability until plugins are updated.
     $gradleArguments = @("--no-configuration-cache") + $Tasks
     Write-Host "Eseguo: .\gradlew.bat $($gradleArguments -join ' ')"
     & $script:gradlew @gradleArguments | Out-Host

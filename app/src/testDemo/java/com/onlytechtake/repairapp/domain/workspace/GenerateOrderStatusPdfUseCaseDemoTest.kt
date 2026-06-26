@@ -16,10 +16,12 @@ import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.data.local.entities.UserEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
+import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentFileStorage
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
 import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
+import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -68,6 +70,9 @@ class GenerateOrderStatusPdfUseCaseDemoTest {
             val userDao = mockk<UserDao>()
             coEvery { userDao.findById("operator-1") } returns user()
 
+            val ownerPreferences = mockk<OwnerPreferences>()
+            every { ownerPreferences.ownerInfo } returns flowOf(OwnerInfo())
+
             val documentRepository = FakeOrderDocumentRepository()
             val pdfGenerator = CapturingPdfGenerator()
             val useCase =
@@ -78,6 +83,7 @@ class GenerateOrderStatusPdfUseCaseDemoTest {
                     documentRepository = documentRepository,
                     userDao = userDao,
                     fileStorage = OrderDocumentFileStorage(MediaStorageProvider(context)),
+                    ownerPreferences = ownerPreferences,
                     pdfGenerator = pdfGenerator,
                     clockMillis = { 1_000L },
                 )
@@ -180,11 +186,9 @@ class GenerateOrderStatusPdfUseCaseDemoTest {
             sharedAt: Long,
         ) = Unit
 
-        override suspend fun findById(id: String): OrderDocumentEntity? =
-            saved.firstOrNull { it.id == id }
+        override suspend fun findById(id: String): OrderDocumentEntity? = saved.firstOrNull { it.id == id }
 
-        override fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>> =
-            documentsFlow
+        override fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>> = documentsFlow
 
         override suspend fun delete(documentId: String): Result<Unit> = Result.success(Unit)
     }

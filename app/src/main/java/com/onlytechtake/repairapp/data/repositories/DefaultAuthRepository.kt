@@ -38,7 +38,9 @@ class DefaultAuthRepository(
     private val loginAttemptDao: LoginAttemptDao,
     private val appSettingDao: AppSettingDao,
     private val authPreferences: AuthPreferences,
+    private val securityPreferences: com.onlytechtake.repairapp.data.preferences.SecurityPreferences,
     private val sessionStore: InMemorySessionStore,
+    private val diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger,
     private val passwordHasher: PasswordHasher,
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) : AuthRepository {
@@ -49,16 +51,19 @@ class DefaultAuthRepository(
             userDao.observeCountByRole(UserRole.ADMIN),
             sessionStore.state,
             authPreferences.lastUserId,
+            securityPreferences.settings,
             inactivityTicker(),
-        ) { adminCount, session, lastUserId, now ->
+        ) { adminCount, session, lastUserId, security, now ->
+            val timeoutMillis = security.inactivityTimeoutMinutes * 60 * 1000L
             val activeUser =
                 if ((session.user != null) &&
+                    (timeoutMillis > 0) &&
                     (
                         sessionStore.isExpired(
                             now,
-                            AuthPolicy.INACTIVITY_TIMEOUT_MILLIS,
+                            timeoutMillis,
                         )
-                        )
+                    )
                 ) {
                     sessionStore.clear()
                     null
@@ -78,6 +83,7 @@ class DefaultAuthRepository(
             delay(1500.milliseconds)
         }.catch { e ->
             android.util.Log.e("AuthRepository", "Flow error", e)
+            diagnosticLogger.logError("AuthRepository", "Flow error", e)
             emit(
                 AuthState(
                     initialized = true,

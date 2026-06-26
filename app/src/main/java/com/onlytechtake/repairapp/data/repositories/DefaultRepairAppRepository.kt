@@ -11,13 +11,13 @@ class DefaultRepairAppRepository(
 ) : RepairAppRepository {
     override fun observeSummary(): Flow<AppSummary> =
         combine(
-            dashboardDao.observeUserCount(),
+            dashboardDao.observeOperatorCount(),
             dashboardDao.observeCustomerCount(),
             dashboardDao.observeActiveOrderCount(),
-        ) { userCount, customerCount, activeOrderCount ->
+        ) { operatorCount, customerCount, activeOrderCount ->
             AppSummary(
                 title = "OnlyTechTake",
-                userCount = userCount,
+                operatorCount = operatorCount,
                 customerCount = customerCount,
                 activeOrderCount = activeOrderCount,
             )

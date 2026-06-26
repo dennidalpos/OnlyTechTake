@@ -11,7 +11,11 @@ class AppContainer(
     val context: Context,
 ) {
     private val dataContainer = DataContainer(context)
-    private val authContainer by lazy { AuthContainer(context, dataContainer) }
+    private val internalSecurityPreferences by lazy {
+        com.onlytechtake.repairapp.data.preferences
+            .SecurityPreferences(context.applicationContext)
+    }
+    private val authContainer by lazy { AuthContainer(context, dataContainer, internalSecurityPreferences) }
     private val mediaContainer by lazy { MediaContainer(context, dataContainer) }
     private val settingsContainer by lazy {
         SettingsContainer(
@@ -19,6 +23,7 @@ class AppContainer(
             dataContainer,
             authContainer,
             mediaContainer,
+            internalSecurityPreferences,
         )
     }
     private val orderContainer by lazy {
@@ -55,7 +60,7 @@ class AppContainer(
     val backupRepository get() = settingsContainer.backupRepository
     val backupReminderPreferences get() = settingsContainer.backupReminderPreferences
     val ownerPreferences get() = settingsContainer.ownerPreferences
-    val securityPreferences get() = settingsContainer.securityPreferences
+    val securityPreferences get() = internalSecurityPreferences
     val dataResetRepository get() = settingsContainer.dataResetRepository
     val storageStatsService get() = settingsContainer.storageStatsService
     val diagnosticLogService get() = settingsContainer.diagnosticLogService

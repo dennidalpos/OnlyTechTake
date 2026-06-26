@@ -8,11 +8,18 @@ import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.utils.capitalizeFirst
 import com.onlytechtake.repairapp.core.utils.formatEuroCents
 import com.onlytechtake.repairapp.core.utils.label
+import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.CustomerDao
 import com.onlytechtake.repairapp.data.local.dao.MessageLogDao
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
+import com.onlytechtake.repairapp.data.local.dao.OrderDocumentDao
+import com.onlytechtake.repairapp.data.local.dao.OrderMediaDao
 import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
+import com.onlytechtake.repairapp.data.local.dao.SignatureDao
+import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
+import com.onlytechtake.repairapp.data.local.entities.AuditAction
+import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerActionStatus
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
@@ -271,7 +278,7 @@ internal class OrderWorkflowCommands(
                 when (input.feedback) {
                     CustomerFeedbackType.ACCEPT,
                     CustomerFeedbackType.REJECT,
-                        ->
+                    ->
                         require(order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
                             context.getString(R.string.error_feedback_only_repairable)
                         }
@@ -391,11 +398,11 @@ internal class OrderWorkflowCommands(
     suspend fun deleteOrder(
         actor: AuthenticatedUser,
         orderId: String,
-        timelineEventDao: com.onlytechtake.repairapp.data.local.dao.TimelineEventDao,
-        orderMediaDao: com.onlytechtake.repairapp.data.local.dao.OrderMediaDao,
-        signatureDao: com.onlytechtake.repairapp.data.local.dao.SignatureDao,
-        orderDocumentDao: com.onlytechtake.repairapp.data.local.dao.OrderDocumentDao,
-        auditLogDao: com.onlytechtake.repairapp.data.local.dao.AuditLogDao,
+        timelineEventDao: TimelineEventDao,
+        orderMediaDao: OrderMediaDao,
+        signatureDao: SignatureDao,
+        orderDocumentDao: OrderDocumentDao,
+        auditLogDao: AuditLogDao,
         fileCleanupService: OrderFileCleanupService,
     ): Result<Unit> =
         runCatching {
@@ -418,9 +425,9 @@ internal class OrderWorkflowCommands(
 
                 // 3. Audit log
                 auditLogDao.upsert(
-                    com.onlytechtake.repairapp.data.local.entities.AuditLogEntity(
+                    AuditLogEntity(
                         id = UUID.randomUUID().toString(),
-                        action = com.onlytechtake.repairapp.data.local.entities.AuditAction.ORDER_DELETED,
+                        action = AuditAction.ORDER_DELETED,
                         actorUserId = actor.id,
                         orderId = null, // Set to null to avoid Foreign Key constraint error (787) after deletion
                         customerId = order.customerId,
@@ -444,8 +451,7 @@ internal class OrderWorkflowCommands(
         return order
     }
 
-    private suspend fun <T> inTransaction(block: suspend () -> T): T =
-        database?.withTransaction { block() } ?: block()
+    private suspend fun <T> inTransaction(block: suspend () -> T): T = database?.withTransaction { block() } ?: block()
 
     private suspend fun buildCategoryPathSnapshot(categoryId: String): String? {
         val path = mutableListOf<String>()

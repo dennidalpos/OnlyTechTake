@@ -378,6 +378,10 @@
     <string name="auth_close_app">Chiudi app</string>
     <string name="auth_admin_name">Nome admin</string>
     <string name="auth_username">Username</string>
+    <string name="auth_inactivity_timeout_title">Timeout attività</string>
+    <string name="auth_inactivity_timeout_label">Timeout (minuti)</string>
+    <string name="auth_inactivity_timeout_disabled">Disattivato</string>
+    <string name="auth_inactivity_timeout_tooltip">Disconnette automaticamente gli operatori dopo un periodo di inattività. 0 per disattivare. Default: 10 min.</string>
     <string name="auth_recovery_code">Codice di recupero</string>
     <string name="auth_password">Password</string>
     <string name="auth_confirm_password">Conferma password</string>
@@ -411,7 +415,7 @@
     <string name="home_demo_pro_features">Scopri i vantaggi della versione Pro</string>
     <string name="home_showcase_scenario">SCENARIO DIMOSTRATIVO</string>
     <string name="home_showcase_walkthrough">Avvia Walkthrough</string>
-    <string name="home_metric_users">Utenti</string>
+    <string name="home_metric_operators">Operatori</string>
     <string name="home_metric_customers">Clienti</string>
     <string name="home_metric_active">Attive</string>
     <string name="home_new_order">Nuova commessa</string>
@@ -687,9 +691,9 @@
     <string name="template_wa_pdf_status_title">WhatsApp stato avanzamento PDF</string>
     <string name="template_wa_pdf_status_body">Ciao {{cliente}}, ti inviamo in allegato lo stato avanzamento della commessa {{numero_commessa}}: {{titolo_commessa}}.\n\nStato attuale: {{stato_commessa}}\nProssima azione: {{prossima_azione}}\n\n{{proprietario_nome}}</string>
     <string name="template_privacy_breve_title">Privacy breve</string>
-    <string name="template_privacy_breve_body">Informativa privacy sintetica ai sensi del Regolamento UE 2016/679 (GDPR).\nTitolare: {{proprietario_nome}}, {{proprietario_piva}}, {{proprietario_indirizzo}}, contattabile presso il punto vendita o i recapiti indicati nella ricevuta: {{proprietario_email}} {{proprietario_telefono}}.\nFinalita\': presa in carico e gestione della commessa, diagnosi, preventivo, riparazione, consegna, assistenza post-intervento, comunicazioni operative e adempimenti contabili/fiscali.\nBasi giuridiche: esecuzione di misure precontrattuali o contrattuali, obblighi di legge e legittimo interesse alla gestione organizzativa e alla tutela dei diritti. Per comunicazioni WhatsApp non indispensabili o ulteriori rispetto alla gestione della commessa puo\' essere richiesto consenso specifico.\nDati trattati: dati identificativi e di contatto, dati fiscali se necessari, informazioni sull\'oggetto consegnato, descrizione del problema, foto/allegati, firma, note operative e storico comunicazioni.\nConservazione: per il tempo necessario alla gestione della commessa e successivamente per obblighi di legge o tutela dei diritti.\nDestinatari: personale autorizzato, fornitori tecnici strettamente necessari, consulenti e soggetti previsti dalla legge. L\'uso di WhatsApp comporta trattamento secondo le condizioni della piattaforma usata dal cliente.\nDiritti: accesso, rettifica, cancellazione nei casi previsti, limitazione, opposizione, portabilita\' ove applicabile e reclamo al Garante per la protezione dei dati personali.</string>
+    <string name="template_privacy_breve_body">Informativa privacy sintetica ai sensi del Regolamento UE 2016/679 (GDPR).\nTitolare: {{proprietario_nome}}, {{proprietario_piva}}, {{proprietario_indirizzo}}, contattabile presso il punto vendita o via: {{proprietario_email}} {{proprietario_telefono}}.\nFinalita\': presa in carico e gestione della commessa, diagnosi, preventivo, riparazione, consegna, assistenza post-intervento e adempimenti fiscali.\nBasi giuridiche: esecuzione di misure precontrattuali o contrattuali, obblighi di legge e legittimo interesse. Per comunicazioni WhatsApp non indispensabili, il consenso si ritiene conferito con il rilascio del numero di contatto.\nDati trattati: identificativi, fiscali, informazioni sull\'oggetto, foto, firme e cronologia.\nConservazione: per il tempo necessario alla gestione della commessa e successivamente per obblighi di legge (10 anni per fini fiscali).\nDestinatari: personale autorizzato e fornitori tecnici strettamente necessari.\nDiritti: accesso, rettifica, cancellazione, limitazione, opposizione e reclamo al Garante Privacy.</string>
     <string name="template_condizioni_title">Condizioni presa in carico</string>
-    <string name="template_condizioni_body">Condizioni di presa in carico.\nIl cliente dichiara di consegnare l\'oggetto indicato in commessa e autorizza {{proprietario_nome}} a custodirlo, verificarlo e svolgere diagnosi tecnica preliminare.\nLa diagnosi puo\' richiedere apertura, test, pulizia tecnica o collegamento ad alimentatori/strumenti compatibili. L\'intervento di riparazione viene eseguito solo dopo accettazione del preventivo quando previsto.\nIl cliente si impegna a fornire informazioni corrette su proprieta\', difetti noti, blocchi, accessori e condizioni dell\'oggetto. {{proprietario_nome}} non risponde di dati non salvati, password non comunicate, difetti preesistenti o peggioramenti inevitabili emersi durante diagnosi su oggetti gia\' danneggiati.\nGli importi comunicati come preventivo devono essere accettati dal cliente prima dell\'avvio intervento. In caso di rifiuto, impossibilita\' di riparazione o mancato ritiro, la commessa puo\' essere chiusa secondo le condizioni comunicate dall\'operatore.\nCon la firma il cliente conferma presa visione di privacy e condizioni operative.</string>
+    <string name="template_condizioni_body">Condizioni di presa in carico.\nIl cliente consegna l\'oggetto indicato in commessa e autorizza {{proprietario_nome}} a custodirlo, verificarlo e svolgere diagnosi tecnica.\nLa diagnosi puo\' richiedere l\'apertura del dispositivo o il collegamento a strumenti di test. L\'intervento di riparazione prosegue solo dopo accettazione del preventivo.\n{{proprietario_nome}} non risponde di perdita dati, password non comunicate, difetti preesistenti o deterioramenti inevitabili emersi durante la diagnosi. È responsabilità del cliente eseguire il backup prima della consegna.\nGli importi del preventivo devono essere accettati prima dell\'avvio. In caso di mancato ritiro entro 90 giorni, l\'oggetto verra\' gestito secondo le norme vigenti sui beni abbandonati.\nCon la firma il cliente conferma di aver letto e accettato l\'informativa privacy e le presenti condizioni.\n\nLaboratorio: {{proprietario_nome}} - {{proprietario_indirizzo}}</string>
 
     <string name="order_confirm_delete_document_title">Eliminare documento?</string>
     <string name="order_confirm_delete_document_text">Il file verra\' rimosso permanentemente.</string>
@@ -699,6 +703,7 @@
     <string name="no_cancel">No, annulla</string>
 
     <string name="admin_close">Chiudi Utenti e Operatori</string>
+    <string name="admin_search_operators_label">Cerca operatori…</string>
     <string name="admin_only_section">Sezione disponibile solo per admin.</string>
     <string name="admin_create_operator">Crea operatore</string>
     <string name="admin_field_temp_password">Password temporanea</string>
@@ -707,10 +712,17 @@
     <string name="admin_users_title">Utenti</string>
     <string name="admin_no_users_title">Nessun operatore</string>
     <string name="admin_no_users_body">Crea almeno un operatore per separare accessi, permessi e responsabilità sulle commesse.</string>
+    <string name="admin_user_active_description">L\'operatore può accedere al sistema</string>
+    <string name="admin_user_inactive_description">L\'operatore non può effettuare il login</string>
     <string name="admin_user_active">Attivo</string>
     <string name="admin_user_inactive">Disattivo</string>
     <string name="admin_user_activate">Attiva</string>
     <string name="admin_user_deactivate">Disattiva</string>
+    <string name="admin_confirm_activate_title">Attivare operatore?</string>
+    <string name="admin_confirm_deactivate_title">Disattivare operatore?</string>
+    <string name="admin_confirm_activate_text">Vuoi attivare l\'operatore %s? Potrà riprendere a gestire le commesse.</string>
+    <string name="admin_confirm_deactivate_text">Vuoi disattivare l\'operatore %s? Non potrà più accedere all\'app finché non verrà riattivato.</string>
+    <string name="admin_confirm_delete_user_title">Eliminare operatore?</string>
     <string name="admin_confirm_delete_user_text">L\'operatore %s verrà rimosso permanentemente dal sistema. Non sarà più possibile recuperare le sue credenziali, ma le commesse da lui gestite resteranno in archivio.</string>
     <string name="admin_reset_password">Reset password</string>
     <string name="admin_confirm_reset_title">Resettare password?</string>
@@ -867,6 +879,7 @@
     <string name="config_whatsapp_confirm_manual_title">Impostare modalita\' manuale?</string>
     <string name="config_whatsapp_confirm_manual_text">La modalita\' WhatsApp verra\' salvata.</string>
     <string name="config_backup_title">Backup e Ripristino</string>
+    <string name="config_backup_reminder_disabled_warning">Attenzione: con il promemoria disattivato non riceverai notifiche per eseguire il backup periodico consigliato.</string>
     <string name="config_backup_reminder_enabled">Promemoria backup attivo</string>
     <string name="config_backup_interval_days">Intervallo promemoria (giorni)</string>
     <string name="config_backup_reminder_info">Stato: %1$s\nUltimo backup riuscito: %2$s\nIntervallo: %3$s\nFile: %4$s</string>
@@ -944,6 +957,7 @@
     <string name="storage_deep_maintenance">Manutenzione profonda</string>
 
     <string name="storage_cleanup_cache">Svuota cache</string>
+    <string name="storage_cleanup_cache_tooltip">Elimina i file temporanei e i dati memorizzati nella cache. Non influisce su commesse o documenti.</string>
     <string name="storage_cleanup_orphans">Pulisci file orfani</string>
     <string name="storage_cleanup_orphans_tooltip">Rimuove permanentemente i file non più referenziati nel database (es. foto di commesse eliminate).</string>
     <string name="storage_tooltip">Monitora l\'uso della memoria e pulisci i file temporanei per liberare spazio.</string>

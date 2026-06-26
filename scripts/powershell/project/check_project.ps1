@@ -79,6 +79,8 @@ function Invoke-GradleTask {
         [string[]]$Tasks
     )
 
+    # Spotless 8.x has serialization issues with Gradle 9.6 Configuration Cache.
+    # Also provides better stability for sequential tasks on Windows.
     $gradleArguments = @("--no-configuration-cache") + $Tasks
     Write-Host "Eseguo: .\gradlew.bat $($gradleArguments -join ' ')" -ForegroundColor Gray
     & $script:gradlew @gradleArguments | Out-Host

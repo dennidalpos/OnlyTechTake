@@ -8,11 +8,13 @@ import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
 import com.onlytechtake.repairapp.data.local.dao.SignatureDao
 import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
 import com.onlytechtake.repairapp.data.local.dao.UserDao
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
+import com.onlytechtake.repairapp.domain.workspace.OrderFilterMode
 import com.onlytechtake.repairapp.domain.workspace.OrderListItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -30,39 +32,36 @@ internal class OrderWorkflowQueries(
     private val signatureDao: SignatureDao,
     private val messageLogDao: MessageLogDao,
 ) {
+    private fun calculateIsClosed(filter: OrderFilter): Boolean? =
+        when (filter.mode) {
+            OrderFilterMode.CLOSED -> true
+            OrderFilterMode.OPEN_UNASSIGNED,
+            OrderFilterMode.IN_PROGRESS,
+            -> false
+            else -> {
+                if (filter.statuses.isNotEmpty()) {
+                    val hasClosed = filter.statuses.contains(OrderStatus.CLOSED)
+                    if (hasClosed && filter.statuses.size == 1) {
+                        true
+                    } else if (!hasClosed) {
+                        false
+                    } else {
+                        null
+                    }
+                } else {
+                    null
+                }
+            }
+        }
+
     fun observeOrders(
         actor: AuthenticatedUser,
         filter: OrderFilter,
     ): Flow<List<RepairOrderEntity>> {
-        val assignedToUserId =
-            if (filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.MINE || filter.showMineOnly) actor.id else null
-        val unassignedOnly =
-            filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED
-        val assignedOnly =
-            filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS
-        val isClosed =
-            when (filter.mode) {
-                com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> true
-                com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
-                com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
-                    -> false
-
-                else -> {
-                    if (filter.statuses.isNotEmpty()) {
-                        val hasClosed =
-                            filter.statuses.contains(com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED)
-                        if (hasClosed && filter.statuses.size == 1) {
-                            true
-                        } else if (!hasClosed) {
-                            false
-                        } else {
-                            null
-                        }
-                    } else {
-                        null
-                    }
-                }
-            }
+        val assignedToUserId = if (filter.mode == OrderFilterMode.MINE || filter.showMineOnly) actor.id else null
+        val unassignedOnly = filter.mode == OrderFilterMode.OPEN_UNASSIGNED
+        val assignedOnly = filter.mode == OrderFilterMode.IN_PROGRESS
+        val isClosed = calculateIsClosed(filter)
 
         return repairOrderDao.observeFiltered(
             assignedToUserId = assignedToUserId,
@@ -80,35 +79,10 @@ internal class OrderWorkflowQueries(
         actor: AuthenticatedUser,
         filter: OrderFilter,
     ): Flow<List<OrderListItem>> {
-        val assignedToUserId =
-            if (filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.MINE || filter.showMineOnly) actor.id else null
-        val unassignedOnly =
-            filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED
-        val assignedOnly =
-            filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS
-        val isClosed =
-            when (filter.mode) {
-                com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> true
-                com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
-                com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
-                    -> false
-
-                else -> {
-                    if (filter.statuses.isNotEmpty()) {
-                        val hasClosed =
-                            filter.statuses.contains(com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED)
-                        if (hasClosed && filter.statuses.size == 1) {
-                            true
-                        } else if (!hasClosed) {
-                            false
-                        } else {
-                            null
-                        }
-                    } else {
-                        null
-                    }
-                }
-            }
+        val assignedToUserId = if (filter.mode == OrderFilterMode.MINE || filter.showMineOnly) actor.id else null
+        val unassignedOnly = filter.mode == OrderFilterMode.OPEN_UNASSIGNED
+        val assignedOnly = filter.mode == OrderFilterMode.IN_PROGRESS
+        val isClosed = calculateIsClosed(filter)
 
         return repairOrderDao
             .search(
@@ -140,35 +114,10 @@ internal class OrderWorkflowQueries(
         actor: AuthenticatedUser,
         filter: OrderFilter,
     ): Flow<List<OrderListItem>> {
-        val assignedToUserId =
-            if (filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.MINE || filter.showMineOnly) actor.id else null
-        val unassignedOnly =
-            filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED
-        val assignedOnly =
-            filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS
-        val isClosed =
-            when (filter.mode) {
-                com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> true
-                com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
-                com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
-                    -> false
-
-                else -> {
-                    if (filter.statuses.isNotEmpty()) {
-                        val hasClosed =
-                            filter.statuses.contains(com.onlytechtake.repairapp.data.local.entities.OrderStatus.CLOSED)
-                        if (hasClosed && filter.statuses.size == 1) {
-                            true
-                        } else if (!hasClosed) {
-                            false
-                        } else {
-                            null
-                        }
-                    } else {
-                        null
-                    }
-                }
-            }
+        val assignedToUserId = if (filter.mode == OrderFilterMode.MINE || filter.showMineOnly) actor.id else null
+        val unassignedOnly = filter.mode == OrderFilterMode.OPEN_UNASSIGNED
+        val assignedOnly = filter.mode == OrderFilterMode.IN_PROGRESS
+        val isClosed = calculateIsClosed(filter)
 
         return repairOrderDao
             .observeOrderListProjection(

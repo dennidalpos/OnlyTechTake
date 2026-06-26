@@ -21,7 +21,7 @@ class DashboardViewModel(
                 initialValue =
                     AppSummary(
                         title = "OnlyTechTake",
-                        userCount = 0,
+                        operatorCount = 0,
                         customerCount = 0,
                         activeOrderCount = 0,
                     ),

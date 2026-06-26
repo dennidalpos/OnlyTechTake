@@ -10,7 +10,9 @@ import kotlinx.coroutines.flow.map
 
 private val Context.ownerDataStore by preferencesDataStore(name = "owner_preferences")
 
-class OwnerPreferences(private val context: Context) {
+class OwnerPreferences(
+    private val context: Context,
+) {
     val ownerInfo: Flow<OwnerInfo> =
         context.ownerDataStore.data.map { preferences ->
             OwnerInfo(
