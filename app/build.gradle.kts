@@ -55,6 +55,7 @@ android {
             dimension = "version"
             applicationIdSuffix = ".demo"
             resValue("string", "app_name", "OTT Demo")
+            buildConfigField("boolean", "IS_PRO_VERSION", "false")
             buildConfigField("boolean", "IS_DEMO_VERSION", "true")
             buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "true")
             buildConfigField("boolean", "IS_SHOWCASE_MODE_ENABLED", "false")
@@ -64,6 +65,7 @@ android {
             dimension = "version"
             applicationIdSuffix = ".showcase"
             resValue("string", "app_name", "OTT Showcase")
+            buildConfigField("boolean", "IS_PRO_VERSION", "false")
             buildConfigField("boolean", "IS_DEMO_VERSION", "false")
             buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "false")
             buildConfigField("boolean", "IS_SHOWCASE_MODE_ENABLED", "true")
@@ -73,6 +75,7 @@ android {
             isDefault = true
             dimension = "version"
             resValue("string", "app_name", "OTT Pro")
+            buildConfigField("boolean", "IS_PRO_VERSION", "true")
             buildConfigField("boolean", "IS_DEMO_VERSION", "false")
             buildConfigField("boolean", "IS_DEMO_MODE_ENABLED", "false")
             buildConfigField("boolean", "IS_SHOWCASE_MODE_ENABLED", "false")

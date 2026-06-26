@@ -1,8 +1,11 @@
 package com.onlytechtake.repairapp.core.error
 
+import android.content.Context
 import android.util.Log
+import com.onlytechtake.repairapp.R
 
 class DefaultErrorHandler(
+    private val context: Context,
     private val diagnosticLogger: DiagnosticLogger,
 ) : ErrorHandler {
     override fun handleError(
@@ -21,5 +24,5 @@ class DefaultErrorHandler(
         diagnosticLogger.logWarning(context, message)
     }
 
-    override fun getErrorMessage(error: Throwable): String = error.message ?: "Si è verificato un errore"
+    override fun getErrorMessage(error: Throwable): String = error.message ?: context.getString(R.string.error_unknown_generic)
 }

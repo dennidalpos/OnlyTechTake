@@ -639,6 +639,7 @@
     <string name="share_title_status_report">Stato avanzamento %s</string>
     <string name="share_title_document">Documento %s</string>
     <string name="error_unknown">Errore</string>
+    <string name="error_unknown_generic">Si è verificato un errore</string>
     <string name="order_diagnosis_repairable">Riparabile</string>
     <string name="order_diagnosis_not_repairable">Non riparabile</string>
     <string name="template_diagnosis_not_repairable_reason">Diagnosi tecnica: non riparabile</string>

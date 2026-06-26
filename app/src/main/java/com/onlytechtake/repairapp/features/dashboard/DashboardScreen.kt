@@ -42,6 +42,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -49,6 +50,7 @@ import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.RepairAppTheme
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
@@ -440,6 +442,7 @@ private data class NavigationItem(
     val testTag: String,
 )
 
+@OptIn(androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi::class)
 @Preview(showBackground = true, name = "Light Mode")
 @Preview(
     showBackground = true,
@@ -448,19 +451,30 @@ private data class NavigationItem(
 )
 @Composable
 private fun DashboardScreenPreview() {
-    MaterialTheme {
-        DashboardScreen(
-            summary =
-                AppSummary(
-                    title = "OnlyTechTake",
-                    operatorCount = 1,
-                    customerCount = 10,
-                    activeOrderCount = 5,
-                ),
-            sharedViewModel =
-                viewModel(),
-            onLogout = {},
-            onAppDataRestored = {},
-        )
+    androidx.compose.runtime.CompositionLocalProvider(
+        com.onlytechtake.repairapp.navigation.LocalWindowSizeClass provides
+            androidx.compose.material3.windowsizeclass.WindowSizeClass.calculateFromSize(
+                androidx.compose.ui.unit
+                    .DpSize(1000.dp, 800.dp),
+            ),
+        com.onlytechtake.repairapp.core.di.LocalAppContainer provides
+            com.onlytechtake.repairapp.core.di
+                .AppContainer(androidx.compose.ui.platform.LocalContext.current),
+    ) {
+        RepairAppTheme {
+            DashboardScreen(
+                summary =
+                    AppSummary(
+                        title = "OnlyTechTake",
+                        operatorCount = 1,
+                        customerCount = 10,
+                        activeOrderCount = 5,
+                    ),
+                sharedViewModel =
+                    androidx.compose.runtime.remember { SharedWorkspaceViewModel() },
+                onLogout = {},
+                onAppDataRestored = {},
+            )
+        }
     }
 }

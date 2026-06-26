@@ -633,6 +633,7 @@
     <string name="share_title_status_report">Progress status %s</string>
     <string name="share_title_document">Document %s</string>
     <string name="error_unknown">Error</string>
+    <string name="error_unknown_generic">An error occurred</string>
     <string name="order_diagnosis_repairable">Repairable</string>
     <string name="order_diagnosis_not_repairable">Not repairable</string>
     <string name="template_diagnosis_not_repairable_reason">Technical diagnosis: not repairable</string>

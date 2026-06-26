@@ -63,6 +63,9 @@
     }
   ],
   "completed_recently": [
+    "Risolti errori di rendering nelle Preview di HomePanel e DashboardScreen tramite mocking dei CompositionLocal.",
+    "Rifattorizzato HomePanel per separare la logica dello stato (ViewModel) dalla UI (HomePanelContent).",
+    "Ottimizzata la struttura di DemoInfoCard rimuovendo Column ridondanti.",
     "Implementato Timeout di inattività configurabile (default 10 min) gestito dall'admin.",
     "Aggiornata Dashboard: convertita metrica 'Utenti' in 'Operatori'.",
     "Ottimizzata gestione Operatori: aggiunta ricerca e schede collassabili.",
