@@ -25,8 +25,7 @@ class CreateIntakeOrderUseCase(
 ) {
     suspend fun countAllOrders(): Int = orderRepository.countAllOrders()
 
-    fun getDemoLimitErrorMessage(): String =
-        DemoMode.getOrderLimitMessage(context, BuildConfig.MAX_ORDERS)
+    fun getDemoLimitErrorMessage(): String = DemoMode.getOrderLimitMessage(context, BuildConfig.MAX_ORDERS)
 
     suspend fun execute(
         actor: AuthenticatedUser,
@@ -50,7 +49,7 @@ class CreateIntakeOrderUseCase(
                 val totalOrders = orderRepository.countAllOrders()
                 if (totalOrders >= BuildConfig.MAX_ORDERS) {
                     throw IllegalStateException(
-                        DemoMode.getOrderLimitMessage(context, BuildConfig.MAX_ORDERS)
+                        DemoMode.getOrderLimitMessage(context, BuildConfig.MAX_ORDERS),
                     )
                 }
             }

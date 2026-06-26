@@ -17,18 +17,37 @@ object DemoMode {
     }
 
     fun getVersionBanner(context: Context): String = ""
+
     fun getAdminDisplayName(context: Context): String = ""
+
     fun getOperatorNotAvailableMessage(context: Context): String = ""
-    fun getOperatorLimitMessage(context: Context, limit: Int): String = ""
-    fun getOrderLimitMessage(context: Context, limit: Int): String = ""
+
+    fun getOperatorLimitMessage(
+        context: Context,
+        limit: Int,
+    ): String = ""
+
+    fun getOrderLimitMessage(
+        context: Context,
+        limit: Int,
+    ): String = ""
+
     fun getShowcaseInitializingMessage(context: Context): String = ""
+
     fun getShowcasePreparingMessage(context: Context): String = ""
+
     fun getDemoActionLabel(context: Context): String = ""
+
     fun getShowcaseScenarioLabel(context: Context): String = ""
+
     fun getShowcaseWalkthroughLabel(context: Context): String = ""
+
     fun getDemoTryCta(context: Context): String = ""
+
     fun getDemoProFeaturesLabel(context: Context): String = ""
+
     fun getDemoProFeaturesDesc(context: Context): String = ""
+
     fun getShowcaseOwnerInfo(context: Context): OwnerInfo? = null
 
     val demoCustomer: CustomerEntity get() = throw IllegalStateException("DemoMode non disponibile")

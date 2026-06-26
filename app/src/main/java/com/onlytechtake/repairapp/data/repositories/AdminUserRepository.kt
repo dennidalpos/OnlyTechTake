@@ -45,7 +45,7 @@ class AdminUserRepository(
 
                 if (userDao.countActiveByRole(UserRole.OPERATOR) >= BuildConfig.MAX_OPERATORS) {
                     throw IllegalStateException(
-                        DemoMode.getOperatorLimitMessage(context, BuildConfig.MAX_OPERATORS)
+                        DemoMode.getOperatorLimitMessage(context, BuildConfig.MAX_OPERATORS),
                     )
                 }
             }

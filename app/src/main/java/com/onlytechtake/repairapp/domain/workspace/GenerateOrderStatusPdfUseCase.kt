@@ -2,7 +2,6 @@ package com.onlytechtake.repairapp.domain.workspace
 
 import android.content.Context
 import com.onlytechtake.repairapp.BuildConfig
-import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.pdf.OrderStatusPdfGenerator
 import com.onlytechtake.repairapp.core.pdf.OrderStatusPdfPayload

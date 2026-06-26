@@ -24,8 +24,7 @@ object DemoMode {
 
     fun getAdminDisplayName(context: Context): String = context.getString(R.string.demo_admin_display_name)
 
-    fun getOperatorNotAvailableMessage(context: Context): String =
-        context.getString(R.string.demo_error_operator_not_available)
+    fun getOperatorNotAvailableMessage(context: Context): String = context.getString(R.string.demo_error_operator_not_available)
 
     fun getOperatorLimitMessage(
         context: Context,
@@ -38,13 +37,21 @@ object DemoMode {
     ): String = context.resources.getQuantityString(R.plurals.demo_error_order_limit, limit, limit)
 
     fun getShowcaseInitializingMessage(context: Context): String = ""
+
     fun getShowcasePreparingMessage(context: Context): String = ""
+
     fun getDemoActionLabel(context: Context): String = context.getString(R.string.auth_demo_action)
+
     fun getShowcaseScenarioLabel(context: Context): String = ""
+
     fun getShowcaseWalkthroughLabel(context: Context): String = ""
+
     fun getDemoTryCta(context: Context): String = context.getString(R.string.home_demo_cta_try)
+
     fun getDemoProFeaturesLabel(context: Context): String = context.getString(R.string.home_demo_pro_features)
+
     fun getDemoProFeaturesDesc(context: Context): String = context.getString(R.string.home_demo_pro_features_description)
+
     fun getShowcaseOwnerInfo(context: Context): OwnerInfo? = null
 
     val demoCustomer =
