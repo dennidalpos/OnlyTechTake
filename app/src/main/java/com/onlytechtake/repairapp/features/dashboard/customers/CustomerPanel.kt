@@ -894,7 +894,10 @@ private fun CustomerCard(
     customer: CustomerEntity,
     onClick: () -> Unit,
 ) {
-    StandardCard(onClick = onClick) {
+    StandardCard(
+        modifier = Modifier.testTag("customer_card_${customer.id}"),
+        onClick = onClick
+    ) {
         Row(
             modifier =
                 Modifier

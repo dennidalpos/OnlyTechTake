@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -17,7 +18,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
@@ -77,26 +80,31 @@ fun OwnerSettings(
                     onValueChange = { name = it },
                     label = stringResource(R.string.owner_field_name),
                     required = true,
+                    testTag = RepairAppTestTags.OwnerFieldName,
                 )
                 AppTextField(
                     value = vatNumber,
                     onValueChange = { vatNumber = it },
                     label = stringResource(R.string.owner_field_vat),
+                    testTag = RepairAppTestTags.OwnerFieldVat,
                 )
                 AppTextField(
                     value = address,
                     onValueChange = { address = it },
                     label = stringResource(R.string.owner_field_address),
+                    testTag = RepairAppTestTags.OwnerFieldAddress,
                 )
                 AppTextField(
                     value = email,
                     onValueChange = { email = it },
                     label = stringResource(R.string.owner_field_email),
+                    testTag = RepairAppTestTags.OwnerFieldEmail,
                 )
                 AppTextField(
                     value = phone,
                     onValueChange = { phone = it },
                     label = stringResource(R.string.owner_field_phone),
+                    testTag = RepairAppTestTags.OwnerFieldPhone,
                 )
 
                 Spacer(Modifier.height(RepairAppSpacing.cardGap))
@@ -128,6 +136,22 @@ fun OwnerSettings(
             size = AppButtonSize.Default,
             modifier = Modifier.fillMaxWidth(),
             onClick = onBack,
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Light Mode")
+@Preview(
+    showBackground = true,
+    name = "Dark Mode",
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
+)
+@Composable
+private fun OwnerSettingsPreview() {
+    MaterialTheme {
+        OwnerSettings(
+            viewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+            onBack = {},
         )
     }
 }

@@ -142,6 +142,12 @@ class StoreProScreenshotTest {
             robot.clickDashboardTab("CUSTOMERS")
             robot.waitForTag(RepairAppTestTags.CustomerSearchField)
             robot.capture(outputDir, "07-clienti-pro.png")
+
+            // 08-dettaglio-cliente-pro
+            robot.waitForText("Mario Demo", scroll = true)
+            robot.clickText("Mario Demo")
+            robot.waitForText("Commesse aperte")
+            robot.capture(outputDir, "08-dettaglio-cliente-pro.png")
         }
     }
 

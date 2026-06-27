@@ -26,11 +26,15 @@ foreach ($p in $publicPaths) {
 }
 
 $profiles = @(
+    @{ id = "workflow-setup"; flavor = "Full" },
     @{ id = "store-pro"; flavor = "Full" },
     @{ id = "store-demo"; flavor = "Demo" },
     @{ id = "social-pro"; flavor = "Full" },
     @{ id = "social-campaign"; flavor = "Full" },
     @{ id = "operator-intake"; flavor = "Full" },
+    @{ id = "workflow-management"; flavor = "Full" },
+    @{ id = "workflow-admin-templates"; flavor = "Full" },
+    @{ id = "workflow-backup"; flavor = "Full" },
     @{ id = "social-stories"; flavor = "Full" }
 )
 

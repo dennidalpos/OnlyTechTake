@@ -31,8 +31,8 @@ import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBa
 import com.onlytechtake.repairapp.features.dashboard.admin.AdminPanel
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun SettingsPanel(

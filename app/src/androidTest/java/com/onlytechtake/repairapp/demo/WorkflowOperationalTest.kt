@@ -7,6 +7,10 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.onlytechtake.repairapp.MainActivity
+import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
+import com.onlytechtake.repairapp.data.preferences.AuthPreferences
+import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
+import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
@@ -23,6 +27,22 @@ class WorkflowOperationalTest {
         GrantPermissionRule.grant(android.Manifest.permission.CAMERA)
 
     private val context: Context = ApplicationProvider.getApplicationContext()
+
+    @Test
+    fun flow0_Setup() {
+        runBlocking {
+            RepairAppDatabase.closeInstance()
+            context.deleteDatabase(RepairAppDatabase.DATABASE_NAME)
+            AuthPreferences(context).clear()
+            OwnerPreferences(context).updateOwnerInfo(OwnerInfo())
+        }
+        val outputDir = prepareDirectory("workflow-setup")
+        val robot = OperationalRobot(composeRule, context)
+
+        ActivityScenario.launch(MainActivity::class.java).use {
+            robot.setupWizardFlow(outputDir)
+        }
+    }
 
     @Test
     fun flow1_Intake() {
@@ -69,6 +89,18 @@ class WorkflowOperationalTest {
         ActivityScenario.launch(MainActivity::class.java).use {
             robot.loginDemo(DemoDataSeeder.DEMO_ADMIN_USERNAME)
             robot.adminTemplatesFlow(outputDir)
+        }
+    }
+
+    @Test
+    fun flow5_Backup() {
+        runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        val outputDir = prepareDirectory("workflow-backup")
+        val robot = OperationalRobot(composeRule, context)
+
+        ActivityScenario.launch(MainActivity::class.java).use {
+            robot.loginDemo(DemoDataSeeder.DEMO_ADMIN_USERNAME)
+            robot.backupFlow(outputDir)
         }
     }
 

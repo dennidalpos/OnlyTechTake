@@ -2,8 +2,8 @@
   "project_name": "OnlyTechTake",
   "version": "1.0.6",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-06-28",
-  "alignment_status": "Allineamento varianti completato. Source set 'main' ripulito da logica legacy e risorse demo/showcase. Test unitari e strumentati allineati alle nuove astrazioni di DemoMode. Risolte inconsistenze di compilazione e warning Lint (UnusedResources, MissingQuantity, DiscouragedApi) su tutte le varianti.",
+  "last_updated": "2026-06-29",
+  "alignment_status": "Allineamento varianti completato. Asset media rigenerati integralmente per includere Setup Wizard, Backup, Log diagnostici e Dettaglio cliente. Risolte inconsistenze nei robot di test e nei seeder per garantire la stabilità della pipeline di acquisizione.",
   "landing_page": {
     "status": "Standalone Ready + Assets Automated",
     "theme": "Material 3 + Inter Typography",
@@ -53,14 +53,11 @@
       "task": "MAINTENANCE: Monitoraggio warning Gradle 10 (AGP 9.2.1) e warning Compose 'frameRate=NaN'."
     }
   ],
-  "identified_residuals": [
-    {
-      "area": "TESTING",
-      "risk": "Necessità di un giro completo di smoke test sugli automated marketing assets dopo lo spostamento delle stringhe in androidTest/res.",
-      "plan": "Eseguire i test strumentati SocialProAssetTest e SocialDemoAssetTest su device fisico."
-    }
-  ],
+  "identified_residuals": [],
   "completed_recently": [
+    "Automation: Rigenerati tutti gli asset media (screenshot e video) con supporto ai nuovi flussi: Setup Wizard, Backup Settings, Diagnostic Logs e Dettaglio Cliente.",
+    "Bugfix: Corretti i robot di test e i seeder (DemoDataSeeder) per gestire correttamente il nuovo Owner Wizard e le etichette localizzate.",
+    "Instrumentation: Aggiornati i profili JSON per includere testMethod e nuovi output attesi.",
     "Quality: Risolte decine di warning Lint (parentesi chiarificatrici, parametri inutilizzati, lambda esterne e qualificatori ridondanti) in tutto il progetto.",
     "Quality: Convertiti ritardi legacy (Long) in Duration per una migliore leggibilità e compliance API.",
     "Quality: Ottimizzate classi ViewModel e UseCase rimuovendo parametri costruttore inutilizzati come proprietà.",

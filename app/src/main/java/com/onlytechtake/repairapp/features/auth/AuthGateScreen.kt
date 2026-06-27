@@ -491,6 +491,7 @@ private fun AuthForm(
                     singleLine = true,
                     imeAction = ImeAction.Next,
                     keyboardActions = nextAction,
+                    testTag = RepairAppTestTags.AuthDisplayNameField,
                 )
             }
 
@@ -517,6 +518,7 @@ private fun AuthForm(
                     capitalization = KeyboardCapitalization.Characters,
                     imeAction = ImeAction.Next,
                     keyboardActions = nextAction,
+                    testTag = RepairAppTestTags.AuthRecoveryCodeField,
                 )
             }
 
@@ -564,6 +566,7 @@ private fun AuthForm(
                             modifier = Modifier.focusProperties { canFocus = false },
                         )
                     },
+                    testTag = RepairAppTestTags.AuthConfirmPasswordField,
                 )
             }
 
@@ -688,6 +691,7 @@ private fun OwnerWizardScreen(
                     label = stringResource(R.string.owner_field_name),
                     required = true,
                     imeAction = ImeAction.Next,
+                    testTag = RepairAppTestTags.OwnerFieldName,
                 )
                 AppTextField(
                     value = vatNumber,
@@ -695,6 +699,7 @@ private fun OwnerWizardScreen(
                     label = stringResource(R.string.owner_field_vat),
                     required = true,
                     imeAction = ImeAction.Next,
+                    testTag = RepairAppTestTags.OwnerFieldVat,
                 )
                 AppTextField(
                     value = address,
@@ -702,6 +707,7 @@ private fun OwnerWizardScreen(
                     label = stringResource(R.string.owner_field_address),
                     required = true,
                     imeAction = ImeAction.Next,
+                    testTag = RepairAppTestTags.OwnerFieldAddress,
                 )
                 AppTextField(
                     value = email,
@@ -709,6 +715,7 @@ private fun OwnerWizardScreen(
                     label = stringResource(R.string.owner_field_email),
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next,
+                    testTag = RepairAppTestTags.OwnerFieldEmail,
                 )
                 AppTextField(
                     value = phone,
@@ -716,6 +723,7 @@ private fun OwnerWizardScreen(
                     label = stringResource(R.string.owner_field_phone),
                     keyboardType = KeyboardType.Phone,
                     imeAction = ImeAction.Done,
+                    testTag = RepairAppTestTags.OwnerFieldPhone,
                 )
 
                 Spacer(Modifier.height(RepairAppSpacing.sectionGap))

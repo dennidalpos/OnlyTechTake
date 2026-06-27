@@ -10,6 +10,9 @@ object RepairAppTestTags {
 
     const val AuthUsernameField = "auth_username_field"
     const val AuthPasswordField = "auth_password_field"
+    const val AuthConfirmPasswordField = "auth_confirm_password_field"
+    const val AuthDisplayNameField = "auth_display_name_field"
+    const val AuthRecoveryCodeField = "auth_recovery_code_field"
     const val AuthSubmitButton = "auth_submit_button"
 
     const val NewOrderCustomerSearchField = "new_order_customer_search_field"
@@ -106,6 +109,11 @@ object RepairAppTestTags {
     const val AdminCreateOperatorButton = "admin_create_operator_button"
     const val AdminDeleteAllOrdersButton = "admin_delete_all_orders_button"
     const val AdminTotalResetButton = "admin_total_reset_button"
+    const val OwnerFieldName = "owner_field_name"
+    const val OwnerFieldVat = "owner_field_vat"
+    const val OwnerFieldAddress = "owner_field_address"
+    const val OwnerFieldEmail = "owner_field_email"
+    const val OwnerFieldPhone = "owner_field_phone"
     const val ScrollToTopButton = "scroll_to_top_button"
     const val MessageBannerCloseButton = "message_banner_close_button"
 

@@ -205,7 +205,7 @@ fun OrderDetailWorkspace(
                                     quoteDecision = workspaceState.quoteDecision,
                                     quoteRejectNote = workspaceState.quoteRejectNote,
                                     onQuoteDecisionChange = { workspaceState.quoteDecision = it },
-                                    onQuoteRejectNoteChange = { workspaceState.quoteRejectNote = it }
+                                    onQuoteRejectNoteChange = { workspaceState.quoteRejectNote = it },
                                 ) { feedback, note, closureReason ->
                                     if (feedback == CustomerFeedbackType.ACCEPT) {
                                         viewModel.recordFeedback(feedback, note)

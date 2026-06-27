@@ -198,6 +198,9 @@ class OperationalRobot(
         clickTag(RepairAppTestTags.ConfigHubAdminButton, scroll = true)
         nextCapture("admin-hub")
 
+        // Expand operator creation form
+        clickTag("admin_create_operator_switch", scroll = true)
+
         // Form filling - ensuring text is actually typed
         typeTag(RepairAppTestTags.AdminDisplayNameField, "Operatore Junior")
         typeTag(RepairAppTestTags.AdminUsernameField, "op_junior")
@@ -243,5 +246,44 @@ class OperationalRobot(
         clickTag(RepairAppTestTags.ConfigBackButton)
         clickTag(RepairAppTestTags.ConfigHubTemplateMappingButton, scroll = true)
         nextCapture("template-mapping")
+    }
+
+    fun backupFlow(outputDir: File) {
+        var step = 1
+
+        fun nextCapture(name: String) = capture(outputDir, "${String.format("%02d", step++)}-$name.png")
+
+        clickDashboardTab("SETTINGS")
+        clickTag(RepairAppTestTags.ConfigHubBackupButton, scroll = true)
+        nextCapture("backup-settings")
+
+        // Scroll to see more
+        performSafeSwipeUp()
+        nextCapture("backup-security-logs")
+    }
+
+    fun setupWizardFlow(outputDir: File) {
+        var step = 1
+
+        fun nextCapture(name: String) = capture(outputDir, "${String.format("%02d", step++)}-$name.png")
+
+        // 1. First Setup (Admin)
+        waitForTag(RepairAppTestTags.AuthDisplayNameField)
+        typeTag(RepairAppTestTags.AuthDisplayNameField, "Mario Rossi")
+        typeTag(RepairAppTestTags.AuthUsernameField, "admin")
+        typeTag(RepairAppTestTags.AuthPasswordField, "AdminPass123!")
+        typeTag(RepairAppTestTags.AuthConfirmPasswordField, "AdminPass123!")
+        nextCapture("setup-admin")
+        clickTag(RepairAppTestTags.AuthSubmitButton)
+
+        // 2. Owner Info (Wizard)
+        waitForTag(RepairAppTestTags.OwnerFieldName)
+        typeTag(RepairAppTestTags.OwnerFieldName, "OnlyTechTake S.r.l.")
+        typeTag(RepairAppTestTags.OwnerFieldVat, "IT01234567890")
+        typeTag(RepairAppTestTags.OwnerFieldAddress, "Via dell'Innovazione 42, Roma")
+        typeTag(RepairAppTestTags.OwnerFieldEmail, "info@onlytechtake.invalid")
+        typeTag(RepairAppTestTags.OwnerFieldPhone, "+39 06 1234567")
+        nextCapture("setup-owner")
+        clickText("Conferma")
     }
 }

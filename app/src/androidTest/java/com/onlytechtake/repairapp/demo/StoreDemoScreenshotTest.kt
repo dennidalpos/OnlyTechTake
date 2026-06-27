@@ -6,6 +6,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
+import androidx.test.platform.app.InstrumentationRegistry
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.MainActivity
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
@@ -25,6 +26,8 @@ class StoreDemoScreenshotTest {
         GrantPermissionRule.grant(android.Manifest.permission.CAMERA)
 
     private val context: Context = ApplicationProvider.getApplicationContext()
+    private val testContext: Context
+        get() = InstrumentationRegistry.getInstrumentation().context
 
     @Test
     fun capturesStoreDemoScreenshots() {
@@ -51,7 +54,7 @@ class StoreDemoScreenshotTest {
             robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
             robot.pauseForDemo()
             robot.waitForText(
-                context.resources
+                testContext.resources
                     .getQuantityString(
                         com.onlytechtake.repairapp.test.R.plurals.demo_error_order_limit,
                         BuildConfig.MAX_ORDERS,

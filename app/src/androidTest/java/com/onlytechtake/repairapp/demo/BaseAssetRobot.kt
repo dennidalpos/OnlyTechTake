@@ -300,7 +300,7 @@ abstract class BaseAssetRobot(
         }
     }
 
-    private fun performSafeSwipeUp() {
+    protected fun performSafeSwipeUp() {
         val listTags =
             listOf(
                 RepairAppTestTags.OrderDetailLazyColumn,
@@ -328,7 +328,7 @@ abstract class BaseAssetRobot(
         composeRule.waitForIdle()
     }
 
-    private fun performSafeSwipeDown() {
+    protected fun performSafeSwipeDown() {
         val listTags =
             listOf(
                 RepairAppTestTags.OrderDetailLazyColumn,

@@ -97,7 +97,8 @@ $activeCases = @($config.cases)
 if ($CaseId) { $activeCases = @($activeCases | Where-Object { $_.id -eq $CaseId }) }
 
 foreach ($case in $activeCases) {
-    $targetTest = if ($case.testMethod) { "$($config.testClass)#$($case.testMethod)" } else { $config.testClass }
+    $method = if ($case.testMethod) { $case.testMethod } else { $config.testMethod }
+    $targetTest = if ($method) { "$($config.testClass)#$method" } else { $config.testClass }
     Invoke-DemoScreenshotTest -Serial $serial -TestClass $targetTest -Flavor $Flavor
 }
 
@@ -127,6 +128,9 @@ try {
             "store-pro" { "marketing/screenshots/play-store/pro" }
             "store-demo" { "marketing/screenshots/play-store/demo" }
             "social-pro" { "marketing/screenshots/social" }
+            "social-demo" { "marketing/screenshots/social/demo" }
+            "social-campaign" { "marketing/screenshots/social/campaign" }
+            "social-stories" { "marketing/screenshots/social/stories" }
             default { "marketing/screenshots/workflows/$AssetProfile" }
         }
         $fullMarketingPath = Join-Path $root $marketingPath

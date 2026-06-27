@@ -146,6 +146,7 @@ fun AdminPanel(
                     Switch(
                         checked = isCreateOperatorExpanded,
                         onCheckedChange = { isCreateOperatorExpanded = it },
+                        modifier = Modifier.testTag("admin_create_operator_switch")
                     )
                 }
 

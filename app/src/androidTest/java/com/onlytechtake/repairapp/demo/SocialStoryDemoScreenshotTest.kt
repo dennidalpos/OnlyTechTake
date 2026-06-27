@@ -261,10 +261,11 @@ class SocialStoryDemoScreenshotTest {
             )
             robot.capture(outputDir, "02-cliente-privato.png")
             robot.clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
-            robot.waitForTag(RepairAppTestTags.CustomerConfirmSaveButton, useUnmergedTree = true)
-            robot.clickText("Conferma")
+            robot.waitForTag(RepairAppTestTags.CustomerConfirmSaveButton)
+            robot.clickTag(RepairAppTestTags.CustomerConfirmSaveButton)
+            robot.pauseForDemo()
             robot.typeTag(RepairAppTestTags.CustomerSearchField, "Luca")
-            robot.waitForText("Luca Rossi")
+            robot.waitForText("Luca")
             robot.capture(outputDir, "03-privato-salvato.png")
 
             robot.clickTag(RepairAppTestTags.CustomerNewButton, scroll = true)
@@ -284,10 +285,11 @@ class SocialStoryDemoScreenshotTest {
             )
             robot.capture(outputDir, "04-cliente-azienda.png")
             robot.clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
-            robot.waitForTag(RepairAppTestTags.CustomerConfirmSaveButton, useUnmergedTree = true)
-            robot.clickText("Conferma")
+            robot.waitForTag(RepairAppTestTags.CustomerConfirmSaveButton)
+            robot.clickTag(RepairAppTestTags.CustomerConfirmSaveButton)
+            robot.pauseForDemo()
             robot.typeTag(RepairAppTestTags.CustomerSearchField, "Demo")
-            robot.waitForText("Demo Lab Srl")
+            robot.waitForText("Demo")
             robot.capture(outputDir, "05-azienda-salvata.png")
         }
     }
@@ -314,8 +316,8 @@ class SocialStoryDemoScreenshotTest {
             robot.waitForText("Backup")
             robot.capture(outputDir, "02-backup-dati.png")
 
-            robot.clickText("Esportazione Commesse", scroll = true)
-            robot.waitForText("Esportazione")
+            robot.clickText("Export", scroll = true)
+            robot.waitForText("Export")
             robot.capture(outputDir, "03-export-excel.png")
         }
     }

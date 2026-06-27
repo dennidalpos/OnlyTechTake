@@ -1,0 +1,20 @@
+{
+  "id": "workflow-setup",
+  "flavor": "Full",
+  "testClass": "com.onlytechtake.repairapp.demo.WorkflowOperationalTest",
+  "testMethod": "flow0_Setup",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/workflows/workflow-setup",
+  "pulledDirectoryName": "workflow-setup",
+  "cases": [
+    {
+      "id": "setup",
+      "sourceDirectory": ".",
+      "outputs": [
+        { "platform": "setup", "variant": "vertical", "subDir": "admin" }
+      ],
+      "expectedFiles": [
+        "01-setup-admin.png"
+      ]
+    }
+  ]
+}
