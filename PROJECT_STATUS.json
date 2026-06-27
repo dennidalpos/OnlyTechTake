@@ -2,8 +2,8 @@
   "project_name": "OnlyTechTake",
   "version": "1.0.6",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-06-26",
-  "alignment_status": "Allineamento varianti completato. Source set 'main' ripulito da logica legacy e risorse demo/showcase. Test unitari e strumentati allineati alle nuove astrazioni di DemoMode.",
+  "last_updated": "2026-06-27",
+  "alignment_status": "Allineamento varianti completato. Source set 'main' ripulito da logica legacy e risorse demo/showcase. Test unitari e strumentati allineati alle nuove astrazioni di DemoMode e risolte inconsistenze di compilazione nei test strumentati (Full flavor).",
   "landing_page": {
     "status": "Standalone Ready + Assets Automated",
     "theme": "Material 3 + Inter Typography",
@@ -61,6 +61,9 @@
     }
   ],
   "completed_recently": [
+    "Quality: Risolti errori di build Spotless escludendo la directory .idea dalla scansione.",
+    "Quality: Completata la rimozione del debito tecnico in main/strings.xml (rimosse stringhe demo/test rimasuglio).",
+    "Test: Corretta la compilazione dei test strumentati (DemoDataSeeder) reindirizzando i riferimenti alle stringhe su androidTest/res (TestR).",
     "Quality: Risolti warning di semplificazione booleana in CustomerRepository e AdminUserRepository (scenari multi-flavor).",
     "Quality: Aggiunte parentesi chiarificatrici in espressioni booleane complesse in TemplateRepository e AdminUserRepository.",
     "Quality: Corretta formattazione stringhe (escape errato %1$s) in values/strings.xml e values-it/strings.xml.",

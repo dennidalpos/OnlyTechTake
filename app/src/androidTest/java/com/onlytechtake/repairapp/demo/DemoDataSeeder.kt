@@ -28,6 +28,7 @@ import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import java.io.File
 import java.io.FileOutputStream
+import com.onlytechtake.repairapp.test.R as TestR
 
 object DemoDataSeeder {
     const val DEMO_PASSWORD = "DemoPass123"
@@ -55,7 +56,7 @@ object DemoDataSeeder {
         database.userDao().upsert(
             UserEntity(
                 id = DEMO_ADMIN_ID,
-                displayName = context.getString(R.string.demo_admin_display_name),
+                displayName = context.getString(TestR.string.demo_admin_display_name),
                 username = DEMO_ADMIN_USERNAME,
                 passwordHash = adminHash.hash,
                 passwordSalt = adminHash.salt,
@@ -71,7 +72,7 @@ object DemoDataSeeder {
             database.userDao().upsert(
                 UserEntity(
                     id = DEMO_OPERATOR_ID,
-                    displayName = context.getString(R.string.demo_operator_display_name),
+                    displayName = context.getString(TestR.string.demo_operator_display_name),
                     username = DEMO_OPERATOR_USERNAME,
                     passwordHash = operatorHash.hash,
                     passwordSalt = operatorHash.salt,
@@ -97,32 +98,32 @@ object DemoDataSeeder {
                     id = "demo-cat-pc",
                     parentId = null,
                     level = 0,
-                    name = context.getString(R.string.common_cat_pc),
-                    description = context.getString(R.string.common_cat_pc_desc),
+                    name = context.getString(TestR.string.common_cat_pc),
+                    description = context.getString(TestR.string.common_cat_pc_desc),
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = DEMO_CATEGORY_ID, // notebook
                     parentId = "demo-cat-pc",
                     level = 1,
-                    name = context.getString(R.string.common_cat_notebook),
-                    description = context.getString(R.string.common_cat_notebook_desc),
+                    name = context.getString(TestR.string.common_cat_notebook),
+                    description = context.getString(TestR.string.common_cat_notebook_desc),
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = "demo-cat-gaming",
                     parentId = DEMO_CATEGORY_ID,
                     level = 2,
-                    name = context.getString(R.string.common_cat_gaming),
-                    description = context.getString(R.string.common_cat_gaming_desc),
+                    name = context.getString(TestR.string.common_cat_gaming),
+                    description = context.getString(TestR.string.common_cat_gaming_desc),
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = "demo-cat-rog-strix",
                     parentId = "demo-cat-gaming",
                     level = 3,
-                    name = context.getString(R.string.common_cat_rog_strix),
-                    description = context.getString(R.string.common_cat_rog_strix_desc),
+                    name = context.getString(TestR.string.common_cat_rog_strix),
+                    description = context.getString(TestR.string.common_cat_rog_strix_desc),
                     active = true,
                 ),
             ),
@@ -137,7 +138,7 @@ object DemoDataSeeder {
                             null
                         } else {
                             context.getString(
-                                R.string.demo_customer_name,
+                                TestR.string.demo_customer_name,
                                 i,
                             )
                         },
@@ -145,7 +146,7 @@ object DemoDataSeeder {
                     companyName =
                         if (i % 3 == 0) {
                             context.getString(
-                                R.string.demo_customer_business_name,
+                                TestR.string.demo_customer_business_name,
                                 i,
                             )
                         } else {
@@ -156,7 +157,7 @@ object DemoDataSeeder {
                     phone = "+39 333 000 ${1000 + i}",
                     email = "cliente$i@example.invalid",
                     address = "Via Demo $i, Milano",
-                    notes = context.getString(R.string.demo_customer_notes, i),
+                    notes = context.getString(TestR.string.demo_customer_notes, i),
                     createdAt = now - (i * 1000L),
                     updatedAt = now - (i * 1000L),
                 )
@@ -174,10 +175,10 @@ object DemoDataSeeder {
                     customerId = DEMO_CUSTOMER_ID,
                     title =
                         if (i == 1) {
-                            context.getString(R.string.demo_order_title_1)
+                            context.getString(TestR.string.demo_order_title_1)
                         } else {
                             context.getString(
-                                R.string.demo_order_title_n,
+                                TestR.string.demo_order_title_n,
                                 i,
                             )
                         },
@@ -186,8 +187,8 @@ object DemoDataSeeder {
                     priority = OrderPriority.NORMAL,
                     assignedToUserId = assignedUserId,
                     createdByUserId = assignedUserId,
-                    description = context.getString(R.string.demo_order_desc, i),
-                    internalNotes = context.getString(R.string.demo_order_notes, i),
+                    description = context.getString(TestR.string.demo_order_desc, i),
+                    internalNotes = context.getString(TestR.string.demo_order_notes, i),
                     estimateAmountCents = null,
                     finalAmountCents = null,
                     createdAt = now - (i * 3600000L),
@@ -202,7 +203,7 @@ object DemoDataSeeder {
             writeDemoBitmap(
                 directory = mediaStorageProvider.getOrderMediaDir(DEMO_ORDER_ID),
                 fileName = "demo-oggetto.png",
-                label = context.getString(R.string.demo_photo_label),
+                label = context.getString(TestR.string.demo_photo_label),
                 backgroundColor = Color.rgb(229, 241, 255),
             )
         database.orderMediaDao().upsert(
@@ -226,7 +227,7 @@ object DemoDataSeeder {
             writeDemoBitmap(
                 directory = mediaStorageProvider.getOrderSignaturesDir(DEMO_ORDER_ID),
                 fileName = "demo-firma.png",
-                label = context.getString(R.string.demo_signature_label),
+                label = context.getString(TestR.string.demo_signature_label),
                 backgroundColor = Color.WHITE,
             )
         database.signatureDao().upsert(
@@ -236,9 +237,9 @@ object DemoDataSeeder {
                 signerName = "Marco Verdi",
                 privacyAccepted = true,
                 termsAccepted = true,
-                privacyTextSnapshot = context.getString(R.string.demo_privacy_snapshot),
+                privacyTextSnapshot = context.getString(TestR.string.demo_privacy_snapshot),
                 privacyTemplateVersion = 1,
-                termsTextSnapshot = context.getString(R.string.demo_terms_snapshot),
+                termsTextSnapshot = context.getString(TestR.string.demo_terms_snapshot),
                 termsTemplateVersion = 1,
                 localPath = signaturePath.absolutePath,
                 fileName = signaturePath.name,
@@ -256,8 +257,8 @@ object DemoDataSeeder {
                 id = "demo-timeline-created",
                 orderId = DEMO_ORDER_ID,
                 type = TimelineEventType.ORDER_CREATED,
-                title = context.getString(R.string.demo_event_title_created),
-                description = context.getString(R.string.demo_event_desc_created),
+                title = context.getString(TestR.string.demo_event_title_created),
+                description = context.getString(TestR.string.demo_event_desc_created),
                 oldStatus = null,
                 newStatus = OrderStatus.OPEN.name,
                 visibleToCustomer = true,
@@ -334,7 +335,7 @@ object DemoDataSeeder {
                     code = template.code,
                     title = template.title,
                     channel = MessageChannel.WHATSAPP,
-                    body = context.getString(R.string.demo_template_body),
+                    body = context.getString(TestR.string.demo_template_body),
                     active = true,
                     version = 1,
                     updatedByUserId = DEMO_ADMIN_ID,

@@ -344,7 +344,7 @@ class SocialStoryDemoScreenshotTest {
             robot.waitForText(
                 context.resources
                     .getQuantityString(
-                        com.onlytechtake.repairapp.R.plurals.demo_error_order_limit,
+                        com.onlytechtake.repairapp.test.R.plurals.demo_error_order_limit,
                         BuildConfig.MAX_ORDERS,
                         BuildConfig.MAX_ORDERS,
                     ).substring(0, 10),

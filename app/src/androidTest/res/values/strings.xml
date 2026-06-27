@@ -24,4 +24,9 @@
     <string name="demo_event_title_created">Repair order created</string>
     <string name="demo_event_desc_created">Demo intake with photo and customer signature.</string>
     <string name="demo_template_body">Update {{numero_commessa}}: {{stato_commessa}} for {{cliente}}.</string>
+
+    <plurals name="demo_error_order_limit">
+        <item quantity="one">Demo Limit reached. The Demo version allows only %1$d repair order and use only with admin account. To continue without limits, activate the Full version.</item>
+        <item quantity="other">Demo Limit reached. The Demo version allows %1$d repair orders and use only with admin account. To continue without limits, activate the Full version.</item>
+    </plurals>
 </resources>

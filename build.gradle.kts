@@ -10,6 +10,7 @@ spotless {
         arrayOf(
             "**/build/**",
             ".gradle/**",
+            ".idea/**",
             ".kotlin/**",
             "app/schemas/**",
             "asset/**",
