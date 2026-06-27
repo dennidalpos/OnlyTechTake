@@ -7,6 +7,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.onlytechtake.repairapp.MainActivity
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
@@ -19,6 +20,9 @@ import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class SocialProAssetTest {
+    @get:Rule
+    val localeRule = LocaleTestRule("en", "US")
+
     @get:Rule
     val composeRule = createEmptyComposeRule()
 
@@ -86,7 +90,7 @@ class SocialProAssetTest {
             )
             robot.clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
 
-            robot.waitForText("Foto e allegati")
+            robot.waitForText(R.string.intake_step_media)
             robot.clickTag(RepairAppTestTags.IntakeMediaTakePhotoButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
             robot.clickTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
@@ -94,9 +98,9 @@ class SocialProAssetTest {
             robot.clickTag(RepairAppTestTags.NewOrderStep4NextButton, scroll = true)
 
             // 04-stories-signature (Highlighting transparency/trust)
-            robot.waitForText("Privacy e firma")
-            robot.clickText("Accetta informativa privacy", scroll = true)
-            robot.clickText("Accetta condizioni di presa in carico", scroll = true)
+            robot.waitForText(R.string.intake_step_privacy)
+            robot.clickText(R.string.signature_accept_privacy, scroll = true)
+            robot.clickText(R.string.signature_accept_terms, scroll = true)
             robot.drawSignature(RepairAppTestTags.SignatureCanvas)
             robot.capture(outputDir, "04-stories-signature.png")
             robot.clickTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
@@ -123,7 +127,7 @@ class SocialProAssetTest {
                 OrderStatusAction.RECORD_RESULT,
             )
             robot.applyResultStatus("Problema risolto con ripristino OS e pulizia.", "89,00")
-            robot.waitForText("Documenti cliente", scroll = true)
+            robot.waitForText(R.string.order_customer_documents, scroll = true)
             robot.capture(outputDir, "06-reel-pdf.png")
         }
     }

@@ -18,6 +18,9 @@ import java.io.File
 @RunWith(AndroidJUnit4::class)
 class SocialDemoAssetTest {
     @get:Rule
+    val localeRule = LocaleTestRule("en", "US")
+
+    @get:Rule
     val composeRule = createEmptyComposeRule()
 
     @get:Rule
@@ -25,6 +28,8 @@ class SocialDemoAssetTest {
         GrantPermissionRule.grant(android.Manifest.permission.CAMERA)
 
     private val context: Context = ApplicationProvider.getApplicationContext()
+    private val testContext: Context
+        get() = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().context
 
     @Test
     fun capturesSocialDemoAssets() {
@@ -48,7 +53,7 @@ class SocialDemoAssetTest {
             robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
             robot.pauseForDemo()
             robot.waitForText(
-                context.resources
+                testContext.resources
                     .getQuantityString(
                         com.onlytechtake.repairapp.test.R.plurals.demo_error_order_limit,
                         BuildConfig.MAX_ORDERS,

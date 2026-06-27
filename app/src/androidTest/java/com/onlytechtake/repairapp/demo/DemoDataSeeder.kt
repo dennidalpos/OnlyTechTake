@@ -47,6 +47,15 @@ object DemoDataSeeder {
         get() = InstrumentationRegistry.getInstrumentation().context
 
     suspend fun seedDemoProfile(context: Context) {
+        // Force English for consistent assets
+        val locale = java.util.Locale.ENGLISH
+        java.util.Locale.setDefault(locale)
+        val resources = context.resources
+        val config = resources.configuration
+        config.setLocale(locale)
+        @Suppress("DEPRECATION")
+        resources.updateConfiguration(config, resources.displayMetrics)
+
         RepairAppDatabase.closeInstance()
         context.deleteDatabase(RepairAppDatabase.DATABASE_NAME)
         AuthPreferences(context).clear()

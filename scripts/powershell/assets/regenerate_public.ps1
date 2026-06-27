@@ -38,10 +38,10 @@ $profiles = @(
     @{ id = "social-stories"; flavor = "Full" }
 )
 
-# Assicuriamoci che l'app e i test siano buildati
-Write-Host "Build preliminare APK (App + Test)..." -ForegroundColor Cyan
-./gradlew :app:assembleFullDebug :app:assembleFullDebugAndroidTest --no-configuration-cache
-./gradlew :app:assembleDemoDebug :app:assembleDemoDebugAndroidTest --no-configuration-cache
+# Assicuriamoci che l'app e i test siano buildati (Salto build per velocità se già eseguita)
+Write-Host "Salto build preliminare APK (Assunto già fatto)..." -ForegroundColor Yellow
+# ./gradlew :app:assembleFullDebug :app:assembleFullDebugAndroidTest --no-configuration-cache
+# ./gradlew :app:assembleDemoDebug :app:assembleDemoDebugAndroidTest --no-configuration-cache
 
 foreach ($p in $profiles) {
     Write-Host "`n=== Rigenerazione Profilo: $($p.id) ($($p.flavor)) ===" -ForegroundColor Cyan

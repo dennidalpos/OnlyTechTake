@@ -8,6 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.MainActivity
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import kotlinx.coroutines.runBlocking
@@ -18,6 +19,9 @@ import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class SocialStoryDemoScreenshotTest {
+    @get:Rule
+    val localeRule = LocaleTestRule("en", "US")
+
     @get:Rule
     val composeRule = createEmptyComposeRule()
 
@@ -40,7 +44,7 @@ class SocialStoryDemoScreenshotTest {
             val username =
                 if (BuildConfig.IS_DEMO_VERSION) DemoDataSeeder.DEMO_ADMIN_USERNAME else DemoDataSeeder.DEMO_OPERATOR_USERNAME
             robot.loginDemo(username)
-            robot.waitForText(if (BuildConfig.IS_DEMO_VERSION) "Admin" else "Operatore")
+            robot.waitForText(if (BuildConfig.IS_DEMO_VERSION) R.string.dashboard_role_admin else R.string.dashboard_role_operator)
             robot.capture(outputDir, "02-dashboard-home.png")
 
             robot.clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
@@ -73,7 +77,8 @@ class SocialStoryDemoScreenshotTest {
             robot.capture(outputDir, "03-new-customer.png")
 
             robot.clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
-            robot.waitForText("Customer selected")
+            // Robust check: wait for the next button to be enabled
+            robot.waitForTag(RepairAppTestTags.NewOrderStep1NextButton)
             robot.clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
 
             robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-pc"), scroll = true)
@@ -100,7 +105,7 @@ class SocialStoryDemoScreenshotTest {
 
             // 4. Wizard: media
             robot.clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
-            robot.waitForText("Photos and attachments")
+            robot.waitForText(R.string.intake_step_media)
             robot.clickTag(RepairAppTestTags.IntakeMediaTakePhotoButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
             robot.clickTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
@@ -109,9 +114,9 @@ class SocialStoryDemoScreenshotTest {
 
             // 5. Wizard: privacy and signature
             robot.clickTag(RepairAppTestTags.NewOrderStep4NextButton, scroll = true)
-            robot.waitForText("Privacy and signature")
-            robot.clickText("Accept privacy policy", scroll = true)
-            robot.clickText("Accept service terms", scroll = true)
+            robot.waitForText(R.string.intake_step_privacy)
+            robot.clickText(R.string.signature_accept_privacy, scroll = true)
+            robot.clickText(R.string.signature_accept_terms, scroll = true)
             robot.drawSignature(RepairAppTestTags.SignatureCanvas)
             robot.waitForTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
             robot.capture(outputDir, "07-customer-signature.png")
@@ -122,7 +127,7 @@ class SocialStoryDemoScreenshotTest {
             robot.clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
 
             robot.clickDashboardTab("ORDERS")
-            robot.waitForText("Orders")
+            robot.waitForText(R.string.dashboard_orders)
             robot.capture(outputDir, "09-orders-list.png")
             robot.waitForTag(
                 RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID),
@@ -158,7 +163,7 @@ class SocialStoryDemoScreenshotTest {
             )
             robot.closeOrder()
             robot.clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
-            robot.waitForText("Closed")
+            robot.waitForText(R.string.status_closed)
             robot.capture(outputDir, "12-timeline-closure.png")
         }
     }
@@ -172,11 +177,11 @@ class SocialStoryDemoScreenshotTest {
         withDemoApp {
             robot.waitForTag(RepairAppTestTags.AuthUsernameField)
             robot.loginDemo(DemoDataSeeder.DEMO_ADMIN_USERNAME)
-            robot.waitForText("Admin")
+            robot.waitForText(R.string.dashboard_role_admin)
             robot.capture(outputDir, "01-admin-dashboard.png")
 
             robot.clickDashboardTab("SETTINGS")
-            robot.waitForText("Setup")
+            robot.waitForText(R.string.dashboard_config)
             robot.capture(outputDir, "02-config-hub.png")
 
             robot.clickTag(RepairAppTestTags.ConfigHubCategoriesButton, scroll = true)
@@ -195,16 +200,16 @@ class SocialStoryDemoScreenshotTest {
             robot.clickTag(RepairAppTestTags.ConfigCategorySaveButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.GenericConfirmButton)
             robot.clickTag(RepairAppTestTags.GenericConfirmButton)
-            robot.waitForText("Operation completed")
+            robot.waitForText(R.string.success_operation_completed)
             robot.capture(outputDir, "04-category-saved.png")
 
             robot.clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
             robot.clickTag(RepairAppTestTags.ConfigHubTemplateMappingButton, scroll = true)
-            robot.waitForText("Template Mapping")
+            robot.waitForText(R.string.config_hub_template_mapping_title)
             robot.capture(outputDir, "05-template-mappings.png")
             robot.clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
             robot.clickTag(RepairAppTestTags.ConfigHubTemplatesButton, scroll = true)
-            robot.waitForText("Template Management")
+            robot.waitForText(R.string.config_hub_templates_title)
             robot.clickTag(RepairAppTestTags.ConfigTemplateNewButton, scroll = true)
 
             // Capture Tooltip for variables
@@ -231,7 +236,7 @@ class SocialStoryDemoScreenshotTest {
             robot.clickTag(RepairAppTestTags.ConfigTemplateSaveButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.GenericConfirmButton)
             robot.clickTag(RepairAppTestTags.GenericConfirmButton)
-            robot.waitForText("Operation completed")
+            robot.waitForText(R.string.success_operation_completed)
             robot.capture(outputDir, "08-template-saved.png")
         }
     }
@@ -305,19 +310,19 @@ class SocialStoryDemoScreenshotTest {
             robot.loginDemo(DemoDataSeeder.DEMO_ADMIN_USERNAME)
 
             robot.clickDashboardTab("SETTINGS")
-            robot.waitForText("Setup")
+            robot.waitForText(R.string.dashboard_config)
 
             robot.clickTag(RepairAppTestTags.ConfigHubStorageButton, scroll = true)
-            robot.waitForText("Storage")
+            robot.waitForText(R.string.storage_title)
             robot.capture(outputDir, "01-storage-management.png")
             robot.clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
 
             robot.clickTag(RepairAppTestTags.ConfigHubBackupButton, scroll = true)
-            robot.waitForText("Backup")
+            robot.waitForText(R.string.config_backup_title)
             robot.capture(outputDir, "02-data-backup.png")
 
-            robot.clickText("Export", scroll = true)
-            robot.waitForText("Export")
+            robot.clickText(R.string.config_backup_export_xlsx, scroll = true)
+            robot.waitForText(R.string.config_backup_export_xlsx)
             robot.capture(outputDir, "03-excel-export.png")
         }
     }

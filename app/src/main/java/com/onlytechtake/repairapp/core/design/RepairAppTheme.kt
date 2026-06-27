@@ -181,6 +181,21 @@ fun RepairAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
+    val forceEnglish = System.getProperty("forceEnglish") == "true"
+    if (forceEnglish) {
+        val context = androidx.compose.ui.platform.LocalContext.current
+        androidx.compose.runtime.remember(context.resources) {
+            val resources = context.resources
+            val configuration = resources.configuration
+            if (configuration.locales[0] != java.util.Locale.ENGLISH) {
+                configuration.setLocale(java.util.Locale.ENGLISH)
+                @Suppress("DEPRECATION")
+                resources.updateConfiguration(configuration, resources.displayMetrics)
+            }
+            true
+        }
+    }
+
     CompositionLocalProvider(
         LocalRepairAppSemanticColors provides if (darkTheme) DarkSemanticColors else LightSemanticColors,
     ) {

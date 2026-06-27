@@ -7,6 +7,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.onlytechtake.repairapp.MainActivity
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
@@ -20,6 +21,9 @@ import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class WorkflowOperationalTest {
+    @get:Rule
+    val localeRule = LocaleTestRule("en", "US")
+
     @get:Rule
     val composeRule = createEmptyComposeRule()
 
@@ -80,7 +84,7 @@ class WorkflowOperationalTest {
             robot.typeTag(RepairAppTestTags.AuthPasswordField, "TempPass123!")
             robot.clickTag(RepairAppTestTags.AuthSubmitButton)
 
-            robot.waitForText("Security Update", scroll = false) // auth_security_title part
+            robot.waitForText(R.string.auth_security_title, scroll = false)
             robot.capture(outputDir, "01-password-change.png")
             robot.typeTag(RepairAppTestTags.AuthPasswordField, "NewAdminPass123!")
             robot.typeTag(RepairAppTestTags.AuthConfirmPasswordField, "NewAdminPass123!")
@@ -93,7 +97,7 @@ class WorkflowOperationalTest {
             robot.typeTag(RepairAppTestTags.OwnerFieldEmail, "info@onlytechtake.invalid")
             robot.typeTag(RepairAppTestTags.OwnerFieldPhone, "+1 555-123-4567")
             robot.capture(outputDir, "02-shop-data-compilation.png")
-            robot.clickText("Confirm")
+            robot.clickText(R.string.action_confirm)
         }
     }
 

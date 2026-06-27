@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTouchInput
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import java.io.File
@@ -38,7 +39,7 @@ class OperationalRobot(
 
         // 4. Save & Next
         clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
-        waitForText("Customer selected")
+        waitForText(R.string.intake_selected_customer)
         clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
 
         // 5. Category Selection
@@ -67,7 +68,7 @@ class OperationalRobot(
         clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
 
         // 7. Media
-        waitForText("Photos and attachments")
+        waitForText(R.string.intake_step_media)
         clickTag(RepairAppTestTags.IntakeMediaTakePhotoButton, scroll = true)
         waitForTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
         clickTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
@@ -76,9 +77,9 @@ class OperationalRobot(
         clickTag(RepairAppTestTags.NewOrderStep4NextButton, scroll = true)
 
         // 8. Signature
-        waitForText("Privacy and signature")
-        clickText("Accept privacy policy", scroll = true)
-        clickText("Accept service terms", scroll = true)
+        waitForText(R.string.intake_step_privacy)
+        clickText(R.string.signature_accept_privacy, scroll = true)
+        clickText(R.string.signature_accept_terms, scroll = true)
         waitForTag(RepairAppTestTags.SignatureCanvas, scroll = true)
         composeRule.onNodeWithTag(RepairAppTestTags.SignatureCanvas).performTouchInput {
             val w = width.toFloat()
@@ -100,7 +101,7 @@ class OperationalRobot(
         waitForTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
         nextCapture("intake-summary")
         clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
-        waitForText("Orders")
+        waitForText(R.string.dashboard_orders)
     }
 
     fun managementFlow(outputDir: File) {
@@ -110,7 +111,7 @@ class OperationalRobot(
 
         // 1. Orders List
         clickDashboardTab("ORDERS")
-        waitForText("Orders")
+        waitForText(R.string.dashboard_orders)
         nextCapture("orders-list")
 
         // 2. Select Order
@@ -177,7 +178,7 @@ class OperationalRobot(
         nextCapture("management-closure")
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
         waitForTagGone(RepairAppTestTags.StatusDialogConfirmButton)
-        waitForText("Orders")
+        waitForText(R.string.dashboard_orders)
     }
 
     private fun confirmStatusDialog() {
@@ -284,6 +285,6 @@ class OperationalRobot(
         typeTag(RepairAppTestTags.OwnerFieldEmail, "info@onlytechtake.invalid")
         typeTag(RepairAppTestTags.OwnerFieldPhone, "+1 555-123-4567")
         nextCapture("setup-owner")
-        clickText("Confirm")
+        clickText(R.string.action_confirm)
     }
 }

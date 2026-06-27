@@ -22,6 +22,7 @@ import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.test.swipeUp
 import androidx.test.espresso.Espresso
 import androidx.test.platform.app.InstrumentationRegistry
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import java.io.File
 import java.io.FileOutputStream
@@ -30,6 +31,14 @@ abstract class BaseAssetRobot(
     protected val composeRule: ComposeTestRule,
     protected val context: Context,
 ) {
+    private val englishContext: Context by lazy {
+        val configuration = android.content.res.Configuration(context.resources.configuration)
+        configuration.setLocale(java.util.Locale.ENGLISH)
+        context.createConfigurationContext(configuration)
+    }
+
+    protected fun getString(@androidx.annotation.StringRes resId: Int): String = englishContext.getString(resId)
+
     fun loginDemo(username: String) {
         repeat(LOGIN_ATTEMPTS) { attempt ->
             waitForTag(RepairAppTestTags.AuthUsernameField)
@@ -59,7 +68,7 @@ abstract class BaseAssetRobot(
         waitForTagExists(tabTag)
         composeRule.onNodeWithTag(tabTag).performClick()
         composeRule.waitForIdle()
-        if (isTextDisplayed("Dati non salvati")) {
+        if (isTextDisplayed(context.getString(R.string.dashboard_unsaved_title))) {
             clickTag(RepairAppTestTags.DashboardDiscardChangesButton)
         }
         composeRule.waitForIdle()
@@ -230,6 +239,20 @@ abstract class BaseAssetRobot(
             attempts++
         }
         if (!found) composeRule.onNodeWithText(text, substring = true).assertExists()
+    }
+
+    fun waitForText(
+        @androidx.annotation.StringRes resId: Int,
+        scroll: Boolean = false,
+    ) {
+        waitForText(getString(resId), scroll = scroll)
+    }
+
+    fun clickText(
+        @androidx.annotation.StringRes resId: Int,
+        scroll: Boolean = false,
+    ) {
+        clickText(getString(resId), scroll = scroll)
     }
 
     fun waitForTagGone(

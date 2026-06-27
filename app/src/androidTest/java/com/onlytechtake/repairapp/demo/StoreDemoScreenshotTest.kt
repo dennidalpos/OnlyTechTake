@@ -19,6 +19,9 @@ import java.io.File
 @RunWith(AndroidJUnit4::class)
 class StoreDemoScreenshotTest {
     @get:Rule
+    val localeRule = LocaleTestRule("en", "US")
+
+    @get:Rule
     val composeRule = createEmptyComposeRule()
 
     @get:Rule

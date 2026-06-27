@@ -7,6 +7,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.onlytechtake.repairapp.MainActivity
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
@@ -19,6 +20,9 @@ import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class StoreProScreenshotTest {
+    @get:Rule
+    val localeRule = LocaleTestRule("en", "US")
+
     @get:Rule
     val composeRule = createEmptyComposeRule()
 
@@ -57,7 +61,7 @@ class StoreProScreenshotTest {
             robot.capture(outputDir, "02-nuova-commessa-pro.png")
 
             robot.clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
-            robot.waitForText("Cliente selezionato")
+            robot.waitForTag(RepairAppTestTags.NewOrderStep1NextButton)
             robot.clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
 
             // Step 2 (Category) - Skip capture
@@ -84,7 +88,7 @@ class StoreProScreenshotTest {
             robot.clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
 
             // Step 4: Photo - Skip capture
-            robot.waitForText("Foto e allegati")
+            robot.waitForText(R.string.intake_step_media)
             robot.clickTag(RepairAppTestTags.IntakeMediaTakePhotoButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
             robot.clickTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
@@ -92,9 +96,9 @@ class StoreProScreenshotTest {
             robot.clickTag(RepairAppTestTags.NewOrderStep4NextButton, scroll = true)
 
             // 03-foto-firma-pro (Step 5 Signature)
-            robot.waitForText("Privacy e firma")
-            robot.clickText("Accetta informativa privacy", scroll = true)
-            robot.clickText("Accetta condizioni di presa in carico", scroll = true)
+            robot.waitForText(R.string.intake_step_privacy)
+            robot.clickText(R.string.signature_accept_privacy, scroll = true)
+            robot.clickText(R.string.signature_accept_terms, scroll = true)
             robot.drawSignature(RepairAppTestTags.SignatureCanvas)
             robot.capture(outputDir, "03-foto-firma-pro.png")
             robot.clickTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
@@ -135,7 +139,7 @@ class StoreProScreenshotTest {
             )
             robot.closeOrder("Riparazione completata con successo.")
             robot.clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
-            robot.waitForText("Chiusa")
+            robot.waitForText(R.string.status_closed)
             robot.capture(outputDir, "06-timeline-chiusura-pro.png")
 
             // 07-clienti-pro
@@ -144,9 +148,9 @@ class StoreProScreenshotTest {
             robot.capture(outputDir, "07-clienti-pro.png")
 
             // 08-dettaglio-cliente-pro
-            robot.waitForText("Mario Demo", scroll = true)
-            robot.clickText("Mario Demo")
-            robot.waitForText("Commesse aperte")
+            robot.waitForText("John Doe", scroll = true)
+            robot.clickText("John Doe")
+            robot.waitForText(R.string.customer_field_phone, scroll = true)
             robot.capture(outputDir, "08-dettaglio-cliente-pro.png")
         }
     }

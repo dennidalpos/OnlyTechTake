@@ -2,15 +2,11 @@
   "project_name": "OnlyTechTake",
   "version": "1.0.6",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-07-03",
+  "last_updated": "2026-07-04",
   "backlog": [
     {
       "priority": "HIGH",
       "task": "CLEANUP: Refactor DemoMode logic. Removed repository bypasses, implemented real DB seeding for Demo flavor, and aligned order number formats."
-    },
-    {
-      "priority": "HIGH",
-      "task": "MARKETING: Completamento rigenerazione asset in inglese (seed configurato) e creazione nuovi screenshot social-stories."
     },
     {
       "priority": "HIGH",

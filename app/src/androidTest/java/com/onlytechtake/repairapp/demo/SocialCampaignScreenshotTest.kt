@@ -8,6 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.MainActivity
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
@@ -20,6 +21,9 @@ import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class SocialCampaignScreenshotTest {
+    @get:Rule
+    val localeRule = LocaleTestRule("en", "US")
+
     @get:Rule
     val composeRule = createEmptyComposeRule()
 
@@ -60,7 +64,7 @@ class SocialCampaignScreenshotTest {
             robot.capture(outputDir, "02-accoglienza.png")
 
             robot.clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
-            robot.waitForText("Cliente selezionato")
+            robot.waitForTag(RepairAppTestTags.NewOrderStep1NextButton)
             robot.clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
 
             // 2. Wizard: Categorie
@@ -89,7 +93,7 @@ class SocialCampaignScreenshotTest {
 
             // 4. Wizard: media
             robot.clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
-            robot.waitForText("Foto e allegati")
+            robot.waitForText(R.string.intake_step_media)
             robot.clickTag(RepairAppTestTags.IntakeMediaTakePhotoButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
             robot.clickTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
@@ -98,9 +102,9 @@ class SocialCampaignScreenshotTest {
 
             // 5. Wizard: privacy e firma
             robot.clickTag(RepairAppTestTags.NewOrderStep4NextButton, scroll = true)
-            robot.waitForText("Privacy e firma")
-            robot.clickText("Accetta informativa privacy", scroll = true)
-            robot.clickText("Accetta condizioni di presa in carico", scroll = true)
+            robot.waitForText(R.string.intake_step_privacy)
+            robot.clickText(R.string.signature_accept_privacy, scroll = true)
+            robot.clickText(R.string.signature_accept_terms, scroll = true)
             robot.drawSignature(RepairAppTestTags.SignatureCanvas)
             robot.waitForTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
             robot.capture(outputDir, "04-step4-firma.png")
@@ -145,7 +149,7 @@ class SocialCampaignScreenshotTest {
             robot.clickDashboardTab("ORDERS")
             robot.waitForTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
             robot.clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
-            robot.waitForText("Chiusa")
+            robot.waitForText(R.string.status_closed)
             robot.capture(outputDir, "06-successo.png")
         }
     }

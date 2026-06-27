@@ -11,6 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.MainActivity
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
@@ -23,6 +24,9 @@ import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class OperatorIntakeDemoScreenshotTest {
+    @get:Rule
+    val localeRule = LocaleTestRule("en", "US")
+
     @get:Rule
     val composeRule = createEmptyComposeRule()
 
@@ -63,7 +67,7 @@ class OperatorIntakeDemoScreenshotTest {
             robot.capture(outputDir, "03-step1-customer.png")
 
             robot.clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
-            robot.waitForText("Cliente selezionato")
+            robot.waitForTag(RepairAppTestTags.NewOrderStep1NextButton)
             robot.clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
 
             robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-pc"), scroll = true)
@@ -88,7 +92,7 @@ class OperatorIntakeDemoScreenshotTest {
             robot.capture(outputDir, "04-step2-problem.png")
 
             robot.clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
-            robot.waitForText("Foto e allegati")
+            robot.waitForText(R.string.intake_step_media)
             robot.clickTag(RepairAppTestTags.IntakeMediaTakePhotoButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
             robot.clickTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
@@ -96,9 +100,9 @@ class OperatorIntakeDemoScreenshotTest {
             robot.capture(outputDir, "05-step3-media.png")
             robot.clickTag(RepairAppTestTags.NewOrderStep4NextButton, scroll = true)
 
-            robot.waitForText("Privacy e firma")
-            robot.clickText("Accetta informativa privacy", scroll = true)
-            robot.clickText("Accetta condizioni di presa in carico", scroll = true)
+            robot.waitForText(R.string.intake_step_privacy)
+            robot.clickText(R.string.signature_accept_privacy, scroll = true)
+            robot.clickText(R.string.signature_accept_terms, scroll = true)
             robot.drawSignature(RepairAppTestTags.SignatureCanvas)
             robot.waitForTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
             robot.capture(outputDir, "06-step4-signature.png")
@@ -110,7 +114,7 @@ class OperatorIntakeDemoScreenshotTest {
 
             val createdOrderId = waitForCreatedOrderId()
             robot.clickDashboardTab("ORDERS")
-            robot.waitForText("Commesse")
+            robot.waitForText(R.string.dashboard_orders)
 
             // Show Back to Top in Orders
             composeRule.onNodeWithTag("orders_list").performTouchInput { swipeUp() }
@@ -147,7 +151,7 @@ class OperatorIntakeDemoScreenshotTest {
             robot.applyResultStatus("Connettore di alimentazione danneggiato.", "149,00")
             robot.capture(outputDir, "13-diagnosis-result.png")
 
-            robot.waitForText("Documenti cliente", scroll = true)
+            robot.waitForText(R.string.order_customer_documents, scroll = true)
             robot.capture(outputDir, "14-pdf-documents.png")
 
             robot.acceptQuote()
@@ -159,7 +163,7 @@ class OperatorIntakeDemoScreenshotTest {
 
             robot.closeOrder()
             robot.clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
-            robot.waitForText("Chiusa")
+            robot.waitForText(R.string.status_closed)
             robot.capture(outputDir, "16-closed-timeline.png")
         }
     }
