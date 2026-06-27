@@ -65,7 +65,8 @@ class CustomerRepository(
     }
 
     override suspend fun findById(id: String): CustomerEntity? {
-        if (DemoMode.isEnabled && (id == DemoMode.demoCustomer.id)) {
+        val isDemo = DemoMode.isEnabled
+        if (isDemo && (id == DemoMode.demoCustomer.id)) {
             return DemoMode.demoCustomer
         }
         return customerDao.findById(id)

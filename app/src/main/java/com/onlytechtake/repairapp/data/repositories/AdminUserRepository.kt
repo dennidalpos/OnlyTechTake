@@ -28,6 +28,7 @@ class AdminUserRepository(
 ) {
     fun observeUsers(): Flow<List<UserEntity>> = userDao.observeAll()
 
+    @Suppress("KotlinConstantConditions")
     suspend fun createOperator(
         actor: AuthenticatedUser,
         input: OperatorInput,
@@ -40,11 +41,13 @@ class AdminUserRepository(
             require(userDao.findByUsername(input.username.trim()) == null) { context.getString(R.string.error_username_exists) }
 
             if (BuildConfig.IS_DEMO_VERSION) {
-                if (BuildConfig.MAX_OPERATORS <= 0) {
+                val limit = BuildConfig.MAX_OPERATORS
+                @Suppress("KotlinConstantConditions")
+                if (limit <= 0) {
                     throw IllegalStateException(DemoMode.getOperatorNotAvailableMessage(context))
                 }
 
-                if (userDao.countActiveByRole(UserRole.OPERATOR) >= BuildConfig.MAX_OPERATORS) {
+                if (userDao.countActiveByRole(UserRole.OPERATOR) >= limit) {
                     throw IllegalStateException(
                         DemoMode.getOperatorLimitMessage(context, BuildConfig.MAX_OPERATORS),
                     )
@@ -122,7 +125,7 @@ class AdminUserRepository(
             PermissionService.requirePermission(actor, UserPermission.MANAGE_USERS)
             val existing =
                 requireNotNull(userDao.findById(userId)) { context.getString(R.string.error_user_not_found) }
-            if (!active && existing.role == UserRole.ADMIN) {
+            if (!active && (existing.role == UserRole.ADMIN)) {
                 throw IllegalStateException(context.getString(R.string.error_admin_cannot_be_deactivated))
             }
 
@@ -197,6 +200,5 @@ class AdminUserRepository(
         )
     }
 
-    private companion object {
-    }
+
 }

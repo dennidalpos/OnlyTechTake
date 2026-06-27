@@ -331,7 +331,7 @@
     <string name="content_description_delete">Delete</string>
     <string name="content_description_delete_order">Delete</string>
     <string name="action_delete_confirm_title">Delete %1$s?</string>
-    <string name="action_delete_confirm_text">\%1$s will be permanently removed. This action is irreversible.</string>
+    <string name="action_delete_confirm_text">%1$s will be permanently removed. This action is irreversible.</string>
     <string name="order_not_repairable_note">Customer notified: device not repairable</string>
     <string name="content_description_edit">Edit</string>
     <string name="content_description_open">Open</string>

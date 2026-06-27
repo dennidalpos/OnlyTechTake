@@ -61,6 +61,10 @@
     }
   ],
   "completed_recently": [
+    "Quality: Risolti warning di semplificazione booleana in CustomerRepository e AdminUserRepository (scenari multi-flavor).",
+    "Quality: Aggiunte parentesi chiarificatrici in espressioni booleane complesse in TemplateRepository e AdminUserRepository.",
+    "Quality: Corretta formattazione stringhe (escape errato %1$s) in values/strings.xml e values-it/strings.xml.",
+    "Quality: Allineati testi Italiani (accenti vs apostrofi) e rimosso companion object vuoto in AdminUserRepository.",
     "Quality: Implementata validazione stringa di conferma in DataResetRepository per reset dati.",
     "Quality: Soppressi warning 'UNUSED_PARAMETER' in componenti UI QuickIntake e SettingsPanel per parametri riservati a sviluppi futuri.",
     "Quality: Soppressi warning 'ConstPropertyName' in RepairAppTestTags, DemoMode e DesignTokenContrastTest.",

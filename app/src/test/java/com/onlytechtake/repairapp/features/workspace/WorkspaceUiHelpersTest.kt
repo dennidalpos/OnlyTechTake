@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.features.workspace
 
 import android.content.Context
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.utils.formatFileSize
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
@@ -17,16 +18,24 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 import java.time.ZoneOffset
 import java.util.Locale
 
 class WorkspaceUiHelpersTest {
-    private val context =
-        mockk<Context> {
-            every { getString(any()) } returns "label"
-            every { getString(any(), any()) } returns "label"
-        }
+    private val context = mockk<Context>(relaxed = true)
+
+    @Before
+    fun setup() {
+        every { context.getString(any()) } returns "label"
+        every { context.getString(R.string.label_photos_count, 1) } returns "Foto 1"
+        every { context.getString(R.string.label_documents_count, 1) } returns "Documenti 1"
+        every { context.getString(R.string.label_signatures_count, 1) } returns "Firme 1"
+        every { context.getString(R.string.label_final_photos_count, 1) } returns "Lavoro finito 1"
+        every { context.getString(R.string.label_photos_count, 2) } returns "Foto 2"
+        every { context.getString(R.string.label_documents_count, 3) } returns "Documenti 3"
+    }
 
     @Test
     fun imageRecognitionUsesMediaTypeAndMimeType() {
@@ -47,12 +56,15 @@ class WorkspaceUiHelpersTest {
                 signatures = listOf(signature()),
             )
 
-        assertEquals(
-            AttachmentCounts(images = 1, documents = 1, signatures = 1, finalPhotos = 1),
-            counts,
-        )
+        assertEquals(1, counts.images)
+        assertEquals(1, counts.documents)
+        assertEquals(1, counts.signatures)
+        assertEquals(1, counts.finalPhotos)
+
         assertEquals("Foto 1 - Documenti 1 - Firme 1 - Lavoro finito 1", counts.label(context))
-        assertEquals("Foto 2 - Documenti 3 - Firme 1", OrderAttachmentCounts(2, 3, 1).label(context))
+
+        val oCounts = OrderAttachmentCounts(images = 2, documents = 3, signatures = 1)
+        assertEquals("Foto 2 - Documenti 3 - Firme 1", oCounts.label(context))
     }
 
     @Test

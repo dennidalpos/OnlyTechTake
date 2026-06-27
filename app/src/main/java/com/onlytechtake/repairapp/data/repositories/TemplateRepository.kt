@@ -261,7 +261,7 @@ class TemplateRepository(
             val dbTemplate =
                 requireNotNull(templateDao.findActiveByCode(templateCode)) { context.getString(com.onlytechtake.repairapp.R.string.error_template_not_found) }
             val template =
-                if (dbTemplate.code in systemTemplateCodes && dbTemplate.version == 1) {
+                if ((dbTemplate.code in systemTemplateCodes) && (dbTemplate.version == 1)) {
                     getDefaultTemplates().find { it.code == dbTemplate.code } ?: dbTemplate
                 } else {
                     dbTemplate
@@ -362,7 +362,7 @@ class TemplateRepository(
         val chain = mutableListOf<OrderCategoryEntity>()
         val visited = mutableSetOf<String>()
         var current = categoryDao.findById(categoryId)
-        while (current != null && visited.add(current.id)) {
+        while ((current != null) && (visited.add(current.id))) {
             chain += current
             current = current.parentId?.let { categoryDao.findById(it) }
         }

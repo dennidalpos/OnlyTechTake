@@ -166,7 +166,7 @@
     <string name="error_backup_db_missing">Database backup mancante</string>
     <string name="error_invalid_zip_backup">Backup ZIP non valido</string>
     <string name="error_invalid_backup_path">Percorso backup non valido</string>
-    <string name="error_type_reset_to_confirm">Digitare %s per confermare</string>
+    <string name="error_type_reset_to_confirm">Digita %s per confermare</string>
     <string name="error_unrecognized_attachment_type">Tipo allegato non riconosciuto</string>
     <string name="error_attachment_type_not_allowed">Tipo allegato non consentito: %s</string>
     <string name="error_critical_db_error">Errore critico database</string>
@@ -336,7 +336,7 @@
     <string name="content_description_delete">Elimina</string>
     <string name="content_description_delete_order">Elimina</string>
     <string name="action_delete_confirm_title">Eliminare %1$s?</string>
-    <string name="action_delete_confirm_text">\%1$s verrà rimosso permanentemente. Questa azione non è reversibile.</string>
+    <string name="action_delete_confirm_text">%1$s verrà rimosso permanentemente. Questa azione non è reversibile.</string>
     <string name="order_not_repairable_note">Cliente avvisato: dispositivo non riparabile</string>
     <string name="content_description_edit">Modifica</string>
     <string name="content_description_open">Apri</string>
@@ -751,8 +751,8 @@
     <string name="config_template_archived">Template archiviato</string>
     <string name="config_template_save">Salva template</string>
     <string name="config_template_confirm_save_title">Salvare template?</string>
-    <string name="config_template_confirm_save_risky">La modifica puo\' interrompere i flussi che usano questo codice. Le firme salvate non cambiano.</string>
-    <string name="config_template_confirm_save_new_version">Verra\' salvata una nuova versione.</string>
+    <string name="config_template_confirm_save_risky">La modifica può interrompere i flussi che usano questo codice. Le firme salvate non cambiano.</string>
+    <string name="config_template_confirm_save_new_version">Verrà salvata una nuova versione.</string>
     <string name="config_template_empty">Nessun template configurato.</string>
     <string name="config_whatsapp_mode">Modalità: %1$s</string>
     <string name="config_whatsapp_manual">Manuale</string>
