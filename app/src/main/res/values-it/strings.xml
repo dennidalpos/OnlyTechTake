@@ -226,8 +226,6 @@
     <string name="error_db_missing_in_backup">Database mancante nel backup</string>
 
 
-
-
     <string name="priority_low">Bassa</string>
     <string name="priority_normal">Normale</string>
     <string name="priority_high">Alta</string>
@@ -790,7 +788,6 @@
     <string name="config_backup_restore_zip">Ripristina ZIP</string>
     <string name="config_backup_confirm_restore_zip_title">Ripristinare backup?</string>
     <string name="config_backup_confirm_restore_zip_text">Il backup ZIP sostituirà database e file locali dell\'app. Dopo il ripristino sarà richiesto un nuovo login.</string>
-
 
 
     <string name="export_xlsx_header_order_number">Numero commessa</string>

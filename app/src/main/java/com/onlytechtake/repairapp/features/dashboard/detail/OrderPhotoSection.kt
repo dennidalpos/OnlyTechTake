@@ -174,7 +174,11 @@ fun OrderPhotoSection(
     deleteMedia?.let { media ->
         AppDialog(
             onDismissRequest = { deleteMedia = null },
-            title = stringResource(R.string.action_delete_confirm_title, stringResource(R.string.label_media)),
+            title =
+                stringResource(
+                    R.string.action_delete_confirm_title,
+                    stringResource(R.string.label_media),
+                ),
             text = stringResource(R.string.action_delete_confirm_text, media.fileName),
             confirmButton = {
                 AppButton(

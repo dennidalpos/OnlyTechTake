@@ -896,7 +896,7 @@ private fun CustomerCard(
 ) {
     StandardCard(
         modifier = Modifier.testTag("customer_card_${customer.id}"),
-        onClick = onClick
+        onClick = onClick,
     ) {
         Row(
             modifier =

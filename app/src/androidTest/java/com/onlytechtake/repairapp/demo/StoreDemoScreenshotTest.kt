@@ -5,8 +5,8 @@ import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.GrantPermissionRule
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.GrantPermissionRule
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.MainActivity
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags

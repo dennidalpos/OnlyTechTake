@@ -50,6 +50,7 @@ fun statusTemplateAnchor(order: RepairOrderEntity): TemplateAnchor =
                 TemplateAnchor.WHATSAPP_NOT_REPAIRABLE
             }
         }
+
         OrderStatus.CLOSED -> {
             if (order.closureReason == ClosureReason.NOT_REPAIRABLE) {
                 TemplateAnchor.WHATSAPP_NOT_REPAIRABLE
@@ -57,6 +58,7 @@ fun statusTemplateAnchor(order: RepairOrderEntity): TemplateAnchor =
                 statusTemplateAnchor(order.status)
             }
         }
+
         else -> statusTemplateAnchor(order.status)
     }
 
@@ -84,6 +86,7 @@ fun nextActionLabel(
                 context.getString(R.string.action_notify_not_repairable)
             }
         }
+
         else -> nextActionLabel(context, order.status)
     }
 

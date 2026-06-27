@@ -253,7 +253,8 @@ internal class DiagnosticSettingsDelegate(
                 UserPermission.MANAGE_STORAGE,
             )
             val settings = securityPreferences.settings.first()
-            val password = settings.backupEncryptionPassword.takeIf { settings.isBackupEncryptionEnabled && it.isNotBlank() }
+            val password =
+                settings.backupEncryptionPassword.takeIf { settings.isBackupEncryptionEnabled && it.isNotBlank() }
 
             val zipFile = diagnosticLogService.collectAndPrepareZip(password)
             if (zipFile != null) {

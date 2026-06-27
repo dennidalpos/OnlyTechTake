@@ -617,7 +617,8 @@ private fun OwnerWizardScreen(
 ) {
     val context = LocalContext.current
     // Pre-fill with showcase data if empty and showcase mode is enabled
-    val showcaseInfo = if (BuildConfig.IS_SHOWCASE_MODE_ENABLED) DemoMode.getShowcaseOwnerInfo(context) else null
+    val showcaseInfo =
+        if (BuildConfig.IS_SHOWCASE_MODE_ENABLED) DemoMode.getShowcaseOwnerInfo(context) else null
 
     val initialName =
         if (showcaseInfo != null && ownerInfo.name.isBlank()) {

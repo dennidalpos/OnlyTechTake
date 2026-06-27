@@ -31,8 +31,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
@@ -584,7 +584,9 @@ private fun backupReminderInfo(settings: BackupReminderSettings): String {
 private fun BackupSettingsPreview() {
     MaterialTheme {
         BackupSettings(
-            viewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+            viewModel =
+                androidx.lifecycle.viewmodel.compose
+                    .viewModel(),
             isAdmin = true,
             onBackupRestored = {},
             onRequestConfirm = { _, _, _ -> },

@@ -42,8 +42,13 @@ fun OrderDocumentSection(
 ) {
     val missingSignatureTitle = stringResource(R.string.order_pdf_missing_signature_title)
     val missingSignatureText = stringResource(R.string.order_pdf_missing_signature_text)
-    val deleteDocumentConfirmTitle = stringResource(R.string.action_delete_confirm_title, stringResource(R.string.label_document))
-    val deleteDocumentConfirmText = stringResource(R.string.action_delete_confirm_text, stringResource(R.string.label_document))
+    val deleteDocumentConfirmTitle =
+        stringResource(
+            R.string.action_delete_confirm_title,
+            stringResource(R.string.label_document),
+        )
+    val deleteDocumentConfirmText =
+        stringResource(R.string.action_delete_confirm_text, stringResource(R.string.label_document))
 
     StandardCard {
         Column(

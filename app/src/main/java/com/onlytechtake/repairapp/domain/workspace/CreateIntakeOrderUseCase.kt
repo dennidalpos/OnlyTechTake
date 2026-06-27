@@ -64,7 +64,11 @@ class CreateIntakeOrderUseCase(
                             ?: customerRepository
                                 .save(
                                     actor,
-                                    requireNotNull(normalizedInput.newCustomer) { context.getString(R.string.error_customer_required) },
+                                    requireNotNull(normalizedInput.newCustomer) {
+                                        context.getString(
+                                            R.string.error_customer_required,
+                                        )
+                                    },
                                 ).getOrThrow()
                                 .id
 
@@ -76,7 +80,12 @@ class CreateIntakeOrderUseCase(
                                     RepairOrderInput(
                                         customerId = customerId,
                                         title = normalizedInput.problemSummary,
-                                        categoryId = requireNotNull(normalizedInput.categoryId) { context.getString(R.string.error_category_required) },
+                                        categoryId =
+                                            requireNotNull(normalizedInput.categoryId) {
+                                                context.getString(
+                                                    R.string.error_category_required,
+                                                )
+                                            },
                                         description = normalizedInput.problemDetails.trim(),
                                         assignedToUserId = normalizedInput.assignedToUserId,
                                     ),

@@ -40,7 +40,8 @@ class DiagnosticLogService(
             if (password != null) {
                 params.isEncryptFiles = true
                 params.encryptionMethod = net.lingala.zip4j.model.enums.EncryptionMethod.AES
-                params.aesKeyStrength = net.lingala.zip4j.model.enums.AesKeyStrength.KEY_STRENGTH_256
+                params.aesKeyStrength =
+                    net.lingala.zip4j.model.enums.AesKeyStrength.KEY_STRENGTH_256
             }
             zip.addFile(logFile, params)
             return zipFile

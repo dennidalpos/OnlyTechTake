@@ -117,7 +117,15 @@ fun QuickActions(
     val termsFallback = stringResource(R.string.legal_terms_fallback)
 
     val stepperState =
-        remember(draft, categories, templates, anchorMappings, currentUser, privacyFallback, termsFallback) {
+        remember(
+            draft,
+            categories,
+            templates,
+            anchorMappings,
+            currentUser,
+            privacyFallback,
+            termsFallback,
+        ) {
             IntakeStepperState(
                 draft = draft,
                 categories = categories,

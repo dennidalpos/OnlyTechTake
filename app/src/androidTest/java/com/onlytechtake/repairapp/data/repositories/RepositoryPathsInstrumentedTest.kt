@@ -874,7 +874,11 @@ class RepositoryPathsInstrumentedTest {
             val useCase =
                 CreateIntakeOrderUseCase(
                     context = context,
-                    customerRepository = CustomerRepository(context, database.customerDao()) { NOW },
+                    customerRepository =
+                        CustomerRepository(
+                            context,
+                            database.customerDao(),
+                        ) { NOW },
                     orderRepository = orderWorkflowRepository(),
                     orderMediaRepository = mediaRepository,
                     signatureRepository = signatureRepository,

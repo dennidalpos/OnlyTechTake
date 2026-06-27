@@ -68,8 +68,14 @@ class BackupRepositoryTest {
 
         BackupArchive.restoreAppFiles(File(extracted, "files"), destination)
 
-        assertEquals("photo", File(destination, "app_media/order_media/order-1/photo.jpg").readText())
-        assertEquals("signature", File(destination, "app_media/signatures/order-1/signature.png").readText())
+        assertEquals(
+            "photo",
+            File(destination, "app_media/order_media/order-1/photo.jpg").readText(),
+        )
+        assertEquals(
+            "signature",
+            File(destination, "app_media/signatures/order-1/signature.png").readText(),
+        )
     }
 
     @Test

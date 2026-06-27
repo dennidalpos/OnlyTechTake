@@ -442,7 +442,8 @@ internal class OrderWorkflowCommands(
         actor: AuthenticatedUser,
         orderId: String,
     ): RepairOrderEntity {
-        val order = requireNotNull(repairOrderDao.findById(orderId)) { context.getString(R.string.error_order_not_found) }
+        val order =
+            requireNotNull(repairOrderDao.findById(orderId)) { context.getString(R.string.error_order_not_found) }
         if (order.assignedToUserId != actor.id) {
             PermissionService.requirePermission(actor, UserPermission.EDIT_ALL_ORDERS)
         } else {

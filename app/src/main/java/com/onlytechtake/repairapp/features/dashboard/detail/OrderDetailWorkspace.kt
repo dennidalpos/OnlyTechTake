@@ -79,8 +79,16 @@ fun OrderDetailWorkspace(
     val diagnosisOutcomeConfirmTitle =
         stringResource(R.string.order_confirm_diagnosis_outcome_title)
     val diagnosisOutcomeConfirmText = stringResource(R.string.order_confirm_diagnosis_outcome_text)
-    val deleteOrderConfirmTitle = stringResource(R.string.action_delete_confirm_title, stringResource(R.string.label_repair_order))
-    val deleteOrderConfirmText = stringResource(R.string.action_delete_confirm_text, stringResource(R.string.label_repair_order))
+    val deleteOrderConfirmTitle =
+        stringResource(
+            R.string.action_delete_confirm_title,
+            stringResource(R.string.label_repair_order),
+        )
+    val deleteOrderConfirmText =
+        stringResource(
+            R.string.action_delete_confirm_text,
+            stringResource(R.string.label_repair_order),
+        )
     val notRepairableNote = stringResource(R.string.order_not_repairable_note)
 
     val selected = detail
@@ -205,7 +213,9 @@ fun OrderDetailWorkspace(
                                     quoteDecision = workspaceState.quoteDecision,
                                     quoteRejectNote = workspaceState.quoteRejectNote,
                                     onQuoteDecisionChange = { workspaceState.quoteDecision = it },
-                                    onQuoteRejectNoteChange = { workspaceState.quoteRejectNote = it },
+                                    onQuoteRejectNoteChange = {
+                                        workspaceState.quoteRejectNote = it
+                                    },
                                 ) { feedback, note, closureReason ->
                                     if (feedback == CustomerFeedbackType.ACCEPT) {
                                         viewModel.recordFeedback(feedback, note)
@@ -414,9 +424,11 @@ fun OrderDetailWorkspace(
                     (targetStatus == OrderStatus.CLOSED) && (closureReason == ClosureReason.NOT_REPAIRABLE) -> {
                         viewModel.prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
                     }
+
                     targetStatus == OrderStatus.READY_FOR_PICKUP -> {
                         viewModel.prepareMessage(TemplateAnchor.WHATSAPP_READY)
                     }
+
                     targetStatus == OrderStatus.CLOSED -> {
                         onBack()
                     }

@@ -20,8 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
@@ -150,7 +150,9 @@ fun OwnerSettings(
 private fun OwnerSettingsPreview() {
     MaterialTheme {
         OwnerSettings(
-            viewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+            viewModel =
+                androidx.lifecycle.viewmodel.compose
+                    .viewModel(),
             onBack = {},
         )
     }

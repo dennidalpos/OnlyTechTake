@@ -53,16 +53,40 @@ fun AttachmentCounts.label(context: android.content.Context): String =
     buildList {
         add(context.getString(com.onlytechtake.repairapp.R.string.label_photos_count, images))
         add(context.getString(com.onlytechtake.repairapp.R.string.label_documents_count, documents))
-        add(context.getString(com.onlytechtake.repairapp.R.string.label_signatures_count, signatures))
-        if (finalPhotos > 0) add(context.getString(com.onlytechtake.repairapp.R.string.label_final_photos_count, finalPhotos))
+        add(
+            context.getString(
+                com.onlytechtake.repairapp.R.string.label_signatures_count,
+                signatures,
+            ),
+        )
+        if (finalPhotos > 0) {
+            add(
+                context.getString(
+                    com.onlytechtake.repairapp.R.string.label_final_photos_count,
+                    finalPhotos,
+                ),
+            )
+        }
     }.joinToString(" - ")
 
 fun OrderAttachmentCounts.label(context: android.content.Context): String =
     buildList {
         add(context.getString(com.onlytechtake.repairapp.R.string.label_photos_count, images))
         add(context.getString(com.onlytechtake.repairapp.R.string.label_documents_count, documents))
-        add(context.getString(com.onlytechtake.repairapp.R.string.label_signatures_count, signatures))
-        if (finalPhotos > 0) add(context.getString(com.onlytechtake.repairapp.R.string.label_final_photos_count, finalPhotos))
+        add(
+            context.getString(
+                com.onlytechtake.repairapp.R.string.label_signatures_count,
+                signatures,
+            ),
+        )
+        if (finalPhotos > 0) {
+            add(
+                context.getString(
+                    com.onlytechtake.repairapp.R.string.label_final_photos_count,
+                    finalPhotos,
+                ),
+            )
+        }
     }.joinToString(" - ")
 
 fun OrderMediaEntity.isImageAttachment(): Boolean =

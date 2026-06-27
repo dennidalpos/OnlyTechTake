@@ -1,6 +1,6 @@
 {
   "name": "OnlyTechTake Repair App",
-  "short_name": "OTT Repair",
+  "short_name": "OnlyTechTake",
   "description": "App Android locale per gestire commesse di riparazione.",
   "start_url": "./index.html",
   "display": "standalone",

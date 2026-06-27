@@ -250,7 +250,8 @@ class TemplateRepository(
         anchor: TemplateAnchor? = null,
     ): Result<PreparedMessage> =
         runCatching {
-            val order = requireNotNull(orderDao.findById(orderId)) { context.getString(com.onlytechtake.repairapp.R.string.error_order_not_found) }
+            val order =
+                requireNotNull(orderDao.findById(orderId)) { context.getString(com.onlytechtake.repairapp.R.string.error_order_not_found) }
             if (order.assignedToUserId != actor.id) {
                 PermissionService.requirePermission(actor, UserPermission.EDIT_ALL_ORDERS)
             } else {
