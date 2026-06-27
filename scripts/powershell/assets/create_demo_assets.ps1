@@ -21,6 +21,8 @@ param(
     [string]$AssetProfile,
     [string]$Platform,
     [string]$Variant,
+    [string]$Locale = "en",
+    [switch]$Dark,
     [switch]$SkipBuild,
     [switch]$SkipVideo,
     [string]$OutputRoot,
@@ -87,6 +89,24 @@ if (-not $OutputRoot) {
 
 # Detect device and build
 $serial = Resolve-DemoDeviceSerial -AndroidHome $env:ANDROID_HOME -AvdName $AvdName -UseConnectedDevice:$UseConnectedDevice
+
+# Configure Device Locale
+if ($Locale) {
+    Write-Host "Configurazione lingua: $Locale" -ForegroundColor Gray
+    adb -s $serial shell "settings put global selected_language_code $Locale"
+    adb -s $serial shell "settings put global locale $Locale"
+    # Note: Full locale change might require reboot or specific per-app settings,
+    # but the app can read this setting for its internal locale provider if implemented.
+}
+
+# Configure Theme
+if ($Dark) {
+    Write-Host "Configurazione tema: DARK" -ForegroundColor Gray
+    adb -s $serial shell "cmd uimode night yes"
+} else {
+    adb -s $serial shell "cmd uimode night no"
+}
+
 Invoke-DemoApkBuildAndInstall -RootPath $root -Serial $serial -Flavor $Flavor -SkipBuild:$SkipBuild
 
 trap { Restore-DeviceGlobalSettings; throw $_ }
@@ -123,15 +143,17 @@ try {
     if (-not $NoDistribute) {
         Write-Host "Distribuzione asset in corso..." -ForegroundColor Cyan
 
+        $subPath = if ($Locale -ne "en") { "$Locale/" } else { "" }
+
         # 1. Marketing (Play Store)
         $marketingPath = switch ($AssetProfile) {
-            "store-pro" { "marketing/screenshots/play-store/pro" }
-            "store-demo" { "marketing/screenshots/play-store/demo" }
-            "social-pro" { "marketing/screenshots/social" }
-            "social-demo" { "marketing/screenshots/social/demo" }
-            "social-campaign" { "marketing/screenshots/social/campaign" }
-            "social-stories" { "marketing/screenshots/social/stories" }
-            default { "marketing/screenshots/workflows/$AssetProfile" }
+            "store-pro" { "marketing/screenshots/play-store/pro/$subPath" }
+            "store-demo" { "marketing/screenshots/play-store/demo/$subPath" }
+            "social-pro" { "marketing/screenshots/social/$subPath" }
+            "social-demo" { "marketing/screenshots/social/demo/$subPath" }
+            "social-campaign" { "marketing/screenshots/social/campaign/$subPath" }
+            "social-stories" { "marketing/screenshots/social/stories/$subPath" }
+            default { "marketing/screenshots/workflows/$AssetProfile/$subPath" }
         }
         $fullMarketingPath = Join-Path $root $marketingPath
         if (-not (Test-Path $fullMarketingPath)) { New-Item -ItemType Directory -Path $fullMarketingPath -Force | Out-Null }

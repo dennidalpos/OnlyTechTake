@@ -14,17 +14,18 @@
       "expectedFiles": [
         "01-login.png",
         "02-dashboard-home.png",
-        "03-nuovo-cliente.png",
-        "04-selezione-categoria.png",
-        "05-dettaglio-problema.png",
-        "06-acquisizione-media.png",
-        "07-firma-cliente.png",
-        "08-riepilogo-invio.png",
-        "09-elenco-commesse.png",
-        "10-dettaglio-commessa.png",
-        "11-risultato-diagnosi.png",
-        "12-chiusura-timeline.png"
+        "03-new-customer.png",
+        "04-category-selection.png",
+        "05-problem-details.png",
+        "06-media-acquisition.png",
+        "07-customer-signature.png",
+        "08-summary-submit.png",
+        "09-orders-list.png",
+        "10-order-details.png",
+        "11-diagnosis-result.png",
+        "12-timeline-closure.png"
       ]
+
     }
   ]
 }

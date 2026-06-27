@@ -2,7 +2,6 @@ package com.onlytechtake.repairapp.data.repositories
 
 import android.content.Context
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.utils.capitalizeFirst
 import com.onlytechtake.repairapp.data.local.dao.CustomerDao
@@ -22,38 +21,14 @@ class CustomerRepository(
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) : CustomerRepository {
     override fun observeRecent(): Flow<List<CustomerEntity>> {
-        if (DemoMode.isEnabled) {
-            return flowOf(listOf(DemoMode.demoCustomer))
-        }
         return customerDao.observeRecent()
     }
 
     override fun observeAll(): Flow<List<CustomerEntity>> {
-        if (DemoMode.isEnabled) {
-            return flowOf(listOf(DemoMode.demoCustomer))
-        }
         return customerDao.observeAll()
     }
 
     override fun search(query: String): Flow<List<CustomerEntity>> {
-        if (DemoMode.isEnabled) {
-            val q = query.trim().lowercase()
-            return if ((
-                    DemoMode.demoCustomer.firstName
-                        ?.lowercase()
-                        ?.contains(q) == true
-                ) ||
-                (
-                    DemoMode.demoCustomer.lastName
-                        ?.lowercase()
-                        ?.contains(q) == true
-                )
-            ) {
-                flowOf(listOf(DemoMode.demoCustomer))
-            } else {
-                flowOf(emptyList())
-            }
-        }
         val trimmed = query.trim()
         val sanitized =
             trimmed
@@ -65,10 +40,6 @@ class CustomerRepository(
     }
 
     override suspend fun findById(id: String): CustomerEntity? {
-        val isDemo = DemoMode.isEnabled
-        if (isDemo && (id == DemoMode.demoCustomer.id)) {
-            return DemoMode.demoCustomer
-        }
         return customerDao.findById(id)
     }
 

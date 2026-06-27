@@ -2,12 +2,21 @@
   "project_name": "OnlyTechTake",
   "version": "1.0.6",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-06-30",
+  "last_updated": "2026-07-03",
   "backlog": [
+    {
+      "priority": "HIGH",
+      "task": "CLEANUP: Refactor DemoMode logic. Removed repository bypasses, implemented real DB seeding for Demo flavor, and aligned order number formats."
+    },
+    {
+      "priority": "HIGH",
+      "task": "MARKETING: Completamento rigenerazione asset in inglese (seed configurato) e creazione nuovi screenshot social-stories."
+    },
     {
       "priority": "HIGH",
       "task": "LEGAL: Verifica accessibilità e pubblicazione HTTPS definitiva per Privacy Policy (inventoveritas.mine.nu)."
     },
+
     {
       "priority": "HIGH",
       "task": "PROCEDURAL: Pianificazione e avvio gruppo di test chiuso (20 tester per 14 giorni) per compliance Play Store account post-2023."

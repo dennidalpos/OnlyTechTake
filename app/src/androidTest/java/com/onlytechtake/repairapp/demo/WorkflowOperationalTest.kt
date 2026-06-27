@@ -7,6 +7,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.onlytechtake.repairapp.MainActivity
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
@@ -41,6 +42,58 @@ class WorkflowOperationalTest {
 
         ActivityScenario.launch(MainActivity::class.java).use {
             robot.setupWizardFlow(outputDir)
+        }
+    }
+
+    @Test
+    fun flow0_SetupFull() {
+        runBlocking {
+            RepairAppDatabase.closeInstance()
+            context.deleteDatabase(RepairAppDatabase.DATABASE_NAME)
+            AuthPreferences(context).clear()
+
+            val db = RepairAppDatabase.getInstance(context)
+            val hasher =
+                com.onlytechtake.repairapp.core.security
+                    .PasswordHasher()
+            val hash = hasher.hash("TempPass123!".toCharArray())
+            db.userDao().upsert(
+                com.onlytechtake.repairapp.data.local.entities.UserEntity(
+                    id = "temp-admin",
+                    displayName = "Admin",
+                    username = "admin",
+                    passwordHash = hash.hash,
+                    passwordSalt = hash.salt,
+                    role = com.onlytechtake.repairapp.data.local.entities.UserRole.ADMIN,
+                    forcePasswordChange = true,
+                    active = true,
+                    createdAt = System.currentTimeMillis(),
+                    updatedAt = System.currentTimeMillis(),
+                ),
+            )
+        }
+        val outputDir = prepareDirectory("workflow-setup-full")
+        val robot = OperationalRobot(composeRule, context)
+
+        ActivityScenario.launch(MainActivity::class.java).use {
+            robot.typeTag(RepairAppTestTags.AuthUsernameField, "admin")
+            robot.typeTag(RepairAppTestTags.AuthPasswordField, "TempPass123!")
+            robot.clickTag(RepairAppTestTags.AuthSubmitButton)
+
+            robot.waitForText("Security Update", scroll = false) // auth_security_title part
+            robot.capture(outputDir, "01-password-change.png")
+            robot.typeTag(RepairAppTestTags.AuthPasswordField, "NewAdminPass123!")
+            robot.typeTag(RepairAppTestTags.AuthConfirmPasswordField, "NewAdminPass123!")
+            robot.clickTag(RepairAppTestTags.AuthSubmitButton)
+
+            robot.waitForTag(RepairAppTestTags.OwnerFieldName)
+            robot.typeTag(RepairAppTestTags.OwnerFieldName, "OnlyTechTake LLC")
+            robot.typeTag(RepairAppTestTags.OwnerFieldVat, "US123456789")
+            robot.typeTag(RepairAppTestTags.OwnerFieldAddress, "123 Tech Avenue, New York")
+            robot.typeTag(RepairAppTestTags.OwnerFieldEmail, "info@onlytechtake.invalid")
+            robot.typeTag(RepairAppTestTags.OwnerFieldPhone, "+1 555-123-4567")
+            robot.capture(outputDir, "02-shop-data-compilation.png")
+            robot.clickText("Confirm")
         }
     }
 

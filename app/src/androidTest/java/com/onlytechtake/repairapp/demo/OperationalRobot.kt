@@ -31,14 +31,14 @@ class OperationalRobot(
         // 3. New Customer
         clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
         waitForTag(RepairAppTestTags.NewOrderFirstNameField)
-        typeTag(RepairAppTestTags.NewOrderFirstNameField, "Mario", scroll = true)
-        typeTag(RepairAppTestTags.NewOrderLastNameField, "Rossi", scroll = true)
-        typeTag(RepairAppTestTags.NewOrderPhoneField, "+39 333 111 2222", scroll = true)
+        typeTag(RepairAppTestTags.NewOrderFirstNameField, "John", scroll = true)
+        typeTag(RepairAppTestTags.NewOrderLastNameField, "Doe", scroll = true)
+        typeTag(RepairAppTestTags.NewOrderPhoneField, "+1 555-111-2222", scroll = true)
         nextCapture("intake-customer")
 
         // 4. Save & Next
         clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
-        waitForText("Cliente selezionato")
+        waitForText("Customer selected")
         clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
 
         // 5. Category Selection
@@ -57,17 +57,17 @@ class OperationalRobot(
         clickTag(RepairAppTestTags.NewOrderStep2NextButton, scroll = true)
 
         // 6. Problem details
-        typeTag(RepairAppTestTags.NewOrderProblemSummaryField, "SSD guasto", scroll = true)
+        typeTag(RepairAppTestTags.NewOrderProblemSummaryField, "Faulty SSD", scroll = true)
         typeTag(
             RepairAppTestTags.NewOrderProblemDetailsField,
-            "Il disco non viene rilevato dal BIOS.",
+            "The drive is not detected by the BIOS.",
             scroll = true,
         )
         nextCapture("intake-problem")
         clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
 
         // 7. Media
-        waitForText("Foto e allegati")
+        waitForText("Photos and attachments")
         clickTag(RepairAppTestTags.IntakeMediaTakePhotoButton, scroll = true)
         waitForTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
         clickTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
@@ -76,9 +76,9 @@ class OperationalRobot(
         clickTag(RepairAppTestTags.NewOrderStep4NextButton, scroll = true)
 
         // 8. Signature
-        waitForText("Privacy e firma")
-        clickText("Accetta informativa privacy", scroll = true)
-        clickText("Accetta condizioni di presa in carico", scroll = true)
+        waitForText("Privacy and signature")
+        clickText("Accept privacy policy", scroll = true)
+        clickText("Accept service terms", scroll = true)
         waitForTag(RepairAppTestTags.SignatureCanvas, scroll = true)
         composeRule.onNodeWithTag(RepairAppTestTags.SignatureCanvas).performTouchInput {
             val w = width.toFloat()
@@ -100,7 +100,7 @@ class OperationalRobot(
         waitForTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
         nextCapture("intake-summary")
         clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
-        waitForText("Commesse")
+        waitForText("Orders")
     }
 
     fun managementFlow(outputDir: File) {
@@ -110,7 +110,7 @@ class OperationalRobot(
 
         // 1. Orders List
         clickDashboardTab("ORDERS")
-        waitForText("Commesse")
+        waitForText("Orders")
         nextCapture("orders-list")
 
         // 2. Select Order
@@ -144,11 +144,11 @@ class OperationalRobot(
         waitForTag(RepairAppTestTags.StatusResultSummaryField)
         typeTag(
             RepairAppTestTags.StatusResultSummaryField,
-            "Sostituzione SSD necessaria.",
+            "SSD replacement required.",
             scroll = false,
         )
         clickTag(RepairAppTestTags.DiagnosisRepairableToggle)
-        typeTag(RepairAppTestTags.DiagnosisEstimateField, "120,00", scroll = false)
+        typeTag(RepairAppTestTags.DiagnosisEstimateField, "120.00", scroll = false)
         nextCapture("management-diagnosis-result")
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
         waitForTagGone(RepairAppTestTags.StatusDialogConfirmButton)
@@ -172,12 +172,12 @@ class OperationalRobot(
         // 8. Close Order
         clickTag(RepairAppTestTags.statusAction(OrderStatusAction.CLOSE_ORDER.name), scroll = true)
         waitForTag(RepairAppTestTags.StatusNoteField)
-        typeTag(RepairAppTestTags.StatusNoteField, "Sostituito SSD 500GB.")
+        typeTag(RepairAppTestTags.StatusNoteField, "Replaced 500GB SSD.")
         clickTag(RepairAppTestTags.closureReason("COMPLETED"))
         nextCapture("management-closure")
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
         waitForTagGone(RepairAppTestTags.StatusDialogConfirmButton)
-        waitForText("Commesse")
+        waitForText("Orders")
     }
 
     private fun confirmStatusDialog() {
@@ -202,7 +202,7 @@ class OperationalRobot(
         clickTag("admin_create_operator_switch", scroll = true)
 
         // Form filling - ensuring text is actually typed
-        typeTag(RepairAppTestTags.AdminDisplayNameField, "Operatore Junior")
+        typeTag(RepairAppTestTags.AdminDisplayNameField, "Junior Operator")
         typeTag(RepairAppTestTags.AdminUsernameField, "op_junior")
         typeTag(RepairAppTestTags.AdminPasswordField, "Pass12345")
 
@@ -232,10 +232,10 @@ class OperationalRobot(
 
         clickTag(RepairAppTestTags.ConfigTemplateNewButton, scroll = true)
         typeTag(RepairAppTestTags.ConfigTemplateCodeField, "new_status_ready")
-        typeTag(RepairAppTestTags.ConfigTemplateTitleField, "Dispositivo pronto")
+        typeTag(RepairAppTestTags.ConfigTemplateTitleField, "Device ready")
         typeTag(
             RepairAppTestTags.ConfigTemplateBodyField,
-            "Gentile {{cliente}}, il suo dispositivo e' pronto.",
+            "Dear {{cliente}}, your device is ready.",
         )
         nextCapture("template-editor")
         clickTag(RepairAppTestTags.ConfigTemplateSaveButton, scroll = true)
@@ -269,7 +269,7 @@ class OperationalRobot(
 
         // 1. First Setup (Admin)
         waitForTag(RepairAppTestTags.AuthDisplayNameField)
-        typeTag(RepairAppTestTags.AuthDisplayNameField, "Mario Rossi")
+        typeTag(RepairAppTestTags.AuthDisplayNameField, "John Doe")
         typeTag(RepairAppTestTags.AuthUsernameField, "admin")
         typeTag(RepairAppTestTags.AuthPasswordField, "AdminPass123!")
         typeTag(RepairAppTestTags.AuthConfirmPasswordField, "AdminPass123!")
@@ -278,12 +278,12 @@ class OperationalRobot(
 
         // 2. Owner Info (Wizard)
         waitForTag(RepairAppTestTags.OwnerFieldName)
-        typeTag(RepairAppTestTags.OwnerFieldName, "OnlyTechTake S.r.l.")
-        typeTag(RepairAppTestTags.OwnerFieldVat, "IT01234567890")
-        typeTag(RepairAppTestTags.OwnerFieldAddress, "Via dell'Innovazione 42, Roma")
+        typeTag(RepairAppTestTags.OwnerFieldName, "OnlyTechTake LLC")
+        typeTag(RepairAppTestTags.OwnerFieldVat, "US123456789")
+        typeTag(RepairAppTestTags.OwnerFieldAddress, "123 Tech Avenue, New York")
         typeTag(RepairAppTestTags.OwnerFieldEmail, "info@onlytechtake.invalid")
-        typeTag(RepairAppTestTags.OwnerFieldPhone, "+39 06 1234567")
+        typeTag(RepairAppTestTags.OwnerFieldPhone, "+1 555-123-4567")
         nextCapture("setup-owner")
-        clickText("Conferma")
+        clickText("Confirm")
     }
 }

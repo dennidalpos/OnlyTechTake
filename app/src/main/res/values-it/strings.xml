@@ -81,7 +81,7 @@
     <string name="anchor_desc_legal_privacy">Testo dell\'informativa privacy mostrato in fase di accettazione.</string>
     <string name="anchor_desc_legal_terms">Condizioni di presa in carico mostrate in fase di accettazione.</string>
 
-    <string name="pdf_title">OnlyTechTake - Stato avanzamento commessa</string>
+    <string name="pdf_title">OnlyTechTake – Stato avanzamento commessa</string>
     <string name="pdf_label_order_number">Commessa N:</string>
     <string name="pdf_label_date">Data:</string>
     <string name="pdf_label_generated_by">Generato da:</string>
@@ -472,7 +472,7 @@
     <string name="orders_empty_body">Modifica ricerca o filtri, oppure crea una nuova commessa dal banco.</string>
 
     <string name="orders_customer_unavailable">Cliente non disponibile</string>
-    <string name="orders_order_reference">%1$s - %2$s</string>
+    <string name="orders_order_reference">%1$s – %2$s</string>
     <string name="orders_customer_reference">%1$s</string>
 
     <string name="orders_next_action_label">Prossima azione: %s</string>
@@ -580,7 +580,7 @@
     <string name="template_privacy_breve_title">Privacy breve</string>
     <string name="template_privacy_breve_body">Informativa privacy sintetica ai sensi del Regolamento UE 2016/679 (GDPR).\nTitolare: {{proprietario_nome}}, {{proprietario_piva}}, {{proprietario_indirizzo}}, contattabile presso il punto vendita o via: {{proprietario_email}} {{proprietario_telefono}}.\nFinalità: presa in carico e gestione della commessa, diagnosi, preventivo, riparazione, consegna, assistenza post-intervento e adempimenti fiscali.\nBasi giuridiche: esecuzione di misure precontrattuali o contrattuali, obblighi di legge e legittimo interesse. Per comunicazioni WhatsApp non indispensabili, il consenso si ritiene conferito con il rilascio del numero di contatto.\nDati trattati: identificativi, fiscali, informazioni sull\'oggetto, foto, firme e cronologia.\nConservazione: per il tempo necessario alla gestione della commessa e successivamente per obblighi di legge (10 anni per fini fiscali).\nDestinatari: personale autorizzato e fornitori tecnici strettamente necessari.\nDiritti: accesso, rettifica, cancellazione, limitazione, opposizione e reclamo al Garante Privacy.</string>
     <string name="template_condizioni_title">Condizioni presa in carico</string>
-    <string name="template_condizioni_body">Condizioni di presa in carico.\nIl cliente consegna l\'oggetto indicato in commessa e autorizza {{proprietario_nome}} a custodirlo, verificarlo e svolgere diagnosi tecnica.\nLa diagnosi può richiedere l\'apertura del dispositivo o il collegamento a strumenti di test. L\'intervento di riparazione prosegue solo dopo accettazione del preventivo.\n{{proprietario_nome}} non risponde di perdita dati, password non comunicate, difetti preesistenti o deterioramenti inevitabili emersi durante la diagnosi. È responsabilità del cliente eseguire il backup prima della consegna.\nGli importi del preventivo devono essere accettati prima dell\'avvio. In caso di mancato ritiro entro 90 giorni, l\'oggetto verrà gestito secondo le norme vigenti sui beni abbandonati.\nCon la firma il cliente conferma di aver letto e accettato l\'informativa privacy e le presenti condizioni.\n\nLaboratorio: {{proprietario_nome}} - {{proprietario_indirizzo}}</string>
+    <string name="template_condizioni_body">Condizioni di presa in carico.\nIl cliente consegna l\'oggetto indicato in commessa e autorizza {{proprietario_nome}} a custodirlo, verificarlo e svolgere diagnosi tecnica.\nLa diagnosi può richiedere l\'apertura del dispositivo o il collegamento a strumenti di test. L\'intervento di riparazione prosegue solo dopo accettazione del preventivo.\n{{proprietario_nome}} non risponde di perdita dati, password non comunicate, difetti preesistenti o deterioramenti inevitabili emersi durante la diagnosi. È responsabilità del cliente eseguire il backup prima della consegna.\nGli importi del preventivo devono essere accettati prima dell\'avvio. In caso di mancato ritiro entro 90 giorni, l\'oggetto verrà gestito secondo le norme vigenti sui beni abbandonati.\nCon la firma il cliente conferma di aver letto e accettato l\'informativa privacy e le presenti condizioni.\n\nLaboratorio: {{proprietario_nome}} – {{proprietario_indirizzo}}</string>
 
 
     <string name="order_pdf_missing_signature_title">Firma mancante</string>

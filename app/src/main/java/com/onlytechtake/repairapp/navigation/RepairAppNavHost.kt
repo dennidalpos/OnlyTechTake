@@ -11,7 +11,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.onlytechtake.repairapp.core.di.AppContainer
 import com.onlytechtake.repairapp.core.di.DefaultAppContainer
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.features.auth.AuthGateRoute

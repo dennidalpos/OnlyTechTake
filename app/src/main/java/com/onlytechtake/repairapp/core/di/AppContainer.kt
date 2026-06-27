@@ -2,7 +2,12 @@ package com.onlytechtake.repairapp.core.di
 
 import android.content.Context
 import androidx.compose.runtime.staticCompositionLocalOf
+import com.onlytechtake.repairapp.core.error.DiagnosticLogger
+import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
+import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
+import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
+import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
@@ -15,18 +20,13 @@ import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
 import com.onlytechtake.repairapp.data.repositories.TemplateRepository
 import com.onlytechtake.repairapp.data.services.DiagnosticLogService
 import com.onlytechtake.repairapp.data.services.StorageStatsService
-import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
-import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
-import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
-import com.onlytechtake.repairapp.core.error.DiagnosticLogger
-import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
-import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase as Database
 import com.onlytechtake.repairapp.demo.DataSeeder
 import com.onlytechtake.repairapp.demo.DataSeederImpl
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.repositories.RepairAppRepository
 import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
 import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
+import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase as Database
 
 interface AppContainer {
     val context: Context
@@ -53,6 +53,7 @@ interface AppContainer {
     val diagnosticLogService: DiagnosticLogService
     val diagnosticLogger: DiagnosticLogger
     val dataSeeder: DataSeeder
+
     fun close()
 }
 
@@ -61,8 +62,7 @@ class DefaultAppContainer(
 ) : AppContainer {
     private val dataContainer = DataContainer(context)
     override val securityPreferences by lazy {
-        com.onlytechtake.repairapp.data.preferences
-            .SecurityPreferences(context.applicationContext)
+        SecurityPreferences(context.applicationContext)
     }
     private val authContainer by lazy {
         AuthContainer(

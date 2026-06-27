@@ -49,9 +49,9 @@
     <string name="showcase_terms_snapshot">Termini e Condizioni di Riparazione</string>
     <string name="showcase_business_name_1">Tech Solutions Srl</string>
     <string name="showcase_business_name_2">Global Food SpA</string>
-    <string name="showcase_business_name_3">Studio Legale Rossi</string>
-    <string name="showcase_business_name_4">Officina Meccanica</string>
-    <string name="showcase_business_name_5">Bar Centrale</string>
+    <string name="showcase_business_name_3">Studio Legale Smith</string>
+    <string name="showcase_business_name_4">Officina Meccanica City</string>
+    <string name="showcase_business_name_5">Bar Skyline</string>
     <string name="showcase_private_name_1">Mario</string>
     <string name="showcase_private_surname_1">Rossi</string>
     <string name="showcase_private_name_2">Luigi</string>
@@ -70,6 +70,12 @@
     <string name="showcase_owner_address">Via delle Riparazioni 42, 00100 Roma (RM)</string>
     <string name="showcase_owner_email">showcase@onlytechtake.it</string>
     <string name="showcase_owner_phone">+39 06 1234567</string>
+    <string name="showcase_private_address">Via Roma %d, Milano</string>
+    <string name="showcase_business_address">Piazza Affari %d, Milano</string>
+    <string name="showcase_phone_prefix">+39 333 100 200</string>
+    <string name="showcase_tax_code_prefix">CF-</string>
+    <string name="showcase_fictitious_tax_code">PRIVATO-ESEMPIO</string>
+    <string name="showcase_fictitious_business_tax_code">BUSINESS-ESEMPIO</string>
     <string name="auth_showcase_initializing">Inizializzazione dati showcase…</string>
     <string name="auth_showcase_preparing">Preparazione ambiente…</string>
     <string name="home_showcase_scenario">SCENARIO DIMOSTRATIVO</string>

@@ -146,9 +146,6 @@ class DefaultAuthRepository(
         password: CharArray,
     ): LoginResult =
         kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-            if (DemoMode.isEnabled) {
-                return@withContext loginDemo()
-            }
             val normalizedUsername = username.trim()
             val now = clockMillis()
             if (isLockedOut(normalizedUsername, now)) return@withContext LoginResult.LockedOut

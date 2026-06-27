@@ -1,7 +1,7 @@
 {
   "name": "OnlyTechTake Repair App",
   "short_name": "OnlyTechTake",
-  "description": "App Android locale per gestire commesse di riparazione.",
+  "description": "Local Android app for managing repair orders.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#102026",

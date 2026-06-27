@@ -54,16 +54,19 @@ object DemoDataSeeder {
         ownerPreferences.updateOwnerInfo(
             OwnerInfo(
                 name = "OnlyTechTake Repair Lab",
-                vatNumber = "IT98765432100",
-                address = "Via delle Demo 123, Milano",
+                vatNumber = "US987654321",
+                address = "123 Demo Street, New York",
                 email = "demo@onlytechtake.invalid",
-                phone = "+39 02 9876543",
+                phone = "+1 555-987-6543",
             ),
         )
+
         val mediaStorageProvider = MediaStorageProvider(context)
         mediaStorageProvider.getBaseMediaDir().deleteRecursively()
+        val orderNumberGenerator = com.onlytechtake.repairapp.core.orders.OrderNumberGenerator()
 
         val now = 1_780_830_000_000L
+        val yearPrefix = orderNumberGenerator.yearPrefix(now)
         val passwordHasher = PasswordHasher()
         val adminHash = passwordHasher.hash(DEMO_PASSWORD.toCharArray())
         val operatorHash = passwordHasher.hash(DEMO_PASSWORD.toCharArray())
@@ -151,7 +154,7 @@ object DemoDataSeeder {
                     type = if ((i % 3) == 0) CustomerType.BUSINESS else CustomerType.PRIVATE,
                     firstName =
                         when {
-                            i == 1 -> "Mario"
+                            i == 1 -> "John"
                             (i % 3) == 0 -> null
                             else ->
                                 testContext.getString(
@@ -159,7 +162,7 @@ object DemoDataSeeder {
                                     i,
                                 )
                         },
-                    lastName = if ((i % 3) == 0) null else "Demo",
+                    lastName = if ((i % 3) == 0) null else "Doe",
                     companyName =
                         if ((i % 3) == 0) {
                             testContext.getString(
@@ -169,11 +172,11 @@ object DemoDataSeeder {
                         } else {
                             null
                         },
-                    vatNumber = if ((i % 3) == 0) "IT${10000000000L + i}" else null,
+                    vatNumber = if ((i % 3) == 0) "US${10000000000L + i}" else null,
                     taxCode = if ((i % 3) == 0) null else "CF${1000000000000000L + i}",
-                    phone = "+39 333 000 ${1000 + i}",
-                    email = "cliente$i@example.invalid",
-                    address = "Via Demo $i, Milano",
+                    phone = "+1 555-000-${1000 + i}",
+                    email = "customer$i@example.invalid",
+                    address = "$i Demo St, New York",
                     notes = testContext.getString(TestR.string.demo_customer_notes, i),
                     createdAt = now - (i * 1000L),
                     updatedAt = now - (i * 1000L),
@@ -188,7 +191,7 @@ object DemoDataSeeder {
             (1..50).map { i ->
                 RepairOrderEntity(
                     id = if (i == 1) DEMO_ORDER_ID else "demo-order-$i",
-                    orderNumber = "2026-${1000 + i}",
+                    orderNumber = yearPrefix + (1000 + i).toString().padStart(6, '0'),
                     customerId = DEMO_CUSTOMER_ID,
                     title =
                         if (i == 1) {
@@ -251,7 +254,7 @@ object DemoDataSeeder {
             SignatureEntity(
                 id = "demo-signature-intake",
                 orderId = DEMO_ORDER_ID,
-                signerName = "Marco Verdi",
+                signerName = "John Doe",
                 privacyAccepted = true,
                 termsAccepted = true,
                 privacyTextSnapshot = testContext.getString(TestR.string.demo_privacy_snapshot),

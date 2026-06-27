@@ -65,7 +65,6 @@ import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
 import com.onlytechtake.repairapp.core.design.components.AppTopBar
 import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
-import com.onlytechtake.repairapp.core.di.AppContainer
 import com.onlytechtake.repairapp.core.di.FakeAppContainer
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.core.permissions.PermissionService

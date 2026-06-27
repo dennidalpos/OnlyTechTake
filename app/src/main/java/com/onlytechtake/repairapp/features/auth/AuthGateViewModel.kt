@@ -195,6 +195,14 @@ class AuthGateViewModel(
     fun loginDemo() {
         viewModelScope.launch {
             mutableFormState.update { it.copy(loading = true, errorMessage = null) }
+            // Seed data if not already configured (first demo run)
+            if (!authState.value.configured) {
+                runCatching {
+                    dataSeeder.seed(applicationContext)
+                }.onFailure { e ->
+                    android.util.Log.e("AuthGateViewModel", "Demo seed failed", e)
+                }
+            }
             authRepository.loginDemo()
         }
     }

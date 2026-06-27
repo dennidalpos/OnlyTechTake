@@ -100,6 +100,10 @@ abstract class RepairAppDatabase : RoomDatabase() {
         @Volatile
         private var instance: RepairAppDatabase? = null
 
+        init {
+            System.loadLibrary("sqlcipher")
+        }
+
         fun getInstance(context: Context): RepairAppDatabase =
             instance ?: synchronized(this) {
                 instance ?: run {

@@ -62,18 +62,18 @@ class SocialStoryDemoScreenshotTest {
 
             robot.waitForTagExists(RepairAppTestTags.NewOrderFirstNameField)
 
-            robot.typeTag(RepairAppTestTags.NewOrderFirstNameField, "Giulia", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderLastNameField, "Bianchi", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderPhoneField, "+39 333 010 2020", scroll = true)
+            robot.typeTag(RepairAppTestTags.NewOrderFirstNameField, "Julia", scroll = true)
+            robot.typeTag(RepairAppTestTags.NewOrderLastNameField, "White", scroll = true)
+            robot.typeTag(RepairAppTestTags.NewOrderPhoneField, "+1 555-010-2020", scroll = true)
             robot.typeTag(
                 RepairAppTestTags.NewOrderEmailField,
-                "giulia.bianchi@example.invalid",
+                "julia.white@example.invalid",
                 scroll = true,
             )
-            robot.capture(outputDir, "03-nuovo-cliente.png")
+            robot.capture(outputDir, "03-new-customer.png")
 
             robot.clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
-            robot.waitForText("Cliente selezionato")
+            robot.waitForText("Customer selected")
             robot.clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
 
             robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-pc"), scroll = true)
@@ -83,47 +83,47 @@ class SocialStoryDemoScreenshotTest {
             )
             robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-gaming"), scroll = true)
             robot.clickTag(RepairAppTestTags.categoryButton("demo-cat-rog-strix"), scroll = true)
-            robot.capture(outputDir, "04-selezione-categoria.png")
+            robot.capture(outputDir, "04-category-selection.png")
 
             robot.clickTag(RepairAppTestTags.NewOrderStep2NextButton, scroll = true)
             robot.typeTag(
                 RepairAppTestTags.NewOrderProblemSummaryField,
-                "Notebook non si accende",
+                "Laptop won't turn on",
                 scroll = true,
             )
             robot.typeTag(
                 RepairAppTestTags.NewOrderProblemDetailsField,
-                "Il cliente segnala spegnimento improvviso dopo caduta accidentale.",
+                "The customer reports sudden shutdown after accidental drop.",
                 scroll = true,
             )
-            robot.capture(outputDir, "05-dettaglio-problema.png")
+            robot.capture(outputDir, "05-problem-details.png")
 
             // 4. Wizard: media
             robot.clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
-            robot.waitForText("Foto e allegati")
+            robot.waitForText("Photos and attachments")
             robot.clickTag(RepairAppTestTags.IntakeMediaTakePhotoButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
             robot.clickTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
             robot.waitForText("PHOTO", scroll = true)
-            robot.capture(outputDir, "06-acquisizione-media.png")
+            robot.capture(outputDir, "06-media-acquisition.png")
 
-            // 5. Wizard: privacy e firma
+            // 5. Wizard: privacy and signature
             robot.clickTag(RepairAppTestTags.NewOrderStep4NextButton, scroll = true)
-            robot.waitForText("Privacy e firma")
-            robot.clickText("Accetta informativa privacy", scroll = true)
-            robot.clickText("Accetta condizioni di presa in carico", scroll = true)
+            robot.waitForText("Privacy and signature")
+            robot.clickText("Accept privacy policy", scroll = true)
+            robot.clickText("Accept service terms", scroll = true)
             robot.drawSignature(RepairAppTestTags.SignatureCanvas)
             robot.waitForTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
-            robot.capture(outputDir, "07-firma-cliente.png")
+            robot.capture(outputDir, "07-customer-signature.png")
 
             robot.clickTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
-            robot.capture(outputDir, "08-riepilogo-invio.png")
+            robot.capture(outputDir, "08-summary-submit.png")
             robot.clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
 
             robot.clickDashboardTab("ORDERS")
-            robot.waitForText("Commesse")
-            robot.capture(outputDir, "09-elenco-commesse.png")
+            robot.waitForText("Orders")
+            robot.capture(outputDir, "09-orders-list.png")
             robot.waitForTag(
                 RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID),
                 scroll = true,
@@ -135,7 +135,7 @@ class SocialStoryDemoScreenshotTest {
             robot.waitForTag(RepairAppTestTags.OrderDetailCustomerReference, useUnmergedTree = true)
             robot.waitForTag(RepairAppTestTags.orderDetailStatusStep(1), useUnmergedTree = true)
             robot.waitForText("Asus ROG Strix")
-            robot.capture(outputDir, "10-dettaglio-commessa.png")
+            robot.capture(outputDir, "10-order-details.png")
 
             robot.applySimpleStatus(
                 OrderStatusAction.START_PROGRESS,
@@ -146,10 +146,10 @@ class SocialStoryDemoScreenshotTest {
                 nextAction = OrderStatusAction.RECORD_RESULT,
             )
             robot.applyResultStatus(
-                summary = "Connettore di alimentazione danneggiato.",
-                estimate = "149,00",
+                summary = "Damaged power connector.",
+                estimate = "149.00",
             )
-            robot.capture(outputDir, "11-risultato-diagnosi.png")
+            robot.capture(outputDir, "11-diagnosis-result.png")
 
             robot.acceptQuote()
             robot.applySimpleStatus(
@@ -158,8 +158,8 @@ class SocialStoryDemoScreenshotTest {
             )
             robot.closeOrder()
             robot.clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
-            robot.waitForText("Chiusa")
-            robot.capture(outputDir, "12-chiusura-timeline.png")
+            robot.waitForText("Closed")
+            robot.capture(outputDir, "12-timeline-closure.png")
         }
     }
 
@@ -173,7 +173,7 @@ class SocialStoryDemoScreenshotTest {
             robot.waitForTag(RepairAppTestTags.AuthUsernameField)
             robot.loginDemo(DemoDataSeeder.DEMO_ADMIN_USERNAME)
             robot.waitForText("Admin")
-            robot.capture(outputDir, "01-dashboard-admin.png")
+            robot.capture(outputDir, "01-admin-dashboard.png")
 
             robot.clickDashboardTab("SETTINGS")
             robot.waitForText("Setup")
@@ -183,28 +183,28 @@ class SocialStoryDemoScreenshotTest {
             robot.clickTag(RepairAppTestTags.ConfigCategoryNewButton, scroll = true)
             robot.typeTag(
                 RepairAppTestTags.ConfigCategoryNameField,
-                "Console portatile",
+                "Handheld Console",
                 scroll = true,
             )
             robot.typeTag(
                 RepairAppTestTags.ConfigCategoryDescriptionField,
-                "Riparazioni console portatili, display e batterie.",
+                "Portable console repairs, displays and batteries.",
                 scroll = true,
             )
-            robot.capture(outputDir, "03-creazione-categoria.png")
+            robot.capture(outputDir, "03-category-creation.png")
             robot.clickTag(RepairAppTestTags.ConfigCategorySaveButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.GenericConfirmButton)
             robot.clickTag(RepairAppTestTags.GenericConfirmButton)
-            robot.waitForText("Operazione completata")
-            robot.capture(outputDir, "04-categoria-salvata.png")
+            robot.waitForText("Operation completed")
+            robot.capture(outputDir, "04-category-saved.png")
 
             robot.clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
             robot.clickTag(RepairAppTestTags.ConfigHubTemplateMappingButton, scroll = true)
-            robot.waitForText("Associazione Template")
-            robot.capture(outputDir, "05-template-associazioni.png")
+            robot.waitForText("Template Mapping")
+            robot.capture(outputDir, "05-template-mappings.png")
             robot.clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
             robot.clickTag(RepairAppTestTags.ConfigHubTemplatesButton, scroll = true)
-            robot.waitForText("Gestione Template")
+            robot.waitForText("Template Management")
             robot.clickTag(RepairAppTestTags.ConfigTemplateNewButton, scroll = true)
 
             // Capture Tooltip for variables
@@ -219,20 +219,20 @@ class SocialStoryDemoScreenshotTest {
             )
             robot.typeTag(
                 RepairAppTestTags.ConfigTemplateTitleField,
-                "Aggiornamento social demo",
+                "Social demo update",
                 scroll = true,
             )
             robot.typeTag(
                 RepairAppTestTags.ConfigTemplateBodyField,
-                "Ciao {{cliente}}, la commessa {{numero_commessa}} e' ora in stato {{stato_commessa}}.",
+                "Hi {{cliente}}, the order {{numero_commessa}} is now in status {{stato_commessa}}.",
                 scroll = true,
             )
-            robot.capture(outputDir, "07-creazione-template.png")
+            robot.capture(outputDir, "07-template-creation.png")
             robot.clickTag(RepairAppTestTags.ConfigTemplateSaveButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.GenericConfirmButton)
             robot.clickTag(RepairAppTestTags.GenericConfirmButton)
-            robot.waitForText("Operazione completata")
-            robot.capture(outputDir, "08-template-salvato.png")
+            robot.waitForText("Operation completed")
+            robot.capture(outputDir, "08-template-saved.png")
         }
     }
 
@@ -246,51 +246,51 @@ class SocialStoryDemoScreenshotTest {
             robot.waitForTag(RepairAppTestTags.AuthUsernameField)
             robot.loginDemo(DemoDataSeeder.DEMO_ADMIN_USERNAME)
             robot.clickDashboardTab("CUSTOMERS")
-            robot.capture(outputDir, "01-archivio-clienti.png")
+            robot.capture(outputDir, "01-customer-archive.png")
 
             robot.clickTag(RepairAppTestTags.CustomerNewButton, scroll = true)
             robot.clickTag(RepairAppTestTags.CustomerPrivateToggle, scroll = true)
-            robot.typeTag(RepairAppTestTags.CustomerFirstNameField, "Luca", scroll = true)
-            robot.typeTag(RepairAppTestTags.CustomerLastNameField, "Rossi", scroll = true)
-            robot.typeTag(RepairAppTestTags.CustomerTaxCodeField, "RSSLCU90A01F205X", scroll = true)
-            robot.typeTag(RepairAppTestTags.CustomerPhoneField, "+39 333 010 3030", scroll = true)
+            robot.typeTag(RepairAppTestTags.CustomerFirstNameField, "Luke", scroll = true)
+            robot.typeTag(RepairAppTestTags.CustomerLastNameField, "Red", scroll = true)
+            robot.typeTag(RepairAppTestTags.CustomerTaxCodeField, "REDLKU90A01F205X", scroll = true)
+            robot.typeTag(RepairAppTestTags.CustomerPhoneField, "+1 555-010-3030", scroll = true)
             robot.typeTag(
                 RepairAppTestTags.CustomerEmailField,
-                "luca.rossi@example.invalid",
+                "luke.red@example.invalid",
                 scroll = true,
             )
-            robot.capture(outputDir, "02-cliente-privato.png")
+            robot.capture(outputDir, "02-private-customer.png")
             robot.clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.CustomerConfirmSaveButton)
             robot.clickTag(RepairAppTestTags.CustomerConfirmSaveButton)
             robot.pauseForDemo()
-            robot.typeTag(RepairAppTestTags.CustomerSearchField, "Luca")
-            robot.waitForText("Luca")
-            robot.capture(outputDir, "03-privato-salvato.png")
+            robot.typeTag(RepairAppTestTags.CustomerSearchField, "Luke")
+            robot.waitForText("Luke")
+            robot.capture(outputDir, "03-private-saved.png")
 
             robot.clickTag(RepairAppTestTags.CustomerNewButton, scroll = true)
             robot.clickTag(RepairAppTestTags.CustomerBusinessToggle, scroll = true)
-            robot.typeTag(RepairAppTestTags.CustomerCompanyNameField, "Demo Lab Srl", scroll = true)
-            robot.typeTag(RepairAppTestTags.CustomerVatNumberField, "IT12345678901", scroll = true)
-            robot.typeTag(RepairAppTestTags.CustomerPhoneField, "+39 02 010 4040", scroll = true)
+            robot.typeTag(RepairAppTestTags.CustomerCompanyNameField, "Demo Lab LLC", scroll = true)
+            robot.typeTag(RepairAppTestTags.CustomerVatNumberField, "US123456789", scroll = true)
+            robot.typeTag(RepairAppTestTags.CustomerPhoneField, "+1 555-010-4040", scroll = true)
             robot.typeTag(
                 RepairAppTestTags.CustomerEmailField,
-                "amministrazione@example.invalid",
+                "admin@example.invalid",
                 scroll = true,
             )
             robot.typeTag(
                 RepairAppTestTags.CustomerAddressField,
-                "Via Demo 24, Milano",
+                "24 Demo Way, New York",
                 scroll = true,
             )
-            robot.capture(outputDir, "04-cliente-azienda.png")
+            robot.capture(outputDir, "04-business-customer.png")
             robot.clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.CustomerConfirmSaveButton)
             robot.clickTag(RepairAppTestTags.CustomerConfirmSaveButton)
             robot.pauseForDemo()
             robot.typeTag(RepairAppTestTags.CustomerSearchField, "Demo")
             robot.waitForText("Demo")
-            robot.capture(outputDir, "05-azienda-salvata.png")
+            robot.capture(outputDir, "05-business-saved.png")
         }
     }
 
@@ -308,17 +308,17 @@ class SocialStoryDemoScreenshotTest {
             robot.waitForText("Setup")
 
             robot.clickTag(RepairAppTestTags.ConfigHubStorageButton, scroll = true)
-            robot.waitForText("Archiviazione")
-            robot.capture(outputDir, "01-gestione-memoria.png")
+            robot.waitForText("Storage")
+            robot.capture(outputDir, "01-storage-management.png")
             robot.clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
 
             robot.clickTag(RepairAppTestTags.ConfigHubBackupButton, scroll = true)
             robot.waitForText("Backup")
-            robot.capture(outputDir, "02-backup-dati.png")
+            robot.capture(outputDir, "02-data-backup.png")
 
             robot.clickText("Export", scroll = true)
             robot.waitForText("Export")
-            robot.capture(outputDir, "03-export-excel.png")
+            robot.capture(outputDir, "03-excel-export.png")
         }
     }
 
@@ -371,10 +371,10 @@ class SocialStoryDemoScreenshotTest {
     }
 
     private companion object {
-        const val CASE_ORDER = "01-commessa-nuovo-cliente-chiusura"
-        const val CASE_CONFIG = "02-categorie-template"
-        const val CASE_CUSTOMERS = "03-clienti-privato-azienda"
-        const val CASE_MAINTENANCE = "05-manutenzione-backup"
+        const val CASE_ORDER = "01-order-new-customer-closure"
+        const val CASE_CONFIG = "02-categories-templates"
+        const val CASE_CUSTOMERS = "03-customers-private-business"
+        const val CASE_MAINTENANCE = "05-maintenance-backup"
         const val CASE_DEMO_LIMIT = "06-demo-limit"
         const val SCREENSHOT_ROOT_DIR_NAME = "social-stories"
     }

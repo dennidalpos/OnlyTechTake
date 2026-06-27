@@ -333,9 +333,7 @@ const translations = {
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Language Management
     const getInitialLanguage = () => {
-        const savedLang = localStorage.getItem('language');
-        if (savedLang) return savedLang;
-        // Default to English as per request
+        // Always default to English on opening as per request
         return 'en';
     };
 

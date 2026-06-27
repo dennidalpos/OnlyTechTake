@@ -36,20 +36,44 @@ class FakeAppContainer(
     override val context: Context,
 ) : AppContainer {
     override val repairAppRepository: RepairAppRepository get() = error("Not implemented")
-    override val authRepository: AuthRepository = object : AuthRepository {
-        override val currentUser: StateFlow<AuthenticatedUser?> = MutableStateFlow(null)
-        override fun observeAuthState(): Flow<AuthState> = flowOf(AuthState())
-        override suspend fun createFirstAdmin(displayName: String, username: String, password: CharArray): AuthenticatedUser = error("Not implemented")
-        override suspend fun login(username: String, password: CharArray): LoginResult = LoginResult.Success(mockk_fallback())
-        override suspend fun loginDemo(): LoginResult = LoginResult.Success(mockk_fallback())
-        override suspend fun changePassword(username: String, currentPassword: CharArray, newPassword: CharArray): Result<Unit> = Result.success(Unit)
-        override suspend fun getRecoveryKit(): Result<String> = Result.success("FAKE-CODE")
-        override suspend fun resetAdminWithRecoveryCode(code: String, newPassword: CharArray): Result<Unit> = Result.success(Unit)
-        override fun touchSession() {}
-        override suspend fun logout() {}
+    override val authRepository: AuthRepository =
+        object : AuthRepository {
+            override val currentUser: StateFlow<AuthenticatedUser?> = MutableStateFlow(null)
 
-        private fun <T> mockk_fallback(): T = error("Fake method not fully implemented")
-    }
+            override fun observeAuthState(): Flow<AuthState> = flowOf(AuthState())
+
+            override suspend fun createFirstAdmin(
+                displayName: String,
+                username: String,
+                password: CharArray,
+            ): AuthenticatedUser = error("Not implemented")
+
+            override suspend fun login(
+                username: String,
+                password: CharArray,
+            ): LoginResult = LoginResult.Success(mockk_fallback())
+
+            override suspend fun loginDemo(): LoginResult = LoginResult.Success(mockk_fallback())
+
+            override suspend fun changePassword(
+                username: String,
+                currentPassword: CharArray,
+                newPassword: CharArray,
+            ): Result<Unit> = Result.success(Unit)
+
+            override suspend fun getRecoveryKit(): Result<String> = Result.success("FAKE-CODE")
+
+            override suspend fun resetAdminWithRecoveryCode(
+                code: String,
+                newPassword: CharArray,
+            ): Result<Unit> = Result.success(Unit)
+
+            override fun touchSession() {}
+
+            override suspend fun logout() {}
+
+            private fun <T> mockk_fallback(): T = error("Fake method not fully implemented")
+        }
     override val adminUserRepository: AdminUserRepository get() = error("Not implemented")
     override val database: RepairAppDatabase get() = error("Not implemented")
     override val customerRepository: CustomerRepository get() = error("Not implemented")

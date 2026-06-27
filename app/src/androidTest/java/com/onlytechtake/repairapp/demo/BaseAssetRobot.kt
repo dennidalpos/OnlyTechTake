@@ -420,7 +420,19 @@ abstract class BaseAssetRobot(
     }
 
     fun pauseForDemo() {
-        Thread.sleep(if (isRecordingDemo()) RECORDING_ACTION_PAUSE_MILLIS else ACTION_PAUSE_MILLIS)
+        val recording = isRecordingDemo()
+        val delay = if (recording) RECORDING_ACTION_PAUSE_MILLIS else ACTION_PAUSE_MILLIS
+        Thread.sleep(delay)
+    }
+
+    /**
+     * Injects a specific delay for narrative video recordings.
+     * Useful to give viewers time to read the screen before moving to the next step.
+     */
+    fun narrativePause(seconds: Int = 2) {
+        if (isRecordingDemo()) {
+            Thread.sleep(seconds * 1000L)
+        }
     }
 
     private fun pauseForScreenshot() {
@@ -436,7 +448,7 @@ abstract class BaseAssetRobot(
         const val TAG_POLL_MILLIS = 250L
         const val ACTION_PAUSE_MILLIS = 2_000L
         const val SCREENSHOT_PAUSE_MILLIS = 2_000L
-        const val RECORDING_ACTION_PAUSE_MILLIS = 500L
-        const val RECORDING_SCREENSHOT_PAUSE_MILLIS = 250L
+        const val RECORDING_ACTION_PAUSE_MILLIS = 1_500L
+        const val RECORDING_SCREENSHOT_PAUSE_MILLIS = 1_000L
     }
 }

@@ -1,10 +1,51 @@
 package com.onlytechtake.repairapp.demo
 
 import android.content.Context
+import androidx.room.withTransaction
+import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.demo.DemoMode
+import com.onlytechtake.repairapp.core.security.PasswordHasher
+import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
+import com.onlytechtake.repairapp.data.local.entities.UserEntity
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
+import com.onlytechtake.repairapp.data.local.entities.UserRole
 
 /**
- * No-op implementation for Demo flavor.
+ * Implementation of [DataSeeder] for the Demo flavor.
+ * Seeds the database with minimal demo data if requested.
  */
 class DataSeederImpl : DataSeeder {
-    override suspend fun seed(context: Context) {}
+    override suspend fun seed(context: Context) {
+        val db = RepairAppDatabase.getInstance(context)
+        val now = System.currentTimeMillis()
+        val passwordHasher = PasswordHasher()
+        val pwdHash = passwordHasher.hash(DEFAULT_PASSWORD.toCharArray())
+
+        db.withTransaction {
+            // Seed Admin
+            db.userDao().upsert(
+                UserEntity(
+                    id = "admin",
+                    displayName = DemoMode.getAdminDisplayName(context),
+                    username = "admin",
+                    passwordHash = pwdHash.hash,
+                    passwordSalt = pwdHash.salt,
+                    role = UserRole.ADMIN,
+                    permissions = UserPermission.entries.toSet(),
+                    active = true,
+                    createdAt = now,
+                    updatedAt = now,
+                ),
+            )
+            // Seed Demo Content
+            db.customerDao().upsert(DemoMode.demoCustomer)
+            db.orderCategoryDao().upsertAll(DemoMode.demoCategories)
+        }
+    }
+
+    override val defaultPassword: String = DEFAULT_PASSWORD
+
+    companion object {
+        const val DEFAULT_PASSWORD = "DemoPassword123"
+    }
 }

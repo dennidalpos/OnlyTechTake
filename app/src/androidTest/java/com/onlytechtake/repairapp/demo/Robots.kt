@@ -33,8 +33,8 @@ class ProAssetRobot(
     }
 
     fun applyResultStatus(
-        summary: String = "Display AMOLED originale Samsung.",
-        estimate: String = "249,00",
+        summary: String = "Original Samsung AMOLED Display.",
+        estimate: String = "249.00",
     ) {
         waitForTag(RepairAppTestTags.OrderActionSection, scroll = true)
         clickTag(
@@ -65,7 +65,7 @@ class ProAssetRobot(
         )
     }
 
-    fun closeOrder(note: String = "Riparazione completata con successo.") {
+    fun closeOrder(note: String = "Repair successfully completed.") {
         waitForTag(RepairAppTestTags.OrderActionSection, scroll = true)
         clickTag(RepairAppTestTags.statusAction(OrderStatusAction.CLOSE_ORDER.name), scroll = true)
         waitForTag(RepairAppTestTags.StatusNoteField)
@@ -74,7 +74,7 @@ class ProAssetRobot(
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
         waitForTagGone(RepairAppTestTags.StatusDialogConfirmButton)
         composeRule.waitForIdle()
-        waitForText("Commesse")
+        waitForText("Orders")
     }
 
     private fun scrollOrderDetailToTop() {

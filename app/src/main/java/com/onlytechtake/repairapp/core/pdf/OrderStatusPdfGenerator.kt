@@ -116,7 +116,7 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         }
 
         fun checkNewPage(neededHeight: Float) {
-            if (y + neededHeight > 842f - margin) {
+            if ((y + neededHeight) > (842f - margin)) {
                 createNewPage()
             }
         }
@@ -136,7 +136,7 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
                     canvas.drawText(line, x, y, paint)
                     line = word
                     y += paint.textSize + lineSpacing
-                    if (y > 842f - margin) {
+                    if (y > (842f - margin)) {
                         createNewPage()
                     }
                 } else {

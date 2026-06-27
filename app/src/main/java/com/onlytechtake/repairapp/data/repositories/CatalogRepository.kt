@@ -2,7 +2,6 @@ package com.onlytechtake.repairapp.data.repositories
 
 import android.content.Context
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.utils.capitalizeFirst
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
@@ -19,21 +18,15 @@ class CatalogRepository(
     private val categoryDao: OrderCategoryDao,
 ) {
     fun observeCategories(): Flow<List<OrderCategoryEntity>> {
-        if (DemoMode.isEnabled) {
-            return flowOf(DemoMode.demoCategories)
-        }
         return categoryDao.observeAll()
     }
 
     fun observeActiveCategories(): Flow<List<OrderCategoryEntity>> {
-        if (DemoMode.isEnabled) {
-            return flowOf(DemoMode.demoCategories.filter { it.active })
-        }
         return categoryDao.observeActiveCategories()
     }
 
     suspend fun getCategoryPath(id: String): String {
-        val all = if (DemoMode.isEnabled) DemoMode.demoCategories else categoryDao.findAll()
+        val all = categoryDao.findAll()
         val path = mutableListOf<String>()
         var currentId: String? = id
         while (currentId != null) {

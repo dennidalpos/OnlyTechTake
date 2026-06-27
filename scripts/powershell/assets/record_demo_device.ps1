@@ -21,6 +21,8 @@ param(
     [switch]$SkipBuild,
     [switch]$SeedData,
     [string]$ScenarioId = "",
+    [string]$Locale = "en",
+    [switch]$Dark,
     [switch]$StartImmediately,
     [int]$MaxDurationSeconds = 180,
     [int]$BitRate = 4000000,
@@ -85,6 +87,22 @@ if (Test-Path $outputPath) { Remove-Item -LiteralPath $outputPath -Force }
 
 # Detect device
 $serial = Resolve-DemoDeviceSerial -AndroidHome $env:ANDROID_HOME -AvdName $AvdName -UseConnectedDevice:$UseConnectedDevice
+
+# Configure Device Locale
+if ($Locale) {
+    Write-Host "Configurazione lingua: $Locale" -ForegroundColor Gray
+    adb -s $serial shell "settings put global selected_language_code $Locale"
+    adb -s $serial shell "settings put global locale $Locale"
+}
+
+# Configure Theme
+if ($Dark) {
+    Write-Host "Configurazione tema: DARK" -ForegroundColor Gray
+    adb -s $serial shell "cmd uimode night yes"
+} else {
+    adb -s $serial shell "cmd uimode night no"
+}
+
 Invoke-DemoApkBuildAndInstall -RootPath $root -Serial $serial -Flavor $Flavor -SkipBuild:$SkipBuild
 
 trap { Restore-DeviceGlobalSettings; throw $_ }
@@ -94,7 +112,8 @@ function Normalize-Video {
     if ($null -eq (Get-Command "ffmpeg" -ErrorAction SilentlyContinue)) { return }
     $tempPath = Join-Path $OutputRoot (".temp_norm_" + [System.IO.Path]::GetFileName($Path))
     try {
-        Invoke-Checked -FilePath "ffmpeg" -Arguments @("-y", "-i", $Path, "-ss", $StartSec.ToString(), "-vf", "fps=30", "-c:v", "libx264", "-crf", "20", "-pix_fmt", "yuv420p", $tempPath)
+        # High quality normalization for marketing
+        Invoke-Checked -FilePath "ffmpeg" -Arguments @("-y", "-i", $Path, "-ss", $StartSec.ToString(), "-vf", "fps=30,format=yuv420p", "-c:v", "libx264", "-crf", "18", "-preset", "slow", $tempPath)
         Move-Item -LiteralPath $tempPath -Destination $Path -Force
     } finally { if (Test-Path $tempPath) { Remove-Item -LiteralPath $tempPath -Force } }
 }

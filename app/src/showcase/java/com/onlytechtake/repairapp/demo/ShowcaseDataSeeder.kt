@@ -51,12 +51,14 @@ object ShowcaseDataSeeder {
     suspend fun seedShowcaseData(context: Context) {
         val authPreferences = AuthPreferences(context)
         val mediaStorageProvider = MediaStorageProvider(context)
+        val orderNumberGenerator = com.onlytechtake.repairapp.core.orders.OrderNumberGenerator()
 
         // We don't pre-fill owner info here anymore to allow the Showcase user
         // to see the initial Setup Wizard (pre-filled in the UI).
 
         val db = RepairAppDatabase.getInstance(context)
         val now = System.currentTimeMillis()
+        val yearPrefix = orderNumberGenerator.yearPrefix(now)
         val passwordHasher = PasswordHasher()
         val pwdHash = passwordHasher.hash(DEFAULT_PASSWORD.toCharArray())
 
@@ -366,15 +368,15 @@ object ShowcaseDataSeeder {
                         vatNumber = null,
                         taxCode =
                             if (i <= 5) {
-                                "CUSTPRV$i${
-                                    UUID.randomUUID().toString().take(5)
-                                }"
+                                context.getString(
+                                    R.string.showcase_tax_code_prefix,
+                                ) + i + UUID.randomUUID().toString().take(5)
                             } else {
-                                "PRIVATO12345678"
+                                context.getString(R.string.showcase_fictitious_tax_code)
                             },
-                        phone = "+39 333 100 200$i",
+                        phone = context.getString(R.string.showcase_phone_prefix) + i,
                         email = "customer.p$i@example.com",
-                        address = "Via Roma $i, Milano",
+                        address = context.getString(R.string.showcase_private_address, i),
                         notes = context.getString(R.string.showcase_customer_notes),
                         createdAt = now - (i * 86400000L),
                         updatedAt = now - (i * 86400000L),
@@ -409,15 +411,15 @@ object ShowcaseDataSeeder {
                         vatNumber = if (i <= 5) "0123456789$i" else "00000000000",
                         taxCode =
                             if (i <= 5) {
-                                "BCN${
-                                    UUID.randomUUID().toString().take(13)
-                                }"
+                                context.getString(
+                                    R.string.showcase_tax_code_prefix,
+                                ) + "B" + i + UUID.randomUUID().toString().take(5)
                             } else {
-                                "BUSINESS123456"
+                                context.getString(R.string.showcase_fictitious_business_tax_code)
                             },
-                        phone = "+39 02 555 666$i",
+                        phone = context.getString(R.string.showcase_phone_prefix) + (i + 5),
                         email = "info@business$i@example.com",
-                        address = "Piazza Affari $i, Milano",
+                        address = context.getString(R.string.showcase_business_address, i),
                         notes = context.getString(R.string.showcase_customer_notes),
                         createdAt = now - (i * 86400000L),
                         updatedAt = now - (i * 86400000L),
@@ -446,7 +448,7 @@ object ShowcaseDataSeeder {
                     val order =
                         RepairOrderEntity(
                             id = orderId,
-                            orderNumber = "2026-${orderCount.toString().padStart(4, '0')}",
+                            orderNumber = yearPrefix + orderCount.toString().padStart(6, '0'),
                             customerId = customer.id,
                             title = context.getString(R.string.showcase_order_title, repairType, j),
                             categoryId = categoryId,
