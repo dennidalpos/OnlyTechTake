@@ -128,6 +128,7 @@ class SocialProAssetTest {
         }
     }
 
+    @Suppress("SameParameterValue")
     private fun waitForCreatedOrderId(summary: String): String {
         val database = RepairAppDatabase.getInstance(context)
         val deadline = System.currentTimeMillis() + 30_000L

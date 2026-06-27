@@ -183,7 +183,6 @@ fun OrderActionCard(
     val secondaryActions = actions.filterNot { it == primaryAction }
 
     AppActionPanel(
-        title = stringResource(R.string.order_actions_title),
         modifier = Modifier.testTag(RepairAppTestTags.OrderActionSection),
     ) {
         Text(
@@ -212,7 +211,7 @@ fun OrderActionCard(
             modifier = Modifier.testTag(RepairAppTestTags.OrderWhatsAppButton),
         )
 
-        if (secondaryActions.isNotEmpty() || onDeleteOrder != null) {
+        if (secondaryActions.isNotEmpty() || (onDeleteOrder != null)) {
             AppDivider(modifier = Modifier.alpha(0.3f))
             Text(
                 stringResource(R.string.order_secondary_actions_title),
@@ -279,7 +278,6 @@ fun OrderActionCard(
 
 @Composable
 fun AppActionPanel(
-    title: String,
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {

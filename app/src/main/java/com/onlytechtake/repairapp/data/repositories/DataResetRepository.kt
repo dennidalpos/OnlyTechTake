@@ -35,7 +35,7 @@ class DataResetRepository(
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.DELETE_DATA)
-            if (confirmation != "RESET") {
+            if (confirmation != context.getString(R.string.admin_total_reset_confirmation_value)) {
                 throw IllegalArgumentException(context.getString(R.string.error_recovery_code_invalid))
             }
 
@@ -74,7 +74,7 @@ class DataResetRepository(
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.DELETE_DATA)
-            if (confirmation != "CANCELLA_ORDINI") {
+            if (confirmation != context.getString(R.string.admin_delete_all_orders_confirmation_value)) {
                 throw IllegalArgumentException(context.getString(R.string.error_recovery_code_invalid))
             }
 

@@ -32,6 +32,7 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.repairColors
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.delay
 
 enum class BannerType {
@@ -121,7 +122,7 @@ fun DismissibleAppMessageBanner(
 ) {
     LaunchedEffect(message, type) {
         if (autoDismissMillis > 0L) {
-            delay(autoDismissMillis)
+            delay(autoDismissMillis.milliseconds)
             onDismiss()
         }
     }

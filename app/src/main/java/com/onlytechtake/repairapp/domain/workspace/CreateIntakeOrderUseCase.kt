@@ -45,7 +45,7 @@ class CreateIntakeOrderUseCase(
             val errors = normalizedInput.validationErrors(context)
             require(errors.isEmpty()) { errors.joinToString("\n") }
 
-            if (BuildConfig.IS_DEMO_VERSION && BuildConfig.MAX_ORDERS > 0) {
+            if ((BuildConfig.IS_DEMO_VERSION) && (BuildConfig.MAX_ORDERS > 0)) {
                 val totalOrders = orderRepository.countAllOrders()
                 if (totalOrders >= BuildConfig.MAX_ORDERS) {
                     throw IllegalStateException(

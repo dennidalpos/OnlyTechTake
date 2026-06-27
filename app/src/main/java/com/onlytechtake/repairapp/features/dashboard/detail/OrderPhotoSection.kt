@@ -44,7 +44,7 @@ fun OrderPhotoSection(
     detail: OrderDetail,
     viewModel: OrderDetailViewModel,
 ) {
-    var showCamera by rememberSaveable { mutableStateOf(false) }
+    var showCamera by rememberSaveable { mutableStateOf(value = false) }
     var selectedImageId by rememberSaveable { mutableStateOf<String?>(null) }
     var deleteMedia by remember { mutableStateOf<OrderMediaEntity?>(null) }
     val attachmentLauncher =
@@ -80,8 +80,7 @@ fun OrderPhotoSection(
                             LocalImagePreview(
                                 path = media.localPath,
                                 description = media.fileName,
-                                onClick = { selectedImageId = media.id },
-                            )
+                            ) { selectedImageId = media.id }
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,

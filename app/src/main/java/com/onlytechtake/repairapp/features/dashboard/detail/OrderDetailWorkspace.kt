@@ -124,8 +124,8 @@ fun OrderDetailWorkspace(
         }
     }
 
-    var timelineExpanded by rememberSaveable { mutableStateOf(false) }
-    var signaturesExpanded by rememberSaveable { mutableStateOf(false) }
+    var timelineExpanded by rememberSaveable { mutableStateOf(value = false) }
+    var signaturesExpanded by rememberSaveable { mutableStateOf(value = false) }
 
     Column(Modifier.fillMaxSize()) {
         message?.let {
@@ -193,7 +193,7 @@ fun OrderDetailWorkspace(
                             } else {
                                 null
                             },
-                        isPrimaryActionEnabled = selected.order.status != OrderStatus.RESULT || selected.order.diagnosisOutcome != DiagnosisOutcome.REPAIRABLE,
+                        isPrimaryActionEnabled = (selected.order.status != OrderStatus.RESULT) || (selected.order.diagnosisOutcome != DiagnosisOutcome.REPAIRABLE),
                     )
                 }
 
@@ -205,19 +205,18 @@ fun OrderDetailWorkspace(
                                     quoteDecision = workspaceState.quoteDecision,
                                     quoteRejectNote = workspaceState.quoteRejectNote,
                                     onQuoteDecisionChange = { workspaceState.quoteDecision = it },
-                                    onQuoteRejectNoteChange = { workspaceState.quoteRejectNote = it },
-                                    onConfirm = { feedback, note, closureReason ->
-                                        if (feedback == CustomerFeedbackType.ACCEPT) {
-                                            viewModel.recordFeedback(feedback, note)
-                                        } else {
-                                            viewModel.recordFeedback(
-                                                feedback,
-                                                note,
-                                                closureReason,
-                                            ) { onBack() }
-                                        }
-                                    },
-                                )
+                                    onQuoteRejectNoteChange = { workspaceState.quoteRejectNote = it }
+                                ) { feedback, note, closureReason ->
+                                    if (feedback == CustomerFeedbackType.ACCEPT) {
+                                        viewModel.recordFeedback(feedback, note)
+                                    } else {
+                                        viewModel.recordFeedback(
+                                            feedback,
+                                            note,
+                                            closureReason,
+                                        ) { onBack() }
+                                    }
+                                }
                             }
                         }
 
@@ -411,12 +410,16 @@ fun OrderDetailWorkspace(
                 note = statusNote,
                 closureReason = closureReason,
             ) {
-                if ((targetStatus == OrderStatus.CLOSED) && (closureReason == ClosureReason.NOT_REPAIRABLE)) {
-                    viewModel.prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
-                } else if (targetStatus == OrderStatus.READY_FOR_PICKUP) {
-                    viewModel.prepareMessage(TemplateAnchor.WHATSAPP_READY)
-                } else if (targetStatus == OrderStatus.CLOSED) {
-                    onBack()
+                when {
+                    (targetStatus == OrderStatus.CLOSED) && (closureReason == ClosureReason.NOT_REPAIRABLE) -> {
+                        viewModel.prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
+                    }
+                    targetStatus == OrderStatus.READY_FOR_PICKUP -> {
+                        viewModel.prepareMessage(TemplateAnchor.WHATSAPP_READY)
+                    }
+                    targetStatus == OrderStatus.CLOSED -> {
+                        onBack()
+                    }
                 }
             }
         },

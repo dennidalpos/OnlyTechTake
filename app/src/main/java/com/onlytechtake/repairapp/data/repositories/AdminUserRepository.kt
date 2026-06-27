@@ -43,7 +43,7 @@ class AdminUserRepository(
             if (BuildConfig.IS_DEMO_VERSION) {
                 val limit = BuildConfig.MAX_OPERATORS
                 @Suppress("KotlinConstantConditions")
-                if (limit <= 0) {
+                if ((limit <= 0)) {
                     throw IllegalStateException(DemoMode.getOperatorNotAvailableMessage(context))
                 }
 

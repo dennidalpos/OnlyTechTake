@@ -28,12 +28,12 @@ fun selectedCategoryAfterClick(
 fun completedStepAfterCategorySelection(completedStep: Int): Int = completedStepAfterEdit(completedStep, 2)
 
 fun calculateIsDirty(draft: QuickIntakeDraft): Boolean =
-    draft.selectedCustomerId != null ||
-        draft.selectedCategoryId != null ||
+    (draft.selectedCustomerId != null) ||
+        (draft.selectedCategoryId != null) ||
         draft.problemSummary.isNotBlank() ||
         draft.problemDetails.isNotBlank() ||
         draft.stagedMedia.isNotEmpty() ||
-        draft.signatureCapture != null
+        (draft.signatureCapture != null)
 
 fun calculateCanSaveNewCustomer(
     customerType: CustomerType,

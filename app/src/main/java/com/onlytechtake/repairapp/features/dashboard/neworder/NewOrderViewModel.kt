@@ -43,7 +43,7 @@ class NewOrderViewModel(
     private val customerRepository: CustomerRepository,
     catalogRepository: CatalogRepository,
     private val orderMediaRepository: OrderMediaRepository,
-    private val templateRepository: TemplateRepository,
+    templateRepository: TemplateRepository,
     private val createIntakeOrderUseCase: CreateIntakeOrderUseCase,
     private val onSetFormDirty: (Boolean) -> Unit,
     diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger,

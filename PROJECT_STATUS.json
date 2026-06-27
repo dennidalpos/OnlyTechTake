@@ -2,8 +2,8 @@
   "project_name": "OnlyTechTake",
   "version": "1.0.6",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-06-27",
-  "alignment_status": "Allineamento varianti completato. Source set 'main' ripulito da logica legacy e risorse demo/showcase. Test unitari e strumentati allineati alle nuove astrazioni di DemoMode e risolte inconsistenze di compilazione nei test strumentati (Full flavor).",
+  "last_updated": "2026-06-28",
+  "alignment_status": "Allineamento varianti completato. Source set 'main' ripulito da logica legacy e risorse demo/showcase. Test unitari e strumentati allineati alle nuove astrazioni di DemoMode. Risolte inconsistenze di compilazione e warning Lint (UnusedResources, MissingQuantity, DiscouragedApi) su tutte le varianti.",
   "landing_page": {
     "status": "Standalone Ready + Assets Automated",
     "theme": "Material 3 + Inter Typography",
@@ -50,7 +50,7 @@
     },
     {
       "priority": "LOW",
-      "task": "MAINTENANCE: Monitoraggio warning Gradle 10 (AGP 9.2.1), problemi Configuration Cache Spotless e warning Compose 'frameRate=NaN'."
+      "task": "MAINTENANCE: Monitoraggio warning Gradle 10 (AGP 9.2.1) e warning Compose 'frameRate=NaN'."
     }
   ],
   "identified_residuals": [
@@ -61,6 +61,14 @@
     }
   ],
   "completed_recently": [
+    "Quality: Risolte decine di warning Lint (parentesi chiarificatrici, parametri inutilizzati, lambda esterne e qualificatori ridondanti) in tutto il progetto.",
+    "Quality: Convertiti ritardi legacy (Long) in Duration per una migliore leggibilità e compliance API.",
+    "Quality: Ottimizzate classi ViewModel e UseCase rimuovendo parametri costruttore inutilizzati come proprietà.",
+    "Quality: Risolti warning 'MissingQuantity' per la lingua italiana nei plurali di strings.xml.",
+    "Quality: Rimossi 16+ stringhe inutilizzate (legacy) nella variante Demo.",
+    "Quality: Ottimizzato ShowcaseDataSeeder rimuovendo l'uso di reflection (getIdentifier) e risolti relativi warning Lint.",
+    "Maintenance: Incrementata versione progetto a 1.0.6 in build.gradle.kts e README.md.",
+    "Quality: Risolti warning di parentesi chiarificatrici in DemoDataSeeder.kt.",
     "Quality: Risolti errori di build Spotless escludendo la directory .idea dalla scansione.",
     "Quality: Completata la rimozione del debito tecnico in main/strings.xml (rimosse stringhe demo/test rimasuglio).",
     "Test: Corretta la compilazione dei test strumentati (DemoDataSeeder) reindirizzando i riferimenti alle stringhe su androidTest/res (TestR).",

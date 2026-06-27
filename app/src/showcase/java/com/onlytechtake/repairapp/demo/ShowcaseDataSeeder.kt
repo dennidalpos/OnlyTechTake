@@ -229,7 +229,7 @@ object ShowcaseDataSeeder {
                         "cat-rog-strix",
                         "cat-gaming-laptop",
                         3,
-                        "Asus ROG Strix",
+                        context.getString(R.string.common_cat_rog_strix),
                         context.getString(R.string.common_cat_rog_strix_desc),
                         true,
                     ),
@@ -325,29 +325,34 @@ object ShowcaseDataSeeder {
             db.orderCategoryDao().upsertAll(categories)
 
             // 3. Create Private Customers
+            val privateNames =
+                listOf(
+                    R.string.showcase_private_name_1,
+                    R.string.showcase_private_name_2,
+                    R.string.showcase_private_name_3,
+                    R.string.showcase_private_name_4,
+                    R.string.showcase_private_name_5,
+                )
+            val privateSurnames =
+                listOf(
+                    R.string.showcase_private_surname_1,
+                    R.string.showcase_private_surname_2,
+                    R.string.showcase_private_surname_3,
+                    R.string.showcase_private_surname_4,
+                    R.string.showcase_private_surname_5,
+                )
+
             val privateCustomers =
                 (1..6).map { i ->
                     val name =
                         if (i <= 5) {
-                            val resId =
-                                context.resources.getIdentifier(
-                                    "showcase_private_name_$i",
-                                    "string",
-                                    context.packageName,
-                                )
-                            context.getString(resId)
+                            context.getString(privateNames[i - 1])
                         } else {
                             context.getString(R.string.showcase_private_fictitious_name)
                         }
                     val surname =
                         if (i <= 5) {
-                            val resId =
-                                context.resources.getIdentifier(
-                                    "showcase_private_surname_$i",
-                                    "string",
-                                    context.packageName,
-                                )
-                            context.getString(resId)
+                            context.getString(privateSurnames[i - 1])
                         } else {
                             context.getString(R.string.showcase_private_fictitious_surname)
                         }
@@ -378,17 +383,19 @@ object ShowcaseDataSeeder {
             db.customerDao().upsertAll(privateCustomers)
 
             // 4. Create Business Customers
+            val businessNameIds =
+                listOf(
+                    R.string.showcase_business_name_1,
+                    R.string.showcase_business_name_2,
+                    R.string.showcase_business_name_3,
+                    R.string.showcase_business_name_4,
+                    R.string.showcase_business_name_5,
+                )
             val businessCustomers =
                 (1..6).map { i ->
                     val businessName =
                         if (i <= 5) {
-                            val resId =
-                                context.resources.getIdentifier(
-                                    "showcase_business_name_$i",
-                                    "string",
-                                    context.packageName,
-                                )
-                            context.getString(resId)
+                            context.getString(businessNameIds[i - 1])
                         } else {
                             context.getString(R.string.showcase_business_fictitious)
                         }

@@ -433,7 +433,7 @@ class OrderMediaRepository(
                     )
                 exifOrientationTransform(orientation).rotationDegrees
             }.getOrDefault(0f)
-        val swapDimensions = rotation == 90f || rotation == -90f
+        val swapDimensions = (rotation == 90f) || (rotation == -90f)
         return ImageBounds(
             width = (if (swapDimensions) options.outHeight else options.outWidth).takeIf { it > 0 },
             height = (if (swapDimensions) options.outWidth else options.outHeight).takeIf { it > 0 },

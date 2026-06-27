@@ -53,12 +53,12 @@ data class IntakeStepperState(
         )
 
     val isDirty: Boolean =
-        draft.selectedCustomerId != null ||
-            draft.selectedCategoryId != null ||
+        (draft.selectedCustomerId != null) ||
+            (draft.selectedCategoryId != null) ||
             draft.problemSummary.isNotBlank() ||
             draft.problemDetails.isNotBlank() ||
             draft.stagedMedia.isNotEmpty() ||
-            draft.signatureCapture != null
+            (draft.signatureCapture != null)
 
     val privacyText: String by lazy {
         val code =

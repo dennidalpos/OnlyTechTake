@@ -31,6 +31,7 @@ import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBa
 import com.onlytechtake.repairapp.features.dashboard.admin.AdminPanel
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.launch
 
 @Composable
@@ -223,7 +224,7 @@ private fun SettingsSectionContent(
                     onBackupRestored = onBackupRestored,
                     onResetComplete = {
                         scope.launch {
-                            kotlinx.coroutines.delay(500)
+                            kotlinx.coroutines.delay(500.milliseconds)
                             onBackupRestored()
                         }
                     },
@@ -242,7 +243,7 @@ private fun SettingsSectionContent(
 
             "ABOUT" -> AboutSettings(onBack = onBack)
             else ->
-                if (section == null && !isWide) {
+                if ((section == null) && !isWide) {
                     SettingsHub(isAdmin, onNavigate)
                 } else {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

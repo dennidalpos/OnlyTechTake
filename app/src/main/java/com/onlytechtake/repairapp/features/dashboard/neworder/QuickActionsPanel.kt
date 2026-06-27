@@ -212,7 +212,7 @@ fun QuickActions(
             totalSteps = LAST_INTAKE_STEP,
             completedStep = draft.completedStep,
             onStepClick = { step ->
-                if ((step <= draft.completedStep + 1)) {
+                if (step <= (draft.completedStep + 1)) {
                     editStep(step)
                 }
             },
@@ -354,22 +354,21 @@ fun QuickActions(
                             customerSuggestions.take(3).forEach { customer ->
                                 CustomerSuggestionCard(
                                     customer = customer,
-                                    onClick = {
-                                        val label =
-                                            customer.displayName(
-                                                unnamedPrivate = unnamedPrivate,
-                                                unnamedBusiness = unnamedBusiness,
-                                            )
-                                        updateDraft {
-                                            it.copy(
-                                                selectedCustomerId = customer.id,
-                                                selectedCustomerLabel = label,
-                                                showNewCustomerForm = false,
-                                            )
-                                        }
-                                        viewModel.setCustomerSearchQuery(label)
-                                    },
-                                )
+                                ) {
+                                    val label =
+                                        customer.displayName(
+                                            unnamedPrivate = unnamedPrivate,
+                                            unnamedBusiness = unnamedBusiness,
+                                        )
+                                    updateDraft {
+                                        it.copy(
+                                            selectedCustomerId = customer.id,
+                                            selectedCustomerLabel = label,
+                                            showNewCustomerForm = false,
+                                        )
+                                    }
+                                    viewModel.setCustomerSearchQuery(label)
+                                }
                             }
                         }
                     }

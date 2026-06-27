@@ -28,8 +28,10 @@ import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -43,6 +45,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -62,6 +65,7 @@ import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
 import com.onlytechtake.repairapp.core.design.components.AppTopBar
 import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
+import com.onlytechtake.repairapp.core.di.AppContainer
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.domain.models.AppSummary
@@ -460,15 +464,13 @@ private data class NavigationItem(
 )
 @Composable
 private fun DashboardScreenPreview() {
-    androidx.compose.runtime.CompositionLocalProvider(
+    CompositionLocalProvider(
         LocalWindowSizeClass provides
-            androidx.compose.material3.windowsizeclass.WindowSizeClass.calculateFromSize(
-                androidx.compose.ui.unit
-                    .DpSize(1000.dp, 800.dp),
+            WindowSizeClass.calculateFromSize(
+                DpSize(1000.dp, 800.dp),
             ),
         LocalAppContainer provides
-            com.onlytechtake.repairapp.core.di
-                .AppContainer(androidx.compose.ui.platform.LocalContext.current),
+            AppContainer(LocalContext.current),
     ) {
         RepairAppTheme {
             DashboardScreen(

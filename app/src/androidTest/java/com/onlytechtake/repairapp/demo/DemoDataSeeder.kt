@@ -134,7 +134,7 @@ object DemoDataSeeder {
                     id = if (i == 1) DEMO_CUSTOMER_ID else "demo-customer-$i",
                     type = if ((i % 3) == 0) CustomerType.BUSINESS else CustomerType.PRIVATE,
                     firstName =
-                        if (i % 3 == 0) {
+                        if ((i % 3) == 0) {
                             null
                         } else {
                             context.getString(
@@ -142,9 +142,9 @@ object DemoDataSeeder {
                                 i,
                             )
                         },
-                    lastName = if (i % 3 == 0) null else "Demo",
+                    lastName = if ((i % 3) == 0) null else "Demo",
                     companyName =
-                        if (i % 3 == 0) {
+                        if ((i % 3) == 0) {
                             context.getString(
                                 TestR.string.demo_customer_business_name,
                                 i,
@@ -152,8 +152,8 @@ object DemoDataSeeder {
                         } else {
                             null
                         },
-                    vatNumber = if (i % 3 == 0) "IT${10000000000L + i}" else null,
-                    taxCode = if (i % 3 == 0) null else "CF${1000000000000000L + i}",
+                    vatNumber = if ((i % 3) == 0) "IT${10000000000L + i}" else null,
+                    taxCode = if ((i % 3) == 0) null else "CF${1000000000000000L + i}",
                     phone = "+39 333 000 ${1000 + i}",
                     email = "cliente$i@example.invalid",
                     address = "Via Demo $i, Milano",
@@ -183,7 +183,7 @@ object DemoDataSeeder {
                             )
                         },
                     categoryId = "demo-cat-rog-strix",
-                    status = if (i % 2 == 0) OrderStatus.IN_PROGRESS else OrderStatus.OPEN,
+                    status = if ((i % 2) == 0) OrderStatus.IN_PROGRESS else OrderStatus.OPEN,
                     priority = OrderPriority.NORMAL,
                     assignedToUserId = assignedUserId,
                     createdByUserId = assignedUserId,

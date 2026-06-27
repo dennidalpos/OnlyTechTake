@@ -87,7 +87,7 @@ fun categoryPath(
     val names = mutableListOf<String>()
     val visited = mutableSetOf<String>()
     var current = byId[categoryId]
-    while (current != null && (visited.add(current.id))) {
+    while ((current != null) && (visited.add(current.id))) {
         names += current.name
         current = current.parentId?.let(byId::get)
     }
@@ -167,7 +167,7 @@ fun OrderStatusStepper(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            steps.forEachIndexed { index, step ->
+            steps.forEachIndexed { index, _ ->
                 val isCurrent = index == currentStepIndex
                 val color =
                     when {
