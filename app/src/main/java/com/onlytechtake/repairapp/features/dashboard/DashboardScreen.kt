@@ -66,6 +66,7 @@ import com.onlytechtake.repairapp.core.design.components.AppTopBar
 import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
 import com.onlytechtake.repairapp.core.di.AppContainer
+import com.onlytechtake.repairapp.core.di.FakeAppContainer
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.domain.models.AppSummary
@@ -470,7 +471,7 @@ private fun DashboardScreenPreview() {
                 DpSize(1000.dp, 800.dp),
             ),
         LocalAppContainer provides
-            AppContainer(LocalContext.current),
+            FakeAppContainer(LocalContext.current),
     ) {
         RepairAppTheme {
             DashboardScreen(

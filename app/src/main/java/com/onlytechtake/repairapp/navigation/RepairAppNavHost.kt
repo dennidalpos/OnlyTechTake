@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.onlytechtake.repairapp.core.di.AppContainer
+import com.onlytechtake.repairapp.core.di.DefaultAppContainer
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.features.auth.AuthGateRoute
 
@@ -26,7 +27,7 @@ fun RepairAppNavHost(windowSizeClass: WindowSizeClass) {
     var appInstanceKey by remember { mutableIntStateOf(0) }
     val appContainer =
         remember(context, appInstanceKey) {
-            AppContainer(context.applicationContext)
+            DefaultAppContainer(context.applicationContext)
         }
     val recreateAppContainer = {
         appContainer.close()
