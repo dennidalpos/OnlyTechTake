@@ -11,6 +11,8 @@ import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
+import com.onlytechtake.repairapp.data.preferences.UiPreferences
+import com.onlytechtake.repairapp.data.preferences.UiSettings
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
@@ -48,6 +50,7 @@ class SettingsViewModel(
     backupReminderPreferences: BackupReminderPreferences,
     ownerPreferences: OwnerPreferences,
     securityPreferences: SecurityPreferences,
+    uiPreferences: UiPreferences,
     private val storageStatsService: StorageStatsService,
     diagnosticLogService: DiagnosticLogService,
     orderFileCleanupService: OrderFileCleanupService,
@@ -110,6 +113,8 @@ class SettingsViewModel(
     private val ownerDelegate =
         OwnerSettingsDelegate(ownerPreferences, actionRunner)
 
+    private val uiDelegate = UiSettingsDelegate(uiPreferences, viewModelScope)
+
     fun initializeTemplatesIfNeeded() {
         viewModelScope.launch {
             val user = authRepository.currentUser.value
@@ -166,6 +171,13 @@ class SettingsViewModel(
             SharingStarted.WhileSubscribed(5_000),
             com.onlytechtake.repairapp.data.preferences
                 .SecuritySettings(),
+        )
+
+    val uiSettings =
+        uiPreferences.settings.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            UiSettings(),
         )
 
     val ownerInfo: kotlinx.coroutines.flow.StateFlow<OwnerInfo> =
@@ -242,6 +254,8 @@ class SettingsViewModel(
     fun setBackupEncryptionPassword(password: String) = securityDelegate.setBackupEncryptionPassword(password)
 
     fun setInactivityTimeoutMinutes(minutes: Int) = securityDelegate.setInactivityTimeoutMinutes(minutes)
+
+    fun setDarkTheme(enabled: Boolean) = uiDelegate.setDarkTheme(enabled)
 
     fun updateOwnerInfo(info: OwnerInfo) = ownerDelegate.updateOwnerInfo(info)
 
@@ -329,6 +343,7 @@ class SettingsViewModel(
         private val backupReminderPreferences: BackupReminderPreferences,
         private val ownerPreferences: OwnerPreferences,
         private val securityPreferences: SecurityPreferences,
+        private val uiPreferences: UiPreferences,
         private val storageStatsService: StorageStatsService,
         private val diagnosticLogService: DiagnosticLogService,
         private val orderFileCleanupService: OrderFileCleanupService,
@@ -350,6 +365,7 @@ class SettingsViewModel(
                 backupReminderPreferences,
                 ownerPreferences,
                 securityPreferences,
+                uiPreferences,
                 storageStatsService,
                 diagnosticLogService,
                 orderFileCleanupService,

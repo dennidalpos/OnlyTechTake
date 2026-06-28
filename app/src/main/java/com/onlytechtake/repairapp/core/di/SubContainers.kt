@@ -11,6 +11,7 @@ import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
+import com.onlytechtake.repairapp.data.preferences.UiPreferences
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
@@ -198,6 +199,7 @@ class SettingsContainer(
 ) {
     val ownerPreferences by lazy { OwnerPreferences(context.applicationContext) }
     val backupReminderPreferences by lazy { BackupReminderPreferences(context.applicationContext) }
+    val uiPreferences by lazy { UiPreferences(context.applicationContext) }
     val storageStatsService by lazy {
         StorageStatsService(
             context.applicationContext,

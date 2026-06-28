@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.onlytechtake.repairapp.core.error.DiagnosticLogger
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
-import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
+import com.onlytechtake.repairapp.data.preferences.UiPreferences
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
@@ -48,6 +48,7 @@ interface AppContainer {
     val backupReminderPreferences: BackupReminderPreferences
     val ownerPreferences: OwnerPreferences
     val securityPreferences: SecurityPreferences
+    val uiPreferences: UiPreferences
     val dataResetRepository: DataResetRepository
     val storageStatsService: StorageStatsService
     val diagnosticLogService: DiagnosticLogService
@@ -115,6 +116,7 @@ class DefaultAppContainer(
     override val backupRepository get() = settingsContainer.backupRepository
     override val backupReminderPreferences get() = settingsContainer.backupReminderPreferences
     override val ownerPreferences get() = settingsContainer.ownerPreferences
+    override val uiPreferences get() = settingsContainer.uiPreferences
     override val dataResetRepository get() = settingsContainer.dataResetRepository
     override val storageStatsService get() = settingsContainer.storageStatsService
     override val diagnosticLogService get() = settingsContainer.diagnosticLogService
@@ -123,7 +125,7 @@ class DefaultAppContainer(
     override val dataSeeder: DataSeeder by lazy { DataSeederImpl() }
 
     override fun close() {
-        RepairAppDatabase.closeInstance()
+        Database.closeInstance()
     }
 }
 

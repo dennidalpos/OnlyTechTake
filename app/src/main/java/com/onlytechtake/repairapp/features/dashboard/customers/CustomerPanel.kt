@@ -101,7 +101,7 @@ fun CustomerPanel(
     var confirmSave by rememberSaveable { mutableStateOf(value = false) }
 
     // Form state
-    var isBusiness by rememberSaveable { mutableStateOf(false) }
+    var isBusiness by rememberSaveable { mutableStateOf(value = false) }
     var firstName by rememberSaveable { mutableStateOf("") }
     var lastName by rememberSaveable { mutableStateOf("") }
     var companyName by rememberSaveable { mutableStateOf("") }
@@ -139,7 +139,7 @@ fun CustomerPanel(
         vatNumber = ""
         address = ""
         notes = ""
-        viewModel.setFormDirty(false)
+        viewModel.setFormDirty(dirty = false)
     }
 
     val resetSignal by sharedViewModel.resetSignal.collectAsState()
@@ -183,11 +183,10 @@ fun CustomerPanel(
                         CustomerListContent(
                             viewModel = viewModel,
                             onCustomerClick = { selectedCustomer = it },
-                            onNewCustomer = {
-                                clearForm()
-                                showForm = true
-                            },
-                        )
+                        ) {
+                            clearForm()
+                            showForm = true
+                        }
                     }
                     AppVerticalDivider()
                     Box(Modifier.weight(1.5f)) {
@@ -197,59 +196,58 @@ fun CustomerPanel(
                                 isBusiness = isBusiness,
                                 onBusinessChange = {
                                     isBusiness = it
-                                    viewModel.setFormDirty(true)
+                                    viewModel.setFormDirty(dirty = true)
                                 },
                                 firstName = firstName,
                                 onFirstNameChange = {
                                     firstName = it
-                                    viewModel.setFormDirty(true)
+                                    viewModel.setFormDirty(dirty = true)
                                 },
                                 lastName = lastName,
                                 onLastNameChange = {
                                     lastName = it
-                                    viewModel.setFormDirty(true)
+                                    viewModel.setFormDirty(dirty = true)
                                 },
                                 companyName = companyName,
                                 onCompanyNameChange = {
                                     companyName = it
-                                    viewModel.setFormDirty(true)
+                                    viewModel.setFormDirty(dirty = true)
                                 },
                                 vatNumber = vatNumber,
                                 onVatNumberChange = {
                                     vatNumber = it
-                                    viewModel.setFormDirty(true)
+                                    viewModel.setFormDirty(dirty = true)
                                 },
                                 taxCode = taxCode,
                                 onTaxCodeChange = {
                                     taxCode = it
-                                    viewModel.setFormDirty(true)
+                                    viewModel.setFormDirty(dirty = true)
                                 },
                                 phone = phone,
                                 onPhoneChange = {
                                     phone = it
-                                    viewModel.setFormDirty(true)
+                                    viewModel.setFormDirty(dirty = true)
                                 },
                                 email = email,
                                 onEmailChange = {
                                     email = it
-                                    viewModel.setFormDirty(true)
+                                    viewModel.setFormDirty(dirty = true)
                                 },
                                 address = address,
                                 onAddressChange = {
                                     address = it
-                                    viewModel.setFormDirty(true)
+                                    viewModel.setFormDirty(dirty = true)
                                 },
                                 notes = notes,
                                 onNotesChange = {
                                     notes = it
-                                    viewModel.setFormDirty(true)
+                                    viewModel.setFormDirty(dirty = true)
                                 },
                                 onSave = { confirmSave = true },
-                                onCancel = {
-                                    showForm = false
-                                    clearForm()
-                                },
-                            )
+                            ) {
+                                showForm = false
+                                clearForm()
+                            }
                         } else if (selectedCustomer != null) {
                             CustomerDetailContent(
                                 customer = selectedCustomer!!,
@@ -258,7 +256,6 @@ fun CustomerPanel(
                                     editCustomer(selectedCustomer!!)
                                 },
                                 onOrderClick = onOrderClick,
-                                onClose = { selectedCustomer = null },
                             )
                         } else {
                             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -277,68 +274,66 @@ fun CustomerPanel(
                         isBusiness = isBusiness,
                         onBusinessChange = {
                             isBusiness = it
-                            viewModel.setFormDirty(true)
+                            viewModel.setFormDirty(dirty = true)
                         },
                         firstName = firstName,
                         onFirstNameChange = {
                             firstName = it
-                            viewModel.setFormDirty(true)
+                            viewModel.setFormDirty(dirty = true)
                         },
                         lastName = lastName,
                         onLastNameChange = {
                             lastName = it
-                            viewModel.setFormDirty(true)
+                            viewModel.setFormDirty(dirty = true)
                         },
                         companyName = companyName,
                         onCompanyNameChange = {
                             companyName = it
-                            viewModel.setFormDirty(true)
+                            viewModel.setFormDirty(dirty = true)
                         },
                         vatNumber = vatNumber,
                         onVatNumberChange = {
                             vatNumber = it
-                            viewModel.setFormDirty(true)
+                            viewModel.setFormDirty(dirty = true)
                         },
                         taxCode = taxCode,
                         onTaxCodeChange = {
                             taxCode = it
-                            viewModel.setFormDirty(true)
+                            viewModel.setFormDirty(dirty = true)
                         },
                         phone = phone,
                         onPhoneChange = {
                             phone = it
-                            viewModel.setFormDirty(true)
+                            viewModel.setFormDirty(dirty = true)
                         },
                         email = email,
                         onEmailChange = {
                             email = it
-                            viewModel.setFormDirty(true)
+                            viewModel.setFormDirty(dirty = true)
                         },
                         address = address,
                         onAddressChange = {
                             address = it
-                            viewModel.setFormDirty(true)
+                            viewModel.setFormDirty(dirty = true)
                         },
                         notes = notes,
                         onNotesChange = {
                             notes = it
-                            viewModel.setFormDirty(true)
+                            viewModel.setFormDirty(dirty = true)
                         },
                         onSave = { confirmSave = true },
-                        onCancel = {
-                            showForm = false
-                            clearForm()
-                        },
-                    )
+                    ) {
+                        showForm = false
+                        clearForm()
+                    }
                 } else {
                     CustomerListContent(
                         viewModel = viewModel,
                         onCustomerClick = { selectedCustomer = it },
-                        onNewCustomer = {
-                            clearForm()
-                            showForm = true
-                        },
-                    )
+                    ) {
+                        clearForm()
+                        showForm = true
+                    }
                 }
             }
         }
@@ -372,7 +367,6 @@ fun CustomerPanel(
                             viewModel = viewModel,
                             onEdit = {}, // Handled by dialog button
                             onOrderClick = onOrderClick,
-                            onClose = { selectedCustomer = null },
                         )
                     },
                 )
@@ -459,7 +453,7 @@ private fun CustomerListContent(
                 value = searchQuery,
                 onValueChange = {
                     viewModel.setSearchQuery(it)
-                    if (it.isNotBlank()) viewModel.setShowAll(false)
+                    if (it.isNotBlank()) viewModel.setShowAll(show = false)
                 },
                 label = stringResource(R.string.label_search_customer),
                 singleLine = true,
@@ -551,7 +545,7 @@ private fun CustomerListContent(
                     }
                 } else {
                     items(customers, key = { it.id }) { customer ->
-                        CustomerCard(customer = customer, onClick = { onCustomerClick(customer) })
+                        CustomerCard(customer = customer) { onCustomerClick(customer) }
                     }
                 }
             }
@@ -718,7 +712,6 @@ private fun CustomerDetailContent(
     viewModel: CustomersViewModel,
     onEdit: () -> Unit,
     onOrderClick: (String) -> Unit,
-    onClose: () -> Unit,
 ) {
     val openOrders by viewModel
         .observeOrdersForCustomer(customer.id, openOnly = true)
@@ -963,7 +956,6 @@ private fun CustomerPanelPreview() {
             sharedViewModel =
                 androidx.lifecycle.viewmodel.compose
                     .viewModel(),
-            onOrderClick = {},
-        )
+        ) {}
     }
 }

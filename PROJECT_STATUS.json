@@ -1,18 +1,29 @@
 {
   "project_name": "OnlyTechTake",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "status": "Production-Ready / Maintenance",
   "last_updated": "2026-07-04",
   "backlog": [
     {
       "priority": "HIGH",
-      "task": "CLEANUP: Refactor DemoMode logic. Removed repository bypasses, implemented real DB seeding for Demo flavor, and aligned order number formats."
+      "task": "FIXED: Resolved name shadowing in CustomerRepository implementation that could lead to recursive inheritance errors."
+    },
+    {
+      "priority": "LOW",
+      "task": "QUALITY: Resolved editor warnings and Lint errors (annotation targets, redundant qualifiers, clarifying parentheses, named boolean arguments, and trailing lambdas)."
+    },
+    {
+      "priority": "LOW",
+      "task": "QUALITY: Resolved editor warnings and Lint errors (Locale deprecations in tests, LocalContext usage, unused resources, etc.)."
+    },
+    {
+      "priority": "LOW",
+      "task": "FEATURE: Added UI settings with Dark/Light theme toggle (default Dark). Synchronized system bars and keyboard theme."
     },
     {
       "priority": "HIGH",
       "task": "LEGAL: Verifica accessibilità e pubblicazione HTTPS definitiva per Privacy Policy (inventoveritas.mine.nu)."
     },
-
     {
       "priority": "HIGH",
       "task": "PROCEDURAL: Pianificazione e avvio gruppo di test chiuso (20 tester per 14 giorni) per compliance Play Store account post-2023."

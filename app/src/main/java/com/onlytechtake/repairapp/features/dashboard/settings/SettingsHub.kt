@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Business
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material3.Icon
@@ -117,6 +118,15 @@ fun SettingsHub(
                 testTag = RepairAppTestTags.ConfigHubAdminButton,
             ) {
                 onNavigate(DashboardRoutes.settings("ADMIN"))
+            }
+
+            SettingsHubCard(
+                title = stringResource(R.string.config_hub_ui_title),
+                subtitle = stringResource(R.string.config_hub_ui_subtitle),
+                icon = Icons.Default.Palette,
+                testTag = RepairAppTestTags.ConfigHubUiButton,
+            ) {
+                onNavigate(DashboardRoutes.settings("UI"))
             }
 
             if (isAdmin) {

@@ -72,7 +72,9 @@ object DemoDataSeeder {
 
         val mediaStorageProvider = MediaStorageProvider(context)
         mediaStorageProvider.getBaseMediaDir().deleteRecursively()
-        val orderNumberGenerator = com.onlytechtake.repairapp.core.orders.OrderNumberGenerator()
+        val orderNumberGenerator =
+            com.onlytechtake.repairapp.core.orders
+                .OrderNumberGenerator()
 
         val now = 1_780_830_000_000L
         val yearPrefix = orderNumberGenerator.yearPrefix(now)

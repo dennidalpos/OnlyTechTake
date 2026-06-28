@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
 import com.onlytechtake.repairapp.core.design.repairColors
@@ -51,18 +52,18 @@ fun attachmentCounts(
 
 fun AttachmentCounts.label(context: android.content.Context): String =
     buildList {
-        add(context.getString(com.onlytechtake.repairapp.R.string.label_photos_count, images))
-        add(context.getString(com.onlytechtake.repairapp.R.string.label_documents_count, documents))
+        add(context.getString(R.string.label_photos_count, images))
+        add(context.getString(R.string.label_documents_count, documents))
         add(
             context.getString(
-                com.onlytechtake.repairapp.R.string.label_signatures_count,
+                R.string.label_signatures_count,
                 signatures,
             ),
         )
         if (finalPhotos > 0) {
             add(
                 context.getString(
-                    com.onlytechtake.repairapp.R.string.label_final_photos_count,
+                    R.string.label_final_photos_count,
                     finalPhotos,
                 ),
             )
@@ -71,18 +72,18 @@ fun AttachmentCounts.label(context: android.content.Context): String =
 
 fun OrderAttachmentCounts.label(context: android.content.Context): String =
     buildList {
-        add(context.getString(com.onlytechtake.repairapp.R.string.label_photos_count, images))
-        add(context.getString(com.onlytechtake.repairapp.R.string.label_documents_count, documents))
+        add(context.getString(R.string.label_photos_count, images))
+        add(context.getString(R.string.label_documents_count, documents))
         add(
             context.getString(
-                com.onlytechtake.repairapp.R.string.label_signatures_count,
+                R.string.label_signatures_count,
                 signatures,
             ),
         )
         if (finalPhotos > 0) {
             add(
                 context.getString(
-                    com.onlytechtake.repairapp.R.string.label_final_photos_count,
+                    R.string.label_final_photos_count,
                     finalPhotos,
                 ),
             )
@@ -227,7 +228,7 @@ fun OrderStatusStepper(
                     }
                 }
 
-                if (index < steps.size - 1) {
+                if (index < (steps.size - 1)) {
                     Canvas(
                         modifier =
                             Modifier

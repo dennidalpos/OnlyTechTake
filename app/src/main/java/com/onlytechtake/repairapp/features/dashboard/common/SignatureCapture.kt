@@ -131,8 +131,21 @@ fun SignatureCaptureForm(
                         selectedSignaturePath = signature.localPath
                         selectedSignatureTitle = desc
                     }
-                    Text("${signature.signerName} - ${formatUiDateTime(signature.signedAt)}")
-                    Text("${signature.fileName} - ${formatFileSize(signature.sizeBytes)} - privacy v${signature.privacyTemplateVersion}")
+                    Text(
+                        stringResource(
+                            R.string.signature_info_main,
+                            signature.signerName,
+                            formatUiDateTime(signature.signedAt),
+                        ),
+                    )
+                    Text(
+                        stringResource(
+                            R.string.signature_info_meta,
+                            signature.fileName,
+                            formatFileSize(signature.sizeBytes),
+                            signature.privacyTemplateVersion,
+                        ),
+                    )
                 }
             }
         }

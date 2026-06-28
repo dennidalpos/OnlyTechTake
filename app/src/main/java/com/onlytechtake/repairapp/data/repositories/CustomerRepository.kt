@@ -9,24 +9,19 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
-import com.onlytechtake.repairapp.domain.repositories.CustomerRepository
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import java.util.UUID
+import com.onlytechtake.repairapp.domain.repositories.CustomerRepository as ICustomerRepository
 
 class CustomerRepository(
     private val context: Context,
     private val customerDao: CustomerDao,
     private val clockMillis: () -> Long = System::currentTimeMillis,
-) : CustomerRepository {
-    override fun observeRecent(): Flow<List<CustomerEntity>> {
-        return customerDao.observeRecent()
-    }
+) : ICustomerRepository {
+    override fun observeRecent(): Flow<List<CustomerEntity>> = customerDao.observeRecent()
 
-    override fun observeAll(): Flow<List<CustomerEntity>> {
-        return customerDao.observeAll()
-    }
+    override fun observeAll(): Flow<List<CustomerEntity>> = customerDao.observeAll()
 
     override fun search(query: String): Flow<List<CustomerEntity>> {
         val trimmed = query.trim()
@@ -39,9 +34,7 @@ class CustomerRepository(
         return customerDao.search(sanitized)
     }
 
-    override suspend fun findById(id: String): CustomerEntity? {
-        return customerDao.findById(id)
-    }
+    override suspend fun findById(id: String): CustomerEntity? = customerDao.findById(id)
 
     override suspend fun save(
         actor: AuthenticatedUser?,

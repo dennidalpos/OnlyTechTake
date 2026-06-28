@@ -103,11 +103,11 @@ fun ColumnScope.CategoriesSettings(
     val currentParent =
         currentCategoryParentId?.let { id -> categories.firstOrNull { it.id == id } }
 
-    BackHandler(enabled = (currentCategoryParentId != null || showEditCard || searchQuery.isNotEmpty())) {
+    BackHandler(enabled = ((currentCategoryParentId != null) || showEditCard || searchQuery.isNotEmpty())) {
         when {
             showEditCard -> {
                 showEditCard = false
-                viewModel.setFormDirty(false)
+                viewModel.setFormDirty(dirty = false)
             }
 
             searchQuery.isNotEmpty() -> searchQuery = ""
@@ -265,7 +265,7 @@ fun ColumnScope.CategoriesSettings(
                                 contentDescription = stringResource(R.string.action_close),
                                 onClick = {
                                     showEditCard = false
-                                    viewModel.setFormDirty(false)
+                                    viewModel.setFormDirty(dirty = false)
                                 },
                             )
                         }
@@ -274,7 +274,7 @@ fun ColumnScope.CategoriesSettings(
                             categoryName,
                             {
                                 categoryName = it
-                                viewModel.setFormDirty(true)
+                                viewModel.setFormDirty(dirty = true)
                             },
                             stringResource(R.string.config_category_name_label),
                             testTag = RepairAppTestTags.ConfigCategoryNameField,
@@ -283,7 +283,7 @@ fun ColumnScope.CategoriesSettings(
                             categoryDescription,
                             {
                                 categoryDescription = it
-                                viewModel.setFormDirty(true)
+                                viewModel.setFormDirty(dirty = true)
                             },
                             stringResource(R.string.config_category_description_label),
                             showOptional = true,
@@ -308,7 +308,7 @@ fun ColumnScope.CategoriesSettings(
                                 enabled = isAdmin,
                                 onCheckedChange = {
                                     categoryActive = it
-                                    viewModel.setFormDirty(true)
+                                    viewModel.setFormDirty(dirty = true)
                                 },
                             )
                         }
@@ -318,7 +318,7 @@ fun ColumnScope.CategoriesSettings(
                                 variant = AppButtonVariant.Secondary,
                                 onClick = {
                                     showEditCard = false
-                                    viewModel.setFormDirty(false)
+                                    viewModel.setFormDirty(dirty = false)
                                 },
                             )
                             if ((categoryId == null) || isAdmin) {

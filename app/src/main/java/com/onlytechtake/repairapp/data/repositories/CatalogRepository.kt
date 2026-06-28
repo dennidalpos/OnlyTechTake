@@ -10,20 +10,15 @@ import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import java.util.UUID
 
 class CatalogRepository(
     private val context: Context,
     private val categoryDao: OrderCategoryDao,
 ) {
-    fun observeCategories(): Flow<List<OrderCategoryEntity>> {
-        return categoryDao.observeAll()
-    }
+    fun observeCategories(): Flow<List<OrderCategoryEntity>> = categoryDao.observeAll()
 
-    fun observeActiveCategories(): Flow<List<OrderCategoryEntity>> {
-        return categoryDao.observeActiveCategories()
-    }
+    fun observeActiveCategories(): Flow<List<OrderCategoryEntity>> = categoryDao.observeActiveCategories()
 
     suspend fun getCategoryPath(id: String): String {
         val all = categoryDao.findAll()

@@ -350,6 +350,8 @@
     <string name="signature_empty">No signature captured.</string>
     <string name="signature_section_title">Signatures</string>
     <string name="signature_image_description">Signature %s</string>
+    <string name="signature_info_main">%1$s – %2$s</string>
+    <string name="signature_info_meta">%1$s – %2$s – privacy v%3$d</string>
     <string name="signature_privacy_accepted">Privacy accepted</string>
     <string name="signature_privacy_rejected">Privacy NOT accepted</string>
     <string name="signature_read_privacy">Read privacy policy</string>
@@ -500,6 +502,7 @@
     <string name="order_wa_prepared_timeline_title">WhatsApp prepared</string>
     <string name="order_wa_sent_timeline_title">WhatsApp confirmed</string>
     <string name="order_wa_message_label">Message</string>
+    <string name="order_wa_template_label">Template: %s</string>
     <string name="order_wa_open">Open WhatsApp</string>
     <string name="order_wa_open_confirm_title">Open WhatsApp?</string>
     <string name="order_wa_open_confirm_text">Record preparation and open WhatsApp for manual sending?</string>
@@ -517,6 +520,7 @@
     <string name="error_repairable_diagnosis_required">Only a repairable diagnosis can pass to repairing</string>
     <string name="error_not_repairable_diagnosis_required">Direct transition to pickup requires a non-repairable diagnosis</string>
     <string name="error_unknown">Error</string>
+    <string name="error_prefix">Error: %s</string>
     <string name="error_log_generation_failed">Failed to generate log file</string>
     <string name="order_diagnosis_repairable">Repairable</string>
     <string name="order_diagnosis_not_repairable">Not repairable</string>
@@ -527,7 +531,6 @@
     <string name="order_closure_reason_title">Closure reason</string>
     <string name="order_paid_button">Paid</string>
     <string name="order_paid_badge">PAID</string>
-    <string name="order_actions_title">Order actions</string>
     <string name="order_next_action_title">Next action</string>
     <string name="order_secondary_actions_title">Other actions</string>
     <string name="order_not_repairable_title">Diagnosis outcome</string>
@@ -674,6 +677,9 @@
     <string name="config_hub_owner_title">Owner Data</string>
     <string name="config_hub_owner_subtitle">Information for PDF and messages</string>
     <string name="config_owner_tooltip">Configure your details to be included in reports and communications.</string>
+    <string name="config_ui_tooltip">Customize the appearance of the application.</string>
+    <string name="config_ui_dark_theme">Dark Theme</string>
+    <string name="config_ui_close">Close interface setup</string>
     <string name="owner_field_name">Business Name / Name</string>
     <string name="owner_field_vat">VAT / Tax ID</string>
     <string name="owner_field_address">Address / Legal Seat</string>
@@ -684,6 +690,8 @@
 
     <string name="config_hub_admin_title">Users and Operators</string>
     <string name="config_hub_admin_subtitle">Operator management and recovery kit</string>
+    <string name="config_hub_ui_title">Interface</string>
+    <string name="config_hub_ui_subtitle">Theme and appearance</string>
     <string name="config_hub_backup_title">Maintenance &amp; Backup</string>
     <string name="config_hub_backup_subtitle">Export, reset and restore</string>
     <string name="config_hub_storage_subtitle">Disk space and monitoring</string>
@@ -704,6 +712,8 @@
     <string name="about_url_home">https://inventoveritas.mine.nu/index.html</string>
     <string name="about_url_privacy">https://inventoveritas.mine.nu/privacy.html</string>
     <string name="about_close">Close Information</string>
+    <string name="about_license_apache">Apache License 2.0</string>
+    <string name="about_license_bsd">BSD 3-Clause License</string>
     <string name="about_legal_credits_title">Open Source Credits</string>
     <string name="about_legal_credits_text">This application uses the following libraries: SQLCipher for encryption, Room for local database, Jetpack Compose for the UI, and Zip4j for backups.</string>
     <string name="about_development">Development</string>

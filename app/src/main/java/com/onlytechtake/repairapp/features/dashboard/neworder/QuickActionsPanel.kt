@@ -381,7 +381,7 @@ fun QuickActions(
                         }
                     }
 
-                    if (draft.showNewCustomerForm && draft.selectedCustomerId == null) {
+                    if ((draft.showNewCustomerForm) && (draft.selectedCustomerId == null)) {
                         AppDivider(modifier = Modifier.padding(vertical = RepairAppSpacing.compactGap))
                         IntakeCustomerFields(
                             isBusiness = isBusiness,
@@ -544,25 +544,24 @@ fun QuickActions(
                         privacyText = stepperState.privacyText,
                         termsText = stepperState.termsText,
                         isBusiness = stepperState.isBusiness,
-                        onCaptureChanged = { capture ->
-                            if (capture != null || draft.signatureCapture == null) {
-                                updateDraft {
-                                    it.copy(
-                                        signatureCapture =
-                                            capture?.let { result ->
-                                                QuickIntakeSignatureDraft(
-                                                    signerName = result.signerName,
-                                                    businessSignerName = result.businessSignerName,
-                                                    privacyAccepted = result.privacyAccepted,
-                                                    termsAccepted = result.termsAccepted,
-                                                    bitmap = result.bitmap,
-                                                )
-                                            },
-                                    )
-                                }
+                    ) { capture ->
+                        if (capture != null || draft.signatureCapture == null) {
+                            updateDraft {
+                                it.copy(
+                                    signatureCapture =
+                                        capture?.let { result ->
+                                            QuickIntakeSignatureDraft(
+                                                signerName = result.signerName,
+                                                businessSignerName = result.businessSignerName,
+                                                privacyAccepted = result.privacyAccepted,
+                                                termsAccepted = result.termsAccepted,
+                                                bitmap = result.bitmap,
+                                            )
+                                        },
+                                )
                             }
-                        },
-                    )
+                        }
+                    }
                 }
             }
             WizardNavigationBar(

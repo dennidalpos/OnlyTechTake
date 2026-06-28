@@ -29,7 +29,10 @@ class SocialDemoAssetTest {
 
     private val context: Context = ApplicationProvider.getApplicationContext()
     private val testContext: Context
-        get() = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().context
+        get() =
+            androidx.test.platform.app.InstrumentationRegistry
+                .getInstrumentation()
+                .context
 
     @Test
     fun capturesSocialDemoAssets() {

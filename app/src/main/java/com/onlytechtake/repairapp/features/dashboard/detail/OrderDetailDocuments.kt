@@ -84,7 +84,10 @@ fun OrderDocumentSection(
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
             pdfError?.let { error ->
-                AppMessageBanner(message = "Errore: $error", type = BannerType.Error)
+                AppMessageBanner(
+                    message = stringResource(R.string.error_prefix, error),
+                    type = BannerType.Error,
+                )
             }
 
             if (documents.isNotEmpty()) {

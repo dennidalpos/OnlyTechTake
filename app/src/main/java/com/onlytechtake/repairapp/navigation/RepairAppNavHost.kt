@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.onlytechtake.repairapp.core.di.AppContainer
 import com.onlytechtake.repairapp.core.di.DefaultAppContainer
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.features.auth.AuthGateRoute
@@ -20,21 +21,24 @@ private object Routes {
 }
 
 @Composable
-fun RepairAppNavHost(windowSizeClass: WindowSizeClass) {
+fun RepairAppNavHost(
+    windowSizeClass: WindowSizeClass,
+    appContainer: AppContainer,
+) {
     val navController = rememberNavController()
     val context = LocalContext.current
     var appInstanceKey by remember { mutableIntStateOf(0) }
-    val appContainer =
+    val currentAppContainer =
         remember(context, appInstanceKey) {
-            DefaultAppContainer(context.applicationContext)
+            if (appInstanceKey == 0) appContainer else DefaultAppContainer(context.applicationContext)
         }
     val recreateAppContainer = {
-        appContainer.close()
+        currentAppContainer.close()
         appInstanceKey += 1
     }
 
     CompositionLocalProvider(
-        LocalAppContainer provides appContainer,
+        LocalAppContainer provides currentAppContainer,
         LocalWindowSizeClass provides windowSizeClass,
     ) {
         NavHost(

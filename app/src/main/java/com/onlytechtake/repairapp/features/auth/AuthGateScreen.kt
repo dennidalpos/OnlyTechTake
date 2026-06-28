@@ -310,7 +310,7 @@ private fun AuthErrorScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = stringResource(com.onlytechtake.repairapp.R.string.error_init_title),
+                text = stringResource(R.string.error_init_title),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.error,
             )
@@ -322,7 +322,7 @@ private fun AuthErrorScreen(
             )
             Spacer(Modifier.height(RepairAppSpacing.sectionGap))
             AppButton(
-                text = stringResource(com.onlytechtake.repairapp.R.string.action_retry),
+                text = stringResource(R.string.action_retry),
                 onClick = onRetry,
                 variant = AppButtonVariant.Primary,
             )
@@ -621,31 +621,31 @@ private fun OwnerWizardScreen(
         if (BuildConfig.IS_SHOWCASE_MODE_ENABLED) DemoMode.getShowcaseOwnerInfo(context) else null
 
     val initialName =
-        if (showcaseInfo != null && ownerInfo.name.isBlank()) {
+        if ((showcaseInfo != null) && ownerInfo.name.isBlank()) {
             showcaseInfo.name
         } else {
             ownerInfo.name
         }
     val initialVat =
-        if (showcaseInfo != null && ownerInfo.vatNumber.isBlank()) {
+        if ((showcaseInfo != null) && ownerInfo.vatNumber.isBlank()) {
             showcaseInfo.vatNumber
         } else {
             ownerInfo.vatNumber
         }
     val initialAddress =
-        if (showcaseInfo != null && ownerInfo.address.isBlank()) {
+        if ((showcaseInfo != null) && ownerInfo.address.isBlank()) {
             showcaseInfo.address
         } else {
             ownerInfo.address
         }
     val initialEmail =
-        if (showcaseInfo != null && ownerInfo.email.isBlank()) {
+        if ((showcaseInfo != null) && ownerInfo.email.isBlank()) {
             showcaseInfo.email
         } else {
             ownerInfo.email
         }
     val initialPhone =
-        if (showcaseInfo != null && ownerInfo.phone.isBlank()) {
+        if ((showcaseInfo != null) && ownerInfo.phone.isBlank()) {
             showcaseInfo.phone
         } else {
             ownerInfo.phone

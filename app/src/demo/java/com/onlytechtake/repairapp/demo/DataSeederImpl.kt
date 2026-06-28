@@ -2,7 +2,6 @@ package com.onlytechtake.repairapp.demo
 
 import android.content.Context
 import androidx.room.withTransaction
-import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase

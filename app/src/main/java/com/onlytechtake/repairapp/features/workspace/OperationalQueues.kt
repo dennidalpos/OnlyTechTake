@@ -7,7 +7,7 @@ import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 
 data class OperationalQueue(
-    @StringRes val titleRes: Int,
+    @get:StringRes val titleRes: Int,
     val statuses: Set<OrderStatus>,
     val orders: List<RepairOrderEntity>,
 )

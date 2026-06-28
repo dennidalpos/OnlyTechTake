@@ -7,6 +7,7 @@ import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
+import com.onlytechtake.repairapp.data.preferences.UiPreferences
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
@@ -51,9 +52,9 @@ class FakeAppContainer(
             override suspend fun login(
                 username: String,
                 password: CharArray,
-            ): LoginResult = LoginResult.Success(mockk_fallback())
+            ): LoginResult = LoginResult.Success(mockkFallback())
 
-            override suspend fun loginDemo(): LoginResult = LoginResult.Success(mockk_fallback())
+            override suspend fun loginDemo(): LoginResult = LoginResult.Success(mockkFallback())
 
             override suspend fun changePassword(
                 username: String,
@@ -72,7 +73,7 @@ class FakeAppContainer(
 
             override suspend fun logout() {}
 
-            private fun <T> mockk_fallback(): T = error("Fake method not fully implemented")
+            private fun <T> mockkFallback(): T = error("Fake method not fully implemented")
         }
     override val adminUserRepository: AdminUserRepository get() = error("Not implemented")
     override val database: RepairAppDatabase get() = error("Not implemented")
@@ -90,6 +91,7 @@ class FakeAppContainer(
     override val backupReminderPreferences: BackupReminderPreferences get() = error("Not implemented")
     override val ownerPreferences: OwnerPreferences get() = error("Not implemented")
     override val securityPreferences: SecurityPreferences get() = error("Not implemented")
+    override val uiPreferences: UiPreferences get() = error("Not implemented")
     override val dataResetRepository: DataResetRepository get() = error("Not implemented")
     override val storageStatsService: StorageStatsService get() = error("Not implemented")
     override val diagnosticLogService: DiagnosticLogService get() = error("Not implemented")

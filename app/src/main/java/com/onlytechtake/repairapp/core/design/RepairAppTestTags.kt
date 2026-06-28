@@ -86,6 +86,7 @@ object RepairAppTestTags {
     const val ConfigHubStorageButton = "config_hub_storage_button"
     const val ConfigHubBackupButton = "config_hub_backup_button"
     const val ConfigHubAdminButton = "config_hub_admin_button"
+    const val ConfigHubUiButton = "config_hub_ui_button"
     const val ConfigHubAboutButton = "config_hub_about_button"
     const val ConfigBackButton = "config_back_button"
     const val ConfigCategoryNameField = "config_category_name_field"

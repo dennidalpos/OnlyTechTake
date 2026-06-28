@@ -10,6 +10,7 @@ import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
+import com.onlytechtake.repairapp.data.preferences.UiPreferences
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
@@ -281,6 +282,17 @@ internal class OwnerSettingsDelegate(
         actionRunner.run(successMessageRes = R.string.owner_save_success) {
             ownerPreferences.updateOwnerInfo(info)
             Result.success(Unit)
+        }
+    }
+}
+
+internal class UiSettingsDelegate(
+    private val uiPreferences: UiPreferences,
+    private val scope: CoroutineScope,
+) {
+    fun setDarkTheme(enabled: Boolean) {
+        scope.launch {
+            uiPreferences.setDarkTheme(enabled)
         }
     }
 }

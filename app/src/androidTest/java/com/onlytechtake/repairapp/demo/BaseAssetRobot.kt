@@ -37,7 +37,9 @@ abstract class BaseAssetRobot(
         context.createConfigurationContext(configuration)
     }
 
-    protected fun getString(@androidx.annotation.StringRes resId: Int): String = englishContext.getString(resId)
+    protected fun getString(
+        @androidx.annotation.StringRes resId: Int,
+    ): String = englishContext.getString(resId)
 
     fun loginDemo(username: String) {
         repeat(LOGIN_ATTEMPTS) { attempt ->
@@ -452,6 +454,7 @@ abstract class BaseAssetRobot(
      * Injects a specific delay for narrative video recordings.
      * Useful to give viewers time to read the screen before moving to the next step.
      */
+    @Suppress("unused")
     fun narrativePause(seconds: Int = 2) {
         if (isRecordingDemo()) {
             Thread.sleep(seconds * 1000L)

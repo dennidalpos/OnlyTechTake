@@ -273,10 +273,9 @@ fun OrderDetailWorkspace(
                 item(key = "notes", contentType = "notes") {
                     InternalNotesPanel(
                         notes = selected.order.internalNotes,
-                        onAddNoteClick = {
-                            workspaceState.openInternalNote()
-                        },
-                    )
+                    ) {
+                        workspaceState.openInternalNote()
+                    }
                 }
 
                 item(key = "photos", contentType = "photos") {
@@ -420,18 +419,20 @@ fun OrderDetailWorkspace(
                 note = statusNote,
                 closureReason = closureReason,
             ) {
-                when {
-                    (targetStatus == OrderStatus.CLOSED) && (closureReason == ClosureReason.NOT_REPAIRABLE) -> {
-                        viewModel.prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
+                when (targetStatus) {
+                    OrderStatus.CLOSED -> {
+                        if (closureReason == ClosureReason.NOT_REPAIRABLE) {
+                            viewModel.prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
+                        } else {
+                            onBack()
+                        }
                     }
 
-                    targetStatus == OrderStatus.READY_FOR_PICKUP -> {
+                    OrderStatus.READY_FOR_PICKUP -> {
                         viewModel.prepareMessage(TemplateAnchor.WHATSAPP_READY)
                     }
 
-                    targetStatus == OrderStatus.CLOSED -> {
-                        onBack()
-                    }
+                    else -> {}
                 }
             }
         },

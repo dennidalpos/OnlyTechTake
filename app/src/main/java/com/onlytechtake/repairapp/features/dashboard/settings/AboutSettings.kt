@@ -43,6 +43,8 @@ import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 @Composable
 fun AboutSettings(onBack: () -> Unit) {
     val uriHandler = LocalUriHandler.current
+    val apacheLicenseName = stringResource(R.string.about_license_apache)
+    val bsdLicenseName = stringResource(R.string.about_license_bsd)
     var selectedLicenseName by remember { mutableStateOf<String?>(null) }
     var selectedLicenseText by remember { mutableStateOf("") }
 
@@ -149,22 +151,22 @@ fun AboutSettings(onBack: () -> Unit) {
                     )
 
                     AppButton(
-                        text = "Apache License 2.0",
+                        text = apacheLicenseName,
                         variant = AppButtonVariant.Ghost,
                         size = AppButtonSize.Compact,
                         leadingIcon = Icons.Default.Info,
                         onClick = {
-                            selectedLicenseName = "Apache License 2.0"
+                            selectedLicenseName = apacheLicenseName
                             selectedLicenseText = LicenseTexts.APACHE_2_0
                         },
                     )
                     AppButton(
-                        text = "BSD 3-Clause License",
+                        text = bsdLicenseName,
                         variant = AppButtonVariant.Ghost,
                         size = AppButtonSize.Compact,
                         leadingIcon = Icons.Default.Info,
                         onClick = {
-                            selectedLicenseName = "BSD 3-Clause License"
+                            selectedLicenseName = bsdLicenseName
                             selectedLicenseText = LicenseTexts.BSD_3_CLAUSE
                         },
                     )

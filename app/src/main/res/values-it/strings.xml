@@ -353,6 +353,8 @@
     <string name="signature_empty">Nessuna firma acquisita.</string>
     <string name="signature_section_title">Firme</string>
     <string name="signature_image_description">Firma %s</string>
+    <string name="signature_info_main">%1$s – %2$s</string>
+    <string name="signature_info_meta">%1$s – %2$s – privacy v%3$d</string>
     <string name="signature_privacy_accepted">Privacy accettata</string>
     <string name="signature_privacy_rejected">Privacy NON accettata</string>
     <string name="signature_read_privacy">Leggi informativa privacy</string>
@@ -506,6 +508,7 @@
     <string name="order_wa_prepared_timeline_title">WhatsApp preparato</string>
     <string name="order_wa_sent_timeline_title">WhatsApp confermato</string>
     <string name="order_wa_message_label">Messaggio</string>
+    <string name="order_wa_template_label">Template: %s</string>
     <string name="order_wa_open">Apri WhatsApp</string>
     <string name="order_wa_open_confirm_title">Aprire WhatsApp?</string>
     <string name="order_wa_open_confirm_text">Registrare la preparazione e aprire WhatsApp per l\'invio manuale?</string>
@@ -523,6 +526,7 @@
     <string name="error_repairable_diagnosis_required">Solo una diagnosi riparabile può passare in riparazione</string>
     <string name="error_not_repairable_diagnosis_required">Il passaggio diretto al ritiro richiede una diagnosi non riparabile</string>
     <string name="error_unknown">Errore</string>
+    <string name="error_prefix">Errore: %s</string>
     <string name="error_log_generation_failed">Impossibile generare il file dei log</string>
     <string name="order_diagnosis_repairable">Riparabile</string>
     <string name="order_diagnosis_not_repairable">Non riparabile</string>
@@ -533,7 +537,6 @@
     <string name="order_closure_reason_title">Motivo chiusura</string>
     <string name="order_paid_button">Pagato</string>
     <string name="order_paid_badge">PAGATO</string>
-    <string name="order_actions_title">Azioni commessa</string>
     <string name="order_next_action_title">Prossima azione</string>
     <string name="order_secondary_actions_title">Altre azioni</string>
     <string name="order_not_repairable_title">Esito diagnosi</string>
@@ -680,6 +683,9 @@
     <string name="config_hub_owner_title">Dati Proprietario</string>
     <string name="config_hub_owner_subtitle">Informazioni per PDF e messaggi</string>
     <string name="config_owner_tooltip">Configura i dati da includere nei report e nelle comunicazioni.</string>
+    <string name="config_ui_tooltip">Personalizza l\'aspetto dell\'applicazione.</string>
+    <string name="config_ui_dark_theme">Tema Scuro</string>
+    <string name="config_ui_close">Chiudi setup interfaccia</string>
     <string name="owner_field_name">Ragione Sociale / Nome</string>
     <string name="owner_field_vat">P.IVA / Codice Fiscale</string>
     <string name="owner_field_address">Indirizzo / Sede Legale</string>
@@ -690,6 +696,8 @@
 
     <string name="config_hub_admin_title">Utenti e Operatori</string>
     <string name="config_hub_admin_subtitle">Gestione operatori e kit di recupero</string>
+    <string name="config_hub_ui_title">Interfaccia</string>
+    <string name="config_hub_ui_subtitle">Tema e aspetto</string>
     <string name="config_hub_backup_title">Backup e Manutenzione</string>
     <string name="config_hub_backup_subtitle">Export, reset e ripristino</string>
     <string name="config_hub_storage_subtitle">Spazio disco e monitoraggio</string>
@@ -710,6 +718,8 @@
     <string name="about_url_home">https://inventoveritas.mine.nu/index.html</string>
     <string name="about_url_privacy">https://inventoveritas.mine.nu/privacy.html</string>
     <string name="about_close">Chiudi Informazioni</string>
+    <string name="about_license_apache">Apache License 2.0</string>
+    <string name="about_license_bsd">BSD 3-Clause License</string>
     <string name="about_legal_credits_title">Crediti Open Source</string>
     <string name="about_legal_credits_text">Questa applicazione utilizza le seguenti librerie: SQLCipher per la crittografia, Room per il database locale, Jetpack Compose per la UI, e Zip4j per i backup.</string>
     <string name="about_development">Sviluppo</string>

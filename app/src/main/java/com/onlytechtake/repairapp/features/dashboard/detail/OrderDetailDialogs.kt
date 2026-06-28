@@ -318,7 +318,7 @@ fun WhatsAppPreviewDialog(
                     verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
                 ) {
                     Text(
-                        text = "Template: ${prepared.templateName}",
+                        text = stringResource(R.string.order_wa_template_label, prepared.templateName),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.outline,
                     )

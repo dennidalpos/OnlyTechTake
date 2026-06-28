@@ -51,7 +51,9 @@ object ShowcaseDataSeeder {
     suspend fun seedShowcaseData(context: Context) {
         val authPreferences = AuthPreferences(context)
         val mediaStorageProvider = MediaStorageProvider(context)
-        val orderNumberGenerator = com.onlytechtake.repairapp.core.orders.OrderNumberGenerator()
+        val orderNumberGenerator =
+            com.onlytechtake.repairapp.core.orders
+                .OrderNumberGenerator()
 
         // We don't pre-fill owner info here anymore to allow the Showcase user
         // to see the initial Setup Wizard (pre-filled in the UI).

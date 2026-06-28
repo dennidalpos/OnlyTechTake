@@ -241,6 +241,8 @@ private fun SettingsSectionContent(
                     onBack = onBack,
                 )
 
+            "UI" -> UiSettings(viewModel, onBack = onBack)
+
             "ABOUT" -> AboutSettings(onBack = onBack)
             else ->
                 if ((section == null) && !isWide) {
