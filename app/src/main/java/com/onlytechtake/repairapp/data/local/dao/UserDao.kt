@@ -25,6 +25,9 @@ interface UserDao {
     suspend fun findByUsername(username: String): UserEntity?
 
     @Query("SELECT * FROM users WHERE id = :id LIMIT 1")
+    fun observeById(id: String): Flow<UserEntity?>
+
+    @Query("SELECT * FROM users WHERE id = :id LIMIT 1")
     suspend fun findById(id: String): UserEntity?
 
     @Query("SELECT * FROM users WHERE role = 'ADMIN'")

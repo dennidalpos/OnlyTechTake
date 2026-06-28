@@ -1,7 +1,7 @@
 package com.onlytechtake.repairapp.features.dashboard.detail
 
-import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.ViewModel
@@ -14,40 +14,36 @@ import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
+import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
 import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
-import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
 import com.onlytechtake.repairapp.data.repositories.TemplateRepository
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
+import com.onlytechtake.repairapp.domain.repositories.OrderRepository
 import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
 import com.onlytechtake.repairapp.domain.workspace.FeedbackInput
 import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
+import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.domain.workspace.PreparedMessage
 import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
-/**
- * ViewModel for the Order Detail screen.
- * Optimized for performance by offloading IO operations to background dispatchers via [AuthenticatedActionRunner]
- * and ensuring main-safety across all public methods.
- */
-@OptIn(ExperimentalCoroutinesApi::class)
 class OrderDetailViewModel(
     context: Context,
     private val orderId: String,
     private val authRepository: AuthRepository,
-    private val orderRepository: OrderWorkflowRepository,
+    private val orderRepository: OrderRepository,
     private val orderMediaRepository: OrderMediaRepository,
     private val orderDocumentRepository: OrderDocumentRepository,
     private val templateRepository: TemplateRepository,
@@ -57,12 +53,11 @@ class OrderDetailViewModel(
     private val onSetFormDirty: (Boolean) -> Unit,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
-    @SuppressLint("StaticFieldLeak")
     private val applicationContext = context.applicationContext
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
 
-    private val _isProcessing = MutableStateFlow(value = false)
+    private val _isProcessing = MutableStateFlow(false)
     val isProcessing = _isProcessing.asStateFlow()
 
     private val actionRunner =
@@ -77,19 +72,19 @@ class OrderDetailViewModel(
             ioDispatcher = ioDispatcher,
         )
 
-    private val _isGeneratingStatusPdf = MutableStateFlow(value = false)
+    private val _isGeneratingStatusPdf = MutableStateFlow(false)
     val isGeneratingStatusPdf = _isGeneratingStatusPdf.asStateFlow()
 
     private val _statusPdfError = MutableStateFlow<String?>(null)
     val statusPdfError = _statusPdfError.asStateFlow()
 
-    private val _showPdfSentConfirmation = MutableStateFlow(value = false)
+    private val _showPdfSentConfirmation = MutableStateFlow(false)
     val showPdfSentConfirmation = _showPdfSentConfirmation.asStateFlow()
 
     private val _lastGeneratedDocumentId = MutableStateFlow<String?>(null)
     val lastGeneratedDocumentId = _lastGeneratedDocumentId.asStateFlow()
 
-    private val _pendingShareIntent = MutableStateFlow<android.content.Intent?>(null)
+    private val _pendingShareIntent = MutableStateFlow<Intent?>(null)
     val pendingShareIntent = _pendingShareIntent.asStateFlow()
 
     private val _preparedMessage = MutableStateFlow<PreparedMessage?>(null)
@@ -100,12 +95,12 @@ class OrderDetailViewModel(
 
     val currentUser = authRepository.currentUser
 
-    val orderDetail =
+    val orderDetail: StateFlow<OrderDetail?> =
         orderRepository
             .observeOrderDetail(orderId)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
-    val documents =
+    val documents: StateFlow<List<OrderDocumentEntity>> =
         orderDocumentRepository
             .observeByOrder(orderId)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
@@ -125,10 +120,8 @@ class OrderDetailViewModel(
         onSuccess: () -> Unit = {},
     ) {
         actionRunner.run(
-            onSuccess = {
-                clearPreparedMessage()
-                onSuccess()
-            },
+            successMessageRes = R.string.success_operation_completed,
+            onSuccess = onSuccess,
         ) { actor ->
             orderRepository.changeStatus(actor, orderId, status, note, closureReason)
         }
@@ -136,97 +129,85 @@ class OrderDetailViewModel(
 
     fun recordResult(
         summary: String,
-        diagnosisOutcome: DiagnosisOutcome,
-        estimateAmountCents: Long?,
+        outcome: DiagnosisOutcome,
+        estimateMillis: Long?,
         onSuccess: () -> Unit = {},
     ) {
         actionRunner.run(
-            onSuccess = {
-                clearPreparedMessage()
-                onSuccess()
-            },
+            successMessageRes = R.string.success_operation_completed,
+            onSuccess = onSuccess,
         ) { actor ->
             orderRepository.recordResult(
                 actor,
                 orderId,
-                DiagnosisResultInput(summary, diagnosisOutcome, estimateAmountCents),
+                DiagnosisResultInput(summary, outcome, estimateMillis),
             )
         }
     }
 
     fun recordFeedback(
-        feedback: CustomerFeedbackType,
+        type: CustomerFeedbackType,
         note: String,
         closureReason: ClosureReason? = null,
         onSuccess: () -> Unit = {},
     ) {
         actionRunner.run(
-            onSuccess = {
-                clearPreparedMessage()
-                onSuccess()
-            },
+            successMessageRes = R.string.success_operation_completed,
+            onSuccess = onSuccess,
         ) { actor ->
-            orderRepository.recordFeedback(
-                actor,
-                orderId,
-                FeedbackInput(feedback, note, closureReason),
-            )
+            orderRepository.recordFeedback(actor, orderId, FeedbackInput(type, note, closureReason))
         }
     }
 
     fun togglePaymentStatus(isPaid: Boolean) {
-        actionRunner.run { actor ->
-            com.onlytechtake.repairapp.core.permissions.PermissionService.requirePermission(
-                actor,
-                com.onlytechtake.repairapp.data.local.entities.UserPermission.MANAGE_PAYMENTS,
-            )
+        actionRunner.run(
+            successMessageRes = R.string.success_operation_completed,
+        ) { actor ->
             orderRepository.togglePaymentStatus(actor, orderId, isPaid)
         }
     }
 
     fun addNote(note: String) {
-        actionRunner.run { actor ->
+        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
             orderRepository.addInternalNote(actor, orderId, note)
         }
     }
 
     fun createPhotoFile(
-        id: String,
+        @Suppress("UNUSED_PARAMETER") prefix: String,
         orderNumber: String,
-    ): Result<File> = runCatching { orderMediaRepository.createPhotoFile(id, orderNumber) }
+    ): Result<File> = runCatching { orderMediaRepository.createPhotoFile(orderId, orderNumber) }
 
     fun registerCapturedPhoto(
-        id: String,
         file: File,
     ) {
-        actionRunner.run { actor ->
-            orderMediaRepository.registerCapturedPhoto(actor, id, file)
+        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
+            orderMediaRepository.registerCapturedPhoto(actor, orderId, file)
         }
     }
 
     fun importAttachment(
-        id: String,
         uri: Uri,
     ) {
-        actionRunner.run { actor ->
-            orderMediaRepository.importAttachment(actor, id, uri)
+        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
+            orderMediaRepository.importAttachment(actor, orderId, uri)
         }
     }
 
     fun deleteMedia(mediaId: String) {
-        actionRunner.run { actor ->
+        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
             orderMediaRepository.deleteMedia(actor, mediaId)
         }
     }
 
     fun deleteSignature(signatureId: String) {
-        actionRunner.run { actor ->
+        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
             orderRepository.deleteSignature(actor, signatureId)
         }
     }
 
-    fun deleteOrder(onSuccess: () -> Unit) {
-        actionRunner.run(onSuccess = onSuccess) { actor ->
+    fun deleteOrder(onDeleted: () -> Unit) {
+        actionRunner.run(successMessageRes = R.string.success_operation_completed, onSuccess = onDeleted) { actor ->
             orderRepository.deleteOrder(actor, orderId)
         }
     }
@@ -235,7 +216,7 @@ class OrderDetailViewModel(
         mediaId: String,
         bitmap: Bitmap,
     ) {
-        actionRunner.run { actor ->
+        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
             orderMediaRepository.replaceImage(actor, mediaId, bitmap)
         }
     }
@@ -245,111 +226,116 @@ class OrderDetailViewModel(
     }
 
     fun prepareMessage(anchor: TemplateAnchor) {
-        actionRunner.run { actor ->
-            templateRepository.prepareMessage(actor, orderId, anchor).onSuccess { prepared ->
-                _preparedMessage.value = prepared
-                _preparedMessageBody.value = prepared.body
-                setFormDirty(dirty = true)
+        viewModelScope.launch {
+            _isProcessing.value = true
+            val actor = currentUser.value
+            if (actor != null) {
+                templateRepository
+                    .prepareMessage(actor, orderId, anchor)
+                    .onSuccess {
+                        _preparedMessage.value = it
+                        _preparedMessageBody.value = it.body
+                    }.onFailure {
+                        _message.value = WorkspaceMessage(it.message ?: "Errore", isError = true)
+                    }
             }
+            _isProcessing.value = false
         }
     }
 
     fun updatePreparedMessageBody(body: String) {
         _preparedMessageBody.value = body
-        setFormDirty(dirty = true)
+        setFormDirty(true)
     }
 
     fun clearPreparedMessage() {
         _preparedMessage.value = null
         _preparedMessageBody.value = ""
-        setFormDirty(dirty = false)
+        setFormDirty(false)
     }
 
     fun recordPreparedMessage() {
         val prepared = _preparedMessage.value ?: return
         actionRunner.run { actor ->
-            templateRepository.recordPrepared(actor, prepared, _preparedMessageBody.value)
+            templateRepository.recordPrepared(actor, prepared, preparedMessageBody.value)
         }
     }
 
     fun confirmSentMessage() {
         val prepared = _preparedMessage.value ?: return
-        actionRunner.run(onSuccess = { clearPreparedMessage() }) { actor ->
-            templateRepository.confirmSent(actor, prepared, _preparedMessageBody.value)
+        actionRunner.run { actor ->
+            templateRepository.confirmSent(actor, prepared, preparedMessageBody.value)
         }
     }
 
-    fun generateStatusPdf(includeSignature: Boolean = true) {
-        val actor = currentUser.value ?: return
+    fun generateStatusPdf(includeSignature: Boolean) {
         viewModelScope.launch {
             _isGeneratingStatusPdf.value = true
             _statusPdfError.value = null
-            generateOrderStatusPdfUseCase(orderId, actor.id, includeSignature)
-                .onSuccess { document ->
-                    _isGeneratingStatusPdf.value = false
-                    _lastGeneratedDocumentId.value = document.id
-                    val title =
-                        applicationContext.getString(
-                            R.string.share_title_status_report,
-                            document.fileName,
-                        )
-                    triggerShare(document.localPath, title)
+            _lastGeneratedDocumentId.value = null
+
+            val actor = currentUser.value
+            if (actor == null) {
+                _statusPdfError.value = "Sessione scaduta"
+                _isGeneratingStatusPdf.value = false
+                return@launch
+            }
+
+            generateOrderStatusPdfUseCase(actor.id, orderId, includeSignature)
+                .onSuccess { doc ->
+                    _lastGeneratedDocumentId.value = doc.id
                     _showPdfSentConfirmation.value = true
-                }.onFailure { error ->
-                    _isGeneratingStatusPdf.value = false
-                    _statusPdfError.value = error.message
+                }.onFailure {
+                    _statusPdfError.value = it.message ?: "Errore generazione PDF"
                 }
+            _isGeneratingStatusPdf.value = false
         }
     }
 
     fun onShareDocumentClicked(documentId: String) {
         viewModelScope.launch {
-            val document =
+            _isProcessing.value = true
+            val doc =
                 withContext(ioDispatcher) {
                     orderDocumentRepository.findById(documentId)
                 }
-            if (document != null) {
-                _lastGeneratedDocumentId.value = documentId
-                val title =
-                    applicationContext.getString(R.string.share_title_document, document.fileName)
-                triggerShare(document.localPath, title)
-                _showPdfSentConfirmation.value = true
-            } else {
-                _message.value =
-                    WorkspaceMessage(
-                        applicationContext.getString(R.string.error_document_not_found),
-                        isError = true,
+            if (doc != null) {
+                val intent =
+                    shareDocumentIntentFactory.createPdfShareIntent(
+                        File(doc.localPath),
+                        applicationContext.getString(R.string.share_title_document, doc.id),
                     )
+                _lastGeneratedDocumentId.value = doc.id
+                _showPdfSentConfirmation.value = true
+                _pendingShareIntent.value = intent
+            } else {
+                _message.value = WorkspaceMessage("Documento non trovato", isError = true)
             }
+            _isProcessing.value = false
         }
     }
 
     fun onDeleteDocumentClicked(documentId: String) {
-        actionRunner.run { actor ->
-            val document =
-                orderDocumentRepository.findById(documentId)
-                    ?: throw Exception(applicationContext.getString(R.string.error_document_not_found))
-            orderDocumentRepository.delete(documentId).onSuccess {
-                orderRepository.recordMediaRemoved(actor, orderId, document.fileName)
-            }
+        actionRunner.run(successMessageRes = R.string.success_operation_completed) {
+            orderDocumentRepository.delete(documentId)
         }
     }
 
     fun onPdfSentConfirmed() {
-        val documentId = _lastGeneratedDocumentId.value ?: return
-        actionRunner.run(
-            onSuccess = {
-                _showPdfSentConfirmation.value = false
-                _lastGeneratedDocumentId.value = null
-            },
-        ) { actor ->
-            val now = System.currentTimeMillis()
-            orderDocumentRepository.markShared(documentId, now)
-            val doc = orderDocumentRepository.findById(documentId)
-            doc?.let {
-                orderRepository.recordPdfShared(actor, orderId, it.fileName)
+        _showPdfSentConfirmation.value = false
+        val docId = _lastGeneratedDocumentId.value ?: return
+        viewModelScope.launch {
+            val doc =
+                withContext(ioDispatcher) {
+                    orderDocumentRepository.findById(docId)
+                }
+            if (doc != null) {
+                actionRunner.run { actor ->
+                    orderDocumentRepository.markShared(docId, System.currentTimeMillis())
+                    orderRepository.recordPdfShared(actor, orderId, doc.fileName)
+                }
             }
-            Result.success(Unit)
+            _lastGeneratedDocumentId.value = null
         }
     }
 
@@ -357,16 +343,17 @@ class OrderDetailViewModel(
         _showPdfSentConfirmation.value = false
     }
 
-    private suspend fun triggerShare(
-        localPath: String,
+    fun triggerShare(
+        fileName: String,
         title: String,
     ) {
-        withContext(ioDispatcher) {
-            val file = File(localPath)
-            if (file.exists()) {
-                _pendingShareIntent.value =
-                    shareDocumentIntentFactory.createPdfShareIntent(file, title)
-            }
+        viewModelScope.launch {
+            val intent =
+                shareDocumentIntentFactory.createPdfShareIntent(
+                    File(fileName),
+                    title,
+                )
+            _pendingShareIntent.value = intent
         }
     }
 
@@ -378,7 +365,7 @@ class OrderDetailViewModel(
         private val context: Context,
         private val orderId: String,
         private val authRepository: AuthRepository,
-        private val orderRepository: OrderWorkflowRepository,
+        private val orderRepository: OrderRepository,
         private val orderMediaRepository: OrderMediaRepository,
         private val orderDocumentRepository: OrderDocumentRepository,
         private val templateRepository: TemplateRepository,

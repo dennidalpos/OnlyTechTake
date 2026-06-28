@@ -41,8 +41,11 @@
     <string name="showcase_order_title">Riparazione %1$s - Modello %2$d</string>
     <string name="showcase_order_description">Problema riscontrato: il dispositivo non funziona correttamente.</string>
     <string name="showcase_order_internal_notes">Nota interna di test.</string>
-    <string name="showcase_event_intake_desc">Dispositivo ricevuto al banco.</string>
-    <string name="showcase_event_closed_desc">Riparazione completata e consegnata.</string>
+    <string name="showcase_event_intake_desc">Dispositivo ricevuto al banco per valutazione tecnica.</string>
+    <string name="showcase_event_diagnosis_desc">Diagnosi tecnica completata: riscontrato guasto al pannello display.</string>
+    <string name="showcase_event_quote_desc">Preventivo di riparazione inviato al cliente via WhatsApp.</string>
+    <string name="showcase_event_ready_desc">Riparazione riuscita. Dispositivo testato e pronto per il ritiro.</string>
+    <string name="showcase_event_closed_desc">Riparazione conclusa, pagamento ricevuto e dispositivo consegnato.</string>
     <string name="showcase_photo_label">Oggetto: %s</string>
     <string name="showcase_sig_label">Firma: %s</string>
     <string name="showcase_privacy_snapshot">Informativa Privacy Standard</string>

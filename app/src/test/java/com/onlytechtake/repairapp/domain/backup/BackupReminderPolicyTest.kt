@@ -77,6 +77,12 @@ class BackupReminderPolicyTest {
         assertTrue(BackupReminderPolicy.shouldShowReminder(failed, NOW + TimeUnit.DAYS.toMillis(7)))
     }
 
+    @Test
+    fun automaticBackupHidesManualReminder() {
+        val settings = BackupReminderSettings(isAutomatic = true)
+        assertFalse(BackupReminderPolicy.shouldShowReminder(settings, NOW))
+    }
+
     private companion object {
         const val NOW = 1_717_171_717_000L
     }

@@ -115,13 +115,10 @@ fun DashboardNavHost(
             CustomerPanel(
                 viewModel = customersViewModel,
                 sharedViewModel = sharedViewModel,
-            ) { orderId ->
-                navController.navigate(
-                    DashboardRoutes.orderDetail(
-                        orderId,
-                    ),
-                )
-            }
+                onOrderClick = { orderId ->
+                    navController.navigate(DashboardRoutes.orderDetail(orderId))
+                },
+            )
         }
         composable(
             route = DashboardRoutes.ORDERS,
@@ -241,6 +238,7 @@ fun DashboardNavHost(
                             backupRepository = container.backupRepository,
                             dataResetRepository = container.dataResetRepository,
                             backupReminderPreferences = container.backupReminderPreferences,
+                            backupService = container.backupService,
                             ownerPreferences = container.ownerPreferences,
                             securityPreferences = container.securityPreferences,
                             uiPreferences = container.uiPreferences,
@@ -275,6 +273,7 @@ fun DashboardNavHost(
                             backupRepository = container.backupRepository,
                             dataResetRepository = container.dataResetRepository,
                             backupReminderPreferences = container.backupReminderPreferences,
+                            backupService = container.backupService,
                             ownerPreferences = container.ownerPreferences,
                             securityPreferences = container.securityPreferences,
                             uiPreferences = container.uiPreferences,

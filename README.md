@@ -38,9 +38,6 @@ The app uses **English** as the default fallback language and includes full loca
 ## 🖼️ Visual Showcase
 
 ### Screenshots (Pro Version)
-> [!NOTE]
-> Official screenshots should be moved from `asset/` to `marketing/screenshots/` to be visible on GitHub.
-
 <p align="center">
   <img src="marketing/screenshots/play-store/pro/01-dashboard-pro.png" width="200" alt="Dashboard">
   <img src="marketing/screenshots/play-store/pro/02-nuova-commessa-pro.png" width="200" alt="New Order">
@@ -66,13 +63,13 @@ The project includes a modern and responsive landing page located in `/landing`.
 
 | Metric | Value |
 |:---|:---|
-| **Target SDK** | 37 (Android 15) |
+| **Target SDK** | 37 |
 | **Min SDK** | 26 (Android 8.0) |
 | **Architecture** | Clean Architecture / MVI |
 | **Database** | SQLCipher v4 (Encrypted) |
 | **Build Flavors** | `full`, `demo`, `showcase` |
 | **Localization** | 🇺🇸 English (Default), 🇮🇹 Italian |
-| **Status** | 🟢 Production Ready (v1.0.6) |
+| **Status** | 🟢 Production Ready (v1.1.0) |
 
 ---
 

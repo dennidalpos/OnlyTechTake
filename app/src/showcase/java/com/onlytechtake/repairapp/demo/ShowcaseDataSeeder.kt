@@ -13,6 +13,7 @@ import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
+import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.MessageChannel
@@ -441,28 +442,36 @@ object ShowcaseDataSeeder {
                     val orderId = "order-$orderCount"
                     val isClosed = (j == 2)
                     val status =
-                        if (isClosed) OrderStatus.CLOSED else statuses[(orderCount % (statuses.size - 1))]
+                        if (isClosed) {
+                            OrderStatus.CLOSED
+                        } else if (j == 1) {
+                            OrderStatus.READY_FOR_PICKUP
+                        } else {
+                            statuses[(orderCount % (statuses.size - 2))]
+                        }
+
                     val categoryId =
                         selectableCategories[(orderCount % selectableCategories.size)].id
                     val operatorId = operators[(orderCount % 3)].id
                     val repairType = listOf("PC", "Smartphone", "Tablet", "Console")[orderCount % 4]
+                    val priority = if (orderCount % 5 == 0) OrderPriority.URGENT else OrderPriority.NORMAL
 
                     val order =
                         RepairOrderEntity(
                             id = orderId,
                             orderNumber = yearPrefix + orderCount.toString().padStart(6, '0'),
                             customerId = customer.id,
-                            title = context.getString(R.string.showcase_order_title, repairType, j),
+                            title = context.getString(R.string.showcase_order_title, repairType, j + 1),
                             categoryId = categoryId,
                             status = status,
-                            priority = OrderPriority.NORMAL,
+                            priority = priority,
                             assignedToUserId = operatorId,
                             createdByUserId = "op-reception",
                             description = context.getString(R.string.showcase_order_description),
                             internalNotes = context.getString(R.string.showcase_order_internal_notes),
-                            estimateAmountCents = if (isClosed) 5000L else null,
+                            estimateAmountCents = if (status != OrderStatus.OPEN) 5000L else null,
                             finalAmountCents = if (isClosed) 4500L else null,
-                            diagnosisOutcome = if (isClosed) DiagnosisOutcome.REPAIRABLE else null,
+                            diagnosisOutcome = if (status != OrderStatus.OPEN) DiagnosisOutcome.REPAIRABLE else null,
                             createdAt = now - (orderCount * 3600000L * 2),
                             updatedAt = now - (orderCount * 3600000L),
                             closedAt = if (isClosed) now - (orderCount * 1800000L) else null,
@@ -470,6 +479,7 @@ object ShowcaseDataSeeder {
                         )
                     db.repairOrderDao().upsert(order)
 
+                    // 1. Intake Event
                     db.timelineEventDao().upsert(
                         TimelineEventEntity(
                             id = "event-$orderId-init",
@@ -489,6 +499,52 @@ object ShowcaseDataSeeder {
                             createdAt = order.createdAt,
                         ),
                     )
+
+                    // 2. Diagnosis Event (if not OPEN)
+                    if (status != OrderStatus.OPEN) {
+                        db.timelineEventDao().upsert(
+                            TimelineEventEntity(
+                                id = "event-$orderId-diag",
+                                orderId = orderId,
+                                type = TimelineEventType.STATUS_CHANGED,
+                                title = context.getString(R.string.status_diagnosis),
+                                description = context.getString(R.string.showcase_event_diagnosis_desc),
+                                oldStatus = OrderStatus.OPEN.name,
+                                newStatus = OrderStatus.DIAGNOSIS.name,
+                                visibleToCustomer = true,
+                                requiresCustomerFeedback = true,
+                                expectedFeedbackType = CustomerFeedbackType.ACCEPT,
+                                customerFeedback = CustomerFeedbackType.ACCEPT,
+                                customerFeedbackNote = "OK, procedete.",
+                                customerFeedbackAt = order.createdAt + 1800000L,
+                                createdByUserId = operatorId,
+                                createdAt = order.createdAt + 1700000L,
+                            ),
+                        )
+                    }
+
+                    // 3. Ready Event (if READY or CLOSED)
+                    if (status == OrderStatus.READY_FOR_PICKUP || status == OrderStatus.CLOSED) {
+                        db.timelineEventDao().upsert(
+                            TimelineEventEntity(
+                                id = "event-$orderId-ready",
+                                orderId = orderId,
+                                type = TimelineEventType.STATUS_CHANGED,
+                                title = context.getString(R.string.status_ready_for_pickup),
+                                description = context.getString(R.string.showcase_event_ready_desc),
+                                oldStatus = OrderStatus.IN_PROGRESS.name,
+                                newStatus = OrderStatus.READY_FOR_PICKUP.name,
+                                visibleToCustomer = true,
+                                requiresCustomerFeedback = false,
+                                expectedFeedbackType = null,
+                                customerFeedback = null,
+                                customerFeedbackNote = null,
+                                customerFeedbackAt = null,
+                                createdByUserId = operatorId,
+                                createdAt = order.updatedAt - 900000L,
+                            ),
+                        )
+                    }
 
                     if (isClosed) {
                         db.timelineEventDao().upsert(

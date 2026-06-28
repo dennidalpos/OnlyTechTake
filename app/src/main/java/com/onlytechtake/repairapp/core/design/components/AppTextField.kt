@@ -17,6 +17,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 
@@ -39,6 +41,7 @@ fun AppTextField(
     trailingIcon: (@Composable () -> Unit)? = null,
     testTag: String? = null,
     fullWidth: Boolean = true,
+    errorText: String? = null,
 ) {
     val focusManager = LocalFocusManager.current
     val effectiveImeAction = if (imeAction == ImeAction.Default) ImeAction.Next else imeAction
@@ -50,44 +53,62 @@ fun AppTextField(
 
     val labelText =
         when {
-            required -> "$label *"
-            showOptional -> "$label (${stringResource(R.string.label_optional)})"
+            required -> label + stringResource(R.string.label_required_suffix)
+            showOptional ->
+                stringResource(
+                    R.string.label_optional_format,
+                    label,
+                    stringResource(R.string.label_optional),
+                )
+
             else -> label
         }
 
-    OutlinedTextField(
-        modifier =
-            modifier
-                .then(if (fullWidth) Modifier.fillMaxWidth() else Modifier)
-                .then(testTag?.let { Modifier.testTag(it) } ?: Modifier),
-        value = value,
-        onValueChange = onValueChange,
-        label = {
+    androidx.compose.foundation.layout.Column(
+        modifier = modifier.then(if (fullWidth) Modifier.fillMaxWidth() else Modifier)
+    ) {
+        OutlinedTextField(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .then(testTag?.let { Modifier.testTag(it) } ?: Modifier),
+            value = value,
+            onValueChange = onValueChange,
+            label = {
+                Text(
+                    text = labelText,
+                    maxLines = 1,
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                )
+            },
+            singleLine = singleLine,
+            maxLines = if (singleLine) 1 else Int.MAX_VALUE,
+            isError = showError,
+            shape = RepairAppShapes.field,
+            colors =
+                OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                ),
+            keyboardOptions =
+                KeyboardOptions(
+                    keyboardType = keyboardType,
+                    imeAction = effectiveImeAction,
+                    capitalization = capitalization,
+                ),
+            visualTransformation = visualTransformation,
+            keyboardActions = effectiveKeyboardActions,
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
+            textStyle = MaterialTheme.typography.bodyLarge,
+        )
+        if (showError && errorText != null) {
             Text(
-                text = labelText,
-                maxLines = 1,
-                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                text = errorText,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
             )
-        },
-        singleLine = singleLine,
-        maxLines = if (singleLine) 1 else Int.MAX_VALUE,
-        isError = showError,
-        shape = RepairAppShapes.field,
-        colors =
-            OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.primary,
-                unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-            ),
-        keyboardOptions =
-            KeyboardOptions(
-                keyboardType = keyboardType,
-                imeAction = effectiveImeAction,
-                capitalization = capitalization,
-            ),
-        visualTransformation = visualTransformation,
-        keyboardActions = effectiveKeyboardActions,
-        leadingIcon = leadingIcon,
-        trailingIcon = trailingIcon,
-        textStyle = MaterialTheme.typography.bodyLarge,
-    )
+        }
+    }
 }

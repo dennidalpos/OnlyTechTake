@@ -195,7 +195,7 @@ fun RepairAppTheme(
         val resources = androidx.compose.ui.platform.LocalResources.current
         androidx.compose.runtime.remember(configuration) {
             if (configuration.locales[0] != java.util.Locale.ENGLISH) {
-                val newConfig = android.content.res.Configuration(configuration)
+                val newConfig = Configuration(configuration)
                 @Suppress("AppBundleLocaleChanges")
                 newConfig.setLocale(java.util.Locale.ENGLISH)
                 @Suppress("DEPRECATION")

@@ -19,6 +19,7 @@ import com.onlytechtake.repairapp.data.repositories.CatalogRepository
 import com.onlytechtake.repairapp.data.repositories.DataResetRepository
 import com.onlytechtake.repairapp.data.repositories.OrderFileCleanupService
 import com.onlytechtake.repairapp.data.repositories.TemplateRepository
+import com.onlytechtake.repairapp.data.services.BackupService
 import com.onlytechtake.repairapp.data.services.DiagnosticLogService
 import com.onlytechtake.repairapp.data.services.StorageStatsService
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
@@ -48,6 +49,7 @@ class SettingsViewModel(
     backupRepository: BackupRepository,
     private val dataResetRepository: DataResetRepository,
     backupReminderPreferences: BackupReminderPreferences,
+    backupService: BackupService,
     ownerPreferences: OwnerPreferences,
     securityPreferences: SecurityPreferences,
     uiPreferences: UiPreferences,
@@ -86,6 +88,7 @@ class SettingsViewModel(
         BackupSettingsDelegate(
             backupRepository,
             backupReminderPreferences,
+            backupService,
             actionRunner,
             viewModelScope,
         )
@@ -249,6 +252,17 @@ class SettingsViewModel(
 
     fun setBackupReminderIntervalDays(days: Int) = backupDelegate.setBackupReminderIntervalDays(days)
 
+    fun setAutomaticBackupEnabled(enabled: Boolean) = backupDelegate.setAutomaticBackupEnabled(enabled)
+
+    fun setBackupUri(uri: Uri?) = backupDelegate.setBackupUri(uri)
+
+    fun setBackupScheduledTime(
+        hour: Int,
+        minute: Int,
+    ) = backupDelegate.setBackupScheduledTime(hour, minute)
+
+    fun runBackupNow(onSuccess: () -> Unit = {}) = backupDelegate.runBackupNow(onSuccess)
+
     fun setBackupEncryptionEnabled(enabled: Boolean) = securityDelegate.setBackupEncryptionEnabled(enabled)
 
     fun setBackupEncryptionPassword(password: String) = securityDelegate.setBackupEncryptionPassword(password)
@@ -330,7 +344,8 @@ class SettingsViewModel(
     fun restoreCompleteBackup(
         uri: Uri,
         onRestored: () -> Unit,
-    ) = backupDelegate.restoreCompleteBackup(uri, onRestored)
+        password: String? = null,
+    ) = backupDelegate.restoreCompleteBackup(uri, onRestored, password)
 
     class Factory(
         private val context: Context,
@@ -341,6 +356,7 @@ class SettingsViewModel(
         private val backupRepository: BackupRepository,
         private val dataResetRepository: DataResetRepository,
         private val backupReminderPreferences: BackupReminderPreferences,
+        private val backupService: BackupService,
         private val ownerPreferences: OwnerPreferences,
         private val securityPreferences: SecurityPreferences,
         private val uiPreferences: UiPreferences,
@@ -363,6 +379,7 @@ class SettingsViewModel(
                 backupRepository,
                 dataResetRepository,
                 backupReminderPreferences,
+                backupService,
                 ownerPreferences,
                 securityPreferences,
                 uiPreferences,

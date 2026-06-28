@@ -15,6 +15,10 @@ data class BackupReminderSettings(
     val lastSuccessfulBackupAtMillis: Long? = null,
     val lastBackupStatus: BackupReminderStatus = BackupReminderStatus.NEVER,
     val lastBackupFileName: String? = null,
+    val isAutomatic: Boolean = false,
+    val backupUri: String? = null,
+    val scheduledHour: Int = 3,
+    val scheduledMinute: Int = 0,
 )
 
 object BackupReminderPolicy {
@@ -27,7 +31,7 @@ object BackupReminderPolicy {
         settings: BackupReminderSettings,
         nowMillis: Long,
     ): Boolean {
-        if (!settings.enabled) return false
+        if (!settings.enabled || settings.isAutomatic) return false
         val lastSuccessfulBackup = settings.lastSuccessfulBackupAtMillis ?: return true
         val interval = normalizeIntervalDays(settings.intervalDays).days
         val elapsed = (nowMillis - lastSuccessfulBackup).milliseconds

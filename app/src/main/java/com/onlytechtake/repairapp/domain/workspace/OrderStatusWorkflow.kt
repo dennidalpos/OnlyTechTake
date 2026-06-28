@@ -10,7 +10,7 @@ import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 
 enum class OrderStatusAction(
-    @StringRes val labelRes: Int,
+    @param:StringRes val labelRes: Int,
     val targetStatus: OrderStatus?,
     val closureReason: ClosureReason? = null,
 ) {
@@ -106,6 +106,6 @@ fun canConfirmDiagnosisResult(
     outcome: DiagnosisOutcome?,
     estimateAmountCents: Long?,
 ): Boolean =
-    summary.isNotBlank() &&
-        outcome != null &&
-        (outcome != DiagnosisOutcome.REPAIRABLE || (estimateAmountCents != null && estimateAmountCents > 0L))
+    (summary.isNotBlank()) &&
+        (outcome != null) &&
+        ((outcome != DiagnosisOutcome.REPAIRABLE) || ((estimateAmountCents != null) && (estimateAmountCents > 0L)))

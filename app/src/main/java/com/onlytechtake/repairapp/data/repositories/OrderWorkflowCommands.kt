@@ -8,15 +8,10 @@ import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.utils.capitalizeFirst
 import com.onlytechtake.repairapp.core.utils.formatEuroCents
 import com.onlytechtake.repairapp.core.utils.label
-import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.CustomerDao
 import com.onlytechtake.repairapp.data.local.dao.MessageLogDao
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
-import com.onlytechtake.repairapp.data.local.dao.OrderDocumentDao
-import com.onlytechtake.repairapp.data.local.dao.OrderMediaDao
 import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
-import com.onlytechtake.repairapp.data.local.dao.SignatureDao
-import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.AuditAction
 import com.onlytechtake.repairapp.data.local.entities.AuditLogEntity
@@ -43,7 +38,7 @@ internal class OrderWorkflowCommands(
     private val customerDao: CustomerDao,
     private val categoryDao: OrderCategoryDao,
     private val messageLogDao: MessageLogDao,
-    private val database: RepairAppDatabase?,
+    private val database: RepairAppDatabase,
     private val orderNumberGenerator: OrderNumberGenerator,
     private val clockMillis: () -> Long,
     private val eventWriter: OrderWorkflowEventWriter,
@@ -54,7 +49,7 @@ internal class OrderWorkflowCommands(
     ): Result<RepairOrderEntity> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.CREATE_ORDERS)
-            inTransaction {
+            database.withTransaction {
                 require(input.customerId.isNotBlank()) { context.getString(R.string.error_customer_required) }
                 require(input.title.isNotBlank()) { context.getString(R.string.error_problem_required) }
                 require(input.categoryId.isNotBlank()) { context.getString(R.string.error_category_required) }
@@ -105,9 +100,9 @@ internal class OrderWorkflowCommands(
         closureReason: ClosureReason? = null,
     ): Result<Unit> =
         runCatching {
-            inTransaction {
+            database.withTransaction {
                 val order = requireWritableOrder(actor, orderId)
-                if (order.status == status) return@inTransaction
+                if (order.status == status) return@withTransaction
                 OrderStatusPolicy.requireAllowed(context, order.status, status, closureReason)
                 OrderClosurePermissionPolicy.requireClosePermissionIfNeeded(actor, status)
                 if ((order.status == OrderStatus.RESULT) && (status == OrderStatus.REPAIRING)) {
@@ -122,20 +117,21 @@ internal class OrderWorkflowCommands(
                 }
 
                 val now = clockMillis()
+                val isClosing = status in OrderStatusPolicy.closedStatuses
                 repairOrderDao.upsert(
                     order.copy(
                         status = status,
                         updatedAt = now,
-                        closedAt = if (status in OrderStatusPolicy.closedStatuses) now else order.closedAt,
-                        closureReason = if (status in OrderStatusPolicy.closedStatuses) closureReason else null,
-                        closedByUserId = if (status in OrderStatusPolicy.closedStatuses) actor.id else order.closedByUserId,
+                        closedAt = if (isClosing) now else null,
+                        closureReason = if (isClosing) closureReason else null,
+                        closedByUserId = if (isClosing) actor.id else null,
                         closeNote =
-                            if (status in OrderStatusPolicy.closedStatuses) {
+                            if (isClosing) {
                                 note
                                     .capitalizeFirst()
                                     .ifBlank { null }
                             } else {
-                                order.closeNote
+                                null
                             },
                     ),
                 )
@@ -157,7 +153,7 @@ internal class OrderWorkflowCommands(
         input: DiagnosisResultInput,
     ): Result<Unit> =
         runCatching {
-            inTransaction {
+            database.withTransaction {
                 val errors = input.validationErrors(context)
                 require(errors.isEmpty()) { errors.joinToString("\n") }
                 val order = requireWritableOrder(actor, orderId)
@@ -227,7 +223,7 @@ internal class OrderWorkflowCommands(
         assignedToUserId: String?,
     ): Result<Unit> =
         runCatching {
-            inTransaction {
+            database.withTransaction {
                 val order = requireWritableOrder(actor, orderId)
                 if (order.assignedToUserId != actor.id) {
                     PermissionService.requirePermission(actor, UserPermission.EDIT_ALL_ORDERS)
@@ -250,7 +246,7 @@ internal class OrderWorkflowCommands(
         note: String,
     ): Result<Unit> =
         runCatching {
-            inTransaction {
+            database.withTransaction {
                 require(note.isNotBlank()) { context.getString(R.string.error_note_empty) }
                 val order = requireWritableOrder(actor, orderId)
                 val now = clockMillis()
@@ -268,7 +264,7 @@ internal class OrderWorkflowCommands(
         input: FeedbackInput,
     ): Result<Unit> =
         runCatching {
-            inTransaction {
+            database.withTransaction {
                 val errors = input.validationErrors(context)
                 require(errors.isEmpty()) { errors.joinToString("\n") }
                 val order = requireWritableOrder(actor, orderId)
@@ -284,9 +280,7 @@ internal class OrderWorkflowCommands(
                         }
                     }
 
-                    else -> {
-                        Unit
-                    }
+                    else -> {}
                 }
                 val now = clockMillis()
                 val targetStatus =
@@ -317,15 +311,16 @@ internal class OrderWorkflowCommands(
                     )
                     OrderClosurePermissionPolicy.requireClosePermissionIfNeeded(actor, targetStatus)
                 }
+                val isClosing = targetStatus == OrderStatus.CLOSED
                 repairOrderDao.upsert(
                     order.copy(
                         status = targetStatus,
                         customerActionStatus = customerActionStatus,
-                        closeNote = if (targetStatus == OrderStatus.CLOSED) input.note.capitalizeFirst() else order.closeNote,
-                        closedByUserId = if (targetStatus == OrderStatus.CLOSED) actor.id else order.closedByUserId,
+                        closeNote = if (isClosing) input.note.capitalizeFirst().ifBlank { null } else null,
+                        closedByUserId = if (isClosing) actor.id else null,
                         updatedAt = now,
-                        closedAt = if (targetStatus == OrderStatus.CLOSED) now else order.closedAt,
-                        closureReason = if (targetStatus == OrderStatus.CLOSED) closureReason else order.closureReason,
+                        closedAt = if (isClosing) now else null,
+                        closureReason = if (isClosing) closureReason else null,
                     ),
                 )
                 eventWriter.feedbackRecorded(
@@ -361,7 +356,7 @@ internal class OrderWorkflowCommands(
         fileName: String,
     ): Result<Unit> =
         runCatching {
-            inTransaction {
+            database.withTransaction {
                 requireWritableOrder(actor, orderId)
                 val now = clockMillis()
                 eventWriter.pdfShared(orderId, actor.id, fileName, now)
@@ -374,7 +369,7 @@ internal class OrderWorkflowCommands(
         fileName: String,
     ): Result<Unit> =
         runCatching {
-            inTransaction {
+            database.withTransaction {
                 requireWritableOrder(actor, orderId)
                 val now = clockMillis()
                 eventWriter.mediaRemoved(orderId, actor.id, fileName, now)
@@ -387,7 +382,7 @@ internal class OrderWorkflowCommands(
         isPaid: Boolean,
     ): Result<Unit> =
         runCatching {
-            inTransaction {
+            database.withTransaction {
                 requireWritableOrder(actor, orderId)
                 val now = clockMillis()
                 if (isPaid) {
@@ -401,16 +396,11 @@ internal class OrderWorkflowCommands(
     suspend fun deleteOrder(
         actor: AuthenticatedUser,
         orderId: String,
-        timelineEventDao: TimelineEventDao,
-        orderMediaDao: OrderMediaDao,
-        signatureDao: SignatureDao,
-        orderDocumentDao: OrderDocumentDao,
-        auditLogDao: AuditLogDao,
         fileCleanupService: OrderFileCleanupService,
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.EDIT_ALL_ORDERS)
-            inTransaction {
+            database.withTransaction {
                 val order =
                     requireNotNull(repairOrderDao.findById(orderId)) { context.getString(R.string.error_order_not_found) }
                 val now = clockMillis()
@@ -419,22 +409,22 @@ internal class OrderWorkflowCommands(
                 fileCleanupService.deleteOrderFiles(orderId)
 
                 // 2. Delete database records
-                timelineEventDao.deleteByOrderId(orderId)
-                orderMediaDao.deleteByOrderId(orderId)
-                signatureDao.deleteByOrderId(orderId)
+                database.timelineEventDao().deleteByOrderId(orderId)
+                database.orderMediaDao().deleteByOrderId(orderId)
+                database.signatureDao().deleteByOrderId(orderId)
                 messageLogDao.deleteByOrderId(orderId)
-                orderDocumentDao.deleteByOrderId(orderId)
+                database.orderDocumentDao().deleteByOrderId(orderId)
                 repairOrderDao.deleteById(orderId)
 
                 // 3. Audit log
-                auditLogDao.upsert(
+                database.auditLogDao().upsert(
                     AuditLogEntity(
                         id = UUID.randomUUID().toString(),
                         action = AuditAction.ORDER_DELETED,
                         actorUserId = actor.id,
-                        orderId = null, // Set to null to avoid Foreign Key constraint error (787) after deletion
+                        orderId = null, // Set to null because order is already deleted
                         customerId = order.customerId,
-                        detailsJson = """{"orderNumber":"${order.orderNumber}","title":"${order.title}"}""",
+                        detailsJson = """{"orderNumber":"${order.orderNumber}","title":"${order.title.replace("\"", "\\\"")}"}""",
                         createdAt = now,
                     ),
                 )
@@ -455,20 +445,18 @@ internal class OrderWorkflowCommands(
         return order
     }
 
-    private suspend fun <T> inTransaction(block: suspend () -> T): T = database?.withTransaction { block() } ?: block()
-
     private suspend fun buildCategoryPathSnapshot(categoryId: String): String? {
         val path = mutableListOf<String>()
         var currentId: String? = categoryId
         val visited = mutableSetOf<String>()
 
-        while (currentId != null && !visited.contains(currentId)) {
+        while ((currentId != null) && (currentId !in visited)) {
             visited.add(currentId)
             val category = categoryDao.findById(currentId) ?: break
             path.add(0, category.name)
             currentId = category.parentId
         }
 
-        return if (path.isEmpty()) null else path.joinToString(" > ")
+        return if (path.isEmpty()) null else path.joinToString(context.getString(R.string.catalog_path_separator))
     }
 }

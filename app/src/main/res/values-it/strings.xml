@@ -378,6 +378,11 @@
     <string name="image_replace_confirm_action">Sostituisci</string>
 
     <string name="label_optional">opzionale</string>
+    <string name="label_required_suffix"> *</string>
+    <string name="label_optional_format">%1$s (%2$s)</string>
+    <string name="label_separator">: </string>
+    <string name="storage_size_zero">0 B</string>
+    <string name="time_format_24h">%02d:%02d</string>
     <string name="label_bytes">bytes</string>
     <string name="label_order_fallback">commessa</string>
 
@@ -785,6 +790,16 @@
     <string name="config_backup_password_label">Password cifratura</string>
     <string name="config_backup_encrypted_success">I backup verranno cifrati.</string>
     <string name="config_backup_unencrypted_warning">File non cifrati: usare solo destinazioni protette.</string>
+    <string name="config_backup_password_modal_title">Impostazioni Cifratura</string>
+    <string name="config_backup_password_modal_text">Imposta una password per proteggere i tuoi backup. Se impostata, verrà utilizzata per tutti i backup e richiesta per il ripristino.</string>
+    <string name="config_backup_restore_password_title">Backup Cifrato</string>
+    <string name="config_backup_restore_password_text">Questo backup è cifrato. Inserisci la password per procedere con il ripristino.</string>
+    <string name="config_backup_password_confirm_error">Le password non corrispondono</string>
+    <string name="config_backup_password_change">Cambia Password Cifratura</string>
+    <string name="config_backup_password_set">Imposta Password Cifratura</string>
+    <string name="config_backup_password_remove">Rimuovi Password</string>
+    <string name="config_backup_status_encrypted">Backup cifrati</string>
+    <string name="config_backup_status_unencrypted">Backup non cifrati</string>
 
     <string name="config_backup_tooltip">Gestisci promemoria e file tramite il selettore documenti Android.</string>
     <string name="config_backup_close">Chiudi setup backup</string>
@@ -798,6 +813,28 @@
     <string name="config_backup_restore_zip">Ripristina ZIP</string>
     <string name="config_backup_confirm_restore_zip_title">Ripristinare backup?</string>
     <string name="config_backup_confirm_restore_zip_text">Il backup ZIP sostituirà database e file locali dell\'app. Dopo il ripristino sarà richiesto un nuovo login.</string>
+
+    <string name="config_backup_auto_title">Backup Automatico</string>
+    <string name="config_backup_auto_enabled">Abilita backup automatico</string>
+    <string name="config_backup_auto_destination">Destinazione backup</string>
+    <string name="config_backup_auto_select_destination">Seleziona destinazione</string>
+    <string name="config_backup_auto_schedule">Pianificazione</string>
+    <string name="config_backup_auto_time">Orario di esecuzione</string>
+    <string name="config_backup_auto_info">Percorso: %s</string>
+    <string name="config_backup_auto_not_set">Non impostato</string>
+    <string name="config_backup_auto_running">Backup in corso…</string>
+    <string name="config_backup_auto_running_detail">L\'app tornerà disponibile al termine dell\'operazione. Per favore non chiudere l\'app.</string>
+    <string name="config_backup_auto_confirm_title">Avviare backup automatico?</string>
+    <string name="config_backup_auto_confirm_text">L\'app non sarà disponibile fino al completamento del backup. Procedere?</string>
+    <string name="config_backup_auto_battery_low">Batteria troppo scarica (%d%%). Collega il caricabatterie per procedere con il backup.</string>
+    <string name="config_backup_manual_reminder_warning">Backup manuale consigliato! Sono passati più di %d giorni dall\'ultimo backup.</string>
+    <string name="config_backup_mode_label">Modalità backup</string>
+    <string name="config_backup_mode_manual">Manuale con avvisi</string>
+    <string name="config_backup_mode_auto">Automatico pianificato</string>
+    <string name="error_no_backup_path">Percorso backup non configurato</string>
+    <string name="error_battery_too_low">Batteria troppo scarica</string>
+    <string name="error_could_not_create_file">Impossibile creare il file di backup</string>
+    <string name="error_backup_failed">Backup fallito</string>
 
 
     <string name="export_xlsx_header_order_number">Numero commessa</string>

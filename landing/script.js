@@ -1,6 +1,6 @@
 /**
  * OnlyTechTake Landing Page Logic
- * Aligned with App features (v1.0.6)
+ * Aligned with App features (v1.1.0)
  */
 
 const translations = {

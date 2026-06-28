@@ -77,8 +77,7 @@ class BackupRepository(
             }
 
             val securitySettings = securityPreferences.settings.first()
-            val password =
-                securitySettings.backupEncryptionPassword.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
+            val password = securitySettings.backupEncryptionPassword.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
 
             withContext(Dispatchers.IO) {
                 context.contentResolver.openOutputStream(uri)?.use { output ->
@@ -120,6 +119,7 @@ class BackupRepository(
     suspend fun restoreCompleteBackup(
         actor: AuthenticatedUser,
         uri: Uri,
+        password: String? = null,
     ): Result<Unit> =
         runCatching {
             StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
@@ -129,7 +129,7 @@ class BackupRepository(
             }
 
             val securitySettings = securityPreferences.settings.first()
-            val password = securitySettings.backupEncryptionPassword.takeIf { it.isNotBlank() }
+            val finalPassword = password ?: securitySettings.backupEncryptionPassword.takeIf { it.isNotBlank() }
 
             withContext(Dispatchers.IO) {
                 val stagingDir =
@@ -144,7 +144,7 @@ class BackupRepository(
                                 context,
                                 input,
                                 stagingDir,
-                                password?.toCharArray(),
+                                finalPassword?.toCharArray(),
                             )
                         } ?: throw IOException(context.getString(R.string.error_backup_unavailable))
                     require(extracted.metadataText.contains("\"databaseVersion\": ${RepairAppDatabase.DATABASE_VERSION}")) {
@@ -258,8 +258,7 @@ class BackupRepository(
             }
 
             val securitySettings = securityPreferences.settings.first()
-            val password =
-                securitySettings.backupEncryptionPassword.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
+            val password = securitySettings.backupEncryptionPassword.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
 
             val exportDao = orderExportDao
             val labels =

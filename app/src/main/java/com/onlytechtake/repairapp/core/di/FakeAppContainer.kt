@@ -4,6 +4,7 @@ import android.content.Context
 import com.onlytechtake.repairapp.core.error.DiagnosticLogger
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
+import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
@@ -18,6 +19,7 @@ import com.onlytechtake.repairapp.data.repositories.OrderFileCleanupService
 import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
 import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
 import com.onlytechtake.repairapp.data.repositories.TemplateRepository
+import com.onlytechtake.repairapp.data.services.BackupService
 import com.onlytechtake.repairapp.data.services.DiagnosticLogService
 import com.onlytechtake.repairapp.data.services.StorageStatsService
 import com.onlytechtake.repairapp.demo.DataSeeder
@@ -26,16 +28,15 @@ import com.onlytechtake.repairapp.domain.auth.AuthState
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.auth.LoginResult
 import com.onlytechtake.repairapp.domain.repositories.RepairAppRepository
-import com.onlytechtake.repairapp.domain.repositories.CustomerRepository as ICustomerRepository
-import com.onlytechtake.repairapp.domain.repositories.OrderRepository as IOrderRepository
 import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
-import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOf
+import com.onlytechtake.repairapp.domain.repositories.CustomerRepository as ICustomerRepository
+import com.onlytechtake.repairapp.domain.repositories.OrderRepository as IOrderRepository
 
 class FakeAppContainer(
     override val context: Context,
@@ -84,11 +85,23 @@ class FakeAppContainer(
     override val customerRepository: ICustomerRepository =
         object : ICustomerRepository {
             override fun observeRecent(): Flow<List<CustomerEntity>> = flowOf(emptyList())
+
             override fun observeAll(): Flow<List<CustomerEntity>> = flowOf(emptyList())
+
             override fun search(query: String): Flow<List<CustomerEntity>> = flowOf(emptyList())
+
             override suspend fun findById(id: String): CustomerEntity? = null
-            override suspend fun save(actor: AuthenticatedUser?, input: CustomerInput): Result<CustomerEntity> =
-                Result.failure(IllegalStateException("Fake"))
+
+            override suspend fun save(
+                actor: AuthenticatedUser?,
+                input: CustomerInput,
+            ): Result<CustomerEntity> = Result.failure(IllegalStateException("Fake"))
+
+            override suspend fun delete(
+                actor: AuthenticatedUser?,
+                id: String,
+            ): Result<Unit> = Result.success(Unit)
+
             override fun isValid(input: CustomerInput): Boolean = true
         }
     override val catalogRepository: CatalogRepository get() = error("Not implemented")
@@ -108,8 +121,12 @@ class FakeAppContainer(
     override val dataResetRepository: DataResetRepository get() = error("Not implemented")
     override val storageStatsService: StorageStatsService get() = error("Not implemented")
     override val diagnosticLogService: DiagnosticLogService get() = error("Not implemented")
+    override val backupService: BackupService get() = error("Not implemented")
     override val diagnosticLogger: DiagnosticLogger get() = error("Not implemented")
-    override val dataSeeder: DataSeeder get() = error("Not implemented")
+    override val dataSeeder: DataSeeder =
+        object : DataSeeder {
+            override suspend fun seed(context: Context) {}
+        }
 
     override fun close() {}
 }

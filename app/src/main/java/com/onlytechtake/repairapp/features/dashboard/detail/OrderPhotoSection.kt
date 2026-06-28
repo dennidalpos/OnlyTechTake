@@ -49,7 +49,7 @@ fun OrderPhotoSection(
     var deleteMedia by remember { mutableStateOf<OrderMediaEntity?>(null) }
     val attachmentLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            uri?.let { viewModel.importAttachment(detail.order.id, it) }
+            uri?.let { viewModel.importAttachment(it) }
         }
     val images = detail.media.filter { it.isImageAttachment() && !it.isFinalPhoto() }
     val documents = detail.media.filterNot { it.isImageAttachment() }
@@ -137,9 +137,9 @@ fun OrderPhotoSection(
                 CameraCapturePreview(
                     orderId = detail.order.id,
                     orderNumber = detail.order.orderNumber,
-                    createPhotoFile = viewModel::createPhotoFile,
+                    createPhotoFile = { _, number -> viewModel.createPhotoFile("", number) },
                     onPhotoCaptured = {
-                        viewModel.registerCapturedPhoto(detail.order.id, it)
+                        viewModel.registerCapturedPhoto(it)
                         showCamera = false
                     },
                     onError = viewModel::reportCameraError,

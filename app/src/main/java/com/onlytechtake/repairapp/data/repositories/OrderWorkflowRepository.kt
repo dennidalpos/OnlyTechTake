@@ -157,11 +157,6 @@ class OrderWorkflowRepository(
         commands.deleteOrder(
             actor = actor,
             orderId = orderId,
-            timelineEventDao = timelineEventDao,
-            orderMediaDao = orderMediaDao,
-            signatureDao = signatureDao,
-            orderDocumentDao = database.orderDocumentDao(),
-            auditLogDao = auditLogDao,
             fileCleanupService = fileCleanupService,
         )
 

@@ -19,6 +19,8 @@ import com.onlytechtake.repairapp.domain.workspace.OrderListItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -47,7 +49,7 @@ internal class OrderWorkflowQueries(
             else -> {
                 if (filter.statuses.isNotEmpty()) {
                     val hasClosed = filter.statuses.contains(OrderStatus.CLOSED)
-                    if (hasClosed && filter.statuses.size == 1) {
+                    if ((hasClosed) && (filter.statuses.size == 1)) {
                         true
                     } else if (!hasClosed) {
                         false
@@ -65,7 +67,7 @@ internal class OrderWorkflowQueries(
         filter: OrderFilter,
     ): Flow<List<RepairOrderEntity>> {
         val assignedToUserId =
-            if (filter.mode == OrderFilterMode.MINE || filter.showMineOnly) actor.id else null
+            if ((filter.mode == OrderFilterMode.MINE) || (filter.showMineOnly)) actor.id else null
         val unassignedOnly = filter.mode == OrderFilterMode.OPEN_UNASSIGNED
         val assignedOnly = filter.mode == OrderFilterMode.IN_PROGRESS
         val isClosed = calculateIsClosed(filter)
@@ -87,7 +89,7 @@ internal class OrderWorkflowQueries(
         filter: OrderFilter,
     ): Flow<List<OrderListItem>> {
         val assignedToUserId =
-            if (filter.mode == OrderFilterMode.MINE || filter.showMineOnly) actor.id else null
+            if ((filter.mode == OrderFilterMode.MINE) || (filter.showMineOnly)) actor.id else null
         val unassignedOnly = filter.mode == OrderFilterMode.OPEN_UNASSIGNED
         val assignedOnly = filter.mode == OrderFilterMode.IN_PROGRESS
         val isClosed = calculateIsClosed(filter)
@@ -123,7 +125,7 @@ internal class OrderWorkflowQueries(
         filter: OrderFilter,
     ): Flow<List<OrderListItem>> {
         val assignedToUserId =
-            if (filter.mode == OrderFilterMode.MINE || filter.showMineOnly) actor.id else null
+            if ((filter.mode == OrderFilterMode.MINE) || (filter.showMineOnly)) actor.id else null
         val unassignedOnly = filter.mode == OrderFilterMode.OPEN_UNASSIGNED
         val assignedOnly = filter.mode == OrderFilterMode.IN_PROGRESS
         val isClosed = calculateIsClosed(filter)
@@ -153,36 +155,41 @@ internal class OrderWorkflowQueries(
             }
     }
 
-    fun observeOrderDetail(orderId: String): Flow<OrderDetail?> {
-        val orderFlow = repairOrderDao.observeById(orderId)
-        val timelineFlow = timelineEventDao.observeForOrder(orderId)
-        val messagesFlow = messageLogDao.observeForOrder(orderId)
-        val mediaFlow = orderMediaDao.observeForOrder(orderId)
-        val signaturesFlow = signatureDao.observeForOrder(orderId)
+    fun observeOrderDetail(orderId: String): Flow<OrderDetail?> =
+        repairOrderDao.observeById(orderId).flatMapLatest { order ->
+            if (order == null) return@flatMapLatest flowOf(null)
 
-        return combine(
-            orderFlow,
-            timelineFlow,
-            messagesFlow,
-            mediaFlow,
-            signaturesFlow,
-        ) { order, timeline, messages, media, signatures ->
-            order?.let {
-                val customer = it.customerId.let { id -> customerDao.findById(id) }
-                val category = it.categoryId.let { id -> categoryDao.findById(id) }
-                val assignedUser = it.assignedToUserId?.let { id -> userDao.findById(id) }
+            val timelineFlow = timelineEventDao.observeForOrder(orderId)
+            val messagesFlow = messageLogDao.observeForOrder(orderId)
+            val mediaFlow = orderMediaDao.observeForOrder(orderId)
+            val signaturesFlow = signatureDao.observeForOrder(orderId)
+            val customerFlow = customerDao.observeById(order.customerId)
+            val categoryFlow = categoryDao.observeById(order.categoryId)
+            val assignedUserFlow =
+                order.assignedToUserId?.let {
+                    userDao.observeById(it)
+                } ?: flowOf(null)
 
+            combine(
+                timelineFlow,
+                messagesFlow,
+                mediaFlow,
+                signaturesFlow,
+                customerFlow,
+                categoryFlow,
+                assignedUserFlow,
+            ) { array: Array<Any?> ->
+                @Suppress("UNCHECKED_CAST")
                 OrderDetail(
-                    order = it,
-                    customer = customer,
-                    category = category,
-                    assignedUser = assignedUser,
-                    timeline = timeline,
-                    messages = messages,
-                    media = media,
-                    signatures = signatures,
+                    order = order,
+                    customer = array[4] as com.onlytechtake.repairapp.data.local.entities.CustomerEntity?,
+                    category = array[5] as com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity?,
+                    assignedUser = array[6] as com.onlytechtake.repairapp.data.local.entities.UserEntity?,
+                    timeline = array[0] as List<com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity>,
+                    messages = array[1] as List<com.onlytechtake.repairapp.data.local.entities.MessageLogEntity>,
+                    media = array[2] as List<com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity>,
+                    signatures = array[3] as List<com.onlytechtake.repairapp.data.local.entities.SignatureEntity>,
                 )
             }
         }
-    }
 }

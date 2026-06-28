@@ -34,6 +34,9 @@ class CustomerRepositoryTest {
 
             override suspend fun upsertAll(customers: List<CustomerEntity>) { // stub
             }
+
+            override suspend fun deleteById(id: String) { // stub
+            }
         }
 
     private val context = mockk<Context>(relaxed = true)

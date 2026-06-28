@@ -11,7 +11,6 @@ import com.onlytechtake.repairapp.data.preferences.UiPreferences
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
-import com.onlytechtake.repairapp.data.repositories.CustomerRepository
 import com.onlytechtake.repairapp.data.repositories.DataResetRepository
 import com.onlytechtake.repairapp.data.repositories.DefaultRepairAppRepository
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
@@ -19,14 +18,15 @@ import com.onlytechtake.repairapp.data.repositories.OrderFileCleanupService
 import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
 import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
 import com.onlytechtake.repairapp.data.repositories.TemplateRepository
+import com.onlytechtake.repairapp.data.services.BackupService
 import com.onlytechtake.repairapp.data.services.DiagnosticLogService
 import com.onlytechtake.repairapp.data.services.StorageStatsService
 import com.onlytechtake.repairapp.demo.DataSeeder
 import com.onlytechtake.repairapp.demo.DataSeederImpl
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
+import com.onlytechtake.repairapp.domain.repositories.CustomerRepository
+import com.onlytechtake.repairapp.domain.repositories.OrderRepository
 import com.onlytechtake.repairapp.domain.repositories.RepairAppRepository
-import com.onlytechtake.repairapp.domain.repositories.CustomerRepository as ICustomerRepository
-import com.onlytechtake.repairapp.domain.repositories.OrderRepository as IOrderRepository
 import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
 import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase as Database
@@ -37,9 +37,9 @@ interface AppContainer {
     val authRepository: AuthRepository
     val adminUserRepository: AdminUserRepository
     val database: Database
-    val customerRepository: ICustomerRepository
+    val customerRepository: CustomerRepository
     val catalogRepository: CatalogRepository
-    val orderWorkflowRepository: IOrderRepository
+    val orderWorkflowRepository: OrderRepository
     val createIntakeOrderUseCase: CreateIntakeOrderUseCase
     val orderMediaRepository: OrderMediaRepository
     val orderDocumentRepository: OrderDocumentRepository
@@ -55,6 +55,7 @@ interface AppContainer {
     val dataResetRepository: DataResetRepository
     val storageStatsService: StorageStatsService
     val diagnosticLogService: DiagnosticLogService
+    val backupService: BackupService
     val diagnosticLogger: DiagnosticLogger
     val dataSeeder: DataSeeder
 
@@ -123,6 +124,7 @@ class DefaultAppContainer(
     override val dataResetRepository get() = settingsContainer.dataResetRepository
     override val storageStatsService get() = settingsContainer.storageStatsService
     override val diagnosticLogService get() = settingsContainer.diagnosticLogService
+    override val backupService get() = settingsContainer.backupService
     override val diagnosticLogger get() = dataContainer.diagnosticLogger
 
     override val dataSeeder: DataSeeder by lazy { DataSeederImpl() }

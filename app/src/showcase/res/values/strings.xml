@@ -41,8 +41,11 @@
     <string name="showcase_order_title">%1$s Repair – Model %2$d</string>
     <string name="showcase_order_description">Problem found: the device is not working correctly.</string>
     <string name="showcase_order_internal_notes">Internal test note.</string>
-    <string name="showcase_event_intake_desc">Device received at the bench.</string>
-    <string name="showcase_event_closed_desc">Repair completed and delivered.</string>
+    <string name="showcase_event_intake_desc">Device received at the bench for technical evaluation.</string>
+    <string name="showcase_event_diagnosis_desc">Technical diagnosis completed: display panel failure identified.</string>
+    <string name="showcase_event_quote_desc">Repair quote sent to customer via WhatsApp.</string>
+    <string name="showcase_event_ready_desc">Repair successful. Device tested and ready for pickup.</string>
+    <string name="showcase_event_closed_desc">Repair completed, payment received, and device delivered.</string>
     <string name="showcase_photo_label">Object: %s</string>
     <string name="showcase_sig_label">Signature: %s</string>
     <string name="showcase_privacy_snapshot">Standard Privacy Policy</string>

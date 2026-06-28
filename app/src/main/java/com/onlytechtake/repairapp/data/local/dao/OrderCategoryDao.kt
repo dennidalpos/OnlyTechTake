@@ -23,6 +23,9 @@ interface OrderCategoryDao {
     @Query("SELECT * FROM order_categories")
     suspend fun findAll(): List<OrderCategoryEntity>
 
+    @Query("SELECT * FROM order_categories WHERE id = :id LIMIT 1")
+    fun observeById(id: String): Flow<OrderCategoryEntity?>
+
     @Suppress("SameReturnValue")
     @Query("SELECT * FROM order_categories WHERE id = :id LIMIT 1")
     suspend fun findById(id: String): OrderCategoryEntity?

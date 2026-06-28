@@ -501,7 +501,7 @@ private fun CustomerListContent(
                 value = searchQuery,
                 onValueChange = {
                     viewModel.setSearchQuery(it)
-                    if (it.isNotBlank()) viewModel.setShowAll(show = false)
+                    if (it.isNotBlank()) viewModel.setShowAll(enabled = false)
                 },
                 label = stringResource(R.string.label_search_customer),
                 singleLine = true,
@@ -763,10 +763,10 @@ private fun CustomerDetailContent(
     onOrderClick: (String) -> Unit,
 ) {
     val openOrders by viewModel
-        .observeOrdersForCustomer(customer.id, openOnly = true)
+        .observeOrdersForCustomer(customer.id, closed = false)
         .collectAsState(emptyList())
     val allOrders by viewModel
-        .observeOrdersForCustomer(customer.id, openOnly = false)
+        .observeOrdersForCustomer(customer.id, closed = true)
         .collectAsState(emptyList())
     val closedOrders =
         allOrders.filter { it.order.status == OrderStatus.CLOSED }

@@ -25,6 +25,8 @@ mockk = "1.14.11"
 zip4j = "2.11.6"
 sqlcipher = "4.16.0"
 sqlite = "2.6.2"
+work = "2.11.2"
+documentfile = "1.1.0"
 
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -64,6 +66,8 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 zip4j = { module = "net.lingala.zip4j:zip4j", version.ref = "zip4j" }
 sqlcipher = { module = "net.zetetic:sqlcipher-android", version.ref = "sqlcipher" }
 sqlite-ktx = { module = "androidx.sqlite:sqlite-ktx", version.ref = "sqlite" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
+androidx-documentfile = { module = "androidx.documentfile:documentfile", version.ref = "documentfile" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

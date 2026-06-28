@@ -27,6 +27,7 @@ import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
 import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
 import com.onlytechtake.repairapp.data.repositories.SignatureRepository
 import com.onlytechtake.repairapp.data.repositories.TemplateRepository
+import com.onlytechtake.repairapp.data.services.BackupService
 import com.onlytechtake.repairapp.data.services.DiagnosticLogService
 import com.onlytechtake.repairapp.data.services.StorageStatsService
 import com.onlytechtake.repairapp.data.session.InMemorySessionStore
@@ -123,7 +124,7 @@ class OrderContainer(
     mediaContainer: MediaContainer,
     private val ownerPreferences: OwnerPreferences,
 ) {
-    val orderWorkflowRepository by lazy {
+    val orderWorkflowRepository: OrderWorkflowRepository by lazy {
         OrderWorkflowRepository(
             context = context.applicationContext,
             repairOrderDao = dataContainer.database.repairOrderDao(),
@@ -140,7 +141,7 @@ class OrderContainer(
         )
     }
 
-    val customerRepository by lazy {
+    val customerRepository: CustomerRepository by lazy {
         CustomerRepository(
             context = context.applicationContext,
             customerDao = dataContainer.database.customerDao(),
@@ -211,6 +212,14 @@ class SettingsContainer(
         DiagnosticLogService(
             context.applicationContext,
             dataContainer.diagnosticLogger,
+        )
+    }
+
+    val backupService by lazy {
+        BackupService(
+            context = context.applicationContext,
+            backupRepository = backupRepository,
+            backupReminderPreferences = backupReminderPreferences,
         )
     }
 

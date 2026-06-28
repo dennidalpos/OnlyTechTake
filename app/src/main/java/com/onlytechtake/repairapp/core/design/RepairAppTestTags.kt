@@ -101,6 +101,7 @@ object RepairAppTestTags {
     const val ConfigTemplateSaveButton = "config_template_save_button"
     const val ConfigBackupReminderSwitch = "config_backup_reminder_switch"
     const val ConfigBackupIntervalField = "config_backup_interval_field"
+    const val ConfigBackupRestorePasswordField = "config_backup_restore_password_field"
     const val ConfigBackupRunZipButton = "config_backup_run_zip_button"
     const val BackupRestoreZipButton = "backup_restore_zip_button"
     const val BackupCloseButton = "backup_close_button"

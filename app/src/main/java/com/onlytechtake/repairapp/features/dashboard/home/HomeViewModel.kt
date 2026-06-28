@@ -7,10 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
-import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
+import com.onlytechtake.repairapp.domain.repositories.OrderRepository
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.features.workspace.buildOperationalQueues
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel(
     authRepository: AuthRepository,
-    orderRepository: OrderWorkflowRepository,
+    orderRepository: OrderRepository,
     private val backupRepository: BackupRepository,
     backupReminderPreferences: BackupReminderPreferences,
 ) : ViewModel() {
@@ -75,7 +75,7 @@ class HomeViewModel(
 
     class Factory(
         private val authRepository: AuthRepository,
-        private val orderRepository: OrderWorkflowRepository,
+        private val orderRepository: OrderRepository,
         private val backupRepository: BackupRepository,
         private val backupReminderPreferences: BackupReminderPreferences,
     ) : ViewModelProvider.Factory {

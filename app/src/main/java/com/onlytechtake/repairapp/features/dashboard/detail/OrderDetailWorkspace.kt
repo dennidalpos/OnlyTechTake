@@ -401,8 +401,8 @@ fun OrderDetailWorkspace(
         onRecordResult = { summary, outcome, estimateAmountCents ->
             viewModel.recordResult(
                 summary = summary,
-                diagnosisOutcome = outcome,
-                estimateAmountCents = estimateAmountCents,
+                outcome = outcome,
+                estimateMillis = estimateAmountCents,
             ) {
                 viewModel.prepareMessage(
                     if (outcome == DiagnosisOutcome.REPAIRABLE) {

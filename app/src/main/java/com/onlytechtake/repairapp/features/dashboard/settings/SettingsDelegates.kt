@@ -16,6 +16,7 @@ import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
 import com.onlytechtake.repairapp.data.repositories.OrderFileCleanupService
 import com.onlytechtake.repairapp.data.repositories.TemplateRepository
+import com.onlytechtake.repairapp.data.services.BackupService
 import com.onlytechtake.repairapp.data.services.DiagnosticLogService
 import com.onlytechtake.repairapp.domain.workspace.CategoryInput
 import com.onlytechtake.repairapp.domain.workspace.OperatorInput
@@ -98,6 +99,7 @@ internal class TemplateSettingsDelegate(
 internal class BackupSettingsDelegate(
     private val backupRepository: BackupRepository,
     private val backupReminderPreferences: BackupReminderPreferences,
+    private val backupService: BackupService,
     private val actionRunner: AuthenticatedActionRunner,
     private val scope: CoroutineScope,
 ) {
@@ -110,6 +112,39 @@ internal class BackupSettingsDelegate(
     fun setBackupReminderIntervalDays(days: Int) {
         scope.launch {
             backupReminderPreferences.setIntervalDays(days)
+        }
+    }
+
+    fun setAutomaticBackupEnabled(enabled: Boolean) {
+        scope.launch {
+            backupReminderPreferences.setAutomatic(enabled)
+            val settings = backupReminderPreferences.settings.first()
+            backupService.scheduleAutomaticBackup(settings)
+        }
+    }
+
+    fun setBackupUri(uri: Uri?) {
+        scope.launch {
+            backupReminderPreferences.setBackupUri(uri?.toString())
+            val settings = backupReminderPreferences.settings.first()
+            backupService.scheduleAutomaticBackup(settings)
+        }
+    }
+
+    fun setBackupScheduledTime(
+        hour: Int,
+        minute: Int,
+    ) {
+        scope.launch {
+            backupReminderPreferences.setScheduledTime(hour, minute)
+            val settings = backupReminderPreferences.settings.first()
+            backupService.scheduleAutomaticBackup(settings)
+        }
+    }
+
+    fun runBackupNow(onSuccess: () -> Unit = {}) {
+        actionRunner.run(successMessageRes = R.string.success_operation_completed, onSuccess = onSuccess) { actor ->
+            backupService.runAutomaticBackup(actor)
         }
     }
 
@@ -128,9 +163,10 @@ internal class BackupSettingsDelegate(
     fun restoreCompleteBackup(
         uri: Uri,
         onRestored: () -> Unit,
+        password: String? = null,
     ) {
         actionRunner.run(onSuccess = onRestored) { actor ->
-            backupRepository.restoreCompleteBackup(actor, uri)
+            backupRepository.restoreCompleteBackup(actor, uri, password)
         }
     }
 }
@@ -255,7 +291,7 @@ internal class DiagnosticSettingsDelegate(
             )
             val settings = securityPreferences.settings.first()
             val password =
-                settings.backupEncryptionPassword.takeIf { settings.isBackupEncryptionEnabled && it.isNotBlank() }
+                settings.backupEncryptionPassword.takeIf { it.isNotBlank() }
 
             val zipFile = diagnosticLogService.collectAndPrepareZip(password)
             if (zipFile != null) {

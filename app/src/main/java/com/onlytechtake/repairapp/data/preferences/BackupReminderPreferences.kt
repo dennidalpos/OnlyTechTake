@@ -33,6 +33,10 @@ class BackupReminderPreferences(
                         ?.let { runCatching { BackupReminderStatus.valueOf(it) }.getOrNull() }
                         ?: BackupReminderStatus.NEVER,
                 lastBackupFileName = preferences[LAST_BACKUP_FILE_NAME],
+                isAutomatic = preferences[IS_AUTOMATIC] ?: false,
+                backupUri = preferences[BACKUP_URI],
+                scheduledHour = preferences[SCHEDULED_HOUR] ?: 3,
+                scheduledMinute = preferences[SCHEDULED_MINUTE] ?: 0,
             )
         }
 
@@ -45,6 +49,32 @@ class BackupReminderPreferences(
     suspend fun setIntervalDays(days: Int) {
         context.backupReminderDataStore.edit { preferences ->
             preferences[INTERVAL_DAYS] = BackupReminderPolicy.normalizeIntervalDays(days)
+        }
+    }
+
+    suspend fun setAutomatic(automatic: Boolean) {
+        context.backupReminderDataStore.edit { preferences ->
+            preferences[IS_AUTOMATIC] = automatic
+        }
+    }
+
+    suspend fun setBackupUri(uri: String?) {
+        context.backupReminderDataStore.edit { preferences ->
+            if (uri == null) {
+                preferences.remove(BACKUP_URI)
+            } else {
+                preferences[BACKUP_URI] = uri
+            }
+        }
+    }
+
+    suspend fun setScheduledTime(
+        hour: Int,
+        minute: Int,
+    ) {
+        context.backupReminderDataStore.edit { preferences ->
+            preferences[SCHEDULED_HOUR] = hour.coerceIn(0, 23)
+            preferences[SCHEDULED_MINUTE] = minute.coerceIn(0, 59)
         }
     }
 
@@ -73,5 +103,9 @@ class BackupReminderPreferences(
         val LAST_SUCCESSFUL_BACKUP_AT = longPreferencesKey("last_successful_full_zip_backup_at")
         val LAST_BACKUP_STATUS = stringPreferencesKey("last_backup_status")
         val LAST_BACKUP_FILE_NAME = stringPreferencesKey("last_backup_file_name")
+        val IS_AUTOMATIC = booleanPreferencesKey("is_automatic_backup_enabled")
+        val BACKUP_URI = stringPreferencesKey("backup_uri")
+        val SCHEDULED_HOUR = intPreferencesKey("backup_scheduled_hour")
+        val SCHEDULED_MINUTE = intPreferencesKey("backup_scheduled_minute")
     }
 }

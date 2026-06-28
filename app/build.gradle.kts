@@ -10,12 +10,8 @@ val keystoreProperties =
     }
 
 // Verifies that keystore.properties exists when a release build is requested.
-// Using a lazy approach to avoid early task realization.
 tasks.configureEach {
-    if (name.contains("Release", ignoreCase = true) &&
-        gradle.startParameter.taskNames.any { it.contains("Release", ignoreCase = true) } &&
-        !keystorePropertiesFile.exists()
-    ) {
+    if (name.contains("Release", ignoreCase = true)) {
         doFirst {
             if (!keystorePropertiesFile.exists()) {
                 throw GradleException("Release build requires keystore.properties in the project root")
@@ -43,8 +39,8 @@ android {
         applicationId = "com.onlytechtake.repairapp"
         minSdk = 26
         targetSdk = 37
-        versionCode = 6
-        versionName = "1.0.6"
+        versionCode = 7
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -157,6 +153,8 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.documentfile)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.camera.camera2)
