@@ -51,29 +51,33 @@ fun AppMessageBanner(
 ) {
     val colors =
         when (type) {
-            BannerType.Info ->
+            BannerType.Info -> {
                 CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                     contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
                 )
+            }
 
-            BannerType.Success ->
+            BannerType.Success -> {
                 CardDefaults.cardColors(
                     containerColor = MaterialTheme.repairColors.successContainer,
                     contentColor = MaterialTheme.repairColors.onSuccessContainer,
                 )
+            }
 
-            BannerType.Warning ->
+            BannerType.Warning -> {
                 CardDefaults.cardColors(
                     containerColor = MaterialTheme.repairColors.warningContainer,
                     contentColor = MaterialTheme.repairColors.onWarningContainer,
                 )
+            }
 
-            BannerType.Error ->
+            BannerType.Error -> {
                 CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.errorContainer,
                     contentColor = MaterialTheme.colorScheme.onErrorContainer,
                 )
+            }
         }
 
     val icon: ImageVector =

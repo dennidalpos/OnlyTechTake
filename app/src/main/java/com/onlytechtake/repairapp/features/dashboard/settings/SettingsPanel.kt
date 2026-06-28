@@ -197,7 +197,7 @@ private fun SettingsSectionContent(
             )
         }
         when (section) {
-            "CATEGORIES" ->
+            "CATEGORIES" -> {
                 CategoriesSettings(
                     viewModel,
                     isAdmin,
@@ -205,19 +205,30 @@ private fun SettingsSectionContent(
                     requestConfirm,
                     onBack = onBack,
                 )
+            }
 
-            "TEMPLATES" -> TemplatesSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)
-            "TEMPLATE_MAPPING" ->
+            "TEMPLATES" -> {
+                TemplatesSettings(viewModel, isAdmin, requestConfirm, onBack = onBack)
+            }
+
+            "TEMPLATE_MAPPING" -> {
                 TemplateMappingSettings(
                     viewModel,
                     isAdmin,
                     requestConfirm,
                     onBack = onBack,
                 )
+            }
 
-            "WHATSAPP" -> WhatsAppSettings(viewModel, requestConfirm, onBack = onBack)
-            "OWNER" -> OwnerSettings(viewModel, onBack = onBack)
-            "EXPORT" ->
+            "WHATSAPP" -> {
+                WhatsAppSettings(viewModel, requestConfirm, onBack = onBack)
+            }
+
+            "OWNER" -> {
+                OwnerSettings(viewModel, onBack = onBack)
+            }
+
+            "EXPORT" -> {
                 BackupSettings(
                     viewModel,
                     isAdmin,
@@ -231,20 +242,30 @@ private fun SettingsSectionContent(
                     requestConfirm,
                     onBack = onBack,
                 )
+            }
 
-            "STORAGE" -> StorageSettings(viewModel, onBack = onBack)
-            "ADMIN" ->
+            "STORAGE" -> {
+                StorageSettings(viewModel, onBack = onBack)
+            }
+
+            "ADMIN" -> {
                 AdminPanel(
                     viewModel = viewModel,
                     isAdmin = isAdmin,
                     onRequestConfirm = requestConfirm,
                     onBack = onBack,
                 )
+            }
 
-            "UI" -> UiSettings(viewModel, onBack = onBack)
+            "UI" -> {
+                UiSettings(viewModel, onBack = onBack)
+            }
 
-            "ABOUT" -> AboutSettings(onBack = onBack)
-            else ->
+            "ABOUT" -> {
+                AboutSettings(onBack = onBack)
+            }
+
+            else -> {
                 if ((section == null) && !isWide) {
                     SettingsHub(isAdmin, onNavigate)
                 } else {
@@ -255,6 +276,7 @@ private fun SettingsSectionContent(
                         )
                     }
                 }
+            }
         }
     }
 }

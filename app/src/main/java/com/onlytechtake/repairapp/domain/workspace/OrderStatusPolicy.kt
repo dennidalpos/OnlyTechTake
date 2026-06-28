@@ -10,43 +10,51 @@ object OrderStatusPolicy {
 
     fun allowedTargets(from: OrderStatus): Set<OrderStatus> =
         when (from) {
-            OrderStatus.OPEN ->
+            OrderStatus.OPEN -> {
                 setOf(
                     OrderStatus.IN_PROGRESS,
                     OrderStatus.CLOSED,
                 )
+            }
 
-            OrderStatus.IN_PROGRESS ->
+            OrderStatus.IN_PROGRESS -> {
                 setOf(
                     OrderStatus.DIAGNOSIS,
                     OrderStatus.CLOSED,
                 )
+            }
 
-            OrderStatus.DIAGNOSIS ->
+            OrderStatus.DIAGNOSIS -> {
                 setOf(
                     OrderStatus.RESULT,
                     OrderStatus.CLOSED,
                 )
+            }
 
-            OrderStatus.RESULT ->
+            OrderStatus.RESULT -> {
                 setOf(
                     OrderStatus.REPAIRING,
                     OrderStatus.READY_FOR_PICKUP,
                     OrderStatus.CLOSED,
                 )
+            }
 
-            OrderStatus.REPAIRING ->
+            OrderStatus.REPAIRING -> {
                 setOf(
                     OrderStatus.READY_FOR_PICKUP,
                     OrderStatus.CLOSED,
                 )
+            }
 
-            OrderStatus.READY_FOR_PICKUP ->
+            OrderStatus.READY_FOR_PICKUP -> {
                 setOf(
                     OrderStatus.CLOSED,
                 )
+            }
 
-            OrderStatus.CLOSED -> emptySet()
+            OrderStatus.CLOSED -> {
+                emptySet()
+            }
         }
 
     private fun requiresClosureReason(to: OrderStatus): Boolean = to == OrderStatus.CLOSED

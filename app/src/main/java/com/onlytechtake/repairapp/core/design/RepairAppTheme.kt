@@ -1,6 +1,9 @@
 package com.onlytechtake.repairapp.core.design
 
 import android.app.Activity
+import android.content.res.Configuration
+import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
@@ -10,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -204,10 +208,41 @@ fun RepairAppTheme(
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            val window = (view.context as Activity).window
+            val activity = view.context as Activity
+            val window = activity.window
             val insetsController = WindowCompat.getInsetsController(window, view)
+
+            // Set light/dark appearance for status and navigation bars
             insetsController.isAppearanceLightStatusBars = !darkTheme
             insetsController.isAppearanceLightNavigationBars = !darkTheme
+
+            // Disable contrast enforcement for a cleaner edge-to-edge look
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                window.isNavigationBarContrastEnforced = false
+                @Suppress("DEPRECATION")
+                window.isStatusBarContrastEnforced = false
+            }
+
+            // Set window background to match theme - helps the system IME to pick the right theme
+            val color = if (darkTheme) DarkColors.background else LightColors.background
+            window.setBackgroundDrawable(ColorDrawable(color.toArgb()))
+
+            // Explicitly set the decor view background as well
+            window.decorView.setBackgroundColor(color.toArgb())
+
+            // Force the activity resources configuration to match the theme
+            // This is a strong signal for the IME (keyboard) theme
+            val resources = activity.resources
+            val config = resources.configuration
+            val expectedMode =
+                if (darkTheme) Configuration.UI_MODE_NIGHT_YES else Configuration.UI_MODE_NIGHT_NO
+            if ((config.uiMode and Configuration.UI_MODE_NIGHT_MASK) != expectedMode) {
+                val newConfig = Configuration(config)
+                newConfig.uiMode =
+                    (newConfig.uiMode and Configuration.UI_MODE_NIGHT_MASK.inv()) or expectedMode
+                @Suppress("DEPRECATION")
+                resources.updateConfiguration(newConfig, resources.displayMetrics)
+            }
         }
     }
 

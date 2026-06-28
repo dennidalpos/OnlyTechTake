@@ -69,6 +69,7 @@ import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.core.utils.labelRes
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
+import com.onlytechtake.repairapp.domain.workspace.OrderFilterMode
 import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
 import com.onlytechtake.repairapp.features.dashboard.common.BackupReminderCard
@@ -76,13 +77,14 @@ import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspace
 import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
+import com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 import kotlinx.coroutines.launch
 
 @Composable
 fun OrdersPanel(
     viewModel: OrdersViewModel,
-    sharedViewModel: com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel,
+    sharedViewModel: SharedWorkspaceViewModel,
     onOrderClick: (String) -> Unit,
     onNewOrder: () -> Unit,
     onOpenBackupSettings: () -> Unit,
@@ -427,18 +429,29 @@ private fun OrdersListContent(
 private fun ActiveFilterInfo(filter: OrderFilter) {
     val modeText =
         when (filter.mode) {
-            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL -> null
-            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.MINE -> stringResource(R.string.orders_filter_mine)
-            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED ->
+            OrderFilterMode.ALL -> {
+                null
+            }
+
+            OrderFilterMode.MINE -> {
+                stringResource(R.string.orders_filter_mine)
+            }
+
+            OrderFilterMode.OPEN_UNASSIGNED -> {
                 stringResource(
                     R.string.orders_filter_open_unassigned,
                 )
+            }
 
-            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED -> stringResource(R.string.orders_filter_closed_discarded)
-            com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS ->
+            OrderFilterMode.CLOSED -> {
+                stringResource(R.string.orders_filter_closed_discarded)
+            }
+
+            OrderFilterMode.IN_PROGRESS -> {
                 stringResource(
                     R.string.orders_filter_in_progress_assigned,
                 )
+            }
         }
 
     val filterText =
@@ -447,8 +460,14 @@ private fun ActiveFilterInfo(filter: OrderFilter) {
             filter.status?.let { stringResource(it.labelRes) },
             filter.statuses
                 .takeIf { it.isNotEmpty() }
-                ?.map { stringResource(it.labelRes) }
-                ?.joinToString(" / "),
+                ?.let { statuses ->
+                    buildString {
+                        statuses.forEachIndexed { index, it ->
+                            if (index > 0) append(" / ")
+                            append(stringResource(it.labelRes))
+                        }
+                    }
+                },
         ).joinToString(", ")
 
     if (filterText.isNotBlank()) {
@@ -468,28 +487,28 @@ private fun OrderFilterBar(
     Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_all),
-            selected = filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL,
-        ) { onFilter(OrderFilter(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL)) }
+            selected = filter.mode == OrderFilterMode.ALL,
+        ) { onFilter(OrderFilter(mode = OrderFilterMode.ALL)) }
 
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_mine),
-            selected = filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.MINE,
-        ) { onFilter(filter.copy(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.MINE)) }
+            selected = filter.mode == OrderFilterMode.MINE,
+        ) { onFilter(filter.copy(mode = OrderFilterMode.MINE)) }
 
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_open_unassigned),
-            selected = filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED,
-        ) { onFilter(filter.copy(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.OPEN_UNASSIGNED)) }
+            selected = filter.mode == OrderFilterMode.OPEN_UNASSIGNED,
+        ) { onFilter(filter.copy(mode = OrderFilterMode.OPEN_UNASSIGNED)) }
 
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_in_progress_assigned),
-            selected = filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS,
-        ) { onFilter(filter.copy(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.IN_PROGRESS)) }
+            selected = filter.mode == OrderFilterMode.IN_PROGRESS,
+        ) { onFilter(filter.copy(mode = OrderFilterMode.IN_PROGRESS)) }
 
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_closed_discarded),
-            selected = filter.mode == com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED,
-        ) { onFilter(filter.copy(mode = com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.CLOSED)) }
+            selected = filter.mode == OrderFilterMode.CLOSED,
+        ) { onFilter(filter.copy(mode = OrderFilterMode.CLOSED)) }
     }
 }
 
@@ -509,4 +528,4 @@ private fun FilterToggleButton(
     )
 }
 
-private fun OrderFilter.hasActiveFilter(): Boolean = (mode != com.onlytechtake.repairapp.domain.workspace.OrderFilterMode.ALL) || query.isNotBlank()
+private fun OrderFilter.hasActiveFilter(): Boolean = (mode != OrderFilterMode.ALL) || query.isNotBlank()

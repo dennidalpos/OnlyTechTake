@@ -26,13 +26,14 @@ interface CustomerDao {
 
     @Query(
         """
-        SELECT * FROM customers
-        WHERE :query = ''
-           OR firstName LIKE '%' || :query || '%'
-           OR lastName LIKE '%' || :query || '%'
-           OR companyName LIKE '%' || :query || '%'
-        ORDER BY updatedAt DESC
+        SELECT customers.* FROM customers
+        JOIN customers_fts ON customers.id = customers_fts.rowid
+        WHERE customers_fts MATCH :query
+        ORDER BY customers.updatedAt DESC
         """,
     )
     fun search(query: String): Flow<List<CustomerEntity>>
+
+    @Query("DELETE FROM customers WHERE id = :id")
+    suspend fun deleteById(id: String)
 }

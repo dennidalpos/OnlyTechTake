@@ -22,6 +22,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -99,6 +100,7 @@ fun CustomerPanel(
     var showForm by rememberSaveable { mutableStateOf(value = false) }
     var editingCustomerId by rememberSaveable { mutableStateOf<String?>(null) }
     var confirmSave by rememberSaveable { mutableStateOf(value = false) }
+    var confirmDelete by rememberSaveable { mutableStateOf(value = false) }
 
     // Form state
     var isBusiness by rememberSaveable { mutableStateOf(value = false) }
@@ -255,6 +257,7 @@ fun CustomerPanel(
                                 onEdit = {
                                     editCustomer(selectedCustomer!!)
                                 },
+                                onDelete = { confirmDelete = true },
                                 onOrderClick = onOrderClick,
                             )
                         } else {
@@ -366,6 +369,10 @@ fun CustomerPanel(
                             customer = customer,
                             viewModel = viewModel,
                             onEdit = {}, // Handled by dialog button
+                            onDelete = {
+                                confirmDelete = true
+                                selectedCustomer = null
+                            },
                             onOrderClick = onOrderClick,
                         )
                     },
@@ -412,6 +419,47 @@ fun CustomerPanel(
                 AppButton(
                     text = stringResource(R.string.customer_cancel),
                     onClick = { confirmSave = false },
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact,
+                )
+            },
+        )
+    }
+
+    if (confirmDelete) {
+        val context = LocalContext.current
+        AppDialog(
+            onDismissRequest = { confirmDelete = false },
+            title =
+                stringResource(
+                    R.string.action_delete_confirm_title,
+                    selectedCustomer?.displayName(context).orEmpty(),
+                ),
+            text =
+                stringResource(
+                    R.string.action_delete_confirm_text,
+                    selectedCustomer?.displayName(context).orEmpty(),
+                ),
+            confirmButton = {
+                AppButton(
+                    text = stringResource(R.string.content_description_delete),
+                    onClick = {
+                        confirmDelete = false
+                        selectedCustomer?.id?.let { id ->
+                            viewModel.deleteCustomer(id) {
+                                selectedCustomer = null
+                            }
+                        }
+                    },
+                    variant = AppButtonVariant.Danger,
+                    size = AppButtonSize.Compact,
+                    testTag = RepairAppTestTags.GenericConfirmButton,
+                )
+            },
+            dismissButton = {
+                AppButton(
+                    text = stringResource(R.string.customer_cancel),
+                    onClick = { confirmDelete = false },
                     variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact,
                 )
@@ -711,6 +759,7 @@ private fun CustomerDetailContent(
     customer: CustomerEntity,
     viewModel: CustomersViewModel,
     onEdit: () -> Unit,
+    onDelete: () -> Unit,
     onOrderClick: (String) -> Unit,
 ) {
     val openOrders by viewModel
@@ -747,12 +796,20 @@ private fun CustomerDetailContent(
                     contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                 )
             }
-            AppIconButton(
-                imageVector = Icons.Default.Edit,
-                contentDescription = stringResource(R.string.customer_detail_edit),
-                onClick = onEdit,
-                tint = MaterialTheme.colorScheme.primary,
-            )
+            Row {
+                AppIconButton(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = stringResource(R.string.customer_detail_edit),
+                    onClick = onEdit,
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+                AppIconButton(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = stringResource(R.string.content_description_delete),
+                    onClick = onDelete,
+                    tint = MaterialTheme.colorScheme.error,
+                )
+            }
         }
 
         StandardCard {

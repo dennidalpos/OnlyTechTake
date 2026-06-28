@@ -182,13 +182,16 @@ fun DashboardScreen(
         val baseCurrent = currentRoute.split("?")[0]
         if (baseRoute == baseCurrent) return true
         return when (baseRoute) {
-            DashboardRoutes.ORDERS.split("?")[0] ->
+            DashboardRoutes.ORDERS.split("?")[0] -> {
                 baseCurrent ==
                     DashboardRoutes.ORDER_DETAIL.split(
                         "?",
                     )[0]
+            }
 
-            else -> false
+            else -> {
+                false
+            }
         }
     }
 

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="android:Theme.DeviceDefault.NoActionBar">
-        <item name="android:windowLightStatusBar">true</item>
+    <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/app_background</item>
+        <!-- Suggerimento al sistema che il tema predefinito è scuro (API 23+) -->
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 </resources>

@@ -32,10 +32,15 @@ fun OrderStatusAction.requiresConfirmation(): Boolean = targetStatus == OrderSta
 fun statusTemplateAnchor(status: OrderStatus): TemplateAnchor =
     when (status) {
         OrderStatus.OPEN -> TemplateAnchor.WHATSAPP_INTAKE
+
         OrderStatus.IN_PROGRESS -> TemplateAnchor.WHATSAPP_UPDATE
+
         OrderStatus.DIAGNOSIS -> TemplateAnchor.WHATSAPP_DIAGNOSIS
+
         OrderStatus.RESULT -> TemplateAnchor.WHATSAPP_UPDATE
+
         OrderStatus.REPAIRING -> TemplateAnchor.WHATSAPP_REPAIRING
+
         OrderStatus.READY_FOR_PICKUP,
         OrderStatus.CLOSED,
         -> TemplateAnchor.WHATSAPP_READY
@@ -59,7 +64,9 @@ fun statusTemplateAnchor(order: RepairOrderEntity): TemplateAnchor =
             }
         }
 
-        else -> statusTemplateAnchor(order.status)
+        else -> {
+            statusTemplateAnchor(order.status)
+        }
     }
 
 fun nextActionLabel(
@@ -87,7 +94,9 @@ fun nextActionLabel(
             }
         }
 
-        else -> nextActionLabel(context, order.status)
+        else -> {
+            nextActionLabel(context, order.status)
+        }
     }
 
 fun shouldShowDiagnosisEstimate(outcome: DiagnosisOutcome?): Boolean = outcome == DiagnosisOutcome.REPAIRABLE

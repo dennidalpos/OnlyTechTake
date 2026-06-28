@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.data.repositories
 import android.content.Context
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.orders.OrderNumberGenerator
+import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.CustomerDao
 import com.onlytechtake.repairapp.data.local.dao.MessageLogDao
@@ -16,6 +17,7 @@ import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
+import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.repositories.OrderRepository
 import com.onlytechtake.repairapp.domain.workspace.DiagnosisResultInput
@@ -171,9 +173,9 @@ class OrderWorkflowRepository(
             val sig =
                 requireNotNull(signatureDao.findById(signatureId)) { context.getString(R.string.error_signature_not_found) }
             if (sig.createdByUserId != actor.id) {
-                com.onlytechtake.repairapp.core.permissions.PermissionService.requirePermission(
+                PermissionService.requirePermission(
                     actor,
-                    com.onlytechtake.repairapp.data.local.entities.UserPermission.EDIT_ALL_ORDERS,
+                    UserPermission.EDIT_ALL_ORDERS,
                 )
             }
             signatureDao.deleteById(signatureId)

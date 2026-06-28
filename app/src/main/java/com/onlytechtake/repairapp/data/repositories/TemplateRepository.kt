@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.data.repositories
 
 import android.content.Context
+import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.core.templates.TemplateRenderer
@@ -198,9 +199,9 @@ class TemplateRepository(
     ): Result<Unit> =
         runCatching {
             PermissionService.requirePermission(actor, UserPermission.MANAGE_TEMPLATES)
-            require(code.isNotBlank()) { context.getString(com.onlytechtake.repairapp.R.string.error_template_code_required) }
-            require(title.isNotBlank()) { context.getString(com.onlytechtake.repairapp.R.string.error_template_title_required) }
-            require(body.isNotBlank()) { context.getString(com.onlytechtake.repairapp.R.string.error_template_body_required) }
+            require(code.isNotBlank()) { context.getString(R.string.error_template_code_required) }
+            require(title.isNotBlank()) { context.getString(R.string.error_template_title_required) }
+            require(body.isNotBlank()) { context.getString(R.string.error_template_body_required) }
             renderer.requireSupportedVariables(body, supportedVariables)
 
             val existing = templateDao.findByCode(code.trim())
@@ -251,16 +252,16 @@ class TemplateRepository(
     ): Result<PreparedMessage> =
         runCatching {
             val order =
-                requireNotNull(orderDao.findById(orderId)) { context.getString(com.onlytechtake.repairapp.R.string.error_order_not_found) }
+                requireNotNull(orderDao.findById(orderId)) { context.getString(R.string.error_order_not_found) }
             if (order.assignedToUserId != actor.id) {
                 PermissionService.requirePermission(actor, UserPermission.EDIT_ALL_ORDERS)
             } else {
                 PermissionService.requirePermission(actor, UserPermission.EDIT_OWN_ORDERS)
             }
             val customer =
-                requireNotNull(customerDao.findById(order.customerId)) { context.getString(com.onlytechtake.repairapp.R.string.error_customer_not_found) }
+                requireNotNull(customerDao.findById(order.customerId)) { context.getString(R.string.error_customer_not_found) }
             val dbTemplate =
-                requireNotNull(templateDao.findActiveByCode(templateCode)) { context.getString(com.onlytechtake.repairapp.R.string.error_template_not_found) }
+                requireNotNull(templateDao.findActiveByCode(templateCode)) { context.getString(R.string.error_template_not_found) }
             val template =
                 if ((dbTemplate.code in systemTemplateCodes) && (dbTemplate.version == 1)) {
                     getDefaultTemplates().find { it.code == dbTemplate.code } ?: dbTemplate
@@ -269,7 +270,7 @@ class TemplateRepository(
                 }
             val categoryPath = categoryPath(order.categoryId)
             val phone = customer.phone?.filter { it.isDigit() || (it == '+') }.orEmpty()
-            require(phone.isNotBlank()) { context.getString(com.onlytechtake.repairapp.R.string.error_customer_phone_missing) }
+            require(phone.isNotBlank()) { context.getString(R.string.error_customer_phone_missing) }
 
             val owner = ownerPreferences.ownerInfo.firstOrNull()
 
@@ -286,17 +287,23 @@ class TemplateRepository(
                                 customer.firstName,
                                 customer.lastName,
                             ).joinToString(" ")
-                                .ifBlank { context.getString(com.onlytechtake.repairapp.R.string.signature_default_signer) },
+                                .ifBlank { context.getString(R.string.signature_default_signer) },
                         "esito_diagnosi" to order.diagnosisOutcome?.label(context).orEmpty(),
                         "importo_preventivo" to order.estimateAmountCents.formatEuroCentsForExport(),
                         "prossima_azione" to nextActionLabel(context, order),
                         "motivo_chiusura" to
                             when {
-                                order.closureReason != null -> order.closureReason.label(context)
-                                order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE ->
-                                    context.getString(com.onlytechtake.repairapp.R.string.template_diagnosis_not_repairable_reason)
+                                order.closureReason != null -> {
+                                    order.closureReason.label(context)
+                                }
 
-                                else -> ""
+                                order.diagnosisOutcome == DiagnosisOutcome.NOT_REPAIRABLE -> {
+                                    context.getString(R.string.template_diagnosis_not_repairable_reason)
+                                }
+
+                                else -> {
+                                    ""
+                                }
                             },
                         "categoria_percorso" to categoryPath,
                         "ancora_label" to (anchor?.let { context.getString(it.labelRes) } ?: ""),
@@ -375,158 +382,158 @@ class TemplateRepository(
             MessageTemplateEntity(
                 id = "",
                 code = "whatsapp_presa_in_carico",
-                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_intake_title),
+                title = context.getString(R.string.template_wa_intake_title),
                 channel = MessageChannel.WHATSAPP,
-                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_intake_body),
+                body = context.getString(R.string.template_wa_intake_body),
                 active = true,
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
-                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_intake),
+                step = context.getString(R.string.anchor_step_intake),
             ),
             MessageTemplateEntity(
                 id = "",
                 code = "whatsapp_aggiornamento",
-                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_update_title),
+                title = context.getString(R.string.template_wa_update_title),
                 channel = MessageChannel.WHATSAPP,
-                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_update_body),
+                body = context.getString(R.string.template_wa_update_body),
                 active = true,
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
-                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_update),
+                step = context.getString(R.string.anchor_step_update),
             ),
             MessageTemplateEntity(
                 id = "",
                 code = "whatsapp_diagnosi",
-                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_diagnosis_title),
+                title = context.getString(R.string.template_wa_diagnosis_title),
                 channel = MessageChannel.WHATSAPP,
-                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_diagnosis_body),
+                body = context.getString(R.string.template_wa_diagnosis_body),
                 active = true,
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
-                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_diagnosis),
+                step = context.getString(R.string.anchor_step_diagnosis),
             ),
             MessageTemplateEntity(
                 id = "",
                 code = "whatsapp_risultato",
-                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_result_title),
+                title = context.getString(R.string.template_wa_result_title),
                 channel = MessageChannel.WHATSAPP,
-                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_result_body),
+                body = context.getString(R.string.template_wa_result_body),
                 active = true,
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
-                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_outcome),
+                step = context.getString(R.string.anchor_step_outcome),
             ),
             MessageTemplateEntity(
                 id = "",
                 code = "whatsapp_preventivo_intervento",
-                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_quote_title),
+                title = context.getString(R.string.template_wa_quote_title),
                 channel = MessageChannel.WHATSAPP,
-                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_quote_body),
+                body = context.getString(R.string.template_wa_quote_body),
                 active = true,
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
-                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_quote),
+                step = context.getString(R.string.anchor_step_quote),
             ),
             MessageTemplateEntity(
                 id = "",
                 code = "whatsapp_non_riparabile",
-                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_not_repairable_title),
+                title = context.getString(R.string.template_wa_not_repairable_title),
                 channel = MessageChannel.WHATSAPP,
-                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_not_repairable_body),
+                body = context.getString(R.string.template_wa_not_repairable_body),
                 active = true,
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
-                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_outcome),
+                step = context.getString(R.string.anchor_step_outcome),
             ),
             MessageTemplateEntity(
                 id = "",
                 code = "whatsapp_riparazione",
-                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_repairing_title),
+                title = context.getString(R.string.template_wa_repairing_title),
                 channel = MessageChannel.WHATSAPP,
-                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_repairing_body),
+                body = context.getString(R.string.template_wa_repairing_body),
                 active = true,
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
-                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_repair),
+                step = context.getString(R.string.anchor_step_repair),
             ),
             MessageTemplateEntity(
                 id = "",
                 code = "whatsapp_lavorazione",
-                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_lavorazione_title),
+                title = context.getString(R.string.template_wa_lavorazione_title),
                 channel = MessageChannel.WHATSAPP,
-                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_lavorazione_body),
+                body = context.getString(R.string.template_wa_lavorazione_body),
                 active = true,
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
-                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_update),
+                step = context.getString(R.string.anchor_step_update),
             ),
             MessageTemplateEntity(
                 id = "",
                 code = "whatsapp_completamento",
-                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_completamento_title),
+                title = context.getString(R.string.template_wa_completamento_title),
                 channel = MessageChannel.WHATSAPP,
-                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_completamento_body),
+                body = context.getString(R.string.template_wa_completamento_body),
                 active = true,
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
-                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_closed),
+                step = context.getString(R.string.anchor_step_closed),
             ),
             MessageTemplateEntity(
                 id = "",
                 code = "whatsapp_pronto_ritiro",
-                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_ready_title),
+                title = context.getString(R.string.template_wa_ready_title),
                 channel = MessageChannel.WHATSAPP,
-                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_ready_body),
+                body = context.getString(R.string.template_wa_ready_body),
                 active = true,
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
-                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_pickup),
+                step = context.getString(R.string.anchor_step_pickup),
             ),
             MessageTemplateEntity(
                 id = "",
                 code = "whatsapp_stato_avanzamento_pdf",
-                title = context.getString(com.onlytechtake.repairapp.R.string.template_wa_pdf_status_title),
+                title = context.getString(R.string.template_wa_pdf_status_title),
                 channel = MessageChannel.WHATSAPP,
-                body = context.getString(com.onlytechtake.repairapp.R.string.template_wa_pdf_status_body),
+                body = context.getString(R.string.template_wa_pdf_status_body),
                 active = true,
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
-                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_docs),
+                step = context.getString(R.string.anchor_step_docs),
             ),
             MessageTemplateEntity(
                 id = "",
                 code = "privacy_breve",
-                title = context.getString(com.onlytechtake.repairapp.R.string.template_privacy_breve_title),
+                title = context.getString(R.string.template_privacy_breve_title),
                 channel = MessageChannel.WHATSAPP,
-                body = context.getString(com.onlytechtake.repairapp.R.string.template_privacy_breve_body),
+                body = context.getString(R.string.template_privacy_breve_body),
                 active = true,
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
-                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_legal),
+                step = context.getString(R.string.anchor_step_legal),
             ),
             MessageTemplateEntity(
                 id = "",
                 code = "condizioni_presa_in_carico",
-                title = context.getString(com.onlytechtake.repairapp.R.string.template_condizioni_title),
+                title = context.getString(R.string.template_condizioni_title),
                 channel = MessageChannel.WHATSAPP,
-                body = context.getString(com.onlytechtake.repairapp.R.string.template_condizioni_body),
+                body = context.getString(R.string.template_condizioni_body),
                 active = true,
                 version = 1,
                 updatedByUserId = null,
                 updatedAt = 0L,
-                step = context.getString(com.onlytechtake.repairapp.R.string.anchor_step_legal),
+                step = context.getString(R.string.anchor_step_legal),
             ),
         )
 

@@ -34,10 +34,15 @@ internal class OrderWorkflowQueries(
 ) {
     private fun calculateIsClosed(filter: OrderFilter): Boolean? =
         when (filter.mode) {
-            OrderFilterMode.CLOSED -> true
+            OrderFilterMode.CLOSED -> {
+                true
+            }
+
             OrderFilterMode.OPEN_UNASSIGNED,
             OrderFilterMode.IN_PROGRESS,
-            -> false
+            -> {
+                false
+            }
 
             else -> {
                 if (filter.statuses.isNotEmpty()) {

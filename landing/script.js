@@ -339,6 +339,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentLightboxIndex = 0;
 
+    let updateCarouselGlobal = null;
+
     const applyTranslations = (lang) => {
         const t = translations[lang];
         if (!t) return;
@@ -427,6 +429,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const setLanguage = (lang) => {
         localStorage.setItem('language', lang);
         applyTranslations(lang);
+        // Restart typing effect if carousel exists
+        if (typeof updateCarouselGlobal === 'function') {
+            updateCarouselGlobal();
+        }
     };
 
     // Initialize language
@@ -506,7 +512,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 6. Dynamic Gallery (Carousel) Implementation
+    // 6. Dynamic Gallery (Ring Carousel) Implementation
     const carouselTrack = document.querySelector('.carousel-track');
     const carouselItems = Array.from(document.querySelectorAll('.carousel-item'));
     const nextBtn = document.querySelector('.next-btn');
@@ -515,6 +521,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentIndex = 0;
     let startX, currentX, isDragging = false;
+    let typingTimer = null;
 
     if (carouselTrack && carouselItems.length > 0) {
         // Create Dots
@@ -528,26 +535,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const dots = document.querySelectorAll('.dot');
 
-        const updateCarousel = () => {
-            carouselItems.forEach((item, i) => {
-                item.classList.remove('active', 'prev', 'next');
+        const typeWriter = (element, text, speed = 40) => {
+            if (typingTimer) clearInterval(typingTimer);
+            element.textContent = '';
+            element.classList.add('typing-cursor');
 
-                if (i === currentIndex) {
-                    item.classList.add('active');
-                } else if (i === (currentIndex - 1 + carouselItems.length) % carouselItems.length) {
-                    item.classList.add('prev');
-                } else if (i === (currentIndex + 1) % carouselItems.length) {
-                    item.classList.add('next');
+            let i = 0;
+            typingTimer = setInterval(() => {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typingTimer);
+                    element.classList.remove('typing-cursor');
                 }
+            }, speed);
+        };
+
+        const updateCarousel = () => {
+            const total = carouselItems.length;
+            const angleStep = 360 / total;
+
+            carouselItems.forEach((item, i) => {
+                item.classList.remove('active', 'visible');
+
+                // Calculate relative index for circular positioning
+                let diff = i - currentIndex;
+                if (diff > total / 2) diff -= total;
+                if (diff < -total / 2) diff += total;
+
+                // Ring positioning
+                const absDiff = Math.abs(diff);
+                const isActive = diff === 0;
+
+                // Show items that are close to center
+                if (absDiff <= 2) {
+                    item.classList.add('visible');
+                    if (isActive) item.classList.add('active');
+                }
+
+                // 3D Transform Logic
+                const translateX = diff * (window.innerWidth < 768 ? 160 : 220);
+                const translateZ = isActive ? 100 : -absDiff * 150;
+                const rotateY = diff * -25;
+                const scale = isActive ? 1.1 : 0.85;
+                const opacity = isActive ? 1 : (absDiff === 1 ? 0.6 : (absDiff === 2 ? 0.2 : 0));
+
+                item.style.transform = `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
+                item.style.opacity = opacity;
+                item.style.zIndex = 10 - absDiff;
             });
 
-            // Calculate translation to center the active item
-            const itemWidth = carouselItems[0].offsetWidth;
-            const gap = 0; // Gap is handled by classes/transforms
-            const centerOffset = (carouselTrack.offsetWidth - itemWidth) / 2;
-            const translateValue = -currentIndex * itemWidth + centerOffset;
+            // Start typing effect for active item
+            const activeItem = carouselItems[currentIndex];
+            const textEl = activeItem.querySelector('.gallery-text');
+            const path = textEl.getAttribute('data-i18n');
+            const lang = document.documentElement.lang || 'en';
+            const text = translations[lang].gallery.overlay[path.split('.').pop()];
 
-            carouselTrack.style.transform = `translateX(${translateValue}px)`;
+            typeWriter(textEl, text);
 
             // Update dots
             dots.forEach((dot, i) => {
@@ -556,49 +602,63 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const goToSlide = (index) => {
-            currentIndex = index;
+            currentIndex = (index + carouselItems.length) % carouselItems.length;
             updateCarousel();
         };
 
-        const nextSlide = () => {
-            currentIndex = (currentIndex + 1) % carouselItems.length;
-            updateCarousel();
-        };
-
-        const prevSlide = () => {
-            currentIndex = (currentIndex - 1 + carouselItems.length) % carouselItems.length;
-            updateCarousel();
-        };
+        const nextSlide = () => goToSlide(currentIndex + 1);
+        const prevSlide = () => goToSlide(currentIndex - 1);
 
         if (nextBtn) nextBtn.addEventListener('click', nextSlide);
         if (prevBtn) prevBtn.addEventListener('click', prevSlide);
 
-        // Swipe / Drag Support
+        // Improved Drag / Swipe Support
         const handleDragStart = (e) => {
             isDragging = true;
             startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
-            carouselTrack.style.transition = 'none';
+            carouselTrack.style.cursor = 'grabbing';
+            // Disable transitions during drag for immediate feedback
+            carouselItems.forEach(item => item.style.transition = 'none');
         };
 
         const handleDragMove = (e) => {
             if (!isDragging) return;
-            currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
-            const diff = currentX - startX;
+            if (e.cancelable) e.preventDefault();
 
-            // Allow some visual feedback during drag
-            const itemWidth = carouselItems[0].offsetWidth;
-            const centerOffset = (carouselTrack.offsetWidth - itemWidth) / 2;
-            const baseTranslate = -currentIndex * itemWidth + centerOffset;
-            carouselTrack.style.transform = `translateX(${baseTranslate + diff}px)`;
+            currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+            const diffX = currentX - startX;
+
+            const total = carouselItems.length;
+            const translateUnit = window.innerWidth < 768 ? 160 : 220;
+
+            carouselItems.forEach((item, i) => {
+                let diff = i - currentIndex;
+                if (diff > total / 2) diff -= total;
+                if (diff < -total / 2) diff += total;
+
+                const absDiff = Math.abs(diff);
+                const isActive = diff === 0;
+
+                const rotateNudge = diffX / 10;
+                const translateX = diff * translateUnit + diffX;
+                const rotateY = diff * -25 + rotateNudge;
+                const translateZ = isActive ? 100 : -absDiff * 150;
+                const scale = isActive ? 1.1 : 0.85;
+
+                item.style.transform = `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
+            });
         };
 
         const handleDragEnd = (e) => {
             if (!isDragging) return;
             isDragging = false;
-            carouselTrack.style.transition = '';
+            carouselTrack.style.cursor = 'grab';
+
+            // Re-enable transitions
+            carouselItems.forEach(item => item.style.transition = '');
 
             const diff = currentX - startX;
-            if (Math.abs(diff) > 50) {
+            if (Math.abs(diff) > 80) {
                 if (diff > 0) prevSlide();
                 else nextSlide();
             } else {
@@ -606,12 +666,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
+        // Attach events to the track and window for robustness
         carouselTrack.addEventListener('mousedown', handleDragStart);
-        carouselTrack.addEventListener('mousemove', handleDragMove);
+        window.addEventListener('mousemove', handleDragMove);
         window.addEventListener('mouseup', handleDragEnd);
 
-        carouselTrack.addEventListener('touchstart', handleDragStart);
-        carouselTrack.addEventListener('touchmove', handleDragMove);
+        carouselTrack.addEventListener('touchstart', handleDragStart, { passive: false });
+        carouselTrack.addEventListener('touchmove', handleDragMove, { passive: false });
         carouselTrack.addEventListener('touchend', handleDragEnd);
 
         // Handle item click (if not active, go to it)
@@ -624,9 +685,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Initialize
+        updateCarouselGlobal = updateCarousel;
+
+        // Initial setup
         window.addEventListener('resize', updateCarousel);
-        updateCarousel();
+        // Delay initial update to ensure translations are applied
+        setTimeout(updateCarousel, 100);
     }
 
     // 7. Accessibility & Cleanup

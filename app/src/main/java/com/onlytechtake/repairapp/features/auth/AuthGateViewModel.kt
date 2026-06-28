@@ -153,7 +153,7 @@ class AuthGateViewModel(
                     // Success will trigger AuthState change, no need to clear form here
                 }
 
-                is LoginResult.PasswordChangeRequired ->
+                is LoginResult.PasswordChangeRequired -> {
                     mutableFormState.update {
                         it.copy(
                             loading = false,
@@ -164,30 +164,34 @@ class AuthGateViewModel(
                             confirmPassword = "",
                         )
                     }
+                }
 
-                LoginResult.InactiveUser ->
+                LoginResult.InactiveUser -> {
                     mutableFormState.update {
                         it.copy(
                             loading = false,
                             errorMessage = applicationContext.getString(R.string.error_user_deactivated),
                         )
                     }
+                }
 
-                LoginResult.InvalidCredentials ->
+                LoginResult.InvalidCredentials -> {
                     mutableFormState.update {
                         it.copy(
                             loading = false,
                             errorMessage = applicationContext.getString(R.string.error_invalid_credentials),
                         )
                     }
+                }
 
-                LoginResult.LockedOut ->
+                LoginResult.LockedOut -> {
                     mutableFormState.update {
                         it.copy(
                             loading = false,
                             errorMessage = applicationContext.getString(R.string.error_too_many_attempts),
                         )
                     }
+                }
             }
         }
     }

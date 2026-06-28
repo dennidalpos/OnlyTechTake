@@ -173,26 +173,29 @@ private fun HomeHeader(onNewOrder: () -> Unit) {
             SectionTitle(stringResource(R.string.home_title))
             val context = LocalContext.current
             when {
-                isShowcase ->
+                isShowcase -> {
                     AppBadge(
                         text = DemoMode.getShowcaseScenarioLabel(context),
                         containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                         contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
                     )
+                }
 
-                isDemo ->
+                isDemo -> {
                     AppBadge(
                         text = DemoMode.getVersionBanner(context),
                         containerColor = MaterialTheme.colorScheme.errorContainer,
                         contentColor = MaterialTheme.colorScheme.onErrorContainer,
                     )
+                }
 
-                else ->
+                else -> {
                     AppBadge(
                         text = stringResource(R.string.home_pro_status_operational),
                         containerColor = MaterialTheme.repairColors.successContainer,
                         contentColor = MaterialTheme.repairColors.onSuccessContainer,
                     )
+                }
             }
         }
 

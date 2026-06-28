@@ -50,6 +50,9 @@ interface RepairOrderDao {
         limit: Int = 100,
     ): Flow<List<RepairOrderEntity>>
 
+    @Query("SELECT EXISTS(SELECT 1 FROM repair_orders WHERE customerId = :customerId LIMIT 1)")
+    suspend fun hasOrdersForCustomer(customerId: String): Boolean
+
     @Query("SELECT orderNumber FROM repair_orders WHERE orderNumber LIKE :yearPrefix || '%' ORDER BY orderNumber DESC LIMIT 1")
     suspend fun findLatestOrderNumberForYear(yearPrefix: String): String?
 

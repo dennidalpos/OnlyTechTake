@@ -110,8 +110,13 @@ fun ColumnScope.CategoriesSettings(
                 viewModel.setFormDirty(dirty = false)
             }
 
-            searchQuery.isNotEmpty() -> searchQuery = ""
-            currentCategoryParentId != null -> currentCategoryParentId = currentParent?.parentId
+            searchQuery.isNotEmpty() -> {
+                searchQuery = ""
+            }
+
+            currentCategoryParentId != null -> {
+                currentCategoryParentId = currentParent?.parentId
+            }
         }
     }
 

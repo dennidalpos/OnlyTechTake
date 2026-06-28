@@ -26,7 +26,11 @@ import com.onlytechtake.repairapp.domain.auth.AuthState
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.auth.LoginResult
 import com.onlytechtake.repairapp.domain.repositories.RepairAppRepository
+import com.onlytechtake.repairapp.domain.repositories.CustomerRepository as ICustomerRepository
+import com.onlytechtake.repairapp.domain.repositories.OrderRepository as IOrderRepository
 import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
+import com.onlytechtake.repairapp.domain.workspace.CustomerInput
+import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -77,9 +81,18 @@ class FakeAppContainer(
         }
     override val adminUserRepository: AdminUserRepository get() = error("Not implemented")
     override val database: RepairAppDatabase get() = error("Not implemented")
-    override val customerRepository: CustomerRepository get() = error("Not implemented")
+    override val customerRepository: ICustomerRepository =
+        object : ICustomerRepository {
+            override fun observeRecent(): Flow<List<CustomerEntity>> = flowOf(emptyList())
+            override fun observeAll(): Flow<List<CustomerEntity>> = flowOf(emptyList())
+            override fun search(query: String): Flow<List<CustomerEntity>> = flowOf(emptyList())
+            override suspend fun findById(id: String): CustomerEntity? = null
+            override suspend fun save(actor: AuthenticatedUser?, input: CustomerInput): Result<CustomerEntity> =
+                Result.failure(IllegalStateException("Fake"))
+            override fun isValid(input: CustomerInput): Boolean = true
+        }
     override val catalogRepository: CatalogRepository get() = error("Not implemented")
-    override val orderWorkflowRepository: OrderWorkflowRepository get() = error("Not implemented")
+    override val orderWorkflowRepository: IOrderRepository get() = error("Not implemented")
     override val createIntakeOrderUseCase: CreateIntakeOrderUseCase get() = error("Not implemented")
     override val orderMediaRepository: OrderMediaRepository get() = error("Not implemented")
     override val orderDocumentRepository: OrderDocumentRepository get() = error("Not implemented")

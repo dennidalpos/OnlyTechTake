@@ -174,15 +174,21 @@ fun OrderStatusActionDialog(
                     text = stringResource(R.string.action_confirm),
                     enabled =
                         when {
-                            isResultStep ->
+                            isResultStep -> {
                                 canConfirmDiagnosisResult(
                                     summary = state.resultSummary,
                                     outcome = state.diagnosisOutcome,
                                     estimateAmountCents = parseEuroCentsOrNull(state.resultAmount),
                                 )
+                            }
 
-                            isClosure -> (state.closureReason != null) && ((state.closureReason != ClosureReason.OTHER) || state.statusNote.isNotBlank())
-                            else -> true
+                            isClosure -> {
+                                (state.closureReason != null) && ((state.closureReason != ClosureReason.OTHER) || state.statusNote.isNotBlank())
+                            }
+
+                            else -> {
+                                true
+                            }
                         },
                     onClick = {
                         if (action == OrderStatusAction.RECORD_RESULT) {

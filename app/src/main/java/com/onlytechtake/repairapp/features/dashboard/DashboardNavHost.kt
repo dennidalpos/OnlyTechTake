@@ -1,14 +1,18 @@
 package com.onlytechtake.repairapp.features.dashboard
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.domain.models.AppSummary
+import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.features.dashboard.customers.CustomerPanel
 import com.onlytechtake.repairapp.features.dashboard.customers.CustomersViewModel
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel
@@ -124,12 +128,12 @@ fun DashboardNavHost(
             arguments =
                 listOf(
                     navArgument("status") {
-                        type = androidx.navigation.NavType.StringType
+                        type = NavType.StringType
                         nullable = true
                         defaultValue = null
                     },
                     navArgument("customerId") {
-                        type = androidx.navigation.NavType.StringType
+                        type = NavType.StringType
                         nullable = true
                         defaultValue = null
                     },
@@ -139,10 +143,7 @@ fun DashboardNavHost(
             val customerId = backStackEntry.arguments?.getString("customerId")
             val status =
                 statusStr?.let {
-                    runCatching {
-                        com.onlytechtake.repairapp.data.local.entities.OrderStatus
-                            .valueOf(it)
-                    }.getOrNull()
+                    runCatching { OrderStatus.valueOf(it) }.getOrNull()
                 }
 
             val ordersViewModel: OrdersViewModel =
@@ -156,10 +157,10 @@ fun DashboardNavHost(
                         ),
                 )
 
-            androidx.compose.runtime.LaunchedEffect(status, customerId) {
+            LaunchedEffect(status, customerId) {
                 if ((status != null) || (customerId != null)) {
                     ordersViewModel.setFilter(
-                        com.onlytechtake.repairapp.domain.workspace.OrderFilter(
+                        OrderFilter(
                             status = status,
                             customerId = customerId,
                         ),
@@ -184,7 +185,7 @@ fun DashboardNavHost(
             arguments =
                 listOf(
                     navArgument("orderId") {
-                        type = androidx.navigation.NavType.StringType
+                        type = NavType.StringType
                     },
                 ),
         ) { backStackEntry ->
@@ -216,12 +217,12 @@ fun DashboardNavHost(
             arguments =
                 listOf(
                     navArgument("section") {
-                        type = androidx.navigation.NavType.StringType
+                        type = NavType.StringType
                         nullable = true
                         defaultValue = null
                     },
                     navArgument("fromIntake") {
-                        type = androidx.navigation.NavType.BoolType
+                        type = NavType.BoolType
                         defaultValue = false
                     },
                 ),

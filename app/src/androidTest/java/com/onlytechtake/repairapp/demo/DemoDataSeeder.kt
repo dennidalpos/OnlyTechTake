@@ -165,13 +165,20 @@ object DemoDataSeeder {
                     type = if ((i % 3) == 0) CustomerType.BUSINESS else CustomerType.PRIVATE,
                     firstName =
                         when {
-                            i == 1 -> "John"
-                            (i % 3) == 0 -> null
-                            else ->
+                            i == 1 -> {
+                                "John"
+                            }
+
+                            (i % 3) == 0 -> {
+                                null
+                            }
+
+                            else -> {
                                 testContext.getString(
                                     TestR.string.demo_customer_name,
                                     i,
                                 )
+                            }
                         },
                     lastName = if ((i % 3) == 0) null else "Doe",
                     companyName =

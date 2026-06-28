@@ -1,16 +1,28 @@
 {
   "project_name": "OnlyTechTake",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-07-04",
+  "last_updated": "2026-07-06",
   "backlog": [
     {
+      "priority": "DONE",
+      "task": "FEATURE: Fully implemented Customers module with FTS search, detailed view, and secure deletion (prevented if orders exist). Decoupled repositories via domain interfaces and improved Preview stability."
+    },
+    {
+      "priority": "DONE",
+      "task": "UX/UI: Optimized landing page gallery with 3D ring effect, typing animation for descriptions, and improved mouse/touch interaction (v1.0.9)."
+    },
+    {
       "priority": "HIGH",
-      "task": "FIXED: Resolved name shadowing in CustomerRepository implementation that could lead to recursive inheritance errors."
+      "task": "FIXED: Resolved persistent white keyboard issue on some devices (e.g., Samsung) by explicitly forcing dark signals in both XML styles (v27+) and Activity runtime via SystemBarStyle.dark. Ensured full alignment across variants."
+    },
+    {
+      "priority": "HIGH",
+      "task": "FIXED: Fully aligned all variants (Full, Demo, Showcase) with theme coherence fixes. Eliminated initial white flash by defaulting splash background to Dark theme."
     },
     {
       "priority": "LOW",
-      "task": "QUALITY: Resolved editor warnings and Lint errors (annotation targets, redundant qualifiers, clarifying parentheses, named boolean arguments, and trailing lambdas)."
+      "task": "QUALITY: Resolved editor warnings, redundant qualifiers, and dependency locking mismatches across all variants."
     },
     {
       "priority": "LOW",
@@ -35,6 +47,10 @@
     {
       "priority": "MEDIUM",
       "task": "QUALITY: Test di regressione su hardware low-end (Android 10-12) per verificare fluidità UI dopo ottimizzazioni dispatcher."
+    },
+    {
+      "priority": "LOW",
+      "task": "MAINTENANCE: Updated dependencies (AppCompat 1.7.1, Material 1.14.0, Protobuf 4.35.1, Commons-Lang3 3.20.0, Ktlint 1.8.0) and verified project stability."
     },
     {
       "priority": "LOW",

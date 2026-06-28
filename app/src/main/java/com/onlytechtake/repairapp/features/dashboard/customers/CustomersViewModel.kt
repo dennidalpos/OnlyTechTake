@@ -111,6 +111,17 @@ class CustomersViewModel(
         }
     }
 
+    fun deleteCustomer(
+        id: String,
+        onDeleted: () -> Unit,
+    ) {
+        actionRunner.run { actor ->
+            customerRepository.delete(actor, id).onSuccess {
+                onDeleted()
+            }
+        }
+    }
+
     fun observeOrdersForCustomer(
         customerId: String,
         openOnly: Boolean,

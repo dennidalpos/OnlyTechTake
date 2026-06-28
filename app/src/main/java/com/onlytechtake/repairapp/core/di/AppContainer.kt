@@ -13,6 +13,7 @@ import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
 import com.onlytechtake.repairapp.data.repositories.CustomerRepository
 import com.onlytechtake.repairapp.data.repositories.DataResetRepository
+import com.onlytechtake.repairapp.data.repositories.DefaultRepairAppRepository
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
 import com.onlytechtake.repairapp.data.repositories.OrderFileCleanupService
 import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
@@ -24,6 +25,8 @@ import com.onlytechtake.repairapp.demo.DataSeeder
 import com.onlytechtake.repairapp.demo.DataSeederImpl
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.repositories.RepairAppRepository
+import com.onlytechtake.repairapp.domain.repositories.CustomerRepository as ICustomerRepository
+import com.onlytechtake.repairapp.domain.repositories.OrderRepository as IOrderRepository
 import com.onlytechtake.repairapp.domain.workspace.CreateIntakeOrderUseCase
 import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase as Database
@@ -34,9 +37,9 @@ interface AppContainer {
     val authRepository: AuthRepository
     val adminUserRepository: AdminUserRepository
     val database: Database
-    val customerRepository: CustomerRepository
+    val customerRepository: ICustomerRepository
     val catalogRepository: CatalogRepository
-    val orderWorkflowRepository: OrderWorkflowRepository
+    val orderWorkflowRepository: IOrderRepository
     val createIntakeOrderUseCase: CreateIntakeOrderUseCase
     val orderMediaRepository: OrderMediaRepository
     val orderDocumentRepository: OrderDocumentRepository
@@ -92,7 +95,7 @@ class DefaultAppContainer(
     }
 
     override val repairAppRepository: RepairAppRepository by lazy {
-        com.onlytechtake.repairapp.data.repositories.DefaultRepairAppRepository(
+        DefaultRepairAppRepository(
             dashboardDao = dataContainer.database.dashboardDao(),
         )
     }

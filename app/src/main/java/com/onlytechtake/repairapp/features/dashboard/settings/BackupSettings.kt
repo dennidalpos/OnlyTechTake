@@ -533,11 +533,13 @@ private fun backupReminderInfo(settings: BackupReminderSettings): String {
     val resources = LocalResources.current
     val status =
         when {
-            settings.lastBackupStatus == BackupReminderStatus.FAILED ->
+            settings.lastBackupStatus == BackupReminderStatus.FAILED -> {
                 stringResource(R.string.backup_status_failed)
+            }
 
-            settings.lastSuccessfulBackupAtMillis == null ->
+            settings.lastSuccessfulBackupAtMillis == null -> {
                 stringResource(R.string.backup_status_never)
+            }
 
             else -> {
                 val days =

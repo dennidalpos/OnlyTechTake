@@ -119,11 +119,12 @@ fun AuthGateRoute(
     val isShowcasePreparing =
         if (BuildConfig.IS_SHOWCASE_MODE_ENABLED) !authState.configured else false
     when {
-        authState.initializationError != null ->
+        authState.initializationError != null -> {
             AuthErrorScreen(
                 error = authState.initializationError!!,
                 onRetry = onAppDataRestored,
             )
+        }
 
         !authState.initialized || isShowcasePreparing || formState.seeding -> {
             val context = LocalContext.current
@@ -137,20 +138,22 @@ fun AuthGateRoute(
             )
         }
 
-        (authState.currentUser != null) && !ownerInfo.isComplete() ->
+        (authState.currentUser != null) && !ownerInfo.isComplete() -> {
             OwnerWizardScreen(
                 ownerInfo = ownerInfo,
                 onSubmit = viewModel::updateOwnerInfo,
             )
+        }
 
-        authState.currentUser != null ->
+        authState.currentUser != null -> {
             DashboardRoute(
                 appInstanceKey = appInstanceKey,
                 onLogout = viewModel::logout,
                 onAppDataRestored = onAppDataRestored,
             )
+        }
 
-        formState.passwordChangeRequired ->
+        formState.passwordChangeRequired -> {
             MandatoryPasswordChangeScreen(
                 formState = formState,
                 onPasswordChange = viewModel::updatePassword,
@@ -158,8 +161,9 @@ fun AuthGateRoute(
                 onSubmit = viewModel::changePassword,
                 onCancel = viewModel::cancelPasswordChange,
             )
+        }
 
-        formState.recoveryMode ->
+        formState.recoveryMode -> {
             AdminRecoveryScreen(
                 formState = formState,
                 onRecoveryCodeChange = viewModel::updateRecoveryCode,
@@ -168,8 +172,9 @@ fun AuthGateRoute(
                 onSubmit = viewModel::recoverAdmin,
                 onCancel = viewModel::cancelRecovery,
             )
+        }
 
-        !authState.configured ->
+        !authState.configured -> {
             FirstSetupScreen(
                 formState = formState,
                 onDisplayNameChange = viewModel::updateDisplayName,
@@ -178,8 +183,9 @@ fun AuthGateRoute(
                 onConfirmPasswordChange = viewModel::updateConfirmPassword,
                 onSubmit = viewModel::createFirstAdmin,
             ) { (context as? Activity)?.finish() }
+        }
 
-        else ->
+        else -> {
             LoginScreen(
                 formState = formState,
                 onUsernameChange = viewModel::updateUsername,
@@ -188,6 +194,7 @@ fun AuthGateRoute(
                 onDemoLogin = viewModel::loginDemo,
                 onRecovery = viewModel::startRecovery,
             ) { (context as? Activity)?.finish() }
+        }
     }
 }
 

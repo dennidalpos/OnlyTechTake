@@ -34,19 +34,23 @@ fun StandardCard(
 ) {
     val effectiveBorder =
         border ?: when (variant) {
-            StandardCardVariant.Highlight ->
+            StandardCardVariant.Highlight -> {
                 BorderStroke(
                     1.dp,
                     MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
                 )
+            }
 
-            StandardCardVariant.Outlined ->
+            StandardCardVariant.Outlined -> {
                 BorderStroke(
                     1.dp,
                     MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f),
                 )
+            }
 
-            StandardCardVariant.Filled -> null
+            StandardCardVariant.Filled -> {
+                null
+            }
         }
     val cardModifier = modifier.fillMaxWidth()
     val effectiveContainerColor =

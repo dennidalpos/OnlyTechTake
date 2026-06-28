@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.core.di
 import android.content.Context
 import androidx.room.withTransaction
 import com.onlytechtake.repairapp.core.error.DiagnosticLogger
+import com.onlytechtake.repairapp.core.media.MediaOptimizer
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
@@ -87,8 +88,7 @@ class MediaContainer(
         )
     }
     private val mediaOptimizer by lazy {
-        com.onlytechtake.repairapp.core.media
-            .MediaOptimizer()
+        MediaOptimizer()
     }
 
     val orderMediaRepository by lazy {
@@ -144,6 +144,7 @@ class OrderContainer(
         CustomerRepository(
             context = context.applicationContext,
             customerDao = dataContainer.database.customerDao(),
+            repairOrderDao = dataContainer.database.repairOrderDao(),
         )
     }
 

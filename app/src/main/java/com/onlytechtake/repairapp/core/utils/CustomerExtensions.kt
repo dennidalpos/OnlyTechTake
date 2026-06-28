@@ -17,14 +17,16 @@ fun CustomerEntity?.displayName(
 ): String =
     this?.run {
         when (type) {
-            CustomerType.PRIVATE ->
+            CustomerType.PRIVATE -> {
                 listOfNotNull(firstName, lastName)
                     .joinToString(" ")
                     .ifBlank { unnamedPrivate }
+            }
 
-            CustomerType.BUSINESS ->
+            CustomerType.BUSINESS -> {
                 companyName
                     .orEmpty()
                     .ifBlank { unnamedBusiness }
+            }
         }
     } ?: ""

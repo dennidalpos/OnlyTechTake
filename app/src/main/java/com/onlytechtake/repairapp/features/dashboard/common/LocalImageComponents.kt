@@ -385,14 +385,15 @@ private fun ImageEditCanvas(
                 }
                 if (dragStart != null && dragCurrent != null) {
                     when (editMode) {
-                        ImageEditMode.ARROW ->
+                        ImageEditMode.ARROW -> {
                             drawBitmapArrow(
                                 dragStart.toCanvasOffset(placement, bitmap),
                                 dragCurrent.toCanvasOffset(placement, bitmap),
                                 color = Color.Yellow,
                             )
+                        }
 
-                        ImageEditMode.CROP ->
+                        ImageEditMode.CROP -> {
                             normalizeBitmapRect(dragStart, dragCurrent, bitmap)?.let { rect ->
                                 drawRect(
                                     color = Color.Yellow,
@@ -401,6 +402,7 @@ private fun ImageEditCanvas(
                                     style = Stroke(width = 3.dp.toPx()),
                                 )
                             }
+                        }
                     }
                 }
             }

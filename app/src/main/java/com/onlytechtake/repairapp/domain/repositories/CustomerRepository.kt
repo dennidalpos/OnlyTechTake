@@ -19,5 +19,10 @@ interface CustomerRepository {
         input: CustomerInput,
     ): Result<CustomerEntity>
 
+    suspend fun delete(
+        actor: AuthenticatedUser?,
+        id: String,
+    ): Result<Unit>
+
     fun isValid(input: CustomerInput): Boolean
 }

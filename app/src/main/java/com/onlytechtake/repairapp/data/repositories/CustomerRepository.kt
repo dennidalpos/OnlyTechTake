@@ -17,6 +17,7 @@ import com.onlytechtake.repairapp.domain.repositories.CustomerRepository as ICus
 class CustomerRepository(
     private val context: Context,
     private val customerDao: CustomerDao,
+    private val repairOrderDao: com.onlytechtake.repairapp.data.local.dao.RepairOrderDao? = null,
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) : ICustomerRepository {
     override fun observeRecent(): Flow<List<CustomerEntity>> = customerDao.observeRecent()
@@ -96,6 +97,17 @@ class CustomerRepository(
                 )
             customerDao.upsert(entity)
             entity
+        }
+
+    override suspend fun delete(
+        actor: AuthenticatedUser?,
+        id: String,
+    ): Result<Unit> =
+        runCatching {
+            PermissionService.requirePermission(actor, UserPermission.MANAGE_CUSTOMERS)
+            val hasOrders = repairOrderDao?.hasOrdersForCustomer(id) ?: false
+            require(!hasOrders) { context.getString(R.string.catalog_error_used_by_order) }
+            customerDao.deleteById(id)
         }
 
     override fun isValid(input: CustomerInput): Boolean =

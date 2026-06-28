@@ -162,42 +162,50 @@ private data class AppButtonColors(
 @Composable
 private fun AppButtonVariant.colors(): AppButtonColors =
     when (this) {
-        AppButtonVariant.Primary ->
+        AppButtonVariant.Primary -> {
             AppButtonColors(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)
+        }
 
-        AppButtonVariant.Secondary ->
+        AppButtonVariant.Secondary -> {
             AppButtonColors(
                 MaterialTheme.colorScheme.secondaryContainer,
                 MaterialTheme.colorScheme.onSecondaryContainer,
             )
+        }
 
-        AppButtonVariant.Success ->
+        AppButtonVariant.Success -> {
             AppButtonColors(
                 MaterialTheme.repairColors.success,
                 MaterialTheme.repairColors.onSuccess,
             )
+        }
 
-        AppButtonVariant.Info ->
+        AppButtonVariant.Info -> {
             AppButtonColors(
                 MaterialTheme.colorScheme.tertiary,
                 MaterialTheme.colorScheme.onTertiary,
             )
+        }
 
-        AppButtonVariant.Warning ->
+        AppButtonVariant.Warning -> {
             AppButtonColors(
                 MaterialTheme.repairColors.warning,
                 MaterialTheme.repairColors.onWarning,
             )
+        }
 
-        AppButtonVariant.Danger ->
+        AppButtonVariant.Danger -> {
             AppButtonColors(MaterialTheme.colorScheme.error, MaterialTheme.colorScheme.onError)
+        }
 
-        AppButtonVariant.WhatsApp ->
+        AppButtonVariant.WhatsApp -> {
             AppButtonColors(
                 MaterialTheme.repairColors.whatsapp,
                 MaterialTheme.repairColors.onWhatsapp,
             )
+        }
 
-        AppButtonVariant.Ghost ->
+        AppButtonVariant.Ghost -> {
             AppButtonColors(Color.Transparent, MaterialTheme.colorScheme.primary)
+        }
     }
