@@ -65,7 +65,7 @@ fun AppTextField(
         }
 
     androidx.compose.foundation.layout.Column(
-        modifier = modifier.then(if (fullWidth) Modifier.fillMaxWidth() else Modifier)
+        modifier = modifier.then(if (fullWidth) Modifier.fillMaxWidth() else Modifier),
     ) {
         OutlinedTextField(
             modifier =
@@ -102,7 +102,7 @@ fun AppTextField(
             trailingIcon = trailingIcon,
             textStyle = MaterialTheme.typography.bodyLarge,
         )
-        if (showError && errorText != null) {
+        if ((showError && errorText != null)) {
             Text(
                 text = errorText,
                 color = MaterialTheme.colorScheme.error,

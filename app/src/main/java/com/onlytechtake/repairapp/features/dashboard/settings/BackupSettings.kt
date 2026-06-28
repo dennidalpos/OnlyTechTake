@@ -390,7 +390,7 @@ fun BackupSettings(
                                 modifier = Modifier.weight(1f),
                             )
                             AppButton(
-                                text = stringResource(R.string.image_edit_rotate),
+                                text = stringResource(R.string.config_backup_auto_select_time),
                                 variant = AppButtonVariant.Secondary,
                                 size = AppButtonSize.Compact,
                                 leadingIcon = Icons.Default.CalendarMonth,

@@ -428,7 +428,7 @@ internal class OrderWorkflowCommands(
                         detailsJson = """{"orderNumber":"${order.orderNumber}","title":"${
                             order.title.replace(
                                 "\"",
-                                "\\\""
+                                "\\\"",
                             )
                         }"}""",
                         createdAt = now,

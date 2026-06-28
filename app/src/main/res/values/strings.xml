@@ -379,7 +379,7 @@
     <string name="label_optional_format">%1$s (%2$s)</string>
     <string name="label_separator">: </string>
     <string name="storage_size_zero">0 B</string>
-    <string name="time_format_24h">%02d:%02d</string>
+    <string name="time_format_24h">%1$02d:%2$02d</string>
     <string name="label_bytes">bytes</string>
     <string name="label_order_fallback">order</string>
 
@@ -810,6 +810,7 @@
     <string name="config_backup_auto_enabled">Enable automatic backup</string>
     <string name="config_backup_auto_destination">Backup destination</string>
     <string name="config_backup_auto_select_destination">Select destination</string>
+    <string name="config_backup_auto_select_time">Select time</string>
     <string name="config_backup_auto_schedule">Scheduling</string>
     <string name="config_backup_auto_time">Execution time</string>
     <string name="config_backup_auto_info">Path: %s</string>
