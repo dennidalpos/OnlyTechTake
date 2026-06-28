@@ -573,27 +573,36 @@ private fun CustomerListContent(
         }
 
         Box(modifier = Modifier.weight(1f)) {
-            LazyColumn(
-                state = listState,
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .testTag("customer_list")
-                        .imePadding(),
-                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
-                contentPadding =
-                    PaddingValues(
-                        top = RepairAppSpacing.compactGap,
-                        bottom = RepairAppSpacing.bottomContentPadding,
-                    ),
-            ) {
-                if (customers.isEmpty()) {
-                    item {
-                        CustomerEmptyState(hasQuery = searchQuery.isNotBlank())
-                    }
-                } else {
-                    items(customers, key = { it.id }) { customer ->
-                        CustomerCard(customer = customer) { onCustomerClick(customer) }
+            val customerList = customers
+            if (customerList == null) {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    com.onlytechtake.repairapp.core.design.LoadingBrandIndicator(
+                        text = stringResource(R.string.order_loading_detail),
+                    )
+                }
+            } else {
+                LazyColumn(
+                    state = listState,
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .testTag("customer_list")
+                            .imePadding(),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
+                    contentPadding =
+                        PaddingValues(
+                            top = RepairAppSpacing.compactGap,
+                            bottom = RepairAppSpacing.bottomContentPadding,
+                        ),
+                ) {
+                    if (customerList.isEmpty()) {
+                        item {
+                            CustomerEmptyState(hasQuery = searchQuery.isNotBlank())
+                        }
+                    } else {
+                        items(customerList, key = { it.id }) { customer ->
+                            CustomerCard(customer = customer) { onCustomerClick(customer) }
+                        }
                     }
                 }
             }

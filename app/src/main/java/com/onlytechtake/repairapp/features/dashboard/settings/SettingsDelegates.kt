@@ -145,7 +145,7 @@ internal class BackupSettingsDelegate(
     fun runBackupNow(onSuccess: () -> Unit = {}) {
         actionRunner.run(
             successMessageRes = R.string.success_operation_completed,
-            onSuccess = onSuccess
+            onSuccess = onSuccess,
         ) { actor ->
             backupService.runAutomaticBackup(actor)
         }

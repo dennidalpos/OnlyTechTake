@@ -33,6 +33,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -74,19 +75,16 @@ class NewOrderViewModel(
 
     val currentUser = authRepository.currentUser
 
-    val customerSuggestions: StateFlow<List<CustomerEntity>> =
+    val customerSuggestions: StateFlow<List<CustomerEntity>?> =
         customerSearchQuery
             .debounce(300)
+            .distinctUntilChanged()
             .flatMapLatest { query ->
-                if (query.isBlank()) {
-                    customerRepository.observeRecent()
-                } else {
-                    customerRepository.search(query)
-                }
+                customerRepository.search(query)
             }.stateIn(
                 viewModelScope,
                 SharingStarted.WhileSubscribed(5_000),
-                emptyList(),
+                null,
             )
 
     val categories: StateFlow<List<OrderCategoryEntity>> =
@@ -197,8 +195,7 @@ class NewOrderViewModel(
         }
     }
 
-    fun createIntakePhotoFile(orderNumber: String): Result<File> =
-        runCatching { orderMediaRepository.createIntakePhotoFile(orderNumber) }
+    fun createIntakePhotoFile(orderNumber: String): Result<File> = runCatching { orderMediaRepository.createIntakePhotoFile(orderNumber) }
 
     fun stageCapturedIntakePhoto(
         file: File,
@@ -231,7 +228,7 @@ class NewOrderViewModel(
     ) {
         actionRunner.run(
             successMessageRes = R.string.success_operation_completed,
-            onSuccess = onCreated
+            onSuccess = onCreated,
         ) { actor ->
             createIntakeOrderUseCase.execute(
                 actor = actor,

@@ -24,11 +24,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, kotlinx.coroutines.FlowPreview::class)
 class CustomersViewModel(
     context: Context,
     private val authRepository: AuthRepository,
@@ -65,18 +67,16 @@ class CustomersViewModel(
 
     val currentUser = authRepository.currentUser
 
-    val customerSuggestions: StateFlow<List<CustomerEntity>> =
+    val customerSuggestions: StateFlow<List<CustomerEntity>?> =
         searchQuery
+            .debounce(300)
+            .distinctUntilChanged()
             .flatMapLatest { query ->
-                if (query.isBlank()) {
-                    customerRepository.observeRecent()
-                } else {
-                    customerRepository.search(query)
-                }
+                customerRepository.search(query)
             }.stateIn(
                 viewModelScope,
                 SharingStarted.WhileSubscribed(5_000),
-                emptyList(),
+                null,
             )
 
     fun setShowAll(enabled: Boolean) {

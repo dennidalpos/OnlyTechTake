@@ -138,7 +138,7 @@ fun QuickActions(
         }
 
     val selectedCustomer =
-        draft.selectedCustomerId?.let { id -> customerSuggestions.firstOrNull { it.id == id } }
+        draft.selectedCustomerId?.let { id -> customerSuggestions?.firstOrNull { it.id == id } }
     val selectedCustomerDisplayName =
         selectedCustomer?.displayName(
             unnamedPrivate = unnamedPrivate,
@@ -241,6 +241,8 @@ fun QuickActions(
                     )
 
                     if (draft.selectedCustomerId != null) {
+                        val selectedCustomerInList =
+                            customerSuggestions?.firstOrNull { it.id == draft.selectedCustomerId }
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -249,7 +251,10 @@ fun QuickActions(
                             Text(
                                 stringResource(
                                     R.string.intake_selected_customer,
-                                    selectedCustomerDisplayName.orEmpty(),
+                                    selectedCustomerInList?.displayName(
+                                        unnamedPrivate = unnamedPrivate,
+                                        unnamedBusiness = unnamedBusiness,
+                                    ) ?: draft.selectedCustomerLabel.orEmpty(),
                                 ),
                                 style = MaterialTheme.typography.bodyLarge,
                                 fontWeight = FontWeight.SemiBold,
@@ -358,8 +363,9 @@ fun QuickActions(
                     }
 
                     if (!draft.showNewCustomerForm && customerSearchQuery.isNotBlank()) {
-                        if (customerSuggestions.isNotEmpty()) {
-                            customerSuggestions.take(3).forEach { customer ->
+                        val suggestions = customerSuggestions
+                        if (suggestions != null && suggestions.isNotEmpty()) {
+                            suggestions.take(3).forEach { customer ->
                                 CustomerSuggestionCard(
                                     customer = customer,
                                 ) {
@@ -377,6 +383,23 @@ fun QuickActions(
                                     }
                                     viewModel.setCustomerSearchQuery(label)
                                 }
+                            }
+                        } else if (suggestions != null && customerSearchQuery.length >= 2) {
+                            Text(
+                                text = stringResource(R.string.customer_no_results),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.outline,
+                                modifier = Modifier.padding(horizontal = RepairAppSpacing.compactGap),
+                            )
+                        } else if (suggestions == null) {
+                            Box(
+                                modifier = Modifier.fillMaxWidth().padding(RepairAppSpacing.compactGap),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                androidx.compose.material3.CircularProgressIndicator(
+                                    modifier = Modifier.size(24.dp),
+                                    strokeWidth = 2.dp,
+                                )
                             }
                         }
                     }

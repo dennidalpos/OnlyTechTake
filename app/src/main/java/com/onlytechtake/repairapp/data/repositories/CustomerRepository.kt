@@ -26,10 +26,10 @@ class CustomerRepository(
 
     override fun search(query: String): Flow<List<CustomerEntity>> {
         val trimmed = query.trim()
+        if (trimmed.isEmpty()) return customerDao.observeRecent()
         val sanitized =
             trimmed
                 .split(" ")
-                .asSequence()
                 .filter { it.isNotBlank() }
                 .joinToString(" ") { "$it*" }
         return customerDao.search(sanitized)

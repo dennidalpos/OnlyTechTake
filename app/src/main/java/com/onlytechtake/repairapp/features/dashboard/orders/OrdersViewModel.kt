@@ -14,14 +14,17 @@ import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, kotlinx.coroutines.FlowPreview::class)
 class OrdersViewModel(
     authRepository: AuthRepository,
     orderRepository: OrderRepository,
@@ -58,15 +61,18 @@ class OrdersViewModel(
                 BackupReminderPolicy.shouldShowReminder(settings, System.currentTimeMillis())
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = false)
 
-    val orderListItems =
-        combine(currentUser, _orderFilter) { user, filter -> user to filter }
+    val orderListItems: StateFlow<List<com.onlytechtake.repairapp.domain.workspace.OrderListItem>?> =
+        _orderFilter
+            .debounce(300)
+            .distinctUntilChanged()
+            .combine(currentUser) { filter, user -> user to filter }
             .flatMapLatest { (user, filter) ->
                 when {
                     user == null -> flowOf(emptyList())
                     filter.query.isNotBlank() -> orderRepository.searchOrders(user, filter)
                     else -> orderRepository.observeOrderList(user, filter)
                 }
-            }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+            }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     fun setFilter(filter: OrderFilter) {
         _orderFilter.value = filter

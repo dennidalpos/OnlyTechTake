@@ -102,7 +102,7 @@ fun DashboardRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
-    summary: AppSummary,
+    summary: AppSummary?,
     sharedViewModel: SharedWorkspaceViewModel,
     onLogout: () -> Unit,
     onAppDataRestored: () -> Unit,
@@ -222,7 +222,7 @@ fun DashboardScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                title = summary.title,
+                title = summary?.title ?: stringResource(R.string.app_name),
                 navigationIcon = {
                     if (currentDestination != DashboardRoutes.HOME) {
                         val isCloseIcon =

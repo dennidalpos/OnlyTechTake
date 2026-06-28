@@ -34,19 +34,15 @@ object DemoMode {
         limit: Int,
     ): String = ""
 
-    fun getShowcaseInitializingMessage(context: Context): String =
-        context.getString(R.string.auth_showcase_initializing)
+    fun getShowcaseInitializingMessage(context: Context): String = context.getString(R.string.auth_showcase_initializing)
 
-    fun getShowcasePreparingMessage(context: Context): String =
-        context.getString(R.string.auth_showcase_preparing)
+    fun getShowcasePreparingMessage(context: Context): String = context.getString(R.string.auth_showcase_preparing)
 
     fun getDemoActionLabel(context: Context): String = ""
 
-    fun getShowcaseScenarioLabel(context: Context): String =
-        context.getString(R.string.home_showcase_scenario)
+    fun getShowcaseScenarioLabel(context: Context): String = context.getString(R.string.home_showcase_scenario)
 
-    fun getShowcaseWalkthroughLabel(context: Context): String =
-        context.getString(R.string.home_showcase_walkthrough)
+    fun getShowcaseWalkthroughLabel(context: Context): String = context.getString(R.string.home_showcase_walkthrough)
 
     fun getDemoTryCta(context: Context): String = ""
 

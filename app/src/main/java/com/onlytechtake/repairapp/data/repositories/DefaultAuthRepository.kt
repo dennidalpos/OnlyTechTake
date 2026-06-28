@@ -63,7 +63,7 @@ class DefaultAuthRepository(
                             now,
                             timeoutMillis,
                         )
-                        )
+                    )
                 ) {
                     sessionStore.clear()
                     null

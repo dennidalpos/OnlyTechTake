@@ -53,15 +53,21 @@ fun AppTextField(
 
     val labelText =
         when {
-            required -> label + stringResource(R.string.label_required_suffix)
-            showOptional ->
+            required -> {
+                label + stringResource(R.string.label_required_suffix)
+            }
+
+            showOptional -> {
                 stringResource(
                     R.string.label_optional_format,
                     label,
                     stringResource(R.string.label_optional),
                 )
+            }
 
-            else -> label
+            else -> {
+                label
+            }
         }
 
     androidx.compose.foundation.layout.Column(
@@ -107,7 +113,7 @@ fun AppTextField(
                 text = errorText,
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.labelSmall,
-                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp),
             )
         }
     }

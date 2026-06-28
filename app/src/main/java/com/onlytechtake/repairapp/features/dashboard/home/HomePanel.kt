@@ -61,7 +61,7 @@ import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HomePanel(
-    summary: AppSummary,
+    summary: AppSummary?,
     viewModel: HomeViewModel,
     onNewOrder: () -> Unit,
     onOpenQueue: (OrderFilter) -> Unit,
@@ -90,8 +90,8 @@ fun HomePanel(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HomePanelContent(
-    summary: AppSummary,
-    queues: List<OperationalQueue>,
+    summary: AppSummary?,
+    queues: List<OperationalQueue>?,
     backupReminderSettings: BackupReminderSettings,
     showBackupReminder: Boolean,
     onNewOrder: () -> Unit,
@@ -108,51 +108,63 @@ fun HomePanelContent(
 
         Spacer(Modifier.height(RepairAppSpacing.cardGap))
 
-        HomeMetrics(summary)
-
-        if (showBackupReminder && isProFlavor()) {
-            Spacer(Modifier.height(RepairAppSpacing.cardGap))
-            BackupReminderCard(
-                settings = backupReminderSettings,
-                onRunBackup = onRunBackup,
-                onOpenSettings = onOpenBackupSettings,
-            )
-        }
-
-        if (BuildConfig.IS_DEMO_VERSION) {
-            Spacer(Modifier.height(RepairAppSpacing.cardGap))
-            DemoInfoCard()
-        }
-
-        Spacer(Modifier.height(RepairAppSpacing.sectionGap))
-        SectionTitle(stringResource(R.string.home_queues_title))
-
-        if (queues.isEmpty() || queues.all { it.orders.isEmpty() }) {
-            AppEmptyState(
-                title = stringResource(R.string.home_empty_queues_title),
-                body = stringResource(R.string.home_empty_queues_body),
-                actionLabel = stringResource(R.string.home_new_order),
-                onAction = onNewOrder,
-            )
-        } else {
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
-                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
-                maxItemsInEachRow = if (isWide) 2 else 1,
+        if (summary == null || queues == null) {
+            androidx.compose.foundation.layout.Box(
+                modifier = Modifier.fillMaxWidth().height(200.dp),
+                contentAlignment = Alignment.Center,
             ) {
-                queues.forEach { queue ->
-                    val itemModifier = if (isWide) Modifier.weight(1f) else Modifier.fillMaxWidth()
-                    AppQueueCard(
-                        title = stringResource(queue.titleRes),
-                        count = queue.orders.size,
-                        lastElementTitle =
-                            queue.orders
-                                .firstOrNull()
-                                ?.let { "${it.orderNumber} - ${it.title}" },
-                        onOpenQueue = { onOpenQueue(queueFilter(queue)) },
-                        modifier = itemModifier,
-                    )
+                com.onlytechtake.repairapp.core.design.LoadingBrandIndicator(
+                    text = stringResource(R.string.order_loading_detail),
+                )
+            }
+        } else {
+            HomeMetrics(summary)
+
+            if (showBackupReminder && isProFlavor()) {
+                Spacer(Modifier.height(RepairAppSpacing.cardGap))
+                BackupReminderCard(
+                    settings = backupReminderSettings,
+                    onRunBackup = onRunBackup,
+                    onOpenSettings = onOpenBackupSettings,
+                )
+            }
+
+            if (BuildConfig.IS_DEMO_VERSION) {
+                Spacer(Modifier.height(RepairAppSpacing.cardGap))
+                DemoInfoCard()
+            }
+
+            Spacer(Modifier.height(RepairAppSpacing.sectionGap))
+            SectionTitle(stringResource(R.string.home_queues_title))
+
+            if (queues.isEmpty() || queues.all { it.orders.isEmpty() }) {
+                AppEmptyState(
+                    title = stringResource(R.string.home_empty_queues_title),
+                    body = stringResource(R.string.home_empty_queues_body),
+                    actionLabel = stringResource(R.string.home_new_order),
+                    onAction = onNewOrder,
+                )
+            } else {
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
+                    maxItemsInEachRow = if (isWide) 2 else 1,
+                ) {
+                    queues.forEach { queue ->
+                        val itemModifier =
+                            if (isWide) Modifier.weight(1f) else Modifier.fillMaxWidth()
+                        AppQueueCard(
+                            title = stringResource(queue.titleRes),
+                            count = queue.orders.size,
+                            lastElementTitle =
+                                queue.orders
+                                    .firstOrNull()
+                                    ?.let { "${it.orderNumber} - ${it.title}" },
+                            onOpenQueue = { onOpenQueue(queueFilter(queue)) },
+                            modifier = itemModifier,
+                        )
+                    }
                 }
             }
         }

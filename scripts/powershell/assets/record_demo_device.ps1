@@ -29,6 +29,7 @@ param(
     [double]$AutomaticTrimStartSeconds = 7,
     [double]$AutomaticTrimEndSeconds = 2,
     [string]$Size,
+    [switch]$WhatsAppOptimized,
     [switch]$NonInteractive,
     [switch]$NoDistribute
 )
@@ -108,12 +109,22 @@ Invoke-DemoApkBuildAndInstall -RootPath $root -Serial $serial -Flavor $Flavor -S
 trap { Restore-DeviceGlobalSettings; throw $_ }
 
 function Normalize-Video {
-    param([string]$Path, [string]$OutputRoot, [double]$StartSec, [double]$EndSec)
+    param([string]$Path, [string]$OutputRoot, [double]$StartSec, [double]$EndSec, [switch]$WhatsApp)
     if ($null -eq (Get-Command "ffmpeg" -ErrorAction SilentlyContinue)) { return }
     $tempPath = Join-Path $OutputRoot (".temp_norm_" + [System.IO.Path]::GetFileName($Path))
     try {
-        # High quality normalization for marketing
-        Invoke-Checked -FilePath "ffmpeg" -Arguments @("-y", "-i", $Path, "-ss", $StartSec.ToString(), "-vf", "fps=30,format=yuv420p", "-c:v", "libx264", "-crf", "18", "-preset", "slow", $tempPath)
+        $ffmpegArgs = @("-y", "-i", $Path, "-ss", $StartSec.ToString())
+
+        if ($WhatsApp) {
+            # Ottimizzazione per WhatsApp: Max 720p, CRF 28 per stare sotto i 10MB
+            $ffmpegArgs += @("-vf", "scale='min(720,iw)':-2,fps=30,format=yuv420p", "-c:v", "libx264", "-crf", "28", "-preset", "faster")
+        } else {
+            # High quality normalization for marketing
+            $ffmpegArgs += @("-vf", "fps=30,format=yuv420p", "-c:v", "libx264", "-crf", "18", "-preset", "slow")
+        }
+
+        $ffmpegArgs += $tempPath
+        Invoke-Checked -FilePath "ffmpeg" -Arguments $ffmpegArgs
         Move-Item -LiteralPath $tempPath -Destination $Path -Force
     } finally { if (Test-Path $tempPath) { Remove-Item -LiteralPath $tempPath -Force } }
 }
@@ -146,7 +157,7 @@ try {
 
 Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "pull", $remoteVideoPath, $outputPath)
 adb -s $serial shell rm $remoteVideoPath
-Normalize-Video -Path $outputPath -OutputRoot $OutputRoot -StartSec $AutomaticTrimStartSeconds -EndSec $AutomaticTrimEndSeconds
+Normalize-Video -Path $outputPath -OutputRoot $OutputRoot -StartSec $AutomaticTrimStartSeconds -EndSec $AutomaticTrimEndSeconds -WhatsApp:$WhatsAppOptimized
 
 # Distribuzione Automatica
 if (-not $NoDistribute) {

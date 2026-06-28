@@ -179,8 +179,7 @@ class OrderDetailViewModelTest {
 
         override suspend fun findById(id: String): OrderDocumentEntity? = documents[id]
 
-        override fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>> =
-            documentsFlow
+        override fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>> = documentsFlow
 
         override suspend fun delete(documentId: String): Result<Unit> =
             runCatching {
@@ -215,8 +214,7 @@ class OrderDetailViewModelTest {
             newPassword: CharArray,
         ): Result<Unit> = error("changePassword is not expected")
 
-        override suspend fun getRecoveryKit(): Result<String> =
-            error("getRecoveryKit is not expected")
+        override suspend fun getRecoveryKit(): Result<String> = error("getRecoveryKit is not expected")
 
         override suspend fun resetAdminWithRecoveryCode(
             code: String,

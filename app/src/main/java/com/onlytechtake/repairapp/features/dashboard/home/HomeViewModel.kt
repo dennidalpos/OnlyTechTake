@@ -12,6 +12,7 @@ import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import com.onlytechtake.repairapp.domain.repositories.OrderRepository
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
+import com.onlytechtake.repairapp.features.workspace.OperationalQueue
 import com.onlytechtake.repairapp.features.workspace.buildOperationalQueues
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
@@ -32,7 +33,7 @@ class HomeViewModel(
 ) : ViewModel() {
     val currentUser = authRepository.currentUser
 
-    val operationalQueues =
+    val operationalQueues: StateFlow<List<OperationalQueue>?> =
         currentUser
             .flatMapLatest { user ->
                 if (user == null) {
@@ -44,7 +45,7 @@ class HomeViewModel(
                     )
                 }
             }.map(::buildOperationalQueues)
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     val backupReminderSettings: StateFlow<BackupReminderSettings> =
         backupReminderPreferences.settings

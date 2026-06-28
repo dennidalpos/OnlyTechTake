@@ -30,7 +30,7 @@ interface CustomerDao {
     @Query(
         """
         SELECT customers.* FROM customers
-        JOIN customers_fts ON customers.id = customers_fts.rowid
+        JOIN customers_fts ON customers.rowid = customers_fts.rowid
         WHERE customers_fts MATCH :query
         ORDER BY customers.updatedAt DESC
         """,

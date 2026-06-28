@@ -30,7 +30,7 @@ import com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel
 @Composable
 fun DashboardNavHost(
     navController: NavHostController,
-    summary: AppSummary,
+    summary: AppSummary?,
     sharedViewModel: SharedWorkspaceViewModel,
     isAdmin: Boolean,
     onAppDataRestored: () -> Unit,

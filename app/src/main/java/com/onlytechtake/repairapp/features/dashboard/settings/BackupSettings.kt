@@ -341,10 +341,11 @@ fun BackupSettings(
                                 modifier = Modifier.size(24.dp),
                             )
                             Text(
-                                text = stringResource(
-                                    R.string.config_backup_auto_info,
-                                    displayPath
-                                ),
+                                text =
+                                    stringResource(
+                                        R.string.config_backup_auto_info,
+                                        displayPath,
+                                    ),
                                 style = MaterialTheme.typography.bodySmall,
                                 modifier = Modifier.weight(1f),
                                 color = if (backupReminderSettings.backupUri == null) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
@@ -510,9 +511,14 @@ fun BackupSettings(
                                 )
                             }
                             Text(
-                                text = if (isEncrypted) stringResource(R.string.config_backup_status_encrypted) else stringResource(
-                                    R.string.config_backup_status_unencrypted
-                                ),
+                                text =
+                                    if (isEncrypted) {
+                                        stringResource(R.string.config_backup_status_encrypted)
+                                    } else {
+                                        stringResource(
+                                            R.string.config_backup_status_unencrypted,
+                                        )
+                                    },
                                 style = MaterialTheme.typography.labelSmall,
                                 color = if (isEncrypted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -521,9 +527,14 @@ fun BackupSettings(
 
                     if (securitySettings.isBackupEncryptionEnabled) {
                         AppButton(
-                            text = if (securitySettings.backupEncryptionPassword.isNotBlank()) stringResource(
-                                R.string.config_backup_password_change
-                            ) else stringResource(R.string.config_backup_password_set),
+                            text =
+                                if (securitySettings.backupEncryptionPassword.isNotBlank()) {
+                                    stringResource(
+                                        R.string.config_backup_password_change,
+                                    )
+                                } else {
+                                    stringResource(R.string.config_backup_password_set)
+                                },
                             variant = AppButtonVariant.Secondary,
                             size = AppButtonSize.Compact,
                             modifier = Modifier.fillMaxWidth(),
@@ -589,7 +600,9 @@ fun BackupSettings(
                             value = tempPassword,
                             onValueChange = { tempPassword = it },
                             label = stringResource(R.string.config_backup_password_label),
-                            visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
+                            visualTransformation =
+                                androidx.compose.ui.text.input
+                                    .PasswordVisualTransformation(),
                             keyboardType = KeyboardType.Password,
                             required = true,
                         )
@@ -598,7 +611,9 @@ fun BackupSettings(
                             value = tempConfirmPassword,
                             onValueChange = { tempConfirmPassword = it },
                             label = stringResource(R.string.auth_confirm_password),
-                            visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
+                            visualTransformation =
+                                androidx.compose.ui.text.input
+                                    .PasswordVisualTransformation(),
                             keyboardType = KeyboardType.Password,
                             required = true,
                             showError = tempPassword != tempConfirmPassword,
@@ -632,12 +647,12 @@ fun BackupSettings(
                                 pendingRestoreUri?.let { uri ->
                                     onRequestConfirm(
                                         confirmRestoreZipTitle,
-                                        confirmRestoreZipText
+                                        confirmRestoreZipText,
                                     ) {
                                         viewModel.restoreCompleteBackup(
                                             uri,
                                             onBackupRestored,
-                                            restorePassword
+                                            restorePassword,
                                         )
                                     }
                                 }
@@ -665,7 +680,9 @@ fun BackupSettings(
                             value = restorePassword,
                             onValueChange = { restorePassword = it },
                             label = stringResource(R.string.config_backup_password_label),
-                            visualTransformation = androidx.compose.ui.text.input.PasswordVisualTransformation(),
+                            visualTransformation =
+                                androidx.compose.ui.text.input
+                                    .PasswordVisualTransformation(),
                             keyboardType = KeyboardType.Password,
                             testTag = RepairAppTestTags.ConfigBackupRestorePasswordField,
                         )

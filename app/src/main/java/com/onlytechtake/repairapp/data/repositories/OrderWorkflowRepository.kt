@@ -93,8 +93,7 @@ class OrderWorkflowRepository(
         filter: OrderFilter,
     ): Flow<List<OrderListItem>> = queries.observeOrderList(actor, filter)
 
-    override fun observeOrderDetail(orderId: String): Flow<OrderDetail?> =
-        queries.observeOrderDetail(orderId)
+    override fun observeOrderDetail(orderId: String): Flow<OrderDetail?> = queries.observeOrderDetail(orderId)
 
     override suspend fun createOrder(
         actor: AuthenticatedUser,

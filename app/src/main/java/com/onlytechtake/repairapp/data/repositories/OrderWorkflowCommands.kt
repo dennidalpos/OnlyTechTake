@@ -274,7 +274,7 @@ internal class OrderWorkflowCommands(
                 when (input.feedback) {
                     CustomerFeedbackType.ACCEPT,
                     CustomerFeedbackType.REJECT,
-                        -> {
+                    -> {
                         require(order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
                             context.getString(R.string.error_feedback_only_repairable)
                         }
@@ -316,8 +316,14 @@ internal class OrderWorkflowCommands(
                     order.copy(
                         status = targetStatus,
                         customerActionStatus = customerActionStatus,
-                        closeNote = if (isClosing) input.note.capitalizeFirst()
-                            .ifBlank { null } else null,
+                        closeNote =
+                            if (isClosing) {
+                                input.note
+                                    .capitalizeFirst()
+                                    .ifBlank { null }
+                            } else {
+                                null
+                            },
                         closedByUserId = if (isClosing) actor.id else null,
                         updatedAt = now,
                         closedAt = if (isClosing) now else null,

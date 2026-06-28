@@ -265,119 +265,128 @@ private fun OrdersListContent(
         Spacer(Modifier.height(RepairAppSpacing.sectionGap))
 
         Box(modifier = Modifier.weight(1f)) {
-            LazyColumn(
-                state = listState,
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .testTag("orders_list")
-                        .imePadding(),
-                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
-                contentPadding =
-                    PaddingValues(
-                        top = RepairAppSpacing.compactGap,
-                        bottom = RepairAppSpacing.bottomContentPadding,
-                    ),
-            ) {
-                if (orderListItems.isEmpty()) {
-                    item {
-                        AppEmptyState(
-                            title = stringResource(R.string.orders_empty_title),
-                            body = stringResource(R.string.orders_empty_body),
-                        )
-                    }
-                } else {
-                    items(orderListItems, key = { it.order.id }) { item ->
-                        val order = item.order
-                        val customerName =
-                            item.customer?.displayName(context)
-                                ?: stringResource(R.string.orders_customer_unavailable)
-                        StandardCard(
-                            modifier = Modifier.testTag(RepairAppTestTags.orderCard(order.id)),
-                            onClick = { onOrderClick(order.id) },
-                        ) {
-                            Column(
-                                modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-                                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+            val listItems = orderListItems
+            if (listItems == null) {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    com.onlytechtake.repairapp.core.design.LoadingBrandIndicator(
+                        text = stringResource(R.string.order_loading_detail),
+                    )
+                }
+            } else {
+                LazyColumn(
+                    state = listState,
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .testTag("orders_list")
+                            .imePadding(),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
+                    contentPadding =
+                        PaddingValues(
+                            top = RepairAppSpacing.compactGap,
+                            bottom = RepairAppSpacing.bottomContentPadding,
+                        ),
+                ) {
+                    if (listItems.isEmpty()) {
+                        item {
+                            AppEmptyState(
+                                title = stringResource(R.string.orders_empty_title),
+                                body = stringResource(R.string.orders_empty_body),
+                            )
+                        }
+                    } else {
+                        items(listItems, key = { it.order.id }) { item ->
+                            val order = item.order
+                            val customerName =
+                                item.customer?.displayName(context)
+                                    ?: stringResource(R.string.orders_customer_unavailable)
+                            StandardCard(
+                                modifier = Modifier.testTag(RepairAppTestTags.orderCard(order.id)),
+                                onClick = { onOrderClick(order.id) },
                             ) {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.Top,
+                                Column(
+                                    modifier = Modifier.padding(RepairAppSpacing.cardPadding),
+                                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                                 ) {
-                                    Column(modifier = Modifier.weight(1f)) {
-                                        Text(
-                                            text =
-                                                stringResource(
-                                                    R.string.orders_order_reference,
-                                                    order.orderNumber,
-                                                    order.title,
-                                                ),
-                                            modifier =
-                                                Modifier.testTag(
-                                                    RepairAppTestTags.orderCardOrderReference(
-                                                        order.id,
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.Top,
+                                    ) {
+                                        Column(modifier = Modifier.weight(1f)) {
+                                            Text(
+                                                text =
+                                                    stringResource(
+                                                        R.string.orders_order_reference,
+                                                        order.orderNumber,
+                                                        order.title,
                                                     ),
-                                                ),
-                                            style = MaterialTheme.typography.titleMedium,
-                                            fontWeight = FontWeight.Bold,
-                                            maxLines = 1,
-                                            overflow = TextOverflow.Ellipsis,
-                                            softWrap = false,
-                                        )
-                                        Text(
-                                            text =
-                                                stringResource(
-                                                    R.string.orders_customer_reference,
-                                                    customerName,
-                                                ),
-                                            modifier =
-                                                Modifier.testTag(
-                                                    RepairAppTestTags.orderCardCustomerReference(
-                                                        order.id,
+                                                modifier =
+                                                    Modifier.testTag(
+                                                        RepairAppTestTags.orderCardOrderReference(
+                                                            order.id,
+                                                        ),
                                                     ),
-                                                ),
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            color = MaterialTheme.colorScheme.secondary,
-                                            maxLines = 1,
-                                            overflow = TextOverflow.Ellipsis,
-                                            softWrap = false,
+                                                style = MaterialTheme.typography.titleMedium,
+                                                fontWeight = FontWeight.Bold,
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis,
+                                                softWrap = false,
+                                            )
+                                            Text(
+                                                text =
+                                                    stringResource(
+                                                        R.string.orders_customer_reference,
+                                                        customerName,
+                                                    ),
+                                                modifier =
+                                                    Modifier.testTag(
+                                                        RepairAppTestTags.orderCardCustomerReference(
+                                                            order.id,
+                                                        ),
+                                                    ),
+                                                style = MaterialTheme.typography.bodyMedium,
+                                                color = MaterialTheme.colorScheme.secondary,
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis,
+                                                softWrap = false,
+                                            )
+                                        }
+                                        Text(
+                                            text = formatUiDateTime(order.updatedAt),
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = MaterialTheme.colorScheme.outline,
+                                            modifier = Modifier.padding(start = RepairAppSpacing.compactGap),
                                         )
                                     }
-                                    Text(
-                                        text = formatUiDateTime(order.updatedAt),
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.outline,
-                                        modifier = Modifier.padding(start = RepairAppSpacing.compactGap),
-                                    )
-                                }
 
-                                OrderStatusStepper(
-                                    status = order.status,
-                                    compact = true,
-                                    modifier =
-                                        Modifier.testTag(
-                                            RepairAppTestTags.orderCardStatusStepper(
-                                                order.id,
+                                    OrderStatusStepper(
+                                        status = order.status,
+                                        compact = true,
+                                        modifier =
+                                            Modifier.testTag(
+                                                RepairAppTestTags.orderCardStatusStepper(
+                                                    order.id,
+                                                ),
                                             ),
-                                        ),
-                                ) { step ->
-                                    RepairAppTestTags.orderCardStatusStep(
-                                        order.id,
-                                        step,
+                                    ) { step ->
+                                        RepairAppTestTags.orderCardStatusStep(
+                                            order.id,
+                                            step,
+                                        )
+                                    }
+
+                                    Text(
+                                        text =
+                                            stringResource(
+                                                R.string.orders_next_action_label,
+                                                nextActionLabel(LocalContext.current, order),
+                                            ),
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.primary,
+                                        fontWeight = FontWeight.Medium,
                                     )
                                 }
-
-                                Text(
-                                    text =
-                                        stringResource(
-                                            R.string.orders_next_action_label,
-                                            nextActionLabel(LocalContext.current, order),
-                                        ),
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.primary,
-                                    fontWeight = FontWeight.Medium,
-                                )
                             }
                         }
                     }
@@ -528,5 +537,4 @@ private fun FilterToggleButton(
     )
 }
 
-private fun OrderFilter.hasActiveFilter(): Boolean =
-    (mode != OrderFilterMode.ALL) || query.isNotBlank()
+private fun OrderFilter.hasActiveFilter(): Boolean = (mode != OrderFilterMode.ALL) || query.isNotBlank()
