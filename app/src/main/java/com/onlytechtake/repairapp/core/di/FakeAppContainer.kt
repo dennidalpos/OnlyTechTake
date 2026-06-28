@@ -12,12 +12,10 @@ import com.onlytechtake.repairapp.data.preferences.UiPreferences
 import com.onlytechtake.repairapp.data.repositories.AdminUserRepository
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.data.repositories.CatalogRepository
-import com.onlytechtake.repairapp.data.repositories.CustomerRepository
 import com.onlytechtake.repairapp.data.repositories.DataResetRepository
 import com.onlytechtake.repairapp.data.repositories.OrderDocumentRepository
 import com.onlytechtake.repairapp.data.repositories.OrderFileCleanupService
 import com.onlytechtake.repairapp.data.repositories.OrderMediaRepository
-import com.onlytechtake.repairapp.data.repositories.OrderWorkflowRepository
 import com.onlytechtake.repairapp.data.repositories.TemplateRepository
 import com.onlytechtake.repairapp.data.services.BackupService
 import com.onlytechtake.repairapp.data.services.DiagnosticLogService

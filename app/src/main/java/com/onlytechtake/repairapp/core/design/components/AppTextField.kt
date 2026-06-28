@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.core.design.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
@@ -17,7 +18,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppShapes

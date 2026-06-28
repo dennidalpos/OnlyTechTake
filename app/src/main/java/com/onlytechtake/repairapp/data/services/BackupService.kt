@@ -15,7 +15,6 @@ import androidx.work.WorkManager
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
-import com.onlytechtake.repairapp.data.services.BackupWorker
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -92,7 +91,8 @@ class BackupService(
             if (result.isSuccess) {
                 _state.value = BackupState.Success(fileName)
             } else {
-                val error = result.exceptionOrNull()?.message ?: context.getString(R.string.error_backup_failed)
+                val error = result.exceptionOrNull()?.message
+                    ?: context.getString(R.string.error_backup_failed)
                 _state.value = BackupState.Error(error)
             }
             result
@@ -116,7 +116,10 @@ class BackupService(
                 .build()
 
         val now = LocalDateTime.now()
-        val scheduledTime = LocalDateTime.of(now.toLocalDate(), LocalTime.of(settings.scheduledHour, settings.scheduledMinute))
+        val scheduledTime = LocalDateTime.of(
+            now.toLocalDate(),
+            LocalTime.of(settings.scheduledHour, settings.scheduledMinute)
+        )
 
         var initialDelay = Duration.between(now, scheduledTime)
         if (initialDelay.isNegative) {

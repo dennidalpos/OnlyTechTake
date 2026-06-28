@@ -38,7 +38,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -67,7 +66,6 @@ import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import com.onlytechtake.repairapp.domain.backup.BackupReminderStatus
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -343,7 +341,10 @@ fun BackupSettings(
                                 modifier = Modifier.size(24.dp),
                             )
                             Text(
-                                text = stringResource(R.string.config_backup_auto_info, displayPath),
+                                text = stringResource(
+                                    R.string.config_backup_auto_info,
+                                    displayPath
+                                ),
                                 style = MaterialTheme.typography.bodySmall,
                                 modifier = Modifier.weight(1f),
                                 color = if (backupReminderSettings.backupUri == null) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
@@ -470,7 +471,8 @@ fun BackupSettings(
                         fontWeight = FontWeight.Bold,
                     )
 
-                    val isEncrypted = securitySettings.isBackupEncryptionEnabled && securitySettings.backupEncryptionPassword.isNotBlank()
+                    val isEncrypted =
+                        securitySettings.isBackupEncryptionEnabled && securitySettings.backupEncryptionPassword.isNotBlank()
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -508,7 +510,9 @@ fun BackupSettings(
                                 )
                             }
                             Text(
-                                text = if (isEncrypted) stringResource(R.string.config_backup_status_encrypted) else stringResource(R.string.config_backup_status_unencrypted),
+                                text = if (isEncrypted) stringResource(R.string.config_backup_status_encrypted) else stringResource(
+                                    R.string.config_backup_status_unencrypted
+                                ),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = if (isEncrypted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -517,7 +521,9 @@ fun BackupSettings(
 
                     if (securitySettings.isBackupEncryptionEnabled) {
                         AppButton(
-                            text = if (securitySettings.backupEncryptionPassword.isNotBlank()) stringResource(R.string.config_backup_password_change) else stringResource(R.string.config_backup_password_set),
+                            text = if (securitySettings.backupEncryptionPassword.isNotBlank()) stringResource(
+                                R.string.config_backup_password_change
+                            ) else stringResource(R.string.config_backup_password_set),
                             variant = AppButtonVariant.Secondary,
                             size = AppButtonSize.Compact,
                             modifier = Modifier.fillMaxWidth(),
@@ -624,8 +630,15 @@ fun BackupSettings(
                             text = stringResource(R.string.config_backup_restore_zip),
                             onClick = {
                                 pendingRestoreUri?.let { uri ->
-                                    onRequestConfirm(confirmRestoreZipTitle, confirmRestoreZipText) {
-                                        viewModel.restoreCompleteBackup(uri, onBackupRestored, restorePassword)
+                                    onRequestConfirm(
+                                        confirmRestoreZipTitle,
+                                        confirmRestoreZipText
+                                    ) {
+                                        viewModel.restoreCompleteBackup(
+                                            uri,
+                                            onBackupRestored,
+                                            restorePassword
+                                        )
                                     }
                                 }
                                 showRestorePasswordModal = false

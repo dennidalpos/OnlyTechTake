@@ -528,4 +528,5 @@ private fun FilterToggleButton(
     )
 }
 
-private fun OrderFilter.hasActiveFilter(): Boolean = (mode != OrderFilterMode.ALL) || query.isNotBlank()
+private fun OrderFilter.hasActiveFilter(): Boolean =
+    (mode != OrderFilterMode.ALL) || query.isNotBlank()

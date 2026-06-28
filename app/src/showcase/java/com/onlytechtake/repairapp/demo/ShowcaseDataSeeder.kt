@@ -454,14 +454,19 @@ object ShowcaseDataSeeder {
                         selectableCategories[(orderCount % selectableCategories.size)].id
                     val operatorId = operators[(orderCount % 3)].id
                     val repairType = listOf("PC", "Smartphone", "Tablet", "Console")[orderCount % 4]
-                    val priority = if (orderCount % 5 == 0) OrderPriority.URGENT else OrderPriority.NORMAL
+                    val priority =
+                        if (orderCount % 5 == 0) OrderPriority.URGENT else OrderPriority.NORMAL
 
                     val order =
                         RepairOrderEntity(
                             id = orderId,
                             orderNumber = yearPrefix + orderCount.toString().padStart(6, '0'),
                             customerId = customer.id,
-                            title = context.getString(R.string.showcase_order_title, repairType, j + 1),
+                            title = context.getString(
+                                R.string.showcase_order_title,
+                                repairType,
+                                j + 1
+                            ),
                             categoryId = categoryId,
                             status = status,
                             priority = priority,
@@ -611,7 +616,7 @@ object ShowcaseDataSeeder {
                             orderId = orderId,
                             signerName =
                                 customer.firstName ?: customer.companyName
-                                    ?: context.getString(R.string.signature_default_signer),
+                                ?: context.getString(R.string.signature_default_signer),
                             privacyAccepted = true,
                             termsAccepted = true,
                             privacyTextSnapshot = context.getString(R.string.showcase_privacy_snapshot),

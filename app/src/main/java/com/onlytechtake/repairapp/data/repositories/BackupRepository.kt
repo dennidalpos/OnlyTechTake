@@ -77,7 +77,8 @@ class BackupRepository(
             }
 
             val securitySettings = securityPreferences.settings.first()
-            val password = securitySettings.backupEncryptionPassword.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
+            val password =
+                securitySettings.backupEncryptionPassword.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
 
             withContext(Dispatchers.IO) {
                 context.contentResolver.openOutputStream(uri)?.use { output ->
@@ -129,7 +130,8 @@ class BackupRepository(
             }
 
             val securitySettings = securityPreferences.settings.first()
-            val finalPassword = password ?: securitySettings.backupEncryptionPassword.takeIf { it.isNotBlank() }
+            val finalPassword =
+                password ?: securitySettings.backupEncryptionPassword.takeIf { it.isNotBlank() }
 
             withContext(Dispatchers.IO) {
                 val stagingDir =
@@ -258,7 +260,8 @@ class BackupRepository(
             }
 
             val securitySettings = securityPreferences.settings.first()
-            val password = securitySettings.backupEncryptionPassword.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
+            val password =
+                securitySettings.backupEncryptionPassword.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
 
             val exportDao = orderExportDao
             val labels =

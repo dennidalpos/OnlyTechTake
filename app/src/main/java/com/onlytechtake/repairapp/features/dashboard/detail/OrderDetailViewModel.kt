@@ -207,7 +207,10 @@ class OrderDetailViewModel(
     }
 
     fun deleteOrder(onDeleted: () -> Unit) {
-        actionRunner.run(successMessageRes = R.string.success_operation_completed, onSuccess = onDeleted) { actor ->
+        actionRunner.run(
+            successMessageRes = R.string.success_operation_completed,
+            onSuccess = onDeleted
+        ) { actor ->
             orderRepository.deleteOrder(actor, orderId)
         }
     }

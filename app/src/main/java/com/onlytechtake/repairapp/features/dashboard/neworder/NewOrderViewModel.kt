@@ -197,7 +197,8 @@ class NewOrderViewModel(
         }
     }
 
-    fun createIntakePhotoFile(orderNumber: String): Result<File> = runCatching { orderMediaRepository.createIntakePhotoFile(orderNumber) }
+    fun createIntakePhotoFile(orderNumber: String): Result<File> =
+        runCatching { orderMediaRepository.createIntakePhotoFile(orderNumber) }
 
     fun stageCapturedIntakePhoto(
         file: File,
@@ -228,7 +229,10 @@ class NewOrderViewModel(
         signatureBitmap: Bitmap,
         onCreated: () -> Unit,
     ) {
-        actionRunner.run(successMessageRes = R.string.success_operation_completed, onSuccess = onCreated) { actor ->
+        actionRunner.run(
+            successMessageRes = R.string.success_operation_completed,
+            onSuccess = onCreated
+        ) { actor ->
             createIntakeOrderUseCase.execute(
                 actor = actor,
                 input = input,
