@@ -682,7 +682,7 @@ nav {
 .carousel-nav {
     display: flex;
     justify-content: center;
-    gap: 2rem;
+    gap: 4rem;
     margin-top: 3rem;
 }
 
@@ -690,8 +690,8 @@ nav {
     background: var(--md-sys-color-surface-variant);
     color: var(--md-sys-color-on-surface);
     border: none;
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
     cursor: pointer;
     display: flex;
@@ -699,6 +699,17 @@ nav {
     justify-content: center;
     transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    position: relative; /* For hit area */
+}
+
+/* Hit area expansion */
+.carousel-btn::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
 }
 
 .carousel-btn:hover {
@@ -721,6 +732,17 @@ nav {
     background: var(--md-sys-color-surface-variant);
     cursor: pointer;
     transition: all 0.3s ease;
+    position: relative; /* For hit area */
+}
+
+/* Hit area expansion for dots */
+.dot::after {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: -12px;
+    right: -12px;
+    bottom: -12px;
 }
 
 .dot.active {
@@ -745,7 +767,14 @@ nav {
     .carousel-item.next { transform: scale(0.8) translateZ(-150px) rotateY(-15deg); }
 
     .carousel-nav {
-        display: none; /* Swipe is primary on mobile */
+        display: flex; /* Enable navigation buttons on mobile too */
+        margin-top: 2rem;
+        gap: 3rem;
+    }
+
+    .carousel-btn {
+        width: 56px;
+        height: 56px;
     }
 
     .carousel-container {

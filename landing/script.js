@@ -616,6 +616,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const handleDragStart = (e) => {
             isDragging = true;
             startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+            currentX = startX;
             carouselTrack.style.cursor = 'grabbing';
             // Disable transitions during drag for immediate feedback
             carouselItems.forEach(item => item.style.transition = 'none');
@@ -680,9 +681,28 @@ document.addEventListener('DOMContentLoaded', () => {
             item.addEventListener('click', (e) => {
                 if (i !== currentIndex) {
                     e.preventDefault();
+                    e.stopPropagation();
                     goToSlide(i);
                 }
             });
+        });
+
+        // Click on the sides of the track to navigate (increases clickable area)
+        carouselTrack.addEventListener('click', (e) => {
+            // Ignore if we were dragging (threshold of 10px)
+            if (Math.abs(currentX - startX) > 10) return;
+
+            // If click was on an item, it's already handled by the item's listener
+            if (e.target.closest('.carousel-item')) return;
+
+            const rect = carouselTrack.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+
+            if (clickX < rect.width * 0.35) {
+                prevSlide();
+            } else if (clickX > rect.width * 0.65) {
+                nextSlide();
+            }
         });
 
         updateCarouselGlobal = updateCarousel;

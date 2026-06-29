@@ -6,6 +6,10 @@
   "backlog": [
     {
       "priority": "DONE",
+      "task": "LANDING: Migliorata usabilità del carosello 'ring' aumentando le aree cliccabili per la navigazione (pulsanti, dot e lati del track)."
+    },
+    {
+      "priority": "DONE",
       "task": "QUALITY: Allineamento varianti (Full, Demo, Showcase) completato. Inclusa nuova autorizzazione RECORD_VIDEO e refactoring DemoMode per supporto localizzazione."
     },
     {
