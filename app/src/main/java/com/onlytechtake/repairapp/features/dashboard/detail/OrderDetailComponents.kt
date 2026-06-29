@@ -107,7 +107,7 @@ fun OrderHeader(
                             ?.split(">")
                             ?.lastOrNull()
                             ?.trim()
-                            ?: stringResource(R.string.orders_category_unavailable),
+                        ?: stringResource(R.string.orders_category_unavailable),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.outline,
                 )
@@ -182,7 +182,8 @@ fun OrderActionCard(
     showSecondaryActions: Boolean = true,
 ) {
     val actions = availableOrderStatusActions(status)
-    val basePrimaryAction = actions.firstOrNull { !it.requiresConfirmation() } ?: actions.firstOrNull()
+    val basePrimaryAction =
+        actions.firstOrNull { !it.requiresConfirmation() } ?: actions.firstOrNull()
     val primaryAction = primaryActionOverride ?: basePrimaryAction
     val secondaryActions =
         if (showSecondaryActions) {

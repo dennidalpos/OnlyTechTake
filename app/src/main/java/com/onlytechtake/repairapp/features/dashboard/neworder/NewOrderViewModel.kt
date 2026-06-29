@@ -195,7 +195,8 @@ class NewOrderViewModel(
         }
     }
 
-    fun createIntakePhotoFile(orderNumber: String): Result<File> = runCatching { orderMediaRepository.createIntakePhotoFile(orderNumber) }
+    fun createIntakePhotoFile(orderNumber: String): Result<File> =
+        runCatching { orderMediaRepository.createIntakePhotoFile(orderNumber) }
 
     fun stageCapturedIntakePhoto(
         file: File,

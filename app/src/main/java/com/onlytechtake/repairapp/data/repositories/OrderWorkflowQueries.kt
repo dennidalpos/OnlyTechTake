@@ -42,7 +42,7 @@ internal class OrderWorkflowQueries(
 
             OrderFilterMode.OPEN_UNASSIGNED,
             OrderFilterMode.IN_PROGRESS,
-            -> {
+                -> {
                 false
             }
 

@@ -31,7 +31,8 @@ class MainActivity : AppCompatActivity() {
 
         // Read theme preference synchronously to avoid theme flickering and infinite restart loops
         val initialSettings = runBlocking { appContainer.uiPreferences.settings.first() }
-        val mode = if (initialSettings.darkTheme) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        val mode =
+            if (initialSettings.darkTheme) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
         if (AppCompatDelegate.getDefaultNightMode() != mode) {
             AppCompatDelegate.setDefaultNightMode(mode)
         }
@@ -52,7 +53,8 @@ class MainActivity : AppCompatActivity() {
             // Force AppCompat night mode to keep IME (keyboard) in sync with app theme
             // Only update if it changes from the initial/current value to avoid loops
             LaunchedEffect(darkTheme) {
-                val currentMode = if (darkTheme) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+                val currentMode =
+                    if (darkTheme) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
                 if (AppCompatDelegate.getDefaultNightMode() != currentMode) {
                     AppCompatDelegate.setDefaultNightMode(currentMode)
                 }

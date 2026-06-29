@@ -393,7 +393,8 @@ fun QuickActions(
                             )
                         } else if (suggestions == null) {
                             Box(
-                                modifier = Modifier.fillMaxWidth().padding(RepairAppSpacing.compactGap),
+                                modifier = Modifier.fillMaxWidth()
+                                    .padding(RepairAppSpacing.compactGap),
                                 contentAlignment = Alignment.Center,
                             ) {
                                 androidx.compose.material3.CircularProgressIndicator(

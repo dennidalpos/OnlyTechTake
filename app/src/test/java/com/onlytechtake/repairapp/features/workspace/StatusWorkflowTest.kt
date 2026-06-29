@@ -114,7 +114,12 @@ class StatusWorkflowTest {
         )
         assertEquals(
             TemplateAnchor.WHATSAPP_COMPLETED,
-            statusTemplateAnchor(order(OrderStatus.CLOSED, closureReason = ClosureReason.COMPLETED)),
+            statusTemplateAnchor(
+                order(
+                    OrderStatus.CLOSED,
+                    closureReason = ClosureReason.COMPLETED
+                )
+            ),
         )
     }
 
