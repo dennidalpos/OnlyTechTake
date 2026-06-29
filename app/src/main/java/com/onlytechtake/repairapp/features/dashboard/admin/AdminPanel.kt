@@ -510,6 +510,10 @@ fun AdminPanel(
                                             UserPermission.MANAGE_STORAGE,
                                             stringResource(R.string.admin_permission_manage_storage),
                                         ),
+                                        PermissionUIItem(
+                                            UserPermission.RECORD_VIDEO,
+                                            stringResource(R.string.admin_permission_record_video),
+                                        ),
                                     )
 
                                 permissionGroups.forEach { item ->

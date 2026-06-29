@@ -123,4 +123,5 @@ enum class UserPermission {
     BACKUP_RESTORE,
     MANAGE_STORAGE,
     MANAGE_PAYMENTS,
+    RECORD_VIDEO,
 }

@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.PhotoCamera
+import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,10 +21,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
@@ -32,19 +35,21 @@ import com.onlytechtake.repairapp.core.design.components.AppIconButton
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
+import com.onlytechtake.repairapp.features.dashboard.common.CameraCaptureMode
 import com.onlytechtake.repairapp.features.dashboard.common.CameraCapturePreview
 import com.onlytechtake.repairapp.features.dashboard.common.LocalImagePreview
 import com.onlytechtake.repairapp.features.dashboard.common.LocalImageViewer
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.workspace.isFinalPhoto
 import com.onlytechtake.repairapp.features.workspace.isImageAttachment
+import com.onlytechtake.repairapp.features.workspace.isVideoAttachment
 
 @Composable
 fun OrderPhotoSection(
     detail: OrderDetail,
     viewModel: OrderDetailViewModel,
 ) {
-    var showCamera by rememberSaveable { mutableStateOf(value = false) }
+    var showCameraMode by rememberSaveable { mutableStateOf<CameraCaptureMode?>(null) }
     var selectedImageId by rememberSaveable { mutableStateOf<String?>(null) }
     var deleteMedia by remember { mutableStateOf<OrderMediaEntity?>(null) }
     val attachmentLauncher =
@@ -52,12 +57,13 @@ fun OrderPhotoSection(
             uri?.let { viewModel.importAttachment(it) }
         }
     val images = detail.media.filter { it.isImageAttachment() && !it.isFinalPhoto() }
-    val documents = detail.media.filterNot { it.isImageAttachment() }
+    val videos = detail.media.filter { it.isVideoAttachment() }
+    val documents = detail.media.filter { !it.isImageAttachment() && !it.isVideoAttachment() }
 
     Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
         SectionTitle(stringResource(R.string.intake_step_media))
 
-        if (images.isEmpty() && documents.isEmpty()) {
+        if (images.isEmpty() && videos.isEmpty() && documents.isEmpty()) {
             Text(
                 stringResource(R.string.intake_media_empty),
                 style = MaterialTheme.typography.bodyMedium,
@@ -81,25 +87,43 @@ fun OrderPhotoSection(
                                 path = media.localPath,
                                 description = media.fileName,
                             ) { selectedImageId = media.id }
+                            MediaMetadataRow(media) { deleteMedia = media }
+                        }
+                    }
+                }
+            }
+
+            if (videos.isNotEmpty()) {
+                Text(
+                    stringResource(R.string.label_media_video),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = RepairAppSpacing.compactGap),
+                )
+                videos.forEach { media ->
+                    StandardCard {
+                        Column(
+                            modifier = Modifier.padding(RepairAppSpacing.compactGap),
+                            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+                        ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
+                                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                                 verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
                             ) {
+                                androidx.compose.material3.Icon(
+                                    imageVector = Icons.Default.Videocam,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                )
                                 Text(
-                                    com.onlytechtake.repairapp.core.utils
-                                        .formatUiDateTime(media.capturedAt),
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.outline,
+                                    text = media.fileName,
+                                    style = MaterialTheme.typography.bodyMedium,
                                     modifier = Modifier.weight(1f),
                                 )
-                                AppIconButton(
-                                    imageVector = Icons.Default.Delete,
-                                    contentDescription = stringResource(R.string.content_description_delete),
-                                    onClick = { deleteMedia = media },
-                                    tint = MaterialTheme.colorScheme.error,
-                                )
                             }
+                            MediaMetadataRow(media) { deleteMedia = media }
                         }
                     }
                 }
@@ -111,36 +135,55 @@ fun OrderPhotoSection(
             horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.actionGap),
         ) {
             AppButton(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).testTag(RepairAppTestTags.IntakeMediaTakePhotoButton),
                 text = stringResource(R.string.intake_media_take_photo),
                 variant = AppButtonVariant.Secondary,
                 size = AppButtonSize.Compact,
                 leadingIcon = Icons.Default.PhotoCamera,
-                onClick = { showCamera = true },
+                onClick = { showCameraMode = CameraCaptureMode.PHOTO },
             )
-            AppButton(
-                modifier = Modifier.weight(1f),
-                text = stringResource(R.string.intake_media_attach_file),
-                variant = AppButtonVariant.Ghost,
-                size = AppButtonSize.Compact,
-                leadingIcon = Icons.Default.AttachFile,
-                onClick = { attachmentLauncher.launch("*/*") },
-            )
+            if (detail.assignedUser?.permissions?.contains(com.onlytechtake.repairapp.data.local.entities.UserPermission.RECORD_VIDEO) == true) {
+                AppButton(
+                    modifier = Modifier.weight(1f).testTag(RepairAppTestTags.IntakeMediaTakeVideoButton),
+                    text = stringResource(R.string.intake_media_take_video),
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact,
+                    leadingIcon = Icons.Default.Videocam,
+                    onClick = { showCameraMode = CameraCaptureMode.VIDEO },
+                )
+            }
         }
+        AppButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(R.string.intake_media_attach_file),
+            variant = AppButtonVariant.Ghost,
+            size = AppButtonSize.Compact,
+            leadingIcon = Icons.Default.AttachFile,
+            onClick = { attachmentLauncher.launch("*/*") },
+        )
     }
 
-    if (showCamera) {
+    showCameraMode?.let { mode ->
         AppDialog(
-            onDismissRequest = { showCamera = false },
-            title = stringResource(R.string.intake_media_take_photo),
+            onDismissRequest = { showCameraMode = null },
+            title =
+                stringResource(
+                    if (mode == CameraCaptureMode.PHOTO) R.string.intake_media_take_photo else R.string.intake_media_take_video,
+                ),
             content = {
                 CameraCapturePreview(
                     orderId = detail.order.id,
                     orderNumber = detail.order.orderNumber,
+                    initialMode = mode,
                     createPhotoFile = { _, number -> viewModel.createPhotoFile("", number) },
-                    onPhotoCaptured = {
-                        viewModel.registerCapturedPhoto(it)
-                        showCamera = false
+                    createVideoFile = { number -> viewModel.createVideoFile(number) },
+                    onMediaCaptured = { file, capturedMode ->
+                        if (capturedMode == CameraCaptureMode.PHOTO) {
+                            viewModel.registerCapturedPhoto(file)
+                        } else {
+                            viewModel.registerCapturedVideo(file)
+                        }
+                        showCameraMode = null
                     },
                     onError = viewModel::reportCameraError,
                 )
@@ -149,7 +192,7 @@ fun OrderPhotoSection(
             dismissButton = {
                 AppButton(
                     text = stringResource(R.string.action_close),
-                    onClick = { showCamera = false },
+                    onClick = { showCameraMode = null },
                     variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact,
                 )
@@ -199,6 +242,32 @@ fun OrderPhotoSection(
                     size = AppButtonSize.Compact,
                 )
             },
+        )
+    }
+}
+
+@Composable
+private fun MediaMetadataRow(
+    media: OrderMediaEntity,
+    onDelete: () -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+    ) {
+        Text(
+            com.onlytechtake.repairapp.core.utils
+                .formatUiDateTime(media.capturedAt),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.outline,
+            modifier = Modifier.weight(1f),
+        )
+        AppIconButton(
+            imageVector = Icons.Default.Delete,
+            contentDescription = stringResource(R.string.content_description_delete),
+            onClick = onDelete,
+            tint = MaterialTheme.colorScheme.error,
         )
     }
 }

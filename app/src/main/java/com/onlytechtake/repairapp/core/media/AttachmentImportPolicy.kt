@@ -46,8 +46,10 @@ class AttachmentImportPolicy(
 
     fun isImage(rawMimeType: String?): Boolean = normalize(rawMimeType) in IMAGE_MIME_TYPES
 
+    fun isVideo(rawMimeType: String?): Boolean = normalize(rawMimeType) in VIDEO_MIME_TYPES
+
     companion object {
-        const val DEFAULT_MAX_SIZE_BYTES = 25L * 1024L * 1024L
+        const val DEFAULT_MAX_SIZE_BYTES = 50L * 1024L * 1024L
 
         private val IMAGE_MIME_TYPES =
             setOf(
@@ -56,8 +58,16 @@ class AttachmentImportPolicy(
                 "image/webp",
             )
 
+        private val VIDEO_MIME_TYPES =
+            setOf(
+                "video/mp4",
+                "video/webm",
+                "video/quicktime",
+            )
+
         val DEFAULT_ALLOWED_MIME_TYPES: Set<String> =
             IMAGE_MIME_TYPES +
+                VIDEO_MIME_TYPES +
                 setOf(
                     "application/pdf",
                     "text/plain",

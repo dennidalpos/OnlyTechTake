@@ -132,7 +132,7 @@ try {
     foreach ($case in $activeCases) {
         $src = if ($case.sourceDirectory -eq ".") { $pulledRoot } else { Join-Path $pulledRoot $case.sourceDirectory }
 
-        $items = Get-ChildItem -Path $src -Filter "*.png"
+        $items = Get-ChildItem -Path $src -Include "*.png", "*.mp4", "*.jpg"
         foreach ($item in $items) {
             $targetFile = Join-Path $OutputRoot $item.Name
             Copy-Item -Path $item.FullName -Destination $targetFile -Force

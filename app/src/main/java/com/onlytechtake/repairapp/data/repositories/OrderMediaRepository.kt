@@ -59,11 +59,30 @@ class OrderMediaRepository(
         )
     }
 
+    fun createVideoFile(
+        orderId: String,
+        orderNumber: String,
+    ): File {
+        StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
+        return File(
+            mediaStorageProvider.getOrderMediaDir(orderId),
+            fileNamer.videoFileName(context, orderNumber, clockMillis()),
+        )
+    }
+
     fun createIntakePhotoFile(sessionId: String): File {
         StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
         return File(
             mediaStorageProvider.getIntakeMediaDir(sessionId),
             fileNamer.photoFileName(context, "presa_in_carico", clockMillis()),
+        )
+    }
+
+    fun createIntakeVideoFile(sessionId: String): File {
+        StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
+        return File(
+            mediaStorageProvider.getIntakeMediaDir(sessionId),
+            fileNamer.videoFileName(context, "presa_in_carico", clockMillis()),
         )
     }
 
@@ -81,6 +100,22 @@ class OrderMediaRepository(
                     sizeBytes = file.length(),
                     width = bounds.width,
                     height = bounds.height,
+                )
+            }
+        }
+
+    suspend fun stageCapturedIntakeVideo(file: File): Result<StagedOrderMedia> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                require(file.exists() && (file.length() > 0L)) { context.getString(R.string.error_photo_not_saved) }
+                StagedOrderMedia(
+                    localPath = file.absolutePath,
+                    fileName = file.name,
+                    mimeType = MIME_TYPE_MP4,
+                    mediaType = MEDIA_TYPE_VIDEO,
+                    sizeBytes = file.length(),
+                    width = null,
+                    height = null,
                 )
             }
         }
@@ -122,11 +157,17 @@ class OrderMediaRepository(
                             null,
                         )
                     }
+                val mediaType =
+                    when {
+                        attachmentPolicy.isImage(mimeType) -> MEDIA_TYPE_IMAGE
+                        attachmentPolicy.isVideo(mimeType) -> MEDIA_TYPE_VIDEO
+                        else -> MEDIA_TYPE_DOCUMENT
+                    }
                 StagedOrderMedia(
                     localPath = file.absolutePath,
                     fileName = file.name,
                     mimeType = mimeType,
-                    mediaType = if (attachmentPolicy.isImage(mimeType)) MEDIA_TYPE_IMAGE else MEDIA_TYPE_DOCUMENT,
+                    mediaType = mediaType,
                     sizeBytes = file.length(),
                     width = bounds.width,
                     height = bounds.height,
@@ -146,6 +187,47 @@ class OrderMediaRepository(
             mediaType = MEDIA_TYPE_PHOTO,
             timelineTitle = context.getString(R.string.timeline_photo_attached),
         )
+
+    suspend fun registerCapturedVideo(
+        actor: AuthenticatedUser,
+        orderId: String,
+        file: File,
+    ): Result<OrderMediaEntity> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                requireWritableOrder(actor, orderId)
+                require(file.exists() && (file.length() > 0L)) { context.getString(R.string.error_photo_not_saved) }
+
+                val now = clockMillis()
+                val media =
+                    OrderMediaEntity(
+                        id = UUID.randomUUID().toString(),
+                        orderId = orderId,
+                        mediaType = MEDIA_TYPE_VIDEO,
+                        localPath = file.absolutePath,
+                        fileName = file.name,
+                        mimeType = MIME_TYPE_MP4,
+                        sizeBytes = file.length(),
+                        width = null,
+                        height = null,
+                        createdByUserId = actor.id,
+                        capturedAt = now,
+                        createdAt = now,
+                    )
+
+                inTransaction {
+                    orderMediaDao.upsert(media)
+                    eventWriter.mediaAdded(
+                        orderId,
+                        actor.id,
+                        context.getString(R.string.timeline_video_attached),
+                        file.name,
+                        now,
+                    )
+                }
+                media
+            }
+        }
 
     private suspend fun registerCapturedImage(
         actor: AuthenticatedUser,
@@ -227,11 +309,17 @@ class OrderMediaRepository(
                             null,
                         )
                     }
+                val mediaType =
+                    when {
+                        attachmentPolicy.isImage(mimeType) -> MEDIA_TYPE_IMAGE
+                        attachmentPolicy.isVideo(mimeType) -> MEDIA_TYPE_VIDEO
+                        else -> MEDIA_TYPE_DOCUMENT
+                    }
                 val media =
                     OrderMediaEntity(
                         id = UUID.randomUUID().toString(),
                         orderId = orderId,
-                        mediaType = if (attachmentPolicy.isImage(mimeType)) MEDIA_TYPE_IMAGE else MEDIA_TYPE_DOCUMENT,
+                        mediaType = mediaType,
                         localPath = file.absolutePath,
                         fileName = file.name,
                         mimeType = mimeType,
@@ -458,8 +546,7 @@ class OrderMediaRepository(
         }
     }
 
-    private suspend fun <T> inTransaction(block: suspend () -> T): T =
-        database?.withTransaction { block() } ?: block()
+    private suspend fun <T> inTransaction(block: suspend () -> T): T = database?.withTransaction { block() } ?: block()
 
     private fun copyToWithLimit(
         input: InputStream,
@@ -517,7 +604,7 @@ class OrderMediaRepository(
         now: Long,
     ): File {
         val directory =
-            if (staged.mediaType == MEDIA_TYPE_PHOTO) {
+            if (staged.mediaType == MEDIA_TYPE_PHOTO || staged.mediaType == MEDIA_TYPE_VIDEO) {
                 mediaStorageProvider.getOrderMediaDir(orderId)
             } else {
                 mediaStorageProvider.getOrderAttachmentsDir(orderId)
@@ -581,9 +668,11 @@ class OrderMediaRepository(
 
     private companion object {
         const val MEDIA_TYPE_PHOTO = "PHOTO"
+        const val MEDIA_TYPE_VIDEO = "VIDEO"
         const val MEDIA_TYPE_IMAGE = "IMAGE"
         const val MEDIA_TYPE_DOCUMENT = "DOCUMENT"
         const val MIME_TYPE_JPEG = "image/jpeg"
+        const val MIME_TYPE_MP4 = "video/mp4"
         const val IMAGE_SAVE_QUALITY = 92
     }
 }

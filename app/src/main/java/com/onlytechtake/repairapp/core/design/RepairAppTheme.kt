@@ -2,7 +2,6 @@ package com.onlytechtake.repairapp.core.design
 
 import android.app.Activity
 import android.content.res.Configuration
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -19,6 +18,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.WindowCompat
 
 private val Charcoal = Color(0xFF191C1D)
@@ -225,7 +225,7 @@ fun RepairAppTheme(
 
             // Set window background to match theme - helps the system IME to pick the right theme
             val color = if (darkTheme) DarkColors.background else LightColors.background
-            window.setBackgroundDrawable(ColorDrawable(color.toArgb()))
+            window.setBackgroundDrawable(color.toArgb().toDrawable())
 
             // Explicitly set the decor view background as well
             window.decorView.setBackgroundColor(color.toArgb())

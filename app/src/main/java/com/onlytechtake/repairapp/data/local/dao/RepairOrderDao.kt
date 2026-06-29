@@ -68,7 +68,8 @@ interface RepairOrderDao {
             c.phone AS cust_phone, c.email AS cust_email, c.address AS cust_address, c.notes AS cust_notes,
             c.createdAt AS cust_createdAt, c.updatedAt AS cust_updatedAt,
             (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND (UPPER(m.mediaType) IN ('PHOTO', 'IMAGE') OR (m.mimeType LIKE 'image/%' AND UPPER(m.mediaType) != 'FINAL_PHOTO'))) AS imagesCount,
-            (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND NOT (UPPER(m.mediaType) IN ('PHOTO', 'IMAGE', 'FINAL_PHOTO') OR m.mimeType LIKE 'image/%')) AS documentsCount,
+            (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND (UPPER(m.mediaType) = 'VIDEO' OR m.mimeType LIKE 'video/%')) AS videosCount,
+            (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND NOT (UPPER(m.mediaType) IN ('PHOTO', 'IMAGE', 'FINAL_PHOTO', 'VIDEO') OR m.mimeType LIKE 'image/%' OR m.mimeType LIKE 'video/%')) AS documentsCount,
             (SELECT COUNT(*) FROM signatures s WHERE s.orderId = o.id) AS signaturesCount,
             (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND UPPER(m.mediaType) = 'FINAL_PHOTO') AS finalPhotosCount
         FROM repair_orders o
@@ -105,7 +106,8 @@ interface RepairOrderDao {
             c.phone AS cust_phone, c.email AS cust_email, c.address AS cust_address, c.notes AS cust_notes,
             c.createdAt AS cust_createdAt, c.updatedAt AS cust_updatedAt,
             (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND (UPPER(m.mediaType) IN ('PHOTO', 'IMAGE') OR (m.mimeType LIKE 'image/%' AND UPPER(m.mediaType) != 'FINAL_PHOTO'))) AS imagesCount,
-            (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND NOT (UPPER(m.mediaType) IN ('PHOTO', 'IMAGE', 'FINAL_PHOTO') OR m.mimeType LIKE 'image/%')) AS documentsCount,
+            (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND (UPPER(m.mediaType) = 'VIDEO' OR m.mimeType LIKE 'video/%')) AS videosCount,
+            (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND NOT (UPPER(m.mediaType) IN ('PHOTO', 'IMAGE', 'FINAL_PHOTO', 'VIDEO') OR m.mimeType LIKE 'image/%' OR m.mimeType LIKE 'video/%')) AS documentsCount,
             (SELECT COUNT(*) FROM signatures s WHERE s.orderId = o.id) AS signaturesCount,
             (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND UPPER(m.mediaType) = 'FINAL_PHOTO') AS finalPhotosCount
         FROM repair_orders o

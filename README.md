@@ -27,7 +27,7 @@ The app uses **English** as the default fallback language and includes full loca
 - 🛠️ **Order Management**: Real-time tracking (Open, Diagnosis, In Progress, Ready, Closed) with expanded operator permissions for full technical autonomy.
 - 👤 **Customer CRM**: Local database optimized for quick search and repair history.
 - ✍️ **Digital Signature**: Legal signature capture for terms and privacy acceptance directly on screen.
-- 📸 **Media Documentation**: Photo attachments of device status integrated into the order.
+- 📸 **Media Documentation**: Photo and video attachments of device status integrated into the order for complete technical evidence.
 - 📄 **PDF Reports**: Instant generation of intake forms and status receipts.
 - 🔄 **Smart Templates**: WhatsApp and legal templates that auto-switch language (English/Italian) unless customized by the user.
 - 🔐 **Total Privacy**: SQLCipher encrypted database and offline storage.

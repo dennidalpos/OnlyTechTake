@@ -42,7 +42,7 @@ internal class OrderWorkflowQueries(
 
             OrderFilterMode.OPEN_UNASSIGNED,
             OrderFilterMode.IN_PROGRESS,
-                -> {
+            -> {
                 false
             }
 
@@ -111,6 +111,7 @@ internal class OrderWorkflowQueries(
                         attachments =
                             OrderAttachmentCounts(
                                 images = projection.imagesCount,
+                                videos = projection.videosCount,
                                 documents = projection.documentsCount,
                                 signatures = projection.signaturesCount,
                                 finalPhotos = projection.finalPhotosCount,
@@ -146,6 +147,7 @@ internal class OrderWorkflowQueries(
                         attachments =
                             OrderAttachmentCounts(
                                 images = projection.imagesCount,
+                                videos = projection.videosCount,
                                 documents = projection.documentsCount,
                                 signatures = projection.signaturesCount,
                                 finalPhotos = projection.finalPhotosCount,

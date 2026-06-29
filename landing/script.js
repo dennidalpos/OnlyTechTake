@@ -44,7 +44,7 @@ const translations = {
             },
             media: {
                 title: "Documentazione Fotografica",
-                text: "Scatta foto per documentare lo stato estetico e tecnico di ogni dispositivo ricevuto, evitando contestazioni."
+                text: "Scatta foto e video per documentare lo stato estetico e tecnico di ogni dispositivo ricevuto, evitando contestazioni."
             },
             signature: {
                 title: "Firma & Privacy",
@@ -133,7 +133,7 @@ const translations = {
                 list: [
                     "Anagrafiche clienti, contatti e note fiscali",
                     "Dettagli tecnici sulle riparazioni e cronologia interventi",
-                    "Documentazione multimediale (Foto)",
+                    "Documentazione multimediale (Foto e Video)",
                     "Firme digitali di presa in carico e accettazione privacy"
                 ],
                 footer: "Vengono memorizzati esclusivamente in un database protetto all'interno dello storage privato del tuo dispositivo Android. Nessun dato viene indicizzato dal sistema operativo o reso accessibile ad altre app."
@@ -206,7 +206,7 @@ const translations = {
             },
             media: {
                 title: "Photo documentation",
-                text: "Take photos to document the visual and technical condition of each device received, avoiding disputes."
+                text: "Take photos and videos to document the visual and technical condition of each device received, avoiding disputes."
             },
             signature: {
                 title: "Signature & Privacy",
@@ -295,7 +295,7 @@ const translations = {
                 list: [
                     "Customer records, contacts, and tax notes",
                     "Technical repair details and intervention history",
-                    "Multimedia documentation (Photos)",
+                    "Multimedia documentation (Photos and Videos)",
                     "Digital signatures for intake and privacy acceptance"
                 ],
                 footer: "is stored exclusively in a protected database within your Android device's private storage. No data is indexed by the OS or accessible to other apps."

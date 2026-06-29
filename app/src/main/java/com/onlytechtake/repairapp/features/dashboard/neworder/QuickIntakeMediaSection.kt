@@ -30,10 +30,12 @@ import com.onlytechtake.repairapp.core.design.components.AppDialog
 import com.onlytechtake.repairapp.core.design.components.AppIconButton
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
+import com.onlytechtake.repairapp.features.dashboard.common.CameraCaptureMode
 import com.onlytechtake.repairapp.features.dashboard.common.CameraCapturePreview
 import com.onlytechtake.repairapp.features.dashboard.common.LocalImagePreview
 import com.onlytechtake.repairapp.features.dashboard.common.LocalImageViewer
 import com.onlytechtake.repairapp.features.workspace.isImageAttachment
+import com.onlytechtake.repairapp.features.workspace.isVideoAttachment
 import java.io.File
 
 @Composable
@@ -47,10 +49,13 @@ fun QuickIntakeMediaSection(
     onReplaceMedia: (StagedOrderMedia, Bitmap) -> Unit,
     onLaunchAttachmentPicker: () -> Unit,
     createPhotoFile: (String, String) -> Result<File>,
-    onPhotoCaptured: (File) -> Unit,
+    createVideoFile: (String) -> Result<File>,
+    onMediaCaptured: (File, CameraCaptureMode) -> Unit,
     onCameraError: (String) -> Unit,
+    canRecordVideo: Boolean = false,
 ) {
     var selectedImagePath by remember { mutableStateOf<String?>(null) }
+    var initialCameraMode by remember { mutableStateOf(CameraCaptureMode.PHOTO) }
 
     StandardCard {
         Column(
@@ -100,28 +105,47 @@ fun QuickIntakeMediaSection(
                     text = stringResource(R.string.intake_media_take_photo),
                     size = AppButtonSize.Compact,
                     testTag = RepairAppTestTags.IntakeMediaTakePhotoButton,
-                    onClick = { onShowCameraChange(true) },
+                    onClick = {
+                        initialCameraMode = CameraCaptureMode.PHOTO
+                        onShowCameraChange(true)
+                    },
                 )
-                AppButton(
-                    modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.intake_media_attach_file),
-                    size = AppButtonSize.Compact,
-                    testTag = RepairAppTestTags.IntakeMediaAttachFileButton,
-                    onClick = onLaunchAttachmentPicker,
-                )
+                if (canRecordVideo) {
+                    AppButton(
+                        modifier = Modifier.weight(1f),
+                        text = stringResource(R.string.intake_media_take_video),
+                        size = AppButtonSize.Compact,
+                        onClick = {
+                            initialCameraMode = CameraCaptureMode.VIDEO
+                            onShowCameraChange(true)
+                        },
+                    )
+                }
             }
+            AppButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(R.string.intake_media_attach_file),
+                size = AppButtonSize.Compact,
+                testTag = RepairAppTestTags.IntakeMediaAttachFileButton,
+                onClick = onLaunchAttachmentPicker,
+            )
 
             if (showCamera) {
                 AppDialog(
                     onDismissRequest = { onShowCameraChange(false) },
-                    title = stringResource(R.string.intake_media_take_photo),
+                    title =
+                        stringResource(
+                            if (initialCameraMode == CameraCaptureMode.PHOTO) R.string.intake_media_take_photo else R.string.intake_media_take_video,
+                        ),
                     content = {
                         CameraCapturePreview(
                             orderId = intakeSessionId,
                             orderNumber = "presa_in_carico",
+                            initialMode = initialCameraMode,
                             createPhotoFile = createPhotoFile,
-                            onPhotoCaptured = {
-                                onPhotoCaptured(it)
+                            createVideoFile = createVideoFile,
+                            onMediaCaptured = { file, mode ->
+                                onMediaCaptured(file, mode)
                                 onShowCameraChange(false)
                             },
                             onError = onCameraError,

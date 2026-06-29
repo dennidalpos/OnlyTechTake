@@ -131,6 +131,12 @@ class OperatorIntakeDemoScreenshotTest {
             robot.waitForTag(RepairAppTestTags.OrderStatusLabel)
             robot.capture(outputDir, "09-order-detail-intake.png")
 
+            // Technical Video Documentation (New Feature)
+            if (robot.isTagPresent(RepairAppTestTags.IntakeMediaTakeVideoButton)) {
+                robot.recordTechnicalVideo()
+                robot.capture(outputDir, "09b-video-recorded.png")
+            }
+
             robot.waitForTag(RepairAppTestTags.OrderWhatsAppButton, scroll = true)
             robot.clickTag(RepairAppTestTags.OrderWhatsAppButton)
             robot.waitForTag(RepairAppTestTags.OrderWhatsAppPreviewPanel)

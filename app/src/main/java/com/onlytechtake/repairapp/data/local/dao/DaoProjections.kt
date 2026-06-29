@@ -37,6 +37,7 @@ data class OrderListItemProjection(
     @Embedded val order: RepairOrderEntity,
     @Embedded(prefix = "cust_") val customer: CustomerEntity?,
     val imagesCount: Int,
+    val videosCount: Int,
     val documentsCount: Int,
     val signaturesCount: Int,
     val finalPhotosCount: Int,

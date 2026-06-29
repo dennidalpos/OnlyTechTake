@@ -248,14 +248,11 @@ class SettingsViewModel(
 
     fun setMessageMode(mode: MessageMode) = templateDelegate.setMessageMode(mode)
 
-    fun setBackupReminderEnabled(enabled: Boolean) =
-        backupDelegate.setBackupReminderEnabled(enabled)
+    fun setBackupReminderEnabled(enabled: Boolean) = backupDelegate.setBackupReminderEnabled(enabled)
 
-    fun setBackupReminderIntervalDays(days: Int) =
-        backupDelegate.setBackupReminderIntervalDays(days)
+    fun setBackupReminderIntervalDays(days: Int) = backupDelegate.setBackupReminderIntervalDays(days)
 
-    fun setAutomaticBackupEnabled(enabled: Boolean) =
-        backupDelegate.setAutomaticBackupEnabled(enabled)
+    fun setAutomaticBackupEnabled(enabled: Boolean) = backupDelegate.setAutomaticBackupEnabled(enabled)
 
     fun setBackupUri(uri: Uri?) = backupDelegate.setBackupUri(uri)
 
@@ -266,14 +263,11 @@ class SettingsViewModel(
 
     fun runBackupNow(onSuccess: () -> Unit = {}) = backupDelegate.runBackupNow(onSuccess)
 
-    fun setBackupEncryptionEnabled(enabled: Boolean) =
-        securityDelegate.setBackupEncryptionEnabled(enabled)
+    fun setBackupEncryptionEnabled(enabled: Boolean) = securityDelegate.setBackupEncryptionEnabled(enabled)
 
-    fun setBackupEncryptionPassword(password: String) =
-        securityDelegate.setBackupEncryptionPassword(password)
+    fun setBackupEncryptionPassword(password: String) = securityDelegate.setBackupEncryptionPassword(password)
 
-    fun setInactivityTimeoutMinutes(minutes: Int) =
-        securityDelegate.setInactivityTimeoutMinutes(minutes)
+    fun setInactivityTimeoutMinutes(minutes: Int) = securityDelegate.setInactivityTimeoutMinutes(minutes)
 
     fun setDarkTheme(enabled: Boolean) = uiDelegate.setDarkTheme(enabled)
 

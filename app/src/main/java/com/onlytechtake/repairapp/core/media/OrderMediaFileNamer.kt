@@ -14,6 +14,16 @@ class OrderMediaFileNamer {
         return "${safeOrderNumber}_$timestampMillis.jpg"
     }
 
+    fun videoFileName(
+        context: Context,
+        orderNumber: String,
+        timestampMillis: Long,
+    ): String {
+        val safeOrderNumber =
+            sanitize(orderNumber).ifBlank { context.getString(R.string.label_order_fallback) }
+        return "${safeOrderNumber}_$timestampMillis.mp4"
+    }
+
     private fun sanitize(value: String): String =
         value
             .trim()

@@ -133,16 +133,20 @@
     <string name="error_admin_cannot_be_deleted">L\'account Admin non può essere eliminato</string>
     <string name="error_admin_permissions_immutable">I permessi dell\'admin non possono essere modificati</string>
     <string name="timeline_photo_attached">Foto allegata</string>
+    <string name="timeline_video_attached">Video allegato</string>
     <string name="timeline_attachment_added">Allegato aggiunto</string>
     <string name="timeline_image_modified">Immagine modificata</string>
 
     <string name="error_photo_not_saved">Foto non salvata</string>
     <string name="label_repair_order">commessa</string>
     <string name="label_media">media</string>
+    <string name="label_media_photo">Foto</string>
+    <string name="label_media_video">Video</string>
     <string name="label_signature">firma</string>
     <string name="label_document">documento</string>
     <string name="label_attachment">allegato</string>
     <string name="label_photos_count">Foto %d</string>
+    <string name="label_videos_count">Video %d</string>
     <string name="label_documents_count">Documenti %d</string>
     <string name="label_signatures_count">Firme %d</string>
     <string name="label_final_photos_count">Lavoro finito %d</string>
@@ -354,6 +358,8 @@
     <string name="camera_grant_permission">Concedi permesso camera</string>
     <string name="camera_permission_denied">Permesso camera negato</string>
     <string name="camera_capture_photo">Acquisisci foto</string>
+    <string name="camera_capture_video">Registra video</string>
+    <string name="camera_stop_video">Ferma registrazione</string>
     <string name="camera_unavailable">Camera non disponibile</string>
     <string name="camera_capture_failed">Scatto non riuscito</string>
     <string name="camera_file_error">File foto non disponibile</string>
@@ -467,6 +473,7 @@
     <string name="intake_confirm_all_steps">Confermare tutti gli step</string>
     <string name="intake_media_empty">Aggiungi almeno una foto o un allegato.</string>
     <string name="intake_media_take_photo">Scatta foto</string>
+    <string name="intake_media_take_video">Registra video</string>
     <string name="intake_media_attach_file">Allega file</string>
     <string name="intake_media_remove">Rimuovi</string>
     <string name="intake_media_summary">%1$s - %2$d KB</string>
@@ -652,6 +659,7 @@
     <string name="admin_permission_manage_payments">Gestione pagamenti</string>
     <string name="admin_permission_export_data">Esportazione dati (Excel/PDF)</string>
     <string name="admin_permission_manage_storage">Pulizia cache e statistiche</string>
+    <string name="admin_permission_record_video">Registrazione video</string>
     <string name="admin_recovery_offline_warning">Scrivi questo codice e conservalo offline. Scomparirà al riavvio della schermata.</string>
     <string name="admin_new_password">Nuova password</string>
     <string name="admin_change_password">Cambia password</string>

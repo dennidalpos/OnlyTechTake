@@ -42,6 +42,18 @@ abstract class BaseAssetRobot(
     ): String = englishContext.getString(resId)
 
     fun loginDemo(username: String) {
+        val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
+        while (System.currentTimeMillis() < deadline) {
+            if (isTagPresent(RepairAppTestTags.AuthUsernameField)) break
+            if (isTagPresent(RepairAppTestTags.dashboardTab("HOME"))) return
+            if (isTagPresent(RepairAppTestTags.AuthDisplayNameField)) {
+                // We are on FirstSetupScreen, maybe seeding failed to mark as configured?
+                // For now, let's just fail with a better message or handle it if we want.
+                throw IllegalStateException("Landed on FirstSetupScreen instead of LoginScreen")
+            }
+            Thread.sleep(TAG_POLL_MILLIS)
+        }
+
         repeat(LOGIN_ATTEMPTS) { attempt ->
             waitForTag(RepairAppTestTags.AuthUsernameField)
             typeTag(RepairAppTestTags.AuthUsernameField, username)
@@ -211,8 +223,7 @@ abstract class BaseAssetRobot(
             .fetchSemanticsNodes()
             .isNotEmpty()
 
-    private fun isTextDisplayed(text: String): Boolean =
-        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+    private fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
     fun waitForText(
         text: String,
@@ -466,8 +477,7 @@ abstract class BaseAssetRobot(
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    private fun isRecordingDemo(): Boolean =
-        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     companion object {
         const val WAIT_TIMEOUT_MILLIS = 30_000L

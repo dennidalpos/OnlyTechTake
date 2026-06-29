@@ -59,6 +59,7 @@ import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.domain.workspace.isReadyForSubmit
 import com.onlytechtake.repairapp.domain.workspace.validationErrors
+import com.onlytechtake.repairapp.features.dashboard.common.CameraCaptureMode
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.SignatureCaptureForm
 import com.onlytechtake.repairapp.features.dashboard.common.WizardNavigationBar
@@ -393,8 +394,10 @@ fun QuickActions(
                             )
                         } else if (suggestions == null) {
                             Box(
-                                modifier = Modifier.fillMaxWidth()
-                                    .padding(RepairAppSpacing.compactGap),
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(RepairAppSpacing.compactGap),
                                 contentAlignment = Alignment.Center,
                             ) {
                                 androidx.compose.material3.CircularProgressIndicator(
@@ -543,12 +546,20 @@ fun QuickActions(
                 },
                 onLaunchAttachmentPicker = { attachmentLauncher.launch("*/*") },
                 createPhotoFile = { sessionId, _ -> viewModel.createIntakePhotoFile(sessionId) },
-                onPhotoCaptured = { file ->
-                    viewModel.stageCapturedIntakePhoto(file) { staged ->
-                        updateDraft { it.copy(stagedMedia = it.stagedMedia + staged) }
+                createVideoFile = { sessionId -> viewModel.createIntakeVideoFile(sessionId) },
+                onMediaCaptured = { file, mode ->
+                    if (mode == CameraCaptureMode.PHOTO) {
+                        viewModel.stageCapturedIntakePhoto(file) { staged ->
+                            updateDraft { it.copy(stagedMedia = it.stagedMedia + staged) }
+                        }
+                    } else {
+                        viewModel.stageCapturedIntakeVideo(file) { staged ->
+                            updateDraft { it.copy(stagedMedia = it.stagedMedia + staged) }
+                        }
                     }
                 },
                 onCameraError = viewModel::reportCameraError,
+                canRecordVideo = currentUser?.permissions?.contains(com.onlytechtake.repairapp.data.local.entities.UserPermission.RECORD_VIDEO) == true,
             )
             WizardNavigationBar(
                 onBack = { editStep(3) },

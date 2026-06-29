@@ -17,9 +17,15 @@ La condivisione dei dati avviene solo su azione esplicita e manuale dell'utente 
 - **PDF/XLSX**: L'utente sceglie di condividere il file tramite il sistema Android (Email, Drive, etc.).
 - **Backup**: L'utente esporta manualmente un file ZIP in una cartella locale o su cloud tramite SAF (Storage Access Framework).
 
+### Tipi di Dati Trattati (On-Device)
+Anche se non vengono "raccolti" (trasmessi), l'app gestisce i seguenti dati sul dispositivo:
+- **Foto e Video**: Acquisiti tramite fotocamera per documentare lo stato dei dispositivi in riparazione.
+- **File e Documenti**: Generazione di PDF e file di esportazione/backup.
+- **Informazioni Personali**: Nome cliente, numero di telefono (solo per invio WhatsApp manuale).
+
 ### Sicurezza dei Dati
 - **Dati in transito**: Non applicabile (nessun trasferimento automatico).
-- **Dati a riposo**: Il database locale è cifrato tramite **SQLCipher**.
+- **Dati a riposo**: Il database locale è cifrato tramite **SQLCipher**. Foto e Video sono salvati nella memoria privata dell'app (`filesDir`).
 - **Cancellazione**: L'utente può eliminare tutti i dati tramite la funzione di "Reset totale" nelle impostazioni dell'app.
 
 ## Risposte per il questionario

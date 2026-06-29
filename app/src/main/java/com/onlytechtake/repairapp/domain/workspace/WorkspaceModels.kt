@@ -112,8 +112,7 @@ fun IntakeOrderInput.validationErrors(context: Context): List<String> =
         if (!hasPrivacySignature) add(context.getString(R.string.error_privacy_required))
     }
 
-fun IntakeOrderInput.isReadyForSubmit(context: Context): Boolean =
-    validationErrors(context).isEmpty()
+fun IntakeOrderInput.isReadyForSubmit(context: Context): Boolean = validationErrors(context).isEmpty()
 
 private fun CustomerInput.isValidForIntake(): Boolean {
     val hasContact = phone.isNotBlank() || email.isNotBlank()
@@ -144,6 +143,7 @@ data class OrderFilter(
 
 data class OrderAttachmentCounts(
     val images: Int = 0,
+    val videos: Int = 0,
     val documents: Int = 0,
     val signatures: Int = 0,
     val finalPhotos: Int = 0,
@@ -208,5 +208,4 @@ fun DiagnosisResultInput.validationErrors(context: Context): List<String> =
         }
     }
 
-fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? =
-    estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }
+fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? = estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }

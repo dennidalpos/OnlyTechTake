@@ -34,6 +34,7 @@ import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
 
 data class AttachmentCounts(
     val images: Int,
+    val videos: Int,
     val documents: Int,
     val signatures: Int,
     val finalPhotos: Int = 0,
@@ -45,7 +46,8 @@ fun attachmentCounts(
 ): AttachmentCounts =
     AttachmentCounts(
         images = media.count { it.isImageAttachment() && !it.isFinalPhoto() },
-        documents = media.count { !it.isImageAttachment() },
+        videos = media.count { it.isVideoAttachment() },
+        documents = media.count { !it.isImageAttachment() && !it.isVideoAttachment() },
         signatures = signatures.size,
         finalPhotos = media.count { it.isFinalPhoto() },
     )
@@ -53,6 +55,9 @@ fun attachmentCounts(
 fun AttachmentCounts.label(context: android.content.Context): String =
     buildList {
         add(context.getString(R.string.label_photos_count, images))
+        if (videos > 0) {
+            add(context.getString(R.string.label_videos_count, videos))
+        }
         add(context.getString(R.string.label_documents_count, documents))
         add(
             context.getString(
@@ -73,6 +78,9 @@ fun AttachmentCounts.label(context: android.content.Context): String =
 fun OrderAttachmentCounts.label(context: android.content.Context): String =
     buildList {
         add(context.getString(R.string.label_photos_count, images))
+        if (videos > 0) {
+            add(context.getString(R.string.label_videos_count, videos))
+        }
         add(context.getString(R.string.label_documents_count, documents))
         add(
             context.getString(
@@ -95,6 +103,10 @@ fun OrderMediaEntity.isImageAttachment(): Boolean =
         mediaType.equals("FINAL_PHOTO", ignoreCase = true) ||
         mediaType.equals("IMAGE", ignoreCase = true) ||
         mimeType.startsWith("image/", ignoreCase = true)
+
+fun OrderMediaEntity.isVideoAttachment(): Boolean =
+    mediaType.equals("VIDEO", ignoreCase = true) ||
+        mimeType.startsWith("video/", ignoreCase = true)
 
 fun OrderMediaEntity.isFinalPhoto(): Boolean = mediaType.equals("FINAL_PHOTO", ignoreCase = true)
 

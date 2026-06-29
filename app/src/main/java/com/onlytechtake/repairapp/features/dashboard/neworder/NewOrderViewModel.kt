@@ -195,8 +195,9 @@ class NewOrderViewModel(
         }
     }
 
-    fun createIntakePhotoFile(orderNumber: String): Result<File> =
-        runCatching { orderMediaRepository.createIntakePhotoFile(orderNumber) }
+    fun createIntakePhotoFile(sessionId: String): Result<File> = runCatching { orderMediaRepository.createIntakePhotoFile(sessionId) }
+
+    fun createIntakeVideoFile(sessionId: String): Result<File> = runCatching { orderMediaRepository.createIntakeVideoFile(sessionId) }
 
     fun stageCapturedIntakePhoto(
         file: File,
@@ -205,6 +206,22 @@ class NewOrderViewModel(
         viewModelScope.launch {
             orderMediaRepository
                 .stageCapturedIntakePhoto(file)
+                .onSuccess {
+                    onSuccess(it)
+                    setFormDirty(true)
+                }.onFailure {
+                    _message.value = WorkspaceMessage(it.message ?: "Errore", isError = true)
+                }
+        }
+    }
+
+    fun stageCapturedIntakeVideo(
+        file: File,
+        onSuccess: (StagedOrderMedia) -> Unit,
+    ) {
+        viewModelScope.launch {
+            orderMediaRepository
+                .stageCapturedIntakeVideo(file)
                 .onSuccess {
                     onSuccess(it)
                     setFormDirty(true)

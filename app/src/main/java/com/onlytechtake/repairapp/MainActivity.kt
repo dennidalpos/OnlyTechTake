@@ -17,7 +17,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.onlytechtake.repairapp.core.design.RepairAppTheme
-import com.onlytechtake.repairapp.data.preferences.UiSettings
 import com.onlytechtake.repairapp.navigation.RepairAppNavHost
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking

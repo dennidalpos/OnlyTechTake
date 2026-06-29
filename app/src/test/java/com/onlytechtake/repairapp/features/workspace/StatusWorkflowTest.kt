@@ -117,8 +117,8 @@ class StatusWorkflowTest {
             statusTemplateAnchor(
                 order(
                     OrderStatus.CLOSED,
-                    closureReason = ClosureReason.COMPLETED
-                )
+                    closureReason = ClosureReason.COMPLETED,
+                ),
             ),
         )
     }

@@ -57,12 +57,23 @@ class ProAssetRobot(
         composeRule.waitForIdle()
         waitForTag(RepairAppTestTags.QuoteAcceptedToggle)
         clickTag(RepairAppTestTags.QuoteAcceptedToggle)
-        clickTag(RepairAppTestTags.QuoteConfirmButton, scroll = true)
+        clickTag(RepairAppTestTags.statusAction(OrderStatusAction.START_REPAIR.name), scroll = true)
         composeRule.waitForIdle()
         waitForTag(
             RepairAppTestTags.statusAction(OrderStatusAction.READY_FOR_PICKUP.name),
             scroll = true,
         )
+    }
+
+    fun recordTechnicalVideo() {
+        waitForTag(RepairAppTestTags.IntakeMediaTakeVideoButton, scroll = true)
+        clickTag(RepairAppTestTags.IntakeMediaTakeVideoButton)
+        waitForTag(RepairAppTestTags.IntakeMediaCaptureVideoButton)
+        clickTag(RepairAppTestTags.IntakeMediaCaptureVideoButton)
+        narrativePause(3)
+        clickTag(RepairAppTestTags.IntakeMediaStopVideoButton)
+        waitForTagGone(RepairAppTestTags.IntakeMediaStopVideoButton)
+        composeRule.waitForIdle()
     }
 
     fun closeOrder(note: String = "Repair successfully completed.") {

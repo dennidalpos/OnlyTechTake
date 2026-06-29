@@ -42,8 +42,6 @@ import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
-import com.onlytechtake.repairapp.data.local.entities.ClosureReason
-import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
@@ -107,7 +105,7 @@ fun OrderHeader(
                             ?.split(">")
                             ?.lastOrNull()
                             ?.trim()
-                        ?: stringResource(R.string.orders_category_unavailable),
+                            ?: stringResource(R.string.orders_category_unavailable),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.outline,
                 )

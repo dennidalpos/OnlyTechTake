@@ -110,8 +110,11 @@ trap { Restore-DeviceGlobalSettings; throw $_ }
 
 function Normalize-Video {
     param([string]$Path, [string]$OutputRoot, [double]$StartSec, [double]$EndSec, [switch]$WhatsApp)
-    if ($null -eq (Get-Command "ffmpeg" -ErrorAction SilentlyContinue)) { return }
-    $tempPath = Join-Path $OutputRoot (".temp_norm_" + [System.IO.Path]::GetFileName($Path))
+    if ($null -eq (Get-Command "ffmpeg" -ErrorAction SilentlyContinue)) {
+        Write-Warning "FFmpeg non trovato. Saltata normalizzazione video."
+        return
+    }
+    Write-Host "Normalizzazione video in corso..." -ForegroundColor Gray
     try {
         $ffmpegArgs = @("-y", "-i", $Path, "-ss", $StartSec.ToString())
 

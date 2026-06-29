@@ -40,7 +40,7 @@ Operational guide for AI agents. Environment: **Windows 11 + PowerShell**.
   - **Variant Alignment**: Every change to core logic or resources (Theme, DI, Repositories) MUST be applied to all flavors. Although development may start on `showcase`, always verify that `full` and `demo` are consistent. (*Ogni modifica alla logica core o alle risorse DEVE essere applicata a tutti i flavor. Anche se lo sviluppo può iniziare su `showcase`, verificare sempre che `full` e `demo` siano coerenti.*)
 - **SDK**: Target 37, Min 26.
 - **Database**: `DATABASE_VERSION = 1` locked. Do not modify schema or entities without explicit order. (*Non modificare schema o entità senza ordine esplicito.*)
-- **Permissions**: Only `CAMERA` (for repair documentation). `android:required="false"`.
+- **Permissions**: `CAMERA` and `RECORD_AUDIO` (for technical repair documentation). `android:required="false"`. (*Solo `CAMERA` e `RECORD_AUDIO` per documentazione tecnica. `android:required="false"`.*)
 
 ---
 

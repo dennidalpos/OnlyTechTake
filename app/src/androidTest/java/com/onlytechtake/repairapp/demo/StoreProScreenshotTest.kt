@@ -39,6 +39,8 @@ class StoreProScreenshotTest {
         val robot = ProAssetRobot(composeRule, context)
 
         ActivityScenario.launch(MainActivity::class.java).use {
+            Thread.sleep(5000)
+            robot.capture(outputDir, "00-debug-launch.png")
             robot.waitForTag(RepairAppTestTags.AuthUsernameField)
             robot.loginDemo(DemoDataSeeder.DEMO_OPERATOR_USERNAME)
 
@@ -175,7 +177,7 @@ class StoreProScreenshotTest {
     }
 
     private fun prepareScreenshotDirectory(): File {
-        val directory = File(requireNotNull(context.getExternalFilesDir(null)), "store-pro")
+        val directory = File("/sdcard/OnlyTechTake/store-pro")
         directory.deleteRecursively()
         directory.mkdirs()
         return directory

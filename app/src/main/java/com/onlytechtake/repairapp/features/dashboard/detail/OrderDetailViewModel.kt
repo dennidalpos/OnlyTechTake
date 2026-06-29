@@ -178,11 +178,23 @@ class OrderDetailViewModel(
         orderNumber: String,
     ): Result<File> = runCatching { orderMediaRepository.createPhotoFile(orderId, orderNumber) }
 
+    fun createVideoFile(
+        orderNumber: String,
+    ): Result<File> = runCatching { orderMediaRepository.createVideoFile(orderId, orderNumber) }
+
     fun registerCapturedPhoto(
         file: File,
     ) {
         actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
             orderMediaRepository.registerCapturedPhoto(actor, orderId, file)
+        }
+    }
+
+    fun registerCapturedVideo(
+        file: File,
+    ) {
+        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
+            orderMediaRepository.registerCapturedVideo(actor, orderId, file)
         }
     }
 

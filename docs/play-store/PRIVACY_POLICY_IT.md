@@ -11,7 +11,7 @@ Il trattamento dei dati avviene sotto la responsabilità dell'utilizzatore dell'
 L\'App permette l\'inserimento e la gestione dei seguenti dati:
 - **Dati Anagrafici Clienti:** Nome, cognome, ragione sociale, codice fiscale, partita IVA, indirizzo, email, numero di telefono.
 - **Dati di Riparazione:** Descrizione del problema, stato del dispositivo, diagnosi, note tecniche.
-- **Media:** Fotografie del dispositivo scattate tramite la fotocamera del dispositivo.
+- **Media:** Fotografie e video del dispositivo acquisiti tramite la fotocamera per documentare lo stato tecnico.
 - **Firme:** Firma autografa digitale acquisita sullo schermo per l\'accettazione dei termini di servizio.
 - **Log di Audit:** Tracciamento delle operazioni effettuate dagli operatori (creazione, modifica, eliminazione).
 

@@ -185,7 +185,7 @@ fun OrderDetailWorkspace(
 
                     val primaryOverride =
                         when {
-                            isResultStep && isRepairable && decision == QuoteDecision.REJECTED -> {
+                            (isResultStep && isRepairable && (decision == QuoteDecision.REJECTED)) -> {
                                 OrderStatusAction.CLOSE_ORDER
                             }
 
@@ -199,7 +199,7 @@ fun OrderDetailWorkspace(
                         }
 
                     val primaryLabel =
-                        if (isResultStep && isRepairable && decision == QuoteDecision.REJECTED) {
+                        if (isResultStep && isRepairable && (decision == QuoteDecision.REJECTED)) {
                             stringResource(R.string.action_close_order)
                         } else {
                             null
@@ -304,10 +304,9 @@ fun OrderDetailWorkspace(
                                     quoteDecision = workspaceState.quoteDecision,
                                     quoteRejectNote = workspaceState.quoteRejectNote,
                                     onQuoteDecisionChange = { workspaceState.quoteDecision = it },
-                                    onQuoteRejectNoteChange = {
-                                        workspaceState.quoteRejectNote = it
-                                    },
-                                )
+                                ) {
+                                    workspaceState.quoteRejectNote = it
+                                }
                             }
                         }
 
@@ -398,10 +397,9 @@ fun OrderDetailWorkspace(
                         onDeleteDocument = { docId ->
                             viewModel.onDeleteDocumentClicked(docId)
                         },
-                        requestConfirm = { title, text, action ->
-                            workspaceState.requestConfirm(title, text, action)
-                        },
-                    )
+                    ) { title, text, action ->
+                        workspaceState.requestConfirm(title, text, action)
+                    }
                 }
 
                 item(key = "timeline", contentType = "timeline") {
@@ -476,42 +474,41 @@ fun OrderDetailWorkspace(
                 )
             }
         },
-        onChangeStatus = { targetStatus, statusNote, closureReason ->
-            viewModel.changeStatus(
-                status = targetStatus,
-                note = statusNote,
-                closureReason = closureReason,
-            ) {
-                when (targetStatus) {
-                    OrderStatus.CLOSED -> {
-                        if (closureReason == ClosureReason.NOT_REPAIRABLE) {
-                            viewModel.prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
-                        } else {
-                            viewModel.prepareMessage(TemplateAnchor.WHATSAPP_COMPLETED)
-                        }
+    ) { targetStatus, statusNote, closureReason ->
+        viewModel.changeStatus(
+            status = targetStatus,
+            note = statusNote,
+            closureReason = closureReason,
+        ) {
+            when (targetStatus) {
+                OrderStatus.CLOSED -> {
+                    if (closureReason == ClosureReason.NOT_REPAIRABLE) {
+                        viewModel.prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
+                    } else {
+                        viewModel.prepareMessage(TemplateAnchor.WHATSAPP_COMPLETED)
                     }
-
-                    OrderStatus.IN_PROGRESS -> {
-                        viewModel.prepareMessage(TemplateAnchor.WHATSAPP_INTAKE)
-                    }
-
-                    OrderStatus.DIAGNOSIS -> {
-                        viewModel.prepareMessage(TemplateAnchor.WHATSAPP_DIAGNOSIS)
-                    }
-
-                    OrderStatus.REPAIRING -> {
-                        viewModel.prepareMessage(TemplateAnchor.WHATSAPP_REPAIRING)
-                    }
-
-                    OrderStatus.READY_FOR_PICKUP -> {
-                        viewModel.prepareMessage(TemplateAnchor.WHATSAPP_READY)
-                    }
-
-                    else -> {}
                 }
+
+                OrderStatus.IN_PROGRESS -> {
+                    viewModel.prepareMessage(TemplateAnchor.WHATSAPP_INTAKE)
+                }
+
+                OrderStatus.DIAGNOSIS -> {
+                    viewModel.prepareMessage(TemplateAnchor.WHATSAPP_DIAGNOSIS)
+                }
+
+                OrderStatus.REPAIRING -> {
+                    viewModel.prepareMessage(TemplateAnchor.WHATSAPP_REPAIRING)
+                }
+
+                OrderStatus.READY_FOR_PICKUP -> {
+                    viewModel.prepareMessage(TemplateAnchor.WHATSAPP_READY)
+                }
+
+                else -> {}
             }
-        },
-    )
+        }
+    }
 
     InternalNoteDialog(
         state = workspaceState,
