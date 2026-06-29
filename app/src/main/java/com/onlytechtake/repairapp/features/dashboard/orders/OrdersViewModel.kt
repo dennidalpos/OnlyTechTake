@@ -11,6 +11,7 @@ import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import com.onlytechtake.repairapp.domain.repositories.OrderRepository
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
+import com.onlytechtake.repairapp.domain.workspace.OrderListItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -61,7 +62,7 @@ class OrdersViewModel(
                 BackupReminderPolicy.shouldShowReminder(settings, System.currentTimeMillis())
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = false)
 
-    val orderListItems: StateFlow<List<com.onlytechtake.repairapp.domain.workspace.OrderListItem>?> =
+    val orderListItems: StateFlow<List<OrderListItem>?> =
         _orderFilter
             .debounce(300.milliseconds)
             .combine(currentUser) { filter, user -> user to filter }

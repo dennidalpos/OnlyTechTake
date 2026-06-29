@@ -2,7 +2,7 @@
   "project_name": "OnlyTechTake",
   "version": "1.0.0",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-07-04",
+  "last_updated": "2026-07-05",
   "backlog": [
     {
       "priority": "HIGH",
@@ -10,6 +10,10 @@
     }
   ],
   "completed_recently": [
+    {
+      "date": "2026-07-05",
+      "task": "QUALITY: Risoluzione violazioni Spotless (formattazione) e lint (backing properties in CustomersViewModel). Pulizia import e rimozione FQN in OrdersViewModel."
+    },
     {
       "date": "2026-07-04",
       "task": "QUALITY: Risoluzione warning editor (debounce Flow con Duration, unnecessary safe calls, parameter naming) e allineamento dimensioni bitmap nel seeder Showcase."

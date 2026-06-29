@@ -61,9 +61,7 @@ class CustomersViewModel(
             ioDispatcher = ioDispatcher,
         )
 
-    private val _isFormDirty = MutableStateFlow(false)
-
-    val isFormDirty: StateFlow<Boolean> = _isFormDirty.asStateFlow()
+    private val isFormDirty = MutableStateFlow(value = false)
 
     val currentUser = authRepository.currentUser
 
@@ -86,7 +84,7 @@ class CustomersViewModel(
     }
 
     fun setFormDirty(dirty: Boolean) {
-        _isFormDirty.value = dirty
+        isFormDirty.value = dirty
         onSetFormDirty(dirty)
     }
 
