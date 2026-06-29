@@ -25,10 +25,10 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class, kotlinx.coroutines.FlowPreview::class)
 class CustomersViewModel(
@@ -47,7 +47,7 @@ class CustomersViewModel(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
-    private val _showAll = MutableStateFlow(false)
+    private val _showAll = MutableStateFlow(value = false)
     val showAll = _showAll.asStateFlow()
 
     private val actionRunner =
@@ -69,8 +69,7 @@ class CustomersViewModel(
 
     val customerSuggestions: StateFlow<List<CustomerEntity>?> =
         searchQuery
-            .debounce(300)
-            .distinctUntilChanged()
+            .debounce(300.milliseconds)
             .flatMapLatest { query ->
                 customerRepository.search(query)
             }.stateIn(

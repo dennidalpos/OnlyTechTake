@@ -2,6 +2,10 @@ package com.onlytechtake.repairapp.core.error
 
 import android.content.Context
 import android.util.Log
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -14,6 +18,7 @@ class DiagnosticLogger(
     private val logDir = File(context.filesDir, "logs")
     private val logFile = File(logDir, "error_logs.txt")
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
+    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     init {
         if (!logDir.exists()) {
@@ -40,12 +45,14 @@ class DiagnosticLogger(
                 append("\n---\n")
             }
 
-        try {
-            FileOutputStream(logFile, true).use { output ->
-                output.write(logLine.toByteArray())
+        scope.launch {
+            try {
+                FileOutputStream(logFile, true).use { output ->
+                    output.write(logLine.toByteArray())
+                }
+            } catch (e: Exception) {
+                Log.e("DiagnosticLogger", "Failed to write log", e)
             }
-        } catch (e: Exception) {
-            Log.e("DiagnosticLogger", "Failed to write log", e)
         }
     }
 

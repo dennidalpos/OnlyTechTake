@@ -36,8 +36,14 @@ class MainActivity : AppCompatActivity() {
             val windowSizeClass = calculateWindowSizeClass(this)
             val uiSettings by appContainer.uiPreferences.settings.collectAsState(
                 initial =
-                    com.onlytechtake.repairapp.data.preferences
-                        .UiSettings(),
+                    com.onlytechtake.repairapp.data.preferences.UiSettings(
+                        darkTheme =
+                            when (AppCompatDelegate.getDefaultNightMode()) {
+                                AppCompatDelegate.MODE_NIGHT_YES -> true
+                                AppCompatDelegate.MODE_NIGHT_NO -> false
+                                else -> true // Default to dark as per UiSettings default
+                            },
+                    ),
             )
             val darkTheme = uiSettings.darkTheme
 

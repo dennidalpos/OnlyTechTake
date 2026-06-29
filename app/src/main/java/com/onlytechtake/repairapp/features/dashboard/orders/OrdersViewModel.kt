@@ -18,11 +18,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class, kotlinx.coroutines.FlowPreview::class)
 class OrdersViewModel(
@@ -63,8 +63,7 @@ class OrdersViewModel(
 
     val orderListItems: StateFlow<List<com.onlytechtake.repairapp.domain.workspace.OrderListItem>?> =
         _orderFilter
-            .debounce(300)
-            .distinctUntilChanged()
+            .debounce(300.milliseconds)
             .combine(currentUser) { filter, user -> user to filter }
             .flatMapLatest { (user, filter) ->
                 when {

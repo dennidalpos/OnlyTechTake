@@ -36,7 +36,12 @@
     <string name="showcase_event_quote_desc">Service quote sent to customer via WhatsApp.</string>
     <string name="showcase_event_ready_desc">Intervention successful. Device tested and ready for pickup.</string>
     <string name="showcase_event_closed_desc">Intervention completed, payment received, and device delivered.</string>
+    <string name="showcase_feedback_ok">OK, go ahead.</string>
     <string name="showcase_photo_label">Object: %s</string>
+    <string name="showcase_type_pc">PC</string>
+    <string name="showcase_type_smartphone">Smartphone</string>
+    <string name="showcase_type_tablet">Tablet</string>
+    <string name="showcase_type_console">Console</string>
     <string name="showcase_sig_label">Signature: %s</string>
     <string name="showcase_privacy_snapshot">Standard Privacy Policy</string>
     <string name="showcase_terms_snapshot">Service Terms and Conditions</string>

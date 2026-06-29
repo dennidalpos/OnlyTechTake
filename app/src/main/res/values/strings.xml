@@ -265,6 +265,10 @@
     <string name="demo_customer_address">Via Roma 1, Milano</string>
     <string name="demo_customer_notes">Regular customer.</string>
 
+    <string name="demo_cat_display_service">Display Service</string>
+    <string name="demo_cat_glass_service">Glass Service</string>
+    <string name="demo_cat_drift_service">Drift Service</string>
+    <string name="demo_cat_analog_service">Analog replacement</string>
 
     <string name="priority_low">Low</string>
     <string name="priority_normal">Normal</string>

@@ -12,6 +12,14 @@
   "completed_recently": [
     {
       "date": "2026-07-04",
+      "task": "QUALITY: Risoluzione warning editor (debounce Flow con Duration, unnecessary safe calls, parameter naming) e allineamento dimensioni bitmap nel seeder Showcase."
+    },
+    {
+      "date": "2026-07-04",
+      "task": "QUALITY: Risolto loop di recreation in MainActivity. Allineato valore iniziale di collectAsState con AppCompatDelegate per evitare flip-flop durante startup."
+    },
+    {
+      "date": "2026-07-04",
       "task": "QUALITY: Pulizia risorse inutilizzate (colori e stringhe) identificate dal report Lint. Ridotti warning da 38 a 26 (rimanenti legati a flavor diversi)."
     },
     {
@@ -40,7 +48,15 @@
     },
     {
       "date": "2026-07-04",
+      "task": "QUALITY: Verifica integrità di tutte le varianti (Full, Demo, Showcase) su dispositivo fisico. Installazione e avvio completati con successo. SQLCipher operativo su tutti i flavor."
+    },
+    {
+      "date": "2026-07-04",
       "task": "SHOWCASE: Refactoring DataSeeder e stringhe per il flavor Showcase completato."
+    },
+    {
+      "date": "2026-07-04",
+      "task": "QUALITY: Localizzazione completa delle stringhe di seeding (feedback, categorie e tipi di riparazione) per i flavor Demo e Showcase."
     }
   ]
 }

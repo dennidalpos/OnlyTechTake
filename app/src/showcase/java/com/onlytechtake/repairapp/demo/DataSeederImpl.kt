@@ -9,6 +9,7 @@ import androidx.core.graphics.createBitmap
 import androidx.room.withTransaction
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
+import com.onlytechtake.repairapp.core.orders.OrderNumberGenerator
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
@@ -30,6 +31,8 @@ import com.onlytechtake.repairapp.data.local.entities.UserEntity
 import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.data.local.entities.UserRole
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
@@ -39,9 +42,10 @@ import java.util.UUID
  * Populates the database with a rich set of demo data for quick presentations.
  */
 class DataSeederImpl : DataSeeder {
-    override suspend fun seed(context: Context) {
-        ShowcaseDataSeeder.seedShowcaseData(context)
-    }
+    override suspend fun seed(context: Context) =
+        withContext(Dispatchers.IO) {
+            ShowcaseDataSeeder.seedShowcaseData(context)
+        }
 
     override val defaultPassword: String = ShowcaseDataSeeder.DEFAULT_PASSWORD
 }
@@ -52,9 +56,7 @@ object ShowcaseDataSeeder {
     suspend fun seedShowcaseData(context: Context) {
         val authPreferences = AuthPreferences(context)
         val mediaStorageProvider = MediaStorageProvider(context)
-        val orderNumberGenerator =
-            com.onlytechtake.repairapp.core.orders
-                .OrderNumberGenerator()
+        val orderNumberGenerator = OrderNumberGenerator()
 
         // We don't pre-fill owner info here anymore to allow the Showcase user
         // to see the initial Setup Wizard (pre-filled in the UI).
@@ -438,6 +440,14 @@ object ShowcaseDataSeeder {
             val selectableCategories =
                 categories.filter { cat -> categories.none { it.parentId == cat.id } }
 
+            val repairTypes =
+                listOf(
+                    context.getString(R.string.showcase_type_pc),
+                    context.getString(R.string.showcase_type_smartphone),
+                    context.getString(R.string.showcase_type_tablet),
+                    context.getString(R.string.showcase_type_console),
+                )
+
             var orderCount = 1
             allCustomers.forEach { customer ->
                 repeat(3) { j ->
@@ -455,7 +465,7 @@ object ShowcaseDataSeeder {
                     val categoryId =
                         selectableCategories[(orderCount % selectableCategories.size)].id
                     val operatorId = operators[(orderCount % 3)].id
-                    val repairType = listOf("PC", "Smartphone", "Tablet", "Console")[orderCount % 4]
+                    val repairType = repairTypes[orderCount % repairTypes.size]
                     val priority =
                         if (orderCount % 5 == 0) OrderPriority.URGENT else OrderPriority.NORMAL
 
@@ -523,7 +533,7 @@ object ShowcaseDataSeeder {
                                 requiresCustomerFeedback = true,
                                 expectedFeedbackType = CustomerFeedbackType.ACCEPT,
                                 customerFeedback = CustomerFeedbackType.ACCEPT,
-                                customerFeedbackNote = "OK, procedete.",
+                                customerFeedbackNote = context.getString(R.string.showcase_feedback_ok),
                                 customerFeedbackAt = order.createdAt + 1800000L,
                                 createdByUserId = operatorId,
                                 createdAt = order.createdAt + 1700000L,
@@ -583,6 +593,8 @@ object ShowcaseDataSeeder {
                             label = context.getString(R.string.showcase_photo_label, order.title),
                             backgroundColor = Color.LTGRAY,
                             paint = paint,
+                            width = 1280,
+                            height = 720,
                         )
                     db.orderMediaDao().upsert(
                         OrderMediaEntity(
@@ -612,6 +624,8 @@ object ShowcaseDataSeeder {
                                 ),
                             backgroundColor = Color.WHITE,
                             paint = paint,
+                            width = 800,
+                            height = 400,
                         )
                     db.signatureDao().upsert(
                         SignatureEntity(
@@ -724,10 +738,12 @@ object ShowcaseDataSeeder {
         label: String,
         backgroundColor: Int,
         paint: Paint,
+        width: Int,
+        height: Int,
     ): File {
         directory.mkdirs()
         val file = File(directory, fileName)
-        val bitmap = createBitmap(1280, 720)
+        val bitmap = createBitmap(width, height)
         val canvas = Canvas(bitmap)
         canvas.drawColor(backgroundColor)
         paint.color = Color.BLACK

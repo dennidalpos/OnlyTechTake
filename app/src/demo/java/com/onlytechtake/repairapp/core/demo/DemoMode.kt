@@ -106,9 +106,9 @@ object DemoMode {
             OrderCategoryEntity(
                 id = "cat-iphone-13",
                 parentId = "cat-iphone",
-                level = 3,
+                level = 2,
                 name = "iPhone 13",
-                description = "Display Service",
+                description = context.getString(R.string.demo_cat_display_service),
                 active = true,
             ),
             OrderCategoryEntity(
@@ -132,7 +132,7 @@ object DemoMode {
                 parentId = "cat-galaxy-s",
                 level = 3,
                 name = "S23 Ultra",
-                description = "Glass Service",
+                description = context.getString(R.string.demo_cat_glass_service),
                 active = true,
             ),
             OrderCategoryEntity(
@@ -164,7 +164,7 @@ object DemoMode {
                 parentId = "cat-ps5",
                 level = 3,
                 name = "DualSense",
-                description = "Drift Service",
+                description = context.getString(R.string.demo_cat_drift_service),
                 active = true,
             ),
             OrderCategoryEntity(
@@ -188,7 +188,7 @@ object DemoMode {
                 parentId = "cat-switch",
                 level = 3,
                 name = "Joy-Con",
-                description = "Analog replacement",
+                description = context.getString(R.string.demo_cat_analog_service),
                 active = true,
             ),
         )

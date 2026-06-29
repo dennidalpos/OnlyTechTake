@@ -266,6 +266,10 @@
     <string name="demo_customer_address">Via Roma 1, Milano</string>
     <string name="demo_customer_notes">Cliente abituale.</string>
 
+    <string name="demo_cat_display_service">Riparazione Display</string>
+    <string name="demo_cat_glass_service">Riparazione Vetro</string>
+    <string name="demo_cat_drift_service">Riparazione Drift</string>
+    <string name="demo_cat_analog_service">Sostituzione Analogico</string>
 
     <string name="priority_low">Bassa</string>
     <string name="priority_normal">Normale</string>

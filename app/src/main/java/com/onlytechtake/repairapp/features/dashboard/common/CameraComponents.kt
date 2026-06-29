@@ -321,7 +321,7 @@ private fun cameraTargetRotation(
 ): Int {
     val windowRotation =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            context.display?.rotation
+            context.display.rotation
         } else {
             @Suppress("DEPRECATION")
             (context.getSystemService(Context.WINDOW_SERVICE) as? WindowManager)
