@@ -220,7 +220,7 @@ fun OrderDetailWorkspace(
                         whatsAppAnchor = statusTemplateAnchor(selected.order),
                         onActionClick = { action ->
                             val isActionMatchDecision =
-                                isResultStep && isRepairable && decision != null &&
+                                (isResultStep && isRepairable && (decision != null)) &&
                                     (action == primaryOverride || (primaryOverride == null && action == OrderStatusAction.START_REPAIR))
 
                             val isActionMatchNotRepairable =

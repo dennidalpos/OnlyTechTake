@@ -2,31 +2,33 @@
   "project_name": "OnlyTechTake",
   "version": "1.0.0",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-07-02",
+  "last_updated": "2026-07-04",
   "backlog": [
-    {
-      "priority": "HIGH",
-      "task": "AUDIT: Baseline versionCode=1 established. Documentation and strings realigned to generic job management positioning."
-    },
-    {
-      "priority": "HIGH",
-      "task": "LEGAL: Verifica accessibilità e pubblicazione HTTPS definitiva per Privacy Policy (inventoveritas.mine.nu)."
-    },
     {
       "priority": "HIGH",
       "task": "PROCEDURAL: Pianificazione e avvio gruppo di test chiuso (20 tester per 14 giorni) per compliance Play Store account post-2023."
     },
     {
       "priority": "MEDIUM",
+      "task": "QUALITY: Test di regressione su hardware low-end (Android 10-12) per verificare fluidità UI dopo ottimizzazioni dispatcher."
+    }
+  ],
+  "completed_recently": [
+    {
+      "date": "2026-07-04",
+      "task": "QUALITY: Risoluzione warning vari dell'editor e ottimizzazione divisioni per zero in StorageSettings per mitigare warning frameRate=NaN."
+    },
+    {
+      "date": "2026-07-04",
+      "task": "LEGAL: Verifica accessibilità e pubblicazione HTTPS definitiva per Privacy Policy (inventoveritas.mine.nu). URL verificato e accessibile."
+    },
+    {
+      "date": "2026-07-04",
       "task": "TECHNICAL: Configurazione finale Data Safety e questionari Play Console basati sui documenti tecnici aggiornati."
     },
     {
-      "priority": "MEDIUM",
-      "task": "QUALITY: Test di regressione su hardware low-end (Android 10-12) per verificare fluidità UI dopo ottimizzazioni dispatcher."
-    },
-    {
-      "priority": "LOW",
-      "task": "MAINTENANCE: Monitoraggio warning Gradle 10 (AGP 9.2.1) e warning Compose 'frameRate=NaN'."
+      "date": "2026-07-04",
+      "task": "SHOWCASE: Refactoring DataSeeder e stringhe per il flavor Showcase completato."
     }
   ]
 }

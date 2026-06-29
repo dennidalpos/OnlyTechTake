@@ -146,7 +146,7 @@ fun AppEmptyState(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center,
             )
-            if ((actionLabel != null && onAction != null)) {
+            if (actionLabel != null && onAction != null) {
                 AppButton(
                     text = actionLabel,
                     onClick = onAction,
@@ -209,13 +209,13 @@ fun WizardNavigationBar(
                 onClick = onNext,
             )
         }
-        if (onCancel != null) {
+        onCancel?.let {
             AppButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.nav_cancel_and_close),
                 variant = AppButtonVariant.Ghost,
                 size = AppButtonSize.Compact,
-                onClick = onCancel,
+                onClick = it,
             )
         }
     }

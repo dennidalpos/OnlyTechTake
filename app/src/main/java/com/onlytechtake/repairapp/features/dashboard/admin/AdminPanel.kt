@@ -347,7 +347,7 @@ fun AdminPanel(
             )
         } else {
             filteredUsers.forEach { user ->
-                var resetPasswordVisible by rememberSaveable(user.id) { mutableStateOf(false) }
+                var resetPasswordVisible by rememberSaveable(user.id) { mutableStateOf(value = false) }
                 var currentPassword by rememberSaveable(user.id) { mutableStateOf("") }
                 var currentPasswordVisible by rememberSaveable(user.id) { mutableStateOf(false) }
 

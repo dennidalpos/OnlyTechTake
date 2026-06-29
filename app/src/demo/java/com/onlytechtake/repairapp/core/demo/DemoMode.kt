@@ -103,7 +103,7 @@ object DemoMode {
                 parentId = "cat-iphone",
                 level = 3,
                 name = "iPhone 13",
-                description = "Riparazione Display",
+                description = "Display Service",
                 active = true,
             ),
             OrderCategoryEntity(
@@ -127,7 +127,7 @@ object DemoMode {
                 parentId = "cat-galaxy-s",
                 level = 3,
                 name = "S23 Ultra",
-                description = "Riparazione Vetro",
+                description = "Glass Service",
                 active = true,
             ),
             OrderCategoryEntity(
@@ -159,7 +159,7 @@ object DemoMode {
                 parentId = "cat-ps5",
                 level = 3,
                 name = "DualSense",
-                description = "Riparazione Drift",
+                description = "Drift Service",
                 active = true,
             ),
             OrderCategoryEntity(
@@ -183,7 +183,7 @@ object DemoMode {
                 parentId = "cat-switch",
                 level = 3,
                 name = "Joy-Con",
-                description = "Sostituzione analogici",
+                description = "Analog replacement",
                 active = true,
             ),
         )

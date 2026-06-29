@@ -61,10 +61,11 @@ fun StorageSettings(
                         fontWeight = FontWeight.Bold,
                     )
 
+                    val total = stats.totalDeviceBytes.toDouble().coerceAtLeast(1.0)
                     val freePercentage =
-                        ((stats.freeDeviceBytes.toDouble() / stats.totalDeviceBytes.toDouble()) * 100).toInt()
+                        ((stats.freeDeviceBytes.toDouble() / total) * 100).toInt()
                     val usedProgress =
-                        (stats.totalDeviceBytes - stats.freeDeviceBytes).toDouble() / stats.totalDeviceBytes.toDouble()
+                        (stats.totalDeviceBytes - stats.freeDeviceBytes).toDouble() / total
 
                     LinearProgressIndicator(
                         progress = { usedProgress.toFloat() },

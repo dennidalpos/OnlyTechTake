@@ -108,7 +108,7 @@ fun HomePanelContent(
 
         Spacer(Modifier.height(RepairAppSpacing.cardGap))
 
-        if (summary == null || queues == null) {
+        if ((summary == null) || (queues == null)) {
             androidx.compose.foundation.layout.Box(
                 modifier = Modifier.fillMaxWidth().height(200.dp),
                 contentAlignment = Alignment.Center,

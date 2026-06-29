@@ -5,6 +5,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.pow
 
 class DesignTokenContrastTest {
     @Test
@@ -104,11 +105,11 @@ private fun Color.relativeLuminance(): Double {
         return if (linear <= 0.03928) {
             linear / 12.92
         } else {
-            Math.pow((linear + 0.055) / 1.055, 2.4)
+            ((linear + 0.055) / 1.055).pow(2.4)
         }
     }
 
-    return 0.2126 * channel(red) +
-        0.7152 * channel(green) +
-        0.0722 * channel(blue)
+    return (0.2126 * channel(red)) +
+        (0.7152 * channel(green)) +
+        (0.0722 * channel(blue))
 }

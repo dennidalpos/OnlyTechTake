@@ -106,7 +106,7 @@ class CustomersViewModel(
         actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
             customerRepository.save(actor, input).onSuccess {
                 onSaved(it)
-                setFormDirty(false)
+                setFormDirty(dirty = false)
             }
         }
     }

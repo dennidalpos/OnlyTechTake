@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
@@ -77,7 +78,7 @@ class NewOrderViewModel(
 
     val customerSuggestions: StateFlow<List<CustomerEntity>?> =
         customerSearchQuery
-            .debounce(300)
+            .debounce(300.milliseconds)
             .distinctUntilChanged()
             .flatMapLatest { query ->
                 customerRepository.search(query)
@@ -140,7 +141,7 @@ class NewOrderViewModel(
     fun resetQuickIntakeDraft() {
         _quickIntakeDraft.value = QuickIntakeDraft()
         _customerSearchQuery.value = ""
-        setFormDirty(false)
+        setFormDirty(dirty = false)
     }
 
     fun saveCustomer(
@@ -150,7 +151,7 @@ class NewOrderViewModel(
         actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
             customerRepository.save(actor, input).onSuccess {
                 onSaved(it)
-                setFormDirty(false)
+                setFormDirty(dirty = false)
             }
         }
     }

@@ -57,7 +57,7 @@ class OrderDetailViewModel(
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
 
-    private val _isProcessing = MutableStateFlow(false)
+    private val _isProcessing = MutableStateFlow(value = false)
     val isProcessing = _isProcessing.asStateFlow()
 
     private val actionRunner =
@@ -244,9 +244,9 @@ class OrderDetailViewModel(
         viewModelScope.launch {
             _isProcessing.value = true
             val actor = currentUser.value
-            if (actor != null) {
+            actor?.let {
                 templateRepository
-                    .prepareMessage(actor, orderId, anchor)
+                    .prepareMessage(it, orderId, anchor)
                     .onSuccess {
                         _preparedMessage.value = it
                         _preparedMessageBody.value = it.body
@@ -266,7 +266,7 @@ class OrderDetailViewModel(
     fun clearPreparedMessage() {
         _preparedMessage.value = null
         _preparedMessageBody.value = ""
-        setFormDirty(false)
+        setFormDirty(dirty = false)
     }
 
     fun recordPreparedMessage() {
@@ -356,20 +356,6 @@ class OrderDetailViewModel(
 
     fun onPdfSentDismissed() {
         _showPdfSentConfirmation.value = false
-    }
-
-    fun triggerShare(
-        fileName: String,
-        title: String,
-    ) {
-        viewModelScope.launch {
-            val intent =
-                shareDocumentIntentFactory.createPdfShareIntent(
-                    File(fileName),
-                    title,
-                )
-            _pendingShareIntent.value = intent
-        }
     }
 
     fun clearPendingShareIntent() {
