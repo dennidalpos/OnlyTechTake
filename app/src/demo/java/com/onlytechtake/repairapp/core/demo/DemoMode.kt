@@ -23,14 +23,17 @@ object DemoMode {
 
     fun getVersionBanner(context: Context): String = context.getString(R.string.demo_version_banner)
 
-    fun getAdminDisplayName(context: Context): String = context.getString(R.string.demo_admin_display_name)
+    fun getAdminDisplayName(context: Context): String =
+        context.getString(R.string.demo_admin_display_name)
 
-    fun getOperatorNotAvailableMessage(context: Context): String = context.getString(R.string.demo_error_operator_not_available)
+    fun getOperatorNotAvailableMessage(context: Context): String =
+        context.getString(R.string.demo_error_operator_not_available)
 
     fun getOperatorLimitMessage(
         context: Context,
         limit: Int,
-    ): String = context.resources.getQuantityString(R.plurals.demo_error_operator_limit, limit, limit)
+    ): String =
+        context.resources.getQuantityString(R.plurals.demo_error_operator_limit, limit, limit)
 
     fun getOrderLimitMessage(
         context: Context,
@@ -49,9 +52,11 @@ object DemoMode {
 
     fun getDemoTryCta(context: Context): String = context.getString(R.string.home_demo_cta_try)
 
-    fun getDemoProFeaturesLabel(context: Context): String = context.getString(R.string.home_demo_pro_features)
+    fun getDemoProFeaturesLabel(context: Context): String =
+        context.getString(R.string.home_demo_pro_features)
 
-    fun getDemoProFeaturesDesc(context: Context): String = context.getString(R.string.home_demo_pro_features_description)
+    fun getDemoProFeaturesDesc(context: Context): String =
+        context.getString(R.string.home_demo_pro_features_description)
 
     fun getShowcaseOwnerInfo(context: Context): OwnerInfo? = null
 
@@ -101,7 +106,7 @@ object DemoMode {
             OrderCategoryEntity(
                 id = "cat-iphone-13",
                 parentId = "cat-iphone",
-                level = 2,
+                level = 3,
                 name = "iPhone 13",
                 description = context.getString(R.string.demo_cat_display_service),
                 active = true,
@@ -184,6 +189,78 @@ object DemoMode {
                 level = 3,
                 name = "Joy-Con",
                 description = context.getString(R.string.demo_cat_analog_service),
+                active = true,
+            ),
+            OrderCategoryEntity(
+                id = "cat-pc",
+                parentId = null,
+                level = 0,
+                name = context.getString(R.string.common_cat_pc),
+                description = context.getString(R.string.common_cat_pc_desc),
+                active = true,
+            ),
+            OrderCategoryEntity(
+                id = "cat-notebook",
+                parentId = "cat-pc",
+                level = 1,
+                name = context.getString(R.string.common_cat_notebook),
+                description = context.getString(R.string.common_cat_notebook_desc),
+                active = true,
+            ),
+            OrderCategoryEntity(
+                id = "cat-gaming-laptop",
+                parentId = "cat-notebook",
+                level = 2,
+                name = context.getString(R.string.common_cat_gaming),
+                description = context.getString(R.string.common_cat_gaming_desc),
+                active = true,
+            ),
+            OrderCategoryEntity(
+                id = "cat-rog-strix",
+                parentId = "cat-gaming-laptop",
+                level = 3,
+                name = context.getString(R.string.common_cat_rog_strix),
+                description = context.getString(R.string.common_cat_rog_strix_desc),
+                active = true,
+            ),
+            OrderCategoryEntity(
+                id = "cat-windows-laptop",
+                parentId = "cat-notebook",
+                level = 2,
+                name = context.getString(R.string.common_cat_notebook),
+                description = "Windows Laptop",
+                active = true,
+            ),
+            OrderCategoryEntity(
+                id = "cat-asus-zenbook",
+                parentId = "cat-windows-laptop",
+                level = 3,
+                name = "Asus Zenbook OLED",
+                description = "Hinge and display service",
+                active = true,
+            ),
+            OrderCategoryEntity(
+                id = "cat-tablet",
+                parentId = null,
+                level = 0,
+                name = context.getString(R.string.common_cat_tablet),
+                description = context.getString(R.string.common_cat_tablet_desc),
+                active = true,
+            ),
+            OrderCategoryEntity(
+                id = "cat-ipad",
+                parentId = "cat-tablet",
+                level = 1,
+                name = context.getString(R.string.common_cat_ipad),
+                description = context.getString(R.string.common_cat_ipad_desc),
+                active = true,
+            ),
+            OrderCategoryEntity(
+                id = "cat-ipad-pro",
+                parentId = "cat-ipad",
+                level = 2,
+                name = "iPad Pro",
+                description = "11\" and 12.9\" models",
                 active = true,
             ),
         )

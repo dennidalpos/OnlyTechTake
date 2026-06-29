@@ -299,6 +299,30 @@ object ShowcaseDataSeeder {
                         true,
                     ),
                     OrderCategoryEntity(
+                        "cat-nintendo",
+                        "cat-console",
+                        1,
+                        "Nintendo",
+                        context.getString(R.string.common_cat_nintendo_desc),
+                        true,
+                    ),
+                    OrderCategoryEntity(
+                        "cat-switch",
+                        "cat-nintendo",
+                        2,
+                        context.getString(R.string.common_cat_switch),
+                        context.getString(R.string.common_cat_switch_desc),
+                        true,
+                    ),
+                    OrderCategoryEntity(
+                        "cat-joycon",
+                        "cat-switch",
+                        3,
+                        "Joy-Con",
+                        "Analog replacement",
+                        true,
+                    ),
+                    OrderCategoryEntity(
                         "cat-tablet",
                         null,
                         0,
@@ -633,7 +657,7 @@ object ShowcaseDataSeeder {
                             orderId = orderId,
                             signerName =
                                 customer.firstName ?: customer.companyName
-                                    ?: context.getString(R.string.signature_default_signer),
+                                ?: context.getString(R.string.signature_default_signer),
                             privacyAccepted = true,
                             termsAccepted = true,
                             privacyTextSnapshot = context.getString(R.string.showcase_privacy_snapshot),

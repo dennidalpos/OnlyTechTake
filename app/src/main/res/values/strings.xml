@@ -249,6 +249,11 @@
     <string name="common_cat_switch">Switch</string>
     <string name="common_cat_switch_desc">Hybrid console</string>
 
+    <string name="common_cat_tablet">Tablet</string>
+    <string name="common_cat_tablet_desc">iPad and Android tablets</string>
+    <string name="common_cat_ipad">iPad</string>
+    <string name="common_cat_ipad_desc">Apple Tablet</string>
+
     <string name="common_cat_pc">Computer &amp; Laptop</string>
     <string name="common_cat_pc_desc">PC hardware and software repairs</string>
     <string name="common_cat_notebook">Notebook</string>

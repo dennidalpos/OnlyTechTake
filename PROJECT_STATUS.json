@@ -12,6 +12,14 @@
   "completed_recently": [
     {
       "date": "2026-07-06",
+      "task": "QUALITY: Allineamento catalogo categorie tra flavor Demo e Showcase. Aggiunte categorie Tablet e iPad come 'common' in main strings. Risolto bug gerarchia (level) in DemoMode. Verifica integrità build e test su tutte le varianti (Full, Demo, Showcase)."
+    },
+    {
+      "date": "2026-07-06",
+      "task": "TECHNICAL: Configurazione simboli di debug (ndk debugSymbolLevel FULL) per la pubblicazione su Play Store."
+    },
+    {
+      "date": "2026-07-06",
       "task": "MAINTENANCE: Pulizia profonda del repository (cache .gradle/.kotlin, build folders, .artifacts) e rimozione stringhe inutilizzate in Showcase flavor. Allineamento formattazione con Spotless."
     },
     {

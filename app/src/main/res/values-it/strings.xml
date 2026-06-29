@@ -250,6 +250,11 @@
     <string name="common_cat_switch">Switch</string>
     <string name="common_cat_switch_desc">Console ibrida</string>
 
+    <string name="common_cat_tablet">Tablet</string>
+    <string name="common_cat_tablet_desc">Interventi iPad e tablet Android</string>
+    <string name="common_cat_ipad">iPad</string>
+    <string name="common_cat_ipad_desc">Tablet Apple</string>
+
     <string name="common_cat_pc">Computer &amp; Laptop</string>
     <string name="common_cat_pc_desc">Riparazioni hardware e software PC</string>
     <string name="common_cat_notebook">Notebook</string>
