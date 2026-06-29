@@ -6,7 +6,7 @@
   "backlog": [
     {
       "priority": "DONE",
-      "task": "QUALITY: Allineamento varianti (Full, Demo, Showcase) completato. Pulizia legacy e centralizzazione risorse common."
+      "task": "QUALITY: Allineamento varianti (Full, Demo, Showcase) completato. Inclusa nuova autorizzazione RECORD_VIDEO e refactoring DemoMode per supporto localizzazione."
     },
     {
       "priority": "DONE",

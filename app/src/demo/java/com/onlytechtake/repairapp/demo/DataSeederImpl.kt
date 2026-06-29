@@ -37,8 +37,8 @@ class DataSeederImpl : DataSeeder {
                 ),
             )
             // Seed Demo Content
-            db.customerDao().upsert(DemoMode.demoCustomer)
-            db.orderCategoryDao().upsertAll(DemoMode.demoCategories)
+            db.customerDao().upsert(DemoMode.getDemoCustomer(context))
+            db.orderCategoryDao().upsertAll(DemoMode.getDemoCategories(context))
         }
     }
 

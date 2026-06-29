@@ -7,15 +7,20 @@ import org.junit.runners.model.Statement
 import java.util.Locale
 
 class LocaleTestRule(
-    language: String,
-    country: String = "",
+    defaultLanguage: String = "en",
+    defaultCountry: String = "US",
 ) : TestRule {
-    private val locale =
+    val locale: Locale by lazy {
+        val args = InstrumentationRegistry.getArguments()
+        val lang = args.getString("locale") ?: defaultLanguage
+        val country = args.getString("country") ?: defaultCountry
+
         Locale
             .Builder()
-            .setLanguage(language)
+            .setLanguage(lang)
             .apply { if (country.isNotEmpty()) setRegion(country) }
             .build()
+    }
     private var deviceLocale: Locale? = null
 
     override fun apply(

@@ -32,13 +32,16 @@ class OperatorIntakeDemoScreenshotTest {
 
     @get:Rule
     val cameraPermissionRule: GrantPermissionRule =
-        GrantPermissionRule.grant(android.Manifest.permission.CAMERA)
+        GrantPermissionRule.grant(
+            android.Manifest.permission.CAMERA,
+            android.Manifest.permission.RECORD_AUDIO,
+        )
 
     private val context: Context = ApplicationProvider.getApplicationContext()
 
     @Test
     fun capturesOperatorIntakeDemo() {
-        runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        runBlocking { DemoDataSeeder.seedDemoProfile(context, localeRule.locale) }
         val outputDir = prepareScreenshotDirectory()
         val robot = ProAssetRobot(composeRule, context)
 

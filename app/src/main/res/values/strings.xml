@@ -230,6 +230,25 @@
 
     <string name="common_cat_smartphone">Smartphone</string>
     <string name="common_cat_smartphone_desc">Mobile phone repair</string>
+    <string name="common_cat_apple">Apple</string>
+    <string name="common_cat_apple_desc">iPhone, iPad, Watch</string>
+    <string name="common_cat_iphone">iPhone</string>
+    <string name="common_cat_iphone_desc">All iPhone models</string>
+    <string name="common_cat_samsung">Samsung</string>
+    <string name="common_cat_samsung_desc">Galaxy S, A, Z</string>
+    <string name="common_cat_galaxy_s">Galaxy S Series</string>
+    <string name="common_cat_galaxy_s_desc">Samsung high-end</string>
+    <string name="common_cat_console">Console</string>
+    <string name="common_cat_console_desc">Gaming hardware</string>
+    <string name="common_cat_sony">Sony</string>
+    <string name="common_cat_sony_desc">PlayStation World</string>
+    <string name="common_cat_ps5">PS5</string>
+    <string name="common_cat_ps5_desc">Next-Gen Console</string>
+    <string name="common_cat_nintendo">Nintendo</string>
+    <string name="common_cat_nintendo_desc">Switch, Lite, OLED</string>
+    <string name="common_cat_switch">Switch</string>
+    <string name="common_cat_switch_desc">Hybrid console</string>
+
     <string name="common_cat_pc">Computer &amp; Laptop</string>
     <string name="common_cat_pc_desc">PC hardware and software repairs</string>
     <string name="common_cat_notebook">Notebook</string>
@@ -238,6 +257,13 @@
     <string name="common_cat_gaming_desc">MSI, ROG, Alienware, Legion</string>
     <string name="common_cat_rog_strix">Asus ROG Strix</string>
     <string name="common_cat_rog_strix_desc">Internal cleaning and thermal paste</string>
+
+    <string name="demo_customer_first_name">Marco</string>
+    <string name="demo_customer_last_name">Rossi</string>
+    <string name="demo_customer_phone">+39 333 000 0000</string>
+    <string name="demo_customer_email">marco.rossi@example.com</string>
+    <string name="demo_customer_address">Via Roma 1, Milano</string>
+    <string name="demo_customer_notes">Regular customer.</string>
 
 
     <string name="priority_low">Low</string>

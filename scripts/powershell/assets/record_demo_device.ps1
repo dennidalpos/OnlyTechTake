@@ -134,6 +134,7 @@ function Normalize-Video {
 
 # Permissions
 adb -s $serial shell pm grant $PackageName android.permission.CAMERA 2>$null
+adb -s $serial shell pm grant $PackageName android.permission.RECORD_AUDIO 2>$null
 
 if ($SeedData) {
     Invoke-DemoScreenshotTest -Serial $serial -TestClass "com.onlytechtake.repairapp.demo.SeedDemoDataTest" -Flavor $Flavor
@@ -147,7 +148,9 @@ $recordProc = Start-Process -FilePath "adb" -ArgumentList (@("-s", $serial, "she
 try {
     Start-Sleep -Seconds 3
     if ($selectedProfileConfig) {
-        Invoke-DemoScreenshotTest -Serial $serial -TestClass $selectedProfileConfig.testClass -Flavor $Flavor -InstrumentationExtras @{ demoRecording = "true" }
+        $extras = @{ demoRecording = "true" }
+        if ($Locale) { $extras["locale"] = $Locale }
+        Invoke-DemoScreenshotTest -Serial $serial -TestClass $selectedProfileConfig.testClass -Flavor $Flavor -InstrumentationExtras $extras
     } else {
         Write-Host "Registrazione manuale in corso... Premi INVIO per fermare."
         Read-Host

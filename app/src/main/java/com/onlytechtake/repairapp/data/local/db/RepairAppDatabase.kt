@@ -5,7 +5,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.sqlite.db.SupportSQLiteOpenHelper
 import com.onlytechtake.repairapp.core.security.DatabaseKeyManager
 import com.onlytechtake.repairapp.data.local.dao.AppSettingDao
 import com.onlytechtake.repairapp.data.local.dao.AuditLogDao

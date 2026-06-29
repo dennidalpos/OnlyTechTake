@@ -46,9 +46,11 @@ object DemoDataSeeder {
     private val testContext: Context
         get() = InstrumentationRegistry.getInstrumentation().context
 
-    suspend fun seedDemoProfile(context: Context) {
-        // Force English for consistent assets
-        val locale = java.util.Locale.ENGLISH
+    suspend fun seedDemoProfile(
+        context: Context,
+        locale: java.util.Locale = java.util.Locale.ENGLISH,
+    ) {
+        // Apply requested locale for consistent assets and strings
         java.util.Locale.setDefault(locale)
         val resources = context.resources
         val config = resources.configuration
@@ -114,6 +116,7 @@ object DemoDataSeeder {
                             UserPermission.CLOSE_ORDERS,
                             UserPermission.MANAGE_CUSTOMERS,
                             UserPermission.MANAGE_PAYMENTS,
+                            UserPermission.RECORD_VIDEO,
                         ),
                     active = true,
                     createdAt = now,
@@ -128,32 +131,32 @@ object DemoDataSeeder {
                     id = "demo-cat-pc",
                     parentId = null,
                     level = 0,
-                    name = testContext.getString(TestR.string.common_cat_pc),
-                    description = testContext.getString(TestR.string.common_cat_pc_desc),
+                    name = testContext.getString(R.string.common_cat_pc),
+                    description = testContext.getString(R.string.common_cat_pc_desc),
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = DEMO_CATEGORY_ID, // notebook
                     parentId = "demo-cat-pc",
                     level = 1,
-                    name = testContext.getString(TestR.string.common_cat_notebook),
-                    description = testContext.getString(TestR.string.common_cat_notebook_desc),
+                    name = testContext.getString(R.string.common_cat_notebook),
+                    description = testContext.getString(R.string.common_cat_notebook_desc),
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = "demo-cat-gaming",
                     parentId = DEMO_CATEGORY_ID,
                     level = 2,
-                    name = testContext.getString(TestR.string.common_cat_gaming),
-                    description = testContext.getString(TestR.string.common_cat_gaming_desc),
+                    name = testContext.getString(R.string.common_cat_gaming),
+                    description = testContext.getString(R.string.common_cat_gaming_desc),
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = "demo-cat-rog-strix",
                     parentId = "demo-cat-gaming",
                     level = 3,
-                    name = testContext.getString(TestR.string.common_cat_rog_strix),
-                    description = testContext.getString(TestR.string.common_cat_rog_strix_desc),
+                    name = testContext.getString(R.string.common_cat_rog_strix),
+                    description = testContext.getString(R.string.common_cat_rog_strix_desc),
                     active = true,
                 ),
             ),

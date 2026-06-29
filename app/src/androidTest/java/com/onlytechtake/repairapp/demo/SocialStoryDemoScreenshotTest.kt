@@ -27,13 +27,16 @@ class SocialStoryDemoScreenshotTest {
 
     @get:Rule
     val cameraPermissionRule: GrantPermissionRule =
-        GrantPermissionRule.grant(android.Manifest.permission.CAMERA)
+        GrantPermissionRule.grant(
+            android.Manifest.permission.CAMERA,
+            android.Manifest.permission.RECORD_AUDIO,
+        )
 
     private val context: Context = ApplicationProvider.getApplicationContext()
 
     @Test
     fun capturesOrderIntakeToClosureStories() {
-        runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        runBlocking { DemoDataSeeder.seedDemoProfile(context, localeRule.locale) }
         val outputDir = prepareCaseDirectory(CASE_ORDER)
         val robot = ProAssetRobot(composeRule, context)
 
@@ -170,7 +173,7 @@ class SocialStoryDemoScreenshotTest {
 
     @Test
     fun capturesCategoryAndTemplateStories() {
-        runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        runBlocking { DemoDataSeeder.seedDemoProfile(context, localeRule.locale) }
         val outputDir = prepareCaseDirectory(CASE_CONFIG)
         val robot = ProAssetRobot(composeRule, context)
 
@@ -243,7 +246,7 @@ class SocialStoryDemoScreenshotTest {
 
     @Test
     fun capturesPrivateAndBusinessCustomerStories() {
-        runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        runBlocking { DemoDataSeeder.seedDemoProfile(context, localeRule.locale) }
         val outputDir = prepareCaseDirectory(CASE_CUSTOMERS)
         val robot = ProAssetRobot(composeRule, context)
 
@@ -301,7 +304,7 @@ class SocialStoryDemoScreenshotTest {
 
     @Test
     fun capturesMaintenanceStories() {
-        runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        runBlocking { DemoDataSeeder.seedDemoProfile(context, localeRule.locale) }
         val outputDir = prepareCaseDirectory(CASE_MAINTENANCE)
         val robot = ProAssetRobot(composeRule, context)
 
@@ -331,7 +334,7 @@ class SocialStoryDemoScreenshotTest {
     fun capturesDemoLimitStory() {
         if (!BuildConfig.IS_DEMO_VERSION) return
 
-        runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        runBlocking { DemoDataSeeder.seedDemoProfile(context, localeRule.locale) }
         val outputDir = prepareCaseDirectory(CASE_DEMO_LIMIT)
         val robot = ProAssetRobot(composeRule, context)
 

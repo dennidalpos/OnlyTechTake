@@ -26,7 +26,10 @@ class StoreDemoScreenshotTest {
 
     @get:Rule
     val cameraPermissionRule: GrantPermissionRule =
-        GrantPermissionRule.grant(android.Manifest.permission.CAMERA)
+        GrantPermissionRule.grant(
+            android.Manifest.permission.CAMERA,
+            android.Manifest.permission.RECORD_AUDIO,
+        )
 
     private val context: Context = ApplicationProvider.getApplicationContext()
     private val testContext: Context
@@ -36,7 +39,7 @@ class StoreDemoScreenshotTest {
     fun capturesStoreDemoScreenshots() {
         if (!BuildConfig.IS_DEMO_VERSION) return
 
-        runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        runBlocking { DemoDataSeeder.seedDemoProfile(context, localeRule.locale) }
         val outputDir = prepareScreenshotDirectory()
         val robot = DemoAssetRobot(composeRule, context)
 

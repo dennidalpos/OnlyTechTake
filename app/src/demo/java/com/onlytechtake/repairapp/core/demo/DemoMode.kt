@@ -55,47 +55,47 @@ object DemoMode {
 
     fun getShowcaseOwnerInfo(context: Context): OwnerInfo? = null
 
-    val demoCustomer =
+    fun getDemoCustomer(context: Context) =
         CustomerEntity(
             id = "demo-customer-1",
             type = CustomerType.PRIVATE,
-            firstName = "Marco",
-            lastName = "Rossi",
+            firstName = context.getString(R.string.demo_customer_first_name),
+            lastName = context.getString(R.string.demo_customer_last_name),
             companyName = null,
             vatNumber = null,
             taxCode = null,
-            phone = "+39 333 000 0000",
-            email = "marco.rossi@example.com",
-            address = "Via Roma 1, Milano",
-            notes = "Cliente abituale",
+            phone = context.getString(R.string.demo_customer_phone),
+            email = context.getString(R.string.demo_customer_email),
+            address = context.getString(R.string.demo_customer_address),
+            notes = context.getString(R.string.demo_customer_notes),
             createdAt = 1735689600000L, // 2025-01-01
             updatedAt = 1735689600000L,
         )
 
-    val demoCategories =
+    fun getDemoCategories(context: Context) =
         listOf(
             OrderCategoryEntity(
                 id = "cat-smartphone",
                 parentId = null,
                 level = 0,
-                name = "Smartphone",
-                description = "Riparazione telefoni cellulari",
+                name = context.getString(R.string.common_cat_smartphone),
+                description = context.getString(R.string.common_cat_smartphone_desc),
                 active = true,
             ),
             OrderCategoryEntity(
                 id = "cat-apple",
                 parentId = "cat-smartphone",
                 level = 1,
-                name = "Apple",
-                description = "iPhone, iPad, Watch",
+                name = context.getString(R.string.common_cat_apple),
+                description = context.getString(R.string.common_cat_apple_desc),
                 active = true,
             ),
             OrderCategoryEntity(
                 id = "cat-iphone",
                 parentId = "cat-apple",
                 level = 2,
-                name = "iPhone",
-                description = "Tutti i modelli",
+                name = context.getString(R.string.common_cat_iphone),
+                description = context.getString(R.string.common_cat_iphone_desc),
                 active = true,
             ),
             OrderCategoryEntity(
@@ -110,16 +110,16 @@ object DemoMode {
                 id = "cat-samsung",
                 parentId = "cat-smartphone",
                 level = 1,
-                name = "Samsung",
-                description = "Galaxy S, A, Z",
+                name = context.getString(R.string.common_cat_samsung),
+                description = context.getString(R.string.common_cat_samsung_desc),
                 active = true,
             ),
             OrderCategoryEntity(
                 id = "cat-galaxy-s",
                 parentId = "cat-samsung",
                 level = 2,
-                name = "Galaxy S",
-                description = "Serie flagship",
+                name = context.getString(R.string.common_cat_galaxy_s),
+                description = context.getString(R.string.common_cat_galaxy_s_desc),
                 active = true,
             ),
             OrderCategoryEntity(
@@ -134,24 +134,24 @@ object DemoMode {
                 id = "cat-console",
                 parentId = null,
                 level = 0,
-                name = "Console",
-                description = "Gaming hardware",
+                name = context.getString(R.string.common_cat_console),
+                description = context.getString(R.string.common_cat_console_desc),
                 active = true,
             ),
             OrderCategoryEntity(
                 id = "cat-sony",
                 parentId = "cat-console",
                 level = 1,
-                name = "Sony",
-                description = "PlayStation World",
+                name = context.getString(R.string.common_cat_sony),
+                description = context.getString(R.string.common_cat_sony_desc),
                 active = true,
             ),
             OrderCategoryEntity(
                 id = "cat-ps5",
                 parentId = "cat-sony",
                 level = 2,
-                name = "PS5",
-                description = "Console Next-Gen",
+                name = context.getString(R.string.common_cat_ps5),
+                description = context.getString(R.string.common_cat_ps5_desc),
                 active = true,
             ),
             OrderCategoryEntity(
@@ -166,16 +166,16 @@ object DemoMode {
                 id = "cat-nintendo",
                 parentId = "cat-console",
                 level = 1,
-                name = "Nintendo",
-                description = "Switch, Lite, OLED",
+                name = context.getString(R.string.common_cat_nintendo),
+                description = context.getString(R.string.common_cat_nintendo_desc),
                 active = true,
             ),
             OrderCategoryEntity(
                 id = "cat-switch",
                 parentId = "cat-nintendo",
                 level = 2,
-                name = "Switch",
-                description = "Console ibrida",
+                name = context.getString(R.string.common_cat_switch),
+                description = context.getString(R.string.common_cat_switch_desc),
                 active = true,
             ),
             OrderCategoryEntity(

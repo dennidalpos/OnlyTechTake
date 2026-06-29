@@ -119,7 +119,11 @@ if ($CaseId) { $activeCases = @($activeCases | Where-Object { $_.id -eq $CaseId 
 foreach ($case in $activeCases) {
     $method = if ($case.testMethod) { $case.testMethod } else { $config.testMethod }
     $targetTest = if ($method) { "$($config.testClass)#$method" } else { $config.testClass }
-    Invoke-DemoScreenshotTest -Serial $serial -TestClass $targetTest -Flavor $Flavor
+
+    $extras = @{}
+    if ($Locale) { $extras["locale"] = $Locale }
+
+    Invoke-DemoScreenshotTest -Serial $serial -TestClass $targetTest -Flavor $Flavor -InstrumentationExtras $extras
 }
 
 # Recupero e Elaborazione

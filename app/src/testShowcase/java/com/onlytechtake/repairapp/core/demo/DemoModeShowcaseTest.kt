@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.core.demo
 
+import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertThrows
@@ -8,7 +9,7 @@ import org.junit.Test
 class DemoModeShowcaseTest {
     @Test
     fun showcaseFlavorCannotEnableDemoMode() {
-        DemoMode.setEnabled(true)
+        DemoMode.setEnabled(enabled = true)
 
         assertFalse(DemoMode.canEnable())
         assertFalse(DemoMode.isEnabled)
@@ -18,14 +19,14 @@ class DemoModeShowcaseTest {
     fun showcaseFlavorDoesNotExposeDemoEntities() {
         val customerError =
             assertThrows(IllegalStateException::class.java) {
-                DemoMode.demoCustomer
+                DemoMode.getDemoCustomer(mockk())
             }
         val categoriesError =
             assertThrows(IllegalStateException::class.java) {
-                DemoMode.demoCategories
+                DemoMode.getDemoCategories(mockk())
             }
 
-        assertEquals("DemoMode non disponibile", customerError.message)
-        assertEquals("DemoMode non disponibile", categoriesError.message)
+        assertEquals("DemoMode not available", customerError.message)
+        assertEquals("DemoMode not available", categoriesError.message)
     }
 }
