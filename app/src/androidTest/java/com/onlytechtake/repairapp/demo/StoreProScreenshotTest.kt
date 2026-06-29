@@ -38,6 +38,7 @@ class StoreProScreenshotTest {
     @Test
     fun capturesStoreProScreenshots() {
         runBlocking { DemoDataSeeder.seedDemoProfile(context, localeRule.locale) }
+        TestUtils.refreshAppContainer()
         val outputDir = prepareScreenshotDirectory()
         val robot = ProAssetRobot(composeRule, context)
 
@@ -112,10 +113,11 @@ class StoreProScreenshotTest {
             robot.waitForTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
             robot.clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
 
+            val summary = "Samsung Galaxy S23 - Schermo rotto"
             val createdOrderId = waitForCreatedOrderId()
             robot.clickDashboardTab("ORDERS")
-            robot.waitForTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
-            robot.clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
+            robot.waitForText(summary, scroll = true)
+            robot.clickText(summary, scroll = true)
 
             // 04-diagnosi-preventivo-pro
             robot.applySimpleStatus(
@@ -143,7 +145,9 @@ class StoreProScreenshotTest {
                 OrderStatusAction.CLOSE_ORDER,
             )
             robot.closeOrder("Riparazione completata con successo.")
-            robot.clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
+            robot.clickDashboardTab("ORDERS")
+            robot.waitForText(summary, scroll = true)
+            robot.clickText(summary, scroll = true)
             robot.waitForText(R.string.status_closed)
             robot.capture(outputDir, "06-timeline-chiusura-pro.png")
 

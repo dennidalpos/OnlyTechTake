@@ -341,6 +341,7 @@ abstract class BaseAssetRobot(
         val listTags =
             listOf(
                 RepairAppTestTags.OrderDetailLazyColumn,
+                "orders_list",
                 "categories_list",
                 "customer_list",
                 "customer_form",
@@ -369,6 +370,7 @@ abstract class BaseAssetRobot(
         val listTags =
             listOf(
                 RepairAppTestTags.OrderDetailLazyColumn,
+                "orders_list",
                 "categories_list",
                 "customer_list",
                 "customer_form",

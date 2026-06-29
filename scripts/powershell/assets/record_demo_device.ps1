@@ -115,6 +115,7 @@ function Normalize-Video {
         return
     }
     Write-Host "Normalizzazione video in corso..." -ForegroundColor Gray
+    $tempPath = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName() + ".mp4")
     try {
         $ffmpegArgs = @("-y", "-i", $Path, "-ss", $StartSec.ToString())
 

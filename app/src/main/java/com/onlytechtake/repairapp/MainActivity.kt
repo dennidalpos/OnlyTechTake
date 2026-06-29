@@ -18,8 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.onlytechtake.repairapp.core.design.RepairAppTheme
 import com.onlytechtake.repairapp.navigation.RepairAppNavHost
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 
 class MainActivity : AppCompatActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -27,14 +25,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val appContainer = (application as RepairAppApplication).appContainer
-
-        // Read theme preference synchronously to avoid theme flickering and infinite restart loops
-        val initialSettings = runBlocking { appContainer.uiPreferences.settings.first() }
-        val mode =
-            if (initialSettings.darkTheme) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-        if (AppCompatDelegate.getDefaultNightMode() != mode) {
-            AppCompatDelegate.setDefaultNightMode(mode)
-        }
 
         // Default to dark style at system level to ensure dark IME and avoid white flash
         enableEdgeToEdge(
@@ -45,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val windowSizeClass = calculateWindowSizeClass(this)
             val uiSettings by appContainer.uiPreferences.settings.collectAsState(
-                initial = initialSettings,
+                initial = com.onlytechtake.repairapp.data.preferences.UiSettings(),
             )
             val darkTheme = uiSettings.darkTheme
 

@@ -42,6 +42,7 @@ class OperatorIntakeDemoScreenshotTest {
     @Test
     fun capturesOperatorIntakeDemo() {
         runBlocking { DemoDataSeeder.seedDemoProfile(context, localeRule.locale) }
+        TestUtils.refreshAppContainer()
         val outputDir = prepareScreenshotDirectory()
         val robot = ProAssetRobot(composeRule, context)
 
@@ -115,22 +116,11 @@ class OperatorIntakeDemoScreenshotTest {
             robot.capture(outputDir, "07-step5-summary.png")
             robot.clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
 
+            val summary = "Samsung Galaxy S23 - Schermo rotto"
             val createdOrderId = waitForCreatedOrderId()
             robot.clickDashboardTab("ORDERS")
-            robot.waitForText(R.string.dashboard_orders)
-
-            // Show Back to Top in Orders
-            composeRule.onNodeWithTag("orders_list").performTouchInput { swipeUp() }
-            robot.pauseForDemo()
-            if (robot.isTagPresent(RepairAppTestTags.ScrollToTopButton)) {
-                robot.capture(outputDir, "08-orders-list-scroll.png")
-                robot.clickTag(RepairAppTestTags.ScrollToTopButton)
-                robot.pauseForDemo()
-            }
-
-            robot.waitForTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
-            robot.clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
-
+            robot.waitForText(summary, scroll = true)
+            robot.clickText(summary, scroll = true)
             robot.waitForTag(RepairAppTestTags.OrderStatusLabel)
             robot.capture(outputDir, "09-order-detail-intake.png")
 
@@ -171,7 +161,9 @@ class OperatorIntakeDemoScreenshotTest {
             robot.capture(outputDir, "15-ready-for-pickup.png")
 
             robot.closeOrder()
-            robot.clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
+            robot.clickDashboardTab("ORDERS")
+            robot.waitForText(summary, scroll = true)
+            robot.clickText(summary, scroll = true)
             robot.waitForText(R.string.status_closed)
             robot.capture(outputDir, "16-closed-timeline.png")
         }

@@ -27,7 +27,7 @@ Operational guide for AI agents. Environment: **Windows 11 + PowerShell**.
 - **Layers**: UI (Compose) → ViewModel (StateHolder) → UseCase (optional) → Repository → Data Source.
 - **Naming**: `*Screen.kt` (UI), `*ViewModel.kt` (Logic), `*Repository.kt` (Data).
 - **Previews**: Every main Screen/Component MUST have `@Preview` for Light and Dark mode. (*Ogni Screen/Componente principale DEVE avere `@Preview` per Light e Dark mode.*)
-- **UI Tests**: Use the **Robot** pattern. Common robots are defined in `app/src/androidTest/.../demo/Robots.kt` and `BaseAssetRobot.kt`. Do not duplicate UI interaction logic. (*Usare il pattern **Robot**. I robot comuni sono definiti in `app/src/androidTest/.../demo/Robots.kt` e `BaseAssetRobot.kt`. Non duplicare logica di interazione UI.*)
+- **UI Tests**: Use the **Robot** pattern. Common robots are defined in `app/src/androidTest/.../demo/Robots.kt` and `BaseAssetRobot.kt`. Do not duplicate UI interaction logic. **IMPORTANT**: After database seeding or reset during a test, you MUST call `TestUtils.refreshAppContainer()` to avoid stale repository/DAO references. (*Usare il pattern **Robot**. I robot comuni sono definiti in `app/src/androidTest/.../demo/Robots.kt` e `BaseAssetRobot.kt`. Non duplicare logica di interazione UI. **IMPORTANTE**: Dopo il seeding o il reset del database durante un test, DEVI chiamare `TestUtils.refreshAppContainer()` per evitare riferimenti obsoleti a repository/DAO.*)
 - **Storage**: Private directories (`filesDir`). Import/Export via Storage Access Framework (SAF). (*Directory private (`filesDir`). Import/Export tramite Storage Access Framework (SAF).*)
 
 ---

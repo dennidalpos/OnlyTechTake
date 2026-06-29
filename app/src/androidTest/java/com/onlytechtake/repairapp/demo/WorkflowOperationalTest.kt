@@ -41,11 +41,7 @@ class WorkflowOperationalTest {
             AuthPreferences(context).clear()
             OwnerPreferences(context).updateOwnerInfo(OwnerInfo())
 
-            // Recreate Application container to ensure it's completely fresh
-            val app = context as com.onlytechtake.repairapp.RepairAppApplication
-            app.appContainer =
-                com.onlytechtake.repairapp.core.di
-                    .DefaultAppContainer(context)
+            TestUtils.refreshAppContainer()
         }
         val outputDir = prepareDirectory("workflow-setup")
         val robot = OperationalRobot(composeRule, context)
@@ -62,11 +58,7 @@ class WorkflowOperationalTest {
             context.deleteDatabase(RepairAppDatabase.DATABASE_NAME)
             AuthPreferences(context).clear()
 
-            // Recreate Application container
-            val app = context as com.onlytechtake.repairapp.RepairAppApplication
-            app.appContainer =
-                com.onlytechtake.repairapp.core.di
-                    .DefaultAppContainer(context)
+            TestUtils.refreshAppContainer()
 
             val db = RepairAppDatabase.getInstance(context)
             val hasher =
@@ -116,6 +108,7 @@ class WorkflowOperationalTest {
     @Test
     fun flow1_Intake() {
         runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        TestUtils.refreshAppContainer()
         val outputDir = prepareDirectory("workflow-intake")
         val robot = OperationalRobot(composeRule, context)
 
@@ -128,6 +121,7 @@ class WorkflowOperationalTest {
     @Test
     fun flow2_Management() {
         runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        TestUtils.refreshAppContainer()
         val outputDir = prepareDirectory("workflow-management")
         val robot = OperationalRobot(composeRule, context)
 
@@ -140,6 +134,7 @@ class WorkflowOperationalTest {
     @Test
     fun flow3_AdminOperators() {
         runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        TestUtils.refreshAppContainer()
         val outputDir = prepareDirectory("workflow-admin-operators")
         val robot = OperationalRobot(composeRule, context)
 
@@ -152,6 +147,7 @@ class WorkflowOperationalTest {
     @Test
     fun flow4_AdminTemplates() {
         runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        TestUtils.refreshAppContainer()
         val outputDir = prepareDirectory("workflow-admin-templates")
         val robot = OperationalRobot(composeRule, context)
 
@@ -164,6 +160,7 @@ class WorkflowOperationalTest {
     @Test
     fun flow5_Backup() {
         runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        TestUtils.refreshAppContainer()
         val outputDir = prepareDirectory("workflow-backup")
         val robot = OperationalRobot(composeRule, context)
 

@@ -37,6 +37,7 @@ class SocialStoryDemoScreenshotTest {
     @Test
     fun capturesOrderIntakeToClosureStories() {
         runBlocking { DemoDataSeeder.seedDemoProfile(context, localeRule.locale) }
+        TestUtils.refreshAppContainer()
         val outputDir = prepareCaseDirectory(CASE_ORDER)
         val robot = ProAssetRobot(composeRule, context)
 
@@ -132,11 +133,10 @@ class SocialStoryDemoScreenshotTest {
             robot.clickDashboardTab("ORDERS")
             robot.waitForText(R.string.dashboard_orders)
             robot.capture(outputDir, "09-orders-list.png")
-            robot.waitForTag(
-                RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID),
-                scroll = true,
-            )
-            robot.clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID))
+
+            val summary = "Laptop won't turn on"
+            robot.waitForText(summary, scroll = true)
+            robot.clickText(summary, scroll = true)
 
             robot.waitForTag(RepairAppTestTags.OrderStatusLabel)
             robot.waitForTag(RepairAppTestTags.OrderDetailOrderReference, useUnmergedTree = true)
@@ -174,6 +174,7 @@ class SocialStoryDemoScreenshotTest {
     @Test
     fun capturesCategoryAndTemplateStories() {
         runBlocking { DemoDataSeeder.seedDemoProfile(context, localeRule.locale) }
+        TestUtils.refreshAppContainer()
         val outputDir = prepareCaseDirectory(CASE_CONFIG)
         val robot = ProAssetRobot(composeRule, context)
 
@@ -247,6 +248,7 @@ class SocialStoryDemoScreenshotTest {
     @Test
     fun capturesPrivateAndBusinessCustomerStories() {
         runBlocking { DemoDataSeeder.seedDemoProfile(context, localeRule.locale) }
+        TestUtils.refreshAppContainer()
         val outputDir = prepareCaseDirectory(CASE_CUSTOMERS)
         val robot = ProAssetRobot(composeRule, context)
 
@@ -305,6 +307,7 @@ class SocialStoryDemoScreenshotTest {
     @Test
     fun capturesMaintenanceStories() {
         runBlocking { DemoDataSeeder.seedDemoProfile(context, localeRule.locale) }
+        TestUtils.refreshAppContainer()
         val outputDir = prepareCaseDirectory(CASE_MAINTENANCE)
         val robot = ProAssetRobot(composeRule, context)
 
@@ -335,6 +338,7 @@ class SocialStoryDemoScreenshotTest {
         if (!BuildConfig.IS_DEMO_VERSION) return
 
         runBlocking { DemoDataSeeder.seedDemoProfile(context, localeRule.locale) }
+        TestUtils.refreshAppContainer()
         val outputDir = prepareCaseDirectory(CASE_DEMO_LIMIT)
         val robot = ProAssetRobot(composeRule, context)
 

@@ -36,6 +36,7 @@ class SocialCampaignScreenshotTest {
     @Test
     fun capturesSocialCampaignFlow() {
         runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        TestUtils.refreshAppContainer()
         val outputDir = prepareScreenshotDirectory()
         val robot = ProAssetRobot(composeRule, context)
 

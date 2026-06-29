@@ -50,14 +50,6 @@ object DemoDataSeeder {
         context: Context,
         locale: java.util.Locale = java.util.Locale.ENGLISH,
     ) {
-        // Apply requested locale for consistent assets and strings
-        java.util.Locale.setDefault(locale)
-        val resources = context.resources
-        val config = resources.configuration
-        config.setLocale(locale)
-        @Suppress("DEPRECATION")
-        resources.updateConfiguration(config, resources.displayMetrics)
-
         RepairAppDatabase.closeInstance()
         context.deleteDatabase(RepairAppDatabase.DATABASE_NAME)
         AuthPreferences(context).clear()
@@ -131,32 +123,32 @@ object DemoDataSeeder {
                     id = "demo-cat-pc",
                     parentId = null,
                     level = 0,
-                    name = testContext.getString(R.string.common_cat_pc),
-                    description = testContext.getString(R.string.common_cat_pc_desc),
+                    name = context.getString(R.string.common_cat_pc),
+                    description = context.getString(R.string.common_cat_pc_desc),
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = DEMO_CATEGORY_ID, // notebook
                     parentId = "demo-cat-pc",
                     level = 1,
-                    name = testContext.getString(R.string.common_cat_notebook),
-                    description = testContext.getString(R.string.common_cat_notebook_desc),
+                    name = context.getString(R.string.common_cat_notebook),
+                    description = context.getString(R.string.common_cat_notebook_desc),
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = "demo-cat-gaming",
                     parentId = DEMO_CATEGORY_ID,
                     level = 2,
-                    name = testContext.getString(R.string.common_cat_gaming),
-                    description = testContext.getString(R.string.common_cat_gaming_desc),
+                    name = context.getString(R.string.common_cat_gaming),
+                    description = context.getString(R.string.common_cat_gaming_desc),
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = "demo-cat-rog-strix",
                     parentId = "demo-cat-gaming",
                     level = 3,
-                    name = testContext.getString(R.string.common_cat_rog_strix),
-                    description = testContext.getString(R.string.common_cat_rog_strix_desc),
+                    name = context.getString(R.string.common_cat_rog_strix),
+                    description = context.getString(R.string.common_cat_rog_strix_desc),
                     active = true,
                 ),
             ),

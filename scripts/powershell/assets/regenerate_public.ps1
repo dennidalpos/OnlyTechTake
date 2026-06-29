@@ -45,13 +45,20 @@ Write-Host "Salto build preliminare APK (Assunto già fatto)..." -ForegroundColo
 
 foreach ($p in $profiles) {
     Write-Host "`n=== Rigenerazione Profilo: $($p.id) ($($p.flavor)) ===" -ForegroundColor Cyan
-    # Screenshot
-    powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "create_demo_assets.ps1") -AssetProfile $p.id -Flavor $p.flavor -UseConnectedDevice -NonInteractive -SkipBuild
 
-    # Video (solo per profili selezionati)
-    if ($p.id -eq "operator-intake") {
+    # Se il profilo richiede video, eseguiamo prima la registrazione (che esegue il test)
+    # e poi creiamo gli asset saltando il test per evitare doppia esecuzione.
+    $hasVideo = ($p.id -eq "operator-intake")
+
+    if ($hasVideo) {
         Write-Host "Registrazione video per $($p.id)..." -ForegroundColor Yellow
         powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "record_demo_device.ps1") -AssetProfile $p.id -Flavor $p.flavor -UseConnectedDevice -NonInteractive -SkipBuild
+
+        Write-Host "Estrazione screenshot per $($p.id) (SkipTest)..." -ForegroundColor Gray
+        powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "create_demo_assets.ps1") -AssetProfile $p.id -Flavor $p.flavor -UseConnectedDevice -NonInteractive -SkipBuild -SkipTest
+    } else {
+        # Screenshot standard
+        powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "create_demo_assets.ps1") -AssetProfile $p.id -Flavor $p.flavor -UseConnectedDevice -NonInteractive -SkipBuild
     }
 }
 

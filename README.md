@@ -69,7 +69,7 @@ The project includes a modern and responsive landing page located in `/landing`.
 | **Database** | SQLCipher v4 (Encrypted) |
 | **Build Flavors** | `full`, `demo`, `showcase` |
 | **Localization** | 🇺🇸 English (Default), 🇮🇹 Italian |
-| **Status** | 🟢 Production Ready (v1.1.0) |
+| **Status** | 🟢 Production Ready (v1.1.0) - Assets Updated July 2026 |
 
 ---
 

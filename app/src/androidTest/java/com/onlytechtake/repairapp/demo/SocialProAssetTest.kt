@@ -35,6 +35,7 @@ class SocialProAssetTest {
     @Test
     fun capturesSocialProAssets() {
         runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        TestUtils.refreshAppContainer()
         val outputDir = prepareScreenshotDirectory()
         val robot = ProAssetRobot(composeRule, context)
 

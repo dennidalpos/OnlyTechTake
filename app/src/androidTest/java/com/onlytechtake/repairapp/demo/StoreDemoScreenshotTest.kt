@@ -40,6 +40,7 @@ class StoreDemoScreenshotTest {
         if (!BuildConfig.IS_DEMO_VERSION) return
 
         runBlocking { DemoDataSeeder.seedDemoProfile(context, localeRule.locale) }
+        TestUtils.refreshAppContainer()
         val outputDir = prepareScreenshotDirectory()
         val robot = DemoAssetRobot(composeRule, context)
 

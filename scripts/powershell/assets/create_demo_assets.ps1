@@ -24,6 +24,7 @@ param(
     [string]$Locale = "en",
     [switch]$Dark,
     [switch]$SkipBuild,
+    [switch]$SkipTest,
     [switch]$SkipVideo,
     [string]$OutputRoot,
     [string]$AssetId,
@@ -112,18 +113,24 @@ Invoke-DemoApkBuildAndInstall -RootPath $root -Serial $serial -Flavor $Flavor -S
 trap { Restore-DeviceGlobalSettings; throw $_ }
 
 # Esecuzione Test
-Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "shell", "rm", "-rf", $config.deviceDirectory)
-$activeCases = @($config.cases)
-if ($CaseId) { $activeCases = @($activeCases | Where-Object { $_.id -eq $CaseId }) }
+if (-not $SkipTest) {
+    Invoke-Checked -FilePath "adb" -Arguments @("-s", $serial, "shell", "rm", "-rf", $config.deviceDirectory)
+    $activeCases = @($config.cases)
+    if ($CaseId) { $activeCases = @($activeCases | Where-Object { $_.id -eq $CaseId }) }
 
-foreach ($case in $activeCases) {
-    $method = if ($case.testMethod) { $case.testMethod } else { $config.testMethod }
-    $targetTest = if ($method) { "$($config.testClass)#$method" } else { $config.testClass }
+    foreach ($case in $activeCases) {
+        $method = if ($case.testMethod) { $case.testMethod } else { $config.testMethod }
+        $targetTest = if ($method) { "$($config.testClass)#$method" } else { $config.testClass }
 
-    $extras = @{}
-    if ($Locale) { $extras["locale"] = $Locale }
+        $extras = @{}
+        if ($Locale) { $extras["locale"] = $Locale }
 
-    Invoke-DemoScreenshotTest -Serial $serial -TestClass $targetTest -Flavor $Flavor -InstrumentationExtras $extras
+        Invoke-DemoScreenshotTest -Serial $serial -TestClass $targetTest -Flavor $Flavor -InstrumentationExtras $extras
+    }
+} else {
+    Write-Host "Salto esecuzione test (richiesto -SkipTest). Assumo file gia' presenti sul device." -ForegroundColor Yellow
+    $activeCases = @($config.cases)
+    if ($CaseId) { $activeCases = @($activeCases | Where-Object { $_.id -eq $CaseId }) }
 }
 
 # Recupero e Elaborazione
@@ -136,7 +143,10 @@ try {
     foreach ($case in $activeCases) {
         $src = if ($case.sourceDirectory -eq ".") { $pulledRoot } else { Join-Path $pulledRoot $case.sourceDirectory }
 
-        $items = Get-ChildItem -Path $src -Include "*.png", "*.mp4", "*.jpg"
+        $items = Get-ChildItem -Path $src -Filter "*.png"
+        $items += Get-ChildItem -Path $src -Filter "*.mp4"
+        $items += Get-ChildItem -Path $src -Filter "*.jpg"
+
         foreach ($item in $items) {
             $targetFile = Join-Path $OutputRoot $item.Name
             Copy-Item -Path $item.FullName -Destination $targetFile -Force

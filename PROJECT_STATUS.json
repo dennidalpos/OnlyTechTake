@@ -13,6 +13,10 @@
       "task": "FEATURE: Implementazione flussi acquisizione video per documentazione tecnica riparazione. Documentazione README, AGENTS e Data Safety aggiornata."
     },
     {
+      "priority": "DONE",
+      "task": "MAINTENANCE: Rigenerazione asset media (screenshot e video) per landing page e marketing. Framework di test UI stabilizzato con refreshAppContainer e fix robot scrolling."
+    },
+    {
       "priority": "HIGH",
       "task": "LEGAL: Verifica accessibilità e pubblicazione HTTPS definitiva per Privacy Policy (inventoveritas.mine.nu)."
     },
