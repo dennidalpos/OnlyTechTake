@@ -7,6 +7,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
@@ -32,31 +33,36 @@ fun StandardCard(
     role: Role = Role.Button,
     content: @Composable ColumnScope.() -> Unit,
 ) {
+    val colorScheme = MaterialTheme.colorScheme
     val effectiveBorder =
-        border ?: when (variant) {
-            StandardCardVariant.Highlight -> {
-                BorderStroke(
-                    1.dp,
-                    MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
-                )
-            }
+        remember(variant, border, colorScheme) {
+            border ?: when (variant) {
+                StandardCardVariant.Highlight -> {
+                    BorderStroke(
+                        1.dp,
+                        colorScheme.primary.copy(alpha = 0.8f),
+                    )
+                }
 
-            StandardCardVariant.Outlined -> {
-                BorderStroke(
-                    1.dp,
-                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f),
-                )
-            }
+                StandardCardVariant.Outlined -> {
+                    BorderStroke(
+                        1.dp,
+                        colorScheme.outlineVariant.copy(alpha = 0.45f),
+                    )
+                }
 
-            StandardCardVariant.Filled -> {
-                null
+                StandardCardVariant.Filled -> {
+                    null
+                }
             }
         }
     val cardModifier = modifier.fillMaxWidth()
     val effectiveContainerColor =
-        when (variant) {
-            StandardCardVariant.Filled -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.18f)
-            else -> containerColor
+        remember(variant, containerColor, colorScheme) {
+            when (variant) {
+                StandardCardVariant.Filled -> colorScheme.surfaceVariant.copy(alpha = 0.18f)
+                else -> containerColor
+            }
         }
     val contentModifier = Modifier
     val cardContent: @Composable ColumnScope.() -> Unit = {

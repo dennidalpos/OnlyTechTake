@@ -388,7 +388,6 @@ fun DashboardScreen(
                     sharedViewModel = sharedViewModel,
                     isAdmin = isAdmin,
                     onAppDataRestored = onAppDataRestored,
-                    onLogout = onLogout,
                     modifier = Modifier.weight(1f),
                 )
             }

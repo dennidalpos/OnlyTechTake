@@ -7,13 +7,25 @@
     {
       "priority": "HIGH",
       "task": "PROCEDURAL: Pianificazione e avvio gruppo di test chiuso (20 tester per 14 giorni) per compliance Play Store account post-2023."
-    },
-    {
-      "priority": "MEDIUM",
-      "task": "QUALITY: Test di regressione su hardware low-end (Android 10-12) per verificare fluidità UI dopo ottimizzazioni dispatcher."
     }
   ],
   "completed_recently": [
+    {
+      "date": "2026-07-04",
+      "task": "QUALITY: Pulizia risorse inutilizzate (colori e stringhe) identificate dal report Lint. Ridotti warning da 38 a 26 (rimanenti legati a flavor diversi)."
+    },
+    {
+      "date": "2026-07-04",
+      "task": "QUALITY: Eseguito quality check completo (Formatting, Spotless e Android Lint) su flavor FullDebug. Progetto conforme agli standard."
+    },
+    {
+      "date": "2026-07-04",
+      "task": "QUALITY: Risoluzione warning vari dell'editor, rimozione parametri inutilizzati, modernizzazione API deprecate (Camera, Bitmap) e fix plurali Italiani."
+    },
+    {
+      "date": "2026-07-04",
+      "task": "QUALITY: Ottimizzazione performance Jetpack Compose e Room completata. Stabilizzazione modelli UI, aggiunta distinctUntilChanged ai Flow e ottimizzazione recomposition in componenti chiave."
+    },
     {
       "date": "2026-07-04",
       "task": "QUALITY: Risoluzione warning vari dell'editor e ottimizzazione divisioni per zero in StorageSettings per mitigare warning frameRate=NaN."

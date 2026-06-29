@@ -11,6 +11,7 @@ import com.onlytechtake.repairapp.data.local.entities.UserPermission
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import java.util.UUID
 import com.onlytechtake.repairapp.domain.repositories.CustomerRepository as ICustomerRepository
 
@@ -20,9 +21,11 @@ class CustomerRepository(
     private val repairOrderDao: com.onlytechtake.repairapp.data.local.dao.RepairOrderDao? = null,
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) : ICustomerRepository {
-    override fun observeRecent(): Flow<List<CustomerEntity>> = customerDao.observeRecent()
+    override fun observeRecent(): Flow<List<CustomerEntity>> =
+        customerDao.observeRecent().distinctUntilChanged()
 
-    override fun observeAll(): Flow<List<CustomerEntity>> = customerDao.observeAll()
+    override fun observeAll(): Flow<List<CustomerEntity>> =
+        customerDao.observeAll().distinctUntilChanged()
 
     override fun search(query: String): Flow<List<CustomerEntity>> {
         val trimmed = query.trim()
@@ -33,7 +36,7 @@ class CustomerRepository(
                 .asSequence()
                 .filter { it.isNotBlank() }
                 .joinToString(" ") { "$it*" }
-        return customerDao.search(sanitized)
+        return customerDao.search(sanitized).distinctUntilChanged()
     }
 
     override suspend fun findById(id: String): CustomerEntity? = customerDao.findById(id)

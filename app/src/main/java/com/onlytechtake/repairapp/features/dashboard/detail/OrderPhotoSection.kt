@@ -135,7 +135,10 @@ fun OrderPhotoSection(
             horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.actionGap),
         ) {
             AppButton(
-                modifier = Modifier.weight(1f).testTag(RepairAppTestTags.IntakeMediaTakePhotoButton),
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .testTag(RepairAppTestTags.IntakeMediaTakePhotoButton),
                 text = stringResource(R.string.intake_media_take_photo),
                 variant = AppButtonVariant.Secondary,
                 size = AppButtonSize.Compact,
@@ -144,7 +147,10 @@ fun OrderPhotoSection(
             )
             if (detail.assignedUser?.permissions?.contains(com.onlytechtake.repairapp.data.local.entities.UserPermission.RECORD_VIDEO) == true) {
                 AppButton(
-                    modifier = Modifier.weight(1f).testTag(RepairAppTestTags.IntakeMediaTakeVideoButton),
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .testTag(RepairAppTestTags.IntakeMediaTakeVideoButton),
                     text = stringResource(R.string.intake_media_take_video),
                     variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact,
@@ -175,7 +181,7 @@ fun OrderPhotoSection(
                     orderId = detail.order.id,
                     orderNumber = detail.order.orderNumber,
                     initialMode = mode,
-                    createPhotoFile = { _, number -> viewModel.createPhotoFile("", number) },
+                    createPhotoFile = { _, number -> viewModel.createPhotoFile(number) },
                     createVideoFile = { number -> viewModel.createVideoFile(number) },
                     onMediaCaptured = { file, capturedMode ->
                         if (capturedMode == CameraCaptureMode.PHOTO) {

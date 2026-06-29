@@ -13,12 +13,14 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 
 @Composable
 fun AppScreenContainer(
@@ -30,6 +32,15 @@ fun AppScreenContainer(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val scrollState = rememberScrollState()
+    val windowSizeClass = LocalWindowSizeClass.current
+    val isWide = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Medium
+
+    val effectiveHorizontalPadding =
+        if (isWide) {
+            maxOf(horizontalPadding, 24.dp)
+        } else {
+            horizontalPadding
+        }
 
     Box(
         modifier =
@@ -46,7 +57,7 @@ fun AppScreenContainer(
                     .widthIn(max = maxWidth)
                     .fillMaxWidth()
                     .then(if (!scrollable) Modifier.fillMaxHeight() else Modifier)
-                    .padding(horizontal = horizontalPadding)
+                    .padding(horizontal = effectiveHorizontalPadding)
                     .padding(top = RepairAppSpacing.screenVertical, bottom = bottomPadding),
             verticalArrangement = verticalArrangement,
             content = content,

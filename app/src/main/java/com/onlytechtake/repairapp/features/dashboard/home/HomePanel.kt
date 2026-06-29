@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.PlayArrow
@@ -110,7 +111,10 @@ fun HomePanelContent(
 
         if ((summary == null) || (queues == null)) {
             androidx.compose.foundation.layout.Box(
-                modifier = Modifier.fillMaxWidth().height(200.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(200.dp),
                 contentAlignment = Alignment.Center,
             ) {
                 com.onlytechtake.repairapp.core.design.LoadingBrandIndicator(
@@ -171,10 +175,13 @@ fun HomePanelContent(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun HomeHeader(onNewOrder: () -> Unit) {
     val isDemo = isAnyDemo()
     val isShowcase = BuildConfig.IS_SHOWCASE_MODE_ENABLED
+    val windowSizeClass = LocalWindowSizeClass.current
+    val isWide = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Medium
 
     Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
         Row(
@@ -221,33 +228,44 @@ private fun HomeHeader(onNewOrder: () -> Unit) {
                 },
             onClick = onNewOrder,
             variant = AppButtonVariant.Primary,
-            size = AppButtonSize.FullWidth,
+            size = if (isWide) AppButtonSize.Default else AppButtonSize.FullWidth,
             leadingIcon = if (isShowcase) Icons.Default.PlayArrow else Icons.Default.Add,
             testTag = RepairAppTestTags.HomeNewOrderButton,
+            modifier = if (isWide) Modifier.widthIn(min = 200.dp) else Modifier,
         )
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun HomeMetrics(summary: AppSummary) {
-    Row(
+    val windowSizeClass = LocalWindowSizeClass.current
+    val isVeryNarrow = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
+
+    FlowRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
+        maxItemsInEachRow = if (isVeryNarrow) 2 else 3,
     ) {
+        val itemModifier =
+            Modifier
+                .weight(1f)
+                .widthIn(min = 100.dp)
         AppMetricCard(
             label = stringResource(R.string.home_metric_operators),
             value = summary.operatorCount.toString(),
-            modifier = Modifier.weight(1f),
+            modifier = itemModifier,
         )
         AppMetricCard(
             label = stringResource(R.string.label_customers),
             value = summary.customerCount.toString(),
-            modifier = Modifier.weight(1f),
+            modifier = itemModifier,
         )
         AppMetricCard(
             label = stringResource(R.string.home_metric_active),
             value = summary.activeOrderCount.toString(),
-            modifier = Modifier.weight(1f),
+            modifier = itemModifier,
         )
     }
 }

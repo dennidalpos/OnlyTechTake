@@ -37,17 +37,17 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.milliseconds
 import java.io.File
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class NewOrderViewModel(
     context: Context,
-    private val authRepository: AuthRepository,
+    authRepository: AuthRepository,
     private val customerRepository: CustomerRepository,
-    private val catalogRepository: CatalogRepository,
+    catalogRepository: CatalogRepository,
     private val orderMediaRepository: OrderMediaRepository,
-    private val templateRepository: TemplateRepository,
+    templateRepository: TemplateRepository,
     private val createIntakeOrderUseCase: CreateIntakeOrderUseCase,
     private val onSetFormDirty: (Boolean) -> Unit,
     diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger,
@@ -166,7 +166,7 @@ class NewOrderViewModel(
                 .importIntakeAttachment(label, uri)
                 .onSuccess {
                     onSuccess(it)
-                    setFormDirty(true)
+                    setFormDirty(dirty = true)
                 }.onFailure {
                     _message.value = WorkspaceMessage(it.message ?: "Errore", isError = true)
                 }
@@ -189,16 +189,18 @@ class NewOrderViewModel(
                 .replaceStagedImage(staged, bitmap)
                 .onSuccess {
                     onSuccess(it)
-                    setFormDirty(true)
+                    setFormDirty(dirty = true)
                 }.onFailure {
                     _message.value = WorkspaceMessage(it.message ?: "Errore", isError = true)
                 }
         }
     }
 
-    fun createIntakePhotoFile(sessionId: String): Result<File> = runCatching { orderMediaRepository.createIntakePhotoFile(sessionId) }
+    fun createIntakePhotoFile(sessionId: String): Result<File> =
+        runCatching { orderMediaRepository.createIntakePhotoFile(sessionId) }
 
-    fun createIntakeVideoFile(sessionId: String): Result<File> = runCatching { orderMediaRepository.createIntakeVideoFile(sessionId) }
+    fun createIntakeVideoFile(sessionId: String): Result<File> =
+        runCatching { orderMediaRepository.createIntakeVideoFile(sessionId) }
 
     fun stageCapturedIntakePhoto(
         file: File,
@@ -209,7 +211,7 @@ class NewOrderViewModel(
                 .stageCapturedIntakePhoto(file)
                 .onSuccess {
                     onSuccess(it)
-                    setFormDirty(true)
+                    setFormDirty(dirty = true)
                 }.onFailure {
                     _message.value = WorkspaceMessage(it.message ?: "Errore", isError = true)
                 }
@@ -225,7 +227,7 @@ class NewOrderViewModel(
                 .stageCapturedIntakeVideo(file)
                 .onSuccess {
                     onSuccess(it)
-                    setFormDirty(true)
+                    setFormDirty(dirty = true)
                 }.onFailure {
                     _message.value = WorkspaceMessage(it.message ?: "Errore", isError = true)
                 }

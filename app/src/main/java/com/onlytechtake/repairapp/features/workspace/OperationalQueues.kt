@@ -12,14 +12,19 @@ data class OperationalQueue(
     val orders: List<RepairOrderEntity>,
 )
 
-fun buildOperationalQueues(orders: List<RepairOrderEntity>): List<OperationalQueue> =
-    queueDefinitions.map { (titleRes, statuses) ->
+fun buildOperationalQueues(orders: List<RepairOrderEntity>): List<OperationalQueue> {
+    val groupedOrders = orders.groupBy { it.status }
+    return queueDefinitions.map { (titleRes, statuses) ->
         OperationalQueue(
             titleRes = titleRes,
             statuses = statuses,
-            orders = orders.filter { it.status in statuses },
+            orders =
+                statuses
+                    .flatMap { groupedOrders[it] ?: emptyList() }
+                    .sortedByDescending { it.updatedAt },
         )
     }
+}
 
 fun queueFilter(queue: OperationalQueue): OrderFilter = OrderFilter(statuses = queue.statuses)
 

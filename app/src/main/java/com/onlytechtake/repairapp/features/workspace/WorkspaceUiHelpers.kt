@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -151,17 +152,21 @@ fun OrderStatusStepper(
 ) {
     val context = LocalContext.current
     val steps =
-        listOf(
-            OrderStatus.OPEN,
-            OrderStatus.IN_PROGRESS,
-            OrderStatus.DIAGNOSIS,
-            OrderStatus.RESULT,
-            OrderStatus.REPAIRING,
-            OrderStatus.READY_FOR_PICKUP,
-            OrderStatus.CLOSED,
-        )
+        remember {
+            listOf(
+                OrderStatus.OPEN,
+                OrderStatus.IN_PROGRESS,
+                OrderStatus.DIAGNOSIS,
+                OrderStatus.RESULT,
+                OrderStatus.REPAIRING,
+                OrderStatus.READY_FOR_PICKUP,
+                OrderStatus.CLOSED,
+            )
+        }
 
-    val currentStepIndex = orderStatusStepNumber(status) - 1
+    val currentStepIndex = remember(status) { orderStatusStepNumber(status) - 1 }
+    val repairColors = MaterialTheme.repairColors
+    val colorScheme = MaterialTheme.colorScheme
 
     val dotSize = if (compact) RepairAppSizes.orderStepperDot else 24.dp
 
@@ -180,15 +185,15 @@ fun OrderStatusStepper(
         ) {
             val containerColor =
                 when (status) {
-                    OrderStatus.CLOSED -> MaterialTheme.colorScheme.errorContainer
-                    OrderStatus.OPEN -> MaterialTheme.colorScheme.secondaryContainer
-                    else -> MaterialTheme.repairColors.warningContainer
+                    OrderStatus.CLOSED -> colorScheme.errorContainer
+                    OrderStatus.OPEN -> colorScheme.secondaryContainer
+                    else -> repairColors.warningContainer
                 }
             val contentColor =
                 when (status) {
-                    OrderStatus.CLOSED -> MaterialTheme.colorScheme.onErrorContainer
-                    OrderStatus.OPEN -> MaterialTheme.colorScheme.onSecondaryContainer
-                    else -> MaterialTheme.repairColors.onWarningContainer
+                    OrderStatus.CLOSED -> colorScheme.onErrorContainer
+                    OrderStatus.OPEN -> colorScheme.onSecondaryContainer
+                    else -> repairColors.onWarningContainer
                 }
 
             AppStatusBadge(
@@ -198,8 +203,8 @@ fun OrderStatusStepper(
             )
         }
 
-        val completedColor = MaterialTheme.repairColors.stepCompleted
-        val inactiveColor = MaterialTheme.repairColors.stepInactive
+        val completedColor = repairColors.stepCompleted
+        val inactiveColor = repairColors.stepInactive
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -210,7 +215,7 @@ fun OrderStatusStepper(
                 val isCurrent = index == currentStepIndex
                 val color =
                     when {
-                        isCurrent -> MaterialTheme.colorScheme.primary
+                        isCurrent -> colorScheme.primary
                         index < currentStepIndex -> completedColor
                         else -> inactiveColor
                     }
@@ -233,9 +238,9 @@ fun OrderStatusStepper(
                                     ?: Modifier,
                             color =
                                 when {
-                                    isCurrent -> MaterialTheme.colorScheme.onPrimary
-                                    index < currentStepIndex -> MaterialTheme.repairColors.onSuccess
-                                    else -> MaterialTheme.colorScheme.onSurfaceVariant
+                                    isCurrent -> colorScheme.onPrimary
+                                    index < currentStepIndex -> repairColors.onSuccess
+                                    else -> colorScheme.onSurfaceVariant
                                 },
                             style = if (compact) MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp) else MaterialTheme.typography.labelSmall,
                         )

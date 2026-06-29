@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.domain.workspace
 
 import android.content.Context
+import androidx.compose.runtime.Immutable
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
@@ -112,7 +113,8 @@ fun IntakeOrderInput.validationErrors(context: Context): List<String> =
         if (!hasPrivacySignature) add(context.getString(R.string.error_privacy_required))
     }
 
-fun IntakeOrderInput.isReadyForSubmit(context: Context): Boolean = validationErrors(context).isEmpty()
+fun IntakeOrderInput.isReadyForSubmit(context: Context): Boolean =
+    validationErrors(context).isEmpty()
 
 private fun CustomerInput.isValidForIntake(): Boolean {
     val hasContact = phone.isNotBlank() || email.isNotBlank()
@@ -141,6 +143,7 @@ data class OrderFilter(
     val query: String = "",
 )
 
+@Immutable
 data class OrderAttachmentCounts(
     val images: Int = 0,
     val videos: Int = 0,
@@ -149,12 +152,14 @@ data class OrderAttachmentCounts(
     val finalPhotos: Int = 0,
 )
 
+@Immutable
 data class OrderListItem(
     val order: RepairOrderEntity,
     val customer: CustomerEntity? = null,
     val attachments: OrderAttachmentCounts = OrderAttachmentCounts(),
 )
 
+@Immutable
 data class OrderDetail(
     val order: RepairOrderEntity,
     val customer: CustomerEntity?,
@@ -208,4 +213,5 @@ fun DiagnosisResultInput.validationErrors(context: Context): List<String> =
         }
     }
 
-fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? = estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }
+fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? =
+    estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }

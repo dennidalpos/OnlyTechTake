@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.features.dashboard.common
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
 import android.view.WindowManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -134,7 +135,14 @@ fun CameraCapturePreview(
         return
     }
 
-    DisposableEffect(context, lifecycleOwner, previewView, imageCapture, videoCapture, captureMode) {
+    DisposableEffect(
+        context,
+        lifecycleOwner,
+        previewView,
+        imageCapture,
+        videoCapture,
+        captureMode,
+    ) {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
         cameraProviderFuture.addListener(
             {
@@ -154,10 +162,20 @@ fun CameraCapturePreview(
 
                     if (captureMode == CameraCaptureMode.PHOTO) {
                         imageCapture.targetRotation = cameraTargetRotation(context, previewView)
-                        cameraProvider.bindToLifecycle(lifecycleOwner, selector, preview, imageCapture)
+                        cameraProvider.bindToLifecycle(
+                            lifecycleOwner,
+                            selector,
+                            preview,
+                            imageCapture,
+                        )
                     } else {
                         videoCapture.targetRotation = cameraTargetRotation(context, previewView)
-                        cameraProvider.bindToLifecycle(lifecycleOwner, selector, preview, videoCapture)
+                        cameraProvider.bindToLifecycle(
+                            lifecycleOwner,
+                            selector,
+                            preview,
+                            videoCapture,
+                        )
                     }
                 }.onFailure {
                     onError(it.message ?: cameraUnavailableMsg)
@@ -251,7 +269,14 @@ fun CameraCapturePreview(
                     Modifier
                         .fillMaxWidth()
                         .testTag(if (isRecording) RepairAppTestTags.IntakeMediaStopVideoButton else RepairAppTestTags.IntakeMediaCaptureVideoButton),
-                text = if (isRecording) stringResource(R.string.camera_stop_video) else stringResource(R.string.camera_capture_video),
+                text =
+                    if (isRecording) {
+                        stringResource(R.string.camera_stop_video)
+                    } else {
+                        stringResource(
+                            R.string.camera_capture_video,
+                        )
+                    },
                 variant = if (isRecording) AppButtonVariant.Danger else AppButtonVariant.Primary,
                 leadingIcon = if (isRecording) Icons.Default.Stop else Icons.Default.Videocam,
                 onClick = {
@@ -271,7 +296,10 @@ fun CameraCapturePreview(
                                             if (event is VideoRecordEvent.Finalize) {
                                                 if (event.hasError()) {
                                                     file.delete()
-                                                    onError(event.cause?.message ?: cameraCaptureFailedMsg)
+                                                    onError(
+                                                        event.cause?.message
+                                                            ?: cameraCaptureFailedMsg,
+                                                    )
                                                 } else {
                                                     onMediaCaptured(file, CameraCaptureMode.VIDEO)
                                                 }
@@ -287,14 +315,18 @@ fun CameraCapturePreview(
     }
 }
 
-@Suppress("DEPRECATION")
 private fun cameraTargetRotation(
     context: Context,
     previewView: PreviewView,
 ): Int {
     val windowRotation =
-        (context.getSystemService(Context.WINDOW_SERVICE) as? WindowManager)
-            ?.defaultDisplay
-            ?.rotation
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            context.display?.rotation
+        } else {
+            @Suppress("DEPRECATION")
+            (context.getSystemService(Context.WINDOW_SERVICE) as? WindowManager)
+                ?.defaultDisplay
+                ?.rotation
+        }
     return normalizeCameraTargetRotation(previewView.display?.rotation ?: windowRotation)
 }

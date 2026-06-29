@@ -10,12 +10,14 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.onlytechtake.repairapp.core.design.RepairAppSemanticColors
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.core.design.repairColors
@@ -67,7 +70,12 @@ fun AppButton(
     leadingIcon: ImageVector? = null,
 ) {
     val compact = size == AppButtonSize.Compact
-    val colors = variant.colors()
+    val repairColors = MaterialTheme.repairColors
+    val colorScheme = MaterialTheme.colorScheme
+    val colors =
+        remember(variant, colorScheme, repairColors) {
+            variant.colors(colorScheme, repairColors)
+        }
     val widthModifier = if (size == AppButtonSize.FullWidth) Modifier.fillMaxWidth() else Modifier
     val effectiveEnabled = enabled && !loading
 
@@ -159,53 +167,55 @@ private data class AppButtonColors(
     val content: Color,
 )
 
-@Composable
-private fun AppButtonVariant.colors(): AppButtonColors =
+private fun AppButtonVariant.colors(
+    colorScheme: ColorScheme,
+    sColors: RepairAppSemanticColors,
+): AppButtonColors =
     when (this) {
         AppButtonVariant.Primary -> {
-            AppButtonColors(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)
+            AppButtonColors(colorScheme.primary, colorScheme.onPrimary)
         }
 
         AppButtonVariant.Secondary -> {
             AppButtonColors(
-                MaterialTheme.colorScheme.secondaryContainer,
-                MaterialTheme.colorScheme.onSecondaryContainer,
+                colorScheme.secondaryContainer,
+                colorScheme.onSecondaryContainer,
             )
         }
 
         AppButtonVariant.Success -> {
             AppButtonColors(
-                MaterialTheme.repairColors.success,
-                MaterialTheme.repairColors.onSuccess,
+                sColors.success,
+                sColors.onSuccess,
             )
         }
 
         AppButtonVariant.Info -> {
             AppButtonColors(
-                MaterialTheme.colorScheme.tertiary,
-                MaterialTheme.colorScheme.onTertiary,
+                colorScheme.tertiary,
+                colorScheme.onTertiary,
             )
         }
 
         AppButtonVariant.Warning -> {
             AppButtonColors(
-                MaterialTheme.repairColors.warning,
-                MaterialTheme.repairColors.onWarning,
+                sColors.warning,
+                sColors.onWarning,
             )
         }
 
         AppButtonVariant.Danger -> {
-            AppButtonColors(MaterialTheme.colorScheme.error, MaterialTheme.colorScheme.onError)
+            AppButtonColors(colorScheme.error, colorScheme.onError)
         }
 
         AppButtonVariant.WhatsApp -> {
             AppButtonColors(
-                MaterialTheme.repairColors.whatsapp,
-                MaterialTheme.repairColors.onWhatsapp,
+                sColors.whatsapp,
+                sColors.onWhatsapp,
             )
         }
 
         AppButtonVariant.Ghost -> {
-            AppButtonColors(Color.Transparent, MaterialTheme.colorScheme.primary)
+            AppButtonColors(Color.Transparent, colorScheme.primary)
         }
     }

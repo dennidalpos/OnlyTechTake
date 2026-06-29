@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.webkit.MimeTypeMap
 import androidx.core.util.AtomicFile
 import androidx.exifinterface.media.ExifInterface
@@ -546,7 +547,8 @@ class OrderMediaRepository(
         }
     }
 
-    private suspend fun <T> inTransaction(block: suspend () -> T): T = database?.withTransaction { block() } ?: block()
+    private suspend fun <T> inTransaction(block: suspend () -> T): T =
+        database?.withTransaction { block() } ?: block()
 
     private fun copyToWithLimit(
         input: InputStream,
@@ -650,20 +652,30 @@ class OrderMediaRepository(
         return mimeType
     }
 
-    @Suppress("DEPRECATION")
     private fun compressFormatFor(mimeType: String): Pair<Bitmap.CompressFormat, String> =
         when {
             mimeType.equals(
                 "image/png",
                 ignoreCase = true,
-            ) -> Bitmap.CompressFormat.PNG to "image/png"
+            ) -> {
+                Bitmap.CompressFormat.PNG to "image/png"
+            }
 
             mimeType.equals(
                 "image/webp",
                 ignoreCase = true,
-            ) -> Bitmap.CompressFormat.WEBP to "image/webp"
+            ) -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    Bitmap.CompressFormat.WEBP_LOSSY to "image/webp"
+                } else {
+                    @Suppress("DEPRECATION")
+                    Bitmap.CompressFormat.WEBP to "image/webp"
+                }
+            }
 
-            else -> Bitmap.CompressFormat.JPEG to MIME_TYPE_JPEG
+            else -> {
+                Bitmap.CompressFormat.JPEG to MIME_TYPE_JPEG
+            }
         }
 
     private companion object {

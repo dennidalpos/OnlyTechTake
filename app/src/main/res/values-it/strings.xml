@@ -559,18 +559,13 @@
     <string name="order_wa_message_label">Messaggio</string>
     <string name="order_wa_template_label">Template: %s</string>
     <string name="order_wa_open">Apri WhatsApp</string>
-    <string name="order_wa_open_confirm_title">Aprire WhatsApp?</string>
-    <string name="order_wa_open_confirm_text">Registrare la preparazione e aprire WhatsApp per l\'invio manuale?</string>
     <string name="order_wa_sent">Inviato</string>
-    <string name="order_wa_sent_confirm_title">Invio confermato?</string>
-    <string name="order_wa_sent_confirm_text">Registrare che l\'operatore ha inviato manualmente il messaggio al cliente?</string>
     <string name="order_wa_close_preview">Chiudi anteprima</string>
     <string name="order_timeline">Cronologia</string>
     <string name="order_confirm_status_update">Aggiornare lo stato della commessa?</string>
     <string name="order_result_summary">Sintesi risultato</string>
     <string name="order_loading_detail">Caricamento commessa…</string>
     <string name="order_share_status_chooser">Invia stato avanzamento</string>
-    <string name="share_title_status_report">Stato avanzamento %s</string>
     <string name="share_title_document">Documento %s</string>
     <string name="error_repairable_diagnosis_required">Solo una diagnosi riparabile può passare in riparazione</string>
     <string name="error_not_repairable_diagnosis_required">Il passaggio diretto al ritiro richiede una diagnosi non riparabile</string>
@@ -590,7 +585,6 @@
     <string name="order_secondary_actions_title">Altre azioni</string>
     <string name="order_not_repairable_title">Esito diagnosi</string>
     <string name="order_not_repairable_body">Il dispositivo non è riparabile. Avvisa il cliente prima di preparare il ritiro.</string>
-    <string name="order_not_repairable_ready">Cliente avvisato / pronto per il ritiro</string>
     <string name="order_updated_label">Aggiornata</string>
     <string name="order_operator_label">Operatore</string>
     <string name="order_wa_sending_to">Inviando a: %s</string>
@@ -833,7 +827,6 @@
     <string name="config_backup_security_title">Sicurezza ed Encryption</string>
     <string name="config_backup_encrypt_label">Cifra backup (ZIP/XLSX)</string>
     <string name="config_backup_password_label">Password cifratura</string>
-    <string name="config_backup_encrypted_success">I backup verranno cifrati.</string>
     <string name="config_backup_unencrypted_warning">File non cifrati: usare solo destinazioni protette.</string>
     <string name="config_backup_password_modal_title">Impostazioni Cifratura</string>
     <string name="config_backup_password_modal_text">Imposta una password per proteggere i tuoi backup. Se impostata, verrà utilizzata per tutti i backup e richiesta per il ripristino.</string>
@@ -860,7 +853,6 @@
     <string name="config_backup_confirm_restore_zip_text">Il backup ZIP sostituirà database e file locali dell\'app. Dopo il ripristino sarà richiesto un nuovo login.</string>
 
     <string name="config_backup_auto_title">Backup Automatico</string>
-    <string name="config_backup_auto_enabled">Abilita backup automatico</string>
     <string name="config_backup_auto_destination">Destinazione backup</string>
     <string name="config_backup_auto_select_destination">Seleziona destinazione</string>
     <string name="config_backup_auto_select_time">Seleziona orario</string>
@@ -873,12 +865,10 @@
     <string name="config_backup_auto_confirm_title">Avviare backup automatico?</string>
     <string name="config_backup_auto_confirm_text">L\'app non sarà disponibile fino al completamento del backup. Procedere?</string>
     <string name="config_backup_auto_battery_low">Batteria troppo scarica (%d%%). Collega il caricabatterie per procedere con il backup.</string>
-    <string name="config_backup_manual_reminder_warning">Backup manuale consigliato! Sono passati più di %d giorni dall\'ultimo backup.</string>
     <string name="config_backup_mode_label">Modalità backup</string>
     <string name="config_backup_mode_manual">Manuale con avvisi</string>
     <string name="config_backup_mode_auto">Automatico pianificato</string>
     <string name="error_no_backup_path">Percorso backup non configurato</string>
-    <string name="error_battery_too_low">Batteria troppo scarica</string>
     <string name="error_could_not_create_file">Impossibile creare il file di backup</string>
     <string name="error_backup_failed">Backup fallito</string>
 

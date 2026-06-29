@@ -35,12 +35,10 @@ import com.onlytechtake.repairapp.features.dashboard.common.CameraCapturePreview
 import com.onlytechtake.repairapp.features.dashboard.common.LocalImagePreview
 import com.onlytechtake.repairapp.features.dashboard.common.LocalImageViewer
 import com.onlytechtake.repairapp.features.workspace.isImageAttachment
-import com.onlytechtake.repairapp.features.workspace.isVideoAttachment
 import java.io.File
 
 @Composable
 fun QuickIntakeMediaSection(
-    @Suppress("UNUSED_PARAMETER") stepNumber: Int,
     intakeSessionId: String,
     stagedMedia: List<StagedOrderMedia>,
     showCamera: Boolean,

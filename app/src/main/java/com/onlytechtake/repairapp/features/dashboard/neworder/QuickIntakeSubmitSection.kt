@@ -22,7 +22,6 @@ import com.onlytechtake.repairapp.core.design.components.StandardCard
 
 @Composable
 fun QuickIntakeSubmitSection(
-    @Suppress("UNUSED_PARAMETER") stepNumber: Int,
     missingRequirements: List<String>,
     enabled: Boolean,
     onSubmit: () -> Unit,

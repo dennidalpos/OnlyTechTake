@@ -42,7 +42,6 @@ import com.onlytechtake.repairapp.features.workspace.categoryPath
 
 @Composable
 fun QuickIntakeCategorySection(
-    @Suppress("UNUSED_PARAMETER") stepNumber: Int,
     activeCategories: List<OrderCategoryEntity>,
     selectedCategoryId: String?,
     onCategorySelected: (String) -> Unit,

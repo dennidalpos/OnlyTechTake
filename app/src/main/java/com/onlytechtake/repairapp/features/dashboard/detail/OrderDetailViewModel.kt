@@ -72,13 +72,13 @@ class OrderDetailViewModel(
             ioDispatcher = ioDispatcher,
         )
 
-    private val _isGeneratingStatusPdf = MutableStateFlow(false)
+    private val _isGeneratingStatusPdf = MutableStateFlow(value = false)
     val isGeneratingStatusPdf = _isGeneratingStatusPdf.asStateFlow()
 
     private val _statusPdfError = MutableStateFlow<String?>(null)
     val statusPdfError = _statusPdfError.asStateFlow()
 
-    private val _showPdfSentConfirmation = MutableStateFlow(false)
+    private val _showPdfSentConfirmation = MutableStateFlow(value = false)
     val showPdfSentConfirmation = _showPdfSentConfirmation.asStateFlow()
 
     private val _lastGeneratedDocumentId = MutableStateFlow<String?>(null)
@@ -174,7 +174,6 @@ class OrderDetailViewModel(
     }
 
     fun createPhotoFile(
-        @Suppress("UNUSED_PARAMETER") prefix: String,
         orderNumber: String,
     ): Result<File> = runCatching { orderMediaRepository.createPhotoFile(orderId, orderNumber) }
 
@@ -244,12 +243,12 @@ class OrderDetailViewModel(
         viewModelScope.launch {
             _isProcessing.value = true
             val actor = currentUser.value
-            actor?.let {
+            actor?.let { user ->
                 templateRepository
-                    .prepareMessage(it, orderId, anchor)
-                    .onSuccess {
-                        _preparedMessage.value = it
-                        _preparedMessageBody.value = it.body
+                    .prepareMessage(user, orderId, anchor)
+                    .onSuccess { message ->
+                        _preparedMessage.value = message
+                        _preparedMessageBody.value = message.body
                     }.onFailure {
                         _message.value = WorkspaceMessage(it.message ?: "Errore", isError = true)
                     }
@@ -260,7 +259,7 @@ class OrderDetailViewModel(
 
     fun updatePreparedMessageBody(body: String) {
         _preparedMessageBody.value = body
-        setFormDirty(true)
+        setFormDirty(dirty = true)
     }
 
     fun clearPreparedMessage() {

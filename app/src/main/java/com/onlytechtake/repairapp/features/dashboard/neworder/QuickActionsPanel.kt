@@ -476,7 +476,6 @@ fun QuickActions(
 
         if (draft.currentStep == 2) {
             QuickIntakeCategorySection(
-                stepNumber = 2,
                 activeCategories = stepperState.activeCategories,
                 selectedCategoryId = draft.selectedCategoryId,
                 onCategorySelected = { categoryId ->
@@ -504,7 +503,6 @@ fun QuickActions(
 
         if (draft.currentStep == 3) {
             QuickIntakeProblemSection(
-                stepNumber = 3,
                 problemSummary = draft.problemSummary,
                 onProblemSummaryChange = { value -> updateDraft { it.copy(problemSummary = value) } },
                 problemDetails = draft.problemDetails,
@@ -523,7 +521,6 @@ fun QuickActions(
 
         if (draft.currentStep == 4) {
             QuickIntakeMediaSection(
-                stepNumber = 4,
                 intakeSessionId = draft.intakeSessionId,
                 stagedMedia = draft.stagedMedia,
                 showCamera = draft.showCamera,
@@ -610,7 +607,6 @@ fun QuickActions(
 
         if (draft.currentStep == SUBMIT_INTAKE_STEP || isIntakeSubmitUnlocked(draft.completedStep)) {
             QuickIntakeSubmitSection(
-                stepNumber = 6,
                 missingRequirements =
                     if (isIntakeSubmitUnlocked(draft.completedStep)) {
                         missingRequirements

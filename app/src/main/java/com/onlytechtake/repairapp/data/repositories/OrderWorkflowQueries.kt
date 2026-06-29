@@ -19,6 +19,7 @@ import com.onlytechtake.repairapp.domain.workspace.OrderListItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -42,7 +43,7 @@ internal class OrderWorkflowQueries(
 
             OrderFilterMode.OPEN_UNASSIGNED,
             OrderFilterMode.IN_PROGRESS,
-            -> {
+                -> {
                 false
             }
 
@@ -72,14 +73,15 @@ internal class OrderWorkflowQueries(
         val assignedOnly = filter.mode == OrderFilterMode.IN_PROGRESS
         val isClosed = calculateIsClosed(filter)
 
-        return repairOrderDao.observeFiltered(
-            assignedToUserId = assignedToUserId,
-            status = filter.status,
-            customerId = filter.customerId,
-            unassignedOnly = unassignedOnly,
-            assignedOnly = assignedOnly,
-            isClosed = isClosed,
-        )
+        return repairOrderDao
+            .observeFiltered(
+                assignedToUserId = assignedToUserId,
+                status = filter.status,
+                customerId = filter.customerId,
+                unassignedOnly = unassignedOnly,
+                assignedOnly = assignedOnly,
+                isClosed = isClosed,
+            ).distinctUntilChanged()
     }
 
     suspend fun countAllOrders(): Int = repairOrderDao.countAll()
@@ -103,7 +105,8 @@ internal class OrderWorkflowQueries(
                 unassignedOnly = unassignedOnly,
                 assignedOnly = assignedOnly,
                 isClosed = isClosed,
-            ).map { list ->
+            ).distinctUntilChanged()
+            .map { list ->
                 list.map { projection ->
                     OrderListItem(
                         order = projection.order,
@@ -139,7 +142,8 @@ internal class OrderWorkflowQueries(
                 unassignedOnly = unassignedOnly,
                 assignedOnly = assignedOnly,
                 isClosed = isClosed,
-            ).map { list ->
+            ).distinctUntilChanged()
+            .map { list ->
                 list.map { projection ->
                     OrderListItem(
                         order = projection.order,
@@ -192,6 +196,6 @@ internal class OrderWorkflowQueries(
                     media = array[2] as List<com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity>,
                     signatures = array[3] as List<com.onlytechtake.repairapp.data.local.entities.SignatureEntity>,
                 )
-            }
+            }.distinctUntilChanged()
         }
 }

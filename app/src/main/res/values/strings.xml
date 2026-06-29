@@ -553,18 +553,13 @@
     <string name="order_wa_message_label">Message</string>
     <string name="order_wa_template_label">Template: %s</string>
     <string name="order_wa_open">Open WhatsApp</string>
-    <string name="order_wa_open_confirm_title">Open WhatsApp?</string>
-    <string name="order_wa_open_confirm_text">Record preparation and open WhatsApp for manual sending?</string>
     <string name="order_wa_sent">Sent</string>
-    <string name="order_wa_sent_confirm_title">Sending confirmed?</string>
-    <string name="order_wa_sent_confirm_text">Record that the operator has manually sent the message to the customer?</string>
     <string name="order_wa_close_preview">Close preview</string>
     <string name="order_timeline">Timeline</string>
     <string name="order_confirm_status_update">Update service order status?</string>
     <string name="order_result_summary">Result summary</string>
     <string name="order_loading_detail">Loading service order…</string>
     <string name="order_share_status_chooser">Send progress status</string>
-    <string name="share_title_status_report">Progress status %s</string>
     <string name="share_title_document">Document %s</string>
     <string name="error_repairable_diagnosis_required">Only a serviceable diagnosis can pass to processing</string>
     <string name="error_not_repairable_diagnosis_required">Direct transition to delivery requires a non-serviceable diagnosis</string>
@@ -584,7 +579,6 @@
     <string name="order_secondary_actions_title">Other actions</string>
     <string name="order_not_repairable_title">Diagnosis outcome</string>
     <string name="order_not_repairable_body">The device is not serviceable. Notify the customer before preparing delivery.</string>
-    <string name="order_not_repairable_ready">Customer notified / ready for delivery</string>
     <string name="order_updated_label">Updated</string>
     <string name="order_operator_label">Operator</string>
     <string name="order_wa_sending_to">Sending to: %s</string>
@@ -825,7 +819,6 @@
     <string name="config_backup_security_title">Security and Encryption</string>
     <string name="config_backup_encrypt_label">Encrypt backup (ZIP/XLSX)</string>
     <string name="config_backup_password_label">Encryption password</string>
-    <string name="config_backup_encrypted_success">Backups will be encrypted.</string>
     <string name="config_backup_unencrypted_warning">Unencrypted files: use only protected destinations.</string>
     <string name="config_backup_password_modal_title">Encryption Settings</string>
     <string name="config_backup_password_modal_text">Set a password to protect your backups. If set, it will be used for all backups and required for restoration.</string>
@@ -852,7 +845,6 @@
     <string name="config_backup_confirm_restore_zip_text">The ZIP backup will replace the app\'s database and local files. After the restore, a new login will be required.</string>
 
     <string name="config_backup_auto_title">Automatic Backup</string>
-    <string name="config_backup_auto_enabled">Enable automatic backup</string>
     <string name="config_backup_auto_destination">Backup destination</string>
     <string name="config_backup_auto_select_destination">Select destination</string>
     <string name="config_backup_auto_select_time">Select time</string>
@@ -865,12 +857,10 @@
     <string name="config_backup_auto_confirm_title">Start automatic backup?</string>
     <string name="config_backup_auto_confirm_text">The app will be unavailable until the backup is completed. Proceed?</string>
     <string name="config_backup_auto_battery_low">Battery too low (%d%%). Please connect the charger to proceed with the backup.</string>
-    <string name="config_backup_manual_reminder_warning">Manual backup recommended! It has been over %d days since the last backup.</string>
     <string name="config_backup_mode_label">Backup mode</string>
     <string name="config_backup_mode_manual">Manual with reminders</string>
     <string name="config_backup_mode_auto">Scheduled automatic</string>
     <string name="error_no_backup_path">Backup path not configured</string>
-    <string name="error_battery_too_low">Battery too low</string>
     <string name="error_could_not_create_file">Could not create backup file</string>
     <string name="error_backup_failed">Backup failed</string>
 

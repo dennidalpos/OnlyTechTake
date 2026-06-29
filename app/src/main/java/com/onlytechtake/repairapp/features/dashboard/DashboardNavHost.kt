@@ -34,7 +34,6 @@ fun DashboardNavHost(
     sharedViewModel: SharedWorkspaceViewModel,
     isAdmin: Boolean,
     onAppDataRestored: () -> Unit,
-    onLogout: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val container = LocalAppContainer.current
@@ -255,7 +254,6 @@ fun DashboardNavHost(
                 initialSection = section,
                 fromIntake = fromIntake,
                 onBackupRestored = onAppDataRestored,
-                onLogout = onLogout,
                 onNavigate = { route -> navController.navigate(route) },
             )
         }
@@ -289,7 +287,6 @@ fun DashboardNavHost(
                 isAdmin = isAdmin,
                 initialSection = "ADMIN",
                 onBackupRestored = onAppDataRestored,
-                onLogout = onLogout,
                 onNavigate = { route -> navController.navigate(route) },
             )
         }

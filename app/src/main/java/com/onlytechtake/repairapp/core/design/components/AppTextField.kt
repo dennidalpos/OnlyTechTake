@@ -9,6 +9,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
@@ -51,22 +52,34 @@ fun AppTextField(
             onDone = { focusManager.clearFocus() },
         )
 
+    val labelRequiredSuffix = stringResource(R.string.label_required_suffix)
+    val labelOptionalFormat = stringResource(R.string.label_optional_format)
+    val labelOptional = stringResource(R.string.label_optional)
+
     val labelText =
-        when {
-            required -> {
-                label + stringResource(R.string.label_required_suffix)
-            }
+        remember(
+            label,
+            required,
+            showOptional,
+            labelRequiredSuffix,
+            labelOptionalFormat,
+            labelOptional,
+        ) {
+            when {
+                required -> {
+                    label + labelRequiredSuffix
+                }
 
-            showOptional -> {
-                stringResource(
-                    R.string.label_optional_format,
-                    label,
-                    stringResource(R.string.label_optional),
-                )
-            }
+                showOptional -> {
+                    labelOptionalFormat.format(
+                        label,
+                        labelOptional,
+                    )
+                }
 
-            else -> {
-                label
+                else -> {
+                    label
+                }
             }
         }
 
