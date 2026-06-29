@@ -101,9 +101,32 @@ class StatusWorkflowTest {
             ),
         )
         assertEquals(
+            TemplateAnchor.WHATSAPP_INTAKE,
+            statusTemplateAnchor(order(OrderStatus.IN_PROGRESS)),
+        )
+        assertEquals(
             TemplateAnchor.WHATSAPP_DIAGNOSIS,
             statusTemplateAnchor(order(OrderStatus.DIAGNOSIS)),
         )
+        assertEquals(
+            TemplateAnchor.WHATSAPP_READY,
+            statusTemplateAnchor(order(OrderStatus.READY_FOR_PICKUP)),
+        )
+        assertEquals(
+            TemplateAnchor.WHATSAPP_COMPLETED,
+            statusTemplateAnchor(order(OrderStatus.CLOSED, closureReason = ClosureReason.COMPLETED)),
+        )
+    }
+
+    @Test
+    fun orderStatusStepNumberMapsWorkflowStates() {
+        assertEquals(1, orderStatusStepNumber(OrderStatus.OPEN))
+        assertEquals(2, orderStatusStepNumber(OrderStatus.IN_PROGRESS))
+        assertEquals(3, orderStatusStepNumber(OrderStatus.DIAGNOSIS))
+        assertEquals(4, orderStatusStepNumber(OrderStatus.RESULT))
+        assertEquals(5, orderStatusStepNumber(OrderStatus.REPAIRING))
+        assertEquals(6, orderStatusStepNumber(OrderStatus.READY_FOR_PICKUP))
+        assertEquals(7, orderStatusStepNumber(OrderStatus.CLOSED))
     }
 
     private fun order(

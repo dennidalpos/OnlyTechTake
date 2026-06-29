@@ -30,6 +30,7 @@ class CustomerRepository(
         val sanitized =
             trimmed
                 .split(" ")
+                .asSequence()
                 .filter { it.isNotBlank() }
                 .joinToString(" ") { "$it*" }
         return customerDao.search(sanitized)

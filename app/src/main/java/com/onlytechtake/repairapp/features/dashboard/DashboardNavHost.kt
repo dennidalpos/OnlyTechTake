@@ -115,10 +115,9 @@ fun DashboardNavHost(
             CustomerPanel(
                 viewModel = customersViewModel,
                 sharedViewModel = sharedViewModel,
-                onOrderClick = { orderId ->
-                    navController.navigate(DashboardRoutes.orderDetail(orderId))
-                },
-            )
+            ) { orderId ->
+                navController.navigate(DashboardRoutes.orderDetail(orderId))
+            }
         }
         composable(
             route = DashboardRoutes.ORDERS,

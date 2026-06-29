@@ -121,6 +121,19 @@ android {
         compose = true
         resValues = true
     }
+
+    packaging {
+        jniLibs {
+            keepDebugSymbols.add("**/libsqlcipher.so")
+            keepDebugSymbols.add("**/libandroidx.graphics.path.so")
+            keepDebugSymbols.add("**/libdatastore_shared_counter.so")
+            keepDebugSymbols.add("**/libimage_processing_util_jni.so")
+            keepDebugSymbols.add("**/libsurface_util_jni.so")
+        }
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
 }
 
 kotlin {

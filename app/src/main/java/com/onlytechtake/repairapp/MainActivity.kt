@@ -17,39 +17,44 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.onlytechtake.repairapp.core.design.RepairAppTheme
-import com.onlytechtake.repairapp.core.di.DefaultAppContainer
 import com.onlytechtake.repairapp.data.preferences.UiSettings
 import com.onlytechtake.repairapp.navigation.RepairAppNavHost
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 class MainActivity : AppCompatActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val appContainer = (application as RepairAppApplication).appContainer
+
+        // Read theme preference synchronously to avoid theme flickering and infinite restart loops
+        val initialSettings = runBlocking { appContainer.uiPreferences.settings.first() }
+        val mode = if (initialSettings.darkTheme) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        if (AppCompatDelegate.getDefaultNightMode() != mode) {
+            AppCompatDelegate.setDefaultNightMode(mode)
+        }
+
         // Default to dark style at system level to ensure dark IME and avoid white flash
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
             navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
         )
 
-        val appContainer = DefaultAppContainer(applicationContext)
-
         setContent {
             val windowSizeClass = calculateWindowSizeClass(this)
             val uiSettings by appContainer.uiPreferences.settings.collectAsState(
-                initial = UiSettings(darkTheme = true),
+                initial = initialSettings,
             )
             val darkTheme = uiSettings.darkTheme
 
             // Force AppCompat night mode to keep IME (keyboard) in sync with app theme
+            // Only update if it changes from the initial/current value to avoid loops
             LaunchedEffect(darkTheme) {
-                val mode =
-                    if (darkTheme) {
-                        AppCompatDelegate.MODE_NIGHT_YES
-                    } else {
-                        AppCompatDelegate.MODE_NIGHT_NO
-                    }
-                if (AppCompatDelegate.getDefaultNightMode() != mode) {
-                    AppCompatDelegate.setDefaultNightMode(mode)
+                val currentMode = if (darkTheme) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+                if (AppCompatDelegate.getDefaultNightMode() != currentMode) {
+                    AppCompatDelegate.setDefaultNightMode(currentMode)
                 }
             }
 

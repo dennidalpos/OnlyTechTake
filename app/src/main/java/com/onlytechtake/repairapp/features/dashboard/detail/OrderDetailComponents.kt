@@ -177,10 +177,19 @@ fun OrderActionCard(
     onSendWhatsApp: (TemplateAnchor) -> Unit,
     onDeleteOrder: (() -> Unit)? = null,
     isPrimaryActionEnabled: Boolean = true,
+    primaryActionLabel: String? = null,
+    primaryActionOverride: OrderStatusAction? = null,
+    showSecondaryActions: Boolean = true,
 ) {
     val actions = availableOrderStatusActions(status)
-    val primaryAction = actions.firstOrNull { !it.requiresConfirmation() } ?: actions.firstOrNull()
-    val secondaryActions = actions.filterNot { it == primaryAction }
+    val basePrimaryAction = actions.firstOrNull { !it.requiresConfirmation() } ?: actions.firstOrNull()
+    val primaryAction = primaryActionOverride ?: basePrimaryAction
+    val secondaryActions =
+        if (showSecondaryActions) {
+            actions.filterNot { it == primaryAction }
+        } else {
+            emptyList()
+        }
 
     AppActionPanel(
         modifier = Modifier.testTag(RepairAppTestTags.OrderActionSection),
@@ -193,7 +202,7 @@ fun OrderActionCard(
 
         primaryAction?.let {
             AppButton(
-                text = stringResource(it.labelRes),
+                text = primaryActionLabel ?: stringResource(it.labelRes),
                 onClick = { onActionClick(it) },
                 variant = if (it.requiresConfirmation()) AppButtonVariant.Warning else AppButtonVariant.Primary,
                 size = AppButtonSize.FullWidth,
@@ -297,7 +306,6 @@ fun QuoteDecisionPanel(
     quoteRejectNote: String,
     onQuoteDecisionChange: (QuoteDecision) -> Unit,
     onQuoteRejectNoteChange: (String) -> Unit,
-    onConfirm: (CustomerFeedbackType, String, ClosureReason?) -> Unit,
 ) {
     StandardCard {
         Column(
@@ -334,32 +342,6 @@ fun QuoteDecisionPanel(
                     onValueChange = onQuoteRejectNoteChange,
                     label = stringResource(R.string.order_quote_reject_reason),
                     showOptional = true,
-                )
-            }
-
-            if (quoteDecision != null) {
-                val quoteAcceptedLabel = stringResource(R.string.order_quote_accepted)
-                val confirmLabel =
-                    if (quoteDecision == QuoteDecision.ACCEPTED) {
-                        stringResource(R.string.action_start_repair)
-                    } else {
-                        stringResource(R.string.action_close_order)
-                    }
-                AppButton(
-                    text = confirmLabel,
-                    modifier = Modifier.fillMaxWidth(),
-                    testTag = RepairAppTestTags.QuoteConfirmButton,
-                    onClick = {
-                        if (quoteDecision == QuoteDecision.ACCEPTED) {
-                            onConfirm(CustomerFeedbackType.ACCEPT, quoteAcceptedLabel, null)
-                        } else {
-                            onConfirm(
-                                CustomerFeedbackType.REJECT,
-                                quoteRejectNote,
-                                ClosureReason.CUSTOMER_DECLINED,
-                            )
-                        }
-                    },
                 )
             }
         }

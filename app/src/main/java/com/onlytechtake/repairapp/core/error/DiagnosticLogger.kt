@@ -25,19 +25,12 @@ class DiagnosticLogger(
         contextTag: String?,
         message: String,
         throwable: Throwable?,
-    ) = log("ERROR", contextTag, message, throwable)
-
-    private fun log(
-        level: String,
-        contextTag: String?,
-        message: String,
-        throwable: Throwable?,
     ) {
         val timestamp = dateFormat.format(Date())
         val logLine =
             buildString {
                 append("[$timestamp] ")
-                append("[$level] ")
+                append("[ERROR] ")
                 append("[$contextTag] ")
                 append(message)
                 if (throwable != null) {

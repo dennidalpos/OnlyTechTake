@@ -3,8 +3,8 @@ package com.onlytechtake.repairapp.data.services
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.net.Uri
 import android.os.BatteryManager
+import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
@@ -28,8 +28,6 @@ import java.util.concurrent.TimeUnit
 
 sealed class BackupState {
     object Idle : BackupState()
-
-    object Checking : BackupState()
 
     data class Running(
         val progress: Float,
@@ -56,8 +54,8 @@ class BackupService(
         val intent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
         val level = intent?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
         val scale = intent?.getIntExtra(BatteryManager.EXTRA_SCALE, -1) ?: -1
-        if (level == -1 || scale == -1) return 100
-        return (level * 100 / scale.toFloat()).toInt()
+        if ((level == -1) || (scale == -1)) return 100
+        return ((level * 100) / scale.toFloat()).toInt()
     }
 
     fun isBatteryLow(): Boolean = getBatteryLevel() < 10
@@ -65,7 +63,7 @@ class BackupService(
     suspend fun runAutomaticBackup(actor: AuthenticatedUser): Result<Unit> {
         val settings = backupReminderPreferences.settings.first()
         val treeUri =
-            settings.backupUri?.let { Uri.parse(it) }
+            settings.backupUri?.toUri()
                 ?: return Result.failure(Exception(context.getString(R.string.error_no_backup_path)))
 
         if (isBatteryLow()) {
@@ -104,7 +102,7 @@ class BackupService(
     }
 
     fun scheduleAutomaticBackup(settings: BackupReminderSettings) {
-        if (!settings.isAutomatic || settings.backupUri == null) {
+        if (!settings.isAutomatic || (settings.backupUri == null)) {
             WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME)
             return
         }
@@ -113,7 +111,7 @@ class BackupService(
             Constraints
                 .Builder()
                 .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
-                .setRequiresBatteryNotLow(true)
+                .setRequiresBatteryNotLow(requiresBatteryNotLow = true)
                 .build()
 
         val now = LocalDateTime.now()

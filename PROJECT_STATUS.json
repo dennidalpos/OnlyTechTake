@@ -2,47 +2,15 @@
   "project_name": "OnlyTechTake",
   "version": "1.1.0",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-07-06",
+  "last_updated": "2026-06-29",
   "backlog": [
     {
-      "priority": "DONE",
-      "task": "MAINTENANCE: Allineamento versioni (v1.1.0) in build.gradle.kts, README.md e Landing Page. Rimozione note obsolete."
-    },
-    {
-      "priority": "DONE",
-      "task": "FEATURE: Implementato sistema di backup automatico programmabile con selezione destinazione (SAF), pianificazione oraria (WorkManager), controlli batteria (<10%) e blocco UI protettivo durante l'esecuzione manuale del backup automatico. Allineamento varianti e correzione regressioni nei test."
-    },
-    {
-      "priority": "DONE",
-      "task": "SHOWCASE: Implementazione dati demo ricchi per la variante Showcase, inclusi 36 ordini con cronologie dettagliate, feedback clienti simulati, categorie gerarchiche e asset (foto/firme) generati automaticamente. Allineamento stringhe i18n."
-    },
-    {
-      "priority": "DONE",
-      "task": "OPTIMIZATION: Ottimizzazione performance e sicurezza. Implementazione observeOrderDetail reattivo, query Dashboard aggregata, pulizia transazioni database e allineamento varianti. Supporto tablet/landscape verificato."
-    },
-    {
-      "priority": "DONE",
-      "task": "FEATURE: Migrazione della configurazione cifratura backup in modale dedicata. Implementato switch di attivazione vincolato alla presenza di password. Cifratura applicata selettivamente basata sullo stato dello switch (ZIP e XLSX). Risoluzione warning locale e ottimizzazione import."
-    },
-    {
-      "priority": "DONE",
-      "task": "OPTIMIZATION: Risolto flickering e problemi di fluidità nel caricamento dati. Implementati placeholders (LoadingBrandIndicator) e debouncing (300ms) sulla ricerca clienti/ordini per evitare race conditions e pressione eccessiva sul database."
-    },
-    {
-      "priority": "DONE",
-      "task": "BUGFIX: Corretto malfunzionamento ricerca clienti in CustomerPanel e Nuova Commessa. Risolto errore nella query FTS4 che utilizzava l'ID stringa (UUID) invece del ROWID integer per il JOIN tra le tabelle customers e customers_fts."
+      "priority": "HIGH",
+      "task": "QUALITY: Allineamento varianti (Full, Demo, Showcase) completato. Pulizia legacy e centralizzazione risorse common."
     },
     {
       "priority": "HIGH",
       "task": "LEGAL: Verifica accessibilità e pubblicazione HTTPS definitiva per Privacy Policy (inventoveritas.mine.nu)."
-    },
-    {
-      "priority": "DONE",
-      "task": "OPTIMIZATION: Ottimizzazione performance e sicurezza. Implementazione observeOrderDetail reattivo, query Dashboard aggregata, pulizia transazioni database e allineamento varianti. Supporto tablet/landscape verificato."
-    },
-    {
-      "priority": "DONE",
-      "task": "BUGFIX: Corretto malfunzionamento ricerca clienti in CustomerPanel e Nuova Commessa. Risolto errore nella query FTS4 che utilizzava l'ID stringa (UUID) invece del ROWID integer per il JOIN tra le tabelle customers e customers_fts."
     },
     {
       "priority": "HIGH",

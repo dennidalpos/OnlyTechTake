@@ -122,11 +122,12 @@ fun categoryPath(
 fun orderStatusStepNumber(status: OrderStatus): Int =
     when (status) {
         OrderStatus.OPEN -> 1
-        OrderStatus.IN_PROGRESS, OrderStatus.DIAGNOSIS -> 2
-        OrderStatus.RESULT -> 3
-        OrderStatus.REPAIRING -> 4
-        OrderStatus.READY_FOR_PICKUP -> 5
-        OrderStatus.CLOSED -> 6
+        OrderStatus.IN_PROGRESS -> 2
+        OrderStatus.DIAGNOSIS -> 3
+        OrderStatus.RESULT -> 4
+        OrderStatus.REPAIRING -> 5
+        OrderStatus.READY_FOR_PICKUP -> 6
+        OrderStatus.CLOSED -> 7
     }
 
 @Composable
@@ -140,6 +141,7 @@ fun OrderStatusStepper(
     val steps =
         listOf(
             OrderStatus.OPEN,
+            OrderStatus.IN_PROGRESS,
             OrderStatus.DIAGNOSIS,
             OrderStatus.RESULT,
             OrderStatus.REPAIRING,

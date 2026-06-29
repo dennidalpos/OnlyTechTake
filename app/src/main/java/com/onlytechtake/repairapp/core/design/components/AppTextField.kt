@@ -108,7 +108,7 @@ fun AppTextField(
             trailingIcon = trailingIcon,
             textStyle = MaterialTheme.typography.bodyLarge,
         )
-        if ((showError && errorText != null)) {
+        if (showError && (errorText != null)) {
             Text(
                 text = errorText,
                 color = MaterialTheme.colorScheme.error,

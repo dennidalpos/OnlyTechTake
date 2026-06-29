@@ -27,7 +27,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onStart
 import java.util.UUID
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -71,16 +70,12 @@ class DefaultAuthRepository(
                     session.user
                 }
 
-            // Simple non-blocking state creation
             AuthState(
                 initialized = true,
                 configured = adminCount > 0,
                 currentUser = activeUser,
                 lastUsername = lastUsername ?: "",
             )
-        }.onStart {
-            // Artificial delay for splash/animation
-            delay(1500.milliseconds)
         }.catch { e ->
             android.util.Log.e("AuthRepository", "Flow error", e)
             diagnosticLogger.logError("AuthRepository", "Flow error", e)

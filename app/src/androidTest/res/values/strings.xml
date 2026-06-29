@@ -2,14 +2,6 @@
 <resources>
     <string name="demo_admin_display_name">Demo Admin</string>
     <string name="demo_operator_display_name">Bench Operator</string>
-    <string name="common_cat_pc">Computer &amp; Laptop</string>
-    <string name="common_cat_pc_desc">PC hardware and software repairs</string>
-    <string name="common_cat_notebook">Notebook</string>
-    <string name="common_cat_notebook_desc">Laptops and Ultrabooks</string>
-    <string name="common_cat_gaming">Gaming Laptop</string>
-    <string name="common_cat_gaming_desc">MSI, ROG, Alienware, Legion</string>
-    <string name="common_cat_rog_strix">Asus ROG Strix</string>
-    <string name="common_cat_rog_strix_desc">Internal cleaning and thermal paste</string>
     <string name="demo_customer_name">Customer %d</string>
     <string name="demo_customer_business_name">Company %d Ltd</string>
     <string name="demo_customer_notes">Demo customer for presentations (ID: %d).</string>

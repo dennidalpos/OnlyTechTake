@@ -37,6 +37,8 @@ class CustomerRepositoryTest {
 
             override suspend fun deleteById(id: String) { // stub
             }
+
+            override fun observeById(id: String) = emptyFlow<CustomerEntity?>()
         }
 
     private val context = mockk<Context>(relaxed = true)

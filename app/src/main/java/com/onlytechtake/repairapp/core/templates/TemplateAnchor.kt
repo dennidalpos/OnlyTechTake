@@ -50,7 +50,7 @@ enum class TemplateAnchor(
     WHATSAPP_RESULT(
         settingKey = "anchor_wa_result",
         defaultCode = "whatsapp_risultato",
-        stepNumber = 3,
+        stepNumber = 4,
         stepNameRes = R.string.anchor_step_outcome,
         labelRes = R.string.anchor_label_wa_result,
         descriptionRes = R.string.anchor_desc_wa_result,

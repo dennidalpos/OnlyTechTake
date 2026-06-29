@@ -31,19 +31,21 @@ fun OrderStatusAction.requiresConfirmation(): Boolean = targetStatus == OrderSta
 
 fun statusTemplateAnchor(status: OrderStatus): TemplateAnchor =
     when (status) {
-        OrderStatus.OPEN -> TemplateAnchor.WHATSAPP_INTAKE
+        OrderStatus.OPEN -> TemplateAnchor.WHATSAPP_UPDATE
 
-        OrderStatus.IN_PROGRESS -> TemplateAnchor.WHATSAPP_UPDATE
+        // Default for manual updates if needed
+
+        OrderStatus.IN_PROGRESS -> TemplateAnchor.WHATSAPP_INTAKE
 
         OrderStatus.DIAGNOSIS -> TemplateAnchor.WHATSAPP_DIAGNOSIS
 
-        OrderStatus.RESULT -> TemplateAnchor.WHATSAPP_UPDATE
+        OrderStatus.RESULT -> TemplateAnchor.WHATSAPP_RESULT
 
         OrderStatus.REPAIRING -> TemplateAnchor.WHATSAPP_REPAIRING
 
-        OrderStatus.READY_FOR_PICKUP,
-        OrderStatus.CLOSED,
-        -> TemplateAnchor.WHATSAPP_READY
+        OrderStatus.READY_FOR_PICKUP -> TemplateAnchor.WHATSAPP_READY
+
+        OrderStatus.CLOSED -> TemplateAnchor.WHATSAPP_COMPLETED
     }
 
 fun statusTemplateAnchor(order: RepairOrderEntity): TemplateAnchor =

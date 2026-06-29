@@ -44,8 +44,10 @@ import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.DiagnosisOutcome
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
+import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.domain.workspace.statusTemplateAnchor
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
+import com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision
 
 @Composable
 fun OrderDetailWorkspace(
@@ -64,6 +66,7 @@ fun OrderDetailWorkspace(
     val pendingShareIntent by viewModel.pendingShareIntent.collectAsState()
     val context = LocalContext.current
     val workspaceState = rememberOrderDetailWorkspaceState()
+    val decision = workspaceState.quoteDecision
     val shareStatusChooserTitle = stringResource(R.string.order_share_status_chooser)
 
     val actor by viewModel.currentUser.collectAsState()
@@ -72,10 +75,6 @@ fun OrderDetailWorkspace(
 
     val exitConfirmTitle = stringResource(R.string.order_exit_confirm_title)
     val exitConfirmText = stringResource(R.string.order_exit_confirm_text)
-    val waOpenConfirmTitle = stringResource(R.string.order_wa_open_confirm_title)
-    val waOpenConfirmText = stringResource(R.string.order_wa_open_confirm_text)
-    val waSentConfirmTitle = stringResource(R.string.order_wa_sent_confirm_title)
-    val waSentConfirmText = stringResource(R.string.order_wa_sent_confirm_text)
     val diagnosisOutcomeConfirmTitle =
         stringResource(R.string.order_confirm_diagnosis_outcome_title)
     val diagnosisOutcomeConfirmText = stringResource(R.string.order_confirm_diagnosis_outcome_text)
@@ -179,12 +178,101 @@ fun OrderDetailWorkspace(
                 }
 
                 item(key = "actions", contentType = "actions") {
+                    val isResultStep = selected.order.status == OrderStatus.RESULT
+                    val outcome = selected.order.diagnosisOutcome
+                    val isRepairable = outcome == DiagnosisOutcome.REPAIRABLE
+                    val isNotRepairable = outcome == DiagnosisOutcome.NOT_REPAIRABLE
+
+                    val primaryOverride =
+                        when {
+                            isResultStep && isRepairable && decision == QuoteDecision.REJECTED -> {
+                                OrderStatusAction.CLOSE_ORDER
+                            }
+
+                            isResultStep && isNotRepairable -> {
+                                OrderStatusAction.READY_FOR_PICKUP
+                            }
+
+                            else -> {
+                                null
+                            }
+                        }
+
+                    val primaryLabel =
+                        if (isResultStep && isRepairable && decision == QuoteDecision.REJECTED) {
+                            stringResource(R.string.action_close_order)
+                        } else {
+                            null
+                        }
+
+                    val isPrimaryEnabled =
+                        if (isResultStep && isRepairable) {
+                            decision != null
+                        } else {
+                            true
+                        }
+
+                    val quoteAcceptedLabel = stringResource(R.string.order_quote_accepted)
+
                     OrderActionCard(
                         status = selected.order.status,
                         isPaid = selected.isPaid,
                         whatsAppAnchor = statusTemplateAnchor(selected.order),
                         onActionClick = { action ->
-                            workspaceState.openStatusAction(action, selected.order.diagnosisOutcome)
+                            val isActionMatchDecision =
+                                isResultStep && isRepairable && decision != null &&
+                                    (action == primaryOverride || (primaryOverride == null && action == OrderStatusAction.START_REPAIR))
+
+                            val isActionMatchNotRepairable =
+                                isResultStep && isNotRepairable && action == OrderStatusAction.READY_FOR_PICKUP
+
+                            when {
+                                isActionMatchDecision -> {
+                                    if (decision == QuoteDecision.ACCEPTED) {
+                                        viewModel.recordFeedback(
+                                            CustomerFeedbackType.ACCEPT,
+                                            quoteAcceptedLabel,
+                                        ) {
+                                            viewModel.prepareMessage(
+                                                TemplateAnchor.WHATSAPP_REPAIRING,
+                                            )
+                                        }
+                                    } else {
+                                        viewModel.recordFeedback(
+                                            CustomerFeedbackType.REJECT,
+                                            workspaceState.quoteRejectNote,
+                                            ClosureReason.CUSTOMER_DECLINED,
+                                        ) {
+                                            viewModel.prepareMessage(
+                                                TemplateAnchor.WHATSAPP_NOT_REPAIRABLE,
+                                            )
+                                        }
+                                    }
+                                }
+
+                                isActionMatchNotRepairable -> {
+                                    workspaceState.requestConfirm(
+                                        diagnosisOutcomeConfirmTitle,
+                                        diagnosisOutcomeConfirmText,
+                                    ) {
+                                        viewModel.changeStatus(
+                                            status = OrderStatus.READY_FOR_PICKUP,
+                                            note = notRepairableNote,
+                                        ) {
+                                            viewModel.prepareMessage(
+                                                TemplateAnchor.WHATSAPP_NOT_REPAIRABLE,
+                                            )
+                                        }
+                                    }
+                                }
+
+                                else -> {
+                                    workspaceState.openStatusAction(
+                                        action,
+                                        selected.order.diagnosisOutcome,
+                                    )
+                                }
+                            }
                         },
                         onTogglePayment = { viewModel.togglePaymentStatus(!selected.isPaid) },
                         onSendWhatsApp = viewModel::prepareMessage,
@@ -201,7 +289,10 @@ fun OrderDetailWorkspace(
                             } else {
                                 null
                             },
-                        isPrimaryActionEnabled = (selected.order.status != OrderStatus.RESULT) || (selected.order.diagnosisOutcome != DiagnosisOutcome.REPAIRABLE),
+                        isPrimaryActionEnabled = isPrimaryEnabled,
+                        primaryActionLabel = primaryLabel,
+                        primaryActionOverride = primaryOverride,
+                        showSecondaryActions = !isResultStep,
                     )
                 }
 
@@ -216,17 +307,7 @@ fun OrderDetailWorkspace(
                                     onQuoteRejectNoteChange = {
                                         workspaceState.quoteRejectNote = it
                                     },
-                                ) { feedback, note, closureReason ->
-                                    if (feedback == CustomerFeedbackType.ACCEPT) {
-                                        viewModel.recordFeedback(feedback, note)
-                                    } else {
-                                        viewModel.recordFeedback(
-                                            feedback,
-                                            note,
-                                            closureReason,
-                                        ) { onBack() }
-                                    }
-                                }
+                                )
                             }
                         }
 
@@ -243,24 +324,6 @@ fun OrderDetailWorkspace(
                                             color = MaterialTheme.colorScheme.error,
                                         )
                                         OperatorText(stringResource(R.string.order_not_repairable_body))
-                                        AppButton(
-                                            text = stringResource(R.string.order_not_repairable_ready),
-                                            variant = AppButtonVariant.Success,
-                                            modifier = Modifier.fillMaxWidth(),
-                                            onClick = {
-                                                workspaceState.requestConfirm(
-                                                    diagnosisOutcomeConfirmTitle,
-                                                    diagnosisOutcomeConfirmText,
-                                                ) {
-                                                    viewModel.changeStatus(
-                                                        status = OrderStatus.READY_FOR_PICKUP,
-                                                        note = notRepairableNote,
-                                                    ) {
-                                                        viewModel.prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
-                                                    }
-                                                }
-                                            },
-                                        )
                                     }
                                 }
                             }
@@ -424,8 +487,20 @@ fun OrderDetailWorkspace(
                         if (closureReason == ClosureReason.NOT_REPAIRABLE) {
                             viewModel.prepareMessage(TemplateAnchor.WHATSAPP_NOT_REPAIRABLE)
                         } else {
-                            onBack()
+                            viewModel.prepareMessage(TemplateAnchor.WHATSAPP_COMPLETED)
                         }
+                    }
+
+                    OrderStatus.IN_PROGRESS -> {
+                        viewModel.prepareMessage(TemplateAnchor.WHATSAPP_INTAKE)
+                    }
+
+                    OrderStatus.DIAGNOSIS -> {
+                        viewModel.prepareMessage(TemplateAnchor.WHATSAPP_DIAGNOSIS)
+                    }
+
+                    OrderStatus.REPAIRING -> {
+                        viewModel.prepareMessage(TemplateAnchor.WHATSAPP_REPAIRING)
                     }
 
                     OrderStatus.READY_FOR_PICKUP -> {
@@ -455,28 +530,21 @@ fun OrderDetailWorkspace(
         body = preparedMessageBody,
         onBodyChange = viewModel::updatePreparedMessageBody,
         onOpenWhatsApp = {
-            workspaceState.requestConfirm(
-                waOpenConfirmTitle,
-                waOpenConfirmText,
-            ) {
-                viewModel.recordPreparedMessage()
-                val intent =
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        "https://wa.me/${preparedMessage?.phone}?text=${
-                            Uri.encode(
-                                preparedMessageBody,
-                            )
-                        }".toUri(),
-                    )
-                context.startActivity(intent)
-            }
+            viewModel.recordPreparedMessage()
+            val intent =
+                Intent(
+                    Intent.ACTION_VIEW,
+                    "https://wa.me/${preparedMessage?.phone}?text=${
+                        Uri.encode(
+                            preparedMessageBody,
+                        )
+                    }".toUri(),
+                )
+            context.startActivity(intent)
         },
         onConfirmSent = {
-            workspaceState.requestConfirm(
-                waSentConfirmTitle,
-                waSentConfirmText,
-            ) { viewModel.confirmSentMessage() }
+            viewModel.confirmSentMessage()
+            viewModel.clearPreparedMessage()
         },
         onClose = viewModel::clearPreparedMessage,
     )

@@ -224,6 +224,17 @@
     <string name="error_backup_incompatible">Incompatible backup version</string>
     <string name="error_db_missing_in_backup">Database missing in backup</string>
 
+    <string name="common_cat_smartphone">Smartphone</string>
+    <string name="common_cat_smartphone_desc">Mobile phone repair</string>
+    <string name="common_cat_pc">Computer &amp; Laptop</string>
+    <string name="common_cat_pc_desc">PC hardware and software repairs</string>
+    <string name="common_cat_notebook">Notebook</string>
+    <string name="common_cat_notebook_desc">Laptops and Ultrabooks</string>
+    <string name="common_cat_gaming">Gaming Laptop</string>
+    <string name="common_cat_gaming_desc">MSI, ROG, Alienware, Legion</string>
+    <string name="common_cat_rog_strix">Asus ROG Strix</string>
+    <string name="common_cat_rog_strix_desc">Internal cleaning and thermal paste</string>
+
 
     <string name="priority_low">Low</string>
     <string name="priority_normal">Normal</string>

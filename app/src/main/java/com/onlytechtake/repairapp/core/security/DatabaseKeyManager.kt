@@ -25,7 +25,7 @@ class DatabaseKeyManager(
         val encryptedKeyBase64 = prefs.getString(KEY_ENCRYPTED_DB_PASSWORD, null)
         val ivBase64 = prefs.getString(KEY_IV, null)
 
-        return if (encryptedKeyBase64 != null && ivBase64 != null) {
+        return if ((encryptedKeyBase64 != null) && (ivBase64 != null)) {
             try {
                 decryptKey(encryptedKeyBase64, ivBase64)
             } catch (e: Exception) {

@@ -46,7 +46,7 @@ fun AppStepper(
         for (i in 1..totalSteps) {
             val isCompleted = i <= completedStep
             val isCurrent = i == currentStep
-            val isSelectable = i <= completedStep + 1
+            val isSelectable = i <= (completedStep + 1)
 
             StepItem(
                 step = i,

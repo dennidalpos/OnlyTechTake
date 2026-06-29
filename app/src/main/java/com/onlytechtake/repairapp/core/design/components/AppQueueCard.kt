@@ -49,7 +49,7 @@ fun AppQueueCard(
                 )
             }
 
-            if (count > 0 && lastElementTitle != null) {
+            if ((count > 0) && (lastElementTitle != null)) {
                 Text(
                     text = lastElementTitle,
                     style = MaterialTheme.typography.bodyMedium,

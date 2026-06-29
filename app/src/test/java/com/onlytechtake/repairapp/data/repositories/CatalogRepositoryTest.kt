@@ -37,6 +37,8 @@ class CatalogRepositoryTest {
                 parentId: String?,
                 name: String,
             ): OrderCategoryEntity? = null
+
+            override fun observeById(id: String) = emptyFlow<OrderCategoryEntity?>()
         }
 
     private val context = mockk<Context>(relaxed = true)

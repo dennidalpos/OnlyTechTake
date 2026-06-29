@@ -40,6 +40,12 @@ class WorkflowOperationalTest {
             context.deleteDatabase(RepairAppDatabase.DATABASE_NAME)
             AuthPreferences(context).clear()
             OwnerPreferences(context).updateOwnerInfo(OwnerInfo())
+
+            // Recreate Application container to ensure it's completely fresh
+            val app = context as com.onlytechtake.repairapp.RepairAppApplication
+            app.appContainer =
+                com.onlytechtake.repairapp.core.di
+                    .DefaultAppContainer(context)
         }
         val outputDir = prepareDirectory("workflow-setup")
         val robot = OperationalRobot(composeRule, context)
@@ -55,6 +61,12 @@ class WorkflowOperationalTest {
             RepairAppDatabase.closeInstance()
             context.deleteDatabase(RepairAppDatabase.DATABASE_NAME)
             AuthPreferences(context).clear()
+
+            // Recreate Application container
+            val app = context as com.onlytechtake.repairapp.RepairAppApplication
+            app.appContainer =
+                com.onlytechtake.repairapp.core.di
+                    .DefaultAppContainer(context)
 
             val db = RepairAppDatabase.getInstance(context)
             val hasher =

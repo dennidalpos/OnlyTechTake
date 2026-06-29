@@ -10,7 +10,7 @@ class BackupWorker(
     params: WorkerParameters,
 ) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
-        val application = applicationContext as? RepairAppApplication ?: return Result.failure()
+        val application = (applicationContext as? RepairAppApplication) ?: return Result.failure()
         val container = application.appContainer
         val backupService = container.backupService
         val authRepository = container.authRepository
@@ -24,7 +24,7 @@ class BackupWorker(
             } else {
                 Result.retry()
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Result.failure()
         }
     }

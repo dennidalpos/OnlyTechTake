@@ -229,20 +229,6 @@ fun RepairAppTheme(
 
             // Explicitly set the decor view background as well
             window.decorView.setBackgroundColor(color.toArgb())
-
-            // Force the activity resources configuration to match the theme
-            // This is a strong signal for the IME (keyboard) theme
-            val resources = activity.resources
-            val config = resources.configuration
-            val expectedMode =
-                if (darkTheme) Configuration.UI_MODE_NIGHT_YES else Configuration.UI_MODE_NIGHT_NO
-            if ((config.uiMode and Configuration.UI_MODE_NIGHT_MASK) != expectedMode) {
-                val newConfig = Configuration(config)
-                newConfig.uiMode =
-                    (newConfig.uiMode and Configuration.UI_MODE_NIGHT_MASK.inv()) or expectedMode
-                @Suppress("DEPRECATION")
-                resources.updateConfiguration(newConfig, resources.displayMetrics)
-            }
         }
     }
 
