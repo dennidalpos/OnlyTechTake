@@ -1,24 +1,12 @@
 {
   "project_name": "OnlyTechTake",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-07-01",
+  "last_updated": "2026-07-02",
   "backlog": [
     {
-      "priority": "DONE",
-      "task": "LANDING: Migliorata usabilità del carosello 'ring' aumentando le aree cliccabili per la navigazione (pulsanti, dot e lati del track)."
-    },
-    {
-      "priority": "DONE",
-      "task": "QUALITY: Allineamento varianti (Full, Demo, Showcase) completato. Inclusa nuova autorizzazione RECORD_VIDEO e refactoring DemoMode per supporto localizzazione."
-    },
-    {
-      "priority": "DONE",
-      "task": "FEATURE: Implementazione flussi acquisizione video per documentazione tecnica riparazione. Documentazione README, AGENTS e Data Safety aggiornata."
-    },
-    {
-      "priority": "DONE",
-      "task": "MAINTENANCE: Rigenerazione asset media (screenshot e video) per landing page e marketing. Framework di test UI stabilizzato con refreshAppContainer e fix robot scrolling."
+      "priority": "HIGH",
+      "task": "AUDIT: Baseline versionCode=1 established. Documentation and strings realigned to generic job management positioning."
     },
     {
       "priority": "HIGH",

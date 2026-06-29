@@ -27,14 +27,14 @@
     <string name="status_in_progress">In lavorazione</string>
     <string name="status_diagnosis">Diagnosi</string>
     <string name="status_result">Risultato</string>
-    <string name="status_repairing">Riparazione</string>
+    <string name="status_repairing">Intervento</string>
     <string name="status_ready_for_pickup">Pronta al ritiro</string>
     <string name="status_closed">Chiusa</string>
 
     <string name="action_start_progress">Prendi in carico</string>
     <string name="action_start_diagnosis">Avvia diagnosi</string>
     <string name="action_record_result">Registra risultato</string>
-    <string name="action_start_repair">Avvia riparazione</string>
+    <string name="action_start_repair">Avvia intervento</string>
     <string name="action_ready_for_pickup">Pronta al ritiro</string>
     <string name="action_close_order">Chiudi</string>
     <string name="action_none_label">Nessuna azione</string>
@@ -47,7 +47,7 @@
     <string name="anchor_step_diagnosis">Diagnosi</string>
     <string name="anchor_step_quote">Preventivo</string>
     <string name="anchor_step_outcome">Esito</string>
-    <string name="anchor_step_repair">Riparazione</string>
+    <string name="anchor_step_repair">Intervento</string>
     <string name="anchor_step_pickup">Ritiro</string>
     <string name="anchor_step_docs">Documenti</string>
     <string name="anchor_step_closed">Chiuso</string>
@@ -58,11 +58,11 @@
     <string name="anchor_label_wa_diagnosis">WA: Diagnosi in corso</string>
     <string name="anchor_label_wa_quote">WA: Preventivo pronto</string>
     <string name="anchor_label_wa_not_repairable">WA: Non riparabile</string>
-    <string name="anchor_label_wa_repairing">WA: In riparazione</string>
+    <string name="anchor_label_wa_repairing">WA: In intervento</string>
     <string name="anchor_label_wa_ready">WA: Pronto ritiro</string>
     <string name="anchor_label_wa_result">WA: Esito diagnosi</string>
     <string name="anchor_label_wa_processing">WA: In lavorazione</string>
-    <string name="anchor_label_wa_completed">WA: Riparazione completata</string>
+    <string name="anchor_label_wa_completed">WA: Intervento completato</string>
     <string name="anchor_label_wa_pdf">WA: Invio PDF Stato</string>
     <string name="anchor_label_legal_privacy">Legale: Privacy</string>
     <string name="anchor_label_legal_terms">Legale: Termini e Condizioni</string>
@@ -108,7 +108,7 @@
     <string name="error_diagnosis_only_during">La diagnosi può essere registrata solo durante o dopo la diagnosi</string>
     <string name="timeline_result_summary">Sintesi risultato: %s</string>
     <string name="timeline_diagnosis_outcome">Esito diagnosi: %s</string>
-    <string name="timeline_repair_amount">Importo riparazione: %s</string>
+    <string name="timeline_repair_amount">Importo intervento: %s</string>
 
     <string name="error_customer_required">Cliente obbligatorio</string>
     <string name="error_customer_required_fields">Inserisci i dati cliente obbligatori</string>
@@ -338,7 +338,7 @@
     <string name="dashboard_unsaved_continue">Continua la compilazione</string>
 
     <string name="home_queues_title">Code operative</string>
-    <string name="home_title">Banco riparazioni</string>
+    <string name="home_title">Banco commesse</string>
     <string name="home_pro_cta_new">NUOVA COMMESSA</string>
     <string name="home_pro_status_operational">BANCO OPERATIVO</string>
 
@@ -346,7 +346,7 @@
     <string name="home_metric_active">Attive</string>
     <string name="queue_open">Aperte</string>
     <string name="queue_processing">In lavorazione / diagnosi</string>
-    <string name="queue_result">Risultato / riparazione</string>
+    <string name="queue_result">Risultato / intervento</string>
     <string name="queue_ready">Pronte</string>
     <string name="home_new_order">Nuova commessa</string>
     <string name="home_empty_queue">Nessuna commessa in questa coda.</string>
@@ -617,8 +617,8 @@
     <string name="template_wa_quote_body">Ciao {{cliente}}, per la commessa {{numero_commessa}} abbiamo completato la diagnosi.\nPreventivo intervento: {{importo_preventivo}}.\nRispondi confermando o rifiutando il preventivo: procederemo solo dopo la tua conferma.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_not_repairable_title">WhatsApp non riparabile</string>
     <string name="template_wa_not_repairable_body">Ciao {{cliente}}, dopo la diagnosi della commessa {{numero_commessa}} l\'oggetto risulta non riparabile.\nPuoi passare in negozio per il ritiro o contattarci per chiarimenti.\n\n{{proprietario_nome}}</string>
-    <string name="template_wa_repairing_title">WhatsApp riparazione</string>
-    <string name="template_wa_repairing_body">Ciao {{cliente}}, la riparazione della commessa {{numero_commessa}} è in corso.\nTi aggiorneremo quando sarà pronta.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_repairing_title">WhatsApp intervento</string>
+    <string name="template_wa_repairing_body">Ciao {{cliente}}, l\'intervento per la commessa {{numero_commessa}} è in corso.\nTi aggiorneremo quando sarà pronta.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_lavorazione_title">WhatsApp lavorazione</string>
     <string name="template_wa_lavorazione_body">Ciao {{cliente}}, la commessa {{numero_commessa}} è in lavorazione.\nProssima azione: {{prossima_azione}}.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_completamento_title">WhatsApp completamento</string>
@@ -630,7 +630,7 @@
     <string name="legal_privacy_fallback">Informativa Privacy sintetica GDPR: I dati sono trattati per presa in carico, diagnosi, preventivo, riparazione, consegna, comunicazioni operative e obblighi di legge. Il cliente può esercitare i diritti GDPR e proporre reclamo al Garante Privacy.</string>
     <string name="legal_terms_fallback">Il cliente autorizza la presa in carico, la custodia e la diagnosi tecnica dell\'oggetto. Ogni riparazione con importo stimato viene eseguita solo dopo conferma del cliente.</string>
     <string name="template_privacy_breve_title">Privacy breve</string>
-    <string name="template_privacy_breve_body">Informativa privacy sintetica ai sensi del Regolamento UE 2016/679 (GDPR).\nTitolare: {{proprietario_nome}}, {{proprietario_piva}}, {{proprietario_indirizzo}}, contattabile presso il punto vendita o via: {{proprietario_email}} {{proprietario_telefono}}.\nFinalità: presa in carico e gestione della commessa, diagnosi, preventivo, riparazione, consegna, assistenza post-intervento e adempimenti fiscali.\nBasi giuridiche: esecuzione di misure precontrattuali o contrattuali, obblighi di legge e legittimo interesse. Per comunicazioni WhatsApp non indispensabili, il consenso si ritiene conferito con il rilascio del numero di contatto.\nDati trattati: identificativi, fiscali, informazioni sull\'oggetto, foto, firme e cronologia.\nConservazione: per il tempo necessario alla gestione della commessa e successivamente per obblighi di legge (10 anni per fini fiscali).\nDestinatari: personale autorizzato e fornitori tecnici strettamente necessari.\nDiritti: accesso, rettifica, cancellazione, limitazione, opposizione e reclamo al Garante Privacy.</string>
+    <string name="template_privacy_breve_body">Informativa privacy sintetica ai sensi del Regolamento UE 2016/679 (GDPR).\nTitolare: {{proprietario_nome}}, {{proprietario_piva}}, {{proprietario_indirizzo}}, contattabile presso il punto vendita o via: {{proprietario_email}} {{proprietario_telefono}}.\nFinalità: presa in carico e gestione della commessa, diagnosi, preventivo, intervento tecnico, consegna, assistenza post-intervento e adempimenti fiscali.\nBasi giuridiche: esecuzione di misure precontrattuali o contrattuali, obblighi di legge e legittimo interesse. Per comunicazioni WhatsApp non indispensabili, il consenso si ritiene conferito con il rilascio del numero di contatto.\nDati trattati: identificativi, fiscali, informazioni sull\'oggetto, foto, firme e cronologia.\nConservazione: per il tempo necessario alla gestione della commessa e successivamente per obblighi di legge (10 anni per fini fiscali).\nDestinatari: personale autorizzato e fornitori tecnici strettamente necessari.\nDiritti: accesso, rettifica, cancellazione, limitazione, opposizione e reclamo al Garante Privacy.</string>
     <string name="template_condizioni_title">Condizioni presa in carico</string>
     <string name="template_condizioni_body">Condizioni di presa in carico.\nIl cliente consegna l\'oggetto indicato in commessa e autorizza {{proprietario_nome}} a custodirlo, verificarlo e svolgere diagnosi tecnica.\nLa diagnosi può richiedere l\'apertura del dispositivo o il collegamento a strumenti di test. L\'intervento di riparazione prosegue solo dopo accettazione del preventivo.\n{{proprietario_nome}} non risponde di perdita dati, password non comunicate, difetti preesistenti o deterioramenti inevitabili emersi durante la diagnosi. È responsabilità del cliente eseguire il backup prima della consegna.\nGli importi del preventivo devono essere accettati prima dell\'avvio. In caso di mancato ritiro entro 90 giorni, l\'oggetto verrà gestito secondo le norme vigenti sui beni abbandonati.\nCon la firma il cliente conferma di aver letto e accettato l\'informativa privacy e le presenti condizioni.\n\nLaboratorio: {{proprietario_nome}} – {{proprietario_indirizzo}}</string>
 
@@ -754,14 +754,14 @@
     <string name="config_hub_about_title">Informazioni</string>
     <string name="config_hub_about_subtitle">Versione e contatti dell\'app</string>
     <string name="about_tooltip">Dettagli sulla versione dell\'applicazione e contatti per lo sviluppo.</string>
-    <string name="about_app_name">OnlyTechTake Repair App</string>
-    <string name="about_version">Versione: %1$s (%2$d)</string>
+    <string name="about_app_name">OnlyTechTake</string>
+    <string name="about_version">Versione: %1$s (Baseline %2$d)</string>
     <string name="about_build_type">Build Type: %s</string>
     <string name="about_links_title">Link e Privacy</string>
     <string name="about_home_page">Sito Web</string>
     <string name="about_privacy_policy">Informativa Privacy</string>
     <string name="about_description_title">Descrizione</string>
-    <string name="about_description_text">OnlyTechTake è un gestionale locale per laboratori di riparazione. Tutti i tuoi dati restano sul dispositivo per garantirti massima privacy e velocità.</string>
+    <string name="about_description_text">OnlyTechTake è un gestionale locale per la gestione di commesse e documentazione tecnica. Tutti i tuoi dati restano sul dispositivo per garantirti massima privacy e velocità.</string>
     <string name="about_copyright">© 2026 OnlyTechTake</string>
     <string name="about_github">GitHub: dennidalpos</string>
     <string name="about_url_github">https://github.com/dennidalpos</string>
@@ -782,7 +782,7 @@
     <string name="config_category_archived">Categoria archiviata</string>
     <string name="config_category_return_to_intake">Torna alla commessa</string>
 
-    <string name="config_category_tooltip">Organizza il catalogo delle riparazioni. Puoi creare una gerarchia di categorie e sottocategorie.</string>
+    <string name="config_category_tooltip">Organizza il catalogo delle commesse. Puoi creare una gerarchia di categorie e sottocategorie.</string>
     <string name="config_category_search_label">Cerca categorie…</string>
     <string name="config_category_new_root">Nuova Categoria principale</string>
     <string name="config_category_new_sub">Nuova Sottocategoria</string>

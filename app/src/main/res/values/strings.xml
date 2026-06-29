@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="order_created_title">Repair order created</string>
+    <string name="order_created_title">Service order created</string>
     <string name="status_updated_title">Status updated</string>
     <string name="closure_reason_prefix">Closure reason: %s</string>
-    <string name="order_reassigned_title">Repair order reassigned</string>
+    <string name="order_reassigned_title">Service order reassigned</string>
     <string name="unassigned">Unassigned</string>
     <string name="internal_note_added_title">Internal note added</string>
     <string name="customer_feedback_recorded_title">Customer feedback recorded</string>
@@ -26,19 +26,19 @@
     <string name="status_in_progress">In Progress</string>
     <string name="status_diagnosis">Diagnosis</string>
     <string name="status_result">Result</string>
-    <string name="status_repairing">Repairing</string>
+    <string name="status_repairing">Processing</string>
     <string name="status_ready_for_pickup">Ready for pickup</string>
     <string name="status_closed">Closed</string>
 
     <string name="action_start_progress">Take in charge</string>
     <string name="action_start_diagnosis">Start diagnosis</string>
     <string name="action_record_result">Record result</string>
-    <string name="action_start_repair">Start repair</string>
+    <string name="action_start_repair">Start intervention</string>
     <string name="action_ready_for_pickup">Ready for pickup</string>
     <string name="action_close_order">Close</string>
     <string name="action_none_label">No action</string>
     <string name="action_wait_quote">Wait for quote acceptance or rejection</string>
-    <string name="action_notify_not_repairable">Notify customer and prepare pickup</string>
+    <string name="action_notify_not_repairable">Notify customer and prepare delivery</string>
     <string name="action_record_quote_outcome">Record quote outcome</string>
 
     <string name="anchor_step_intake">Intake</string>
@@ -46,7 +46,7 @@
     <string name="anchor_step_diagnosis">Diagnosis</string>
     <string name="anchor_step_quote">Quote</string>
     <string name="anchor_step_outcome">Outcome</string>
-    <string name="anchor_step_repair">Repair</string>
+    <string name="anchor_step_repair">Intervention</string>
     <string name="anchor_step_pickup">Pickup</string>
     <string name="anchor_step_docs">Documents</string>
     <string name="anchor_step_closed">Closed</string>
@@ -56,23 +56,23 @@
     <string name="anchor_label_wa_update">WA: Update</string>
     <string name="anchor_label_wa_diagnosis">WA: Diagnosis in progress</string>
     <string name="anchor_label_wa_quote">WA: Quote ready</string>
-    <string name="anchor_label_wa_not_repairable">WA: Not repairable</string>
-    <string name="anchor_label_wa_repairing">WA: In repair</string>
+    <string name="anchor_label_wa_not_repairable">WA: Not serviceable</string>
+    <string name="anchor_label_wa_repairing">WA: In progress</string>
     <string name="anchor_label_wa_ready">WA: Ready for pickup</string>
     <string name="anchor_label_wa_result">WA: Diagnosis outcome</string>
     <string name="anchor_label_wa_processing">WA: Processing</string>
-    <string name="anchor_label_wa_completed">WA: Repair completed</string>
+    <string name="anchor_label_wa_completed">WA: Service completed</string>
     <string name="anchor_label_wa_pdf">WA: Send Status PDF</string>
     <string name="anchor_label_legal_privacy">Legal: Privacy</string>
     <string name="anchor_label_legal_terms">Legal: Terms and Conditions</string>
 
-    <string name="anchor_desc_wa_intake">Sent when a new repair order is opened.</string>
+    <string name="anchor_desc_wa_intake">Sent when a new service order is opened.</string>
     <string name="anchor_desc_wa_update">Sent to communicate generic status changes.</string>
     <string name="anchor_desc_wa_diagnosis">Sent when the object enters the diagnosis phase.</string>
     <string name="anchor_desc_wa_quote">Sent when the quote is ready for acceptance.</string>
-    <string name="anchor_desc_wa_not_repairable">Sent when the object is not repairable.</string>
+    <string name="anchor_desc_wa_not_repairable">Sent when the object is not serviceable.</string>
     <string name="anchor_desc_wa_repairing">Sent when the technical intervention begins.</string>
-    <string name="anchor_desc_wa_ready">Sent when the device can be picked up.</string>
+    <string name="anchor_desc_wa_ready">Sent when the device can be delivered.</string>
     <string name="anchor_desc_wa_result">Sent after the diagnosis is completed with a specific result.</string>
     <string name="anchor_desc_wa_processing">Sent when the object enters generic processing.</string>
     <string name="anchor_desc_wa_completed">Sent when the technical intervention is finished and closed.</string>
@@ -81,7 +81,7 @@
     <string name="anchor_desc_legal_terms">Service intake terms shown during acceptance.</string>
 
     <string name="pdf_title">OnlyTechTake – Progress Status Report</string>
-    <string name="pdf_label_order_number">Repair Order N:</string>
+    <string name="pdf_label_order_number">Service Order N:</string>
     <string name="pdf_label_date">Date:</string>
     <string name="pdf_label_generated_by">Generated by:</string>
     <string name="pdf_section_customer">CUSTOMER</string>
@@ -107,7 +107,7 @@
     <string name="error_diagnosis_only_during">Diagnosis can only be recorded during or after diagnosis</string>
     <string name="timeline_result_summary">Result summary: %s</string>
     <string name="timeline_diagnosis_outcome">Diagnosis outcome: %s</string>
-    <string name="timeline_repair_amount">Repair amount: %s</string>
+    <string name="timeline_repair_amount">Intervention amount: %s</string>
 
     <string name="error_customer_required">Customer required</string>
     <string name="error_customer_required_fields">Enter mandatory customer fields</string>
@@ -120,13 +120,13 @@
     <string name="error_username_required">Username required</string>
     <string name="error_password_too_short">Password too short</string>
     <string name="error_username_exists">Username already exists</string>
-    <string name="error_media_required">At least one photo or attachment is required</string>
+    <string name="error_media_required">At least one photo or attachment is required for documentation</string>
     <string name="error_privacy_required">Privacy and signature are required</string>
     <string name="error_positive_estimate_required">Positive quote amount is required</string>
     <string name="error_reject_reason_required">Rejection reason is required</string>
     <string name="error_result_summary_required">Result summary is required</string>
-    <string name="error_feedback_requires_result">Quote feedback requires a repair order waiting for customer</string>
-    <string name="error_feedback_only_repairable">Acceptance or rejection are only available for a repairable diagnosis</string>
+    <string name="error_feedback_requires_result">Quote feedback requires a service order waiting for customer</string>
+    <string name="error_feedback_only_repairable">Acceptance or rejection are only available for a serviceable diagnosis</string>
     <string name="error_user_not_found">User not found</string>
     <string name="error_admin_cannot_be_deactivated">Admin account cannot be deactivated</string>
     <string name="error_admin_cannot_be_deleted">Admin account cannot be deleted</string>
@@ -137,7 +137,7 @@
     <string name="timeline_image_modified">Image modified</string>
 
     <string name="error_photo_not_saved">Photo not saved</string>
-    <string name="label_repair_order">repair order</string>
+    <string name="label_repair_order">service order</string>
     <string name="label_media">media</string>
     <string name="label_media_photo">Photo</string>
     <string name="label_media_video">Video</string>
@@ -159,9 +159,9 @@
     <string name="error_intake_file_unavailable">Intake file unavailable: %s</string>
     <string name="timeline_media_intake">Media intake</string>
     <string name="error_media_move_failed">Media move failed</string>
-    <string name="error_order_not_found">Repair order not found</string>
+    <string name="error_order_not_found">Service order not found</string>
     <string name="error_signature_not_found">Signature not found</string>
-    <string name="error_signature_exists">Signature already exists for this repair order</string>
+    <string name="error_signature_exists">Signature already exists for this service order</string>
     <string name="error_attachment_too_large">Attachment too large: maximum %s</string>
     <string name="error_invalid_db_backup">Invalid database backup</string>
     <string name="error_unsupported_app_files">Backup contains unsupported app files</string>
@@ -286,7 +286,7 @@
     <string name="action_call_requested">Call requested</string>
     <string name="action_notified">Notified</string>
 
-    <string name="share_pdf_text">Attached is the progress status of the repair order.</string>
+    <string name="share_pdf_text">Attached is the progress status of the service order.</string>
 
 
     <string name="auth_system_ready">System ready</string>
@@ -336,20 +336,20 @@
     <string name="dashboard_unsaved_continue">Continue editing</string>
 
     <string name="home_queues_title">Operational queues</string>
-    <string name="home_title">Repair Bench</string>
-    <string name="home_pro_cta_new">NEW REPAIR ORDER</string>
+    <string name="home_title">Service Bench</string>
+    <string name="home_pro_cta_new">NEW SERVICE ORDER</string>
     <string name="home_pro_status_operational">BENCH OPERATIONAL</string>
 
     <string name="home_metric_operators">Operators</string>
     <string name="home_metric_active">Active</string>
     <string name="queue_open">Open</string>
     <string name="queue_processing">In Progress / Diagnosis</string>
-    <string name="queue_result">Result / Repair</string>
+    <string name="queue_result">Result / Intervention</string>
     <string name="queue_ready">Ready</string>
-    <string name="home_new_order">New repair order</string>
-    <string name="home_empty_queue">No repair orders in this queue.</string>
+    <string name="home_new_order">New service order</string>
+    <string name="home_empty_queue">No service orders in this queue.</string>
     <string name="home_empty_queues_title">No active queues</string>
-    <string name="home_empty_queues_body">When a repair order enters work, diagnosis, or pickup, it will appear here with the next action.</string>
+    <string name="home_empty_queues_body">When a service order enters work, diagnosis, or pickup, it will appear here with the next action.</string>
     <string name="home_open_queue">Open queue</string>
     <string name="home_backup_reminder_title">Backup recommended</string>
     <string name="home_backup_reminder_settings">Backup setup</string>
@@ -373,7 +373,7 @@
     <string name="content_description_delete_order">Delete</string>
     <string name="action_delete_confirm_title">Delete %1$s?</string>
     <string name="action_delete_confirm_text">%1$s will be permanently removed. This action is irreversible.</string>
-    <string name="order_not_repairable_note">Customer notified: device not repairable</string>
+    <string name="order_not_repairable_note">Customer notified: device not serviceable</string>
     <string name="content_description_edit">Edit</string>
     <string name="content_description_open">Open</string>
     <string name="content_description_clear">Clear</string>
@@ -476,12 +476,12 @@
     <string name="customer_field_address">Address</string>
     <string name="customer_field_notes">Notes</string>
 
-    <string name="new_order_title">New repair order</string>
+    <string name="new_order_title">New service order</string>
     <string name="intake_step_customer">Customer</string>
     <string name="intake_step_category">Category</string>
     <string name="intake_category_select_hint">Navigate to the last level to select the final category.</string>
     <string name="intake_category_step_hint">Select a subcategory to continue.</string>
-    <string name="intake_step_problem">Repair details</string>
+    <string name="intake_step_problem">Service details</string>
     <string name="intake_step_media">Photos and attachments</string>
     <string name="intake_step_privacy">Privacy and signature</string>
 
@@ -502,7 +502,7 @@
 
     <string name="intake_submit_missing">Missing: %s</string>
     <string name="intake_submit_create">Create intake order</string>
-    <string name="intake_help">Fill in the steps to create a new repair order. You can save a draft and resume later.</string>
+    <string name="intake_help">Fill in the steps to create a new service order. You can save a draft and resume later.</string>
     <string name="intake_category_selected">Selected: %s</string>
     <string name="intake_category_open">Open category</string>
     <string name="intake_category_selected_icon">Selected category</string>
@@ -513,9 +513,9 @@
     <string name="intake_problem_description">Description</string>
 
     <string name="orders_filter_title">Filters</string>
-    <string name="orders_title">Repair Orders</string>
-    <string name="orders_empty_title">No repair orders found</string>
-    <string name="orders_empty_body">Modify search or filters, or create a new repair order from the bench.</string>
+    <string name="orders_title">Service Orders</string>
+    <string name="orders_empty_title">No service orders found</string>
+    <string name="orders_empty_body">Modify search or filters, or create a new service order from the bench.</string>
 
     <string name="orders_customer_unavailable">Customer unavailable</string>
     <string name="orders_order_reference">%1$s – %2$s</string>
@@ -529,8 +529,8 @@
     <string name="orders_filter_open_unassigned">Open (unassigned)</string>
     <string name="orders_filter_closed_discarded">Closed (closed or discarded)</string>
     <string name="orders_filter_in_progress_assigned">In progress (assigned)</string>
-    <string name="orders_select_detail_hint">Select a repair order to see details</string>
-    <string name="orders_select_detail_title">No repair order selected</string>
+    <string name="orders_select_detail_hint">Select a service order to see details</string>
+    <string name="orders_select_detail_title">No service order selected</string>
     <string name="orders_category_unavailable">Category unavailable</string>
 
     <string name="order_exit_confirm_title">Exit the form?</string>
@@ -560,20 +560,20 @@
     <string name="order_wa_sent_confirm_text">Record that the operator has manually sent the message to the customer?</string>
     <string name="order_wa_close_preview">Close preview</string>
     <string name="order_timeline">Timeline</string>
-    <string name="order_confirm_status_update">Update repair order status?</string>
+    <string name="order_confirm_status_update">Update service order status?</string>
     <string name="order_result_summary">Result summary</string>
-    <string name="order_loading_detail">Loading repair order…</string>
+    <string name="order_loading_detail">Loading service order…</string>
     <string name="order_share_status_chooser">Send progress status</string>
     <string name="share_title_status_report">Progress status %s</string>
     <string name="share_title_document">Document %s</string>
-    <string name="error_repairable_diagnosis_required">Only a repairable diagnosis can pass to repairing</string>
-    <string name="error_not_repairable_diagnosis_required">Direct transition to pickup requires a non-repairable diagnosis</string>
+    <string name="error_repairable_diagnosis_required">Only a serviceable diagnosis can pass to processing</string>
+    <string name="error_not_repairable_diagnosis_required">Direct transition to delivery requires a non-serviceable diagnosis</string>
     <string name="error_unknown">Error</string>
     <string name="error_prefix">Error: %s</string>
     <string name="error_log_generation_failed">Failed to generate log file</string>
-    <string name="order_diagnosis_repairable">Repairable</string>
-    <string name="order_diagnosis_not_repairable">Not repairable</string>
-    <string name="template_diagnosis_not_repairable_reason">Technical diagnosis: not repairable</string>
+    <string name="order_diagnosis_repairable">Serviceable</string>
+    <string name="order_diagnosis_not_repairable">Not serviceable</string>
+    <string name="template_diagnosis_not_repairable_reason">Technical diagnosis: not serviceable</string>
     <string name="order_estimate_amount">Quote amount (€)</string>
 
     <string name="order_closure_note_label">Closure note</string>
@@ -583,12 +583,12 @@
     <string name="order_next_action_title">Next action</string>
     <string name="order_secondary_actions_title">Other actions</string>
     <string name="order_not_repairable_title">Diagnosis outcome</string>
-    <string name="order_not_repairable_body">The device is not repairable. Notify the customer before preparing pickup.</string>
-    <string name="order_not_repairable_ready">Customer notified / ready for pickup</string>
+    <string name="order_not_repairable_body">The device is not serviceable. Notify the customer before preparing delivery.</string>
+    <string name="order_not_repairable_ready">Customer notified / ready for delivery</string>
     <string name="order_updated_label">Updated</string>
     <string name="order_operator_label">Operator</string>
     <string name="order_wa_sending_to">Sending to: %s</string>
-    <string name="order_timeline_tooltip">History of all events and status changes related to this repair order.</string>
+    <string name="order_timeline_tooltip">History of all events and status changes related to this service order.</string>
     <string name="order_quote_outcome">Quote outcome</string>
     <string name="order_quote_accepted">Quote accepted</string>
     <string name="order_quote_rejected">Quote rejected</string>
@@ -597,30 +597,30 @@
     <string name="order_pdf_sent_confirm_title">Confirm sending</string>
     <string name="order_pdf_sent_confirm_text">Have you completed sending the PDF to the customer?</string>
     <string name="order_confirm_diagnosis_outcome_title">Customer notified?</string>
-    <string name="order_confirm_diagnosis_outcome_text">The repair order will pass to ready for pickup.</string>
+    <string name="order_confirm_diagnosis_outcome_text">The service order will pass to ready for delivery.</string>
 
     <string name="template_wa_intake_title">WhatsApp intake</string>
-    <string name="template_wa_intake_body">Hello {{cliente}}, we have taken in charge the repair order {{numero_commessa}}: {{titolo_commessa}}.\nCategory: {{categoria_percorso}}.\nWe will update you as soon as we have news.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_intake_body">Hello {{cliente}}, we have taken in charge the service order {{numero_commessa}}: {{titolo_commessa}}.\nCategory: {{categoria_percorso}}.\nWe will update you as soon as we have news.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_update_title">WhatsApp update</string>
-    <string name="template_wa_update_body">Repair order {{numero_commessa}} update: current status {{stato_commessa}}.\nNext action: {{prossima_azione}}.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_update_body">Service order {{numero_commessa}} update: current status {{stato_commessa}}.\nNext action: {{prossima_azione}}.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_diagnosis_title">WhatsApp diagnosis</string>
-    <string name="template_wa_diagnosis_body">Hello {{cliente}}, repair order {{numero_commessa}} is in diagnosis.\nObject: {{titolo_commessa}}.\nWe will communicate outcome and quote before proceeding.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_diagnosis_body">Hello {{cliente}}, service order {{numero_commessa}} is in diagnosis.\nObject: {{titolo_commessa}}.\nWe will communicate outcome and quote before proceeding.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_result_title">WhatsApp result</string>
-    <string name="template_wa_result_body">Hello {{cliente}}, we have completed the diagnosis for repair order {{numero_commessa}}.\nOutcome: {{esito_diagnosi}}.\nStatus: {{stato_commessa}}.\nNext action: {{prossima_azione}}.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_result_body">Hello {{cliente}}, we have completed the diagnosis for service order {{numero_commessa}}.\nOutcome: {{esito_diagnosi}}.\nStatus: {{stato_commessa}}.\nNext action: {{prossima_azione}}.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_quote_title">WhatsApp intervention quote</string>
-    <string name="template_wa_quote_body">Hello {{cliente}}, for repair order {{numero_commessa}} we have completed the diagnosis.\nIntervention quote: {{importo_preventivo}}.\nPlease respond by confirming or rejecting the quote: we will proceed only after your confirmation.\n\n{{proprietario_nome}}</string>
-    <string name="template_wa_not_repairable_title">WhatsApp not repairable</string>
-    <string name="template_wa_not_repairable_body">Hello {{cliente}}, after the diagnosis of repair order {{numero_commessa}} the object is not repairable.\nYou can come to the shop for pickup or contact us for clarifications.\n\n{{proprietario_nome}}</string>
-    <string name="template_wa_repairing_title">WhatsApp repairing</string>
-    <string name="template_wa_repairing_body">Hello {{cliente}}, the repair of order {{numero_commessa}} is in progress.\nWe will update you when it is ready.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_quote_body">Hello {{cliente}}, for service order {{numero_commessa}} we have completed the diagnosis.\nIntervention quote: {{importo_preventivo}}.\nPlease respond by confirming or rejecting the quote: we will proceed only after your confirmation.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_not_repairable_title">WhatsApp not serviceable</string>
+    <string name="template_wa_not_repairable_body">Hello {{cliente}}, after the diagnosis of service order {{numero_commessa}} the object is not serviceable.\nYou can contact us for delivery details or clarifications.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_repairing_title">WhatsApp processing</string>
+    <string name="template_wa_repairing_body">Hello {{cliente}}, the intervention for order {{numero_commessa}} is in progress.\nWe will update you when it is ready.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_lavorazione_title">WhatsApp processing</string>
-    <string name="template_wa_lavorazione_body">Hello {{cliente}}, repair order {{numero_commessa}} is in progress.\nNext action: {{prossima_azione}}.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_lavorazione_body">Hello {{cliente}}, service order {{numero_commessa}} is in progress.\nNext action: {{prossima_azione}}.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_completamento_title">WhatsApp completion</string>
-    <string name="template_wa_completamento_body">Hello {{cliente}}, the processing of repair order {{numero_commessa}} is completed.\n\n{{proprietario_nome}}</string>
-    <string name="template_wa_ready_title">WhatsApp ready for pickup</string>
-    <string name="template_wa_ready_body">Hello {{cliente}}, repair order {{numero_commessa}} is ready for pickup.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_completamento_body">Hello {{cliente}}, the processing of service order {{numero_commessa}} is completed.\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_ready_title">WhatsApp ready for delivery</string>
+    <string name="template_wa_ready_body">Hello {{cliente}}, service order {{numero_commessa}} is ready for delivery.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_pdf_status_title">WhatsApp progress status PDF</string>
-    <string name="template_wa_pdf_status_body">Hello {{cliente}}, we are sending you the attached progress status for repair order {{numero_commessa}}: {{titolo_commessa}}.\n\nCurrent status: {{stato_commessa}}\nNext action: {{prossima_azione}}\n\n{{proprietario_nome}}</string>
+    <string name="template_wa_pdf_status_body">Hello {{cliente}}, we are sending you the attached progress status for service order {{numero_commessa}}: {{titolo_commessa}}.\n\nCurrent status: {{stato_commessa}}\nNext action: {{prossima_azione}}\n\n{{proprietario_nome}}</string>
     <string name="legal_privacy_fallback">Summary GDPR Privacy Notice: Data is processed for intake, diagnosis, quote, repair, delivery, operational communications, and legal obligations. Customers may exercise their GDPR rights and lodge a complaint with the Data Protection Authority.</string>
     <string name="legal_terms_fallback">The customer authorizes the intake, custody, and technical diagnosis of the object. Any repair with an estimated cost is performed only after customer confirmation.</string>
     <string name="template_privacy_breve_title">Short privacy notice</string>
@@ -643,26 +643,26 @@
     <string name="admin_confirm_create_text">The new operator will be saved in the local database.</string>
     <string name="admin_users_title">Users</string>
     <string name="admin_no_users_title">No operator</string>
-    <string name="admin_no_users_body">Create at least one operator to separate access, permissions, and responsibilities on repair orders.</string>
+    <string name="admin_no_users_body">Create at least one operator to separate access, permissions, and responsibilities on service orders.</string>
     <string name="admin_user_active_description">The operator can access the system</string>
     <string name="admin_user_inactive_description">The operator cannot log in</string>
     <string name="admin_user_active">Active</string>
     <string name="admin_user_inactive">Inactive</string>
     <string name="admin_confirm_activate_title">Activate operator?</string>
     <string name="admin_confirm_deactivate_title">Deactivate operator?</string>
-    <string name="admin_confirm_activate_text">Do you want to activate operator %s? They will be able to manage repair orders again.</string>
+    <string name="admin_confirm_activate_text">Do you want to activate operator %s? They will be able to manage service orders again.</string>
     <string name="admin_confirm_deactivate_text">Do you want to deactivate operator %s? They will no longer be able to access the app until reactivated.</string>
     <string name="admin_confirm_delete_user_title">Delete operator?</string>
-    <string name="admin_confirm_delete_user_text">The operator %s will be permanently removed from the system. It will no longer be possible to recover their credentials, but the repair orders managed by them will remain in the archive.</string>
+    <string name="admin_confirm_delete_user_text">The operator %s will be permanently removed from the system. It will no longer be possible to recover their credentials, but the service orders managed by them will remain in the archive.</string>
     <string name="admin_reset_password">Reset password</string>
     <string name="admin_confirm_reset_title">Reset password?</string>
     <string name="admin_confirm_reset_text">The entered temporary password will be saved for %s.</string>
     <string name="admin_total_reset">Total data reset</string>
     <string name="admin_confirm_total_reset_title">Total reset?</string>
     <string name="admin_confirm_total_reset_text">This action deletes local app data and returns to the first admin setup.</string>
-    <string name="admin_delete_all_orders">Delete all repair orders</string>
-    <string name="admin_confirm_delete_all_orders_title">Total repair orders deletion?</string>
-    <string name="admin_confirm_delete_all_orders_text">All repair orders, timelines, messages, photos, signatures, and documents will be permanently deleted.</string>
+    <string name="admin_delete_all_orders">Delete all service orders</string>
+    <string name="admin_confirm_delete_all_orders_title">Total service orders deletion?</string>
+    <string name="admin_confirm_delete_all_orders_text">All service orders, timelines, messages, photos, signatures, and documents will be permanently deleted.</string>
     <string name="admin_access_security">Access and security</string>
     <string name="admin_recovery_kit">Admin recovery kit</string>
     <string name="admin_recovery_generate">Generate new recovery kit</string>
@@ -685,8 +685,8 @@
     <string name="admin_change_password">Change password</string>
     <string name="admin_recovery_tooltip">The recovery kit allows you to reset the admin password. Keep it in a safe place outside the device.</string>
     <string name="admin_current_password">Current password</string>
-    <string name="admin_delete_all_orders_tooltip">Permanently deletes repair orders, timelines, messages, photos, signatures, and documents.</string>
-    <string name="admin_total_reset_tooltip">Removes account, customers, configurations, and repair orders, returning the app to its initial state.</string>
+    <string name="admin_delete_all_orders_tooltip">Permanently deletes service orders, timelines, messages, photos, signatures, and documents.</string>
+    <string name="admin_total_reset_tooltip">Removes account, customers, configurations, and service orders, returning the app to its initial state.</string>
     <string name="admin_delete_all_orders_field_short">Type %s</string>
     <string name="admin_total_reset_field">Type %s</string>
     <string name="admin_delete_all_orders_confirmation_value">DELETE ALL</string>
@@ -748,14 +748,14 @@
     <string name="config_hub_about_title">Information</string>
     <string name="config_hub_about_subtitle">App version and contacts</string>
     <string name="about_tooltip">Details about the application version and development contacts.</string>
-    <string name="about_app_name">OnlyTechTake Repair App</string>
-    <string name="about_version">Version: %1$s (%2$d)</string>
+    <string name="about_app_name">OnlyTechTake</string>
+    <string name="about_version">Version: %1$s (Baseline %2$d)</string>
     <string name="about_build_type">Build Type: %s</string>
     <string name="about_links_title">Links &amp; Privacy</string>
     <string name="about_home_page">Home Page</string>
     <string name="about_privacy_policy">Privacy Policy</string>
     <string name="about_description_title">Description</string>
-    <string name="about_description_text">OnlyTechTake is a local management software for repair shops. All your data stays on the device to guarantee maximum privacy and speed.</string>
+    <string name="about_description_text">OnlyTechTake is a local-first management software for job orders and technical documentation. All your data stays on the device to guarantee maximum privacy and speed.</string>
     <string name="about_copyright">© 2026 OnlyTechTake</string>
     <string name="about_github">GitHub: dennidalpos</string>
     <string name="about_url_github">https://github.com/dennidalpos</string>
@@ -774,9 +774,9 @@
     <string name="config_category_description_label">Description</string>
     <string name="config_category_active">Category active</string>
     <string name="config_category_archived">Category archived</string>
-    <string name="config_category_return_to_intake">Back to repair order</string>
+    <string name="config_category_return_to_intake">Back to service order</string>
 
-    <string name="config_category_tooltip">Organize the repair catalog. You can create a hierarchy of categories and subcategories.</string>
+    <string name="config_category_tooltip">Organize the service catalog. You can create a hierarchy of categories and subcategories.</string>
     <string name="config_category_search_label">Search categories…</string>
     <string name="config_category_new_root">New Main Category</string>
     <string name="config_category_new_sub">New Subcategory</string>
@@ -791,7 +791,7 @@
     <string name="config_category_confirm_delete_title">Delete category?</string>
     <string name="config_category_close">Close Categories</string>
 
-    <string name="config_category_confirm_delete_specific_text">Category \'%1$s\' and all its subcategories will be deleted. It is not possible to delete categories used in existing repair orders.</string>
+    <string name="config_category_confirm_delete_specific_text">Category \'%1$s\' and all its subcategories will be deleted. It is not possible to delete categories used in existing service orders.</string>
 
     <string name="config_category_empty_branch">No category in this branch.</string>
     <string name="config_template_code_label">Code</string>
@@ -841,8 +841,8 @@
     <string name="config_backup_tooltip">Manage reminders and files through the Android document selector.</string>
     <string name="config_backup_close">Close backup setup</string>
 
-    <string name="config_backup_export_xlsx">Export repair orders XLSX</string>
-    <string name="config_backup_confirm_export_xlsx_title">Export repair orders?</string>
+    <string name="config_backup_export_xlsx">Export service orders XLSX</string>
+    <string name="config_backup_confirm_export_xlsx_title">Export service orders?</string>
     <string name="config_backup_confirm_export_xlsx_text">An XLSX file will be created via system selector.</string>
 
     <string name="config_backup_confirm_export_zip_title">Export full backup?</string>
@@ -915,9 +915,9 @@
     <string name="storage_deep_maintenance">Deep maintenance</string>
 
     <string name="storage_cleanup_cache">Empty cache</string>
-    <string name="storage_cleanup_cache_tooltip">Deletes temporary files and cached data. Does not affect repair orders or documents.</string>
+    <string name="storage_cleanup_cache_tooltip">Deletes temporary files and cached data. Does not affect service orders or documents.</string>
     <string name="storage_cleanup_orphans">Clean orphan files</string>
-    <string name="storage_cleanup_orphans_tooltip">Permanently removes files no longer referenced in the database (e.g., photos of deleted repair orders).</string>
+    <string name="storage_cleanup_orphans_tooltip">Permanently removes files no longer referenced in the database (e.g., photos of deleted service orders).</string>
     <string name="storage_tooltip">Monitor memory use and clean temporary files to free up space.</string>
     <string name="storage_loading">Loading statistics…</string>
     <string name="storage_free_percentage">Free space: %1$d%% (%2$s)</string>
@@ -930,7 +930,7 @@
     <string name="catalog_error_duplicate_name">Category already present in this branch</string>
 
     <string name="catalog_error_not_found">Category not found</string>
-    <string name="catalog_error_used_by_order">Category used by a repair order</string>
+    <string name="catalog_error_used_by_order">Category used by a service order</string>
     <string name="catalog_error_cycle_detected">The category branch contains a cycle</string>
     <string name="catalog_error_self_parent">A category cannot be its own parent</string>
     <string name="catalog_error_parent_not_found">Parent category not found</string>

@@ -39,8 +39,8 @@ android {
         applicationId = "com.onlytechtake.repairapp"
         minSdk = 26
         targetSdk = 37
-        versionCode = 7
-        versionName = "1.1.0"
+        versionCode = 1
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -56,7 +56,7 @@ object DemoDataSeeder {
         val ownerPreferences = OwnerPreferences(context)
         ownerPreferences.updateOwnerInfo(
             OwnerInfo(
-                name = "OnlyTechTake Repair Lab",
+                name = "OnlyTechTake HQ",
                 vatNumber = "US987654321",
                 address = "123 Demo Street, New York",
                 email = "demo@onlytechtake.invalid",
@@ -402,7 +402,7 @@ object DemoDataSeeder {
         paint.textSize = 54f
         canvas.drawText(label, 96f, 160f, paint)
         paint.textSize = 36f
-        canvas.drawText("OnlyTechTake Repair App", 96f, 230f, paint)
+        canvas.drawText("OnlyTechTake", 96f, 230f, paint)
         paint.color = Color.rgb(37, 99, 235)
         paint.strokeWidth = 8f
         canvas.drawLine(96f, 300f, 880f, 560f, paint)

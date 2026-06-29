@@ -14,7 +14,7 @@ Features:
 - Order Management: track repair stages (Open, Diagnosis, In Progress, Ready, Closed).
 - Customer Registry: manage contacts and repair history in a local database.
 - Digital Signature: capture acceptance signatures directly on the screen.
-- Photo Documentation: attach photos of device conditions.
+- Photo & Video Documentation: attach media evidence of device conditions for technical documentation.
 - Communication: prepare messages for manual sending via messaging apps.
 - PDF Reports: generate intake forms and receipts in PDF format.
 - Export & Backup: export data to XLSX format and create encrypted ZIP backups.

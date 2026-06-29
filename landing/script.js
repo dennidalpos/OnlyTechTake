@@ -133,7 +133,7 @@ const translations = {
                 list: [
                     "Anagrafiche clienti, contatti e note fiscali",
                     "Dettagli tecnici sulle riparazioni e cronologia interventi",
-                    "Documentazione multimediale (Foto e Video)",
+                    "Documentazione multimediale (Foto e Video HD)",
                     "Firme digitali di presa in carico e accettazione privacy"
                 ],
                 footer: "Vengono memorizzati esclusivamente in un database protetto all'interno dello storage privato del tuo dispositivo Android. Nessun dato viene indicizzato dal sistema operativo o reso accessibile ad altre app."
@@ -146,7 +146,7 @@ const translations = {
                 title: "3. Permessi e Finalità",
                 text: "L'App richiede permessi minimi, utilizzati esclusivamente per le finalità operative del laboratorio:",
                 list: [
-                    "<strong>Fotocamera:</strong> Acquisizione di prove visive dello stato del dispositivo.",
+                    "<strong>Fotocamera e Microfono:</strong> Acquisizione di prove visive e audio dello stato del dispositivo.",
                     "<strong>Storage:</strong> Salvataggio locale dei PDF e degli export richiesti dall'utente.",
                     "<strong>Internet:</strong> Nessun traffico dati principale. Utilizzato solo per la verifica periodica della licenza tramite Google Play."
                 ]
@@ -295,7 +295,7 @@ const translations = {
                 list: [
                     "Customer records, contacts, and tax notes",
                     "Technical repair details and intervention history",
-                    "Multimedia documentation (Photos and Videos)",
+                    "Multimedia documentation (Photos and HD Videos)",
                     "Digital signatures for intake and privacy acceptance"
                 ],
                 footer: "is stored exclusively in a protected database within your Android device's private storage. No data is indexed by the OS or accessible to other apps."
@@ -308,7 +308,7 @@ const translations = {
                 title: "3. Permissions and Purposes",
                 text: "The App requires minimal permissions, used exclusively for the workshop's operational purposes:",
                 list: [
-                    "<strong>Camera:</strong> Acquiring visual evidence of the device's condition.",
+                    "<strong>Camera and Microphone:</strong> Acquiring visual and audio evidence of the device's condition.",
                     "<strong>Storage:</strong> Local saving of PDFs and exports requested by the user.",
                     "<strong>Internet:</strong> No main data traffic. Used only for periodic license verification via Google Play."
                 ]

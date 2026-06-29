@@ -6,19 +6,19 @@
     <string name="demo_customer_business_name">Company %d Ltd</string>
     <string name="demo_customer_notes">Demo customer for presentations (ID: %d).</string>
     <string name="demo_order_title_1">Asus ROG Strix - Cleaning and Paste</string>
-    <string name="demo_order_title_n">Repair %d</string>
-    <string name="demo_order_desc">Demo repair order description %d.</string>
+    <string name="demo_order_title_n">Service %d</string>
+    <string name="demo_order_desc">Demo service order description %d.</string>
     <string name="demo_order_notes">Demo internal notes %d.</string>
     <string name="demo_photo_label">Object photo</string>
     <string name="demo_signature_label">Customer signature</string>
     <string name="demo_privacy_snapshot">Demo privacy notice.</string>
     <string name="demo_terms_snapshot">Demo service intake terms.</string>
-    <string name="demo_event_title_created">Repair order created</string>
+    <string name="demo_event_title_created">Service order created</string>
     <string name="demo_event_desc_created">Demo intake with photo and customer signature.</string>
     <string name="demo_template_body">Update {{numero_commessa}}: {{stato_commessa}} for {{cliente}}.</string>
 
     <plurals name="demo_error_order_limit">
-        <item quantity="one">Demo Limit reached. The Demo version allows only %1$d repair order and use only with admin account. To continue without limits, activate the Full version.</item>
-        <item quantity="other">Demo Limit reached. The Demo version allows %1$d repair orders and use only with admin account. To continue without limits, activate the Full version.</item>
+        <item quantity="one">Demo Limit reached. The Demo version allows only %1$d service order and use only with admin account. To continue without limits, activate the Full version.</item>
+        <item quantity="other">Demo Limit reached. The Demo version allows %1$d service orders and use only with admin account. To continue without limits, activate the Full version.</item>
     </plurals>
 </resources>

@@ -1,48 +1,50 @@
 # Store Listing - Italiano
 
-## OnlyTechTake Pro
+## OnlyTechTake
 
-**Nome app:** OnlyTechTake: Gestione Riparazioni Pro
-**Descrizione breve:** Il gestionale locale completo per laboratori di riparazione smartphone e PC.
+**Nome app:** OnlyTechTake: Gestione Commesse
+**Descrizione breve:** Gestionale locale per commesse di lavoro e documentazione tecnica.
 **Descrizione completa:**
-🚀 **Ottimizza il tuo laboratorio con OnlyTechTake Pro!**
+🚀 **Ottimizza il tuo business con OnlyTechTake!**
 
-Sei un tecnico o un proprietario di un negozio di riparazioni? OnlyTechTake è la soluzione "local-first" definitiva per gestire l'intero ciclo di vita delle tue commesse direttamente dal tuo dispositivo Android. Dimentica il disordine cartaceo e tieni traccia di ogni riparazione, dalla presa in carico alla consegna finale.
+Hai bisogno di una soluzione affidabile per gestire le commesse e documentare la presa in carico di beni? OnlyTechTake è la soluzione "local-first" definitiva per gestire l'intero ciclo di vita delle tue attività professionali direttamente dal tuo dispositivo Android. Tieni traccia di ogni intervento, dalla presa in carico alla consegna finale.
+
+OnlyTechTake è ideale per centri di assistenza tecnica, laboratori di riparazione e qualsiasi attività professionale che richieda documentazione fotografica e firme di accettazione.
 
 🔒 **Privacy Totale e Sicurezza**
-Tutti i tuoi dati risiedono esclusivamente sul tuo dispositivo. Grazie al database cifrato SQLCipher e alla filosofia offline-first, le informazioni dei tuoi clienti e del tuo business sono protette e sempre accessibili, anche senza connessione internet.
+Tutti i tuoi dati risiedono esclusivamente sul tuo dispositivo. Grazie al database cifrato SQLCipher e alla filosofia offline-first, le informazioni dei tuoi clienti e i dati aziendali sono protetti e sempre accessibili, anche senza connessione internet. Nessun cloud, nessun tracciamento, nessuna fuga di dati.
 
 ✨ **Caratteristiche Principali:**
 - 📋 **Gestione Commesse Avanzata:** Traccia ogni fase (Aperta, Diagnosi, In Lavorazione, Pronta, Chiusa) con facilità.
-- 👥 **Anagrafica Clienti CRM:** Gestisci contatti, preferenze privacy e storico riparazioni in un database sicuro.
+- 👥 **Anagrafica Clienti CRM Locale:** Gestisci contatti, preferenze privacy e storico interventi in un archivio sicuro.
 - ✍️ **Firma Digitale Integrata:** Acquisisci la firma per l'accettazione e la privacy direttamente sullo schermo.
-- 📸 **Documentazione Fotografica:** Allega foto dello stato estetico dei dispositivi per evitare contestazioni.
+- 📸 **Documentazione Tecnica:** Allega foto e video per fornire prove documentali dello stato dei beni e ridurre le contestazioni.
 - 💬 **WhatsApp manuale:** Prepara messaggi pronti da controllare e inviare manualmente ai clienti.
-- 📄 **Report PDF Professionali:** Crea schede di accettazione e ricevute PDF con il tuo logo.
+- 📄 **Report PDF Professionali:** Crea schede di accettazione e ricevute PDF con il tuo logo aziendale.
 - 📊 **Export XLSX e Backup:** Esporta i dati per la tua contabilità e crea backup ZIP cifrati.
 
-**Perché scegliere OnlyTechTake Pro:**
-1. **Velocità Operativa:** Workflow guidato per non dimenticare alcun passaggio.
-2. **Nessun Abbonamento Cloud:** Paghi una volta o usi la tua licenza senza costi nascosti di server.
-3. **Comunicazione Chiara:** Template messaggi personalizzabili per ogni stato della riparazione.
-4. **Professionale:** Dai al tuo negozio un'immagine moderna e organizzata.
+**Perché scegliere OnlyTechTake:**
+1. **Velocità Operativa:** Workflow guidato progettato per rendere semplice la presa in carico e il tracciamento.
+2. **Privacy First:** I dati del tuo business appartengono solo a te. Nessun abbonamento cloud o server di terze parti.
+3. **Comunicazione Chiara:** Template professionali per ogni aggiornamento di stato.
+4. **Immagine Professionale:** Fornisci ai tuoi clienti ricevute firmate e report PDF dettagliati.
 
-Trasforma il tuo modo di lavorare oggi stesso con OnlyTechTake Pro!
+Trasforma il tuo modo di lavorare oggi stesso con OnlyTechTake!
 
 **Keyword ASO:**
-gestione riparazioni, software laboratorio tecnico, riparazione smartphone, assistenza pc, commesse lavoro, CRM locale, firma digitale Android, registro riparazioni, gestione negozio assistenza.
+gestione commesse, ordini di lavoro, documentazione tecnica, CRM locale, firma digitale Android, registro interventi, gestione business, tracciamento lavori, presa in carico beni.
 
-**Categoria:** Produttività / Business.
-**Testo promozionale:** L'app all-in-one per i professionisti della riparazione. Privacy totale, workflow guidato e gestione clienti offline.
+**Categoria:** Business / Produttività.
+**Testo promozionale:** L'app local-first per professionisti. Gestione commesse sicura, evidenze tecniche e documentazione firmata.
 
 ## OnlyTechTake Demo
 
-**Nome app:** OnlyTechTake: Prova Gestionale
-**Descrizione breve:** Prova gratuita del flusso di lavoro OnlyTechTake per laboratori.
+**Nome app:** OnlyTechTake: Demo
+**Descrizione breve:** Prova gratuita del flusso di lavoro OnlyTechTake.
 **Descrizione completa:**
-Scatena il potenziale del tuo laboratorio con la versione **Demo di OnlyTechTake**.
+Scopri il potenziale del tuo business con la versione **Demo di OnlyTechTake**.
 
-Questa versione ti permette di testare il flusso base del gestionale "local-first" prima di passare alla versione Pro. Scopri come gestire una commessa dimostrativa dall'accettazione alla diagnosi tecnica.
+Questa versione ti permette di testare il flusso base del gestionale "local-first" prima di passare alla versione completa. Prova come gestire una commessa dimostrativa dalla presa in carico al completamento.
 
 ⚠️ **Limiti della Versione Demo:**
 - Massimo 1 commessa attiva per testare il flusso.
@@ -50,4 +52,4 @@ Questa versione ti permette di testare il flusso base del gestionale "local-firs
 - Funzioni di Export (XLSX, Backup ZIP) bloccate.
 - PDF generati con watermark "VERSIONE DEMO".
 
-Ideale per chi vuole toccare con mano la velocità e la semplicità di OnlyTechTake prima di adottarlo nel proprio business quotidiano.
+Ideale per i professionisti che vogliono toccare con mano la velocità e la sicurezza di OnlyTechTake prima di adottarlo nel proprio business quotidiano.

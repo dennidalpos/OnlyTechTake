@@ -14,7 +14,7 @@ Funzionalità:
 - Gestione Commesse: monitoraggio delle fasi di riparazione (Aperta, Diagnosi, In Lavorazione, Pronta, Chiusa).
 - Registro Clienti: gestione dei contatti e dello storico riparazioni in un database locale.
 - Firma Digitale: acquisizione della firma per l'accettazione direttamente sullo schermo.
-- Documentazione Fotografica: possibilità di allegare foto dello stato dei dispositivi.
+- Documentazione Media: possibilità di allegare foto e video dello stato dei dispositivi per evidenza tecnica.
 - Comunicazione: preparazione di messaggi per l'invio manuale tramite applicazioni di messaggistica.
 - Report PDF: generazione di schede di accettazione e ricevute in formato PDF.
 - Esportazione e Backup: esportazione dei dati in formato XLSX e creazione di backup ZIP cifrati.

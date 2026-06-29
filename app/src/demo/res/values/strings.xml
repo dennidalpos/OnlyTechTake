@@ -3,8 +3,8 @@
     <string name="demo_version_banner">DEMO VERSION</string>
     <string name="demo_admin_display_name">Demo Admin</string>
     <plurals name="demo_error_order_limit">
-        <item quantity="one">Demo Limit reached. The Demo version allows only %1$d repair order and use only with admin account. To continue without limits, activate the Full version.</item>
-        <item quantity="other">Demo Limit reached. The Demo version allows %1$d repair orders and use only with admin account. To continue without limits, activate the Full version.</item>
+        <item quantity="one">Demo Limit reached. The Demo version allows only %1$d service order and use only with admin account. To continue without limits, activate the Full version.</item>
+        <item quantity="other">Demo Limit reached. The Demo version allows %1$d service orders and use only with admin account. To continue without limits, activate the Full version.</item>
     </plurals>
     <string name="demo_error_operator_not_available">The Demo version does not allow the creation of operators. Use only the local admin account.</string>
     <plurals name="demo_error_operator_limit">
@@ -12,7 +12,7 @@
         <item quantity="other">Demo Limit reached. Maximum %1$d operators allowed in the Demo version. To continue without limits, activate the Full version.</item>
     </plurals>
     <string name="auth_demo_action">Launch demo mode</string>
-    <string name="home_demo_cta_try">TRY REPAIR ORDER</string>
+    <string name="home_demo_cta_try">TRY SERVICE ORDER</string>
     <string name="home_demo_pro_features">Discover Pro version benefits</string>
     <string name="home_demo_pro_features_description">ZIP Backup, Excel Export, Operator Management, and Unlimited Orders are available in the Pro version.</string>
 </resources>
