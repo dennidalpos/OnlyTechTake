@@ -2,7 +2,7 @@
   "project_name": "OnlyTechTake",
   "version": "1.0.0",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-07-05",
+  "last_updated": "2026-07-06",
   "backlog": [
     {
       "priority": "HIGH",
@@ -10,6 +10,10 @@
     }
   ],
   "completed_recently": [
+    {
+      "date": "2026-07-06",
+      "task": "MAINTENANCE: Pulizia profonda del repository (cache .gradle/.kotlin, build folders, .artifacts) e rimozione stringhe inutilizzate in Showcase flavor. Allineamento formattazione con Spotless."
+    },
     {
       "date": "2026-07-05",
       "task": "QUALITY: Risoluzione violazioni Spotless (formattazione) e lint (backing properties in CustomersViewModel). Pulizia import e rimozione FQN in OrdersViewModel."

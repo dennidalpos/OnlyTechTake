@@ -33,7 +33,6 @@
     <string name="showcase_order_internal_notes">Internal test note.</string>
     <string name="showcase_event_intake_desc">Device received at the bench for technical evaluation.</string>
     <string name="showcase_event_diagnosis_desc">Technical diagnosis completed: display panel failure identified.</string>
-    <string name="showcase_event_quote_desc">Service quote sent to customer via WhatsApp.</string>
     <string name="showcase_event_ready_desc">Intervention successful. Device tested and ready for pickup.</string>
     <string name="showcase_event_closed_desc">Intervention completed, payment received, and device delivered.</string>
     <string name="showcase_feedback_ok">OK, go ahead.</string>

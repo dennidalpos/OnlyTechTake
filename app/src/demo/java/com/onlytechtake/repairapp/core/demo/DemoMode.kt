@@ -23,17 +23,14 @@ object DemoMode {
 
     fun getVersionBanner(context: Context): String = context.getString(R.string.demo_version_banner)
 
-    fun getAdminDisplayName(context: Context): String =
-        context.getString(R.string.demo_admin_display_name)
+    fun getAdminDisplayName(context: Context): String = context.getString(R.string.demo_admin_display_name)
 
-    fun getOperatorNotAvailableMessage(context: Context): String =
-        context.getString(R.string.demo_error_operator_not_available)
+    fun getOperatorNotAvailableMessage(context: Context): String = context.getString(R.string.demo_error_operator_not_available)
 
     fun getOperatorLimitMessage(
         context: Context,
         limit: Int,
-    ): String =
-        context.resources.getQuantityString(R.plurals.demo_error_operator_limit, limit, limit)
+    ): String = context.resources.getQuantityString(R.plurals.demo_error_operator_limit, limit, limit)
 
     fun getOrderLimitMessage(
         context: Context,
@@ -52,11 +49,9 @@ object DemoMode {
 
     fun getDemoTryCta(context: Context): String = context.getString(R.string.home_demo_cta_try)
 
-    fun getDemoProFeaturesLabel(context: Context): String =
-        context.getString(R.string.home_demo_pro_features)
+    fun getDemoProFeaturesLabel(context: Context): String = context.getString(R.string.home_demo_pro_features)
 
-    fun getDemoProFeaturesDesc(context: Context): String =
-        context.getString(R.string.home_demo_pro_features_description)
+    fun getDemoProFeaturesDesc(context: Context): String = context.getString(R.string.home_demo_pro_features_description)
 
     fun getShowcaseOwnerInfo(context: Context): OwnerInfo? = null
 

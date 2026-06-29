@@ -633,7 +633,7 @@ object ShowcaseDataSeeder {
                             orderId = orderId,
                             signerName =
                                 customer.firstName ?: customer.companyName
-                                ?: context.getString(R.string.signature_default_signer),
+                                    ?: context.getString(R.string.signature_default_signer),
                             privacyAccepted = true,
                             termsAccepted = true,
                             privacyTextSnapshot = context.getString(R.string.showcase_privacy_snapshot),
