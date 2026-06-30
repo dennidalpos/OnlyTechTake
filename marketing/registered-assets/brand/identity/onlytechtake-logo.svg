@@ -1,13 +1,21 @@
-<svg width="720" height="180" viewBox="0 0 720 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <g transform="translate(8 8) scale(.64)">
-  <rect x="18" y="18" width="220" height="220" rx="54" fill="#062629"/>
-  <rect x="67" y="49" width="122" height="166" rx="19" fill="#F4FBFA" stroke="#B8C7C7" stroke-width="5"/>
-  <rect x="87" y="90" width="82" height="15" rx="4" fill="#1BB8AE"/>
-  <rect x="89" y="131" width="55" height="13" rx="3" fill="#102326"/>
-  <rect x="89" y="159" width="39" height="13" rx="3" fill="#102326"/>
-  <path d="M151 180L176 202L230 132" stroke="#FF9F0A" stroke-width="21" stroke-linecap="square" stroke-linejoin="round"/>
-</g>
-  <text x="190" y="87" font-family="Segoe UI, Arial, sans-serif" font-size="54" font-weight="700" fill="#191C1D">OnlyTechTake</text>
-  <text x="192" y="126" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="600" fill="#006A6A">REPAIR APP</text>
-  <text x="192" y="155" font-family="Segoe UI, Arial, sans-serif" font-size="20" fill="#4A6363">Un'app per ogni problema.</text>
+<svg width="720" height="180" viewBox="0 0 720 180" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="OnlyTechTake - Ripara, traccia, aggiorna.">
+  <rect width="720" height="180" rx="28" fill="transparent"/>
+  <g transform="translate(18 28) scale(1.15)">
+    <path d="M22 34Q22 26 30 26H40M22 34V72Q22 80 30 80H38" stroke="#0D0D0D" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M32 38V53L41 62M33 71H44" stroke="#0D0D0D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="32" cy="32" r="5" fill="#0D0D0D"/>
+    <circle cx="42" cy="57" r="5" fill="#0D0D0D"/>
+    <path d="M68 26H82Q90 26 90 34V66Q90 74 82 74H78L84 85L70 74H66" stroke="#0D0D0D" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M72 42H84M72 52H82" stroke="#0D0D0D" stroke-width="5" stroke-linecap="round"/>
+    <path d="M72 64L78 70L90 55" stroke="#FFB627" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M44 15C39 19 37 25 38 31C39 36 42 41 47 44V72L42 83H48L54 75L60 83H66L61 72V44C66 41 69 36 70 31C71 25 69 19 64 15L59 24H49L44 15Z" fill="#00B6B0"/>
+    <rect x="50" y="48" width="8" height="24" fill="#00B6B0"/>
+    <path d="M54 67V94M48 70V82L39 91M60 70V82L69 91" stroke="#00B6B0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="54" cy="91" r="5" fill="#00B6B0"/><circle cx="39" cy="88" r="5" fill="#00B6B0"/><circle cx="69" cy="88" r="5" fill="#00B6B0"/>
+    <path d="M83 19L87 10M90 23L98 17M92 31H102" stroke="#FFB627" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <text x="160" y="84" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="58" font-weight="800" font-style="italic" fill="#0D0D0D">Only</text>
+  <text x="292" y="84" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="58" font-weight="800" font-style="italic" fill="#00B6B0">Tech</text>
+  <text x="428" y="84" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="58" font-weight="800" font-style="italic" fill="#0D0D0D">Take</text>
+  <text x="164" y="126" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="25" font-weight="700" fill="#4F5B5B">Ripara, traccia, aggiorna.</text>
 </svg>
