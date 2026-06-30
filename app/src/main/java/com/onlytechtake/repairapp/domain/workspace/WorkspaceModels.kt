@@ -113,8 +113,7 @@ fun IntakeOrderInput.validationErrors(context: Context): List<String> =
         if (!hasPrivacySignature) add(context.getString(R.string.error_privacy_required))
     }
 
-fun IntakeOrderInput.isReadyForSubmit(context: Context): Boolean =
-    validationErrors(context).isEmpty()
+fun IntakeOrderInput.isReadyForSubmit(context: Context): Boolean = validationErrors(context).isEmpty()
 
 private fun CustomerInput.isValidForIntake(): Boolean {
     val hasContact = phone.isNotBlank() || email.isNotBlank()
@@ -134,22 +133,24 @@ enum class OrderFilterMode {
 }
 
 data class OrderFilter(
-    val modes: Set<OrderFilterMode> = setOf(
-        OrderFilterMode.MINE,
-        OrderFilterMode.OPEN_UNASSIGNED,
-        OrderFilterMode.OTHERS_ASSIGNED
-    ),
+    val modes: Set<OrderFilterMode> =
+        setOf(
+            OrderFilterMode.MINE,
+            OrderFilterMode.OPEN_UNASSIGNED,
+            OrderFilterMode.OTHERS_ASSIGNED,
+        ),
     val query: String = "",
     val status: OrderStatus? = null,
     val statuses: Set<OrderStatus> = emptySet(),
     val customerId: String? = null,
 ) {
     fun hasActiveFilter(): Boolean {
-        val defaultModes = setOf(
-            OrderFilterMode.MINE,
-            OrderFilterMode.OPEN_UNASSIGNED,
-            OrderFilterMode.OTHERS_ASSIGNED
-        )
+        val defaultModes =
+            setOf(
+                OrderFilterMode.MINE,
+                OrderFilterMode.OPEN_UNASSIGNED,
+                OrderFilterMode.OTHERS_ASSIGNED,
+            )
         return modes != defaultModes || query.isNotBlank() || customerId != null || status != null || statuses.isNotEmpty()
     }
 }
@@ -224,5 +225,4 @@ fun DiagnosisResultInput.validationErrors(context: Context): List<String> =
         }
     }
 
-fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? =
-    estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }
+fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? = estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }

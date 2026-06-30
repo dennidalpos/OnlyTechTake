@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.core.pdf
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -150,6 +151,17 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
         }
 
         // Header
+        val logo = BitmapFactory.decodeResource(context.resources, R.drawable.pdf_logo)
+        if (logo != null) {
+            val logoSize = 48f
+            canvas.drawBitmap(
+                logo,
+                null,
+                android.graphics.RectF(595f - margin - logoSize, y - 10f, 595f - margin, y - 10f + logoSize),
+                null,
+            )
+            logo.recycle()
+        }
         canvas.drawText(context.getString(R.string.pdf_title), margin, y, titlePaint)
         y += 20f
 

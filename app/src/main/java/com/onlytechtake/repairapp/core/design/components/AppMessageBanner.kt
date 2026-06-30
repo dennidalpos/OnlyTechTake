@@ -120,10 +120,11 @@ fun AppMessageBanner(
             colors = colors,
         ) {
             Row(
-                modifier = Modifier.padding(
-                    horizontal = RepairAppSpacing.compactGap,
-                    vertical = 6.dp
-                ),
+                modifier =
+                    Modifier.padding(
+                        horizontal = RepairAppSpacing.compactGap,
+                        vertical = 6.dp,
+                    ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
             ) {

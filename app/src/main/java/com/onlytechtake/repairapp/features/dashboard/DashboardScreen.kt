@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.List
@@ -223,6 +224,7 @@ fun DashboardScreen(
         topBar = {
             AppTopBar(
                 title = summary?.title ?: stringResource(R.string.app_name),
+                showLogo = currentDestination == DashboardRoutes.HOME,
                 navigationIcon = {
                     if (currentDestination != DashboardRoutes.HOME) {
                         val isCloseIcon =
@@ -250,18 +252,26 @@ fun DashboardScreen(
                 actions = {
                     currentUser?.let { user ->
                         val isAdminUser = PermissionService.isAdmin(user)
-                        AppStatusBadge(
-                            text =
-                                stringResource(
-                                    if (isAdminUser) R.string.dashboard_role_admin else R.string.dashboard_role_operator,
-                                ),
-                            containerColor = if (isAdminUser) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer,
-                            contentColor = if (isAdminUser) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer,
-                            modifier =
-                                Modifier
-                                    .padding(end = RepairAppSpacing.compactGap)
-                                    .basicMarquee(),
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(end = RepairAppSpacing.compactGap),
+                        ) {
+                            androidx.compose.foundation.Image(
+                                painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_brand_avatar),
+                                contentDescription = null,
+                                modifier = Modifier.size(24.dp),
+                            )
+                            Spacer(Modifier.size(RepairAppSpacing.compactGap))
+                            AppStatusBadge(
+                                text =
+                                    stringResource(
+                                        if (isAdminUser) R.string.dashboard_role_admin else R.string.dashboard_role_operator,
+                                    ),
+                                containerColor = if (isAdminUser) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer,
+                                contentColor = if (isAdminUser) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer,
+                                modifier = Modifier.basicMarquee(),
+                            )
+                        }
                     }
                     AppButton(
                         text = stringResource(R.string.logout),

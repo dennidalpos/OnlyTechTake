@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- OnlyTechTake Avatar: Wrench inside Circle -->
+    <path
+        android:fillColor="#00B6B0"
+        android:pathData="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2z" />
+    <group
+        android:translateX="6"
+        android:translateY="6"
+        android:scaleX="0.5"
+        android:scaleY="0.5">
+        <!-- Wrench in White contrast -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M9,3 C7.5,4.5 6.5,6.5 7,9 C7.5,11 9,13 11,14 V21 L9,25 H11 L13,22 L15,25 H17 L15,21 V14 C17,13 18.5,11 19,9 C19.5,6.5 18.5,4.5 17,3 L15,6 H11 L9,3 Z" />
+    </group>
+</vector>

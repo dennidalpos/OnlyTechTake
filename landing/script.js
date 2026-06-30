@@ -26,7 +26,7 @@ const translations = {
             privacy: "Privacy Policy"
         },
         hero: {
-            title: 'Un\'App per la gestione delle commesse clienti a portata di click!<br><span class="gradient-text">Il tuo Banco Riparazioni.</span>',
+            title: 'OnlyTechTake: Ripara, traccia, aggiorna.<br><span class="gradient-text">Il tuo Banco Riparazioni.</span>',
             subtitle: "Gestione professionale delle commesse, diagnosi e clienti tutto sul tuo dispositivo Android in totale sicurezza. Senza abbonamenti, senza cloud.",
             ctaPro: "Inizia ora (PRO)",
             ctaDemo: "Prova la Demo"
@@ -188,7 +188,7 @@ const translations = {
             privacy: "Privacy Policy"
         },
         hero: {
-            title: 'One App for customer repair orders, just a click away!<br><span class="gradient-text">Your repair workbench.</span>',
+            title: 'OnlyTechTake: Repair, track, update.<br><span class="gradient-text">Your service workbench.</span>',
             subtitle: "Professional management of repair orders, diagnostics, and customers right on your Android device. No subscriptions, no cloud.",
             ctaPro: "Get started now (PRO)",
             ctaDemo: "Try the Demo"

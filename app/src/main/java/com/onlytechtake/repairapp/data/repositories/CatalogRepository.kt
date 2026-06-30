@@ -18,8 +18,7 @@ class CatalogRepository(
 ) {
     fun observeCategories(): Flow<List<OrderCategoryEntity>> = categoryDao.observeAll()
 
-    fun observeActiveCategories(): Flow<List<OrderCategoryEntity>> =
-        categoryDao.observeActiveCategories()
+    fun observeActiveCategories(): Flow<List<OrderCategoryEntity>> = categoryDao.observeActiveCategories()
 
     suspend fun getCategoryPath(id: String): String {
         val all = categoryDao.findAll()

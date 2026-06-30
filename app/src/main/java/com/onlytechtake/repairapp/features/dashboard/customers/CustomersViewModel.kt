@@ -131,15 +131,16 @@ class CustomersViewModel(
                 val filter =
                     OrderFilter(
                         customerId = customerId,
-                        modes = if (closed) {
-                            setOf(OrderFilterMode.CLOSED)
-                        } else {
-                            setOf(
-                                OrderFilterMode.MINE,
-                                OrderFilterMode.OPEN_UNASSIGNED,
-                                OrderFilterMode.OTHERS_ASSIGNED
-                            )
-                        },
+                        modes =
+                            if (closed) {
+                                setOf(OrderFilterMode.CLOSED)
+                            } else {
+                                setOf(
+                                    OrderFilterMode.MINE,
+                                    OrderFilterMode.OPEN_UNASSIGNED,
+                                    OrderFilterMode.OTHERS_ASSIGNED,
+                                )
+                            },
                     )
                 orderWorkflowRepository.observeOrderList(user, filter)
             }

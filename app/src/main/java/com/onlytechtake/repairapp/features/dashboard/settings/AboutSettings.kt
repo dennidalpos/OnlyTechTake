@@ -1,11 +1,14 @@
 package com.onlytechtake.repairapp.features.dashboard.settings
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
@@ -22,8 +25,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
@@ -65,28 +70,38 @@ fun AboutSettings(onBack: () -> Unit) {
 
         item {
             StandardCard(highlight = true) {
-                Column(
+                Row(
                     modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+                    horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.screenHorizontal),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(
-                        stringResource(R.string.about_app_name),
-                        style = MaterialTheme.typography.titleLarge,
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_brand_avatar),
+                        contentDescription = null,
+                        modifier = Modifier.size(64.dp),
                     )
-                    Text(
-                        text =
-                            stringResource(
-                                R.string.about_version,
-                                BuildConfig.VERSION_NAME,
-                                BuildConfig.VERSION_CODE,
-                            ),
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
-                    Text(
-                        text = stringResource(R.string.about_build_type, BuildConfig.BUILD_TYPE),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.secondary,
-                    )
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+                    ) {
+                        Text(
+                            stringResource(R.string.about_app_name),
+                            style = MaterialTheme.typography.titleLarge,
+                        )
+                        Text(
+                            text =
+                                stringResource(
+                                    R.string.about_version,
+                                    BuildConfig.VERSION_NAME,
+                                    BuildConfig.VERSION_CODE,
+                                ),
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                        Text(
+                            text = stringResource(R.string.about_build_type, BuildConfig.BUILD_TYPE),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.secondary,
+                        )
+                    }
                 }
             }
         }

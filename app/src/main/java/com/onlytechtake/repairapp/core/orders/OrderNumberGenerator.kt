@@ -26,7 +26,7 @@ class OrderNumberGenerator(
     }
 
     private companion object {
-        const val PREFIX = "RIP"
+        const val PREFIX = "OTT"
         const val SEQUENCE_WIDTH = 6
     }
 }

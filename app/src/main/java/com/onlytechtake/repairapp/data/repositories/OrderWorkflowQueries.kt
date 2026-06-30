@@ -37,8 +37,8 @@ internal class OrderWorkflowQueries(
     fun observeOrders(
         actor: AuthenticatedUser,
         filter: OrderFilter,
-    ): Flow<List<RepairOrderEntity>> {
-        return repairOrderDao
+    ): Flow<List<RepairOrderEntity>> =
+        repairOrderDao
             .observeFiltered(
                 actorId = actor.id,
                 includeMe = OrderFilterMode.MINE in filter.modes,
@@ -50,15 +50,14 @@ internal class OrderWorkflowQueries(
                 useStatuses = filter.statuses.isNotEmpty(),
                 statuses = filter.statuses.toList(),
             ).distinctUntilChanged()
-    }
 
     suspend fun countAllOrders(): Int = repairOrderDao.countAll()
 
     fun searchOrders(
         actor: AuthenticatedUser,
         filter: OrderFilter,
-    ): Flow<List<OrderListItem>> {
-        return repairOrderDao
+    ): Flow<List<OrderListItem>> =
+        repairOrderDao
             .search(
                 query = filter.query,
                 actorId = actor.id,
@@ -87,13 +86,12 @@ internal class OrderWorkflowQueries(
                     )
                 }
             }
-    }
 
     fun observeOrderList(
         actor: AuthenticatedUser,
         filter: OrderFilter,
-    ): Flow<List<OrderListItem>> {
-        return repairOrderDao
+    ): Flow<List<OrderListItem>> =
+        repairOrderDao
             .observeOrderListProjection(
                 actorId = actor.id,
                 includeMe = OrderFilterMode.MINE in filter.modes,
@@ -121,7 +119,6 @@ internal class OrderWorkflowQueries(
                     )
                 }
             }
-    }
 
     fun observeOrderDetail(orderId: String): Flow<OrderDetail?> =
         repairOrderDao.observeById(orderId).flatMapLatest { order ->

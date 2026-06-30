@@ -223,8 +223,7 @@ abstract class BaseAssetRobot(
             .fetchSemanticsNodes()
             .isNotEmpty()
 
-    private fun isTextDisplayed(text: String): Boolean =
-        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+    private fun isTextDisplayed(text: String): Boolean = composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
 
     fun waitForText(
         text: String,
@@ -487,8 +486,7 @@ abstract class BaseAssetRobot(
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    private fun isRecordingDemo(): Boolean =
-        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     companion object {
         const val WAIT_TIMEOUT_MILLIS = 30_000L

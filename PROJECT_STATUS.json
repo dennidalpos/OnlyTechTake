@@ -2,169 +2,41 @@
   "project_name": "OnlyTechTake",
   "version": "1.0.0",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-07-09",
+  "last_updated": "2026-07-10",
   "backlog": [
     {
       "priority": "HIGH",
-      "task": "PROCEDURAL: Pianificazione e avvio gruppo di test chiuso (20 tester per 14 giorni) per compliance Play Store account post-2023."
+      "task": "ASSETS: Rigenerazione totale Screenshot e Video Demo (OUTSIDE AI SCOPE per ora, richiesto skip)."
+    },
+    {
+      "priority": "MEDIUM",
+      "task": "QUALITY: Scansione completa delle risorse per identificare e rimuovere eventuali file .png o .xml orfani non più coerenti con il nuovo brand Teal/Charcoal."
+    },
+    {
+      "priority": "LOW",
+      "task": "CLEANUP: Verifica finale della coerenza dei temi Material 3 per assicurare che tutti i componenti personalizzati utilizzino correttamente le nuove costanti Teal/Mustard."
     }
   ],
   "completed_recently": [
     {
       "date": "2026-07-10",
-      "task": "BRANDING: Avvio aggiornamento identità visiva. Allineata la palette colori in RepairAppTheme.kt (Teal #00B6B0, Mustard #FFB627, Charcoal #0D0D0D) e aggiunto lo slogan 'Ripara, traccia, aggiorna' nelle stringhe localizzate."
-    },
-    {
-      "date": "2026-07-09",
-      "task": "UI: Uniformate dimensioni pulsanti '+' per l'aggiunta di elementi (Categorie, Template, Commesse, Clienti) portandoli a 48dp (standard) con icone a 24dp. Rimosse altezze hardcoded dai campi di testo adiacenti per garantire allineamento visivo e flessibilità."
+      "task": "BRANDING: Integrazione dei nuovi asset 'Small-Mark' (Badge, Avatar) in tutta l'UI Compose (AppTopBar, Auth Screens, About Screen) e nel generatore di report PDF."
     },
     {
       "date": "2026-07-10",
-      "task": "BRANDING: Avvio aggiornamento identità visiva. Allineata la palette colori in RepairAppTheme.kt (Teal #00B6B0, Mustard #FFB627, Charcoal #0D0D0D) e aggiunto lo slogan 'Ripara, traccia, aggiorna' nelle stringhe localizzate."
-    },
-    {
-      "date": "2026-07-09",
-      "task": "UI: Esteso lo stile banner animato (compatezza e AnimatedVisibility) a tutti i popup e messaggi di errore dell'app tramite refactoring di AppMessageBanner. Garantita coerenza visiva su tutte le varianti del progetto (Full, Demo, Showcase)."
+      "task": "BRANDING: Implementate varianti vettoriali 'Small-Mark Board' (ic_brand_badge.xml, ic_brand_avatar.xml, ic_brand_one_color.xml) per uso interno."
     },
     {
       "date": "2026-07-10",
-      "task": "BRANDING: Avvio aggiornamento identità visiva. Allineata la palette colori in RepairAppTheme.kt (Teal #00B6B0, Mustard #FFB627, Charcoal #0D0D0D) e aggiunto lo slogan 'Ripara, traccia, aggiorna' nelle stringhe localizzate."
-    },
-    {
-      "date": "2026-07-09",
-      "task": "UI: Ottimizzazione banner messaggi (più compatti, icone ridotte e font labelMedium) con aggiunta animazione di dissolvenza (AnimatedVisibility) per i banner a scomparsa. Allineate le code operative della dashboard con numerazione degli step (1-6) per una migliore guida procedurale in tutte le lingue."
+      "task": "BRANDING: Installato ImageMagick e rigenerati asset statici raster (Favicons, GitHub Cover, App Preview, PDF Logo) dai vettoriali aggiornati."
     },
     {
       "date": "2026-07-10",
-      "task": "BRANDING: Avvio aggiornamento identità visiva. Allineata la palette colori in RepairAppTheme.kt (Teal #00B6B0, Mustard #FFB627, Charcoal #0D0D0D) e aggiunto lo slogan 'Ripara, traccia, aggiorna' nelle stringhe localizzate."
-    },
-    {
-      "date": "2026-07-09",
-      "task": "DASHBOARD: Allineamento e coerenza pulsanti acquisizione media. Implementata riga a 3 pulsanti (Foto, Scatto, Video) nel modale CameraCapturePreview e uniformati i trigger in QuickIntakeMediaSection e OrderPhotoSection con varianti (Secondary/Ghost) e icone coerenti su tutti i flavor."
+      "task": "WORKFLOW: Aggiornato il sistema di generazione asset. Creato script 'generate_static_brands.ps1' per centralizzare la conversione dei vettoriali."
     },
     {
       "date": "2026-07-10",
-      "task": "BRANDING: Avvio aggiornamento identità visiva. Allineata la palette colori in RepairAppTheme.kt (Teal #00B6B0, Mustard #FFB627, Charcoal #0D0D0D) e aggiunto lo slogan 'Ripara, traccia, aggiorna' nelle stringhe localizzate."
-    },
-    {
-      "date": "2026-07-09",
-      "task": "QUALITY: Analisi completa e allineamento perimetrale. Confermata risoluzione warning in CameraComponents (trailing lambda, foldable if), CustomersViewModel (backing property _isFormDirty), e rimozione stringhe hardcoded in DataSeederImpl. Verificato allineamento cataloghi stringhe Showcase (IT/EN) e conformità script di pulizia repo."
-    },
-    {
-      "date": "2026-07-10",
-      "task": "BRANDING: Avvio aggiornamento identità visiva. Allineata la palette colori in RepairAppTheme.kt (Teal #00B6B0, Mustard #FFB627, Charcoal #0D0D0D) e aggiunto lo slogan 'Ripara, traccia, aggiorna' nelle stringhe localizzate."
-    },
-    {
-      "date": "2026-07-09",
-      "task": "QUALITY: Risoluzione warning editor in CameraComponents (trailing lambda, foldable if), CustomersViewModel (backing property _isFormDirty), e allineamento plurali Italiani in main strings. Eliminata stringa hardcoded residua in DataSeederImpl (footer bitmap) con aggiunta risorsa localizzata."
-    },
-    {
-      "date": "2026-07-10",
-      "task": "BRANDING: Avvio aggiornamento identità visiva. Allineata la palette colori in RepairAppTheme.kt (Teal #00B6B0, Mustard #FFB627, Charcoal #0D0D0D) e aggiunto lo slogan 'Ripara, traccia, aggiorna' nelle stringhe localizzate."
-    },
-    {
-      "date": "2026-07-09",
-      "task": "QUALITY: Allineamento varianti e risoluzione regressioni test. Risolto errore SQL MATCH in ricerca clienti (ottimizzazione subquery FTS), corretto messaggio di errore in DataResetRepository, e sistemata corrispondenza placeholder nei robot di test. Allineato l'oggetto DemoMode su tutti i flavor per supportare il flag disableAutoSeed."
-    },
-    {
-      "date": "2026-07-10",
-      "task": "BRANDING: Avvio aggiornamento identità visiva. Allineata la palette colori in RepairAppTheme.kt (Teal #00B6B0, Mustard #FFB627, Charcoal #0D0D0D) e aggiunto lo slogan 'Ripara, traccia, aggiorna' nelle stringhe localizzate."
-    },
-    {
-      "date": "2026-07-09",
-      "task": "AUTH: Aggiunta funzione di ripristino backup nella schermata di primo avvio. Consente di ripristinare l'intero ambiente (database, media e configurazioni) senza dover eseguire l'enrollment manuale del primo admin. Supporta backup cifrati con richiesta password in dialog dedicato."
-    },
-    {
-      "date": "2026-07-10",
-      "task": "BRANDING: Avvio aggiornamento identità visiva. Allineata la palette colori in RepairAppTheme.kt (Teal #00B6B0, Mustard #FFB627, Charcoal #0D0D0D) e aggiunto lo slogan 'Ripara, traccia, aggiorna' nelle stringhe localizzate."
-    },
-    {
-      "date": "2026-07-09",
-      "task": "DASHBOARD: Risolto bug di navigazione nella creazione categorie durante l'intake (ora torna correttamente alla commessa invece di aprire le impostazioni). Ottimizzata la sezione media (foto/video/allegati) compattando i pulsanti in un'unica riga con icone per risparmiare spazio."
-    },
-    {
-      "date": "2026-07-08",
-      "task": "DASHBOARD: Ottimizzazione metrica e code operative. Rimpicciolite le metriche in un'unica riga, rimosso il pulsante 'Apri coda' rendendo le card cliccabili, e convertito i titoli delle code in badge colorati. Rimosso il separatore '/' dai titoli delle code e dai filtri per una visualizzazione più pulita in tutte le lingue."
-    },
-    {
-      "date": "2026-07-08",
-      "task": "LANDING: Verifica integrità risorse e fix galleria 3D. Rimozione dead code (updateLightbox) che causava potenziali errori JS. Aggiunti prefissi -webkit per compatibilità cross-browser su webserver e verificata la località di tutti gli asset (tutti i path sono relativi e interni alla cartella landing)."
-    },
-    {
-      "date": "2026-07-07",
-      "task": "QUALITY: Risoluzione warning editor in DataSeederImpl (Showcase) e DemoMode. Rimozione stringhe hardcoded e allineamento con cataloghi 'common' in main strings (Joy-Con, iPad Pro, etc.). Fix parentesi e parametri booleani."
-    },
-    {
-      "date": "2026-07-07",
-      "task": "MAINTENANCE: Risoluzione violazioni Spotless (formattazione Kotlin) su 41 file. Allineamento stringhe cataloghi (Tablet, iPad, Nintendo, etc.) nel seeder Showcase per conformità con main strings e rimozione hardcoded copy."
-    },
-    {
-      "date": "2026-07-06",
-      "task": "ASSETS: Rigenerazione completa asset media pubblici e workflow. Aggiornato script regenerate_public.ps1 per includere nuovi profili (social-demo, workflow-intake, workflow-setup-full, workflow-admin-operators). Risolte diverse regressioni nei test UI (permessi camera/audio mancanti, tag errati, refresh container mancanti)."
-    },
-    {
-      "date": "2026-07-06",
-      "task": "QUALITY: Allineamento catalogo categorie tra flavor Demo e Showcase. Aggiunte categorie Tablet e iPad come 'common' in main strings. Risolto bug gerarchia (level) in DemoMode. Verifica integrità build e test su tutte le varianti (Full, Demo, Showcase)."
-    },
-    {
-      "date": "2026-07-06",
-      "task": "TECHNICAL: Configurazione simboli di debug (ndk debugSymbolLevel FULL) per la pubblicazione su Play Store."
-    },
-    {
-      "date": "2026-07-06",
-      "task": "MAINTENANCE: Pulizia profonda del repository (cache .gradle/.kotlin, build folders, .artifacts) e rimozione stringhe inutilizzate in Showcase flavor. Allineamento formattazione con Spotless."
-    },
-    {
-      "date": "2026-07-05",
-      "task": "QUALITY: Risoluzione violazioni Spotless (formattazione) e lint (backing properties in CustomersViewModel). Pulizia import e rimozione FQN in OrdersViewModel."
-    },
-    {
-      "date": "2026-07-04",
-      "task": "QUALITY: Risoluzione warning editor (debounce Flow con Duration, unnecessary safe calls, parameter naming) e allineamento dimensioni bitmap nel seeder Showcase."
-    },
-    {
-      "date": "2026-07-04",
-      "task": "QUALITY: Risolto loop di recreation in MainActivity. Allineato valore iniziale di collectAsState con AppCompatDelegate per evitare flip-flop durante startup."
-    },
-    {
-      "date": "2026-07-04",
-      "task": "QUALITY: Pulizia risorse inutilizzate (colori e stringhe) identificate dal report Lint. Ridotti warning da 38 a 26 (rimanenti legati a flavor diversi)."
-    },
-    {
-      "date": "2026-07-04",
-      "task": "QUALITY: Eseguito quality check completo (Formatting, Spotless e Android Lint) su flavor FullDebug. Progetto conforme agli standard."
-    },
-    {
-      "date": "2026-07-04",
-      "task": "QUALITY: Risoluzione warning vari dell'editor, rimozione parametri inutilizzati, modernizzazione API deprecate (Camera, Bitmap) e fix plurali Italiani."
-    },
-    {
-      "date": "2026-07-04",
-      "task": "QUALITY: Ottimizzazione performance Jetpack Compose e Room completata. Stabilizzazione modelli UI, aggiunta distinctUntilChanged ai Flow e ottimizzazione recomposition in componenti chiave."
-    },
-    {
-      "date": "2026-07-04",
-      "task": "QUALITY: Risoluzione warning vari dell'editor e ottimizzazione divisioni per zero in StorageSettings per mitigare warning frameRate=NaN."
-    },
-    {
-      "date": "2026-07-04",
-      "task": "LEGAL: Verifica accessibilità e pubblicazione HTTPS definitiva per Privacy Policy (inventoveritas.mine.nu). URL verificato e accessibile."
-    },
-    {
-      "date": "2026-07-04",
-      "task": "TECHNICAL: Configurazione finale Data Safety e questionari Play Console basati sui documenti tecnici aggiornati."
-    },
-    {
-      "date": "2026-07-04",
-      "task": "QUALITY: Verifica integrità di tutte le varianti (Full, Demo, Showcase) su dispositivo fisico. Installazione e avvio completati con successo. SQLCipher operativo su tutti i flavor."
-    },
-    {
-      "date": "2026-07-04",
-      "task": "SHOWCASE: Refactoring DataSeeder e stringhe per il flavor Showcase completato."
-    },
-    {
-      "date": "2026-07-04",
-      "task": "QUALITY: Localizzazione completa delle stringhe di seeding (feedback, categorie e tipi di riparazione) per i flavor Demo e Showcase."
+      "task": "BRANDING: Allineamento totale varianti (Full, Demo, Showcase). Unificata l'icona launcher e il colore di background (#0D0D0D) su tutti i flavor. Aggiornato il prefisso delle commesse da 'RIP' a 'OTT' (OnlyTechTake)."
     }
   ]
 }

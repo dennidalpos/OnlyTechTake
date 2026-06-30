@@ -102,18 +102,15 @@ class AuthGateViewModel(
         }
     }
 
-    fun updateDisplayName(value: String) =
-        updateForm { copy(displayName = value, errorMessage = null) }
+    fun updateDisplayName(value: String) = updateForm { copy(displayName = value, errorMessage = null) }
 
     fun updateUsername(value: String) = updateForm { copy(username = value, errorMessage = null) }
 
     fun updatePassword(value: String) = updateForm { copy(password = value, errorMessage = null) }
 
-    fun updateConfirmPassword(value: String) =
-        updateForm { copy(confirmPassword = value, errorMessage = null) }
+    fun updateConfirmPassword(value: String) = updateForm { copy(confirmPassword = value, errorMessage = null) }
 
-    fun updateRecoveryCode(value: String) =
-        updateForm { copy(recoveryCode = value, errorMessage = null) }
+    fun updateRecoveryCode(value: String) = updateForm { copy(recoveryCode = value, errorMessage = null) }
 
     fun createFirstAdmin() {
         val form = formState.value
