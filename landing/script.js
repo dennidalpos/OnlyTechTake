@@ -414,11 +414,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Update lightbox caption if open
+        // Update lightbox caption if open (Logic removed to avoid ReferenceError)
+        /*
         const lightbox = document.getElementById('lightbox');
         if (lightbox && lightbox.classList.contains('active')) {
             updateLightbox(currentLightboxIndex);
         }
+        */
 
         // Re-create icons for the whole document
         if (typeof lucide !== 'undefined') {
@@ -554,7 +556,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const updateCarousel = () => {
             const total = carouselItems.length;
-            const angleStep = 360 / total;
+            if (total === 0) return;
+
+            const viewportWidth = window.innerWidth;
+            const isMobile = viewportWidth < 768;
 
             carouselItems.forEach((item, i) => {
                 item.classList.remove('active', 'visible');
@@ -574,14 +579,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (isActive) item.classList.add('active');
                 }
 
-                // 3D Transform Logic
-                const translateX = diff * (window.innerWidth < 768 ? 160 : 220);
+                // 3D Transform Logic - Adjusted for stability on web servers
+                const translateUnit = isMobile ? 160 : 220;
+                const translateX = diff * translateUnit;
                 const translateZ = isActive ? 100 : -absDiff * 150;
                 const rotateY = diff * -25;
                 const scale = isActive ? 1.1 : 0.85;
                 const opacity = isActive ? 1 : (absDiff === 1 ? 0.6 : (absDiff === 2 ? 0.2 : 0));
 
-                item.style.transform = `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
+                const transformValue = `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
+                item.style.transform = transformValue;
+                item.style.webkitTransform = transformValue; // Support for older webkit browsers
                 item.style.opacity = opacity;
                 item.style.zIndex = 10 - absDiff;
             });
@@ -646,7 +654,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const translateZ = isActive ? 100 : -absDiff * 150;
                 const scale = isActive ? 1.1 : 0.85;
 
-                item.style.transform = `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
+                const transformValue = `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
+                item.style.transform = transformValue;
+                item.style.webkitTransform = transformValue;
             });
         };
 

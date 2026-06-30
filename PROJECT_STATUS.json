@@ -2,7 +2,7 @@
   "project_name": "OnlyTechTake",
   "version": "1.0.0",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-07-07",
+  "last_updated": "2026-07-08",
   "backlog": [
     {
       "priority": "HIGH",
@@ -11,8 +11,16 @@
   ],
   "completed_recently": [
     {
+      "date": "2026-07-08",
+      "task": "LANDING: Verifica integrità risorse e fix galleria 3D. Rimozione dead code (updateLightbox) che causava potenziali errori JS. Aggiunti prefissi -webkit per compatibilità cross-browser su webserver e verificata la località di tutti gli asset (tutti i path sono relativi e interni alla cartella landing)."
+    },
+    {
       "date": "2026-07-07",
       "task": "QUALITY: Risoluzione warning editor in DataSeederImpl (Showcase) e DemoMode. Rimozione stringhe hardcoded e allineamento con cataloghi 'common' in main strings (Joy-Con, iPad Pro, etc.). Fix parentesi e parametri booleani."
+    },
+    {
+      "date": "2026-07-08",
+      "task": "LANDING: Verifica integrità risorse e fix galleria 3D. Rimozione dead code (updateLightbox) che causava potenziali errori JS. Aggiunti prefissi -webkit per compatibilità cross-browser su webserver e verificata la località di tutti gli asset (tutti i path sono relativi e interni alla cartella landing)."
     },
     {
       "date": "2026-07-07",
