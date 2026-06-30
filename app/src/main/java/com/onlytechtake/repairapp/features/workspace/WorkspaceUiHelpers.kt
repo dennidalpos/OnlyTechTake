@@ -11,21 +11,29 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.core.design.RepairAppSizes
+import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
+import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.design.repairColors
-import com.onlytechtake.repairapp.core.utils.label
+import com.onlytechtake.repairapp.core.utils.labelRes
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
@@ -111,6 +119,67 @@ fun OrderMediaEntity.isVideoAttachment(): Boolean =
 
 fun OrderMediaEntity.isFinalPhoto(): Boolean = mediaType.equals("FINAL_PHOTO", ignoreCase = true)
 
+@Composable
+fun statusColors(status: OrderStatus): Pair<androidx.compose.ui.graphics.Color, androidx.compose.ui.graphics.Color> {
+    val colorScheme = MaterialTheme.colorScheme
+    val semanticColors = MaterialTheme.repairColors
+    return when (status) {
+        OrderStatus.OPEN -> colorScheme.primaryContainer to colorScheme.onPrimaryContainer
+        OrderStatus.IN_PROGRESS -> colorScheme.secondaryContainer to colorScheme.onSecondaryContainer
+        OrderStatus.DIAGNOSIS -> semanticColors.warningContainer to semanticColors.onWarningContainer
+        OrderStatus.RESULT -> colorScheme.tertiaryContainer to colorScheme.onTertiaryContainer
+        OrderStatus.REPAIRING -> colorScheme.errorContainer to colorScheme.onErrorContainer
+        OrderStatus.READY_FOR_PICKUP -> semanticColors.successContainer to semanticColors.onSuccessContainer
+        OrderStatus.CLOSED -> colorScheme.outlineVariant to colorScheme.onSurfaceVariant
+    }
+}
+
+@Composable
+fun OrderSummaryRow(
+    item: com.onlytechtake.repairapp.domain.workspace.OrderListItem,
+    onOrderClick: (String) -> Unit,
+) {
+    val (containerColor, contentColor) = statusColors(item.order.status)
+
+    StandardCard(
+        onClick = { onOrderClick(item.order.id) },
+        modifier = Modifier.padding(bottom = RepairAppSpacing.tinyGap),
+    ) {
+        Row(
+            modifier =
+                Modifier
+                    .padding(RepairAppSpacing.compactGap)
+                    .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.tinyGap),
+            ) {
+                Text(
+                    text = "${item.order.orderNumber}: ${item.order.title}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                AppStatusBadge(
+                    text = stringResource(item.order.status.labelRes),
+                    containerColor = containerColor,
+                    contentColor = contentColor,
+                )
+            }
+            Icon(
+                Icons.Default.Info,
+                contentDescription = null,
+                modifier = Modifier.size(RepairAppIconSizes.small),
+                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
+            )
+        }
+    }
+}
+
 fun StagedOrderMedia.isImageAttachment(): Boolean =
     mediaType.equals("PHOTO", ignoreCase = true) ||
         mediaType.equals("IMAGE", ignoreCase = true) ||
@@ -150,7 +219,6 @@ fun OrderStatusStepper(
     compact: Boolean = false,
     stepTestTag: ((Int) -> String)? = null,
 ) {
-    val context = LocalContext.current
     val steps =
         remember {
             listOf(
@@ -183,21 +251,10 @@ fun OrderStatusStepper(
                     .padding(bottom = if (compact) 4.dp else 8.dp),
             contentAlignment = Alignment.Center,
         ) {
-            val containerColor =
-                when (status) {
-                    OrderStatus.CLOSED -> colorScheme.errorContainer
-                    OrderStatus.OPEN -> colorScheme.secondaryContainer
-                    else -> repairColors.warningContainer
-                }
-            val contentColor =
-                when (status) {
-                    OrderStatus.CLOSED -> colorScheme.onErrorContainer
-                    OrderStatus.OPEN -> colorScheme.onSecondaryContainer
-                    else -> repairColors.onWarningContainer
-                }
+            val (containerColor, contentColor) = statusColors(status)
 
             AppStatusBadge(
-                text = status.label(context),
+                text = stringResource(status.labelRes),
                 containerColor = containerColor,
                 contentColor = contentColor,
             )

@@ -158,15 +158,15 @@ fun OrderPhotoSection(
                     onClick = { showCameraMode = CameraCaptureMode.VIDEO },
                 )
             }
+            AppButton(
+                modifier = Modifier.weight(1f),
+                text = stringResource(R.string.intake_media_attach_file),
+                variant = AppButtonVariant.Ghost,
+                size = AppButtonSize.Compact,
+                leadingIcon = Icons.Default.AttachFile,
+                onClick = { attachmentLauncher.launch("*/*") },
+            )
         }
-        AppButton(
-            modifier = Modifier.fillMaxWidth(),
-            text = stringResource(R.string.intake_media_attach_file),
-            variant = AppButtonVariant.Ghost,
-            size = AppButtonSize.Compact,
-            leadingIcon = Icons.Default.AttachFile,
-            onClick = { attachmentLauncher.launch("*/*") },
-        )
     }
 
     showCameraMode?.let { mode ->

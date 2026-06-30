@@ -13,6 +13,7 @@ import com.onlytechtake.repairapp.core.orders.OrderNumberGenerator
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
+import com.onlytechtake.repairapp.data.local.entities.CustomerActionStatus
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
@@ -89,6 +90,7 @@ object ShowcaseDataSeeder {
                                 UserPermission.RECORD_VIDEO,
                             ),
                         active = true,
+                        forcePasswordChange = false,
                         createdAt = now,
                         updatedAt = now,
                     ),
@@ -107,6 +109,7 @@ object ShowcaseDataSeeder {
                                 UserPermission.RECORD_VIDEO,
                             ),
                         active = true,
+                        forcePasswordChange = false,
                         createdAt = now,
                         updatedAt = now,
                     ),
@@ -125,6 +128,7 @@ object ShowcaseDataSeeder {
                                 UserPermission.BACKUP_RESTORE,
                             ),
                         active = true,
+                        forcePasswordChange = false,
                         createdAt = now,
                         updatedAt = now,
                     ),
@@ -137,6 +141,7 @@ object ShowcaseDataSeeder {
                         role = UserRole.ADMIN,
                         permissions = UserPermission.entries.toSet(),
                         active = true,
+                        forcePasswordChange = false,
                         createdAt = now,
                         updatedAt = now,
                     ),
@@ -354,8 +359,7 @@ object ShowcaseDataSeeder {
                         context.getString(R.string.showcase_cat_ipad_glass_desc),
                         active = true,
                     ),
-
-                    )
+                )
             db.orderCategoryDao().upsertAll(categories)
 
             // 3. Create Private Customers
@@ -407,7 +411,7 @@ object ShowcaseDataSeeder {
                                 context.getString(R.string.showcase_fictitious_tax_code)
                             },
                         phone = context.getString(R.string.showcase_phone_prefix) + i,
-                        email = "customer.p$i@example.com",
+                        email = context.getString(R.string.showcase_private_email_format, i),
                         address = context.getString(R.string.showcase_private_address, i),
                         notes = context.getString(R.string.showcase_customer_notes),
                         createdAt = now - (i * 86400000L),
@@ -440,17 +444,21 @@ object ShowcaseDataSeeder {
                         firstName = null,
                         lastName = null,
                         companyName = businessName,
-                        vatNumber = if (i <= 5) "0123456789$i" else "00000000000",
+                        vatNumber = if (i <= 5) context.getString(
+                            R.string.showcase_vat_format,
+                            i
+                        ) else context.getString(R.string.showcase_vat_fictitious),
                         taxCode =
                             if (i <= 5) {
                                 context.getString(
                                     R.string.showcase_tax_code_prefix,
-                                ) + "B" + i + UUID.randomUUID().toString().take(5)
+                                ) + context.getString(R.string.showcase_tax_code_business_prefix) + i + UUID.randomUUID()
+                                    .toString().take(5)
                             } else {
                                 context.getString(R.string.showcase_fictitious_business_tax_code)
                             },
                         phone = context.getString(R.string.showcase_phone_prefix) + (i + 5),
-                        email = "info@business$i@example.com",
+                        email = context.getString(R.string.showcase_business_email_format, i),
                         address = context.getString(R.string.showcase_business_address, i),
                         notes = context.getString(R.string.showcase_customer_notes),
                         createdAt = now - (i * 86400000L),
@@ -519,6 +527,11 @@ object ShowcaseDataSeeder {
                             updatedAt = now - (orderCount * 3600000L),
                             closedAt = if (isClosed) now - (orderCount * 1800000L) else null,
                             closureReason = if (isClosed) ClosureReason.COMPLETED else null,
+                            customerActionStatus = if (status == OrderStatus.RESULT) CustomerActionStatus.WAITING_ACCEPTANCE else CustomerActionStatus.NONE,
+                            closeNote = if (isClosed) context.getString(R.string.showcase_order_closed_note) else null,
+                            closedByUserId = if (isClosed) operatorId else null,
+                            categoryPathSnapshot = context.getString(R.string.showcase_cat_snapshot_demo),
+                            lastCustomerContactAt = now - (orderCount * 1000000L),
                         )
                     db.repairOrderDao().upsert(order)
 
@@ -613,6 +626,7 @@ object ShowcaseDataSeeder {
 
                     val photoFile =
                         writeDemoBitmap(
+                            context = context,
                             directory = mediaStorageProvider.getOrderMediaDir(orderId),
                             fileName = "photo-$orderId.png",
                             label = context.getString(R.string.showcase_photo_label, order.title),
@@ -625,10 +639,10 @@ object ShowcaseDataSeeder {
                         OrderMediaEntity(
                             id = "media-$orderId",
                             orderId = orderId,
-                            mediaType = "PHOTO",
+                            mediaType = context.getString(R.string.showcase_media_type_photo),
                             localPath = photoFile.absolutePath,
                             fileName = photoFile.name,
-                            mimeType = "image/png",
+                            mimeType = context.getString(R.string.showcase_mime_type_png),
                             sizeBytes = photoFile.length(),
                             width = 1280,
                             height = 720,
@@ -640,6 +654,7 @@ object ShowcaseDataSeeder {
 
                     val sigFile =
                         writeDemoBitmap(
+                            context = context,
                             directory = mediaStorageProvider.getOrderSignaturesDir(orderId),
                             fileName = "sig-$orderId.png",
                             label =
@@ -667,7 +682,7 @@ object ShowcaseDataSeeder {
                             termsTemplateVersion = 1,
                             localPath = sigFile.absolutePath,
                             fileName = sigFile.name,
-                            mimeType = "image/png",
+                            mimeType = context.getString(R.string.showcase_mime_type_png),
                             sizeBytes = sigFile.length(),
                             width = 800,
                             height = 400,
@@ -682,82 +697,112 @@ object ShowcaseDataSeeder {
             }
 
             // 6. Create Templates
-            val templates =
+            val templateConfigs =
                 listOf(
-                    "privacy_breve" to context.getString(R.string.template_privacy_breve_title) to
-                        context.getString(
-                            R.string.template_privacy_breve_body,
-                        ),
-                    "condizioni_presa_in_carico" to context.getString(R.string.template_condizioni_title) to
-                        context.getString(
-                            R.string.template_condizioni_body,
-                        ),
-                    "whatsapp_presa_in_carico" to context.getString(R.string.template_wa_intake_title) to
-                        context.getString(
-                            R.string.template_wa_intake_body,
-                        ),
-                    "whatsapp_aggiornamento" to context.getString(R.string.template_wa_update_title) to
-                        context.getString(
-                            R.string.template_wa_update_body,
-                        ),
-                    "whatsapp_diagnosi" to context.getString(R.string.template_wa_diagnosis_title) to
-                        context.getString(
-                            R.string.template_wa_diagnosis_body,
-                        ),
-                    "whatsapp_risultato" to context.getString(R.string.template_wa_result_title) to
-                        context.getString(
-                            R.string.template_wa_result_body,
-                        ),
-                    "whatsapp_preventivo_intervento" to context.getString(R.string.template_wa_quote_title) to
-                        context.getString(
-                            R.string.template_wa_quote_body,
-                        ),
-                    "whatsapp_non_riparabile" to context.getString(R.string.template_wa_not_repairable_title) to
-                        context.getString(
-                            R.string.template_wa_not_repairable_body,
-                        ),
-                    "whatsapp_riparazione" to context.getString(R.string.template_wa_repairing_title) to
-                        context.getString(
-                            R.string.template_wa_repairing_body,
-                        ),
-                    "whatsapp_lavorazione" to context.getString(R.string.template_wa_lavorazione_title) to
-                        context.getString(
-                            R.string.template_wa_lavorazione_body,
-                        ),
-                    "whatsapp_completamento" to context.getString(R.string.template_wa_completamento_title) to
-                        context.getString(
-                            R.string.template_wa_completamento_body,
-                        ),
-                    "whatsapp_pronto_ritiro" to context.getString(R.string.template_wa_ready_title) to
-                        context.getString(
-                            R.string.template_wa_ready_body,
-                        ),
-                    "whatsapp_stato_avanzamento_pdf" to context.getString(R.string.template_wa_pdf_status_title) to
-                        context.getString(
-                            R.string.template_wa_pdf_status_body,
-                        ),
-                ).mapIndexed { index, pair ->
-                    val (codeTitle, body) = pair
-                    val (code, title) = codeTitle
+                    TemplateConfig(
+                        "privacy_breve",
+                        R.string.template_privacy_breve_title,
+                        R.string.template_privacy_breve_body,
+                        R.string.anchor_step_legal,
+                    ),
+                    TemplateConfig(
+                        "condizioni_presa_in_carico",
+                        R.string.template_condizioni_title,
+                        R.string.template_condizioni_body,
+                        R.string.anchor_step_legal,
+                    ),
+                    TemplateConfig(
+                        "whatsapp_presa_in_carico",
+                        R.string.template_wa_intake_title,
+                        R.string.template_wa_intake_body,
+                        R.string.anchor_step_intake,
+                    ),
+                    TemplateConfig(
+                        "whatsapp_aggiornamento",
+                        R.string.template_wa_update_title,
+                        R.string.template_wa_update_body,
+                        R.string.anchor_step_update,
+                    ),
+                    TemplateConfig(
+                        "whatsapp_diagnosi",
+                        R.string.template_wa_diagnosis_title,
+                        R.string.template_wa_diagnosis_body,
+                        R.string.anchor_step_diagnosis,
+                    ),
+                    TemplateConfig(
+                        "whatsapp_preventivo_intervento",
+                        R.string.template_wa_quote_title,
+                        R.string.template_wa_quote_body,
+                        R.string.anchor_step_quote,
+                    ),
+                    TemplateConfig(
+                        "whatsapp_non_riparabile",
+                        R.string.template_wa_not_repairable_title,
+                        R.string.template_wa_not_repairable_body,
+                        R.string.anchor_step_outcome,
+                    ),
+                    TemplateConfig(
+                        "whatsapp_riparazione",
+                        R.string.template_wa_repairing_title,
+                        R.string.template_wa_repairing_body,
+                        R.string.anchor_step_repair,
+                    ),
+                    TemplateConfig(
+                        "whatsapp_completamento",
+                        R.string.template_wa_completamento_title,
+                        R.string.template_wa_completamento_body,
+                        R.string.anchor_step_closed,
+                    ),
+                    TemplateConfig(
+                        "whatsapp_pronto_ritiro",
+                        R.string.template_wa_ready_title,
+                        R.string.template_wa_ready_body,
+                        R.string.anchor_step_pickup,
+                    ),
+                    TemplateConfig(
+                        "whatsapp_stato_avanzamento_pdf",
+                        R.string.template_wa_pdf_status_title,
+                        R.string.template_wa_pdf_status_body,
+                        R.string.anchor_step_docs,
+                    ),
+                )
+
+            val templates =
+                templateConfigs.mapIndexed { index, config ->
                     MessageTemplateEntity(
                         id = "template-$index",
-                        code = code,
-                        title = title,
+                        code = config.code,
+                        title = context.getString(config.titleRes),
                         channel = MessageChannel.WHATSAPP,
-                        body = body,
+                        body = context.getString(config.bodyRes),
                         active = true,
                         version = 1,
                         updatedByUserId = "admin-showcase",
                         updatedAt = now,
+                        step = context.getString(config.stepRes),
                     )
                 }
             db.messageTemplateDao().upsertAll(templates)
+
+            // Reset Anchor Mappings to defaults to avoid broken links from previous sessions
+            db.appSettingDao().deleteByKeys(
+                com.onlytechtake.repairapp.core.templates.TemplateAnchor.entries
+                    .map { it.settingKey },
+            )
         }
 
         authPreferences.markConfigured()
     }
 
+    private data class TemplateConfig(
+        val code: String,
+        val titleRes: Int,
+        val bodyRes: Int,
+        val stepRes: Int,
+    )
+
     private fun writeDemoBitmap(
+        context: Context,
         directory: File,
         fileName: String,
         label: String,
@@ -775,7 +820,7 @@ object ShowcaseDataSeeder {
         paint.textSize = 40f
         canvas.drawText(label, 50f, 100f, paint)
         paint.textSize = 24f
-        canvas.drawText("Showcase Data - OnlyTechTake", 50f, 150f, paint)
+        canvas.drawText(context.getString(R.string.showcase_bitmap_footer), 50f, 150f, paint)
 
         paint.strokeWidth = 5f
         paint.color = Color.BLUE

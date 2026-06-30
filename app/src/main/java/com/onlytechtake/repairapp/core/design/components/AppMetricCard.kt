@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 
@@ -19,28 +21,38 @@ fun AppMetricCard(
     label: String,
     value: String,
     modifier: Modifier = Modifier,
+    isCompact: Boolean = false,
 ) {
+    val height = if (isCompact) 64.dp else RepairAppSizes.metricCardHeight
+    val padding = if (isCompact) RepairAppSpacing.compactGap else RepairAppSpacing.cardPadding
+    val valueStyle =
+        if (isCompact) MaterialTheme.typography.titleLarge else MaterialTheme.typography.headlineMedium
+    val labelStyle =
+        if (isCompact) MaterialTheme.typography.labelSmall else MaterialTheme.typography.labelMedium
+
     StandardCard(
-        modifier = modifier.height(RepairAppSizes.metricCardHeight),
+        modifier = modifier.height(height),
     ) {
         Column(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(RepairAppSpacing.cardPadding),
+                    .padding(padding),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 text = value,
-                style = MaterialTheme.typography.headlineMedium,
+                style = valueStyle,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary,
             )
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelMedium,
+                style = labelStyle,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }

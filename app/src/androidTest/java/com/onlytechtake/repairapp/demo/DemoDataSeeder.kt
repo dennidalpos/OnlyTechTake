@@ -332,11 +332,6 @@ object DemoDataSeeder {
                 context.getString(R.string.anchor_step_diagnosis),
             ),
             DemoTemplate(
-                "whatsapp_risultato",
-                context.getString(R.string.template_wa_result_title),
-                context.getString(R.string.anchor_step_outcome),
-            ),
-            DemoTemplate(
                 "whatsapp_preventivo_intervento",
                 context.getString(R.string.template_wa_quote_title),
                 context.getString(R.string.anchor_step_quote),
@@ -360,6 +355,11 @@ object DemoDataSeeder {
                 "whatsapp_stato_avanzamento_pdf",
                 context.getString(R.string.template_wa_pdf_status_title),
                 context.getString(R.string.anchor_step_docs),
+            ),
+            DemoTemplate(
+                "whatsapp_completamento",
+                context.getString(R.string.template_wa_completamento_title),
+                context.getString(R.string.anchor_step_closed),
             ),
         ).forEachIndexed { index, template ->
             database.messageTemplateDao().upsert(

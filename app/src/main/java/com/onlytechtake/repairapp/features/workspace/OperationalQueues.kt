@@ -31,7 +31,9 @@ fun queueFilter(queue: OperationalQueue): OrderFilter = OrderFilter(statuses = q
 private val queueDefinitions =
     listOf(
         R.string.queue_open to setOf(OrderStatus.OPEN),
-        R.string.queue_processing to setOf(OrderStatus.IN_PROGRESS, OrderStatus.DIAGNOSIS),
-        R.string.queue_result to setOf(OrderStatus.RESULT, OrderStatus.REPAIRING),
+        R.string.queue_processing to setOf(OrderStatus.IN_PROGRESS),
+        R.string.queue_diagnosis to setOf(OrderStatus.DIAGNOSIS),
+        R.string.queue_result to setOf(OrderStatus.RESULT),
+        R.string.queue_repair to setOf(OrderStatus.REPAIRING),
         R.string.queue_ready to setOf(OrderStatus.READY_FOR_PICKUP),
     )

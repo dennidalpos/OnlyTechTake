@@ -102,6 +102,10 @@ class StatusWorkflowTest {
         )
         assertEquals(
             TemplateAnchor.WHATSAPP_INTAKE,
+            statusTemplateAnchor(order(OrderStatus.OPEN)),
+        )
+        assertEquals(
+            TemplateAnchor.WHATSAPP_UPDATE,
             statusTemplateAnchor(order(OrderStatus.IN_PROGRESS)),
         )
         assertEquals(

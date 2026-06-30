@@ -7,7 +7,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.PhotoCamera
+import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -102,6 +105,7 @@ fun QuickIntakeMediaSection(
                     modifier = Modifier.weight(1f),
                     text = stringResource(R.string.intake_media_take_photo),
                     size = AppButtonSize.Compact,
+                    leadingIcon = Icons.Default.PhotoCamera,
                     testTag = RepairAppTestTags.IntakeMediaTakePhotoButton,
                     onClick = {
                         initialCameraMode = CameraCaptureMode.PHOTO
@@ -113,20 +117,22 @@ fun QuickIntakeMediaSection(
                         modifier = Modifier.weight(1f),
                         text = stringResource(R.string.intake_media_take_video),
                         size = AppButtonSize.Compact,
+                        leadingIcon = Icons.Default.Videocam,
                         onClick = {
                             initialCameraMode = CameraCaptureMode.VIDEO
                             onShowCameraChange(true)
                         },
                     )
                 }
+                AppButton(
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(R.string.intake_media_attach_file),
+                    size = AppButtonSize.Compact,
+                    leadingIcon = Icons.Default.AttachFile,
+                    testTag = RepairAppTestTags.IntakeMediaAttachFileButton,
+                    onClick = onLaunchAttachmentPicker,
+                )
             }
-            AppButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.intake_media_attach_file),
-                size = AppButtonSize.Compact,
-                testTag = RepairAppTestTags.IntakeMediaAttachFileButton,
-                onClick = onLaunchAttachmentPicker,
-            )
 
             if (showCamera) {
                 AppDialog(

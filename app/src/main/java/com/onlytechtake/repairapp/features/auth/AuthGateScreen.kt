@@ -1,6 +1,9 @@
 package com.onlytechtake.repairapp.features.auth
 
 import android.app.Activity
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -19,6 +22,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Backup
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -28,6 +32,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -56,7 +61,9 @@ import com.onlytechtake.repairapp.core.design.PasswordVisibilityButton
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
+import com.onlytechtake.repairapp.core.design.components.AppDialog
 import com.onlytechtake.repairapp.core.design.components.AppErrorText
 import com.onlytechtake.repairapp.core.design.components.AppIconButton
 import com.onlytechtake.repairapp.core.design.components.AppTextField
@@ -69,8 +76,9 @@ import com.onlytechtake.repairapp.features.dashboard.DashboardRoute
 fun AuthGateRoute(
     appInstanceKey: Int,
     onAppDataRestored: () -> Unit,
+    disableAutoSeed: Boolean = false,
 ) {
-    var showcaseSeedRequested by rememberSaveable(appInstanceKey) { mutableStateOf(value = false) }
+    var showcaseSeedRequested by remember(appInstanceKey) { mutableStateOf(value = false) }
     val container = LocalAppContainer.current
     val viewModel: AuthGateViewModel =
         viewModel(
@@ -80,6 +88,7 @@ fun AuthGateRoute(
                     container.context,
                     container.authRepository,
                     container.ownerPreferences,
+                    container.backupRepository,
                     container.dataSeeder,
                 ),
         )
@@ -94,7 +103,7 @@ fun AuthGateRoute(
         }
     }
 
-    if (BuildConfig.IS_SHOWCASE_MODE_ENABLED) {
+    if (BuildConfig.IS_SHOWCASE_MODE_ENABLED && !disableAutoSeed) {
         if (authState.initialized && !authState.configured) {
             val appCtx = context.applicationContext
             LaunchedEffect(onAppDataRestored, viewModel) {
@@ -108,7 +117,7 @@ fun AuthGateRoute(
         }
     }
 
-    if (BuildConfig.IS_SHOWCASE_MODE_ENABLED) {
+    if (BuildConfig.IS_SHOWCASE_MODE_ENABLED && !disableAutoSeed) {
         if (authState.initialized && authState.configured && (authState.currentUser == null)) {
             LaunchedEffect(Unit) {
                 viewModel.loginShowcaseAdmin()
@@ -182,7 +191,11 @@ fun AuthGateRoute(
                 onPasswordChange = viewModel::updatePassword,
                 onConfirmPasswordChange = viewModel::updateConfirmPassword,
                 onSubmit = viewModel::createFirstAdmin,
-            ) { (context as? Activity)?.finish() }
+                onRestore = { uri, password ->
+                    viewModel.restoreBackup(uri, password, onAppDataRestored)
+                },
+                onBack = { (context as? Activity)?.finish() },
+            )
         }
 
         else -> {
@@ -346,8 +359,22 @@ private fun FirstSetupScreen(
     onPasswordChange: (String) -> Unit,
     onConfirmPasswordChange: (String) -> Unit,
     onSubmit: () -> Unit,
+    onRestore: (Uri, String?) -> Unit,
     onBack: () -> Unit,
 ) {
+    var showRestoreDialog by remember { mutableStateOf(value = false) }
+    var restoreUri by remember { mutableStateOf<Uri?>(null) }
+    var restorePassword by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(value = false) }
+
+    val restoreLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            uri?.let {
+                restoreUri = it
+                showRestoreDialog = true
+            }
+        }
+
     Scaffold(
         topBar = {
             AppTopBar(
@@ -357,6 +384,13 @@ private fun FirstSetupScreen(
                         onClick = onBack,
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = stringResource(R.string.action_back),
+                    )
+                },
+                actions = {
+                    AppIconButton(
+                        onClick = { restoreLauncher.launch("application/zip") },
+                        imageVector = Icons.Default.Backup,
+                        contentDescription = stringResource(R.string.config_hub_backup_title),
                     )
                 },
             )
@@ -375,6 +409,68 @@ private fun FirstSetupScreen(
             onSubmit = onSubmit,
             showDisplayName = true,
             showConfirmPassword = true,
+        )
+    }
+
+    if (showRestoreDialog) {
+        AppDialog(
+            onDismissRequest = {
+                showRestoreDialog = false
+                restoreUri = null
+                restorePassword = ""
+            },
+            title = stringResource(R.string.action_restore_confirm_title),
+            content = {
+                Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)) {
+                    Text(
+                        text = stringResource(R.string.action_restore_confirm_text),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                    AppTextField(
+                        value = restorePassword,
+                        onValueChange = { restorePassword = it },
+                        label = stringResource(R.string.auth_password_backup),
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        keyboardType = KeyboardType.Password,
+                        trailingIcon = {
+                            PasswordVisibilityButton(
+                                visible = passwordVisible,
+                                onVisibleChange = { passwordVisible = it },
+                            )
+                        },
+                    )
+                }
+            },
+            confirmButton = {
+                AppButton(
+                    text = stringResource(R.string.action_confirm),
+                    variant = AppButtonVariant.Primary,
+                    size = AppButtonSize.Compact,
+                    onClick = {
+                        restoreUri?.let {
+                            onRestore(
+                                it,
+                                restorePassword.takeIf { it.isNotBlank() },
+                            )
+                        }
+                        showRestoreDialog = false
+                        restoreUri = null
+                        restorePassword = ""
+                    },
+                )
+            },
+            dismissButton = {
+                AppButton(
+                    text = stringResource(R.string.customer_cancel),
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact,
+                    onClick = {
+                        showRestoreDialog = false
+                        restoreUri = null
+                        restorePassword = ""
+                    },
+                )
+            },
         )
     }
 }

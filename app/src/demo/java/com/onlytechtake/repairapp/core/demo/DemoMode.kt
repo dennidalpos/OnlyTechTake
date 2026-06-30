@@ -12,6 +12,7 @@ import com.onlytechtake.repairapp.domain.workspace.OwnerInfo
 object DemoMode {
     var isEnabled: Boolean = false
         private set
+    var disableAutoSeed: Boolean = false
 
     fun canEnable(): Boolean = BuildConfig.IS_DEMO_MODE_ENABLED
 

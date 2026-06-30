@@ -1,6 +1,7 @@
 package com.onlytechtake.repairapp.demo
 
 import android.content.Context
+import android.content.Intent
 import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -49,17 +50,23 @@ class WorkflowOperationalTest {
         val outputDir = prepareDirectory("workflow-setup")
         val robot = OperationalRobot(composeRule, context)
 
-        ActivityScenario.launch(MainActivity::class.java).use {
+        val intent =
+            Intent(context, MainActivity::class.java).apply {
+                putExtra("disable_auto_seed", true)
+            }
+        ActivityScenario.launch<MainActivity>(intent).use {
             robot.setupWizardFlow(outputDir)
         }
     }
 
     @Test
     fun flow0_SetupFull() {
+        System.setProperty("disable_auto_seed", "true")
         runBlocking {
             RepairAppDatabase.closeInstance()
             context.deleteDatabase(RepairAppDatabase.DATABASE_NAME)
             AuthPreferences(context).clear()
+            OwnerPreferences(context).updateOwnerInfo(OwnerInfo())
 
             TestUtils.refreshAppContainer()
 
@@ -82,11 +89,16 @@ class WorkflowOperationalTest {
                     updatedAt = System.currentTimeMillis(),
                 ),
             )
+            TestUtils.refreshAppContainer()
         }
         val outputDir = prepareDirectory("workflow-setup-full")
         val robot = OperationalRobot(composeRule, context)
 
-        ActivityScenario.launch(MainActivity::class.java).use {
+        val intent =
+            Intent(context, MainActivity::class.java).apply {
+                putExtra("disable_auto_seed", true)
+            }
+        ActivityScenario.launch<MainActivity>(intent).use {
             robot.typeTag(RepairAppTestTags.AuthUsernameField, "admin")
             robot.typeTag(RepairAppTestTags.AuthPasswordField, "TempPass123!")
             robot.clickTag(RepairAppTestTags.AuthSubmitButton)

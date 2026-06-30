@@ -86,9 +86,11 @@ class MainActivity : AppCompatActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
+                    val disableAutoSeed = intent.getBooleanExtra("disable_auto_seed", false)
                     RepairAppNavHost(
                         windowSizeClass = windowSizeClass,
                         appContainer = appContainer,
+                        disableAutoSeed = disableAutoSeed,
                     )
                 }
             }

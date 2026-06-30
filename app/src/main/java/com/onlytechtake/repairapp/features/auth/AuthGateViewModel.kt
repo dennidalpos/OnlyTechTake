@@ -1,11 +1,13 @@
 package com.onlytechtake.repairapp.features.auth
 
 import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
+import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.demo.DataSeeder
 import com.onlytechtake.repairapp.domain.auth.AuthPolicy
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
@@ -37,6 +39,7 @@ class AuthGateViewModel(
     context: Context,
     private val authRepository: AuthRepository,
     private val ownerPreferences: OwnerPreferences,
+    private val backupRepository: BackupRepository,
     private val dataSeeder: DataSeeder,
 ) : ViewModel() {
     private val applicationContext = context.applicationContext
@@ -390,10 +393,35 @@ class AuthGateViewModel(
         }
     }
 
+    fun restoreBackup(
+        uri: Uri,
+        password: String? = null,
+        onDone: () -> Unit,
+    ) {
+        viewModelScope.launch {
+            mutableFormState.update { it.copy(loading = true, errorMessage = null) }
+            backupRepository
+                .restoreInitialBackup(uri, password)
+                .onSuccess {
+                    onDone()
+                }.onFailure { e ->
+                    mutableFormState.update {
+                        it.copy(
+                            loading = false,
+                            errorMessage =
+                                e.message
+                                    ?: applicationContext.getString(R.string.error_restore_failed),
+                        )
+                    }
+                }
+        }
+    }
+
     class Factory(
         private val context: Context,
         private val authRepository: AuthRepository,
         private val ownerPreferences: OwnerPreferences,
+        private val backupRepository: BackupRepository,
         private val dataSeeder: DataSeeder,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
@@ -401,7 +429,13 @@ class AuthGateViewModel(
             require(modelClass.isAssignableFrom(AuthGateViewModel::class.java)) {
                 "Unknown ViewModel class: ${modelClass.name}"
             }
-            return AuthGateViewModel(context, authRepository, ownerPreferences, dataSeeder) as T
+            return AuthGateViewModel(
+                context,
+                authRepository,
+                ownerPreferences,
+                backupRepository,
+                dataSeeder,
+            ) as T
         }
     }
 }

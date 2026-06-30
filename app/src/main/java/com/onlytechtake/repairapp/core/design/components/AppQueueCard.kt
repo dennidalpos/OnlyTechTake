@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -24,9 +25,12 @@ fun AppQueueCard(
     modifier: Modifier = Modifier,
     lastElementTitle: String? = null,
     onOpenQueue: () -> Unit,
+    containerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
+    contentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
 ) {
     StandardCard(
         modifier = modifier,
+        onClick = onOpenQueue,
     ) {
         Column(
             modifier = Modifier.padding(RepairAppSpacing.cardPadding),
@@ -37,15 +41,16 @@ fun AppQueueCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
+                AppStatusBadge(
+                    text = title.uppercase(),
+                    containerColor = containerColor,
+                    contentColor = contentColor,
+                )
                 Text(
-                    text = title,
+                    text = count.toString(),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                )
-                AppBadge(
-                    text = count.toString(),
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
 
@@ -66,14 +71,6 @@ fun AppQueueCard(
                     modifier = Modifier.padding(vertical = 4.dp),
                 )
             }
-
-            AppButton(
-                text = stringResource(R.string.home_open_queue),
-                onClick = onOpenQueue,
-                variant = AppButtonVariant.Secondary,
-                size = AppButtonSize.Compact,
-                modifier = Modifier.align(Alignment.End),
-            )
         }
     }
 }

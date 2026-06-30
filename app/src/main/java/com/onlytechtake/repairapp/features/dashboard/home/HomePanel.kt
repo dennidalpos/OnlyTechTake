@@ -28,6 +28,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -49,6 +50,7 @@ import com.onlytechtake.repairapp.core.design.components.AppQueueCard
 import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.design.repairColors
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import com.onlytechtake.repairapp.domain.models.AppSummary
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
@@ -153,11 +155,12 @@ fun HomePanelContent(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
                     verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
-                    maxItemsInEachRow = if (isWide) 2 else 1,
+                    maxItemsInEachRow = if (isWide) 3 else 2,
                 ) {
                     queues.forEach { queue ->
                         val itemModifier =
                             if (isWide) Modifier.weight(1f) else Modifier.fillMaxWidth()
+                        val (containerColor, contentColor) = getQueueColors(queue.titleRes)
                         AppQueueCard(
                             title = stringResource(queue.titleRes),
                             count = queue.orders.size,
@@ -167,12 +170,30 @@ fun HomePanelContent(
                                     ?.let { "${it.orderNumber} - ${it.title}" },
                             onOpenQueue = { onOpenQueue(queueFilter(queue)) },
                             modifier = itemModifier,
+                            containerColor = containerColor,
+                            contentColor = contentColor,
                         )
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+private fun getQueueColors(titleRes: Int): Pair<Color, Color> {
+    val status =
+        when (titleRes) {
+            R.string.queue_open -> OrderStatus.OPEN
+            R.string.queue_processing -> OrderStatus.IN_PROGRESS
+            R.string.queue_diagnosis -> OrderStatus.DIAGNOSIS
+            R.string.queue_result -> OrderStatus.RESULT
+            R.string.queue_repair -> OrderStatus.REPAIRING
+            R.string.queue_ready -> OrderStatus.READY_FOR_PICKUP
+            else -> OrderStatus.CLOSED
+        }
+    return com.onlytechtake.repairapp.features.workspace
+        .statusColors(status)
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -239,33 +260,28 @@ private fun HomeHeader(onNewOrder: () -> Unit) {
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun HomeMetrics(summary: AppSummary) {
-    val windowSizeClass = LocalWindowSizeClass.current
-    val isVeryNarrow = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
-
-    FlowRow(
+    Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
-        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.cardGap),
-        maxItemsInEachRow = if (isVeryNarrow) 2 else 3,
+        horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
     ) {
-        val itemModifier =
-            Modifier
-                .weight(1f)
-                .widthIn(min = 100.dp)
+        val itemModifier = Modifier.weight(1f)
         AppMetricCard(
             label = stringResource(R.string.home_metric_operators),
             value = summary.operatorCount.toString(),
             modifier = itemModifier,
+            isCompact = true,
         )
         AppMetricCard(
             label = stringResource(R.string.label_customers),
             value = summary.customerCount.toString(),
             modifier = itemModifier,
+            isCompact = true,
         )
         AppMetricCard(
             label = stringResource(R.string.home_metric_active),
             value = summary.activeOrderCount.toString(),
             modifier = itemModifier,
+            isCompact = true,
         )
     }
 }

@@ -71,7 +71,6 @@ import com.onlytechtake.repairapp.core.design.components.AppVerticalDivider
 import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
 import com.onlytechtake.repairapp.core.design.components.StandardCard
-import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.labelRes
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
@@ -860,7 +859,12 @@ private fun CustomerDetailContent(
                 color = MaterialTheme.colorScheme.outline,
             )
         } else {
-            openOrders.forEach { item -> OrderSummaryRow(item, onOrderClick) }
+            openOrders.forEach { item ->
+                com.onlytechtake.repairapp.features.workspace.OrderSummaryRow(
+                    item,
+                    onOrderClick,
+                )
+            }
         }
 
         SectionTitle(stringResource(R.string.customer_closed_orders, closedOrders.size))
@@ -871,7 +875,12 @@ private fun CustomerDetailContent(
                 color = MaterialTheme.colorScheme.outline,
             )
         } else {
-            closedOrders.forEach { item -> OrderSummaryRow(item, onOrderClick) }
+            closedOrders.forEach { item ->
+                com.onlytechtake.repairapp.features.workspace.OrderSummaryRow(
+                    item,
+                    onOrderClick,
+                )
+            }
         }
     }
 }
@@ -892,59 +901,6 @@ fun AppKeyValueRow(
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Medium,
         )
-    }
-}
-
-@Composable
-fun OrderSummaryRow(
-    item: com.onlytechtake.repairapp.domain.workspace.OrderListItem,
-    onOrderClick: (String) -> Unit,
-) {
-    StandardCard(
-        onClick = { onOrderClick(item.order.id) },
-        modifier = Modifier.padding(bottom = RepairAppSpacing.tinyGap),
-    ) {
-        Row(
-            modifier =
-                Modifier
-                    .padding(RepairAppSpacing.compactGap)
-                    .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.tinyGap)) {
-                Text(
-                    text = "${item.order.orderNumber}: ${item.order.title}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.SemiBold,
-                )
-                val status = item.order.status
-                val containerColor =
-                    when (status) {
-                        OrderStatus.CLOSED -> MaterialTheme.colorScheme.errorContainer
-                        OrderStatus.OPEN -> MaterialTheme.colorScheme.secondaryContainer
-                        else -> MaterialTheme.repairColors.warningContainer
-                    }
-                val contentColor =
-                    when (status) {
-                        OrderStatus.CLOSED -> MaterialTheme.colorScheme.onErrorContainer
-                        OrderStatus.OPEN -> MaterialTheme.colorScheme.onSecondaryContainer
-                        else -> MaterialTheme.repairColors.onWarningContainer
-                    }
-
-                AppStatusBadge(
-                    text = stringResource(status.labelRes),
-                    containerColor = containerColor,
-                    contentColor = contentColor,
-                )
-            }
-            Icon(
-                Icons.Default.Info,
-                contentDescription = null,
-                modifier = Modifier.size(RepairAppIconSizes.small),
-                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
-            )
-        }
     }
 }
 

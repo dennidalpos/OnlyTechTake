@@ -132,14 +132,17 @@ class StoreProScreenshotTest {
             robot.capture(outputDir, "04-diagnosi-preventivo-pro.png")
 
             // 05-whatsapp-pdf-pro
+            robot.acceptQuote()
+            // Capture here to show the "REPAIRING" step
+            robot.capture(outputDir, "05-repairing-step-pro.png")
+
             robot.waitForTag(RepairAppTestTags.OrderWhatsAppButton, scroll = true)
             robot.clickTag(RepairAppTestTags.OrderWhatsAppButton)
             robot.waitForTag(RepairAppTestTags.OrderWhatsAppPreviewPanel)
-            robot.capture(outputDir, "05-whatsapp-pdf-pro.png")
+            robot.capture(outputDir, "06-whatsapp-pdf-pro.png")
             robot.dismissWhatsAppPreviewIfPresent()
 
-            // 06-timeline-chiusura-pro
-            robot.acceptQuote()
+            // 07-timeline-chiusura-pro
             robot.applySimpleStatus(
                 OrderStatusAction.READY_FOR_PICKUP,
                 OrderStatusAction.CLOSE_ORDER,
@@ -149,18 +152,18 @@ class StoreProScreenshotTest {
             robot.waitForText(summary, scroll = true)
             robot.clickText(summary, scroll = true)
             robot.waitForText(R.string.status_closed)
-            robot.capture(outputDir, "06-timeline-chiusura-pro.png")
+            robot.capture(outputDir, "07-timeline-chiusura-pro.png")
 
-            // 07-clienti-pro
+            // 08-clienti-pro
             robot.clickDashboardTab("CUSTOMERS")
             robot.waitForTag(RepairAppTestTags.CustomerSearchField)
-            robot.capture(outputDir, "07-clienti-pro.png")
+            robot.capture(outputDir, "08-clienti-pro.png")
 
-            // 08-dettaglio-cliente-pro
+            // 09-dettaglio-cliente-pro
             robot.waitForText("John Doe", scroll = true)
             robot.clickText("John Doe")
-            robot.waitForText(R.string.customer_field_phone, scroll = true)
-            robot.capture(outputDir, "08-dettaglio-cliente-pro.png")
+            robot.waitForText(R.string.customer_open_orders, scroll = true)
+            robot.capture(outputDir, "09-dettaglio-cliente-pro.png")
         }
     }
 

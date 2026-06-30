@@ -44,6 +44,7 @@ class AuthGateViewModelTest {
                     context = mockk(relaxed = true),
                     authRepository = fakeRepo,
                     ownerPreferences = mockk(relaxed = true),
+                    backupRepository = mockk(relaxed = true),
                     dataSeeder = mockk(relaxed = true),
                 )
 

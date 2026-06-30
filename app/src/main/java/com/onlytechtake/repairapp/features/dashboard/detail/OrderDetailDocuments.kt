@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Message
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.LinearProgressIndicator
@@ -26,6 +27,7 @@ import com.onlytechtake.repairapp.core.design.components.AppIconButton
 import com.onlytechtake.repairapp.core.design.components.AppMessageBanner
 import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.StandardCard
+import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
 
@@ -37,6 +39,7 @@ fun OrderDocumentSection(
     hasSignatures: Boolean,
     onGeneratePdf: (Boolean) -> Unit,
     onShareDocument: (String) -> Unit,
+    onWhatsAppDocument: (String) -> Unit,
     onDeleteDocument: (String) -> Unit,
     requestConfirm: (String, String, () -> Unit) -> Unit,
 ) {
@@ -124,6 +127,12 @@ fun OrderDocumentSection(
                             )
                         }
                         Row {
+                            AppIconButton(
+                                imageVector = Icons.AutoMirrored.Filled.Message,
+                                contentDescription = stringResource(R.string.order_whatsapp_send),
+                                onClick = { onWhatsAppDocument(doc.id) },
+                                tint = MaterialTheme.repairColors.whatsapp,
+                            )
                             AppIconButton(
                                 imageVector = Icons.Default.Share,
                                 contentDescription = stringResource(R.string.order_share),

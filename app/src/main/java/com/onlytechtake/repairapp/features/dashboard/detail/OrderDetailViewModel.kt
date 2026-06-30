@@ -295,7 +295,7 @@ class OrderDetailViewModel(
                 return@launch
             }
 
-            generateOrderStatusPdfUseCase(actor.id, orderId, includeSignature)
+            generateOrderStatusPdfUseCase(orderId, actor.id, includeSignature)
                 .onSuccess { doc ->
                     _lastGeneratedDocumentId.value = doc.id
                     _showPdfSentConfirmation.value = true
@@ -327,6 +327,10 @@ class OrderDetailViewModel(
             }
             _isProcessing.value = false
         }
+    }
+
+    fun onWhatsAppDocumentClicked(documentId: String) {
+        prepareMessage(TemplateAnchor.WHATSAPP_PDF_STATUS)
     }
 
     fun onDeleteDocumentClicked(documentId: String) {

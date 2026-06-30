@@ -40,6 +40,7 @@ fun SettingsPanel(
     isAdmin: Boolean,
     onBackupRestored: () -> Unit,
     onNavigate: (String) -> Unit,
+    onBack: () -> Unit,
     initialSection: String? = null,
     fromIntake: Boolean = false,
 ) {
@@ -65,7 +66,9 @@ fun SettingsPanel(
     }
 
     val onBackToHub = {
-        if (isWide) {
+        if (fromIntake) {
+            onBack()
+        } else if (isWide) {
             currentSection = null
         } else {
             onNavigate(
@@ -294,6 +297,7 @@ private fun SettingsPanelWidePreview() {
             isAdmin = true,
             onBackupRestored = {},
             onNavigate = {},
+            onBack = {},
         )
     }
 }
@@ -309,6 +313,7 @@ private fun SettingsPanelMobilePreview() {
             isAdmin = true,
             onBackupRestored = {},
             onNavigate = {},
+            onBack = {},
         )
     }
 }

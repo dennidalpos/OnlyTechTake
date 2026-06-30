@@ -59,8 +59,6 @@
     <string name="anchor_label_wa_not_repairable">WA: Not serviceable</string>
     <string name="anchor_label_wa_repairing">WA: In progress</string>
     <string name="anchor_label_wa_ready">WA: Ready for pickup</string>
-    <string name="anchor_label_wa_result">WA: Diagnosis outcome</string>
-    <string name="anchor_label_wa_processing">WA: Processing</string>
     <string name="anchor_label_wa_completed">WA: Service completed</string>
     <string name="anchor_label_wa_pdf">WA: Send Status PDF</string>
     <string name="anchor_label_legal_privacy">Legal: Privacy</string>
@@ -73,8 +71,6 @@
     <string name="anchor_desc_wa_not_repairable">Sent when the object is not serviceable.</string>
     <string name="anchor_desc_wa_repairing">Sent when the technical intervention begins.</string>
     <string name="anchor_desc_wa_ready">Sent when the device can be delivered.</string>
-    <string name="anchor_desc_wa_result">Sent after the diagnosis is completed with a specific result.</string>
-    <string name="anchor_desc_wa_processing">Sent when the object enters generic processing.</string>
     <string name="anchor_desc_wa_completed">Sent when the technical intervention is finished and closed.</string>
     <string name="anchor_desc_wa_pdf">Accompanies the sending of the progress status PDF document.</string>
     <string name="anchor_desc_legal_privacy">Privacy notice text shown during acceptance.</string>
@@ -367,14 +363,16 @@
 
     <string name="home_metric_operators">Operators</string>
     <string name="home_metric_active">Active</string>
-    <string name="queue_open">Open</string>
-    <string name="queue_processing">In Progress / Diagnosis</string>
-    <string name="queue_result">Result / Intervention</string>
-    <string name="queue_ready">Ready</string>
+    <string name="queue_open">Acceptance</string>
+    <string name="queue_processing">In Charge</string>
+    <string name="queue_diagnosis">Diagnosis</string>
+    <string name="queue_result">Outcome</string>
+    <string name="queue_repair">Repair</string>
+    <string name="queue_ready">Pickup</string>
     <string name="home_new_order">New service order</string>
     <string name="home_empty_queue">No service orders in this queue.</string>
     <string name="home_empty_queues_title">No active queues</string>
-    <string name="home_empty_queues_body">When a service order enters work, diagnosis, or pickup, it will appear here with the next action.</string>
+    <string name="home_empty_queues_body">When a service order enters acceptance, diagnosis, repair, or pickup, it will appear here with the next action.</string>
     <string name="home_open_queue">Open queue</string>
     <string name="home_backup_reminder_title">Backup recommended</string>
     <string name="home_backup_reminder_settings">Backup setup</string>
@@ -484,7 +482,7 @@
     <string name="customer_select_detail_title">No customer selected</string>
 
     <string name="customer_detail_edit">Edit</string>
-    <string name="customer_open_orders">Open orders (%1$d)</string>
+    <string name="customer_open_orders">Active steps (%1$d)</string>
     <string name="customer_closed_orders">Closed history (%1$d)</string>
     <string name="customer_no_open_orders">No open orders</string>
     <string name="customer_no_closed_orders">No closed orders</string>
@@ -632,8 +630,6 @@
     <string name="template_wa_not_repairable_body">Hello {{cliente}}, after the diagnosis of service order {{numero_commessa}} the object is not serviceable.\nYou can contact us for delivery details or clarifications.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_repairing_title">WhatsApp processing</string>
     <string name="template_wa_repairing_body">Hello {{cliente}}, the intervention for order {{numero_commessa}} is in progress.\nWe will update you when it is ready.\n\n{{proprietario_nome}}</string>
-    <string name="template_wa_lavorazione_title">WhatsApp processing</string>
-    <string name="template_wa_lavorazione_body">Hello {{cliente}}, service order {{numero_commessa}} is in progress.\nNext action: {{prossima_azione}}.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_completamento_title">WhatsApp completion</string>
     <string name="template_wa_completamento_body">Hello {{cliente}}, the processing of service order {{numero_commessa}} is completed.\n\n{{proprietario_nome}}</string>
     <string name="template_wa_ready_title">WhatsApp ready for delivery</string>
@@ -950,5 +946,11 @@
     <string name="catalog_error_self_parent">A category cannot be its own parent</string>
     <string name="catalog_error_parent_not_found">Parent category not found</string>
     <string name="catalog_error_depth_limit">Maximum depth reached (4 levels)</string>
+
+    <string name="error_restore_failed">Restore failed</string>
+    <string name="action_restore_confirm_title">Restore Backup</string>
+    <string name="action_restore_confirm_text">All current data will be replaced by the backup. This operation cannot be undone. Enter backup password if encrypted.</string>
+    <string name="auth_password_backup">Backup password (optional)</string>
+    <string name="error_reset_confirmation_invalid">Type the correct word to confirm</string>
 
 </resources>

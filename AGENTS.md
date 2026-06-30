@@ -9,14 +9,14 @@ Operational guide for AI agents. Environment: **Windows 11 + PowerShell**.
 1. **Source of Truth**: Always consult and update `PROJECT_STATUS.json`. (*Consultare e aggiornare sempre `PROJECT_STATUS.json`.*)
 2. **Local-First & Privacy**: No cloud, telemetry, or analytics. No sensitive data logging. Database encrypted with SQLCipher. (*Niente cloud o telemetria. Database cifrato SQLCipher.*)
 3. **Product Positioning**: The app is for **job management and technical documentation**, not just "repairs". Use prudent formulas like "helps reduce disputes". (*L'app è per gestione commesse e documentazione tecnica. Evitare claim legali assoluti.*)
-4. **Versioning**: `versionCode = 1` is the baseline. Do NOT increment without explicit order. (*`versionCode = 1` è la base. NON incrementare senza ordine.*)
+4. **Versioning & SDK**: `versionCode = 1` is the baseline. `targetSdk` is locked to **37**. Do NOT increment without explicit order. (*`versionCode = 1` è la base. `targetSdk = 37`. NON incrementare senza ordine.*)
 
 ---
 
 ## 2. Technical Rules
 - **Environment**: Use PowerShell wrappers in `scripts\powershell\`. (*Usare i wrapper PowerShell.*)
 - **Dependencies**: Use ONLY `gradle/libs.versions.toml`. No hardcoded versions. (*Usare solo `libs.versions.toml`.*)
-- **UI & Strings**: All strings in `strings.xml`. English default, Italian in `values-it`. No hardcoded copy. (*Tutte le stringhe in `strings.xml`.*)
+- **UI & Strings**: All strings in `strings.xml`. English default, Italian in `values-it`. No hardcoded copy. Ensure cross-flavor consistency (Main, Demo, Showcase). (*Tutte le stringhe in `strings.xml`. Coerenza tra i flavor.*)
 - **Database**: `DATABASE_VERSION = 1` locked. Do not modify schema or entities without explicit order. (*Schema e versione DB bloccati.*)
 - **Architecture**: UI (Compose/M3) → ViewModel → Repository. Every screen MUST have Light/Dark Previews. (*Architettura pulita. Preview Obbligatorie.*)
 - **UI Tests**: Use **Robot** pattern. Call `TestUtils.refreshAppContainer()` after seeding or resetting DB. (*Pattern Robot. Refresh obbligatorio dopo reset DB.*)

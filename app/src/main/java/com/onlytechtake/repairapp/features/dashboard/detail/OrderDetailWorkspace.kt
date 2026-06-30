@@ -394,6 +394,7 @@ fun OrderDetailWorkspace(
                             viewModel.generateStatusPdf(includeSignature = includeSignature)
                         },
                         onShareDocument = { viewModel.onShareDocumentClicked(it) },
+                        onWhatsAppDocument = { viewModel.onWhatsAppDocumentClicked(it) },
                         onDeleteDocument = { docId ->
                             viewModel.onDeleteDocumentClicked(docId)
                         },
@@ -490,7 +491,7 @@ fun OrderDetailWorkspace(
                 }
 
                 OrderStatus.IN_PROGRESS -> {
-                    viewModel.prepareMessage(TemplateAnchor.WHATSAPP_INTAKE)
+                    viewModel.prepareMessage(TemplateAnchor.WHATSAPP_UPDATE)
                 }
 
                 OrderStatus.DIAGNOSIS -> {

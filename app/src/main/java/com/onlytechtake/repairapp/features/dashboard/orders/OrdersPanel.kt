@@ -472,7 +472,7 @@ private fun ActiveFilterInfo(filter: OrderFilter) {
                 ?.let { statuses ->
                     buildString {
                         statuses.forEachIndexed { index, it ->
-                            if (index > 0) append(" / ")
+                            if (index > 0) append(", ")
                             append(stringResource(it.labelRes))
                         }
                     }

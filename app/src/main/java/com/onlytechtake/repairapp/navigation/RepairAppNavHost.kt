@@ -24,6 +24,7 @@ private object Routes {
 fun RepairAppNavHost(
     windowSizeClass: WindowSizeClass,
     appContainer: AppContainer,
+    disableAutoSeed: Boolean = false,
 ) {
     val navController = rememberNavController()
     val context = LocalContext.current
@@ -49,6 +50,7 @@ fun RepairAppNavHost(
                 AuthGateRoute(
                     appInstanceKey = appInstanceKey,
                     onAppDataRestored = recreateAppContainer,
+                    disableAutoSeed = disableAutoSeed,
                 )
             }
         }

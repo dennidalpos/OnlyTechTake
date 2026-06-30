@@ -260,7 +260,14 @@ abstract class BaseAssetRobot(
         @androidx.annotation.StringRes resId: Int,
         scroll: Boolean = false,
     ) {
-        waitForText(getString(resId), scroll = scroll)
+        val raw = getString(resId)
+        val textToSearch =
+            if (raw.contains("%")) {
+                raw.substringBefore("%").trim()
+            } else {
+                raw
+            }
+        waitForText(textToSearch, scroll = scroll)
     }
 
     fun clickText(

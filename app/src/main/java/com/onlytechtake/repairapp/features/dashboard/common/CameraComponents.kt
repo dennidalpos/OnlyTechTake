@@ -259,8 +259,7 @@ fun CameraCapturePreview(
                                 },
                             )
                         },
-                        onFailure = { onError(it.message ?: cameraFileErrorMsg) },
-                    )
+                    ) { onError(it.message ?: cameraFileErrorMsg) }
                 },
             )
         } else {
@@ -293,16 +292,14 @@ fun CameraCapturePreview(
                                         .prepareRecording(context, outputOptions)
                                         .withAudioEnabled()
                                         .start(executor) { event ->
-                                            if (event is VideoRecordEvent.Finalize) {
-                                                if (event.hasError()) {
-                                                    file.delete()
-                                                    onError(
-                                                        event.cause?.message
-                                                            ?: cameraCaptureFailedMsg,
-                                                    )
-                                                } else {
-                                                    onMediaCaptured(file, CameraCaptureMode.VIDEO)
-                                                }
+                                            if (event !is VideoRecordEvent.Finalize) return@start
+                                            if (event.hasError()) {
+                                                file.delete()
+                                                onError(
+                                                    event.cause?.message ?: cameraCaptureFailedMsg
+                                                )
+                                            } else {
+                                                onMediaCaptured(file, CameraCaptureMode.VIDEO)
                                             }
                                         }
                                 isRecording = true

@@ -29,10 +29,16 @@ interface CustomerDao {
 
     @Query(
         """
-        SELECT customers.* FROM customers
-        JOIN customers_fts ON customers.rowid = customers_fts.rowid
-        WHERE customers_fts MATCH :query
-        ORDER BY customers.updatedAt DESC
+        SELECT * FROM customers
+        WHERE rowid IN (
+            SELECT rowid FROM customers_fts WHERE customers_fts MATCH :query
+        ) OR id IN (
+            SELECT customerId FROM repair_orders
+            WHERE rowid IN (
+                SELECT rowid FROM repair_orders_fts WHERE repair_orders_fts MATCH :query
+            )
+        )
+        ORDER BY updatedAt DESC
         """,
     )
     fun search(query: String): Flow<List<CustomerEntity>>

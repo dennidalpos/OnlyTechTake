@@ -2,7 +2,7 @@
   "project_name": "OnlyTechTake",
   "version": "1.0.0",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-07-08",
+  "last_updated": "2026-07-09",
   "backlog": [
     {
       "priority": "HIGH",
@@ -11,16 +11,36 @@
   ],
   "completed_recently": [
     {
+      "date": "2026-07-09",
+      "task": "QUALITY: Analisi completa e allineamento perimetrale. Confermata risoluzione warning in CameraComponents (trailing lambda, foldable if), CustomersViewModel (backing property _isFormDirty), e rimozione stringhe hardcoded in DataSeederImpl. Verificato allineamento cataloghi stringhe Showcase (IT/EN) e conformità script di pulizia repo."
+    },
+    {
+      "date": "2026-07-09",
+      "task": "QUALITY: Risoluzione warning editor in CameraComponents (trailing lambda, foldable if), CustomersViewModel (backing property _isFormDirty), e allineamento plurali Italiani in main strings. Eliminata stringa hardcoded residua in DataSeederImpl (footer bitmap) con aggiunta risorsa localizzata."
+    },
+    {
+      "date": "2026-07-09",
+      "task": "QUALITY: Allineamento varianti e risoluzione regressioni test. Risolto errore SQL MATCH in ricerca clienti (ottimizzazione subquery FTS), corretto messaggio di errore in DataResetRepository, e sistemata corrispondenza placeholder nei robot di test. Allineato l'oggetto DemoMode su tutti i flavor per supportare il flag disableAutoSeed."
+    },
+    {
+      "date": "2026-07-09",
+      "task": "AUTH: Aggiunta funzione di ripristino backup nella schermata di primo avvio. Consente di ripristinare l'intero ambiente (database, media e configurazioni) senza dover eseguire l'enrollment manuale del primo admin. Supporta backup cifrati con richiesta password in dialog dedicato."
+    },
+    {
+      "date": "2026-07-09",
+      "task": "DASHBOARD: Risolto bug di navigazione nella creazione categorie durante l'intake (ora torna correttamente alla commessa invece di aprire le impostazioni). Ottimizzata la sezione media (foto/video/allegati) compattando i pulsanti in un'unica riga con icone per risparmiare spazio."
+    },
+    {
+      "date": "2026-07-08",
+      "task": "DASHBOARD: Ottimizzazione metrica e code operative. Rimpicciolite le metriche in un'unica riga, rimosso il pulsante 'Apri coda' rendendo le card cliccabili, e convertito i titoli delle code in badge colorati. Rimosso il separatore '/' dai titoli delle code e dai filtri per una visualizzazione più pulita in tutte le lingue."
+    },
+    {
       "date": "2026-07-08",
       "task": "LANDING: Verifica integrità risorse e fix galleria 3D. Rimozione dead code (updateLightbox) che causava potenziali errori JS. Aggiunti prefissi -webkit per compatibilità cross-browser su webserver e verificata la località di tutti gli asset (tutti i path sono relativi e interni alla cartella landing)."
     },
     {
       "date": "2026-07-07",
       "task": "QUALITY: Risoluzione warning editor in DataSeederImpl (Showcase) e DemoMode. Rimozione stringhe hardcoded e allineamento con cataloghi 'common' in main strings (Joy-Con, iPad Pro, etc.). Fix parentesi e parametri booleani."
-    },
-    {
-      "date": "2026-07-08",
-      "task": "LANDING: Verifica integrità risorse e fix galleria 3D. Rimozione dead code (updateLightbox) che causava potenziali errori JS. Aggiunti prefissi -webkit per compatibilità cross-browser su webserver e verificata la località di tutti gli asset (tutti i path sono relativi e interni alla cartella landing)."
     },
     {
       "date": "2026-07-07",

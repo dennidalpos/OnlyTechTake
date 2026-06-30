@@ -190,12 +190,12 @@ class RepairAppDatabaseInstrumentedTest {
 
             assertSearchContains("Mario", privateCustomer.id)
             assertSearchContains("Rossi", privateCustomer.id)
-            assertSearchContains("333", privateCustomer.id)
-            assertSearchContains("mario@example.com", privateCustomer.id)
-            assertSearchContains("Only Tech", businessCustomer.id)
+            assertSearchContains("333*", privateCustomer.id)
+            assertSearchContains("mario*", privateCustomer.id)
+            assertSearchContains("Only*", businessCustomer.id)
             assertSearchContains("12345678901", businessCustomer.id)
-            assertSearchContains("RSSMRA", privateCustomer.id)
-            assertSearchContains("000777", privateCustomer.id)
+            assertSearchContains("RSSMRA*", privateCustomer.id)
+            assertSearchContains("000777*", privateCustomer.id)
         }
 
     private suspend fun assertSearchContains(

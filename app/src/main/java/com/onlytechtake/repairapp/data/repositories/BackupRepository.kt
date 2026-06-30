@@ -123,8 +123,30 @@ class BackupRepository(
         password: String? = null,
     ): Result<Unit> =
         runCatching {
-            StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
             PermissionService.requirePermission(actor, UserPermission.BACKUP_RESTORE)
+            performRestore(actor.id, uri, password).getOrThrow()
+        }
+
+    suspend fun restoreInitialBackup(
+        uri: Uri,
+        password: String? = null,
+    ): Result<Unit> =
+        runCatching {
+            // Only allow if not configured
+            val adminCount = database.userDao().findAllAdmins().size
+            if (adminCount > 0) {
+                throw SecurityException(context.getString(R.string.error_feature_pro_only))
+            }
+            performRestore(null, uri, password).getOrThrow()
+        }
+
+    private suspend fun performRestore(
+        actorId: String?,
+        uri: Uri,
+        password: String? = null,
+    ): Result<Unit> =
+        runCatching {
+            StoragePolicy.requireSpaceForHeavyWrite(context.filesDir)
             if (BuildConfig.IS_DEMO_VERSION) {
                 throw IllegalStateException(context.getString(R.string.error_feature_pro_only))
             }
@@ -195,8 +217,19 @@ class BackupRepository(
                         val restoredDatabase = RepairAppDatabase.getInstance(context)
                         try {
                             // Verify if actor exists in restored database
-                            val actorExists = restoredDatabase.userDao().findById(actor.id) != null
-                            val finalActorId = if (actorExists) actor.id else null
+                            val finalActorId =
+                                if (actorId != null) {
+                                    if (restoredDatabase
+                                            .userDao()
+                                            .findById(actorId) != null
+                                    ) {
+                                        actorId
+                                    } else {
+                                        null
+                                    }
+                                } else {
+                                    null
+                                }
 
                             restoredDatabase.auditLogDao().upsert(
                                 com.onlytechtake.repairapp.data.local.entities.AuditLogEntity(

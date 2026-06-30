@@ -255,6 +255,7 @@ fun DashboardNavHost(
                 fromIntake = fromIntake,
                 onBackupRestored = onAppDataRestored,
                 onNavigate = { route -> navController.navigate(route) },
+                onBack = { navController.popBackStack() },
             )
         }
         composable(DashboardRoutes.ADMIN) {
@@ -288,6 +289,7 @@ fun DashboardNavHost(
                 initialSection = "ADMIN",
                 onBackupRestored = onAppDataRestored,
                 onNavigate = { route -> navController.navigate(route) },
+                onBack = { navController.popBackStack() },
             )
         }
     }

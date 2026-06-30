@@ -15,14 +15,15 @@ class OperationalQueuesTest {
                 listOf(
                     order("1", OrderStatus.OPEN),
                     order("2", OrderStatus.IN_PROGRESS),
-                    order("3", OrderStatus.RESULT),
+                    order("3", OrderStatus.DIAGNOSIS),
+                    order("4", OrderStatus.RESULT),
                     order("5", OrderStatus.REPAIRING),
-                    order("4", OrderStatus.READY_FOR_PICKUP),
+                    order("6", OrderStatus.READY_FOR_PICKUP),
                 ),
             )
 
-        assertEquals(listOf(1, 1, 2, 1), queues.map { it.orders.size })
-        assertTrue(queueFilter(queues[1]).statuses.contains(OrderStatus.DIAGNOSIS))
+        assertEquals(listOf(1, 1, 1, 1, 1, 1), queues.map { it.orders.size })
+        assertTrue(queueFilter(queues[2]).statuses.contains(OrderStatus.DIAGNOSIS))
     }
 
     private fun order(
