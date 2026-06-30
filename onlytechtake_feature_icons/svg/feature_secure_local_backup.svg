@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-hidden="true">
+  <defs>
+    <style>
+      .w{fill:none;stroke:#F5F2EA;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+      .t{fill:none;stroke:#00B6B0;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+      .y{fill:none;stroke:#FFB627;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+      .tf{fill:#00B6B0}
+      .yf{fill:#FFB627}
+      .cf{fill:#0D0D0D}
+      .wf{fill:#F5F2EA}
+    </style>
+  </defs>
+  <path class="w" d="M18 50H15a9 9 0 0 1-1-18 14 14 0 0 1 26-7 11 11 0 0 1 13 11 10 10 0 0 1-8 10"/>
+  <rect class="tf" x="17" y="34" width="30" height="17" rx="3"/>
+  <path class="cf" d="M24 44h4v3h-4zM31 44h4v3h-4zM38 44h4v3h-4z"/>
+  <circle class="yf" cx="49" cy="49" r="9"/>
+  <path class="cf" d="M45 48l3 3 6-7 2 2-8 9-5-5z"/>
+  <path class="w" d="M54 17a15 15 0 0 1 2 16M9 19a15 15 0 0 0-2 15"/>
+</svg>

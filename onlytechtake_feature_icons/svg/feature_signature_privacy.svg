@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-hidden="true">
+  <defs>
+    <style>
+      .w{fill:none;stroke:#F5F2EA;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+      .t{fill:none;stroke:#00B6B0;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+      .y{fill:none;stroke:#FFB627;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+      .tf{fill:#00B6B0}
+      .yf{fill:#FFB627}
+      .cf{fill:#0D0D0D}
+      .wf{fill:#F5F2EA}
+    </style>
+  </defs>
+  <path class="w" d="M16 6h24l10 10v38a5 5 0 0 1-5 5H16a5 5 0 0 1-5-5V11a5 5 0 0 1 5-5z"/>
+  <path class="t" d="M40 6v12h12"/>
+  <path class="w" d="M20 24h18M20 32h21"/>
+  <path class="t" d="M18 46c4-8 7 7 11-1 3-6 7-1 12-3"/>
+  <path class="yf" d="M44 34l12 5v8c0 7-5 11-12 13-7-2-12-6-12-13v-8z"/>
+  <path class="cf" d="M40 46h8v8h-8z"/>
+  <path class="cf" d="M41.5 46v-3a2.5 2.5 0 0 1 5 0v3h-3v-3a.5.5 0 0 0-1 0v3z"/>
+</svg>

@@ -11,36 +11,72 @@
   ],
   "completed_recently": [
     {
+      "date": "2026-07-10",
+      "task": "BRANDING: Avvio aggiornamento identità visiva. Allineata la palette colori in RepairAppTheme.kt (Teal #00B6B0, Mustard #FFB627, Charcoal #0D0D0D) e aggiunto lo slogan 'Ripara, traccia, aggiorna' nelle stringhe localizzate."
+    },
+    {
       "date": "2026-07-09",
       "task": "UI: Uniformate dimensioni pulsanti '+' per l'aggiunta di elementi (Categorie, Template, Commesse, Clienti) portandoli a 48dp (standard) con icone a 24dp. Rimosse altezze hardcoded dai campi di testo adiacenti per garantire allineamento visivo e flessibilità."
+    },
+    {
+      "date": "2026-07-10",
+      "task": "BRANDING: Avvio aggiornamento identità visiva. Allineata la palette colori in RepairAppTheme.kt (Teal #00B6B0, Mustard #FFB627, Charcoal #0D0D0D) e aggiunto lo slogan 'Ripara, traccia, aggiorna' nelle stringhe localizzate."
     },
     {
       "date": "2026-07-09",
       "task": "UI: Esteso lo stile banner animato (compatezza e AnimatedVisibility) a tutti i popup e messaggi di errore dell'app tramite refactoring di AppMessageBanner. Garantita coerenza visiva su tutte le varianti del progetto (Full, Demo, Showcase)."
     },
     {
+      "date": "2026-07-10",
+      "task": "BRANDING: Avvio aggiornamento identità visiva. Allineata la palette colori in RepairAppTheme.kt (Teal #00B6B0, Mustard #FFB627, Charcoal #0D0D0D) e aggiunto lo slogan 'Ripara, traccia, aggiorna' nelle stringhe localizzate."
+    },
+    {
       "date": "2026-07-09",
       "task": "UI: Ottimizzazione banner messaggi (più compatti, icone ridotte e font labelMedium) con aggiunta animazione di dissolvenza (AnimatedVisibility) per i banner a scomparsa. Allineate le code operative della dashboard con numerazione degli step (1-6) per una migliore guida procedurale in tutte le lingue."
+    },
+    {
+      "date": "2026-07-10",
+      "task": "BRANDING: Avvio aggiornamento identità visiva. Allineata la palette colori in RepairAppTheme.kt (Teal #00B6B0, Mustard #FFB627, Charcoal #0D0D0D) e aggiunto lo slogan 'Ripara, traccia, aggiorna' nelle stringhe localizzate."
     },
     {
       "date": "2026-07-09",
       "task": "DASHBOARD: Allineamento e coerenza pulsanti acquisizione media. Implementata riga a 3 pulsanti (Foto, Scatto, Video) nel modale CameraCapturePreview e uniformati i trigger in QuickIntakeMediaSection e OrderPhotoSection con varianti (Secondary/Ghost) e icone coerenti su tutti i flavor."
     },
     {
+      "date": "2026-07-10",
+      "task": "BRANDING: Avvio aggiornamento identità visiva. Allineata la palette colori in RepairAppTheme.kt (Teal #00B6B0, Mustard #FFB627, Charcoal #0D0D0D) e aggiunto lo slogan 'Ripara, traccia, aggiorna' nelle stringhe localizzate."
+    },
+    {
       "date": "2026-07-09",
       "task": "QUALITY: Analisi completa e allineamento perimetrale. Confermata risoluzione warning in CameraComponents (trailing lambda, foldable if), CustomersViewModel (backing property _isFormDirty), e rimozione stringhe hardcoded in DataSeederImpl. Verificato allineamento cataloghi stringhe Showcase (IT/EN) e conformità script di pulizia repo."
+    },
+    {
+      "date": "2026-07-10",
+      "task": "BRANDING: Avvio aggiornamento identità visiva. Allineata la palette colori in RepairAppTheme.kt (Teal #00B6B0, Mustard #FFB627, Charcoal #0D0D0D) e aggiunto lo slogan 'Ripara, traccia, aggiorna' nelle stringhe localizzate."
     },
     {
       "date": "2026-07-09",
       "task": "QUALITY: Risoluzione warning editor in CameraComponents (trailing lambda, foldable if), CustomersViewModel (backing property _isFormDirty), e allineamento plurali Italiani in main strings. Eliminata stringa hardcoded residua in DataSeederImpl (footer bitmap) con aggiunta risorsa localizzata."
     },
     {
+      "date": "2026-07-10",
+      "task": "BRANDING: Avvio aggiornamento identità visiva. Allineata la palette colori in RepairAppTheme.kt (Teal #00B6B0, Mustard #FFB627, Charcoal #0D0D0D) e aggiunto lo slogan 'Ripara, traccia, aggiorna' nelle stringhe localizzate."
+    },
+    {
       "date": "2026-07-09",
       "task": "QUALITY: Allineamento varianti e risoluzione regressioni test. Risolto errore SQL MATCH in ricerca clienti (ottimizzazione subquery FTS), corretto messaggio di errore in DataResetRepository, e sistemata corrispondenza placeholder nei robot di test. Allineato l'oggetto DemoMode su tutti i flavor per supportare il flag disableAutoSeed."
     },
     {
+      "date": "2026-07-10",
+      "task": "BRANDING: Avvio aggiornamento identità visiva. Allineata la palette colori in RepairAppTheme.kt (Teal #00B6B0, Mustard #FFB627, Charcoal #0D0D0D) e aggiunto lo slogan 'Ripara, traccia, aggiorna' nelle stringhe localizzate."
+    },
+    {
       "date": "2026-07-09",
       "task": "AUTH: Aggiunta funzione di ripristino backup nella schermata di primo avvio. Consente di ripristinare l'intero ambiente (database, media e configurazioni) senza dover eseguire l'enrollment manuale del primo admin. Supporta backup cifrati con richiesta password in dialog dedicato."
+    },
+    {
+      "date": "2026-07-10",
+      "task": "BRANDING: Avvio aggiornamento identità visiva. Allineata la palette colori in RepairAppTheme.kt (Teal #00B6B0, Mustard #FFB627, Charcoal #0D0D0D) e aggiunto lo slogan 'Ripara, traccia, aggiorna' nelle stringhe localizzate."
     },
     {
       "date": "2026-07-09",

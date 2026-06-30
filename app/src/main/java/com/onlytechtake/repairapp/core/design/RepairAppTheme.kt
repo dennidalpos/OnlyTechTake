@@ -21,11 +21,11 @@ import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.WindowCompat
 
-private val Charcoal = Color(0xFF191C1D)
-private val Teal = Color(0xFF006A6A)
-private val TealDark = Color(0xFF4DDADA)
-private val Amber = Color(0xFF7D5800)
-private val AmberDark = Color(0xFFFFBA28)
+private val Charcoal = Color(0xFF0D0D0D)
+private val Teal = Color(0xFF00B6B0)
+private val TealDark = Color(0xFF5BE2E0)
+private val Amber = Color(0xFFFFB627)
+private val AmberDark = Color(0xFFFFD17A)
 private val Danger = Color(0xFFBA1A1A)
 private val DangerDark = Color(0xFFFFB4AB)
 private val AppTypography =
