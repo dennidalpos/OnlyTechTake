@@ -152,63 +152,63 @@ object ShowcaseDataSeeder {
                         0,
                         context.getString(R.string.common_cat_smartphone),
                         context.getString(R.string.common_cat_smartphone_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-apple",
                         "cat-smartphone",
                         1,
-                        "Apple",
+                        context.getString(R.string.common_cat_apple),
                         context.getString(R.string.showcase_cat_apple_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-iphone",
                         "cat-apple",
                         2,
-                        "iPhone",
+                        context.getString(R.string.common_cat_iphone),
                         context.getString(R.string.showcase_cat_iphone_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-iphone-14-pro",
                         "cat-iphone",
                         3,
-                        "iPhone 14 Pro",
+                        context.getString(R.string.common_cat_iphone_14_pro),
                         context.getString(R.string.showcase_cat_iphone_14_pro_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-iphone-13",
                         "cat-iphone",
                         3,
-                        "iPhone 13",
+                        context.getString(R.string.common_cat_iphone_13),
                         context.getString(R.string.showcase_cat_iphone_13_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-samsung",
                         "cat-smartphone",
                         1,
-                        "Samsung",
+                        context.getString(R.string.common_cat_samsung),
                         context.getString(R.string.showcase_cat_samsung_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-galaxy-s",
                         "cat-samsung",
                         2,
-                        context.getString(R.string.showcase_cat_galaxy_s),
+                        context.getString(R.string.common_cat_galaxy_s),
                         context.getString(R.string.showcase_cat_galaxy_s_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-s23-ultra",
                         "cat-galaxy-s",
                         3,
-                        "S23 Ultra",
+                        context.getString(R.string.common_cat_s23_ultra),
                         context.getString(R.string.showcase_cat_s23_ultra_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-pc",
@@ -216,15 +216,15 @@ object ShowcaseDataSeeder {
                         0,
                         context.getString(R.string.common_cat_pc),
                         context.getString(R.string.common_cat_pc_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-notebook",
                         "cat-pc",
                         1,
-                        "Notebook",
+                        context.getString(R.string.common_cat_notebook),
                         context.getString(R.string.common_cat_notebook_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-gaming-laptop",
@@ -232,7 +232,7 @@ object ShowcaseDataSeeder {
                         2,
                         context.getString(R.string.common_cat_gaming),
                         context.getString(R.string.common_cat_gaming_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-rog-strix",
@@ -240,23 +240,23 @@ object ShowcaseDataSeeder {
                         3,
                         context.getString(R.string.common_cat_rog_strix),
                         context.getString(R.string.common_cat_rog_strix_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-windows-laptop",
                         "cat-notebook",
                         2,
-                        context.getString(R.string.common_cat_notebook),
+                        context.getString(R.string.common_cat_windows_laptop),
                         context.getString(R.string.showcase_cat_windows_laptop_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-asus-zenbook",
                         "cat-windows-laptop",
                         3,
-                        "Asus Zenbook OLED",
+                        context.getString(R.string.common_cat_asus_zenbook),
                         context.getString(R.string.showcase_cat_asus_zenbook_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-console",
@@ -264,23 +264,23 @@ object ShowcaseDataSeeder {
                         0,
                         context.getString(R.string.showcase_cat_console),
                         context.getString(R.string.showcase_cat_console_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-sony",
                         "cat-console",
                         1,
-                        "Sony",
+                        context.getString(R.string.common_cat_sony),
                         context.getString(R.string.showcase_cat_sony_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-ps5",
                         "cat-sony",
                         2,
-                        "PlayStation 5",
+                        context.getString(R.string.common_cat_ps5),
                         context.getString(R.string.showcase_cat_ps5_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-ps5-hdmi",
@@ -288,23 +288,23 @@ object ShowcaseDataSeeder {
                         3,
                         context.getString(R.string.showcase_cat_ps5_hdmi),
                         context.getString(R.string.showcase_cat_ps5_hdmi_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-dualsense",
                         "cat-ps5",
                         3,
-                        "DualSense Controller",
+                        context.getString(R.string.common_cat_dualsense),
                         context.getString(R.string.showcase_cat_dualsense_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-nintendo",
                         "cat-console",
                         1,
-                        "Nintendo",
+                        context.getString(R.string.common_cat_nintendo),
                         context.getString(R.string.common_cat_nintendo_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-switch",
@@ -312,39 +312,39 @@ object ShowcaseDataSeeder {
                         2,
                         context.getString(R.string.common_cat_switch),
                         context.getString(R.string.common_cat_switch_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-joycon",
                         "cat-switch",
                         3,
-                        "Joy-Con",
-                        "Analog replacement",
-                        true,
+                        context.getString(R.string.common_cat_joycon),
+                        context.getString(R.string.demo_cat_analog_service),
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-tablet",
                         null,
                         0,
-                        "Tablet",
+                        context.getString(R.string.common_cat_tablet),
                         context.getString(R.string.showcase_cat_tablet_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-ipad",
                         "cat-tablet",
                         1,
-                        "iPad",
+                        context.getString(R.string.common_cat_ipad),
                         context.getString(R.string.showcase_cat_ipad_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-ipad-pro",
                         "cat-ipad",
                         2,
-                        "iPad Pro",
+                        context.getString(R.string.common_cat_ipad_pro),
                         context.getString(R.string.showcase_cat_ipad_pro_desc),
-                        true,
+                        active = true,
                     ),
                     OrderCategoryEntity(
                         "cat-ipad-glass",
@@ -352,9 +352,10 @@ object ShowcaseDataSeeder {
                         3,
                         context.getString(R.string.showcase_cat_ipad_glass),
                         context.getString(R.string.showcase_cat_ipad_glass_desc),
-                        true,
+                        active = true,
                     ),
-                )
+
+                    )
             db.orderCategoryDao().upsertAll(categories)
 
             // 3. Create Private Customers
@@ -491,7 +492,7 @@ object ShowcaseDataSeeder {
                     val operatorId = operators[(orderCount % 3)].id
                     val repairType = repairTypes[orderCount % repairTypes.size]
                     val priority =
-                        if (orderCount % 5 == 0) OrderPriority.URGENT else OrderPriority.NORMAL
+                        if ((orderCount % 5) == 0) OrderPriority.URGENT else OrderPriority.NORMAL
 
                     val order =
                         RepairOrderEntity(
@@ -566,7 +567,7 @@ object ShowcaseDataSeeder {
                     }
 
                     // 3. Ready Event (if READY or CLOSED)
-                    if (status == OrderStatus.READY_FOR_PICKUP || status == OrderStatus.CLOSED) {
+                    if ((status == OrderStatus.READY_FOR_PICKUP) || (status == OrderStatus.CLOSED)) {
                         db.timelineEventDao().upsert(
                             TimelineEventEntity(
                                 id = "event-$orderId-ready",

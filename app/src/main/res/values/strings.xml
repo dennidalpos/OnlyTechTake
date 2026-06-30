@@ -249,6 +249,22 @@
     <string name="common_cat_switch">Switch</string>
     <string name="common_cat_switch_desc">Hybrid console</string>
 
+    <string name="common_cat_joycon">Joy-Con</string>
+    <string name="common_cat_dualsense">DualSense</string>
+    <string name="common_cat_ipad_pro">iPad Pro</string>
+    <string name="common_cat_iphone_13">iPhone 13</string>
+    <string name="common_cat_iphone_14_pro">iPhone 14 Pro</string>
+    <string name="common_cat_s23_ultra">S23 Ultra</string>
+    <string name="common_cat_asus_zenbook">Asus Zenbook OLED</string>
+    <string name="common_cat_windows_laptop">Windows Laptop</string>
+    <string name="common_cat_windows_laptop_desc">Asus, HP, Lenovo, Dell</string>
+    <string name="common_cat_iphone_14_pro_desc">Display and back glass service</string>
+    <string name="common_cat_iphone_13_desc">Battery and connector replacement</string>
+    <string name="common_cat_s23_ultra_desc">Curved screen and S-Pen service</string>
+    <string name="common_cat_asus_zenbook_desc">Hinge and display service</string>
+    <string name="common_cat_ipad_pro_desc">11\" and 12.9\" models</string>
+
+
     <string name="common_cat_tablet">Tablet</string>
     <string name="common_cat_tablet_desc">iPad and Android tablets</string>
     <string name="common_cat_ipad">iPad</string>

@@ -2,7 +2,7 @@
   "project_name": "OnlyTechTake",
   "version": "1.0.0",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-07-06",
+  "last_updated": "2026-07-07",
   "backlog": [
     {
       "priority": "HIGH",
@@ -10,6 +10,14 @@
     }
   ],
   "completed_recently": [
+    {
+      "date": "2026-07-07",
+      "task": "QUALITY: Risoluzione warning editor in DataSeederImpl (Showcase) e DemoMode. Rimozione stringhe hardcoded e allineamento con cataloghi 'common' in main strings (Joy-Con, iPad Pro, etc.). Fix parentesi e parametri booleani."
+    },
+    {
+      "date": "2026-07-07",
+      "task": "MAINTENANCE: Risoluzione violazioni Spotless (formattazione Kotlin) su 41 file. Allineamento stringhe cataloghi (Tablet, iPad, Nintendo, etc.) nel seeder Showcase per conformità con main strings e rimozione hardcoded copy."
+    },
     {
       "date": "2026-07-06",
       "task": "ASSETS: Rigenerazione completa asset media pubblici e workflow. Aggiornato script regenerate_public.ps1 per includere nuovi profili (social-demo, workflow-intake, workflow-setup-full, workflow-admin-operators). Risolte diverse regressioni nei test UI (permessi camera/audio mancanti, tag errati, refresh container mancanti)."
