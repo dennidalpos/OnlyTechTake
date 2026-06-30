@@ -25,7 +25,10 @@ class SocialDemoAssetTest {
 
     @get:Rule
     val cameraPermissionRule: GrantPermissionRule =
-        GrantPermissionRule.grant(android.Manifest.permission.CAMERA)
+        GrantPermissionRule.grant(
+            android.Manifest.permission.CAMERA,
+            android.Manifest.permission.RECORD_AUDIO,
+        )
 
     private val context: Context = ApplicationProvider.getApplicationContext()
     private val testContext: Context
@@ -39,6 +42,7 @@ class SocialDemoAssetTest {
         if (!BuildConfig.IS_DEMO_VERSION) return
 
         runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        TestUtils.refreshAppContainer()
         val outputDir = prepareScreenshotDirectory()
         val robot = DemoAssetRobot(composeRule, context)
 

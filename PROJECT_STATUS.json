@@ -12,6 +12,10 @@
   "completed_recently": [
     {
       "date": "2026-07-06",
+      "task": "ASSETS: Rigenerazione completa asset media pubblici e workflow. Aggiornato script regenerate_public.ps1 per includere nuovi profili (social-demo, workflow-intake, workflow-setup-full, workflow-admin-operators). Risolte diverse regressioni nei test UI (permessi camera/audio mancanti, tag errati, refresh container mancanti)."
+    },
+    {
+      "date": "2026-07-06",
       "task": "QUALITY: Allineamento catalogo categorie tra flavor Demo e Showcase. Aggiunte categorie Tablet e iPad come 'common' in main strings. Risolto bug gerarchia (level) in DemoMode. Verifica integrità build e test su tutte le varianti (Full, Demo, Showcase)."
     },
     {

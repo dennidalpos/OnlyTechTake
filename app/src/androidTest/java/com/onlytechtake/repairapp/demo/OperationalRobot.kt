@@ -40,7 +40,7 @@ class OperationalRobot(
 
         // 4. Save & Next
         clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
-        waitForText(R.string.intake_selected_customer)
+        waitForText(getString(R.string.intake_selected_customer).substringBefore("%"))
         clickTag(RepairAppTestTags.NewOrderStep1NextButton, scroll = true)
 
         // 5. Category Selection
@@ -162,7 +162,10 @@ class OperationalRobot(
         waitForTag(RepairAppTestTags.QuoteAcceptedToggle)
         clickTag(RepairAppTestTags.QuoteAcceptedToggle)
         nextCapture("management-quote")
-        clickTag(RepairAppTestTags.QuoteConfirmButton, scroll = true)
+        clickTag(
+            RepairAppTestTags.statusAction(OrderStatusAction.START_REPAIR.name),
+            scroll = true,
+        )
 
         // 7. Ready for Pickup
         clickTag(

@@ -156,14 +156,14 @@ fun AdminPanel(
                         { displayName = it },
                         stringResource(R.string.customer_field_first_name),
                         required = true,
-                        modifier = Modifier.testTag(RepairAppTestTags.AdminDisplayNameField),
+                        testTag = RepairAppTestTags.AdminDisplayNameField,
                     )
                     AppTextField(
                         username,
                         { username = it },
                         stringResource(R.string.auth_username),
                         required = true,
-                        modifier = Modifier.testTag(RepairAppTestTags.AdminUsernameField),
+                        testTag = RepairAppTestTags.AdminUsernameField,
                     )
                     AppTextField(
                         value = password,
@@ -172,7 +172,7 @@ fun AdminPanel(
                         required = true,
                         singleLine = true,
                         keyboardType = KeyboardType.Password,
-                        modifier = Modifier.testTag(RepairAppTestTags.AdminPasswordField),
+                        testTag = RepairAppTestTags.AdminPasswordField,
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         trailingIcon = {
                             PasswordVisibilityButton(

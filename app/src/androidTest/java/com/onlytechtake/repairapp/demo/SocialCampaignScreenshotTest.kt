@@ -29,7 +29,10 @@ class SocialCampaignScreenshotTest {
 
     @get:Rule
     val cameraPermissionRule: GrantPermissionRule =
-        GrantPermissionRule.grant(android.Manifest.permission.CAMERA)
+        GrantPermissionRule.grant(
+            android.Manifest.permission.CAMERA,
+            android.Manifest.permission.RECORD_AUDIO,
+        )
 
     private val context: Context = ApplicationProvider.getApplicationContext()
 
