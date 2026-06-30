@@ -20,6 +20,14 @@
   "completed_recently": [
     {
       "date": "2026-07-10",
+      "task": "UX/UI: Ottimizzati pulsanti fotocamera (icone solo), aggiunto pulsante REC rosso e bordi visuali per stati inattivi/Ghost."
+    },
+    {
+      "date": "2026-07-10",
+      "task": "UX/UI: Ripristinato sfondo pulsante allegati e migliorata coerenza visiva dei pulsanti secondari."
+    },
+    {
+      "date": "2026-07-10",
       "task": "UX/UI: Rimossa fascia informativa gialla filtri e aggiornato feedback cromatico pulsante filtri (Blu se inattivo, Giallo se attivo)."
     },
     {

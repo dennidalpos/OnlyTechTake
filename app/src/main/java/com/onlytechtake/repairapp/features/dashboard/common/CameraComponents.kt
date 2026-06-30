@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FiberManualRecord
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material.icons.filled.Videocam
@@ -218,10 +219,10 @@ fun CameraCapturePreview(
             horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.actionGap),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            // Selettore/Indicatore Foto
+            // Selettore/Indicatore Foto (Icon-only)
             AppButton(
                 modifier = Modifier.weight(1f),
-                text = stringResource(R.string.label_media_photo),
+                text = null,
                 leadingIcon = Icons.Default.PhotoCamera,
                 variant = if (captureMode == CameraCaptureMode.PHOTO) AppButtonVariant.Primary else AppButtonVariant.Ghost,
                 size = AppButtonSize.Compact,
@@ -234,11 +235,12 @@ fun CameraCapturePreview(
                 AppButton(
                     modifier =
                         Modifier
-                            .weight(1f)
+                            .weight(1.5f)
                             .testTag(RepairAppTestTags.IntakeMediaCapturePhotoButton),
-                    text = stringResource(R.string.camera_capture_photo),
+                    text = null,
                     leadingIcon = Icons.Default.PhotoCamera,
-                    size = AppButtonSize.Compact,
+                    size = AppButtonSize.Default,
+                    variant = AppButtonVariant.Danger,
                     onClick = {
                         imageCapture.targetRotation = cameraTargetRotation(context, previewView)
                         createPhotoFile(orderId, orderNumber).fold(
@@ -267,17 +269,12 @@ fun CameraCapturePreview(
                 AppButton(
                     modifier =
                         Modifier
-                            .weight(1f)
+                            .weight(1.5f)
                             .testTag(if (isRecording) RepairAppTestTags.IntakeMediaStopVideoButton else RepairAppTestTags.IntakeMediaCaptureVideoButton),
-                    text =
-                        if (isRecording) {
-                            stringResource(R.string.camera_stop_video)
-                        } else {
-                            stringResource(R.string.camera_capture_video)
-                        },
-                    variant = if (isRecording) AppButtonVariant.Danger else AppButtonVariant.Primary,
-                    leadingIcon = if (isRecording) Icons.Default.Stop else Icons.Default.Videocam,
-                    size = AppButtonSize.Compact,
+                    text = null,
+                    variant = AppButtonVariant.Danger,
+                    leadingIcon = if (isRecording) Icons.Default.Stop else Icons.Default.FiberManualRecord,
+                    size = AppButtonSize.Default,
                     onClick = {
                         if (isRecording) {
                             recording?.stop()
@@ -311,10 +308,10 @@ fun CameraCapturePreview(
                 )
             }
 
-            // Selettore/Indicatore Video
+            // Selettore/Indicatore Video (Icon-only)
             AppButton(
                 modifier = Modifier.weight(1f),
-                text = stringResource(R.string.label_media_video),
+                text = null,
                 leadingIcon = Icons.Default.Videocam,
                 variant = if (captureMode == CameraCaptureMode.VIDEO) AppButtonVariant.Primary else AppButtonVariant.Ghost,
                 size = AppButtonSize.Compact,

@@ -103,7 +103,7 @@ fun QuickIntakeMediaSection(
             ) {
                 AppButton(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.intake_media_take_photo),
+                    text = null,
                     variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact,
                     leadingIcon = Icons.Default.PhotoCamera,
@@ -116,7 +116,7 @@ fun QuickIntakeMediaSection(
 
                 AppButton(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.intake_media_take_video),
+                    text = null,
                     variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact,
                     leadingIcon = Icons.Default.Videocam,
@@ -129,8 +129,8 @@ fun QuickIntakeMediaSection(
 
                 AppButton(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.intake_media_attach_file),
-                    variant = AppButtonVariant.Ghost,
+                    text = null,
+                    variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact,
                     leadingIcon = Icons.Default.AttachFile,
                     testTag = RepairAppTestTags.IntakeMediaAttachFileButton,

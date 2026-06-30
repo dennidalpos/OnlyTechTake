@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.core.design.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -57,7 +58,7 @@ enum class AppButtonSize {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppButton(
-    text: String,
+    text: String?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -68,6 +69,7 @@ fun AppButton(
     stateDescription: String? = null,
     testTag: String? = null,
     leadingIcon: ImageVector? = null,
+    border: BorderStroke? = null,
 ) {
     val compact = size == AppButtonSize.Compact
     val repairColors = MaterialTheme.repairColors
@@ -91,6 +93,23 @@ fun AppButton(
         } else {
             MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f)
         }
+
+    // Border for Ghost variant, inactive states, or explicit border
+    val effectiveBorder =
+        border ?: when {
+            variant == AppButtonVariant.Ghost && effectiveEnabled -> {
+                BorderStroke(1.dp, contentColor.copy(alpha = 0.5f))
+            }
+
+            !effectiveEnabled -> {
+                BorderStroke(1.dp, contentColor.copy(alpha = 0.12f))
+            }
+
+            else -> {
+                null
+            }
+        }
+
     val visualHeight = if (compact) RepairAppSizes.buttonCompact else RepairAppSizes.buttonDefault
 
     Surface(
@@ -109,19 +128,20 @@ fun AppButton(
         shape = if (compact) RepairAppShapes.compactButton else RepairAppShapes.button,
         color = containerColor,
         contentColor = contentColor,
+        border = effectiveBorder,
     ) {
         Box(
             modifier =
                 Modifier
                     .height(visualHeight)
                     .defaultMinSize(
-                        minWidth = if (compact) 60.dp else 100.dp,
+                        minWidth = if (compact) 48.dp else 100.dp,
                         minHeight = if (compact) 0.dp else RepairAppSizes.touchTarget,
                     ),
             contentAlignment = Alignment.Center,
         ) {
             Row(
-                modifier = Modifier.padding(horizontal = if (compact) 12.dp else 16.dp),
+                modifier = Modifier.padding(horizontal = if (compact) 8.dp else 16.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -129,7 +149,7 @@ fun AppButton(
                     CircularProgressIndicator(
                         modifier =
                             Modifier
-                                .padding(end = 8.dp)
+                                .padding(end = if (text != null) 8.dp else 0.dp)
                                 .size(if (compact) 16.dp else 20.dp),
                         strokeWidth = 2.dp,
                         color = contentColor,
@@ -141,22 +161,24 @@ fun AppButton(
                             contentDescription = null,
                             modifier =
                                 Modifier
-                                    .padding(end = 8.dp)
+                                    .padding(end = if (text != null) 8.dp else 0.dp)
                                     .size(if (compact) 16.dp else 20.dp),
                         )
                     }
                 }
-                Text(
-                    text = text,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.Center,
-                    style =
-                        (if (compact) MaterialTheme.typography.labelMedium else MaterialTheme.typography.labelLarge).copy(
-                            fontWeight = FontWeight.Bold,
-                        ),
-                    softWrap = false,
-                )
+                if (text != null) {
+                    Text(
+                        text = text,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        textAlign = TextAlign.Center,
+                        style =
+                            (if (compact) MaterialTheme.typography.labelMedium else MaterialTheme.typography.labelLarge).copy(
+                                fontWeight = FontWeight.Bold,
+                            ),
+                        softWrap = false,
+                    )
+                }
             }
         }
     }
