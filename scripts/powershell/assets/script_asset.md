@@ -1,46 +1,70 @@
 # Documentazione Script Asset (PowerShell)
 
-Questa cartella contiene gli script per la generazione automatizzata di screenshot e video demo dell'applicazione OnlyTechTake.
+Questa cartella contiene gli script per la generazione automatizzata di screenshot e video demo dell'applicazione OnlyTechTake, ottimizzati per Store (Play Store), Social Media e Landing Page.
 
 ---
 
 ## 1. create_demo_assets.ps1
-Genera screenshot dell'interfaccia utente eseguendo test strumentati automatizzati.
+Genera screenshot dell'interfaccia utente eseguendo test strumentati automatizzati basati su profili JSON.
 
-### Parametri
+### Parametri principali
 | Parametro | Tipo | Descrizione |
 | :--- | :--- | :--- |
-| `-Flavor` | String | Variante dell'app (`Full`, `Demo`, `Showcase`). |
-| `-AssetProfile` | String | Nome del profilo JSON che definisce i test. |
-| `-Locale` | String | Codice lingua per il dispositivo (es. `it`, `en`). |
-| `-Dark` | Switch | Attiva il tema scuro prima della cattura. |
-| `-UseConnectedDevice` | Switch | Usa un dispositivo fisico invece dell'emulatore. |
-| `-SkipBuild` | Switch | Salta la fase di compilazione dell'APK. |
+| `-AssetProfile` | String | Nome del profilo in `demo/assets/profiles` (es. `store-pro`). |
+| `-Flavor` | String | Variante dell'app (`Full`, `Demo`, `Showcase`). Default: `Full`. |
+| `-Locale` | String | Codice lingua per il dispositivo (es. `it`, `en`). Default: `en`. |
+| `-Dark` | Switch | Attiva il tema scuro (Night Mode) prima della cattura. |
+| `-UseConnectedDevice` | Switch | Forza l'uso di un dispositivo fisico invece dell'emulatore. |
+| `-SkipBuild` | Switch | Salta la compilazione e installazione dell'APK. |
+| `-NoDistribute` | Switch | Genera i file in `asset/` ma non li copia nelle cartelle marketing/landing. |
 
-### Cosa fa
-Esegue test UI che navigano l'app e scattano screenshot. Le immagini vengono poi distribuite automaticamente nelle cartelle di marketing (Play Store) e nella landing page.
+### Flusso di Lavoro
+1. Carica la configurazione dal file `.asset.json` corrispondente.
+2. Configura lingua e tema sul dispositivo tramite `adb`.
+3. Esegue i test di strumentazione (es. `ScreengrabTest`).
+4. **Post-Processing**: Elabora gli screenshot in base al campo `outputs` del profilo (es. conversione in formato Story, Square o Landscape tramite GDI+).
+5. **Distribuzione**: Copia gli asset in `marketing/screenshots/` (organizzati per flavor e locale) e in `landing/assets/screenshots/`.
+
+### Elaborazione Screenshot
+Se il profilo JSON definisce degli `outputs` con un `variant`, lo script applica trasformazioni automatiche tramite GDI+:
+- **vertical**: Ottimizzato per Stories/Reels (1080x1920).
+- **square**: Formato 1:1 per feed social con ombra soft.
+- **landscape**: Formato 16:9 per presentazioni o post orizzontali.
 
 ---
 
 ## 2. record_demo_device.ps1
-Registra video dei flussi utente dal dispositivo.
+Registra video dei flussi utente dal dispositivo, con post-processing automatico tramite FFmpeg.
 
-### Parametri
+### Parametri principali
 | Parametro | Tipo | Descrizione |
 | :--- | :--- | :--- |
-| `-Flavor` | String | Variante dell'app (`Full`, `Demo`, `Showcase`). |
-| `-AssetProfile` | String | Profilo JSON per la registrazione automatica. |
+| `-AssetProfile` | String | Profilo JSON per la registrazione automatica del test. |
+| `-WhatsAppOptimized` | Switch | Riduce risoluzione (720p) e aumenta compressione (CRF 28) per stare sotto i 10MB. |
+| `-SeedData` | Switch | Esegue `SeedDemoDataTest` prima di iniziare la registrazione. |
 | `-MaxDurationSeconds`| Int | Durata massima della registrazione (default: 180s). |
-| `-BitRate` | Int | Qualità del video (default: 4Mbps). |
-| `-WhatsAppOptimized` | Switch | Riduce risoluzione (720p) e aumenta compressione per restare sotto i 10MB. |
+| `-AutomaticTrimStartSeconds`| Double | Secondi da tagliare all'inizio (default: 7.0s per saltare splash/setup). |
 
-### Cosa fa
-Cattura l'attività dello schermo durante l'esecuzione di uno scenario. Se `ffmpeg` è disponibile, il video viene ottimizzato e ritagliato automaticamente per rimuovere i tempi morti.
+### Post-Processing
+Se `ffmpeg` è installato nel sistema, lo script:
+- Normalizza il framerate a 30fps.
+- Converte in formato YUV420p per massima compatibilità.
+- Applica il trimming (taglio) automatico di testa e coda.
+- Ottimizza il bitrate per la distribuzione social se richiesto.
 
 ---
 
 ## 3. regenerate_public.ps1
-Master script per aggiornare tutti gli asset pubblici.
+Script master per l'aggiornamento massivo di tutto il materiale promozionale pubblico.
 
-### Cosa fa
-Esegue una pulizia completa e rigenera in sequenza tutti gli screenshot e i video per i profili principali (Pro, Demo, Social, Workflow). È lo strumento principale per garantire che il materiale promozionale sia sempre aggiornato all'ultima versione della UI.
+### Operazioni eseguite:
+1. **Cleanup Totale**: Rimuove la cartella locale `asset/` e pulisce i file `.png` e `.mp4` nelle destinazioni pubbliche (`marketing/` e `landing/`).
+2. **Iterazione Profili**: Esegue in sequenza la generazione per una lista predefinita di profili (Pro, Demo, Social, Workflow).
+3. **Gestione Mista**: Per i profili che richiedono sia video che screenshot (es. `operator-intake`), gestisce l'esecuzione combinata per minimizzare i tempi di build.
+
+---
+
+## Note Tecniche
+- **Profili**: I file di configurazione si trovano in `demo/assets/profiles/*.asset.json`.
+- **Requisiti**: Richiede Android SDK configurato e, opzionalmente, `ffmpeg` nel PATH per il processing video.
+- **Distribuzione**: I file generati vengono salvati in `asset/<AssetProfile>/` come archivio locale e poi copiati nelle destinazioni finali del repository.

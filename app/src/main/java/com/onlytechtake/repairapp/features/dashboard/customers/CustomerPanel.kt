@@ -57,6 +57,7 @@ import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
+import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppButton
@@ -493,10 +494,7 @@ private fun CustomerListContent(
             horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
         ) {
             AppTextField(
-                modifier =
-                    Modifier
-                        .weight(1f)
-                        .height(56.dp),
+                modifier = Modifier.weight(1f),
                 value = searchQuery,
                 onValueChange = {
                     viewModel.setSearchQuery(it)
@@ -517,8 +515,8 @@ private fun CustomerListContent(
                 shape = RepairAppShapes.button,
                 modifier =
                     Modifier
-                        .height(56.dp)
-                        .width(56.dp)
+                        .height(RepairAppSizes.buttonDefault)
+                        .width(RepairAppSizes.buttonDefault)
                         .testTag(RepairAppTestTags.CustomerNewButton),
                 tonalElevation = 0.dp,
             ) {
@@ -527,7 +525,7 @@ private fun CustomerListContent(
                         imageVector = Icons.Default.Add,
                         contentDescription = stringResource(R.string.customer_new),
                         tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(RepairAppIconSizes.medium),
+                        modifier = Modifier.size(RepairAppIconSizes.standard),
                     )
                 }
             }

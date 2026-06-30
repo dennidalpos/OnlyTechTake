@@ -104,6 +104,7 @@ fun QuickIntakeMediaSection(
                 AppButton(
                     modifier = Modifier.weight(1f),
                     text = stringResource(R.string.intake_media_take_photo),
+                    variant = AppButtonVariant.Secondary,
                     size = AppButtonSize.Compact,
                     leadingIcon = Icons.Default.PhotoCamera,
                     testTag = RepairAppTestTags.IntakeMediaTakePhotoButton,
@@ -112,21 +113,24 @@ fun QuickIntakeMediaSection(
                         onShowCameraChange(true)
                     },
                 )
-                if (canRecordVideo) {
-                    AppButton(
-                        modifier = Modifier.weight(1f),
-                        text = stringResource(R.string.intake_media_take_video),
-                        size = AppButtonSize.Compact,
-                        leadingIcon = Icons.Default.Videocam,
-                        onClick = {
-                            initialCameraMode = CameraCaptureMode.VIDEO
-                            onShowCameraChange(true)
-                        },
-                    )
-                }
+
+                AppButton(
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(R.string.intake_media_take_video),
+                    variant = AppButtonVariant.Secondary,
+                    size = AppButtonSize.Compact,
+                    leadingIcon = Icons.Default.Videocam,
+                    enabled = canRecordVideo,
+                    onClick = {
+                        initialCameraMode = CameraCaptureMode.VIDEO
+                        onShowCameraChange(true)
+                    },
+                )
+
                 AppButton(
                     modifier = Modifier.weight(1f),
                     text = stringResource(R.string.intake_media_attach_file),
+                    variant = AppButtonVariant.Ghost,
                     size = AppButtonSize.Compact,
                     leadingIcon = Icons.Default.AttachFile,
                     testTag = RepairAppTestTags.IntakeMediaAttachFileButton,
@@ -146,6 +150,7 @@ fun QuickIntakeMediaSection(
                             orderId = intakeSessionId,
                             orderNumber = "presa_in_carico",
                             initialMode = initialCameraMode,
+                            canRecordVideo = canRecordVideo,
                             createPhotoFile = createPhotoFile,
                             createVideoFile = createVideoFile,
                             onMediaCaptured = { file, mode ->

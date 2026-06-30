@@ -30,23 +30,29 @@ interface RepairOrderDao {
     @Query(
         """
         SELECT * FROM repair_orders
-        WHERE (:assignedToUserId IS NULL OR assignedToUserId = :assignedToUserId)
-            AND (:status IS NULL OR status = :status)
-            AND (:customerId IS NULL OR customerId = :customerId)
-            AND (:unassignedOnly = 0 OR assignedToUserId IS NULL)
-            AND (:assignedOnly = 0 OR assignedToUserId IS NOT NULL)
-            AND (:isClosed IS NULL OR (:isClosed = 1 AND status = 'CLOSED') OR (:isClosed = 0 AND status != 'CLOSED'))
+        WHERE (
+            (:includeMe = 1 AND assignedToUserId = :actorId AND status != 'CLOSED') OR
+            (:includeUnassigned = 1 AND assignedToUserId IS NULL AND status != 'CLOSED') OR
+            (:includeOthers = 1 AND assignedToUserId IS NOT NULL AND assignedToUserId != :actorId AND status != 'CLOSED') OR
+            (:includeClosed = 1 AND status = 'CLOSED')
+        )
+        AND (:status IS NULL OR status = :status)
+        AND (:customerId IS NULL OR customerId = :customerId)
+        AND (:useStatuses = 0 OR status IN (:statuses))
         ORDER BY updatedAt DESC
         LIMIT :limit
         """,
     )
     fun observeFiltered(
-        assignedToUserId: String? = null,
+        actorId: String,
+        includeMe: Boolean = false,
+        includeUnassigned: Boolean = false,
+        includeOthers: Boolean = false,
+        includeClosed: Boolean = false,
         status: OrderStatus? = null,
         customerId: String? = null,
-        unassignedOnly: Boolean = false,
-        assignedOnly: Boolean = false,
-        isClosed: Boolean? = null,
+        useStatuses: Boolean = false,
+        statuses: List<OrderStatus> = emptyList(),
         limit: Int = 100,
     ): Flow<List<RepairOrderEntity>>
 
@@ -74,23 +80,29 @@ interface RepairOrderDao {
             (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND UPPER(m.mediaType) = 'FINAL_PHOTO') AS finalPhotosCount
         FROM repair_orders o
         LEFT JOIN customers c ON o.customerId = c.id
-        WHERE (:assignedToUserId IS NULL OR o.assignedToUserId = :assignedToUserId)
-            AND (:status IS NULL OR o.status = :status)
-            AND (:customerId IS NULL OR o.customerId = :customerId)
-            AND (:unassignedOnly = 0 OR o.assignedToUserId IS NULL)
-            AND (:assignedOnly = 0 OR o.assignedToUserId IS NOT NULL)
-            AND (:isClosed IS NULL OR (:isClosed = 1 AND o.status = 'CLOSED') OR (:isClosed = 0 AND o.status != 'CLOSED'))
+        WHERE (
+            (:includeMe = 1 AND o.assignedToUserId = :actorId AND o.status != 'CLOSED') OR
+            (:includeUnassigned = 1 AND o.assignedToUserId IS NULL AND o.status != 'CLOSED') OR
+            (:includeOthers = 1 AND o.assignedToUserId IS NOT NULL AND o.assignedToUserId != :actorId AND o.status != 'CLOSED') OR
+            (:includeClosed = 1 AND o.status = 'CLOSED')
+        )
+        AND (:status IS NULL OR o.status = :status)
+        AND (:customerId IS NULL OR o.customerId = :customerId)
+        AND (:useStatuses = 0 OR o.status IN (:statuses))
         ORDER BY o.updatedAt DESC
         LIMIT :limit
         """,
     )
     fun observeOrderListProjection(
-        assignedToUserId: String? = null,
+        actorId: String,
+        includeMe: Boolean = false,
+        includeUnassigned: Boolean = false,
+        includeOthers: Boolean = false,
+        includeClosed: Boolean = false,
         status: OrderStatus? = null,
         customerId: String? = null,
-        unassignedOnly: Boolean = false,
-        assignedOnly: Boolean = false,
-        isClosed: Boolean? = null,
+        useStatuses: Boolean = false,
+        statuses: List<OrderStatus> = emptyList(),
         limit: Int = 100,
     ): Flow<List<OrderListItemProjection>>
 
@@ -112,27 +124,33 @@ interface RepairOrderDao {
             (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND UPPER(m.mediaType) = 'FINAL_PHOTO') AS finalPhotosCount
         FROM repair_orders o
         LEFT JOIN customers c ON o.customerId = c.id
-        WHERE (:query = ''
+        WHERE ((:query = ''
            OR o.rowid IN (SELECT rowid FROM repair_orders_fts WHERE repair_orders_fts MATCH :query || '*')
-           OR c.rowid IN (SELECT rowid FROM customers_fts WHERE customers_fts MATCH :query || '*'))
-           AND (:assignedToUserId IS NULL OR o.assignedToUserId = :assignedToUserId)
+           OR c.rowid IN (SELECT rowid FROM customers_fts WHERE customers_fts MATCH :query || '*')))
+           AND (
+               (:includeMe = 1 AND o.assignedToUserId = :actorId AND o.status != 'CLOSED') OR
+               (:includeUnassigned = 1 AND o.assignedToUserId IS NULL AND o.status != 'CLOSED') OR
+               (:includeOthers = 1 AND o.assignedToUserId IS NOT NULL AND o.assignedToUserId != :actorId AND o.status != 'CLOSED') OR
+               (:includeClosed = 1 AND o.status = 'CLOSED')
+           )
            AND (:status IS NULL OR o.status = :status)
            AND (:customerId IS NULL OR o.customerId = :customerId)
-           AND (:unassignedOnly = 0 OR o.assignedToUserId IS NULL)
-           AND (:assignedOnly = 0 OR o.assignedToUserId IS NOT NULL)
-           AND (:isClosed IS NULL OR (:isClosed = 1 AND o.status = 'CLOSED') OR (:isClosed = 0 AND o.status != 'CLOSED'))
+           AND (:useStatuses = 0 OR o.status IN (:statuses))
         ORDER BY o.updatedAt DESC
         LIMIT :limit
         """,
     )
     fun search(
         query: String,
-        assignedToUserId: String? = null,
+        actorId: String,
+        includeMe: Boolean = false,
+        includeUnassigned: Boolean = false,
+        includeOthers: Boolean = false,
+        includeClosed: Boolean = false,
         status: OrderStatus? = null,
         customerId: String? = null,
-        unassignedOnly: Boolean = false,
-        assignedOnly: Boolean = false,
-        isClosed: Boolean? = null,
+        useStatuses: Boolean = false,
+        statuses: List<OrderStatus> = emptyList(),
         limit: Int = 100,
     ): Flow<List<OrderListItemProjection>>
 }

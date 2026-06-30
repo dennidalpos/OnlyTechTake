@@ -62,6 +62,7 @@ class CustomersViewModel(
         )
 
     private val _isFormDirty = MutableStateFlow(value = false)
+    val isFormDirty = _isFormDirty.asStateFlow()
 
     val currentUser = authRepository.currentUser
 
@@ -130,7 +131,15 @@ class CustomersViewModel(
                 val filter =
                     OrderFilter(
                         customerId = customerId,
-                        mode = if (closed) OrderFilterMode.CLOSED else OrderFilterMode.ALL,
+                        modes = if (closed) {
+                            setOf(OrderFilterMode.CLOSED)
+                        } else {
+                            setOf(
+                                OrderFilterMode.MINE,
+                                OrderFilterMode.OPEN_UNASSIGNED,
+                                OrderFilterMode.OTHERS_ASSIGNED
+                            )
+                        },
                     )
                 orderWorkflowRepository.observeOrderList(user, filter)
             }

@@ -127,21 +127,32 @@ private fun CustomerInput.isValidForIntake(): Boolean {
 }
 
 enum class OrderFilterMode {
-    ALL,
     MINE,
     OPEN_UNASSIGNED,
+    OTHERS_ASSIGNED,
     CLOSED,
-    IN_PROGRESS,
 }
 
 data class OrderFilter(
-    val mode: OrderFilterMode = OrderFilterMode.ALL,
-    val showMineOnly: Boolean = false,
+    val modes: Set<OrderFilterMode> = setOf(
+        OrderFilterMode.MINE,
+        OrderFilterMode.OPEN_UNASSIGNED,
+        OrderFilterMode.OTHERS_ASSIGNED
+    ),
+    val query: String = "",
     val status: OrderStatus? = null,
     val statuses: Set<OrderStatus> = emptySet(),
     val customerId: String? = null,
-    val query: String = "",
-)
+) {
+    fun hasActiveFilter(): Boolean {
+        val defaultModes = setOf(
+            OrderFilterMode.MINE,
+            OrderFilterMode.OPEN_UNASSIGNED,
+            OrderFilterMode.OTHERS_ASSIGNED
+        )
+        return modes != defaultModes || query.isNotBlank() || customerId != null || status != null || statuses.isNotEmpty()
+    }
+}
 
 @Immutable
 data class OrderAttachmentCounts(

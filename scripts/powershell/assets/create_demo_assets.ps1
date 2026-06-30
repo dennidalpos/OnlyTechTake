@@ -148,8 +148,30 @@ try {
         $items += Get-ChildItem -Path $src -Filter "*.jpg"
 
         foreach ($item in $items) {
-            $targetFile = Join-Path $OutputRoot $item.Name
-            Copy-Item -Path $item.FullName -Destination $targetFile -Force
+            # Se il caso ha degli output specifici, processiamo le conversioni
+            if ($case.outputs -and @($case.outputs).Count -gt 0) {
+                foreach ($out in $case.outputs) {
+                    $subDir = if ($out.subDir) { Join-Path $OutputRoot $out.subDir } else { $OutputRoot }
+                    if (-not (Test-Path $subDir)) { New-Item -ItemType Directory -Path $subDir -Force | Out-Null }
+
+                    $targetFile = Join-Path $subDir $item.Name
+
+                    if ($item.Extension -eq ".png" -and $out.variant) {
+                        switch ($out.variant) {
+                            "vertical"  { Convert-ToStoryPng -SourcePath $item.FullName -TargetPath $targetFile }
+                            "square"    { Convert-ToSquarePng -SourcePath $item.FullName -TargetPath $targetFile }
+                            "landscape" { Convert-ToLandscapePng -SourcePath $item.FullName -TargetPath $targetFile }
+                            default     { Copy-Item -Path $item.FullName -Destination $targetFile -Force }
+                        }
+                    } else {
+                        Copy-Item -Path $item.FullName -Destination $targetFile -Force
+                    }
+                }
+            } else {
+                # Fallback: copia diretta nella root dell'output
+                $targetFile = Join-Path $OutputRoot $item.Name
+                Copy-Item -Path $item.FullName -Destination $targetFile -Force
+            }
         }
     }
 
@@ -171,13 +193,26 @@ try {
         }
         $fullMarketingPath = Join-Path $root $marketingPath
         if (-not (Test-Path $fullMarketingPath)) { New-Item -ItemType Directory -Path $fullMarketingPath -Force | Out-Null }
-        Copy-Item -Path "$OutputRoot\*.png" -Destination $fullMarketingPath -Force
+
+        # Copia ricorsiva per includere eventuali sottocartelle definite nei profili (es. stories, screenshots)
+        # ma appiattiamo se la destinazione è specifica.
+        if (Test-Path $OutputRoot) {
+            Get-ChildItem -Path $OutputRoot -Recurse -File | ForEach-Object {
+                Copy-Item -Path $_.FullName -Destination $fullMarketingPath -Force
+            }
+        }
 
         # 2. Landing Page (solo per profili principali)
         if ($AssetProfile -eq "store-pro") {
             $landingPath = Join-Path $root "landing/assets/screenshots"
             if (-not (Test-Path $landingPath)) { New-Item -ItemType Directory -Path $landingPath -Force | Out-Null }
-            Copy-Item -Path "$OutputRoot\*.png" -Destination $landingPath -Force
+            # Per la landing prendiamo solo i file dalla cartella 'screenshots' se esiste, altrimenti root
+            $landingSrc = Join-Path $OutputRoot "screenshots"
+            if (-not (Test-Path $landingSrc)) { $landingSrc = $OutputRoot }
+
+            Get-ChildItem -Path $landingSrc -Filter "*.png" | ForEach-Object {
+                Copy-Item -Path $_.FullName -Destination $landingPath -Force
+            }
             Write-Host "Landing page aggiornata con nuovi screenshot." -ForegroundColor Gray
         }
     }

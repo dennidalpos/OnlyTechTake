@@ -50,7 +50,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
+import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppBadge
@@ -160,8 +162,8 @@ fun ColumnScope.TemplatesSettings(
                         shape = RepairAppShapes.button,
                         modifier =
                             Modifier
-                                .height(56.dp)
-                                .width(56.dp)
+                                .height(RepairAppSizes.buttonDefault)
+                                .width(RepairAppSizes.buttonDefault)
                                 .testTag(RepairAppTestTags.ConfigTemplateNewButton),
                         tonalElevation = 0.dp,
                     ) {
@@ -170,7 +172,7 @@ fun ColumnScope.TemplatesSettings(
                                 imageVector = Icons.Default.Add,
                                 contentDescription = stringResource(R.string.config_template_new),
                                 tint = MaterialTheme.colorScheme.onPrimary,
-                                modifier = Modifier.size(32.dp),
+                                modifier = Modifier.size(RepairAppIconSizes.standard),
                             )
                         }
                     }

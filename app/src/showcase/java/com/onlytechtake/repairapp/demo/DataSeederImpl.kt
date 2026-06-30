@@ -444,16 +444,24 @@ object ShowcaseDataSeeder {
                         firstName = null,
                         lastName = null,
                         companyName = businessName,
-                        vatNumber = if (i <= 5) context.getString(
-                            R.string.showcase_vat_format,
-                            i
-                        ) else context.getString(R.string.showcase_vat_fictitious),
+                        vatNumber =
+                            if (i <= 5) {
+                                context.getString(
+                                    R.string.showcase_vat_format,
+                                    i,
+                                )
+                            } else {
+                                context.getString(R.string.showcase_vat_fictitious)
+                            },
                         taxCode =
                             if (i <= 5) {
                                 context.getString(
                                     R.string.showcase_tax_code_prefix,
-                                ) + context.getString(R.string.showcase_tax_code_business_prefix) + i + UUID.randomUUID()
-                                    .toString().take(5)
+                                ) + context.getString(R.string.showcase_tax_code_business_prefix) + i +
+                                    UUID
+                                        .randomUUID()
+                                        .toString()
+                                        .take(5)
                             } else {
                                 context.getString(R.string.showcase_fictitious_business_tax_code)
                             },

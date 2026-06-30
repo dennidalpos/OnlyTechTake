@@ -52,6 +52,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
+import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppButton
@@ -214,8 +215,7 @@ private fun OrdersListContent(
             AppTextField(
                 modifier =
                     Modifier
-                        .weight(1f)
-                        .height(56.dp),
+                        .weight(1f),
                 value = orderFilter.query,
                 onValueChange = { viewModel.setFilter(orderFilter.copy(query = it)) },
                 label = stringResource(R.string.label_search_customer),
@@ -241,8 +241,8 @@ private fun OrdersListContent(
                 shape = RepairAppShapes.button,
                 modifier =
                     Modifier
-                        .height(56.dp)
-                        .width(56.dp)
+                        .height(RepairAppSizes.buttonDefault)
+                        .width(RepairAppSizes.buttonDefault)
                         .testTag(RepairAppTestTags.HomeNewOrderButton),
                 tonalElevation = 0.dp,
             ) {
@@ -251,7 +251,7 @@ private fun OrdersListContent(
                         imageVector = Icons.Default.Add,
                         contentDescription = stringResource(R.string.home_new_order),
                         tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(RepairAppIconSizes.medium),
+                        modifier = Modifier.size(RepairAppIconSizes.standard),
                     )
                 }
             }
@@ -436,47 +436,20 @@ private fun OrdersListContent(
 
 @Composable
 private fun ActiveFilterInfo(filter: OrderFilter) {
-    val modeText =
-        when (filter.mode) {
-            OrderFilterMode.ALL -> {
-                null
-            }
-
-            OrderFilterMode.MINE -> {
-                stringResource(R.string.orders_filter_mine)
-            }
-
-            OrderFilterMode.OPEN_UNASSIGNED -> {
-                stringResource(
-                    R.string.orders_filter_open_unassigned,
-                )
-            }
-
-            OrderFilterMode.CLOSED -> {
-                stringResource(R.string.orders_filter_closed_discarded)
-            }
-
-            OrderFilterMode.IN_PROGRESS -> {
-                stringResource(
-                    R.string.orders_filter_in_progress_assigned,
-                )
+    val modeTexts =
+        filter.modes.map { mode ->
+            when (mode) {
+                OrderFilterMode.MINE -> stringResource(R.string.orders_filter_mine)
+                OrderFilterMode.OPEN_UNASSIGNED -> stringResource(R.string.orders_filter_open_unassigned)
+                OrderFilterMode.OTHERS_ASSIGNED -> stringResource(R.string.orders_filter_in_progress_assigned)
+                OrderFilterMode.CLOSED -> stringResource(R.string.orders_filter_closed_discarded)
             }
         }
 
     val filterText =
         listOfNotNull(
-            modeText?.lowercase(),
+            modeTexts.takeIf { it.isNotEmpty() }?.joinToString(", ") { it.lowercase() },
             filter.status?.let { stringResource(it.labelRes) },
-            filter.statuses
-                .takeIf { it.isNotEmpty() }
-                ?.let { statuses ->
-                    buildString {
-                        statuses.forEachIndexed { index, it ->
-                            if (index > 0) append(", ")
-                            append(stringResource(it.labelRes))
-                        }
-                    }
-                },
         ).joinToString(", ")
 
     if (filterText.isNotBlank()) {
@@ -493,31 +466,36 @@ private fun OrderFilterBar(
     filter: OrderFilter,
     onFilter: (OrderFilter) -> Unit,
 ) {
+    val toggleMode = { mode: OrderFilterMode ->
+        val newModes =
+            if (mode in filter.modes) {
+                filter.modes - mode
+            } else {
+                filter.modes + mode
+            }
+        onFilter(filter.copy(modes = newModes))
+    }
+
     Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
         FilterToggleButton(
-            text = stringResource(R.string.orders_filter_all),
-            selected = filter.mode == OrderFilterMode.ALL,
-        ) { onFilter(OrderFilter(mode = OrderFilterMode.ALL)) }
-
-        FilterToggleButton(
             text = stringResource(R.string.orders_filter_mine),
-            selected = filter.mode == OrderFilterMode.MINE,
-        ) { onFilter(filter.copy(mode = OrderFilterMode.MINE)) }
+            selected = OrderFilterMode.MINE in filter.modes,
+        ) { toggleMode(OrderFilterMode.MINE) }
 
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_open_unassigned),
-            selected = filter.mode == OrderFilterMode.OPEN_UNASSIGNED,
-        ) { onFilter(filter.copy(mode = OrderFilterMode.OPEN_UNASSIGNED)) }
+            selected = OrderFilterMode.OPEN_UNASSIGNED in filter.modes,
+        ) { toggleMode(OrderFilterMode.OPEN_UNASSIGNED) }
 
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_in_progress_assigned),
-            selected = filter.mode == OrderFilterMode.IN_PROGRESS,
-        ) { onFilter(filter.copy(mode = OrderFilterMode.IN_PROGRESS)) }
+            selected = OrderFilterMode.OTHERS_ASSIGNED in filter.modes,
+        ) { toggleMode(OrderFilterMode.OTHERS_ASSIGNED) }
 
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_closed_discarded),
-            selected = filter.mode == OrderFilterMode.CLOSED,
-        ) { onFilter(filter.copy(mode = OrderFilterMode.CLOSED)) }
+            selected = OrderFilterMode.CLOSED in filter.modes,
+        ) { toggleMode(OrderFilterMode.CLOSED) }
     }
 }
 
@@ -537,5 +515,4 @@ private fun FilterToggleButton(
     )
 }
 
-private fun OrderFilter.hasActiveFilter(): Boolean =
-    (mode != OrderFilterMode.ALL) || query.isNotBlank()
+// Use hasActiveFilter from OrderFilter domain model

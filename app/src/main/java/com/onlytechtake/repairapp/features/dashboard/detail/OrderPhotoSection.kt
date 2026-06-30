@@ -145,19 +145,23 @@ fun OrderPhotoSection(
                 leadingIcon = Icons.Default.PhotoCamera,
                 onClick = { showCameraMode = CameraCaptureMode.PHOTO },
             )
-            if (detail.assignedUser?.permissions?.contains(com.onlytechtake.repairapp.data.local.entities.UserPermission.RECORD_VIDEO) == true) {
-                AppButton(
-                    modifier =
-                        Modifier
-                            .weight(1f)
-                            .testTag(RepairAppTestTags.IntakeMediaTakeVideoButton),
-                    text = stringResource(R.string.intake_media_take_video),
-                    variant = AppButtonVariant.Secondary,
-                    size = AppButtonSize.Compact,
-                    leadingIcon = Icons.Default.Videocam,
-                    onClick = { showCameraMode = CameraCaptureMode.VIDEO },
-                )
-            }
+
+            AppButton(
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .testTag(RepairAppTestTags.IntakeMediaTakeVideoButton),
+                text = stringResource(R.string.intake_media_take_video),
+                variant = AppButtonVariant.Secondary,
+                size = AppButtonSize.Compact,
+                leadingIcon = Icons.Default.Videocam,
+                enabled =
+                    detail.assignedUser?.permissions?.contains(
+                        com.onlytechtake.repairapp.data.local.entities.UserPermission.RECORD_VIDEO,
+                    ) == true,
+                onClick = { showCameraMode = CameraCaptureMode.VIDEO },
+            )
+
             AppButton(
                 modifier = Modifier.weight(1f),
                 text = stringResource(R.string.intake_media_attach_file),
@@ -181,6 +185,10 @@ fun OrderPhotoSection(
                     orderId = detail.order.id,
                     orderNumber = detail.order.orderNumber,
                     initialMode = mode,
+                    canRecordVideo =
+                        detail.assignedUser?.permissions?.contains(
+                            com.onlytechtake.repairapp.data.local.entities.UserPermission.RECORD_VIDEO,
+                        ) == true,
                     createPhotoFile = { _, number -> viewModel.createPhotoFile(number) },
                     createVideoFile = { number -> viewModel.createVideoFile(number) },
                     onMediaCaptured = { file, capturedMode ->

@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
+import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppButton
@@ -289,10 +290,7 @@ fun QuickActions(
                             horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
                         ) {
                             AppTextField(
-                                modifier =
-                                    Modifier
-                                        .weight(1f)
-                                        .height(56.dp),
+                                modifier = Modifier.weight(1f),
                                 value = customerSearchQuery,
                                 onValueChange = { query ->
                                     updateDraft { draftState ->
@@ -345,8 +343,8 @@ fun QuickActions(
                                     shape = RepairAppShapes.button,
                                     modifier =
                                         Modifier
-                                            .height(56.dp)
-                                            .width(56.dp)
+                                            .height(RepairAppSizes.buttonDefault)
+                                            .width(RepairAppSizes.buttonDefault)
                                             .testTag(RepairAppTestTags.NewOrderInsertCustomerButton),
                                     tonalElevation = 0.dp,
                                 ) {
@@ -355,7 +353,7 @@ fun QuickActions(
                                             imageVector = Icons.Default.Add,
                                             contentDescription = stringResource(R.string.intake_insert_new_customer),
                                             tint = MaterialTheme.colorScheme.onPrimary,
-                                            modifier = Modifier.size(RepairAppIconSizes.medium),
+                                            modifier = Modifier.size(RepairAppIconSizes.standard),
                                         )
                                     }
                                 }

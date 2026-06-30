@@ -8,7 +8,6 @@ import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
 import com.onlytechtake.repairapp.data.local.dao.SignatureDao
 import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
 import com.onlytechtake.repairapp.data.local.dao.UserDao
-import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
@@ -35,52 +34,21 @@ internal class OrderWorkflowQueries(
     private val signatureDao: SignatureDao,
     private val messageLogDao: MessageLogDao,
 ) {
-    private fun calculateIsClosed(filter: OrderFilter): Boolean? =
-        when (filter.mode) {
-            OrderFilterMode.CLOSED -> {
-                true
-            }
-
-            OrderFilterMode.OPEN_UNASSIGNED,
-            OrderFilterMode.IN_PROGRESS,
-                -> {
-                false
-            }
-
-            else -> {
-                if (filter.statuses.isNotEmpty()) {
-                    val hasClosed = filter.statuses.contains(OrderStatus.CLOSED)
-                    if ((hasClosed) && (filter.statuses.size == 1)) {
-                        true
-                    } else if (!hasClosed) {
-                        false
-                    } else {
-                        null
-                    }
-                } else {
-                    null
-                }
-            }
-        }
-
     fun observeOrders(
         actor: AuthenticatedUser,
         filter: OrderFilter,
     ): Flow<List<RepairOrderEntity>> {
-        val assignedToUserId =
-            if ((filter.mode == OrderFilterMode.MINE) || (filter.showMineOnly)) actor.id else null
-        val unassignedOnly = filter.mode == OrderFilterMode.OPEN_UNASSIGNED
-        val assignedOnly = filter.mode == OrderFilterMode.IN_PROGRESS
-        val isClosed = calculateIsClosed(filter)
-
         return repairOrderDao
             .observeFiltered(
-                assignedToUserId = assignedToUserId,
+                actorId = actor.id,
+                includeMe = OrderFilterMode.MINE in filter.modes,
+                includeUnassigned = OrderFilterMode.OPEN_UNASSIGNED in filter.modes,
+                includeOthers = OrderFilterMode.OTHERS_ASSIGNED in filter.modes,
+                includeClosed = OrderFilterMode.CLOSED in filter.modes,
                 status = filter.status,
                 customerId = filter.customerId,
-                unassignedOnly = unassignedOnly,
-                assignedOnly = assignedOnly,
-                isClosed = isClosed,
+                useStatuses = filter.statuses.isNotEmpty(),
+                statuses = filter.statuses.toList(),
             ).distinctUntilChanged()
     }
 
@@ -90,21 +58,18 @@ internal class OrderWorkflowQueries(
         actor: AuthenticatedUser,
         filter: OrderFilter,
     ): Flow<List<OrderListItem>> {
-        val assignedToUserId =
-            if ((filter.mode == OrderFilterMode.MINE) || (filter.showMineOnly)) actor.id else null
-        val unassignedOnly = filter.mode == OrderFilterMode.OPEN_UNASSIGNED
-        val assignedOnly = filter.mode == OrderFilterMode.IN_PROGRESS
-        val isClosed = calculateIsClosed(filter)
-
         return repairOrderDao
             .search(
                 query = filter.query,
-                assignedToUserId = assignedToUserId,
+                actorId = actor.id,
+                includeMe = OrderFilterMode.MINE in filter.modes,
+                includeUnassigned = OrderFilterMode.OPEN_UNASSIGNED in filter.modes,
+                includeOthers = OrderFilterMode.OTHERS_ASSIGNED in filter.modes,
+                includeClosed = OrderFilterMode.CLOSED in filter.modes,
                 status = filter.status,
                 customerId = filter.customerId,
-                unassignedOnly = unassignedOnly,
-                assignedOnly = assignedOnly,
-                isClosed = isClosed,
+                useStatuses = filter.statuses.isNotEmpty(),
+                statuses = filter.statuses.toList(),
             ).distinctUntilChanged()
             .map { list ->
                 list.map { projection ->
@@ -128,20 +93,17 @@ internal class OrderWorkflowQueries(
         actor: AuthenticatedUser,
         filter: OrderFilter,
     ): Flow<List<OrderListItem>> {
-        val assignedToUserId =
-            if ((filter.mode == OrderFilterMode.MINE) || (filter.showMineOnly)) actor.id else null
-        val unassignedOnly = filter.mode == OrderFilterMode.OPEN_UNASSIGNED
-        val assignedOnly = filter.mode == OrderFilterMode.IN_PROGRESS
-        val isClosed = calculateIsClosed(filter)
-
         return repairOrderDao
             .observeOrderListProjection(
-                assignedToUserId = assignedToUserId,
+                actorId = actor.id,
+                includeMe = OrderFilterMode.MINE in filter.modes,
+                includeUnassigned = OrderFilterMode.OPEN_UNASSIGNED in filter.modes,
+                includeOthers = OrderFilterMode.OTHERS_ASSIGNED in filter.modes,
+                includeClosed = OrderFilterMode.CLOSED in filter.modes,
                 status = filter.status,
                 customerId = filter.customerId,
-                unassignedOnly = unassignedOnly,
-                assignedOnly = assignedOnly,
-                isClosed = isClosed,
+                useStatuses = filter.statuses.isNotEmpty(),
+                statuses = filter.statuses.toList(),
             ).distinctUntilChanged()
             .map { list ->
                 list.map { projection ->

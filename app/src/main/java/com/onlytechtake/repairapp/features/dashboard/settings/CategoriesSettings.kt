@@ -43,7 +43,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
+import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppButton
@@ -187,8 +189,8 @@ fun ColumnScope.CategoriesSettings(
                             shape = RepairAppShapes.button,
                             modifier =
                                 Modifier
-                                    .height(56.dp)
-                                    .width(56.dp)
+                                    .height(RepairAppSizes.buttonDefault)
+                                    .width(RepairAppSizes.buttonDefault)
                                     .testTag(RepairAppTestTags.ConfigCategoryNewButton),
                             tonalElevation = 0.dp,
                         ) {
@@ -202,7 +204,7 @@ fun ColumnScope.CategoriesSettings(
                                             stringResource(R.string.config_category_new_sub)
                                         },
                                     tint = MaterialTheme.colorScheme.onPrimary,
-                                    modifier = Modifier.size(32.dp),
+                                    modifier = Modifier.size(RepairAppIconSizes.standard),
                                 )
                             }
                         }

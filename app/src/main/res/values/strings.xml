@@ -363,12 +363,12 @@
 
     <string name="home_metric_operators">Operators</string>
     <string name="home_metric_active">Active</string>
-    <string name="queue_open">Acceptance</string>
-    <string name="queue_processing">In Charge</string>
-    <string name="queue_diagnosis">Diagnosis</string>
-    <string name="queue_result">Outcome</string>
-    <string name="queue_repair">Repair</string>
-    <string name="queue_ready">Pickup</string>
+    <string name="queue_open">1. Acceptance</string>
+    <string name="queue_processing">2. In Charge</string>
+    <string name="queue_diagnosis">3. Diagnosis</string>
+    <string name="queue_result">4. Outcome</string>
+    <string name="queue_repair">5. Repair</string>
+    <string name="queue_ready">6. Pickup</string>
     <string name="home_new_order">New service order</string>
     <string name="home_empty_queue">No service orders in this queue.</string>
     <string name="home_empty_queues_title">No active queues</string>

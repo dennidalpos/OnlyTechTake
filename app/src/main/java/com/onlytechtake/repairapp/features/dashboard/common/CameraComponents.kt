@@ -50,6 +50,7 @@ import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppButton
+import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.core.media.normalizeCameraTargetRotation
 import java.io.File
@@ -61,6 +62,7 @@ fun CameraCapturePreview(
     orderId: String,
     orderNumber: String,
     initialMode: CameraCaptureMode = CameraCaptureMode.PHOTO,
+    canRecordVideo: Boolean = true,
     createPhotoFile: (String, String) -> Result<File>,
     createVideoFile: (String) -> Result<File>,
     onMediaCaptured: (File, CameraCaptureMode) -> Unit,
@@ -211,102 +213,113 @@ fun CameraCapturePreview(
             )
         }
 
-        if (!isRecording) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.actionGap),
-            ) {
-                AppButton(
-                    modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.label_media_photo),
-                    variant = if (captureMode == CameraCaptureMode.PHOTO) AppButtonVariant.Primary else AppButtonVariant.Ghost,
-                    onClick = { captureMode = CameraCaptureMode.PHOTO },
-                )
-                AppButton(
-                    modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.label_media_video),
-                    variant = if (captureMode == CameraCaptureMode.VIDEO) AppButtonVariant.Primary else AppButtonVariant.Ghost,
-                    onClick = { captureMode = CameraCaptureMode.VIDEO },
-                )
-            }
-        }
-
-        if (captureMode == CameraCaptureMode.PHOTO) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.actionGap),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            // Selettore/Indicatore Foto
             AppButton(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .testTag(RepairAppTestTags.IntakeMediaCapturePhotoButton),
-                text = stringResource(R.string.camera_capture_photo),
+                modifier = Modifier.weight(1f),
+                text = stringResource(R.string.label_media_photo),
                 leadingIcon = Icons.Default.PhotoCamera,
-                onClick = {
-                    imageCapture.targetRotation = cameraTargetRotation(context, previewView)
-                    createPhotoFile(orderId, orderNumber).fold(
-                        onSuccess = { file ->
-                            val outputOptions = ImageCapture.OutputFileOptions.Builder(file).build()
-                            imageCapture.takePicture(
-                                outputOptions,
-                                executor,
-                                object : ImageCapture.OnImageSavedCallback {
-                                    override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                                        onMediaCaptured(file, CameraCaptureMode.PHOTO)
-                                    }
-
-                                    override fun onError(exception: ImageCaptureException) {
-                                        file.delete()
-                                        onError(exception.message ?: cameraCaptureFailedMsg)
-                                    }
-                                },
-                            )
-                        },
-                    ) { onError(it.message ?: cameraFileErrorMsg) }
-                },
+                variant = if (captureMode == CameraCaptureMode.PHOTO) AppButtonVariant.Primary else AppButtonVariant.Ghost,
+                size = AppButtonSize.Compact,
+                enabled = !isRecording,
+                onClick = { captureMode = CameraCaptureMode.PHOTO },
             )
-        } else {
-            AppButton(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .testTag(if (isRecording) RepairAppTestTags.IntakeMediaStopVideoButton else RepairAppTestTags.IntakeMediaCaptureVideoButton),
-                text =
-                    if (isRecording) {
-                        stringResource(R.string.camera_stop_video)
-                    } else {
-                        stringResource(
-                            R.string.camera_capture_video,
-                        )
-                    },
-                variant = if (isRecording) AppButtonVariant.Danger else AppButtonVariant.Primary,
-                leadingIcon = if (isRecording) Icons.Default.Stop else Icons.Default.Videocam,
-                onClick = {
-                    if (isRecording) {
-                        recording?.stop()
-                        recording = null
-                        isRecording = false
-                    } else {
-                        createVideoFile(orderNumber).fold(
+
+            // Pulsante di Acquisizione (Centrale)
+            if (captureMode == CameraCaptureMode.PHOTO) {
+                AppButton(
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .testTag(RepairAppTestTags.IntakeMediaCapturePhotoButton),
+                    text = stringResource(R.string.camera_capture_photo),
+                    leadingIcon = Icons.Default.PhotoCamera,
+                    size = AppButtonSize.Compact,
+                    onClick = {
+                        imageCapture.targetRotation = cameraTargetRotation(context, previewView)
+                        createPhotoFile(orderId, orderNumber).fold(
                             onSuccess = { file ->
-                                val outputOptions = FileOutputOptions.Builder(file).build()
-                                recording =
-                                    videoCapture.output
-                                        .prepareRecording(context, outputOptions)
-                                        .withAudioEnabled()
-                                        .start(executor) { event ->
-                                            if (event !is VideoRecordEvent.Finalize) return@start
-                                            if (event.hasError()) {
-                                                file.delete()
-                                                onError(
-                                                    event.cause?.message ?: cameraCaptureFailedMsg
-                                                )
-                                            } else {
-                                                onMediaCaptured(file, CameraCaptureMode.VIDEO)
-                                            }
+                                val outputOptions =
+                                    ImageCapture.OutputFileOptions.Builder(file).build()
+                                imageCapture.takePicture(
+                                    outputOptions,
+                                    executor,
+                                    object : ImageCapture.OnImageSavedCallback {
+                                        override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                                            onMediaCaptured(file, CameraCaptureMode.PHOTO)
                                         }
-                                isRecording = true
+
+                                        override fun onError(exception: ImageCaptureException) {
+                                            file.delete()
+                                            onError(exception.message ?: cameraCaptureFailedMsg)
+                                        }
+                                    },
+                                )
                             },
                         ) { onError(it.message ?: cameraFileErrorMsg) }
-                    }
-                },
+                    },
+                )
+            } else {
+                AppButton(
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .testTag(if (isRecording) RepairAppTestTags.IntakeMediaStopVideoButton else RepairAppTestTags.IntakeMediaCaptureVideoButton),
+                    text =
+                        if (isRecording) {
+                            stringResource(R.string.camera_stop_video)
+                        } else {
+                            stringResource(R.string.camera_capture_video)
+                        },
+                    variant = if (isRecording) AppButtonVariant.Danger else AppButtonVariant.Primary,
+                    leadingIcon = if (isRecording) Icons.Default.Stop else Icons.Default.Videocam,
+                    size = AppButtonSize.Compact,
+                    onClick = {
+                        if (isRecording) {
+                            recording?.stop()
+                            recording = null
+                            isRecording = false
+                        } else {
+                            createVideoFile(orderNumber).fold(
+                                onSuccess = { file ->
+                                    val outputOptions = FileOutputOptions.Builder(file).build()
+                                    recording =
+                                        videoCapture.output
+                                            .prepareRecording(context, outputOptions)
+                                            .withAudioEnabled()
+                                            .start(executor) { event ->
+                                                if (event !is VideoRecordEvent.Finalize) return@start
+                                                if (event.hasError()) {
+                                                    file.delete()
+                                                    onError(
+                                                        event.cause?.message
+                                                            ?: cameraCaptureFailedMsg,
+                                                    )
+                                                } else {
+                                                    onMediaCaptured(file, CameraCaptureMode.VIDEO)
+                                                }
+                                            }
+                                    isRecording = true
+                                },
+                            ) { onError(it.message ?: cameraFileErrorMsg) }
+                        }
+                    },
+                )
+            }
+
+            // Selettore/Indicatore Video
+            AppButton(
+                modifier = Modifier.weight(1f),
+                text = stringResource(R.string.label_media_video),
+                leadingIcon = Icons.Default.Videocam,
+                variant = if (captureMode == CameraCaptureMode.VIDEO) AppButtonVariant.Primary else AppButtonVariant.Ghost,
+                size = AppButtonSize.Compact,
+                enabled = !isRecording && canRecordVideo,
+                onClick = { captureMode = CameraCaptureMode.VIDEO },
             )
         }
     }

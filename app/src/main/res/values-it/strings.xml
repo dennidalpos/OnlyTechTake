@@ -365,12 +365,12 @@
 
     <string name="home_metric_operators">Operatori</string>
     <string name="home_metric_active">Attive</string>
-    <string name="queue_open">Accettazione</string>
-    <string name="queue_processing">Presa in carico</string>
-    <string name="queue_diagnosis">Diagnosi</string>
-    <string name="queue_result">Esito</string>
-    <string name="queue_repair">Intervento</string>
-    <string name="queue_ready">Ritiro</string>
+    <string name="queue_open">1. Accettazione</string>
+    <string name="queue_processing">2. Presa in carico</string>
+    <string name="queue_diagnosis">3. Diagnosi</string>
+    <string name="queue_result">4. Esito</string>
+    <string name="queue_repair">5. Intervento</string>
+    <string name="queue_ready">6. Ritiro</string>
     <string name="home_new_order">Nuova commessa</string>
     <string name="home_empty_queue">Nessuna commessa in questa coda.</string>
     <string name="home_empty_queues_title">Nessuna coda attiva</string>
