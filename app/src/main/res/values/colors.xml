@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- OnlyTechTake Brand Teal for Launcher Background -->
-    <color name="ic_launcher_background">#006A6A</color>
+    <!-- OnlyTechTake brand launcher background -->
+    <color name="ic_launcher_background">#0D0D0D</color>
     <!-- Background colors for theme coherence -->
-    <color name="background_dark">#191C1C</color>
+    <color name="background_dark">#0D0D0D</color>
     <!-- Default to dark to avoid white flash, as the app is dark-first -->
     <color name="app_background">@color/background_dark</color>
 </resources>
