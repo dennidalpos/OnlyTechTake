@@ -6,10 +6,10 @@
     android:viewportHeight="24">
     <!-- OnlyTechTake One-color: Simplified master mark -->
     <group
-        android:translateX="2"
-        android:translateY="2"
         android:scaleX="0.83"
-        android:scaleY="0.83">
+        android:scaleY="0.83"
+        android:translateX="2"
+        android:translateY="2">
         <!-- Main Logo Silhouette -->
         <path
             android:fillColor="#000000"

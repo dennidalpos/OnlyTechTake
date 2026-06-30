@@ -9,10 +9,10 @@
         android:fillColor="#00B6B0"
         android:pathData="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2z" />
     <group
-        android:translateX="6"
-        android:translateY="6"
         android:scaleX="0.5"
-        android:scaleY="0.5">
+        android:scaleY="0.5"
+        android:translateX="6"
+        android:translateY="6">
         <!-- Wrench in White contrast -->
         <path
             android:fillColor="#FFFFFF"

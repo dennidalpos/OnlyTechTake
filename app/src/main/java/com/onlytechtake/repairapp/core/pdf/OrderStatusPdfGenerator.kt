@@ -157,7 +157,12 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
             canvas.drawBitmap(
                 logo,
                 null,
-                android.graphics.RectF(595f - margin - logoSize, y - 10f, 595f - margin, y - 10f + logoSize),
+                android.graphics.RectF(
+                    595f - margin - logoSize,
+                    y - 10f,
+                    595f - margin,
+                    y - 10f + logoSize
+                ),
                 null,
             )
             logo.recycle()
