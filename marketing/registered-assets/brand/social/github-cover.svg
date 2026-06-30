@@ -4,9 +4,38 @@
     <pattern id="dots" width="34" height="34" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="2" fill="#00B6B0" fill-opacity=".12"/></pattern>
   </defs>
   <rect width="1280" height="640" rx="42" fill="url(#bg)"/><rect width="1280" height="640" rx="42" fill="url(#dots)"/>
-  <g transform="translate(74 70) scale(1.25)"><path d="M22 34Q22 26 30 26H40M22 34V72Q22 80 30 80H38" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 38V53L41 62M33 71H44" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="32" r="5" fill="#FFFFFF"/><circle cx="42" cy="57" r="5" fill="#FFFFFF"/><path d="M68 26H82Q90 26 90 34V66Q90 74 82 74H78L84 85L70 74H66" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M72 42H84M72 52H82" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/><path d="M72 64L78 70L90 55" stroke="#FFB627" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M44 15C39 19 37 25 38 31C39 36 42 41 47 44V72L42 83H48L54 75L60 83H66L61 72V44C66 41 69 36 70 31C71 25 69 19 64 15L59 24H49L44 15Z" fill="#00B6B0"/><rect x="50" y="48" width="8" height="24" fill="#00B6B0"/><path d="M54 67V94M48 70V82L39 91M60 70V82L69 91" stroke="#00B6B0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="54" cy="91" r="5" fill="#00B6B0"/><circle cx="39" cy="88" r="5" fill="#00B6B0"/><circle cx="69" cy="88" r="5" fill="#00B6B0"/><path d="M83 19L87 10M90 23L98 17M92 31H102" stroke="#FFB627" stroke-width="5" stroke-linecap="round"/></g>
-  <text x="222" y="136" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="58" font-weight="800" font-style="italic" fill="#FFFFFF">Only</text><text x="354" y="136" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="58" font-weight="800" font-style="italic" fill="#00B6B0">Tech</text><text x="490" y="136" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="58" font-weight="800" font-style="italic" fill="#FFFFFF">Take</text>
-  <text x="78" y="292" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="80" font-weight="900" fill="#FFFFFF">Ripara, traccia,</text><text x="78" y="386" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="90" font-weight="900" fill="#00B6B0">aggiorna.</text><text x="82" y="456" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="30" font-weight="600" fill="#E7F7F6">Gestione commesse, clienti, documenti e aggiornamenti.</text>
-  <rect x="80" y="510" width="244" height="54" rx="27" fill="#00B6B0"/><text x="114" y="546" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="800" fill="#0D0D0D">LOCAL-FIRST</text><rect x="344" y="510" width="260" height="54" rx="27" fill="#FFB627"/><text x="381" y="546" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="800" fill="#0D0D0D">FLUSSO REALE</text>
-  <g transform="translate(830 130)"><rect width="330" height="380" rx="34" fill="#121818" stroke="#00B6B0" stroke-width="4"/><text x="34" y="62" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="28" font-weight="800" fill="#FFFFFF">Banco operativo</text><rect x="34" y="96" width="262" height="64" rx="18" fill="#00B6B0"/><text x="64" y="137" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="22" font-weight="800" fill="#0D0D0D">+ Nuova commessa</text><rect x="34" y="190" width="262" height="56" rx="16" fill="#1E2A2A"/><circle cx="262" cy="218" r="10" fill="#FFB627"/><text x="58" y="225" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">Diagnosi</text><rect x="34" y="262" width="262" height="56" rx="16" fill="#1E2A2A"/><circle cx="262" cy="290" r="10" fill="#00B6B0"/><text x="58" y="297" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">Pronta al ritiro</text></g>
+  <g transform="translate(74 70) scale(1.25)">
+    <path d="M22 34Q22 26 30 26H40M22 34V72Q22 80 30 80H38" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M32 38V53L41 62M33 71H44" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="32" cy="32" r="5" fill="#FFFFFF"/><circle cx="42" cy="57" r="5" fill="#FFFFFF"/>
+    <path d="M68 26H82Q90 26 90 34V66Q90 74 82 74H78L84 85L70 74H66" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M72 42H84M72 52H82" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
+    <path d="M72 64L78 70L90 55" stroke="#FFB627" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M44 15C39 19 37 25 38 31C39 36 42 41 47 44V72L42 83H48L54 75L60 83H66L61 72V44C66 41 69 36 70 31C71 25 69 19 64 15L59 24H49L44 15Z" fill="#00B6B0"/>
+    <rect x="50" y="48" width="8" height="24" fill="#00B6B0"/>
+    <path d="M54 67V94M48 70V82L39 91M60 70V82L69 91" stroke="#00B6B0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="54" cy="91" r="5" fill="#00B6B0"/><circle cx="39" cy="88" r="5" fill="#00B6B0"/><circle cx="69" cy="88" r="5" fill="#00B6B0"/>
+    <path d="M83 19L87 10M90 23L98 17M92 31H102" stroke="#FFB627" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <text x="222" y="136" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="58" font-weight="800" font-style="italic" fill="#FFFFFF">Only</text>
+  <text x="354" y="136" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="58" font-weight="800" font-style="italic" fill="#00B6B0">Tech</text>
+  <text x="490" y="136" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="58" font-weight="800" font-style="italic" fill="#FFFFFF">Take</text>
+
+  <text x="78" y="292" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="80" font-weight="900" fill="#FFFFFF">Ripara, traccia,</text>
+  <text x="78" y="386" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="90" font-weight="900" fill="#00B6B0">aggiorna.</text>
+
+  <text x="82" y="456" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="28" font-weight="600" fill="#E7F7F6">Gestione professionale di commesse e documenti tecnici.</text>
+
+  <g transform="translate(830 130)">
+    <rect width="330" height="380" rx="34" fill="#121818" stroke="#00B6B0" stroke-width="4"/>
+    <text x="34" y="62" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="28" font-weight="800" fill="#FFFFFF">Banco operativo</text>
+    <rect x="34" y="96" width="262" height="64" rx="18" fill="#00B6B0"/>
+    <text x="64" y="137" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="22" font-weight="800" fill="#0D0D0D">+ Nuova commessa</text>
+    <rect x="34" y="190" width="262" height="56" rx="16" fill="#1E2A2A"/>
+    <circle cx="262" cy="218" r="10" fill="#FFB627"/>
+    <text x="58" y="225" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">Diagnosi</text>
+    <rect x="34" y="262" width="262" height="56" rx="16" fill="#1E2A2A"/>
+    <circle cx="262" cy="290" r="10" fill="#00B6B0"/>
+    <text x="58" y="297" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">Pronta al ritiro</text>
+  </g>
 </svg>

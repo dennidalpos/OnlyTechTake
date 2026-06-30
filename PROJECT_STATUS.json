@@ -20,6 +20,22 @@
   "completed_recently": [
     {
       "date": "2026-07-10",
+      "task": "UX/UI: Rimossa fascia informativa gialla filtri e aggiornato feedback cromatico pulsante filtri (Blu se inattivo, Giallo se attivo)."
+    },
+    {
+      "date": "2026-07-10",
+      "task": "BRANDING: Aggiornati asset SVG (Logo e GitHub Cover) per visibilità su temi scuri e pulizia testi/spacing."
+    },
+    {
+      "date": "2026-07-10",
+      "task": "NAVIGATION: Ottimizzata la navigazione tra Tab (Home/Orders) e risolto il problema del ritorno alla Home dalle code filtrate. Allineati tutti i flavor (Full, Demo, Showcase)."
+    },
+    {
+      "date": "2026-07-10",
+      "task": "QUALITY: Allineamento totale dei test (Unit e Instrumented) al nuovo prefisso branding 'OTT-' (OnlyTechTake), correggendo i fallimenti residui legati al vecchio prefisso 'RIP-'."
+    },
+    {
+      "date": "2026-07-10",
       "task": "BRANDING: Integrazione dei nuovi asset 'Small-Mark' (Badge, Avatar) in tutta l'UI Compose (AppTopBar, Auth Screens, About Screen) e nel generatore di report PDF."
     },
     {

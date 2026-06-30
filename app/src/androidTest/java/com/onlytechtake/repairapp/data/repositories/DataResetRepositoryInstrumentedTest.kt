@@ -211,7 +211,7 @@ class DataResetRepositoryInstrumentedTest {
         database.repairOrderDao().upsert(
             RepairOrderEntity(
                 id = "order-1",
-                orderNumber = "RIP-1",
+                orderNumber = "OTT-1",
                 customerId = "cust-1",
                 title = "T",
                 categoryId = "cat-1",

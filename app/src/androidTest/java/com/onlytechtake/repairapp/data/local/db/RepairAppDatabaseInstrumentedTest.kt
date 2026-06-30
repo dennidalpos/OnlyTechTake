@@ -77,7 +77,7 @@ class RepairAppDatabaseInstrumentedTest {
             val order =
                 RepairOrderEntity(
                     id = "order-1",
-                    orderNumber = "RIP-2026-000001",
+                    orderNumber = "OTT-2026-000001",
                     customerId = customer.id,
                     title = "Riparazione test",
                     categoryId = "category-1",
@@ -164,7 +164,7 @@ class RepairAppDatabaseInstrumentedTest {
             val order =
                 RepairOrderEntity(
                     id = "order-1",
-                    orderNumber = "RIP-2026-000777",
+                    orderNumber = "OTT-2026-000777",
                     customerId = privateCustomer.id,
                     title = "Riparazione search",
                     categoryId = "category-search",

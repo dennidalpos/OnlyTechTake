@@ -8,17 +8,17 @@ class OrderNumberGeneratorTest {
     private val generator = OrderNumberGenerator(ZoneId.of("UTC"))
 
     @Test
-    fun yearPrefixUsesRipYearFormat() {
-        assertEquals("RIP-2026-", generator.yearPrefix(1_767_225_600_000L))
+    fun yearPrefixUsesOttYearFormat() {
+        assertEquals("OTT-2026-", generator.yearPrefix(1_767_225_600_000L))
     }
 
     @Test
     fun nextStartsAtOneWhenNoPreviousOrderExists() {
-        assertEquals("RIP-2026-000001", generator.next("RIP-2026-", null))
+        assertEquals("OTT-2026-000001", generator.next("OTT-2026-", null))
     }
 
     @Test
     fun nextIncrementsLatestSequence() {
-        assertEquals("RIP-2026-000043", generator.next("RIP-2026-", "RIP-2026-000042"))
+        assertEquals("OTT-2026-000043", generator.next("OTT-2026-", "OTT-2026-000042"))
     }
 }

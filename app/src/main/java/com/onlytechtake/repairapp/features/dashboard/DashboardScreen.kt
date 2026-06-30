@@ -49,6 +49,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.onlytechtake.repairapp.BuildConfig
@@ -213,9 +214,14 @@ fun DashboardScreen(
             sharedViewModel.triggerReset()
         }
         navController.navigate(route) {
-            popUpTo(DashboardRoutes.HOME) { saveState = true }
+            val startDest = navController.graph.findStartDestination()
+            popUpTo(startDest.id) {
+                saveState = true
+            }
             launchSingleTop = true
-            restoreState = !isReset
+            // Restore state for everything EXCEPT the start destination
+            // to ensure clicking Home always takes us to the root of Home
+            restoreState = !isReset && (route != startDest.route)
         }
         sharedViewModel.setFormDirty(dirty = false)
     }
@@ -257,7 +263,9 @@ fun DashboardScreen(
                             modifier = Modifier.padding(end = RepairAppSpacing.compactGap),
                         ) {
                             androidx.compose.foundation.Image(
-                                painter = androidx.compose.ui.res.painterResource(id = R.drawable.ic_brand_avatar),
+                                painter =
+                                    androidx.compose.ui.res
+                                        .painterResource(id = R.drawable.ic_brand_avatar),
                                 contentDescription = null,
                                 modifier = Modifier.size(24.dp),
                             )

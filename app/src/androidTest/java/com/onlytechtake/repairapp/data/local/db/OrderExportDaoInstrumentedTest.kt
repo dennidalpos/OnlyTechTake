@@ -47,8 +47,8 @@ class OrderExportDaoInstrumentedTest {
     fun exportAllOrdersDerivesPaymentStateFromLatestPaymentEvent() =
         runBlocking {
             seedCoreData()
-            seedOrder(id = "order-paid", orderNumber = "RIP-2026-000002")
-            seedOrder(id = "order-unpaid", orderNumber = "RIP-2026-000001")
+            seedOrder(id = "order-paid", orderNumber = "OTT-2026-000002")
+            seedOrder(id = "order-unpaid", orderNumber = "OTT-2026-000001")
             database.timelineEventDao().upsert(
                 paymentEvent(
                     "payment-old",
@@ -77,16 +77,16 @@ class OrderExportDaoInstrumentedTest {
             val rowsByNumber =
                 database.orderExportDao().exportAllOrders().associateBy { it.orderNumber }
 
-            assertEquals(setOf("RIP-2026-000001", "RIP-2026-000002"), rowsByNumber.keys)
-            assertTrue(rowsByNumber.getValue("RIP-2026-000002").isPaid)
-            assertFalse(rowsByNumber.getValue("RIP-2026-000001").isPaid)
+            assertEquals(setOf("OTT-2026-000001", "OTT-2026-000002"), rowsByNumber.keys)
+            assertTrue(rowsByNumber.getValue("OTT-2026-000002").isPaid)
+            assertFalse(rowsByNumber.getValue("OTT-2026-000001").isPaid)
         }
 
     @Test
     fun exportAllOrdersIncludesLatestSignerName() =
         runBlocking {
             seedCoreData()
-            seedOrder(id = "order-signed", orderNumber = "RIP-2026-SIGNED")
+            seedOrder(id = "order-signed", orderNumber = "OTT-2026-SIGNED")
 
             val now = 1_717_171_717_000L
             database.signatureDao().upsert(
@@ -135,7 +135,7 @@ class OrderExportDaoInstrumentedTest {
             )
 
             val rows = database.orderExportDao().exportAllOrders()
-            val signedRow = rows.find { it.orderNumber == "RIP-2026-SIGNED" }
+            val signedRow = rows.find { it.orderNumber == "OTT-2026-SIGNED" }
 
             assertEquals("Latest Signer", signedRow?.signerName)
         }

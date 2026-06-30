@@ -12,10 +12,10 @@ class TemplateRendererTest {
         val result =
             renderer.render(
                 template = "Commessa {{ numero_commessa }} per {{cliente}}",
-                variables = mapOf("numero_commessa" to "RIP-2026-000001", "cliente" to "Mario"),
+                variables = mapOf("numero_commessa" to "OTT-2026-000001", "cliente" to "Mario"),
             )
 
-        assertEquals("Commessa RIP-2026-000001 per Mario", result)
+        assertEquals("Commessa OTT-2026-000001 per Mario", result)
     }
 
     @Test
@@ -23,7 +23,7 @@ class TemplateRendererTest {
         assertThrows(IllegalArgumentException::class.java) {
             renderer.render(
                 template = "Commessa {{missing}}",
-                variables = mapOf("numero_commessa" to "RIP-2026-000001"),
+                variables = mapOf("numero_commessa" to "OTT-2026-000001"),
             )
         }
     }

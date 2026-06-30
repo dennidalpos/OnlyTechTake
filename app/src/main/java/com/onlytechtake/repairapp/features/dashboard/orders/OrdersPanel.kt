@@ -61,14 +61,12 @@ import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.core.design.components.AppDialog
 import com.onlytechtake.repairapp.core.design.components.AppIconButton
 import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
-import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
 import com.onlytechtake.repairapp.core.design.components.AppTextField
 import com.onlytechtake.repairapp.core.design.components.AppVerticalDivider
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
-import com.onlytechtake.repairapp.core.utils.labelRes
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.domain.workspace.OrderFilterMode
 import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
@@ -186,7 +184,7 @@ private fun OrdersListContent(
             AppButton(
                 text = stringResource(R.string.orders_filter_title),
                 onClick = { showFilterDialog = true },
-                variant = if (orderFilter.hasActiveFilter()) AppButtonVariant.Info else AppButtonVariant.Secondary,
+                variant = if (orderFilter.hasActiveFilter()) AppButtonVariant.Info else AppButtonVariant.Primary,
                 size = AppButtonSize.Compact,
                 leadingIcon = Icons.Default.FilterList,
                 testTag = RepairAppTestTags.OrdersFilterButton,
@@ -255,11 +253,6 @@ private fun OrdersListContent(
                     )
                 }
             }
-        }
-
-        if (orderFilter.hasActiveFilter()) {
-            Spacer(Modifier.height(RepairAppSpacing.tinyGap))
-            ActiveFilterInfo(orderFilter)
         }
 
         Spacer(Modifier.height(RepairAppSpacing.sectionGap))
@@ -430,33 +423,6 @@ private fun OrdersListContent(
                     size = AppButtonSize.Compact,
                 )
             },
-        )
-    }
-}
-
-@Composable
-private fun ActiveFilterInfo(filter: OrderFilter) {
-    val modeTexts =
-        filter.modes.map { mode ->
-            when (mode) {
-                OrderFilterMode.MINE -> stringResource(R.string.orders_filter_mine)
-                OrderFilterMode.OPEN_UNASSIGNED -> stringResource(R.string.orders_filter_open_unassigned)
-                OrderFilterMode.OTHERS_ASSIGNED -> stringResource(R.string.orders_filter_in_progress_assigned)
-                OrderFilterMode.CLOSED -> stringResource(R.string.orders_filter_closed_discarded)
-            }
-        }
-
-    val filterText =
-        listOfNotNull(
-            modeTexts.takeIf { it.isNotEmpty() }?.joinToString(", ") { it.lowercase() },
-            filter.status?.let { stringResource(it.labelRes) },
-        ).joinToString(", ")
-
-    if (filterText.isNotBlank()) {
-        AppStatusBadge(
-            text = stringResource(R.string.orders_filter_active, filterText),
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-            contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
         )
     }
 }
