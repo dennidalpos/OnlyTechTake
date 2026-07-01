@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -617,26 +616,26 @@ fun QuickActions(
                             termsText = stepperState.termsText,
                             isBusiness = stepperState.isBusiness,
                         ) { capture ->
-                        if (capture != null || draft.signatureCapture == null) {
-                            updateDraft {
-                                it.copy(
-                                    signatureCapture =
-                                        capture?.let { result ->
-                                            QuickIntakeSignatureDraft(
-                                                signerName = result.signerName,
-                                                businessSignerName = result.businessSignerName,
-                                                privacyAccepted = result.privacyAccepted,
-                                                termsAccepted = result.termsAccepted,
-                                                bitmap = result.bitmap,
-                                            )
-                                        },
-                                )
+                            if (capture != null || draft.signatureCapture == null) {
+                                updateDraft {
+                                    it.copy(
+                                        signatureCapture =
+                                            capture?.let { result ->
+                                                QuickIntakeSignatureDraft(
+                                                    signerName = result.signerName,
+                                                    businessSignerName = result.businessSignerName,
+                                                    privacyAccepted = result.privacyAccepted,
+                                                    termsAccepted = result.termsAccepted,
+                                                    bitmap = result.bitmap,
+                                                )
+                                            },
+                                    )
+                                }
                             }
                         }
                     }
                 }
             }
-        }
 
             WizardNavigationBar(
                 onBack = { editStep(4) },

@@ -18,7 +18,8 @@ class OperationalRobot(
     fun intakeFlow(outputDir: File) {
         var step = 1
 
-        fun nextCapture(name: String) = capture(outputDir, "${String.format("%02d", step++)}-$name.png")
+        fun nextCapture(name: String) =
+            capture(outputDir, "${String.format("%02d", step++)}-$name.png")
 
         // 1. Home
         waitForTag(RepairAppTestTags.dashboardTab("HOME"))
@@ -107,7 +108,8 @@ class OperationalRobot(
     fun managementFlow(outputDir: File) {
         var step = 1
 
-        fun nextCapture(name: String) = capture(outputDir, "${String.format("%02d", step++)}-$name.png")
+        fun nextCapture(name: String) =
+            capture(outputDir, "${String.format("%02d", step++)}-$name.png")
 
         // 1. Orders List
         clickDashboardTab("ORDERS")
@@ -195,7 +197,8 @@ class OperationalRobot(
     fun adminOperatorsFlow(outputDir: File) {
         var step = 1
 
-        fun nextCapture(name: String) = capture(outputDir, "${String.format("%02d", step++)}-$name.png")
+        fun nextCapture(name: String) =
+            capture(outputDir, "${String.format("%02d", step++)}-$name.png")
 
         clickDashboardTab("SETTINGS")
         waitForTag(RepairAppTestTags.ConfigHubAdminButton, scroll = true)
@@ -228,7 +231,8 @@ class OperationalRobot(
     fun adminTemplatesFlow(outputDir: File) {
         var step = 1
 
-        fun nextCapture(name: String) = capture(outputDir, "${String.format("%02d", step++)}-$name.png")
+        fun nextCapture(name: String) =
+            capture(outputDir, "${String.format("%02d", step++)}-$name.png")
 
         clickDashboardTab("SETTINGS")
         clickTag(RepairAppTestTags.ConfigHubTemplatesButton, scroll = true)
@@ -255,7 +259,8 @@ class OperationalRobot(
     fun backupFlow(outputDir: File) {
         var step = 1
 
-        fun nextCapture(name: String) = capture(outputDir, "${String.format("%02d", step++)}-$name.png")
+        fun nextCapture(name: String) =
+            capture(outputDir, "${String.format("%02d", step++)}-$name.png")
 
         clickDashboardTab("SETTINGS")
         clickTag(RepairAppTestTags.ConfigHubBackupButton, scroll = true)
@@ -269,7 +274,8 @@ class OperationalRobot(
     fun setupWizardFlow(outputDir: File) {
         var step = 1
 
-        fun nextCapture(name: String) = capture(outputDir, "${String.format("%02d", step++)}-$name.png")
+        fun nextCapture(name: String) =
+            capture(outputDir, "${String.format("%02d", step++)}-$name.png")
 
         // 1. First Setup (Admin)
         waitForTag(RepairAppTestTags.AuthDisplayNameField)

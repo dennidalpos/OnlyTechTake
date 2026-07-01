@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
-import androidx.compose.ui.tooling.preview.Preview as ComposePreview
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -43,9 +42,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.createBitmap
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.design.RepairAppTheme
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.RepairAppTheme
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
@@ -57,6 +56,7 @@ import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import android.graphics.Canvas as AndroidCanvas
 import androidx.compose.ui.graphics.Path as ComposePath
+import androidx.compose.ui.tooling.preview.Preview as ComposePreview
 
 data class SignatureCaptureResult(
     val signerName: String,
@@ -308,11 +308,13 @@ private fun SignatureCanvas(
                 .border(1.dp, MaterialTheme.colorScheme.outline)
                 .semantics {
                     contentDescription = canvasDescription
-                }.pointerInput(Unit) {
+                }
+                .pointerInput(Unit) {
                     detectTapGestures { offset ->
                         onTap(offset.toSignaturePoint(size.width, size.height))
                     }
-                }.pointerInput(Unit) {
+                }
+                .pointerInput(Unit) {
                     detectDragGestures(
                         onDragStart = { offset ->
                             onStart(offset.toSignaturePoint(size.width, size.height))

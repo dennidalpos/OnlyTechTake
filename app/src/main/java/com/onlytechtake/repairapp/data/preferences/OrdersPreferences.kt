@@ -41,9 +41,12 @@ class OrdersPreferences(private val context: Context) {
         context.ordersDataStore.edit { preferences ->
             preferences[modesKey(userId)] = filter.modes.map { it.name }.toSet()
             preferences[queryKey(userId)] = filter.query
-            filter.status?.let { preferences[statusKey(userId)] = it.name } ?: preferences.remove(statusKey(userId))
+            filter.status?.let { preferences[statusKey(userId)] = it.name } ?: preferences.remove(
+                statusKey(userId)
+            )
             preferences[statusesKey(userId)] = filter.statuses.map { it.name }.toSet()
-            filter.customerId?.let { preferences[customerIdKey(userId)] = it } ?: preferences.remove(customerIdKey(userId))
+            filter.customerId?.let { preferences[customerIdKey(userId)] = it }
+                ?: preferences.remove(customerIdKey(userId))
         }
     }
 
