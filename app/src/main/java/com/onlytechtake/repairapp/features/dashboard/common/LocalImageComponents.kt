@@ -451,14 +451,12 @@ private fun ZoomableLocalImage(
                                     .coerceAtLeast(
                                         1,
                                     ).toFloat(),
-                        )
-                        .graphicsLayer {
+                        ).graphicsLayer {
                             scaleX = scale
                             scaleY = scale
                             translationX = offset.x
                             translationY = offset.y
-                        }
-                        .transformable(transformState),
+                        }.transformable(transformState),
                 contentScale = ContentScale.Fit,
             )
         }
@@ -476,8 +474,7 @@ private fun rememberDecodedLocalBitmap(
         }
 }
 
-private fun fileVersion(path: String): Pair<Long, Long> =
-    File(path).let { file -> file.lastModified() to file.length() }
+private fun fileVersion(path: String): Pair<Long, Long> = File(path).let { file -> file.lastModified() to file.length() }
 
 private fun DrawScope.drawBitmapArrow(
     start: Offset,

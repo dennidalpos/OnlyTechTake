@@ -93,8 +93,7 @@ fun nextActionLabel(
         }
     }
 
-fun shouldShowDiagnosisEstimate(outcome: DiagnosisOutcome?): Boolean =
-    outcome == DiagnosisOutcome.REPAIRABLE
+fun shouldShowDiagnosisEstimate(outcome: DiagnosisOutcome?): Boolean = outcome == DiagnosisOutcome.REPAIRABLE
 
 fun canConfirmDiagnosisResult(
     summary: String,

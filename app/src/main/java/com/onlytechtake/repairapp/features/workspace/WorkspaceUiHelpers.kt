@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.features.workspace
 
+import android.content.Context
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,6 +42,7 @@ import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
 import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
 import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
+import com.onlytechtake.repairapp.domain.workspace.OrderListItem
 
 data class AttachmentCounts(
     val images: Int,
@@ -61,7 +64,7 @@ fun attachmentCounts(
         finalPhotos = media.count { it.isFinalPhoto() },
     )
 
-fun AttachmentCounts.label(context: android.content.Context): String =
+fun AttachmentCounts.label(context: Context): String =
     buildList {
         add(context.getString(R.string.label_photos_count, images))
         if (videos > 0) {
@@ -84,7 +87,7 @@ fun AttachmentCounts.label(context: android.content.Context): String =
         }
     }.joinToString(" - ")
 
-fun OrderAttachmentCounts.label(context: android.content.Context): String =
+fun OrderAttachmentCounts.label(context: Context): String =
     buildList {
         add(context.getString(R.string.label_photos_count, images))
         if (videos > 0) {
@@ -120,7 +123,7 @@ fun OrderMediaEntity.isVideoAttachment(): Boolean =
 fun OrderMediaEntity.isFinalPhoto(): Boolean = mediaType.equals("FINAL_PHOTO", ignoreCase = true)
 
 @Composable
-fun statusColors(status: OrderStatus): Pair<androidx.compose.ui.graphics.Color, androidx.compose.ui.graphics.Color> {
+fun statusColors(status: OrderStatus): Pair<Color, Color> {
     val colorScheme = MaterialTheme.colorScheme
     val semanticColors = MaterialTheme.repairColors
     return when (status) {
@@ -136,7 +139,7 @@ fun statusColors(status: OrderStatus): Pair<androidx.compose.ui.graphics.Color, 
 
 @Composable
 fun OrderSummaryRow(
-    item: com.onlytechtake.repairapp.domain.workspace.OrderListItem,
+    item: OrderListItem,
     onOrderClick: (String) -> Unit,
 ) {
     val (containerColor, contentColor) = statusColors(item.order.status)

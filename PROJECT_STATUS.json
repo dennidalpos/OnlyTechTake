@@ -2,18 +2,25 @@
   "project_name": "OnlyTechTake",
   "version": "1.0.0",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-07-11",
-  "backlog": [
+  "last_updated": "2026-07-12",
+  "backlog": [],
+  "completed_recently": [
     {
-      "priority": "MEDIUM",
-      "task": "QUALITY: Scansione completa delle risorse per identificare e rimuovere eventuali file .png o .xml orfani non più coerenti con il nuovo brand Teal/Charcoal."
+      "date": "2026-07-12",
+      "task": "QUALITY: Finalized internationalization of template resources and codes. Renamed legacy Italian resource IDs (privacy_breve, condizioni, completamento) to English (privacy_short, terms, completed). Aligned Showcase and Demo seeders with system template codes. Cleaned up redundant fully qualified names in UI helpers."
     },
     {
-      "priority": "LOW",
-      "task": "CLEANUP: Verifica finale della coerenza dei temi Material 3 per assicurare che tutti i componenti personalizzati utilizzino correttamente le nuove costanti Teal/Mustard."
-    }
-  ],
-  "completed_recently": [
+      "date": "2026-07-12",
+      "task": "WORKFLOW: Aggiornata documentazione agenti (AGENTS.md) con il flusso reale di generazione asset media. Verificato allineamento varianti (Demo/Showcase) e forzatura lingua inglese nel seeding. Eseguiti check qualità e unit test con successo."
+    },
+    {
+      "date": "2026-07-12",
+      "task": "CLEANUP: Rimossi drawables orfani (ic_feature_*) e ic_brand_one_color non utilizzati. Verificata coerenza temi Material 3 e componenti personalizzati (Teal/Mustard)."
+    },
+    {
+      "date": "2026-07-12",
+      "task": "QUALITY: Internazionalizzazione dei codici template (da 'privacy_breve' a 'privacy_short', etc.) in tutto il progetto (TemplateAnchor, Repository, Seeding, Test). Rimosso legacy linguistico negli identificatori interni."
+    },
     {
       "date": "2026-07-12",
       "task": "QUALITY: Allineamento totale flavor e correzione bug linguistici. Forzata lingua inglese nel seeding per workflow asset. Implementata durata pop-up personalizzabile (ridotta a 1s per successi). Risolti mismatch linguistici nei test tramite LocaleTestRule aggiornata. Corretti test tag mancanti per WhatsApp preview."

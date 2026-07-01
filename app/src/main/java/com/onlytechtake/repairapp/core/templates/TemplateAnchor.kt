@@ -17,7 +17,7 @@ enum class TemplateAnchor(
 ) {
     PRIVACY_TEXT(
         settingKey = "anchor_privacy_text",
-        defaultCode = "privacy_breve",
+        defaultCode = "privacy_short",
         stepNumber = 0,
         stepNameRes = R.string.anchor_step_legal,
         labelRes = R.string.anchor_label_legal_privacy,
@@ -25,7 +25,7 @@ enum class TemplateAnchor(
     ),
     TERMS_TEXT(
         settingKey = "anchor_terms_text",
-        defaultCode = "condizioni_presa_in_carico",
+        defaultCode = "terms_intake",
         stepNumber = 0,
         stepNameRes = R.string.anchor_step_legal,
         labelRes = R.string.anchor_label_legal_terms,
@@ -33,7 +33,7 @@ enum class TemplateAnchor(
     ),
     WHATSAPP_INTAKE(
         settingKey = "anchor_wa_intake",
-        defaultCode = "whatsapp_presa_in_carico",
+        defaultCode = "whatsapp_intake",
         stepNumber = 1,
         stepNameRes = R.string.anchor_step_intake,
         labelRes = R.string.anchor_label_wa_intake,
@@ -41,7 +41,7 @@ enum class TemplateAnchor(
     ),
     WHATSAPP_UPDATE(
         settingKey = "anchor_wa_update",
-        defaultCode = "whatsapp_aggiornamento",
+        defaultCode = "whatsapp_update",
         stepNumber = 2,
         stepNameRes = R.string.anchor_step_update,
         labelRes = R.string.anchor_label_wa_update,
@@ -49,7 +49,7 @@ enum class TemplateAnchor(
     ),
     WHATSAPP_DIAGNOSIS(
         settingKey = "anchor_wa_diagnosis",
-        defaultCode = "whatsapp_diagnosi",
+        defaultCode = "whatsapp_diagnosis",
         stepNumber = 3,
         stepNameRes = R.string.anchor_step_diagnosis,
         labelRes = R.string.anchor_label_wa_diagnosis,
@@ -57,7 +57,7 @@ enum class TemplateAnchor(
     ),
     WHATSAPP_QUOTE(
         settingKey = "anchor_wa_quote",
-        defaultCode = "whatsapp_preventivo_intervento",
+        defaultCode = "whatsapp_quote",
         stepNumber = 4,
         stepNameRes = R.string.anchor_step_quote,
         labelRes = R.string.anchor_label_wa_quote,
@@ -65,7 +65,7 @@ enum class TemplateAnchor(
     ),
     WHATSAPP_NOT_REPAIRABLE(
         settingKey = "anchor_wa_not_repairable",
-        defaultCode = "whatsapp_non_riparabile",
+        defaultCode = "whatsapp_not_repairable",
         stepNumber = 4,
         stepNameRes = R.string.anchor_step_outcome,
         labelRes = R.string.anchor_label_wa_not_repairable,
@@ -73,7 +73,7 @@ enum class TemplateAnchor(
     ),
     WHATSAPP_REPAIRING(
         settingKey = "anchor_wa_repairing",
-        defaultCode = "whatsapp_riparazione",
+        defaultCode = "whatsapp_repairing",
         stepNumber = 5,
         stepNameRes = R.string.anchor_step_repair,
         labelRes = R.string.anchor_label_wa_repairing,
@@ -81,7 +81,7 @@ enum class TemplateAnchor(
     ),
     WHATSAPP_READY(
         settingKey = "anchor_wa_ready",
-        defaultCode = "whatsapp_pronto_ritiro",
+        defaultCode = "whatsapp_ready",
         stepNumber = 6,
         stepNameRes = R.string.anchor_step_pickup,
         labelRes = R.string.anchor_label_wa_ready,
@@ -89,7 +89,7 @@ enum class TemplateAnchor(
     ),
     WHATSAPP_PDF_STATUS(
         settingKey = "anchor_wa_pdf_status",
-        defaultCode = "whatsapp_stato_avanzamento_pdf",
+        defaultCode = "whatsapp_pdf_status",
         stepNumber = 6,
         stepNameRes = R.string.anchor_step_docs,
         labelRes = R.string.anchor_label_wa_pdf,
@@ -97,7 +97,7 @@ enum class TemplateAnchor(
     ),
     WHATSAPP_COMPLETED(
         settingKey = "anchor_wa_completed",
-        defaultCode = "whatsapp_completamento",
+        defaultCode = "whatsapp_completed",
         stepNumber = 7,
         stepNameRes = R.string.anchor_step_closed,
         labelRes = R.string.anchor_label_wa_completed,

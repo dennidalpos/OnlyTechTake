@@ -392,8 +392,9 @@ fun DashboardScreen(
                         message = message.text,
                         type = if (message.isError) BannerType.Error else BannerType.Info,
                         onDismiss = sharedViewModel::clearMessage,
-                        autoDismissMillis = message.autoDismissMillis
-                            ?: (if (message.isError) 8_000L else 4_000L),
+                        autoDismissMillis =
+                            message.autoDismissMillis
+                                ?: (if (message.isError) 8_000L else 4_000L),
                         modifier =
                             Modifier.padding(
                                 horizontal = RepairAppSpacing.screenHorizontal,

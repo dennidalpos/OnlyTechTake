@@ -224,8 +224,10 @@ abstract class BaseAssetRobot(
             .isNotEmpty()
 
     private fun isTextDisplayed(text: String): Boolean =
-        composeRule.onAllNodesWithText(text, substring = true, ignoreCase = true)
-            .fetchSemanticsNodes().isNotEmpty()
+        composeRule
+            .onAllNodesWithText(text, substring = true, ignoreCase = true)
+            .fetchSemanticsNodes()
+            .isNotEmpty()
 
     fun waitForText(
         text: String,
@@ -240,7 +242,8 @@ abstract class BaseAssetRobot(
             if (scroll) {
                 if ((attempts % 2) == 0) {
                     try {
-                        composeRule.onNodeWithText(text, substring = true, ignoreCase = true)
+                        composeRule
+                            .onNodeWithText(text, substring = true, ignoreCase = true)
                             .performScrollTo()
                         composeRule.waitForIdle()
                         if (isTextDisplayed(text)) {
@@ -255,8 +258,11 @@ abstract class BaseAssetRobot(
             Thread.sleep(TAG_POLL_MILLIS)
             attempts++
         }
-        if (!found) composeRule.onNodeWithText(text, substring = true, ignoreCase = true)
-            .assertExists()
+        if (!found) {
+            composeRule
+                .onNodeWithText(text, substring = true, ignoreCase = true)
+                .assertExists()
+        }
     }
 
     fun waitForText(
@@ -490,8 +496,7 @@ abstract class BaseAssetRobot(
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    private fun isRecordingDemo(): Boolean =
-        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     companion object {
         const val WAIT_TIMEOUT_MILLIS = 30_000L

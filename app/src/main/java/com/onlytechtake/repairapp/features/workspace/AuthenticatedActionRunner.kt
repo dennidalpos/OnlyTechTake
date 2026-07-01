@@ -63,7 +63,7 @@ internal class AuthenticatedActionRunner(
                 showMessage(
                     error.message ?: context.getString(R.string.error_unknown),
                     true,
-                    autoDismissMillis
+                    autoDismissMillis,
                 )
             }
         }

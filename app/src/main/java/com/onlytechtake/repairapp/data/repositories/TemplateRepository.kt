@@ -242,8 +242,7 @@ class TemplateRepository(
         return prepareMessage(actor, orderId, templateCode, anchor)
     }
 
-    private suspend fun resolveAnchor(anchor: TemplateAnchor): String =
-        settingDao.findByKey(anchor.settingKey)?.value ?: anchor.defaultCode
+    private suspend fun resolveAnchor(anchor: TemplateAnchor): String = settingDao.findByKey(anchor.settingKey)?.value ?: anchor.defaultCode
 
     suspend fun prepareMessage(
         actor: AuthenticatedUser,
@@ -330,8 +329,7 @@ class TemplateRepository(
         actor: AuthenticatedUser,
         prepared: PreparedMessage,
         body: String,
-    ): Result<Unit> =
-        writeMessage(actor, prepared, body, MessageStatus.SENT_CONFIRMED, clockMillis())
+    ): Result<Unit> = writeMessage(actor, prepared, body, MessageStatus.SENT_CONFIRMED, clockMillis())
 
     private suspend fun writeMessage(
         actor: AuthenticatedUser,
@@ -383,10 +381,10 @@ class TemplateRepository(
         listOf(
             MessageTemplateEntity(
                 id = "",
-                code = "privacy_breve",
-                title = context.getString(R.string.template_privacy_breve_title),
+                code = "privacy_short",
+                title = context.getString(R.string.template_privacy_short_title),
                 channel = MessageChannel.WHATSAPP,
-                body = context.getString(R.string.template_privacy_breve_body),
+                body = context.getString(R.string.template_privacy_short_body),
                 active = true,
                 version = 1,
                 updatedByUserId = null,
@@ -395,10 +393,10 @@ class TemplateRepository(
             ),
             MessageTemplateEntity(
                 id = "",
-                code = "condizioni_presa_in_carico",
-                title = context.getString(R.string.template_condizioni_title),
+                code = "terms_intake",
+                title = context.getString(R.string.template_terms_title),
                 channel = MessageChannel.WHATSAPP,
-                body = context.getString(R.string.template_condizioni_body),
+                body = context.getString(R.string.template_terms_body),
                 active = true,
                 version = 1,
                 updatedByUserId = null,
@@ -407,7 +405,7 @@ class TemplateRepository(
             ),
             MessageTemplateEntity(
                 id = "",
-                code = "whatsapp_presa_in_carico",
+                code = "whatsapp_intake",
                 title = context.getString(R.string.template_wa_intake_title),
                 channel = MessageChannel.WHATSAPP,
                 body = context.getString(R.string.template_wa_intake_body),
@@ -419,7 +417,7 @@ class TemplateRepository(
             ),
             MessageTemplateEntity(
                 id = "",
-                code = "whatsapp_aggiornamento",
+                code = "whatsapp_update",
                 title = context.getString(R.string.template_wa_update_title),
                 channel = MessageChannel.WHATSAPP,
                 body = context.getString(R.string.template_wa_update_body),
@@ -431,7 +429,7 @@ class TemplateRepository(
             ),
             MessageTemplateEntity(
                 id = "",
-                code = "whatsapp_diagnosi",
+                code = "whatsapp_diagnosis",
                 title = context.getString(R.string.template_wa_diagnosis_title),
                 channel = MessageChannel.WHATSAPP,
                 body = context.getString(R.string.template_wa_diagnosis_body),
@@ -443,7 +441,7 @@ class TemplateRepository(
             ),
             MessageTemplateEntity(
                 id = "",
-                code = "whatsapp_preventivo_intervento",
+                code = "whatsapp_quote",
                 title = context.getString(R.string.template_wa_quote_title),
                 channel = MessageChannel.WHATSAPP,
                 body = context.getString(R.string.template_wa_quote_body),
@@ -455,7 +453,7 @@ class TemplateRepository(
             ),
             MessageTemplateEntity(
                 id = "",
-                code = "whatsapp_non_riparabile",
+                code = "whatsapp_not_repairable",
                 title = context.getString(R.string.template_wa_not_repairable_title),
                 channel = MessageChannel.WHATSAPP,
                 body = context.getString(R.string.template_wa_not_repairable_body),
@@ -467,7 +465,7 @@ class TemplateRepository(
             ),
             MessageTemplateEntity(
                 id = "",
-                code = "whatsapp_riparazione",
+                code = "whatsapp_repairing",
                 title = context.getString(R.string.template_wa_repairing_title),
                 channel = MessageChannel.WHATSAPP,
                 body = context.getString(R.string.template_wa_repairing_body),
@@ -479,7 +477,7 @@ class TemplateRepository(
             ),
             MessageTemplateEntity(
                 id = "",
-                code = "whatsapp_pronto_ritiro",
+                code = "whatsapp_ready",
                 title = context.getString(R.string.template_wa_ready_title),
                 channel = MessageChannel.WHATSAPP,
                 body = context.getString(R.string.template_wa_ready_body),
@@ -491,7 +489,7 @@ class TemplateRepository(
             ),
             MessageTemplateEntity(
                 id = "",
-                code = "whatsapp_stato_avanzamento_pdf",
+                code = "whatsapp_pdf_status",
                 title = context.getString(R.string.template_wa_pdf_status_title),
                 channel = MessageChannel.WHATSAPP,
                 body = context.getString(R.string.template_wa_pdf_status_body),
@@ -503,10 +501,10 @@ class TemplateRepository(
             ),
             MessageTemplateEntity(
                 id = "",
-                code = "whatsapp_completamento",
-                title = context.getString(R.string.template_wa_completamento_title),
+                code = "whatsapp_completed",
+                title = context.getString(R.string.template_wa_completed_title),
                 channel = MessageChannel.WHATSAPP,
-                body = context.getString(R.string.template_wa_completamento_body),
+                body = context.getString(R.string.template_wa_completed_body),
                 active = true,
                 version = 1,
                 updatedByUserId = null,
@@ -520,17 +518,17 @@ class TemplateRepository(
 
         val systemTemplateCodes =
             setOf(
-                "privacy_breve",
-                "condizioni_presa_in_carico",
-                "whatsapp_presa_in_carico",
-                "whatsapp_aggiornamento",
-                "whatsapp_diagnosi",
-                "whatsapp_preventivo_intervento",
-                "whatsapp_non_riparabile",
-                "whatsapp_riparazione",
-                "whatsapp_pronto_ritiro",
-                "whatsapp_stato_avanzamento_pdf",
-                "whatsapp_completamento",
+                "privacy_short",
+                "terms_intake",
+                "whatsapp_intake",
+                "whatsapp_update",
+                "whatsapp_diagnosis",
+                "whatsapp_quote",
+                "whatsapp_not_repairable",
+                "whatsapp_repairing",
+                "whatsapp_ready",
+                "whatsapp_pdf_status",
+                "whatsapp_completed",
             )
 
         val supportedVariables =

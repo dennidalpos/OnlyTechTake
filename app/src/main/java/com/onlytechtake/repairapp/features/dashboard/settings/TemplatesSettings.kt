@@ -541,24 +541,21 @@ fun TemplateEditDialog(
 
 private val systemTemplateCodes =
     setOf(
-        "privacy_breve",
-        "condizioni_presa_in_carico",
-        "whatsapp_presa_in_carico",
-        "whatsapp_aggiornamento",
-        "whatsapp_diagnosi",
-        "whatsapp_risultato",
-        "whatsapp_preventivo_intervento",
-        "whatsapp_non_riparabile",
-        "whatsapp_riparazione",
-        "whatsapp_lavorazione",
-        "whatsapp_completamento",
-        "whatsapp_pronto_ritiro",
-        "whatsapp_stato_avanzamento_pdf",
+        "privacy_short",
+        "terms_intake",
+        "whatsapp_intake",
+        "whatsapp_update",
+        "whatsapp_diagnosis",
+        "whatsapp_quote",
+        "whatsapp_not_repairable",
+        "whatsapp_repairing",
+        "whatsapp_ready",
+        "whatsapp_pdf_status",
+        "whatsapp_completed",
     )
 
 private fun isRiskyTemplateChange(
     loadedCode: String?,
     currentCode: String,
     active: Boolean,
-): Boolean =
-    ((loadedCode != null) && (loadedCode != currentCode)) || ((currentCode in systemTemplateCodes) && !active)
+): Boolean = ((loadedCode != null) && (loadedCode != currentCode)) || ((currentCode in systemTemplateCodes) && !active)

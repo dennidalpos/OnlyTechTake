@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.features.dashboard.home
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.demo.DemoMode
+import com.onlytechtake.repairapp.core.design.LoadingBrandIndicator
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.RepairAppTheme
@@ -59,6 +61,7 @@ import com.onlytechtake.repairapp.features.dashboard.common.BackupReminderCard
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.workspace.OperationalQueue
 import com.onlytechtake.repairapp.features.workspace.queueFilter
+import com.onlytechtake.repairapp.features.workspace.statusColors
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -112,14 +115,14 @@ fun HomePanelContent(
         Spacer(Modifier.height(RepairAppSpacing.cardGap))
 
         if ((summary == null) || (queues == null)) {
-            androidx.compose.foundation.layout.Box(
+            Box(
                 modifier =
                     Modifier
                         .fillMaxWidth()
                         .height(200.dp),
                 contentAlignment = Alignment.Center,
             ) {
-                com.onlytechtake.repairapp.core.design.LoadingBrandIndicator(
+                LoadingBrandIndicator(
                     text = stringResource(R.string.order_loading_detail),
                 )
             }
@@ -192,8 +195,7 @@ private fun getQueueColors(titleRes: Int): Pair<Color, Color> {
             R.string.queue_ready -> OrderStatus.READY_FOR_PICKUP
             else -> OrderStatus.CLOSED
         }
-    return com.onlytechtake.repairapp.features.workspace
-        .statusColors(status)
+    return statusColors(status)
 }
 
 @OptIn(ExperimentalLayoutApi::class)

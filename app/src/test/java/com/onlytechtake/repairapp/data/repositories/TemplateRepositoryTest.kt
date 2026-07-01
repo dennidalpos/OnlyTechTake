@@ -157,7 +157,7 @@ class TemplateRepositoryTest {
             val deletedKeys = slot<List<String>>()
             val audit = slot<AuditLogEntity>()
             coEvery { templateDao.findByCode(any()) } returns null
-            coEvery { templateDao.findByCode("whatsapp_presa_in_carico") } returns existingInactiveTemplate()
+            coEvery { templateDao.findByCode("whatsapp_intake") } returns existingInactiveTemplate()
             coEvery { templateDao.upsert(capture(savedTemplates)) } returns Unit
             coEvery { settingDao.deleteByKeys(capture(deletedKeys)) } returns TemplateAnchor.entries.size
             coEvery { auditLogDao.upsert(capture(audit)) } returns Unit
@@ -165,7 +165,7 @@ class TemplateRepositoryTest {
             val result = repository.resetToDefaults(admin())
 
             assertTrue(result.isSuccess)
-            val restoredIntake = savedTemplates.first { it.code == "whatsapp_presa_in_carico" }
+            val restoredIntake = savedTemplates.first { it.code == "whatsapp_intake" }
             assertEquals("existing-id", restoredIntake.id)
             assertEquals(true, restoredIntake.active)
             assertEquals(8, restoredIntake.version)
@@ -219,7 +219,7 @@ class TemplateRepositoryTest {
     private fun existingInactiveTemplate() =
         MessageTemplateEntity(
             id = "existing-id",
-            code = "whatsapp_presa_in_carico",
+            code = "whatsapp_intake",
             title = "Custom",
             channel = MessageChannel.WHATSAPP,
             body = "Custom body",

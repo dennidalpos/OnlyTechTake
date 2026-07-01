@@ -20,6 +20,7 @@ Operational guide for AI agents. Environment: **Windows 11 + PowerShell**.
 - **Database**: `DATABASE_VERSION = 1` locked. Do not modify schema or entities without explicit order. (*Schema e versione DB bloccati.*)
 - **Architecture**: UI (Compose/M3) → ViewModel → Repository. Every screen MUST have Light/Dark Previews. (*Architettura pulita. Preview Obbligatorie.*)
 - **UI Tests**: Use **Robot** pattern. Call `TestUtils.refreshAppContainer()` after seeding or resetting DB. (*Pattern Robot. Refresh obbligatorio dopo reset DB.*)
+- **Media Assets**: Use `scripts\powershell\assets\` for marketing materials. Seed in English (`-Locale en`) for public assets. (*Usare script in `scripts\powershell\assets\` per materiale marketing.*)
 - **Flavors**: Maintain consistency across `full` (Pro), `demo` (Trial), and `showcase` (Internal). Do NOT promote `showcase`. (*Mantenere coerenza tra i flavor. Non promuovere `showcase`.*)
 
 ---
@@ -30,11 +31,21 @@ Operational guide for AI agents. Environment: **Windows 11 + PowerShell**.
 3. **Verification**:
    - `scripts\powershell\project\check_project.ps1 -Flavor Full -SkipReleaseBuild`
    - `scripts\powershell\project\quality.ps1`
-4. **Cleanup**: Update `PROJECT_STATUS.json` (remove DONE, update timestamp).
+4. **Asset Refresh (if needed)**:
+   - `scripts\powershell\assets\regenerate_public.ps1`
+5. **Cleanup**: Update `PROJECT_STATUS.json` (remove DONE, update timestamp).
 
 ---
 
-## 4. Final Report Requirements
+## 4. Media Asset Workflow
+- `generate_static_brands.ps1`: (ImageMagick) SVG -> PNG/ICO/Favicon.
+- `create_demo_assets.ps1`: (Instrumented Tests) UI Screenshot with JSON Profiles. Supports `-Dark`, `-Locale`, and variants (square, vertical).
+- `record_demo_device.ps1`: (FFmpeg) Video capture with automatic trimming and WhatsApp optimization.
+- `regenerate_public.ps1`: Master script to refresh all public assets.
+
+---
+
+## 5. Final Report Requirements
 1. Modified/deleted files.
 2. Executed checks and results.
 3. Updated status of `PROJECT_STATUS.json`.
