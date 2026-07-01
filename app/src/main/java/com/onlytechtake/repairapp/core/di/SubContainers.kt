@@ -10,6 +10,7 @@ import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.preferences.AuthPreferences
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
+import com.onlytechtake.repairapp.data.preferences.OrdersPreferences
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
 import com.onlytechtake.repairapp.data.preferences.UiPreferences
@@ -201,6 +202,7 @@ class SettingsContainer(
 ) {
     val ownerPreferences by lazy { OwnerPreferences(context.applicationContext) }
     val backupReminderPreferences by lazy { BackupReminderPreferences(context.applicationContext) }
+    val ordersPreferences by lazy { OrdersPreferences(context.applicationContext) }
     val uiPreferences by lazy { UiPreferences(context.applicationContext) }
     val storageStatsService by lazy {
         StorageStatsService(

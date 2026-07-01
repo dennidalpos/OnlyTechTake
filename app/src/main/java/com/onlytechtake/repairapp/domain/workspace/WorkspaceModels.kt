@@ -133,25 +133,20 @@ enum class OrderFilterMode {
 }
 
 data class OrderFilter(
-    val modes: Set<OrderFilterMode> =
-        setOf(
-            OrderFilterMode.MINE,
-            OrderFilterMode.OPEN_UNASSIGNED,
-            OrderFilterMode.OTHERS_ASSIGNED,
-        ),
+    val modes: Set<OrderFilterMode> = DEFAULT_MODES,
     val query: String = "",
     val status: OrderStatus? = null,
     val statuses: Set<OrderStatus> = emptySet(),
     val customerId: String? = null,
 ) {
     fun hasActiveFilter(): Boolean {
-        val defaultModes =
-            setOf(
-                OrderFilterMode.MINE,
-                OrderFilterMode.OPEN_UNASSIGNED,
-                OrderFilterMode.OTHERS_ASSIGNED,
-            )
-        return modes != defaultModes || query.isNotBlank() || customerId != null || status != null || statuses.isNotEmpty()
+        return modes != FULL_MODES || query.isNotBlank() || customerId != null || status != null || statuses.isNotEmpty()
+    }
+
+    companion object {
+        val FULL_MODES = OrderFilterMode.entries.toSet()
+
+        val DEFAULT_MODES = FULL_MODES
     }
 }
 

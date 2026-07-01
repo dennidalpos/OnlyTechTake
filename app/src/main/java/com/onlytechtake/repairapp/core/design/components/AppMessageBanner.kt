@@ -6,10 +6,13 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
@@ -19,6 +22,7 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -110,35 +114,40 @@ fun AppMessageBanner(
         visible = isVisible,
         enter = fadeIn() + expandVertically(),
         exit = fadeOut() + shrinkVertically(),
+        modifier = modifier.fillMaxWidth(),
     ) {
-        Card(
-            modifier =
-                modifier
-                    .fillMaxWidth()
-                    .semantics { liveRegion = LiveRegionMode.Polite },
-            shape = RepairAppShapes.card,
-            colors = colors,
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center,
         ) {
-            Row(
-                modifier =
-                    Modifier.padding(
-                        horizontal = RepairAppSpacing.compactGap,
-                        vertical = 6.dp,
-                    ),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+            Card(
+                modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+                shape = RepairAppShapes.card,
+                colors = colors,
             ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp),
-                )
-                Text(
-                    text = message,
-                    style = MaterialTheme.typography.labelMedium,
-                    modifier = Modifier.weight(1f),
-                )
-                action?.invoke()
+                Row(
+                    modifier =
+                        Modifier.padding(
+                            horizontal = 12.dp,
+                            vertical = 4.dp,
+                        ),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+                ) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(14.dp),
+                    )
+                    Text(
+                        text = message,
+                        style = MaterialTheme.typography.labelMedium,
+                    )
+                    if (action != null) {
+                        Spacer(Modifier.width(RepairAppSpacing.tinyGap))
+                        action()
+                    }
+                }
             }
         }
     }
@@ -170,16 +179,22 @@ fun DismissibleAppMessageBanner(
         modifier = modifier,
         animate = isVisible,
         action = {
-            AppIconButton(
-                imageVector = Icons.Default.Close,
-                contentDescription = stringResource(R.string.action_close),
+            IconButton(
                 onClick = {
                     isVisible = false
                     onDismiss()
                 },
-                tint = LocalContentColor.current,
-                modifier = Modifier.testTag(RepairAppTestTags.MessageBannerCloseButton),
-            )
+                modifier = Modifier
+                    .size(24.dp)
+                    .testTag(RepairAppTestTags.MessageBannerCloseButton),
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(R.string.action_close),
+                    modifier = Modifier.size(14.dp),
+                    tint = LocalContentColor.current,
+                )
+            }
         },
     )
 }

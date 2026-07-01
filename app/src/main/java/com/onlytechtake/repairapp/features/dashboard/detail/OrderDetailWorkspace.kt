@@ -138,7 +138,7 @@ fun OrderDetailWorkspace(
         message?.let {
             DismissibleAppMessageBanner(
                 message = it.text,
-                type = if (it.isError) BannerType.Error else BannerType.Info,
+                type = if (it.isError) BannerType.Error else BannerType.Success,
                 onDismiss = viewModel::clearMessage,
                 modifier = Modifier.padding(RepairAppSpacing.compactGap),
             )

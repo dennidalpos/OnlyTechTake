@@ -390,7 +390,7 @@ fun DashboardScreen(
                 globalMessage?.let { message ->
                     DismissibleAppMessageBanner(
                         message = message.text,
-                        type = if (message.isError) BannerType.Error else BannerType.Info,
+                        type = if (message.isError) BannerType.Error else BannerType.Success,
                         onDismiss = sharedViewModel::clearMessage,
                         autoDismissMillis =
                             message.autoDismissMillis

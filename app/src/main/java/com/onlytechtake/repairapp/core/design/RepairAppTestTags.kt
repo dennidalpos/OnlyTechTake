@@ -6,6 +6,7 @@ object RepairAppTestTags {
     const val LogoutButton = "logout_button"
     const val HomeNewOrderButton = "home_new_order_button"
     const val OrdersFilterButton = "orders_filter_button"
+    const val OrdersFilterResetButton = "orders_filter_reset_button"
     const val DashboardDiscardChangesButton = "dashboard_discard_changes_button"
 
     const val AuthUsernameField = "auth_username_field"
@@ -124,6 +125,10 @@ object RepairAppTestTags {
     const val MessageBannerCloseButton = "message_banner_close_button"
 
     fun dashboardTab(destination: String) = "dashboard_tab_${destination.lowercase()}"
+
+    fun orderFilterQueue(name: String) = "order_filter_queue_${name.replace(" ", "_").lowercase()}"
+
+    fun orderFilterMode(mode: String) = "order_filter_mode_${mode.lowercase()}"
 
     fun categoryButton(categoryId: String) = "new_order_category_$categoryId"
 

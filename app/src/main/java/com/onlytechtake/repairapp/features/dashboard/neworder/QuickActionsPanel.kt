@@ -8,11 +8,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -30,6 +34,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -61,12 +66,14 @@ import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.domain.workspace.isReadyForSubmit
 import com.onlytechtake.repairapp.domain.workspace.validationErrors
 import com.onlytechtake.repairapp.features.dashboard.common.CameraCaptureMode
+import com.onlytechtake.repairapp.features.dashboard.common.LocalImagePreview
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.common.SignatureCaptureForm
 import com.onlytechtake.repairapp.features.dashboard.common.WizardNavigationBar
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeSignatureDraft
 import com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel
+import com.onlytechtake.repairapp.features.workspace.isImageAttachment
 
 @Composable
 fun QuickActions(
@@ -207,7 +214,7 @@ fun QuickActions(
         message?.let {
             DismissibleAppMessageBanner(
                 message = it.text,
-                type = if (it.isError) BannerType.Error else BannerType.Info,
+                type = if (it.isError) BannerType.Error else BannerType.Success,
                 onDismiss = viewModel::clearMessage,
             )
         }
@@ -343,7 +350,7 @@ fun QuickActions(
                                     shape = RepairAppShapes.button,
                                     modifier =
                                         Modifier
-                                            .height(RepairAppSizes.buttonDefault)
+                                            .fillMaxHeight()
                                             .width(RepairAppSizes.buttonDefault)
                                             .testTag(RepairAppTestTags.NewOrderInsertCustomerButton),
                                     tonalElevation = 0.dp,
@@ -568,13 +575,48 @@ fun QuickActions(
         if (draft.currentStep == 5) {
             key(draft.intakeSessionId) {
                 StandardCard {
-                    SignatureCaptureForm(
-                        modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-                        title = stringResource(R.string.intake_step_privacy),
-                        privacyText = stepperState.privacyText,
-                        termsText = stepperState.termsText,
-                        isBusiness = stepperState.isBusiness,
-                    ) { capture ->
+                    Column(modifier = Modifier.padding(RepairAppSpacing.cardPadding)) {
+                        if (draft.stagedMedia.isNotEmpty()) {
+                            Text(
+                                text = stringResource(R.string.intake_step_media),
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(bottom = RepairAppSpacing.compactGap),
+                            )
+                            androidx.compose.foundation.lazy.LazyRow(
+                                horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .height(80.dp)
+                                        .padding(bottom = RepairAppSpacing.fieldGap),
+                            ) {
+                                items(draft.stagedMedia) { media ->
+                                    if (media.isImageAttachment()) {
+                                        Box(
+                                            modifier =
+                                                Modifier
+                                                    .height(80.dp)
+                                                    .aspectRatio(1f)
+                                                    .clip(MaterialTheme.shapes.small),
+                                        ) {
+                                            LocalImagePreview(
+                                                path = media.localPath,
+                                                description = media.fileName,
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        SignatureCaptureForm(
+                            title = stringResource(R.string.intake_step_privacy),
+                            privacyText = stepperState.privacyText,
+                            termsText = stepperState.termsText,
+                            isBusiness = stepperState.isBusiness,
+                        ) { capture ->
                         if (capture != null || draft.signatureCapture == null) {
                             updateDraft {
                                 it.copy(
@@ -594,6 +636,8 @@ fun QuickActions(
                     }
                 }
             }
+        }
+
             WizardNavigationBar(
                 onBack = { editStep(4) },
                 nextEnabled = draft.signatureCapture != null,
@@ -640,3 +684,4 @@ fun QuickActions(
         }
     }
 }
+

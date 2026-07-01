@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -175,7 +176,7 @@ fun CustomerPanel(
         message?.let {
             DismissibleAppMessageBanner(
                 message = it.text,
-                type = if (it.isError) BannerType.Error else BannerType.Info,
+                type = if (it.isError) BannerType.Error else BannerType.Success,
                 onDismiss = viewModel::clearMessage,
                 modifier = Modifier.padding(RepairAppSpacing.compactGap),
             )
@@ -518,7 +519,7 @@ private fun CustomerListContent(
                 shape = RepairAppShapes.button,
                 modifier =
                     Modifier
-                        .height(RepairAppSizes.buttonDefault)
+                        .fillMaxHeight()
                         .width(RepairAppSizes.buttonDefault)
                         .testTag(RepairAppTestTags.CustomerNewButton),
                 tonalElevation = 0.dp,

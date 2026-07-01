@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -77,6 +78,7 @@ import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspace
 import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
 import com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel
+import com.onlytechtake.repairapp.features.workspace.queueDefinitions
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 import kotlinx.coroutines.launch
 
@@ -184,7 +186,7 @@ private fun OrdersListContent(
             AppButton(
                 text = stringResource(R.string.orders_filter_title),
                 onClick = { showFilterDialog = true },
-                variant = if (orderFilter.hasActiveFilter()) AppButtonVariant.Info else AppButtonVariant.Primary,
+                variant = if (orderFilter.hasActiveFilter()) AppButtonVariant.Warning else AppButtonVariant.Primary,
                 size = AppButtonSize.Compact,
                 leadingIcon = Icons.Default.FilterList,
                 testTag = RepairAppTestTags.OrdersFilterButton,
@@ -239,7 +241,7 @@ private fun OrdersListContent(
                 shape = RepairAppShapes.button,
                 modifier =
                     Modifier
-                        .height(RepairAppSizes.buttonDefault)
+                        .fillMaxHeight()
                         .width(RepairAppSizes.buttonDefault)
                         .testTag(RepairAppTestTags.HomeNewOrderButton),
                 tonalElevation = 0.dp,
@@ -432,36 +434,67 @@ private fun OrderFilterBar(
     filter: OrderFilter,
     onFilter: (OrderFilter) -> Unit,
 ) {
-    val toggleMode = { mode: OrderFilterMode ->
-        val newModes =
-            if (mode in filter.modes) {
-                filter.modes - mode
-            } else {
-                filter.modes + mode
-            }
-        onFilter(filter.copy(modes = newModes))
-    }
-
     Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+        AppButton(
+            text = stringResource(R.string.orders_filter_all),
+            onClick = { onFilter(OrderFilter()) },
+            variant = if (!filter.hasActiveFilter()) AppButtonVariant.Primary else AppButtonVariant.Ghost,
+            size = AppButtonSize.Compact,
+            modifier = Modifier.fillMaxWidth(),
+            leadingIcon = Icons.Default.Clear,
+            testTag = RepairAppTestTags.OrdersFilterResetButton,
+        )
+
+        Spacer(Modifier.height(RepairAppSpacing.compactGap))
+        SectionTitle(stringResource(R.string.home_queues_title))
+
+        queueDefinitions.forEach { (titleRes, statuses) ->
+            val title = stringResource(titleRes)
+            val isSelected =
+                filter.statuses == statuses || (statuses.size == 1 && filter.status == statuses.first())
+            FilterToggleButton(
+                text = title,
+                selected = isSelected,
+                testTag = RepairAppTestTags.orderFilterQueue(title),
+            ) {
+                if (isSelected) {
+                    onFilter(filter.copy(status = null, statuses = emptySet()))
+                } else {
+                    onFilter(filter.copy(status = null, statuses = statuses))
+                }
+            }
+        }
+
+        Spacer(Modifier.height(RepairAppSpacing.compactGap))
+        SectionTitle(stringResource(R.string.home_metric_operators))
+
+        val toggleMode = { mode: OrderFilterMode ->
+            val newModes =
+                if (mode in filter.modes) {
+                    filter.modes - mode
+                } else {
+                    filter.modes + mode
+                }
+            onFilter(filter.copy(modes = newModes))
+        }
+
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_mine),
             selected = OrderFilterMode.MINE in filter.modes,
+            testTag = RepairAppTestTags.orderFilterMode(OrderFilterMode.MINE.name),
         ) { toggleMode(OrderFilterMode.MINE) }
 
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_open_unassigned),
             selected = OrderFilterMode.OPEN_UNASSIGNED in filter.modes,
+            testTag = RepairAppTestTags.orderFilterMode(OrderFilterMode.OPEN_UNASSIGNED.name),
         ) { toggleMode(OrderFilterMode.OPEN_UNASSIGNED) }
 
         FilterToggleButton(
             text = stringResource(R.string.orders_filter_in_progress_assigned),
             selected = OrderFilterMode.OTHERS_ASSIGNED in filter.modes,
+            testTag = RepairAppTestTags.orderFilterMode(OrderFilterMode.OTHERS_ASSIGNED.name),
         ) { toggleMode(OrderFilterMode.OTHERS_ASSIGNED) }
-
-        FilterToggleButton(
-            text = stringResource(R.string.orders_filter_closed_discarded),
-            selected = OrderFilterMode.CLOSED in filter.modes,
-        ) { toggleMode(OrderFilterMode.CLOSED) }
     }
 }
 
@@ -469,6 +502,7 @@ private fun OrderFilterBar(
 private fun FilterToggleButton(
     text: String,
     selected: Boolean,
+    testTag: String? = null,
     onClick: () -> Unit,
 ) {
     AppButton(
@@ -476,7 +510,10 @@ private fun FilterToggleButton(
         onClick = onClick,
         variant = if (selected) AppButtonVariant.Primary else AppButtonVariant.Ghost,
         size = AppButtonSize.Compact,
-        modifier = Modifier.fillMaxWidth(),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .let { if (testTag != null) it.testTag(testTag) else it },
         selected = selected,
     )
 }

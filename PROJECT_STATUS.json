@@ -2,9 +2,25 @@
   "project_name": "OnlyTechTake",
   "version": "1.0.0",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-07-12",
+  "last_updated": "2026-07-13",
   "backlog": [],
   "completed_recently": [
+    {
+      "date": "2026-07-13",
+      "task": "NAVIGATION: Riprogettati Filtri e Navigazione Code. Allineate le opzioni del pannello filtri alle Code Operative della Dashboard (aggiunta coda 'Chiuse'). Implementato pulsante di reset rapido 'Tutte' e navigazione diretta tra code dal pannello filtri per evitare blocchi nella UI. Aggiornati Test Tags e internazionalizzazione (EN/IT). Allineate tutte le varianti."
+    },
+    {
+      "date": "2026-07-13",
+      "task": "UX/UI: Ottimizzato Banner Notifiche: ridotte dimensioni icona (14dp) e padding verticale (4dp). Implementata larghezza dinamica basata sul contenuto e allineamento centrale in tutte le varianti (Dashboard, Admin, Customers, Detail, QuickActions, Settings). Aggiornata mappatura feedback: i messaggi di successo ora utilizzano BannerType.Success (Verde) invece di BannerType.Info (Blu)."
+    },
+    {
+      "date": "2026-07-13",
+      "task": "UX/UI: Allineata l'altezza del pulsante '+' con il campo di ricerca 'Cerca cliente' in tutte le varianti (CustomerPanel, OrdersPanel, QuickActionsPanel, CategoriesSettings, TemplatesSettings) utilizzando IntrinsicSize.Min."
+    },
+    {
+      "date": "2026-07-13",
+      "task": "UX/UI: Implementata persistenza filtri commesse per operatore tramite DataStore. Aggiornato feedback cromatico pulsante filtri: Arancione (Warning) quando limitato rispetto alla Vista Completa, Blu standard (Primary) quando in Vista Completa (nessun filtro). Allineate tutte le varianti."
+    },
     {
       "date": "2026-07-12",
       "task": "QUALITY: Finalized internationalization of template resources and codes. Renamed legacy Italian resource IDs (privacy_breve, condizioni, completamento) to English (privacy_short, terms, completed). Aligned Showcase and Demo seeders with system template codes. Cleaned up redundant fully qualified names in UI helpers."

@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
@@ -89,6 +90,9 @@ fun QuickIntakeMediaSection(
                                 LocalImagePreview(
                                     path = media.localPath,
                                     description = media.fileName,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(200.dp)
                                 ) { selectedImagePath = media.localPath }
                             }
                             StagedMediaSummary(media = media, onRemoveMedia = onRemoveMedia)

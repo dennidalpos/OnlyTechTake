@@ -371,6 +371,7 @@
     <string name="queue_result">4. Esito</string>
     <string name="queue_repair">5. Intervento</string>
     <string name="queue_ready">6. Ritiro</string>
+    <string name="queue_closed">7. Chiuse</string>
     <string name="home_new_order">Nuova commessa</string>
     <string name="home_empty_queue">Nessuna commessa in questa coda.</string>
     <string name="home_empty_queues_title">Nessuna coda attiva</string>
@@ -414,7 +415,7 @@
     <string name="camera_file_error">File foto non disponibile</string>
     <string name="signature_canvas_description">Area firma cliente. Traccia la firma con dito o pennino.</string>
 
-    <string name="signature_form_title">Privacy e firma</string>
+    <string name="signature_form_title">Foto e firma digitale</string>
     <string name="signature_signer_label">Firma %s</string>
     <string name="signature_empty">Nessuna firma acquisita.</string>
     <string name="signature_section_title">Firme</string>
@@ -509,7 +510,7 @@
     <string name="intake_category_step_hint">Seleziona una sottocategoria per continuare.</string>
     <string name="intake_step_problem">Dettagli commessa</string>
     <string name="intake_step_media">Foto e allegati</string>
-    <string name="intake_step_privacy">Privacy e firma</string>
+    <string name="intake_step_privacy">Foto e firma digitale</string>
 
 
     <string name="intake_selected_customer">Cliente selezionato: %s</string>

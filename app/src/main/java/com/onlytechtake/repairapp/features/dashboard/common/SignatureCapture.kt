@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
+import androidx.compose.ui.tooling.preview.Preview as ComposePreview
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -42,6 +43,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.createBitmap
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.RepairAppTheme
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppButton
@@ -127,6 +129,9 @@ fun SignatureCaptureForm(
                     LocalImagePreview(
                         path = signature.localPath,
                         description = desc,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(120.dp)
                     ) {
                         selectedSignaturePath = signature.localPath
                         selectedSignatureTitle = desc
@@ -395,6 +400,30 @@ private fun SignatureStroke.toAndroidPath(
             points.drop(1).forEach { point -> path.lineTo(point.x * width, point.y * height) }
         }
     }
+
+@ComposePreview(showBackground = true)
+@Composable
+private fun SignatureCaptureFormPreview() {
+    RepairAppTheme {
+        SignatureCaptureForm(
+            privacyText = "Privacy policy text...",
+            termsText = "Intake terms text...",
+            isBusiness = true
+        )
+    }
+}
+
+@ComposePreview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun SignatureCaptureFormDarkPreview() {
+    RepairAppTheme {
+        SignatureCaptureForm(
+            privacyText = "Privacy policy text...",
+            termsText = "Intake terms text...",
+            isBusiness = false
+        )
+    }
+}
 
 private const val BITMAP_WIDTH = 1200
 private const val BITMAP_HEIGHT = 400

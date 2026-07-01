@@ -5,6 +5,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import com.onlytechtake.repairapp.core.error.DiagnosticLogger
 import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
+import com.onlytechtake.repairapp.data.preferences.OrdersPreferences
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
 import com.onlytechtake.repairapp.data.preferences.UiPreferences
@@ -48,6 +49,7 @@ interface AppContainer {
     val templateRepository: TemplateRepository
     val backupRepository: BackupRepository
     val backupReminderPreferences: BackupReminderPreferences
+    val ordersPreferences: OrdersPreferences
     val ownerPreferences: OwnerPreferences
     val securityPreferences: SecurityPreferences
     val uiPreferences: UiPreferences
@@ -118,6 +120,7 @@ class DefaultAppContainer(
     override val templateRepository get() = settingsContainer.templateRepository
     override val backupRepository get() = settingsContainer.backupRepository
     override val backupReminderPreferences get() = settingsContainer.backupReminderPreferences
+    override val ordersPreferences get() = settingsContainer.ordersPreferences
     override val ownerPreferences get() = settingsContainer.ownerPreferences
     override val uiPreferences get() = settingsContainer.uiPreferences
     override val dataResetRepository get() = settingsContainer.dataResetRepository

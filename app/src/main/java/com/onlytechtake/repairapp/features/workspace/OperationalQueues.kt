@@ -12,6 +12,17 @@ data class OperationalQueue(
     val orders: List<RepairOrderEntity>,
 )
 
+val queueDefinitions: List<Pair<Int, Set<OrderStatus>>> =
+    listOf(
+        R.string.queue_open to setOf(OrderStatus.OPEN),
+        R.string.queue_processing to setOf(OrderStatus.IN_PROGRESS),
+        R.string.queue_diagnosis to setOf(OrderStatus.DIAGNOSIS),
+        R.string.queue_result to setOf(OrderStatus.RESULT),
+        R.string.queue_repair to setOf(OrderStatus.REPAIRING),
+        R.string.queue_ready to setOf(OrderStatus.READY_FOR_PICKUP),
+        R.string.queue_closed to setOf(OrderStatus.CLOSED),
+    )
+
 fun buildOperationalQueues(orders: List<RepairOrderEntity>): List<OperationalQueue> {
     val groupedOrders = orders.groupBy { it.status }
     return queueDefinitions.map { (titleRes, statuses) ->
@@ -27,13 +38,3 @@ fun buildOperationalQueues(orders: List<RepairOrderEntity>): List<OperationalQue
 }
 
 fun queueFilter(queue: OperationalQueue): OrderFilter = OrderFilter(statuses = queue.statuses)
-
-private val queueDefinitions =
-    listOf(
-        R.string.queue_open to setOf(OrderStatus.OPEN),
-        R.string.queue_processing to setOf(OrderStatus.IN_PROGRESS),
-        R.string.queue_diagnosis to setOf(OrderStatus.DIAGNOSIS),
-        R.string.queue_result to setOf(OrderStatus.RESULT),
-        R.string.queue_repair to setOf(OrderStatus.REPAIRING),
-        R.string.queue_ready to setOf(OrderStatus.READY_FOR_PICKUP),
-    )

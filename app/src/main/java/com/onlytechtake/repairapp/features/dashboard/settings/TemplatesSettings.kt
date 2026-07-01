@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -116,7 +117,10 @@ fun ColumnScope.TemplatesSettings(
             )
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(IntrinsicSize.Min),
                 verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
             ) {
@@ -162,7 +166,7 @@ fun ColumnScope.TemplatesSettings(
                         shape = RepairAppShapes.button,
                         modifier =
                             Modifier
-                                .height(RepairAppSizes.buttonDefault)
+                                .fillMaxHeight()
                                 .width(RepairAppSizes.buttonDefault)
                                 .testTag(RepairAppTestTags.ConfigTemplateNewButton),
                         tonalElevation = 0.dp,

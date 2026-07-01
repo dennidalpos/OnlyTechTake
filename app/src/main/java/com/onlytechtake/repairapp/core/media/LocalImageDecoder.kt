@@ -26,7 +26,6 @@ fun decodeOrientedBitmap(
             )
         }.getOrDefault(ExifInterface.ORIENTATION_NORMAL)
     val transform = exifOrientationTransform(orientation)
-    if (transform == ExifOrientationTransform()) return source
 
     val matrix =
         Matrix().apply {
@@ -34,11 +33,24 @@ fun decodeOrientedBitmap(
             if (transform.flipVertical) postScale(1f, -1f)
             if (transform.rotationDegrees != 0f) postRotate(transform.rotationDegrees)
         }
-    return Bitmap
-        .createBitmap(source, 0, 0, source.width, source.height, matrix, true)
-        .also { oriented ->
-            if (oriented !== source) source.recycle()
+
+    val oriented = Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
+    if (oriented !== source) source.recycle()
+
+    // Scale down if it still exceeds maxDimension after rotation
+    if (maxDimension != Int.MAX_VALUE) {
+        val currentMax = max(oriented.width, oriented.height)
+        if (currentMax > maxDimension) {
+            val scale = maxDimension.toFloat() / currentMax
+            val finalWidth = (oriented.width * scale).toInt()
+            val finalHeight = (oriented.height * scale).toInt()
+            val scaled = Bitmap.createScaledBitmap(oriented, finalWidth, finalHeight, true)
+            if (scaled !== oriented) oriented.recycle()
+            return scaled
         }
+    }
+
+    return oriented
 }
 
 data class ExifOrientationTransform(

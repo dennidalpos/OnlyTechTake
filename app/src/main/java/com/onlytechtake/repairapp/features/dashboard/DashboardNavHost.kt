@@ -157,6 +157,7 @@ fun DashboardNavHost(
                             orderRepository = container.orderWorkflowRepository,
                             backupRepository = container.backupRepository,
                             backupReminderPreferences = container.backupReminderPreferences,
+                            ordersPreferences = container.ordersPreferences,
                         ),
                 )
 

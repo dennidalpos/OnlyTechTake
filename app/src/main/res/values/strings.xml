@@ -369,6 +369,7 @@
     <string name="queue_result">4. Outcome</string>
     <string name="queue_repair">5. Repair</string>
     <string name="queue_ready">6. Pickup</string>
+    <string name="queue_closed">7. Closed</string>
     <string name="home_new_order">New service order</string>
     <string name="home_empty_queue">No service orders in this queue.</string>
     <string name="home_empty_queues_title">No active queues</string>
@@ -411,7 +412,7 @@
     <string name="camera_file_error">Photo file unavailable</string>
     <string name="signature_canvas_description">Customer signature area. Trace the signature with finger or stylus.</string>
 
-    <string name="signature_form_title">Privacy and signature</string>
+    <string name="signature_form_title">Photos and Digital Signature</string>
     <string name="signature_signer_label">Signature %s</string>
     <string name="signature_empty">No signature captured.</string>
     <string name="signature_section_title">Signatures</string>
@@ -506,7 +507,7 @@
     <string name="intake_category_step_hint">Select a subcategory to continue.</string>
     <string name="intake_step_problem">Service details</string>
     <string name="intake_step_media">Photos and attachments</string>
-    <string name="intake_step_privacy">Privacy and signature</string>
+    <string name="intake_step_privacy">Photos and Digital Signature</string>
 
     <string name="intake_selected_customer">Selected customer: %s</string>
     <string name="intake_change_customer">Change customer</string>
