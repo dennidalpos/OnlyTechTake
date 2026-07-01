@@ -60,11 +60,29 @@ Script master per l'aggiornamento massivo di tutto il materiale promozionale pub
 ### Operazioni eseguite:
 1. **Cleanup Totale**: Rimuove la cartella locale `asset/` e pulisce i file `.png` e `.mp4` nelle destinazioni pubbliche (`marketing/` e `landing/`).
 2. **Iterazione Profili**: Esegue in sequenza la generazione per una lista predefinita di profili (Pro, Demo, Social, Workflow).
-3. **Gestione Mista**: Per i profili che richiedono sia video che screenshot (es. `operator-intake`), gestisce l'esecuzione combinata per minimizzare i tempi di build.
+3. **Gestione Mista**: Per i profili che richiedono sia video che screenshot (es. `operator-intake`), gestisce l'esecuzione combinata: esegue prima la registrazione video (che lancia il test) e poi lo screenshot creator con `-SkipTest` per estrarre i frame.
+
+---
+
+## 4. generate_static_brands.ps1
+Rigenera asset statici (PNG, ICO, Favicon) dai vettoriali sorgente (`SVG`) presenti in `marketing/` e `landing/`.
+
+### Requisiti
+- **ImageMagick** (`magick`) installato nel sistema (consigliato).
+- Se non presente, lo script elenca le operazioni manuali necessarie.
+
+### Asset Generati
+- **Favicons**: SVG, PNG (192, 512), ICO (48).
+- **Social**: GitHub Cover e Social Preview.
+- **App Preview**: Icona app con sfondo Charcoal per la landing.
 
 ---
 
 ## Note Tecniche
-- **Profili**: I file di configurazione si trovano in `demo/assets/profiles/*.asset.json`.
-- **Requisiti**: Richiede Android SDK configurato e, opzionalmente, `ffmpeg` nel PATH per il processing video.
-- **Distribuzione**: I file generati vengono salvati in `asset/<AssetProfile>/` come archivio locale e poi copiati nelle destinazioni finali del repository.
+- **Profili**: I file di configurazione si trovano in `demo/assets/profiles/*.asset.json`. Questi definiscono `testClass`, `testMethod`, `deviceDirectory` e le trasformazioni di `output` (es. `vertical` per Stories).
+- **Tooling**: Richiede Android SDK configurato. `ffmpeg` è necessario per la normalizzazione video, `magick` per gli asset statici.
+- **Distribuzione**: I file generati vengono salvati in `asset/<AssetProfile>/` e poi distribuiti automaticamente in:
+  - `marketing/screenshots/play-store/` (organizzati per flavor e locale)
+  - `marketing/videos/play-store/`
+  - `landing/assets/screenshots/`
+  - `landing/assets/videos/`

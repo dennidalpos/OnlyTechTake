@@ -61,6 +61,12 @@ object DemoSeeder {
 
             // Seed Default Templates
             seedDefaultTemplates(db, context, now)
+
+            // Reset Anchor Mappings to defaults
+            db.appSettingDao().deleteByKeys(
+                com.onlytechtake.repairapp.core.templates.TemplateAnchor.entries
+                    .map { it.settingKey },
+            )
         }
 
         authPreferences.markConfigured()
@@ -73,83 +79,104 @@ object DemoSeeder {
     ) {
         val templates =
             listOf(
-                Triple(
+                SeedTemplate(
                     "privacy_breve",
                     R.string.template_privacy_breve_title,
+                    R.string.template_privacy_breve_body,
                     R.string.anchor_step_legal,
                 ),
-                Triple(
+                SeedTemplate(
                     "condizioni_presa_in_carico",
                     R.string.template_condizioni_title,
+                    R.string.template_condizioni_body,
                     R.string.anchor_step_legal,
                 ),
-                Triple(
+                SeedTemplate(
                     "whatsapp_presa_in_carico",
                     R.string.template_wa_intake_title,
+                    R.string.template_wa_intake_body,
                     R.string.anchor_step_intake,
                 ),
-                Triple(
+                SeedTemplate(
                     "whatsapp_aggiornamento",
                     R.string.template_wa_update_title,
+                    R.string.template_wa_update_body,
                     R.string.anchor_step_update,
                 ),
-                Triple(
+                SeedTemplate(
                     "whatsapp_diagnosi",
                     R.string.template_wa_diagnosis_title,
+                    R.string.template_wa_diagnosis_body,
                     R.string.anchor_step_diagnosis,
                 ),
-                Triple(
+                SeedTemplate(
                     "whatsapp_preventivo_intervento",
                     R.string.template_wa_quote_title,
+                    R.string.template_wa_quote_body,
                     R.string.anchor_step_quote,
                 ),
-                Triple(
-                    "whatsapp_non_riparabile",
-                    R.string.template_wa_not_repairable_title,
+                SeedTemplate(
+                    "whatsapp_esito",
+                    R.string.template_wa_result_title,
+                    R.string.template_wa_result_body,
                     R.string.anchor_step_outcome,
                 ),
-                Triple(
+                SeedTemplate(
+                    "whatsapp_non_riparabile",
+                    R.string.template_wa_not_repairable_title,
+                    R.string.template_wa_not_repairable_body,
+                    R.string.anchor_step_outcome,
+                ),
+                SeedTemplate(
                     "whatsapp_riparazione",
                     R.string.template_wa_repairing_title,
+                    R.string.template_wa_repairing_body,
                     R.string.anchor_step_repair,
                 ),
-                Triple(
+                SeedTemplate(
                     "whatsapp_pronto_ritiro",
                     R.string.template_wa_ready_title,
+                    R.string.template_wa_ready_body,
                     R.string.anchor_step_pickup,
                 ),
-                Triple(
+                SeedTemplate(
                     "whatsapp_stato_avanzamento_pdf",
                     R.string.template_wa_pdf_status_title,
+                    R.string.template_wa_pdf_status_body,
                     R.string.anchor_step_docs,
                 ),
-                Triple(
+                SeedTemplate(
                     "whatsapp_completamento",
                     R.string.template_wa_completamento_title,
+                    R.string.template_wa_completamento_body,
                     R.string.anchor_step_closed,
                 ),
             )
 
         templates.forEach { template ->
-            val code = template.first
-            val titleRes = template.second
-            val stepRes = template.third
-            if (db.messageTemplateDao().findByCode(code) == null) {
+            if (db.messageTemplateDao().findByCode(template.code) == null) {
                 db.messageTemplateDao().upsert(
                     MessageTemplateEntity(
                         id = UUID.randomUUID().toString(),
-                        code = code,
-                        title = context.getString(titleRes),
+                        code = template.code,
+                        title = context.getString(template.titleRes),
                         channel = MessageChannel.WHATSAPP,
-                        body = "Demo body for $code",
+                        body = context.getString(template.bodyRes),
                         active = true,
                         version = 1,
                         updatedByUserId = "admin",
                         updatedAt = now,
-                        step = context.getString(stepRes),
+                        step = context.getString(template.stepRes),
                     ),
                 )
             }
         }
     }
+
+    private data class SeedTemplate(
+        val code: String,
+        val titleRes: Int,
+        val bodyRes: Int,
+        val stepRes: Int,
+    )
 }

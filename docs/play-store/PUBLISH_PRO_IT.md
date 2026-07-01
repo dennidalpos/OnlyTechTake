@@ -42,4 +42,4 @@ app\build\outputs\bundle\fullRelease\app-full-release.aab
 
 ## Asset statici
 
-Vedi [`../marketing/ASSETS.md`](../marketing/ASSETS.md).
+Vedi [`../../marketing/README.md`](../../marketing/README.md).

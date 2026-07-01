@@ -2,7 +2,7 @@
   "project_name": "OnlyTechTake",
   "version": "1.0.0",
   "status": "Production-Ready / Maintenance",
-  "last_updated": "2026-07-10",
+  "last_updated": "2026-07-11",
   "backlog": [
     {
       "priority": "HIGH",
@@ -18,6 +18,18 @@
     }
   ],
   "completed_recently": [
+    {
+      "date": "2026-07-11",
+      "task": "SEED: Aggiornati tutti i dati di seeding (Demo e Showcase) in lingua inglese. Allineati nomi operatori, clienti e template ai nuovi flussi tecnici. Aggiunto reset automatico dei link template (anchors) durante il seeding."
+    },
+    {
+      "date": "2026-07-11",
+      "task": "CLEANUP: Rimossi file legacy e ridondanti. Rinominati 'script_asset.md' in 'README.md' per coerenza standard. Corretti link rotti nelle checklist di pubblicazione e allineata versione a 1.0.0 Baseline in tutti i documenti."
+    },
+    {
+      "date": "2026-07-11",
+      "task": "WORKFLOW: Allineamento e verifica build/test per tutti i flavor (Full, Demo, Showcase). Aggiornata documentazione asset in 'README.md' basata sul codice reale."
+    },
     {
       "date": "2026-07-10",
       "task": "UX/UI: Ottimizzati pulsanti fotocamera (icone solo), aggiunto pulsante REC rosso e bordi visuali per stati inattivi/Ghost."

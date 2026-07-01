@@ -275,12 +275,12 @@
     <string name="common_cat_rog_strix">Asus ROG Strix</string>
     <string name="common_cat_rog_strix_desc">Internal cleaning and thermal paste</string>
 
-    <string name="demo_customer_first_name">Marco</string>
-    <string name="demo_customer_last_name">Rossi</string>
-    <string name="demo_customer_phone">+39 333 000 0000</string>
-    <string name="demo_customer_email">marco.rossi@example.com</string>
-    <string name="demo_customer_address">Via Roma 1, Milano</string>
-    <string name="demo_customer_notes">Regular customer.</string>
+    <string name="demo_customer_first_name">John</string>
+    <string name="demo_customer_last_name">Doe</string>
+    <string name="demo_customer_phone">+1 555-010-9999</string>
+    <string name="demo_customer_email">john.doe@example.com</string>
+    <string name="demo_customer_address">123 Tech Lane, San Francisco, CA</string>
+    <string name="demo_customer_notes">Regular customer. Prefers technical details.</string>
 
     <string name="demo_cat_display_service">Display Service</string>
     <string name="demo_cat_glass_service">Glass Service</string>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="demo_version_banner">VERSIONE SHOWCASE</string>
-    <string name="showcase_op_reception">Anna Receptionist</string>
-    <string name="showcase_op_technician">Marco Tecnico</string>
-    <string name="showcase_op_manager">Elena Manager</string>
-    <string name="showcase_admin">Admin Showcase</string>
+    <string name="showcase_op_reception">Alice Receptionist</string>
+    <string name="showcase_op_technician">Mark Tecnico</string>
+    <string name="showcase_op_manager">Helen Manager</string>
+    <string name="showcase_admin">Admin OTT</string>
     <string name="showcase_cat_apple_desc">Dispositivi Apple</string>
     <string name="showcase_cat_iphone_desc">Tutti i modelli iPhone</string>
     <string name="showcase_cat_iphone_14_pro_desc">Intervento display e vetro posteriore</string>

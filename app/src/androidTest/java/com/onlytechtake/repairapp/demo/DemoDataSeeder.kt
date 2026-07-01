@@ -36,7 +36,7 @@ import com.onlytechtake.repairapp.test.R as TestR
 object DemoDataSeeder {
     const val DEMO_PASSWORD = "DemoPass123"
     const val DEMO_ADMIN_USERNAME = "admin.demo"
-    const val DEMO_OPERATOR_USERNAME = "operatore.demo"
+    const val DEMO_OPERATOR_USERNAME = "operator.demo"
     private const val DEMO_ADMIN_ID = "demo-admin"
     private const val DEMO_OPERATOR_ID = "demo-operator"
     const val DEMO_CATEGORY_ID = "demo-category-notebook"
@@ -309,56 +309,73 @@ object DemoDataSeeder {
             DemoTemplate(
                 "privacy_breve",
                 context.getString(R.string.template_privacy_breve_title),
+                context.getString(R.string.template_privacy_breve_body),
                 context.getString(R.string.anchor_step_legal),
             ),
             DemoTemplate(
                 "condizioni_presa_in_carico",
                 context.getString(R.string.template_condizioni_title),
+                context.getString(R.string.template_condizioni_body),
                 context.getString(R.string.anchor_step_legal),
             ),
             DemoTemplate(
                 "whatsapp_presa_in_carico",
                 context.getString(R.string.template_wa_intake_title),
+                context.getString(R.string.template_wa_intake_body),
                 context.getString(R.string.anchor_step_intake),
             ),
             DemoTemplate(
                 "whatsapp_aggiornamento",
                 context.getString(R.string.template_wa_update_title),
+                context.getString(R.string.template_wa_update_body),
                 context.getString(R.string.anchor_step_update),
             ),
             DemoTemplate(
                 "whatsapp_diagnosi",
                 context.getString(R.string.template_wa_diagnosis_title),
+                context.getString(R.string.template_wa_diagnosis_body),
                 context.getString(R.string.anchor_step_diagnosis),
             ),
             DemoTemplate(
                 "whatsapp_preventivo_intervento",
                 context.getString(R.string.template_wa_quote_title),
+                context.getString(R.string.template_wa_quote_body),
                 context.getString(R.string.anchor_step_quote),
+            ),
+            DemoTemplate(
+                "whatsapp_esito",
+                context.getString(R.string.template_wa_result_title),
+                context.getString(R.string.template_wa_result_body),
+                context.getString(R.string.anchor_step_outcome),
             ),
             DemoTemplate(
                 "whatsapp_non_riparabile",
                 context.getString(R.string.template_wa_not_repairable_title),
+                context.getString(R.string.template_wa_not_repairable_body),
                 context.getString(R.string.anchor_step_outcome),
             ),
             DemoTemplate(
                 "whatsapp_riparazione",
                 context.getString(R.string.template_wa_repairing_title),
+                context.getString(R.string.template_wa_repairing_body),
                 context.getString(R.string.anchor_step_repair),
             ),
             DemoTemplate(
                 "whatsapp_pronto_ritiro",
                 context.getString(R.string.template_wa_ready_title),
+                context.getString(R.string.template_wa_ready_body),
                 context.getString(R.string.anchor_step_pickup),
             ),
             DemoTemplate(
                 "whatsapp_stato_avanzamento_pdf",
                 context.getString(R.string.template_wa_pdf_status_title),
+                context.getString(R.string.template_wa_pdf_status_body),
                 context.getString(R.string.anchor_step_docs),
             ),
             DemoTemplate(
                 "whatsapp_completamento",
                 context.getString(R.string.template_wa_completamento_title),
+                context.getString(R.string.template_wa_completamento_body),
                 context.getString(R.string.anchor_step_closed),
             ),
         ).forEachIndexed { index, template ->
@@ -368,7 +385,7 @@ object DemoDataSeeder {
                     code = template.code,
                     title = template.title,
                     channel = MessageChannel.WHATSAPP,
-                    body = testContext.getString(TestR.string.demo_template_body),
+                    body = template.body,
                     active = true,
                     version = 1,
                     updatedByUserId = DEMO_ADMIN_ID,
@@ -377,12 +394,20 @@ object DemoDataSeeder {
                 ),
             )
         }
+
+        // Reset Anchor Mappings to defaults
+        database.appSettingDao().deleteByKeys(
+            com.onlytechtake.repairapp.core.templates.TemplateAnchor.entries
+                .map { it.settingKey },
+        )
+
         AuthPreferences(context).markConfigured()
     }
 
     private data class DemoTemplate(
         val code: String,
         val title: String,
+        val body: String,
         val step: String,
     )
 

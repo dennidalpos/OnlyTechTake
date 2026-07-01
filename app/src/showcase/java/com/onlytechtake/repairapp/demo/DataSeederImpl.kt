@@ -77,7 +77,7 @@ object ShowcaseDataSeeder {
                     UserEntity(
                         id = "op-reception",
                         displayName = context.getString(R.string.showcase_op_reception),
-                        username = "anna.reception",
+                        username = "alice.reception",
                         passwordHash = pwdHash.hash,
                         passwordSalt = pwdHash.salt,
                         role = UserRole.OPERATOR,
@@ -97,7 +97,7 @@ object ShowcaseDataSeeder {
                     UserEntity(
                         id = "op-technician",
                         displayName = context.getString(R.string.showcase_op_technician),
-                        username = "marco.tech",
+                        username = "mark.tech",
                         passwordHash = pwdHash.hash,
                         passwordSalt = pwdHash.salt,
                         role = UserRole.OPERATOR,
@@ -116,7 +116,7 @@ object ShowcaseDataSeeder {
                     UserEntity(
                         id = "op-manager",
                         displayName = context.getString(R.string.showcase_op_manager),
-                        username = "elena.manager",
+                        username = "helen.manager",
                         passwordHash = pwdHash.hash,
                         passwordSalt = pwdHash.salt,
                         role = UserRole.OPERATOR,
