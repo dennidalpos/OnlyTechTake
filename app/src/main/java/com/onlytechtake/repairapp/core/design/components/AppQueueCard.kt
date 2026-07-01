@@ -27,13 +27,12 @@ fun AppQueueCard(
     modifier: Modifier = Modifier,
     lastElementTitle: String? = null,
     onOpenQueue: () -> Unit,
-    containerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
-    contentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
+    badgeContainerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
+    badgeContentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
 ) {
     StandardCard(
         modifier = modifier,
         onClick = onOpenQueue,
-        containerColor = containerColor,
     ) {
         Column(
             modifier = Modifier.padding(RepairAppSpacing.cardPadding),
@@ -46,8 +45,8 @@ fun AppQueueCard(
             ) {
                 AppStatusBadge(
                     text = title.uppercase(),
-                    containerColor = containerColor,
-                    contentColor = contentColor,
+                    containerColor = badgeContainerColor,
+                    contentColor = badgeContentColor,
                 )
                 Text(
                     text = count.toString(),

@@ -88,9 +88,10 @@ fun OrderPhotoSection(
                             LocalImagePreview(
                                 path = media.localPath,
                                 description = media.fileName,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(200.dp)
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .height(200.dp),
                             ) { selectedImageId = media.id }
                             MediaMetadataRow(media) { deleteMedia = media }
                         }

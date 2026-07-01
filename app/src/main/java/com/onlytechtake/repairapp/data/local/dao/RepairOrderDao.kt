@@ -30,13 +30,7 @@ interface RepairOrderDao {
     @Query(
         """
         SELECT * FROM repair_orders
-        WHERE (
-            (:includeMe = 1 AND assignedToUserId = :actorId AND status != 'CLOSED') OR
-            (:includeUnassigned = 1 AND assignedToUserId IS NULL AND status != 'CLOSED') OR
-            (:includeOthers = 1 AND assignedToUserId IS NOT NULL AND assignedToUserId != :actorId AND status != 'CLOSED') OR
-            (:includeClosed = 1 AND status = 'CLOSED')
-        )
-        AND (:status IS NULL OR status = :status)
+        WHERE (:status IS NULL OR status = :status)
         AND (:customerId IS NULL OR customerId = :customerId)
         AND (:useStatuses = 0 OR status IN (:statuses))
         ORDER BY updatedAt DESC
@@ -44,11 +38,6 @@ interface RepairOrderDao {
         """,
     )
     fun observeFiltered(
-        actorId: String,
-        includeMe: Boolean = false,
-        includeUnassigned: Boolean = false,
-        includeOthers: Boolean = false,
-        includeClosed: Boolean = false,
         status: OrderStatus? = null,
         customerId: String? = null,
         useStatuses: Boolean = false,
@@ -80,13 +69,7 @@ interface RepairOrderDao {
             (SELECT COUNT(*) FROM order_media m WHERE m.orderId = o.id AND UPPER(m.mediaType) = 'FINAL_PHOTO') AS finalPhotosCount
         FROM repair_orders o
         LEFT JOIN customers c ON o.customerId = c.id
-        WHERE (
-            (:includeMe = 1 AND o.assignedToUserId = :actorId AND o.status != 'CLOSED') OR
-            (:includeUnassigned = 1 AND o.assignedToUserId IS NULL AND o.status != 'CLOSED') OR
-            (:includeOthers = 1 AND o.assignedToUserId IS NOT NULL AND o.assignedToUserId != :actorId AND o.status != 'CLOSED') OR
-            (:includeClosed = 1 AND o.status = 'CLOSED')
-        )
-        AND (:status IS NULL OR o.status = :status)
+        WHERE (:status IS NULL OR o.status = :status)
         AND (:customerId IS NULL OR o.customerId = :customerId)
         AND (:useStatuses = 0 OR o.status IN (:statuses))
         ORDER BY o.updatedAt DESC
@@ -94,11 +77,6 @@ interface RepairOrderDao {
         """,
     )
     fun observeOrderListProjection(
-        actorId: String,
-        includeMe: Boolean = false,
-        includeUnassigned: Boolean = false,
-        includeOthers: Boolean = false,
-        includeClosed: Boolean = false,
         status: OrderStatus? = null,
         customerId: String? = null,
         useStatuses: Boolean = false,
@@ -127,12 +105,6 @@ interface RepairOrderDao {
         WHERE ((:query = ''
            OR o.rowid IN (SELECT rowid FROM repair_orders_fts WHERE repair_orders_fts MATCH :query || '*')
            OR c.rowid IN (SELECT rowid FROM customers_fts WHERE customers_fts MATCH :query || '*')))
-           AND (
-               (:includeMe = 1 AND o.assignedToUserId = :actorId AND o.status != 'CLOSED') OR
-               (:includeUnassigned = 1 AND o.assignedToUserId IS NULL AND o.status != 'CLOSED') OR
-               (:includeOthers = 1 AND o.assignedToUserId IS NOT NULL AND o.assignedToUserId != :actorId AND o.status != 'CLOSED') OR
-               (:includeClosed = 1 AND o.status = 'CLOSED')
-           )
            AND (:status IS NULL OR o.status = :status)
            AND (:customerId IS NULL OR o.customerId = :customerId)
            AND (:useStatuses = 0 OR o.status IN (:statuses))
@@ -142,11 +114,6 @@ interface RepairOrderDao {
     )
     fun search(
         query: String,
-        actorId: String,
-        includeMe: Boolean = false,
-        includeUnassigned: Boolean = false,
-        includeOthers: Boolean = false,
-        includeClosed: Boolean = false,
         status: OrderStatus? = null,
         customerId: String? = null,
         useStatuses: Boolean = false,

@@ -129,9 +129,10 @@ fun SignatureCaptureForm(
                     LocalImagePreview(
                         path = signature.localPath,
                         description = desc,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(120.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .height(120.dp),
                     ) {
                         selectedSignaturePath = signature.localPath
                         selectedSignatureTitle = desc
@@ -410,7 +411,7 @@ private fun SignatureCaptureFormPreview() {
         SignatureCaptureForm(
             privacyText = "Privacy policy text...",
             termsText = "Intake terms text...",
-            isBusiness = true
+            isBusiness = true,
         )
     }
 }
@@ -422,7 +423,7 @@ private fun SignatureCaptureFormDarkPreview() {
         SignatureCaptureForm(
             privacyText = "Privacy policy text...",
             termsText = "Intake terms text...",
-            isBusiness = false
+            isBusiness = false,
         )
     }
 }

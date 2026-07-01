@@ -7,12 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.error.DiagnosticLogger
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.repositories.CustomerRepository
 import com.onlytechtake.repairapp.domain.repositories.OrderRepository
 import com.onlytechtake.repairapp.domain.workspace.CustomerInput
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
-import com.onlytechtake.repairapp.domain.workspace.OrderFilterMode
 import com.onlytechtake.repairapp.domain.workspace.OrderListItem
 import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
@@ -139,15 +139,11 @@ class CustomersViewModel(
                 val filter =
                     OrderFilter(
                         customerId = customerId,
-                        modes =
+                        statuses =
                             if (closed) {
-                                setOf(OrderFilterMode.CLOSED)
+                                setOf(OrderStatus.CLOSED)
                             } else {
-                                setOf(
-                                    OrderFilterMode.MINE,
-                                    OrderFilterMode.OPEN_UNASSIGNED,
-                                    OrderFilterMode.OTHERS_ASSIGNED,
-                                )
+                                OrderStatus.entries.filter { it != OrderStatus.CLOSED }.toSet()
                             },
                     )
                 orderWorkflowRepository.observeOrderList(user, filter)

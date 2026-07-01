@@ -29,8 +29,8 @@ Operational guide for AI agents. Environment: **Windows 11 + PowerShell**.
 1. **Analysis**: Check `PROJECT_STATUS.json` and `git status`.
 2. **Execution**: Atomic changes. Run `./gradlew spotlessApply` (via ps1) before closing.
 3. **Verification**:
-   - `scripts\powershell\project\check_project.ps1 -Flavor Full -SkipReleaseBuild`
-   - `scripts\powershell\project\quality.ps1`
+   - `scripts\powershell\project\check_project.ps1 -Flavor Full -SkipReleaseBuild -NonInteractive`
+   - `scripts\powershell\project\quality.ps1 -Apply -NonInteractive`
 4. **Asset Refresh (if needed)**:
    - `scripts\powershell\assets\regenerate_public.ps1`
 5. **Cleanup**: Update `PROJECT_STATUS.json` (remove DONE, update timestamp).
@@ -38,10 +38,10 @@ Operational guide for AI agents. Environment: **Windows 11 + PowerShell**.
 ---
 
 ## 4. Media Asset Workflow
-- `generate_static_brands.ps1`: (ImageMagick) SVG -> PNG/ICO/Favicon.
-- `create_demo_assets.ps1`: (Instrumented Tests) UI Screenshot with JSON Profiles. Supports `-Dark`, `-Locale`, and variants (square, vertical).
-- `record_demo_device.ps1`: (FFmpeg) Video capture with automatic trimming and WhatsApp optimization.
-- `regenerate_public.ps1`: Master script to refresh all public assets.
+- `generate_static_brands.ps1`: (ImageMagick) SVG -> PNG/ICO/Favicon. Updates landing and marketing assets from vector sources.
+- `create_demo_assets.ps1`: (Instrumented Tests) Generates UI screenshots using JSON profiles. Supports `-Dark`, `-Locale`, and `-NoDistribute`. Applies automatic transformations (square, vertical/Story, landscape) via GDI+.
+- `record_demo_device.ps1`: (FFmpeg) Captures screen videos with `-SeedData` and automatic trimming (`-AutomaticTrimStartSeconds`). Supports `-WhatsAppOptimized` for compressed delivery.
+- `regenerate_public.ps1`: Master script for full asset refresh. Handles **Mixed Management**: first records video (executing the test), then runs screenshot creator with `-SkipTest` to extract frames from the same state.
 
 ---
 

@@ -44,11 +44,14 @@ class OrdersViewModel(
 
     init {
         viewModelScope.launch {
-            currentUser.filterNotNull().flatMapLatest { user ->
-                ordersPreferences?.getFilter(user.id) ?: flowOf(OrderFilter())
-            }.take(1).collect { savedFilter ->
-                _orderFilter.value = savedFilter
-            }
+            currentUser
+                .filterNotNull()
+                .flatMapLatest { user ->
+                    ordersPreferences?.getFilter(user.id) ?: flowOf(OrderFilter())
+                }.take(1)
+                .collect { savedFilter ->
+                    _orderFilter.value = savedFilter
+                }
         }
     }
 

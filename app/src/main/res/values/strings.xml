@@ -277,7 +277,7 @@
 
     <string name="demo_customer_first_name">John</string>
     <string name="demo_customer_last_name">Doe</string>
-    <string name="demo_customer_phone">+1 555-010-9999</string>
+    <string name="demo_customer_phone">+1 555–010–9999</string>
     <string name="demo_customer_email">john.doe@example.com</string>
     <string name="demo_customer_address">123 Tech Lane, San Francisco, CA</string>
     <string name="demo_customer_notes">Regular customer. Prefers technical details.</string>
@@ -522,7 +522,7 @@
     <string name="intake_media_take_video">Record video</string>
     <string name="intake_media_attach_file">Attach file</string>
     <string name="intake_media_remove">Remove</string>
-    <string name="intake_media_summary">%1$s - %2$d KB</string>
+    <string name="intake_media_summary">%1$s – %2$d KB</string>
 
     <string name="intake_submit_missing">Missing: %s</string>
     <string name="intake_submit_create">Create intake order</string>
@@ -549,10 +549,6 @@
 
     <string name="orders_filter_active">Active filter: %s</string>
     <string name="orders_filter_all">All</string>
-    <string name="orders_filter_mine">Mine</string>
-    <string name="orders_filter_open_unassigned">Open (unassigned)</string>
-    <string name="orders_filter_closed_discarded">Closed (closed or discarded)</string>
-    <string name="orders_filter_in_progress_assigned">In progress (assigned)</string>
     <string name="orders_select_detail_hint">Select a service order to see details</string>
     <string name="orders_select_detail_title">No service order selected</string>
     <string name="orders_category_unavailable">Category unavailable</string>

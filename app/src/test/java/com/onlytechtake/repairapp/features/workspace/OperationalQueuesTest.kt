@@ -22,7 +22,7 @@ class OperationalQueuesTest {
                 ),
             )
 
-        assertEquals(listOf(1, 1, 1, 1, 1, 1), queues.map { it.orders.size })
+        assertEquals(listOf(1, 1, 1, 1, 1, 1, 0), queues.map { it.orders.size })
         assertTrue(queueFilter(queues[2]).statuses.contains(OrderStatus.DIAGNOSIS))
     }
 

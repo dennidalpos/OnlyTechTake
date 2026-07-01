@@ -6,6 +6,7 @@ import com.onlytechtake.repairapp.core.share.ShareDocumentIntentFactory
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
+import com.onlytechtake.repairapp.data.preferences.OrdersPreferences
 import com.onlytechtake.repairapp.data.preferences.OwnerPreferences
 import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
 import com.onlytechtake.repairapp.data.preferences.UiPreferences
@@ -113,6 +114,7 @@ class FakeAppContainer(
     override val templateRepository: TemplateRepository get() = error("Not implemented")
     override val backupRepository: BackupRepository get() = error("Not implemented")
     override val backupReminderPreferences: BackupReminderPreferences get() = error("Not implemented")
+    override val ordersPreferences: OrdersPreferences get() = error("Not implemented")
     override val ownerPreferences: OwnerPreferences get() = error("Not implemented")
     override val securityPreferences: SecurityPreferences get() = error("Not implemented")
     override val uiPreferences: UiPreferences get() = error("Not implemented")

@@ -7,6 +7,30 @@
   "completed_recently": [
     {
       "date": "2026-07-13",
+      "task": "WORKFLOW: Gestione scripts PowerShell interattivi. Implementato rilevamento sessione interattiva ([Environment]::UserInteractive) in quality.ps1, check_project.ps1, create_demo_assets.ps1 e record_demo_device.ps1 per evitare blocchi in ambienti automatizzati/agenti. Aggiornato AGENTS.md con i parametri espliciti per la verifica non-interattiva."
+    },
+    {
+      "date": "2026-07-13",
+      "task": "QUALITY: Risolti errori di build e warning. Sistemate le espressioni logiche in OrdersPanel.kt con parentesi esplicite. Corretto il rendering delle preview in CustomerPanel.kt. Allineati i separatori (en-dash) in WorkspaceUiHelpers.kt e CustomerPanel.kt. Rimossi residui di filtri legacy (orders_filter_mine, etc.) dai file strings.xml."
+    },
+    {
+      "date": "2026-07-13",
+      "task": "QUALITY: Risolti warning ed errori segnalati dall'editor. Aggiunte parentesi chiarificatrici nelle espressioni logiche in OrdersPanel.kt. Corretti i separatori in strings.xml (da trattino a en-dash) in linea con le indicazioni di stile e risolto warning su formato numero telefono demo."
+    },
+    {
+      "date": "2026-07-13",
+      "task": "NAVIGATION: Semplificazione Filtri Commesse. Rimossi filtri basati su assegnazione (Miei, Aperti, Altri) lasciando esclusivamente le Code Operative basate sullo stato (Status-based Queues). Allineata l'architettura (OrderFilter, DAO, Repository, Preferences) e rimosse le varianti di filtraggio non coerenti in tutte le parti del codice (CustomerPanel, OrdersPanel, HomeViewModel). Pulizia totale degli identificatori legacy (OrderFilterMode)."
+    },
+    {
+      "date": "2026-07-13",
+      "task": "WORKFLOW: Allineamento totale AGENTS.md con il workflow reale di generazione asset media (GDI+ transformations, Mixed Management video/screenshot). Verificata coerenza dati seed in inglese per tutte le varianti (Full, Demo, Showcase) e superamento unit test."
+    },
+    {
+      "date": "2026-07-13",
+      "task": "UX/UI: Riprogettate le card delle code nella Dashboard. Le card ora utilizzano lo sfondo standard (Surface) e il colore semantico è applicato solo al titolo come badge (AppStatusBadge), migliorando la leggibilità e la coerenza visiva."
+    },
+    {
+      "date": "2026-07-13",
       "task": "NAVIGATION: Riprogettati Filtri e Navigazione Code. Allineate le opzioni del pannello filtri alle Code Operative della Dashboard (aggiunta coda 'Chiuse'). Implementato pulsante di reset rapido 'Tutte' e navigazione diretta tra code dal pannello filtri per evitare blocchi nella UI. Aggiornati Test Tags e internazionalizzazione (EN/IT). Allineate tutte le varianti."
     },
     {

@@ -20,6 +20,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
@@ -69,7 +71,6 @@ import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
-import com.onlytechtake.repairapp.domain.workspace.OrderFilterMode
 import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
 import com.onlytechtake.repairapp.features.dashboard.common.BackupReminderCard
@@ -434,7 +435,10 @@ private fun OrderFilterBar(
     filter: OrderFilter,
     onFilter: (OrderFilter) -> Unit,
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+    Column(
+        modifier = Modifier.verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+    ) {
         AppButton(
             text = stringResource(R.string.orders_filter_all),
             onClick = { onFilter(OrderFilter()) },
@@ -451,7 +455,7 @@ private fun OrderFilterBar(
         queueDefinitions.forEach { (titleRes, statuses) ->
             val title = stringResource(titleRes)
             val isSelected =
-                filter.statuses == statuses || (statuses.size == 1 && filter.status == statuses.first())
+                (filter.statuses == statuses) || (statuses.size == 1 && (filter.status == statuses.first()))
             FilterToggleButton(
                 text = title,
                 selected = isSelected,
@@ -464,37 +468,6 @@ private fun OrderFilterBar(
                 }
             }
         }
-
-        Spacer(Modifier.height(RepairAppSpacing.compactGap))
-        SectionTitle(stringResource(R.string.home_metric_operators))
-
-        val toggleMode = { mode: OrderFilterMode ->
-            val newModes =
-                if (mode in filter.modes) {
-                    filter.modes - mode
-                } else {
-                    filter.modes + mode
-                }
-            onFilter(filter.copy(modes = newModes))
-        }
-
-        FilterToggleButton(
-            text = stringResource(R.string.orders_filter_mine),
-            selected = OrderFilterMode.MINE in filter.modes,
-            testTag = RepairAppTestTags.orderFilterMode(OrderFilterMode.MINE.name),
-        ) { toggleMode(OrderFilterMode.MINE) }
-
-        FilterToggleButton(
-            text = stringResource(R.string.orders_filter_open_unassigned),
-            selected = OrderFilterMode.OPEN_UNASSIGNED in filter.modes,
-            testTag = RepairAppTestTags.orderFilterMode(OrderFilterMode.OPEN_UNASSIGNED.name),
-        ) { toggleMode(OrderFilterMode.OPEN_UNASSIGNED) }
-
-        FilterToggleButton(
-            text = stringResource(R.string.orders_filter_in_progress_assigned),
-            selected = OrderFilterMode.OTHERS_ASSIGNED in filter.modes,
-            testTag = RepairAppTestTags.orderFilterMode(OrderFilterMode.OTHERS_ASSIGNED.name),
-        ) { toggleMode(OrderFilterMode.OTHERS_ASSIGNED) }
     }
 }
 

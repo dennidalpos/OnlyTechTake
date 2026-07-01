@@ -184,9 +184,10 @@ fun DismissibleAppMessageBanner(
                     isVisible = false
                     onDismiss()
                 },
-                modifier = Modifier
-                    .size(24.dp)
-                    .testTag(RepairAppTestTags.MessageBannerCloseButton),
+                modifier =
+                    Modifier
+                        .size(24.dp)
+                        .testTag(RepairAppTestTags.MessageBannerCloseButton),
             ) {
                 Icon(
                     imageVector = Icons.Default.Close,

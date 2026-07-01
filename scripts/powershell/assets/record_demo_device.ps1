@@ -153,8 +153,12 @@ try {
         if ($Locale) { $extras["locale"] = $Locale }
         Invoke-DemoScreenshotTest -Serial $serial -TestClass $selectedProfileConfig.testClass -Flavor $Flavor -InstrumentationExtras $extras
     } else {
-        Write-Host "Registrazione manuale in corso... Premi INVIO per fermare."
-        Read-Host
+        if ($NonInteractive -or -not [Environment]::UserInteractive) {
+            Write-Host "Registrazione manuale saltata in modalità non interattiva." -ForegroundColor Yellow
+        } else {
+            Write-Host "Registrazione manuale in corso... Premi INVIO per fermare."
+            Read-Host
+        }
     }
 } finally {
     adb -s $serial shell "pkill -2 screenrecord"

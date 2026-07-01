@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachFile
@@ -90,9 +91,10 @@ fun QuickIntakeMediaSection(
                                 LocalImagePreview(
                                     path = media.localPath,
                                     description = media.fileName,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(200.dp)
+                                    modifier =
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .height(200.dp),
                                 ) { selectedImagePath = media.localPath }
                             }
                             StagedMediaSummary(media = media, onRemoveMedia = onRemoveMedia)

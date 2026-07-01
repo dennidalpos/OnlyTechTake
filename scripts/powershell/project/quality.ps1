@@ -31,33 +31,38 @@ $ErrorActionPreference = "Stop"
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
 
-# Interactive Mode
-if ($PSBoundParameters.Count -eq 0 -and -not $NonInteractive) {
+# Interactive Mode - Only if no parameters are provided AND it's an interactive session
+if ($PSBoundParameters.Count -eq 0 -and -not $NonInteractive -and [Environment]::UserInteractive) {
     Write-Host "`n--- OnlyTechTake Code Quality Check ---" -ForegroundColor Cyan
     Write-Host "Verifica formattazione (Spotless) e analisi statica (Lint)."
 
-    $Apply = (Read-Host "`nApplicare automaticamente le correzioni di formattazione? [y/N]").ToLower() -eq 'y'
-    $SkipLint = (Read-Host "Saltare Android Lint (più veloce)? [y/N]").ToLower() -eq 'y'
+    try {
+        $Apply = (Read-Host "`nApplicare automaticamente le correzioni di formattazione? [y/N]").ToLower() -eq 'y'
+        $SkipLint = (Read-Host "Saltare Android Lint (più veloce)? [y/N]").ToLower() -eq 'y'
 
-    if (-not $SkipLint) {
-        Write-Host "`nScegli variante per Lint:"
-        Write-Host "1. Solo Full (Default)"
-        Write-Host "2. Solo Demo"
-        Write-Host "3. Solo Showcase"
-        Write-Host "4. TUTTE le varianti (Lento)"
-        $lChoice = Read-Host "Opzione [1-4]"
+        if (-not $SkipLint) {
+            Write-Host "`nScegli variante per Lint:"
+            Write-Host "1. Solo Full (Default)"
+            Write-Host "2. Solo Demo"
+            Write-Host "3. Solo Showcase"
+            Write-Host "4. TUTTE le varianti (Lento)"
+            $lChoice = Read-Host "Opzione [1-4]"
 
-        switch ($lChoice) {
-            "2" { $Flavor = "Demo" }
-            "3" { $Flavor = "Showcase" }
-            "4" { $AllVariants = $true }
-            default { $Flavor = "Full" }
+            switch ($lChoice) {
+                "2" { $Flavor = "Demo" }
+                "3" { $Flavor = "Showcase" }
+                "4" { $AllVariants = $true }
+                default { $Flavor = "Full" }
+            }
+
+            if (-not $AllVariants) {
+                $bChoice = Read-Host "Build Type? [1. Debug (default) / 2. Release]"
+                if ($bChoice -eq "2") { $BuildType = "Release" }
+            }
         }
-
-        if (-not $AllVariants) {
-            $bChoice = Read-Host "Build Type? [1. Debug (default) / 2. Release]"
-            if ($bChoice -eq "2") { $BuildType = "Release" }
-        }
+    } catch {
+        Write-Host "`nInput non disponibile o interrotto. Uso i valori predefiniti." -ForegroundColor Yellow
+        $NonInteractive = $true
     }
 }
 

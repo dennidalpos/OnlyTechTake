@@ -86,6 +86,7 @@ import com.onlytechtake.repairapp.features.dashboard.common.CustomerTypeToggle
 import com.onlytechtake.repairapp.features.dashboard.common.NoteFieldWithDialog
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
+import com.onlytechtake.repairapp.features.workspace.OrderSummaryRow
 import com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 import kotlinx.coroutines.launch
@@ -828,19 +829,19 @@ private fun CustomerDetailContent(
                 verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
             ) {
                 customer.phone?.let {
-                    AppKeyValueRow(
+                    LocalAppKeyValueRow(
                         label = stringResource(R.string.customer_field_phone),
                         value = it,
                     )
                 }
                 customer.email?.let {
-                    AppKeyValueRow(
+                    LocalAppKeyValueRow(
                         label = stringResource(R.string.customer_field_email),
                         value = it,
                     )
                 }
                 customer.address?.let {
-                    AppKeyValueRow(
+                    LocalAppKeyValueRow(
                         label = stringResource(R.string.customer_field_address),
                         value = it,
                     )
@@ -862,7 +863,7 @@ private fun CustomerDetailContent(
             )
         } else {
             openOrders.forEach { item ->
-                com.onlytechtake.repairapp.features.workspace.OrderSummaryRow(
+                OrderSummaryRow(
                     item,
                     onOrderClick,
                 )
@@ -878,7 +879,7 @@ private fun CustomerDetailContent(
             )
         } else {
             closedOrders.forEach { item ->
-                com.onlytechtake.repairapp.features.workspace.OrderSummaryRow(
+                OrderSummaryRow(
                     item,
                     onOrderClick,
                 )
@@ -888,7 +889,7 @@ private fun CustomerDetailContent(
 }
 
 @Composable
-fun AppKeyValueRow(
+private fun LocalAppKeyValueRow(
     label: String,
     value: String,
 ) {
@@ -935,7 +936,7 @@ private fun CustomerCard(
                         listOfNotNull(
                             stringResource(customer.type.labelRes),
                             customer.phone,
-                        ).joinToString(" - "),
+                        ).joinToString(" – "),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -973,13 +974,22 @@ private fun CustomerEmptyState(hasQuery: Boolean) {
 @Composable
 private fun CustomerPanelPreview() {
     RepairAppTheme {
-        CustomerPanel(
-            viewModel =
-                androidx.lifecycle.viewmodel.compose
-                    .viewModel(),
-            sharedViewModel =
-                androidx.lifecycle.viewmodel.compose
-                    .viewModel(),
-        ) {}
+        val mockCustomer =
+            CustomerEntity(
+                id = "1",
+                type = CustomerType.PRIVATE,
+                firstName = "John",
+                lastName = "Doe",
+                companyName = null,
+                vatNumber = null,
+                taxCode = null,
+                phone = "123456789",
+                email = "john.doe@example.com",
+                address = "123 Main St",
+                notes = "Some notes",
+                createdAt = 0L,
+                updatedAt = 0L,
+            )
+        CustomerCard(customer = mockCustomer) {}
     }
 }

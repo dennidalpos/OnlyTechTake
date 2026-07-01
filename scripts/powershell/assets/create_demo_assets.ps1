@@ -52,14 +52,18 @@ if (-not $AssetProfile -and $AssetId) { $AssetProfile = $AssetId }
 $profilesDir = Join-Path $root "demo/assets/profiles"
 $availableProfiles = Get-ChildItem -Path $profilesDir -Filter "*.asset.json" | ForEach-Object { $_.BaseName.Replace(".asset", "") }
 
-if (-not $AssetProfile -and -not $NonInteractive) {
+if (-not $AssetProfile -and -not $NonInteractive -and [Environment]::UserInteractive) {
     Write-Host "`n--- Selezione Profilo Asset ---" -ForegroundColor Yellow
     for ($i = 0; $i -lt $availableProfiles.Count; $i++) {
         Write-Host "$($i + 1). $($availableProfiles[$i])"
     }
-    $choice = Read-Host "`nScegli il profilo [1-$($availableProfiles.Count)]"
-    if ($choice -match "^\d+$" -and [int]$choice -ge 1 -and [int]$choice -le $availableProfiles.Count) {
-        $AssetProfile = $availableProfiles[[int]$choice - 1]
+    try {
+        $choice = Read-Host "`nScegli il profilo [1-$($availableProfiles.Count)]"
+        if ($choice -match "^\d+$" -and [int]$choice -ge 1 -and [int]$choice -le $availableProfiles.Count) {
+            $AssetProfile = $availableProfiles[[int]$choice - 1]
+        }
+    } catch {
+        Write-Host "`nInput non disponibile." -ForegroundColor Red
     }
 }
 

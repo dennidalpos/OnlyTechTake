@@ -128,8 +128,6 @@ object RepairAppTestTags {
 
     fun orderFilterQueue(name: String) = "order_filter_queue_${name.replace(" ", "_").lowercase()}"
 
-    fun orderFilterMode(mode: String) = "order_filter_mode_${mode.lowercase()}"
-
     fun categoryButton(categoryId: String) = "new_order_category_$categoryId"
 
     fun orderCard(orderId: String) = "order_card_$orderId"

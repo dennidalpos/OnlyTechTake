@@ -526,7 +526,7 @@
     <string name="intake_media_take_video">Registra video</string>
     <string name="intake_media_attach_file">Allega file</string>
     <string name="intake_media_remove">Rimuovi</string>
-    <string name="intake_media_summary">%1$s - %2$d KB</string>
+    <string name="intake_media_summary">%1$s – %2$d KB</string>
 
     <string name="intake_submit_missing">Mancano: %s</string>
     <string name="intake_submit_create">Crea commessa in carico</string>
@@ -554,10 +554,6 @@
 
     <string name="orders_filter_active">Filtro attivo: %s</string>
     <string name="orders_filter_all">Tutte</string>
-    <string name="orders_filter_mine">Mie</string>
-    <string name="orders_filter_open_unassigned">Aperte (non assegnate)</string>
-    <string name="orders_filter_closed_discarded">Chiuse (chiuse o scartate)</string>
-    <string name="orders_filter_in_progress_assigned">In lavorazione (assegnate)</string>
     <string name="orders_select_detail_hint">Seleziona una commessa per vedere i dettagli</string>
     <string name="orders_select_detail_title">Nessuna commessa selezionata</string>
     <string name="orders_category_unavailable">Categoria non disponibile</string>

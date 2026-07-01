@@ -126,29 +126,14 @@ private fun CustomerInput.isValidForIntake(): Boolean {
     return hasContact && hasName
 }
 
-enum class OrderFilterMode {
-    MINE,
-    OPEN_UNASSIGNED,
-    OTHERS_ASSIGNED,
-    CLOSED,
-}
-
 data class OrderFilter(
-    val modes: Set<OrderFilterMode> = DEFAULT_MODES,
     val query: String = "",
     val status: OrderStatus? = null,
     val statuses: Set<OrderStatus> = emptySet(),
     val customerId: String? = null,
 ) {
-    fun hasActiveFilter(): Boolean {
-        return modes != FULL_MODES || query.isNotBlank() || customerId != null || status != null || statuses.isNotEmpty()
-    }
-
-    companion object {
-        val FULL_MODES = OrderFilterMode.entries.toSet()
-
-        val DEFAULT_MODES = FULL_MODES
-    }
+    fun hasActiveFilter(): Boolean =
+        query.isNotBlank() || customerId != null || status != null || statuses.isNotEmpty()
 }
 
 @Immutable

@@ -173,8 +173,8 @@ fun HomePanelContent(
                                     ?.let { "${it.orderNumber} - ${it.title}" },
                             onOpenQueue = { onOpenQueue(queueFilter(queue)) },
                             modifier = itemModifier,
-                            containerColor = containerColor,
-                            contentColor = contentColor,
+                            badgeContainerColor = containerColor,
+                            badgeContentColor = contentColor,
                         )
                     }
                 }

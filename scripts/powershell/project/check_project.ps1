@@ -33,25 +33,30 @@ $ErrorActionPreference = "Stop"
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
 
-# Interactive Mode
-if ($PSBoundParameters.Count -eq 0 -and -not $NonInteractive) {
+# Interactive Mode - Only if no parameters are provided AND it's an interactive session
+if ($PSBoundParameters.Count -eq 0 -and -not $NonInteractive -and [Environment]::UserInteractive) {
     Write-Host "`n--- OnlyTechTake Project Health Check ---" -ForegroundColor Cyan
     Write-Host "Esegue i controlli principali (Lint, Compile, Unit Test, Assemble)."
 
-    if (-not $Flavor) {
-        Write-Host "`nScegli il Flavor:"
-        Write-Host "1. Full (default)"
-        Write-Host "2. Demo"
-        Write-Host "3. Showcase"
-        $fChoice = Read-Host "Scelta [1-3]"
-        $Flavor = switch ($fChoice) { "2" { "Demo" }; "3" { "Showcase" }; default { "Full" } }
+    try {
+        if (-not $Flavor) {
+            Write-Host "`nScegli il Flavor:"
+            Write-Host "1. Full (default)"
+            Write-Host "2. Demo"
+            Write-Host "3. Showcase"
+            $fChoice = Read-Host "Scelta [1-3]"
+            $Flavor = switch ($fChoice) { "2" { "Demo" }; "3" { "Showcase" }; default { "Full" } }
+        }
+
+        $tChoice = Read-Host "`nEseguire anche i test strumentati (richiede device)? [y/N]"
+        if ($tChoice -eq 'y') { $AndroidTests = $true }
+
+        $rChoice = Read-Host "`nSaltare la build Release? [Y/n]"
+        if ($rChoice -ne 'n') { $SkipReleaseBuild = $true }
+    } catch {
+        Write-Host "`nInput non disponibile o interrotto. Uso i valori predefiniti." -ForegroundColor Yellow
+        $NonInteractive = $true
     }
-
-    $tChoice = Read-Host "`nEseguire anche i test strumentati (richiede device)? [y/N]"
-    if ($tChoice -eq 'y') { $AndroidTests = $true }
-
-    $rChoice = Read-Host "`nSaltare la build Release? [Y/n]"
-    if ($rChoice -ne 'n') { $SkipReleaseBuild = $true }
 } else {
     if (-not $Flavor) { $Flavor = "Full" }
 }

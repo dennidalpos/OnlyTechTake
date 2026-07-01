@@ -85,7 +85,7 @@ fun AttachmentCounts.label(context: Context): String =
                 ),
             )
         }
-    }.joinToString(" - ")
+    }.joinToString(" – ")
 
 fun OrderAttachmentCounts.label(context: Context): String =
     buildList {
@@ -108,7 +108,7 @@ fun OrderAttachmentCounts.label(context: Context): String =
                 ),
             )
         }
-    }.joinToString(" - ")
+    }.joinToString(" – ")
 
 fun OrderMediaEntity.isImageAttachment(): Boolean =
     mediaType.equals("PHOTO", ignoreCase = true) ||

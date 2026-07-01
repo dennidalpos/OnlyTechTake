@@ -13,7 +13,6 @@ import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
-import com.onlytechtake.repairapp.domain.workspace.OrderFilterMode
 import com.onlytechtake.repairapp.domain.workspace.OrderListItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -40,11 +39,6 @@ internal class OrderWorkflowQueries(
     ): Flow<List<RepairOrderEntity>> =
         repairOrderDao
             .observeFiltered(
-                actorId = actor.id,
-                includeMe = OrderFilterMode.MINE in filter.modes,
-                includeUnassigned = OrderFilterMode.OPEN_UNASSIGNED in filter.modes,
-                includeOthers = OrderFilterMode.OTHERS_ASSIGNED in filter.modes,
-                includeClosed = OrderFilterMode.CLOSED in filter.modes,
                 status = filter.status,
                 customerId = filter.customerId,
                 useStatuses = filter.statuses.isNotEmpty(),
@@ -60,11 +54,6 @@ internal class OrderWorkflowQueries(
         repairOrderDao
             .search(
                 query = filter.query,
-                actorId = actor.id,
-                includeMe = OrderFilterMode.MINE in filter.modes,
-                includeUnassigned = OrderFilterMode.OPEN_UNASSIGNED in filter.modes,
-                includeOthers = OrderFilterMode.OTHERS_ASSIGNED in filter.modes,
-                includeClosed = OrderFilterMode.CLOSED in filter.modes,
                 status = filter.status,
                 customerId = filter.customerId,
                 useStatuses = filter.statuses.isNotEmpty(),
@@ -93,11 +82,6 @@ internal class OrderWorkflowQueries(
     ): Flow<List<OrderListItem>> =
         repairOrderDao
             .observeOrderListProjection(
-                actorId = actor.id,
-                includeMe = OrderFilterMode.MINE in filter.modes,
-                includeUnassigned = OrderFilterMode.OPEN_UNASSIGNED in filter.modes,
-                includeOthers = OrderFilterMode.OTHERS_ASSIGNED in filter.modes,
-                includeClosed = OrderFilterMode.CLOSED in filter.modes,
                 status = filter.status,
                 customerId = filter.customerId,
                 useStatuses = filter.statuses.isNotEmpty(),
