@@ -5,10 +5,6 @@
   "last_updated": "2026-07-11",
   "backlog": [
     {
-      "priority": "HIGH",
-      "task": "ASSETS: Rigenerazione totale Screenshot e Video Demo (OUTSIDE AI SCOPE per ora, richiesto skip)."
-    },
-    {
       "priority": "MEDIUM",
       "task": "QUALITY: Scansione completa delle risorse per identificare e rimuovere eventuali file .png o .xml orfani non più coerenti con il nuovo brand Teal/Charcoal."
     },
@@ -19,12 +15,32 @@
   ],
   "completed_recently": [
     {
+      "date": "2026-07-12",
+      "task": "QUALITY: Allineamento totale flavor e correzione bug linguistici. Forzata lingua inglese nel seeding per workflow asset. Implementata durata pop-up personalizzabile (ridotta a 1s per successi). Risolti mismatch linguistici nei test tramite LocaleTestRule aggiornata. Corretti test tag mancanti per WhatsApp preview."
+    },
+    {
+      "date": "2026-07-11",
+      "task": "ASSETS: Rigenerazione totale degli asset media (Screenshot e Video Demo). Corretti bug negli Instrumentation Test che causavano fallimenti dopo la chiusura delle commesse (necessità di attivare il filtro 'Closed' per visualizzarle nella dashboard)."
+    },
+    {
+      "date": "2026-07-12",
+      "task": "QUALITY: Allineamento totale flavor e correzione bug linguistici. Forzata lingua inglese nel seeding per workflow asset. Implementata durata pop-up personalizzabile (ridotta a 1s per successi). Risolti mismatch linguistici nei test tramite LocaleTestRule aggiornata. Corretti test tag mancanti per WhatsApp preview."
+    },
+    {
       "date": "2026-07-11",
       "task": "SEED: Aggiornati tutti i dati di seeding (Demo e Showcase) in lingua inglese. Allineati nomi operatori, clienti e template ai nuovi flussi tecnici. Aggiunto reset automatico dei link template (anchors) durante il seeding."
     },
     {
+      "date": "2026-07-12",
+      "task": "QUALITY: Allineamento totale flavor e correzione bug linguistici. Forzata lingua inglese nel seeding per workflow asset. Implementata durata pop-up personalizzabile (ridotta a 1s per successi). Risolti mismatch linguistici nei test tramite LocaleTestRule aggiornata. Corretti test tag mancanti per WhatsApp preview."
+    },
+    {
       "date": "2026-07-11",
       "task": "CLEANUP: Rimossi file legacy e ridondanti. Rinominati 'script_asset.md' in 'README.md' per coerenza standard. Corretti link rotti nelle checklist di pubblicazione e allineata versione a 1.0.0 Baseline in tutti i documenti."
+    },
+    {
+      "date": "2026-07-12",
+      "task": "QUALITY: Allineamento totale flavor e correzione bug linguistici. Forzata lingua inglese nel seeding per workflow asset. Implementata durata pop-up personalizzabile (ridotta a 1s per successi). Risolti mismatch linguistici nei test tramite LocaleTestRule aggiornata. Corretti test tag mancanti per WhatsApp preview."
     },
     {
       "date": "2026-07-11",
@@ -52,7 +68,7 @@
     },
     {
       "date": "2026-07-10",
-      "task": "QUALITY: Allineamento totale dei test (Unit e Instrumented) al nuovo prefisso branding 'OTT-' (OnlyTechTake), correggendo i fallimenti residui legati al vecchio prefisso 'RIP-'."
+      "task": "QUALITY: Allineamento totale dei test (Unit e Instrumented) al nuovo prefisso branding 'OTT-' (OnlyTechTake), correggendo i fallimenti residui legati al vecchio prefisso 'RIP-'. "
     },
     {
       "date": "2026-07-10",

@@ -55,11 +55,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.LoadingBrandIndicator
 import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.RepairAppTheme
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
@@ -83,13 +85,14 @@ import com.onlytechtake.repairapp.features.dashboard.common.CustomerTypeToggle
 import com.onlytechtake.repairapp.features.dashboard.common.NoteFieldWithDialog
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
+import com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 import kotlinx.coroutines.launch
 
 @Composable
 fun CustomerPanel(
     viewModel: CustomersViewModel,
-    sharedViewModel: com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel,
+    sharedViewModel: SharedWorkspaceViewModel,
     onOrderClick: (String) -> Unit,
 ) {
     val windowSizeClass = LocalWindowSizeClass.current
@@ -573,7 +576,7 @@ private fun CustomerListContent(
             val customerList = customers
             if (customerList == null) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    com.onlytechtake.repairapp.core.design.LoadingBrandIndicator(
+                    LoadingBrandIndicator(
                         text = stringResource(R.string.order_loading_detail),
                     )
                 }
@@ -968,7 +971,7 @@ private fun CustomerEmptyState(hasQuery: Boolean) {
 )
 @Composable
 private fun CustomerPanelPreview() {
-    MaterialTheme {
+    RepairAppTheme {
         CustomerPanel(
             viewModel =
                 androidx.lifecycle.viewmodel.compose

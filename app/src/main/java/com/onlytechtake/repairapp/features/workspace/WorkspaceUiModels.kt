@@ -8,6 +8,7 @@ import java.util.UUID
 data class WorkspaceMessage(
     val text: String,
     val isError: Boolean,
+    val autoDismissMillis: Long? = null,
 )
 
 data class QuickIntakeSignatureDraft(

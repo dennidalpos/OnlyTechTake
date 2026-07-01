@@ -11,6 +11,7 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.orders.OrderNumberGenerator
 import com.onlytechtake.repairapp.core.security.PasswordHasher
+import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerActionStatus
@@ -45,10 +46,21 @@ import java.util.UUID
 class DataSeederImpl : DataSeeder {
     override suspend fun seed(context: Context) =
         withContext(Dispatchers.IO) {
-            ShowcaseDataSeeder.seedShowcaseData(context)
+            val englishContext = getLocalizedContext(context, java.util.Locale.ENGLISH)
+            ShowcaseDataSeeder.seedShowcaseData(englishContext)
         }
 
     override val defaultPassword: String = ShowcaseDataSeeder.DEFAULT_PASSWORD
+
+    private fun getLocalizedContext(
+        context: Context,
+        locale: java.util.Locale,
+    ): Context {
+        val configuration = context.resources.configuration
+        val localizedConfig = android.content.res.Configuration(configuration)
+        localizedConfig.setLocale(locale)
+        return context.createConfigurationContext(localizedConfig)
+    }
 }
 
 object ShowcaseDataSeeder {
@@ -794,8 +806,7 @@ object ShowcaseDataSeeder {
 
             // Reset Anchor Mappings to defaults to avoid broken links from previous sessions
             db.appSettingDao().deleteByKeys(
-                com.onlytechtake.repairapp.core.templates.TemplateAnchor.entries
-                    .map { it.settingKey },
+                TemplateAnchor.entries.map { it.settingKey },
             )
         }
 

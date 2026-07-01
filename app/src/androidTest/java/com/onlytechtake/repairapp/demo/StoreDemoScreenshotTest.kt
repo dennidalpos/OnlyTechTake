@@ -73,7 +73,9 @@ class StoreDemoScreenshotTest {
             // 04-passa-a-pro-demo (Close banner and show Home with some Pro CTA if any)
             robot.clickTag(RepairAppTestTags.MessageBannerCloseButton)
             robot.clickDashboardTab("HOME")
-            // Assuming there is some "Passa a Pro" info on Home in Demo
+            robot.waitForTag(RepairAppTestTags.dashboardTab("HOME"))
+            // Scroll to show lower part of home (Pro metrics etc) to differentiate from 01
+            robot.waitForTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
             robot.capture(outputDir, "04-passa-a-pro-demo.png")
         }
     }

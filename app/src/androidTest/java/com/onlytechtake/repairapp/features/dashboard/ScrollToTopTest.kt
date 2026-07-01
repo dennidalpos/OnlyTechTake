@@ -13,6 +13,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.onlytechtake.repairapp.MainActivity
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.demo.DemoDataSeeder
+import com.onlytechtake.repairapp.demo.LocaleTestRule
+import com.onlytechtake.repairapp.demo.TestUtils
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -22,6 +24,9 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ScrollToTopTest {
     @get:Rule
+    val localeRule = LocaleTestRule("en", "US")
+
+    @get:Rule
     val composeRule = createEmptyComposeRule()
 
     @Before
@@ -30,6 +35,7 @@ class ScrollToTopTest {
         runBlocking {
             DemoDataSeeder.seedDemoProfile(context)
         }
+        TestUtils.refreshAppContainer()
     }
 
     @Test

@@ -71,15 +71,18 @@ const translations = {
                 intake: "Presa in Carico Guidata",
                 media: "Foto e Firma Digitale",
                 quotes: "Diagnosi e Preventivi",
+                repairing: "Intervento Tecnico",
                 whatsapp: "Invio stato con WhatsApp",
                 timeline: "Cronologia Eventi & Timeline",
-                customers: "Anagrafica Clienti"
+                customers: "Anagrafica Clienti",
+                customerDetail: "Dettaglio Storico Cliente"
             },
             alt: {
                 dashboard: "Banco Riparazioni",
                 newOrder: "Nuova Commessa",
                 media: "Media e Firme",
                 diagnosis: "Diagnosi",
+                repairing: "Lavorazione",
                 pdf: "PDF e WhatsApp",
                 timeline: "Timeline Eventi",
                 customers: "Archivio Clienti",
@@ -233,15 +236,18 @@ const translations = {
                 intake: "Guided Intake",
                 media: "Photos and Digital Signature",
                 quotes: "Diagnosis and Quotes",
+                repairing: "Technical Intervention",
                 whatsapp: "Send status via WhatsApp",
                 timeline: "Event History & Timeline",
-                customers: "Customer Records"
+                customers: "Customer Records",
+                customerDetail: "Customer History"
             },
             alt: {
                 dashboard: "Repair Workbench",
                 newOrder: "New Repair Order",
                 media: "Media and Signatures",
                 diagnosis: "Diagnosis",
+                repairing: "In Progress",
                 pdf: "PDF and WhatsApp",
                 timeline: "Event Timeline",
                 customers: "Customer Archive",

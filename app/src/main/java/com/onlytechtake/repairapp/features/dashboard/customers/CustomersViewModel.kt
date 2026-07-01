@@ -56,7 +56,9 @@ class CustomersViewModel(
             authRepository = authRepository,
             currentUser = authRepository.currentUser,
             scope = viewModelScope,
-            showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) },
+            showMessage = { text, isError, duration ->
+                _message.value = WorkspaceMessage(text, isError, duration)
+            },
             diagnosticLogger = diagnosticLogger,
             ioDispatcher = ioDispatcher,
         )
@@ -101,7 +103,10 @@ class CustomersViewModel(
         input: CustomerInput,
         onSaved: (CustomerEntity) -> Unit = {},
     ) {
-        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
+        actionRunner.run(
+            successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
+        ) { actor ->
             customerRepository.save(actor, input).onSuccess {
                 onSaved(it)
                 setFormDirty(dirty = false)
@@ -113,7 +118,10 @@ class CustomersViewModel(
         customerId: String,
         onDeleted: () -> Unit = {},
     ) {
-        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
+        actionRunner.run(
+            successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
+        ) { actor ->
             customerRepository.delete(actor, customerId).onSuccess {
                 onDeleted()
             }

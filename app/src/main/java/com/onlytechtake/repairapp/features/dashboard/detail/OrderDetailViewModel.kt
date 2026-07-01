@@ -66,7 +66,9 @@ class OrderDetailViewModel(
             authRepository = authRepository,
             currentUser = authRepository.currentUser,
             scope = viewModelScope,
-            showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) },
+            showMessage = { text, isError, duration ->
+                _message.value = WorkspaceMessage(text, isError, duration)
+            },
             setLoading = { _isProcessing.value = it },
             diagnosticLogger = diagnosticLogger,
             ioDispatcher = ioDispatcher,
@@ -121,6 +123,7 @@ class OrderDetailViewModel(
     ) {
         actionRunner.run(
             successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
             onSuccess = onSuccess,
         ) { actor ->
             orderRepository.changeStatus(actor, orderId, status, note, closureReason)
@@ -135,6 +138,7 @@ class OrderDetailViewModel(
     ) {
         actionRunner.run(
             successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
             onSuccess = onSuccess,
         ) { actor ->
             orderRepository.recordResult(
@@ -153,6 +157,7 @@ class OrderDetailViewModel(
     ) {
         actionRunner.run(
             successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
             onSuccess = onSuccess,
         ) { actor ->
             orderRepository.recordFeedback(actor, orderId, FeedbackInput(type, note, closureReason))
@@ -162,13 +167,17 @@ class OrderDetailViewModel(
     fun togglePaymentStatus(isPaid: Boolean) {
         actionRunner.run(
             successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
         ) { actor ->
             orderRepository.togglePaymentStatus(actor, orderId, isPaid)
         }
     }
 
     fun addNote(note: String) {
-        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
+        actionRunner.run(
+            successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
+        ) { actor ->
             orderRepository.addInternalNote(actor, orderId, note)
         }
     }
@@ -184,7 +193,10 @@ class OrderDetailViewModel(
     fun registerCapturedPhoto(
         file: File,
     ) {
-        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
+        actionRunner.run(
+            successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
+        ) { actor ->
             orderMediaRepository.registerCapturedPhoto(actor, orderId, file)
         }
     }
@@ -192,7 +204,10 @@ class OrderDetailViewModel(
     fun registerCapturedVideo(
         file: File,
     ) {
-        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
+        actionRunner.run(
+            successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
+        ) { actor ->
             orderMediaRepository.registerCapturedVideo(actor, orderId, file)
         }
     }
@@ -200,19 +215,28 @@ class OrderDetailViewModel(
     fun importAttachment(
         uri: Uri,
     ) {
-        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
+        actionRunner.run(
+            successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
+        ) { actor ->
             orderMediaRepository.importAttachment(actor, orderId, uri)
         }
     }
 
     fun deleteMedia(mediaId: String) {
-        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
+        actionRunner.run(
+            successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
+        ) { actor ->
             orderMediaRepository.deleteMedia(actor, mediaId)
         }
     }
 
     fun deleteSignature(signatureId: String) {
-        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
+        actionRunner.run(
+            successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
+        ) { actor ->
             orderRepository.deleteSignature(actor, signatureId)
         }
     }
@@ -220,6 +244,7 @@ class OrderDetailViewModel(
     fun deleteOrder(onDeleted: () -> Unit) {
         actionRunner.run(
             successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
             onSuccess = onDeleted,
         ) { actor ->
             orderRepository.deleteOrder(actor, orderId)
@@ -230,7 +255,10 @@ class OrderDetailViewModel(
         mediaId: String,
         bitmap: Bitmap,
     ) {
-        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
+        actionRunner.run(
+            successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
+        ) { actor ->
             orderMediaRepository.replaceImage(actor, mediaId, bitmap)
         }
     }
@@ -334,7 +362,10 @@ class OrderDetailViewModel(
     }
 
     fun onDeleteDocumentClicked(documentId: String) {
-        actionRunner.run(successMessageRes = R.string.success_operation_completed) {
+        actionRunner.run(
+            successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
+        ) {
             orderDocumentRepository.delete(documentId)
         }
     }

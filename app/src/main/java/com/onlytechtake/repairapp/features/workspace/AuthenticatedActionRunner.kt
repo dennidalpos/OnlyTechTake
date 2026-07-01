@@ -17,7 +17,7 @@ internal class AuthenticatedActionRunner(
     private val authRepository: AuthRepository,
     private val currentUser: StateFlow<AuthenticatedUser?>,
     private val scope: CoroutineScope,
-    private val showMessage: (String, Boolean) -> Unit,
+    private val showMessage: (String, Boolean, Long?) -> Unit,
     private val setLoading: (Boolean) -> Unit = {},
     private val diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger? = null,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
@@ -25,6 +25,7 @@ internal class AuthenticatedActionRunner(
     fun run(
         @StringRes successMessageRes: Int? = null,
         successMessage: String? = null,
+        autoDismissMillis: Long? = null,
         onSuccess: () -> Unit = {},
         block: suspend (AuthenticatedUser) -> Result<*>,
     ) {
@@ -32,7 +33,7 @@ internal class AuthenticatedActionRunner(
             val actor = currentUser.value
             if (actor == null) {
                 authRepository.logout()
-                showMessage(context.getString(R.string.error_session_expired), true)
+                showMessage(context.getString(R.string.error_session_expired), true, null)
                 return@launch
             }
 
@@ -49,7 +50,7 @@ internal class AuthenticatedActionRunner(
                         (result as? String)
                             ?: successMessage
                             ?: successMessageRes?.let { context.getString(it) }
-                    message?.let { showMessage(it, false) }
+                    message?.let { showMessage(it, false, autoDismissMillis) }
                     onSuccess()
                 },
             ) { error ->
@@ -59,7 +60,11 @@ internal class AuthenticatedActionRunner(
                     error.message ?: "Action failed",
                     error,
                 )
-                showMessage(error.message ?: context.getString(R.string.error_unknown), true)
+                showMessage(
+                    error.message ?: context.getString(R.string.error_unknown),
+                    true,
+                    autoDismissMillis
+                )
             }
         }
     }

@@ -38,6 +38,7 @@ fun DashboardNavHost(
     modifier: Modifier = Modifier,
 ) {
     val container = LocalAppContainer.current
+    val context = androidx.compose.ui.platform.LocalContext.current
 
     NavHost(
         navController = navController,
@@ -81,7 +82,7 @@ fun DashboardNavHost(
                 viewModel(
                     factory =
                         NewOrderViewModel.Factory(
-                            context = container.context,
+                            context = context,
                             authRepository = container.authRepository,
                             customerRepository = container.customerRepository,
                             catalogRepository = container.catalogRepository,
@@ -110,7 +111,7 @@ fun DashboardNavHost(
                 viewModel(
                     factory =
                         CustomersViewModel.Factory(
-                            context = container.context,
+                            context = context,
                             authRepository = container.authRepository,
                             customerRepository = container.customerRepository,
                             orderWorkflowRepository = container.orderWorkflowRepository,
@@ -197,7 +198,7 @@ fun DashboardNavHost(
                     key = "order_detail_$orderId",
                     factory =
                         OrderDetailViewModel.Factory(
-                            context = container.context,
+                            context = context,
                             orderId = orderId,
                             authRepository = container.authRepository,
                             orderRepository = container.orderWorkflowRepository,
@@ -235,7 +236,7 @@ fun DashboardNavHost(
                 viewModel(
                     factory =
                         SettingsViewModel.Factory(
-                            context = container.context,
+                            context = context,
                             authRepository = container.authRepository,
                             adminUserRepository = container.adminUserRepository,
                             catalogRepository = container.catalogRepository,
@@ -270,7 +271,7 @@ fun DashboardNavHost(
                 viewModel(
                     factory =
                         SettingsViewModel.Factory(
-                            context = container.context,
+                            context = context,
                             authRepository = container.authRepository,
                             adminUserRepository = container.adminUserRepository,
                             catalogRepository = container.catalogRepository,

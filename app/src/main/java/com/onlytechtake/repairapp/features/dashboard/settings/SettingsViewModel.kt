@@ -76,7 +76,9 @@ class SettingsViewModel(
             authRepository = authRepository,
             currentUser = authRepository.currentUser,
             scope = viewModelScope,
-            showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) },
+            showMessage = { text, isError, duration ->
+                _message.value = WorkspaceMessage(text, isError, duration)
+            },
             setLoading = { _isProcessing.value = it },
             diagnosticLogger = diagnosticLogger,
             ioDispatcher = ioDispatcher,

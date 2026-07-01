@@ -23,8 +23,9 @@ class SharedWorkspaceViewModel : ViewModel() {
     fun showMessage(
         text: String,
         isError: Boolean = false,
+        autoDismissMillis: Long? = null,
     ) {
-        _message.value = WorkspaceMessage(text, isError)
+        _message.value = WorkspaceMessage(text, isError, autoDismissMillis)
     }
 
     fun clearMessage() {

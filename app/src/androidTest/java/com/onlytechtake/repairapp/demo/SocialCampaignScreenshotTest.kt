@@ -151,6 +151,12 @@ class SocialCampaignScreenshotTest {
             // 6. SUCCESSO (Timeline chiusura)
             robot.closeOrder()
             robot.clickDashboardTab("ORDERS")
+
+            // Enable "Closed" filter to see the order we just closed
+            robot.clickTag(RepairAppTestTags.OrdersFilterButton)
+            robot.clickText(R.string.orders_filter_closed_discarded)
+            robot.clickText(R.string.action_confirm)
+
             robot.waitForTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
             robot.clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
             robot.waitForText(R.string.status_closed)

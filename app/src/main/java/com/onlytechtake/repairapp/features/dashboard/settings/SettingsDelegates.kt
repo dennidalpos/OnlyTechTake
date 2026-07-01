@@ -41,7 +41,10 @@ internal class CatalogSettingsDelegate(
         active: Boolean,
         onSaved: (String) -> Unit = {},
     ) {
-        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
+        actionRunner.run(
+            successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
+        ) { actor ->
             catalogRepository
                 .saveCategory(
                     actor,
@@ -69,7 +72,10 @@ internal class TemplateSettingsDelegate(
         active: Boolean,
         step: String? = null,
     ) {
-        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
+        actionRunner.run(
+            successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
+        ) { actor ->
             templateRepository.saveTemplate(actor, code, title, body, active, step)
         }
     }
@@ -78,13 +84,19 @@ internal class TemplateSettingsDelegate(
         anchor: TemplateAnchor,
         templateCode: String,
     ) {
-        actionRunner.run(successMessageRes = R.string.success_association_updated) { actor ->
+        actionRunner.run(
+            successMessageRes = R.string.success_association_updated,
+            autoDismissMillis = 1000L,
+        ) { actor ->
             templateRepository.setTemplateForAnchor(actor, anchor, templateCode)
         }
     }
 
     fun resetTemplatesToDefaults() {
-        actionRunner.run(successMessageRes = R.string.success_templates_restored) { actor ->
+        actionRunner.run(
+            successMessageRes = R.string.success_templates_restored,
+            autoDismissMillis = 1000L,
+        ) { actor ->
             templateRepository.resetToDefaults(actor)
         }
     }
@@ -145,6 +157,7 @@ internal class BackupSettingsDelegate(
     fun runBackupNow(onSuccess: () -> Unit = {}) {
         actionRunner.run(
             successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
             onSuccess = onSuccess,
         ) { actor ->
             backupService.runAutomaticBackup(actor)
@@ -258,7 +271,10 @@ internal class StorageSettingsDelegate(
     }
 
     fun cleanupOrphanedFiles() {
-        actionRunner.run(successMessageRes = R.string.success_orphaned_files_cleaned) { actor ->
+        actionRunner.run(
+            successMessageRes = R.string.success_orphaned_files_cleaned,
+            autoDismissMillis = 1000L,
+        ) { actor ->
             PermissionService.requirePermission(actor, UserPermission.MANAGE_STORAGE)
             val paths = mutableSetOf<String>()
             paths.addAll(database.orderMediaDao().getAllPaths())
@@ -287,7 +303,10 @@ internal class DiagnosticSettingsDelegate(
     }
 
     fun shareLogs() {
-        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
+        actionRunner.run(
+            successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
+        ) { actor ->
             PermissionService.requirePermission(
                 actor,
                 UserPermission.MANAGE_STORAGE,
@@ -318,7 +337,10 @@ internal class OwnerSettingsDelegate(
     private val actionRunner: AuthenticatedActionRunner,
 ) {
     fun updateOwnerInfo(info: OwnerInfo) {
-        actionRunner.run(successMessageRes = R.string.owner_save_success) {
+        actionRunner.run(
+            successMessageRes = R.string.owner_save_success,
+            autoDismissMillis = 1000L,
+        ) {
             ownerPreferences.updateOwnerInfo(info)
             Result.success(Unit)
         }

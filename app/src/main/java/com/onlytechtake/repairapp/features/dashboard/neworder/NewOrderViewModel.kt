@@ -63,7 +63,9 @@ class NewOrderViewModel(
             authRepository = authRepository,
             currentUser = authRepository.currentUser,
             scope = viewModelScope,
-            showMessage = { text, isError -> _message.value = WorkspaceMessage(text, isError) },
+            showMessage = { text, isError, duration ->
+                _message.value = WorkspaceMessage(text, isError, duration)
+            },
             diagnosticLogger = diagnosticLogger,
             ioDispatcher = ioDispatcher,
         )
@@ -148,7 +150,10 @@ class NewOrderViewModel(
         input: CustomerInput,
         onSaved: (CustomerEntity) -> Unit = {},
     ) {
-        actionRunner.run(successMessageRes = R.string.success_operation_completed) { actor ->
+        actionRunner.run(
+            successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
+        ) { actor ->
             customerRepository.save(actor, input).onSuccess {
                 onSaved(it)
                 setFormDirty(dirty = false)
@@ -249,6 +254,7 @@ class NewOrderViewModel(
     ) {
         actionRunner.run(
             successMessageRes = R.string.success_operation_completed,
+            autoDismissMillis = 1000L,
             onSuccess = onCreated,
         ) { actor ->
             createIntakeOrderUseCase.execute(

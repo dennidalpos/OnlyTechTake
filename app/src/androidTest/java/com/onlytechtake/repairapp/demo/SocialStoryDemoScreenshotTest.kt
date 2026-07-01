@@ -165,7 +165,15 @@ class SocialStoryDemoScreenshotTest {
                 nextAction = OrderStatusAction.CLOSE_ORDER,
             )
             robot.closeOrder()
-            robot.clickTag(RepairAppTestTags.orderCard(DemoDataSeeder.DEMO_ORDER_ID), scroll = true)
+            robot.clickDashboardTab("ORDERS")
+
+            // Enable "Closed" filter to see the order we just closed
+            robot.clickTag(RepairAppTestTags.OrdersFilterButton)
+            robot.clickText(R.string.orders_filter_closed_discarded)
+            robot.clickText(R.string.action_confirm)
+
+            robot.waitForText(summary, scroll = true)
+            robot.clickText(summary, scroll = true)
             robot.waitForText(R.string.status_closed)
             robot.capture(outputDir, "12-timeline-closure.png")
         }
@@ -204,6 +212,7 @@ class SocialStoryDemoScreenshotTest {
             robot.clickTag(RepairAppTestTags.ConfigCategorySaveButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.GenericConfirmButton)
             robot.clickTag(RepairAppTestTags.GenericConfirmButton)
+            robot.pauseForDemo()
             robot.waitForText(R.string.success_operation_completed)
             robot.capture(outputDir, "04-category-saved.png")
 
@@ -240,6 +249,7 @@ class SocialStoryDemoScreenshotTest {
             robot.clickTag(RepairAppTestTags.ConfigTemplateSaveButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.GenericConfirmButton)
             robot.clickTag(RepairAppTestTags.GenericConfirmButton)
+            robot.pauseForDemo()
             robot.waitForText(R.string.success_operation_completed)
             robot.capture(outputDir, "08-template-saved.png")
         }

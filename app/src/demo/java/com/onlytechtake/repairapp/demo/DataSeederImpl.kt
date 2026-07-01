@@ -5,6 +5,7 @@ import androidx.room.withTransaction
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.demo.DemoMode
 import com.onlytechtake.repairapp.core.security.PasswordHasher
+import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.data.local.entities.MessageChannel
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
@@ -23,10 +24,21 @@ import java.util.UUID
 class DataSeederImpl : DataSeeder {
     override suspend fun seed(context: Context) =
         withContext(Dispatchers.IO) {
-            DemoSeeder.seedDemoData(context)
+            val englishContext = getLocalizedContext(context, java.util.Locale.ENGLISH)
+            DemoSeeder.seedDemoData(englishContext)
         }
 
     override val defaultPassword: String = DemoSeeder.DEFAULT_PASSWORD
+
+    private fun getLocalizedContext(
+        context: Context,
+        locale: java.util.Locale,
+    ): Context {
+        val configuration = context.resources.configuration
+        val localizedConfig = android.content.res.Configuration(configuration)
+        localizedConfig.setLocale(locale)
+        return context.createConfigurationContext(localizedConfig)
+    }
 }
 
 object DemoSeeder {
@@ -64,8 +76,7 @@ object DemoSeeder {
 
             // Reset Anchor Mappings to defaults
             db.appSettingDao().deleteByKeys(
-                com.onlytechtake.repairapp.core.templates.TemplateAnchor.entries
-                    .map { it.settingKey },
+                TemplateAnchor.entries.map { it.settingKey },
             )
         }
 

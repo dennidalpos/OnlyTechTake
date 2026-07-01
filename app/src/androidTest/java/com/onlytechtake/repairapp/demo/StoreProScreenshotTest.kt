@@ -131,14 +131,17 @@ class StoreProScreenshotTest {
             robot.applyResultStatus("Display AMOLED originale Samsung.", "249,00")
             robot.capture(outputDir, "04-diagnosi-preventivo-pro.png")
 
-            // 05-whatsapp-pdf-pro
+            // 05-repairing-step-pro
             robot.acceptQuote()
-            // Capture here to show the "REPAIRING" step
             robot.capture(outputDir, "05-repairing-step-pro.png")
 
+            // 06-whatsapp-pdf-pro
             robot.waitForTag(RepairAppTestTags.OrderWhatsAppButton, scroll = true)
             robot.clickTag(RepairAppTestTags.OrderWhatsAppButton)
             robot.waitForTag(RepairAppTestTags.OrderWhatsAppPreviewPanel)
+            // Scroll inside dialog or interaction to ensure visual change
+            robot.typeTag(RepairAppTestTags.OrderWhatsAppMessageField, " ", scroll = false)
+            Thread.sleep(1000)
             robot.capture(outputDir, "06-whatsapp-pdf-pro.png")
             robot.dismissWhatsAppPreviewIfPresent()
 
@@ -147,8 +150,14 @@ class StoreProScreenshotTest {
                 OrderStatusAction.READY_FOR_PICKUP,
                 OrderStatusAction.CLOSE_ORDER,
             )
-            robot.closeOrder("Riparazione completata con successo.")
+            robot.closeOrder("Repair successfully completed.")
             robot.clickDashboardTab("ORDERS")
+
+            // Enable "Closed" filter to see the order we just closed
+            robot.clickTag(RepairAppTestTags.OrdersFilterButton)
+            robot.clickText(R.string.orders_filter_closed_discarded)
+            robot.clickText(R.string.action_confirm)
+
             robot.waitForText(summary, scroll = true)
             robot.clickText(summary, scroll = true)
             robot.waitForText(R.string.status_closed)

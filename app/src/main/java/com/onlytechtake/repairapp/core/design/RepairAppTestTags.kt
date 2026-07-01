@@ -58,6 +58,7 @@ object RepairAppTestTags {
     const val OrderActionSection = "order_action_section"
     const val OrderWhatsAppButton = "order_whatsapp_button"
     const val OrderWhatsAppPreviewPanel = "order_whatsapp_preview_panel"
+    const val OrderWhatsAppMessageField = "order_whatsapp_message_field"
     const val OrderWhatsAppOpenButton = "order_whatsapp_open_button"
     const val OrderWhatsAppSentButton = "order_whatsapp_sent_button"
     const val OrderWhatsAppClosePreviewButton = "order_whatsapp_close_preview_button"

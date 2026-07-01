@@ -80,12 +80,13 @@ fun AuthGateRoute(
 ) {
     var showcaseSeedRequested by remember(appInstanceKey) { mutableStateOf(value = false) }
     val container = LocalAppContainer.current
+    val context = androidx.compose.ui.platform.LocalContext.current
     val viewModel: AuthGateViewModel =
         viewModel(
             key = "auth_gate_$appInstanceKey",
             factory =
                 AuthGateViewModel.Factory(
-                    container.context,
+                    context,
                     container.authRepository,
                     container.ownerPreferences,
                     container.backupRepository,
@@ -95,7 +96,6 @@ fun AuthGateRoute(
     val authState by viewModel.authState.collectAsState()
     val ownerInfo by viewModel.ownerInfo.collectAsState()
     val formState by viewModel.formState.collectAsState()
-    val context = LocalContext.current
 
     LaunchedEffect(authState.lastUsername) {
         if (formState.username.isBlank() && authState.lastUsername.isNotBlank()) {

@@ -159,6 +159,12 @@ class OperatorIntakeDemoScreenshotTest {
 
             robot.closeOrder()
             robot.clickDashboardTab("ORDERS")
+
+            // Enable "Closed" filter to see the order we just closed
+            robot.clickTag(RepairAppTestTags.OrdersFilterButton)
+            robot.clickText(R.string.orders_filter_closed_discarded)
+            robot.clickText(R.string.action_confirm)
+
             robot.waitForText(summary, scroll = true)
             robot.clickText(summary, scroll = true)
             robot.waitForText(R.string.status_closed)

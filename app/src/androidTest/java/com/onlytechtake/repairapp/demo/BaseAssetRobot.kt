@@ -138,7 +138,7 @@ abstract class BaseAssetRobot(
         scroll: Boolean = false,
     ) {
         waitForText(text, scroll = scroll)
-        val node = composeRule.onNodeWithText(text, substring = true)
+        val node = composeRule.onNodeWithText(text, substring = true, ignoreCase = true)
         try {
             node.performClick()
         } catch (_: Throwable) {
@@ -224,7 +224,8 @@ abstract class BaseAssetRobot(
             .isNotEmpty()
 
     private fun isTextDisplayed(text: String): Boolean =
-        composeRule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+        composeRule.onAllNodesWithText(text, substring = true, ignoreCase = true)
+            .fetchSemanticsNodes().isNotEmpty()
 
     fun waitForText(
         text: String,
@@ -239,7 +240,8 @@ abstract class BaseAssetRobot(
             if (scroll) {
                 if ((attempts % 2) == 0) {
                     try {
-                        composeRule.onNodeWithText(text, substring = true).performScrollTo()
+                        composeRule.onNodeWithText(text, substring = true, ignoreCase = true)
+                            .performScrollTo()
                         composeRule.waitForIdle()
                         if (isTextDisplayed(text)) {
                             found = true
@@ -253,7 +255,8 @@ abstract class BaseAssetRobot(
             Thread.sleep(TAG_POLL_MILLIS)
             attempts++
         }
-        if (!found) composeRule.onNodeWithText(text, substring = true).assertExists()
+        if (!found) composeRule.onNodeWithText(text, substring = true, ignoreCase = true)
+            .assertExists()
     }
 
     fun waitForText(

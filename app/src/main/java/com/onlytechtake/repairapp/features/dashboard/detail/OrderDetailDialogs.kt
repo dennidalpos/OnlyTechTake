@@ -344,6 +344,7 @@ fun WhatsAppPreviewDialog(
                         label = stringResource(R.string.order_wa_message_label),
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = false,
+                        testTag = RepairAppTestTags.OrderWhatsAppMessageField,
                     )
                 }
             },

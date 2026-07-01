@@ -97,10 +97,11 @@ fun AboutSettings(onBack: () -> Unit) {
                             style = MaterialTheme.typography.bodyMedium,
                         )
                         Text(
-                            text = stringResource(
-                                R.string.about_build_type,
-                                BuildConfig.BUILD_TYPE
-                            ),
+                            text =
+                                stringResource(
+                                    R.string.about_build_type,
+                                    BuildConfig.BUILD_TYPE,
+                                ),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.secondary,
                         )

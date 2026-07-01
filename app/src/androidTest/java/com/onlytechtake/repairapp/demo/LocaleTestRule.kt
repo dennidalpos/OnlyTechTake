@@ -30,16 +30,15 @@ class LocaleTestRule(
         object : Statement() {
             override fun evaluate() {
                 val context = InstrumentationRegistry.getInstrumentation().targetContext
-                val resources = context.resources
-                val configuration = resources.configuration
+                val appCtx = context.applicationContext
 
-                deviceLocale = configuration.locales[0]
+                deviceLocale = context.resources.configuration.locales[0]
 
                 System.setProperty("forceEnglish", "true")
                 Locale.setDefault(locale)
-                configuration.setLocale(locale)
-                @Suppress("DEPRECATION")
-                resources.updateConfiguration(configuration, resources.displayMetrics)
+
+                updateContextLocale(context, locale)
+                updateContextLocale(appCtx, locale)
 
                 try {
                     base.evaluate()
@@ -47,11 +46,21 @@ class LocaleTestRule(
                     System.clearProperty("forceEnglish")
                     deviceLocale?.let {
                         Locale.setDefault(it)
-                        configuration.setLocale(it)
-                        @Suppress("DEPRECATION")
-                        resources.updateConfiguration(configuration, resources.displayMetrics)
+                        updateContextLocale(context, it)
+                        updateContextLocale(appCtx, it)
                     }
                 }
+            }
+
+            private fun updateContextLocale(
+                context: android.content.Context,
+                locale: Locale,
+            ) {
+                val resources = context.resources
+                val configuration = resources.configuration
+                configuration.setLocale(locale)
+                @Suppress("DEPRECATION")
+                resources.updateConfiguration(configuration, resources.displayMetrics)
             }
         }
 }

@@ -72,7 +72,7 @@ class AuthGateViewModel(
 
             mutableFormState.update { it.copy(seeding = true, loading = true, errorMessage = null) }
             runCatching {
-                dataSeeder.seed(context)
+                dataSeeder.seed(applicationContext)
             }.onSuccess {
                 onDone()
             }.onFailure { e ->

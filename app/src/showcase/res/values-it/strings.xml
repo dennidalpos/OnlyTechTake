@@ -84,6 +84,6 @@
     <string name="showcase_vat_format">0123456789%d</string>
     <string name="showcase_vat_fictitious">00000000000</string>
     <string name="showcase_tax_code_business_prefix">B</string>
-    <string name="showcase_media_type_photo">FOTO</string>
-    <string name="showcase_mime_type_png">image/png</string>
+    <string name="showcase_media_type_photo" translatable="false">PHOTO</string>
+    <string name="showcase_mime_type_png" translatable="false">image/png</string>
 </resources>
