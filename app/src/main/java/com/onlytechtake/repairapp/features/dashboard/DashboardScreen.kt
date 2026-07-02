@@ -63,6 +63,7 @@ import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.core.design.components.AppDialog
 import com.onlytechtake.repairapp.core.design.components.AppIconButton
+import com.onlytechtake.repairapp.core.design.components.AppMessageBanner
 import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
 import com.onlytechtake.repairapp.core.design.components.AppTopBar
 import com.onlytechtake.repairapp.core.design.components.BannerType
@@ -84,7 +85,11 @@ fun DashboardRoute(
     val dashboardViewModel: DashboardViewModel =
         viewModel(
             key = "dashboard_$appInstanceKey",
-            factory = DashboardViewModel.Factory(container.repairAppRepository),
+            factory =
+                DashboardViewModel.Factory(
+                    container.repairAppRepository,
+                    container.backupReminderPreferences,
+                ),
         )
     val sharedViewModel: SharedWorkspaceViewModel =
         viewModel(
@@ -92,9 +97,11 @@ fun DashboardRoute(
             factory = SharedWorkspaceViewModel.Factory(),
         )
     val summary by dashboardViewModel.summary.collectAsState()
+    val isBackupReminderDue by dashboardViewModel.isBackupReminderDue.collectAsState()
 
     DashboardScreen(
         summary = summary,
+        isBackupReminderDue = isBackupReminderDue,
         sharedViewModel = sharedViewModel,
         onLogout = onLogout,
         onAppDataRestored = onAppDataRestored,
@@ -105,6 +112,7 @@ fun DashboardRoute(
 @Composable
 fun DashboardScreen(
     summary: AppSummary?,
+    isBackupReminderDue: Boolean,
     sharedViewModel: SharedWorkspaceViewModel,
     onLogout: () -> Unit,
     onAppDataRestored: () -> Unit,
@@ -403,6 +411,28 @@ fun DashboardScreen(
                     )
                 }
 
+                if (isBackupReminderDue && isAdmin) {
+                    AppMessageBanner(
+                        message = stringResource(R.string.home_backup_reminder_title),
+                        type = BannerType.Warning,
+                        modifier =
+                            Modifier.padding(
+                                horizontal = RepairAppSpacing.screenHorizontal,
+                                vertical = RepairAppSpacing.compactGap,
+                            ),
+                        action = {
+                            AppButton(
+                                text = stringResource(R.string.dashboard_config),
+                                onClick = {
+                                    performNavigation(DashboardRoutes.settings("EXPORT"))
+                                },
+                                variant = AppButtonVariant.Ghost,
+                                size = AppButtonSize.Compact,
+                            )
+                        },
+                    )
+                }
+
                 DashboardNavHost(
                     navController = navController,
                     summary = summary,
@@ -504,6 +534,7 @@ private fun DashboardScreenPreview() {
                         customerCount = 10,
                         activeOrderCount = 5,
                     ),
+                isBackupReminderDue = true,
                 sharedViewModel =
                     androidx.compose.runtime.remember { SharedWorkspaceViewModel() },
                 onLogout = {},

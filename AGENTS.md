@@ -38,11 +38,11 @@ Operational guide for AI agents. Environment: **Windows 11 + PowerShell**.
 ---
 
 ## 4. Media Asset Workflow
-- `generate_static_brands.ps1`: (ImageMagick) SVG -> PNG/ICO/Favicon. Updates landing and marketing assets from vector sources.
-- `create_demo_assets.ps1`: (Instrumented Tests) Generates UI screenshots using JSON profiles in `demo/assets/profiles`. Supports `-Dark`, `-Locale`, and `-NoDistribute`. Applies automatic transformations (square, vertical/Story, landscape) via GDI+ (`android_demo.ps1`).
-- `record_demo_device.ps1`: (FFmpeg) Captures screen videos by executing instrumental tests. Supports `-AutomaticTrimStartSeconds`, `-SeedData`, and `-WhatsAppOptimized`.
-- `regenerate_public.ps1`: Master script for full asset refresh. Handles **Mixed Management**: for video-enabled profiles (e.g., `operator-intake`), it first records the video (running the test), then runs the screenshot creator with `-SkipTest` to extract frames from the same device state.
-- **Asset Locale**: Public assets MUST be generated in English (`-Locale en`). Use `SeedDemoDataTest` or `DemoDataSeeder.seedDemoProfile` to ensure consistent English data.
+- `generate_static_brands.ps1`: (ImageMagick) SVG -> PNG/ICO/Favicon. Generates brand identity assets for landing page and social media from `marketing/registered-assets/brand/identity/onlytechtake-logo.svg` and `landing/assets/brand/onlytechtake-mark.svg`.
+- `create_demo_assets.ps1`: (Instrumented Tests) Generates UI screenshots using JSON profiles in `demo/assets/profiles`. Supports `-Dark`, `-Locale`, and `-UseConnectedDevice`. Applies automatic transformations (**vertical/Story**, **square**, **landscape**) via GDI+ (`android_demo.ps1`). Assets are distributed to `marketing/screenshots/` and `landing/assets/screenshots/`.
+- `record_demo_device.ps1`: (FFmpeg) Captures screen videos by executing instrumental tests. Supports `-WhatsAppOptimized` (720p, CRF 28) and `-AutomaticTrim`. Distributed to `marketing/videos/` and `landing/assets/videos/`.
+- `regenerate_public.ps1`: Master script for full asset refresh. Handles **Mixed Management**: for video-enabled profiles (e.g., `operator-intake`), it first records the video (running the test), then runs the screenshot creator with `-SkipTest` to extract frames from the same device state. It performs a full cleanup of `asset/`, `marketing/screenshots/`, and `landing/assets/screenshots/` before generation.
+- **Asset Locale**: Public assets MUST be generated in English (`-Locale en`). The scripts handle device locale configuration via `adb`.
 
 ---
 

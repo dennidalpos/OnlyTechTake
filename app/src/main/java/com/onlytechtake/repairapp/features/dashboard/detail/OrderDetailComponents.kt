@@ -105,7 +105,7 @@ fun OrderHeader(
                             ?.split(">")
                             ?.lastOrNull()
                             ?.trim()
-                            ?: stringResource(R.string.orders_category_unavailable),
+                        ?: stringResource(R.string.orders_category_unavailable),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.outline,
                 )
@@ -395,7 +395,8 @@ fun QuoteDecisionRow(
                 .background(
                     if (checked) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else Color.Transparent,
                     RepairAppShapes.compactButton,
-                ).padding(
+                )
+                .padding(
                     horizontal = RepairAppSpacing.compactGap,
                     vertical = RepairAppSpacing.compactGap,
                 ),
@@ -412,27 +413,19 @@ fun InternalNotesPanel(
     notes: String?,
     onAddNoteClick: () -> Unit,
 ) {
-    StandardCard {
-        Column(
-            modifier = Modifier.padding(RepairAppSpacing.cardPadding),
-            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
-        ) {
-            Text(
-                stringResource(R.string.order_internal_notes),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-            )
-            notes?.takeIf { it.isNotBlank() }?.let {
-                OperatorText(it)
-            }
-            AppButton(
-                text = stringResource(R.string.order_save_note),
-                variant = AppButtonVariant.Ghost,
-                onClick = onAddNoteClick,
-                size = AppButtonSize.Compact,
-                modifier = Modifier.align(Alignment.End),
-            )
+    Column(
+        verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+    ) {
+        notes?.takeIf { it.isNotBlank() }?.let {
+            OperatorText(it)
         }
+        AppButton(
+            text = stringResource(R.string.order_save_note),
+            variant = AppButtonVariant.Ghost,
+            onClick = onAddNoteClick,
+            size = AppButtonSize.Compact,
+            modifier = Modifier.align(Alignment.End),
+        )
     }
 }
 

@@ -161,6 +161,7 @@ class StoreProScreenshotTest {
             robot.waitForText(summary, scroll = true)
             robot.clickText(summary, scroll = true)
             robot.waitForText(R.string.status_closed)
+            robot.expandTimeline()
             robot.capture(outputDir, "07-timeline-chiusura-pro.png")
 
             // 08-clienti-pro

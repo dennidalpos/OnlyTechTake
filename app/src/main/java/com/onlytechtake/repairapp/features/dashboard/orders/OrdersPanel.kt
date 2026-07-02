@@ -1,7 +1,5 @@
 package com.onlytechtake.repairapp.features.dashboard.orders
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -76,7 +74,6 @@ import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.domain.workspace.nextActionLabel
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
-import com.onlytechtake.repairapp.features.dashboard.common.BackupReminderCard
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspace
@@ -92,7 +89,6 @@ fun OrdersPanel(
     sharedViewModel: SharedWorkspaceViewModel,
     onOrderClick: (String) -> Unit,
     onNewOrder: () -> Unit,
-    onOpenBackupSettings: () -> Unit,
     onSetFormDirty: (Boolean) -> Unit = {},
 ) {
     val windowSizeClass = LocalWindowSizeClass.current
@@ -113,7 +109,6 @@ fun OrdersPanel(
                     viewModel = viewModel,
                     onOrderClick = { selectedOrderId = it },
                     onNewOrder = onNewOrder,
-                    onOpenBackupSettings = onOpenBackupSettings,
                 )
             }
             AppVerticalDivider()
@@ -152,7 +147,7 @@ fun OrdersPanel(
             }
         }
     } else {
-        OrdersListContent(viewModel, onOrderClick, onNewOrder, onOpenBackupSettings)
+        OrdersListContent(viewModel, onOrderClick, onNewOrder)
     }
 }
 
@@ -161,12 +156,9 @@ private fun OrdersListContent(
     viewModel: OrdersViewModel,
     onOrderClick: (String) -> Unit,
     onNewOrder: () -> Unit,
-    onOpenBackupSettings: () -> Unit,
 ) {
     val orderFilter by viewModel.orderFilter.collectAsState()
     val orderListItems by viewModel.orderListItems.collectAsState()
-    val backupReminderSettings by viewModel.backupReminderSettings.collectAsState()
-    val showBackupReminder by viewModel.isBackupReminderDue.collectAsState()
     val context = LocalContext.current
     var showFilterDialog by rememberSaveable { mutableStateOf(value = false) }
     val listState = rememberLazyListState()
@@ -174,11 +166,6 @@ private fun OrdersListContent(
         derivedStateOf { listState.firstVisibleItemIndex > 3 }
     }
     val scope = rememberCoroutineScope()
-
-    val exportZipLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
-            uri?.let(viewModel::exportCompleteBackup)
-        }
 
     AppScreenContainer(scrollable = false) {
         Row(
@@ -198,15 +185,6 @@ private fun OrdersListContent(
         }
 
         Spacer(Modifier.height(RepairAppSpacing.cardGap))
-
-        if (showBackupReminder) {
-            BackupReminderCard(
-                settings = backupReminderSettings,
-                onRunBackup = { exportZipLauncher.launch("onlytechtake-backup.zip") },
-                onOpenSettings = onOpenBackupSettings,
-            )
-            Spacer(Modifier.height(RepairAppSpacing.cardGap))
-        }
 
         Row(
             modifier =
@@ -507,9 +485,9 @@ private fun OrdersPanelPreview() {
             OrdersListContent(
                 viewModel = viewModel(),
                 onOrderClick = {},
-                onNewOrder = {},
-                onOpenBackupSettings = {},
-            )
+            ) {
+                // onNewOrder
+            }
         }
     }
 }

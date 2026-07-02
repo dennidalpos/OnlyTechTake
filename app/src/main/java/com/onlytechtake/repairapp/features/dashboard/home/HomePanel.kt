@@ -1,7 +1,5 @@
 package com.onlytechtake.repairapp.features.dashboard.home
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -53,11 +51,9 @@ import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
 import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.core.design.repairColors
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
-import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import com.onlytechtake.repairapp.domain.models.AppSummary
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
-import com.onlytechtake.repairapp.features.dashboard.common.BackupReminderCard
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.workspace.OperationalQueue
 import com.onlytechtake.repairapp.features.workspace.queueFilter
@@ -71,25 +67,14 @@ fun HomePanel(
     viewModel: HomeViewModel,
     onNewOrder: () -> Unit,
     onOpenQueue: (OrderFilter) -> Unit,
-    onOpenBackupSettings: () -> Unit,
 ) {
     val queues by viewModel.operationalQueues.collectAsState()
-    val backupReminderSettings by viewModel.backupReminderSettings.collectAsState()
-    val showBackupReminder by viewModel.isBackupReminderDue.collectAsState()
-    val exportZipLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
-            uri?.let(viewModel::exportCompleteBackup)
-        }
 
     HomePanelContent(
         summary = summary,
         queues = queues,
-        backupReminderSettings = backupReminderSettings,
-        showBackupReminder = showBackupReminder,
         onNewOrder = onNewOrder,
         onOpenQueue = onOpenQueue,
-        onOpenBackupSettings = onOpenBackupSettings,
-        onRunBackup = { exportZipLauncher.launch("onlytechtake-backup.zip") },
     )
 }
 
@@ -98,12 +83,8 @@ fun HomePanel(
 fun HomePanelContent(
     summary: AppSummary?,
     queues: List<OperationalQueue>?,
-    backupReminderSettings: BackupReminderSettings,
-    showBackupReminder: Boolean,
     onNewOrder: () -> Unit,
     onOpenQueue: (OrderFilter) -> Unit,
-    onOpenBackupSettings: () -> Unit,
-    onRunBackup: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val windowSizeClass = LocalWindowSizeClass.current
@@ -128,15 +109,6 @@ fun HomePanelContent(
             }
         } else {
             HomeMetrics(summary)
-
-            if (showBackupReminder && isProFlavor()) {
-                Spacer(Modifier.height(RepairAppSpacing.cardGap))
-                BackupReminderCard(
-                    settings = backupReminderSettings,
-                    onRunBackup = onRunBackup,
-                    onOpenSettings = onOpenBackupSettings,
-                )
-            }
 
             if (BuildConfig.IS_DEMO_VERSION) {
                 Spacer(Modifier.height(RepairAppSpacing.cardGap))
@@ -342,19 +314,12 @@ private fun HomePanelPreview() {
                         activeOrderCount = 45,
                     ),
                 queues = emptyList(),
-                backupReminderSettings = BackupReminderSettings(),
-                showBackupReminder = true,
                 onNewOrder = {},
                 onOpenQueue = {},
-                onOpenBackupSettings = {},
-                onRunBackup = {},
             )
         }
     }
 }
-
-@Suppress("SameReturnValue")
-private fun isProFlavor(): Boolean = BuildConfig.IS_PRO_VERSION
 
 @Suppress("SameReturnValue")
 private fun isDemoFlavor(): Boolean = BuildConfig.IS_DEMO_VERSION

@@ -7,7 +7,7 @@ class TemplateRenderer {
     ): String =
         variablePattern.replace(template) { match ->
             val variableName = match.groupValues[1].trim()
-            require(variableName in variables) { "Variabile template non supportata: $variableName" }
+            require(variableName in variables) { "Unsupported template variable: $variableName" }
             variables.getValue(variableName)
         }
 
@@ -24,7 +24,7 @@ class TemplateRenderer {
     ) {
         val unsupportedVariables = extractVariables(template) - supportedVariables
         require(unsupportedVariables.isEmpty()) {
-            "Variabili template non supportate: ${unsupportedVariables.sorted().joinToString(", ")}"
+            "Unsupported template variables: ${unsupportedVariables.sorted().joinToString(", ")}"
         }
     }
 

@@ -2,12 +2,18 @@ package com.onlytechtake.repairapp.features.dashboard.detail
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.Delete
@@ -21,7 +27,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,7 +49,6 @@ import com.onlytechtake.repairapp.features.dashboard.common.CameraCaptureMode
 import com.onlytechtake.repairapp.features.dashboard.common.CameraCapturePreview
 import com.onlytechtake.repairapp.features.dashboard.common.LocalImagePreview
 import com.onlytechtake.repairapp.features.dashboard.common.LocalImageViewer
-import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.workspace.isFinalPhoto
 import com.onlytechtake.repairapp.features.workspace.isImageAttachment
 import com.onlytechtake.repairapp.features.workspace.isVideoAttachment
@@ -60,16 +67,14 @@ fun OrderPhotoSection(
         }
     val images = detail.media.filter { it.isImageAttachment() && !it.isFinalPhoto() }
     val videos = detail.media.filter { it.isVideoAttachment() }
-    val documents = detail.media.filter { !it.isImageAttachment() && !it.isVideoAttachment() }
 
-    Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
-        SectionTitle(stringResource(R.string.intake_step_media))
-
-        if (images.isEmpty() && videos.isEmpty() && documents.isEmpty()) {
+    Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap)) {
+        if (images.isEmpty() && videos.isEmpty()) {
             Text(
                 stringResource(R.string.intake_media_empty),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.outline,
+                modifier = Modifier.padding(vertical = RepairAppSpacing.compactGap),
             )
         } else {
             if (images.isNotEmpty()) {
@@ -79,21 +84,38 @@ fun OrderPhotoSection(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontWeight = FontWeight.Bold,
                 )
-                images.forEach { media ->
-                    StandardCard {
-                        Column(
-                            modifier = Modifier.padding(RepairAppSpacing.compactGap),
-                            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    items(images, key = { it.id }) { media ->
+                        StandardCard(
+                            modifier =
+                                Modifier
+                                    .height(140.dp)
+                                    .aspectRatio(1f),
                         ) {
-                            LocalImagePreview(
-                                path = media.localPath,
-                                description = media.fileName,
-                                modifier =
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .height(200.dp),
-                            ) { selectedImageId = media.id }
-                            MediaMetadataRow(media) { deleteMedia = media }
+                            Box {
+                                LocalImagePreview(
+                                    path = media.localPath,
+                                    description = media.fileName,
+                                    modifier = Modifier.fillMaxWidth(),
+                                ) { selectedImageId = media.id }
+
+                                AppIconButton(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = stringResource(R.string.content_description_delete),
+                                    onClick = { deleteMedia = media },
+                                    tint = MaterialTheme.colorScheme.error,
+                                    modifier =
+                                        Modifier
+                                            .align(Alignment.TopEnd)
+                                            .padding(4.dp)
+                                            .clip(MaterialTheme.shapes.small)
+                                            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.7f))
+                                            .size(24.dp),
+                                )
+                            }
                         }
                     }
                 }
@@ -105,18 +127,17 @@ fun OrderPhotoSection(
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top = RepairAppSpacing.compactGap),
                 )
-                videos.forEach { media ->
-                    StandardCard {
-                        Column(
-                            modifier = Modifier.padding(RepairAppSpacing.compactGap),
-                            verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
-                        ) {
+                Column(verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap)) {
+                    videos.forEach { media ->
+                        StandardCard {
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(RepairAppSpacing.compactGap),
                                 horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
-                                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 androidx.compose.material3.Icon(
                                     imageVector = Icons.Default.Videocam,
@@ -125,11 +146,17 @@ fun OrderPhotoSection(
                                 )
                                 Text(
                                     text = media.fileName,
-                                    style = MaterialTheme.typography.bodyMedium,
+                                    style = MaterialTheme.typography.bodySmall,
                                     modifier = Modifier.weight(1f),
+                                    maxLines = 1,
+                                )
+                                AppIconButton(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = stringResource(R.string.content_description_delete),
+                                    onClick = { deleteMedia = media },
+                                    tint = MaterialTheme.colorScheme.error,
                                 )
                             }
-                            MediaMetadataRow(media) { deleteMedia = media }
                         }
                     }
                 }
@@ -262,32 +289,6 @@ fun OrderPhotoSection(
                     size = AppButtonSize.Compact,
                 )
             },
-        )
-    }
-}
-
-@Composable
-private fun MediaMetadataRow(
-    media: OrderMediaEntity,
-    onDelete: () -> Unit,
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
-    ) {
-        Text(
-            com.onlytechtake.repairapp.core.utils
-                .formatUiDateTime(media.capturedAt),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.outline,
-            modifier = Modifier.weight(1f),
-        )
-        AppIconButton(
-            imageVector = Icons.Default.Delete,
-            contentDescription = stringResource(R.string.content_description_delete),
-            onClick = onDelete,
-            tint = MaterialTheme.colorScheme.error,
         )
     }
 }

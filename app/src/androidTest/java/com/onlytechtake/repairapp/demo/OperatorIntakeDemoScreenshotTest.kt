@@ -119,6 +119,7 @@ class OperatorIntakeDemoScreenshotTest {
             robot.waitForText(summary, scroll = true)
             robot.clickText(summary, scroll = true)
             robot.waitForTag(RepairAppTestTags.OrderStatusLabel)
+            robot.expandPhotos()
             robot.capture(outputDir, "09-order-detail-intake.png")
 
             // Technical Video Documentation (New Feature)
@@ -168,6 +169,7 @@ class OperatorIntakeDemoScreenshotTest {
             robot.waitForText(summary, scroll = true)
             robot.clickText(summary, scroll = true)
             robot.waitForText(R.string.status_closed)
+            robot.expandTimeline()
             robot.capture(outputDir, "16-closed-timeline.png")
         }
     }

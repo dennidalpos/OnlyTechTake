@@ -88,6 +88,30 @@ class ProAssetRobot(
         waitForText("Orders")
     }
 
+    fun expandNotes() {
+        waitForTag(RepairAppTestTags.OrderNotesSectionCard, scroll = true)
+        clickTag(RepairAppTestTags.OrderNotesSectionCard)
+        composeRule.waitForIdle()
+    }
+
+    fun expandPhotos() {
+        waitForTag(RepairAppTestTags.OrderPhotosSectionCard, scroll = true)
+        clickTag(RepairAppTestTags.OrderPhotosSectionCard)
+        composeRule.waitForIdle()
+    }
+
+    fun expandSignatures() {
+        waitForTag(RepairAppTestTags.OrderSignaturesCard, scroll = true)
+        clickTag(RepairAppTestTags.OrderSignaturesCard)
+        composeRule.waitForIdle()
+    }
+
+    fun expandTimeline() {
+        waitForTag(RepairAppTestTags.OrderTimelineSection, scroll = true)
+        clickTag(RepairAppTestTags.OrderTimelineSection)
+        composeRule.waitForIdle()
+    }
+
     private fun scrollOrderDetailToTop() {
         composeRule.onNodeWithTag(RepairAppTestTags.OrderDetailLazyColumn).performScrollToIndex(0)
         composeRule.waitForIdle()

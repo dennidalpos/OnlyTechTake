@@ -278,7 +278,11 @@ class OrderDetailViewModel(
                         _preparedMessage.value = message
                         _preparedMessageBody.value = message.body
                     }.onFailure {
-                        _message.value = WorkspaceMessage(it.message ?: "Errore", isError = true)
+                        _message.value =
+                            WorkspaceMessage(
+                                it.message ?: applicationContext.getString(R.string.error_unknown),
+                                isError = true,
+                            )
                     }
             }
             _isProcessing.value = false
@@ -318,7 +322,7 @@ class OrderDetailViewModel(
 
             val actor = currentUser.value
             if (actor == null) {
-                _statusPdfError.value = "Sessione scaduta"
+                _statusPdfError.value = applicationContext.getString(R.string.error_session_expired)
                 _isGeneratingStatusPdf.value = false
                 return@launch
             }
@@ -328,7 +332,8 @@ class OrderDetailViewModel(
                     _lastGeneratedDocumentId.value = doc.id
                     _showPdfSentConfirmation.value = true
                 }.onFailure {
-                    _statusPdfError.value = it.message ?: "Errore generazione PDF"
+                    _statusPdfError.value =
+                        it.message ?: applicationContext.getString(R.string.error_init_failed)
                 }
             _isGeneratingStatusPdf.value = false
         }
@@ -351,7 +356,11 @@ class OrderDetailViewModel(
                 _showPdfSentConfirmation.value = true
                 _pendingShareIntent.value = intent
             } else {
-                _message.value = WorkspaceMessage("Documento non trovato", isError = true)
+                _message.value =
+                    WorkspaceMessage(
+                        applicationContext.getString(R.string.error_document_not_found),
+                        isError = true,
+                    )
             }
             _isProcessing.value = false
         }

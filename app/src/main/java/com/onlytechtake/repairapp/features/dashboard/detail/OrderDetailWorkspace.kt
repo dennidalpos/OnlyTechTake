@@ -28,11 +28,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.LoadingBrandIndicator
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.RepairAppTheme
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
@@ -131,8 +134,10 @@ fun OrderDetailWorkspace(
         }
     }
 
-    var timelineExpanded by rememberSaveable { mutableStateOf(value = false) }
-    var signaturesExpanded by rememberSaveable { mutableStateOf(value = false) }
+    var notesExpanded by rememberSaveable { mutableStateOf(false) }
+    var photosExpanded by rememberSaveable { mutableStateOf(false) }
+    var timelineExpanded by rememberSaveable { mutableStateOf(false) }
+    var signaturesExpanded by rememberSaveable { mutableStateOf(false) }
 
     Column(Modifier.fillMaxSize()) {
         message?.let {
@@ -333,47 +338,66 @@ fun OrderDetailWorkspace(
                 }
 
                 item(key = "notes", contentType = "notes") {
-                    InternalNotesPanel(
-                        notes = selected.order.internalNotes,
+                    val hasNotes = selected.order.internalNotes?.isNotBlank() == true
+                    StandardCard(
+                        onClick = { notesExpanded = !notesExpanded },
+                        highlight = notesExpanded || hasNotes,
+                        modifier = Modifier.testTag(RepairAppTestTags.OrderNotesSectionCard),
                     ) {
-                        workspaceState.openInternalNote()
+                        Column(modifier = Modifier.padding(RepairAppSpacing.compactGap)) {
+                            ExpandableHeader(
+                                title = stringResource(R.string.order_internal_notes),
+                                isExpanded = notesExpanded,
+                                showBadge = hasNotes && !notesExpanded,
+                            )
+                            if (notesExpanded) {
+                                Column(modifier = Modifier.padding(horizontal = RepairAppSpacing.tinyGap)) {
+                                    InternalNotesPanel(
+                                        notes = selected.order.internalNotes,
+                                    ) {
+                                        workspaceState.openInternalNote()
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
                 item(key = "photos", contentType = "photos") {
-                    OrderPhotoSection(selected, viewModel)
+                    val mediaCount = selected.media.size
+                    StandardCard(
+                        onClick = { photosExpanded = !photosExpanded },
+                        highlight = photosExpanded || mediaCount > 0,
+                        modifier = Modifier.testTag(RepairAppTestTags.OrderPhotosSectionCard),
+                    ) {
+                        Column(modifier = Modifier.padding(RepairAppSpacing.compactGap)) {
+                            ExpandableHeader(
+                                title = stringResource(R.string.intake_step_media),
+                                isExpanded = photosExpanded,
+                                showBadge = mediaCount > 0 && !photosExpanded,
+                                badgeText = mediaCount.toString(),
+                            )
+                            if (photosExpanded) {
+                                Column(modifier = Modifier.padding(horizontal = RepairAppSpacing.tinyGap)) {
+                                    OrderPhotoSection(selected, viewModel)
+                                }
+                            }
+                        }
+                    }
                 }
 
                 item(key = "signatures", contentType = "signatures") {
                     StandardCard(
                         onClick = { signaturesExpanded = !signaturesExpanded },
-                        highlight = signaturesExpanded,
+                        highlight = signaturesExpanded || selected.signatures.isNotEmpty(),
                         modifier = Modifier.testTag(RepairAppTestTags.OrderSignaturesCard),
                     ) {
                         Column(modifier = Modifier.padding(RepairAppSpacing.compactGap)) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(
-                                    stringResource(R.string.signature_section_title),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    modifier = Modifier.padding(RepairAppSpacing.tinyGap),
-                                )
-                                Text(
-                                    if (signaturesExpanded) {
-                                        stringResource(R.string.action_close)
-                                    } else {
-                                        stringResource(
-                                            R.string.content_description_open,
-                                        )
-                                    },
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.primary,
-                                )
-                            }
+                            ExpandableHeader(
+                                title = stringResource(R.string.signature_section_title),
+                                isExpanded = signaturesExpanded,
+                                showBadge = selected.signatures.isNotEmpty() && !signaturesExpanded,
+                            )
                             if (signaturesExpanded) {
                                 OrderSignatureSection(
                                     detail = selected,
@@ -410,29 +434,10 @@ fun OrderDetailWorkspace(
                         modifier = Modifier.testTag(RepairAppTestTags.OrderTimelineSection),
                     ) {
                         Column(modifier = Modifier.padding(RepairAppSpacing.compactGap)) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(
-                                    stringResource(R.string.order_timeline),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    modifier = Modifier.padding(RepairAppSpacing.tinyGap),
-                                )
-                                Text(
-                                    if (timelineExpanded) {
-                                        stringResource(R.string.action_close)
-                                    } else {
-                                        stringResource(
-                                            R.string.content_description_open,
-                                        )
-                                    },
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.primary,
-                                )
-                            }
+                            ExpandableHeader(
+                                title = stringResource(R.string.order_timeline),
+                                isExpanded = timelineExpanded,
+                            )
                             if (timelineExpanded) {
                                 OrderTimelineSection(timeline = selected.timeline)
                             }
@@ -546,4 +551,62 @@ fun OrderDetailWorkspace(
         },
         onClose = viewModel::clearPreparedMessage,
     )
+}
+
+@Composable
+private fun ExpandableHeader(
+    title: String,
+    isExpanded: Boolean,
+    showBadge: Boolean = false,
+    badgeText: String? = null,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(RepairAppSpacing.tinyGap),
+            )
+            if (showBadge) {
+                androidx.compose.foundation.layout
+                    .Spacer(Modifier.padding(4.dp))
+                com.onlytechtake.repairapp.core.design.components.AppBadge(
+                    text = badgeText ?: "!",
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+            }
+        }
+        Text(
+            if (isExpanded) {
+                stringResource(R.string.action_close)
+            } else {
+                stringResource(
+                    R.string.content_description_open,
+                )
+            },
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.primary,
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Light Mode")
+@Preview(
+    showBackground = true,
+    name = "Dark Mode",
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
+)
+@Composable
+private fun OrderDetailWorkspacePreview() {
+    RepairAppTheme {
+        // Mocked or minimal workspace could be here if we had a way to provide fake viewmodel
+        // For now just showing a placeholder if needed, but the user asked for previews.
+        Text("Order Detail Preview Placeholder")
+    }
 }

@@ -179,14 +179,6 @@ fun BackupSettings(
             }
         }
 
-        if (isBackupReminderDue && !backupReminderSettings.isAutomatic) {
-            AppMessageBanner(
-                message = stringResource(R.string.home_backup_reminder_title),
-                type = BannerType.Warning,
-                modifier = Modifier.padding(bottom = RepairAppSpacing.cardGap),
-            )
-        }
-
         if (isProcessing) {
             Box(
                 modifier = Modifier.fillMaxWidth(),

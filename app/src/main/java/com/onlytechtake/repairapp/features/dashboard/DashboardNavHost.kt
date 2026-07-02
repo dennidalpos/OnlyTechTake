@@ -75,7 +75,7 @@ fun DashboardNavHost(
                         restoreState = true
                     }
                 },
-            ) { navController.navigate(DashboardRoutes.settings("EXPORT")) }
+            )
         }
         composable(DashboardRoutes.NEW_ORDER) {
             val newOrderViewModel: NewOrderViewModel =
@@ -179,9 +179,6 @@ fun DashboardNavHost(
                     navController.navigate(DashboardRoutes.orderDetail(orderId))
                 },
                 onNewOrder = { navController.navigate(DashboardRoutes.NEW_ORDER) },
-                onOpenBackupSettings = {
-                    navController.navigate(DashboardRoutes.settings("EXPORT"))
-                },
             ) { dirty -> sharedViewModel.setFormDirty(dirty) }
         }
         composable(
