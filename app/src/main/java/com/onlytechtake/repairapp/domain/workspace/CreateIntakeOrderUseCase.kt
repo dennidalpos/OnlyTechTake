@@ -25,7 +25,8 @@ class CreateIntakeOrderUseCase(
 ) {
     suspend fun countAllOrders(): Int = orderRepository.countAllOrders()
 
-    fun getDemoLimitErrorMessage(): String = DemoMode.getOrderLimitMessage(context, BuildConfig.MAX_ORDERS)
+    fun getDemoLimitErrorMessage(): String =
+        DemoMode.getOrderLimitMessage(context, BuildConfig.MAX_ORDERS)
 
     suspend fun execute(
         actor: AuthenticatedUser,

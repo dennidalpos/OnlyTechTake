@@ -167,7 +167,7 @@ fun ColumnScope.TemplateMappingSettings(
                                 Text(
                                     text =
                                         assignedTemplate?.title ?: assignedCode
-                                            ?: stringResource(R.string.config_template_status_not_configured),
+                                        ?: stringResource(R.string.config_template_status_not_configured),
                                     style = MaterialTheme.typography.bodySmall,
                                     color =
                                         if (assignedTemplate == null) {

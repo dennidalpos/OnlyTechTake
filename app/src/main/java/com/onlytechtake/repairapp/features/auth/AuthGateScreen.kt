@@ -80,7 +80,7 @@ fun AuthGateRoute(
 ) {
     var showcaseSeedRequested by remember(appInstanceKey) { mutableStateOf(value = false) }
     val container = LocalAppContainer.current
-    val context = androidx.compose.ui.platform.LocalContext.current
+    val context = LocalContext.current
     val viewModel: AuthGateViewModel =
         viewModel(
             key = "auth_gate_$appInstanceKey",

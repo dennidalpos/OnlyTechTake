@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="order_created_title">Commessa creata</string>
     <string name="status_updated_title">Stato aggiornato</string>
@@ -385,7 +385,7 @@
     <string name="backup_status_never">Mai eseguito</string>
     <plurals name="backup_status_days_ago">
         <item quantity="one">%1$d giorno fa</item>
-        <item quantity="many">%1$d giorni fa</item>
+        <item quantity="many" tools:ignore="UnusedQuantity">%1$d giorni fa</item>
         <item quantity="other">%1$d giorni fa</item>
     </plurals>
     <string name="backup_status_failed">Ultimo tentativo fallito</string>
@@ -838,7 +838,7 @@
     <string name="config_backup_reminder_info">Stato: %1$s\nUltimo backup riuscito: %2$s\nIntervallo: %3$s\nFile: %4$s</string>
     <plurals name="config_backup_reminder_interval">
         <item quantity="one">ogni %1$d giorno</item>
-        <item quantity="many">ogni %1$d giorni</item>
+        <item quantity="many" tools:ignore="UnusedQuantity">ogni %1$d giorni</item>
         <item quantity="other">ogni %1$d giorni</item>
     </plurals>
     <string name="config_backup_last_success_none">Nessuno</string>

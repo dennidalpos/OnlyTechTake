@@ -105,7 +105,7 @@ fun OrderHeader(
                             ?.split(">")
                             ?.lastOrNull()
                             ?.trim()
-                            ?: stringResource(R.string.orders_category_unavailable),
+                        ?: stringResource(R.string.orders_category_unavailable),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.outline,
                 )
@@ -395,7 +395,8 @@ fun QuoteDecisionRow(
                 .background(
                     if (checked) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else Color.Transparent,
                     RepairAppShapes.compactButton,
-                ).padding(
+                )
+                .padding(
                     horizontal = RepairAppSpacing.compactGap,
                     vertical = RepairAppSpacing.compactGap,
                 ),

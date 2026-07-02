@@ -68,6 +68,7 @@ import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.core.design.components.AppDialog
 import com.onlytechtake.repairapp.core.design.components.AppIconButton
+import com.onlytechtake.repairapp.core.design.components.AppKeyValueRow
 import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
 import com.onlytechtake.repairapp.core.design.components.AppStatusBadge
 import com.onlytechtake.repairapp.core.design.components.AppTextField
@@ -829,21 +830,27 @@ private fun CustomerDetailContent(
                 verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
             ) {
                 customer.phone?.let {
-                    LocalAppKeyValueRow(
+                    AppKeyValueRow(
                         label = stringResource(R.string.customer_field_phone),
                         value = it,
+                        labelStyle = MaterialTheme.typography.labelMedium,
+                        valueStyle = MaterialTheme.typography.bodyMedium,
                     )
                 }
                 customer.email?.let {
-                    LocalAppKeyValueRow(
+                    AppKeyValueRow(
                         label = stringResource(R.string.customer_field_email),
                         value = it,
+                        labelStyle = MaterialTheme.typography.labelMedium,
+                        valueStyle = MaterialTheme.typography.bodyMedium,
                     )
                 }
                 customer.address?.let {
-                    LocalAppKeyValueRow(
+                    AppKeyValueRow(
                         label = stringResource(R.string.customer_field_address),
                         value = it,
+                        labelStyle = MaterialTheme.typography.labelMedium,
+                        valueStyle = MaterialTheme.typography.bodyMedium,
                     )
                 }
             }
@@ -885,25 +892,6 @@ private fun CustomerDetailContent(
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun LocalAppKeyValueRow(
-    label: String,
-    value: String,
-) {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Medium,
-        )
     }
 }
 
@@ -963,6 +951,22 @@ private fun CustomerEmptyState(hasQuery: Boolean) {
             },
         body = if (hasQuery) stringResource(R.string.customer_no_results) else stringResource(R.string.customer_search_hint),
     )
+}
+
+@Preview(showBackground = true, name = "Full Panel")
+@Composable
+private fun CustomerPanelFullPreview() {
+    RepairAppTheme {
+        CustomerPanel(
+            viewModel =
+                androidx.lifecycle.viewmodel.compose
+                    .viewModel(),
+            sharedViewModel =
+                androidx.lifecycle.viewmodel.compose
+                    .viewModel(),
+            onOrderClick = {},
+        )
+    }
 }
 
 @Preview(showBackground = true, name = "Light Mode")

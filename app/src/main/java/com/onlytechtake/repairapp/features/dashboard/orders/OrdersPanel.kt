@@ -34,6 +34,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -50,9 +51,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.LoadingBrandIndicator
 import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSizes
@@ -96,7 +99,7 @@ fun OrdersPanel(
     val isWide = windowSizeClass.widthSizeClass >= WindowWidthSizeClass.Medium
 
     val resetSignal by sharedViewModel.resetSignal.collectAsState()
-    androidx.compose.runtime.LaunchedEffect(resetSignal) {
+    LaunchedEffect(resetSignal) {
         if (resetSignal > 0) {
             viewModel.setFilter(OrderFilter())
         }
@@ -264,7 +267,7 @@ private fun OrdersListContent(
             val listItems = orderListItems
             if (listItems == null) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    com.onlytechtake.repairapp.core.design.LoadingBrandIndicator(
+                    LoadingBrandIndicator(
                         text = stringResource(R.string.order_loading_detail),
                     )
                 }
@@ -455,7 +458,7 @@ private fun OrderFilterBar(
         queueDefinitions.forEach { (titleRes, statuses) ->
             val title = stringResource(titleRes)
             val isSelected =
-                (filter.statuses == statuses) || (statuses.size == 1 && (filter.status == statuses.first()))
+                (filter.statuses == statuses) || ((statuses.size == 1) && (filter.status == statuses.first()))
             FilterToggleButton(
                 text = title,
                 selected = isSelected,
@@ -491,4 +494,22 @@ private fun FilterToggleButton(
     )
 }
 
-// Use hasActiveFilter from OrderFilter domain model
+@Preview(showBackground = true, name = "Light Mode")
+@Preview(
+    showBackground = true,
+    name = "Dark Mode",
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
+)
+@Composable
+private fun OrdersPanelPreview() {
+    com.onlytechtake.repairapp.core.design.RepairAppTheme {
+        Box(Modifier.fillMaxSize()) {
+            OrdersListContent(
+                viewModel = viewModel(),
+                onOrderClick = {},
+                onNewOrder = {},
+                onOpenBackupSettings = {},
+            )
+        }
+    }
+}

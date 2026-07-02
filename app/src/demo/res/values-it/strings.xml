@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="demo_version_banner">VERSIONE DEMO</string>
     <string name="demo_admin_display_name">Admin Demo</string>
     <plurals name="demo_error_order_limit">
         <item quantity="one">Limite Demo raggiunto. La versione Demo consente %1$d sola commessa e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
-        <item quantity="many">Limite Demo raggiunto. La versione Demo consente %1$d commesse e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
+        <item quantity="many" tools:ignore="UnusedQuantity">Limite Demo raggiunto. La versione Demo consente %1$d commesse e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
         <item quantity="other">Limite Demo raggiunto. La versione Demo consente %1$d commesse e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
     </plurals>
     <string name="demo_error_operator_not_available">La versione Demo non consente la creazione di operatori. Usa solo l\'account admin locale.</string>
     <plurals name="demo_error_operator_limit">
         <item quantity="one">Limite Demo raggiunto. Massimo %1$d operatore consentito nella versione Demo. Per continuare senza limiti, attiva la versione Full.</item>
-        <item quantity="many">Limite Demo raggiunto. Massimo %1$d operatori consentiti nella versione Demo. Per continuare senza limiti, attiva la versione Full.</item>
+        <item quantity="many" tools:ignore="UnusedQuantity">Limite Demo raggiunto. Massimo %1$d operatori consentiti nella versione Demo. Per continuare senza limiti, attiva la versione Full.</item>
         <item quantity="other">Limite Demo raggiunto. Massimo %1$d operatori consentiti nella versione Demo. Per continuare senza limiti, attiva la versione Full.</item>
     </plurals>
     <string name="auth_demo_action">Avvia modalità demo</string>

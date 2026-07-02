@@ -185,9 +185,11 @@ class GenerateOrderStatusPdfUseCaseDemoTest {
             sharedAt: Long,
         ) = Unit
 
-        override suspend fun findById(id: String): OrderDocumentEntity? = saved.firstOrNull { it.id == id }
+        override suspend fun findById(id: String): OrderDocumentEntity? =
+            saved.firstOrNull { it.id == id }
 
-        override fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>> = documentsFlow
+        override fun observeByOrder(orderId: String): Flow<List<OrderDocumentEntity>> =
+            documentsFlow
 
         override suspend fun delete(documentId: String): Result<Unit> = Result.success(Unit)
     }
