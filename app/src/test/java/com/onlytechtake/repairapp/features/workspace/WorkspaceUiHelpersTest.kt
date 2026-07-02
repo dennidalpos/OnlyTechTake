@@ -61,10 +61,10 @@ class WorkspaceUiHelpersTest {
         assertEquals(1, counts.signatures)
         assertEquals(1, counts.finalPhotos)
 
-        assertEquals("Foto 1 - Documenti 1 - Firme 1 - Lavoro finito 1", counts.label(context))
+        assertEquals("Foto 1 – Documenti 1 – Firme 1 – Lavoro finito 1", counts.label(context))
 
         val oCounts = OrderAttachmentCounts(images = 2, documents = 3, signatures = 1)
-        assertEquals("Foto 2 - Documenti 3 - Firme 1", oCounts.label(context))
+        assertEquals("Foto 2 – Documenti 3 – Firme 1", oCounts.label(context))
     }
 
     @Test

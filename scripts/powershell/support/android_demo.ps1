@@ -390,7 +390,7 @@ function Convert-ToStoryPng {
         $graphics.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
         $graphics.Clear([System.Drawing.Color]::Black)
 
-        $scale = [Math]::Max(1080 / $source.Width, 1920 / $source.Height)
+        $scale = [Math]::Min(1080 / $source.Width, 1920 / $source.Height)
         $drawWidth = [int]($source.Width * $scale)
         $drawHeight = [int]($source.Height * $scale)
         $drawX = [int]((1080 - $drawWidth) / 2)

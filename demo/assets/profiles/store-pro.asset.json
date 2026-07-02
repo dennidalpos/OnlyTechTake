@@ -9,7 +9,7 @@
       "id": "play-store",
       "sourceDirectory": ".",
       "outputs": [
-        { "platform": "play-store", "variant": "vertical", "subDir": "screenshots" }
+        { "platform": "play-store", "subDir": "screenshots" }
       ],
       "expectedFiles": [
         "01-dashboard-pro.png",

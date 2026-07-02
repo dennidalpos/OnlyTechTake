@@ -21,11 +21,9 @@ class CustomerRepository(
     private val repairOrderDao: com.onlytechtake.repairapp.data.local.dao.RepairOrderDao? = null,
     private val clockMillis: () -> Long = System::currentTimeMillis,
 ) : ICustomerRepository {
-    override fun observeRecent(): Flow<List<CustomerEntity>> =
-        customerDao.observeRecent().distinctUntilChanged()
+    override fun observeRecent(): Flow<List<CustomerEntity>> = customerDao.observeRecent().distinctUntilChanged()
 
-    override fun observeAll(): Flow<List<CustomerEntity>> =
-        customerDao.observeAll().distinctUntilChanged()
+    override fun observeAll(): Flow<List<CustomerEntity>> = customerDao.observeAll().distinctUntilChanged()
 
     override fun search(query: String): Flow<List<CustomerEntity>> {
         val trimmed = query.trim()

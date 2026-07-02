@@ -45,8 +45,11 @@ Operational guide for AI agents. Environment: **Windows 11 + PowerShell**.
 
 ---
 
-## 5. Final Report Requirements
-1. Modified/deleted files.
-2. Executed checks and results.
-3. Updated status of `PROJECT_STATUS.json`.
-4. Residual risks.
+## 5. Final Report & Status Requirements
+1. **Modified/deleted files.**
+2. **Executed checks and results.**
+3. **Update `PROJECT_STATUS.json`**:
+   - Remove completed tasks from `backlog`.
+   - **DO NOT** keep history in `completed_recently` (empty the list to avoid bloat).
+   - Focus on high-priority residuals and current plan.
+4. **Residual risks.**

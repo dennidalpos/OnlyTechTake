@@ -164,7 +164,7 @@ fun DismissibleAppMessageBanner(
             0L // Disable auto-dismiss during tests
         } else {
             if (type == BannerType.Error) 8_000L else 4_000L
-        }
+        },
 ) {
     var isVisible by remember { mutableStateOf(true) }
 

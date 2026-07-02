@@ -9,7 +9,7 @@
       "id": "multichannel",
       "sourceDirectory": ".",
       "outputs": [
-        { "platform": "whatsapp", "variant": "vertical", "subDir": "highlights" }
+        { "platform": "whatsapp", "subDir": "highlights" }
       ],
       "expectedFiles": [
         "01-stories-dashboard.png",

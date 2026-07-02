@@ -9,7 +9,7 @@
       "id": "complete-workflow",
       "sourceDirectory": ".",
       "outputs": [
-        { "platform": "whatsapp", "variant": "vertical", "subDir": "operator-workflow" }
+        { "platform": "whatsapp", "subDir": "operator-workflow" }
       ],
       "expectedFiles": [
         "01-login.png",

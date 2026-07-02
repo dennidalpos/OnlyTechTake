@@ -38,7 +38,6 @@ class SharedWorkspaceViewModel : ViewModel() {
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T =
-            SharedWorkspaceViewModel() as T
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = SharedWorkspaceViewModel() as T
     }
 }

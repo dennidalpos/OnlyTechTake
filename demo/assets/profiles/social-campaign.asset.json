@@ -9,7 +9,7 @@
       "id": "social-flow",
       "sourceDirectory": ".",
       "outputs": [
-        { "platform": "whatsapp", "variant": "vertical", "subDir": "campaign" }
+        { "platform": "whatsapp", "subDir": "campaign" }
       ],
       "expectedFiles": [
         "01-home.png",
