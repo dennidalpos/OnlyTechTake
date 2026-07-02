@@ -54,12 +54,12 @@ class SocialProAssetTest {
             robot.clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
             robot.waitForTag("quick_actions_screen")
             robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderFirstNameField, "Marco", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderLastNameField, "Bianchi", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderPhoneField, "+39 347 123 4567", scroll = true)
+            robot.typeTag(RepairAppTestTags.NewOrderFirstNameField, "Mark", scroll = true)
+            robot.typeTag(RepairAppTestTags.NewOrderLastNameField, "White", scroll = true)
+            robot.typeTag(RepairAppTestTags.NewOrderPhoneField, "+1 555-010-9988", scroll = true)
             robot.typeTag(
                 RepairAppTestTags.NewOrderEmailField,
-                "m.bianchi@example.invalid",
+                "m.white@example.invalid",
                 scroll = true,
             )
             robot.capture(outputDir, "02-reel-intake.png")
@@ -89,7 +89,7 @@ class SocialProAssetTest {
             )
             robot.typeTag(
                 RepairAppTestTags.NewOrderProblemDetailsField,
-                "Spegnimenti improvvisi durante sessioni di gioco.",
+                "Sudden shutdowns during gaming sessions.",
                 scroll = true,
             )
             robot.clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
@@ -130,7 +130,7 @@ class SocialProAssetTest {
                 OrderStatusAction.START_DIAGNOSIS,
                 OrderStatusAction.RECORD_RESULT,
             )
-            robot.applyResultStatus("Problema risolto con ripristino OS e pulizia.", "89,00")
+            robot.applyResultStatus("Issue resolved with OS restore and cleaning.", "89.00")
             robot.waitForText(R.string.order_customer_documents, scroll = true)
             robot.capture(outputDir, "06-reel-pdf.png")
         }

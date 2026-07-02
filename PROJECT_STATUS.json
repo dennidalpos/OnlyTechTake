@@ -12,11 +12,7 @@
     {
       "priority": "HIGH",
       "id": "B12",
-      "task": "QUALITY: Test su device fisico. Eseguire suite strumentale su hardware reale e verificare il flusso dinamico 'Torna su' come da requisiti UX."
-    },
-    {
-      "priority": "MEDIUM",
-      "task": "ASSETS: Revisione finale screenshot store (Pro/Demo) e note di rilascio 1.0.0."
+      "task": "QUALITY: Test su device fisico. Eseguire suite strumentale su hardware reale."
     }
   ],
   "completed_recently": []

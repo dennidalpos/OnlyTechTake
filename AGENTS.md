@@ -39,9 +39,10 @@ Operational guide for AI agents. Environment: **Windows 11 + PowerShell**.
 
 ## 4. Media Asset Workflow
 - `generate_static_brands.ps1`: (ImageMagick) SVG -> PNG/ICO/Favicon. Updates landing and marketing assets from vector sources.
-- `create_demo_assets.ps1`: (Instrumented Tests) Generates UI screenshots using JSON profiles. Supports `-Dark`, `-Locale`, and `-NoDistribute`. Applies automatic transformations (square, vertical/Story, landscape) via GDI+.
-- `record_demo_device.ps1`: (FFmpeg) Captures screen videos with `-SeedData` and automatic trimming (`-AutomaticTrimStartSeconds`). Supports `-WhatsAppOptimized` for compressed delivery.
-- `regenerate_public.ps1`: Master script for full asset refresh. Handles **Mixed Management**: first records video (executing the test), then runs screenshot creator with `-SkipTest` to extract frames from the same state.
+- `create_demo_assets.ps1`: (Instrumented Tests) Generates UI screenshots using JSON profiles in `demo/assets/profiles`. Supports `-Dark`, `-Locale`, and `-NoDistribute`. Applies automatic transformations (square, vertical/Story, landscape) via GDI+ (`android_demo.ps1`).
+- `record_demo_device.ps1`: (FFmpeg) Captures screen videos by executing instrumental tests. Supports `-AutomaticTrimStartSeconds`, `-SeedData`, and `-WhatsAppOptimized`.
+- `regenerate_public.ps1`: Master script for full asset refresh. Handles **Mixed Management**: for video-enabled profiles (e.g., `operator-intake`), it first records the video (running the test), then runs the screenshot creator with `-SkipTest` to extract frames from the same device state.
+- **Asset Locale**: Public assets MUST be generated in English (`-Locale en`). Use `SeedDemoDataTest` or `DemoDataSeeder.seedDemoProfile` to ensure consistent English data.
 
 ---
 

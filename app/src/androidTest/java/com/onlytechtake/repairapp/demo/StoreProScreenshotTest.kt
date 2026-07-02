@@ -56,12 +56,12 @@ class StoreProScreenshotTest {
             robot.clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
             robot.waitForTag("quick_actions_screen")
             robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderFirstNameField, "Marco", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderLastNameField, "Bianchi", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderPhoneField, "+39 347 123 4567", scroll = true)
+            robot.typeTag(RepairAppTestTags.NewOrderFirstNameField, "Mark", scroll = true)
+            robot.typeTag(RepairAppTestTags.NewOrderLastNameField, "White", scroll = true)
+            robot.typeTag(RepairAppTestTags.NewOrderPhoneField, "+1 555-010-9988", scroll = true)
             robot.typeTag(
                 RepairAppTestTags.NewOrderEmailField,
-                "m.bianchi@example.invalid",
+                "m.white@example.invalid",
                 scroll = true,
             )
             robot.capture(outputDir, "02-nuova-commessa-pro.png")
@@ -83,12 +83,12 @@ class StoreProScreenshotTest {
             // Step 3 (Problem) - Skip capture
             robot.typeTag(
                 RepairAppTestTags.NewOrderProblemSummaryField,
-                "Samsung Galaxy S23 - Schermo rotto",
+                "Samsung Galaxy S23 - Broken screen",
                 scroll = true,
             )
             robot.typeTag(
                 RepairAppTestTags.NewOrderProblemDetailsField,
-                "Sostituzione display originale dopo caduta.",
+                "Original display replacement after accidental drop.",
                 scroll = true,
             )
             robot.clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
@@ -113,7 +113,7 @@ class StoreProScreenshotTest {
             robot.waitForTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
             robot.clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
 
-            val summary = "Samsung Galaxy S23 - Schermo rotto"
+            val summary = "Samsung Galaxy S23 - Broken screen"
             val createdOrderId = waitForCreatedOrderId()
             robot.clickDashboardTab("ORDERS")
             robot.waitForText(summary, scroll = true)
@@ -128,7 +128,7 @@ class StoreProScreenshotTest {
                 OrderStatusAction.START_DIAGNOSIS,
                 OrderStatusAction.RECORD_RESULT,
             )
-            robot.applyResultStatus("Display AMOLED originale Samsung.", "249,00")
+            robot.applyResultStatus("Samsung original AMOLED display.", "249.00")
             robot.capture(outputDir, "04-diagnosi-preventivo-pro.png")
 
             // 05-repairing-step-pro
@@ -177,7 +177,7 @@ class StoreProScreenshotTest {
     }
 
     private fun waitForCreatedOrderId(): String {
-        val summary = "Samsung Galaxy S23 - Schermo rotto"
+        val summary = "Samsung Galaxy S23 - Broken screen"
         val database = RepairAppDatabase.getInstance(context)
         val deadline = System.currentTimeMillis() + 30_000L
         while (System.currentTimeMillis() < deadline) {
