@@ -357,7 +357,7 @@ class OrderDetailViewModel(
         }
     }
 
-    fun onWhatsAppDocumentClicked(documentId: String) {
+    fun onWhatsAppDocumentClicked() {
         prepareMessage(TemplateAnchor.WHATSAPP_PDF_STATUS)
     }
 

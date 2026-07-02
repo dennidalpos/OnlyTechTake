@@ -26,7 +26,7 @@ class MediaOptimizer(
             val width = bounds.outWidth
             val height = bounds.outHeight
 
-            if (width <= 0 || height <= 0) return@runCatching file
+            if ((width <= 0) || (height <= 0)) return@runCatching file
 
             // Ridimensionamento se necessario
             val scale =
@@ -45,7 +45,7 @@ class MediaOptimizer(
                         ExifInterface.TAG_ORIENTATION,
                         ExifInterface.ORIENTATION_NORMAL,
                     )
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     ExifInterface.ORIENTATION_NORMAL
                 }
 

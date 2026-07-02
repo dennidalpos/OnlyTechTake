@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.core.media
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import androidx.core.graphics.scale
 import androidx.exifinterface.media.ExifInterface
 import kotlin.math.max
 
@@ -44,7 +45,7 @@ fun decodeOrientedBitmap(
             val scale = maxDimension.toFloat() / currentMax
             val finalWidth = (oriented.width * scale).toInt()
             val finalHeight = (oriented.height * scale).toInt()
-            val scaled = Bitmap.createScaledBitmap(oriented, finalWidth, finalHeight, true)
+            val scaled = oriented.scale(finalWidth, finalHeight)
             if (scaled !== oriented) oriented.recycle()
             return scaled
         }
@@ -76,7 +77,7 @@ fun calculateBitmapSampleSize(
     height: Int,
     maxDimension: Int,
 ): Int {
-    if (width <= 0 || height <= 0 || maxDimension <= 0) return 1
+    if ((width <= 0) || (height <= 0) || (maxDimension <= 0)) return 1
     var sampleSize = 1
     val largestDimension = max(width, height)
     while ((largestDimension / (sampleSize * 2)) >= maxDimension) {

@@ -221,7 +221,7 @@ fun OrderDetailWorkspace(
                         onActionClick = { action ->
                             val isActionMatchDecision =
                                 (isResultStep && isRepairable && (decision != null)) &&
-                                    (action == primaryOverride || (primaryOverride == null && action == OrderStatusAction.START_REPAIR))
+                                    ((action == primaryOverride) || (primaryOverride == null && action == OrderStatusAction.START_REPAIR))
 
                             val isActionMatchNotRepairable =
                                 isResultStep && isNotRepairable && action == OrderStatusAction.READY_FOR_PICKUP
@@ -394,7 +394,7 @@ fun OrderDetailWorkspace(
                             viewModel.generateStatusPdf(includeSignature = includeSignature)
                         },
                         onShareDocument = { viewModel.onShareDocumentClicked(it) },
-                        onWhatsAppDocument = { viewModel.onWhatsAppDocumentClicked(it) },
+                        onWhatsAppDocument = { viewModel.onWhatsAppDocumentClicked() },
                         onDeleteDocument = { docId ->
                             viewModel.onDeleteDocumentClicked(docId)
                         },

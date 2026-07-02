@@ -161,7 +161,7 @@ class OrderStatusPdfGenerator : OrderStatusPdfWriter {
                     595f - margin - logoSize,
                     y - 10f,
                     595f - margin,
-                    y - 10f + logoSize,
+                    (y - 10f + logoSize),
                 ),
                 null,
             )

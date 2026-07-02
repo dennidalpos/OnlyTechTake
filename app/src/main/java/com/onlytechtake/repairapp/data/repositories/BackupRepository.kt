@@ -218,17 +218,8 @@ class BackupRepository(
                         try {
                             // Verify if actor exists in restored database
                             val finalActorId =
-                                if (actorId != null) {
-                                    if (restoredDatabase
-                                            .userDao()
-                                            .findById(actorId) != null
-                                    ) {
-                                        actorId
-                                    } else {
-                                        null
-                                    }
-                                } else {
-                                    null
+                                actorId?.takeIf {
+                                    restoredDatabase.userDao().findById(it) != null
                                 }
 
                             restoredDatabase.auditLogDao().upsert(
