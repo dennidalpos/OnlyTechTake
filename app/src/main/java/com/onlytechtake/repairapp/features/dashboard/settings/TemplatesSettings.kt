@@ -261,7 +261,11 @@ fun ColumnScope.TemplatesSettings(
                                 )
                             }
                         }
-                        Text(template.title, style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            text = template.title,
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier.testTag("template_title_${template.code}"),
+                        )
                         Text(
                             text = template.body,
                             style = MaterialTheme.typography.bodySmall,

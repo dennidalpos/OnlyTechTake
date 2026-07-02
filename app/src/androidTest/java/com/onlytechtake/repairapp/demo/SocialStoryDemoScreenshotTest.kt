@@ -169,7 +169,7 @@ class SocialStoryDemoScreenshotTest {
 
             // Enable "Closed" filter to see the order we just closed
             robot.clickTag(RepairAppTestTags.OrdersFilterButton)
-            robot.clickText(R.string.orders_filter_closed_discarded)
+            robot.clickText(R.string.queue_closed)
             robot.clickText(R.string.action_confirm)
 
             robot.waitForText(summary, scroll = true)
@@ -212,8 +212,9 @@ class SocialStoryDemoScreenshotTest {
             robot.clickTag(RepairAppTestTags.ConfigCategorySaveButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.GenericConfirmButton)
             robot.clickTag(RepairAppTestTags.GenericConfirmButton)
+            robot.waitForTagGone(RepairAppTestTags.GenericConfirmButton)
+            robot.dismissBanner()
             robot.pauseForDemo()
-            robot.waitForText(R.string.success_operation_completed)
             robot.capture(outputDir, "04-category-saved.png")
 
             robot.clickTag(RepairAppTestTags.ConfigBackButton, scroll = true)
@@ -249,8 +250,9 @@ class SocialStoryDemoScreenshotTest {
             robot.clickTag(RepairAppTestTags.ConfigTemplateSaveButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.GenericConfirmButton)
             robot.clickTag(RepairAppTestTags.GenericConfirmButton)
+            robot.waitForTagGone(RepairAppTestTags.GenericConfirmButton)
+            robot.dismissBanner()
             robot.pauseForDemo()
-            robot.waitForText(R.string.success_operation_completed)
             robot.capture(outputDir, "08-template-saved.png")
         }
     }
@@ -283,7 +285,8 @@ class SocialStoryDemoScreenshotTest {
             robot.clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.CustomerConfirmSaveButton)
             robot.clickTag(RepairAppTestTags.CustomerConfirmSaveButton)
-            robot.pauseForDemo()
+            robot.waitForTagGone(RepairAppTestTags.CustomerConfirmSaveButton)
+            robot.dismissBanner()
             robot.typeTag(RepairAppTestTags.CustomerSearchField, "Luke")
             robot.waitForText("Luke")
             robot.capture(outputDir, "03-private-saved.png")
@@ -307,7 +310,8 @@ class SocialStoryDemoScreenshotTest {
             robot.clickTag(RepairAppTestTags.CustomerSaveButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.CustomerConfirmSaveButton)
             robot.clickTag(RepairAppTestTags.CustomerConfirmSaveButton)
-            robot.pauseForDemo()
+            robot.waitForTagGone(RepairAppTestTags.CustomerConfirmSaveButton)
+            robot.dismissBanner()
             robot.typeTag(RepairAppTestTags.CustomerSearchField, "Demo")
             robot.waitForText("Demo")
             robot.capture(outputDir, "05-business-saved.png")

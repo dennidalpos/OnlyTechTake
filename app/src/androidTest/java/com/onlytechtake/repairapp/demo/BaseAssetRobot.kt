@@ -461,6 +461,17 @@ abstract class BaseAssetRobot(
         Thread.sleep(1000) // Pausa per far sparire eventuali artefatti UI della gesture
     }
 
+    fun dismissBanner() {
+        try {
+            if (isTagPresent(RepairAppTestTags.MessageBannerCloseButton)) {
+                composeRule.onNodeWithTag(RepairAppTestTags.MessageBannerCloseButton).performClick()
+                composeRule.waitForIdle()
+            }
+        } catch (_: Throwable) {
+            // Ignore failures during banner dismissal in tests
+        }
+    }
+
     fun capture(
         outputDir: File,
         fileName: String,

@@ -386,7 +386,11 @@ fun ColumnScope.CategoriesSettings(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             StatusDot(category.active)
-                            Text(category.name, style = MaterialTheme.typography.titleMedium)
+                            Text(
+                                text = category.name,
+                                style = MaterialTheme.typography.titleMedium,
+                                modifier = Modifier.testTag("category_name_${category.id}"),
+                            )
                         }
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             if (isAdmin) {

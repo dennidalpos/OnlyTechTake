@@ -265,7 +265,8 @@ function Invoke-DemoApkBuildAndInstall {
         [Parameter(Mandatory = $true)][string]$RootPath,
         [Parameter(Mandatory = $true)][string]$Serial,
         [string]$Flavor = "Full",
-        [switch]$SkipBuild
+        [switch]$SkipBuild,
+        [switch]$SkipClear
     )
 
     if (-not $SkipBuild) {
@@ -299,7 +300,12 @@ function Invoke-DemoApkBuildAndInstall {
     Write-Host "Installazione APK ($Flavor) su $Serial..."
     Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "install", "-r", "-d", $debugApk)
     Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "install", "-r", "-d", $testApk)
-    Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "shell", "pm", "clear", $packageName)
+
+    if (-not $SkipClear) {
+        Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "shell", "pm", "clear", $packageName)
+    } else {
+        Write-Host "Salto pulizia dati (richiesto -SkipClear)."
+    }
 }
 
 function Invoke-DemoScreenshotTest {
@@ -327,7 +333,10 @@ function Invoke-DemoScreenshotTest {
         "-w",
         "-e",
         "class",
-        $TestClass
+        $TestClass,
+        "-e",
+        "forceEnglish",
+        "true"
     )
     foreach ($entry in $InstrumentationExtras.GetEnumerator()) {
         $arguments += @("-e", [string]$entry.Key, [string]$entry.Value)

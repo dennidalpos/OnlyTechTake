@@ -159,7 +159,12 @@ fun DismissibleAppMessageBanner(
     type: BannerType,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
-    autoDismissMillis: Long = if (type == BannerType.Error) 8_000L else 4_000L,
+    autoDismissMillis: Long =
+        if (System.getProperty("forceEnglish") == "true") {
+            0L // Disable auto-dismiss during tests
+        } else {
+            if (type == BannerType.Error) 8_000L else 4_000L
+        }
 ) {
     var isVisible by remember { mutableStateOf(true) }
 

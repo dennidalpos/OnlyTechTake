@@ -104,7 +104,7 @@ if ($Dark) {
     adb -s $serial shell "cmd uimode night no"
 }
 
-Invoke-DemoApkBuildAndInstall -RootPath $root -Serial $serial -Flavor $Flavor -SkipBuild:$SkipBuild
+Invoke-DemoApkBuildAndInstall -RootPath $root -Serial $serial -Flavor $Flavor -SkipBuild:$SkipBuild -SkipClear:$false
 
 trap { Restore-DeviceGlobalSettings; throw $_ }
 

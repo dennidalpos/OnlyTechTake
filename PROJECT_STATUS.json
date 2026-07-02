@@ -7,6 +7,10 @@
   "completed_recently": [
     {
       "date": "2026-07-13",
+      "task": "ASSETS: Rigenerazione totale degli asset media (Screenshot e Video) completata con successo. Risolti problemi di fragilità nei test strumentati legati al timing dei banner e alla pulizia dei dati tra fasi diverse (Mixed Management). Implementati tag di test univoci in CategoriesSettings e TemplatesSettings per una verifica robusta del salvataggio. Ottimizzato BaseAssetRobot con helper sicuri per la gestione dei banner."
+    },
+    {
+      "date": "2026-07-13",
       "task": "WORKFLOW: Gestione scripts PowerShell interattivi. Implementato rilevamento sessione interattiva ([Environment]::UserInteractive) in quality.ps1, check_project.ps1, create_demo_assets.ps1 e record_demo_device.ps1 per evitare blocchi in ambienti automatizzati/agenti. Aggiornato AGENTS.md con i parametri espliciti per la verifica non-interattiva."
     },
     {
