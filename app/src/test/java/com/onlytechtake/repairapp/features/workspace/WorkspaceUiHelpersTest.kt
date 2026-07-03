@@ -81,7 +81,7 @@ class WorkspaceUiHelpersTest {
         assertEquals("512 B", formatFileSize(512, locale))
         assertEquals("2 KB", formatFileSize(2_048, locale))
         assertEquals("1,5 MB", formatFileSize(1_572_864, locale))
-        assertEquals("01/01/1970 00:00", formatUiDateTime(0L, ZoneOffset.UTC, locale))
+        assertEquals("01/01/1970 00:00", formatUiDateTime(millis = 0L, zoneId = ZoneOffset.UTC, locale = locale))
     }
 
     @Test

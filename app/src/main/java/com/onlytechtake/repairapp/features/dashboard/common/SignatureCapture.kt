@@ -95,7 +95,7 @@ fun SignatureCaptureForm(
             strokes,
             businessSignerName,
             defaultSignerName,
-            isBusiness
+            isBusiness,
         ) {
             if (privacyAccepted && termsAccepted && hasSignature) {
                 SignatureCaptureResult(
@@ -316,13 +316,11 @@ private fun SignatureCanvas(
                 .border(1.dp, MaterialTheme.colorScheme.outline)
                 .semantics {
                     contentDescription = canvasDescription
-                }
-                .pointerInput(Unit) {
+                }.pointerInput(Unit) {
                     detectTapGestures { offset ->
                         onTap(offset.toSignaturePoint(size.width, size.height))
                     }
-                }
-                .pointerInput(Unit) {
+                }.pointerInput(Unit) {
                     detectDragGestures(
                         onDragStart = { offset ->
                             onStart(offset.toSignaturePoint(size.width, size.height))

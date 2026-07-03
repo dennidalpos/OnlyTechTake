@@ -158,9 +158,17 @@ nav {
 }
 
 @media (max-width: 768px) {
+    .nav-actions {
+        gap: 0.75rem;
+    }
     .app-title {
-        font-size: 1.4rem;
-        letter-spacing: -0.8px;
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .app-title {
+        display: none; /* Just show the logo mark on tiny screens */
     }
 }
 
@@ -229,8 +237,15 @@ nav {
 }
 
 @media (max-width: 768px) {
+    /* .nav-actions .lang-selector removed display:none to show it in topbar */
     .nav-actions .lang-selector {
-        display: none;
+        display: flex;
+        gap: 2px;
+        padding: 2px;
+    }
+    .nav-actions .lang-btn {
+        padding: 4px 6px;
+        font-size: 0.7rem;
     }
 }
 
@@ -674,10 +689,10 @@ nav {
 
 @media (max-width: 768px) {
     .carousel-track {
-        height: 700px;
+        height: 580px; /* Reduced from 700px to avoid taking whole screen */
     }
     .carousel-item {
-        width: 220px;
+        width: 180px; /* Smaller items for smaller height */
     }
 }
 
@@ -756,8 +771,8 @@ nav {
 
 @media (max-width: 768px) {
     .carousel-item {
-        min-width: 260px;
-        width: 260px;
+        min-width: 200px;
+        width: 200px;
     }
     .carousel-item.active {
         transform: scale(1.05) translateZ(30px);

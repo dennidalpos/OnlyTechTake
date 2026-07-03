@@ -274,7 +274,7 @@ internal class OrderWorkflowCommands(
                 when (input.feedback) {
                     CustomerFeedbackType.ACCEPT,
                     CustomerFeedbackType.REJECT,
-                        -> {
+                    -> {
                         require(order.diagnosisOutcome == DiagnosisOutcome.REPAIRABLE) {
                             context.getString(R.string.error_feedback_only_repairable)
                         }

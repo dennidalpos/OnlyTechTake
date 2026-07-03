@@ -61,18 +61,21 @@ fun DashboardNavHost(
                 viewModel = homeViewModel,
                 onNewOrder = { navController.navigate(DashboardRoutes.NEW_ORDER) },
             ) { filter ->
-                val status = filter.status?.name ?: filter.statuses.firstOrNull()?.name
+                val statusArg =
+                    filter.status?.name
+                        ?: if (filter.statuses.size == 1) filter.statuses.first().name else null
+                val statusesArg = if (filter.statuses.size > 1) filter.statuses.map { it.name } else null
+
                 navController.navigate(
                     DashboardRoutes.orders(
-                        status = status,
+                        status = statusArg,
+                        statuses = statusesArg,
                         customerId = filter.customerId,
                     ),
                 ) {
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        saveState = true
-                    }
+                    popUpTo(navController.graph.findStartDestination().id)
                     launchSingleTop = true
-                    restoreState = true
+                    restoreState = false
                 }
             }
         }
@@ -134,6 +137,11 @@ fun DashboardNavHost(
                         nullable = true
                         defaultValue = null
                     },
+                    navArgument("statuses") {
+                        type = NavType.StringType
+                        nullable = true
+                        defaultValue = null
+                    },
                     navArgument("customerId") {
                         type = NavType.StringType
                         nullable = true
@@ -142,11 +150,8 @@ fun DashboardNavHost(
                 ),
         ) { backStackEntry ->
             val statusStr = backStackEntry.arguments?.getString("status")
+            val statusesStr = backStackEntry.arguments?.getString("statuses")
             val customerId = backStackEntry.arguments?.getString("customerId")
-            val status =
-                statusStr?.let {
-                    runCatching { OrderStatus.valueOf(it) }.getOrNull()
-                }
 
             val ordersViewModel: OrdersViewModel =
                 viewModel(
@@ -160,15 +165,23 @@ fun DashboardNavHost(
                         ),
                 )
 
-            LaunchedEffect(status, customerId) {
-                if ((status != null) || (customerId != null)) {
-                    ordersViewModel.setFilter(
-                        OrderFilter(
-                            status = status,
-                            customerId = customerId,
-                        ),
-                    )
-                }
+            LaunchedEffect(statusStr, statusesStr, customerId) {
+                val status =
+                    statusStr?.let {
+                        runCatching { OrderStatus.valueOf(it.uppercase()) }.getOrNull()
+                    }
+                val statuses =
+                    statusesStr?.split(",")?.mapNotNull {
+                        runCatching { OrderStatus.valueOf(it.uppercase()) }.getOrNull()
+                    }?.toSet() ?: emptySet()
+
+                ordersViewModel.setFilter(
+                    OrderFilter(
+                        status = status,
+                        statuses = statuses,
+                        customerId = customerId,
+                    ),
+                )
             }
 
             OrdersPanel(

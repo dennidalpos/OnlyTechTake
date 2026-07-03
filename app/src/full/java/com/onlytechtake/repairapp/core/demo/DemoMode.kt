@@ -52,9 +52,7 @@ object DemoMode {
 
     fun getShowcaseOwnerInfo(context: Context): OwnerInfo? = null
 
-    fun getDemoCustomer(context: Context): CustomerEntity =
-        throw IllegalStateException("DemoMode not available")
+    fun getDemoCustomer(context: Context): CustomerEntity = throw IllegalStateException("DemoMode not available")
 
-    fun getDemoCategories(context: Context): List<OrderCategoryEntity> =
-        throw IllegalStateException("DemoMode not available")
+    fun getDemoCategories(context: Context): List<OrderCategoryEntity> = throw IllegalStateException("DemoMode not available")
 }

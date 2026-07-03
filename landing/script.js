@@ -339,8 +339,8 @@ const translations = {
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Language Management
     const getInitialLanguage = () => {
-        // Always default to English on opening as per request
-        return 'en';
+        // Persist language choice if available, otherwise default to English
+        return localStorage.getItem('language') || 'en';
     };
 
     let currentLightboxIndex = 0;
@@ -630,6 +630,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const handleDragStart = (e) => {
             isDragging = true;
             startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+            // Store initial Y to check for vertical scroll intent
+            carouselTrack.dataset.startY = e.type === 'touchstart' ? e.touches[0].clientY : null;
             currentX = startX;
             carouselTrack.style.cursor = 'grabbing';
             // Disable transitions during drag for immediate feedback
@@ -638,10 +640,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const handleDragMove = (e) => {
             if (!isDragging) return;
-            if (e.cancelable) e.preventDefault();
 
             currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
             const diffX = currentX - startX;
+
+            // Only prevent default and drag if the movement is primarily horizontal
+            // This allows vertical scrolling to work normally
+            if (e.type === 'touchmove') {
+                const currentY = e.touches[0].clientY;
+                const startY = parseFloat(carouselTrack.dataset.startY);
+                const diffY = Math.abs(currentY - startY);
+
+                // If vertical movement is greater than horizontal, it's a scroll intent
+                if (diffY > Math.abs(diffX) && diffY > 10) {
+                    isDragging = false;
+                    carouselItems.forEach(item => item.style.transition = '');
+                    return;
+                }
+            }
+
+            if (e.cancelable) e.preventDefault();
 
             const total = carouselItems.length;
             const translateUnit = window.innerWidth < 768 ? 160 : 220;

@@ -706,9 +706,8 @@ fun BackupSettings(
                                     java.text
                                         .SimpleDateFormat(
                                             "yyyyMMdd_HHmm",
-                                            java.util.Locale.getDefault()
-                                        )
-                                        .format(java.util.Date())
+                                            java.util.Locale.getDefault(),
+                                        ).format(java.util.Date())
                                 exportZipLauncher.launch("${prefix}${appName}_v${appVersion}_Manual_$date.zip")
                             }
                         },
@@ -745,9 +744,8 @@ fun BackupSettings(
                                     java.text
                                         .SimpleDateFormat(
                                             "yyyyMMdd_HHmm",
-                                            java.util.Locale.getDefault()
-                                        )
-                                        .format(java.util.Date())
+                                            java.util.Locale.getDefault(),
+                                        ).format(java.util.Date())
                                 exportOrdersXlsxLauncher.launch("${appName}_v${appVersion}_Orders_$date.xlsx")
                             }
                         },

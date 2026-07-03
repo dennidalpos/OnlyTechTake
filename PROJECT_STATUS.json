@@ -1,8 +1,8 @@
 {
   "project_name": "OnlyTechTake",
   "version": "1.0.0",
-  "status": "Risolti diversi warning e ottimizzati alcuni ViewModel (Home, Orders, Settings). Migliorata la gestione delle sequenze in OperationalQueues e la flessibilità di DateTimeUtils. Allineato DashboardNavHost ai pattern di navigazione correnti.",
-  "last_updated": "2026-07-24",
+  "status": "Implementata navigazione filtrata dalle code della dashboard. Allineate tutte le varianti (Full, Demo, Showcase) con il nuovo pattern di navigazione. Risolti warning e ottimizzati i ViewModel.",
+  "last_updated": "2026-07-25",
   "backlog": [
     {
       "priority": "HIGH",
