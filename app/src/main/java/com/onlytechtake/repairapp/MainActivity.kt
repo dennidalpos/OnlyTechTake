@@ -35,17 +35,15 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val windowSizeClass = calculateWindowSizeClass(this)
             val uiSettings by appContainer.uiPreferences.settings.collectAsState(
-                initial =
-                    com.onlytechtake.repairapp.data.preferences.UiSettings(
-                        darkTheme =
-                            when (AppCompatDelegate.getDefaultNightMode()) {
-                                AppCompatDelegate.MODE_NIGHT_YES -> true
-                                AppCompatDelegate.MODE_NIGHT_NO -> false
-                                else -> true // Default to dark as per UiSettings default
-                            },
-                    ),
+                initial = null,
             )
-            val darkTheme = uiSettings.darkTheme
+
+            // Wait for settings to load to avoid theme flicker/loops on startup/recreation
+            if (uiSettings == null) {
+                return@setContent
+            }
+
+            val darkTheme = uiSettings!!.darkTheme
 
             // Force AppCompat night mode to keep IME (keyboard) in sync with app theme
             // Only update if it changes from the initial/current value to avoid loops

@@ -71,6 +71,7 @@ class OrdersViewModel(
                 BackupReminderSettings(enabled = false),
             )
 
+    @Suppress("unused")
     val isBackupReminderDue =
         combine(
             currentUser,
@@ -95,13 +96,14 @@ class OrdersViewModel(
     fun setFilter(filter: OrderFilter) {
         _orderFilter.value = filter
         val user = currentUser.value
-        if (user != null && ordersPreferences != null) {
+        if ((user != null) && (ordersPreferences != null)) {
             viewModelScope.launch {
                 ordersPreferences.saveFilter(user.id, filter)
             }
         }
     }
 
+    @Suppress("unused")
     fun exportCompleteBackup(uri: Uri) {
         val user = currentUser.value ?: return
         viewModelScope.launch {

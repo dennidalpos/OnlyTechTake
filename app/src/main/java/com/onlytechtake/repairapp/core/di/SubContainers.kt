@@ -222,6 +222,7 @@ class SettingsContainer(
             context = context.applicationContext,
             backupRepository = backupRepository,
             backupReminderPreferences = backupReminderPreferences,
+            securityPreferences = securityPreferences,
         )
     }
 

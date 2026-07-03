@@ -14,6 +14,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
+import com.onlytechtake.repairapp.data.preferences.SecurityPreferences
 import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
@@ -24,6 +25,7 @@ import kotlinx.coroutines.flow.first
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 
 sealed class BackupState {
@@ -46,6 +48,7 @@ class BackupService(
     private val context: Context,
     private val backupRepository: BackupRepository,
     private val backupReminderPreferences: BackupReminderPreferences,
+    private val securityPreferences: SecurityPreferences,
 ) {
     private val _state = MutableStateFlow<BackupState>(BackupState.Idle)
     val state: StateFlow<BackupState> = _state.asStateFlow()
@@ -76,13 +79,28 @@ class BackupService(
         _state.value = BackupState.Running(0f)
 
         return try {
-            val directory =
+            val rootDirectory =
                 DocumentFile.fromTreeUri(context, treeUri)
                     ?: throw Exception(context.getString(R.string.error_destination_unavailable))
 
-            val fileName = "backup_${System.currentTimeMillis()}.zip"
+            val securitySettings = securityPreferences.settings.first()
+            val isEncrypted =
+                securitySettings.isBackupEncryptionEnabled && securitySettings.backupEncryptionPassword.isNotBlank()
+
+            val appVersion = com.onlytechtake.repairapp.BuildConfig.VERSION_NAME
+            val appName = context.getString(R.string.about_app_name)
+            val now = LocalDateTime.now()
+            val timestamp = now.format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm"))
+
+            val prefix = if (isEncrypted) "ENC_" else ""
+            val folderName = "${prefix}${appName}_v${appVersion}_Auto_$timestamp"
+            val subDirectory =
+                rootDirectory.createDirectory(folderName)
+                    ?: throw Exception(context.getString(R.string.error_could_not_create_file))
+
+            val fileName = "${prefix}${appName}_v${appVersion}_$timestamp.zip"
             val file =
-                directory.createFile("application/zip", fileName)
+                subDirectory.createFile("application/zip", fileName)
                     ?: throw Exception(context.getString(R.string.error_could_not_create_file))
 
             val result = backupRepository.exportCompleteBackup(actor, file.uri)

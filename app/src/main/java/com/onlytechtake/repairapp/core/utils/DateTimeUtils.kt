@@ -18,13 +18,14 @@ private fun getFormatter(
 
 /**
  * Formats a timestamp in milliseconds into a UI-friendly date-time string.
- * Uses the provided [zoneId] (defaults to system) and [locale] (defaults to system).
+ * Uses the provided [pattern], [zoneId] (defaults to system) and [locale] (defaults to system).
  */
 fun formatUiDateTime(
     millis: Long,
+    pattern: String = "dd/MM/yyyy HH:mm",
     zoneId: ZoneId = ZoneId.systemDefault(),
     locale: Locale = Locale.getDefault(),
 ): String {
-    val formatter = getFormatter("dd/MM/yyyy HH:mm", locale)
+    val formatter = getFormatter(pattern, locale)
     return formatter.format(Instant.ofEpochMilli(millis).atZone(zoneId))
 }

@@ -256,6 +256,30 @@ object DemoDataSeeder {
             ),
         )
 
+        val mediaPath2 =
+            writeDemoBitmap(
+                directory = mediaStorageProvider.getOrderMediaDir(DEMO_ORDER_ID),
+                fileName = "demo-dettaglio.png",
+                label = "Detail Photo",
+                backgroundColor = Color.rgb(240, 240, 240),
+            )
+        database.orderMediaDao().upsert(
+            OrderMediaEntity(
+                id = "demo-media-detail",
+                orderId = DEMO_ORDER_ID,
+                mediaType = "PHOTO",
+                localPath = mediaPath2.absolutePath,
+                fileName = mediaPath2.name,
+                mimeType = "image/png",
+                sizeBytes = mediaPath2.length(),
+                width = 1280,
+                height = 720,
+                createdByUserId = assignedUserId,
+                capturedAt = now + 5_000L,
+                createdAt = now + 5_000L,
+            ),
+        )
+
         val signaturePath =
             writeDemoBitmap(
                 directory = mediaStorageProvider.getOrderSignaturesDir(DEMO_ORDER_ID),
@@ -285,23 +309,42 @@ object DemoDataSeeder {
                 createdAt = now + 2_000L,
             ),
         )
-        database.timelineEventDao().upsert(
-            TimelineEventEntity(
-                id = "demo-timeline-created",
-                orderId = DEMO_ORDER_ID,
-                type = TimelineEventType.ORDER_CREATED,
-                title = testContext.getString(TestR.string.demo_event_title_created),
-                description = testContext.getString(TestR.string.demo_event_desc_created),
-                oldStatus = null,
-                newStatus = OrderStatus.OPEN.name,
-                visibleToCustomer = true,
-                requiresCustomerFeedback = false,
-                expectedFeedbackType = null,
-                customerFeedback = null,
-                customerFeedbackNote = null,
-                customerFeedbackAt = null,
-                createdByUserId = assignedUserId,
-                createdAt = now,
+        database.timelineEventDao().upsertAll(
+            listOf(
+                TimelineEventEntity(
+                    id = "demo-timeline-created",
+                    orderId = DEMO_ORDER_ID,
+                    type = TimelineEventType.ORDER_CREATED,
+                    title = testContext.getString(TestR.string.demo_event_title_created),
+                    description = testContext.getString(TestR.string.demo_event_desc_created),
+                    oldStatus = null,
+                    newStatus = OrderStatus.OPEN.name,
+                    visibleToCustomer = true,
+                    requiresCustomerFeedback = false,
+                    expectedFeedbackType = null,
+                    customerFeedback = null,
+                    customerFeedbackNote = null,
+                    customerFeedbackAt = null,
+                    createdByUserId = assignedUserId,
+                    createdAt = now,
+                ),
+                TimelineEventEntity(
+                    id = "demo-timeline-diagnosis",
+                    orderId = DEMO_ORDER_ID,
+                    type = TimelineEventType.STATUS_CHANGED,
+                    title = "Diagnosis started",
+                    description = "The device is currently under technical evaluation.",
+                    oldStatus = OrderStatus.IN_PROGRESS.name,
+                    newStatus = OrderStatus.DIAGNOSIS.name,
+                    visibleToCustomer = true,
+                    requiresCustomerFeedback = false,
+                    expectedFeedbackType = null,
+                    customerFeedback = null,
+                    customerFeedbackNote = null,
+                    customerFeedbackAt = null,
+                    createdByUserId = assignedUserId,
+                    createdAt = now + 10_000L,
+                ),
             ),
         )
 

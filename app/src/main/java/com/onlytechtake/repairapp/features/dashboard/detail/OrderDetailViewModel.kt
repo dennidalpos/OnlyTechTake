@@ -303,7 +303,12 @@ class OrderDetailViewModel(
     fun recordPreparedMessage() {
         val prepared = _preparedMessage.value ?: return
         actionRunner.run { actor ->
-            templateRepository.recordPrepared(actor, prepared, preparedMessageBody.value)
+            val result =
+                templateRepository.recordPrepared(actor, prepared, preparedMessageBody.value)
+            withContext(Dispatchers.Main) {
+                setFormDirty(dirty = false)
+            }
+            result
         }
     }
 

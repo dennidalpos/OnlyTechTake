@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.LoadingBrandIndicator
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
@@ -42,6 +43,7 @@ import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
 import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
 import com.onlytechtake.repairapp.core.design.components.StandardCard
+import com.onlytechtake.repairapp.core.di.FakeAppContainer
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.entities.ClosureReason
 import com.onlytechtake.repairapp.data.local.entities.CustomerFeedbackType
@@ -51,10 +53,12 @@ import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.domain.workspace.statusTemplateAnchor
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision
+import com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel
 
 @Composable
 fun OrderDetailWorkspace(
     viewModel: OrderDetailViewModel,
+    sharedViewModel: SharedWorkspaceViewModel,
     onBack: () -> Unit,
 ) {
     val message by viewModel.message.collectAsState()
@@ -122,6 +126,13 @@ fun OrderDetailWorkspace(
         }
     }
 
+    val autoSaveSignal by sharedViewModel.autoSaveSignal.collectAsState()
+    LaunchedEffect(autoSaveSignal) {
+        if ((autoSaveSignal > 0) && (preparedMessage != null)) {
+            viewModel.recordPreparedMessage()
+        }
+    }
+
     val hasUnsavedLocalWork = (workspaceState.note.isNotBlank() || (preparedMessage != null))
     BackHandler(enabled = true) {
         if (hasUnsavedLocalWork) {
@@ -134,10 +145,10 @@ fun OrderDetailWorkspace(
         }
     }
 
-    var notesExpanded by rememberSaveable { mutableStateOf(false) }
-    var photosExpanded by rememberSaveable { mutableStateOf(false) }
-    var timelineExpanded by rememberSaveable { mutableStateOf(false) }
-    var signaturesExpanded by rememberSaveable { mutableStateOf(false) }
+    var notesExpanded by rememberSaveable { mutableStateOf(value = false) }
+    var photosExpanded by rememberSaveable { mutableStateOf(value = false) }
+    var timelineExpanded by rememberSaveable { mutableStateOf(value = false) }
+    var signaturesExpanded by rememberSaveable { mutableStateOf(value = false) }
 
     Column(Modifier.fillMaxSize()) {
         message?.let {
@@ -225,7 +236,7 @@ fun OrderDetailWorkspace(
                         whatsAppAnchor = statusTemplateAnchor(selected.order),
                         onActionClick = { action ->
                             val isActionMatchDecision =
-                                (isResultStep && isRepairable && (decision != null)) &&
+                                ((isResultStep && isRepairable && (decision != null))) &&
                                     ((action == primaryOverride) || (primaryOverride == null && action == OrderStatusAction.START_REPAIR))
 
                             val isActionMatchNotRepairable =
@@ -349,6 +360,7 @@ fun OrderDetailWorkspace(
                                 title = stringResource(R.string.order_internal_notes),
                                 isExpanded = notesExpanded,
                                 showBadge = hasNotes && !notesExpanded,
+                                badgeText = if (hasNotes) "1" else null,
                             )
                             if (notesExpanded) {
                                 Column(modifier = Modifier.padding(horizontal = RepairAppSpacing.tinyGap)) {
@@ -387,16 +399,18 @@ fun OrderDetailWorkspace(
                 }
 
                 item(key = "signatures", contentType = "signatures") {
+                    val signatureCount = selected.signatures.size
                     StandardCard(
                         onClick = { signaturesExpanded = !signaturesExpanded },
-                        highlight = signaturesExpanded || selected.signatures.isNotEmpty(),
+                        highlight = signaturesExpanded || signatureCount > 0,
                         modifier = Modifier.testTag(RepairAppTestTags.OrderSignaturesCard),
                     ) {
                         Column(modifier = Modifier.padding(RepairAppSpacing.compactGap)) {
                             ExpandableHeader(
                                 title = stringResource(R.string.signature_section_title),
                                 isExpanded = signaturesExpanded,
-                                showBadge = selected.signatures.isNotEmpty() && !signaturesExpanded,
+                                showBadge = signatureCount > 0 && !signaturesExpanded,
+                                badgeText = signatureCount.toString(),
                             )
                             if (signaturesExpanded) {
                                 OrderSignatureSection(
@@ -428,6 +442,7 @@ fun OrderDetailWorkspace(
                 }
 
                 item(key = "timeline", contentType = "timeline") {
+                    val timelineCount = selected.timeline.size
                     StandardCard(
                         onClick = { timelineExpanded = !timelineExpanded },
                         highlight = timelineExpanded,
@@ -437,6 +452,8 @@ fun OrderDetailWorkspace(
                             ExpandableHeader(
                                 title = stringResource(R.string.order_timeline),
                                 isExpanded = timelineExpanded,
+                                showBadge = timelineCount > 0 && !timelineExpanded,
+                                badgeText = timelineCount.toString(),
                             )
                             if (timelineExpanded) {
                                 OrderTimelineSection(timeline = selected.timeline)
@@ -604,9 +621,28 @@ private fun ExpandableHeader(
 )
 @Composable
 private fun OrderDetailWorkspacePreview() {
+    val context = LocalContext.current
+    val container = FakeAppContainer(context)
     RepairAppTheme {
-        // Mocked or minimal workspace could be here if we had a way to provide fake viewmodel
-        // For now just showing a placeholder if needed, but the user asked for previews.
-        Text("Order Detail Preview Placeholder")
+        OrderDetailWorkspace(
+            viewModel =
+                viewModel(
+                    factory =
+                        OrderDetailViewModel.Factory(
+                            context = context,
+                            orderId = "PREVIEW-ID",
+                            authRepository = container.authRepository,
+                            orderRepository = container.orderWorkflowRepository,
+                            orderMediaRepository = container.orderMediaRepository,
+                            orderDocumentRepository = container.orderDocumentRepository,
+                            templateRepository = container.templateRepository,
+                            generateOrderStatusPdfUseCase = container.generateOrderStatusPdfUseCase,
+                            shareDocumentIntentFactory = container.shareDocumentIntentFactory,
+                            diagnosticLogger = container.diagnosticLogger,
+                            onSetFormDirty = {},
+                        ),
+                ),
+            sharedViewModel = viewModel(),
+        ) {}
     }
 }

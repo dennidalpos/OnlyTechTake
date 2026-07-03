@@ -108,7 +108,6 @@ class SettingsViewModel(
     private val diagnosticDelegate =
         DiagnosticSettingsDelegate(
             diagnosticLogService,
-            securityPreferences,
             actionRunner,
             viewModelScope,
             ::refreshStorageStats,
@@ -189,6 +188,7 @@ class SettingsViewModel(
         ownerPreferences.ownerInfo
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), OwnerInfo())
 
+    @Suppress("unused")
     val isBackupReminderDue =
         backupReminderPreferences.settings
             .map { settings ->

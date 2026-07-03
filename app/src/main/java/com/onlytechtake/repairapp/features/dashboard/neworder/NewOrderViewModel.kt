@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.error.DiagnosticLogger
 import com.onlytechtake.repairapp.core.templates.TemplateAnchor
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.MessageTemplateEntity
@@ -50,7 +51,7 @@ class NewOrderViewModel(
     templateRepository: TemplateRepository,
     private val createIntakeOrderUseCase: CreateIntakeOrderUseCase,
     private val onSetFormDirty: (Boolean) -> Unit,
-    diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger,
+    diagnosticLogger: DiagnosticLogger,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
     private val applicationContext = context.applicationContext
@@ -277,7 +278,7 @@ class NewOrderViewModel(
         private val orderMediaRepository: OrderMediaRepository,
         private val templateRepository: TemplateRepository,
         private val createIntakeOrderUseCase: CreateIntakeOrderUseCase,
-        private val diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger,
+        private val diagnosticLogger: DiagnosticLogger,
         private val onSetFormDirty: (Boolean) -> Unit,
         private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     ) : ViewModelProvider.Factory {

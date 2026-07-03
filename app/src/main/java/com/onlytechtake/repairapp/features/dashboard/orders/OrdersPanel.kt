@@ -135,6 +135,7 @@ fun OrdersPanel(
                         )
                     OrderDetailWorkspace(
                         viewModel = detailViewModel,
+                        sharedViewModel = sharedViewModel,
                     ) { selectedOrderId = null }
                 } else {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

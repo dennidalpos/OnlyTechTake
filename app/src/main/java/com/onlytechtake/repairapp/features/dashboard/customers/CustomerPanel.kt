@@ -135,6 +135,10 @@ fun CustomerPanel(
             notes = notes,
         )
 
+    val canSave =
+        (phone.isNotBlank() || email.isNotBlank()) &&
+            if (isBusiness) companyName.isNotBlank() else firstName.isNotBlank() && lastName.isNotBlank()
+
     fun clearForm() {
         editingCustomerId = null
         isBusiness = false
@@ -148,6 +152,17 @@ fun CustomerPanel(
         address = ""
         notes = ""
         viewModel.setFormDirty(dirty = false)
+    }
+
+    val autoSaveSignal by sharedViewModel.autoSaveSignal.collectAsState()
+    LaunchedEffect(autoSaveSignal) {
+        val isDirty = viewModel.isFormDirty.value
+        if ((autoSaveSignal > 0) && isDirty && canSave) {
+            viewModel.saveCustomer(input) {
+                clearForm()
+                showForm = false
+            }
+        }
     }
 
     val resetSignal by sharedViewModel.resetSignal.collectAsState()

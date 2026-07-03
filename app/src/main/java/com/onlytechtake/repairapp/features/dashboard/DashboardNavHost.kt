@@ -60,22 +60,21 @@ fun DashboardNavHost(
                 summary = summary,
                 viewModel = homeViewModel,
                 onNewOrder = { navController.navigate(DashboardRoutes.NEW_ORDER) },
-                onOpenQueue = { filter ->
-                    val status = filter.status?.name ?: filter.statuses.firstOrNull()?.name
-                    navController.navigate(
-                        DashboardRoutes.orders(
-                            status = status,
-                            customerId = filter.customerId,
-                        ),
-                    ) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
+            ) { filter ->
+                val status = filter.status?.name ?: filter.statuses.firstOrNull()?.name
+                navController.navigate(
+                    DashboardRoutes.orders(
+                        status = status,
+                        customerId = filter.customerId,
+                    ),
+                ) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
                     }
-                },
-            )
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
         }
         composable(DashboardRoutes.NEW_ORDER) {
             val newOrderViewModel: NewOrderViewModel =
@@ -211,6 +210,7 @@ fun DashboardNavHost(
                 )
             OrderDetailWorkspace(
                 viewModel = orderDetailViewModel,
+                sharedViewModel = sharedViewModel,
             ) { navController.popBackStack() }
         }
         composable(

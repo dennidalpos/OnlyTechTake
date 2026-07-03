@@ -89,16 +89,25 @@ fun SignatureCaptureForm(
     val hasSignature = strokes.any { it.points.size > 1 }
     val defaultSignerName = stringResource(R.string.signature_default_signer)
     val capture =
-        if (privacyAccepted && termsAccepted && hasSignature) {
-            SignatureCaptureResult(
-                signerName = defaultSignerName,
-                businessSignerName = businessSignerName.takeIf { isBusiness && it.isNotBlank() },
-                privacyAccepted = privacyAccepted,
-                termsAccepted = termsAccepted,
-                bitmap = renderSignatureBitmap(strokes),
-            )
-        } else {
-            null
+        remember(
+            privacyAccepted,
+            termsAccepted,
+            strokes,
+            businessSignerName,
+            defaultSignerName,
+            isBusiness
+        ) {
+            if (privacyAccepted && termsAccepted && hasSignature) {
+                SignatureCaptureResult(
+                    signerName = defaultSignerName,
+                    businessSignerName = businessSignerName.takeIf { isBusiness && it.isNotBlank() },
+                    privacyAccepted = privacyAccepted,
+                    termsAccepted = termsAccepted,
+                    bitmap = renderSignatureBitmap(strokes),
+                )
+            } else {
+                null
+            }
         }
 
     LaunchedEffect(privacyAccepted, termsAccepted, strokes, businessSignerName) {
@@ -155,7 +164,7 @@ fun SignatureCaptureForm(
                 }
             }
         }
-        if ((existingSignatures.isEmpty() && submitText != null)) {
+        if (existingSignatures.isEmpty() && submitText != null) {
             Text(stringResource(R.string.signature_empty))
         }
 
@@ -164,8 +173,7 @@ fun SignatureCaptureForm(
                 Modifier.clickable(
                     onClickLabel = stringResource(R.string.signature_read_privacy),
                     role = Role.Button,
-                    onClick = { textDialog = SignatureTextDialog.PRIVACY },
-                ),
+                ) { textDialog = SignatureTextDialog.PRIVACY },
             text = stringResource(R.string.signature_read_privacy),
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.bodySmall,
@@ -175,8 +183,7 @@ fun SignatureCaptureForm(
                 Modifier.clickable(
                     onClickLabel = stringResource(R.string.signature_read_terms),
                     role = Role.Button,
-                    onClick = { textDialog = SignatureTextDialog.TERMS },
-                ),
+                ) { textDialog = SignatureTextDialog.TERMS },
             text = stringResource(R.string.signature_read_terms),
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.bodySmall,

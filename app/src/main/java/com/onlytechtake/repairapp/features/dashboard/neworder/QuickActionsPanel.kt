@@ -42,13 +42,16 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppIconSizes
 import com.onlytechtake.repairapp.core.design.RepairAppShapes
 import com.onlytechtake.repairapp.core.design.RepairAppSizes
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.RepairAppTheme
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
@@ -60,6 +63,7 @@ import com.onlytechtake.repairapp.core.design.components.AppTextField
 import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
 import com.onlytechtake.repairapp.core.design.components.StandardCard
+import com.onlytechtake.repairapp.core.di.FakeAppContainer
 import com.onlytechtake.repairapp.core.utils.displayName
 import com.onlytechtake.repairapp.data.local.entities.CustomerType
 import com.onlytechtake.repairapp.domain.workspace.isReadyForSubmit
@@ -369,7 +373,7 @@ fun QuickActions(
 
                     if (!draft.showNewCustomerForm && customerSearchQuery.isNotBlank()) {
                         val suggestions = customerSuggestions
-                        if (suggestions != null && suggestions.isNotEmpty()) {
+                        if (!suggestions.isNullOrEmpty()) {
                             suggestions.take(3).forEach { customer ->
                                 CustomerSuggestionCard(
                                     customer = customer,
@@ -658,28 +662,60 @@ fun QuickActions(
                     isIntakeSubmitUnlocked(draft.completedStep) &&
                         stepperState.activeCategories.isNotEmpty() &&
                         stepperState.intakeInput.isReadyForSubmit(context),
-                onSubmit = {
-                    draft.signatureCapture?.let { capture ->
-                        val resolvedSignerName =
-                            if (stepperState.isBusiness) {
-                                capture.businessSignerName?.takeIf { it.isNotBlank() }
-                                    ?: selectedCustomerDisplayName ?: unnamedBusiness
-                            } else {
-                                selectedCustomerDisplayName ?: unnamedPrivate
-                            }
+            ) {
+                draft.signatureCapture?.let { capture ->
+                    val resolvedSignerName =
+                        if (stepperState.isBusiness) {
+                            capture.businessSignerName?.takeIf { it.isNotBlank() }
+                                ?: selectedCustomerDisplayName ?: unnamedBusiness
+                        } else {
+                            selectedCustomerDisplayName ?: unnamedPrivate
+                        }
 
-                        viewModel.createIntakeOrder(
-                            input = stepperState.intakeInput,
-                            stagedMedia = draft.stagedMedia,
-                            signerName = resolvedSignerName,
-                            privacyAccepted = capture.privacyAccepted,
-                            termsAccepted = capture.termsAccepted,
-                            signatureBitmap = capture.bitmap,
-                            onCreated = ::resetForm,
-                        )
-                    }
-                },
-            )
+                    viewModel.createIntakeOrder(
+                        input = stepperState.intakeInput,
+                        stagedMedia = draft.stagedMedia,
+                        signerName = resolvedSignerName,
+                        privacyAccepted = capture.privacyAccepted,
+                        termsAccepted = capture.termsAccepted,
+                        signatureBitmap = capture.bitmap,
+                        onCreated = ::resetForm,
+                    )
+                }
+            }
         }
+    }
+}
+
+@Preview(showBackground = true, name = "Light Mode")
+@Preview(
+    showBackground = true,
+    name = "Dark Mode",
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
+)
+@Composable
+private fun QuickActionsPreview() {
+    val context = LocalContext.current
+    val container = FakeAppContainer(context)
+    RepairAppTheme {
+        QuickActions(
+            viewModel =
+                viewModel(
+                    factory =
+                        NewOrderViewModel.Factory(
+                            context = context,
+                            authRepository = container.authRepository,
+                            customerRepository = container.customerRepository,
+                            catalogRepository = container.catalogRepository,
+                            orderMediaRepository = container.orderMediaRepository,
+                            templateRepository = container.templateRepository,
+                            createIntakeOrderUseCase = container.createIntakeOrderUseCase,
+                            diagnosticLogger = container.diagnosticLogger,
+                            onSetFormDirty = {},
+                        ),
+                ),
+            sharedViewModel = remember { SharedWorkspaceViewModel() },
+            onOpenConfig = {},
+        ) {}
     }
 }

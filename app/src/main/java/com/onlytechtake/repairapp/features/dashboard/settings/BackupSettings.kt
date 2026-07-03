@@ -47,9 +47,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.design.RepairAppTheme
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
@@ -60,6 +62,7 @@ import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
 import com.onlytechtake.repairapp.core.design.components.AppTextField
 import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.StandardCard
+import com.onlytechtake.repairapp.core.di.FakeAppContainer
 import com.onlytechtake.repairapp.core.utils.formatUiDateTime
 import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
@@ -77,14 +80,14 @@ fun BackupSettings(
     onRequestConfirm: (String, String, () -> Unit) -> Unit,
     onBack: () -> Unit,
 ) {
+    val appName = stringResource(R.string.about_app_name)
     val backupReminderSettings by viewModel.backupReminderSettings.collectAsState()
     val securitySettings by viewModel.securitySettings.collectAsState()
     val storageStats by viewModel.storageStats.collectAsState()
     val isProcessing by viewModel.isProcessing.collectAsState()
-    val isBackupReminderDue by viewModel.isBackupReminderDue.collectAsState()
     var backupIntervalDays by rememberSaveable { mutableStateOf(backupReminderSettings.intervalDays.toString()) }
 
-    var showEncryptionModal by remember { mutableStateOf(false) }
+    var showEncryptionModal by remember { mutableStateOf(value = false) }
     var tempPassword by rememberSaveable { mutableStateOf(securitySettings.backupEncryptionPassword) }
     var tempConfirmPassword by rememberSaveable { mutableStateOf(securitySettings.backupEncryptionPassword) }
 
@@ -92,14 +95,8 @@ fun BackupSettings(
     var restorePassword by rememberSaveable { mutableStateOf("") }
     var pendingRestoreUri by remember { mutableStateOf<Uri?>(null) }
 
-    val timestamp =
-        remember {
-            val date =
-                java.text
-                    .SimpleDateFormat("yyyyMMdd_HHmm", java.util.Locale.getDefault())
-                    .format(java.util.Date())
-            "${com.onlytechtake.repairapp.BuildConfig.FLAVOR}_$date"
-        }
+    val isEncrypted =
+        securitySettings.isBackupEncryptionEnabled && securitySettings.backupEncryptionPassword.isNotBlank()
 
     val exportZipLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
@@ -559,7 +556,7 @@ fun BackupSettings(
                     confirmButton = {
                         AppButton(
                             text = stringResource(R.string.action_confirm),
-                            enabled = tempPassword.isNotBlank() && tempPassword == tempConfirmPassword,
+                            enabled = tempPassword.isNotBlank() && (tempPassword == tempConfirmPassword),
                             onClick = {
                                 viewModel.setBackupEncryptionPassword(tempPassword)
                                 viewModel.setBackupEncryptionEnabled(true)
@@ -703,7 +700,16 @@ fun BackupSettings(
                         testTag = RepairAppTestTags.ConfigBackupRunZipButton,
                         onClick = {
                             onRequestConfirm(confirmExportZipTitle, confirmExportZipText) {
-                                exportZipLauncher.launch("onlytechtake_backup_$timestamp.zip")
+                                val appVersion = com.onlytechtake.repairapp.BuildConfig.VERSION_NAME
+                                val prefix = if (isEncrypted) "ENC_" else ""
+                                val date =
+                                    java.text
+                                        .SimpleDateFormat(
+                                            "yyyyMMdd_HHmm",
+                                            java.util.Locale.getDefault()
+                                        )
+                                        .format(java.util.Date())
+                                exportZipLauncher.launch("${prefix}${appName}_v${appVersion}_Manual_$date.zip")
                             }
                         },
                     )
@@ -734,7 +740,15 @@ fun BackupSettings(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
                             onRequestConfirm(confirmExportXlsxTitle, confirmExportXlsxText) {
-                                exportOrdersXlsxLauncher.launch("onlytechtake_commesse_$timestamp.xlsx")
+                                val appVersion = com.onlytechtake.repairapp.BuildConfig.VERSION_NAME
+                                val date =
+                                    java.text
+                                        .SimpleDateFormat(
+                                            "yyyyMMdd_HHmm",
+                                            java.util.Locale.getDefault()
+                                        )
+                                        .format(java.util.Date())
+                                exportOrdersXlsxLauncher.launch("${appName}_v${appVersion}_Orders_$date.xlsx")
                             }
                         },
                     )
@@ -1021,15 +1035,37 @@ private fun backupReminderInfo(settings: BackupReminderSettings): String {
 )
 @Composable
 private fun BackupSettingsPreview() {
-    MaterialTheme {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val container = FakeAppContainer(context)
+    RepairAppTheme {
         BackupSettings(
             viewModel =
-                androidx.lifecycle.viewmodel.compose
-                    .viewModel(),
+                viewModel(
+                    factory =
+                        SettingsViewModel.Factory(
+                            context = context,
+                            authRepository = container.authRepository,
+                            adminUserRepository = container.adminUserRepository,
+                            catalogRepository = container.catalogRepository,
+                            templateRepository = container.templateRepository,
+                            backupRepository = container.backupRepository,
+                            dataResetRepository = container.dataResetRepository,
+                            backupReminderPreferences = container.backupReminderPreferences,
+                            backupService = container.backupService,
+                            ownerPreferences = container.ownerPreferences,
+                            securityPreferences = container.securityPreferences,
+                            uiPreferences = container.uiPreferences,
+                            storageStatsService = container.storageStatsService,
+                            diagnosticLogService = container.diagnosticLogService,
+                            orderFileCleanupService = container.orderFileCleanupService,
+                            diagnosticLogger = container.diagnosticLogger,
+                            database = container.database,
+                            onSetFormDirty = {},
+                        ),
+                ),
             isAdmin = true,
             onBackupRestored = {},
             onRequestConfirm = { _, _, _ -> },
-            onBack = {},
-        )
+        ) {}
     }
 }

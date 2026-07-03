@@ -86,25 +86,25 @@ class BackupRepository(
                         zip.putTextEntry(
                             "metadata/backup.json",
                             metadataService.buildBackupMetadataJson(),
-                            password,
+                            null, // Do not encrypt metadata
                         )
                         zip.putTextEntry(
                             "config/configuration.json",
                             metadataService.buildConfigurationJson(),
-                            password,
+                            null, // Do not encrypt configuration
                         )
                         dbBackupService.addDatabaseFiles(zip, password)
                         BackupArchive.addDirectory(
                             zip = zip,
                             directory = mediaStorageProvider.getBaseMediaDir(),
                             entryDirectory = "files/${BackupArchive.CANONICAL_MEDIA_DIRECTORY}",
-                            password = password,
+                            password = null, // Do not encrypt media files
                         )
                         BackupArchive.addDirectory(
                             zip = zip,
                             directory = File(context.filesDir, "datastore"),
                             entryDirectory = "files/datastore",
-                            password = password,
+                            password = null, // Do not encrypt datastore files
                         )
                     }
                 } ?: throw IOException(context.getString(R.string.error_destination_unavailable))
@@ -283,10 +283,6 @@ class BackupRepository(
                 throw IllegalStateException(context.getString(R.string.error_feature_pro_only))
             }
 
-            val securitySettings = securityPreferences.settings.first()
-            val password =
-                securitySettings.backupEncryptionPassword.takeIf { securitySettings.isBackupEncryptionEnabled && it.isNotBlank() }
-
             val exportDao = orderExportDao
             val labels =
                 OrderExportLabels(
@@ -332,7 +328,7 @@ class BackupRepository(
             withContext(Dispatchers.IO) {
                 val allOrders = exportDao.exportAllOrders()
                 context.contentResolver.openOutputStream(uri)?.use { output ->
-                    OrderExportXlsxWriter(labels).write(allOrders, output, password)
+                    OrderExportXlsxWriter(labels).write(allOrders, output, null)
                 } ?: throw IOException(context.getString(R.string.error_destination_unavailable))
             }
             eventWriter.dataExported(actor.id, clockMillis())

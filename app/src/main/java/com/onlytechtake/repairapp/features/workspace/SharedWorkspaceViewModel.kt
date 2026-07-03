@@ -15,8 +15,15 @@ class SharedWorkspaceViewModel : ViewModel() {
     private val _resetSignal = MutableStateFlow(value = 0)
     val resetSignal = _resetSignal.asStateFlow()
 
+    private val _autoSaveSignal = MutableStateFlow(value = 0)
+    val autoSaveSignal = _autoSaveSignal.asStateFlow()
+
     fun triggerReset() {
         _resetSignal.value += 1
+    }
+
+    fun triggerAutoSave() {
+        _autoSaveSignal.value += 1
     }
 
     @Suppress("unused")

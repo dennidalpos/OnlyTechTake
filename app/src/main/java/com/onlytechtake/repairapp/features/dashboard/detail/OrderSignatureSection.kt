@@ -30,7 +30,6 @@ import com.onlytechtake.repairapp.core.design.components.StandardCard
 import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 import com.onlytechtake.repairapp.features.dashboard.common.LocalImagePreview
 import com.onlytechtake.repairapp.features.dashboard.common.LocalImageViewer
-import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 
 @Composable
 fun OrderSignatureSection(
@@ -45,8 +44,6 @@ fun OrderSignatureSection(
         modifier = Modifier.testTag(RepairAppTestTags.OrderSignatureSection),
         verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
     ) {
-        SectionTitle(stringResource(R.string.signature_section_title))
-
         if (detail.signatures.isEmpty()) {
             Text(
                 stringResource(R.string.signature_empty),

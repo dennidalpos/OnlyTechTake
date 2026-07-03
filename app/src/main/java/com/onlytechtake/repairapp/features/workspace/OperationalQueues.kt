@@ -31,8 +31,10 @@ fun buildOperationalQueues(orders: List<RepairOrderEntity>): List<OperationalQue
             statuses = statuses,
             orders =
                 statuses
+                    .asSequence()
                     .flatMap { groupedOrders[it] ?: emptyList() }
-                    .sortedByDescending { it.updatedAt },
+                    .sortedByDescending { it.updatedAt }
+                    .toList(),
         )
     }
 }

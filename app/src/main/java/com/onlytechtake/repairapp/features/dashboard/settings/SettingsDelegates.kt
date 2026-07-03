@@ -289,7 +289,6 @@ internal class StorageSettingsDelegate(
 
 internal class DiagnosticSettingsDelegate(
     private val diagnosticLogService: DiagnosticLogService,
-    private val securityPreferences: SecurityPreferences,
     private val actionRunner: AuthenticatedActionRunner,
     private val scope: CoroutineScope,
     private val onRefreshStats: () -> Unit,
@@ -311,11 +310,7 @@ internal class DiagnosticSettingsDelegate(
                 actor,
                 UserPermission.MANAGE_STORAGE,
             )
-            val settings = securityPreferences.settings.first()
-            val password =
-                settings.backupEncryptionPassword.takeIf { it.isNotBlank() }
-
-            val zipFile = diagnosticLogService.collectAndPrepareZip(password)
+            val zipFile = diagnosticLogService.collectAndPrepareZip(null)
             if (zipFile != null) {
                 val intent =
                     diagnosticLogService.createShareIntent(zipFile).apply {

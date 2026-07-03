@@ -194,8 +194,7 @@ fun AuthGateRoute(
                 onRestore = { uri, password ->
                     viewModel.restoreBackup(uri, password, onAppDataRestored)
                 },
-                onBack = { (context as? Activity)?.finish() },
-            )
+            ) { (context as? Activity)?.finish() }
         }
 
         else -> {
@@ -447,9 +446,9 @@ private fun FirstSetupScreen(
                     variant = AppButtonVariant.Primary,
                     size = AppButtonSize.Compact,
                     onClick = {
-                        restoreUri?.let {
+                        restoreUri?.let { uri ->
                             onRestore(
-                                it,
+                                uri,
                                 restorePassword.takeIf { it.isNotBlank() },
                             )
                         }

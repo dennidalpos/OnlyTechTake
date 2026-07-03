@@ -227,9 +227,8 @@ fun DashboardScreen(
                 saveState = true
             }
             launchSingleTop = true
-            // Restore state for everything EXCEPT the start destination
-            // to ensure clicking Home always takes us to the root of Home
-            restoreState = !isReset && (route != startDest.route)
+            // ALWAYS take to dedicated page (start of tab), so restoreState is false
+            restoreState = false
         }
         sharedViewModel.setFormDirty(dirty = false)
     }
@@ -326,11 +325,14 @@ fun DashboardScreen(
                             },
                             selected = selected,
                             onClick = {
-                                if (isFormDirty) {
+                                if ((currentDestination == DashboardRoutes.NEW_ORDER) && isFormDirty) {
                                     pendingRoute = item.route
                                     pendingIsReset = selected
                                     showUnsavedChangesDialog = true
                                 } else {
+                                    if (isFormDirty) {
+                                        sharedViewModel.triggerAutoSave()
+                                    }
                                     performNavigation(item.route, isReset = selected)
                                 }
                             },
@@ -374,11 +376,14 @@ fun DashboardScreen(
                             },
                             selected = selected,
                             onClick = {
-                                if (isFormDirty) {
+                                if ((currentDestination == DashboardRoutes.NEW_ORDER) && isFormDirty) {
                                     pendingRoute = item.route
                                     pendingIsReset = selected
                                     showUnsavedChangesDialog = true
                                 } else {
+                                    if (isFormDirty) {
+                                        sharedViewModel.triggerAutoSave()
+                                    }
                                     performNavigation(item.route, isReset = selected)
                                 }
                             },
@@ -424,7 +429,16 @@ fun DashboardScreen(
                             AppButton(
                                 text = stringResource(R.string.dashboard_config),
                                 onClick = {
-                                    performNavigation(DashboardRoutes.settings("EXPORT"))
+                                    if ((currentDestination == DashboardRoutes.NEW_ORDER) && isFormDirty) {
+                                        pendingRoute = DashboardRoutes.settings("EXPORT")
+                                        pendingIsReset = false
+                                        showUnsavedChangesDialog = true
+                                    } else {
+                                        if (isFormDirty) {
+                                            sharedViewModel.triggerAutoSave()
+                                        }
+                                        performNavigation(DashboardRoutes.settings("EXPORT"))
+                                    }
                                 },
                                 variant = AppButtonVariant.Ghost,
                                 size = AppButtonSize.Compact,

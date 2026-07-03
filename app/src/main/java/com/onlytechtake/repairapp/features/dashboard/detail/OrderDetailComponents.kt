@@ -51,7 +51,6 @@ import com.onlytechtake.repairapp.domain.workspace.requiresConfirmation
 import com.onlytechtake.repairapp.features.dashboard.common.CompactExpandableRow
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision
-import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.workspace.OrderStatusStepper
 
 @Composable
@@ -420,7 +419,7 @@ fun InternalNotesPanel(
             OperatorText(it)
         }
         AppButton(
-            text = stringResource(R.string.order_save_note),
+            text = stringResource(R.string.order_new_note),
             variant = AppButtonVariant.Ghost,
             onClick = onAddNoteClick,
             size = AppButtonSize.Compact,
@@ -437,10 +436,6 @@ fun OrderTimelineSection(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
     ) {
-        SectionTitle(
-            text = stringResource(R.string.order_timeline),
-            tooltip = stringResource(R.string.order_timeline_tooltip),
-        )
         timeline.forEachIndexed { index, event ->
             val eventNumber = timeline.size - index
             CompactExpandableRow(

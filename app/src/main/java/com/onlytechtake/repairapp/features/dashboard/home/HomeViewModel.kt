@@ -55,6 +55,7 @@ class HomeViewModel(
                 BackupReminderSettings(),
             )
 
+    @Suppress("unused")
     val isBackupReminderDue: StateFlow<Boolean> =
         combine(
             currentUser,
@@ -67,6 +68,7 @@ class HomeViewModel(
                 )
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = false)
 
+    @Suppress("unused")
     fun exportCompleteBackup(uri: Uri) {
         val user = currentUser.value ?: return
         viewModelScope.launch {
