@@ -393,7 +393,7 @@ fun QuickActions(
                                     viewModel.setCustomerSearchQuery(label)
                                 }
                             }
-                        } else if (suggestions != null && customerSearchQuery.length >= 2) {
+                        } else if ((suggestions != null) && (customerSearchQuery.length >= 2)) {
                             Text(
                                 text = stringResource(R.string.customer_no_results),
                                 style = MaterialTheme.typography.bodySmall,
@@ -620,7 +620,7 @@ fun QuickActions(
                             termsText = stepperState.termsText,
                             isBusiness = stepperState.isBusiness,
                         ) { capture ->
-                            if (capture != null || draft.signatureCapture == null) {
+                            if ((capture != null) || (draft.signatureCapture == null)) {
                                 updateDraft {
                                     it.copy(
                                         signatureCapture =
@@ -650,7 +650,7 @@ fun QuickActions(
             )
         }
 
-        if (draft.currentStep == SUBMIT_INTAKE_STEP || isIntakeSubmitUnlocked(draft.completedStep)) {
+        if ((draft.currentStep == SUBMIT_INTAKE_STEP) || isIntakeSubmitUnlocked(draft.completedStep)) {
             QuickIntakeSubmitSection(
                 missingRequirements =
                     if (isIntakeSubmitUnlocked(draft.completedStep)) {

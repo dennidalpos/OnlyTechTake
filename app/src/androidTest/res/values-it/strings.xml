@@ -17,6 +17,18 @@
     <string name="demo_event_desc_created">Presa in carico demo con foto e firma cliente.</string>
     <string name="demo_template_body">Aggiornamento {{numero_commessa}}: {{stato_commessa}} per {{cliente}}.</string>
 
+    <string name="demo_wizard_customer_first_name">Marco</string>
+    <string name="demo_wizard_customer_last_name">Bianchi</string>
+    <string name="demo_wizard_customer_phone">+39 333 000 9988</string>
+    <string name="demo_wizard_customer_email">m.bianchi@esempio.invalid</string>
+    <string name="demo_wizard_order_title">Samsung Galaxy S23 - Schermo rotto</string>
+    <string name="demo_wizard_order_desc">Il cliente riferisce la rottura del display a seguito di una caduta accidentale.</string>
+    <string name="demo_wizard_diagnosis_result">Connettore di ricarica danneggiato.</string>
+
+    <string name="demo_event_title_diagnosis">Diagnosi avviata</string>
+    <string name="demo_event_desc_diagnosis">Il dispositivo è attualmente in fase di valutazione tecnica.</string>
+    <string name="demo_photo_detail_label">Foto dettaglio</string>
+
     <plurals name="demo_error_order_limit">
         <item quantity="one">Limite Demo raggiunto. La versione Demo consente %1$d sola commessa e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
         <item quantity="many" tools:ignore="UnusedQuantity">Limite Demo raggiunto. La versione Demo consente %1$d commesse e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>

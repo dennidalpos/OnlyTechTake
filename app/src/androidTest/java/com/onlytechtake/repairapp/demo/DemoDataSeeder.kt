@@ -161,7 +161,7 @@ object DemoDataSeeder {
                     firstName =
                         when {
                             i == 1 -> {
-                                "John"
+                                context.getString(R.string.demo_customer_first_name)
                             }
 
                             (i % 3) == 0 -> {
@@ -175,7 +175,7 @@ object DemoDataSeeder {
                                 )
                             }
                         },
-                    lastName = if ((i % 3) == 0) null else "Doe",
+                    lastName = if ((i % 3) == 0) null else context.getString(R.string.demo_customer_last_name),
                     companyName =
                         if ((i % 3) == 0) {
                             testContext.getString(
@@ -187,10 +187,18 @@ object DemoDataSeeder {
                         },
                     vatNumber = if ((i % 3) == 0) "US${10000000000L + i}" else null,
                     taxCode = if ((i % 3) == 0) null else "CF${1000000000000000L + i}",
-                    phone = "+1 555-000-${1000 + i}",
-                    email = "customer$i@example.invalid",
-                    address = "$i Demo St, New York",
-                    notes = testContext.getString(TestR.string.demo_customer_notes, i),
+                    phone = if (i == 1) context.getString(R.string.demo_customer_phone) else "+1 555-000-${1000 + i}",
+                    email = if (i == 1) context.getString(R.string.demo_customer_email) else "customer$i@example.invalid",
+                    address = if (i == 1) context.getString(R.string.demo_customer_address) else "$i Demo St, New York",
+                    notes =
+                        if (i == 1) {
+                            context.getString(R.string.demo_customer_notes)
+                        } else {
+                            testContext.getString(
+                                TestR.string.demo_customer_notes,
+                                i,
+                            )
+                        },
                     createdAt = now - (i * 1000L),
                     updatedAt = now - (i * 1000L),
                 )
@@ -260,7 +268,7 @@ object DemoDataSeeder {
             writeDemoBitmap(
                 directory = mediaStorageProvider.getOrderMediaDir(DEMO_ORDER_ID),
                 fileName = "demo-dettaglio.png",
-                label = "Detail Photo",
+                label = testContext.getString(TestR.string.demo_photo_detail_label),
                 backgroundColor = Color.rgb(240, 240, 240),
             )
         database.orderMediaDao().upsert(
@@ -332,8 +340,8 @@ object DemoDataSeeder {
                     id = "demo-timeline-diagnosis",
                     orderId = DEMO_ORDER_ID,
                     type = TimelineEventType.STATUS_CHANGED,
-                    title = "Diagnosis started",
-                    description = "The device is currently under technical evaluation.",
+                    title = testContext.getString(TestR.string.demo_event_title_diagnosis),
+                    description = testContext.getString(TestR.string.demo_event_desc_diagnosis),
                     oldStatus = OrderStatus.IN_PROGRESS.name,
                     newStatus = OrderStatus.DIAGNOSIS.name,
                     visibleToCustomer = true,
@@ -345,6 +353,29 @@ object DemoDataSeeder {
                     createdByUserId = assignedUserId,
                     createdAt = now + 10_000L,
                 ),
+            ),
+        )
+
+        val videoPath = File(mediaStorageProvider.getOrderMediaDir(DEMO_ORDER_ID), "demo-video.mp4")
+        if (!videoPath.exists()) {
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                videoPath.createNewFile()
+            }
+        }
+        database.orderMediaDao().upsert(
+            OrderMediaEntity(
+                id = "demo-media-video",
+                orderId = DEMO_ORDER_ID,
+                mediaType = "VIDEO",
+                localPath = videoPath.absolutePath,
+                fileName = videoPath.name,
+                mimeType = "video/mp4",
+                sizeBytes = 1024 * 512,
+                width = 1280,
+                height = 720,
+                createdByUserId = assignedUserId,
+                capturedAt = now + 15_000L,
+                createdAt = now + 15_000L,
             ),
         )
 

@@ -236,11 +236,11 @@ fun OrderDetailWorkspace(
                         whatsAppAnchor = statusTemplateAnchor(selected.order),
                         onActionClick = { action ->
                             val isActionMatchDecision =
-                                ((isResultStep && isRepairable && (decision != null))) &&
-                                    ((action == primaryOverride) || (primaryOverride == null && action == OrderStatusAction.START_REPAIR))
+                                (isResultStep && isRepairable && (decision != null)) &&
+                                    ((action == primaryOverride) || ((primaryOverride == null) && (action == OrderStatusAction.START_REPAIR)))
 
                             val isActionMatchNotRepairable =
-                                isResultStep && isNotRepairable && action == OrderStatusAction.READY_FOR_PICKUP
+                                isResultStep && isNotRepairable && (action == OrderStatusAction.READY_FOR_PICKUP)
 
                             when {
                                 isActionMatchDecision -> {
@@ -379,14 +379,14 @@ fun OrderDetailWorkspace(
                     val mediaCount = selected.media.size
                     StandardCard(
                         onClick = { photosExpanded = !photosExpanded },
-                        highlight = photosExpanded || mediaCount > 0,
+                        highlight = photosExpanded || (mediaCount > 0),
                         modifier = Modifier.testTag(RepairAppTestTags.OrderPhotosSectionCard),
                     ) {
                         Column(modifier = Modifier.padding(RepairAppSpacing.compactGap)) {
                             ExpandableHeader(
                                 title = stringResource(R.string.intake_step_media),
                                 isExpanded = photosExpanded,
-                                showBadge = mediaCount > 0 && !photosExpanded,
+                                showBadge = (mediaCount > 0) && !photosExpanded,
                                 badgeText = mediaCount.toString(),
                             )
                             if (photosExpanded) {
@@ -402,14 +402,14 @@ fun OrderDetailWorkspace(
                     val signatureCount = selected.signatures.size
                     StandardCard(
                         onClick = { signaturesExpanded = !signaturesExpanded },
-                        highlight = signaturesExpanded || signatureCount > 0,
+                        highlight = signaturesExpanded || (signatureCount > 0),
                         modifier = Modifier.testTag(RepairAppTestTags.OrderSignaturesCard),
                     ) {
                         Column(modifier = Modifier.padding(RepairAppSpacing.compactGap)) {
                             ExpandableHeader(
                                 title = stringResource(R.string.signature_section_title),
                                 isExpanded = signaturesExpanded,
-                                showBadge = signatureCount > 0 && !signaturesExpanded,
+                                showBadge = (signatureCount > 0) && !signaturesExpanded,
                                 badgeText = signatureCount.toString(),
                             )
                             if (signaturesExpanded) {
@@ -452,7 +452,7 @@ fun OrderDetailWorkspace(
                             ExpandableHeader(
                                 title = stringResource(R.string.order_timeline),
                                 isExpanded = timelineExpanded,
-                                showBadge = timelineCount > 0 && !timelineExpanded,
+                                showBadge = (timelineCount > 0) && !timelineExpanded,
                                 badgeText = timelineCount.toString(),
                             )
                             if (timelineExpanded) {

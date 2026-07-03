@@ -143,7 +143,7 @@ class CustomersViewModel(
                             if (closed) {
                                 setOf(OrderStatus.CLOSED)
                             } else {
-                                OrderStatus.entries.filter { it != OrderStatus.CLOSED }.toSet()
+                                OrderStatus.entries.asSequence().filter { it != OrderStatus.CLOSED }.toSet()
                             },
                     )
                 orderWorkflowRepository.observeOrderList(user, filter)

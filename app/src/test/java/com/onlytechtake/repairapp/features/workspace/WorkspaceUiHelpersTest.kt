@@ -63,8 +63,8 @@ class WorkspaceUiHelpersTest {
 
         assertEquals("Foto 1 – Documenti 1 – Firme 1 – Lavoro finito 1", counts.label(context))
 
-        val oCounts = OrderAttachmentCounts(images = 2, documents = 3, signatures = 1)
-        assertEquals("Foto 2 – Documenti 3 – Firme 1", oCounts.label(context))
+        val specificCounts = OrderAttachmentCounts(images = 2, documents = 3, signatures = 1)
+        assertEquals("Foto 2 – Documenti 3 – Firme 1", specificCounts.label(context))
     }
 
     @Test
@@ -83,7 +83,7 @@ class WorkspaceUiHelpersTest {
         assertEquals("1,5 MB", formatFileSize(1_572_864, locale))
         assertEquals(
             "01/01/1970 00:00",
-            formatUiDateTime(millis = 0L, zoneId = ZoneOffset.UTC, locale = locale)
+            formatUiDateTime(millis = 0L, zoneId = ZoneOffset.UTC, locale = locale),
         )
     }
 

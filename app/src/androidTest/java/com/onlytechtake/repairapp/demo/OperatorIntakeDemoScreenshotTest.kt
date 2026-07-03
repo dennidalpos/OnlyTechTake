@@ -5,6 +5,7 @@ import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.MainActivity
@@ -18,6 +19,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
+import com.onlytechtake.repairapp.test.R as TestR
 
 @RunWith(AndroidJUnit4::class)
 class OperatorIntakeDemoScreenshotTest {
@@ -34,14 +36,16 @@ class OperatorIntakeDemoScreenshotTest {
             android.Manifest.permission.RECORD_AUDIO,
         )
 
-    private val context: Context = ApplicationProvider.getApplicationContext()
+    private val targetContext: Context = ApplicationProvider.getApplicationContext()
+    private val testContext: Context
+        get() = InstrumentationRegistry.getInstrumentation().context
 
     @Test
     fun capturesOperatorIntakeDemo() {
-        runBlocking { DemoDataSeeder.seedDemoProfile(context, localeRule.locale) }
+        runBlocking { DemoDataSeeder.seedDemoProfile(targetContext, localeRule.locale) }
         TestUtils.refreshAppContainer()
         val outputDir = prepareScreenshotDirectory()
-        val robot = ProAssetRobot(composeRule, context)
+        val robot = ProAssetRobot(composeRule, targetContext)
 
         ActivityScenario.launch(MainActivity::class.java).use {
             robot.waitForTag(RepairAppTestTags.AuthUsernameField)
@@ -57,12 +61,24 @@ class OperatorIntakeDemoScreenshotTest {
             robot.waitForTag("quick_actions_screen")
 
             robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderFirstNameField, "Mark", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderLastNameField, "White", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderPhoneField, "+1 555-010-9988", scroll = true)
+            robot.typeTag(
+                RepairAppTestTags.NewOrderFirstNameField,
+                testContext.getString(TestR.string.demo_wizard_customer_first_name),
+                scroll = true,
+            )
+            robot.typeTag(
+                RepairAppTestTags.NewOrderLastNameField,
+                testContext.getString(TestR.string.demo_wizard_customer_last_name),
+                scroll = true,
+            )
+            robot.typeTag(
+                RepairAppTestTags.NewOrderPhoneField,
+                testContext.getString(TestR.string.demo_wizard_customer_phone),
+                scroll = true,
+            )
             robot.typeTag(
                 RepairAppTestTags.NewOrderEmailField,
-                "m.white@example.invalid",
+                testContext.getString(TestR.string.demo_wizard_customer_email),
                 scroll = true,
             )
             robot.capture(outputDir, "03-step1-customer.png")
@@ -82,12 +98,12 @@ class OperatorIntakeDemoScreenshotTest {
             robot.clickTag(RepairAppTestTags.NewOrderStep2NextButton, scroll = true)
             robot.typeTag(
                 RepairAppTestTags.NewOrderProblemSummaryField,
-                "Samsung Galaxy S23 - Broken screen",
+                testContext.getString(TestR.string.demo_wizard_order_title),
                 scroll = true,
             )
             robot.typeTag(
                 RepairAppTestTags.NewOrderProblemDetailsField,
-                "The customer reports a broken display after an accidental drop.",
+                testContext.getString(TestR.string.demo_wizard_order_desc),
                 scroll = true,
             )
             robot.capture(outputDir, "04-step2-problem.png")
@@ -113,8 +129,8 @@ class OperatorIntakeDemoScreenshotTest {
             robot.capture(outputDir, "07-step5-summary.png")
             robot.clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
 
-            val summary = "Samsung Galaxy S23 - Broken screen"
-            val createdOrderId = waitForCreatedOrderId()
+            val summary = testContext.getString(TestR.string.demo_wizard_order_title)
+            val createdOrderId = waitForCreatedOrderId(summary)
             robot.clickDashboardTab("ORDERS")
             robot.waitForText(summary, scroll = true)
             robot.clickText(summary, scroll = true)
@@ -145,7 +161,10 @@ class OperatorIntakeDemoScreenshotTest {
                 OrderStatusAction.START_DIAGNOSIS,
                 nextAction = OrderStatusAction.RECORD_RESULT,
             )
-            robot.applyResultStatus("Damaged power connector.", "149.00")
+            robot.applyResultStatus(
+                testContext.getString(TestR.string.demo_wizard_diagnosis_result),
+                "149.00",
+            )
             robot.capture(outputDir, "13-diagnosis-result.png")
 
             robot.waitForText(R.string.order_customer_documents, scroll = true)
@@ -174,9 +193,8 @@ class OperatorIntakeDemoScreenshotTest {
         }
     }
 
-    private fun waitForCreatedOrderId(): String {
-        val summary = "Samsung Galaxy S23 - Broken screen"
-        val database = RepairAppDatabase.getInstance(context)
+    private fun waitForCreatedOrderId(summary: String): String {
+        val database = RepairAppDatabase.getInstance(targetContext)
         val deadline = System.currentTimeMillis() + 30_000L
         while (System.currentTimeMillis() < deadline) {
             val order =
@@ -197,7 +215,8 @@ class OperatorIntakeDemoScreenshotTest {
     }
 
     private fun prepareScreenshotDirectory(): File {
-        val directory = File(requireNotNull(context.getExternalFilesDir(null)), "operator-intake")
+        val directory =
+            File(requireNotNull(targetContext.getExternalFilesDir(null)), "operator-intake")
         directory.deleteRecursively()
         directory.mkdirs()
         return directory

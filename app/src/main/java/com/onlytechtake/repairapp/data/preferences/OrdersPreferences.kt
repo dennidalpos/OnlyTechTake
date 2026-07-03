@@ -24,6 +24,7 @@ class OrdersPreferences(
 
             val statuses =
                 preferences[statusesKey(userId)]
+                    ?.asSequence()
                     ?.mapNotNull {
                         runCatching { OrderStatus.valueOf(it) }.getOrNull()
                     }?.toSet() ?: emptySet()

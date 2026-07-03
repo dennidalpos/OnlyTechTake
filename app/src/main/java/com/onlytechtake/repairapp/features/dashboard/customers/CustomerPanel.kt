@@ -979,8 +979,7 @@ private fun CustomerPanelFullPreview() {
             sharedViewModel =
                 androidx.lifecycle.viewmodel.compose
                     .viewModel(),
-            onOrderClick = {},
-        )
+        ) {}
     }
 }
 

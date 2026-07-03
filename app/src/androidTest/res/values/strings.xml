@@ -17,6 +17,18 @@
     <string name="demo_event_desc_created">Demo intake with photo and customer signature.</string>
     <string name="demo_template_body">Update {{numero_commessa}}: {{stato_commessa}} for {{cliente}}.</string>
 
+    <string name="demo_wizard_customer_first_name">Mark</string>
+    <string name="demo_wizard_customer_last_name">White</string>
+    <string name="demo_wizard_customer_phone">+1 555-010-9988</string>
+    <string name="demo_wizard_customer_email">m.white@example.invalid</string>
+    <string name="demo_wizard_order_title">Samsung Galaxy S23 - Broken screen</string>
+    <string name="demo_wizard_order_desc">The customer reports a broken display after an accidental drop.</string>
+    <string name="demo_wizard_diagnosis_result">Damaged power connector.</string>
+
+    <string name="demo_event_title_diagnosis">Diagnosis started</string>
+    <string name="demo_event_desc_diagnosis">The device is currently under technical evaluation.</string>
+    <string name="demo_photo_detail_label">Detail photo</string>
+
     <plurals name="demo_error_order_limit">
         <item quantity="one">Demo Limit reached. The Demo version allows only %1$d service order and use only with admin account. To continue without limits, activate the Full version.</item>
         <item quantity="other">Demo Limit reached. The Demo version allows %1$d service orders and use only with admin account. To continue without limits, activate the Full version.</item>

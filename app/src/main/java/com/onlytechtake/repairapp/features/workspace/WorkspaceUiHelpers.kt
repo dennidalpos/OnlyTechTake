@@ -44,48 +44,17 @@ import com.onlytechtake.repairapp.data.repositories.StagedOrderMedia
 import com.onlytechtake.repairapp.domain.workspace.OrderAttachmentCounts
 import com.onlytechtake.repairapp.domain.workspace.OrderListItem
 
-data class AttachmentCounts(
-    val images: Int,
-    val videos: Int,
-    val documents: Int,
-    val signatures: Int,
-    val finalPhotos: Int = 0,
-)
-
 fun attachmentCounts(
     media: List<OrderMediaEntity>,
     signatures: List<SignatureEntity>,
-): AttachmentCounts =
-    AttachmentCounts(
+): OrderAttachmentCounts =
+    OrderAttachmentCounts(
         images = media.count { it.isImageAttachment() && !it.isFinalPhoto() },
         videos = media.count { it.isVideoAttachment() },
         documents = media.count { !it.isImageAttachment() && !it.isVideoAttachment() },
         signatures = signatures.size,
         finalPhotos = media.count { it.isFinalPhoto() },
     )
-
-fun AttachmentCounts.label(context: Context): String =
-    buildList {
-        add(context.getString(R.string.label_photos_count, images))
-        if (videos > 0) {
-            add(context.getString(R.string.label_videos_count, videos))
-        }
-        add(context.getString(R.string.label_documents_count, documents))
-        add(
-            context.getString(
-                R.string.label_signatures_count,
-                signatures,
-            ),
-        )
-        if (finalPhotos > 0) {
-            add(
-                context.getString(
-                    R.string.label_final_photos_count,
-                    finalPhotos,
-                ),
-            )
-        }
-    }.joinToString(" – ")
 
 fun OrderAttachmentCounts.label(context: Context): String =
     buildList {

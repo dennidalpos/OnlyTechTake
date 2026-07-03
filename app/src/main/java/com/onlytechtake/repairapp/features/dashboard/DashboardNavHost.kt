@@ -174,6 +174,7 @@ fun DashboardNavHost(
                 val statuses =
                     statusesStr
                         ?.split(",")
+                        ?.asSequence()
                         ?.mapNotNull {
                             runCatching { OrderStatus.valueOf(it.uppercase()) }.getOrNull()
                         }?.toSet() ?: emptySet()
