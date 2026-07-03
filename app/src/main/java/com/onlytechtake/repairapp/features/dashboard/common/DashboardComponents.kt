@@ -233,7 +233,8 @@ fun OperatorText(
                 .background(
                     MaterialTheme.colorScheme.secondaryContainer,
                     RepairAppShapes.compactButton,
-                ).padding(horizontal = 12.dp, vertical = 8.dp),
+                )
+                .padding(horizontal = 12.dp, vertical = 8.dp),
         text = text,
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -295,7 +296,8 @@ fun CustomerTypeToggle(
                 .background(
                     MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
                     RepairAppShapes.pill,
-                ).padding(RepairAppSpacing.tinyGap),
+                )
+                .padding(RepairAppSpacing.tinyGap),
         horizontalArrangement = Arrangement.spacedBy(RepairAppSpacing.tinyGap),
     ) {
         val privateSelected = !isBusiness

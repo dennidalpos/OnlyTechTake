@@ -47,10 +47,15 @@ class OrdersViewModel(
             currentUser
                 .filterNotNull()
                 .flatMapLatest { user ->
-                    ordersPreferences?.getFilter(user.id) ?: flowOf(OrderFilter())
-                }.take(1)
+                    ordersPreferences?.getFilter(user.id) ?: flowOf(null)
+                }.filterNotNull()
+                .take(1)
                 .collect { savedFilter ->
-                    _orderFilter.value = savedFilter
+                    // Only restore saved filter if the current filter is empty
+                    // to avoid overwriting filters passed via navigation arguments
+                    if (!_orderFilter.value.hasActiveFilter()) {
+                        _orderFilter.value = savedFilter
+                    }
                 }
         }
     }
@@ -83,8 +88,9 @@ class OrdersViewModel(
 
     val orderListItems: StateFlow<List<OrderListItem>?> =
         _orderFilter
-            .debounce(300.milliseconds)
-            .combine(currentUser) { filter, user -> user to filter }
+            .debounce { filter ->
+                if (filter.query.isNotBlank()) 300.milliseconds else 0.milliseconds
+            }.combine(currentUser) { filter, user -> user to filter }
             .flatMapLatest { (user, filter) ->
                 when {
                     user == null -> flowOf(emptyList())

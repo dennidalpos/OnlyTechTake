@@ -202,9 +202,11 @@ class NewOrderViewModel(
         }
     }
 
-    fun createIntakePhotoFile(sessionId: String): Result<File> = runCatching { orderMediaRepository.createIntakePhotoFile(sessionId) }
+    fun createIntakePhotoFile(sessionId: String): Result<File> =
+        runCatching { orderMediaRepository.createIntakePhotoFile(sessionId) }
 
-    fun createIntakeVideoFile(sessionId: String): Result<File> = runCatching { orderMediaRepository.createIntakeVideoFile(sessionId) }
+    fun createIntakeVideoFile(sessionId: String): Result<File> =
+        runCatching { orderMediaRepository.createIntakeVideoFile(sessionId) }
 
     fun stageCapturedIntakePhoto(
         file: File,

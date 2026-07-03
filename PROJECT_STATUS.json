@@ -1,8 +1,8 @@
 {
   "project_name": "OnlyTechTake",
   "version": "1.0.0",
-  "status": "Implementata navigazione filtrata dalle code della dashboard. Allineate tutte le varianti (Full, Demo, Showcase) con il nuovo pattern di navigazione. Risolti warning e ottimizzati i ViewModel.",
-  "last_updated": "2026-07-25",
+  "status": "Risolto bug nel filtraggio delle commesse dalle code operative della dashboard. Ottimizzata reattività dei filtri nel OrdersViewModel (rimosso debounce non necessario). Verificate e allineate tutte le varianti (Full, Demo, Showcase).",
+  "last_updated": "2026-07-26",
   "backlog": [
     {
       "priority": "HIGH",

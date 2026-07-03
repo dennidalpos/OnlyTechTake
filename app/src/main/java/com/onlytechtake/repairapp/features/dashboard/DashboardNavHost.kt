@@ -64,7 +64,8 @@ fun DashboardNavHost(
                 val statusArg =
                     filter.status?.name
                         ?: if (filter.statuses.size == 1) filter.statuses.first().name else null
-                val statusesArg = if (filter.statuses.size > 1) filter.statuses.map { it.name } else null
+                val statusesArg =
+                    if (filter.statuses.size > 1) filter.statuses.map { it.name } else null
 
                 navController.navigate(
                     DashboardRoutes.orders(
@@ -171,9 +172,11 @@ fun DashboardNavHost(
                         runCatching { OrderStatus.valueOf(it.uppercase()) }.getOrNull()
                     }
                 val statuses =
-                    statusesStr?.split(",")?.mapNotNull {
-                        runCatching { OrderStatus.valueOf(it.uppercase()) }.getOrNull()
-                    }?.toSet() ?: emptySet()
+                    statusesStr
+                        ?.split(",")
+                        ?.mapNotNull {
+                            runCatching { OrderStatus.valueOf(it.uppercase()) }.getOrNull()
+                        }?.toSet() ?: emptySet()
 
                 ordersViewModel.setFilter(
                     OrderFilter(
