@@ -1,8 +1,8 @@
 {
   "project_name": "OnlyTechTake",
   "version": "1.0.0",
-  "status": "Allineamento varianti completato. Risolti warning lint (en-dash nei numeri di telefono) in tutte le risorse e nel Seeder. Pulizia codice test strumentati (rimozione unused e correzione trailing commas). Build e Unit Test superati per i flavor Full e Demo. Eseguito Spotless per consistenza stile.",
-  "last_updated": "2026-07-04T18:30:00Z",
+  "status": "Rigenerazione completa degli asset media (Brand, Screenshot, Video) completata con successo per le lingue EN e IT. Identificata e risolta una regressione in BaseAssetRobot che causava NPE in caso di fallimento della cattura screenshot. Verificata la build e i test su device fisico. Eseguito Spotless e Lint per mantenere la qualit\u00e0 del codice.",
+  "last_updated": "2026-07-04T19:00:00Z",
   "backlog": [
     {
       "priority": "HIGH",

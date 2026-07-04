@@ -512,6 +512,10 @@ abstract class BaseAssetRobot(
         InstrumentationRegistry.getInstrumentation().waitForIdleSync()
         pauseForScreenshot()
         val bitmap = InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot()
+        if (bitmap == null) {
+            android.util.Log.e("BaseAssetRobot", "Failed to take screenshot: $fileName (bitmap is null)")
+            return
+        }
         FileOutputStream(File(outputDir, fileName)).use { output ->
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, output)
         }
