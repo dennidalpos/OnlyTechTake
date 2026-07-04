@@ -51,14 +51,14 @@ class ProAssetRobot(
             RepairAppTestTags.StatusResultSummaryField,
             finalSummary,
             scroll = false,
-            fast = true
+            fast = true,
         )
         clickTag(RepairAppTestTags.DiagnosisRepairableToggle)
         typeTag(
             RepairAppTestTags.DiagnosisEstimateField,
             finalEstimate,
             scroll = false,
-            fast = true
+            fast = true,
         )
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
         waitForTagGone(RepairAppTestTags.StatusDialogConfirmButton)

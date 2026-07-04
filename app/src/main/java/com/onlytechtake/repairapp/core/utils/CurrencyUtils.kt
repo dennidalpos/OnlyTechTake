@@ -6,8 +6,7 @@ fun Long.formatEuroCents(): String = String.format(Locale.getDefault(), "%.2f â‚
 
 fun Long?.formatEuroCents(): String = this?.formatEuroCents() ?: "0,00 â‚¬"
 
-fun Long.formatEuroCentsForExport(): String =
-    "EUR ${this / 100},${(this % 100).toString().padStart(2, '0')}"
+fun Long.formatEuroCentsForExport(): String = "EUR ${this / 100},${(this % 100).toString().padStart(2, '0')}"
 
 fun Long?.formatEuroCentsForExport(): String = this?.formatEuroCentsForExport().orEmpty()
 

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.test.core.app.ActivityScenario
-
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.onlytechtake.repairapp.MainActivity
@@ -39,12 +38,10 @@ class WorkflowOperationalTest {
         )
 
     private val context: Context
-        get() = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().targetContext
-    private val testContext: Context
         get() =
             androidx.test.platform.app.InstrumentationRegistry
                 .getInstrumentation()
-                .context
+                .targetContext
 
     private fun launchMainActivity(disableAutoSeed: Boolean = false): ActivityScenario<MainActivity> {
         val intent =
@@ -103,7 +100,7 @@ class WorkflowOperationalTest {
             robot.typeTag(
                 RepairAppTestTags.AuthConfirmPasswordField,
                 "NewAdminPass123!",
-                fast = true
+                fast = true,
             )
             robot.clickTag(RepairAppTestTags.AuthSubmitButton)
 
@@ -615,7 +612,7 @@ class WorkflowOperationalTest {
             robot.clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
 
             val summary = robot.getTestString(TestR.string.demo_order_summary_s23)
-            val createdOrderId = waitForCreatedOrderId(summary)
+            waitForCreatedOrderId(summary)
             robot.clickDashboardTab("ORDERS")
             robot.waitForText(summary, scroll = true)
             robot.clickText(summary, scroll = true)
@@ -644,7 +641,7 @@ class WorkflowOperationalTest {
                 RepairAppTestTags.OrderWhatsAppMessageField,
                 " ",
                 scroll = false,
-                fast = true
+                fast = true,
             )
             robot.capture(outputDir, "06-whatsapp-pdf-pro.png")
             robot.dismissWhatsAppPreviewIfPresent()
@@ -700,10 +697,11 @@ class WorkflowOperationalTest {
             robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
             robot.pauseForDemo()
             robot.waitForText(
-                robot.getTestQuantityString(
-                    TestR.plurals.demo_error_order_limit,
-                    com.onlytechtake.repairapp.BuildConfig.MAX_ORDERS,
-                ).substring(0, 10),
+                robot
+                    .getTestQuantityString(
+                        TestR.plurals.demo_error_order_limit,
+                        com.onlytechtake.repairapp.BuildConfig.MAX_ORDERS,
+                    ).substring(0, 10),
             )
             robot.capture(outputDir, "03-limite-demo.png")
 
@@ -733,10 +731,11 @@ class WorkflowOperationalTest {
             robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
             robot.pauseForDemo()
             robot.waitForText(
-                robot.getTestQuantityString(
-                    TestR.plurals.demo_error_order_limit,
-                    com.onlytechtake.repairapp.BuildConfig.MAX_ORDERS,
-                ).substring(0, 10),
+                robot
+                    .getTestQuantityString(
+                        TestR.plurals.demo_error_order_limit,
+                        com.onlytechtake.repairapp.BuildConfig.MAX_ORDERS,
+                    ).substring(0, 10),
             )
             robot.capture(outputDir, "02-reel-demo-limit.png")
         }

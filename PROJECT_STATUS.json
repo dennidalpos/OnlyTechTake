@@ -1,8 +1,8 @@
 {
   "project_name": "OnlyTechTake",
   "version": "1.0.0",
-  "status": "Rigenerazione integrale asset completata con successo per tutte le lingue (en, it). Risolte regressioni critiche: 1) Perdita di localizzazione (leak Italiano) in English flow tramite correzione Invoke-DemoScreenshotTest. 2) Mismatch nomi file in workflow-setup. 3) Sovrascrittura varianti social-posts tramite preservazione struttura directory. 4) Ottimizzato script master per esecuzione locale-specifica e cleanup esteso.",
-  "last_updated": "2026-07-04T17:00:00Z",
+  "status": "Allineamento varianti completato. Risolti warning lint (en-dash nei numeri di telefono) in tutte le risorse e nel Seeder. Pulizia codice test strumentati (rimozione unused e correzione trailing commas). Build e Unit Test superati per i flavor Full e Demo. Eseguito Spotless per consistenza stile.",
+  "last_updated": "2026-07-04T18:30:00Z",
   "backlog": [
     {
       "priority": "HIGH",

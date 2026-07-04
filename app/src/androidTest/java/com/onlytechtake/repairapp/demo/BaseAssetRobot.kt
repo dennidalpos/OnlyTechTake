@@ -35,7 +35,7 @@ abstract class BaseAssetRobot(
     fun getString(
         @androidx.annotation.StringRes resId: Int,
     ): String {
-        val forceEnglish = LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
+        val forceEnglish = LocaleForcer.forceEnglish || (System.getProperty("forceEnglish") == "true")
         return if (forceEnglish) {
             val config = android.content.res.Configuration(context.resources.configuration)
             config.setLocales(android.os.LocaleList(java.util.Locale.US))
@@ -50,7 +50,7 @@ abstract class BaseAssetRobot(
     ): String {
         val testCtx = InstrumentationRegistry.getInstrumentation().context
         val isForceEnglish =
-            LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
+            LocaleForcer.forceEnglish || (System.getProperty("forceEnglish") == "true")
         return if (isForceEnglish) {
             val config = android.content.res.Configuration(testCtx.resources.configuration)
             config.setLocales(android.os.LocaleList(java.util.Locale.US))
@@ -66,14 +66,14 @@ abstract class BaseAssetRobot(
     ): String {
         val testCtx = InstrumentationRegistry.getInstrumentation().context
         val isForceEnglish =
-            LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
+            LocaleForcer.forceEnglish || (System.getProperty("forceEnglish") == "true")
         return if (isForceEnglish) {
             val config = android.content.res.Configuration(testCtx.resources.configuration)
             config.setLocales(android.os.LocaleList(java.util.Locale.US))
             testCtx.createConfigurationContext(config).resources.getQuantityString(
                 resId,
                 quantity,
-                quantity
+                quantity,
             )
         } else {
             testCtx.resources.getQuantityString(resId, quantity, quantity)
@@ -504,18 +504,6 @@ abstract class BaseAssetRobot(
         Thread.sleep(1000) // Pausa per far sparire eventuali artefatti UI della gesture
     }
 
-    fun dismissBanner() {
-        try {
-            if (isTagPresent(RepairAppTestTags.MessageBannerCloseButton)) {
-                Thread.sleep(1500) // Give time to read the success/error message
-                composeRule.onNodeWithTag(RepairAppTestTags.MessageBannerCloseButton).performClick()
-                composeRule.waitForIdle()
-            }
-        } catch (_: Throwable) {
-            // Ignore failures during banner dismissal in tests
-        }
-    }
-
     fun capture(
         outputDir: File,
         fileName: String,
@@ -551,8 +539,7 @@ abstract class BaseAssetRobot(
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    private fun isRecordingDemo(): Boolean =
-        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     companion object {
         const val WAIT_TIMEOUT_MILLIS = 30_000L

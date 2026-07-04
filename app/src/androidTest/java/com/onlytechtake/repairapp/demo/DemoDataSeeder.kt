@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import androidx.test.platform.app.InstrumentationRegistry
 import com.onlytechtake.repairapp.BuildConfig
-
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
@@ -82,7 +81,7 @@ object DemoDataSeeder {
                         "123 Demo Street, New York"
                     },
                 email = "demo@onlytechtake.invalid",
-                phone = if (locale.language == "it") "+39 333 987 6543" else "+1 555-987-6543",
+                phone = if (locale.language == "it") "+39 333 987 6543" else "+1 555–987–6543",
             ),
         )
 
@@ -190,13 +189,24 @@ object DemoDataSeeder {
                     type = if ((i % 3) == 0) CustomerType.BUSINESS else CustomerType.PRIVATE,
                     firstName =
                         when {
-                            i == 1 -> if (locale.language == "it") "Marco" else "John"
-                            i == 2 -> if (locale.language == "it") "Giulia" else "Julia"
-                            (i % 3) == 0 -> null
-                            else -> testLocalizedContext.getString(
-                                TestR.string.demo_customer_name,
-                                i
-                            )
+                            i == 1 -> {
+                                if (locale.language == "it") "Marco" else "John"
+                            }
+
+                            i == 2 -> {
+                                if (locale.language == "it") "Giulia" else "Julia"
+                            }
+
+                            (i % 3) == 0 -> {
+                                null
+                            }
+
+                            else -> {
+                                testLocalizedContext.getString(
+                                    TestR.string.demo_customer_name,
+                                    i,
+                                )
+                            }
                         },
                     lastName = if ((i % 3) == 0) null else (if (locale.language == "it") "Rossi" else "Doe"),
                     companyName =
@@ -208,9 +218,9 @@ object DemoDataSeeder {
                         } else {
                             null
                         },
-                    vatNumber = if ((i % 3) == 0) (if (locale.language == "it") "IT" else "US") + "${10000000000L + i}" else null,
+                    vatNumber = if ((i % 3) == 0) (if (locale.language == "it") "IT" else "US") + (10000000000L + i).toString() else null,
                     taxCode = if ((i % 3) == 0) null else (if (locale.language == "it") "RSSMRC90A01F205Z" else "CF${1000000000000000L + i}"),
-                    phone = if (i == 1) (if (locale.language == "it") "+39 02 123456" else "+1 555-123-4567") else (if (locale.language == "it") "+39 333 000 ${1000 + i}" else "+1 555-000-${1000 + i}"),
+                    phone = if (i == 1) (if (locale.language == "it") "+39 02 123456" else "+1 555–123–4567") else (if (locale.language == "it") "+39 333 000 ${1000 + i}" else "+1 555–000–${1000 + i}"),
                     email = if (i == 1) "john.doe@example.com" else "customer$i@example.invalid",
                     address = if (i == 1) (if (locale.language == "it") "Via Milano 1, Milano" else "123 Main St, New York") else (if (locale.language == "it") "Via Demo $i, Milano" else "$i Demo St, New York"),
                     notes =
@@ -252,10 +262,11 @@ object DemoDataSeeder {
                     assignedToUserId = assignedUserId,
                     createdByUserId = assignedUserId,
                     description = testLocalizedContext.getString(TestR.string.demo_order_desc, i),
-                    internalNotes = testLocalizedContext.getString(
-                        TestR.string.demo_order_notes,
-                        i
-                    ),
+                    internalNotes =
+                        testLocalizedContext.getString(
+                            TestR.string.demo_order_notes,
+                            i,
+                        ),
                     estimateAmountCents = null,
                     finalAmountCents = null,
                     createdAt = now - (i * 3600000L),

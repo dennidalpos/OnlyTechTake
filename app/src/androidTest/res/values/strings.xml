@@ -19,7 +19,7 @@
 
     <string name="demo_wizard_customer_first_name">Mark</string>
     <string name="demo_wizard_customer_last_name">White</string>
-    <string name="demo_wizard_customer_phone">+1 555-010-9988</string>
+    <string name="demo_wizard_customer_phone">+1 555&#8211;010&#8211;9988</string>
     <string name="demo_wizard_customer_email">m.white@example.invalid</string>
     <string name="demo_wizard_order_title">Samsung Galaxy S23 - Broken screen</string>
     <string name="demo_wizard_order_desc">The customer reports a broken display after an accidental drop.</string>
@@ -75,7 +75,7 @@
     <string name="demo_shop_vat_default">US123456789</string>
     <string name="demo_shop_address_default">123 Tech Avenue, New York</string>
     <string name="demo_shop_email_default">info@onlytechtake.invalid</string>
-    <string name="demo_shop_phone_default">+1 555-123-4567</string>
+    <string name="demo_shop_phone_default">+1 555&#8211;123&#8211;4567</string>
     <string name="demo_order_summary_ssd">Faulty SSD</string>
     <string name="demo_order_desc_ssd">The drive is not detected by the BIOS.</string>
     <string name="demo_diagnosis_result_ssd">SSD replacement required.</string>
@@ -95,7 +95,7 @@
     <string name="demo_customer_name_john">John Doe</string>
 
     <string name="demo_customer_name_julia">Julia</string>
-    <string name="demo_customer_phone_julia">+1 555-010-2020</string>
+    <string name="demo_customer_phone_julia">+1 555&#8211;010&#8211;2020</string>
     <string name="demo_customer_email_julia">julia.white@example.invalid</string>
     <string name="demo_order_summary_not_turning_on">Laptop won\'t turn on</string>
     <string name="demo_order_desc_not_turning_on">The customer reports sudden shutdown after accidental drop.</string>
@@ -107,11 +107,11 @@
     <string name="demo_customer_first_name_luke">Luke</string>
     <string name="demo_customer_last_name_red">Red</string>
     <string name="demo_customer_tax_code_luke">REDLKU90A01F205X</string>
-    <string name="demo_customer_phone_luke">+1 555-010-3030</string>
+    <string name="demo_customer_phone_luke">+1 555&#8211;010&#8211;3030</string>
     <string name="demo_customer_email_luke">luke.red@example.invalid</string>
     <string name="demo_customer_company_name_lab">Demo Lab LLC</string>
     <string name="demo_customer_vat_lab">US123456789</string>
-    <string name="demo_customer_phone_lab">+1 555-010-4040</string>
+    <string name="demo_customer_phone_lab">+1 555&#8211;010&#8211;4040</string>
     <string name="demo_customer_email_lab">admin@example.invalid</string>
     <string name="demo_customer_address_lab">24 Demo Way, New York</string>
 

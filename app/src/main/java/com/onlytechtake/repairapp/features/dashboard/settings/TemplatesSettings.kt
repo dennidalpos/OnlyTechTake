@@ -566,5 +566,4 @@ private fun isRiskyTemplateChange(
     loadedCode: String?,
     currentCode: String,
     active: Boolean,
-): Boolean =
-    ((loadedCode != null) && (loadedCode != currentCode)) || ((currentCode in systemTemplateCodes) && !active)
+): Boolean = ((loadedCode != null) && (loadedCode != currentCode)) || ((currentCode in systemTemplateCodes) && !active)
