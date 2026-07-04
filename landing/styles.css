@@ -1146,3 +1146,29 @@ footer {
         text-align: center;
     }
 }
+
+/* Install Guide for APK */
+.install-guide {
+    margin-top: 1.5rem;
+    padding: 1.25rem;
+    background: var(--md-sys-color-surface-variant);
+    border-radius: var(--border-radius-md);
+    text-align: left;
+    font-size: 0.85rem;
+    border: 1px dashed var(--md-sys-color-outline);
+}
+
+.install-guide h4 {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--md-sys-color-primary);
+}
+
+.guide-steps {
+    color: var(--md-sys-color-on-surface-variant);
+    line-height: 1.6;
+}
+

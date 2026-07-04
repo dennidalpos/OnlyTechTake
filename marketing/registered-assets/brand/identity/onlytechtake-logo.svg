@@ -14,8 +14,8 @@
     <circle cx="54" cy="91" r="5" fill="#00B6B0"/><circle cx="39" cy="88" r="5" fill="#00B6B0"/><circle cx="69" cy="88" r="5" fill="#00B6B0"/>
     <path d="M83 19L87 10M90 23L98 17M92 31H102" stroke="#FFB627" stroke-width="5" stroke-linecap="round"/>
   </g>
-  <text x="160" y="84" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="58" font-weight="800" font-style="italic" fill="#0D0D0D">Only</text>
-  <text x="292" y="84" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="58" font-weight="800" font-style="italic" fill="#00B6B0">Tech</text>
-  <text x="428" y="84" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="58" font-weight="800" font-style="italic" fill="#0D0D0D">Take</text>
-  <text x="164" y="126" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="25" font-weight="700" fill="#4F5B5B">Ripara, traccia, aggiorna.</text>
+  <text x="160" y="84" font-family="Inter" font-size="58" font-weight="800" font-style="italic" fill="#0D0D0D">Only</text>
+  <text x="292" y="84" font-family="Inter" font-size="58" font-weight="800" font-style="italic" fill="#00B6B0">Tech</text>
+  <text x="428" y="84" font-family="Inter" font-size="58" font-weight="800" font-style="italic" fill="#0D0D0D">Take</text>
+  <text x="164" y="126" font-family="Inter" font-size="25" font-weight="700" fill="#4F5B5B">Ripara, traccia, aggiorna.</text>
 </svg>

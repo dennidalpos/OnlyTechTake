@@ -65,21 +65,25 @@ class OperatorIntakeDemoScreenshotTest {
                 RepairAppTestTags.NewOrderFirstNameField,
                 testContext.getString(TestR.string.demo_wizard_customer_first_name),
                 scroll = true,
+                fast = true,
             )
             robot.typeTag(
                 RepairAppTestTags.NewOrderLastNameField,
                 testContext.getString(TestR.string.demo_wizard_customer_last_name),
                 scroll = true,
+                fast = true,
             )
             robot.typeTag(
                 RepairAppTestTags.NewOrderPhoneField,
                 testContext.getString(TestR.string.demo_wizard_customer_phone),
                 scroll = true,
+                fast = true,
             )
             robot.typeTag(
                 RepairAppTestTags.NewOrderEmailField,
                 testContext.getString(TestR.string.demo_wizard_customer_email),
                 scroll = true,
+                fast = true,
             )
             robot.capture(outputDir, "03-step1-customer.png")
 
@@ -98,13 +102,15 @@ class OperatorIntakeDemoScreenshotTest {
             robot.clickTag(RepairAppTestTags.NewOrderStep2NextButton, scroll = true)
             robot.typeTag(
                 RepairAppTestTags.NewOrderProblemSummaryField,
-                testContext.getString(TestR.string.demo_wizard_order_title),
+                robot.getTestString(TestR.string.demo_wizard_order_title),
                 scroll = true,
+                fast = true,
             )
             robot.typeTag(
                 RepairAppTestTags.NewOrderProblemDetailsField,
-                testContext.getString(TestR.string.demo_wizard_order_desc),
+                robot.getTestString(TestR.string.demo_wizard_order_desc),
                 scroll = true,
+                fast = true,
             )
             robot.capture(outputDir, "04-step2-problem.png")
 
@@ -129,7 +135,7 @@ class OperatorIntakeDemoScreenshotTest {
             robot.capture(outputDir, "07-step5-summary.png")
             robot.clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
 
-            val summary = testContext.getString(TestR.string.demo_wizard_order_title)
+            val summary = robot.getTestString(TestR.string.demo_wizard_order_title)
             val createdOrderId = waitForCreatedOrderId(summary)
             robot.clickDashboardTab("ORDERS")
             robot.waitForText(summary, scroll = true)

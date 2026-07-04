@@ -5,6 +5,7 @@ import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.onlytechtake.repairapp.MainActivity
 import com.onlytechtake.repairapp.R
@@ -17,6 +18,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
+import com.onlytechtake.repairapp.test.R as TestR
 
 @RunWith(AndroidJUnit4::class)
 class StoreProScreenshotTest {
@@ -34,6 +36,8 @@ class StoreProScreenshotTest {
         )
 
     private val context: Context = ApplicationProvider.getApplicationContext()
+    private val testContext: Context
+        get() = InstrumentationRegistry.getInstrumentation().context
 
     @Test
     fun capturesStoreProScreenshots() {
@@ -56,13 +60,29 @@ class StoreProScreenshotTest {
             robot.clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
             robot.waitForTag("quick_actions_screen")
             robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderFirstNameField, "Mark", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderLastNameField, "White", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderPhoneField, "+1 555-010-9988", scroll = true)
+            robot.typeTag(
+                RepairAppTestTags.NewOrderFirstNameField,
+                testContext.getString(TestR.string.demo_wizard_customer_first_name),
+                scroll = true,
+                fast = true,
+            )
+            robot.typeTag(
+                RepairAppTestTags.NewOrderLastNameField,
+                testContext.getString(TestR.string.demo_wizard_customer_last_name),
+                scroll = true,
+                fast = true,
+            )
+            robot.typeTag(
+                RepairAppTestTags.NewOrderPhoneField,
+                testContext.getString(TestR.string.demo_wizard_customer_phone),
+                scroll = true,
+                fast = true,
+            )
             robot.typeTag(
                 RepairAppTestTags.NewOrderEmailField,
-                "m.white@example.invalid",
+                testContext.getString(TestR.string.demo_wizard_customer_email),
                 scroll = true,
+                fast = true,
             )
             robot.capture(outputDir, "02-nuova-commessa-pro.png")
 
@@ -83,13 +103,15 @@ class StoreProScreenshotTest {
             // Step 3 (Problem) - Skip capture
             robot.typeTag(
                 RepairAppTestTags.NewOrderProblemSummaryField,
-                "Samsung Galaxy S23 - Broken screen",
+                testContext.getString(TestR.string.demo_order_summary_s23),
                 scroll = true,
+                fast = true,
             )
             robot.typeTag(
                 RepairAppTestTags.NewOrderProblemDetailsField,
-                "Original display replacement after accidental drop.",
+                testContext.getString(TestR.string.demo_order_desc_s23),
                 scroll = true,
+                fast = true,
             )
             robot.clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
 
@@ -113,8 +135,8 @@ class StoreProScreenshotTest {
             robot.waitForTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
             robot.clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
 
-            val summary = "Samsung Galaxy S23 - Broken screen"
-            val createdOrderId = waitForCreatedOrderId()
+            val summary = testContext.getString(TestR.string.demo_order_summary_s23)
+            val createdOrderId = waitForCreatedOrderId(summary)
             robot.clickDashboardTab("ORDERS")
             robot.waitForText(summary, scroll = true)
             robot.clickText(summary, scroll = true)
@@ -128,7 +150,10 @@ class StoreProScreenshotTest {
                 OrderStatusAction.START_DIAGNOSIS,
                 OrderStatusAction.RECORD_RESULT,
             )
-            robot.applyResultStatus("Samsung original AMOLED display.", "249.00")
+            robot.applyResultStatus(
+                testContext.getString(TestR.string.demo_diagnosis_result_s23),
+                testContext.getString(TestR.string.demo_estimate_s23),
+            )
             robot.capture(outputDir, "04-diagnosi-preventivo-pro.png")
 
             // 05-repairing-step-pro
@@ -140,7 +165,7 @@ class StoreProScreenshotTest {
             robot.clickTag(RepairAppTestTags.OrderWhatsAppButton)
             robot.waitForTag(RepairAppTestTags.OrderWhatsAppPreviewPanel)
             // Scroll inside dialog or interaction to ensure visual change
-            robot.typeTag(RepairAppTestTags.OrderWhatsAppMessageField, " ", scroll = false)
+            robot.typeTag(RepairAppTestTags.OrderWhatsAppMessageField, " ", scroll = false, fast = true)
             Thread.sleep(1000)
             robot.capture(outputDir, "06-whatsapp-pdf-pro.png")
             robot.dismissWhatsAppPreviewIfPresent()
@@ -150,7 +175,7 @@ class StoreProScreenshotTest {
                 OrderStatusAction.READY_FOR_PICKUP,
                 OrderStatusAction.CLOSE_ORDER,
             )
-            robot.closeOrder("Repair successfully completed.")
+            robot.closeOrder(testContext.getString(TestR.string.demo_closure_note_completed))
             robot.clickDashboardTab("ORDERS")
 
             // Enable "Closed" filter to see the order we just closed
@@ -170,15 +195,15 @@ class StoreProScreenshotTest {
             robot.capture(outputDir, "08-clienti-pro.png")
 
             // 09-dettaglio-cliente-pro
-            robot.waitForText("John Doe", scroll = true)
-            robot.clickText("John Doe")
+            val demoCustomerName = robot.getTestString(TestR.string.demo_customer_name_john)
+            robot.waitForText(demoCustomerName, scroll = true)
+            robot.clickText(demoCustomerName)
             robot.waitForText(R.string.customer_open_orders, scroll = true)
             robot.capture(outputDir, "09-dettaglio-cliente-pro.png")
         }
     }
 
-    private fun waitForCreatedOrderId(): String {
-        val summary = "Samsung Galaxy S23 - Broken screen"
+    private fun waitForCreatedOrderId(summary: String): String {
         val database = RepairAppDatabase.getInstance(context)
         val deadline = System.currentTimeMillis() + 30_000L
         while (System.currentTimeMillis() < deadline) {
@@ -193,7 +218,7 @@ class StoreProScreenshotTest {
             order?.let { return it.id }
             Thread.sleep(250)
         }
-        error("Ordine creato dal wizard non trovato")
+        error("Ordine creato dal wizard non trovato (summary: $summary)")
     }
 
     private fun prepareScreenshotDirectory(): File {

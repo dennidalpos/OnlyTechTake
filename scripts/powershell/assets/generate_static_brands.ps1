@@ -8,9 +8,13 @@ $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
 Write-Host "--- OnlyTechTake Static Asset Generator ---" -ForegroundColor Cyan
 
 $sourceLogo = Join-Path $root "marketing/registered-assets/brand/identity/onlytechtake-logo.svg"
-$sourceMark = Join-Path $root "landing/assets/brand/onlytechtake-mark.svg"
+$sourceMark = Join-Path $root "marketing/registered-assets/brand/identity/onlytechtake-mark.svg"
 
 $targets = @(
+    # Brand Identity (Landing)
+    @{ src = $sourceMark; dest = "landing/assets/brand/onlytechtake-mark.svg" },
+    @{ src = $sourceLogo; dest = "landing/assets/brand/onlytechtake-logo.svg" },
+
     # Favicons & Web
     @{ src = $sourceMark; dest = "landing/assets/icons/favicon.svg" },
     @{ src = $sourceMark; dest = "landing/assets/icons/favicon-192.png"; size = "192x192" },
@@ -22,7 +26,15 @@ $targets = @(
     @{ src = $sourceLogo; dest = "marketing/registered-assets/brand/social/github-social-preview.png"; size = "1280x640" },
 
     # App Preview
-    @{ src = $sourceMark; dest = "landing/assets/icons/app-icon-preview.png"; size = "512x512"; bg = "#0D0D0D" }
+    @{ src = $sourceMark; dest = "landing/assets/icons/app-icon-preview.png"; size = "512x512"; bg = "#0D0D0D" },
+
+    # Play Store - Pro (Full)
+    @{ src = $sourceMark; dest = "marketing/registered-assets/play-store/pro/icon-512.png"; size = "512x512"; bg = "#0D0D0D" },
+    @{ src = $sourceLogo; dest = "marketing/registered-assets/play-store/pro/feature-graphic-1024x500.png"; size = "1024x500"; bg = "#0D0D0D" },
+
+    # Play Store - Demo
+    @{ src = $sourceMark; dest = "marketing/registered-assets/play-store/demo/icon-512.png"; size = "512x512"; bg = "#0D0D0D" },
+    @{ src = $sourceLogo; dest = "marketing/registered-assets/play-store/demo/feature-graphic-1024x500.png"; size = "1024x500"; bg = "#0D0D0D" }
 )
 
 Write-Host "`nVerifica sorgenti..." -ForegroundColor Yellow
@@ -57,9 +69,16 @@ if ($magick) {
         if ($t.dest.EndsWith(".svg")) {
             Copy-Item -Path $t.src -Destination $destPath -Force
         } else {
+            # Temp fix for font-stack issues in ImageMagick on some Windows environments
+            # Simplifies "Inter, Segoe UI, ..." to just "Inter" or "Segoe UI" for the converter
+            $tempSvg = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName() + ".svg")
+            (Get-Content $t.src) -replace 'font-family="Inter, Segoe UI, Arial, sans-serif"', 'font-family="Inter"' | Set-Content $tempSvg
+
             # Se e' la preview app, aggiungiamo il background Charcoal
             $bgParam = if ($t.bg) { @("-background", $t.bg) } else { @("-background", "none") }
-            & $magick $bgParam -size $t.size $t.src $destPath
+            & $magick $bgParam -size $t.size $tempSvg $destPath
+
+            Remove-Item $tempSvg -Force
         }
     }
 } else {

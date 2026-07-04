@@ -31,19 +31,24 @@ class LocaleTestRule(
             override fun evaluate() {
                 val context = InstrumentationRegistry.getInstrumentation().targetContext
                 val appCtx = context.applicationContext
+                val testCtx = InstrumentationRegistry.getInstrumentation().context
 
                 deviceLocale = context.resources.configuration.locales[0]
 
-                System.setProperty("forceEnglish", "true")
+                val isForceEnglish = locale.language == "en"
+                System.setProperty("forceEnglish", isForceEnglish.toString())
+                com.onlytechtake.repairapp.core.design.LocaleForcer.forceEnglish = isForceEnglish
                 Locale.setDefault(locale)
 
                 updateContextLocale(context, locale)
                 updateContextLocale(appCtx, locale)
+                updateContextLocale(testCtx, locale)
 
                 try {
                     base.evaluate()
                 } finally {
                     System.clearProperty("forceEnglish")
+                    com.onlytechtake.repairapp.core.design.LocaleForcer.forceEnglish = false
                     deviceLocale?.let {
                         Locale.setDefault(it)
                         updateContextLocale(context, it)

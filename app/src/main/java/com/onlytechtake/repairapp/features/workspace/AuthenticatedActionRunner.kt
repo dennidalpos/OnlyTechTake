@@ -49,7 +49,7 @@ internal class AuthenticatedActionRunner(
                     val message =
                         (result as? String)
                             ?: successMessage
-                            ?: successMessageRes?.let { context.getString(it) }
+                            ?: successMessageRes?.let { getLocalizedContext(context).getString(it) }
                     message?.let { showMessage(it, false, autoDismissMillis) }
                     onSuccess()
                 },
@@ -61,11 +61,24 @@ internal class AuthenticatedActionRunner(
                     error,
                 )
                 showMessage(
-                    error.message ?: context.getString(R.string.error_unknown),
+                    error.message ?: getLocalizedContext(context).getString(R.string.error_unknown),
                     true,
                     autoDismissMillis,
                 )
             }
         }
+    }
+
+    private fun getLocalizedContext(baseContext: Context): Context {
+        val forceEnglish = com.onlytechtake.repairapp.core.design.LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
+        if (!forceEnglish) return baseContext
+
+        val locale = java.util.Locale.ENGLISH
+        val configuration = baseContext.resources.configuration
+        if (configuration.locales[0] == locale) return baseContext
+
+        val localizedConfig = android.content.res.Configuration(configuration)
+        localizedConfig.setLocale(locale)
+        return baseContext.createConfigurationContext(localizedConfig)
     }
 }

@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -16,10 +17,24 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import com.onlytechtake.repairapp.core.design.LocaleForcer
 import com.onlytechtake.repairapp.core.design.RepairAppTheme
 import com.onlytechtake.repairapp.navigation.RepairAppNavHost
 
 class MainActivity : AppCompatActivity() {
+    override fun attachBaseContext(newBase: Context) {
+        val forceEnglish = LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
+        if (forceEnglish) {
+            val locale = java.util.Locale.ENGLISH
+            java.util.Locale.setDefault(locale)
+            val config = android.content.res.Configuration(newBase.resources.configuration)
+            config.setLocale(locale)
+            super.attachBaseContext(newBase.createConfigurationContext(config))
+        } else {
+            super.attachBaseContext(newBase)
+        }
+    }
+
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

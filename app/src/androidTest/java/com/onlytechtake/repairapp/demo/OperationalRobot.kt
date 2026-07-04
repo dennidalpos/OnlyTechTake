@@ -10,6 +10,7 @@ import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import java.io.File
+import com.onlytechtake.repairapp.test.R as TestR
 
 class OperationalRobot(
     composeRule: ComposeTestRule,
@@ -23,19 +24,37 @@ class OperationalRobot(
         // 1. Home
         waitForTag(RepairAppTestTags.dashboardTab("HOME"))
         nextCapture("home")
+        narrativePause(2)
 
         // 2. Start Intake
         clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
         waitForTag("quick_actions_screen")
         nextCapture("intake-start")
+        narrativePause(1)
 
         // 3. New Customer
         clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
         waitForTag(RepairAppTestTags.NewOrderFirstNameField)
-        typeTag(RepairAppTestTags.NewOrderFirstNameField, "John", scroll = true)
-        typeTag(RepairAppTestTags.NewOrderLastNameField, "Doe", scroll = true)
-        typeTag(RepairAppTestTags.NewOrderPhoneField, "+1 555-111-2222", scroll = true)
+        typeTag(
+            RepairAppTestTags.NewOrderFirstNameField,
+            getTestString(TestR.string.demo_wizard_customer_first_name),
+            scroll = true,
+            fast = true,
+        )
+        typeTag(
+            RepairAppTestTags.NewOrderLastNameField,
+            getTestString(TestR.string.demo_wizard_customer_last_name),
+            scroll = true,
+            fast = true,
+        )
+        typeTag(
+            RepairAppTestTags.NewOrderPhoneField,
+            getTestString(TestR.string.demo_wizard_customer_phone),
+            scroll = true,
+            fast = true,
+        )
         nextCapture("intake-customer")
+        narrativePause(2)
 
         // 4. Save & Next
         clickTag(RepairAppTestTags.NewOrderSaveCustomerButton, scroll = true)
@@ -52,19 +71,27 @@ class OperationalRobot(
         clickTag(RepairAppTestTags.categoryButton("demo-cat-rog-strix"), scroll = true)
         pauseForDemo()
         nextCapture("intake-category")
+        narrativePause(2)
 
         // Wait for button to be enabled
         waitForTag(RepairAppTestTags.NewOrderStep2NextButton, scroll = true)
         clickTag(RepairAppTestTags.NewOrderStep2NextButton, scroll = true)
 
         // 6. Problem details
-        typeTag(RepairAppTestTags.NewOrderProblemSummaryField, "Faulty SSD", scroll = true)
+        typeTag(
+            RepairAppTestTags.NewOrderProblemSummaryField,
+            getTestString(TestR.string.demo_order_summary_ssd),
+            scroll = true,
+            fast = true,
+        )
         typeTag(
             RepairAppTestTags.NewOrderProblemDetailsField,
-            "The drive is not detected by the BIOS.",
+            getTestString(TestR.string.demo_order_desc_ssd),
             scroll = true,
+            fast = true,
         )
         nextCapture("intake-problem")
+        narrativePause(2)
         clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
 
         // 7. Media
@@ -74,6 +101,7 @@ class OperationalRobot(
         clickTag(RepairAppTestTags.IntakeMediaCapturePhotoButton, scroll = true)
         waitForText("PHOTO", scroll = true)
         nextCapture("intake-media")
+        narrativePause(2)
         clickTag(RepairAppTestTags.NewOrderStep4NextButton, scroll = true)
 
         // 8. Signature
@@ -95,6 +123,7 @@ class OperationalRobot(
             up()
         }
         nextCapture("intake-signature")
+        narrativePause(2)
         clickTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
 
         // 9. Summary & Submit
@@ -113,6 +142,7 @@ class OperationalRobot(
         clickDashboardTab("ORDERS")
         waitForText(R.string.dashboard_orders)
         nextCapture("orders-list")
+        narrativePause(2)
 
         // 2. Select Order
         val orderId = DemoDataSeeder.DEMO_ORDER_ID
@@ -120,6 +150,7 @@ class OperationalRobot(
         clickTag(RepairAppTestTags.orderCard(orderId), scroll = true)
         waitForTag(RepairAppTestTags.OrderStatusLabel)
         nextCapture("order-details")
+        narrativePause(2)
 
         // 3. Start Progress
         clickTag(
@@ -145,12 +176,14 @@ class OperationalRobot(
         waitForTag(RepairAppTestTags.StatusResultSummaryField)
         typeTag(
             RepairAppTestTags.StatusResultSummaryField,
-            "SSD replacement required.",
+            getTestString(TestR.string.demo_diagnosis_result_ssd),
             scroll = false,
+            fast = true,
         )
         clickTag(RepairAppTestTags.DiagnosisRepairableToggle)
-        typeTag(RepairAppTestTags.DiagnosisEstimateField, "120.00", scroll = false)
+        typeTag(RepairAppTestTags.DiagnosisEstimateField, "120.00", scroll = false, fast = true)
         nextCapture("management-diagnosis-result")
+        narrativePause(2)
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
         waitForTagGone(RepairAppTestTags.StatusDialogConfirmButton)
         dismissWhatsAppPreviewIfPresent()
@@ -176,7 +209,10 @@ class OperationalRobot(
         // 8. Close Order
         clickTag(RepairAppTestTags.statusAction(OrderStatusAction.CLOSE_ORDER.name), scroll = true)
         waitForTag(RepairAppTestTags.StatusNoteField)
-        typeTag(RepairAppTestTags.StatusNoteField, "Replaced 500GB SSD.")
+        typeTag(
+            RepairAppTestTags.StatusNoteField,
+            getTestString(TestR.string.demo_closure_note_ssd),
+        )
         clickTag(RepairAppTestTags.closureReason("COMPLETED"))
         nextCapture("management-closure")
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
@@ -206,9 +242,21 @@ class OperationalRobot(
         clickTag("admin_create_operator_switch", scroll = true)
 
         // Form filling - ensuring text is actually typed
-        typeTag(RepairAppTestTags.AdminDisplayNameField, "Junior Operator")
-        typeTag(RepairAppTestTags.AdminUsernameField, "op_junior")
-        typeTag(RepairAppTestTags.AdminPasswordField, "Pass12345")
+        typeTag(
+            RepairAppTestTags.AdminDisplayNameField,
+            getTestString(TestR.string.demo_operator_name_junior),
+            fast = true,
+        )
+        typeTag(
+            RepairAppTestTags.AdminUsernameField,
+            getTestString(TestR.string.demo_operator_username_junior),
+            fast = true,
+        )
+        typeTag(
+            RepairAppTestTags.AdminPasswordField,
+            getTestString(TestR.string.demo_operator_password_junior),
+            fast = true,
+        )
 
         composeRule.waitForIdle()
         pauseForDemo()
@@ -235,11 +283,20 @@ class OperationalRobot(
         nextCapture("templates-list")
 
         clickTag(RepairAppTestTags.ConfigTemplateNewButton, scroll = true)
-        typeTag(RepairAppTestTags.ConfigTemplateCodeField, "new_status_ready")
-        typeTag(RepairAppTestTags.ConfigTemplateTitleField, "Device ready")
+        typeTag(
+            RepairAppTestTags.ConfigTemplateCodeField,
+            getTestString(TestR.string.demo_template_ready_code),
+            fast = true,
+        )
+        typeTag(
+            RepairAppTestTags.ConfigTemplateTitleField,
+            getTestString(TestR.string.demo_template_ready_title),
+            fast = true,
+        )
         typeTag(
             RepairAppTestTags.ConfigTemplateBodyField,
-            "Dear {{cliente}}, your device is ready.",
+            getTestString(TestR.string.demo_template_ready_body),
+            fast = true,
         )
         nextCapture("template-editor")
         clickTag(RepairAppTestTags.ConfigTemplateSaveButton, scroll = true)
@@ -273,20 +330,44 @@ class OperationalRobot(
 
         // 1. First Setup (Admin)
         waitForTag(RepairAppTestTags.AuthDisplayNameField)
-        typeTag(RepairAppTestTags.AuthDisplayNameField, "John Doe")
-        typeTag(RepairAppTestTags.AuthUsernameField, "admin")
-        typeTag(RepairAppTestTags.AuthPasswordField, "AdminPass123!")
-        typeTag(RepairAppTestTags.AuthConfirmPasswordField, "AdminPass123!")
+        typeTag(
+            RepairAppTestTags.AuthDisplayNameField,
+            getTestString(TestR.string.demo_admin_name_default),
+            fast = true,
+        )
+        typeTag(RepairAppTestTags.AuthUsernameField, "admin", fast = true)
+        typeTag(RepairAppTestTags.AuthPasswordField, "AdminPass123!", fast = true)
+        typeTag(RepairAppTestTags.AuthConfirmPasswordField, "AdminPass123!", fast = true)
         nextCapture("setup-admin")
         clickTag(RepairAppTestTags.AuthSubmitButton)
 
         // 2. Owner Info (Wizard)
         waitForTag(RepairAppTestTags.OwnerFieldName)
-        typeTag(RepairAppTestTags.OwnerFieldName, "OnlyTechTake LLC")
-        typeTag(RepairAppTestTags.OwnerFieldVat, "US123456789")
-        typeTag(RepairAppTestTags.OwnerFieldAddress, "123 Tech Avenue, New York")
-        typeTag(RepairAppTestTags.OwnerFieldEmail, "info@onlytechtake.invalid")
-        typeTag(RepairAppTestTags.OwnerFieldPhone, "+1 555-123-4567")
+        typeTag(
+            RepairAppTestTags.OwnerFieldName,
+            getTestString(TestR.string.demo_shop_name_default),
+            fast = true,
+        )
+        typeTag(
+            RepairAppTestTags.OwnerFieldVat,
+            getTestString(TestR.string.demo_shop_vat_default),
+            fast = true,
+        )
+        typeTag(
+            RepairAppTestTags.OwnerFieldAddress,
+            getTestString(TestR.string.demo_shop_address_default),
+            fast = true,
+        )
+        typeTag(
+            RepairAppTestTags.OwnerFieldEmail,
+            getTestString(TestR.string.demo_shop_email_default),
+            fast = true,
+        )
+        typeTag(
+            RepairAppTestTags.OwnerFieldPhone,
+            getTestString(TestR.string.demo_shop_phone_default),
+            fast = true,
+        )
         nextCapture("setup-owner")
         clickText(R.string.action_confirm)
     }

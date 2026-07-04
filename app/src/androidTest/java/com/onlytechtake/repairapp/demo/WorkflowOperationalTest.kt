@@ -19,6 +19,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
+import com.onlytechtake.repairapp.test.R as TestR
 
 @RunWith(AndroidJUnit4::class)
 class WorkflowOperationalTest {
@@ -36,6 +37,11 @@ class WorkflowOperationalTest {
         )
 
     private val context: Context = ApplicationProvider.getApplicationContext()
+    private val testContext: Context
+        get() =
+            androidx.test.platform.app.InstrumentationRegistry
+                .getInstrumentation()
+                .context
 
     @Test
     fun flow0_Setup() {
@@ -99,22 +105,42 @@ class WorkflowOperationalTest {
                 putExtra("disable_auto_seed", true)
             }
         ActivityScenario.launch<MainActivity>(intent).use {
-            robot.typeTag(RepairAppTestTags.AuthUsernameField, "admin")
-            robot.typeTag(RepairAppTestTags.AuthPasswordField, "TempPass123!")
+            robot.typeTag(RepairAppTestTags.AuthUsernameField, "admin", fast = true)
+            robot.typeTag(RepairAppTestTags.AuthPasswordField, "TempPass123!", fast = true)
             robot.clickTag(RepairAppTestTags.AuthSubmitButton)
 
             robot.waitForText(R.string.auth_security_title, scroll = false)
             robot.capture(outputDir, "01-password-change.png")
-            robot.typeTag(RepairAppTestTags.AuthPasswordField, "NewAdminPass123!")
-            robot.typeTag(RepairAppTestTags.AuthConfirmPasswordField, "NewAdminPass123!")
+            robot.typeTag(RepairAppTestTags.AuthPasswordField, "NewAdminPass123!", fast = true)
+            robot.typeTag(RepairAppTestTags.AuthConfirmPasswordField, "NewAdminPass123!", fast = true)
             robot.clickTag(RepairAppTestTags.AuthSubmitButton)
 
             robot.waitForTag(RepairAppTestTags.OwnerFieldName)
-            robot.typeTag(RepairAppTestTags.OwnerFieldName, "OnlyTechTake LLC")
-            robot.typeTag(RepairAppTestTags.OwnerFieldVat, "US123456789")
-            robot.typeTag(RepairAppTestTags.OwnerFieldAddress, "123 Tech Avenue, New York")
-            robot.typeTag(RepairAppTestTags.OwnerFieldEmail, "info@onlytechtake.invalid")
-            robot.typeTag(RepairAppTestTags.OwnerFieldPhone, "+1 555-123-4567")
+            robot.typeTag(
+                RepairAppTestTags.OwnerFieldName,
+                testContext.getString(TestR.string.demo_shop_name_default),
+                fast = true,
+            )
+            robot.typeTag(
+                RepairAppTestTags.OwnerFieldVat,
+                testContext.getString(TestR.string.demo_shop_vat_default),
+                fast = true,
+            )
+            robot.typeTag(
+                RepairAppTestTags.OwnerFieldAddress,
+                testContext.getString(TestR.string.demo_shop_address_default),
+                fast = true,
+            )
+            robot.typeTag(
+                RepairAppTestTags.OwnerFieldEmail,
+                testContext.getString(TestR.string.demo_shop_email_default),
+                fast = true,
+            )
+            robot.typeTag(
+                RepairAppTestTags.OwnerFieldPhone,
+                testContext.getString(TestR.string.demo_shop_phone_default),
+                fast = true,
+            )
             robot.capture(outputDir, "02-shop-data-compilation.png")
             robot.clickText(R.string.action_confirm)
         }
@@ -122,9 +148,22 @@ class WorkflowOperationalTest {
 
     @Test
     fun flow1_Intake() {
-        runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        runBlocking { DemoDataSeeder.seedDemoProfile(context, java.util.Locale.ENGLISH) }
         TestUtils.refreshAppContainer()
-        val outputDir = prepareDirectory("workflow-intake")
+        val outputDir = prepareDirectory("workflow-intake-en")
+        val robot = OperationalRobot(composeRule, context)
+
+        ActivityScenario.launch(MainActivity::class.java).use {
+            robot.loginDemo(DemoDataSeeder.DEMO_OPERATOR_USERNAME)
+            robot.intakeFlow(outputDir)
+        }
+    }
+
+    @Test
+    fun flow1_Intake_IT() {
+        runBlocking { DemoDataSeeder.seedDemoProfile(context, java.util.Locale.ITALIAN) }
+        TestUtils.refreshAppContainer()
+        val outputDir = prepareDirectory("workflow-intake-it")
         val robot = OperationalRobot(composeRule, context)
 
         ActivityScenario.launch(MainActivity::class.java).use {
@@ -135,9 +174,22 @@ class WorkflowOperationalTest {
 
     @Test
     fun flow2_Management() {
-        runBlocking { DemoDataSeeder.seedDemoProfile(context) }
+        runBlocking { DemoDataSeeder.seedDemoProfile(context, java.util.Locale.ENGLISH) }
         TestUtils.refreshAppContainer()
-        val outputDir = prepareDirectory("workflow-management")
+        val outputDir = prepareDirectory("workflow-management-en")
+        val robot = OperationalRobot(composeRule, context)
+
+        ActivityScenario.launch(MainActivity::class.java).use {
+            robot.loginDemo(DemoDataSeeder.DEMO_OPERATOR_USERNAME)
+            robot.managementFlow(outputDir)
+        }
+    }
+
+    @Test
+    fun flow2_Management_IT() {
+        runBlocking { DemoDataSeeder.seedDemoProfile(context, java.util.Locale.ITALIAN) }
+        TestUtils.refreshAppContainer()
+        val outputDir = prepareDirectory("workflow-management-it")
         val robot = OperationalRobot(composeRule, context)
 
         ActivityScenario.launch(MainActivity::class.java).use {

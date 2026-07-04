@@ -59,6 +59,7 @@ The project includes a modern and responsive landing page located in `/landing`.
 - **Technologies**: HTML5, CSS3 (Modern Material 3 Design), Lucide Icons.
 - **Features**: Interactive gallery, Dark/Light mode toggle, mobile optimization.
 - **Local URL**: Open `landing/index.html` in your browser.
+- **Note**: Currently, Google Play Store links are dormant. The landing page points to a local APK for the Demo version and a contact email for the Pro version.
 
 ---
 

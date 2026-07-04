@@ -5,6 +5,7 @@ import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.onlytechtake.repairapp.BuildConfig
 import com.onlytechtake.repairapp.MainActivity
@@ -18,6 +19,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
+import com.onlytechtake.repairapp.test.R as TestR
 
 @RunWith(AndroidJUnit4::class)
 class SocialCampaignScreenshotTest {
@@ -35,6 +37,8 @@ class SocialCampaignScreenshotTest {
         )
 
     private val context: Context = ApplicationProvider.getApplicationContext()
+    private val testContext: Context
+        get() = InstrumentationRegistry.getInstrumentation().context
 
     @Test
     fun capturesSocialCampaignFlow() {
@@ -57,13 +61,29 @@ class SocialCampaignScreenshotTest {
             robot.waitForTag("quick_actions_screen")
 
             robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderFirstNameField, "Marco", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderLastNameField, "Bianchi", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderPhoneField, "+39 347 123 4567", scroll = true)
+            robot.typeTag(
+                RepairAppTestTags.NewOrderFirstNameField,
+                testContext.getString(TestR.string.demo_wizard_customer_first_name),
+                scroll = true,
+                fast = true,
+            )
+            robot.typeTag(
+                RepairAppTestTags.NewOrderLastNameField,
+                testContext.getString(TestR.string.demo_wizard_customer_last_name),
+                scroll = true,
+                fast = true,
+            )
+            robot.typeTag(
+                RepairAppTestTags.NewOrderPhoneField,
+                testContext.getString(TestR.string.demo_wizard_customer_phone),
+                scroll = true,
+                fast = true,
+            )
             robot.typeTag(
                 RepairAppTestTags.NewOrderEmailField,
-                "m.bianchi@example.invalid",
+                testContext.getString(TestR.string.demo_wizard_customer_email),
                 scroll = true,
+                fast = true,
             )
             robot.capture(outputDir, "02-accoglienza.png")
 
@@ -85,13 +105,15 @@ class SocialCampaignScreenshotTest {
             // 3. Wizard: Problema
             robot.typeTag(
                 RepairAppTestTags.NewOrderProblemSummaryField,
-                "Samsung Galaxy S23 - Schermo rotto",
+                robot.getTestString(TestR.string.demo_order_summary_s23),
                 scroll = true,
+                fast = true,
             )
             robot.typeTag(
                 RepairAppTestTags.NewOrderProblemDetailsField,
-                "Richiesta sostituzione display originale.",
+                robot.getTestString(TestR.string.demo_order_desc_s23),
                 scroll = true,
+                fast = true,
             )
             robot.capture(outputDir, "03-step2-diagnosi.png")
 
@@ -116,7 +138,8 @@ class SocialCampaignScreenshotTest {
             robot.clickTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
             robot.clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
-            val createdOrderId = waitForCreatedOrderId()
+            val summary = robot.getTestString(TestR.string.demo_order_summary_s23)
+            val createdOrderId = waitForCreatedOrderId(summary)
 
             robot.clickDashboardTab("ORDERS")
             robot.waitForTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
@@ -134,7 +157,10 @@ class SocialCampaignScreenshotTest {
             )
 
             // 5. WHATSAPP & PREVENTIVO
-            robot.applyResultStatus("Pasta termica secca.", "89,00")
+            robot.applyResultStatus(
+                robot.getTestString(TestR.string.demo_diagnosis_result_overheating),
+                robot.getTestString(TestR.string.demo_estimate_overheating),
+            )
             robot.waitForTag(RepairAppTestTags.OrderWhatsAppButton, scroll = true)
             robot.clickTag(RepairAppTestTags.OrderWhatsAppButton)
             robot.waitForTag(RepairAppTestTags.OrderWhatsAppPreviewPanel)
@@ -164,8 +190,7 @@ class SocialCampaignScreenshotTest {
         }
     }
 
-    private fun waitForCreatedOrderId(): String {
-        val summary = "Samsung Galaxy S23 - Schermo rotto"
+    private fun waitForCreatedOrderId(summary: String): String {
         val database = RepairAppDatabase.getInstance(context)
         val deadline = System.currentTimeMillis() + 30_000L
         while (System.currentTimeMillis() < deadline) {
@@ -183,7 +208,7 @@ class SocialCampaignScreenshotTest {
             order?.let { return it.id }
             Thread.sleep(250)
         }
-        error("Ordine creato dal wizard non trovato")
+        error("Ordine creato dal wizard non trovato (summary: $summary)")
     }
 
     private fun prepareScreenshotDirectory(): File {

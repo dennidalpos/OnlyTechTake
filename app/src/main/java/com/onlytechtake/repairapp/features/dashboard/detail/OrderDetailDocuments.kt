@@ -16,10 +16,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.onlytechtake.repairapp.R
 import com.onlytechtake.repairapp.core.design.RepairAppSpacing
+import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppButton
 import com.onlytechtake.repairapp.core.design.components.AppButtonSize
 import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
@@ -138,6 +140,7 @@ fun OrderDocumentSection(
                                 contentDescription = stringResource(R.string.order_share),
                                 onClick = { onShareDocument(doc.id) },
                                 tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.testTag(RepairAppTestTags.OrderShareButton),
                             )
                             AppIconButton(
                                 imageVector = Icons.Default.Delete,

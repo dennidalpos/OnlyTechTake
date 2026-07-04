@@ -3,7 +3,11 @@ $ErrorActionPreference = "Stop"
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
 $assetDir = Join-Path $root "asset"
 
-# 1. Cleanup locale
+# 1. Rigenerazione Brand Identity
+Write-Host "Rigenerazione asset brand identity..." -ForegroundColor Cyan
+powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "generate_static_brands.ps1")
+
+# 2. Cleanup locale
 if (Test-Path $assetDir) {
     Write-Host "Pulizia vecchi asset in $assetDir..." -ForegroundColor Yellow
     Remove-Item -Path $assetDir -Recurse -Force
@@ -64,6 +68,12 @@ foreach ($p in $profiles) {
         # Screenshot standard
         powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "create_demo_assets.ps1") -AssetProfile $p.id -Flavor $p.flavor -UseConnectedDevice -NonInteractive -SkipBuild
     }
+}
+
+# 3. Cleanup finale asset temporanei
+if (Test-Path $assetDir) {
+    Write-Host "Pulizia finale asset temporanei..." -ForegroundColor Yellow
+    Remove-Item -Path $assetDir -Recurse -Force
 }
 
 Write-Host "`nRigenerazione e distribuzione asset completata!" -ForegroundColor Green

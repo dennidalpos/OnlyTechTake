@@ -23,6 +23,7 @@ import androidx.compose.ui.test.swipeUp
 import androidx.test.espresso.Espresso
 import androidx.test.platform.app.InstrumentationRegistry
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.design.LocaleForcer
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import java.io.File
 import java.io.FileOutputStream
@@ -31,15 +32,32 @@ abstract class BaseAssetRobot(
     protected val composeRule: ComposeTestRule,
     protected val context: Context,
 ) {
-    private val englishContext: Context by lazy {
-        val configuration = android.content.res.Configuration(context.resources.configuration)
-        configuration.setLocale(java.util.Locale.ENGLISH)
-        context.createConfigurationContext(configuration)
+    fun getString(
+        @androidx.annotation.StringRes resId: Int,
+    ): String {
+        val forceEnglish = LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
+        return if (forceEnglish) {
+            val config = android.content.res.Configuration(context.resources.configuration)
+            config.setLocale(java.util.Locale.ENGLISH)
+            context.createConfigurationContext(config).getString(resId)
+        } else {
+            context.getString(resId)
+        }
     }
 
-    protected fun getString(
+    fun getTestString(
         @androidx.annotation.StringRes resId: Int,
-    ): String = englishContext.getString(resId)
+    ): String {
+        val testCtx = InstrumentationRegistry.getInstrumentation().context
+        val forceEnglish = LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
+        return if (forceEnglish) {
+            val config = android.content.res.Configuration(testCtx.resources.configuration)
+            config.setLocale(java.util.Locale.ENGLISH)
+            testCtx.createConfigurationContext(config).getString(resId)
+        } else {
+            testCtx.getString(resId)
+        }
+    }
 
     fun loginDemo(username: String) {
         val deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MILLIS
@@ -56,9 +74,9 @@ abstract class BaseAssetRobot(
 
         repeat(LOGIN_ATTEMPTS) { attempt ->
             waitForTag(RepairAppTestTags.AuthUsernameField)
-            typeTag(RepairAppTestTags.AuthUsernameField, username)
+            typeTag(RepairAppTestTags.AuthUsernameField, username, fast = true)
             pauseForDemo()
-            typeTag(RepairAppTestTags.AuthPasswordField, DemoDataSeeder.DEMO_PASSWORD)
+            typeTag(RepairAppTestTags.AuthPasswordField, DemoDataSeeder.DEMO_PASSWORD, fast = true)
             pauseForDemo()
             clickTag(RepairAppTestTags.AuthSubmitButton)
 
@@ -93,17 +111,20 @@ abstract class BaseAssetRobot(
         tag: String,
         text: String,
         scroll: Boolean = false,
+        fast: Boolean = false,
     ) {
         waitForTagExists(tag, scroll = scroll)
         val node = composeRule.onNodeWithTag(tag)
         node.performClick()
         composeRule.waitForIdle()
-        Thread.sleep(200)
+        if (!fast) Thread.sleep(200)
         node.performTextReplacement(text)
         composeRule.waitForIdle()
         Espresso.closeSoftKeyboard()
-        Thread.sleep(500)
-        pauseForDemo()
+        if (!fast) {
+            Thread.sleep(500)
+            pauseForDemo()
+        }
     }
 
     fun clickTag(
@@ -320,6 +341,9 @@ abstract class BaseAssetRobot(
                 useUnmergedTree = true,
             )
         ) {
+            // Narrative pause to show the WhatsApp template to the user
+            Thread.sleep(if (isRecordingDemo()) 6000 else 4000)
+
             repeat(5) {
                 if (isTagPresent(
                         RepairAppTestTags.OrderWhatsAppPreviewPanel,
@@ -464,6 +488,7 @@ abstract class BaseAssetRobot(
     fun dismissBanner() {
         try {
             if (isTagPresent(RepairAppTestTags.MessageBannerCloseButton)) {
+                Thread.sleep(2500) // Give time to read the success/error message
                 composeRule.onNodeWithTag(RepairAppTestTags.MessageBannerCloseButton).performClick()
                 composeRule.waitForIdle()
             }
@@ -516,7 +541,7 @@ abstract class BaseAssetRobot(
         const val TAG_POLL_MILLIS = 250L
         const val ACTION_PAUSE_MILLIS = 2_000L
         const val SCREENSHOT_PAUSE_MILLIS = 2_000L
-        const val RECORDING_ACTION_PAUSE_MILLIS = 1_500L
-        const val RECORDING_SCREENSHOT_PAUSE_MILLIS = 1_000L
+        const val RECORDING_ACTION_PAUSE_MILLIS = 3_000L
+        const val RECORDING_SCREENSHOT_PAUSE_MILLIS = 2_000L
     }
 }

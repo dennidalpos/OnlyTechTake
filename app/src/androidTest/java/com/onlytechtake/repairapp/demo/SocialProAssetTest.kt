@@ -5,6 +5,7 @@ import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.onlytechtake.repairapp.MainActivity
 import com.onlytechtake.repairapp.R
@@ -17,6 +18,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
+import com.onlytechtake.repairapp.test.R as TestR
 
 @RunWith(AndroidJUnit4::class)
 class SocialProAssetTest {
@@ -34,6 +36,8 @@ class SocialProAssetTest {
         )
 
     private val context: Context = ApplicationProvider.getApplicationContext()
+    private val testContext: Context
+        get() = InstrumentationRegistry.getInstrumentation().context
 
     @Test
     fun capturesSocialProAssets() {
@@ -54,13 +58,29 @@ class SocialProAssetTest {
             robot.clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
             robot.waitForTag("quick_actions_screen")
             robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderFirstNameField, "Mark", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderLastNameField, "White", scroll = true)
-            robot.typeTag(RepairAppTestTags.NewOrderPhoneField, "+1 555-010-9988", scroll = true)
+            robot.typeTag(
+                RepairAppTestTags.NewOrderFirstNameField,
+                testContext.getString(TestR.string.demo_wizard_customer_first_name),
+                scroll = true,
+                fast = true,
+            )
+            robot.typeTag(
+                RepairAppTestTags.NewOrderLastNameField,
+                testContext.getString(TestR.string.demo_wizard_customer_last_name),
+                scroll = true,
+                fast = true,
+            )
+            robot.typeTag(
+                RepairAppTestTags.NewOrderPhoneField,
+                testContext.getString(TestR.string.demo_wizard_customer_phone),
+                scroll = true,
+                fast = true,
+            )
             robot.typeTag(
                 RepairAppTestTags.NewOrderEmailField,
-                "m.white@example.invalid",
+                testContext.getString(TestR.string.demo_wizard_customer_email),
                 scroll = true,
+                fast = true,
             )
             robot.capture(outputDir, "02-reel-intake.png")
 
@@ -84,13 +104,15 @@ class SocialProAssetTest {
 
             robot.typeTag(
                 RepairAppTestTags.NewOrderProblemSummaryField,
-                "Gaming Laptop - Overheating",
+                robot.getTestString(TestR.string.demo_order_summary_overheating),
                 scroll = true,
+                fast = true,
             )
             robot.typeTag(
                 RepairAppTestTags.NewOrderProblemDetailsField,
-                "Sudden shutdowns during gaming sessions.",
+                robot.getTestString(TestR.string.demo_order_desc_overheating),
                 scroll = true,
+                fast = true,
             )
             robot.clickTag(RepairAppTestTags.NewOrderStep3NextButton, scroll = true)
 
@@ -113,7 +135,8 @@ class SocialProAssetTest {
             robot.waitForTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
             robot.clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
 
-            val createdOrderId = waitForCreatedOrderId("Gaming Laptop - Overheating")
+            val summary = robot.getTestString(TestR.string.demo_order_summary_overheating)
+            val createdOrderId = waitForCreatedOrderId(summary)
             robot.clickDashboardTab("ORDERS")
             robot.waitForTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
             robot.clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
@@ -130,7 +153,10 @@ class SocialProAssetTest {
                 OrderStatusAction.START_DIAGNOSIS,
                 OrderStatusAction.RECORD_RESULT,
             )
-            robot.applyResultStatus("Issue resolved with OS restore and cleaning.", "89.00")
+            robot.applyResultStatus(
+                testContext.getString(TestR.string.demo_diagnosis_result_overheating),
+                testContext.getString(TestR.string.demo_estimate_overheating),
+            )
             robot.waitForText(R.string.order_customer_documents, scroll = true)
             robot.capture(outputDir, "06-reel-pdf.png")
         }

@@ -36,14 +36,12 @@ data class AuthFormState(
 )
 
 class AuthGateViewModel(
-    context: Context,
+    private val context: Context,
     private val authRepository: AuthRepository,
     private val ownerPreferences: OwnerPreferences,
     private val backupRepository: BackupRepository,
     private val dataSeeder: DataSeeder,
 ) : ViewModel() {
-    private val applicationContext = context.applicationContext
-
     val authState: StateFlow<AuthState> =
         authRepository
             .observeAuthState()
@@ -72,7 +70,7 @@ class AuthGateViewModel(
 
             mutableFormState.update { it.copy(seeding = true, loading = true, errorMessage = null) }
             runCatching {
-                dataSeeder.seed(applicationContext)
+                dataSeeder.seed(context)
             }.onSuccess {
                 onDone()
             }.onFailure { e ->
@@ -82,7 +80,7 @@ class AuthGateViewModel(
                         seeding = false,
                         loading = false,
                         errorMessage =
-                            applicationContext.getString(
+                            context.getString(
                                 R.string.error_init_failed,
                                 e.message,
                             ),
@@ -135,7 +133,7 @@ class AuthGateViewModel(
                 mutableFormState.update {
                     it.copy(
                         loading = false,
-                        errorMessage = applicationContext.getString(R.string.error_admin_creation_failed),
+                        errorMessage = context.getString(R.string.error_admin_creation_failed),
                     )
                 }
             }
@@ -145,7 +143,7 @@ class AuthGateViewModel(
     fun login() {
         val form = formState.value
         if (form.username.isBlank() || form.password.isBlank()) {
-            setError(applicationContext.getString(R.string.error_enter_username_password))
+            setError(context.getString(R.string.error_enter_username_password))
             return
         }
 
@@ -173,7 +171,7 @@ class AuthGateViewModel(
                     mutableFormState.update {
                         it.copy(
                             loading = false,
-                            errorMessage = applicationContext.getString(R.string.error_user_deactivated),
+                            errorMessage = context.getString(R.string.error_user_deactivated),
                         )
                     }
                 }
@@ -182,7 +180,7 @@ class AuthGateViewModel(
                     mutableFormState.update {
                         it.copy(
                             loading = false,
-                            errorMessage = applicationContext.getString(R.string.error_invalid_credentials),
+                            errorMessage = context.getString(R.string.error_invalid_credentials),
                         )
                     }
                 }
@@ -191,7 +189,7 @@ class AuthGateViewModel(
                     mutableFormState.update {
                         it.copy(
                             loading = false,
-                            errorMessage = applicationContext.getString(R.string.error_too_many_attempts),
+                            errorMessage = context.getString(R.string.error_too_many_attempts),
                         )
                     }
                 }
@@ -205,7 +203,7 @@ class AuthGateViewModel(
             // Seed data if not already configured (first demo run)
             if (!authState.value.configured) {
                 runCatching {
-                    dataSeeder.seed(applicationContext)
+                    dataSeeder.seed(context)
                 }.onFailure { e ->
                     android.util.Log.e("AuthGateViewModel", "Demo seed failed", e)
                 }
@@ -240,15 +238,15 @@ class AuthGateViewModel(
     fun recoverAdmin() {
         val form = formState.value
         if (form.recoveryCode.isBlank()) {
-            setError(applicationContext.getString(R.string.error_enter_recovery_code))
+            setError(context.getString(R.string.error_enter_recovery_code))
             return
         }
         if (form.password.length < AuthPolicy.MIN_PASSWORD_LENGTH) {
-            setError(applicationContext.getString(R.string.error_password_min_length))
+            setError(context.getString(R.string.error_password_min_length))
             return
         }
         if (form.password != form.confirmPassword) {
-            setError(applicationContext.getString(R.string.error_passwords_mismatch))
+            setError(context.getString(R.string.error_passwords_mismatch))
             return
         }
 
@@ -261,7 +259,7 @@ class AuthGateViewModel(
                         it.copy(
                             loading = false,
                             recoveryMode = false,
-                            errorMessage = applicationContext.getString(R.string.success_password_reset),
+                            errorMessage = context.getString(R.string.success_password_reset),
                             password = "",
                             confirmPassword = "",
                             recoveryCode = "",
@@ -273,7 +271,7 @@ class AuthGateViewModel(
                             loading = false,
                             errorMessage =
                                 e.message
-                                    ?: applicationContext.getString(R.string.error_recovery_failed),
+                                    ?: context.getString(R.string.error_recovery_failed),
                         )
                     }
                 }
@@ -311,11 +309,11 @@ class AuthGateViewModel(
     fun changePassword() {
         val form = formState.value
         if (form.password.length < AuthPolicy.MIN_PASSWORD_LENGTH) {
-            setError(applicationContext.getString(R.string.error_password_min_length))
+            setError(context.getString(R.string.error_password_min_length))
             return
         }
         if (form.password != form.confirmPassword) {
-            setError(applicationContext.getString(R.string.error_passwords_mismatch))
+            setError(context.getString(R.string.error_passwords_mismatch))
             return
         }
 
@@ -347,7 +345,7 @@ class AuthGateViewModel(
                             it.copy(
                                 loading = false,
                                 passwordChangeRequired = false,
-                                errorMessage = applicationContext.getString(R.string.success_password_changed_login),
+                                errorMessage = context.getString(R.string.success_password_changed_login),
                                 password = "",
                                 confirmPassword = "",
                                 currentPassword = "",
@@ -360,7 +358,7 @@ class AuthGateViewModel(
                             loading = false,
                             errorMessage =
                                 e.message
-                                    ?: applicationContext.getString(R.string.error_change_password_failed),
+                                    ?: context.getString(R.string.error_change_password_failed),
                         )
                     }
                 }
@@ -369,10 +367,10 @@ class AuthGateViewModel(
 
     private fun validateSetup(form: AuthFormState): String? =
         when {
-            form.displayName.isBlank() -> applicationContext.getString(R.string.error_enter_admin_name)
-            form.username.isBlank() -> applicationContext.getString(R.string.error_enter_admin_username)
-            form.password.length < AuthPolicy.MIN_PASSWORD_LENGTH -> applicationContext.getString(R.string.error_password_min_length)
-            form.password != form.confirmPassword -> applicationContext.getString(R.string.error_passwords_mismatch)
+            form.displayName.isBlank() -> context.getString(R.string.error_enter_admin_name)
+            form.username.isBlank() -> context.getString(R.string.error_enter_admin_username)
+            form.password.length < AuthPolicy.MIN_PASSWORD_LENGTH -> context.getString(R.string.error_password_min_length)
+            form.password != form.confirmPassword -> context.getString(R.string.error_passwords_mismatch)
             else -> null
         }
 
@@ -407,7 +405,7 @@ class AuthGateViewModel(
                             loading = false,
                             errorMessage =
                                 e.message
-                                    ?: applicationContext.getString(R.string.error_restore_failed),
+                                    ?: context.getString(R.string.error_restore_failed),
                         )
                     }
                 }

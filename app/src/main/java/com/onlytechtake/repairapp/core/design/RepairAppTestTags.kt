@@ -53,6 +53,7 @@ object RepairAppTestTags {
     const val DiagnosisEstimateField = "diagnosis_estimate_field"
 
     const val OrderStatusLabel = "order_status_label"
+    const val OrderShareButton = "order_share_button"
     const val OrderDetailLazyColumn = "order_detail_lazy_column"
     const val OrderDetailOrderReference = "order_detail_order_reference"
     const val OrderDetailCustomerReference = "order_detail_customer_reference"

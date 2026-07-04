@@ -29,6 +29,80 @@
     <string name="demo_event_desc_diagnosis">Il dispositivo è attualmente in fase di valutazione tecnica.</string>
     <string name="demo_photo_detail_label">Foto dettaglio</string>
 
+    <string name="demo_template_privacy_title">Informativa Privacy (Breve)</string>
+    <string name="demo_template_privacy_body">Informativa sul trattamento dei dati personali per la gestione delle commesse tecniche presso OnlyTechTake. I dati sono trattati per finalità tecniche e contabili.</string>
+    <string name="demo_template_terms_title">Condizioni di Servizio</string>
+    <string name="demo_template_terms_body">Il cliente autorizza la diagnosi tecnica. Le riparazioni vengono effettuate solo dopo accettazione del preventivo. OnlyTechTake non risponde della perdita dati.</string>
+
+    <string name="demo_template_wa_intake_title">WhatsApp: Presa in Carico</string>
+    <string name="demo_template_wa_intake_body">Salve {{cliente}}, abbiamo preso in carico la commessa {{numero_commessa}}: {{titolo_commessa}}.\nCategoria: {{categoria_percorso}}.\nVi aggiorneremo presto.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_diagnosis_title">WhatsApp: Diagnosi in Corso</string>
+    <string name="demo_template_wa_diagnosis_body">Salve {{cliente}}, la commessa {{numero_commessa}} è attualmente in diagnosi.\nVi comunicheremo esito e preventivo a breve.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_result_title">WhatsApp: Esito Tecnico</string>
+    <string name="demo_template_wa_result_body">Salve {{cliente}}, abbiamo completato la diagnosi per la commessa {{numero_commessa}}.\nEsito: {{esito_diagnosi}}.\nStato: {{stato_commessa}}.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_quote_title">WhatsApp: Preventivo Riparazione</string>
+    <string name="demo_template_wa_quote_body">Salve {{cliente}}, per la commessa {{numero_commessa}} il preventivo è di {{importo_preventivo}}.\nConfermare per procedere con la riparazione.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_ready_title">WhatsApp: Pronto al Ritiro</string>
+    <string name="demo_template_wa_ready_body">Salve {{cliente}}, la commessa {{numero_commessa}} è completata e pronta per il ritiro!\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_pdf_title">WhatsApp: Rapportino PDF</string>
+    <string name="demo_template_wa_pdf_body">Salve {{cliente}}, in allegato il rapporto di avanzamento per la commessa {{numero_commessa}}.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_operator_name_junior">Operatore Junior</string>
+    <string name="demo_operator_username_junior">op_junior</string>
+    <string name="demo_operator_password_junior">Pass12345</string>
+    <string name="demo_template_ready_code">nuovo_stato_pronto</string>
+    <string name="demo_template_ready_title">Dispositivo pronto</string>
+    <string name="demo_template_ready_body">Gentile {{cliente}}, il suo dispositivo è pronto.</string>
+    <string name="demo_admin_name_default">Mario Rossi</string>
+    <string name="demo_shop_name_default">OnlyTechTake Srl</string>
+    <string name="demo_shop_vat_default">IT123456789</string>
+    <string name="demo_shop_address_default">Via Roma 123, Milano</string>
+    <string name="demo_shop_email_default">info@onlytechtake.invalid</string>
+    <string name="demo_shop_phone_default">+39 333 123 4567</string>
+    <string name="demo_order_summary_ssd">SSD Guasto</string>
+    <string name="demo_order_desc_ssd">Il disco non viene rilevato dal BIOS.</string>
+    <string name="demo_diagnosis_result_ssd">Sostituzione SSD necessaria.</string>
+    <string name="demo_closure_note_ssd">Sostituito SSD 500GB.</string>
+
+    <string name="demo_order_summary_s23">Samsung Galaxy S23 - Schermo rotto</string>
+    <string name="demo_order_desc_s23">Sostituzione display originale a seguito di caduta.</string>
+    <string name="demo_diagnosis_result_s23">Display AMOLED originale Samsung.</string>
+    <string name="demo_estimate_s23">249,00</string>
+
+    <string name="demo_order_summary_overheating">Laptop Gaming - Surriscaldamento</string>
+    <string name="demo_order_desc_overheating">Spegnimenti improvvisi durante sessioni di gioco.</string>
+    <string name="demo_diagnosis_result_overheating">Problema risolto con ripristino OS e pulizia interna.</string>
+    <string name="demo_estimate_overheating">89,00</string>
+
+    <string name="demo_closure_note_completed">Riparazione completata con successo.</string>
+    <string name="demo_customer_name_john">Mario Rossi</string>
+
+    <string name="demo_customer_name_julia">Giulia</string>
+    <string name="demo_customer_phone_julia">+39 333 010 2020</string>
+    <string name="demo_customer_email_julia">giulia.bianchi@esempio.invalid</string>
+    <string name="demo_order_summary_not_turning_on">Il laptop non si accende</string>
+    <string name="demo_order_desc_not_turning_on">Il cliente riferisce spegnimento improvviso dopo caduta accidentale.</string>
+    <string name="demo_cat_handheld">Console Portatili</string>
+    <string name="demo_cat_handheld_desc">Riparazioni console portatili, display e batterie.</string>
+    <string name="demo_template_social_code">whatsapp_demo_social</string>
+    <string name="demo_template_social_title">Aggiornamento social</string>
+    <string name="demo_template_social_body">Ciao {{cliente}}, l\'ordine {{numero_commessa}} è ora in stato {{stato_commessa}}.</string>
+    <string name="demo_customer_first_name_luke">Luca</string>
+    <string name="demo_customer_last_name_red">Rossi</string>
+    <string name="demo_customer_tax_code_luke">RSSLCU90A01F205X</string>
+    <string name="demo_customer_phone_luke">+39 333 010 3030</string>
+    <string name="demo_customer_email_luke">luca.rossi@esempio.invalid</string>
+    <string name="demo_customer_company_name_lab">Laboratorio Demo Srl</string>
+    <string name="demo_customer_vat_lab">IT123456789</string>
+    <string name="demo_customer_phone_lab">+39 333 010 4040</string>
+    <string name="demo_customer_email_lab">admin@esempio.invalid</string>
+    <string name="demo_customer_address_lab">Via Roma 24, Milano</string>
+
     <plurals name="demo_error_order_limit">
         <item quantity="one">Limite Demo raggiunto. La versione Demo consente %1$d sola commessa e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
         <item quantity="many" tools:ignore="UnusedQuantity">Limite Demo raggiunto. La versione Demo consente %1$d commesse e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>

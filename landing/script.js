@@ -13,6 +13,7 @@ const translations = {
             features: "Funzioni",
             versions: "Versioni",
             downloadPro: "Scarica PRO",
+            requestInfo: "Richiedi Info",
             theme: "Cambia Tema",
             menu: "Menu",
             close: "Chiudi"
@@ -23,13 +24,14 @@ const translations = {
             gallery: "Gallery",
             versions: "Versioni",
             buyPro: "Acquista PRO",
+            requestPro: "Richiedi PRO",
             privacy: "Privacy Policy"
         },
         hero: {
             title: 'OnlyTechTake: Ripara, traccia, aggiorna.<br><span class="gradient-text">Il tuo Banco Riparazioni.</span>',
             subtitle: "Gestione professionale delle commesse, diagnosi e clienti tutto sul tuo dispositivo Android in totale sicurezza. Senza abbonamenti, senza cloud.",
-            ctaPro: "Inizia ora (PRO)",
-            ctaDemo: "Prova la Demo"
+            ctaPro: "Richiedi Info (PRO)",
+            ctaDemo: "Scarica APK (Demo)"
         },
         privacySection: {
             title: "Dati protetti, privacy garantita",
@@ -103,7 +105,9 @@ const translations = {
                 feature6: '<i data-lucide="x"></i> Gestione Operatori',
                 feature7: '<i data-lucide="x"></i> Export Excel (XLSX)',
                 feature8: '<i data-lucide="x"></i> Backup protetto completo',
-                cta: "Scarica Demo"
+                cta: "Scarica APK (Demo)",
+                guideTitle: "Come installare l'APK?",
+                guideText: "1. Scarica il file APK.<br>2. Apri il file sul dispositivo.<br>3. Se richiesto, abilita 'Origini Sconosciute' nelle impostazioni.<br>4. Procedi con l'installazione."
             },
             pro: {
                 badge: "Consigliato",
@@ -115,7 +119,7 @@ const translations = {
                 feature5: '<i data-lucide="check"></i> Protezione Dati Avanzata',
                 feature6: '<i data-lucide="check"></i> Supporto prioritario',
                 feature7: '<i data-lucide="check"></i> Aggiornamenti gratuiti',
-                cta: "Acquista PRO"
+                cta: "Contattaci per la PRO"
             }
         },
         footer: {
@@ -178,6 +182,7 @@ const translations = {
             features: "Features",
             versions: "Versions",
             downloadPro: "Download PRO",
+            requestInfo: "Request Info",
             theme: "Change Theme",
             menu: "Menu",
             close: "Close"
@@ -188,13 +193,14 @@ const translations = {
             gallery: "Gallery",
             versions: "Versions",
             buyPro: "Buy PRO",
+            requestPro: "Request PRO",
             privacy: "Privacy Policy"
         },
         hero: {
             title: 'OnlyTechTake: Repair, track, update.<br><span class="gradient-text">Your service workbench.</span>',
             subtitle: "Professional management of repair orders, diagnostics, and customers right on your Android device. No subscriptions, no cloud.",
-            ctaPro: "Get started now (PRO)",
-            ctaDemo: "Try the Demo"
+            ctaPro: "Request Info (PRO)",
+            ctaDemo: "Download APK (Demo)"
         },
         privacySection: {
             title: "Protected data, guaranteed privacy",
@@ -268,7 +274,9 @@ const translations = {
                 feature6: '<i data-lucide="x"></i> Operator management',
                 feature7: '<i data-lucide="x"></i> Excel export (XLSX)',
                 feature8: '<i data-lucide="x"></i> Full protected backup',
-                cta: "Download Demo"
+                cta: "Download APK (Demo)",
+                guideTitle: "How to install?",
+                guideText: "1. Download the APK file.<br>2. Open the file on your device.<br>3. If prompted, enable 'Unknown Sources' in settings.<br>4. Proceed with installation."
             },
             pro: {
                 badge: "Recommended",
@@ -280,7 +288,7 @@ const translations = {
                 feature5: '<i data-lucide="check"></i> Advanced Data Protection',
                 feature6: '<i data-lucide="check"></i> Priority support',
                 feature7: '<i data-lucide="check"></i> Free updates',
-                cta: "Buy PRO"
+                cta: "Contact us for PRO"
             }
         },
         footer: {

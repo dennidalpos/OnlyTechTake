@@ -17,6 +17,7 @@ Operational guide for AI agents. Environment: **Windows 11 + PowerShell**.
 - **Environment**: Use PowerShell wrappers in `scripts\powershell\`. (*Usare i wrapper PowerShell.*)
 - **Dependencies**: Use ONLY `gradle/libs.versions.toml`. No hardcoded versions. (*Usare solo `libs.versions.toml`.*)
 - **UI & Strings**: All strings in `strings.xml`. English default, Italian in `values-it`. No hardcoded copy. Ensure cross-flavor consistency (Main, Demo, Showcase). (*Tutte le stringhe in `strings.xml`. Coerenza tra i flavor.*)
+- **Landing Page**: Google Play Store links in `landing/index.html` are currently **dormant** (commented out). Use direct APK links for Demo and `mailto:` for Pro. Do NOT reactivate without explicit order. (*Link Play Store dormienti. Usare APK diretto e mail.*)
 - **Database**: `DATABASE_VERSION = 1` locked. Do not modify schema or entities without explicit order. (*Schema e versione DB bloccati.*)
 - **Architecture**: UI (Compose/M3) → ViewModel → Repository. Every screen MUST have Light/Dark Previews. (*Architettura pulita. Preview Obbligatorie.*)
 - **UI Tests**: Use **Robot** pattern. Call `TestUtils.refreshAppContainer()` after seeding or resetting DB. (*Pattern Robot. Refresh obbligatorio dopo reset DB.*)
@@ -43,7 +44,7 @@ Operational guide for AI agents. Environment: **Windows 11 + PowerShell**.
 - `record_demo_device.ps1`: (FFmpeg) Captures screen videos by executing instrumental tests. Supports `-WhatsAppOptimized` (720p, CRF 28) and `-AutomaticTrim`. Distributed to `marketing/videos/` and `landing/assets/videos/`.
 - `regenerate_public.ps1`: Master script for full asset refresh. Handles **Mixed Management**: for video-enabled profiles (e.g., `operator-intake`), it first runs `record_demo_device.ps1` (which executes the test and records the video), then runs `create_demo_assets.ps1` with `-SkipTest` to pull the generated screenshots from the same device state. It performs a full cleanup of `asset/` and public destinations before generation.
 - **Asset Locale**: Public assets MUST be generated in English (`-Locale en`). The scripts handle device locale configuration via `adb` and pass `forceEnglish` extra to instrumentation.
-- **Seed Data**: Use `DemoDataSeeder.kt` to maintain consistent datasets for screenshots. Ensure English strings are updated in `app/src/androidTest/res/values/strings.xml` and referenced via `TestR`.
+- **Seed Data**: Use `DemoDataSeeder.kt` to maintain consistent datasets for screenshots. Ensure English strings are updated in `app/src/androidTest/res/values/strings.xml` and referenced via `TestR`. Includes realistic templates for all steps (Intake, Diagnosis, Result, Quote, Pickup, PDF).
 
 ---
 

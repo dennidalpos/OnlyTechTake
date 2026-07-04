@@ -184,20 +184,27 @@ private val DarkColors =
         outlineVariant = Color(0xFF3F4948),
     )
 
+object LocaleForcer {
+    var forceEnglish: Boolean = false
+}
+
 @Composable
 fun RepairAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
-    val forceEnglish = System.getProperty("forceEnglish") == "true"
+    val forceEnglish = LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
+
     if (forceEnglish) {
         val configuration = androidx.compose.ui.platform.LocalConfiguration.current
         val resources = androidx.compose.ui.platform.LocalResources.current
         androidx.compose.runtime.remember(configuration) {
             if (configuration.locales[0] != java.util.Locale.ENGLISH) {
+                val locale = java.util.Locale.ENGLISH
+                java.util.Locale.setDefault(locale)
                 val newConfig = Configuration(configuration)
                 @Suppress("AppBundleLocaleChanges")
-                newConfig.setLocale(java.util.Locale.ENGLISH)
+                newConfig.setLocale(locale)
                 @Suppress("DEPRECATION")
                 resources.updateConfiguration(newConfig, resources.displayMetrics)
             }

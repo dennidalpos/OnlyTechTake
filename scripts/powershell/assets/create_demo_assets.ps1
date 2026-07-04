@@ -189,7 +189,7 @@ try {
         $marketingPath = switch ($AssetProfile) {
             "store-pro" { "marketing/screenshots/play-store/pro/$subPath" }
             "store-demo" { "marketing/screenshots/play-store/demo/$subPath" }
-            "social-pro" { "marketing/screenshots/social/$subPath" }
+            "social-pro" { "marketing/screenshots/social/pro/$subPath" }
             "social-demo" { "marketing/screenshots/social/demo/$subPath" }
             "social-campaign" { "marketing/screenshots/social/campaign/$subPath" }
             "social-stories" { "marketing/screenshots/social/stories/$subPath" }
@@ -198,10 +198,9 @@ try {
         $fullMarketingPath = Join-Path $root $marketingPath
         if (-not (Test-Path $fullMarketingPath)) { New-Item -ItemType Directory -Path $fullMarketingPath -Force | Out-Null }
 
-        # Copia ricorsiva per includere eventuali sottocartelle definite nei profili (es. stories, screenshots)
-        # ma appiattiamo se la destinazione è specifica.
+        # Copia solo immagini per evitare duplicati di video o altri file intermedi
         if (Test-Path $OutputRoot) {
-            Get-ChildItem -Path $OutputRoot -Recurse -File | ForEach-Object {
+            Get-ChildItem -Path $OutputRoot -Recurse -File | Where-Object { $_.Extension -match '^\.(png|jpg|jpeg)$' } | ForEach-Object {
                 Copy-Item -Path $_.FullName -Destination $fullMarketingPath -Force
             }
         }

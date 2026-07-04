@@ -41,7 +41,7 @@ import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SettingsViewModel(
-    context: Context,
+    private val context: Context,
     private val authRepository: AuthRepository,
     private val adminUserRepository: AdminUserRepository,
     catalogRepository: CatalogRepository,
@@ -72,7 +72,7 @@ class SettingsViewModel(
 
     private val actionRunner =
         AuthenticatedActionRunner(
-            context = context.applicationContext,
+            context = context,
             authRepository = authRepository,
             currentUser = authRepository.currentUser,
             scope = viewModelScope,

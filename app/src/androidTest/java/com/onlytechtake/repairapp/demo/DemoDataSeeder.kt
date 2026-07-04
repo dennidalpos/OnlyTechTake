@@ -50,6 +50,16 @@ object DemoDataSeeder {
         context: Context,
         locale: java.util.Locale = java.util.Locale.ENGLISH,
     ) {
+        val config = android.content.res.Configuration(context.resources.configuration)
+        config.setLocale(locale)
+        val localizedContext = context.createConfigurationContext(config)
+        val testLocalizedContext =
+            testContext.let {
+                val tcConfig = android.content.res.Configuration(it.resources.configuration)
+                tcConfig.setLocale(locale)
+                it.createConfigurationContext(tcConfig)
+            }
+
         RepairAppDatabase.closeInstance()
         context.deleteDatabase(RepairAppDatabase.DATABASE_NAME)
         AuthPreferences(context).clear()
@@ -57,10 +67,15 @@ object DemoDataSeeder {
         ownerPreferences.updateOwnerInfo(
             OwnerInfo(
                 name = "OnlyTechTake HQ",
-                vatNumber = "US987654321",
-                address = "123 Demo Street, New York",
+                vatNumber = if (locale.language == "it") "IT987654321" else "US987654321",
+                address =
+                    if (locale.language == "it") {
+                        "Via Demo 123, Milano"
+                    } else {
+                        "123 Demo Street, New York"
+                    },
                 email = "demo@onlytechtake.invalid",
-                phone = "+1 555-987-6543",
+                phone = if (locale.language == "it") "+39 333 987 6543" else "+1 555-987-6543",
             ),
         )
 
@@ -80,7 +95,7 @@ object DemoDataSeeder {
         database.userDao().upsert(
             UserEntity(
                 id = DEMO_ADMIN_ID,
-                displayName = testContext.getString(TestR.string.demo_admin_display_name),
+                displayName = testLocalizedContext.getString(TestR.string.demo_admin_display_name),
                 username = DEMO_ADMIN_USERNAME,
                 passwordHash = adminHash.hash,
                 passwordSalt = adminHash.salt,
@@ -96,7 +111,7 @@ object DemoDataSeeder {
             database.userDao().upsert(
                 UserEntity(
                     id = DEMO_OPERATOR_ID,
-                    displayName = testContext.getString(TestR.string.demo_operator_display_name),
+                    displayName = testLocalizedContext.getString(TestR.string.demo_operator_display_name),
                     username = DEMO_OPERATOR_USERNAME,
                     passwordHash = operatorHash.hash,
                     passwordSalt = operatorHash.salt,
@@ -123,32 +138,40 @@ object DemoDataSeeder {
                     id = "demo-cat-pc",
                     parentId = null,
                     level = 0,
-                    name = context.getString(R.string.common_cat_pc),
-                    description = context.getString(R.string.common_cat_pc_desc),
+                    name = localizedContext.getString(R.string.common_cat_pc),
+                    description = localizedContext.getString(R.string.common_cat_pc_desc),
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = DEMO_CATEGORY_ID, // notebook
                     parentId = "demo-cat-pc",
                     level = 1,
-                    name = context.getString(R.string.common_cat_notebook),
-                    description = context.getString(R.string.common_cat_notebook_desc),
+                    name = localizedContext.getString(R.string.common_cat_notebook),
+                    description = localizedContext.getString(R.string.common_cat_notebook_desc),
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = "demo-cat-gaming",
                     parentId = DEMO_CATEGORY_ID,
                     level = 2,
-                    name = context.getString(R.string.common_cat_gaming),
-                    description = context.getString(R.string.common_cat_gaming_desc),
+                    name = localizedContext.getString(R.string.common_cat_gaming),
+                    description = localizedContext.getString(R.string.common_cat_gaming_desc),
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = "demo-cat-rog-strix",
                     parentId = "demo-cat-gaming",
                     level = 3,
-                    name = context.getString(R.string.common_cat_rog_strix),
-                    description = context.getString(R.string.common_cat_rog_strix_desc),
+                    name = localizedContext.getString(R.string.common_cat_rog_strix),
+                    description = localizedContext.getString(R.string.common_cat_rog_strix_desc),
+                    active = true,
+                ),
+                OrderCategoryEntity(
+                    id = "demo-cat-handheld",
+                    parentId = "demo-cat-pc", // Actually handhelds might be under PC or elsewhere, but for the test let's see where it expects them.
+                    level = 1,
+                    name = testLocalizedContext.getString(TestR.string.demo_cat_handheld),
+                    description = testLocalizedContext.getString(TestR.string.demo_cat_handheld_desc),
                     active = true,
                 ),
             ),
@@ -161,7 +184,11 @@ object DemoDataSeeder {
                     firstName =
                         when {
                             i == 1 -> {
-                                context.getString(R.string.demo_customer_first_name)
+                                localizedContext.getString(R.string.demo_customer_first_name)
+                            }
+
+                            i == 2 -> {
+                                testLocalizedContext.getString(TestR.string.demo_customer_name_julia)
                             }
 
                             (i % 3) == 0 -> {
@@ -169,32 +196,32 @@ object DemoDataSeeder {
                             }
 
                             else -> {
-                                testContext.getString(
+                                testLocalizedContext.getString(
                                     TestR.string.demo_customer_name,
                                     i,
                                 )
                             }
                         },
-                    lastName = if ((i % 3) == 0) null else context.getString(R.string.demo_customer_last_name),
+                    lastName = if ((i % 3) == 0) null else localizedContext.getString(R.string.demo_customer_last_name),
                     companyName =
                         if ((i % 3) == 0) {
-                            testContext.getString(
+                            testLocalizedContext.getString(
                                 TestR.string.demo_customer_business_name,
                                 i,
                             )
                         } else {
                             null
                         },
-                    vatNumber = if ((i % 3) == 0) "US${10000000000L + i}" else null,
-                    taxCode = if ((i % 3) == 0) null else "CF${1000000000000000L + i}",
-                    phone = if (i == 1) context.getString(R.string.demo_customer_phone) else "+1 555-000-${1000 + i}",
-                    email = if (i == 1) context.getString(R.string.demo_customer_email) else "customer$i@example.invalid",
-                    address = if (i == 1) context.getString(R.string.demo_customer_address) else "$i Demo St, New York",
+                    vatNumber = if ((i % 3) == 0) (if (locale.language == "it") "IT" else "US") + "${10000000000L + i}" else null,
+                    taxCode = if ((i % 3) == 0) null else (if (locale.language == "it") "RSSMRC90A01F205Z" else "CF${1000000000000000L + i}"),
+                    phone = if (i == 1) localizedContext.getString(R.string.demo_customer_phone) else (if (locale.language == "it") "+39 333 000 ${1000 + i}" else "+1 555-000-${1000 + i}"),
+                    email = if (i == 1) localizedContext.getString(R.string.demo_customer_email) else "customer$i@example.invalid",
+                    address = if (i == 1) localizedContext.getString(R.string.demo_customer_address) else (if (locale.language == "it") "Via Demo $i, Milano" else "$i Demo St, New York"),
                     notes =
                         if (i == 1) {
-                            context.getString(R.string.demo_customer_notes)
+                            localizedContext.getString(R.string.demo_customer_notes)
                         } else {
-                            testContext.getString(
+                            testLocalizedContext.getString(
                                 TestR.string.demo_customer_notes,
                                 i,
                             )
@@ -216,9 +243,9 @@ object DemoDataSeeder {
                     customerId = DEMO_CUSTOMER_ID,
                     title =
                         if (i == 1) {
-                            testContext.getString(TestR.string.demo_order_title_1)
+                            testLocalizedContext.getString(TestR.string.demo_order_title_1)
                         } else {
-                            testContext.getString(
+                            testLocalizedContext.getString(
                                 TestR.string.demo_order_title_n,
                                 i,
                             )
@@ -228,8 +255,8 @@ object DemoDataSeeder {
                     priority = OrderPriority.NORMAL,
                     assignedToUserId = assignedUserId,
                     createdByUserId = assignedUserId,
-                    description = testContext.getString(TestR.string.demo_order_desc, i),
-                    internalNotes = testContext.getString(TestR.string.demo_order_notes, i),
+                    description = testLocalizedContext.getString(TestR.string.demo_order_desc, i),
+                    internalNotes = testLocalizedContext.getString(TestR.string.demo_order_notes, i),
                     estimateAmountCents = null,
                     finalAmountCents = null,
                     createdAt = now - (i * 3600000L),
@@ -244,7 +271,7 @@ object DemoDataSeeder {
             writeDemoBitmap(
                 directory = mediaStorageProvider.getOrderMediaDir(DEMO_ORDER_ID),
                 fileName = "demo-oggetto.png",
-                label = testContext.getString(TestR.string.demo_photo_label),
+                label = testLocalizedContext.getString(TestR.string.demo_photo_label),
                 backgroundColor = Color.rgb(229, 241, 255),
             )
         database.orderMediaDao().upsert(
@@ -268,7 +295,7 @@ object DemoDataSeeder {
             writeDemoBitmap(
                 directory = mediaStorageProvider.getOrderMediaDir(DEMO_ORDER_ID),
                 fileName = "demo-dettaglio.png",
-                label = testContext.getString(TestR.string.demo_photo_detail_label),
+                label = testLocalizedContext.getString(TestR.string.demo_photo_detail_label),
                 backgroundColor = Color.rgb(240, 240, 240),
             )
         database.orderMediaDao().upsert(
@@ -292,19 +319,19 @@ object DemoDataSeeder {
             writeDemoBitmap(
                 directory = mediaStorageProvider.getOrderSignaturesDir(DEMO_ORDER_ID),
                 fileName = "demo-firma.png",
-                label = testContext.getString(TestR.string.demo_signature_label),
+                label = testLocalizedContext.getString(TestR.string.demo_signature_label),
                 backgroundColor = Color.WHITE,
             )
         database.signatureDao().upsert(
             SignatureEntity(
                 id = "demo-signature-intake",
                 orderId = DEMO_ORDER_ID,
-                signerName = "John Doe",
+                signerName = if (locale.language == "it") "Marco Rossi" else "John Doe",
                 privacyAccepted = true,
                 termsAccepted = true,
-                privacyTextSnapshot = testContext.getString(TestR.string.demo_privacy_snapshot),
+                privacyTextSnapshot = testLocalizedContext.getString(TestR.string.demo_privacy_snapshot),
                 privacyTemplateVersion = 1,
-                termsTextSnapshot = testContext.getString(TestR.string.demo_terms_snapshot),
+                termsTextSnapshot = testLocalizedContext.getString(TestR.string.demo_terms_snapshot),
                 termsTemplateVersion = 1,
                 localPath = signaturePath.absolutePath,
                 fileName = signaturePath.name,
@@ -323,8 +350,8 @@ object DemoDataSeeder {
                     id = "demo-timeline-created",
                     orderId = DEMO_ORDER_ID,
                     type = TimelineEventType.ORDER_CREATED,
-                    title = testContext.getString(TestR.string.demo_event_title_created),
-                    description = testContext.getString(TestR.string.demo_event_desc_created),
+                    title = testLocalizedContext.getString(TestR.string.demo_event_title_created),
+                    description = testLocalizedContext.getString(TestR.string.demo_event_desc_created),
                     oldStatus = null,
                     newStatus = OrderStatus.OPEN.name,
                     visibleToCustomer = true,
@@ -340,8 +367,8 @@ object DemoDataSeeder {
                     id = "demo-timeline-diagnosis",
                     orderId = DEMO_ORDER_ID,
                     type = TimelineEventType.STATUS_CHANGED,
-                    title = testContext.getString(TestR.string.demo_event_title_diagnosis),
-                    description = testContext.getString(TestR.string.demo_event_desc_diagnosis),
+                    title = testLocalizedContext.getString(TestR.string.demo_event_title_diagnosis),
+                    description = testLocalizedContext.getString(TestR.string.demo_event_desc_diagnosis),
                     oldStatus = OrderStatus.IN_PROGRESS.name,
                     newStatus = OrderStatus.DIAGNOSIS.name,
                     visibleToCustomer = true,
@@ -382,69 +409,75 @@ object DemoDataSeeder {
         listOf(
             DemoTemplate(
                 "privacy_short",
-                context.getString(R.string.template_privacy_short_title),
-                context.getString(R.string.template_privacy_short_body),
-                context.getString(R.string.anchor_step_legal),
+                testLocalizedContext.getString(TestR.string.demo_template_privacy_title),
+                testLocalizedContext.getString(TestR.string.demo_template_privacy_body),
+                localizedContext.getString(R.string.anchor_step_legal),
             ),
             DemoTemplate(
                 "terms_intake",
-                context.getString(R.string.template_terms_title),
-                context.getString(R.string.template_terms_body),
-                context.getString(R.string.anchor_step_legal),
+                testLocalizedContext.getString(TestR.string.demo_template_terms_title),
+                testLocalizedContext.getString(TestR.string.demo_template_terms_body),
+                localizedContext.getString(R.string.anchor_step_legal),
             ),
             DemoTemplate(
                 "whatsapp_intake",
-                context.getString(R.string.template_wa_intake_title),
-                context.getString(R.string.template_wa_intake_body),
-                context.getString(R.string.anchor_step_intake),
+                testLocalizedContext.getString(TestR.string.demo_template_wa_intake_title),
+                testLocalizedContext.getString(TestR.string.demo_template_wa_intake_body),
+                localizedContext.getString(R.string.anchor_step_intake),
             ),
             DemoTemplate(
                 "whatsapp_update",
-                context.getString(R.string.template_wa_update_title),
-                context.getString(R.string.template_wa_update_body),
-                context.getString(R.string.anchor_step_update),
+                localizedContext.getString(R.string.template_wa_update_title),
+                localizedContext.getString(R.string.template_wa_update_body),
+                localizedContext.getString(R.string.anchor_step_update),
             ),
             DemoTemplate(
                 "whatsapp_diagnosis",
-                context.getString(R.string.template_wa_diagnosis_title),
-                context.getString(R.string.template_wa_diagnosis_body),
-                context.getString(R.string.anchor_step_diagnosis),
+                testLocalizedContext.getString(TestR.string.demo_template_wa_diagnosis_title),
+                testLocalizedContext.getString(TestR.string.demo_template_wa_diagnosis_body),
+                localizedContext.getString(R.string.anchor_step_diagnosis),
+            ),
+            DemoTemplate(
+                "whatsapp_result",
+                testLocalizedContext.getString(TestR.string.demo_template_wa_result_title),
+                testLocalizedContext.getString(TestR.string.demo_template_wa_result_body),
+                localizedContext.getString(R.string.anchor_step_outcome),
             ),
             DemoTemplate(
                 "whatsapp_quote",
-                context.getString(R.string.template_wa_quote_title),
-                context.getString(R.string.template_wa_quote_body),
-                context.getString(R.string.anchor_step_quote),
+                testLocalizedContext.getString(TestR.string.demo_template_wa_quote_title),
+                testLocalizedContext.getString(TestR.string.demo_template_wa_quote_body),
+                localizedContext.getString(R.string.anchor_step_quote),
             ),
             DemoTemplate(
                 "whatsapp_not_repairable",
-                context.getString(R.string.template_wa_not_repairable_title),
-                context.getString(R.string.template_wa_not_repairable_body),
-                context.getString(R.string.anchor_step_outcome),
+                localizedContext.getString(R.string.template_wa_not_repairable_title),
+                localizedContext.getString(R.string.template_wa_not_repairable_body),
+                localizedContext.getString(R.string.anchor_step_outcome),
             ),
             DemoTemplate(
                 "whatsapp_repairing",
-                context.getString(R.string.template_wa_repairing_title),
-                context.getString(R.string.template_wa_repairing_body),
-                context.getString(R.string.anchor_step_repair),
+                localizedContext.getString(R.string.template_wa_repairing_title),
+                localizedContext.getString(R.string.template_wa_repairing_body),
+                localizedContext.getString(R.string.anchor_step_repair),
             ),
             DemoTemplate(
                 "whatsapp_ready",
-                context.getString(R.string.template_wa_ready_title),
-                context.getString(R.string.template_wa_ready_body),
-                context.getString(R.string.anchor_step_pickup),
+                testLocalizedContext.getString(TestR.string.demo_template_wa_ready_title),
+                testLocalizedContext.getString(TestR.string.demo_template_wa_ready_body),
+                localizedContext.getString(R.string.anchor_step_pickup),
             ),
             DemoTemplate(
                 "whatsapp_pdf_status",
-                context.getString(R.string.template_wa_pdf_status_title),
-                context.getString(R.string.template_wa_pdf_status_body),
-                context.getString(R.string.anchor_step_docs),
+                testLocalizedContext.getString(TestR.string.demo_template_wa_pdf_title),
+                testLocalizedContext.getString(TestR.string.demo_template_wa_pdf_body),
+                localizedContext.getString(R.string.anchor_step_docs),
             ),
             DemoTemplate(
                 "whatsapp_completed",
-                context.getString(R.string.template_wa_completed_title),
-                context.getString(R.string.template_wa_completed_body),
-                context.getString(R.string.anchor_step_closed),
+                localizedContext.getString(R.string.template_wa_completed_title),
+                localizedContext.getString(R.string.template_wa_completed_body),
+                localizedContext.getString(R.string.anchor_step_closed),
             ),
         ).forEachIndexed { index, template ->
             database.messageTemplateDao().upsert(

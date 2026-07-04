@@ -32,7 +32,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class, kotlinx.coroutines.FlowPreview::class)
 class CustomersViewModel(
-    context: Context,
+    private val context: Context,
     private val authRepository: AuthRepository,
     private val customerRepository: CustomerRepository,
     private val orderWorkflowRepository: OrderRepository,
@@ -40,7 +40,6 @@ class CustomersViewModel(
     diagnosticLogger: DiagnosticLogger,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
-    private val applicationContext = context.applicationContext
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
 
@@ -52,7 +51,7 @@ class CustomersViewModel(
 
     private val actionRunner =
         AuthenticatedActionRunner(
-            context = applicationContext,
+            context = context,
             authRepository = authRepository,
             currentUser = authRepository.currentUser,
             scope = viewModelScope,
@@ -143,7 +142,10 @@ class CustomersViewModel(
                             if (closed) {
                                 setOf(OrderStatus.CLOSED)
                             } else {
-                                OrderStatus.entries.asSequence().filter { it != OrderStatus.CLOSED }.toSet()
+                                OrderStatus.entries
+                                    .asSequence()
+                                    .filter { it != OrderStatus.CLOSED }
+                                    .toSet()
                             },
                     )
                 orderWorkflowRepository.observeOrderList(user, filter)

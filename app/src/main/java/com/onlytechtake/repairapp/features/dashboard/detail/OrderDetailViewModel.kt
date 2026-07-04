@@ -40,7 +40,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 
 class OrderDetailViewModel(
-    context: Context,
+    private val context: Context,
     private val orderId: String,
     private val authRepository: AuthRepository,
     private val orderRepository: OrderRepository,
@@ -53,7 +53,6 @@ class OrderDetailViewModel(
     private val onSetFormDirty: (Boolean) -> Unit,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
-    private val applicationContext = context.applicationContext
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
 
@@ -62,7 +61,7 @@ class OrderDetailViewModel(
 
     private val actionRunner =
         AuthenticatedActionRunner(
-            context = applicationContext,
+            context = context,
             authRepository = authRepository,
             currentUser = authRepository.currentUser,
             scope = viewModelScope,
@@ -280,7 +279,7 @@ class OrderDetailViewModel(
                     }.onFailure {
                         _message.value =
                             WorkspaceMessage(
-                                it.message ?: applicationContext.getString(R.string.error_unknown),
+                                it.message ?: context.getString(R.string.error_unknown),
                                 isError = true,
                             )
                     }
@@ -327,7 +326,7 @@ class OrderDetailViewModel(
 
             val actor = currentUser.value
             if (actor == null) {
-                _statusPdfError.value = applicationContext.getString(R.string.error_session_expired)
+                _statusPdfError.value = context.getString(R.string.error_session_expired)
                 _isGeneratingStatusPdf.value = false
                 return@launch
             }
@@ -338,7 +337,7 @@ class OrderDetailViewModel(
                     _showPdfSentConfirmation.value = true
                 }.onFailure {
                     _statusPdfError.value =
-                        it.message ?: applicationContext.getString(R.string.error_init_failed)
+                        it.message ?: context.getString(R.string.error_init_failed)
                 }
             _isGeneratingStatusPdf.value = false
         }
@@ -355,7 +354,7 @@ class OrderDetailViewModel(
                 val intent =
                     shareDocumentIntentFactory.createPdfShareIntent(
                         File(doc.localPath),
-                        applicationContext.getString(R.string.share_title_document, doc.id),
+                        context.getString(R.string.share_title_document, doc.id),
                     )
                 _lastGeneratedDocumentId.value = doc.id
                 _showPdfSentConfirmation.value = true
@@ -363,7 +362,7 @@ class OrderDetailViewModel(
             } else {
                 _message.value =
                     WorkspaceMessage(
-                        applicationContext.getString(R.string.error_document_not_found),
+                        context.getString(R.string.error_document_not_found),
                         isError = true,
                     )
             }

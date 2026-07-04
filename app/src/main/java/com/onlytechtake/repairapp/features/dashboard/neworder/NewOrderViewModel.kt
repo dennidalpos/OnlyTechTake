@@ -43,7 +43,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class NewOrderViewModel(
-    context: Context,
+    private val context: Context,
     authRepository: AuthRepository,
     private val customerRepository: CustomerRepository,
     catalogRepository: CatalogRepository,
@@ -54,13 +54,12 @@ class NewOrderViewModel(
     diagnosticLogger: DiagnosticLogger,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
-    private val applicationContext = context.applicationContext
     private val _message = MutableStateFlow<WorkspaceMessage?>(null)
     val message = _message.asStateFlow()
 
     private val actionRunner =
         AuthenticatedActionRunner(
-            context = applicationContext,
+            context = context,
             authRepository = authRepository,
             currentUser = authRepository.currentUser,
             scope = viewModelScope,

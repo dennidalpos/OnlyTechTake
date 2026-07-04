@@ -416,7 +416,7 @@ function Convert-ToSquarePng {
         $graphics.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::HighQuality
         $graphics.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
         $graphics.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
-        $graphics.Clear([System.Drawing.Color]::FromArgb(246, 247, 249))
+        $graphics.Clear([System.Drawing.Color]::FromArgb(244, 251, 250)) # OnlyTechTake Light Background
 
         # Scaling: we want the screenshot to fit well within the square
         $maxWidth = 1000
@@ -453,7 +453,7 @@ function Convert-ToLandscapePng {
         $graphics.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::HighQuality
         $graphics.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
         $graphics.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
-        $graphics.Clear([System.Drawing.Color]::FromArgb(246, 247, 249))
+        $graphics.Clear([System.Drawing.Color]::FromArgb(244, 251, 250)) # OnlyTechTake Light Background
 
         $maxWidth = 1800
         $maxHeight = 1000
@@ -519,13 +519,13 @@ function New-CaptionedSlide {
         $graphics.DrawImage($source, $drawX, $drawY, $drawWidth, $drawHeight)
 
         $captionHeight = 170
-        $overlayBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(190, 17, 24, 39))
+        $overlayBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(210, 13, 13, 13)) # OnlyTechTake Charcoal Overlay
         # Overlay barra testi centrato al video e della larghezza del video (drawWidth)
         $graphics.FillRectangle($overlayBrush, $drawX, $Height - $captionHeight, $drawWidth, $captionHeight)
         $overlayBrush.Dispose()
 
         $font = New-Object System.Drawing.Font("Segoe UI", 32, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
-        $captionBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::White)
+        $captionBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(0, 182, 176)) # OnlyTechTake Teal Text
 
         # Margine interno testo proporzionale alla larghezza video (drawWidth)
         $hMargin = [int]($drawWidth * 0.12)
