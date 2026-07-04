@@ -39,12 +39,12 @@ Operational guide for AI agents. Environment: **Windows 11 + PowerShell**.
 ---
 
 ## 4. Media Asset Workflow
-- `generate_static_brands.ps1`: (ImageMagick) SVG -> PNG/ICO/Favicon. Generates brand identity assets for landing page and social media from `marketing/registered-assets/brand/identity/onlytechtake-logo.svg` and `landing/assets/brand/onlytechtake-mark.svg`.
-- `create_demo_assets.ps1`: (Instrumented Tests) Generates UI screenshots using JSON profiles in `demo/assets/profiles`. Supports `-Dark`, `-Locale`, and `-UseConnectedDevice`. Applies automatic transformations (**vertical**, **square**, **landscape**) via GDI+ (`android_demo.ps1`). Assets are distributed to `marketing/screenshots/` and `landing/assets/screenshots/`.
-- `record_demo_device.ps1`: (FFmpeg) Captures screen videos by executing instrumental tests. Supports `-WhatsAppOptimized` (720p, CRF 28) and `-AutomaticTrim`. Distributed to `marketing/videos/` and `landing/assets/videos/`.
-- `regenerate_public.ps1`: Master script for full asset refresh. Handles **Mixed Management**: for video-enabled profiles (e.g., `operator-intake`), it first runs `record_demo_device.ps1` (which executes the test and records the video), then runs `create_demo_assets.ps1` with `-SkipTest` to pull the generated screenshots from the same device state. It performs a full cleanup of `asset/` and public destinations before generation.
-- **Asset Locale**: Public assets MUST be generated in English (`-Locale en`). The scripts handle device locale configuration via `adb` and pass `forceEnglish` extra to instrumentation.
-- **Seed Data**: Use `DemoDataSeeder.kt` to maintain consistent datasets for screenshots. Ensure English strings are updated in `app/src/androidTest/res/values/strings.xml` and referenced via `TestR`. Includes realistic templates for all steps (Intake, Diagnosis, Result, Quote, Pickup, PDF).
+- `generate_static_brands.ps1`: (ImageMagick) SVG -> PNG/ICO/Favicon. Brand identity assets from `marketing/registered-assets/brand/identity/` and `landing/assets/brand/`.
+- `create_demo_assets.ps1`: (Instrumented Tests) UI screenshots from JSON profiles in `demo/assets/profiles`. Supports `-Dark`, `-Locale`, and `-UseConnectedDevice`. Generates **vertical**, **square**, **landscape**, and **linkedin** (captioned) variants via GDI+ (`android_demo.ps1`). Assets go to `marketing/screenshots/` and `landing/assets/screenshots/`.
+- `record_demo_device.ps1`: (FFmpeg) Screen recording of instrumental tests. Supports `-WhatsAppOptimized` (720p) and `-AutomaticTrim`. Distributed to `marketing/videos/` and `landing/assets/videos/`.
+- `regenerate_public.ps1`: Master script for full asset refresh. Performs **Dynamic Discovery** of all profiles in `demo/assets/profiles`. Handles **Mixed Management**: for video-enabled profiles, it runs `record_demo_device.ps1`, then `create_demo_assets.ps1` with `-SkipTest`. Manages priority order to satisfy dependencies (e.g., social posts after campaign). Performs full cleanup and optimized APK installation.
+- **Asset Locale**: Public assets MUST be generated in English (`-Locale en`). The scripts configure device locale via `adb` and pass `locale` extra to instrumentation.
+- **Seed Data**: Use `DemoDataSeeder.kt` for consistent datasets. English strings are in `app/src/androidTest/res/values/strings.xml` (`TestR`). Includes realistic templates for all stages (Intake, Diagnosis, Result, Quote, Pickup, PDF).
 
 ---
 
@@ -53,6 +53,6 @@ Operational guide for AI agents. Environment: **Windows 11 + PowerShell**.
 2. **Executed checks and results.**
 3. **Update `PROJECT_STATUS.json`**:
    - Remove completed tasks from `backlog`.
-   - **DO NOT** keep history in `completed_recently` (empty the list to avoid bloat).
-   - Focus on high-priority residuals and current plan.
+   - **DO NOT** keep history in `completed_recently` (empty the list).
+   - Update `last_updated` timestamp.
 4. **Residual risks.**

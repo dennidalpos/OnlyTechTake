@@ -63,7 +63,8 @@ class LocaleTestRule(
             ) {
                 val resources = context.resources
                 val configuration = resources.configuration
-                configuration.setLocale(locale)
+                configuration.setLocales(android.os.LocaleList(locale))
+                configuration.setLayoutDirection(locale)
                 @Suppress("DEPRECATION")
                 resources.updateConfiguration(configuration, resources.displayMetrics)
             }

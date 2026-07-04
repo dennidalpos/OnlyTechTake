@@ -4,8 +4,8 @@
   "description": "Local Android app for managing repair orders.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#102026",
-  "theme_color": "#102026",
+  "background_color": "#0D0D0D",
+  "theme_color": "#0D0D0D",
   "icons": [
     {
       "src": "assets/icons/favicon-192.png",

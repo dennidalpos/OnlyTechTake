@@ -13,7 +13,8 @@
         { "platform": "setup", "variant": "vertical", "subDir": "admin" }
       ],
       "expectedFiles": [
-        "01-setup-admin.png"
+        "01-password-change.png",
+        "02-shop-data-compilation.png"
       ]
     }
   ]

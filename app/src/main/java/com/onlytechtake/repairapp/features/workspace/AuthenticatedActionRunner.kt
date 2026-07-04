@@ -70,12 +70,13 @@ internal class AuthenticatedActionRunner(
     }
 
     private fun getLocalizedContext(baseContext: Context): Context {
-        val forceEnglish = com.onlytechtake.repairapp.core.design.LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
+        val forceEnglish =
+            com.onlytechtake.repairapp.core.design.LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
         if (!forceEnglish) return baseContext
 
         val locale = java.util.Locale.ENGLISH
         val configuration = baseContext.resources.configuration
-        if (configuration.locales[0] == locale) return baseContext
+        if (configuration.locales[0].language == locale.language) return baseContext
 
         val localizedConfig = android.content.res.Configuration(configuration)
         localizedConfig.setLocale(locale)

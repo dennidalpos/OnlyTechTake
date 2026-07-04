@@ -1,8 +1,9 @@
 {
   "id": "store-pro",
   "flavor": "Full",
-  "testClass": "com.onlytechtake.repairapp.demo.StoreProScreenshotTest",
-  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/store-pro",
+  "testClass": "com.onlytechtake.repairapp.demo.WorkflowOperationalTest",
+  "testMethod": "flow9_StorePro",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/workflows/store-pro",
   "pulledDirectoryName": "store-pro",
   "cases": [
     {

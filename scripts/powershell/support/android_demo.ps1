@@ -297,9 +297,15 @@ function Invoke-DemoApkBuildAndInstall {
     if (-not (Test-Path $debugApk)) { throw "APK debug non trovato: $debugApk" }
     if (-not (Test-Path $testApk)) { throw "Test APK non trovato: $testApk" }
 
-    Write-Host "Installazione APK ($Flavor) su $Serial..."
-    Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "install", "-r", "-d", $debugApk)
-    Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "install", "-r", "-d", $testApk)
+    # Ottimizzazione: se l'APK è già installato e abbiamo chiesto SkipBuild, saltiamo l'installazione fisica
+    $isInstalled = (adb -s $Serial shell pm list packages $packageName 2>$null) -match [regex]::Escape($packageName)
+    if ($SkipBuild -and $isInstalled) {
+        Write-Host "APK ($Flavor) già installato su $Serial. Salto installazione." -ForegroundColor Gray
+    } else {
+        Write-Host "Installazione APK ($Flavor) su $Serial..."
+        Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "install", "-r", "-d", $debugApk)
+        Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "install", "-r", "-d", $testApk)
+    }
 
     if (-not $SkipClear) {
         Invoke-Checked -FilePath "adb" -Arguments @("-s", $Serial, "shell", "pm", "clear", $packageName)
@@ -333,11 +339,12 @@ function Invoke-DemoScreenshotTest {
         "-w",
         "-e",
         "class",
-        $TestClass,
-        "-e",
-        "forceEnglish",
-        "true"
+        $TestClass
     )
+    # Add forceEnglish if locale is en or not specified
+    $isEnglish = ($null -eq $InstrumentationExtras["locale"]) -or ($InstrumentationExtras["locale"] -eq "en")
+    $arguments += @("-e", "forceEnglish", [string]$isEnglish.ToString().ToLower())
+
     foreach ($entry in $InstrumentationExtras.GetEnumerator()) {
         $arguments += @("-e", [string]$entry.Key, [string]$entry.Value)
     }
@@ -473,6 +480,39 @@ function Convert-ToLandscapePng {
         $graphics.Dispose()
         $landscape.Dispose()
         $source.Dispose()
+    }
+}
+
+function Convert-ToLinkedinLandscapePng {
+    param(
+        [Parameter(Mandatory = $true)][string]$SourcePath,
+        [Parameter(Mandatory = $true)][string]$TargetPath,
+        [string]$Caption
+    )
+
+    if ($Caption) {
+        New-CaptionedSlide -SourcePath $SourcePath -Caption $Caption -TargetPath $TargetPath -Width 1200 -Height 628
+    } else {
+        $source = [System.Drawing.Bitmap]::FromFile($SourcePath)
+        $linkedin = New-Object System.Drawing.Bitmap(1200, 628)
+        $graphics = [System.Drawing.Graphics]::FromImage($linkedin)
+        try {
+            $graphics.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::HighQuality
+            $graphics.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
+            $graphics.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
+            $graphics.Clear([System.Drawing.Color]::FromArgb(244, 251, 250))
+
+            $scale = [Math]::Min(1100 / $source.Width, 580 / $source.Height)
+            $drawWidth = [int]($source.Width * $scale)
+            $drawHeight = [int]($source.Height * $scale)
+            $drawX = [int]((1200 - $drawWidth) / 2)
+            $drawY = [int]((628 - $drawHeight) / 2)
+
+            $graphics.DrawImage($source, $drawX, $drawY, $drawWidth, $drawHeight)
+            $linkedin.Save($TargetPath, [System.Drawing.Imaging.ImageFormat]::Png)
+        } finally {
+            $graphics.Dispose(); $linkedin.Dispose(); $source.Dispose()
+        }
     }
 }
 

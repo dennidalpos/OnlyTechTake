@@ -1,6 +1,6 @@
 /**
  * OnlyTechTake Landing Page Logic
- * Aligned with App features (v1.1.0)
+ * Aligned with App features (v1.0.0)
  */
 
 const translations = {
@@ -31,7 +31,8 @@ const translations = {
             title: 'OnlyTechTake: Ripara, traccia, aggiorna.<br><span class="gradient-text">Il tuo Banco Riparazioni.</span>',
             subtitle: "Gestione professionale delle commesse, diagnosi e clienti tutto sul tuo dispositivo Android in totale sicurezza. Senza abbonamenti, senza cloud.",
             ctaPro: "Richiedi Info (PRO)",
-            ctaDemo: "Scarica APK (Demo)"
+            ctaDemo: "Scarica APK (Demo)",
+            badge: "Target Android 15 (API 37)"
         },
         privacySection: {
             title: "Dati protetti, privacy garantita",
@@ -125,14 +126,14 @@ const translations = {
         footer: {
             subtitle: "La soluzione professionale per la gestione delle riparazioni, progettata per la massima sicurezza dei tuoi dati.",
             resources: "Risorse",
-            support: "Supporto Tecnico",
+            support: "support@onlytechtake.com",
             github: "GitHub Repository",
             disclaimer: "Nessuna garanzia legale implicita sui moduli di firma. Consultare un legale per la conformità normativa locale."
         },
         privacyPage: {
             titleMeta: "Privacy Policy - OnlyTechTake",
             title: "Informativa sulla Privacy",
-            version: "Versione Corrente: 1.1.0 (Conforme GDPR)",
+            version: "Versione Corrente: 1.0.0 (Conforme GDPR)",
             intro: "L'applicazione OnlyTechTake (di seguito \"l'App\") è progettata per operare interamente sul tuo dispositivo per massimizzare la tutela della privacy. La presente informativa, redatta ai sensi del <strong>Regolamento UE 2016/679 (GDPR)</strong>, descrive come vengono gestiti i dati, basandoci su un principio fondamentale: i tuoi dati appartengono a te e non lasciano mai il tuo dispositivo senza il tuo comando manuale.",
             section1: {
                 title: "1. Trattamento dei Dati Locali",
@@ -200,7 +201,8 @@ const translations = {
             title: 'OnlyTechTake: Repair, track, update.<br><span class="gradient-text">Your service workbench.</span>',
             subtitle: "Professional management of repair orders, diagnostics, and customers right on your Android device. No subscriptions, no cloud.",
             ctaPro: "Request Info (PRO)",
-            ctaDemo: "Download APK (Demo)"
+            ctaDemo: "Download APK (Demo)",
+            badge: "Target Android 15 (API 37)"
         },
         privacySection: {
             title: "Protected data, guaranteed privacy",
@@ -294,14 +296,14 @@ const translations = {
         footer: {
             subtitle: "The professional solution for repair management, designed for maximum security of your data.",
             resources: "Resources",
-            support: "Technical Support",
+            support: "support@onlytechtake.com",
             github: "GitHub Repository",
             disclaimer: "No implied legal warranty is provided for signature forms. Consult a legal professional for local regulatory compliance."
         },
         privacyPage: {
             titleMeta: "Privacy Policy - OnlyTechTake",
             title: "Privacy Policy",
-            version: "Current Version: 1.1.0 (GDPR Compliant)",
+            version: "Current Version: 1.0.0 (GDPR Compliant)",
             intro: "The OnlyTechTake application (hereinafter the \"App\") is designed to operate entirely on your device to maximize privacy protection. This policy, drafted in accordance with <strong>EU Regulation 2016/679 (GDPR)</strong>, describes how data is handled based on a core principle: your data belongs to you and never leaves your device without your manual command.",
             section1: {
                 title: "1. Local Data Processing",
@@ -417,6 +419,29 @@ document.addEventListener('DOMContentLoaded', () => {
             const path = el.getAttribute('data-i18n-alt');
             const alt = getNested(t, path);
             if (alt) el.alt = alt;
+        });
+
+        // Update localized assets (Images and Videos)
+        document.querySelectorAll('[data-i18n-asset]').forEach(el => {
+            const assetName = el.getAttribute('data-i18n-asset');
+            const type = el.tagName.toLowerCase();
+            const basePath = type === 'video' || el.closest('video') ? 'assets/videos/' : 'assets/screenshots/';
+            const localizedSrc = `${basePath}${lang}/${assetName}`;
+
+            if (type === 'img') {
+                el.src = localizedSrc;
+            } else if (type === 'video') {
+                el.poster = `assets/screenshots/${lang}/${el.getAttribute('data-i18n-poster')}`;
+                const source = el.querySelector('source');
+                if (source) {
+                    source.src = localizedSrc;
+                    el.load(); // Reload video with new source
+                }
+            } else if (type === 'source') {
+                el.src = localizedSrc;
+                const video = el.closest('video');
+                if (video) video.load();
+            }
         });
 
         // Update active class on language buttons

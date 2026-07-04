@@ -52,6 +52,18 @@
     <string name="demo_template_wa_pdf_title">WhatsApp: Status Report PDF</string>
     <string name="demo_template_wa_pdf_body">Hello {{cliente}}, attached is the progress report for order {{numero_commessa}}.\n\n{{proprietario_nome}}</string>
 
+    <string name="demo_template_wa_update_title">WhatsApp: Order Update</string>
+    <string name="demo_template_wa_update_body">Service order {{numero_commessa}} update: current status {{stato_commessa}} for {{cliente}}.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_not_repairable_title">WhatsApp: Not Repairable</string>
+    <string name="demo_template_wa_not_repairable_body">Hello {{cliente}}, after diagnosis of order {{numero_commessa}}, we found it is not repairable.\nDetails: {{esito_diagnosi}}.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_repairing_title">WhatsApp: Repair in Progress</string>
+    <string name="demo_template_wa_repairing_body">Hello {{cliente}}, we started working on order {{numero_commessa}}.\nWe will notify you as soon as it is ready.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_completed_title">WhatsApp: Service Completed</string>
+    <string name="demo_template_wa_completed_body">Hello {{cliente}}, the repair of order {{numero_commessa}} has been successfully completed.\n\n{{proprietario_nome}}</string>
+
     <string name="demo_operator_name_junior">Junior Operator</string>
     <string name="demo_operator_username_junior">op_junior</string>
     <string name="demo_operator_password_junior">Pass12345</string>
@@ -102,6 +114,14 @@
     <string name="demo_customer_phone_lab">+1 555-010-4040</string>
     <string name="demo_customer_email_lab">admin@example.invalid</string>
     <string name="demo_customer_address_lab">24 Demo Way, New York</string>
+
+    <string name="social_caption_home">Everything under control: your repair shop in one app.</string>
+    <string name="social_caption_intake">Fast and professional intake with guided workflow.</string>
+    <string name="social_caption_diagnosis">Precise diagnosis and automated status updates.</string>
+    <string name="social_caption_media">High-quality technical documentation with photos and videos.</string>
+    <string name="social_caption_signature">Digital signature for privacy and service terms.</string>
+    <string name="social_caption_whatsapp">Notify customers instantly via WhatsApp integration.</string>
+    <string name="social_caption_closed">Professional closure with PDF report generation.</string>
 
     <plurals name="demo_error_order_limit">
         <item quantity="one">Demo Limit reached. The Demo version allows only %1$d service order and use only with admin account. To continue without limits, activate the Full version.</item>

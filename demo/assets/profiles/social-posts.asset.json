@@ -1,0 +1,27 @@
+{
+  "id": "social-posts",
+  "flavor": "Full",
+  "skipTest": true,
+  "testClass": "com.onlytechtake.repairapp.demo.SocialCampaignScreenshotTest",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/workflows/social-campaign",
+  "pulledDirectoryName": "social-campaign",
+  "captions": {
+    "01-home": "social_caption_home",
+    "02-accoglienza": "social_caption_intake",
+    "03-step2-diagnosi": "social_caption_diagnosis",
+    "03b-step3-media": "social_caption_media",
+    "04-step4-firma": "social_caption_signature",
+    "05-whatsapp": "social_caption_whatsapp",
+    "06-successo": "social_caption_closed"
+  },
+  "cases": [
+    {
+      "id": "linkedin-facebook",
+      "sourceDirectory": ".",
+      "outputs": [
+        { "platform": "linkedin", "variant": "linkedin", "subDir": "posts/linkedin" },
+        { "platform": "facebook", "variant": "square", "subDir": "posts/facebook" }
+      ]
+    }
+  ]
+}

@@ -1,8 +1,9 @@
 {
   "id": "social-stories",
   "flavor": "Full",
-  "testClass": "com.onlytechtake.repairapp.demo.SocialStoryDemoScreenshotTest",
-  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/social-stories",
+  "testClass": "com.onlytechtake.repairapp.demo.WorkflowOperationalTest",
+  "testMethod": "flow8_SocialStories",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/workflows/social-stories",
   "pulledDirectoryName": "social-stories",
   "cases": [
     {
@@ -12,20 +13,14 @@
         { "platform": "whatsapp", "variant": "vertical", "subDir": "stories" }
       ],
       "expectedFiles": [
-        "01-login.png",
-        "02-dashboard-home.png",
-        "03-new-customer.png",
+        "01-home-stories.png",
+        "02-customer-selection.png",
         "04-category-selection.png",
         "05-problem-details.png",
         "06-media-acquisition.png",
         "07-customer-signature.png",
-        "08-summary-submit.png",
-        "09-orders-list.png",
-        "10-order-details.png",
-        "11-diagnosis-result.png",
-        "12-timeline-closure.png"
+        "08-share-stories.png"
       ]
-
     }
   ]
 }

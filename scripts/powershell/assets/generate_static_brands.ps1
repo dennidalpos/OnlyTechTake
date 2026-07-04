@@ -2,7 +2,7 @@
 # Richiede ImageMagick o Inkscape nel path per la conversione automatica se disponibile.
 # In assenza di tool, elenca le operazioni necessarie per il designer.
 
-$ErrorActionPreference = "Continue"
+$ErrorActionPreference = "Stop"
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
 
 Write-Host "--- OnlyTechTake Static Asset Generator ---" -ForegroundColor Cyan
@@ -70,9 +70,12 @@ if ($magick) {
             Copy-Item -Path $t.src -Destination $destPath -Force
         } else {
             # Temp fix for font-stack issues in ImageMagick on some Windows environments
-            # Simplifies "Inter, Segoe UI, ..." to just "Inter" or "Segoe UI" for the converter
+            # Map Inter to Segoe UI (standard Windows font) to avoid variable font resolution issues
             $tempSvg = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName() + ".svg")
-            (Get-Content $t.src) -replace 'font-family="Inter, Segoe UI, Arial, sans-serif"', 'font-family="Inter"' | Set-Content $tempSvg
+            $content = Get-Content $t.src -Raw
+            $content = $content -replace 'font-family="Inter, Segoe UI, Arial, sans-serif"', 'font-family="Segoe UI"'
+            $content = $content -replace 'font-family="Inter"', 'font-family="Segoe UI"'
+            $content | Set-Content $tempSvg -Encoding UTF8
 
             # Se e' la preview app, aggiungiamo il background Charcoal
             $bgParam = if ($t.bg) { @("-background", $t.bg) } else { @("-background", "none") }

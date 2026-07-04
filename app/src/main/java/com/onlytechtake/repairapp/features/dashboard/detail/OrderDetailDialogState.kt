@@ -58,7 +58,8 @@ class OrderDetailWorkspaceState(
     ) {
         statusAction = action
         statusNote = ""
-        closureReason = null
+        closureReason =
+            if (action == OrderStatusAction.CLOSE_ORDER) ClosureReason.COMPLETED else null
         resultSummary = ""
         resultAmount = ""
         diagnosisOutcome = currentOutcome

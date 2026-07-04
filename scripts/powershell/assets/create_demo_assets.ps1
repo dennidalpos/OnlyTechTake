@@ -161,10 +161,33 @@ try {
                     $targetFile = Join-Path $subDir $item.Name
 
                     if ($item.Extension -eq ".png" -and $out.variant) {
+                        $caption = $null
+                        if ($config.captions -and $config.captions.$($item.BaseName)) {
+                            $captionKey = $config.captions.$($item.BaseName)
+                            $lang = if ($Locale -eq "en") { "values" } else { "values-$Locale" }
+                            $stringsFile = Join-Path $root "app/src/androidTest/res/$lang/strings.xml"
+                            if (Test-Path $stringsFile) {
+                                try {
+                                    [xml]$xml = Get-Content $stringsFile
+                                    $node = $xml.resources.string | Where-Object { $_.name -eq $captionKey }
+                                    if ($node) {
+                                        $caption = ($node.'#text' -join "").Replace("\'", "'")
+                                    }
+                                } catch {
+                                    Write-Warning "Errore nel parsing XML di $stringsFile per la chiave $captionKey. Uso fallback regex."
+                                    $regex = "<string name=`"$captionKey`">(.*)</string>"
+                                    if ((Get-Content $stringsFile -Raw) -match $regex) {
+                                        $caption = $Matches[1].Replace("\'", "'")
+                                    }
+                                }
+                            }
+                        }
+
                         switch ($out.variant) {
                             "vertical"  { Convert-ToStoryPng -SourcePath $item.FullName -TargetPath $targetFile }
                             "square"    { Convert-ToSquarePng -SourcePath $item.FullName -TargetPath $targetFile }
                             "landscape" { Convert-ToLandscapePng -SourcePath $item.FullName -TargetPath $targetFile }
+                            "linkedin"  { Convert-ToLinkedinLandscapePng -SourcePath $item.FullName -TargetPath $targetFile -Caption $caption }
                             default     { Copy-Item -Path $item.FullName -Destination $targetFile -Force }
                         }
                     } else {
@@ -183,7 +206,7 @@ try {
     if (-not $NoDistribute) {
         Write-Host "Distribuzione asset in corso..." -ForegroundColor Cyan
 
-        $subPath = if ($Locale -ne "en") { "$Locale/" } else { "" }
+        $subPath = "$Locale/"
 
         # 1. Marketing (Play Store)
         $marketingPath = switch ($AssetProfile) {
@@ -193,21 +216,26 @@ try {
             "social-demo" { "marketing/screenshots/social/demo/$subPath" }
             "social-campaign" { "marketing/screenshots/social/campaign/$subPath" }
             "social-stories" { "marketing/screenshots/social/stories/$subPath" }
+            "social-posts" { "marketing/screenshots/social/posts/$subPath" }
             default { "marketing/screenshots/workflows/$AssetProfile/$subPath" }
         }
         $fullMarketingPath = Join-Path $root $marketingPath
         if (-not (Test-Path $fullMarketingPath)) { New-Item -ItemType Directory -Path $fullMarketingPath -Force | Out-Null }
 
-        # Copia solo immagini per evitare duplicati di video o altri file intermedi
+        # Copia mantenendo la struttura relativa sotto OutputRoot per evitare sovrascritture di varianti
         if (Test-Path $OutputRoot) {
             Get-ChildItem -Path $OutputRoot -Recurse -File | Where-Object { $_.Extension -match '^\.(png|jpg|jpeg)$' } | ForEach-Object {
-                Copy-Item -Path $_.FullName -Destination $fullMarketingPath -Force
+                $relative = Get-RepoRelativePath -FullPath $_.FullName -RootPath $OutputRoot
+                $target = Join-Path $fullMarketingPath $relative
+                $targetDir = Split-Path $target
+                if (-not (Test-Path $targetDir)) { New-Item -ItemType Directory -Path $targetDir -Force | Out-Null }
+                Copy-Item -Path $_.FullName -Destination $target -Force
             }
         }
 
-        # 2. Landing Page (solo per profili principali)
+        # 2. Landing Page (per profili principali)
         if ($AssetProfile -eq "store-pro") {
-            $landingPath = Join-Path $root "landing/assets/screenshots"
+            $landingPath = Join-Path $root "landing/assets/screenshots/$subPath"
             if (-not (Test-Path $landingPath)) { New-Item -ItemType Directory -Path $landingPath -Force | Out-Null }
             # Per la landing prendiamo solo i file dalla cartella 'screenshots' se esiste, altrimenti root
             $landingSrc = Join-Path $OutputRoot "screenshots"
@@ -216,7 +244,7 @@ try {
             Get-ChildItem -Path $landingSrc -Filter "*.png" | ForEach-Object {
                 Copy-Item -Path $_.FullName -Destination $landingPath -Force
             }
-            Write-Host "Landing page aggiornata con nuovi screenshot." -ForegroundColor Gray
+            Write-Host "Landing page aggiornata con nuovi screenshot [$Locale]." -ForegroundColor Gray
         }
     }
 

@@ -52,6 +52,18 @@
     <string name="demo_template_wa_pdf_title">WhatsApp: Rapportino PDF</string>
     <string name="demo_template_wa_pdf_body">Salve {{cliente}}, in allegato il rapporto di avanzamento per la commessa {{numero_commessa}}.\n\n{{proprietario_nome}}</string>
 
+    <string name="demo_template_wa_update_title">WhatsApp: Aggiornamento Ordine</string>
+    <string name="demo_template_wa_update_body">Aggiornamento commessa {{numero_commessa}}: stato attuale {{stato_commessa}} per {{cliente}}.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_not_repairable_title">WhatsApp: Non Riparabile</string>
+    <string name="demo_template_wa_not_repairable_body">Salve {{cliente}}, dopo la diagnosi della commessa {{numero_commessa}}, abbiamo riscontrato che non è riparabile.\nDettagli: {{esito_diagnosi}}.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_repairing_title">WhatsApp: Riparazione in Corso</string>
+    <string name="demo_template_wa_repairing_body">Salve {{cliente}}, abbiamo iniziato la lavorazione per la commessa {{numero_commessa}}.\nTi avviseremo non appena sarà pronta.\n\n{{proprietario_nome}}</string>
+
+    <string name="demo_template_wa_completed_title">WhatsApp: Intervento Completato</string>
+    <string name="demo_template_wa_completed_body">Salve {{cliente}}, la riparazione della commessa {{numero_commessa}} è stata completata con successo.\n\n{{proprietario_nome}}</string>
+
     <string name="demo_operator_name_junior">Operatore Junior</string>
     <string name="demo_operator_username_junior">op_junior</string>
     <string name="demo_operator_password_junior">Pass12345</string>
@@ -80,7 +92,7 @@
     <string name="demo_estimate_overheating">89,00</string>
 
     <string name="demo_closure_note_completed">Riparazione completata con successo.</string>
-    <string name="demo_customer_name_john">Mario Rossi</string>
+    <string name="demo_customer_name_john">Marco Rossi</string>
 
     <string name="demo_customer_name_julia">Giulia</string>
     <string name="demo_customer_phone_julia">+39 333 010 2020</string>
@@ -102,6 +114,14 @@
     <string name="demo_customer_phone_lab">+39 333 010 4040</string>
     <string name="demo_customer_email_lab">admin@esempio.invalid</string>
     <string name="demo_customer_address_lab">Via Roma 24, Milano</string>
+
+    <string name="social_caption_home">Tutto sotto controllo: il tuo laboratorio in un\'app.</string>
+    <string name="social_caption_intake">Presa in carico rapida e professionale con workflow guidato.</string>
+    <string name="social_caption_diagnosis">Diagnosi precisa e aggiornamenti di stato automatizzati.</string>
+    <string name="social_caption_media">Documentazione tecnica di qualità con foto e video.</string>
+    <string name="social_caption_signature">Firma digitale per privacy e condizioni di servizio.</string>
+    <string name="social_caption_whatsapp">Notifica i clienti all\'istante tramite WhatsApp.</string>
+    <string name="social_caption_closed">Chiusura professionale con rapporto PDF automatico.</string>
 
     <plurals name="demo_error_order_limit">
         <item quantity="one">Limite Demo raggiunto. La versione Demo consente %1$d sola commessa e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>

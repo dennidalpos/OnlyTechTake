@@ -1,8 +1,9 @@
 {
   "id": "store-demo",
   "flavor": "Demo",
-  "testClass": "com.onlytechtake.repairapp.demo.StoreDemoScreenshotTest",
-  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/store-demo",
+  "testClass": "com.onlytechtake.repairapp.demo.WorkflowOperationalTest",
+  "testMethod": "flow10_StoreDemo",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/workflows/store-demo",
   "pulledDirectoryName": "store-demo",
   "cases": [
     {

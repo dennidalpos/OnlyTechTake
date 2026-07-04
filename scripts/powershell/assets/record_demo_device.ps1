@@ -151,7 +151,13 @@ try {
     if ($selectedProfileConfig) {
         $extras = @{ demoRecording = "true" }
         if ($Locale) { $extras["locale"] = $Locale }
-        Invoke-DemoScreenshotTest -Serial $serial -TestClass $selectedProfileConfig.testClass -Flavor $Flavor -InstrumentationExtras $extras
+
+        $testClass = $selectedProfileConfig.testClass
+        if ($selectedProfileConfig.testMethod) {
+            $testClass = "$testClass#$($selectedProfileConfig.testMethod)"
+        }
+
+        Invoke-DemoScreenshotTest -Serial $serial -TestClass $testClass -Flavor $Flavor -InstrumentationExtras $extras
     } else {
         if ($NonInteractive -or -not [Environment]::UserInteractive) {
             Write-Host "Registrazione manuale saltata in modalità non interattiva." -ForegroundColor Yellow
@@ -172,12 +178,13 @@ Normalize-Video -Path $outputPath -OutputRoot $OutputRoot -StartSec $AutomaticTr
 
 # Distribuzione Automatica
 if (-not $NoDistribute) {
-    $marketingVideoPath = Join-Path $root "marketing/videos/play-store"
+    $subPath = "$Locale/"
+    $marketingVideoPath = Join-Path $root "marketing/videos/play-store/$subPath"
     if (-not (Test-Path $marketingVideoPath)) { New-Item -ItemType Directory -Path $marketingVideoPath -Force | Out-Null }
     Copy-Item -Path $outputPath -Destination (Join-Path $marketingVideoPath "pro-workflow.mp4") -Force
 
     if ($AssetProfile -eq "store-pro" -or $AssetProfile -eq "operator-intake") {
-        $landingVideoPath = Join-Path $root "landing/assets/videos"
+        $landingVideoPath = Join-Path $root "landing/assets/videos/$subPath"
         if (-not (Test-Path $landingVideoPath)) { New-Item -ItemType Directory -Path $landingVideoPath -Force | Out-Null }
         Copy-Item -Path $outputPath -Destination (Join-Path $landingVideoPath "intake-flow.mp4") -Force
     }

@@ -1,8 +1,9 @@
 {
   "id": "social-demo",
   "flavor": "Demo",
-  "testClass": "com.onlytechtake.repairapp.demo.SocialDemoAssetTest",
-  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/social-demo",
+  "testClass": "com.onlytechtake.repairapp.demo.WorkflowOperationalTest",
+  "testMethod": "flow11_SocialDemo",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/workflows/social-demo",
   "pulledDirectoryName": "social-demo",
   "cases": [
     {

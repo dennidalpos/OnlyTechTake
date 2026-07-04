@@ -1,8 +1,9 @@
 {
   "id": "social-pro",
   "flavor": "Full",
-  "testClass": "com.onlytechtake.repairapp.demo.SocialProAssetTest",
-  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/social-pro",
+  "testClass": "com.onlytechtake.repairapp.demo.WorkflowOperationalTest",
+  "testMethod": "flow6_SocialPro",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/workflows/social-pro",
   "pulledDirectoryName": "social-pro",
   "cases": [
     {

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.onlytechtake.repairapp.R
@@ -84,9 +86,15 @@ fun OrderStatusActionDialog(
             content = {
                 Column(
                     modifier = Modifier.verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.compactGap),
+                    verticalArrangement = Arrangement.spacedBy(RepairAppSpacing.fieldGap),
                 ) {
-                    Text(stringResource(R.string.order_confirm_status_update))
+                    if (!isClosure) {
+                        Text(
+                            text = stringResource(R.string.order_confirm_status_update),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                     if (isResultStep) {
                         AppTextField(
                             value = state.resultSummary,
@@ -144,6 +152,8 @@ fun OrderStatusActionDialog(
                         Text(
                             stringResource(R.string.order_closure_reason_title),
                             style = MaterialTheme.typography.titleSmall,
+                            modifier = Modifier.padding(top = RepairAppSpacing.compactGap),
+                            fontWeight = FontWeight.Bold,
                         )
                         ActionRow {
                             ClosureReason.entries.forEach { reason ->
@@ -153,13 +163,9 @@ fun OrderStatusActionDialog(
                                     variant = if (selectedReason) AppButtonVariant.Success else AppButtonVariant.Secondary,
                                     selected = selectedReason,
                                     stateDescription =
-                                        if (selectedReason) {
-                                            stringResource(R.string.state_selected)
-                                        } else {
-                                            stringResource(
-                                                R.string.state_not_selected,
-                                            )
-                                        },
+                                        stringResource(
+                                            if (selectedReason) R.string.state_selected else R.string.state_not_selected,
+                                        ),
                                     testTag = RepairAppTestTags.closureReason(reason.name),
                                     onClick = { state.closureReason = reason },
                                     size = AppButtonSize.Compact,

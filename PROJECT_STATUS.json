@@ -1,18 +1,13 @@
 {
   "project_name": "OnlyTechTake",
   "version": "1.0.0",
-  "status": "Rigenerazione completa degli asset media completata con successo. Identificate e risolte numerose regressioni nella suite di test strumentati (import mancanti, localizzazione incoerente, shadowing di variabili, selettori ambigui e gestione dialoghi). Pipeline degli asset ora stabile e sincronizzata con la UI.",
-  "last_updated": "2026-07-31",
+  "status": "Rigenerazione integrale asset completata con successo per tutte le lingue (en, it). Risolte regressioni critiche: 1) Perdita di localizzazione (leak Italiano) in English flow tramite correzione Invoke-DemoScreenshotTest. 2) Mismatch nomi file in workflow-setup. 3) Sovrascrittura varianti social-posts tramite preservazione struttura directory. 4) Ottimizzato script master per esecuzione locale-specifica e cleanup esteso.",
+  "last_updated": "2026-07-04T17:00:00Z",
   "backlog": [
     {
       "priority": "HIGH",
       "id": "B11",
       "task": "GOOGLE PLAY: Pubblicazione e Distribuzione. Finalizzare Privacy Policy (URL HTTPS), completare Data Safety, configurare keystore.properties reale e caricare AAB (Full/Demo) in Internal Testing."
-    },
-    {
-      "priority": "HIGH",
-      "id": "B12",
-      "task": "QUALITY: Test su device fisico. Continuare l'esecuzione della suite strumentale completa su hardware reale per validazione finale."
     }
   ],
   "completed_recently": []

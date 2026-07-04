@@ -1,8 +1,9 @@
 {
   "id": "social-campaign",
   "flavor": "Full",
-  "testClass": "com.onlytechtake.repairapp.demo.SocialCampaignScreenshotTest",
-  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/social-campaign",
+  "testClass": "com.onlytechtake.repairapp.demo.WorkflowOperationalTest",
+  "testMethod": "flow7_SocialCampaign",
+  "deviceDirectory": "/sdcard/Android/data/{PACKAGE_NAME}/files/workflows/social-campaign",
   "pulledDirectoryName": "social-campaign",
   "cases": [
     {

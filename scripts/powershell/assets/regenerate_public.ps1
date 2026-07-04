@@ -1,14 +1,24 @@
-# Script per rigenerare solo asset pubblici (Full e Demo)
+param(
+    [string]$Locale = ""
+)
+
 $ErrorActionPreference = "Stop"
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
 $assetDir = Join-Path $root "asset"
 
-# 1. Rigenerazione Brand Identity
-Write-Host "Rigenerazione asset brand identity..." -ForegroundColor Cyan
-powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "generate_static_brands.ps1")
+# Carica helper
+. (Join-Path $PSScriptRoot "..\support\android_env.ps1")
+Set-AndroidCliEnvironment | Out-Null
+. (Join-Path $PSScriptRoot "..\support\android_demo.ps1")
+
+# 1. Rigenerazione Brand Identity (solo se non specifico locale)
+if ([string]::IsNullOrWhiteSpace($Locale)) {
+    Write-Host "Rigenerazione asset brand identity..." -ForegroundColor Cyan
+    Invoke-Checked -FilePath "powershell" -Arguments @("-ExecutionPolicy", "Bypass", "-File", (Join-Path $PSScriptRoot "generate_static_brands.ps1"))
+}
 
 # 2. Cleanup locale
-if (Test-Path $assetDir) {
+if ([string]::IsNullOrWhiteSpace($Locale) -and (Test-Path $assetDir)) {
     Write-Host "Pulizia vecchi asset in $assetDir..." -ForegroundColor Yellow
     Remove-Item -Path $assetDir -Recurse -Force
 }
@@ -17,56 +27,70 @@ if (Test-Path $assetDir) {
 $publicPaths = @(
     "landing/assets/screenshots",
     "marketing/screenshots/play-store/pro",
-    "marketing/screenshots/play-store/demo"
+    "marketing/screenshots/play-store/demo",
+    "marketing/screenshots/social",
+    "marketing/screenshots/workflows"
 )
 
-foreach ($p in $publicPaths) {
-    $fullPath = Join-Path $root $p
-    if (Test-Path $fullPath) {
-        Write-Host "Pulizia destinazione pubblica: $p" -ForegroundColor Gray
-        Get-ChildItem -Path $fullPath -Filter "*.png" | Remove-Item -Force
-        Get-ChildItem -Path $fullPath -Filter "*.mp4" | Remove-Item -Force
+if ([string]::IsNullOrWhiteSpace($Locale)) {
+    foreach ($p in $publicPaths) {
+        $fullPath = Join-Path $root $p
+        if (Test-Path $fullPath) {
+            Write-Host "Pulizia destinazione pubblica: $p" -ForegroundColor Gray
+            Get-ChildItem -Path $fullPath -Filter "*.png" -Recurse | Remove-Item -Force
+            Get-ChildItem -Path $fullPath -Filter "*.mp4" -Recurse | Remove-Item -Force
+        }
     }
 }
 
-$profiles = @(
-    @{ id = "workflow-setup"; flavor = "Full" },
-    @{ id = "workflow-setup-full"; flavor = "Full" },
-    @{ id = "store-pro"; flavor = "Full" },
-    @{ id = "store-demo"; flavor = "Demo" },
-    @{ id = "social-pro"; flavor = "Full" },
-    @{ id = "social-demo"; flavor = "Demo" },
-    @{ id = "social-campaign"; flavor = "Full" },
-    @{ id = "operator-intake"; flavor = "Full" },
-    @{ id = "workflow-intake"; flavor = "Full" },
-    @{ id = "workflow-management"; flavor = "Full" },
-    @{ id = "workflow-admin-templates"; flavor = "Full" },
-    @{ id = "workflow-admin-operators"; flavor = "Full" },
-    @{ id = "workflow-backup"; flavor = "Full" },
-    @{ id = "social-stories"; flavor = "Full" }
-)
+# 3. Discovery Dinamico dei Profili
+$profilesDir = Join-Path $root "demo/assets/profiles"
+$profiles = Get-ChildItem -Path $profilesDir -Filter "*.asset.json" | ForEach-Object {
+    $config = Get-Content $_.FullName -Raw | ConvertFrom-Json
+    @{
+        id = $config.id
+        flavor = if ($config.flavor) { $config.flavor } else { "Full" }
+        skipTest = [bool]$config.skipTest
+    }
+}
 
-# Assicuriamoci che l'app e i test siano buildati (Salto build per velocità se già eseguita)
+# Ordine consigliato per dipendenze Mixed Management (social-posts deve venire dopo social-campaign)
+$priorityIds = @("workflow-setup", "social-campaign", "social-posts", "store-pro")
+$profiles = $profiles | Sort-Object {
+    $idx = [array]::IndexOf($priorityIds, $_.id)
+    if ($idx -lt 0) { 100 } else { $idx }
+}
+
+# Definiamo le lingue.
+$targetLocales = if ([string]::IsNullOrWhiteSpace($Locale)) { @("en", "it") } else { @($Locale) }
+
+# Assicuriamoci che l'app e i test siano buildati
 Write-Host "Salto build preliminare APK (Assunto già fatto)..." -ForegroundColor Yellow
-# ./gradlew :app:assembleFullDebug :app:assembleFullDebugAndroidTest --no-configuration-cache
-# ./gradlew :app:assembleDemoDebug :app:assembleDemoDebugAndroidTest --no-configuration-cache
 
-foreach ($p in $profiles) {
-    Write-Host "`n=== Rigenerazione Profilo: $($p.id) ($($p.flavor)) ===" -ForegroundColor Cyan
+foreach ($locale in $targetLocales) {
+    Write-Host "`n>>>>>> LINGUA: $($locale.ToUpper()) <<<<<<" -ForegroundColor White -BackgroundColor DarkBlue
 
-    # Se il profilo richiede video, eseguiamo prima la registrazione (che esegue il test)
-    # e poi creiamo gli asset saltando il test per evitare doppia esecuzione.
-    $hasVideo = ($p.id -eq "operator-intake")
+    foreach ($p in $profiles) {
+        Write-Host "`n=== Rigenerazione Profilo: $($p.id) ($($p.flavor)) [$locale] ===" -ForegroundColor Cyan
 
-    if ($hasVideo) {
-        Write-Host "Registrazione video per $($p.id)..." -ForegroundColor Yellow
-        powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "record_demo_device.ps1") -AssetProfile $p.id -Flavor $p.flavor -UseConnectedDevice -NonInteractive -SkipBuild
+        # Ogni flusso di acquisizione deve avere il suo video (se non è un profilo di post-elaborazione)
+        $skipTest = $p.skipTest
 
-        Write-Host "Estrazione screenshot per $($p.id) (SkipTest)..." -ForegroundColor Gray
-        powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "create_demo_assets.ps1") -AssetProfile $p.id -Flavor $p.flavor -UseConnectedDevice -NonInteractive -SkipBuild -SkipTest
-    } else {
-        # Screenshot standard
-        powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "create_demo_assets.ps1") -AssetProfile $p.id -Flavor $p.flavor -UseConnectedDevice -NonInteractive -SkipBuild
+        if (-not $skipTest) {
+            Write-Host "Registrazione video per $($p.id)..." -ForegroundColor Yellow
+            $videoArgs = @("-ExecutionPolicy", "Bypass", "-File", (Join-Path $PSScriptRoot "record_demo_device.ps1"), "-AssetProfile", $p.id, "-Flavor", $p.flavor, "-UseConnectedDevice", "-NonInteractive", "-SkipBuild", "-Locale", $locale)
+            if ($p.id -like "workflow-*") {
+                $videoArgs += "-WhatsAppOptimized"
+            }
+
+            Invoke-Checked -FilePath "powershell" -Arguments $videoArgs
+
+            Write-Host "Estrazione screenshot per $($p.id) (SkipTest)..." -ForegroundColor Gray
+            Invoke-Checked -FilePath "powershell" -Arguments @("-ExecutionPolicy", "Bypass", "-File", (Join-Path $PSScriptRoot "create_demo_assets.ps1"), "-AssetProfile", $p.id, "-Flavor", $p.flavor, "-UseConnectedDevice", "-NonInteractive", "-SkipBuild", "-SkipTest", "-Locale", $locale)
+        } else {
+            Write-Host "Generazione asset post-elaborati per $($p.id) (SkipTest)..." -ForegroundColor Yellow
+            Invoke-Checked -FilePath "powershell" -Arguments @("-ExecutionPolicy", "Bypass", "-File", (Join-Path $PSScriptRoot "create_demo_assets.ps1"), "-AssetProfile", $p.id, "-Flavor", $p.flavor, "-UseConnectedDevice", "-NonInteractive", "-SkipBuild", "-SkipTest", "-Locale", $locale)
+        }
     }
 }
 

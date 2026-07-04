@@ -38,7 +38,7 @@ abstract class BaseAssetRobot(
         val forceEnglish = LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
         return if (forceEnglish) {
             val config = android.content.res.Configuration(context.resources.configuration)
-            config.setLocale(java.util.Locale.ENGLISH)
+            config.setLocales(android.os.LocaleList(java.util.Locale.US))
             context.createConfigurationContext(config).getString(resId)
         } else {
             context.getString(resId)
@@ -49,13 +49,34 @@ abstract class BaseAssetRobot(
         @androidx.annotation.StringRes resId: Int,
     ): String {
         val testCtx = InstrumentationRegistry.getInstrumentation().context
-        val forceEnglish = LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
-        return if (forceEnglish) {
+        val isForceEnglish =
+            LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
+        return if (isForceEnglish) {
             val config = android.content.res.Configuration(testCtx.resources.configuration)
-            config.setLocale(java.util.Locale.ENGLISH)
+            config.setLocales(android.os.LocaleList(java.util.Locale.US))
             testCtx.createConfigurationContext(config).getString(resId)
         } else {
             testCtx.getString(resId)
+        }
+    }
+
+    fun getTestQuantityString(
+        @androidx.annotation.PluralsRes resId: Int,
+        quantity: Int,
+    ): String {
+        val testCtx = InstrumentationRegistry.getInstrumentation().context
+        val isForceEnglish =
+            LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
+        return if (isForceEnglish) {
+            val config = android.content.res.Configuration(testCtx.resources.configuration)
+            config.setLocales(android.os.LocaleList(java.util.Locale.US))
+            testCtx.createConfigurationContext(config).resources.getQuantityString(
+                resId,
+                quantity,
+                quantity
+            )
+        } else {
+            testCtx.resources.getQuantityString(resId, quantity, quantity)
         }
     }
 
@@ -75,9 +96,7 @@ abstract class BaseAssetRobot(
         repeat(LOGIN_ATTEMPTS) { attempt ->
             waitForTag(RepairAppTestTags.AuthUsernameField)
             typeTag(RepairAppTestTags.AuthUsernameField, username, fast = true)
-            pauseForDemo()
             typeTag(RepairAppTestTags.AuthPasswordField, DemoDataSeeder.DEMO_PASSWORD, fast = true)
-            pauseForDemo()
             clickTag(RepairAppTestTags.AuthSubmitButton)
 
             if (waitForTagIfPresent(
@@ -342,7 +361,7 @@ abstract class BaseAssetRobot(
             )
         ) {
             // Narrative pause to show the WhatsApp template to the user
-            Thread.sleep(if (isRecordingDemo()) 6000 else 4000)
+            Thread.sleep(if (isRecordingDemo()) 4000 else 2000)
 
             repeat(5) {
                 if (isTagPresent(
@@ -488,7 +507,7 @@ abstract class BaseAssetRobot(
     fun dismissBanner() {
         try {
             if (isTagPresent(RepairAppTestTags.MessageBannerCloseButton)) {
-                Thread.sleep(2500) // Give time to read the success/error message
+                Thread.sleep(1500) // Give time to read the success/error message
                 composeRule.onNodeWithTag(RepairAppTestTags.MessageBannerCloseButton).performClick()
                 composeRule.waitForIdle()
             }
@@ -532,16 +551,17 @@ abstract class BaseAssetRobot(
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean =
+        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     companion object {
         const val WAIT_TIMEOUT_MILLIS = 30_000L
         const val LOGIN_ATTEMPTS = 2
         const val LOGIN_ATTEMPT_TIMEOUT_MILLIS = 20_000L
         const val TAG_POLL_MILLIS = 250L
-        const val ACTION_PAUSE_MILLIS = 2_000L
-        const val SCREENSHOT_PAUSE_MILLIS = 2_000L
-        const val RECORDING_ACTION_PAUSE_MILLIS = 3_000L
-        const val RECORDING_SCREENSHOT_PAUSE_MILLIS = 2_000L
+        const val ACTION_PAUSE_MILLIS = 500L
+        const val SCREENSHOT_PAUSE_MILLIS = 500L
+        const val RECORDING_ACTION_PAUSE_MILLIS = 1000L
+        const val RECORDING_SCREENSHOT_PAUSE_MILLIS = 800L
     }
 }

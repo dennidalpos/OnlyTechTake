@@ -47,9 +47,19 @@ class ProAssetRobot(
             scroll = true,
         )
         waitForTag(RepairAppTestTags.StatusResultSummaryField)
-        typeTag(RepairAppTestTags.StatusResultSummaryField, finalSummary, scroll = false, fast = true)
+        typeTag(
+            RepairAppTestTags.StatusResultSummaryField,
+            finalSummary,
+            scroll = false,
+            fast = true
+        )
         clickTag(RepairAppTestTags.DiagnosisRepairableToggle)
-        typeTag(RepairAppTestTags.DiagnosisEstimateField, finalEstimate, scroll = false, fast = true)
+        typeTag(
+            RepairAppTestTags.DiagnosisEstimateField,
+            finalEstimate,
+            scroll = false,
+            fast = true
+        )
         clickTag(RepairAppTestTags.StatusDialogConfirmButton)
         waitForTagGone(RepairAppTestTags.StatusDialogConfirmButton)
         composeRule.waitForIdle()
@@ -75,7 +85,7 @@ class ProAssetRobot(
         clickTag(RepairAppTestTags.IntakeMediaTakeVideoButton)
         waitForTag(RepairAppTestTags.IntakeMediaCaptureVideoButton)
         clickTag(RepairAppTestTags.IntakeMediaCaptureVideoButton)
-        narrativePause(3)
+        narrativePause(2)
         clickTag(RepairAppTestTags.IntakeMediaStopVideoButton)
         waitForTagGone(RepairAppTestTags.IntakeMediaStopVideoButton)
         composeRule.waitForIdle()

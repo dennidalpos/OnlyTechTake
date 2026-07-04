@@ -7,7 +7,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import androidx.test.platform.app.InstrumentationRegistry
 import com.onlytechtake.repairapp.BuildConfig
-import com.onlytechtake.repairapp.R
+
 import com.onlytechtake.repairapp.core.media.MediaStorageProvider
 import com.onlytechtake.repairapp.core.security.PasswordHasher
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
@@ -50,15 +50,22 @@ object DemoDataSeeder {
         context: Context,
         locale: java.util.Locale = java.util.Locale.ENGLISH,
     ) {
+        android.util.Log.d("DemoDataSeeder", "Seeding profile with locale: $locale")
+
+        val targetLocale =
+            if (locale.language == "it") java.util.Locale.ITALIAN else java.util.Locale.US
+        java.util.Locale.setDefault(targetLocale)
+
         val config = android.content.res.Configuration(context.resources.configuration)
-        config.setLocale(locale)
-        val localizedContext = context.createConfigurationContext(config)
-        val testLocalizedContext =
-            testContext.let {
-                val tcConfig = android.content.res.Configuration(it.resources.configuration)
-                tcConfig.setLocale(locale)
-                it.createConfigurationContext(tcConfig)
-            }
+        config.setLocales(android.os.LocaleList(targetLocale))
+        config.setLayoutDirection(targetLocale)
+
+        @Suppress("DEPRECATION")
+        context.resources.updateConfiguration(config, context.resources.displayMetrics)
+        @Suppress("DEPRECATION")
+        testContext.resources.updateConfiguration(config, testContext.resources.displayMetrics)
+
+        val testLocalizedContext = testContext
 
         RepairAppDatabase.closeInstance()
         context.deleteDatabase(RepairAppDatabase.DATABASE_NAME)
@@ -138,40 +145,40 @@ object DemoDataSeeder {
                     id = "demo-cat-pc",
                     parentId = null,
                     level = 0,
-                    name = localizedContext.getString(R.string.common_cat_pc),
-                    description = localizedContext.getString(R.string.common_cat_pc_desc),
+                    name = if (locale.language == "it") "Computer & Laptop" else "Computer & Laptop",
+                    description = if (locale.language == "it") "Riparazioni hardware e software PC" else "PC hardware and software repairs",
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = DEMO_CATEGORY_ID, // notebook
                     parentId = "demo-cat-pc",
                     level = 1,
-                    name = localizedContext.getString(R.string.common_cat_notebook),
-                    description = localizedContext.getString(R.string.common_cat_notebook_desc),
+                    name = if (locale.language == "it") "Notebook" else "Laptop",
+                    description = if (locale.language == "it") "Riparazione notebook e portatili" else "Laptop and notebook repairs",
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = "demo-cat-gaming",
                     parentId = DEMO_CATEGORY_ID,
                     level = 2,
-                    name = localizedContext.getString(R.string.common_cat_gaming),
-                    description = localizedContext.getString(R.string.common_cat_gaming_desc),
+                    name = if (locale.language == "it") "Gaming" else "Gaming",
+                    description = if (locale.language == "it") "Notebook e PC da gaming" else "Gaming laptops and PCs",
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = "demo-cat-rog-strix",
                     parentId = "demo-cat-gaming",
                     level = 3,
-                    name = localizedContext.getString(R.string.common_cat_rog_strix),
-                    description = localizedContext.getString(R.string.common_cat_rog_strix_desc),
+                    name = "ASUS ROG Strix",
+                    description = if (locale.language == "it") "Serie ROG Strix" else "ROG Strix Series",
                     active = true,
                 ),
                 OrderCategoryEntity(
                     id = "demo-cat-handheld",
-                    parentId = "demo-cat-pc", // Actually handhelds might be under PC or elsewhere, but for the test let's see where it expects them.
+                    parentId = "demo-cat-pc",
                     level = 1,
-                    name = testLocalizedContext.getString(TestR.string.demo_cat_handheld),
-                    description = testLocalizedContext.getString(TestR.string.demo_cat_handheld_desc),
+                    name = if (locale.language == "it") "Console Portatili" else "Handheld Consoles",
+                    description = if (locale.language == "it") "Steam Deck, ROG Ally, ecc." else "Steam Deck, ROG Ally, etc.",
                     active = true,
                 ),
             ),
@@ -183,26 +190,15 @@ object DemoDataSeeder {
                     type = if ((i % 3) == 0) CustomerType.BUSINESS else CustomerType.PRIVATE,
                     firstName =
                         when {
-                            i == 1 -> {
-                                localizedContext.getString(R.string.demo_customer_first_name)
-                            }
-
-                            i == 2 -> {
-                                testLocalizedContext.getString(TestR.string.demo_customer_name_julia)
-                            }
-
-                            (i % 3) == 0 -> {
-                                null
-                            }
-
-                            else -> {
-                                testLocalizedContext.getString(
-                                    TestR.string.demo_customer_name,
-                                    i,
-                                )
-                            }
+                            i == 1 -> if (locale.language == "it") "Marco" else "John"
+                            i == 2 -> if (locale.language == "it") "Giulia" else "Julia"
+                            (i % 3) == 0 -> null
+                            else -> testLocalizedContext.getString(
+                                TestR.string.demo_customer_name,
+                                i
+                            )
                         },
-                    lastName = if ((i % 3) == 0) null else localizedContext.getString(R.string.demo_customer_last_name),
+                    lastName = if ((i % 3) == 0) null else (if (locale.language == "it") "Rossi" else "Doe"),
                     companyName =
                         if ((i % 3) == 0) {
                             testLocalizedContext.getString(
@@ -214,12 +210,12 @@ object DemoDataSeeder {
                         },
                     vatNumber = if ((i % 3) == 0) (if (locale.language == "it") "IT" else "US") + "${10000000000L + i}" else null,
                     taxCode = if ((i % 3) == 0) null else (if (locale.language == "it") "RSSMRC90A01F205Z" else "CF${1000000000000000L + i}"),
-                    phone = if (i == 1) localizedContext.getString(R.string.demo_customer_phone) else (if (locale.language == "it") "+39 333 000 ${1000 + i}" else "+1 555-000-${1000 + i}"),
-                    email = if (i == 1) localizedContext.getString(R.string.demo_customer_email) else "customer$i@example.invalid",
-                    address = if (i == 1) localizedContext.getString(R.string.demo_customer_address) else (if (locale.language == "it") "Via Demo $i, Milano" else "$i Demo St, New York"),
+                    phone = if (i == 1) (if (locale.language == "it") "+39 02 123456" else "+1 555-123-4567") else (if (locale.language == "it") "+39 333 000 ${1000 + i}" else "+1 555-000-${1000 + i}"),
+                    email = if (i == 1) "john.doe@example.com" else "customer$i@example.invalid",
+                    address = if (i == 1) (if (locale.language == "it") "Via Milano 1, Milano" else "123 Main St, New York") else (if (locale.language == "it") "Via Demo $i, Milano" else "$i Demo St, New York"),
                     notes =
                         if (i == 1) {
-                            localizedContext.getString(R.string.demo_customer_notes)
+                            if (locale.language == "it") "Cliente fedele" else "Loyal customer"
                         } else {
                             testLocalizedContext.getString(
                                 TestR.string.demo_customer_notes,
@@ -256,7 +252,10 @@ object DemoDataSeeder {
                     assignedToUserId = assignedUserId,
                     createdByUserId = assignedUserId,
                     description = testLocalizedContext.getString(TestR.string.demo_order_desc, i),
-                    internalNotes = testLocalizedContext.getString(TestR.string.demo_order_notes, i),
+                    internalNotes = testLocalizedContext.getString(
+                        TestR.string.demo_order_notes,
+                        i
+                    ),
                     estimateAmountCents = null,
                     finalAmountCents = null,
                     createdAt = now - (i * 3600000L),
@@ -411,73 +410,73 @@ object DemoDataSeeder {
                 "privacy_short",
                 testLocalizedContext.getString(TestR.string.demo_template_privacy_title),
                 testLocalizedContext.getString(TestR.string.demo_template_privacy_body),
-                localizedContext.getString(R.string.anchor_step_legal),
+                if (locale.language == "it") "Legale" else "Legal",
             ),
             DemoTemplate(
                 "terms_intake",
                 testLocalizedContext.getString(TestR.string.demo_template_terms_title),
                 testLocalizedContext.getString(TestR.string.demo_template_terms_body),
-                localizedContext.getString(R.string.anchor_step_legal),
+                if (locale.language == "it") "Legale" else "Legal",
             ),
             DemoTemplate(
                 "whatsapp_intake",
                 testLocalizedContext.getString(TestR.string.demo_template_wa_intake_title),
                 testLocalizedContext.getString(TestR.string.demo_template_wa_intake_body),
-                localizedContext.getString(R.string.anchor_step_intake),
+                if (locale.language == "it") "Ingresso" else "Intake",
             ),
             DemoTemplate(
                 "whatsapp_update",
-                localizedContext.getString(R.string.template_wa_update_title),
-                localizedContext.getString(R.string.template_wa_update_body),
-                localizedContext.getString(R.string.anchor_step_update),
+                testLocalizedContext.getString(TestR.string.demo_template_wa_update_title),
+                testLocalizedContext.getString(TestR.string.demo_template_wa_update_body),
+                if (locale.language == "it") "Aggiornamento" else "Update",
             ),
             DemoTemplate(
                 "whatsapp_diagnosis",
                 testLocalizedContext.getString(TestR.string.demo_template_wa_diagnosis_title),
                 testLocalizedContext.getString(TestR.string.demo_template_wa_diagnosis_body),
-                localizedContext.getString(R.string.anchor_step_diagnosis),
+                if (locale.language == "it") "Diagnosi" else "Diagnosis",
             ),
             DemoTemplate(
                 "whatsapp_result",
                 testLocalizedContext.getString(TestR.string.demo_template_wa_result_title),
                 testLocalizedContext.getString(TestR.string.demo_template_wa_result_body),
-                localizedContext.getString(R.string.anchor_step_outcome),
+                if (locale.language == "it") "Esito" else "Outcome",
             ),
             DemoTemplate(
                 "whatsapp_quote",
                 testLocalizedContext.getString(TestR.string.demo_template_wa_quote_title),
                 testLocalizedContext.getString(TestR.string.demo_template_wa_quote_body),
-                localizedContext.getString(R.string.anchor_step_quote),
+                if (locale.language == "it") "Preventivo" else "Quote",
             ),
             DemoTemplate(
                 "whatsapp_not_repairable",
-                localizedContext.getString(R.string.template_wa_not_repairable_title),
-                localizedContext.getString(R.string.template_wa_not_repairable_body),
-                localizedContext.getString(R.string.anchor_step_outcome),
+                testLocalizedContext.getString(TestR.string.demo_template_wa_not_repairable_title),
+                testLocalizedContext.getString(TestR.string.demo_template_wa_not_repairable_body),
+                if (locale.language == "it") "Esito" else "Outcome",
             ),
             DemoTemplate(
                 "whatsapp_repairing",
-                localizedContext.getString(R.string.template_wa_repairing_title),
-                localizedContext.getString(R.string.template_wa_repairing_body),
-                localizedContext.getString(R.string.anchor_step_repair),
+                testLocalizedContext.getString(TestR.string.demo_template_wa_repairing_title),
+                testLocalizedContext.getString(TestR.string.demo_template_wa_repairing_body),
+                if (locale.language == "it") "Riparazione" else "Repair",
             ),
             DemoTemplate(
                 "whatsapp_ready",
                 testLocalizedContext.getString(TestR.string.demo_template_wa_ready_title),
                 testLocalizedContext.getString(TestR.string.demo_template_wa_ready_body),
-                localizedContext.getString(R.string.anchor_step_pickup),
+                if (locale.language == "it") "Ritiro" else "Pickup",
             ),
             DemoTemplate(
                 "whatsapp_pdf_status",
                 testLocalizedContext.getString(TestR.string.demo_template_wa_pdf_title),
                 testLocalizedContext.getString(TestR.string.demo_template_wa_pdf_body),
-                localizedContext.getString(R.string.anchor_step_docs),
+                if (locale.language == "it") "Documenti" else "Docs",
             ),
             DemoTemplate(
                 "whatsapp_completed",
-                localizedContext.getString(R.string.template_wa_completed_title),
-                localizedContext.getString(R.string.template_wa_completed_body),
-                localizedContext.getString(R.string.anchor_step_closed),
+                testLocalizedContext.getString(TestR.string.demo_template_wa_completed_title),
+                testLocalizedContext.getString(TestR.string.demo_template_wa_completed_body),
+                if (locale.language == "it") "Chiuso" else "Closed",
             ),
         ).forEachIndexed { index, template ->
             database.messageTemplateDao().upsert(

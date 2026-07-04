@@ -59,8 +59,10 @@ Script master per l'aggiornamento massivo di tutto il materiale promozionale pub
 
 ### Operazioni eseguite:
 1. **Cleanup Totale**: Rimuove la cartella locale `asset/` e pulisce i file `.png` e `.mp4` nelle destinazioni pubbliche (`marketing/` e `landing/`).
-2. **Iterazione Profili**: Esegue in sequenza la generazione per una lista predefinita di profili (Pro, Demo, Social, Workflow).
-3. **Gestione Mista**: Per i profili che richiedono sia video che screenshot (es. `operator-intake`), gestisce l'esecuzione combinata: esegue prima la registrazione video (che lancia il test) e poi lo screenshot creator con `-SkipTest` per estrarre i frame.
+2. **Discovery Dinamico**: Scansiona `demo/assets/profiles/*.asset.json` per identificare tutti i profili da rigenerare.
+3. **Gestione Priorità**: Ordina l'esecuzione in base alle dipendenze (es. i profili social vengono elaborati dopo le campagne principali per riutilizzare lo stato del dispositivo).
+4. **Ottimizzazione Deployment**: Rileva se l'APK è già installato, saltando i passaggi di build/installazione ridondanti.
+5. **Mixed Management**: Per i profili che richiedono sia video che screenshot, gestisce l'esecuzione combinata: esegue prima la registrazione video (che lancia il test) e poi lo screenshot creator con `-SkipTest` per estrarre i frame.
 
 ---
 

@@ -23,12 +23,16 @@ import com.onlytechtake.repairapp.navigation.RepairAppNavHost
 
 class MainActivity : AppCompatActivity() {
     override fun attachBaseContext(newBase: Context) {
-        val forceEnglish = LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
-        if (forceEnglish) {
+        val isForceEnglish =
+            LocaleForcer.forceEnglish ||
+                System.getProperty("forceEnglish") == "true" ||
+                (newBase.applicationContext as? RepairAppApplication)?.let { false } ?: false // Cannot easily check intent here
+
+        if (isForceEnglish) {
             val locale = java.util.Locale.ENGLISH
             java.util.Locale.setDefault(locale)
             val config = android.content.res.Configuration(newBase.resources.configuration)
-            config.setLocale(locale)
+            config.setLocales(android.os.LocaleList(locale))
             super.attachBaseContext(newBase.createConfigurationContext(config))
         } else {
             super.attachBaseContext(newBase)
@@ -37,6 +41,21 @@ class MainActivity : AppCompatActivity() {
 
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
+        val forceEnglishFromIntent = intent.getBooleanExtra("forceEnglish", false)
+        if (forceEnglishFromIntent) {
+            LocaleForcer.forceEnglish = true
+        }
+
+        if (LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true") {
+            val locale = java.util.Locale.ENGLISH
+            java.util.Locale.setDefault(locale)
+            val config = resources.configuration
+            config.setLocales(android.os.LocaleList(locale))
+            config.setLayoutDirection(locale)
+            @Suppress("DEPRECATION")
+            resources.updateConfiguration(config, resources.displayMetrics)
+        }
+
         super.onCreate(savedInstanceState)
 
         val appContainer = (application as RepairAppApplication).appContainer
