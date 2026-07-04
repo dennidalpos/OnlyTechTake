@@ -24,9 +24,8 @@ import com.onlytechtake.repairapp.navigation.RepairAppNavHost
 class MainActivity : AppCompatActivity() {
     override fun attachBaseContext(newBase: Context) {
         val isForceEnglish =
-            LocaleForcer.forceEnglish ||
-                System.getProperty("forceEnglish") == "true" ||
-                (newBase.applicationContext as? RepairAppApplication)?.let { false } ?: false // Cannot easily check intent here
+            (LocaleForcer.forceEnglish) ||
+                (System.getProperty("forceEnglish") == "true")
 
         if (isForceEnglish) {
             val locale = java.util.Locale.ENGLISH

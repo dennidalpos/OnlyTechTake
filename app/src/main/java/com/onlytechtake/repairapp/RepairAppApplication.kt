@@ -14,7 +14,7 @@ class RepairAppApplication : Application() {
     lateinit var appContainer: AppContainer
 
     override fun attachBaseContext(base: Context) {
-        val forceEnglish = LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
+        val forceEnglish = (LocaleForcer.forceEnglish) || (System.getProperty("forceEnglish") == "true")
         if (forceEnglish) {
             val locale = java.util.Locale.ENGLISH
             java.util.Locale.setDefault(locale)

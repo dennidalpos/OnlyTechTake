@@ -80,17 +80,6 @@ class ProAssetRobot(
         )
     }
 
-    fun recordTechnicalVideo() {
-        waitForTag(RepairAppTestTags.IntakeMediaTakeVideoButton, scroll = true)
-        clickTag(RepairAppTestTags.IntakeMediaTakeVideoButton)
-        waitForTag(RepairAppTestTags.IntakeMediaCaptureVideoButton)
-        clickTag(RepairAppTestTags.IntakeMediaCaptureVideoButton)
-        narrativePause(2)
-        clickTag(RepairAppTestTags.IntakeMediaStopVideoButton)
-        waitForTagGone(RepairAppTestTags.IntakeMediaStopVideoButton)
-        composeRule.waitForIdle()
-    }
-
     fun closeOrder(note: String? = null) {
         val finalNote = note ?: getTestString(TestR.string.demo_closure_note_completed)
 
@@ -105,24 +94,6 @@ class ProAssetRobot(
         waitForText(R.string.dashboard_orders)
     }
 
-    fun expandNotes() {
-        waitForTag(RepairAppTestTags.OrderNotesSectionCard, scroll = true)
-        clickTag(RepairAppTestTags.OrderNotesSectionCard)
-        composeRule.waitForIdle()
-    }
-
-    fun expandPhotos() {
-        waitForTag(RepairAppTestTags.OrderPhotosSectionCard, scroll = true)
-        clickTag(RepairAppTestTags.OrderPhotosSectionCard)
-        composeRule.waitForIdle()
-    }
-
-    fun expandSignatures() {
-        waitForTag(RepairAppTestTags.OrderSignaturesCard, scroll = true)
-        clickTag(RepairAppTestTags.OrderSignaturesCard)
-        composeRule.waitForIdle()
-    }
-
     fun expandTimeline() {
         waitForTag(RepairAppTestTags.OrderTimelineSection, scroll = true)
         clickTag(RepairAppTestTags.OrderTimelineSection)
@@ -134,3 +105,4 @@ class ProAssetRobot(
         composeRule.waitForIdle()
     }
 }
+

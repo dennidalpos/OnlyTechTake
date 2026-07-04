@@ -120,7 +120,7 @@ class OperationalRobot(
             down(Offset(startX, startY))
             for (i in 1..20) {
                 val dx = i * (w * 0.03f)
-                val dy = if (i % 2 == 0) -h * 0.1f else h * 0.1f
+                val dy = if ((i % 2) == 0) -h * 0.1f else h * 0.1f
                 moveTo(Offset(startX + dx, startY + dy))
             }
             up()
@@ -312,7 +312,11 @@ class OperationalRobot(
         waitForText(R.string.anchor_step_intake)
         composeRule
             .onNode(
-                hasText(getString(R.string.anchor_step_intake), substring = true, ignoreCase = true) and
+                hasText(
+                    getString(R.string.anchor_step_intake),
+                    substring = true,
+                    ignoreCase = true,
+                ) and
                     hasText("Step 1", substring = true, ignoreCase = true),
             ).performScrollTo()
             .performClick()
@@ -335,53 +339,5 @@ class OperationalRobot(
         performSafeSwipeUp()
         nextCapture("backup-security-logs")
     }
-
-    fun setupWizardFlow(outputDir: File) {
-        var step = 1
-
-        fun nextCapture(name: String) = capture(outputDir, "${String.format("%02d", step++)}-$name.png")
-
-        // 1. First Setup (Admin)
-        waitForTag(RepairAppTestTags.AuthDisplayNameField)
-        typeTag(
-            RepairAppTestTags.AuthDisplayNameField,
-            getTestString(TestR.string.demo_admin_name_default),
-            fast = true,
-        )
-        typeTag(RepairAppTestTags.AuthUsernameField, "admin", fast = true)
-        typeTag(RepairAppTestTags.AuthPasswordField, "AdminPass123!", fast = true)
-        typeTag(RepairAppTestTags.AuthConfirmPasswordField, "AdminPass123!", fast = true)
-        nextCapture("setup-admin")
-        clickTag(RepairAppTestTags.AuthSubmitButton)
-
-        // 2. Owner Info (Wizard)
-        waitForTag(RepairAppTestTags.OwnerFieldName)
-        typeTag(
-            RepairAppTestTags.OwnerFieldName,
-            getTestString(TestR.string.demo_shop_name_default),
-            fast = true,
-        )
-        typeTag(
-            RepairAppTestTags.OwnerFieldVat,
-            getTestString(TestR.string.demo_shop_vat_default),
-            fast = true,
-        )
-        typeTag(
-            RepairAppTestTags.OwnerFieldAddress,
-            getTestString(TestR.string.demo_shop_address_default),
-            fast = true,
-        )
-        typeTag(
-            RepairAppTestTags.OwnerFieldEmail,
-            getTestString(TestR.string.demo_shop_email_default),
-            fast = true,
-        )
-        typeTag(
-            RepairAppTestTags.OwnerFieldPhone,
-            getTestString(TestR.string.demo_shop_phone_default),
-            fast = true,
-        )
-        nextCapture("setup-owner")
-        clickText(R.string.action_confirm)
-    }
 }
+

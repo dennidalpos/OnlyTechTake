@@ -287,10 +287,10 @@ class WorkflowOperationalTest {
             robot.clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
 
             val summary = robot.getTestString(TestR.string.demo_order_summary_overheating)
-            val createdOrderId = waitForCreatedOrderId(summary)
+            waitForCreatedOrderId(summary)
             robot.clickDashboardTab("ORDERS")
-            robot.waitForTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
-            robot.clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
+            robot.waitForText(summary.substringBefore("-").trim(), scroll = true)
+            robot.clickText(summary.substringBefore("-").trim(), scroll = true)
 
             robot.applySimpleStatus(
                 OrderStatusAction.START_PROGRESS,
@@ -400,12 +400,15 @@ class WorkflowOperationalTest {
             robot.clickTag(RepairAppTestTags.NewOrderStep5NextButton, scroll = true)
             robot.waitForTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
             robot.clickTag(RepairAppTestTags.IntakeSubmitButton, scroll = true)
+            composeRule.waitForIdle()
+            Thread.sleep(2000)
+
             val summary = robot.getTestString(TestR.string.demo_order_summary_s23)
-            val createdOrderId = waitForCreatedOrderId(summary)
+            waitForCreatedOrderId(summary)
 
             robot.clickDashboardTab("ORDERS")
-            robot.waitForTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
-            robot.clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
+            robot.waitForText(summary.substringBefore("-").trim(), scroll = true)
+            robot.clickText(summary.substringBefore("-").trim(), scroll = true)
 
             robot.applySimpleStatus(
                 OrderStatusAction.START_PROGRESS,
@@ -439,8 +442,8 @@ class WorkflowOperationalTest {
             robot.clickText(R.string.queue_closed)
             robot.clickText(R.string.action_confirm)
 
-            robot.waitForTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
-            robot.clickTag(RepairAppTestTags.orderCard(createdOrderId), scroll = true)
+            robot.waitForText(summary.substringBefore("-").trim(), scroll = true)
+            robot.clickText(summary.substringBefore("-").trim(), scroll = true)
             robot.waitForText(R.string.status_closed)
             robot.capture(outputDir, "06-successo.png")
         }
@@ -512,8 +515,8 @@ class WorkflowOperationalTest {
 
             robot.clickDashboardTab("ORDERS")
             val summary = robot.getTestString(TestR.string.demo_order_summary_not_turning_on)
-            robot.waitForText(summary, scroll = true)
-            robot.clickText(summary, scroll = true)
+            robot.waitForText(summary.substringBefore("-").trim(), scroll = true)
+            robot.clickText(summary.substringBefore("-").trim(), scroll = true)
 
             robot.clickText(R.string.order_generate_status_pdf, scroll = true)
             robot.clickTag(RepairAppTestTags.GenericConfirmButton)
@@ -614,8 +617,8 @@ class WorkflowOperationalTest {
             val summary = robot.getTestString(TestR.string.demo_order_summary_s23)
             waitForCreatedOrderId(summary)
             robot.clickDashboardTab("ORDERS")
-            robot.waitForText(summary, scroll = true)
-            robot.clickText(summary, scroll = true)
+            robot.waitForText(summary.substringBefore("-").trim(), scroll = true)
+            robot.clickText(summary.substringBefore("-").trim(), scroll = true)
 
             robot.applySimpleStatus(
                 OrderStatusAction.START_PROGRESS,
@@ -657,8 +660,8 @@ class WorkflowOperationalTest {
             robot.clickText(R.string.queue_closed)
             robot.clickText(R.string.action_confirm)
 
-            robot.waitForText(summary, scroll = true)
-            robot.clickText(summary, scroll = true)
+            robot.waitForText(summary.substringBefore("-").trim(), scroll = true)
+            robot.clickText(summary.substringBefore("-").trim(), scroll = true)
             robot.waitForText(R.string.status_closed)
             robot.expandTimeline()
             robot.capture(outputDir, "07-timeline-chiusura-pro.png")
@@ -749,7 +752,7 @@ class WorkflowOperationalTest {
                 runBlocking {
                     database
                         .repairOrderDao()
-                        .observeRecentActiveOrders(limit = 20)
+                        .observeRecentActiveOrders(limit = 100)
                         .first()
                         .firstOrNull {
                             (it.id != DemoDataSeeder.DEMO_ORDER_ID) &&

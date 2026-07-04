@@ -69,6 +69,10 @@ object DemoDataSeeder {
         RepairAppDatabase.closeInstance()
         context.deleteDatabase(RepairAppDatabase.DATABASE_NAME)
         AuthPreferences(context).clear()
+        // Clear orders preferences to avoid stale filters
+        val ordersPrefsFile = File(context.filesDir.parentFile, "datastore/orders_preferences.preferences_pb")
+        if (ordersPrefsFile.exists()) ordersPrefsFile.delete()
+
         val ownerPreferences = OwnerPreferences(context)
         ownerPreferences.updateOwnerInfo(
             OwnerInfo(
@@ -91,7 +95,7 @@ object DemoDataSeeder {
             com.onlytechtake.repairapp.core.orders
                 .OrderNumberGenerator()
 
-        val now = 1_780_830_000_000L
+        val now = System.currentTimeMillis() - (7 * 24 * 3600 * 1000L) // 7 days ago to ensure real-time orders are newer
         val yearPrefix = orderNumberGenerator.yearPrefix(now)
         val passwordHasher = PasswordHasher()
         val adminHash = passwordHasher.hash(DEMO_PASSWORD.toCharArray())

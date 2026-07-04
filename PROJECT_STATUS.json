@@ -1,8 +1,8 @@
 {
   "project_name": "OnlyTechTake",
   "version": "1.0.0",
-  "status": "Rigenerazione completa degli asset media (Brand, Screenshot, Video) completata con successo per le lingue EN e IT. Identificata e risolta una regressione in BaseAssetRobot che causava NPE in caso di fallimento della cattura screenshot. Verificata la build e i test su device fisico. Eseguito Spotless e Lint per mantenere la qualit\u00e0 del codice.",
-  "last_updated": "2026-07-04T19:00:00Z",
+  "status": "Allineate le varianti (Demo, Showcase, Full) con le ultime modifiche alle stringhe e alla configurazione. Risolto un problema di ordinamento nei test demo impostando i timestamp dei dati seed nel passato, garantendo che gli ordini creati in tempo reale siano i pi\u00f9 recenti. Ottimizzata la ricerca degli ordini nei test instrumentati usando waitForText.",
+  "last_updated": "2026-07-04T19:30:00Z",
   "backlog": [
     {
       "priority": "HIGH",
@@ -12,3 +12,4 @@
   ],
   "completed_recently": []
 }
+

@@ -35,7 +35,8 @@ abstract class BaseAssetRobot(
     fun getString(
         @androidx.annotation.StringRes resId: Int,
     ): String {
-        val forceEnglish = LocaleForcer.forceEnglish || (System.getProperty("forceEnglish") == "true")
+        val forceEnglish =
+            LocaleForcer.forceEnglish || (System.getProperty("forceEnglish") == "true")
         return if (forceEnglish) {
             val config = android.content.res.Configuration(context.resources.configuration)
             config.setLocales(android.os.LocaleList(java.util.Locale.US))
@@ -513,7 +514,10 @@ abstract class BaseAssetRobot(
         pauseForScreenshot()
         val bitmap = InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot()
         if (bitmap == null) {
-            android.util.Log.e("BaseAssetRobot", "Failed to take screenshot: $fileName (bitmap is null)")
+            android.util.Log.e(
+                "BaseAssetRobot",
+                "Failed to take screenshot: $fileName (bitmap is null)",
+            )
             return
         }
         FileOutputStream(File(outputDir, fileName)).use { output ->
