@@ -204,7 +204,8 @@ abstract class BaseAssetRobot(
         while (System.currentTimeMillis() < deadline) {
             val displayed =
                 runCatching {
-                    val nodes = composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree)
+                    val nodes =
+                        composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree)
                     val count = nodes.fetchSemanticsNodes().size
                     if (count > 0) {
                         val node = nodes.onFirst()
@@ -225,7 +226,8 @@ abstract class BaseAssetRobot(
             Thread.sleep(TAG_POLL_MILLIS)
             attempts++
         }
-        composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).onFirst().assertIsDisplayed()
+        composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).onFirst()
+            .assertIsDisplayed()
     }
 
     fun waitForTagExists(
@@ -276,7 +278,12 @@ abstract class BaseAssetRobot(
             .fetchSemanticsNodes()
             .isNotEmpty() ||
             composeRule
-                .onAllNodesWithText(text, substring = true, ignoreCase = true, useUnmergedTree = true)
+                .onAllNodesWithText(
+                    text,
+                    substring = true,
+                    ignoreCase = true,
+                    useUnmergedTree = true
+                )
                 .fetchSemanticsNodes()
                 .isNotEmpty()
 
@@ -304,7 +311,12 @@ abstract class BaseAssetRobot(
                     } catch (_: Throwable) {
                         try {
                             composeRule
-                                .onNodeWithText(text, substring = true, ignoreCase = true, useUnmergedTree = true)
+                                .onNodeWithText(
+                                    text,
+                                    substring = true,
+                                    ignoreCase = true,
+                                    useUnmergedTree = true
+                                )
                                 .performScrollTo()
                             composeRule.waitForIdle()
                             if (isTextDisplayed(text)) {
@@ -327,7 +339,12 @@ abstract class BaseAssetRobot(
                     .assertExists()
             } catch (e: Throwable) {
                 composeRule
-                    .onNodeWithText(text, substring = true, ignoreCase = true, useUnmergedTree = true)
+                    .onNodeWithText(
+                        text,
+                        substring = true,
+                        ignoreCase = true,
+                        useUnmergedTree = true
+                    )
                     .assertExists()
             }
         }
@@ -574,7 +591,8 @@ abstract class BaseAssetRobot(
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean =
+        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     companion object {
         const val WAIT_TIMEOUT_MILLIS = 30_000L

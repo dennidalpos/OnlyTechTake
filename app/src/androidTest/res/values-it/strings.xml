@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="demo_admin_display_name">Admin Demo</string>
     <string name="demo_operator_display_name">Operatore Banco</string>
     <string name="demo_customer_name">Cliente %d</string>

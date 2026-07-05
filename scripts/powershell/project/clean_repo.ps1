@@ -43,7 +43,8 @@ $ErrorActionPreference = 'Stop'
 
 $script:Failures = New-Object System.Collections.Generic.List[string]
 $script:ExcludedRelativePaths = @(
-    'reports\demo-assets'
+    'reports\demo-assets',
+    'landing\build'
 )
 
 function Write-Section {
