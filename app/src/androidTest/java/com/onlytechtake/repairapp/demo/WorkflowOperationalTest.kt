@@ -691,21 +691,19 @@ class WorkflowOperationalTest {
             robot.loginDemo(DemoDataSeeder.DEMO_ADMIN_USERNAME)
 
             robot.waitForTag(RepairAppTestTags.dashboardTab("HOME"))
+            robot.waitForText(robot.getTestString(TestR.string.demo_order_title_1))
             robot.capture(outputDir, "01-dashboard-demo.png")
 
             robot.clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
             robot.waitForTag("quick_actions_screen")
+            val limitText = if (localeRule.locale.language == "it") "raggiunto" else "reached"
+            robot.waitForText(limitText, scroll = true)
             robot.capture(outputDir, "02-nuova-commessa-demo.png")
 
             robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
+            composeRule.waitForIdle()
             robot.pauseForDemo()
-            robot.waitForText(
-                robot
-                    .getTestQuantityString(
-                        TestR.plurals.demo_error_order_limit,
-                        com.onlytechtake.repairapp.BuildConfig.MAX_ORDERS,
-                    ).substring(0, 10),
-            )
+            robot.waitForText(limitText, scroll = true)
             robot.capture(outputDir, "03-limite-demo.png")
 
             robot.clickDashboardTab("HOME")
@@ -731,15 +729,12 @@ class WorkflowOperationalTest {
 
             robot.clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
             robot.waitForTag("quick_actions_screen")
+            val limitText = if (localeRule.locale.language == "it") "raggiunto" else "reached"
+            robot.waitForText(limitText, scroll = true)
             robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
+            composeRule.waitForIdle()
             robot.pauseForDemo()
-            robot.waitForText(
-                robot
-                    .getTestQuantityString(
-                        TestR.plurals.demo_error_order_limit,
-                        com.onlytechtake.repairapp.BuildConfig.MAX_ORDERS,
-                    ).substring(0, 10),
-            )
+            robot.waitForText(limitText, scroll = true)
             robot.capture(outputDir, "02-reel-demo-limit.png")
         }
     }

@@ -268,7 +268,11 @@ abstract class BaseAssetRobot(
         composeRule
             .onAllNodesWithText(text, substring = true, ignoreCase = true)
             .fetchSemanticsNodes()
-            .isNotEmpty()
+            .isNotEmpty() ||
+            composeRule
+                .onAllNodesWithText(text, substring = true, ignoreCase = true, useUnmergedTree = true)
+                .fetchSemanticsNodes()
+                .isNotEmpty()
 
     fun waitForText(
         text: String,
@@ -292,7 +296,18 @@ abstract class BaseAssetRobot(
                             break
                         }
                     } catch (_: Throwable) {
-                        if ((attempts % 15) < 10) performSafeSwipeUp() else performSafeSwipeDown()
+                        try {
+                            composeRule
+                                .onNodeWithText(text, substring = true, ignoreCase = true, useUnmergedTree = true)
+                                .performScrollTo()
+                            composeRule.waitForIdle()
+                            if (isTextDisplayed(text)) {
+                                found = true
+                                break
+                            }
+                        } catch (_: Throwable) {
+                            if ((attempts % 15) < 10) performSafeSwipeUp() else performSafeSwipeDown()
+                        }
                     }
                 }
             }
@@ -300,9 +315,15 @@ abstract class BaseAssetRobot(
             attempts++
         }
         if (!found) {
-            composeRule
-                .onNodeWithText(text, substring = true, ignoreCase = true)
-                .assertExists()
+            try {
+                composeRule
+                    .onNodeWithText(text, substring = true, ignoreCase = true)
+                    .assertExists()
+            } catch (e: Throwable) {
+                composeRule
+                    .onNodeWithText(text, substring = true, ignoreCase = true, useUnmergedTree = true)
+                    .assertExists()
+            }
         }
     }
 

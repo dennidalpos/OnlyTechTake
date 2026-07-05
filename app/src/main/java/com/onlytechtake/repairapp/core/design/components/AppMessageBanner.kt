@@ -61,7 +61,7 @@ fun AppMessageBanner(
     message: String,
     type: BannerType,
     modifier: Modifier = Modifier,
-    animate: Boolean = true,
+    visible: Boolean = true,
     action: (@Composable () -> Unit)? = null,
 ) {
     val colors =
@@ -83,7 +83,7 @@ fun AppMessageBanner(
             BannerType.Warning -> {
                 CardDefaults.cardColors(
                     containerColor = MaterialTheme.repairColors.warningContainer,
-                    contentColor = MaterialTheme.repairColors.onWarningContainer,
+                    contentColor = MaterialTheme.repairColors.onSuccessContainer,
                 )
             }
 
@@ -103,15 +103,8 @@ fun AppMessageBanner(
             BannerType.Error -> Icons.Default.Error
         }
 
-    var isVisible by remember { mutableStateOf(!animate) }
-    LaunchedEffect(Unit) {
-        if (animate) {
-            isVisible = true
-        }
-    }
-
     AnimatedVisibility(
-        visible = isVisible,
+        visible = visible,
         enter = fadeIn() + expandVertically(),
         exit = fadeOut() + shrinkVertically(),
         modifier = modifier.fillMaxWidth(),
@@ -160,7 +153,7 @@ fun DismissibleAppMessageBanner(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     autoDismissMillis: Long =
-        if (System.getProperty("forceEnglish") == "true") {
+        if (com.onlytechtake.repairapp.core.utils.LocaleForcer.forceEnglish) {
             0L // Disable auto-dismiss during tests
         } else {
             if (type == BannerType.Error) 8_000L else 4_000L
@@ -182,7 +175,7 @@ fun DismissibleAppMessageBanner(
         message = message,
         type = type,
         modifier = modifier,
-        animate = isVisible,
+        visible = isVisible,
         action = {
             IconButton(
                 onClick = {
