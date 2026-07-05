@@ -3,7 +3,7 @@
 </p>
 
 # OnlyTechTake
-**Ripara, traccia, aggiorna.** | *Repair, track, update.*
+**Gestisci, traccia, documenta.** | *Manage, track, document.*
 
 <p align="center">
   <img src="marketing/registered-assets/brand/identity/onlytechtake-logo.svg" alt="OnlyTechTake Logo" width="400">

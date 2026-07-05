@@ -1,7 +1,6 @@
 package com.onlytechtake.repairapp.core.design
 
 import android.app.Activity
-import android.content.res.Configuration
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.WindowCompat
+import com.onlytechtake.repairapp.core.utils.LocaleHelper
 
 private val Charcoal = Color(0xFF0D0D0D)
 private val Teal = Color(0xFF00B6B0)
@@ -184,30 +184,15 @@ private val DarkColors =
         outlineVariant = Color(0xFF3F4948),
     )
 
-object LocaleForcer {
-    var forceEnglish: Boolean = false
-}
-
 @Composable
 fun RepairAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
-    val forceEnglish = LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
-
-    if (forceEnglish) {
-        val configuration = androidx.compose.ui.platform.LocalConfiguration.current
-        val resources = androidx.compose.ui.platform.LocalResources.current
-        androidx.compose.runtime.remember(configuration) {
-            if (configuration.locales[0] != java.util.Locale.ENGLISH) {
-                val locale = java.util.Locale.ENGLISH
-                java.util.Locale.setDefault(locale)
-                val newConfig = Configuration(configuration)
-                @Suppress("AppBundleLocaleChanges")
-                newConfig.setLocale(locale)
-                @Suppress("DEPRECATION")
-                resources.updateConfiguration(newConfig, resources.displayMetrics)
-            }
+    if (LocaleHelper.isEnglishForced()) {
+        val context = androidx.compose.ui.platform.LocalContext.current
+        androidx.compose.runtime.remember(context) {
+            LocaleHelper.applyLocaleLegacy(context)
             true
         }
     }

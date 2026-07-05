@@ -37,7 +37,7 @@ class LocaleTestRule(
 
                 val isForceEnglish = locale.language == "en"
                 System.setProperty("forceEnglish", isForceEnglish.toString())
-                com.onlytechtake.repairapp.core.design.LocaleForcer.forceEnglish = isForceEnglish
+                com.onlytechtake.repairapp.core.utils.LocaleForcer.forceEnglish = isForceEnglish
                 Locale.setDefault(locale)
 
                 updateContextLocale(context, locale)
@@ -48,7 +48,7 @@ class LocaleTestRule(
                     base.evaluate()
                 } finally {
                     System.clearProperty("forceEnglish")
-                    com.onlytechtake.repairapp.core.design.LocaleForcer.forceEnglish = false
+                    com.onlytechtake.repairapp.core.utils.LocaleForcer.forceEnglish = false
                     deviceLocale?.let {
                         Locale.setDefault(it)
                         updateContextLocale(context, it)

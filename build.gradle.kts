@@ -59,13 +59,6 @@ subprojects {
                     }
                 }
 
-                "com.google.android.material" -> {
-                    if (requested.name == "material") {
-                        useVersion("1.14.0")
-                        because("Consistent material version across all configurations")
-                    }
-                }
-
                 "com.google.protobuf" -> {
                     if (requested.name.startsWith("protobuf-")) {
                         useVersion("4.35.1")

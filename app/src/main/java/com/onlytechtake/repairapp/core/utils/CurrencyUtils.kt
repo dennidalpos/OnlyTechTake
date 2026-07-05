@@ -23,5 +23,5 @@ fun parseEuroCentsOrNull(value: String): Long? {
             ?.padEnd(2, '0')
             ?.toLongOrNull()
             ?: 0L
-    return euros * 100L + cents
+    return (euros * 100L) + cents
 }

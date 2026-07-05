@@ -2,9 +2,9 @@ package com.onlytechtake.repairapp
 
 import android.app.Application
 import android.content.Context
-import com.onlytechtake.repairapp.core.design.LocaleForcer
 import com.onlytechtake.repairapp.core.di.AppContainer
 import com.onlytechtake.repairapp.core.di.DefaultAppContainer
+import com.onlytechtake.repairapp.core.utils.LocaleHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -14,16 +14,7 @@ class RepairAppApplication : Application() {
     lateinit var appContainer: AppContainer
 
     override fun attachBaseContext(base: Context) {
-        val forceEnglish = (LocaleForcer.forceEnglish) || (System.getProperty("forceEnglish") == "true")
-        if (forceEnglish) {
-            val locale = java.util.Locale.ENGLISH
-            java.util.Locale.setDefault(locale)
-            val config = android.content.res.Configuration(base.resources.configuration)
-            config.setLocale(locale)
-            super.attachBaseContext(base.createConfigurationContext(config))
-        } else {
-            super.attachBaseContext(base)
-        }
+        super.attachBaseContext(LocaleHelper.applyLocale(base))
     }
 
     override fun onCreate() {

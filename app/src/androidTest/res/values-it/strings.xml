@@ -125,7 +125,6 @@
 
     <plurals name="demo_error_order_limit">
         <item quantity="one">Limite Demo raggiunto. La versione Demo consente %1$d sola commessa e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
-        <item quantity="many" tools:ignore="UnusedQuantity">Limite Demo raggiunto. La versione Demo consente %1$d commesse e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
         <item quantity="other">Limite Demo raggiunto. La versione Demo consente %1$d commesse e l\'uso solo con account admin. Per continuare senza limiti, attiva la versione Full.</item>
     </plurals>
 </resources>

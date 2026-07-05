@@ -1,8 +1,8 @@
 {
   "project_name": "OnlyTechTake",
-  "version": "1.0.0",
-  "status": "Allineate le varianti (Demo, Showcase, Full) con le ultime modifiche alle stringhe e alla configurazione. Risolto un problema di ordinamento nei test demo impostando i timestamp dei dati seed nel passato, garantendo che gli ordini creati in tempo reale siano i pi\u00f9 recenti. Ottimizzata la ricerca degli ordini nei test instrumentati usando waitForText.",
-  "last_updated": "2026-07-04T19:30:00Z",
+  "version": "1.0.1",
+  "status": "Allineate tutte le varianti con le ultime modifiche strutturali. Risolto errore di build causato dalla rimozione della libreria Material (XML) aggiornando gli stili in styles.xml (v27, v29 e base) per utilizzare Theme.AppCompat. Rigenerati i file di lock delle dipendenze. Allineata la stringa status_repairing in inglese a 'Intervention' per coerenza con la versione italiana e i passi del workflow. Build e test completati con successo per tutti i flavor (Full, Demo, Showcase).",
+  "last_updated": "2026-07-05T03:15:00Z",
   "backlog": [
     {
       "priority": "HIGH",
@@ -12,4 +12,3 @@
   ],
   "completed_recently": []
 }
-

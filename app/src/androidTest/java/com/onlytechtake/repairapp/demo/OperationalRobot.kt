@@ -340,4 +340,3 @@ class OperationalRobot(
         nextCapture("backup-security-logs")
     }
 }
-

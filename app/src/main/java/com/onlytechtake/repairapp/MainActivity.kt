@@ -17,25 +17,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.onlytechtake.repairapp.core.design.LocaleForcer
 import com.onlytechtake.repairapp.core.design.RepairAppTheme
+import com.onlytechtake.repairapp.core.utils.LocaleForcer
+import com.onlytechtake.repairapp.core.utils.LocaleHelper
 import com.onlytechtake.repairapp.navigation.RepairAppNavHost
 
 class MainActivity : AppCompatActivity() {
     override fun attachBaseContext(newBase: Context) {
-        val isForceEnglish =
-            (LocaleForcer.forceEnglish) ||
-                (System.getProperty("forceEnglish") == "true")
-
-        if (isForceEnglish) {
-            val locale = java.util.Locale.ENGLISH
-            java.util.Locale.setDefault(locale)
-            val config = android.content.res.Configuration(newBase.resources.configuration)
-            config.setLocales(android.os.LocaleList(locale))
-            super.attachBaseContext(newBase.createConfigurationContext(config))
-        } else {
-            super.attachBaseContext(newBase)
-        }
+        super.attachBaseContext(LocaleHelper.applyLocale(newBase))
     }
 
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -45,15 +34,7 @@ class MainActivity : AppCompatActivity() {
             LocaleForcer.forceEnglish = true
         }
 
-        if (LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true") {
-            val locale = java.util.Locale.ENGLISH
-            java.util.Locale.setDefault(locale)
-            val config = resources.configuration
-            config.setLocales(android.os.LocaleList(locale))
-            config.setLayoutDirection(locale)
-            @Suppress("DEPRECATION")
-            resources.updateConfiguration(config, resources.displayMetrics)
-        }
+        LocaleHelper.applyLocaleLegacy(this)
 
         super.onCreate(savedInstanceState)
 

@@ -226,7 +226,7 @@
     <string name="error_db_missing_in_backup">Database mancante nel backup</string>
 
     <string name="common_cat_smartphone">Smartphone</string>
-    <string name="common_cat_smartphone_desc">Riparazione telefoni cellulari</string>
+    <string name="common_cat_smartphone_desc">Assistenza dispositivi mobili</string>
     <string name="common_cat_apple">Apple</string>
     <string name="common_cat_apple_desc">iPhone, iPad, Watch</string>
     <string name="common_cat_iphone">iPhone</string>
@@ -268,7 +268,7 @@
     <string name="common_cat_ipad_desc">Tablet Apple</string>
 
     <string name="common_cat_pc">Computer &amp; Laptop</string>
-    <string name="common_cat_pc_desc">Riparazioni hardware e software PC</string>
+    <string name="common_cat_pc_desc">Servizi tecnici hardware e software</string>
     <string name="common_cat_notebook">Notebook</string>
     <string name="common_cat_notebook_desc">Portatili e Ultrabook</string>
     <string name="common_cat_gaming">Gaming Laptop</string>
@@ -767,7 +767,7 @@
     <string name="config_hub_about_subtitle">Versione e contatti dell\'app</string>
     <string name="about_tooltip">Dettagli sulla versione dell\'applicazione e contatti per lo sviluppo.</string>
     <string name="about_app_name">OnlyTechTake</string>
-    <string name="app_slogan">Ripara, traccia, aggiorna.</string>
+    <string name="app_slogan">Gestisci, traccia, documenta.</string>
     <string name="about_version">Versione: %1$s (Baseline %2$d)</string>
     <string name="about_build_type">Build Type: %s</string>
     <string name="about_links_title">Link e Privacy</string>

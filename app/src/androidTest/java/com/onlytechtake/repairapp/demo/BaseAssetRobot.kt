@@ -23,8 +23,8 @@ import androidx.compose.ui.test.swipeUp
 import androidx.test.espresso.Espresso
 import androidx.test.platform.app.InstrumentationRegistry
 import com.onlytechtake.repairapp.R
-import com.onlytechtake.repairapp.core.design.LocaleForcer
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
+import com.onlytechtake.repairapp.core.utils.LocaleForcer
 import java.io.File
 import java.io.FileOutputStream
 

@@ -3,6 +3,7 @@ package com.onlytechtake.repairapp.features.workspace
 import android.content.Context
 import androidx.annotation.StringRes
 import com.onlytechtake.repairapp.R
+import com.onlytechtake.repairapp.core.utils.LocaleHelper
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import kotlinx.coroutines.CoroutineDispatcher
@@ -69,17 +70,5 @@ internal class AuthenticatedActionRunner(
         }
     }
 
-    private fun getLocalizedContext(baseContext: Context): Context {
-        val forceEnglish =
-            com.onlytechtake.repairapp.core.design.LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
-        if (!forceEnglish) return baseContext
-
-        val locale = java.util.Locale.ENGLISH
-        val configuration = baseContext.resources.configuration
-        if (configuration.locales[0].language == locale.language) return baseContext
-
-        val localizedConfig = android.content.res.Configuration(configuration)
-        localizedConfig.setLocale(locale)
-        return baseContext.createConfigurationContext(localizedConfig)
-    }
+    private fun getLocalizedContext(baseContext: Context): Context = LocaleHelper.applyLocale(baseContext)
 }
