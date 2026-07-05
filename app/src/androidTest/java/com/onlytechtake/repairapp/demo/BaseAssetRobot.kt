@@ -204,13 +204,19 @@ abstract class BaseAssetRobot(
         while (System.currentTimeMillis() < deadline) {
             val displayed =
                 runCatching {
-                    val node = composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree)
-                    if (scroll) {
-                        runCatching { node.performScrollTo() }
-                        composeRule.waitForIdle()
+                    val nodes = composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree)
+                    val count = nodes.fetchSemanticsNodes().size
+                    if (count > 0) {
+                        val node = nodes.onFirst()
+                        if (scroll) {
+                            runCatching { node.performScrollTo() }
+                            composeRule.waitForIdle()
+                        }
+                        node.assertIsDisplayed()
+                        true
+                    } else {
+                        false
                     }
-                    node.assertIsDisplayed()
-                    true
                 }.getOrDefault(defaultValue = false)
             if (displayed) return
             if (scroll) {
@@ -219,7 +225,7 @@ abstract class BaseAssetRobot(
             Thread.sleep(TAG_POLL_MILLIS)
             attempts++
         }
-        composeRule.onNodeWithTag(tag, useUnmergedTree = useUnmergedTree).assertIsDisplayed()
+        composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).onFirst().assertIsDisplayed()
     }
 
     fun waitForTagExists(

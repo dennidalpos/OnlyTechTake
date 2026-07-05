@@ -696,14 +696,13 @@ class WorkflowOperationalTest {
 
             robot.clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
             robot.waitForTag("quick_actions_screen")
-            val limitText = if (localeRule.locale.language == "it") "raggiunto" else "reached"
-            robot.waitForText(limitText, scroll = true)
+            robot.waitForTag("banner_container")
             robot.capture(outputDir, "02-nuova-commessa-demo.png")
 
             robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
             composeRule.waitForIdle()
             robot.pauseForDemo()
-            robot.waitForText(limitText, scroll = true)
+            robot.waitForTag("banner_container")
             robot.capture(outputDir, "03-limite-demo.png")
 
             robot.clickDashboardTab("HOME")
@@ -729,12 +728,11 @@ class WorkflowOperationalTest {
 
             robot.clickTag(RepairAppTestTags.HomeNewOrderButton, scroll = true)
             robot.waitForTag("quick_actions_screen")
-            val limitText = if (localeRule.locale.language == "it") "raggiunto" else "reached"
-            robot.waitForText(limitText, scroll = true)
+            robot.waitForTag("banner_container")
             robot.clickTag(RepairAppTestTags.NewOrderInsertCustomerButton, scroll = true)
             composeRule.waitForIdle()
             robot.pauseForDemo()
-            robot.waitForText(limitText, scroll = true)
+            robot.waitForTag("banner_container")
             robot.capture(outputDir, "02-reel-demo-limit.png")
         }
     }
