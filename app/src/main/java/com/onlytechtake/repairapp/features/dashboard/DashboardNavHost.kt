@@ -6,10 +6,9 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.onlytechtake.repairapp.core.di.LocalAppContainer
 import com.onlytechtake.repairapp.data.local.entities.OrderStatus
 import com.onlytechtake.repairapp.domain.models.AppSummary
@@ -42,10 +41,10 @@ fun DashboardNavHost(
 
     NavHost(
         navController = navController,
-        startDestination = DashboardRoutes.HOME,
+        startDestination = DashboardNavRoute.Home,
         modifier = modifier,
     ) {
-        composable(DashboardRoutes.HOME) {
+        composable<DashboardNavRoute.Home> {
             val homeViewModel: HomeViewModel =
                 viewModel(
                     factory =
@@ -59,7 +58,7 @@ fun DashboardNavHost(
             HomePanel(
                 summary = summary,
                 viewModel = homeViewModel,
-                onNewOrder = { navController.navigate(DashboardRoutes.NEW_ORDER) },
+                onNewOrder = { navController.navigate(DashboardNavRoute.NewOrder) },
             ) { filter ->
                 val statusArg =
                     filter.status?.name
@@ -68,7 +67,7 @@ fun DashboardNavHost(
                     if (filter.statuses.size > 1) filter.statuses.map { it.name } else null
 
                 navController.navigate(
-                    DashboardRoutes.orders(
+                    DashboardNavRoute.Orders(
                         status = statusArg,
                         statuses = statusesArg,
                         customerId = filter.customerId,
@@ -80,7 +79,7 @@ fun DashboardNavHost(
                 }
             }
         }
-        composable(DashboardRoutes.NEW_ORDER) {
+        composable<DashboardNavRoute.NewOrder> {
             val newOrderViewModel: NewOrderViewModel =
                 viewModel(
                     factory =
@@ -101,15 +100,15 @@ fun DashboardNavHost(
                 sharedViewModel = sharedViewModel,
                 onOpenConfig = {
                     navController.navigate(
-                        DashboardRoutes.settings(
-                            "CATEGORIES",
+                        DashboardNavRoute.Settings(
+                            section = "CATEGORIES",
                             fromIntake = true,
                         ),
                     )
                 },
             ) { navController.popBackStack() }
         }
-        composable(DashboardRoutes.CUSTOMERS) {
+        composable<DashboardNavRoute.Customers> {
             val customersViewModel: CustomersViewModel =
                 viewModel(
                     factory =
@@ -126,33 +125,11 @@ fun DashboardNavHost(
                 viewModel = customersViewModel,
                 sharedViewModel = sharedViewModel,
             ) { orderId ->
-                navController.navigate(DashboardRoutes.orderDetail(orderId))
+                navController.navigate(DashboardNavRoute.OrderDetail(orderId))
             }
         }
-        composable(
-            route = DashboardRoutes.ORDERS,
-            arguments =
-                listOf(
-                    navArgument("status") {
-                        type = NavType.StringType
-                        nullable = true
-                        defaultValue = null
-                    },
-                    navArgument("statuses") {
-                        type = NavType.StringType
-                        nullable = true
-                        defaultValue = null
-                    },
-                    navArgument("customerId") {
-                        type = NavType.StringType
-                        nullable = true
-                        defaultValue = null
-                    },
-                ),
-        ) { backStackEntry ->
-            val statusStr = backStackEntry.arguments?.getString("status")
-            val statusesStr = backStackEntry.arguments?.getString("statuses")
-            val customerId = backStackEntry.arguments?.getString("customerId")
+        composable<DashboardNavRoute.Orders> { backStackEntry ->
+            val route = backStackEntry.toRoute<DashboardNavRoute.Orders>()
 
             val ordersViewModel: OrdersViewModel =
                 viewModel(
@@ -166,14 +143,13 @@ fun DashboardNavHost(
                         ),
                 )
 
-            LaunchedEffect(statusStr, statusesStr, customerId) {
+            LaunchedEffect(route) {
                 val status =
-                    statusStr?.let {
+                    route.status?.let {
                         runCatching { OrderStatus.valueOf(it.uppercase()) }.getOrNull()
                     }
                 val statuses =
-                    statusesStr
-                        ?.split(",")
+                    route.statuses
                         ?.asSequence()
                         ?.mapNotNull {
                             runCatching { OrderStatus.valueOf(it.uppercase()) }.getOrNull()
@@ -183,7 +159,7 @@ fun DashboardNavHost(
                     OrderFilter(
                         status = status,
                         statuses = statuses,
-                        customerId = customerId,
+                        customerId = route.customerId,
                     ),
                 )
             }
@@ -192,21 +168,14 @@ fun DashboardNavHost(
                 viewModel = ordersViewModel,
                 sharedViewModel = sharedViewModel,
                 onOrderClick = { orderId ->
-                    navController.navigate(DashboardRoutes.orderDetail(orderId))
+                    navController.navigate(DashboardNavRoute.OrderDetail(orderId))
                 },
-                onNewOrder = { navController.navigate(DashboardRoutes.NEW_ORDER) },
+                onNewOrder = { navController.navigate(DashboardNavRoute.NewOrder) },
             ) { dirty -> sharedViewModel.setFormDirty(dirty) }
         }
-        composable(
-            route = DashboardRoutes.ORDER_DETAIL,
-            arguments =
-                listOf(
-                    navArgument("orderId") {
-                        type = NavType.StringType
-                    },
-                ),
-        ) { backStackEntry ->
-            val orderId = backStackEntry.arguments?.getString("orderId") ?: ""
+        composable<DashboardNavRoute.OrderDetail> { backStackEntry ->
+            val route = backStackEntry.toRoute<DashboardNavRoute.OrderDetail>()
+            val orderId = route.orderId
             val orderDetailViewModel: OrderDetailViewModel =
                 viewModel(
                     key = "order_detail_$orderId",
@@ -230,23 +199,8 @@ fun DashboardNavHost(
                 sharedViewModel = sharedViewModel,
             ) { navController.popBackStack() }
         }
-        composable(
-            route = DashboardRoutes.SETTINGS,
-            arguments =
-                listOf(
-                    navArgument("section") {
-                        type = NavType.StringType
-                        nullable = true
-                        defaultValue = null
-                    },
-                    navArgument("fromIntake") {
-                        type = NavType.BoolType
-                        defaultValue = false
-                    },
-                ),
-        ) { backStackEntry ->
-            val section = backStackEntry.arguments?.getString("section")
-            val fromIntake = backStackEntry.arguments?.getBoolean("fromIntake") ?: false
+        composable<DashboardNavRoute.Settings> { backStackEntry ->
+            val route = backStackEntry.toRoute<DashboardNavRoute.Settings>()
             val settingsViewModel: SettingsViewModel =
                 viewModel(
                     factory =
@@ -274,14 +228,14 @@ fun DashboardNavHost(
             SettingsPanel(
                 viewModel = settingsViewModel,
                 isAdmin = isAdmin,
-                initialSection = section,
-                fromIntake = fromIntake,
+                initialSection = route.section,
+                fromIntake = route.fromIntake,
                 onBackupRestored = onAppDataRestored,
-                onNavigate = { route -> navController.navigate(route) },
+                onNavigate = { targetRoute -> navController.navigate(targetRoute) },
                 onBack = { navController.popBackStack() },
             )
         }
-        composable(DashboardRoutes.ADMIN) {
+        composable<DashboardNavRoute.Admin> {
             val settingsViewModel: SettingsViewModel =
                 viewModel(
                     factory =
@@ -311,7 +265,7 @@ fun DashboardNavHost(
                 isAdmin = isAdmin,
                 initialSection = "ADMIN",
                 onBackupRestored = onAppDataRestored,
-                onNavigate = { route -> navController.navigate(route) },
+                onNavigate = { targetRoute -> navController.navigate(targetRoute) },
                 onBack = { navController.popBackStack() },
             )
         }

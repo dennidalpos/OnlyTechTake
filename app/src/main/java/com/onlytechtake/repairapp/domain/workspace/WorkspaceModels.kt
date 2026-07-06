@@ -113,8 +113,7 @@ fun IntakeOrderInput.validationErrors(context: Context): List<String> =
         if (!hasPrivacySignature) add(context.getString(R.string.error_privacy_required))
     }
 
-fun IntakeOrderInput.isReadyForSubmit(context: Context): Boolean =
-    validationErrors(context).isEmpty()
+fun IntakeOrderInput.isReadyForSubmit(context: Context): Boolean = validationErrors(context).isEmpty()
 
 private fun CustomerInput.isValidForIntake(): Boolean {
     val hasContact = phone.isNotBlank() || email.isNotBlank()
@@ -132,8 +131,7 @@ data class OrderFilter(
     val statuses: Set<OrderStatus> = emptySet(),
     val customerId: String? = null,
 ) {
-    fun hasActiveFilter(): Boolean =
-        query.isNotBlank() || customerId != null || status != null || statuses.isNotEmpty()
+    fun hasActiveFilter(): Boolean = query.isNotBlank() || customerId != null || status != null || statuses.isNotEmpty()
 }
 
 @Immutable
@@ -206,5 +204,4 @@ fun DiagnosisResultInput.validationErrors(context: Context): List<String> =
         }
     }
 
-fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? =
-    estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }
+fun DiagnosisResultInput.normalizedEstimateAmountCents(): Long? = estimateAmountCents.takeIf { diagnosisOutcome == DiagnosisOutcome.REPAIRABLE }

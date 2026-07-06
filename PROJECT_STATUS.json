@@ -1,19 +1,19 @@
 {
   "project_name": "OnlyTechTake",
-  "version": "1.0.1",
-  "status": "Tutti gli asset media (screenshot e video) sono stati rigenerati con successo per Inglese e Italiano. Risolte le regressioni nei test strumentati causate dai banner e dalla localizzazione. L'app è pronta per la distribuzione su Google Play.",
-  "last_updated": "2026-07-05T10:45:00Z",
+  "version": "1.1.0",
+  "status": "Allineamento varianti (Full, Demo, Showcase) completato. Risolto conflitto di dipendenze kotlinx-serialization tramite rigenerazione del lockfile. Aggiunte preview mancanti in AuthGateScreen.kt e armonizzato il comportamento del watermark per Showcase.",
+  "last_updated": "2026-07-05T14:30:00Z",
   "backlog": [
     {
       "priority": "HIGH",
       "id": "B11",
-      "task": "GOOGLE PLAY: Pubblicazione e Distribuzione. Finalizzare Privacy Policy (URL HTTPS), completare Data Safety, configurare keystore.properties reale e caricare AAB (Full/Demo) in Internal Testing."
+      "task": "GOOGLE PLAY: Pubblicazione e Distribuzione. Finalizzare Privacy Policy (URL HTTPS), completare Data Safety e caricare AAB."
+    },
+    {
+      "priority": "MEDIUM",
+      "id": "B12",
+      "task": "AUTH REFACTOR: Scomporre AuthGateRoute per separare la logica di inizializzazione dai vari stati della UI (Setup, Login, Wizard)."
     }
   ],
-  "completed_recently": [
-    {
-      "id": "DONE_ASSETS",
-      "task": "Rigenerazione asset media e fix stabilità test strumentati."
-    }
-  ]
+  "completed_recently": []
 }

@@ -226,7 +226,9 @@ abstract class BaseAssetRobot(
             Thread.sleep(TAG_POLL_MILLIS)
             attempts++
         }
-        composeRule.onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree).onFirst()
+        composeRule
+            .onAllNodesWithTag(tag, useUnmergedTree = useUnmergedTree)
+            .onFirst()
             .assertIsDisplayed()
     }
 
@@ -282,9 +284,8 @@ abstract class BaseAssetRobot(
                     text,
                     substring = true,
                     ignoreCase = true,
-                    useUnmergedTree = true
-                )
-                .fetchSemanticsNodes()
+                    useUnmergedTree = true,
+                ).fetchSemanticsNodes()
                 .isNotEmpty()
 
     fun waitForText(
@@ -315,9 +316,8 @@ abstract class BaseAssetRobot(
                                     text,
                                     substring = true,
                                     ignoreCase = true,
-                                    useUnmergedTree = true
-                                )
-                                .performScrollTo()
+                                    useUnmergedTree = true,
+                                ).performScrollTo()
                             composeRule.waitForIdle()
                             if (isTextDisplayed(text)) {
                                 found = true
@@ -343,9 +343,8 @@ abstract class BaseAssetRobot(
                         text,
                         substring = true,
                         ignoreCase = true,
-                        useUnmergedTree = true
-                    )
-                    .assertExists()
+                        useUnmergedTree = true,
+                    ).assertExists()
             }
         }
     }
@@ -591,8 +590,7 @@ abstract class BaseAssetRobot(
         Thread.sleep(if (isRecordingDemo()) RECORDING_SCREENSHOT_PAUSE_MILLIS else SCREENSHOT_PAUSE_MILLIS)
     }
 
-    private fun isRecordingDemo(): Boolean =
-        InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
+    private fun isRecordingDemo(): Boolean = InstrumentationRegistry.getArguments().getString("demoRecording").toBoolean()
 
     companion object {
         const val WAIT_TIMEOUT_MILLIS = 30_000L

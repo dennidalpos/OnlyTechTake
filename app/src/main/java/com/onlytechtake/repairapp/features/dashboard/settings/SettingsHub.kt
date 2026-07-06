@@ -34,13 +34,13 @@ import com.onlytechtake.repairapp.core.design.RepairAppSpacing
 import com.onlytechtake.repairapp.core.design.RepairAppTestTags
 import com.onlytechtake.repairapp.core.design.components.AppScreenContainer
 import com.onlytechtake.repairapp.core.design.components.StandardCard
-import com.onlytechtake.repairapp.features.dashboard.DashboardRoutes
+import com.onlytechtake.repairapp.features.dashboard.DashboardNavRoute
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 
 @Composable
 fun SettingsHub(
     isAdmin: Boolean,
-    onNavigate: (String) -> Unit,
+    onNavigate: (DashboardNavRoute) -> Unit,
 ) {
     AppScreenContainer {
         SectionTitle(stringResource(R.string.dashboard_config))
@@ -54,7 +54,7 @@ fun SettingsHub(
                 icon = Icons.AutoMirrored.Filled.List,
                 testTag = RepairAppTestTags.ConfigHubCategoriesButton,
             ) {
-                onNavigate(DashboardRoutes.settings("CATEGORIES"))
+                onNavigate(DashboardNavRoute.Settings(section = "CATEGORIES"))
             }
 
             SettingsHubCard(
@@ -71,7 +71,7 @@ fun SettingsHub(
                 enabled = isAdmin,
                 testTag = RepairAppTestTags.ConfigHubTemplatesButton,
             ) {
-                onNavigate(DashboardRoutes.settings("TEMPLATES"))
+                onNavigate(DashboardNavRoute.Settings(section = "TEMPLATES"))
             }
 
             SettingsHubCard(
@@ -81,7 +81,7 @@ fun SettingsHub(
                 enabled = isAdmin,
                 testTag = RepairAppTestTags.ConfigHubTemplateMappingButton,
             ) {
-                onNavigate(DashboardRoutes.settings("TEMPLATE_MAPPING"))
+                onNavigate(DashboardNavRoute.Settings(section = "TEMPLATE_MAPPING"))
             }
 
             SettingsHubCard(
@@ -90,7 +90,7 @@ fun SettingsHub(
                 icon = Icons.AutoMirrored.Filled.Send,
                 testTag = RepairAppTestTags.ConfigHubWhatsappButton,
             ) {
-                onNavigate(DashboardRoutes.settings("WHATSAPP"))
+                onNavigate(DashboardNavRoute.Settings(section = "WHATSAPP"))
             }
 
             SettingsHubCard(
@@ -99,7 +99,7 @@ fun SettingsHub(
                 icon = Icons.Default.Business,
                 testTag = RepairAppTestTags.ConfigHubOwnerButton,
             ) {
-                onNavigate(DashboardRoutes.settings("OWNER"))
+                onNavigate(DashboardNavRoute.Settings(section = "OWNER"))
             }
 
             SettingsHubCard(
@@ -108,7 +108,7 @@ fun SettingsHub(
                 icon = Icons.Default.Storage,
                 testTag = RepairAppTestTags.ConfigHubStorageButton,
             ) {
-                onNavigate(DashboardRoutes.settings("STORAGE"))
+                onNavigate(DashboardNavRoute.Settings(section = "STORAGE"))
             }
 
             SettingsHubCard(
@@ -117,7 +117,7 @@ fun SettingsHub(
                 icon = Icons.Default.People,
                 testTag = RepairAppTestTags.ConfigHubAdminButton,
             ) {
-                onNavigate(DashboardRoutes.settings("ADMIN"))
+                onNavigate(DashboardNavRoute.Settings(section = "ADMIN"))
             }
 
             SettingsHubCard(
@@ -126,7 +126,7 @@ fun SettingsHub(
                 icon = Icons.Default.Palette,
                 testTag = RepairAppTestTags.ConfigHubUiButton,
             ) {
-                onNavigate(DashboardRoutes.settings("UI"))
+                onNavigate(DashboardNavRoute.Settings(section = "UI"))
             }
 
             if (isAdmin) {
@@ -136,7 +136,7 @@ fun SettingsHub(
                     icon = Icons.Default.Backup,
                     testTag = RepairAppTestTags.ConfigHubBackupButton,
                 ) {
-                    onNavigate(DashboardRoutes.settings("EXPORT"))
+                    onNavigate(DashboardNavRoute.Settings(section = "EXPORT"))
                 }
             }
 
@@ -146,7 +146,7 @@ fun SettingsHub(
                 icon = Icons.Default.Info,
                 testTag = RepairAppTestTags.ConfigHubAboutButton,
             ) {
-                onNavigate(DashboardRoutes.settings("ABOUT"))
+                onNavigate(DashboardNavRoute.Settings(section = "ABOUT"))
             }
         }
     }

@@ -51,6 +51,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onlytechtake.repairapp.BuildConfig
@@ -849,5 +850,75 @@ private fun OwnerWizardScreen(
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true, name = "Login Screen - Light")
+@Preview(
+    showBackground = true,
+    name = "Login Screen - Dark",
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
+)
+@Composable
+private fun LoginScreenPreview() {
+    com.onlytechtake.repairapp.core.design.RepairAppTheme {
+        LoginScreen(
+            formState = AuthFormState(username = "admin"),
+            onUsernameChange = {},
+            onPasswordChange = {},
+            onSubmit = {},
+            onDemoLogin = {},
+            onRecovery = {},
+        ) {}
+    }
+}
+
+@Preview(showBackground = true, name = "First Setup - Light")
+@Composable
+private fun FirstSetupPreview() {
+    com.onlytechtake.repairapp.core.design.RepairAppTheme {
+        FirstSetupScreen(
+            formState = AuthFormState(),
+            onDisplayNameChange = {},
+            onUsernameChange = {},
+            onPasswordChange = {},
+            onConfirmPasswordChange = {},
+            onSubmit = {},
+            onRestore = { _, _ -> },
+        ) {}
+    }
+}
+
+@Preview(showBackground = true, name = "Owner Wizard - Light")
+@Composable
+private fun OwnerWizardPreview() {
+    com.onlytechtake.repairapp.core.design.RepairAppTheme {
+        OwnerWizardScreen(
+            ownerInfo = OwnerInfo(),
+            onSubmit = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Recovery Screen - Light")
+@Composable
+private fun AdminRecoveryPreview() {
+    com.onlytechtake.repairapp.core.design.RepairAppTheme {
+        AdminRecoveryScreen(
+            formState = AuthFormState(recoveryMode = true),
+            onRecoveryCodeChange = {},
+            onPasswordChange = {},
+            onConfirmPasswordChange = {},
+            onSubmit = {},
+            onCancel = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Auth Loading - Light")
+@Composable
+private fun AuthLoadingPreview() {
+    com.onlytechtake.repairapp.core.design.RepairAppTheme {
+        AuthLoadingScreen(text = "Initializing system...")
     }
 }

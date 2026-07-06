@@ -107,9 +107,10 @@ fun AppMessageBanner(
         visible = visible,
         enter = fadeIn() + expandVertically(),
         exit = fadeOut() + shrinkVertically(),
-        modifier = modifier
-            .fillMaxWidth()
-            .testTag("banner_container"),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .testTag("banner_container"),
     ) {
         Box(
             modifier = Modifier.fillMaxWidth(),

@@ -49,6 +49,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -119,7 +122,6 @@ fun DashboardScreen(
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination?.route ?: DashboardRoutes.HOME
 
     val globalMessage by sharedViewModel.message.collectAsState()
     val isFormDirty by sharedViewModel.isFormDirty.collectAsState()
@@ -135,31 +137,31 @@ fun DashboardScreen(
         androidx.compose.runtime.remember {
             listOf(
                 NavigationItem(
-                    DashboardRoutes.HOME,
+                    DashboardNavRoute.Home,
                     Icons.Default.Home,
                     R.string.dashboard_home,
                     RepairAppTestTags.dashboardTab("HOME"),
                 ),
                 NavigationItem(
-                    DashboardRoutes.NEW_ORDER,
+                    DashboardNavRoute.NewOrder,
                     Icons.Default.Add,
                     R.string.dashboard_new,
                     RepairAppTestTags.dashboardTab("NEW_ORDER"),
                 ),
                 NavigationItem(
-                    DashboardRoutes.CUSTOMERS,
+                    DashboardNavRoute.Customers,
                     Icons.Default.Person,
                     R.string.label_customers,
                     RepairAppTestTags.dashboardTab("CUSTOMERS"),
                 ),
                 NavigationItem(
-                    DashboardRoutes.orders(),
+                    DashboardNavRoute.Orders(),
                     Icons.AutoMirrored.Filled.List,
                     R.string.dashboard_orders,
                     RepairAppTestTags.dashboardTab("ORDERS"),
                 ),
                 NavigationItem(
-                    DashboardRoutes.settings(),
+                    DashboardNavRoute.Settings(),
                     Icons.Default.Settings,
                     R.string.dashboard_config,
                     RepairAppTestTags.dashboardTab("SETTINGS"),
@@ -168,7 +170,7 @@ fun DashboardScreen(
         }
 
     var pendingRoute by androidx.compose.runtime.remember {
-        androidx.compose.runtime.mutableStateOf<String?>(
+        androidx.compose.runtime.mutableStateOf<DashboardNavRoute?>(
             null,
         )
     }
@@ -184,19 +186,32 @@ fun DashboardScreen(
     }
 
     fun isTabSelected(
-        itemRoute: String,
-        currentRoute: String?,
+        itemRoute: DashboardNavRoute,
+        currentEntry: NavBackStackEntry?,
     ): Boolean {
-        if (currentRoute == null) return false
-        val baseRoute = itemRoute.split("?")[0]
-        val baseCurrent = currentRoute.split("?")[0]
-        if (baseRoute == baseCurrent) return true
-        return when (baseRoute) {
-            DashboardRoutes.ORDERS.split("?")[0] -> {
-                baseCurrent ==
-                    DashboardRoutes.ORDER_DETAIL.split(
-                        "?",
-                    )[0]
+        if (currentEntry == null) return false
+        val destination = currentEntry.destination
+        return when (itemRoute) {
+            is DashboardNavRoute.Home -> {
+                destination.hasRoute<DashboardNavRoute.Home>()
+            }
+
+            is DashboardNavRoute.NewOrder -> {
+                destination.hasRoute<DashboardNavRoute.NewOrder>()
+            }
+
+            is DashboardNavRoute.Customers -> {
+                destination.hasRoute<DashboardNavRoute.Customers>()
+            }
+
+            is DashboardNavRoute.Orders -> {
+                destination.hierarchy.any {
+                    it.hasRoute<DashboardNavRoute.Orders>() || it.hasRoute<DashboardNavRoute.OrderDetail>()
+                }
+            }
+
+            is DashboardNavRoute.Settings -> {
+                destination.hasRoute<DashboardNavRoute.Settings>()
             }
 
             else -> {
@@ -205,7 +220,14 @@ fun DashboardScreen(
         }
     }
 
-    BackHandler(enabled = currentDestination != DashboardRoutes.HOME) {
+    fun isHome(currentEntry: NavBackStackEntry?): Boolean = currentEntry?.destination?.hasRoute<DashboardNavRoute.Home>() == true
+
+    fun isCloseIcon(currentEntry: NavBackStackEntry?): Boolean {
+        val destination = currentEntry?.destination ?: return false
+        return destination.hasRoute<DashboardNavRoute.NewOrder>() || destination.hasRoute<DashboardNavRoute.OrderDetail>()
+    }
+
+    BackHandler(enabled = !isHome(navBackStackEntry)) {
         if (isFormDirty) {
             pendingRoute = null // Pop back
             showUnsavedChangesDialog = true
@@ -215,7 +237,7 @@ fun DashboardScreen(
     }
 
     fun performNavigation(
-        route: String,
+        route: DashboardNavRoute,
         isReset: Boolean = false,
     ) {
         if (isReset) {
@@ -227,7 +249,6 @@ fun DashboardScreen(
                 saveState = true
             }
             launchSingleTop = true
-            // ALWAYS take to dedicated page (start of tab), so restoreState is false
             restoreState = false
         }
         sharedViewModel.setFormDirty(dirty = false)
@@ -237,19 +258,17 @@ fun DashboardScreen(
         topBar = {
             AppTopBar(
                 title = summary?.title ?: stringResource(R.string.app_name),
-                showLogo = currentDestination == DashboardRoutes.HOME,
+                showLogo = isHome(navBackStackEntry),
                 navigationIcon = {
-                    if (currentDestination != DashboardRoutes.HOME) {
-                        val isCloseIcon =
-                            (currentDestination == DashboardRoutes.NEW_ORDER) ||
-                                (currentDestination.startsWith("order_detail/"))
+                    if (!isHome(navBackStackEntry)) {
+                        val closeIcon = isCloseIcon(navBackStackEntry)
                         AppIconButton(
                             modifier = Modifier.testTag(RepairAppTestTags.ConfigBackButton),
-                            imageVector = if (isCloseIcon) Icons.Default.Close else Icons.AutoMirrored.Filled.ArrowBack,
-                            tint = if (isCloseIcon) Color.Unspecified else MaterialTheme.colorScheme.primary,
+                            imageVector = if (closeIcon) Icons.Default.Close else Icons.AutoMirrored.Filled.ArrowBack,
+                            tint = if (closeIcon) Color.Unspecified else MaterialTheme.colorScheme.primary,
                             contentDescription =
                                 stringResource(
-                                    if (isCloseIcon) R.string.action_close else R.string.action_back,
+                                    if (closeIcon) R.string.action_close else R.string.action_back,
                                 ),
                             onClick = {
                                 if (isFormDirty) {
@@ -304,7 +323,7 @@ fun DashboardScreen(
                     modifier = Modifier.testTag(RepairAppTestTags.DashboardTabs),
                 ) {
                     items.forEach { item ->
-                        val selected = isTabSelected(item.route, currentDestination)
+                        val selected = isTabSelected(item.route, navBackStackEntry)
                         NavigationBarItem(
                             modifier = Modifier.testTag(item.testTag),
                             icon = {
@@ -325,7 +344,8 @@ fun DashboardScreen(
                             },
                             selected = selected,
                             onClick = {
-                                if ((currentDestination == DashboardRoutes.NEW_ORDER) && isFormDirty) {
+                                val currentRouteIsNewOrder = navBackStackEntry?.destination?.hasRoute<DashboardNavRoute.NewOrder>() == true
+                                if (currentRouteIsNewOrder && isFormDirty) {
                                     pendingRoute = item.route
                                     pendingIsReset = selected
                                     showUnsavedChangesDialog = true
@@ -358,7 +378,7 @@ fun DashboardScreen(
                 ) {
                     Spacer(Modifier.weight(1f))
                     items.forEach { item ->
-                        val selected = isTabSelected(item.route, currentDestination)
+                        val selected = isTabSelected(item.route, navBackStackEntry)
                         NavigationRailItem(
                             modifier = Modifier.testTag(item.testTag),
                             icon = {
@@ -376,7 +396,8 @@ fun DashboardScreen(
                             },
                             selected = selected,
                             onClick = {
-                                if ((currentDestination == DashboardRoutes.NEW_ORDER) && isFormDirty) {
+                                val currentRouteIsNewOrder = navBackStackEntry?.destination?.hasRoute<DashboardNavRoute.NewOrder>() == true
+                                if (currentRouteIsNewOrder && isFormDirty) {
                                     pendingRoute = item.route
                                     pendingIsReset = selected
                                     showUnsavedChangesDialog = true
@@ -429,15 +450,16 @@ fun DashboardScreen(
                             AppButton(
                                 text = stringResource(R.string.dashboard_config),
                                 onClick = {
-                                    if ((currentDestination == DashboardRoutes.NEW_ORDER) && isFormDirty) {
-                                        pendingRoute = DashboardRoutes.settings("EXPORT")
+                                    val currentRouteIsNewOrder = navBackStackEntry?.destination?.hasRoute<DashboardNavRoute.NewOrder>() == true
+                                    if (currentRouteIsNewOrder && isFormDirty) {
+                                        pendingRoute = DashboardNavRoute.Settings(section = "EXPORT")
                                         pendingIsReset = false
                                         showUnsavedChangesDialog = true
                                     } else {
                                         if (isFormDirty) {
                                             sharedViewModel.triggerAutoSave()
                                         }
-                                        performNavigation(DashboardRoutes.settings("EXPORT"))
+                                        performNavigation(DashboardNavRoute.Settings(section = "EXPORT"))
                                     }
                                 },
                                 variant = AppButtonVariant.Ghost,
@@ -496,27 +518,30 @@ fun DashboardScreen(
         )
     }
 
-    if (BuildConfig.IS_DEMO_VERSION) {
-        Box(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .alpha(0.08f),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(
-                text = DemoMode.getVersionBanner(LocalContext.current),
-                style = MaterialTheme.typography.displayLarge,
-                color = Color.Gray,
-                modifier = Modifier.rotate(-45f),
-                softWrap = false,
-            )
+    if (BuildConfig.IS_DEMO_VERSION || BuildConfig.IS_SHOWCASE_MODE_ENABLED) {
+        val banner = DemoMode.getVersionBanner(LocalContext.current)
+        if (banner.isNotBlank()) {
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .alpha(0.08f),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = banner,
+                    style = MaterialTheme.typography.displayLarge,
+                    color = Color.Gray,
+                    modifier = Modifier.rotate(-45f),
+                    softWrap = false,
+                )
+            }
         }
     }
 }
 
 private data class NavigationItem(
-    val route: String,
+    val route: DashboardNavRoute,
     val icon: androidx.compose.ui.graphics.vector.ImageVector,
     val labelRes: Int,
     val testTag: String,

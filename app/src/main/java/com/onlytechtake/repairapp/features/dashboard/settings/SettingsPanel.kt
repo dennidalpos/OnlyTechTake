@@ -28,6 +28,7 @@ import com.onlytechtake.repairapp.core.design.components.AppButtonVariant
 import com.onlytechtake.repairapp.core.design.components.AppDialog
 import com.onlytechtake.repairapp.core.design.components.BannerType
 import com.onlytechtake.repairapp.core.design.components.DismissibleAppMessageBanner
+import com.onlytechtake.repairapp.features.dashboard.DashboardNavRoute
 import com.onlytechtake.repairapp.features.dashboard.admin.AdminPanel
 import com.onlytechtake.repairapp.features.dashboard.common.AppEmptyState
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
@@ -39,7 +40,7 @@ fun SettingsPanel(
     viewModel: SettingsViewModel,
     isAdmin: Boolean,
     onBackupRestored: () -> Unit,
-    onNavigate: (String) -> Unit,
+    onNavigate: (DashboardNavRoute) -> Unit,
     onBack: () -> Unit,
     initialSection: String? = null,
     fromIntake: Boolean = false,
@@ -71,10 +72,7 @@ fun SettingsPanel(
         } else if (isWide) {
             currentSection = null
         } else {
-            onNavigate(
-                com.onlytechtake.repairapp.features.dashboard.DashboardRoutes
-                    .settings(),
-            )
+            onNavigate(DashboardNavRoute.Settings())
         }
     }
 
@@ -84,14 +82,8 @@ fun SettingsPanel(
                 SettingsHub(
                     isAdmin = isAdmin,
                 ) { route ->
-                    val section =
-                        if (route.contains("section=")) {
-                            route.substringAfter("section=")
-                        } else {
-                            null
-                        }
-                    if (section != null) {
-                        currentSection = section
+                    if (route is DashboardNavRoute.Settings && route.section != null) {
+                        currentSection = route.section
                     } else {
                         onNavigate(route)
                     }
@@ -173,7 +165,7 @@ private fun SettingsSectionContent(
     fromIntake: Boolean,
     onBackupRestored: () -> Unit,
     requestConfirm: (String, String, () -> Unit) -> Unit,
-    onNavigate: (String) -> Unit = {},
+    onNavigate: (DashboardNavRoute) -> Unit = {},
     onBack: () -> Unit = {},
 ) {
     val windowSizeClass = LocalWindowSizeClass.current

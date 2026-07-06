@@ -1,39 +1,35 @@
 package com.onlytechtake.repairapp.features.dashboard
 
-object DashboardRoutes {
-    const val HOME = "home"
-    const val CUSTOMERS = "customers"
-    const val ORDERS = "orders?status={status}&statuses={statuses}&customerId={customerId}"
-    const val NEW_ORDER = "new_order"
-    const val ORDER_DETAIL = "order_detail/{orderId}"
-    const val SETTINGS = "settings?section={section}&fromIntake={fromIntake}"
-    const val ADMIN = "admin"
+import kotlinx.serialization.Serializable
 
-    fun orderDetail(orderId: String) = "order_detail/$orderId"
+sealed interface DashboardNavRoute {
+    @Serializable
+    data object Home : DashboardNavRoute
 
-    fun orders(
-        status: String? = null,
-        statuses: List<String>? = null,
-        customerId: String? = null,
-    ): String {
-        val params =
-            listOfNotNull(
-                status?.let { "status=$it" },
-                statuses?.let { "statuses=${it.joinToString(",")}" },
-                customerId?.let { "customerId=$it" },
-            )
-        return if (params.isEmpty()) "orders" else "orders?${params.joinToString("&")}"
-    }
+    @Serializable
+    data object Customers : DashboardNavRoute
 
-    fun settings(
-        section: String? = null,
-        fromIntake: Boolean = false,
-    ): String {
-        val params =
-            listOfNotNull(
-                section?.let { "section=$it" },
-                if (fromIntake) "fromIntake=true" else null,
-            )
-        return if (params.isEmpty()) "settings" else "settings?${params.joinToString("&")}"
-    }
+    @Serializable
+    data class Orders(
+        val status: String? = null,
+        val statuses: List<String>? = null,
+        val customerId: String? = null,
+    ) : DashboardNavRoute
+
+    @Serializable
+    data object NewOrder : DashboardNavRoute
+
+    @Serializable
+    data class OrderDetail(
+        val orderId: String,
+    ) : DashboardNavRoute
+
+    @Serializable
+    data class Settings(
+        val section: String? = null,
+        val fromIntake: Boolean = false,
+    ) : DashboardNavRoute
+
+    @Serializable
+    data object Admin : DashboardNavRoute
 }

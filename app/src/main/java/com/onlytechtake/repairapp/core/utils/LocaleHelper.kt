@@ -10,8 +10,7 @@ object LocaleForcer {
 }
 
 object LocaleHelper {
-    fun isEnglishForced(): Boolean =
-        LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
+    fun isEnglishForced(): Boolean = LocaleForcer.forceEnglish || System.getProperty("forceEnglish") == "true"
 
     fun applyLocale(context: Context): Context {
         if (!isEnglishForced()) return context

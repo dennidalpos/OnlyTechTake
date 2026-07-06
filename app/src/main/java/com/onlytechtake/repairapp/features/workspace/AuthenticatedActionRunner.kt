@@ -70,6 +70,5 @@ internal class AuthenticatedActionRunner(
         }
     }
 
-    private fun getLocalizedContext(baseContext: Context): Context =
-        LocaleHelper.applyLocale(baseContext)
+    private fun getLocalizedContext(baseContext: Context): Context = LocaleHelper.applyLocale(baseContext)
 }
