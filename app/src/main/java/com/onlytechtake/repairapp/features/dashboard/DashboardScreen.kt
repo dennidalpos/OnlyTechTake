@@ -220,7 +220,8 @@ fun DashboardScreen(
         }
     }
 
-    fun isHome(currentEntry: NavBackStackEntry?): Boolean = currentEntry?.destination?.hasRoute<DashboardNavRoute.Home>() == true
+    fun isHome(currentEntry: NavBackStackEntry?): Boolean =
+        currentEntry?.destination?.hasRoute<DashboardNavRoute.Home>() == true
 
     fun isCloseIcon(currentEntry: NavBackStackEntry?): Boolean {
         val destination = currentEntry?.destination ?: return false
@@ -344,7 +345,8 @@ fun DashboardScreen(
                             },
                             selected = selected,
                             onClick = {
-                                val currentRouteIsNewOrder = navBackStackEntry?.destination?.hasRoute<DashboardNavRoute.NewOrder>() == true
+                                val currentRouteIsNewOrder =
+                                    navBackStackEntry?.destination?.hasRoute<DashboardNavRoute.NewOrder>() == true
                                 if (currentRouteIsNewOrder && isFormDirty) {
                                     pendingRoute = item.route
                                     pendingIsReset = selected
@@ -396,7 +398,8 @@ fun DashboardScreen(
                             },
                             selected = selected,
                             onClick = {
-                                val currentRouteIsNewOrder = navBackStackEntry?.destination?.hasRoute<DashboardNavRoute.NewOrder>() == true
+                                val currentRouteIsNewOrder =
+                                    navBackStackEntry?.destination?.hasRoute<DashboardNavRoute.NewOrder>() == true
                                 if (currentRouteIsNewOrder && isFormDirty) {
                                     pendingRoute = item.route
                                     pendingIsReset = selected
@@ -450,9 +453,11 @@ fun DashboardScreen(
                             AppButton(
                                 text = stringResource(R.string.dashboard_config),
                                 onClick = {
-                                    val currentRouteIsNewOrder = navBackStackEntry?.destination?.hasRoute<DashboardNavRoute.NewOrder>() == true
+                                    val currentRouteIsNewOrder =
+                                        navBackStackEntry?.destination?.hasRoute<DashboardNavRoute.NewOrder>() == true
                                     if (currentRouteIsNewOrder && isFormDirty) {
-                                        pendingRoute = DashboardNavRoute.Settings(section = "EXPORT")
+                                        pendingRoute =
+                                            DashboardNavRoute.Settings(section = "EXPORT")
                                         pendingIsReset = false
                                         showUnsavedChangesDialog = true
                                     } else {
