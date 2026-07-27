@@ -19,7 +19,9 @@ import com.onlytechtake.repairapp.domain.models.OrderDocument
 import com.onlytechtake.repairapp.domain.models.OrderDocumentType
 import com.onlytechtake.repairapp.domain.models.UserRole
 import com.onlytechtake.repairapp.domain.workspace.GenerateOrderStatusPdfUseCase
+import com.onlytechtake.repairapp.features.workspace.AuthenticatedActionRunner
 import com.onlytechtake.repairapp.features.workspace.WorkspaceManager
+import com.onlytechtake.repairapp.features.workspace.WorkspaceMessage
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -108,19 +110,30 @@ class OrderDetailViewModelTest {
             every { resources.getString(any()) } returns "label"
             every { resources.getString(any(), *anyVararg()) } returns "label"
 
+            val authRepository = FakeAuthRepository(actor)
+            val workspaceManager = WorkspaceManager()
+            val actionRunner =
+                AuthenticatedActionRunner(
+                    context = context,
+                    authRepository = authRepository,
+                    workspaceManager = workspaceManager,
+                    diagnosticLogger = mockk(relaxed = true),
+                    ioDispatcher = testDispatcher,
+                )
+
             val viewModel =
                 OrderDetailViewModel(
                     context = context,
                     savedStateHandle = SavedStateHandle(mapOf("orderId" to "order-1")),
-                    authRepository = FakeAuthRepository(actor),
+                    authRepository = authRepository,
                     orderRepository = orderRepository,
                     orderMediaRepository = mockk<OrderMediaRepository>(relaxed = true),
                     orderDocumentRepository = documentRepository,
                     templateRepository = mockk<TemplateRepository>(relaxed = true),
                     generateOrderStatusPdfUseCase = mockk<GenerateOrderStatusPdfUseCase>(relaxed = true),
                     shareDocumentIntentFactory = shareFactory,
-                    diagnosticLogger = mockk(relaxed = true),
-                    workspaceManager = mockk(relaxed = true),
+                    workspaceManager = workspaceManager,
+                    actionRunner = actionRunner,
                     ioDispatcher = testDispatcher,
                 )
 

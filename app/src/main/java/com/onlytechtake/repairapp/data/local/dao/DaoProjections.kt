@@ -1,8 +1,14 @@
 package com.onlytechtake.repairapp.data.local.dao
 
 import androidx.room.Embedded
+import androidx.room.Relation
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
+import com.onlytechtake.repairapp.data.local.entities.OrderMediaEntity
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
+import com.onlytechtake.repairapp.data.local.entities.SignatureEntity
+import com.onlytechtake.repairapp.data.local.entities.TimelineEventEntity
+import com.onlytechtake.repairapp.data.local.entities.UserEntity
 import com.onlytechtake.repairapp.domain.models.ClosureReason
 import com.onlytechtake.repairapp.domain.models.CustomerType
 import com.onlytechtake.repairapp.domain.models.DiagnosisOutcome
@@ -41,4 +47,20 @@ data class OrderListItemProjection(
     val documentsCount: Int,
     val signaturesCount: Int,
     val finalPhotosCount: Int,
+)
+
+data class OrderDetailProjection(
+    @Embedded val order: RepairOrderEntity,
+    @Relation(parentColumn = "customerId", entityColumn = "id")
+    val customer: CustomerEntity?,
+    @Relation(parentColumn = "categoryId", entityColumn = "id")
+    val category: OrderCategoryEntity?,
+    @Relation(parentColumn = "assignedToUserId", entityColumn = "id")
+    val assignedUser: UserEntity?,
+    @Relation(parentColumn = "id", entityColumn = "orderId")
+    val timeline: List<TimelineEventEntity>,
+    @Relation(parentColumn = "id", entityColumn = "orderId")
+    val media: List<OrderMediaEntity>,
+    @Relation(parentColumn = "id", entityColumn = "orderId")
+    val signatures: List<SignatureEntity>,
 )

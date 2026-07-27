@@ -118,7 +118,6 @@ abstract class RepairAppDatabase : RoomDatabase() {
                     DATABASE_NAME,
                 ).openHelperFactory(factory)
                 .setJournalMode(JournalMode.WRITE_AHEAD_LOGGING) // Performance: Enable WAL
-                .fallbackToDestructiveMigration(dropAllTables = true)
                 .build()
         }
 

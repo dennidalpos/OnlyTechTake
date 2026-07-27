@@ -1,19 +1,15 @@
 package com.onlytechtake.repairapp.features.dashboard.orders
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.data.preferences.BackupReminderPreferences
 import com.onlytechtake.repairapp.data.preferences.OrdersPreferences
-import com.onlytechtake.repairapp.data.repositories.BackupRepository
 import com.onlytechtake.repairapp.domain.auth.AuthRepository
-import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.backup.BackupReminderSettings
 import com.onlytechtake.repairapp.domain.repositories.OrderRepository
 import com.onlytechtake.repairapp.domain.workspace.OrderFilter
 import com.onlytechtake.repairapp.domain.workspace.OrderListItem
+import com.onlytechtake.repairapp.features.workspace.WorkspaceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,9 +34,9 @@ class OrdersViewModel
     constructor(
         authRepository: AuthRepository,
         orderRepository: OrderRepository,
-        private val backupRepository: BackupRepository,
         backupReminderPreferences: BackupReminderPreferences,
         private val ordersPreferences: OrdersPreferences,
+        private val workspaceManager: WorkspaceManager,
     ) : ViewModel() {
         private val _orderFilter = MutableStateFlow(OrderFilter())
         val orderFilter = _orderFilter.asStateFlow()
@@ -55,16 +51,6 @@ class OrdersViewModel
                     SharingStarted.WhileSubscribed(5_000),
                     BackupReminderSettings(),
                 )
-
-        @Suppress("unused")
-        val isBackupReminderDue =
-            combine(
-                currentUser,
-                backupReminderSettings,
-            ) { user, settings ->
-                PermissionService.isAdmin(user) &&
-                    BackupReminderPolicy.shouldShowReminder(settings, System.currentTimeMillis())
-            }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = false)
 
         val orderListItems: StateFlow<List<OrderListItem>?> =
             _orderFilter
@@ -89,11 +75,7 @@ class OrdersViewModel
             }
         }
 
-        @Suppress("unused")
-        fun exportCompleteBackup(uri: Uri) {
-            val user = currentUser.value ?: return
-            viewModelScope.launch {
-                backupRepository.exportCompleteBackup(user, uri)
-            }
+        fun setFormDirty(dirty: Boolean) {
+            workspaceManager.setFormDirty(dirty)
         }
     }

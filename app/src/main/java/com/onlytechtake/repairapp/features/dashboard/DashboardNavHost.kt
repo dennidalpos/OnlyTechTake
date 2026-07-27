@@ -24,13 +24,13 @@ import com.onlytechtake.repairapp.features.dashboard.orders.OrdersPanel
 import com.onlytechtake.repairapp.features.dashboard.orders.OrdersViewModel
 import com.onlytechtake.repairapp.features.dashboard.settings.SettingsPanel
 import com.onlytechtake.repairapp.features.dashboard.settings.SettingsViewModel
-import com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel
+import com.onlytechtake.repairapp.features.workspace.WorkspaceManager
 
 @Composable
 fun DashboardNavHost(
     navController: NavHostController,
     summary: AppSummary?,
-    sharedViewModel: SharedWorkspaceViewModel,
+    dashboardViewModel: DashboardViewModel,
     isAdmin: Boolean,
     onAppDataRestored: () -> Unit,
     modifier: Modifier = Modifier,
@@ -70,7 +70,6 @@ fun DashboardNavHost(
             val newOrderViewModel: NewOrderViewModel = hiltViewModel()
             QuickActions(
                 viewModel = newOrderViewModel,
-                sharedViewModel = sharedViewModel,
                 onOpenConfig = {
                     navController.navigate(
                         DashboardNavRoute.Settings(
@@ -85,7 +84,6 @@ fun DashboardNavHost(
             val customersViewModel: CustomersViewModel = hiltViewModel()
             CustomerPanel(
                 viewModel = customersViewModel,
-                sharedViewModel = sharedViewModel,
             ) { orderId ->
                 navController.navigate(DashboardNavRoute.OrderDetail(orderId))
             }
@@ -117,18 +115,16 @@ fun DashboardNavHost(
 
             OrdersPanel(
                 viewModel = ordersViewModel,
-                sharedViewModel = sharedViewModel,
                 onOrderClick = { orderId ->
                     navController.navigate(DashboardNavRoute.OrderDetail(orderId))
                 },
                 onNewOrder = { navController.navigate(DashboardNavRoute.NewOrder) },
-            ) { dirty -> sharedViewModel.setFormDirty(dirty) }
+            ) { dirty -> dashboardViewModel.setFormDirty(dirty) }
         }
         composable<DashboardNavRoute.OrderDetail> {
             val orderDetailViewModel: OrderDetailViewModel = hiltViewModel()
             OrderDetailWorkspace(
                 viewModel = orderDetailViewModel,
-                sharedViewModel = sharedViewModel,
                 showCloseButton = true,
             ) { navController.popBackStack() }
         }

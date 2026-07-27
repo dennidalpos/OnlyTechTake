@@ -53,12 +53,10 @@ import com.onlytechtake.repairapp.domain.workspace.OrderStatusAction
 import com.onlytechtake.repairapp.domain.workspace.statusTemplateAnchor
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.QuoteDecision
-import com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel
 
 @Composable
 fun OrderDetailWorkspace(
     viewModel: OrderDetailViewModel,
-    sharedViewModel: SharedWorkspaceViewModel,
     showCloseButton: Boolean = true,
     onBack: () -> Unit,
 ) {
@@ -124,13 +122,6 @@ fun OrderDetailWorkspace(
         pendingShareIntent?.let { intent ->
             context.startActivity(Intent.createChooser(intent, shareStatusChooserTitle))
             viewModel.clearPendingShareIntent()
-        }
-    }
-
-    val autoSaveSignal by sharedViewModel.autoSaveSignal.collectAsState()
-    LaunchedEffect(autoSaveSignal) {
-        if ((autoSaveSignal > 0) && (preparedMessage != null)) {
-            viewModel.recordPreparedMessage()
         }
     }
 

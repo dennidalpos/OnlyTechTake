@@ -32,6 +32,7 @@ import kotlinx.coroutines.withContext
 internal class CatalogSettingsDelegate(
     private val catalogRepository: CatalogRepository,
     private val actionRunner: AuthenticatedActionRunner,
+    private val scope: CoroutineScope,
 ) {
     fun saveCategory(
         id: String?,
@@ -42,6 +43,7 @@ internal class CatalogSettingsDelegate(
         onSaved: (String) -> Unit = {},
     ) {
         actionRunner.run(
+            scope = scope,
             successMessageRes = R.string.success_operation_completed,
             autoDismissMillis = 1000L,
         ) { actor ->
@@ -55,7 +57,7 @@ internal class CatalogSettingsDelegate(
     }
 
     fun deleteCategory(categoryId: String) {
-        actionRunner.run { actor ->
+        actionRunner.run(scope = scope) { actor ->
             catalogRepository.deleteCategory(actor, categoryId)
         }
     }
@@ -64,6 +66,7 @@ internal class CatalogSettingsDelegate(
 internal class TemplateSettingsDelegate(
     private val templateRepository: TemplateRepository,
     private val actionRunner: AuthenticatedActionRunner,
+    private val scope: CoroutineScope,
 ) {
     fun saveTemplate(
         code: String,
@@ -73,6 +76,7 @@ internal class TemplateSettingsDelegate(
         step: String? = null,
     ) {
         actionRunner.run(
+            scope = scope,
             successMessageRes = R.string.success_operation_completed,
             autoDismissMillis = 1000L,
         ) { actor ->
@@ -85,6 +89,7 @@ internal class TemplateSettingsDelegate(
         templateCode: String,
     ) {
         actionRunner.run(
+            scope = scope,
             successMessageRes = R.string.success_association_updated,
             autoDismissMillis = 1000L,
         ) { actor ->
@@ -94,6 +99,7 @@ internal class TemplateSettingsDelegate(
 
     fun resetTemplatesToDefaults() {
         actionRunner.run(
+            scope = scope,
             successMessageRes = R.string.success_templates_restored,
             autoDismissMillis = 1000L,
         ) { actor ->
@@ -102,7 +108,7 @@ internal class TemplateSettingsDelegate(
     }
 
     fun setMessageMode(mode: MessageMode) {
-        actionRunner.run { actor ->
+        actionRunner.run(scope = scope) { actor ->
             templateRepository.setMessageMode(actor, mode)
         }
     }
@@ -156,6 +162,7 @@ internal class BackupSettingsDelegate(
 
     fun runBackupNow(onSuccess: () -> Unit = {}) {
         actionRunner.run(
+            scope = scope,
             successMessageRes = R.string.success_operation_completed,
             autoDismissMillis = 1000L,
             onSuccess = onSuccess,
@@ -165,13 +172,13 @@ internal class BackupSettingsDelegate(
     }
 
     fun exportCompleteBackup(uri: Uri) {
-        actionRunner.run { actor ->
+        actionRunner.run(scope = scope) { actor ->
             backupRepository.exportCompleteBackup(actor, uri)
         }
     }
 
     fun exportOrdersXlsx(uri: Uri) {
-        actionRunner.run { actor ->
+        actionRunner.run(scope = scope) { actor ->
             backupRepository.exportOrdersXlsx(actor, uri)
         }
     }
@@ -181,7 +188,7 @@ internal class BackupSettingsDelegate(
         onRestored: () -> Unit,
         password: String? = null,
     ) {
-        actionRunner.run(onSuccess = onRestored) { actor ->
+        actionRunner.run(scope = scope, onSuccess = onRestored) { actor ->
             backupRepository.restoreCompleteBackup(actor, uri, password)
         }
     }
@@ -213,13 +220,14 @@ internal class SecuritySettingsDelegate(
 internal class AdminSettingsDelegate(
     private val adminUserRepository: AdminUserRepository,
     private val actionRunner: AuthenticatedActionRunner,
+    private val scope: CoroutineScope,
 ) {
     fun createOperator(
         displayName: String,
         username: String,
         password: CharArray,
     ) {
-        actionRunner.run { actor ->
+        actionRunner.run(scope = scope) { actor ->
             adminUserRepository.createOperator(
                 actor,
                 OperatorInput(displayName, username, password),
@@ -231,7 +239,7 @@ internal class AdminSettingsDelegate(
         userId: String,
         active: Boolean,
     ) {
-        actionRunner.run { actor ->
+        actionRunner.run(scope = scope) { actor ->
             adminUserRepository.setActive(actor, userId, active)
         }
     }
@@ -240,7 +248,7 @@ internal class AdminSettingsDelegate(
         userId: String,
         permissions: Set<UserPermission>,
     ) {
-        actionRunner.run { actor ->
+        actionRunner.run(scope = scope) { actor ->
             adminUserRepository.setPermissions(actor, userId, permissions)
         }
     }
@@ -249,7 +257,7 @@ internal class AdminSettingsDelegate(
         userId: String,
         password: CharArray,
     ) {
-        actionRunner.run { actor ->
+        actionRunner.run(scope = scope) { actor ->
             adminUserRepository.resetPassword(actor, userId, password)
         }
     }
@@ -272,6 +280,7 @@ internal class StorageSettingsDelegate(
 
     fun cleanupOrphanedFiles() {
         actionRunner.run(
+            scope = scope,
             successMessageRes = R.string.success_orphaned_files_cleaned,
             autoDismissMillis = 1000L,
         ) { actor ->
@@ -303,6 +312,7 @@ internal class DiagnosticSettingsDelegate(
 
     fun shareLogs() {
         actionRunner.run(
+            scope = scope,
             successMessageRes = R.string.success_operation_completed,
             autoDismissMillis = 1000L,
         ) { actor ->
@@ -330,9 +340,11 @@ internal class DiagnosticSettingsDelegate(
 internal class OwnerSettingsDelegate(
     private val ownerPreferences: OwnerPreferences,
     private val actionRunner: AuthenticatedActionRunner,
+    private val scope: CoroutineScope,
 ) {
     fun updateOwnerInfo(info: OwnerInfo) {
         actionRunner.run(
+            scope = scope,
             successMessageRes = R.string.owner_save_success,
             autoDismissMillis = 1000L,
         ) {

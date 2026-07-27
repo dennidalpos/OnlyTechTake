@@ -77,13 +77,11 @@ import com.onlytechtake.repairapp.features.dashboard.common.SignatureCaptureForm
 import com.onlytechtake.repairapp.features.dashboard.common.WizardNavigationBar
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeDraft
 import com.onlytechtake.repairapp.features.workspace.QuickIntakeSignatureDraft
-import com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel
 import com.onlytechtake.repairapp.features.workspace.isImageAttachment
 
 @Composable
 fun QuickActions(
     viewModel: NewOrderViewModel,
-    sharedViewModel: SharedWorkspaceViewModel,
     onOpenConfig: () -> Unit,
     onClose: () -> Unit,
 ) {
@@ -94,14 +92,7 @@ fun QuickActions(
     val templates by viewModel.templates.collectAsState()
     val anchorMappings by viewModel.anchorMappings.collectAsState()
     val currentUser by viewModel.currentUser.collectAsState()
-    val message by viewModel.message.collectAsState()
-
-    val resetSignal by sharedViewModel.resetSignal.collectAsState()
-    LaunchedEffect(resetSignal) {
-        if (resetSignal > 0) {
-            viewModel.resetQuickIntakeDraft()
-        }
-    }
+    val message by viewModel.message.collectAsState(null)
 
     val unnamedPrivate = stringResource(R.string.customer_unnamed_private)
     val unnamedBusiness = stringResource(R.string.customer_unnamed_business)

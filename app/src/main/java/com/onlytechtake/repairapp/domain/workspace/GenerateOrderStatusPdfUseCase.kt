@@ -79,7 +79,7 @@ class GenerateOrderStatusPdfUseCase(
                         generatedBy = user.displayName,
                         ownerInfo = ownerInfo,
                         watermarkText =
-                            if (BuildConfig.IS_DEMO_VERSION) {
+                            if (BuildConfig.IS_DEMO_VERSION || BuildConfig.IS_SHOWCASE_MODE_ENABLED) {
                                 DemoMode.getVersionBanner(context)
                             } else {
                                 null

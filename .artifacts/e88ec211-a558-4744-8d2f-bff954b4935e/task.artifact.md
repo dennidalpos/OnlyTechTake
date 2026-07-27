@@ -1,15 +1,11 @@
-- [x] Research tech stack and official documentation
-- [x] Create `skills/` directory
-- [x] Generate skill files:
-    - [x] `android-compose-m3.skill.md`
-    - [x] `persistence-room-sqlcipher.skill.md`
-    - [x] `architecture-mvvm-hilt.skill.md`
-    - [x] `testing-robot-pattern.skill.md`
-    - [x] `devops-powershell-scripts.skill.md`
-    - [x] `project-management-agents.skill.md`
-    - [x] `media-camerax.skill.md`
-    - [x] `background-workmanager.skill.md`
-- [x] Update `AGENTS.md` with Skill Management section
-- [x] Update `PROJECT_STATUS.json`
-- [x] Verify file formats and content
-- [x] Create walkthrough artifact
+# Tasks - Project Cleanup and Dependency Update
+
+- `[x]` Update `libs.versions.toml` (Spotless to 8.9.0)
+- `[x]` Cleanup `HomeViewModel.kt` (Remove redundant properties/methods)
+- `[x]` Cleanup `OrdersViewModel.kt` (Remove redundant properties/methods)
+- `[x]` Cleanup `SettingsViewModel.kt` (Remove redundant `isBackupReminderDue`)
+- `[x]` Update `AGENTS.md` (Checked, no changes needed)
+- `[x]` Run `spotlessApply` and build the project
+- `[x]` Run Unit Tests
+- `[x]` Update `PROJECT_STATUS.json`
+- `[x]` Final Walkthrough

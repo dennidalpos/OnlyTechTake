@@ -33,7 +33,6 @@ import com.onlytechtake.repairapp.core.permissions.PermissionService
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.models.AppSummary
 import com.onlytechtake.repairapp.features.dashboard.components.*
-import com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 
 @Composable
@@ -43,7 +42,6 @@ fun DashboardRoute(
     onAppDataRestored: () -> Unit,
 ) {
     val dashboardViewModel: DashboardViewModel = hiltViewModel(key = "dashboard_$appInstanceKey")
-    val sharedViewModel: SharedWorkspaceViewModel = hiltViewModel(key = "shared_workspace_$appInstanceKey")
 
     val summary by dashboardViewModel.summary.collectAsState()
     val isBackupReminderDue by dashboardViewModel.isBackupReminderDue.collectAsState()
@@ -53,7 +51,7 @@ fun DashboardRoute(
         summary = summary,
         isBackupReminderDue = isBackupReminderDue,
         currentUser = currentUser,
-        sharedViewModel = sharedViewModel,
+        dashboardViewModel = dashboardViewModel,
         onLogout = onLogout,
         onAppDataRestored = onAppDataRestored,
     )
@@ -65,15 +63,15 @@ fun DashboardScreen(
     summary: AppSummary?,
     isBackupReminderDue: Boolean,
     currentUser: AuthenticatedUser?,
-    sharedViewModel: SharedWorkspaceViewModel,
+    dashboardViewModel: DashboardViewModel,
     onLogout: () -> Unit,
     onAppDataRestored: () -> Unit,
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-    val globalMessage by sharedViewModel.message.collectAsState()
-    val isFormDirty by sharedViewModel.isFormDirty.collectAsState()
+    val globalMessage by dashboardViewModel.message.collectAsState(null)
+    val isFormDirty by dashboardViewModel.isFormDirty.collectAsState(false)
 
     val isAdmin = PermissionService.isAdmin(currentUser)
 
@@ -162,14 +160,14 @@ fun DashboardScreen(
         route: DashboardNavRoute,
         isReset: Boolean = false,
     ) {
-        if (isReset) sharedViewModel.triggerReset()
+        if (isReset) dashboardViewModel.triggerReset()
         navController.navigate(route) {
             val startDest = navController.graph.findStartDestination()
             popUpTo(startDest.id) { saveState = true }
             launchSingleTop = true
             restoreState = false
         }
-        sharedViewModel.setFormDirty(dirty = false)
+        dashboardViewModel.setFormDirty(dirty = false)
     }
 
     fun handleNavigation(
@@ -182,7 +180,7 @@ fun DashboardScreen(
             pendingIsReset = isReset
             showUnsavedChangesDialog = true
         } else {
-            if (isFormDirty) sharedViewModel.triggerAutoSave()
+            if (isFormDirty) dashboardViewModel.triggerAutoSave()
             performNavigation(route, isReset = isReset)
         }
     }
@@ -249,7 +247,7 @@ fun DashboardScreen(
                     DismissibleAppMessageBanner(
                         message = message.text,
                         type = if (message.isError) BannerType.Error else BannerType.Success,
-                        onDismiss = sharedViewModel::clearMessage,
+                        onDismiss = dashboardViewModel::clearMessage,
                         autoDismissMillis = message.autoDismissMillis ?: (if (message.isError) 8000L else 4000L),
                         modifier =
                             Modifier.padding(
@@ -282,7 +280,7 @@ fun DashboardScreen(
                 DashboardNavHost(
                     navController = navController,
                     summary = summary,
-                    sharedViewModel = sharedViewModel,
+                    dashboardViewModel = dashboardViewModel,
                     isAdmin = isAdmin,
                     onAppDataRestored = onAppDataRestored,
                     modifier = Modifier.weight(1f),
@@ -300,7 +298,7 @@ fun DashboardScreen(
             },
         ) {
             showUnsavedChangesDialog = false
-            sharedViewModel.setFormDirty(dirty = false)
+            dashboardViewModel.setFormDirty(dirty = false)
             pendingRoute?.let { performNavigation(it, isReset = pendingIsReset) } ?: navController.popBackStack()
             pendingRoute = null
             pendingIsReset = false

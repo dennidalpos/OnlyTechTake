@@ -8,11 +8,9 @@ import com.onlytechtake.repairapp.data.local.dao.AuditLogDao
 import com.onlytechtake.repairapp.data.local.dao.CustomerDao
 import com.onlytechtake.repairapp.data.local.dao.MessageLogDao
 import com.onlytechtake.repairapp.data.local.dao.OrderCategoryDao
-import com.onlytechtake.repairapp.data.local.dao.OrderMediaDao
 import com.onlytechtake.repairapp.data.local.dao.RepairOrderDao
 import com.onlytechtake.repairapp.data.local.dao.SignatureDao
 import com.onlytechtake.repairapp.data.local.dao.TimelineEventDao
-import com.onlytechtake.repairapp.data.local.dao.UserDao
 import com.onlytechtake.repairapp.data.local.db.RepairAppDatabase
 import com.onlytechtake.repairapp.domain.auth.AuthenticatedUser
 import com.onlytechtake.repairapp.domain.models.ClosureReason
@@ -33,9 +31,7 @@ class OrderWorkflowRepository(
     private val repairOrderDao: RepairOrderDao,
     private val customerDao: CustomerDao,
     private val categoryDao: OrderCategoryDao,
-    private val userDao: UserDao,
     private val timelineEventDao: TimelineEventDao,
-    private val orderMediaDao: OrderMediaDao,
     private val signatureDao: SignatureDao,
     private val messageLogDao: MessageLogDao,
     private val auditLogDao: AuditLogDao,
@@ -54,13 +50,6 @@ class OrderWorkflowRepository(
     private val queries =
         OrderWorkflowQueries(
             repairOrderDao = repairOrderDao,
-            customerDao = customerDao,
-            categoryDao = categoryDao,
-            userDao = userDao,
-            timelineEventDao = timelineEventDao,
-            orderMediaDao = orderMediaDao,
-            signatureDao = signatureDao,
-            messageLogDao = messageLogDao,
         )
 
     private val commands =

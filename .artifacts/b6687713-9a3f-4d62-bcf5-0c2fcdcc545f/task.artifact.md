@@ -1,0 +1,7 @@
+- `[/]` Alignment and Verification Cycle
+    - `[x]` Update `versionName` in `app/build.gradle.kts`
+    - `[x]` Run `spotlessApply`
+    - `[x]` Build all flavor variants (`Full`, `Demo`, `Showcase`)
+    - `[x]` Run unit tests for all variants
+    - `[x]` Run quality check script
+    - `[x]` Update `PROJECT_STATUS.json`

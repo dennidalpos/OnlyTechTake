@@ -60,32 +60,17 @@ class OrderDetailViewModel
         private val templateRepository: TemplateRepository,
         private val generateOrderStatusPdfUseCase: GenerateOrderStatusPdfUseCase,
         private val shareDocumentIntentFactory: ShareDocumentIntentFactory,
-        private val diagnosticLogger: DiagnosticLogger,
         private val workspaceManager: WorkspaceManager,
+        private val actionRunner: AuthenticatedActionRunner,
         @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     ) : ViewModel() {
         private val _orderId = MutableStateFlow<String?>(savedStateHandle["orderId"])
         val orderId: StateFlow<String?> = _orderId.asStateFlow()
 
-        private val _message = MutableStateFlow<WorkspaceMessage?>(null)
-        val message = _message.asStateFlow()
+        val message = workspaceManager.message
 
         private val _isProcessing = MutableStateFlow(value = false)
         val isProcessing = _isProcessing.asStateFlow()
-
-        private val actionRunner =
-            AuthenticatedActionRunner(
-                context = context,
-                authRepository = authRepository,
-                currentUser = authRepository.currentUser,
-                scope = viewModelScope,
-                showMessage = { text, isError, duration ->
-                    _message.value = WorkspaceMessage(text, isError, duration)
-                },
-                setLoading = { _isProcessing.value = it },
-                diagnosticLogger = diagnosticLogger,
-                ioDispatcher = ioDispatcher,
-            )
 
         private val _isGeneratingStatusPdf = MutableStateFlow(value = false)
         val isGeneratingStatusPdf = _isGeneratingStatusPdf.asStateFlow()
@@ -110,6 +95,20 @@ class OrderDetailViewModel
 
         val currentUser = authRepository.currentUser
 
+        init {
+            observeAutoSaveSignal()
+        }
+
+        private fun observeAutoSaveSignal() {
+            viewModelScope.launch {
+                workspaceManager.autoSaveSignal.collect { signal ->
+                    if (signal > 0 && preparedMessage.value != null) {
+                        recordPreparedMessage()
+                    }
+                }
+            }
+        }
+
         @OptIn(ExperimentalCoroutinesApi::class)
         val orderDetail: StateFlow<OrderDetail?> =
             _orderId
@@ -133,7 +132,7 @@ class OrderDetailViewModel
         }
 
         fun clearMessage() {
-            _message.value = null
+            workspaceManager.clearMessage()
         }
 
         fun changeStatus(
@@ -144,8 +143,10 @@ class OrderDetailViewModel
         ) {
             val id = _orderId.value ?: return
             actionRunner.run(
+                scope = viewModelScope,
                 successMessageRes = R.string.success_operation_completed,
                 autoDismissMillis = 1000L,
+                setLoading = { _isProcessing.value = it },
                 onSuccess = onSuccess,
             ) { actor ->
                 orderRepository.changeStatus(actor, id, status, note, closureReason)
@@ -160,8 +161,10 @@ class OrderDetailViewModel
         ) {
             val id = _orderId.value ?: return
             actionRunner.run(
+                scope = viewModelScope,
                 successMessageRes = R.string.success_operation_completed,
                 autoDismissMillis = 1000L,
+                setLoading = { _isProcessing.value = it },
                 onSuccess = onSuccess,
             ) { actor ->
                 orderRepository.recordResult(
@@ -180,8 +183,10 @@ class OrderDetailViewModel
         ) {
             val id = _orderId.value ?: return
             actionRunner.run(
+                scope = viewModelScope,
                 successMessageRes = R.string.success_operation_completed,
                 autoDismissMillis = 1000L,
+                setLoading = { _isProcessing.value = it },
                 onSuccess = onSuccess,
             ) { actor ->
                 orderRepository.recordFeedback(actor, id, FeedbackInput(type, note, closureReason))
@@ -191,8 +196,10 @@ class OrderDetailViewModel
         fun togglePaymentStatus(isPaid: Boolean) {
             val id = _orderId.value ?: return
             actionRunner.run(
+                scope = viewModelScope,
                 successMessageRes = R.string.success_operation_completed,
                 autoDismissMillis = 1000L,
+                setLoading = { _isProcessing.value = it },
             ) { actor ->
                 orderRepository.togglePaymentStatus(actor, id, isPaid)
             }
@@ -201,8 +208,10 @@ class OrderDetailViewModel
         fun addNote(note: String) {
             val id = _orderId.value ?: return
             actionRunner.run(
+                scope = viewModelScope,
                 successMessageRes = R.string.success_operation_completed,
                 autoDismissMillis = 1000L,
+                setLoading = { _isProcessing.value = it },
             ) { actor ->
                 orderRepository.addInternalNote(actor, id, note)
             }
@@ -227,8 +236,10 @@ class OrderDetailViewModel
         ) {
             val id = _orderId.value ?: return
             actionRunner.run(
+                scope = viewModelScope,
                 successMessageRes = R.string.success_operation_completed,
                 autoDismissMillis = 1000L,
+                setLoading = { _isProcessing.value = it },
             ) { actor ->
                 orderMediaRepository.registerCapturedPhoto(actor, id, file)
             }
@@ -239,8 +250,10 @@ class OrderDetailViewModel
         ) {
             val id = _orderId.value ?: return
             actionRunner.run(
+                scope = viewModelScope,
                 successMessageRes = R.string.success_operation_completed,
                 autoDismissMillis = 1000L,
+                setLoading = { _isProcessing.value = it },
             ) { actor ->
                 orderMediaRepository.registerCapturedVideo(actor, id, file)
             }
@@ -251,8 +264,10 @@ class OrderDetailViewModel
         ) {
             val id = _orderId.value ?: return
             actionRunner.run(
+                scope = viewModelScope,
                 successMessageRes = R.string.success_operation_completed,
                 autoDismissMillis = 1000L,
+                setLoading = { _isProcessing.value = it },
             ) { actor ->
                 orderMediaRepository.importAttachment(actor, id, uri)
             }
@@ -260,8 +275,10 @@ class OrderDetailViewModel
 
         fun deleteMedia(mediaId: String) {
             actionRunner.run(
+                scope = viewModelScope,
                 successMessageRes = R.string.success_operation_completed,
                 autoDismissMillis = 1000L,
+                setLoading = { _isProcessing.value = it },
             ) { actor ->
                 orderMediaRepository.deleteMedia(actor, mediaId)
             }
@@ -269,8 +286,10 @@ class OrderDetailViewModel
 
         fun deleteSignature(signatureId: String) {
             actionRunner.run(
+                scope = viewModelScope,
                 successMessageRes = R.string.success_operation_completed,
                 autoDismissMillis = 1000L,
+                setLoading = { _isProcessing.value = it },
             ) { actor ->
                 orderRepository.deleteSignature(actor, signatureId)
             }
@@ -279,8 +298,10 @@ class OrderDetailViewModel
         fun deleteOrder(onDeleted: () -> Unit) {
             val id = _orderId.value ?: return
             actionRunner.run(
+                scope = viewModelScope,
                 successMessageRes = R.string.success_operation_completed,
                 autoDismissMillis = 1000L,
+                setLoading = { _isProcessing.value = it },
                 onSuccess = {
                     setOrderId(null)
                     onDeleted()
@@ -295,15 +316,17 @@ class OrderDetailViewModel
             bitmap: Bitmap,
         ) {
             actionRunner.run(
+                scope = viewModelScope,
                 successMessageRes = R.string.success_operation_completed,
                 autoDismissMillis = 1000L,
+                setLoading = { _isProcessing.value = it },
             ) { actor ->
                 orderMediaRepository.replaceImage(actor, mediaId, bitmap)
             }
         }
 
         fun reportCameraError(message: String) {
-            _message.value = WorkspaceMessage(message, isError = true)
+            workspaceManager.showMessage(message, isError = true)
         }
 
         fun prepareMessage(anchor: TemplateAnchor) {
@@ -318,11 +341,10 @@ class OrderDetailViewModel
                             _preparedMessage.value = message
                             _preparedMessageBody.value = message.body
                         }.onFailure {
-                            _message.value =
-                                WorkspaceMessage(
-                                    it.message ?: context.getString(R.string.error_unknown),
-                                    isError = true,
-                                )
+                            workspaceManager.showMessage(
+                                it.message ?: context.getString(R.string.error_unknown),
+                                isError = true,
+                            )
                         }
                 }
                 _isProcessing.value = false
@@ -342,7 +364,7 @@ class OrderDetailViewModel
 
         fun recordPreparedMessage() {
             val prepared = _preparedMessage.value ?: return
-            actionRunner.run { actor ->
+            actionRunner.run(scope = viewModelScope) { actor ->
                 val result =
                     templateRepository.recordPrepared(actor, prepared, preparedMessageBody.value)
                 withContext(Dispatchers.Main) {
@@ -354,7 +376,7 @@ class OrderDetailViewModel
 
         fun confirmSentMessage() {
             val prepared = _preparedMessage.value ?: return
-            actionRunner.run { actor ->
+            actionRunner.run(scope = viewModelScope) { actor ->
                 templateRepository.confirmSent(actor, prepared, preparedMessageBody.value)
             }
         }
@@ -403,11 +425,10 @@ class OrderDetailViewModel
                     _showPdfSentConfirmation.value = true
                     _pendingShareIntent.value = intent
                 } else {
-                    _message.value =
-                        WorkspaceMessage(
-                            context.getString(R.string.error_document_not_found),
-                            isError = true,
-                        )
+                    workspaceManager.showMessage(
+                        context.getString(R.string.error_document_not_found),
+                        isError = true,
+                    )
                 }
                 _isProcessing.value = false
             }
@@ -419,8 +440,10 @@ class OrderDetailViewModel
 
         fun onDeleteDocumentClicked(documentId: String) {
             actionRunner.run(
+                scope = viewModelScope,
                 successMessageRes = R.string.success_operation_completed,
                 autoDismissMillis = 1000L,
+                setLoading = { _isProcessing.value = it },
             ) {
                 orderDocumentRepository.delete(documentId)
             }
@@ -436,7 +459,7 @@ class OrderDetailViewModel
                         orderDocumentRepository.findById(docId)
                     }
                 if (doc != null) {
-                    actionRunner.run { actor ->
+                    actionRunner.run(scope = viewModelScope) { actor ->
                         orderDocumentRepository.markShared(docId, System.currentTimeMillis())
                         orderRepository.recordPdfShared(actor, id, doc.fileName)
                     }

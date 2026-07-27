@@ -51,7 +51,6 @@ import javax.inject.Inject
 class SettingsViewModel
     @Inject
     constructor(
-        @ApplicationContext private val context: Context,
         private val authRepository: AuthRepository,
         private val adminUserRepository: AdminUserRepository,
         catalogRepository: CatalogRepository,
@@ -66,13 +65,12 @@ class SettingsViewModel
         private val storageStatsService: StorageStatsService,
         diagnosticLogService: DiagnosticLogService,
         orderFileCleanupService: OrderFileCleanupService,
-        diagnosticLogger: com.onlytechtake.repairapp.core.error.DiagnosticLogger,
         database: com.onlytechtake.repairapp.data.local.db.RepairAppDatabase,
         private val workspaceManager: WorkspaceManager,
+        private val actionRunner: AuthenticatedActionRunner,
     ) : ViewModel() {
         private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-        private val _message = MutableStateFlow<WorkspaceMessage?>(null)
-        val message = _message.asStateFlow()
+        val message = workspaceManager.message
 
         private val _isProcessing = MutableStateFlow(value = false)
         val isProcessing = _isProcessing.asStateFlow()
@@ -80,22 +78,8 @@ class SettingsViewModel
         private val _recoveryCode = MutableStateFlow<String?>(null)
         val recoveryCode = _recoveryCode.asStateFlow()
 
-        private val actionRunner =
-            AuthenticatedActionRunner(
-                context = context,
-                authRepository = authRepository,
-                currentUser = authRepository.currentUser,
-                scope = viewModelScope,
-                showMessage = { text, isError, duration ->
-                    _message.value = WorkspaceMessage(text, isError, duration)
-                },
-                setLoading = { _isProcessing.value = it },
-                diagnosticLogger = diagnosticLogger,
-                ioDispatcher = ioDispatcher,
-            )
-
-        private val catalogDelegate = CatalogSettingsDelegate(catalogRepository, actionRunner)
-        private val templateDelegate = TemplateSettingsDelegate(templateRepository, actionRunner)
+        private val catalogDelegate = CatalogSettingsDelegate(catalogRepository, actionRunner, viewModelScope)
+        private val templateDelegate = TemplateSettingsDelegate(templateRepository, actionRunner, viewModelScope)
         private val backupDelegate =
             BackupSettingsDelegate(
                 backupRepository,
@@ -105,7 +89,7 @@ class SettingsViewModel
                 viewModelScope,
             )
         private val securityDelegate = SecuritySettingsDelegate(securityPreferences, viewModelScope)
-        private val adminDelegate = AdminSettingsDelegate(adminUserRepository, actionRunner)
+        private val adminDelegate = AdminSettingsDelegate(adminUserRepository, actionRunner, viewModelScope)
         private val storageDelegate =
             StorageSettingsDelegate(
                 orderFileCleanupService,
@@ -125,7 +109,7 @@ class SettingsViewModel
             )
 
         private val ownerDelegate =
-            OwnerSettingsDelegate(ownerPreferences, actionRunner)
+            OwnerSettingsDelegate(ownerPreferences, actionRunner, viewModelScope)
 
         private val uiDelegate = UiSettingsDelegate(uiPreferences, viewModelScope)
 
@@ -137,7 +121,7 @@ class SettingsViewModel
         }
 
         fun clearMessage() {
-            _message.value = null
+            workspaceManager.clearMessage()
         }
 
         fun setFormDirty(dirty: Boolean) {
@@ -197,13 +181,6 @@ class SettingsViewModel
         val ownerInfo: kotlinx.coroutines.flow.StateFlow<OwnerInfo> =
             ownerPreferences.ownerInfo
                 .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), OwnerInfo())
-
-        @Suppress("unused")
-        val isBackupReminderDue =
-            backupReminderPreferences.settings
-                .map { settings ->
-                    BackupReminderPolicy.shouldShowReminder(settings, System.currentTimeMillis())
-                }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = false)
 
         init {
             refreshStorageStats()
@@ -302,7 +279,7 @@ class SettingsViewModel
         ) = adminDelegate.setUserPermissions(userId, permissions)
 
         fun deleteUser(userId: String) =
-            actionRunner.run { actor ->
+            actionRunner.run(scope = viewModelScope) { actor ->
                 adminUserRepository.deleteUser(actor, userId)
             }
 
@@ -310,7 +287,7 @@ class SettingsViewModel
             username: String,
             currentPassword: CharArray,
             newPassword: CharArray,
-        ) = actionRunner.run {
+        ) = actionRunner.run(scope = viewModelScope) {
             authRepository.changePassword(username, currentPassword, newPassword)
         }
 
@@ -322,14 +299,14 @@ class SettingsViewModel
         fun resetAllData(
             confirmation: String,
             onReset: () -> Unit,
-        ) = actionRunner.run(onSuccess = onReset) { actor ->
+        ) = actionRunner.run(scope = viewModelScope, onSuccess = onReset) { actor ->
             dataResetRepository.resetAll(actor, confirmation)
         }
 
         fun resetOrders(
             confirmation: String,
             onReset: () -> Unit,
-        ) = actionRunner.run(onSuccess = onReset) { actor ->
+        ) = actionRunner.run(scope = viewModelScope, onSuccess = onReset) { actor ->
             dataResetRepository.resetOrders(actor, confirmation)
         }
 
@@ -340,7 +317,7 @@ class SettingsViewModel
                     .onSuccess { code ->
                         _recoveryCode.value = code
                     }.onFailure { error ->
-                        _message.value = WorkspaceMessage(error.message ?: "Errore", isError = true)
+                        workspaceManager.showMessage(error.message ?: "Errore", isError = true)
                     }
             }
         }

@@ -1,35 +1,27 @@
-# Walkthrough: AI Skills Integration
+# Walkthrough - Project Cleanup and Dependency Update
 
-I have successfully integrated a specialized Skill system for the OnlyTechTake repository. This system ensures that any AI agent working on this project (on any machine) follows the specific architectural, security, and operational rules established.
+Project optimization through removal of redundant code, centralization of backup logic, and dependency updates.
 
-## Changes Made
+## Changes
 
-### 1. Skill Library Generation
-I created a new `skills/` directory containing 8 specialized skill files. Each file includes a YAML frontmatter for identification and a Markdown body with guidelines and official references.
+### [Component] Core Cleanup
+- **ViewModel De-cluttering**: Removed redundant `isBackupReminderDue` and `exportCompleteBackup` from [HomeViewModel.kt](file:///D:/GITHUB/OnlyTechTake/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/home/HomeViewModel.kt) and [OrdersViewModel.kt](file:///D:/GITHUB/OnlyTechTake/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/orders/OrdersViewModel.kt).
+- **Centralization**: Centralized backup logic in [DashboardViewModel.kt](file:///D:/GITHUB/OnlyTechTake/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/DashboardViewModel.kt) for the UI banner and [SettingsViewModel.kt](file:///D:/GITHUB/OnlyTechTake/app/src/main/java/com/onlytechtake/repairapp/features/dashboard/settings/SettingsViewModel.kt) for actions.
+- **Clean Imports**: Removed unused imports (`android.net.Uri`, `BackupRepository`, etc.) in the affected ViewModels.
 
-- [android-compose-m3.skill.md](file:///D:/GITHUB/OnlyTechTake/skills/android-compose-m3.skill.md): Material 3 standards and Preview requirements.
-- [persistence-room-sqlcipher.skill.md](file:///D:/GITHUB/OnlyTechTake/skills/persistence-room-sqlcipher.skill.md): Encrypted Room database guidelines.
-- [architecture-mvvm-hilt.skill.md](file:///D:/GITHUB/OnlyTechTake/skills/architecture-mvvm-hilt.skill.md): MVVM and Hilt DI patterns.
-- [testing-robot-pattern.skill.md](file:///D:/GITHUB/OnlyTechTake/skills/testing-robot-pattern.skill.md): UI testing with the Robot pattern.
-- [devops-powershell-scripts.skill.md](file:///D:/GITHUB/OnlyTechTake/skills/devops-powershell-scripts.skill.md): Usage guide for local automation scripts.
-- [project-management-agents.skill.md](file:///D:/GITHUB/OnlyTechTake/skills/project-management-agents.skill.md): Status tracking and versioning rules.
-- [media-camerax.skill.md](file:///D:/GITHUB/OnlyTechTake/skills/media-camerax.skill.md): CameraX integration for technical documentation.
-- [background-workmanager.skill.md](file:///D:/GITHUB/OnlyTechTake/skills/background-workmanager.skill.md): Reliable background task management.
+### [Component] Build & Dependencies
+- **Spotless Update**: Updated `spotless` to version `8.9.0` in [libs.versions.toml](file:///D:/GITHUB/OnlyTechTake/gradle/libs.versions.toml).
+- **Quality Checks**: Executed `quality.ps1` to apply formatting and run Lint checks.
 
-### 2. Guidance Update
-Updated [AGENTS.md](file:///D:/GITHUB/OnlyTechTake/AGENTS.md) with a new section **"6. Skill Management"**. This instructs agents to load these skills at the start of every session, ensuring consistent behavior across different developers and workstations.
-
-### 3. Project Status Update
-Updated [PROJECT_STATUS.json](file:///D:/GITHUB/OnlyTechTake/PROJECT_STATUS.json) to reflect the new integration and updated the timestamp.
+### [Component] Project Management
+- **Status Update**: Updated [PROJECT_STATUS.json](file:///D:/GITHUB/OnlyTechTake/PROJECT_STATUS.json) to reflect the cleanup.
 
 ## Verification Results
 
-> [!IMPORTANT]
-> All skill files follow the standard format required for dynamic loading.
-> The `AGENTS.md` file now explicitly mentions the portability of these skills.
+### Automated Tests
+- **Lint**: Passed (only known deprecation warnings for `hiltViewModel` package move remain).
+- **Unit Tests**: Passed via `./scripts/powershell/project/check_project.ps1`.
+- **Build**: Successfully assembled `FullDebug` APK.
 
-### Manual Checks
-- [x] Verified `skills/` directory creation.
-- [x] Verified content of each skill file against official Android documentation.
-- [x] Verified `AGENTS.md` formatting.
-- [x] Verified `PROJECT_STATUS.json` integrity.
+> [!NOTE]
+> The app is now leaner and follows a more centralized pattern for common features like backup reminders.

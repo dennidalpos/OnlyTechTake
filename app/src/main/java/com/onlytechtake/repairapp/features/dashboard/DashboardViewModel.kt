@@ -7,6 +7,7 @@ import com.onlytechtake.repairapp.domain.auth.AuthRepository
 import com.onlytechtake.repairapp.domain.backup.BackupReminderPolicy
 import com.onlytechtake.repairapp.domain.models.AppSummary
 import com.onlytechtake.repairapp.domain.repositories.RepairAppRepository
+import com.onlytechtake.repairapp.features.workspace.WorkspaceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,8 +22,11 @@ class DashboardViewModel
         repository: RepairAppRepository,
         backupReminderPreferences: BackupReminderPreferences,
         authRepository: AuthRepository,
+        private val workspaceManager: WorkspaceManager,
     ) : ViewModel() {
         val currentUser = authRepository.currentUser
+        val message = workspaceManager.message
+        val isFormDirty = workspaceManager.isFormDirty
         val summary: StateFlow<AppSummary?> =
             repository
                 .observeSummary()
@@ -41,4 +45,20 @@ class DashboardViewModel
                     started = SharingStarted.WhileSubscribed(5_000),
                     initialValue = false,
                 )
+
+        fun clearMessage() {
+            workspaceManager.clearMessage()
+        }
+
+        fun triggerReset() {
+            workspaceManager.triggerReset()
+        }
+
+        fun triggerAutoSave() {
+            workspaceManager.triggerAutoSave()
+        }
+
+        fun setFormDirty(dirty: Boolean) {
+            workspaceManager.setFormDirty(dirty)
+        }
     }

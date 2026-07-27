@@ -34,7 +34,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -88,14 +87,12 @@ import com.onlytechtake.repairapp.features.dashboard.common.NoteFieldWithDialog
 import com.onlytechtake.repairapp.features.dashboard.common.OperatorText
 import com.onlytechtake.repairapp.features.dashboard.common.SectionTitle
 import com.onlytechtake.repairapp.features.workspace.OrderSummaryRow
-import com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 import kotlinx.coroutines.launch
 
 @Composable
 fun CustomerPanel(
     viewModel: CustomersViewModel,
-    sharedViewModel: SharedWorkspaceViewModel,
     onOrderClick: (String) -> Unit,
 ) {
     val windowSizeClass = LocalWindowSizeClass.current
@@ -135,10 +132,6 @@ fun CustomerPanel(
             notes = notes,
         )
 
-    val canSave =
-        (phone.isNotBlank() || email.isNotBlank()) &&
-            if (isBusiness) companyName.isNotBlank() else firstName.isNotBlank() && lastName.isNotBlank()
-
     fun clearForm() {
         editingCustomerId = null
         isBusiness = false
@@ -152,26 +145,6 @@ fun CustomerPanel(
         address = ""
         notes = ""
         viewModel.setFormDirty(dirty = false)
-    }
-
-    val autoSaveSignal by sharedViewModel.autoSaveSignal.collectAsState()
-    LaunchedEffect(autoSaveSignal) {
-        val isDirty = viewModel.isFormDirty.value
-        if ((autoSaveSignal > 0) && isDirty && canSave) {
-            viewModel.saveCustomer(input) {
-                clearForm()
-                showForm = false
-            }
-        }
-    }
-
-    val resetSignal by sharedViewModel.resetSignal.collectAsState()
-    LaunchedEffect(resetSignal) {
-        if (resetSignal > 0) {
-            clearForm()
-            showForm = false
-            selectedCustomer = null
-        }
     }
 
     fun editCustomer(customer: Customer) {
@@ -974,9 +947,6 @@ private fun CustomerPanelFullPreview() {
     RepairAppTheme {
         CustomerPanel(
             viewModel =
-                androidx.lifecycle.viewmodel.compose
-                    .viewModel(),
-            sharedViewModel =
                 androidx.lifecycle.viewmodel.compose
                     .viewModel(),
         ) {}

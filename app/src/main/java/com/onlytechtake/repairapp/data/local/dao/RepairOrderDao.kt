@@ -2,6 +2,7 @@ package com.onlytechtake.repairapp.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Upsert
 import com.onlytechtake.repairapp.data.local.entities.RepairOrderEntity
 import com.onlytechtake.repairapp.domain.models.OrderStatus
@@ -23,6 +24,10 @@ interface RepairOrderDao {
 
     @Query("SELECT * FROM repair_orders WHERE id = :id LIMIT 1")
     fun observeById(id: String): Flow<RepairOrderEntity?>
+
+    @Transaction
+    @Query("SELECT * FROM repair_orders WHERE id = :id")
+    fun observeOrderDetailProjection(id: String): Flow<OrderDetailProjection?>
 
     @Query("DELETE FROM repair_orders WHERE id = :id")
     suspend fun deleteById(id: String)

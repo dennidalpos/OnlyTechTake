@@ -50,7 +50,6 @@ import kotlin.time.Duration.Companion.milliseconds
 class NewOrderViewModel
     @Inject
     constructor(
-        @ApplicationContext private val context: Context,
         authRepository: AuthRepository,
         private val customerRepository: CustomerRepository,
         catalogRepository: CatalogRepository,
@@ -58,24 +57,9 @@ class NewOrderViewModel
         templateRepository: TemplateRepository,
         private val createIntakeOrderUseCase: CreateIntakeOrderUseCase,
         private val workspaceManager: WorkspaceManager,
-        diagnosticLogger: DiagnosticLogger,
+        private val actionRunner: AuthenticatedActionRunner,
     ) : ViewModel() {
-        private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-        private val _message = MutableStateFlow<WorkspaceMessage?>(null)
-        val message = _message.asStateFlow()
-
-        private val actionRunner =
-            AuthenticatedActionRunner(
-                context = context,
-                authRepository = authRepository,
-                currentUser = authRepository.currentUser,
-                scope = viewModelScope,
-                showMessage = { text, isError, duration ->
-                    _message.value = WorkspaceMessage(text, isError, duration)
-                },
-                diagnosticLogger = diagnosticLogger,
-                ioDispatcher = ioDispatcher,
-            )
+        val message = workspaceManager.message
 
         private val _quickIntakeDraft = MutableStateFlow(QuickIntakeDraft())
         val quickIntakeDraft = _quickIntakeDraft.asStateFlow()
@@ -114,6 +98,17 @@ class NewOrderViewModel
 
         init {
             checkDemoLimit()
+            observeResetSignal()
+        }
+
+        private fun observeResetSignal() {
+            viewModelScope.launch {
+                workspaceManager.resetSignal.collect { signal ->
+                    if (signal > 0) {
+                        resetQuickIntakeDraft()
+                    }
+                }
+            }
         }
 
         private fun checkDemoLimit() {
@@ -121,11 +116,10 @@ class NewOrderViewModel
                 viewModelScope.launch {
                     val count = createIntakeOrderUseCase.countAllOrders()
                     if (count >= 1) {
-                        _message.value =
-                            WorkspaceMessage(
-                                createIntakeOrderUseCase.getDemoLimitErrorMessage(),
-                                isError = false,
-                            )
+                        workspaceManager.showMessage(
+                            createIntakeOrderUseCase.getDemoLimitErrorMessage(),
+                            isError = false,
+                        )
                     }
                 }
             }
@@ -136,7 +130,7 @@ class NewOrderViewModel
         }
 
         fun clearMessage() {
-            _message.value = null
+            workspaceManager.clearMessage()
         }
 
         fun updateQuickIntakeDraft(update: (QuickIntakeDraft) -> QuickIntakeDraft) {
@@ -158,6 +152,7 @@ class NewOrderViewModel
             onSaved: (Customer) -> Unit = {},
         ) {
             actionRunner.run(
+                scope = viewModelScope,
                 successMessageRes = R.string.success_operation_completed,
                 autoDismissMillis = 1000L,
             ) { actor ->
@@ -180,7 +175,7 @@ class NewOrderViewModel
                         onSuccess(it)
                         setFormDirty(dirty = true)
                     }.onFailure {
-                        _message.value = WorkspaceMessage(it.message ?: "Errore", isError = true)
+                        workspaceManager.showMessage(it.message ?: "Errore", isError = true)
                     }
             }
         }
@@ -203,7 +198,7 @@ class NewOrderViewModel
                         onSuccess(it)
                         setFormDirty(dirty = true)
                     }.onFailure {
-                        _message.value = WorkspaceMessage(it.message ?: "Errore", isError = true)
+                        workspaceManager.showMessage(it.message ?: "Errore", isError = true)
                     }
             }
         }
@@ -223,7 +218,7 @@ class NewOrderViewModel
                         onSuccess(it)
                         setFormDirty(dirty = true)
                     }.onFailure {
-                        _message.value = WorkspaceMessage(it.message ?: "Errore", isError = true)
+                        workspaceManager.showMessage(it.message ?: "Errore", isError = true)
                     }
             }
         }
@@ -239,13 +234,13 @@ class NewOrderViewModel
                         onSuccess(it)
                         setFormDirty(dirty = true)
                     }.onFailure {
-                        _message.value = WorkspaceMessage(it.message ?: "Errore", isError = true)
+                        workspaceManager.showMessage(it.message ?: "Errore", isError = true)
                     }
             }
         }
 
         fun reportCameraError(message: String) {
-            _message.value = WorkspaceMessage(message, isError = true)
+            workspaceManager.showMessage(message, isError = true)
         }
 
         fun createIntakeOrder(
@@ -258,6 +253,7 @@ class NewOrderViewModel
             onCreated: () -> Unit,
         ) {
             actionRunner.run(
+                scope = viewModelScope,
                 successMessageRes = R.string.success_operation_completed,
                 autoDismissMillis = 1000L,
                 onSuccess = onCreated,

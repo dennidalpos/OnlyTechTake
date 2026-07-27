@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -39,16 +40,13 @@ import kotlin.time.Duration.Companion.milliseconds
 class CustomersViewModel
     @Inject
     constructor(
-        @ApplicationContext private val context: Context,
-        private val authRepository: AuthRepository,
+        authRepository: AuthRepository,
         private val customerRepository: CustomerRepository,
         private val orderWorkflowRepository: OrderRepository,
         private val workspaceManager: WorkspaceManager,
-        diagnosticLogger: DiagnosticLogger,
+        private val actionRunner: AuthenticatedActionRunner,
     ) : ViewModel() {
-        private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-        private val _message = MutableStateFlow<WorkspaceMessage?>(null)
-        val message = _message.asStateFlow()
+        val message = workspaceManager.message
 
         private val _searchQuery = MutableStateFlow("")
         val searchQuery = _searchQuery.asStateFlow()
@@ -56,23 +54,25 @@ class CustomersViewModel
         private val _showAll = MutableStateFlow(value = false)
         val showAll = _showAll.asStateFlow()
 
-        private val actionRunner =
-            AuthenticatedActionRunner(
-                context = context,
-                authRepository = authRepository,
-                currentUser = authRepository.currentUser,
-                scope = viewModelScope,
-                showMessage = { text, isError, duration ->
-                    _message.value = WorkspaceMessage(text, isError, duration)
-                },
-                diagnosticLogger = diagnosticLogger,
-                ioDispatcher = ioDispatcher,
-            )
-
         private val _isFormDirty = MutableStateFlow(value = false)
         val isFormDirty = _isFormDirty.asStateFlow()
 
         val currentUser = authRepository.currentUser
+
+        init {
+            observeResetSignal()
+        }
+
+        private fun observeResetSignal() {
+            viewModelScope.launch {
+                workspaceManager.resetSignal.collect { signal ->
+                    if (signal > 0) {
+                        _searchQuery.value = ""
+                        _showAll.value = false
+                    }
+                }
+            }
+        }
 
         val customerSuggestions: StateFlow<List<Customer>?> =
             searchQuery
@@ -98,7 +98,7 @@ class CustomersViewModel
         }
 
         fun clearMessage() {
-            _message.value = null
+            workspaceManager.clearMessage()
         }
 
         fun setSearchQuery(query: String) {
@@ -110,6 +110,7 @@ class CustomersViewModel
             onSaved: (Customer) -> Unit = {},
         ) {
             actionRunner.run(
+                scope = viewModelScope,
                 successMessageRes = R.string.success_operation_completed,
                 autoDismissMillis = 1000L,
             ) { actor ->
@@ -125,6 +126,7 @@ class CustomersViewModel
             onDeleted: () -> Unit = {},
         ) {
             actionRunner.run(
+                scope = viewModelScope,
                 successMessageRes = R.string.success_operation_completed,
                 autoDismissMillis = 1000L,
             ) { actor ->

@@ -1,5 +1,6 @@
 package com.onlytechtake.repairapp.data.mappers
 
+import com.onlytechtake.repairapp.data.local.dao.OrderDetailProjection
 import com.onlytechtake.repairapp.data.local.entities.CustomerEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderCategoryEntity
 import com.onlytechtake.repairapp.data.local.entities.OrderDocumentEntity
@@ -16,6 +17,7 @@ import com.onlytechtake.repairapp.domain.models.OrderMedia
 import com.onlytechtake.repairapp.domain.models.Signature
 import com.onlytechtake.repairapp.domain.models.TimelineEvent
 import com.onlytechtake.repairapp.domain.models.User
+import com.onlytechtake.repairapp.domain.workspace.OrderDetail
 
 fun CustomerEntity.toDomain(): Customer =
     Customer(
@@ -131,4 +133,15 @@ fun OrderDocumentEntity.toDomain(): OrderDocument =
         createdByUserId = createdByUserId,
         createdAt = createdAt,
         sharedAt = sharedAt,
+    )
+
+fun OrderDetailProjection.toDomain(): OrderDetail =
+    OrderDetail(
+        order = order.toDomain(),
+        customer = customer?.toDomain(),
+        category = category?.toDomain(),
+        assignedUser = assignedUser?.toDomain(),
+        timeline = timeline.map { it.toDomain() },
+        media = media.map { it.toDomain() },
+        signatures = signatures.map { it.toDomain() },
     )

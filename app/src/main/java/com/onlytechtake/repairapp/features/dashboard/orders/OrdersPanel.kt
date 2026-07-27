@@ -27,14 +27,12 @@ import com.onlytechtake.repairapp.domain.models.OrderStatus
 import com.onlytechtake.repairapp.domain.workspace.OrderListItem
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailViewModel
 import com.onlytechtake.repairapp.features.dashboard.detail.OrderDetailWorkspace
-import com.onlytechtake.repairapp.features.workspace.SharedWorkspaceViewModel
 import com.onlytechtake.repairapp.navigation.LocalWindowSizeClass
 import kotlinx.coroutines.launch
 
 @Composable
 fun OrdersPanel(
     viewModel: OrdersViewModel,
-    sharedViewModel: SharedWorkspaceViewModel,
     onOrderClick: (String) -> Unit,
     onNewOrder: () -> Unit,
     onSetFormDirty: (Boolean) -> Unit = {},
@@ -77,7 +75,6 @@ fun OrdersPanel(
                         }
                         OrderDetailWorkspace(
                             viewModel = orderDetailViewModel,
-                            sharedViewModel = sharedViewModel,
                             showCloseButton = false,
                             onBack = { selectedOrderId = null },
                         )
