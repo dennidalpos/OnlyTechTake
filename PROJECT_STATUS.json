@@ -1,8 +1,8 @@
 {
   "project_name": "OnlyTechTake",
   "version": "1.4.0",
-  "status": "Allineamento varianti completato. Risolti errori di compilazione in testDemo e conflitti variabili d'ambiente AGP 9.3.1. Build e Test passati su tutte le varianti (Full, Demo, Showcase).",
-  "last_updated": "2026-07-27T20:15:00Z",
+  "status": "Allineamento varianti completato. Integrato sistema di Skill per agenti AI nella cartella /skills/. Aggiornato AGENTS.md.",
+  "last_updated": "2026-07-27T23:15:00Z",
   "backlog": [
     {
       "priority": "MEDIUM",

@@ -48,7 +48,14 @@ Operational guide for AI agents. Environment: **Windows 11 + PowerShell**.
 
 ---
 
-## 5. Final Report & Status Requirements
+## 6. Skill Management
+- **Load Skills**: Before starting a task, read relevant files in the `skills/` directory using `read_file`. These contain project-specific constraints and official standards.
+- **Update Skills**: If a task involves updating a core library or architecture pattern, update the corresponding skill file in `skills/`.
+- **Portability**: The `skills/` directory must be committed to the repository to ensure consistent agent behavior across different environments.
+
+---
+
+## 7. Final Report & Status Requirements
 1. **Modified/deleted files.**
 2. **Executed checks and results.**
 3. **Update `PROJECT_STATUS.json`**:
